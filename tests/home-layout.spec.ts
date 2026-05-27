@@ -82,3 +82,46 @@ test.describe('Home Page Layout and Navigation', () => {
   });
 
 });
+
+
+test('mobile pages do not create horizontal overflow', async ({ page }) => {
+  const routes = ['/', '/gear', '/blog', '/events', '/about'];
+  const viewports = [{ width: 375, height: 812 }, { width: 390, height: 844 }];
+
+  for (const viewport of viewports) {
+    for (const route of routes) {
+      await page.setViewportSize(viewport);
+      await page.goto(`${BASE_PATH || ''}${route}`);
+
+      const result = await page.evaluate(() => {
+        const viewportWidth = window.innerWidth;
+        const offenders = [...document.querySelectorAll('body *')]
+          .map((el) => {
+            const rect = el.getBoundingClientRect();
+            return {
+              tag: el.tagName,
+              className: String((el as HTMLElement).className || ''),
+              text: (el.textContent || '').trim().slice(0, 80),
+              left: rect.left,
+              right: rect.right,
+              width: rect.width,
+            };
+          })
+          .filter((x) => x.right > viewportWidth + 1 || x.left < -1)
+          .slice(0, 20);
+
+        return {
+          viewport: viewportWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          bodyWidth: document.body.scrollWidth,
+          offenders,
+        };
+      });
+
+      expect(result.documentWidth, `${route} @ ${viewport.width} => ${JSON.stringify(result.offenders, null, 2)}`)
+        .toBeLessThanOrEqual(result.viewport);
+      expect(result.bodyWidth, `${route} @ ${viewport.width} => ${JSON.stringify(result.offenders, null, 2)}`)
+        .toBeLessThanOrEqual(result.viewport);
+    }
+  }
+});

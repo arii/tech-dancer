@@ -5,7 +5,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export function DevLabCallout() {
   return (
-    <Box border radius="lg" padding={5} className="flex flex-col gap-4">
+    <Box border radius="lg" padding={5} className="w-full max-w-full min-w-0">
       {/* Header row */}
       <Stack direction="row" align="center" gap={3}>
         <Box className="shrink-0 rounded-md bg-accent/10 p-2">
