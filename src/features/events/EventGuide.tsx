@@ -3,6 +3,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
+import { EventNavigation } from './components/EventNavigation';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
@@ -77,6 +78,8 @@ export default function EventGuide() {
         packingCue={event.packingReminderDate}
       />
 
+      <EventNavigation />
+
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         {event.whyAttending && (
           <Box
@@ -87,7 +90,7 @@ export default function EventGuide() {
             radius="2xl"
             className="bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group"
           >
-            {/* Decorative background accent */}
+
             <Box
               position="absolute"
               top={-20}
@@ -133,7 +136,9 @@ export default function EventGuide() {
                 />
               )}
 
-              <EventReminders id="reminders" event={event} />
+              <Box display={{ base: 'block', lg: 'none' }}>
+                <EventReminders id="reminders" event={event} />
+              </Box>
 
               <EventTravel id="travel" notes={event.description} />
 
@@ -147,7 +152,9 @@ export default function EventGuide() {
               )}
             </Stack>
           </Box>
-          <EventSidebar event={event} />
+          <Box display={{ base: 'none', lg: 'block' }}>
+            <EventSidebar event={event} />
+          </Box>
         </Grid>
       </Box>
     </Box>
