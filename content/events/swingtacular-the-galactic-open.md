@@ -30,7 +30,7 @@ theme:
     - "#ec4899"
   outfitIds:
     - "sequin-bomber-jacket"
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
   accessoryIds:
     - "rave-fan"
     - "pride-sunglasses"

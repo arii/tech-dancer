@@ -41,7 +41,7 @@ theme:
     - "#004DFF"
     - "#750787"
   outfitIds:
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
     - "love-neon-follow-shirt"
@@ -62,7 +62,7 @@ theme:
 
 gear:
   outfitIds:
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
     - "love-neon-follow-shirt"

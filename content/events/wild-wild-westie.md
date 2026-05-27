@@ -26,7 +26,7 @@ theme:
   description: "Bold Texas-inspired styles for a high-octane weekend. Think Western-chic, denim, boots, and anything that captures the legendary spirit of Dallas."
   outfitIds:
     - "sequin-bomber-jacket"
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
   accessoryIds:
     - "rave-fan"
 

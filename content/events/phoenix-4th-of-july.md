@@ -25,7 +25,7 @@ theme:
   label: "Patriotic Theme"
   description: "Expressive patriotic looks for the legendary Red, White & Blue celebration. Think flags, stars, stripes, and anything that screams summer holiday."
   outfitIds:
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
     - "sequin-bomber-jacket"
   accessoryIds:
     - "pride-sunglasses"
