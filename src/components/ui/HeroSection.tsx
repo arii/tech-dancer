@@ -1,7 +1,6 @@
 // impeccable-ignore-file
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
-import { CalendarDays, Backpack, Rocket } from 'lucide-react';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { NavLink } from 'react-router-dom';
 import { ActionButton } from './ActionButton';
@@ -82,7 +81,7 @@ export function HeroSection() {
             color="white"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            Dance better.
+            Travel better.
           </Text>
         </Stack>
 
@@ -117,8 +116,8 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training tips, event resource guides, and gear reviews for competitive West Coast Swing dancers,
-            plus technical deep dives into building the platform with DevAI.
+            Practical guides for West Coast Swing dancers — training notes, event travel tips, gear reviews,
+            and tools for better dance weekends.
           </Text>
         </Stack>
 
@@ -132,29 +131,14 @@ export function HeroSection() {
           maxWidth={{ base: "full", md: "2xl" }}
           className="opacity-0 hero-cta-anim"
         >
-          <ActionButton
-            as={NavLink}
-            to="/blog/why-finals-are-hard"
-            variant="primary"
-            className="min-h-12 justify-center md:justify-start normal-case"
-          >
-            <Stack direction="row" align="center" gap={2}>
-              <Rocket className="h-4 w-4" aria-hidden="true" />
-              <Text as="span" variant="mono" size="sm" color="bg" className="normal-case">New to WCS traveling? Start here</Text>
-            </Stack>
-          </ActionButton>
-
           <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
             <ActionButton
               as={NavLink}
               to="/events"
-              variant="secondary"
+              variant="primary"
               className="min-h-12 justify-center md:justify-start flex-1 normal-case"
             >
-              <Stack direction="row" align="center" gap={2}>
-                <CalendarDays className="h-4 w-4" aria-hidden="true" />
-                <Text as="span" variant="mono" size="sm" color="main" className="normal-case">Explore Event Guides</Text>
-              </Stack>
+              Explore Event Guides
             </ActionButton>
             <ActionButton
               as={NavLink}
@@ -162,12 +146,15 @@ export function HeroSection() {
               variant="secondary"
               className="min-h-12 justify-center md:justify-start flex-1 normal-case"
             >
-              <Stack direction="row" align="center" gap={2}>
-                <Backpack className="h-4 w-4" aria-hidden="true" />
-                <Text as="span" variant="mono" size="sm" color="main" className="normal-case">Browse Gear Reviews</Text>
-              </Stack>
+              Browse Gear Reviews
             </ActionButton>
           </Stack>
+
+          <Box>
+            <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent normal-case">
+              Start with practical notes →
+            </Text>
+          </Box>
         </Stack>
 
         <Stack
