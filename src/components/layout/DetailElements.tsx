@@ -1,58 +1,7 @@
 
-import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { LucideIcon, Shield } from 'lucide-react';
-
-interface ScoreItemProps {
-  label: string;
-  value: string | number;
-  icon?: LucideIcon;
-  color?: string;
-  intent?: "brand" | "accent" | "success" | "warning" | "danger";
-}
-
-export function ScoreItem({ label, value, icon: IconComponent, color, intent }: ScoreItemProps) {
-  return (
-    <Stack
-      gap={1}
-      align="center"
-      flex
-      paddingX={{ base: 2, md: 4 }}
-      paddingY={2}
-      minWidth={{ base: 24, sm: 32 }}
-    >
-      <Text variant="mono" size="tiny" color="dim" uppercase>{label}</Text>
-      <Stack direction="row" align="center" gap={1} className={color || ''}>
-        {IconComponent && <Icon icon={IconComponent} size="sm" color={intent === "brand" || intent === "accent" ? "accent" : "default"} />}
-        <Text variant="display" size="xl" weight="font-bold" intent={intent}>{value}</Text>
-      </Stack>
-    </Stack>
-  );
-}
-
-export function ScoreGrid({ children }: { children: ReactNode }) {
-  return (
-    <Box
-      border="y"
-      paddingY={6}
-      surface="muted"
-      width="full"
-      className="border-line/50"
-    >
-      <Stack
-        direction="row"
-        wrap
-        justify="center"
-        width="full"
-        gap={{ base: 4, md: 0 }}
-        className="divide-x-0 md:divide-x divide-line/30"
-      >
-        {children}
-      </Stack>
-    </Box>
-  );
-}
+import { Shield } from 'lucide-react';
 
 export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
   if (!specs || Object.keys(specs).length === 0) return null;

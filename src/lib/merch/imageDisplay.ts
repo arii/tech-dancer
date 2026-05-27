@@ -65,21 +65,6 @@ export function getMerchImageConfig(
   };
 }
 
-/**
- * Get CSS class name for the container based on display mode.
- */
-export function getMerchImageContainerClass(displayMode: MerchDisplayMode): string {
-  switch (displayMode) {
-    case 'single':
-      return 'merch-image-single';
-    case 'pair':
-      return 'merch-image-pair';
-    case 'featured':
-      return 'merch-image-featured';
-    default:
-      return 'merch-image-single';
-  }
-}
 
 /**
  * Fallback for products using old `image` and `imageBack` fields.
@@ -110,45 +95,4 @@ export function legacyImageToMerchImages(
   return images;
 }
 
-export interface MerchCardImageConfig {
-  primaryImage: { src: string; label: string; alt: string };
-  secondaryImage?: { src: string; label: string; alt: string };
-}
 
-/**
- * Resolve display images for card layout.
- * Grid cards show a large primary image and a small inset secondary image.
- */
-export function getMerchCardImageConfig(
-  imageUrl: string,
-  imageBack?: string,
-  displayMode?: MerchDisplayMode | string,
-  featuredSide?: MerchFeaturedSide | string,
-): MerchCardImageConfig {
-  const primarySide = featuredSide || 'front';
-  const showInset = displayMode ? (displayMode !== 'single') : !!imageBack;
-
-  const frontView = {
-    src: imageUrl,
-    label: 'Front',
-    alt: 'Front view',
-  };
-
-  const backView = imageBack ? {
-    src: imageBack,
-    label: 'Back',
-    alt: 'Back view',
-  } : undefined;
-
-  if (primarySide.toLowerCase() === 'back' && backView) {
-    return {
-      primaryImage: backView,
-      secondaryImage: showInset ? frontView : undefined,
-    };
-  }
-
-  return {
-    primaryImage: frontView,
-    secondaryImage: showInset ? backView : undefined,
-  };
-}

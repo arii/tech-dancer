@@ -11,15 +11,6 @@ export const SOCIAL_LINKS = {
 export const GA_MEASUREMENT_ID = 'G-W9W73FV2K1';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION || 'FGbpuhF_c3YUFon1LzrzqmW1jvVPFygugss24n0wn5k';
 
-export const PRINTFUL_REFERRAL = {
-  URL: 'https://www.printful.com/give-5-get-5/GZB6C4',
-  DISCOUNT_AMOUNT: '$5',
-  HERO_HEADING: 'Get $5 Off Your First Order',
-  HERO_SUBHEADING: 'New to Printful? Use our referral link to save $5 on your first purchase.',
-  FOOTER_HEADING: 'First-Time Buyer Discount',
-  FOOTER_DESCRIPTION: 'Supporting BoomTick helps us keep the servers running and the content flowing. Save $5 on your first Printful order and support the blog at the same time.'
-} as const;
-
 const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Training tips, travel guides, and gear reviews for competitive West Coast Swing dancers, plus technical deep dives into building the platform with DevAI.";
 
 export const STATIC_SCHEMAS = {

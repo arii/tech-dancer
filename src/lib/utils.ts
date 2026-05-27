@@ -77,14 +77,6 @@ export function getSkeletonVariant(pathname: string, routeConfig: RouteConfig[])
   return matchRoute?.skeleton || 'grid';
 }
 
-/**
- * Standardizes category strings to Title Case, splitting on hyphens.
- */
-export function formatCategory(cat: string): string {
-  if (!cat || typeof cat !== 'string') return cat;
-  if (cat === 'All') return 'All Posts';
-  return cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
 
 /**
  * Wraps a fetch function with an optional artificial delay for UI simulation.
