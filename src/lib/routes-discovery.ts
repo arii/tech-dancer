@@ -64,7 +64,7 @@ export function getAllRoutes() {
       } else if (r.path === '/') {
         // For home page, use the latest modification of any content
         lastmod = Object.values(contentLastModMap).reduce((latest, current) =>
-          current > latest ? current : latest, getFileLastMod('src/pages/Home.tsx'));
+          current > latest ? current : latest, getFileLastMod('src/features/dashboard/Dashboard.tsx'));
       } else {
         // Fallback to the component file's modification time
         let fileName = r.path.slice(1).split('-').map(part =>

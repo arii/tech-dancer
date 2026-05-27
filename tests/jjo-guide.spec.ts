@@ -32,18 +32,12 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).toBeVisible();
   });
 
-  test('should render the action timeline when reminder dates are available', async ({ page }) => {
+  test('should render the action timeline with multiple rows', async ({ page }) => {
     const remindersSection = page.getByTestId('reminders');
-    const count = await remindersSection.count();
-
-    if (count > 0) {
-      await expect(remindersSection).toBeVisible();
-      const rows = remindersSection.getByTestId('timeline-row');
-      await expect(rows).toHaveCountGreaterThan(1);
-    } else {
-      // Some events may not include reminder timeline source dates.
-      await expect(page.getByTestId('gear')).toBeVisible();
-    }
+    await expect(remindersSection).toBeVisible();
+    // Using stable data-testid instead of .group class
+    const rows = remindersSection.getByTestId('timeline-row');
+    await expect(rows).toHaveCount(4); // Standard WSDC timeline
   });
 
   test('should render related events', async ({ page }) => {
