@@ -37,12 +37,9 @@ export function EventNavigation() {
               key={tab.id}
               as="a"
               href={`#${tab.id}`}
-              paddingY={3.5}
+              paddingY={4}
               shrink={false}
               className="group relative cursor-pointer"
-              minHeight={11}
-              display="flex"
-              align="center"
             >
               <Box
                 display="flex"

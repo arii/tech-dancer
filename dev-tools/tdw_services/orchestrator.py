@@ -236,16 +236,6 @@ class Orchestrator:
         def run(cmd):
             res = run_command(cmd, check=False, shell=True)
             return res.returncode, res.stdout.strip()
-
-        code, origin_url = run("git remote get-url origin")
-        origin_url = (origin_url or "").strip()
-        if code != 0 or not origin_url or 'setup-agent' in origin_url or 'github.com/' not in origin_url:
-            return {"status": "manual_intervention_required", "message": "Malformed or missing origin remote. Fix with: git remote add origin https://github.com/arii/tech-dancer.git"}
-
-        token = os.environ.get('CODEX_GH_TOKEN') or os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
-        if not token:
-            return {"status": "manual_intervention_required", "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN."}
-
         run("git fetch origin")
         code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
         if code == 0 and merge_base:

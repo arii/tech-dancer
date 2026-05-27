@@ -14,8 +14,7 @@ export function MobileBottomNav() {
       inset="bottom"
       zIndex="sticky"
       border="t"
-      display={{ lg: 'none' }}
-      className="bg-surface/90 backdrop-blur-xl safe-bottom"
+      className="lg:hidden bg-surface/90 backdrop-blur-xl border-line safe-bottom"
     >
       <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
