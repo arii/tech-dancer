@@ -104,11 +104,11 @@
     "epsom-salt": {
         "id": "epsom-salt",
         "name": "Epsom Salt / Bath Bombs",
-        "url": "https://amazon.com",
+        "url": "https://www.amazon.com/Amazon-Basics-Magnesium-Sulfate-1-Pack/dp/B0BXTS6L35?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "recovery",
-        "description": "Soothe tired muscles and refresh your skin after a long weekend.",
-        "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg",
-        "draft": true
+        "description": "I like to pack a ziplock bag of this or just order prime groceries at the event and include this",
+        "draft": true,
+        "image": "https://m.media-amazon.com/images/I/71LqUR0-ceL._AC_SL1500_.jpg"
     },
     "foam-roller": {
         "id": "foam-roller",
@@ -179,20 +179,20 @@
     "travel-pillow": {
         "id": "travel-pillow",
         "name": "Memory Foam Travel Pillow",
-        "url": "https://www.amazon.com/dp/B09QRZNV8R?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://a.co/d/0enuFqp9?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "travel",
-        "description": "Essential for catching some sleep on flights or between sessions.",
-        "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg",
-        "draft": true
+        "description": "this is good for long flights and has straps to secure the pillow and your neck",
+        "draft": true,
+        "image": "https://m.media-amazon.com/images/I/51bHGyZRrgL._AC_SL1080_.jpg"
     },
     "dry-shampoo": {
         "id": "dry-shampoo",
-        "name": "Batiste Dry Shampoo",
-        "url": "https://amazon.com",
+        "name": "Oribe Dry Texturizing Spray",
+        "url": "https://a.co/d/06dLoxbA?tag=onasafari04-20",
         "category": "travel",
-        "description": "Refresh your hair quickly between workshops and social dancing.",
-        "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg",
-        "draft": true
+        "description": "I love Oribe products and this one smells amazing while refreshing your hair between workshops and socials.",
+        "draft": true,
+        "image": "https://m.media-amazon.com/images/I/71enRpyGa+L._SL1500_.jpg"
     },
     "electric-fan": {
         "id": "electric-fan",
@@ -206,11 +206,11 @@
     "liquid-iv": {
         "id": "liquid-iv",
         "name": "Liquid I.V. Hydration Multiplier",
-        "url": "https://amazon.com",
+        "url": "https://a.co/d/0gUbbjrc?&tag=onasafari04-20",
         "category": "recovery",
         "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
-        "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg",
-        "draft": true
+        "draft": true,
+        "image": "https://m.media-amazon.com/images/I/41kfwQ6qx9L._AC_.jpg"
     },
     "shoe-brush": {
         "id": "shoe-brush",
@@ -415,6 +415,42 @@
         "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
         "gearSlug": "2024-06-01-shoe-dryer",
         "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg",
+        "draft": true
+    },
+    "piercing-aftercare-swabs": {
+        "id": "piercing-aftercare-swabs",
+        "name": "Dr. Piercing Aftercare Swabs",
+        "url": "https://a.co/d/0heZRdhE?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "category": "travel",
+        "description": "perfect for travel individually wrapped swabs",
+        "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg",
+        "draft": true
+    },
+    "womens-long-zip-hoodie": {
+        "id": "womens-long-zip-hoodie",
+        "name": "Womens Long Zip Up Hoodies",
+        "url": "https://a.co/d/0cgqoZH5?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "category": "gear",
+        "description": "Fun long hoodie perfect for a chilly ballroom length is nice for keeping part of your legs warm and looks good",
+        "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg",
+        "draft": true
+    },
+    "convenience-travel-kit": {
+        "id": "convenience-travel-kit",
+        "name": "Convenience Travel Kit",
+        "url": "https://a.co/d/0eajAb55?tag=onasafari04-20",
+        "category": "travel",
+        "description": "when flying baggage prices are so high it can be more convenient and cheaper to ship products directly to the hotel",
+        "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg",
+        "draft": true
+    },
+    "bling-keychain-pill-case": {
+        "id": "bling-keychain-pill-case",
+        "name": "Bling Keychain Pill Case",
+        "url": "https://amazon.com",
+        "category": "travel",
+        "description": "Bling keychain pill case that is good for keeping small earplugs in.",
+        "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg",
         "draft": true
     }
 }
