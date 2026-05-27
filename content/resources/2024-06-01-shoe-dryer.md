@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event."
-image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
+image: "/images/gear/amazon/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpg"
 affiliateIds: ["shoe-dryer"]
 tags: ["gear", "shoes", "maintenance"]
 rating: 5
