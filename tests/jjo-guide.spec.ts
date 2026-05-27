@@ -25,18 +25,14 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     const gearSection = page.getByTestId('gear');
     await expect(gearSection).toBeVisible();
 
-    // Using stable data-testids to avoid heading level conflicts
-    await expect(page.getByTestId('gear-section-outfits')).toBeVisible();
-    await expect(page.getByTestId('gear-section-accessories')).toBeVisible();
-    await expect(page.getByTestId('gear-section-shoes-&-essentials')).toBeVisible();
-    await expect(page.getByTestId('gear-section-travel-extras')).toBeVisible();
+    // Using headings to be more specific and avoid strict mode violations with descriptions
+    await expect(gearSection.getByRole('heading', { name: 'Outfits' })).toBeVisible();
+    await expect(gearSection.getByRole('heading', { name: 'Accessories' })).toBeVisible();
+    await expect(gearSection.getByRole('heading', { name: 'Shoes & Essentials' })).toBeVisible();
+    await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).toBeVisible();
   });
 
   test('should render the action timeline with multiple rows', async ({ page }) => {
-    // The reminders section is conditionally rendered on mobile/desktop
-    // Let's ensure we are checking the mobile viewport for 'reminders'
-    await page.setViewportSize({ width: 375, height: 667 });
-
     const remindersSection = page.getByTestId('reminders');
     await expect(remindersSection).toBeVisible();
     // Using stable data-testid instead of .group class
@@ -59,8 +55,8 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     const hero = page.getByTestId('hero');
     await expect(hero.getByRole('heading', { name: 'Jack & Jill O\'Rama' })).toBeVisible();
 
-    // For EventNavigation, it's an overflowX auto box. We use the first one matching these classes to avoid strict mode violations
-    const eventNav = page.locator('.no-scrollbar.scroll-smooth').first();
+    // For EventNavigation, it's an overflowX auto box.
+    const eventNav = page.locator('.no-scrollbar.scroll-smooth');
     await expect(eventNav).toBeVisible();
   });
 });
