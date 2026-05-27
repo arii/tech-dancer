@@ -136,7 +136,7 @@ export function HeroSection() {
               as={NavLink}
               to="/events"
               variant="primary"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+              className="min-h-12 justify-center md:justify-start flex-1 normal-case rounded-lg px-6"
             >
               Explore Event Guides
             </ActionButton>
@@ -144,7 +144,7 @@ export function HeroSection() {
               as={NavLink}
               to="/gear"
               variant="secondary"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+              className="min-h-12 justify-center md:justify-start flex-1 normal-case rounded-lg px-6"
             >
               Browse Gear Reviews
             </ActionButton>

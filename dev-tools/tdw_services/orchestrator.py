@@ -236,7 +236,38 @@ class Orchestrator:
         def run(cmd):
             res = run_command(cmd, check=False, shell=True)
             return res.returncode, res.stdout.strip()
-        run("git fetch origin")
+
+        code, origin_url = run("git remote get-url origin")
+        if code != 0 or not origin_url:
+            return {
+                "status": "manual_intervention_required",
+                "message": "Git remote 'origin' is missing or invalid. Fix with: git remote add origin https://github.com/arii/tech-dancer.git",
+            }
+        if "github.com" not in origin_url:
+            return {
+                "status": "manual_intervention_required",
+                "message": "Git remote 'origin' does not point to GitHub. Fix with: git remote add origin https://github.com/arii/tech-dancer.git",
+            }
+        if any(marker in origin_url for marker in ("[setup-agent]", "GitHub token detected")):
+            return {
+                "status": "manual_intervention_required",
+                "message": "Git remote 'origin' appears malformed. Fix with: git remote add origin https://github.com/arii/tech-dancer.git",
+            }
+
+        token = os.environ.get("CODEX_GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        if not token:
+            return {
+                "status": "manual_intervention_required",
+                "message": "Missing GitHub auth token. Set CODEX_GH_TOKEN or GITHUB_TOKEN.",
+            }
+
+        fetch_code, _ = run("git fetch origin")
+        if fetch_code != 0:
+            return {
+                "status": "manual_intervention_required",
+                "message": "Unable to fetch origin. Verify remote URL and token. Fixes: git remote add origin https://github.com/arii/tech-dancer.git and set CODEX_GH_TOKEN or GITHUB_TOKEN.",
+            }
+
         code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
         if code == 0 and merge_base:
             run(f"git reset --soft {merge_base}")
