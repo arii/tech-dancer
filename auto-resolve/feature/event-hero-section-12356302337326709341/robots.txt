@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/auto-resolve/feature/event-hero-section-12356302337326709341/sitemap.xml

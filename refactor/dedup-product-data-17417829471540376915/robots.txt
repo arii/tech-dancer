@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/refactor/dedup-product-data-17417829471540376915/sitemap.xml
