@@ -8,7 +8,7 @@ from typing import Optional, Dict, Any, List
 from utils import call_ollama, is_ollama_available, clean_llm_output, get_ollama_model
 
 # Model used for per-file chunk review (code-aware, focused)
-_REVIEW_MODEL = "qwen2.5-coder:7b"
+_REVIEW_MODEL = "code-reviewer"
 # Lighter/faster model used only for the final synthesis step
 _SYNTHESIS_MODEL = "llama3.2"
 

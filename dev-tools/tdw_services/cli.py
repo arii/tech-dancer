@@ -350,8 +350,21 @@ def dispatch(ctx, branch, task):
 def sync(ctx):
     """Sync active agent sessions."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.jules.list_sessions()
-    out(ctx, "Agent sync complete.", data={"sessions": res})
+    sessions = orch.jules.list_sessions()
+
+    if not ctx.obj['JSON']:
+        if not sessions:
+            click.echo("No active agent sessions found.")
+        else:
+            click.echo(f"{'Session ID':<20} | {'Status':<15} | {'Created':<25}")
+            click.echo("-" * 65)
+            for s in sessions:
+                sid = s.get('name', 'N/A').split('/')[-1]
+                state = s.get('state', 'UNKNOWN')
+                created = s.get('createTime', 'N/A')
+                click.echo(f"{sid:<20} | {state:<15} | {created:<25}")
+
+    out(ctx, "Agent sync complete.", data={"sessions": sessions})
 
 @agent_group.command()
 @click.option('--pr-number', type=int)

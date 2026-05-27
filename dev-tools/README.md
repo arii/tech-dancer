@@ -62,7 +62,7 @@ export GEMINI_API_KEY="<key>"
 - `SKIP_VALIDATION=1` — skip post-install validation checks.
 - `SKIP_REMOTE_CONFIG=1` — skip `origin` remote auto-configuration.
 - `PNPM_VERSION` — override pnpm version (default `10.28.2`).
-- `NODE_MAJOR` — override Node major used for apt installation (default `22`). Defaults to 22 if not specified.
+- `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
 
 
 ### Non-Traditional Workflows (Deploy, Antigravity, Jules, Ollama)
