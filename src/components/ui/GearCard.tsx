@@ -29,6 +29,7 @@ interface GearCardProps extends BaseProps {
   excerpt: string;
   verdict?: string;
   image?: string;
+  imageMode?: string;
   imageFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
   imagePosition?: string;
   imagePadding?: boolean;
@@ -62,7 +63,7 @@ export function GearCard(props: GearCardProps) {
   ] as (keyof GearCardProps)[]);
 
   // Image display options
-  const mode = (props as any).imageMode || 'contain';
+  const mode = props.imageMode || 'contain';
   const imagePosition = props.imagePosition || 'center';
 
   const imageSizeClasses: Record<string, string> = {

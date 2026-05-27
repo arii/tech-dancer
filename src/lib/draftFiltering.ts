@@ -12,7 +12,7 @@ export interface DraftableItem {
   id: string;
   name: string;
   draft?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

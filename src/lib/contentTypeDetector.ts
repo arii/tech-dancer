@@ -65,16 +65,3 @@ export function getSourceBadge(type: ContentType): string {
   }
 }
 
-/**
- * Check if a resource is an external affiliate link.
- */
-export function isAffiliateExternal(resource: ResourceWithType): boolean {
-  return detectContentType(resource) === 'affiliate' && !!resource.affiliateIds;
-}
-
-/**
- * Check if a resource is merch (Printful).
- */
-export function isMerch(resource: ResourceWithType): boolean {
-  return detectContentType(resource) === 'merch';
-}

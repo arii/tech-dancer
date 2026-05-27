@@ -21,12 +21,6 @@ export interface MerchProduct {
   tags: string[];
 }
 
-export const COLLECTIONS = [
-  { id: 'all', label: 'All' },
-  { id: 'lead-follow-switch', label: 'Lead/Follow/Switch' },
-  { id: 'norcal-bestcal', label: 'NorCal BestCal' },
-  { id: 'rainbow-pride', label: 'Rainbow Pride' },
-] as const;
 
 export const MERCH_PRODUCTS: MerchProduct[] = [
   {

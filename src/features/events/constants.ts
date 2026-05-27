@@ -13,4 +13,3 @@ export const MAIN_GAP = 'space-y-12';
 export const SECTION_GAP = 'space-y-5';
 export const GRID_GAP = 'gap-4';
 export const SIDEBAR_WIDTH = 80;
-export const SECTION_SPACING = 'section-spacing';

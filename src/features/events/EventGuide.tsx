@@ -37,19 +37,21 @@ export default function EventGuide() {
 
   const editorialProducts = useMemo(() => {
     const deduplicator = createProductDeduplicator();
-    let remainingSlots = TOTAL_VISIBLE_PRODUCTS;
-    let hasOverflow = false;
+    const state = {
+      remainingSlots: TOTAL_VISIBLE_PRODUCTS,
+      hasOverflow: false
+    };
 
     const allocate = <T extends { id: string }>(items: T[], limit: number) => {
       const uniqueItems = deduplicator.filter(items);
-      const allowed = Math.max(Math.min(limit, remainingSlots), 0);
+      const allowed = Math.max(Math.min(limit, state.remainingSlots), 0);
       const visibleItems = uniqueItems.slice(0, allowed);
 
       if (uniqueItems.length > visibleItems.length) {
-        hasOverflow = true;
+        state.hasOverflow = true;
       }
 
-      remainingSlots -= visibleItems.length;
+      state.remainingSlots -= visibleItems.length;
       return visibleItems;
     };
 
@@ -80,7 +82,7 @@ export default function EventGuide() {
       packingProducts,
       travelProducts,
       packingMaxItems,
-      hasOverflow,
+      hasOverflow: state.hasOverflow,
     };
   }, [event, themeAccessories, themeOutfits]);
 
