@@ -43,7 +43,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        paddingX={{ base: 8, md: 12, lg: 24 }}
+        paddingX={{ base: 0, md: 0, lg: 0 }}
         paddingY={{ base: 2, lg: 2 }}
         maxWidth="screen-xl"
         marginX="auto"
