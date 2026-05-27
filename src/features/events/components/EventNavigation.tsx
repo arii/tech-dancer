@@ -1,37 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 import { EVENT_TABS } from '../constants';
 
 export function EventNavigation() {
-  const [activeTab, setActiveTab] = useState<string>('');
-  const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = EVENT_TABS
-        .filter(tab => !('path' in tab))
-        .map(tab => ({
-          id: tab.id,
-          offset: document.getElementById(tab.id)?.offsetTop || 0
-        }))
-        .sort((a, b) => b.offset - a.offset);
-
-      const scrollPosition = window.scrollY + 100; // Offset for header
-
-      for (const section of sections) {
-        if (scrollPosition >= section.offset) {
-          setActiveTab(section.id);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location]);
-
   return (
     <Box
       position="sticky"
@@ -55,54 +25,50 @@ export function EventNavigation() {
 
         <Box
           display="flex"
-          gap={{ base: 6, md: 8 }}
+          gap={{ base: 8, md: 10 }}
           overflowX="auto"
           scrollBehavior="smooth"
           className="no-scrollbar"
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
         >
-          {EVENT_TABS.map(tab => {
-            const isExternal = 'path' in tab;
-            const isActive = activeTab === tab.id;
-
-            return (
+          {EVENT_TABS.map(tab => (
+            <Box
+              key={tab.id}
+              as="a"
+              href={`#${tab.id}`}
+              paddingY={4}
+              shrink={false}
+              className="group relative cursor-pointer"
+            >
               <Box
-                key={tab.id}
-                as={isExternal ? Link : "a"}
-                {...(isExternal ? { to: tab.path } : { href: `#${tab.id}` })}
-                paddingY={3}
-                shrink={false}
-                className="group relative cursor-pointer"
+                display="flex"
+                align="center"
+                gap={2}
+                color="dim"
+                className="group-hover:text-accent transition-colors whitespace-nowrap"
               >
-                <Box
-                  display="flex"
-                  align="center"
-                  gap={2}
-                  className={`${isActive ? 'text-accent' : 'text-dim'} group-hover:text-accent transition-colors whitespace-nowrap`}
+                <tab.icon size={14} />
+                <Text
+                  variant="mono"
+                  size="xs"
+                  weight="font-bold"
+                  uppercase
+                  tracking="widest"
                 >
-                  <tab.icon size={16} />
-                  <Text
-                    variant="mono"
-                    size="xs"
-                    weight="font-bold"
-                    uppercase
-                    tracking="wider"
-                  >
-                    {tab.label}
-                  </Text>
-                </Box>
-                <Box
-                  position="absolute"
-                  bottom={0}
-                  left={0}
-                  right={0}
-                  height={0.5}
-                  className={`bg-accent transition-transform origin-left ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-                />
+                  {tab.label}
+                </Text>
               </Box>
-            );
-          })}
+              <Box
+                position="absolute"
+                bottom={0}
+                left={0}
+                right={0}
+                height={0.5}
+                className="bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+              />
+            </Box>
+          ))}
         </Box>
       </Box>
     </Box>
