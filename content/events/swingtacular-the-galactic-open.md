@@ -74,9 +74,7 @@ San Francisco event. Check for roommate pairings on the Facebook group early.
 
 ## Community Reviews
 
-> "The production value is insane. It's not just a dance event; it's a visual experience. Saturday night feels like a futuristic rave where everyone happens to be world-class at West Coast Swing." — *Frequent Attendee*
 
-> "Best lighting on the circuit, hands down. The Hyatt ballroom is huge, and they really know how to fill it with energy." — *Pro Dancer*
 
 ## Pro Tips
 
@@ -88,7 +86,5 @@ San Francisco event. Check for roommate pairings on the Facebook group early.
 ## Gear Spotlight: Alien Essentials
 
 ### Loop Experience Earplugs
-> "As a lead who spends 8+ hours a day in the ballroom, these are a lifesaver. Swingtacular has *huge* sound, and these take the edge off without losing the music's clarity." — *Amazon Review*
 
 ### Sequin Bomber Jacket
-> "Perfect for the Alien theme! It catches the lasers in the Swingtacular ballroom beautifully. Lightweight enough to dance in all night." — *Customer Review*

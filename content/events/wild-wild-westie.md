@@ -69,9 +69,7 @@ Dallas event. Book the hotel room block immediately as it fills fast.
 
 ## Community Reviews
 
-> "The energy in the Westin ballroom during the finals is unlike anything else. Dallas dancers bring a whole different level of hype and hospitality." — *Competitive Follow*
 
-> "It's called Wild Wild Westie for a reason. The social floor is fast, the talent is deep, and you'll probably leave with no voice and very tired feet. 10/10." — *Texas Local*
 
 ## Pro Tips
 
@@ -83,7 +81,5 @@ Dallas event. Book the hotel room block immediately as it fills fast.
 ## Gear Spotlight: Dallas Essentials
 
 ### Suede Sheets (DIY Shoe Kit)
-> "Texas floors can be surprisingly fast. I always carry a pack of these suede sheets to Wild Wild Westie to make sure I have the traction I need for those intense social sets." — *Lead Review*
 
 ### Portable Charger
-> "With all the filming and social media updates from the Dallas ballroom, my phone battery never lasts. This charger is small enough to keep in my pocket and has saved me more than once." — *Customer Review*

@@ -61,9 +61,7 @@ Weekly social dance in San Jose.
 
 ## Community Reviews
 
-> "The South Bay's home for West Coast Swing. It's where most of us started, and it's where we keep coming back for the great floor and the even better people." — *San Jose Local*
 
-> "The level of instruction here is top-notch. They bring in amazing guest pros, but the core community is what really makes it special every Wednesday night." — *Advanced Dancer*
 
 ## Pro Tips
 
