@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { getBasePath } from '../scripts/base-path.js';
 
-const BASE_PATH = getBasePath();
+const BASE_PATH = getBasePath().replace(/\/$/, '');
 
 test.describe('Home Page Layout and Navigation', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,7 +14,7 @@ test.describe('Home Page Layout and Navigation', () => {
     await expect(nav).toBeVisible();
 
     // The logo should be visible
-    const logo = nav.locator(`a[href="${BASE_PATH}/"]`);
+    const logo = nav.locator(`a[href="${BASE_PATH || ''}/"]`);
     await expect(logo).toBeVisible();
 
     // Navigation links should be present (at least top routes)
@@ -29,7 +29,7 @@ test.describe('Home Page Layout and Navigation', () => {
     // Subscribe CTA should be present
     const subscribeCta = nav.locator('a:has-text("Subscribe")');
     await expect(subscribeCta).toBeVisible();
-    await expect(subscribeCta).toHaveAttribute('href', `${BASE_PATH}/contact?intent=subscribe`);
+    await expect(subscribeCta).toHaveAttribute('href', `${BASE_PATH || ''}/contact?intent=subscribe`);
   });
 
   test('should render the new hero section with CTAs', async ({ page }) => {
@@ -44,10 +44,10 @@ test.describe('Home Page Layout and Navigation', () => {
     const browseCta = heroSection.locator('a:has-text("Browse Gear Reviews")');
 
     await expect(exploreCta).toBeVisible();
-    await expect(exploreCta).toHaveAttribute('href', `${BASE_PATH}/events`);
+    await expect(exploreCta).toHaveAttribute('href', `${BASE_PATH || ''}/events`);
 
     await expect(browseCta).toBeVisible();
-    await expect(browseCta).toHaveAttribute('href', `${BASE_PATH}/gear`);
+    await expect(browseCta).toHaveAttribute('href', `${BASE_PATH || ''}/gear`);
   });
 
   test('should render all new modular homepage feature panels', async ({ page }) => {
