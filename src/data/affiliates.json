@@ -52,7 +52,8 @@
         "url": "https://www.amazon.com/dp/B0G1TSYYRW?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "travel",
         "description": "Leak-proof refillable containers for TSA-approved liquids.",
-        "image": "/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.png"
+        "image": "/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.png",
+        "draft": true
     },
     "dance-socks": {
         "id": "dance-socks",
@@ -124,7 +125,8 @@
         "url": "https://www.amazon.com/dp/B06XKBMKJY?&linkCode=ll2&tag=onasafari04-20&linkId=abca4152f64a2c6c164458d732c29dc4&language=en_US&ref_=as_li_ss_tl",
         "category": "gear",
         "description": "Rainbow bustle that glows in the dark and looks amazing under UV light.",
-        "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg"
+        "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg",
+        "draft": true
     },
     "sequin-bomber-jacket": {
         "id": "sequin-bomber-jacket",
@@ -141,7 +143,7 @@
         "name": "Ombre Flowy Dance Dress",
         "url": "https://www.amazon.com/dp/B08QMP3YXK?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
-        "description": "Gradient dress that moves beautifully with every turn.",
+        "description": "Gradient dress that moves beautifully with every turn. (Temporarily hidden pending image/source verification.)",
         "image": "/images/gear/amazon/prettygarden-women-s-summer-casual-deep-v-neck-short-sleeve-wrap-draws.jpg",
         "imageMode": "apparel",
         "draft": true
@@ -226,7 +228,8 @@
         "category": "travel",
         "description": "Essential for social dancing confidence.",
         "image": "/images/gear/amazon/altoids-peppermint-mints.jpg",
-        "imageMode": "contain"
+        "imageMode": "contain",
+        "draft": true
     },
     "hand-sanitizer": {
         "id": "hand-sanitizer",
@@ -311,7 +314,8 @@
         "category": "fashion",
         "description": "Reflective casual crop tops for visibility and style on and off the dance floor.",
         "gearSlug": "2024-06-01-reflective-crop-tops",
-        "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.png"
+        "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.png",
+        "draft": true
     },
     "pumpkin-headbands": {
         "id": "pumpkin-headbands",
@@ -320,7 +324,8 @@
         "category": "fashion",
         "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
         "gearSlug": "2024-06-01-pumpkin-headbands",
-        "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.png"
+        "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.png",
+        "draft": true
     },
     "mini-fan": {
         "id": "mini-fan",
@@ -338,7 +343,8 @@
         "category": "fashion",
         "description": "Comfortable and stylish crop tops for dancing.",
         "gearSlug": "2024-06-01-crop-tops",
-        "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.jpg"
+        "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.jpg",
+        "draft": true
     },
     "mesh-fishnet-top": {
         "id": "mesh-fishnet-top",
@@ -348,7 +354,8 @@
         "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
         "gearSlug": "2024-06-01-mesh-fishnet-top",
         "image": "/images/gear/sketches/mesh-fishnet-top.png",
-        "imageMode": "apparel"
+        "imageMode": "apparel",
+        "draft": true
     },
     "portable-speaker": {
         "id": "portable-speaker",
@@ -358,7 +365,8 @@
         "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
         "gearSlug": "2024-01-01-portable-speaker",
         "image": "/assets/gear/ue-wonderboom.jpg",
-        "imageMode": "wide"
+        "imageMode": "wide",
+        "draft": true
     },
     "yellow-fun-romper": {
         "id": "yellow-fun-romper",
@@ -366,7 +374,8 @@
         "url": "https://www.amazon.com/dp/B097XSKNRB?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
         "description": "Yellow fun romper that is great to dance in.",
-        "image": "/images/gear/amazon/yellow-fun-romper.jpg"
+        "image": "/images/gear/amazon/yellow-fun-romper.jpg",
+        "draft": true
     },
     "charging-cables": {
         "id": "charging-cables",
@@ -375,7 +384,8 @@
         "category": "travel",
         "description": "Fast-charging USB cables for keeping your devices powered during multi-day conventions.",
         "gearSlug": "2024-06-01-charging-cables",
-        "image": "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpeg"
+        "image": "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpeg",
+        "draft": true
     },
     "fishnet-tights": {
         "id": "fishnet-tights",
@@ -384,7 +394,8 @@
         "category": "fashion",
         "description": "Six-pack of fishnet lace tights for elegant leg coverage and style.",
         "gearSlug": "2024-06-01-fishnet-tights",
-        "image": "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.png"
+        "image": "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.png",
+        "draft": true
     },
     "running-belt": {
         "id": "running-belt",
@@ -393,7 +404,8 @@
         "category": "travel",
         "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
         "gearSlug": "2024-06-01-running-belt",
-        "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
+        "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg",
+        "draft": true
     },
     "shoe-dryer": {
         "id": "shoe-dryer",
@@ -402,6 +414,7 @@
         "category": "travel",
         "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
         "gearSlug": "2024-06-01-shoe-dryer",
-        "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
+        "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg",
+        "draft": true
     }
 }
