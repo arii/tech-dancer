@@ -350,8 +350,8 @@ def dispatch(ctx, branch, task):
 def sync(ctx):
     """Sync active agent sessions."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.jules.list_sources() # Placeholder for actual session sync
-    out(ctx, "Agent sync complete.", data={"sources": res})
+    res = orch.jules.list_sessions()
+    out(ctx, "Agent sync complete.", data={"sessions": res})
 
 @agent_group.command()
 @click.option('--pr-number', type=int)
