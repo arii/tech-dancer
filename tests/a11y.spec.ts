@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('accessibility', () => {
   test.beforeEach(async ({ page }) => {
      await page.goto('./');
-     await expect(page.locator('main')).toBeVisible();
+     await expect(page.locator('main').first()).toBeVisible();
 
      // Dismiss newsletter banner if present to avoid overlay issues during scan
      const dismissButton = page.locator('button[aria-label="Dismiss newsletter signup"]');
