@@ -550,5 +550,13 @@
     "gearSlug": "2024-06-01-shoe-dryer",
     "draft": true,
     "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
+  },
+  "barge-cement": {
+    "id": "barge-cement",
+    "name": "Barge All Purpose Cement",
+    "url": "https://www.amazon.com/dp/B0032YYOFS?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "category": "gear",
+    "description": "Heavy duty waterproof glue for applying suede to shoes.",
+    "draft": false
   }
 }

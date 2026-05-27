@@ -6,9 +6,7 @@ author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "The $15 DIY hack for perfect traction on any ballroom floor."
 image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
-affiliateIds:
-  - suede-sheets
-  - barge-cement
+affiliateIds: ["suede-sheets", "barge-cement"]
 tags:
   - diy
   - footwear
