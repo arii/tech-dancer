@@ -13,6 +13,8 @@ verdict: "Oversized & Comfortable"
 priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/war-eagle-shirt
+displayMode: "pair"
+featuredSide: "back"
 ---
 
 The War Eagle oversized t-shirt offers a modern high-neck silhouette and maximum comfort for long dance weekends.

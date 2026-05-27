@@ -13,6 +13,8 @@ verdict: "Stylish & Social"
 priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/lead-love-shirt-neon
+displayMode: "pair"
+featuredSide: "back"
 ---
 
 The LOVE neon tshirt is part of the NorCal BestCal collection, designed for dancers who want to make a statement. This version is perfect for leaders who want to clearly communicate their role while sporting a vibrant, Pride-inspired aesthetic.
