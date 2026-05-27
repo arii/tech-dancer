@@ -70,9 +70,7 @@ Celebrate Independence Day at one of the most luxurious resorts on the swing cir
 
 ## Community Reviews
 
-> "The pool party is absolutely legendary. There's nothing like dancing in Scottsdale with a cocktail in hand and the best dancers in the world nearby. It's the ultimate 'vacation' event." — *Travel Dancer*
 
-> "The Paradise Ballroom is stunning, but honestly, the fireworks over the resort are what make this a core memory every year." — *Event Regular*
 
 ## Pro Tips
 
@@ -84,7 +82,5 @@ Celebrate Independence Day at one of the most luxurious resorts on the swing cir
 ## Gear Spotlight: Patriotic Essentials
 
 ### Liquid I.V. Hydration Multiplier
-> "Absolute necessity for Phoenix in July. I drank one of these every morning before the workshops and another before the pool party. Kept me from crashing in the 110-degree heat." — *Amazon Review*
 
 ### Neck Fan
-> "Game changer for the outdoor pool party. While everyone else was melting, I had my own personal breeze. It's quiet enough that I could still hear the music and talk to my friends." — *Verified Purchase*

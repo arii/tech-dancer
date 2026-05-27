@@ -101,10 +101,20 @@
   "epsom-salt": {
     "id": "epsom-salt",
     "name": "Epsom Salt / Bath Bombs",
-    "url": "https://amazon.com",
+    "url": "https://www.amazon.com/Amazon-Basics-Magnesium-Sulfate-1-Pack/dp/B0BXTS6L35?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "recovery",
-    "description": "Soothe tired muscles and refresh your skin after a long weekend.",
-    "draft": true
+    "description": "I like to pack a ziplock bag of this or just order prime groceries at the event and include this",
+    "draft": false,
+    "image": "https://m.media-amazon.com/images/I/71LqUR0-ceL._AC_SL1500_.jpg"
+  },
+  "piercing-aftercare": {
+    "id": "piercing-aftercare",
+    "name": "Dr. Piercing Aftercare Swabs",
+    "url": "https://a.co/d/0heZRdhE?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "category": "recovery",
+    "description": "perfect for travel individually wrapped swabs",
+    "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg",
+    "draft": false
   },
   "foam-roller": {
     "id": "foam-roller",
@@ -165,10 +175,20 @@
   "travel-pillow": {
     "id": "travel-pillow",
     "name": "Memory Foam Travel Pillow",
-    "url": "https://www.amazon.com/dp/B09QRZNV8R?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://a.co/d/0enuFqp9?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
-    "description": "Essential for catching some sleep on flights or between sessions.",
-    "draft": true
+    "description": "this is good for long flights and has straps to secure the pillow and your neck",
+    "draft": false,
+    "image": "https://m.media-amazon.com/images/I/51bHGyZRrgL._AC_SL1080_.jpg"
+  },
+  "long-zip-up-hoodie": {
+    "id": "long-zip-up-hoodie",
+    "name": "Womens Long Zip Up Hoodies",
+    "url": "https://a.co/d/0cgqoZH5?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "category": "fashion",
+    "description": "Fun long hoodie perfect for a chilly ballroom length is nice for keeping part of your legs warm and looks good",
+    "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg",
+    "draft": false
   },
   "microfiber-towel": {
     "id": "microfiber-towel",
@@ -180,11 +200,21 @@
   },
   "dry-shampoo": {
     "id": "dry-shampoo",
-    "name": "Batiste Dry Shampoo",
-    "url": "https://amazon.com",
+    "name": "Oribe Dry Texturizing Spray",
+    "url": "https://a.co/d/06dLoxbA?tag=onasafari04-20",
     "category": "travel",
-    "description": "Refresh your hair quickly between workshops and social dancing.",
-    "draft": true
+    "description": "I love Oribe products and they smell amazing. Perfect for refreshing hair between sessions.",
+    "draft": false,
+    "image": "https://m.media-amazon.com/images/I/71enRpyGa+L._SL1500_.jpg"
+  },
+  "travel-toiletries-kit": {
+    "id": "travel-toiletries-kit",
+    "name": "Convenience Travel Kit",
+    "url": "https://a.co/d/0eajAb55?tag=onasafari04-20",
+    "category": "travel",
+    "description": "when flying baggage prices are so high it can be more convenient and cheaper to ship products directly to the hotel",
+    "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg",
+    "draft": false
   },
   "electric-fan": {
     "id": "electric-fan",
@@ -197,9 +227,19 @@
   "liquid-iv": {
     "id": "liquid-iv",
     "name": "Liquid I.V. Hydration Multiplier",
-    "url": "https://amazon.com",
+    "url": "https://a.co/d/0gUbbjrc?&tag=onasafari04-20",
     "category": "recovery",
     "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
+    "draft": false,
+    "image": "https://m.media-amazon.com/images/I/41kfwQ6qx9L._AC_.jpg"
+  },
+  "bling-pill-case": {
+    "id": "bling-pill-case",
+    "name": "Bling Keychain Pill Case",
+    "url": "https://amazon.com",
+    "category": "gear",
+    "description": "A bling keychain pill case that is good for keeping small earplugs in.",
+    "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg",
     "draft": true
   },
   "shoe-brush": {
@@ -216,7 +256,8 @@
     "url": "https://www.amazon.com/ALTOIDS-Curiously-Strong-Individual-1-76-Ounce/dp/B09QPR3J2B?crid=1JJYA4NTLDUI8&dib=eyJ2IjoiMSJ9.S6xHBieEj_kl1b7YSroF7HInWJL3s5AEMQvLYiGgBaZpBI478iBDeuwVeFa5k1SG5d0oYVYuajaa4O4DI1KMZ8eSwZlb-z31om-LseEWE3zHfpb4HurO89ZU7jhfCdQf2Mcy6h9FT3KjJ8lgc7j6uczyHJHmZE31BQ_i1zPSr0usE8N-flO4RKH7T0xk2HQisPZs_6TXRXTzSaik18e7GIYg93VzMsy7cmSiyNtAt0bIKGuMqjTNXiRbP7Ll9q78Kol8nzN-VBP8DFPAdZpf2At4fzkallQZnOZ2Y3mBuWk.IqwCnSeO0D3yfh0mNE0Fs_d4ikNJx-1k7VLJUwU-ytM&dib_tag=se&keywords=altoid+peppermint&qid=1779840032&sprefix=altoid+peper%2Caps%2C210&sr=8-7&linkCode=ll2&tag=onasafari04-20&linkId=63364f49a83e62faaa7fe4ef919be05c&language=en_US&ref_=as_li_ss_tl",
     "category": "travel",
     "description": "Essential for social dancing confidence.",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/amazon/altoids-peppermint-mints.jpg"
   },
   "hand-sanitizer": {
     "id": "hand-sanitizer",
@@ -412,7 +453,8 @@
     "category": "fashion",
     "description": "Reflective casual crop tops for visibility and style on and off the dance floor.",
     "gearSlug": "2024-06-01-reflective-crop-tops",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.png"
   },
   "pumpkin-headbands": {
     "id": "pumpkin-headbands",
@@ -421,7 +463,8 @@
     "category": "fashion",
     "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
     "gearSlug": "2024-06-01-pumpkin-headbands",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.png"
   },
   "mini-fan": {
     "id": "mini-fan",
@@ -438,7 +481,8 @@
     "category": "fashion",
     "description": "Comfortable and stylish crop tops for dancing.",
     "gearSlug": "2024-06-01-crop-tops",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.jpg"
   },
   "mesh-fishnet-top": {
     "id": "mesh-fishnet-top",
@@ -447,7 +491,8 @@
     "category": "fashion",
     "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
     "gearSlug": "2024-06-01-mesh-fishnet-top",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/mesh-fishnet-top.png"
   },
   "portable-speaker": {
     "id": "portable-speaker",
@@ -473,7 +518,8 @@
     "category": "travel",
     "description": "Fast-charging USB cables for keeping your devices powered during multi-day conventions.",
     "gearSlug": "2024-06-01-charging-cables",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpeg"
   },
   "fishnet-tights": {
     "id": "fishnet-tights",
@@ -482,7 +528,8 @@
     "category": "fashion",
     "description": "Six-pack of fishnet lace tights for elegant leg coverage and style.",
     "gearSlug": "2024-06-01-fishnet-tights",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.png"
   },
   "running-belt": {
     "id": "running-belt",
@@ -491,7 +538,8 @@
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
     "gearSlug": "2024-06-01-running-belt",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
   },
   "shoe-dryer": {
     "id": "shoe-dryer",
@@ -500,6 +548,7 @@
     "category": "travel",
     "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
     "gearSlug": "2024-06-01-shoe-dryer",
-    "draft": true
+    "draft": true,
+    "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
   }
 }

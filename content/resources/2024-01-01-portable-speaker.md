@@ -6,11 +6,9 @@ author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings."
 image: "/assets/gear/ue-wonderboom.jpg"
-affiliateIds: ["amazon"]
+affiliateIds: ["portable-speaker"]
 tags: ["practice", "music", "travel"]
-rating: 4.8
 verdict: "Best for Travel"
-priceCategory: "$$"
 updatedDate: "Jan 2024"
 ---
 
