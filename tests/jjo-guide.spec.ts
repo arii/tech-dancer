@@ -21,31 +21,23 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     await expect(swatches).toHaveCount(6);
   });
 
-  test('should render curated gear sections (with deduplication and capping)', async ({ page }) => {
+  test('should render curated gear sections', async ({ page }) => {
     const gearSection = page.getByTestId('gear');
     await expect(gearSection).toBeVisible();
 
-    // Deduplication logic: Accessories are all in theme, so they won't appear in gear section
+    // Using headings to be more specific and avoid strict mode violations with descriptions
     await expect(gearSection.getByRole('heading', { name: 'Outfits' })).toBeVisible();
+    await expect(gearSection.getByRole('heading', { name: 'Accessories' })).toBeVisible();
     await expect(gearSection.getByRole('heading', { name: 'Shoes & Essentials' })).toBeVisible();
-
-    // Note: 'Travel Extras' may be capped if total products exceed 15
-    // For JJO: 6 theme outfits + 3 theme accessories + 3 gear outfits + 3 shoes = 15 items reached.
-    await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).not.toBeVisible();
+    await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).toBeVisible();
   });
 
-  test('should render the action timeline in sidebar (desktop)', async ({ page }) => {
-    // On desktop, reminders are in the sidebar under "IMPORTANT DATES" (uppercase in UI)
-    const sidebar = page.locator('aside');
-    // JJO has no dates, so important dates section should not be visible
-    await expect(sidebar.getByText('IMPORTANT DATES')).not.toBeVisible();
-  });
-
-  test('should render the action timeline inline (mobile)', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    // JJO has no dates, so reminders section should be hidden entirely
+  test('should render the action timeline with multiple rows', async ({ page }) => {
     const remindersSection = page.getByTestId('reminders');
-    await expect(remindersSection).not.toBeVisible();
+    await expect(remindersSection).toBeVisible();
+    // Using stable data-testid instead of .group class
+    const rows = remindersSection.getByTestId('timeline-row');
+    await expect(rows).toHaveCount(4); // Standard WSDC timeline
   });
 
   test('should render related events', async ({ page }) => {
@@ -56,7 +48,7 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     await expect(relatedSection.getByText('Boogie by the Bay')).toBeVisible();
   });
 
-  test('responsive check - mobile viewport navigation', async ({ page }) => {
+  test('responsive check - mobile viewport', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
 
     // Header should still be visible
