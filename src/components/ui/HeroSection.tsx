@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
