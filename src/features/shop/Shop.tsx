@@ -43,14 +43,14 @@ export default function Shop() {
   return (
     <Box as="section" paddingY={4}>
       <SEO
-        title="Shop"
+        title="West Coast Swing Dance Merch"
         description="BoomTick Printful merch — hoodies, tees, and apparel for swing dancers."
       />
 
       <Box as="header" marginBottom={8}>
         <PageHeader
-          label="SHOP"
-          title="BoomTick Merch"
+          label="STOREFRONT"
+          title="West Coast Swing Dance Merch"
           description="Exclusive BoomTick apparel for swing dancers."
         />
 
