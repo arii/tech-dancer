@@ -47,7 +47,7 @@ export function GearShelf() {
               {image ? (
                 <img
                   src={`${ASSET_PREFIX}${image}`}
-                  alt={label}
+                  alt=""
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
@@ -78,7 +78,7 @@ export function GearShelf() {
             >
               <Box radius="lg" overflow="hidden" border className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
                 {image ? (
-                  <img src={`${ASSET_PREFIX}${image}`} alt={label} className="h-full w-full object-cover" />
+                  <img src={`${ASSET_PREFIX}${image}`} alt="" className="h-full w-full object-cover" />
                 ) : (
                   <CategoryPlaceholder category="gear" size="sm" />
                 )}
