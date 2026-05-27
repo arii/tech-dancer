@@ -20,6 +20,7 @@ const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
+  'wcs-scraper': WCSScraperTool,
   'wcs-parquet-pipeline': WCSScraperTool,
   'wsdc-event-reminders': WSDCReminders,
   'gitops-pr-reviewer': GitOpsReviewerTool,

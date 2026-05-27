@@ -67,7 +67,7 @@ export default function Shop() {
 
       {/* Grid: Mobile-first stacking */}
       {view === 'card' ? (
-        <Grid cols={{ base: 1, md: 2, lg: 3, "2xl": 4 }} gap={{ base: 3, md: 4 }}>
+        <Grid cols={{ base: 1, md: 2, lg: 3 }} gap={{ base: 3, md: 4 }}>
           {merchItems.map((item) => (
             <MerchCard
               key={item.slug}

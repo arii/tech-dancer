@@ -28,33 +28,6 @@ export function getMerchImageConfig(
   const primaryViewSide = featuredSide || 'front';
   const imageList = images ?? [];
 
-  // If display mode is explicitly set, respect it
-  if (displayMode === 'pair' && imageList.length >= 2) {
-    return {
-      primary: imageList[0],
-      secondary: imageList[1],
-      displayMode: 'pair',
-      featuredSide: primaryViewSide,
-    };
-  }
-
-  // If display mode is explicitly set to featured or single, respect it
-  if (displayMode === 'featured' || displayMode === 'single') {
-    const primary = imageList.find(
-      (img) => img.label.toLowerCase() === primaryViewSide
-    ) ?? imageList[0];
-
-    const secondary = imageList.find((img) => img.src !== primary?.src);
-
-    return {
-      primary,
-      secondary: displayMode === 'featured' ? secondary : undefined,
-      displayMode,
-      featuredSide: primaryViewSide,
-    };
-  }
-
-  // Auto-detect display mode based on available images
   if (imageList.length === 0) {
     return {
       displayMode: 'single',
@@ -70,26 +43,24 @@ export function getMerchImageConfig(
     };
   }
 
-  // Multiple images available
-  const primary = imageList.find((img) => img.label.toLowerCase() === primaryViewSide) ?? imageList[0];
-  const secondary = imageList.find((img) => img.src !== primary?.src);
+  // At this point, imageList.length >= 2. We want to show both sides.
+  // Find the primary image that matches the requested featuredSide (or default to the first image)
+  const primary = imageList.find(
+    (img) => img.label.toLowerCase() === primaryViewSide
+  ) ?? imageList[0];
 
-  // If both front and back are present, decide between "pair" or "featured"
-  if (imageList.length >= 2) {
-    // By default, use "featured" (primary large + secondary small inset)
-    // unless explicitly set to "pair"
-    return {
-      primary,
-      secondary,
-      displayMode: 'featured',
-      featuredSide: primaryViewSide,
-    };
-  }
+  // Find the secondary image (the other image)
+  const secondary = imageList.find((img) => img.src !== primary.src) ?? imageList[1];
+
+  // If displayMode is 'pair', keep 'pair' but use our primary and secondary (which respects featuredSide).
+  // If displayMode is 'featured', use 'featured'.
+  // If displayMode is 'single' (or undefined), upgrade it to 'featured' to show both sides.
+  const resolvedDisplayMode = displayMode === 'pair' ? 'pair' : 'featured';
 
   return {
     primary,
     secondary,
-    displayMode: 'single',
+    displayMode: resolvedDisplayMode,
     featuredSide: primaryViewSide,
   };
 }
@@ -137,4 +108,47 @@ export function legacyImageToMerchImages(
   }
 
   return images;
+}
+
+export interface MerchCardImageConfig {
+  primaryImage: { src: string; label: string; alt: string };
+  secondaryImage?: { src: string; label: string; alt: string };
+}
+
+/**
+ * Resolve display images for card layout.
+ * Grid cards show a large primary image and a small inset secondary image.
+ */
+export function getMerchCardImageConfig(
+  imageUrl: string,
+  imageBack?: string,
+  displayMode?: MerchDisplayMode | string,
+  featuredSide?: MerchFeaturedSide | string,
+): MerchCardImageConfig {
+  const primarySide = featuredSide || 'front';
+  const showInset = displayMode ? (displayMode !== 'single') : !!imageBack;
+
+  const frontView = {
+    src: imageUrl,
+    label: 'Front',
+    alt: 'Front view',
+  };
+
+  const backView = imageBack ? {
+    src: imageBack,
+    label: 'Back',
+    alt: 'Back view',
+  } : undefined;
+
+  if (primarySide.toLowerCase() === 'back' && backView) {
+    return {
+      primaryImage: backView,
+      secondaryImage: showInset ? frontView : undefined,
+    };
+  }
+
+  return {
+    primaryImage: frontView,
+    secondaryImage: showInset ? backView : undefined,
+  };
 }

@@ -8,7 +8,11 @@ import { cn } from '@/lib/utils';
 export type Product = AffiliateLink;
 
 interface EventProductCardProps {
-  product: Product;
+  product: Product & {
+    imageFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
+    imagePosition?: string;
+    imagePadding?: boolean;
+  };
   variant?: 'compact' | 'featured';
 }
 
@@ -24,6 +28,11 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
   const ctaLabel = getCtaLabel(contentType, isExternal);
   const sourceBadge = getSourceBadge(contentType);
 
+  // Image display options
+  const imageFit = product.imageFit || 'contain';
+  const imagePosition = product.imagePosition || 'center';
+  const shouldPadImage = product.imagePadding !== false;
+
   return (
     <Box
       as="article"
@@ -38,15 +47,21 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
       <Stack direction={{ base: 'row', md: 'col' }} gap={4} height="full">
         <Box
           width={{ base: 24, md: 'full' }}
-          height={{ base: 24, md: 28 }}
+          minHeight={{ base: 24, md: variant === 'featured' ? 56 : 40 }}
           radius="lg"
           overflow="hidden"
           shrink={false}
-          surface="muted"
-          className="relative"
+          padding={shouldPadImage ? 3 : 0}
+          className={shouldPadImage ? "bg-surface-alt/30" : "bg-surface-alt/20"}
         >
           {product.image ? (
-            <img src={product.image} alt={product.name} className="h-full w-full object-cover" loading="lazy" />
+            <img 
+              src={product.image} 
+              alt={product.name} 
+              className={`h-full w-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300`} 
+              style={{ objectPosition: imagePosition }}
+              loading="lazy" 
+            />
           ) : (
             <Box display="flex" align="center" justify="center" height="full" padding={3}>
               <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide text-center">
@@ -54,20 +69,6 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
               </Text>
             </Box>
           )}
-          {/* Source badge on image thumbnail */}
-          <Box
-            position="absolute"
-            bottom={1}
-            left={1}
-            paddingX={1.5}
-            paddingY={0.5}
-            radius="sm"
-            className="bg-bg/70 backdrop-blur-sm"
-          >
-            <Text size="xs" weight="font-medium" color="dim" className="whitespace-nowrap">
-              {sourceBadge}
-            </Text>
-          </Box>
         </Box>
 
         <Stack gap={3} height="full" flex={1} justify="between" minWidth="0">
@@ -84,6 +85,10 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
             </Text>
             <Text size={variant === 'featured' ? 'sm' : 'xs'} color="dim" clamp={2} className="leading-relaxed">
               {product.description}
+            </Text>
+            {/* Source badge moved from image to body metadata */}
+            <Text size="xs" weight="font-medium" color="dim" className="whitespace-nowrap pt-1">
+              {sourceBadge}
             </Text>
           </Stack>
 

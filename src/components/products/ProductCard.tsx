@@ -5,8 +5,18 @@ import { ASSET_PREFIX } from '@/config/constants';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import styles from '@/components/ui/merch/MerchImages.module.css';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
+  const resolvedPrimary = {
+    src: item.imageUrl.startsWith('http') ? item.imageUrl : `${ASSET_PREFIX}${item.imageUrl}`,
+    alt: item.title,
+  };
+
+  const cropClass = item.cardCrop === 'front-print' ? styles.crop_front_print :
+                    item.cardCrop === 'back-print' ? styles.crop_back_print :
+                    item.cardCrop === 'hoodie' ? styles.crop_hoodie : '';
+
   return (
     <BaseCard
       gap={4}
@@ -20,27 +30,13 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       rel="sponsored noopener noreferrer"
       ariaLabel={`Buy ${item.title} on storefront`}
     >
-      <Box
-        position="relative"
-        display="flex"
-        align="center"
-        justify="center"
-        height={{ base: 72, md: 80 }}
-        overflow="hidden"
-        radius="lg"
-        className="bg-surface-alt/35"
-      >
-        <Box
-          as="img"
-          src={item.imageUrl.startsWith('http') ? item.imageUrl : `${ASSET_PREFIX}${item.imageUrl}`}
-          alt={item.title}
-          maxWidth="full"
-          maxHeight="full"
-          padding={4}
-          className="object-contain transition-transform duration-300 group-hover:scale-105"
+      <div className={styles.merch_card_media}>
+        <img
+          src={resolvedPrimary.src}
+          alt={resolvedPrimary.alt}
+          className={cn(styles.merch_card_primary_image, cropClass)}
         />
-
-      </Box>
+      </div>
 
       <Stack gap={3}>
         <Text as="h3" variant="body" size="lg" weight="font-bold" color="main" leading="tight" clamp={2} className="group-hover:text-accent transition-colors">

@@ -29,12 +29,15 @@ interface GearCardProps extends BaseProps {
   excerpt: string;
   verdict?: string;
   image?: string;
+  imageFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
+  imagePosition?: string;
+  imagePadding?: boolean;
   affiliateIds?: string[];
   [key: string]: unknown;
 }
 
 const CARD_STYLES = {
-  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
+  image: "w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-90",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
   verdict: "uppercase tracking-widest opacity-90"
 };
@@ -52,8 +55,16 @@ export function GearCard(props: GearCardProps) {
 
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
-    'affiliateIds'
+    'affiliateIds',
+    'imageFit',
+    'imagePosition',
+    'imagePadding'
   ] as (keyof GearCardProps)[]);
+
+  // Image display options
+  const imageFit = props.imageFit || 'contain';
+  const imagePosition = props.imagePosition || 'center';
+  const shouldPadImage = props.imagePadding !== false;
 
   // Resolve link: prioritization check
   const affiliateId = affiliateIds?.[0];
@@ -87,13 +98,21 @@ export function GearCard(props: GearCardProps) {
       {/* Image zone */}
       <Box
         position="relative"
-        aspect="video"
+        minHeight={{ base: 'auto', md: '220px' }}
         overflow="hidden"
         radius="md"
-        className="bg-surface-alt/20"
+        padding={shouldPadImage ? 4 : 0}
+        className={shouldPadImage ? "bg-surface-alt/30" : "bg-surface-alt/20"}
       >
         {image ? (
-          <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
+          <img 
+            src={image} 
+            alt={title} 
+            width={640} 
+            height={360} 
+            className={`w-full h-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300 group-hover:opacity-90`}
+            style={{ objectPosition: imagePosition }}
+          />
         ) : (
           <CategoryPlaceholder category={category} />
         )}
@@ -121,19 +140,8 @@ export function GearCard(props: GearCardProps) {
             </Text>
           </Box>
         )}
-        {/* Category and affiliate badges */}
+        {/* Affiliate badges - only "Earns commission" badge stays in image */}
         <Box position="absolute" top={3} right={3} display="flex" gap={2} direction="col" align="end">
-          <Box
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacity={80}
-            className="bg-accent text-bg backdrop-blur-md shadow-sm"
-          >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-              {category}
-            </Text>
-          </Box>
           {isExternal && (
             <Box
               paddingX={1.5}
@@ -158,17 +166,31 @@ export function GearCard(props: GearCardProps) {
             </Text>
           </Box>
         )}
-        <Text
-          as="h3"
-          variant="body"
-          size="lg"
-          weight="font-bold"
-            color="main"
-            leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
+        <Box display="flex" align="center" justify="between" gap={2}>
+          <Box flex={1}>
+            <Text
+              as="h3"
+              variant="body"
+              size="lg"
+              weight="font-bold"
+              color="main"
+              leading="tight"
+              className="group-hover:text-accent transition-colors line-clamp-2"
+            >
+              {title}
+            </Text>
+          </Box>
+          <Box
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            className="bg-accent/10 text-accent shrink-0"
+          >
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide whitespace-nowrap">
+              {category}
+            </Text>
+          </Box>
+        </Box>
 
         <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-2">
            {excerpt}

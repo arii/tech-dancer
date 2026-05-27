@@ -40,7 +40,10 @@ export interface Resource {
   content: string;
   image?: string;
   imageBack?: string;
-  // New flexible merch image system
+  cardImage?: string;
+  cardCrop?: 'back-print' | 'front-print' | 'hoodie' | 'none';
+  galleryImages?: { src: string; label: string; alt: string }[];
+  // Legacy
   images?: MerchImageView[];
   displayMode?: MerchDisplayMode;
   featuredSide?: MerchFeaturedSide;
