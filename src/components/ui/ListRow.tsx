@@ -15,16 +15,21 @@ interface ListRowProps {
   date?: string;
   basePath: string;
   content?: string;
+  image?: string;
   [key: string]: unknown;
 }
 
 export function ListRow(props: ListRowProps) {
-  const { slug, title, category, excerpt, date, basePath, content } = props;
+  const { slug, title, category, excerpt, date, basePath, content, image } = props;
   const rest = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'basePath'
   ] as (keyof ListRowProps)[]);
   const rt = readingTime(content, excerpt);
+
+  const normalizedImage = (image && image.startsWith('/') && !image.startsWith(import.meta.env.BASE_URL))
+    ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${image}`
+    : image;
 
   return (
     <Box as={NavLink} to={`${basePath}/${slug}`}
@@ -34,7 +39,11 @@ export function ListRow(props: ListRowProps) {
     >
       <Box width={1} shrink={0} self="stretch" opacity={0} className="bg-accent group-hover:opacity-100 transition-opacity" />
       <Box width={12} height={12} margin={4} shrink={0} radius="md" overflow="hidden" display="flex" align="center" justify="center" border className="bg-surface-alt/30 border-line/30">
-        <CategoryPlaceholder category={category} size="md" />
+        {normalizedImage ? (
+          <img src={normalizedImage} alt={title} className="h-full w-full object-cover" loading="lazy" />
+        ) : (
+          <CategoryPlaceholder category={category} size="md" />
+        )}
       </Box>
       <Stack gap={1} flex paddingY={3} className="min-w-0">
         <Box display="flex" align="center" gap={3}>

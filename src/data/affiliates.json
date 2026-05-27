@@ -104,10 +104,9 @@
     "epsom-salt": {
         "id": "epsom-salt",
         "name": "Epsom Salt / Bath Bombs",
-        "url": "https://amazon.com",
+        "url": "https://www.amazon.com/s?k=epsom+salt+bath+soak&tag=onasafari04-20",
         "category": "recovery",
         "description": "Soothe tired muscles and refresh your skin after a long weekend.",
-        "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg",
         "draft": true
     },
     "foam-roller": {
@@ -179,19 +178,17 @@
     "travel-pillow": {
         "id": "travel-pillow",
         "name": "Memory Foam Travel Pillow",
-        "url": "https://www.amazon.com/dp/B09QRZNV8R?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://www.amazon.com/s?k=memory+foam+travel+pillow&tag=onasafari04-20",
         "category": "travel",
         "description": "Essential for catching some sleep on flights or between sessions.",
-        "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg",
         "draft": true
     },
     "dry-shampoo": {
         "id": "dry-shampoo",
         "name": "Batiste Dry Shampoo",
-        "url": "https://amazon.com",
+        "url": "https://www.amazon.com/s?k=batiste+dry+shampoo&tag=onasafari04-20",
         "category": "travel",
         "description": "Refresh your hair quickly between workshops and social dancing.",
-        "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg",
         "draft": true
     },
     "electric-fan": {
@@ -206,10 +203,9 @@
     "liquid-iv": {
         "id": "liquid-iv",
         "name": "Liquid I.V. Hydration Multiplier",
-        "url": "https://amazon.com",
+        "url": "https://www.amazon.com/s?k=liquid+iv+hydration+multiplier&tag=onasafari04-20",
         "category": "recovery",
         "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
-        "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg",
         "draft": true
     },
     "shoe-brush": {
