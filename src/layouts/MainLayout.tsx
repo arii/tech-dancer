@@ -45,7 +45,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Box display="flex" minHeight="screen" width="full">
+      <Stack minHeight="screen" width="full">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -75,7 +75,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             <Footer />
           </Stack>
         </Stack>
-      </Box>
+      </Stack>
 
       <NewsletterBanner />
       <GlobalSearch />
