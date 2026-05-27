@@ -1,12 +1,40 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
-import { ASSET_PREFIX } from '@/config/constants';
-import type { ProductCatalogItem } from '@/data/products/catalog';
+import type { ProductCatalogItem, MerchImageLabel } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { MerchImageSingle, MerchImagePair, MerchImageFeatured } from '@/components/ui/merch/MerchImageDisplay';
+import { getMerchImageConfig, legacyImageToMerchImages } from '@/lib/merch/imageDisplay';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
+  // Normalize images: use new format if available, fall back to legacy
+  const normalizedImages = item.images || legacyImageToMerchImages(item.imageUrl);
+
+  // Determine display configuration: respect item's primaryImageLabel and showSecondaryInset options
+  const config = getMerchImageConfig(
+    normalizedImages,
+    item.showSecondaryInset ? 'featured' : undefined,
+    item.primaryImageLabel?.toLowerCase() as MerchImageLabel | undefined
+  );
+
+  // Render image based on display mode
+  const renderImage = () => {
+    if (config.displayMode === 'pair' && config.primary && config.secondary) {
+      return <MerchImagePair images={[config.primary, config.secondary]} />;
+    }
+
+    if (config.displayMode === 'featured' && config.primary) {
+      return <MerchImageFeatured primary={config.primary} secondary={config.secondary} />;
+    }
+
+    if (config.primary) {
+      return <MerchImageSingle image={config.primary} />;
+    }
+
+    return <Box className="w-full aspect-video bg-surface-alt rounded-lg" />;
+  };
+
   return (
     <BaseCard
       gap={4}
@@ -22,24 +50,10 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
     >
       <Box
         position="relative"
-        display="flex"
-        align="center"
-        justify="center"
-        height={{ base: 72, md: 80 }}
         overflow="hidden"
         radius="lg"
-        className="bg-surface-alt/35"
       >
-        <Box
-          as="img"
-          src={item.imageUrl.startsWith('http') ? item.imageUrl : `${ASSET_PREFIX}${item.imageUrl}`}
-          alt={item.title}
-          maxWidth="full"
-          maxHeight="full"
-          padding={4}
-          className="object-contain transition-transform duration-300 group-hover:scale-105"
-        />
-
+        {renderImage()}
       </Box>
 
       <Stack gap={3}>

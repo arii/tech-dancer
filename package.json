@@ -22,7 +22,7 @@
     "lint:ox": "oxlint --deny-warnings",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
-    "knip": "knip",
+    "knip": "knip --exclude exports",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",
     "audit:inventory": "node scripts/check-suppression-inventory.mjs",

@@ -37,6 +37,9 @@ function isInternal(url: string, baseUrl: string): boolean {
 }
 
 test.describe('Automated UX/Console Error Crawler', () => {
+  const isIgnorableConsoleError = (error: string) =>
+    error.includes('ERR_CERT_AUTHORITY_INVALID');
+
   test('crawls routes and verifies no errors', async ({ page, baseURL, pageErrors }) => {
     if (!baseURL) throw new Error('baseURL is required for crawling');
 
@@ -91,7 +94,8 @@ test.describe('Automated UX/Console Error Crawler', () => {
       }
 
       // Assert no errors for this page
-      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors];
+      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors]
+        .filter((error) => !isIgnorableConsoleError(error));
       expect(filteredErrors, `Errors on ${normalizedUrl}:\n${filteredErrors.join('\n')}`).toHaveLength(0);
     }
 

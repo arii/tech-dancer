@@ -9,4 +9,8 @@ export const EVENT_TABS = [
   { id: 'related', label: 'More Guides', icon: Briefcase },
 ] as const;
 
-export const SECTION_SPACING = "section-spacing";
+export const MAIN_GAP = 'space-y-12';
+export const SECTION_GAP = 'space-y-5';
+export const GRID_GAP = 'gap-4';
+export const SIDEBAR_WIDTH = 80;
+export const SECTION_SPACING = 'section-spacing';

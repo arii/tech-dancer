@@ -36,7 +36,7 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "30vh", md: "40vh" }}
+      minHeight={{ base: "auto", md: "38vh" }}
       direction="col"
       gap={0}
       overflow="hidden"
@@ -66,7 +66,7 @@ export function EventHero({
         position="absolute"
         top={0}
         right={0}
-        width={{ base: "full", md: "1/2" }}
+        width={{ base: "0", md: "1/3" }}
         height="full"
         pointerEvents="none"
         opacity={20}
@@ -77,10 +77,10 @@ export function EventHero({
         relative
         zIndex={10}
         gap={{ base: 6, md: 10 }}
-        paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingTop={{ base: 8, md: 12 }}
-        paddingBottom={{ base: 6, md: 8 }}
-        maxWidth="screen-xl"
+        paddingX={{ base: 4, sm: 6, lg: 8 }}
+        paddingTop={{ base: 24, md: 24 }}
+        paddingBottom={{ base: 10, md: 12 }}
+        maxWidth="screen-lg"
         marginX="auto"
         width="full"
         flex="1 1 auto"
@@ -136,7 +136,7 @@ export function EventHero({
             padding={{ base: 4, md: 6 }}
             radius="lg"
             width={{ base: "full", md: "auto" }}
-            maxWidth="2xl"
+            maxWidth="3xl"
             className="glass-panel border-l-4 border-l-accent"
           >
             <Stack gap={{ base: 3, md: 4 }}>

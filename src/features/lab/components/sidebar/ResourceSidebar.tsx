@@ -12,6 +12,13 @@ interface ResourceHeaderExtrasProps {
   priceCategory: string;
 }
 
+/**
+ * Header extras for individual gear posts (author info + ratings grid).
+ * 
+ * NOTE: The ResourceGrid component (which displays ratings) is currently
+ * hidden pending Amazon affiliate approval for dynamic content updates.
+ * See ResourceGrid.tsx for details.
+ */
 export function ResourceHeaderExtras({ author, rating, durability, value, priceCategory }: ResourceHeaderExtrasProps) {
   return (
     <Stack gap={6} marginTop={6}>

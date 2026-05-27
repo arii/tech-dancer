@@ -27,6 +27,19 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
+    path: '/merch',
+    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
+    label: 'Merch',
+    icon: ShoppingBag,
+    skeleton: 'grid',
+    isMobileVisible: true
+  },
+  {
+    path: '/merch/:slug',
+    lazy: () => import('@/features/shop/ShopPost').then(m => ({ Component: m.default })),
+    skeleton: 'post'
+  },
+  {
     path: '/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',
@@ -70,14 +83,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/UXAuditor').then(m => ({ Component: m.default })),
     skeleton: 'grid'
   },
-  {
-    path: '/merch',
-    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
-    label: 'Merch',
-    icon: ShoppingBag,
-    skeleton: 'grid',
-    isMobileVisible: true
-  },
+
   {
     path: '/about',
     lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),

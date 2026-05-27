@@ -1,16 +1,12 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-utils';
 import { Event } from '@/lib/content';
 
+
 export function EventHeaderExtras({ author }: { author: string }) {
   return (
-    <Stack gap={6} marginTop={6}>
-      <Stack direction="row" align="center" gap={2} color="dim">
-        <Box width={8} height={8} radius="full" surface="muted" />
-        <Text variant="mono" size="xs">{author}</Text>
-      </Stack>
+    <Stack gap={2} marginTop={4}>
+      <Text variant="mono" size="xs" color="dim">{author}</Text>
     </Stack>
   );
 }
@@ -24,101 +20,76 @@ interface EventSidebarProps {
   startDate?: string;
   earlyBirdDate?: string;
   hotelCutoffDate?: string;
+  inline?: boolean;
 }
 
-export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate }: EventSidebarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate, inline = false }: EventSidebarProps) {
   const finalStartDate = event?.startDate || startDate;
   const finalEarlyBirdDate = event?.earlyBirdDate || earlyBirdDate;
   const finalHotelCutoffDate = event?.hotelCutoffDate || hotelCutoffDate;
+  const reminders = finalStartDate
+    ? calculateTimeline(
+        {
+          title: event?.title || 'Event',
+          startDate: finalStartDate,
+          earlyBirdDate: finalEarlyBirdDate,
+          hotelCutoffDate: finalHotelCutoffDate,
+        },
+        {
+          filterIds: ['flight-track', 'early-bird', 'hotel-block', 'comp-window', 'cancel-safety'],
+        },
+      ).slice(0, inline ? 3 : 4)
+    : [];
+
+  if (!event && reminders.length === 0) {
+    return null;
+  }
 
   return (
-    <Box as="aside">
-      <Stack gap={8} className="sticky top-24">
-        {event && (
-          <Box border radius="lg" padding={6} surface="surface-alt">
-            <Stack gap={6}>
-              <Box
-                display="flex"
-                align="center"
-                justify="between"
-                as="button"
-                onClick={() => setIsOpen(!isOpen)}
-                width="full"
-                className="lg:pointer-events-none"
-                aria-expanded={isOpen}
-                aria-controls="event-insights-content"
-              >
-                <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                  Event Insights
-                </Text>
-                <Box display={{ base: 'block', lg: 'none' }}>
-                  {isOpen ? <ChevronUp className="w-4 h-4 text-accent" /> : <ChevronDown className="w-4 h-4 text-accent" />}
-                </Box>
-              </Box>
-
-              <Box
-                id="event-insights-content"
-                display={{ base: isOpen ? "block" : "none", lg: "block" }}
-              >
-                <Stack gap={4}>
-                  <Box>
-                    <Text variant="mono" size="micro" color="dim" uppercase>Category</Text>
-                    <Text variant="body" size="sm">{event.category}</Text>
-                  </Box>
-                  <Box>
-                    <Text variant="mono" size="micro" color="dim" uppercase>Registry Status</Text>
-                    <Text variant="body" size="sm">WSDC Verified</Text>
-                  </Box>
-                </Stack>
-              </Box>
-            </Stack>
-          </Box>
-        )}
-
-        {finalStartDate && (
-          <Stack gap={4}>
-            <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
-              Travel Reminders
+    <Stack gap={4}>
+      {event && (
+        <Box border radius="xl" padding={4} surface="muted">
+          <Stack gap={3}>
+            <Text variant="mono" size="xs" weight="font-semibold" color="dim" uppercase className="tracking-wide">
+              {inline ? 'Quick event notes' : 'Event snapshot'}
             </Text>
-            <Stack gap={4}>
-              {calculateTimeline({
-                title: event?.title || 'Event',
-                startDate: finalStartDate,
-                earlyBirdDate: finalEarlyBirdDate,
-                hotelCutoffDate: finalHotelCutoffDate,
-              }, {
-                filterIds: ['flight-track', 'early-bird', 'hotel-block', 'comp-window', 'cancel-safety']
-              }).map((reminder) => {
-                const Icon = reminder.icon!;
-                return (
-                  <Box
-                    key={reminder.id}
-                    border
-                    padding={4}
-                    surface="muted"
-                    className="hover:border-accent transition-colors"
-                  >
-                    <Stack gap={2}>
-                      <Box display="flex" align="center" gap={2} color="brand">
-                        <Icon className="w-4 h-4" />
-                        <Text variant="mono" size="xs" weight="font-bold">{reminder.label.toUpperCase()}</Text>
-                      </Box>
-                      <Text variant="mono" size="tiny" color="dim">
-                        Target: {reminder.date.toLocaleDateString()}
-                      </Text>
-                      <Text variant="body" size="xs" color="dim">
-                        {reminder.description}
-                      </Text>
-                    </Stack>
-                  </Box>
-                );
-              })}
+            <Stack gap={2}>
+              <Box>
+                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-wide">Category</Text>
+                <Text size="sm">{event.category}</Text>
+              </Box>
+              <Box>
+                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-wide">City</Text>
+                <Text size="sm">{event.city}</Text>
+              </Box>
+              <Box>
+                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-wide">Schedule</Text>
+                <Text size="sm">{event.schedule}</Text>
+              </Box>
             </Stack>
           </Stack>
-        )}
-      </Stack>
-    </Box>
+        </Box>
+      )}
+
+      {reminders.length > 0 && (
+        <Box border radius="xl" padding={4} surface="muted">
+          <Stack gap={3}>
+            <Text variant="mono" size="xs" weight="font-semibold" color="dim" uppercase className="tracking-wide">
+              {inline ? 'Inline reminders' : 'Quick reminders'}
+            </Text>
+            <Stack gap={2}>
+              {reminders.map((reminder) => (
+                <Box key={reminder.id} border radius="lg" padding={3} surface="surface">
+                  <Stack gap={1}>
+                    <Text size="sm" weight="font-semibold">{reminder.label}</Text>
+                    <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-wide">{reminder.date.toLocaleDateString()}</Text>
+                  </Stack>
+                </Box>
+              ))}
+            </Stack>
+          </Stack>
+        </Box>
+      )}
+    </Stack>
   );
 }
-

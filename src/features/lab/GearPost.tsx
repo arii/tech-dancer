@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -17,8 +17,18 @@ export default function GearPost() {
     initialData: () => slug ? getResourceBySlug(slug) : undefined,
   });
 
+  // Redirect merch items to shop page
+  useEffect(() => {
+    if (resource && resource.shopUrl) {
+      navigate(`/merch/${slug}`, { replace: true });
+    }
+  }, [resource, slug, navigate]);
+
   const structuredData = useMemo(() => {
     if (!resource) return null;
+    // Note: Schema.org rating data is preserved for SEO purposes, but visual
+    // display of ratings is currently hidden pending Amazon affiliate approval
+    // for dynamic content updates. See ResourceGrid.tsx for details.
     return {
       "@context": "https://schema.org",
       "@type": "Product",

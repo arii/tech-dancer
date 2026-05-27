@@ -7,12 +7,14 @@ category: "fashion"
 excerpt: "Show your versatility on the dance floor with this neon 'Lead, Follow, or Switch' LOVE shirt."
 image: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"
 imageBack: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp"
-affiliateIds: ["love-neon-switch-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Versatile & Vibrant"
 priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/lead-follow-switch-love-shirt-neon
+displayMode: "pair"
+featuredSide: "back"
 ---
 
 Perfect for the multi-role dancer, this neon shirt expresses the inclusive spirit of West Coast Swing.

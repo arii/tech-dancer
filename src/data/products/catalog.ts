@@ -1,3 +1,5 @@
+
+
 export type ProductSource = 'affiliate' | 'owned-merch';
 
 export type ProductUseCase =
@@ -17,6 +19,10 @@ export interface ProductCatalogItem {
   title: string;
   description: string;
   imageUrl: string;
+  images?: { src: string; label: string; alt: string }[];
+  cardCrop?: 'back-print' | 'front-print' | 'hoodie' | 'none';
+  primaryImageLabel?: 'Front' | 'Back';
+  showSecondaryInset?: boolean;
   href: string;
   price?: string;
   collections: string[];

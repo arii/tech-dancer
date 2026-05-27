@@ -7,12 +7,12 @@ category: "fashion"
 excerpt: "Classic Golden Gate bridge design with a vibrant rainbow twist for NorCal dancers."
 image: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp"
 imageBack: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-back.webp"
-affiliateIds: ["norcal-pride-gate-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Regional Pride"
 priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/norcal-pride-golden-gate-shirt
 ---
 
 Celebrate your Northern California roots and Pride month with this custom Golden Gate bridge design. It's a favorite for Team NorCal BestCal members at flagship events like Jack & Jill O'Rama.

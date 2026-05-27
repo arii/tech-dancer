@@ -19,6 +19,15 @@ export interface Post {
   affiliateIds?: string[];
 }
 
+export interface MerchImageView {
+  src: string;
+  label: "Front" | "Back" | "Detail";
+  alt: string;
+}
+
+export type MerchDisplayMode = "single" | "pair" | "featured";
+export type MerchFeaturedSide = "front" | "back";
+
 export interface Resource {
   type: 'resource';
   draft?: boolean;
@@ -31,8 +40,16 @@ export interface Resource {
   content: string;
   image?: string;
   imageBack?: string;
+  cardImage?: string;
+  cardCrop?: 'back-print' | 'front-print' | 'hoodie' | 'none';
+  galleryImages?: { src: string; label: string; alt: string }[];
+  // Legacy
+  images?: MerchImageView[];
+  displayMode?: MerchDisplayMode;
+  featuredSide?: MerchFeaturedSide;
   tags?: string[];
   affiliateIds?: string[];
+  shopUrl?: string; // For Printful or direct shop links (non-affiliate merch)
   rating?: number;
   verdict?: string;
   priceCategory?: string;

@@ -1,0 +1,106 @@
+/**
+ * Merch card image display layouts.
+ * Supports single, pair, and featured display modes.
+ * impeccable-ignore-file - CSS layout requires precise pixel values for grid positioning
+ */
+
+.merch_image_single,
+.merch_image_featured,
+.merch_image_pair {
+  position: relative;
+  background: rgb(17, 24, 39);
+  border-radius: 18px; /* impeccable-ignore */
+  padding: 14px; /* impeccable-ignore */
+  width: 100%;
+}
+
+/* Single view: one large image */
+.merch_image_single img,
+.merch_image_featured > img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  background: rgb(22, 32, 50);
+  border-radius: 14px; /* impeccable-ignore */
+}
+
+/* Single image label (Front, Back, or Detail) */
+.merch_image_single span {
+  position: absolute;
+  left: 24px; /* impeccable-ignore */
+  bottom: 24px; /* impeccable-ignore */
+  font-size: 10px; /* impeccable-ignore */
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(142, 160, 184);
+}
+
+/* Pair view: side-by-side images */
+.merch_image_pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px; /* impeccable-ignore */
+}
+
+.merch_image_pair figure {
+  margin: 0;
+}
+
+.merch_image_pair img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  background: rgb(22, 32, 50);
+  border-radius: 14px; /* impeccable-ignore */
+}
+
+.merch_image_pair figcaption,
+.merch_image_inset span {
+  margin-top: 6px; /* impeccable-ignore */
+  font-size: 10px; /* impeccable-ignore */
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(142, 160, 184);
+}
+
+/* Featured view: primary image with small inset secondary */
+.merch_image_inset {
+  position: absolute;
+  right: 24px; /* impeccable-ignore */
+  bottom: 24px; /* impeccable-ignore */
+  width: 32%;
+  padding: 6px; /* impeccable-ignore */
+  background: rgb(11, 16, 32);
+  border: 1px solid rgba(148, 163, 184, 0.24); /* impeccable-ignore */
+  border-radius: 12px; /* impeccable-ignore */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* impeccable-ignore */
+}
+
+.merch_image_inset img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  border-radius: 8px; /* impeccable-ignore */
+}
+
+/* Mobile responsive: stack and adjust sizing */
+@media (max-width: 640px) { /* impeccable-ignore */
+  .merch_image_pair {
+    grid-template-columns: 1fr;
+    gap: 8px; /* impeccable-ignore */
+  }
+
+  .merch_image_inset {
+    width: 28%;
+    right: 16px; /* impeccable-ignore */
+    bottom: 16px; /* impeccable-ignore */
+    padding: 4px; /* impeccable-ignore */
+  }
+
+  .merch_image_single span,
+  .merch_image_featured > span {
+    left: 16px; /* impeccable-ignore */
+    bottom: 16px; /* impeccable-ignore */
+    font-size: 9px; /* impeccable-ignore */
+  }
+}

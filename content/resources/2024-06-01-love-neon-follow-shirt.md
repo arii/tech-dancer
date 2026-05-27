@@ -7,12 +7,14 @@ category: "fashion"
 excerpt: "Express your style and your role on the floor with this neon-inspired follow shirt."
 image: "/assets/gear/love-neon-tshirt-ask-me-to-follow-front.webp"
 imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-follow-back.webp"
-affiliateIds: ["love-neon-follow-shirt"]
 tags: ["merch", "norcal", "rainbow", "pride"]
 rating: 5
 verdict: "Stylish & Social"
 priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/follow-love-shirt-neon
+displayMode: "pair"
+featuredSide: "back"
 ---
 
 The LOVE neon tshirt is part of the NorCal BestCal collection, designed for dancers who want to make a statement. This version is perfect for followers who want to clearly communicate their role while sporting a vibrant, Pride-inspired aesthetic.
