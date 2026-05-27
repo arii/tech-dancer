@@ -1,138 +1,87 @@
-
-import { Search } from 'lucide-react';
-import { useState, useEffect, useRef } from "react";
+import { Search, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { Logo } from '@/components/ui/Logo';
-
 import { routes } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
-import { MobileHeader } from './navigation/MobileHeader';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
-import { NavItem } from './navigation/NavItem';
 import { cn } from '@/lib/utils';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
-
-  const timer = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (timer.current) return;
-      timer.current = setTimeout(() => {
-        setScrolled(window.scrollY > 20);
-        timer.current = null;
-      }, 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (timer.current) clearTimeout(timer.current);
-    };
-  }, []);
 
   const handleSearchClick = () => {
     setIsOpen(false);
-    if (isSearchOpen) {
-      closeSearch();
-    } else {
-      openSearch();
-    }
+    if (isSearchOpen) closeSearch();
+    else openSearch();
   };
+
+  const topRoutes = routes.filter((r): r is typeof r & { label: string } =>
+    !!(r.path !== '/' && r.label && ['/events', '/gear', '/blog', '/merch', '/research', '/about'].includes(r.path))
+  );
 
   return (
     <>
-      {/* Mobile Bottom Tabs */}
       <MobileBottomNav />
-
-      {/* Mobile Header */}
-      <MobileHeader
-        isOpen={isOpen}
-        onToggle={() => setIsOpen(!isOpen)}
-        onClose={() => setIsOpen(false)}
-      />
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <MobileMenuOverlay
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            onSearchClick={handleSearchClick}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Desktop Sidebar */}
-      <Box
-        as="nav"
-        aria-label="Main Navigation"
-        layout="navRail"
-        className={cn(
-          "transition-nav border-r border-line bg-surface",
-          scrolled ? "backdrop-blur-xl bg-surface/90" : ""
-        )}
-      >
-        <Stack
-          padding={0}
-          gap={0}
-          flex={1}
-        >
-          <Box
-            as={NavLink}
-            to="/"
-            display="block"
-            paddingX={5}
-            paddingY={3}
-            className="group border-b border-line"
-          >
-            <Logo className="h-8 w-auto text-white transition-opacity group-hover:opacity-80" />
-          </Box>
-
-          <Stack as="ul" gap={1} flex={1} paddingY={4}>
-            <Box as="li">
-              <Box
-                as="button"
-                type="button"
-                cursor="pointer"
-                onClick={handleSearchClick}
-                display="flex"
-                align="center"
-                gap={3}
-                width="full"
-                paddingY={3}
-                paddingX={6}
-                className="group text-text-dim hover:text-accent transition-all text-left hover:bg-surface-alt"
-                aria-label="Open search"
-              >
-                <Box shrink={false}>
-                  <Search className="w-4 h-4 opacity-70 group-hover:opacity-100" aria-hidden="true" />
-                </Box>
-                <Text variant="sans" size="sm" weight="font-medium" className="leading-none">Search</Text>
-              </Box>
+      <Box as="nav" aria-label="Main Navigation" className="fixed inset-x-0 top-0 z-50 h-16 w-full max-w-full border-b border-line bg-bg/95 backdrop-blur-xl">
+        <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
+          <Stack direction="row" align="center" gap={8}>
+            <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} className="group">
+              <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-80" />
             </Box>
-
-            {routes.filter((r): r is typeof r & { label: string } => !!(r.path !== '/' && r.label)).map((item) => (
-              <NavItem key={item.path} to={item.path} label={item.label} icon={item.icon} />
-            ))}
+            <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
+              {topRoutes.map((item) => (
+                <Box as="li" key={item.path}>
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
+                  >
+                    {item.label}
+                  </NavLink>
+                </Box>
+              ))}
+            </Box>
           </Stack>
 
-          <Box paddingX={6} paddingY={5} className="border-t border-line bg-surface">
-            <Text variant="sans" size="xs" color="dim" marginBottom={1} className="leading-normal">
-              Written by <strong className="text-accent">Tech Dancer </strong>
-            </Text>
-            <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-widest opacity-60 leading-none">
-              2026 boomtick.blog
-            </Text>
-          </Box>
-        </Stack>
+          <Stack direction="row" align="center" gap={{ base: 2, lg: 6 }}>
+            <Box as="button" type="button" onClick={handleSearchClick} padding={2} display={{ base: 'none', lg: 'flex' }} align="center" gap={2} className="group text-text-dim transition-colors hover:text-accent" aria-label="Open search">
+              <Search className="h-4 w-4" aria-hidden="true" />
+              <Text variant="mono" size="xs" color="dim" display={{ base: 'none', xl: 'block' }}>CMD+K</Text>
+            </Box>
+
+            <Box display={{ base: 'none', lg: 'flex' }}>
+              <ActionButton as={NavLink} to="/contact?intent=subscribe" variant="primary" paddingX={4} paddingY={2} className="text-xs uppercase tracking-widest">
+                Subscribe
+              </ActionButton>
+            </Box>
+
+            <Box
+              as={motion.create('button')}
+              display={{ base: 'flex', lg: 'none' }}
+              onClick={() => setIsOpen(!isOpen)}
+              padding={2}
+              align="center"
+              justify="center"
+              radius="full"
+              className="hover:bg-bg/50 active:bg-accent/10 transition-colors"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+            </Box>
+          </Stack>
+        </Box>
       </Box>
+
+      <AnimatePresence mode="wait">
+        {isOpen && <MobileMenuOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} onSearchClick={handleSearchClick} />}
+      </AnimatePresence>
     </>
   );
 }

@@ -2,6 +2,8 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
+import { NavLink } from 'react-router-dom';
+import { ActionButton } from './ActionButton';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
@@ -41,7 +43,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        paddingX={{ base: 8, md: 12, lg: 24 }}
+        paddingX={{ base: 4, md: 8, lg: 12 }}
         paddingY={{ base: 2, lg: 2 }}
         maxWidth="screen-xl"
         marginX="auto"
@@ -79,7 +81,7 @@ export function HeroSection() {
             color="white"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            Dance better.
+            Travel better.
           </Text>
         </Stack>
 
@@ -114,12 +116,47 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training tips, event resource guides, and gear reviews for competitive West Coast Swing dancers,
-            plus technical deep dives into building the platform with DevAI.
+            Practical guides for West Coast Swing dancers — training notes, event travel tips, gear reviews,
+            and tools for better dance weekends.
           </Text>
         </Stack>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
+
+
+        <Stack
+          marginTop={8}
+          gap={3}
+          width="full"
+          maxWidth={{ base: "full", md: "2xl" }}
+          className="opacity-0 hero-cta-anim"
+        >
+          <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
+            <ActionButton
+              as={NavLink}
+              to="/events"
+              variant="primary"
+              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+            >
+              Explore Event Guides
+            </ActionButton>
+            <ActionButton
+              as={NavLink}
+              to="/gear"
+              variant="secondary"
+              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+            >
+              Browse Gear Reviews
+            </ActionButton>
+          </Stack>
+
+          <Box>
+            <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent normal-case">
+              Start with practical notes →
+            </Text>
+          </Box>
+        </Stack>
+
         <Stack
           direction="row"
           align="end"
