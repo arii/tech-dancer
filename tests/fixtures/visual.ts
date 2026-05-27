@@ -15,11 +15,6 @@ export const test = base.extend<{ pageErrors: ErrorMonitor }>({
     // Mock system time for consistent date rendering (e.g., in Lab tools)
     await page.clock.setFixedTime(new Date('2024-01-01T12:00:00Z'));
 
-    // Ensure newsletter banner doesn't interfere with visual tests
-    await page.addInitScript(() => {
-      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
-    });
-
     // Control CSS Animations and Transitions to prevent visual flakiness
     await disableAnimations(page);
 
