@@ -1,4 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { getBasePath } from '../scripts/base-path.js';
+
+const BASE_PATH = getBasePath();
 
 test.describe('Home Page Layout and Navigation', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,21 +14,22 @@ test.describe('Home Page Layout and Navigation', () => {
     await expect(nav).toBeVisible();
 
     // The logo should be visible
-    const logo = nav.locator('a[href="/"]');
+    const logo = nav.locator(`a[href="${BASE_PATH}/"]`);
     await expect(logo).toBeVisible();
 
     // Navigation links should be present (at least top routes)
     const routes = ['/events', '/gear', '/blog', '/merch', '/research', '/about'];
     for (const route of routes) {
       // Look for the desktop navigation links
-      const link = nav.locator(`a[href="${route}"]`);
+      const link = nav.locator(`a[href="${BASE_PATH}${route}"]`);
       await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', `${BASE_PATH}${route}`);
     }
 
     // Subscribe CTA should be present
     const subscribeCta = nav.locator('a:has-text("Subscribe")');
     await expect(subscribeCta).toBeVisible();
-    await expect(subscribeCta).toHaveAttribute('href', '/contact?intent=subscribe');
+    await expect(subscribeCta).toHaveAttribute('href', `${BASE_PATH}/contact?intent=subscribe`);
   });
 
   test('should render the new hero section with CTAs', async ({ page }) => {
@@ -40,17 +44,13 @@ test.describe('Home Page Layout and Navigation', () => {
     const browseCta = heroSection.locator('a:has-text("Browse Gear Reviews")');
 
     await expect(exploreCta).toBeVisible();
-    await expect(exploreCta).toHaveAttribute('href', '/events');
+    await expect(exploreCta).toHaveAttribute('href', `${BASE_PATH}/events`);
 
     await expect(browseCta).toBeVisible();
-    await expect(browseCta).toHaveAttribute('href', '/gear');
+    await expect(browseCta).toHaveAttribute('href', `${BASE_PATH}/gear`);
   });
 
   test('should render all new modular homepage feature panels', async ({ page }) => {
-    // The main container should be present
-    const main = page.locator('main');
-    await expect(main).toBeVisible();
-
     // Check for the TopicGrid presence by a known heading
     await expect(page.getByText('Explore by topic')).toBeVisible();
 

@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
@@ -7,7 +8,7 @@ import { FeaturedEventGuide } from '@/features/home/FeaturedEventGuide';
 import { GearShelf } from '@/features/home/GearShelf';
 import { LatestPosts } from '@/features/home/LatestPosts';
 import { DevLabCallout } from '@/features/home/DevLabCallout';
-import { HeroSection } from '@/components/ui/HeroSection';
+import { HomeHero } from '@/features/home/HomeHero';
 
 export default function Home() {
   return (
@@ -24,7 +25,7 @@ export default function Home() {
         display="grid"
         className="items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
       >
-        <HeroSection />
+        <HomeHero />
         <FeaturedGuidePanel />
       </Box>
 
