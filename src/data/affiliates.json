@@ -25,6 +25,7 @@
         "description": "Helps soften loud ballroom sound while still letting you hear the music.",
         "gearSlug": "2023-10-01-loop-earplugs",
         "image": "/assets/gear/loop-earplugs.jpg",
+        "imageMode": "wide",
         "draft": true
     },
     "suede-sheets": {
@@ -78,6 +79,7 @@
         "category": "gear",
         "description": "Stay cool while adding a touch of flair to your performance.",
         "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg",
+        "imageMode": "contain",
         "draft": true
     },
     "neck-fan": {
@@ -131,6 +133,7 @@
         "category": "gear",
         "description": "Flashy jacket to stand out on the social floor.",
         "image": "/images/gear/amazon/cresay-women-s-sequin-fitted-long-sleeve-zipper-blazer-bomber-jacket-r.jpg",
+        "imageMode": "apparel",
         "draft": true
     },
     "ombre-dance-dress": {
@@ -140,6 +143,7 @@
         "category": "gear",
         "description": "Gradient dress that moves beautifully with every turn.",
         "image": "/images/gear/amazon/prettygarden-women-s-summer-casual-deep-v-neck-short-sleeve-wrap-draws.jpg",
+        "imageMode": "apparel",
         "draft": true
     },
     "rainbow-earrings": {
@@ -149,6 +153,7 @@
         "category": "gear",
         "description": "Bold accessories to complete your theme outfit.",
         "image": "/images/gear/amazon/didder-gold-crystal-tiara-crown-headband-princess-elegant-crown-with-c.jpg",
+        "imageMode": "square",
         "draft": true
     },
     "pride-sunglasses": {
@@ -220,7 +225,8 @@
         "url": "https://www.amazon.com/ALTOIDS-Curiously-Strong-Individual-1-76-Ounce/dp/B09QPR3J2B?crid=1JJYA4NTLDUI8&dib=eyJ2IjoiMSJ9.S6xHBieEj_kl1b7YSroF7HInWJL3s5AEMQvLYiGgBaZpBI478iBDeuwVeFa5k1SG5d0oYVYuajaa4O4DI1KMZ8eSwZlb-z31om-LseEWE3zHfpb4HurO89ZU7jhfCdQf2Mcy6h9FT3KjJ8lgc7j6uczyHJHmZE31BQ_i1zPSr0usE8N-flO4RKH7T0xk2HQisPZs_6TXRXTzSaik18e7GIYg93VzMsy7cmSiyNtAt0bIKGuMqjTNXiRbP7Ll9q78Kol8nzN-VBP8DFPAdZpf2At4fzkallQZnOZ2Y3mBuWk.IqwCnSeO0D3yfh0mNE0Fs_d4ikNJx-1k7VLJUwU-ytM&dib_tag=se&keywords=altoid+peppermint&qid=1779840032&sprefix=altoid+peper%2Caps%2C210&sr=8-7&linkCode=ll2&tag=onasafari04-20&linkId=63364f49a83e62faaa7fe4ef919be05c&language=en_US&ref_=as_li_ss_tl",
         "category": "travel",
         "description": "Essential for social dancing confidence.",
-        "image": "/images/gear/amazon/altoids-peppermint-mints.jpg"
+        "image": "/images/gear/amazon/altoids-peppermint-mints.jpg",
+        "imageMode": "contain"
     },
     "hand-sanitizer": {
         "id": "hand-sanitizer",
@@ -229,6 +235,7 @@
         "category": "travel",
         "description": "Stay healthy while dancing with hundreds of people.",
         "image": "/images/gear/amazon/purell-advanced-hand-sanitizer.jpg",
+        "imageMode": "contain",
         "draft": true
     },
     "rainbow-fan": {
@@ -340,7 +347,8 @@
         "category": "fashion",
         "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
         "gearSlug": "2024-06-01-mesh-fishnet-top",
-        "image": "/images/gear/sketches/mesh-fishnet-top.png"
+        "image": "/images/gear/sketches/mesh-fishnet-top.png",
+        "imageMode": "apparel"
     },
     "portable-speaker": {
         "id": "portable-speaker",
@@ -349,7 +357,8 @@
         "category": "gear",
         "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
         "gearSlug": "2024-01-01-portable-speaker",
-        "image": "/assets/gear/ue-wonderboom.jpg"
+        "image": "/assets/gear/ue-wonderboom.jpg",
+        "imageMode": "wide"
     },
     "yellow-fun-romper": {
         "id": "yellow-fun-romper",

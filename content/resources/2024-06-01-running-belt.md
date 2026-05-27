@@ -14,4 +14,4 @@ priceCategory: "$"
 updatedDate: "Jun 2024"
 ---
 
-Discreet waist belt that holds essentials without the bounce. Perfect for carrying ID, cash, or phone during long event days.
+Discreet waist belt that holds essentials without the bounce. Essentially a low-profile fanny pack, it's particularly great for social dancing and high-energy styles like Lindy Hop, allowing you to carry your ID, cash, or phone safely without it getting in the way.

@@ -15,7 +15,7 @@
  */
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
-import { pickRest } from '@/lib/utils';
+import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
@@ -62,9 +62,24 @@ export function GearCard(props: GearCardProps) {
   ] as (keyof GearCardProps)[]);
 
   // Image display options
-  const imageFit = props.imageFit || 'contain';
+  const mode = (props as any).imageMode || 'contain';
   const imagePosition = props.imagePosition || 'center';
-  const shouldPadImage = props.imagePadding !== false;
+
+  const imageSizeClasses: Record<string, string> = {
+    wide: "md:h-52",
+    contain: "md:h-52",
+    apparel: "md:h-72",
+    square: "md:h-56",
+    frontBack: "md:h-72",
+  };
+
+  const mobileImageSizeClasses: Record<string, string> = {
+    wide: "h-44",
+    contain: "h-44",
+    apparel: "h-64",
+    square: "h-52",
+    frontBack: "h-auto",
+  };
 
   // Resolve link: prioritization check
   const affiliateId = affiliateIds?.[0];
@@ -98,11 +113,17 @@ export function GearCard(props: GearCardProps) {
       {/* Image zone */}
       <Box
         position="relative"
-        aspect="video"
         overflow="hidden"
         radius="md"
-        padding={shouldPadImage ? 4 : 0}
-        className={shouldPadImage ? "bg-surface-alt/30" : "bg-surface-alt/20"}
+        className={cn(
+          "w-full bg-white shrink-0",
+          mobileImageSizeClasses[mode],
+          imageSizeClasses[mode],
+          mode === "apparel" && "p-4",
+          mode === "square" && "p-5",
+          mode === "contain" && "p-4",
+          mode === "frontBack" && "p-4"
+        )}
       >
         {image ? (
           <img
@@ -110,7 +131,10 @@ export function GearCard(props: GearCardProps) {
             alt={title}
             width={640}
             height={360}
-            className={`w-full h-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300 group-hover:opacity-90`}
+            className={cn(
+              "mx-auto h-full w-full transition-opacity duration-300 group-hover:opacity-90",
+              mode === "wide" ? "object-cover" : "object-contain"
+            )}
             style={{ objectPosition: imagePosition }}
           />
         ) : (

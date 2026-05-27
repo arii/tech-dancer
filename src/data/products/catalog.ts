@@ -1,4 +1,4 @@
-import { MerchImage } from '@/data/merch';
+
 
 export type ProductSource = 'affiliate' | 'owned-merch';
 

@@ -327,7 +327,7 @@ async function main() {
 
     // Generate recommendations
     const recommendations: string[] = [];
-    const issues = results.filter((r) => r.status !== 'valid');
+    const _issues = results.filter((r) => r.status !== 'valid');
 
     if (stats.drafted > 0) {
       recommendations.push(

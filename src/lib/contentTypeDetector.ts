@@ -35,7 +35,7 @@ export function detectContentType(resource: ResourceWithType | null | undefined)
 /**
  * Get the appropriate CTA label for a content type.
  */
-export function getCtaLabel(type: ContentType, isExternal: boolean = false): string {
+export function getCtaLabel(type: ContentType, _isExternal: boolean = false): string {
   switch (type) {
     case 'affiliate':
       return 'View product';

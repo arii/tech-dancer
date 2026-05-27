@@ -11,7 +11,7 @@ import { ListRow } from '@/components/ui/ListRow';
 import { SearchBox } from '@/components/ui/SearchBox';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
-import { cn } from '@/lib/utils';
+
 import { GEAR_PILLS } from "./config";
 import { FilterButton } from '@/components/ui/FilterButton';
 

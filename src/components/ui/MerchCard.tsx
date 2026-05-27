@@ -8,7 +8,7 @@ import { ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 import { getMerchImageConfig, legacyImageToMerchImages } from '@/lib/merch/imageDisplay';
 import { MerchImageView, MerchDisplayMode, MerchFeaturedSide } from '@/lib/types/content';
-import styles from './merch/MerchImages.module.css';
+
 
 interface MerchCardProps extends BaseProps {
   slug?: string;
