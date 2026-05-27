@@ -35,7 +35,7 @@ export function FeaturedEventGuide() {
   if (!event) return null;
 
   return (
-    <Box as="section">
+    <Box as="section" className="w-full max-w-full min-w-0">
       <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={4}>
         Featured Event Guide
       </Text>
@@ -45,12 +45,12 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="grid bg-surface touch-pan-y md:grid-cols-[260px_1fr] md:h-[200px]"
+        className="grid w-full max-w-full min-w-0 bg-surface touch-pan-y md:grid-cols-[260px_1fr] md:h-[200px]"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="h-44 md:h-full">
+        <Box position="relative" className="h-44 min-w-0 md:h-full">
           <img
             src={event.heroImage}
             alt={event.title}
@@ -61,11 +61,11 @@ export function FeaturedEventGuide() {
         </Box>
 
         {/* Content */}
-        <Stack gap={3} padding={6} className="justify-between">
+        <Stack gap={3} padding={6} className="min-w-0 justify-between">
           <Stack gap={1.5}>
             <Box display="flex" align="center" gap={2}>
               <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
-              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="truncate">
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full truncate">
                 {event.location}
               </Text>
             </Box>

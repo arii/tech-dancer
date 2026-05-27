@@ -45,7 +45,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Stack minHeight="screen" width="full" className="max-w-full min-w-0 overflow-x-clip">
+      <Stack minHeight="screen" width="full" className="w-full max-w-full min-w-0 overflow-x-clip">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -60,7 +60,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           width="full"
           surface="bg"
           direction="col"
-          className="min-w-0 max-w-full overflow-x-clip"
+          className="w-full max-w-full min-w-0 overflow-x-clip"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 10 }}
