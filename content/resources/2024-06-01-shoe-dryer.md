@@ -4,7 +4,7 @@ title: "Electric Shoe Dryer and Deodorizer"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
-excerpt: "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event."
+excerpt: "Fast shoe dryer-- the best way to handle stinky shoes."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
 affiliateIds: ["shoe-dryer"]
 tags: ["gear", "shoes", "maintenance"]
