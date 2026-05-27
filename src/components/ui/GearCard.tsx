@@ -96,7 +96,7 @@ export function GearCard(props: GearCardProps) {
         <Box
           position="absolute"
           top={3}
-          right={3}
+          left={3}
           paddingX={2}
           paddingY={1}
           radius="full"
@@ -107,6 +107,24 @@ export function GearCard(props: GearCardProps) {
             {category}
           </Text>
         </Box>
+
+        {/* Affiliate badge */}
+        {isExternal && (
+          <Box
+            position="absolute"
+            top={3}
+            right={3}
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacity={80}
+            className="bg-accent/80 text-white backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+              Amazon affiliate link
+            </Text>
+          </Box>
+        )}
       </Box>
       <Stack gap={2}>
         {verdict && (
@@ -144,7 +162,7 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            {isExternal ? "View deal" : "Read review"}
+            {isExternal ? "View product" : "Read review"}
           </Text>
           {isExternal ? (
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
