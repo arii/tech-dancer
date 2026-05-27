@@ -43,7 +43,7 @@ export default function ShopPost() {
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
           <Text variant="display" size="2xl">Product Not Found</Text>
-          <Box as="button" onClick={() => navigate('/shop')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={() => navigate('/merch')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Shop</Text>
           </Box>
         </Stack>
@@ -62,7 +62,7 @@ export default function ShopPost() {
       />
       <MerchPostDetail
         post={resource}
-        onBack={() => navigate('/shop')}
+        onBack={() => navigate('/merch')}
         backLabel="Back to Shop"
       />
     </>

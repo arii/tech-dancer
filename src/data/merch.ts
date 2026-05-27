@@ -129,9 +129,9 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     title: "Men's Bear Tank NorCal BestCal",
     description: 'Lightweight and breathable tank top featuring the iconic NorCal BestCal bear. Perfect for high-energy workshops and summer social sets.',
     price: '18.50',
-    primaryImageLabel: 'Front',
-    showSecondaryInset: true,
-    images: [
+    cardImage: '/assets/gear/norcal-bear-tank-front.webp',
+    cardCrop: 'front-print',
+    galleryImages: [
       {
         src: '/assets/gear/norcal-bear-tank-front.webp',
         label: 'Front',

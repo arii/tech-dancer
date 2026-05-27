@@ -8,7 +8,7 @@
  * For now, we preserve the data structure but hide the display in ResourceGrid.
  * See: https://github.com/arii/tech-dancer/issues/1604
  */
-import { ScoreGrid, ScoreItem } from '@/components/layout/DetailElements';
+
 
 interface ResourceGridProps {
   rating: number;
@@ -30,12 +30,12 @@ interface ResourceGridProps {
  * See: https://github.com/arii/tech-dancer/issues/1604
  */
 export function ResourceGrid({
-  rating,
-  durability,
-  value,
-  priceCategory,
-  updatedDate,
-  date
+  rating: _rating,
+  durability: _durability,
+  value: _value,
+  priceCategory: _priceCategory,
+  updatedDate: _updatedDate,
+  date: _date
 }: ResourceGridProps) {
   // Ratings hidden pending affiliate approval for dynamic updates
   // TODO: Re-enable when Amazon PA-API integration approved

@@ -29,9 +29,25 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
   const sourceBadge = getSourceBadge(contentType);
 
   // Image display options
-  const imageFit = product.imageFit || 'contain';
   const imagePosition = product.imagePosition || 'center';
-  const shouldPadImage = product.imagePadding !== false;
+
+  const mode = product.imageMode || 'contain';
+
+  const imageSizeClasses: Record<string, string> = {
+    wide: "md:h-52",
+    contain: "md:h-52",
+    apparel: "md:h-72",
+    square: "md:h-56",
+    frontBack: "md:h-72",
+  };
+
+  const mobileImageSizeClasses: Record<string, string> = {
+    wide: "h-44",
+    contain: "h-44",
+    apparel: "h-64",
+    square: "h-52",
+    frontBack: "h-auto",
+  };
 
   return (
     <Box
@@ -41,18 +57,18 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
       surface="surface"
       padding={4}
       height="full"
-      maxHeight={96}
       className="overflow-hidden transition-colors hover:border-line-hover relative"
     >
-      <Stack direction={{ base: 'row', md: 'col' }} gap={4} height="full">
+      <Stack direction="col" gap={4} height="full">
         <Box
-          width={{ base: 32, md: 'full' }}
-          height={{ base: 32, md: variant === 'featured' ? 72 : 56 }}
-          radius="lg"
-          overflow="hidden"
-          shrink={false}
-          padding={shouldPadImage ? 3 : 0}
-          className={shouldPadImage ? "bg-surface-alt/30" : "bg-surface-alt/20"}
+          className={cn(
+            "w-full rounded-xl bg-white overflow-hidden shrink-0 relative",
+            mobileImageSizeClasses[mode],
+            imageSizeClasses[mode],
+            mode === "apparel" && "p-4",
+            mode === "square" && "p-5",
+            mode === "contain" && "p-4"
+          )}
         >
           {product.image ? (
             <Box
@@ -70,7 +86,10 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
               <img 
                 src={product.image} 
                 alt={product.name} 
-                className={`h-full w-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300 pointer-events-none`} 
+                className={cn(
+                  "mx-auto h-full w-full pointer-events-none transition-opacity duration-300",
+                  mode === "wide" ? "object-cover" : "object-contain"
+                )}
                 style={{ objectPosition: imagePosition }} // impeccable-ignore
                 loading="lazy" 
               />

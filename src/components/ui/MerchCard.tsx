@@ -111,20 +111,7 @@ export function MerchCard(props: MerchCardProps) {
           aria-hidden="true"
         />
 
-        {/* Category badge */}
-        <Box position="absolute" top={3} right={3}>
-          <Box
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacity={80}
-            className="bg-accent text-bg backdrop-blur-md shadow-sm"
-          >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-              {category}
-            </Text>
-          </Box>
-        </Box>
+
 
         {/* Source badge */}
         <SourceBadge type="merch" position="bottom-left" />

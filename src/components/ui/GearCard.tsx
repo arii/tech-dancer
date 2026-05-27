@@ -98,18 +98,18 @@ export function GearCard(props: GearCardProps) {
       {/* Image zone */}
       <Box
         position="relative"
-        aspectRatio={isInternal ? "800 / 300" : "1 / 1"}
+        aspect="video"
         overflow="hidden"
         radius="md"
         padding={shouldPadImage ? 4 : 0}
         className={shouldPadImage ? "bg-surface-alt/30" : "bg-surface-alt/20"}
       >
         {image ? (
-          <img 
-            src={image} 
-            alt={title} 
-            width={640} 
-            height={360} 
+          <img
+            src={image}
+            alt={title}
+            width={640}
+            height={360}
             className={`w-full h-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300 group-hover:opacity-90`}
             style={{ objectPosition: imagePosition }}
           />
@@ -193,7 +193,7 @@ export function GearCard(props: GearCardProps) {
         </Box>
 
         <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-2">
-           {excerpt}
+          {excerpt}
         </Text>
       </Stack>
 

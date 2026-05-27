@@ -20,7 +20,7 @@ export default function GearPost() {
   // Redirect merch items to shop page
   useEffect(() => {
     if (resource && resource.shopUrl) {
-      navigate(`/shop/${slug}`, { replace: true });
+      navigate(`/merch/${slug}`, { replace: true });
     }
   }, [resource, slug, navigate]);
 
