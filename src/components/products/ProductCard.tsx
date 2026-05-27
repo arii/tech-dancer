@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
-import type { ProductCatalogItem } from '@/data/products/catalog';
+import type { ProductCatalogItem, MerchImageLabel } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 import { MerchImageSingle, MerchImagePair, MerchImageFeatured } from '@/components/ui/merch/MerchImageDisplay';
@@ -15,7 +15,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
   const config = getMerchImageConfig(
     normalizedImages,
     item.showSecondaryInset ? 'featured' : undefined,
-    item.primaryImageLabel?.toLowerCase() as any
+    item.primaryImageLabel?.toLowerCase() as MerchImageLabel | undefined
   );
 
   // Render image based on display mode

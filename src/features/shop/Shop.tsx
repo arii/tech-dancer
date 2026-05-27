@@ -28,7 +28,7 @@ export default function Shop() {
 
   // Filter to only merch items (those with shopUrl)
   const merchItems = useMemo(() => {
-    let items = resources.filter(r => r.shopUrl);
+    const items = resources.filter(r => r.shopUrl);
 
     if (!searchTerm) return items;
 
