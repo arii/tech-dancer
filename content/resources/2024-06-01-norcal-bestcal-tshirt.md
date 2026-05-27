@@ -13,6 +13,7 @@ rating: 5
 verdict: "Essential Merch"
 priceCategory: "$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/norcal-bestcal-tshirt
 ---
 
 The core piece of the NorCal BestCal collection. Simple, bold, and indispensable for Team NorCal.

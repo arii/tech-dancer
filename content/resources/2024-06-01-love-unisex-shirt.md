@@ -13,6 +13,7 @@ rating: 5
 verdict: "Classic & Inclusive"
 priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/love-unisex-shirt
 ---
 
 A classic unisex fit for everyone in the community who loves to do it all on the floor.

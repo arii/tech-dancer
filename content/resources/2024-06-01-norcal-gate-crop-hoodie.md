@@ -12,6 +12,7 @@ rating: 5
 verdict: "Cozy & Regional"
 priceCategory: "$$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/norcal-bestcal-golden-gate-crop-hoodie
 ---
 
 The perfect layer for those early morning workshops or chilly ballroom social sets.
