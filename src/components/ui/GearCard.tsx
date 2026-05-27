@@ -21,7 +21,7 @@ interface GearCardProps extends BaseProps {
 }
 
 const CARD_STYLES = {
-  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
+  image: "w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
   verdict: "uppercase tracking-widest opacity-90"
 };
@@ -78,7 +78,7 @@ export function GearCard(props: GearCardProps) {
         aspect="video"
         overflow="hidden"
         radius="md"
-        className="bg-surface-alt/20"
+        className="bg-slate-100"
       >
         {image ? (
           <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
@@ -144,7 +144,7 @@ export function GearCard(props: GearCardProps) {
         )}
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            {isExternal ? "View deal" : "Read review"}
+            {isExternal ? "See picks" : "Read review"}
           </Text>
           {isExternal ? (
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
@@ -153,6 +153,9 @@ export function GearCard(props: GearCardProps) {
           )}
         </Box>
       </Box>
+      <Text variant="mono" size="micro" color="dim" weight="font-bold" className="uppercase tracking-wide mt-2">
+        {isExternal ? "Amazon affiliate link" : "Non-affiliate resource"}
+      </Text>
     </BaseCard>
   );
 }
