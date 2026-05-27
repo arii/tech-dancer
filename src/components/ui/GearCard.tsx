@@ -176,7 +176,7 @@ export function GearCard(props: GearCardProps) {
               className="bg-accent/60 text-accent-sky backdrop-blur-md shadow-sm"
             >
               <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide text-xs">
-                Earns Commission
+                Amazon affiliate link
               </Text>
             </Box>
           )}
@@ -225,7 +225,7 @@ export function GearCard(props: GearCardProps) {
       <Box display="flex" align="center" justify="end" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
           <Text variant="body" size="sm" weight="font-semibold" color="accent" className="font-semibold">
-            {isExternal ? "View product" : "Read review"}
+            {isExternal ? "Paid Amazon link" : "Read review"}
           </Text>
           {isExternal ? (
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
