@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -8,6 +8,29 @@ import { getEvents } from '@/lib/content';
 export function FeaturedEventGuide() {
   const featured = getEvents().filter((event) => !!event.heroImage);
   const [index, setIndex] = useState(0);
+
+  const touchStartX = useRef<number | null>(null);
+
+  const goPrev = () => setIndex((i) => Math.max(0, i - 1));
+  const goNext = () => setIndex((i) => Math.min(featured.length - 1, i + 1));
+
+  const handleTouchStart = (event: React.TouchEvent) => {
+    touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    const startX = touchStartX.current;
+    const endX = event.changedTouches[0]?.clientX;
+    touchStartX.current = null;
+    if (startX == null || endX == null) return;
+
+    const deltaX = endX - startX;
+    const swipeThreshold = 40;
+
+    if (deltaX <= -swipeThreshold) goNext();
+    if (deltaX >= swipeThreshold) goPrev();
+  };
+
   const event = featured[index];
   if (!event) return null;
 
@@ -22,7 +45,9 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="grid bg-surface md:grid-cols-[260px_1fr] md:h-[200px]"
+        className="grid bg-surface touch-pan-y md:grid-cols-[260px_1fr] md:h-[200px]"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Image column — full height, strong crop */}
         <Box position="relative" className="h-44 md:h-full">
@@ -68,7 +93,7 @@ export function FeaturedEventGuide() {
               <Box display="flex" gap={2}>
                 <Box
                   as="button"
-                  onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                  onClick={goPrev}
                   padding={1.5}
                   border
                   radius="sm"
@@ -80,7 +105,7 @@ export function FeaturedEventGuide() {
                 </Box>
                 <Box
                   as="button"
-                  onClick={() => setIndex((i) => Math.min(featured.length - 1, i + 1))}
+                  onClick={goNext}
                   padding={1.5}
                   border
                   radius="sm"
