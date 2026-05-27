@@ -8,7 +8,7 @@ export function EventNavigation() {
       top={{ base: 16, lg: 0 }}
       zIndex={40}
       width="full"
-      className="bg-bg/80 backdrop-blur-md border-b border-line/10"
+      className="bg-slate-950/80 backdrop-blur-md border-b border-white/10"
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
         {/* Right fade indicator for mobile horizontal scroll */}
@@ -25,48 +25,26 @@ export function EventNavigation() {
 
         <Box
           display="flex"
-          gap={{ base: 8, md: 10 }}
+          gap={{ base: 2, md: 4 }}
           overflowX="auto"
           scrollBehavior="smooth"
           className="no-scrollbar"
-          paddingX={{ base: 6, md: 0 }}
-          paddingRight={{ base: 12, md: 0 }}
+          paddingX={{ base: 4, md: 0 }}
+          paddingY={3}
         >
           {EVENT_TABS.map(tab => (
             <Box
               key={tab.id}
               as="a"
               href={`#${tab.id}`}
-              paddingY={4}
               shrink={false}
-              className="group relative cursor-pointer"
+              className="whitespace-nowrap rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
             >
-              <Box
-                display="flex"
-                align="center"
-                gap={2}
-                color="dim"
-                className="group-hover:text-accent transition-colors whitespace-nowrap"
+              <Text
+                weight="font-semibold"
               >
-                <tab.icon size={14} />
-                <Text
-                  variant="mono"
-                  size="xs"
-                  weight="font-bold"
-                  uppercase
-                  tracking="widest"
-                >
-                  {tab.label}
-                </Text>
-              </Box>
-              <Box
-                position="absolute"
-                bottom={0}
-                left={0}
-                right={0}
-                height={0.5}
-                className="bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
-              />
+                {tab.label}
+              </Text>
             </Box>
           ))}
         </Box>

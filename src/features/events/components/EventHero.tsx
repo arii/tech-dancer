@@ -36,11 +36,11 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "30vh", md: "40vh" }}
+      minHeight={{ base: "auto", md: "40vh" }}
       direction="col"
       gap={0}
       overflow="hidden"
-      surface="bg"
+      className="bg-slate-950 border-b border-white/10"
     >
       {/* Background Image or Particle Fallback */}
       {image ? (
@@ -77,9 +77,9 @@ export function EventHero({
         relative
         zIndex={10}
         gap={{ base: 6, md: 10 }}
-        paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingTop={{ base: 8, md: 12 }}
-        paddingBottom={{ base: 6, md: 8 }}
+        paddingX={{ base: 4, sm: 6, lg: 8 }}
+        paddingTop={{ base: 24, md: 24 }}
+        paddingBottom={10}
         maxWidth="screen-xl"
         marginX="auto"
         width="full"
@@ -89,7 +89,7 @@ export function EventHero({
         animate={{ opacity: 1, y: 0 }}
         transition={motionTokens.page.transition}
       >
-        <Stack gap={6}>
+        <Stack gap={6} maxWidth="720px">
           <Stack gap={2}>
             <Text
               variant="mono"
@@ -98,13 +98,14 @@ export function EventHero({
               color="accent"
               uppercase
               tracking="widest"
+              className="text-[11px] sm:text-xs"
             >
               {eyebrow}
             </Text>
             <Text
               as="h1"
               variant="headline"
-              size={{ base: "fluid-5", md: "fluid-7" }}
+              size={{ base: "3xl", sm: "4xl", md: "5xl" }}
               weight="font-black"
               color="white"
               leading="tight"
@@ -114,7 +115,7 @@ export function EventHero({
             </Text>
           </Stack>
 
-          <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center">
+          <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center" className="flex-col sm:flex-row items-start sm:items-center">
             <Box display="flex" align="center" gap={2}>
               <Calendar className="w-4 h-4 md:w-5 md:h-5 text-accent" />
               <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">

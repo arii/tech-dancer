@@ -147,7 +147,7 @@ export default function EventGuide() {
         whyAttending={event.whyAttending}
       />
 
-      <Box maxWidth="screen-2xl" marginX="auto" paddingX={{ base: 4, md: 6 }} paddingTop={8}>
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingTop={10}>
         <Stack direction={{ base: 'col', lg: 'row' }} gap={12} align="start">
           <Box as="main" flex={1} minWidth="0" className={MAIN_GAP}>
             {event.theme && (

@@ -36,7 +36,7 @@ export function EventProductGrid({
   const desktopColumns =
     variant === 'featured'
       ? 'xl:grid-cols-3'
-      : 'lg:grid-cols-3 xl:grid-cols-3';
+      : 'xl:grid-cols-3';
 
   const hasMore = products.length > visibleProducts.length;
 
@@ -44,7 +44,7 @@ export function EventProductGrid({
     <Box>
       <Box
         display="grid"
-        className={cn('grid-cols-2', GRID_GAP, desktopColumns)}
+        className={cn('grid-cols-1 sm:grid-cols-2', GRID_GAP, desktopColumns)}
       >
         {visibleProducts.map((product) => (
           <EventProductCard key={product.id} product={product} variant={variant} />
