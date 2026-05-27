@@ -9,7 +9,7 @@ import { EventReminders } from './components/EventReminders';
 import { EventTravel } from './components/EventTravel';
 import { EventNotes } from './components/EventNotes';
 import { RelatedEvents } from './components/RelatedEvents';
-import { MAIN_GAP, SIDEBAR_WIDTH } from './constants';
+import { MAIN_GAP } from './constants';
 import { getEventSchema } from './schema';
 import { useEventDetail, resolveAffiliateLinks } from './useEventDetail';
 import { createProductDeduplicator } from './lib/deduplication';
@@ -18,8 +18,9 @@ const TOTAL_VISIBLE_PRODUCTS = 15;
 const FEATURED_MAX_ITEMS = 3;
 const THEME_MAX_ITEMS = 6;
 const TRAVEL_MAX_ITEMS = 3;
-const PACKING_MAX_WITH_THEME = 3;
-const PACKING_MAX_WITHOUT_THEME = 6;
+const PACKING_MAX = 3;
+
+const SIDEBAR_WIDTH = '320px';
 
 const joinDescriptions = (...parts: Array<string | undefined>) => parts.filter(Boolean).join(' ');
 
@@ -37,50 +38,68 @@ export default function EventGuide() {
 
   const editorialProducts = useMemo(() => {
     const deduplicator = createProductDeduplicator();
-    let remainingSlots = TOTAL_VISIBLE_PRODUCTS;
-    let hasOverflow = false;
 
-    const allocate = <T extends { id: string }>(items: T[], limit: number) => {
+    const resolveAndAllocate = (ids: string[], limit: number, currentRemainingSlots: number) => {
+      const items = resolveAffiliateLinks(ids);
       const uniqueItems = deduplicator.filter(items);
-      const allowed = Math.max(Math.min(limit, remainingSlots), 0);
+      const allowed = Math.max(Math.min(limit, currentRemainingSlots), 0);
       const visibleItems = uniqueItems.slice(0, allowed);
+      const hasOverflow = uniqueItems.length > visibleItems.length;
 
-      if (uniqueItems.length > visibleItems.length) {
-        hasOverflow = true;
-      }
-
-      remainingSlots -= visibleItems.length;
-      return visibleItems;
+      return {
+        visibleItems,
+        hasOverflow,
+        allocatedCount: visibleItems.length
+      };
     };
 
-    const themeProducts = allocate([...themeOutfits, ...themeAccessories], THEME_MAX_ITEMS);
-    const packingMaxItems = themeProducts.length > 0 ? PACKING_MAX_WITH_THEME : PACKING_MAX_WITHOUT_THEME;
-    const featuredProducts = allocate(
-      resolveAffiliateLinks([
+    let slotsRemaining = TOTAL_VISIBLE_PRODUCTS;
+
+    const featured = resolveAndAllocate(
+      [
         ...(event?.gear?.outfitIds ?? []),
         ...(event?.gear?.shoeIds ?? []),
         ...(event?.gear?.essentialIds ?? []),
-      ]),
+      ],
       FEATURED_MAX_ITEMS,
+      slotsRemaining
     );
-    const packingProducts = allocate(
-      resolveAffiliateLinks([
+    slotsRemaining -= featured.allocatedCount;
+
+    const theme = resolveAndAllocate(
+      [...(event?.theme?.outfitIds ?? []), ...(event?.theme?.accessoryIds ?? [])],
+      THEME_MAX_ITEMS,
+      slotsRemaining
+    );
+    slotsRemaining -= theme.allocatedCount;
+
+    const packing = resolveAndAllocate(
+      [
         ...(event?.gear?.accessoryIds ?? []),
         ...(event?.gear?.essentialIds ?? []),
         ...(event?.gear?.shoeIds ?? []),
         ...(event?.gear?.outfitIds ?? []),
-      ]),
-      packingMaxItems,
+      ],
+      PACKING_MAX,
+      slotsRemaining
     );
-    const travelProducts = allocate(resolveAffiliateLinks(event?.gear?.travelIds ?? []), TRAVEL_MAX_ITEMS);
+    slotsRemaining -= packing.allocatedCount;
+
+    const travel = resolveAndAllocate(
+      event?.gear?.travelIds ?? [],
+      TRAVEL_MAX_ITEMS,
+      slotsRemaining
+    );
+    // slotsRemaining -= travel.allocatedCount; // Intentional for final allocation
+
+    const hasAnyOverflow = featured.hasOverflow || theme.hasOverflow || packing.hasOverflow || travel.hasOverflow;
 
     return {
-      themeProducts,
-      featuredProducts,
-      packingProducts,
-      travelProducts,
-      packingMaxItems,
-      hasOverflow,
+      themeProducts: theme.visibleItems,
+      featuredProducts: featured.visibleItems,
+      packingProducts: packing.visibleItems,
+      travelProducts: travel.visibleItems,
+      hasOverflow: hasAnyOverflow,
     };
   }, [event, themeAccessories, themeOutfits]);
 
@@ -130,13 +149,13 @@ export default function EventGuide() {
         whyAttending={event.whyAttending}
       />
 
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingTop={8}>
-        <Stack direction={{ base: 'col', lg: 'row' }} gap={8} align="start">
+      <Box maxWidth="screen-2xl" marginX="auto" paddingX={{ base: 4, md: 6 }} paddingTop={8}>
+        <Stack direction={{ base: 'col', lg: 'row' }} gap={12} align="start">
           <Box as="main" flex={1} minWidth="0" className={MAIN_GAP}>
             {event.theme && (
               <ThemeSpotlight
                 id="theme"
-                title={event.theme.name}
+                title={`${event.theme.name} Event Picks`}
                 label={event.theme.label}
                 description={event.theme.description}
                 colors={event.theme.colors}
@@ -158,13 +177,15 @@ export default function EventGuide() {
                 event.gear?.accessoryDescription,
                 editorialProducts.themeProducts.length > 0 ? undefined : event.gear?.outfitDescription,
               )}
-              packingMaxItems={editorialProducts.packingMaxItems}
               travelPicks={editorialProducts.travelProducts}
               travelDescription={event.gear?.travelDescription}
               showFullGearListCta={editorialProducts.hasOverflow}
             />
 
-            <EventReminders id="reminders" event={event} />
+            <Box display={{ base: 'block', lg: 'none' }}>
+              <EventReminders id="reminders" event={event} />
+            </Box>
+
             <EventTravel id="travel" notes={event.description} />
             <EventNotes id="notes" content={event.content} />
 
@@ -173,7 +194,7 @@ export default function EventGuide() {
             )}
           </Box>
 
-          <Box as="aside" width={{ base: 'full', lg: SIDEBAR_WIDTH }} shrink={false} className="space-y-4 lg:sticky lg:top-24">
+          <Box as="aside" display={{ base: 'none', lg: 'block' }} width={SIDEBAR_WIDTH} shrink={false} className="space-y-4 sticky top-24">
             <EventSidebar event={event} />
           </Box>
         </Stack>

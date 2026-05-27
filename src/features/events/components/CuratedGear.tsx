@@ -11,7 +11,6 @@ interface CuratedGearProps {
   featuredDescription?: string;
   packingPicks: Product[];
   packingDescription?: string;
-  packingMaxItems?: number;
   travelPicks: Product[];
   travelDescription?: string;
   showFullGearListCta?: boolean;
@@ -23,13 +22,12 @@ export function CuratedGear({
   featuredDescription,
   packingPicks,
   packingDescription,
-  packingMaxItems = 6,
   travelPicks,
   travelDescription,
   showFullGearListCta = false,
 }: CuratedGearProps) {
-  const canRenderPacking = packingPicks.length > 1;
-  const canRenderTravel = travelPicks.length > 1;
+  const canRenderPacking = packingPicks.length >= 1;
+  const canRenderTravel = travelPicks.length >= 1;
 
   if (
     featuredPicks.length === 0 &&
@@ -59,8 +57,8 @@ export function CuratedGear({
           {/* Affiliate disclosure moved directly after Featured Picks */}
           <Box paddingTop={2}>
             <Box maxWidth="screen-xl" paddingX={{ base: 3, md: 6 }}>
-              <Text size="xs" color="dim" className="max-w-2xl leading-relaxed italic">
-                As an Amazon Associate, I earn a small commission from qualifying purchases made through the links below at no extra cost to you. This helps support my event guides!
+              <Text size="xs" color="dim" className="max-w-2xl leading-relaxed italic opacity-60">
+                As an Amazon Associate, I earn a small commission from qualifying purchases made through the links below at no extra cost to you.
               </Text>
             </Box>
           </Box>
@@ -75,7 +73,7 @@ export function CuratedGear({
         >
           <EventProductGrid
             products={packingPicks}
-            maxItems={packingMaxItems}
+            maxItems={3}
             showMoreCta={false}
           />
         </EventSection>
@@ -84,7 +82,7 @@ export function CuratedGear({
       {canRenderTravel && (
         <EventSection
           eyebrow="Travel setup"
-          title="Travel Essentials"
+          title="Travel Extras"
           description={travelDescription || 'Practical items that make the weekend easier.'}
         >
           <EventProductGrid
@@ -96,7 +94,7 @@ export function CuratedGear({
       )}
 
       {showFullGearListCta && (
-        <Box>
+        <Box paddingTop={4}>
           <Text
             as={Link}
             to="/gear"
@@ -104,7 +102,7 @@ export function CuratedGear({
             size="xs"
             weight="font-bold"
             color="accent"
-            className="hover:underline"
+            className="hover:underline opacity-80"
           >
             View full gear list
           </Text>

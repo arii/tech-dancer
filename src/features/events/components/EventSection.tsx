@@ -17,29 +17,33 @@ export function EventSection({ id, eyebrow, title, description, children }: Even
 
   return (
     <Box id={id} as="section" className={SECTION_GAP}>
-      <Stack gap={2}>
-        {eyebrow && (
-          <Text
-            variant="mono"
-            size="xs"
-            weight="font-semibold"
-            color="accent"
-            uppercase
-            className="tracking-wider"
-          >
-            {eyebrow}
+      <Stack gap={3}>
+        <Stack gap={1}>
+          {eyebrow && (
+            <Text
+              variant="mono"
+              size="micro"
+              weight="font-semibold"
+              color="accent"
+              uppercase
+              className="tracking-widest opacity-80"
+            >
+              {eyebrow}
+            </Text>
+          )}
+          <Text as="h2" variant="headline" size="xl" weight="font-bold" color="white" className="tracking-tight">
+            {title}
           </Text>
-        )}
-        <Text as="h2" variant="headline" size="2xl" weight="font-bold" color="white">
-          {title}
-        </Text>
+        </Stack>
         {description && (
-          <Text size="sm" color="dim" className="max-w-3xl leading-relaxed">
+          <Text size="sm" color="dim" className="max-w-3xl leading-relaxed opacity-90">
             {description}
           </Text>
         )}
       </Stack>
-      {children}
+      <Box marginTop={6}>
+        {children}
+      </Box>
     </Box>
   );
 }

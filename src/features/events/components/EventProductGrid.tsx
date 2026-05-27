@@ -28,21 +28,23 @@ export function EventProductGrid({
     return null;
   }
 
+  // Avoid lonely one-card grids unless featured
   if (variant !== 'featured' && visibleProducts.length === 1) {
     return null;
   }
 
   const desktopColumns =
     variant === 'featured'
-      ? 'xl:grid-cols-3 2xl:grid-cols-4'
-      : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4';
+      ? 'xl:grid-cols-3'
+      : 'lg:grid-cols-3 xl:grid-cols-3';
+
   const hasMore = products.length > visibleProducts.length;
 
   return (
     <Box>
       <Box
         display="grid"
-        className={cn('grid-cols-1 sm:grid-cols-2', GRID_GAP, desktopColumns)}
+        className={cn('grid-cols-2', GRID_GAP, desktopColumns)}
       >
         {visibleProducts.map((product) => (
           <EventProductCard key={product.id} product={product} variant={variant} />

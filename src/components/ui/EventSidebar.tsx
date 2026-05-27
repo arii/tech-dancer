@@ -47,31 +47,31 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
   }
 
   return (
-    <Stack gap={4}>
+    <Stack gap={6} className="w-full">
       {event && (
-        <Box border radius="xl" padding={5} surface="surface">
-          <Stack gap={4}>
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase className="tracking-wider">
+        <Box border radius="xl" padding={6} surface="surface" className="bg-slate-900/40 backdrop-blur-sm border-white/5">
+          <Stack gap={5}>
+            <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase className="tracking-widest opacity-80">
               Event snapshot
             </Text>
-            <Stack gap={3}>
+            <Stack gap={4}>
               <Box>
-                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-wide">
+                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60 mb-1">
                   Category
                 </Text>
-                <Text size="sm">{event.category}</Text>
+                <Text size="sm" weight="font-medium">{event.category}</Text>
               </Box>
               <Box>
-                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-wide">
+                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60 mb-1">
                   City
                 </Text>
-                <Text size="sm">{event.city}</Text>
+                <Text size="sm" weight="font-medium">{event.city}</Text>
               </Box>
               <Box>
-                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-wide">
+                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60 mb-1">
                   Schedule
                 </Text>
-                <Text size="sm">{event.schedule}</Text>
+                <Text size="sm" weight="font-medium">{event.schedule}</Text>
               </Box>
             </Stack>
           </Stack>
@@ -79,28 +79,28 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
       )}
 
       {reminders.length > 0 && (
-        <Box border radius="xl" padding={5} surface="surface">
-          <Stack gap={4}>
-            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase className="tracking-wider">
-              Quick reminders
+        <Box border radius="xl" padding={6} surface="surface" className="bg-slate-900/40 backdrop-blur-sm border-white/5">
+          <Stack gap={5}>
+            <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase className="tracking-widest opacity-80">
+              Important Dates
             </Text>
-            <Stack gap={3}>
+            <Stack gap={4}>
               {reminders.map((reminder) => {
                 const Icon = reminder.icon;
 
                 return (
-                  <Box key={reminder.id} border radius="lg" padding={3} surface="muted">
-                    <Stack gap={2}>
+                  <Box key={reminder.id} className="relative pl-4 border-l border-white/10 hover:border-accent/40 transition-colors">
+                    <Stack gap={1}>
                       <Box display="flex" align="center" gap={2}>
-                        {Icon && <Icon className="h-4 w-4 text-accent" />}
-                        <Text size="sm" weight="font-bold" color="white">
+                        {Icon && <Icon className="h-3.5 w-3.5 text-accent opacity-80" />}
+                        <Text size="xs" weight="font-bold" color="white" className="tracking-tight">
                           {reminder.label}
                         </Text>
                       </Box>
-                      <Text variant="mono" size="tiny" color="dim" uppercase className="tracking-wide">
-                        {reminder.date.toLocaleDateString()}
+                      <Text variant="mono" size="micro" color="accent" uppercase className="tracking-widest opacity-80">
+                        {reminder.date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </Text>
-                      <Text size="xs" color="dim" className="leading-relaxed">
+                      <Text size="xs" color="dim" className="leading-relaxed opacity-80">
                         {reminder.description}
                       </Text>
                     </Stack>

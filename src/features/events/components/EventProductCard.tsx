@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -5,7 +6,9 @@ import { detectContentType, getCtaLabel, getSourceBadge } from '@/lib/contentTyp
 import type { AffiliateLink } from '@/types';
 import { cn } from '@/lib/utils';
 
-export type Product = AffiliateLink;
+export type Product = AffiliateLink & {
+  backImage?: string;
+};
 
 interface EventProductCardProps {
   product: Product & {
@@ -17,6 +20,7 @@ interface EventProductCardProps {
 }
 
 export function EventProductCard({ product, variant = 'compact' }: EventProductCardProps) {
+  const [showBack, setShowBack] = useState(false);
   const href = affiliateManager.resolveResourceHref({ id: product.id, gearSlug: product.gearSlug });
   const isExternal = /^https?:\/\//.test(href);
   const CtaTag = isExternal ? 'a' : Link;
@@ -30,24 +34,18 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
 
   // Image display options
   const imagePosition = product.imagePosition || 'center';
-
   const mode = product.imageMode || 'contain';
 
-  const imageSizeClasses: Record<string, string> = {
-    wide: "md:h-52",
-    contain: "md:h-52",
-    apparel: "md:h-72",
-    square: "md:h-56",
-    frontBack: "md:h-72",
-  };
+  const isCompact = variant === 'compact';
 
-  const mobileImageSizeClasses: Record<string, string> = {
-    wide: "h-44",
-    contain: "h-44",
-    apparel: "h-64",
-    square: "h-52",
-    frontBack: "h-auto",
-  };
+  const imageContainerClasses = cn(
+    "w-full rounded-xl bg-white overflow-hidden shrink-0 relative flex items-center justify-center",
+    isCompact ? "h-24 md:h-28" : "h-44 md:h-52",
+    (mode === "apparel" || mode === "contain") && "p-2",
+    mode === "square" && "p-3"
+  );
+
+  const hasBackImage = !!product.backImage;
 
   return (
     <Box
@@ -55,21 +53,14 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
       border
       radius="xl"
       surface="surface"
-      padding={4}
+      padding={isCompact ? 3 : 4}
       height="full"
-      className="overflow-hidden transition-colors hover:border-line-hover relative"
+      className="group overflow-hidden transition-colors hover:border-line-hover relative"
+      onMouseEnter={() => hasBackImage && setShowBack(true)}
+      onMouseLeave={() => hasBackImage && setShowBack(false)}
     >
-      <Stack direction="col" gap={4} height="full">
-        <Box
-          className={cn(
-            "w-full rounded-xl bg-white overflow-hidden shrink-0 relative",
-            mobileImageSizeClasses[mode],
-            imageSizeClasses[mode],
-            mode === "apparel" && "p-4",
-            mode === "square" && "p-5",
-            mode === "contain" && "p-4"
-          )}
-        >
+      <Stack direction="col" gap={isCompact ? 3 : 4} height="full">
+        <Box className={imageContainerClasses}>
           {product.image ? (
             <Box
               as={isExternal ? 'a' : Link}
@@ -80,22 +71,19 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
               display="flex"
               height="full"
               width="full"
-              className="hover:opacity-90 transition-opacity cursor-pointer"
+              className="hover:opacity-90 transition-opacity cursor-pointer items-center justify-center"
               style={{ textDecoration: 'none' }} // impeccable-ignore
             >
               <img 
-                src={product.image} 
+                src={showBack && product.backImage ? product.backImage : product.image}
                 alt={product.name} 
-                className={cn(
-                  "mx-auto h-full w-full pointer-events-none transition-opacity duration-300",
-                  mode === "wide" ? "object-cover" : "object-contain"
-                )}
+                className="mx-auto max-h-full max-w-full object-contain pointer-events-none transition-opacity duration-300"
                 style={{ objectPosition: imagePosition }} // impeccable-ignore
                 loading="lazy" 
               />
             </Box>
           ) : (
-            <Box display="flex" align="center" justify="center" height="full" padding={3}>
+            <Box display="flex" align="center" justify="center" height="full" padding={2}>
               <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide text-center">
                 {product.category}
               </Text>
@@ -103,11 +91,11 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
           )}
         </Box>
 
-        <Stack gap={3} height="full" flex={1} justify="between" minWidth="0">
-          <Stack gap={2} minWidth="0">
+        <Stack gap={isCompact ? 2 : 3} height="full" flex={1} justify="between" minWidth="0">
+          <Stack gap={1.5} minWidth="0">
             <Text
               as="h3"
-              size={variant === 'featured' ? { base: 'base', md: 'lg' } : { base: 'sm', md: 'base' }}
+              size={variant === 'featured' ? { base: 'sm', md: 'base' } : 'xs'}
               weight="font-bold"
               color="white"
               clamp={2}
@@ -115,12 +103,11 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
             >
               {product.name}
             </Text>
-            <Text size={variant === 'featured' ? 'sm' : 'xs'} color="dim" clamp={2} className="leading-relaxed">
+            <Text size="xs" color="dim" clamp={2} className="leading-relaxed">
               {product.description}
             </Text>
-            {/* Source badge moved from image to body metadata */}
-            <Box paddingTop={1}>
-              <Text size="xs" weight="font-medium" color="dim" className="whitespace-nowrap">
+            <Box paddingTop={0.5}>
+              <Text size="micro" weight="font-medium" color="dim" className="whitespace-nowrap uppercase tracking-wider opacity-60">
                 {sourceBadge}
               </Text>
             </Box>
@@ -132,7 +119,11 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
             size="xs"
             weight="font-bold"
             color="accent"
-            className={cn(!isExternal && 'hover:underline')}
+            className={cn(
+              "transition-colors",
+              !isExternal && 'hover:underline',
+              "group-hover:text-accent-hover"
+            )}
             {...ctaProps}
           >
             {ctaLabel}
