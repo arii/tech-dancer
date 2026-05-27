@@ -19,7 +19,7 @@ export default function EventsFeed() {
         items={events}
         categoryTitle="Upcoming Event Resource Guides"
         as="h1"
-        label="PLAN"
+        eyebrow="PLAN"
         description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
         basePath="/events"
         searchPlaceholder="Search events..."

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Stack, Text } from '@/layouts/Primitives';
 
 interface SectionHeaderProps {
-  eyebrow?: string;
+  eyebrow: string;
   title: string;
   link?: {
     text: string;
