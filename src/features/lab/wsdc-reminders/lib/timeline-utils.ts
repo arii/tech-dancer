@@ -9,7 +9,7 @@ export interface TimelineOptions {
 export const calculateTimeline = (event: EventAnchors, options: TimelineOptions = {}): TimelineItem[] => {
   const start = parseDate(event.startDate);
 
-  const isValidDate = (d: any) => d instanceof Date && !isNaN(d.getTime());
+  const isValidDate = (d: unknown): d is Date => d instanceof Date && !isNaN(d.getTime());
 
   const early = event.earlyBirdDate ? parseDate(event.earlyBirdDate) : null;
   const registration = event.registrationDeadline ? parseDate(event.registrationDeadline) : null;
