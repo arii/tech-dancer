@@ -138,39 +138,39 @@
         "imageMode": "apparel",
         "draft": true
     },
-    "ombre-dance-dress": {
-        "id": "ombre-dance-dress",
-        "name": "Ombre Flowy Dance Dress",
+    "short-sleeve-romper": {
+        "id": "short-sleeve-romper",
+        "name": "Short Sleeve Romper",
         "url": "https://www.amazon.com/dp/B08QMP3YXK?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
-        "description": "Gradient dress that moves beautifully with every turn. (Temporarily hidden pending image/source verification.)",
+        "description": "Fun romper to dance in and perfect for tall girls too!",
         "image": "/images/gear/amazon/prettygarden-women-s-summer-casual-deep-v-neck-short-sleeve-wrap-draws.jpg",
         "imageMode": "apparel",
-        "draft": true
+        "draft": false
     },
-    "rainbow-earrings": {
-        "id": "rainbow-earrings",
-        "name": "Rainbow Statement Earrings",
-        "url": "https://www.amazon.com/dp/B09FWYRDH2?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "princess-tiara": {
+        "id": "princess-tiara",
+        "name": "Princess Tiara",
+        "url": "https://a.co/d/07zZzzkh?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
-        "description": "Bold accessories to complete your theme outfit.",
+        "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really.",
         "image": "/images/gear/amazon/didder-gold-crystal-tiara-crown-headband-princess-elegant-crown-with-c.jpg",
         "imageMode": "square",
-        "draft": true
+        "draft": false
     },
-    "pride-sunglasses": {
-        "id": "pride-sunglasses",
-        "name": "Pride Heart Sunglasses",
-        "url": "https://amazon.com",
+    "led-shot-glasses": {
+        "id": "led-shot-glasses",
+        "name": "LED Shot Glasses party pack",
+        "url": "https://a.co/d/01tPhh25?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "gear",
-        "description": "Fun sunglasses for pool parties and daytime events.",
+        "description": "Colorful light up shot glasses perfect for parties.",
         "image": "/images/gear/amazon/volpeblu-24-pack-light-up-cups-led-flash-shot-glasses-for-party-favors.jpg",
-        "draft": true
+        "draft": false
     },
     "portable-charger": {
         "id": "portable-charger",
         "name": "Anker Portable Power Bank",
-        "url": "https://www.amazon.com/dp/B08DJL2ZQX?tag=onasafari04-20&linkCode=ll2&language=en_US",
+        "url": "https://a.co/d/0f3nS8hg?tag=onasafari04-20&linkCode=ll2&language=en_US",
         "category": "travel",
         "description": "High-capacity charger to keep your phone alive during long event days.",
         "image": "/images/gear/amazon/anker-20000mah-power-bank.jpg",

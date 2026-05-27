@@ -1,10 +1,10 @@
 ---
 type: resource
-title: "Slim Running Belt"
+title: "Slim Fanny Pack"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Travel"
-excerpt: "Ultra-light bounce-free waist pouch for carrying essentials during events and travel."
+excerpt: "Ultra-light bounce-free waist perfect for outdoor dancing at Lindy in the Park."
 image: "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
 affiliateIds: ["running-belt"]
 tags: ["travel", "packing", "storage"]
