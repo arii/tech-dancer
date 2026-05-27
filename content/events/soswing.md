@@ -74,8 +74,3 @@ from the hotel. Book early; the room block is limited.
 - **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
 
-## Gear Spotlight: Ashland Essentials
-
-### Suede Sheets (DIY Shoe Kit)
-
-### Bloch Grecian Sandals

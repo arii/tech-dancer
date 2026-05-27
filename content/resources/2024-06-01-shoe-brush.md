@@ -4,7 +4,7 @@ draft: true
 title: "Suede Shoe Brush"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Dance Gear"
 excerpt: "Keep your suede soles clean and grippy."
 image: ""
 affiliateIds: ["shoe-brush"]

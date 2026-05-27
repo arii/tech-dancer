@@ -9,6 +9,8 @@ export interface AffiliateLink {
   url: string;
   category: string;
   description: string;
+  draft?: boolean;
   gearSlug?: string;
   image?: string;
+  imageMode?: string;
 }

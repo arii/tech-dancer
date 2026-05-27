@@ -5,7 +5,6 @@
     "url": "https://www.amazon.com/dp/B0D3V61JC8?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "The quiet version of the loop earplugs are good for very loud ballrooms and sleeping with roommates.",
-    "draft": true,
     "image": "/images/gear/amazon/loop-quiet-2-ear-plugs.jpg",
     "imageMode": "contain"
   },
@@ -15,7 +14,6 @@
     "url": "https://www.amazon.com/dp/B0C62ZTGXL?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Popular shoe worn by champion swing dancers. Requires foot strength.",
-    "draft": true,
     "image": "/images/gear/amazon/bloch-women-s-grecian-sandal-dance-shoes.jpg",
     "imageMode": "contain"
   },
@@ -27,7 +25,6 @@
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
     "gearSlug": "2023-10-01-loop-earplugs",
     "image": "/images/gear/amazon/loop-experience-ear-plugs.jpg",
-    "draft": true,
     "imageMode": "contain"
   },
   "suede-sheets": {
@@ -36,7 +33,6 @@
     "url": "https://www.amazon.com/dp/B07FZYY6J6?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Turn regular sneakers into dance shoes for indoor floors.",
-    "draft": true,
     "image": "/images/gear/amazon/suede-stick-on-sheets.jpg",
     "imageMode": "contain"
   },
@@ -46,7 +42,6 @@
     "url": "https://www.amazon.com/dp/B07XLFXJ7D?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "Save space and keep outfits organized.",
-    "draft": true,
     "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg",
     "imageMode": "wide"
   },
@@ -56,7 +51,6 @@
     "url": "https://www.amazon.com/dp/B0G1TSYYRW?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "Leak-proof refillable containers for TSA-approved liquids.",
-    "draft": true,
     "image": "/images/gear/amazon/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.jpg",
     "imageMode": "contain"
   },
@@ -66,7 +60,6 @@
     "url": "https://www.amazon.com/dp/B0FP2PY1WW?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Slip over sneakers for smooth pivots and turns on wood floors.",
-    "draft": true,
     "image": "/images/gear/amazon/2-feet-sock-for-dancing-on-smooth-floors-over-sneakers-smooth-pivots-t.jpg",
     "imageMode": "contain"
   },
@@ -76,7 +69,6 @@
     "url": "https://www.amazon.com/dp/B088VCG8JH?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "Revolutionary 4-hour fresh breath in a chewable tablet.",
-    "draft": true,
     "image": "/images/gear/amazon/listerine-ready-tabs-chewable-tablets-with-clean-mint-flavor-revolutio.jpg",
     "imageMode": "contain"
   },
@@ -86,7 +78,6 @@
     "url": "https://www.amazon.com/dp/B07QXLKP1R?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Stay cool while adding a touch of flair to your performance.",
-    "draft": true,
     "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg",
     "imageMode": "contain"
   },
@@ -96,7 +87,6 @@
     "url": "https://www.amazon.com/dp/B0BQWC8B7D?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Keeps you cooler during hot workshops, comps, and late nights.",
-    "draft": true,
     "image": "/images/gear/amazon/olv-neck-fan-5000mah-foldable-neck-fan-portable-rechargeable-led-displ.jpg",
     "imageMode": "contain"
   },
@@ -106,7 +96,6 @@
     "url": "https://www.amazon.com/dp/B07TBCXCJH?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "Waterproof and spacious organizer for all your toiletries.",
-    "draft": true,
     "image": "/images/gear/amazon/relavel-travel-hanging-toiletry-bag-for-men-women-travel-kit-shaving-b.jpg",
     "imageMode": "contain"
   },
@@ -118,7 +107,8 @@
     "description": "Keep your outfits wrinkle-free while traveling.",
     "gearSlug": "2023-11-01-travel-steamer",
     "image": "/images/gear/amazon/oghom-portable-garment-steamer.jpg",
-    "imageMode": "contain"
+    "imageMode": "contain",
+    "draft": true
   },
   "epsom-salt": {
     "id": "epsom-salt",
@@ -126,7 +116,6 @@
     "url": "https://www.amazon.com/Amazon-Basics-Magnesium-Sulfate-1-Pack/dp/B0BXTS6L35?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "recovery",
     "description": "I like to pack a ziplock bag of this or just order prime groceries at the event and include this",
-    "draft": false,
     "image": "https://m.media-amazon.com/images/I/71LqUR0-ceL._AC_SL1500_.jpg"
   },
   "foam-roller": {
@@ -145,7 +134,6 @@
     "url": "https://www.amazon.com/dp/B06XHV5X5G?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Flashy jacket to stand out on the social floor.",
-    "draft": true,
     "image": "/images/gear/amazon/cresay-women-s-sequin-fitted-long-sleeve-zipper-blazer-bomber-jacket-r.jpg",
     "imageMode": "apparel"
   },
@@ -179,7 +167,6 @@
     "url": "https://a.co/d/0f3nS8hg?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "High-capacity charger to keep your phone alive during long event days.",
-    "draft": true,
     "image": "/images/gear/amazon/anker-20000mah-power-bank.jpg",
     "imageMode": "contain"
   },
@@ -189,7 +176,6 @@
     "url": "https://a.co/d/0enuFqp9?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "this is good for long flights and has straps to secure the pillow and your neck",
-    "draft": false,
     "image": "https://m.media-amazon.com/images/I/51bHGyZRrgL._AC_SL1080_.jpg"
   },
   "microfiber-towel": {
@@ -206,7 +192,6 @@
     "url": "https://a.co/d/06dLoxbA?tag=onasafari04-20",
     "category": "travel",
     "description": "I love Oribe products and this one smells amazing while refreshing your hair between workshops and socials.",
-    "draft": false,
     "image": "https://m.media-amazon.com/images/I/71enRpyGa+L._SL1500_.jpg"
   },
   "electric-fan": {
@@ -225,7 +210,6 @@
     "url": "https://a.co/d/0gUbbjrc?&tag=onasafari04-20",
     "category": "recovery",
     "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
-    "draft": false,
     "image": "https://m.media-amazon.com/images/I/41kfwQ6qx9L._AC_.jpg"
   },
   "shoe-brush": {
@@ -244,7 +228,6 @@
     "url": "https://www.amazon.com/ALTOIDS-Curiously-Strong-Individual-1-76-Ounce/dp/B09QPR3J2B?crid=1JJYA4NTLDUI8&dib=eyJ2IjoiMSJ9.S6xHBieEj_kl1b7YSroF7HInWJL3s5AEMQvLYiGgBaZpBI478iBDeuwVeFa5k1SG5d0oYVYuajaa4O4DI1KMZ8eSwZlb-z31om-LseEWE3zHfpb4HurO89ZU7jhfCdQf2Mcy6h9FT3KjJ8lgc7j6uczyHJHmZE31BQ_i1zPSr0usE8N-flO4RKH7T0xk2HQisPZs_6TXRXTzSaik18e7GIYg93VzMsy7cmSiyNtAt0bIKGuMqjTNXiRbP7Ll9q78Kol8nzN-VBP8DFPAdZpf2At4fzkallQZnOZ2Y3mBuWk.IqwCnSeO0D3yfh0mNE0Fs_d4ikNJx-1k7VLJUwU-ytM&dib_tag=se&keywords=altoid+peppermint&qid=1779840032&sprefix=altoid+peper%2Caps%2C210&sr=8-7&linkCode=ll2&tag=onasafari04-20&linkId=63364f49a83e62faaa7fe4ef919be05c&language=en_US&ref_=as_li_ss_tl",
     "category": "travel",
     "description": "Essential for social dancing confidence.",
-    "draft": true,
     "image": "/images/gear/amazon/altoids-peppermint-mints.jpg",
     "imageMode": "contain"
   },
@@ -254,7 +237,6 @@
     "url": "https://www.amazon.com/dp/B00EAQX2LE?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "Stay healthy while dancing with hundreds of people.",
-    "draft": true,
     "image": "/images/gear/amazon/purell-advanced-hand-sanitizer.jpg",
     "imageMode": "contain"
   },
@@ -264,7 +246,6 @@
     "url": "https://www.amazon.com/dp/B0C5LR17SB?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Show your pride while staying cool.",
-    "draft": true,
     "image": "/images/gear/amazon/rainbow-folding-hand-fan.jpg",
     "imageMode": "contain"
   },
@@ -406,8 +387,7 @@
     "name": "LED Light Up Scrunchies",
     "url": "https://www.amazon.com/dp/B08GM59R8R?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
-    "description": "Add some glow to your hair with these LED scrunchies.",
-    "draft": true
+    "description": "Add some glow to your hair with these LED scrunchies."
   },
   "portable-steamer": {
     "id": "portable-steamer",
@@ -416,7 +396,6 @@
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
     "image": "/images/gear/amazon/oghom-portable-garment-steamer.jpg",
-    "draft": true,
     "imageMode": "contain"
   },
   "short-sleeve-romper": {
@@ -424,24 +403,21 @@
     "name": "Short Sleeve Romper",
     "url": "https://www.amazon.com/dp/B08QMP3YXK?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
-    "description": "Fun romper to dance in and perfect for tall girls too!",
-    "draft": false
+    "description": "Fun romper to dance in and perfect for tall girls too!"
   },
   "princess-tiara": {
     "id": "princess-tiara",
     "name": "Princess Tiara",
     "url": "https://a.co/d/07zZzzkh?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
-    "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really.",
-    "draft": false
+    "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really."
   },
   "led-shot-glasses": {
     "id": "led-shot-glasses",
     "name": "LED Shot Glasses party pack",
     "url": "https://a.co/d/01tPhh25?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
-    "description": "Colorful light up shot glasses perfect for parties.",
-    "draft": false
+    "description": "Colorful light up shot glasses perfect for parties."
   },
   "reflective-crop-tops": {
     "id": "reflective-crop-tops",
@@ -450,7 +426,6 @@
     "category": "fashion",
     "description": "Reflective casual crop tops for visibility and style on and off the dance floor.",
     "gearSlug": "2024-06-01-reflective-crop-tops",
-    "draft": true,
     "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.png"
   },
   "pumpkin-headbands": {
@@ -460,7 +435,6 @@
     "category": "fashion",
     "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
     "gearSlug": "2024-06-01-pumpkin-headbands",
-    "draft": true,
     "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.png"
   },
   "sports-crop-tops": {
@@ -470,7 +444,6 @@
     "category": "fashion",
     "description": "Comfortable and stylish crop tops for dancing.",
     "gearSlug": "2024-06-01-crop-tops",
-    "draft": true,
     "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.jpg"
   },
   "mesh-fishnet-top": {
@@ -480,7 +453,6 @@
     "category": "fashion",
     "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
     "gearSlug": "2024-06-01-mesh-fishnet-top",
-    "draft": true,
     "image": "/images/gear/sketches/mesh-fishnet-top.png"
   },
   "portable-speaker": {
@@ -489,16 +461,14 @@
     "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
-    "gearSlug": "2024-01-01-portable-speaker",
-    "draft": true
+    "gearSlug": "2024-01-01-portable-speaker"
   },
   "yellow-fun-romper": {
     "id": "yellow-fun-romper",
     "name": "Yellow Fun Romper",
     "url": "https://www.amazon.com/dp/B097XSKNRB?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
-    "description": "Yellow fun romper that is great to dance in.",
-    "draft": true
+    "description": "Yellow fun romper that is great to dance in."
   },
   "charging-cables": {
     "id": "charging-cables",
@@ -523,11 +493,10 @@
   "running-belt": {
     "id": "running-belt",
     "name": "Slim Running Belt",
-    "url": "https://amazon.com",
+    "url": "https://www.amazon.com/dp/B073XSHTWR?linkCode=ll2&tag=onasafari04-20&language=en_US",
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
     "gearSlug": "2024-06-01-running-belt",
-    "draft": true,
     "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
   },
   "shoe-dryer": {
@@ -545,8 +514,7 @@
     "name": "Barge All Purpose Cement",
     "url": "https://www.amazon.com/dp/B0032YYOFS?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
-    "description": "Heavy duty waterproof glue for applying suede to shoes.",
-    "draft": false
+    "description": "Heavy duty waterproof glue for applying suede to shoes."
   },
   "piercing-aftercare-swabs": {
     "id": "piercing-aftercare-swabs",
@@ -554,8 +522,7 @@
     "url": "https://a.co/d/0heZRdhE?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "perfect for travel individually wrapped swabs",
-    "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg",
-    "draft": true
+    "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg"
   },
   "womens-long-zip-hoodie": {
     "id": "womens-long-zip-hoodie",
@@ -563,8 +530,7 @@
     "url": "https://a.co/d/0cgqoZH5?tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "gear",
     "description": "Fun long hoodie perfect for a chilly ballroom length is nice for keeping part of your legs warm and looks good",
-    "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg",
-    "draft": true
+    "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg"
   },
   "convenience-travel-kit": {
     "id": "convenience-travel-kit",
@@ -572,8 +538,7 @@
     "url": "https://a.co/d/0eajAb55?tag=onasafari04-20",
     "category": "travel",
     "description": "when flying baggage prices are so high it can be more convenient and cheaper to ship products directly to the hotel",
-    "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg",
-    "draft": true
+    "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg"
   },
   "bling-keychain-pill-case": {
     "id": "bling-keychain-pill-case",
@@ -581,8 +546,7 @@
     "url": "https://a.co/d/05QhhIru&tag=onasafari04-20&linkCode=ll2&language=en_US",
     "category": "travel",
     "description": "Bling keychain pill case that is good for keeping small earplugs in.",
-    "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg",
-    "draft": true
+    "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg"
   },
   "rainbow-bustle": {
     "id": "rainbow-bustle",
@@ -591,7 +555,6 @@
     "category": "gear",
     "description": "A fun and flowy rainbow bustle skirt for themed nights.",
     "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg",
-    "imageMode": "apparel",
-    "draft": true
+    "imageMode": "apparel"
   }
 }

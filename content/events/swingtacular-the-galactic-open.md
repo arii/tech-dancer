@@ -83,8 +83,3 @@ San Francisco event. Check for roommate pairings on the Facebook group early.
 - **Food Options:** The hotel restaurant is convenient but can be pricey. There are several good dining options within a short Uber ride in Burlingame.
 - **Production:** Make sure to be in the ballroom for the Saturday night shows—the production quality is some of the best in the business.
 
-## Gear Spotlight: Alien Essentials
-
-### Loop Experience Earplugs
-
-### Sequin Bomber Jacket

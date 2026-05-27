@@ -79,8 +79,3 @@ Celebrate Independence Day at one of the most luxurious resorts on the swing cir
 - **Pool Party:** The All-Star Pool Party is legendary. It happens during the day, so bring plenty of sunscreen and a hat.
 - **Fireworks:** The resort hosts a spectacular fireworks display on the 4th. Find a good spot early for the best view!
 
-## Gear Spotlight: Patriotic Essentials
-
-### Liquid I.V. Hydration Multiplier
-
-### Neck Fan

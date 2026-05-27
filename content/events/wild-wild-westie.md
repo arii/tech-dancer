@@ -78,8 +78,3 @@ Dallas event. Book the hotel room block immediately as it fills fast.
 - **Hydration:** Even though you're indoors, the Dallas summer heat and intense dancing mean you need to stay on top of your hydration.
 - **Workshops:** The leveled workshops here are excellent. Try to attend as many as your energy levels allow.
 
-## Gear Spotlight: Dallas Essentials
-
-### Suede Sheets (DIY Shoe Kit)
-
-### Portable Charger

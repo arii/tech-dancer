@@ -79,9 +79,4 @@ The flagship event of The Next Generation Swing Dance Club, held every Columbus 
 - **Room Location:** The Hyatt Regency SFO is massive. Request a room near the elevators if you want to minimize the walk to the ballroom.
 - **SF Weather:** San Francisco in October is often beautiful, but the bay breeze is real. Bring a light jacket for any ventures outside the hotel.
 
-## Gear Spotlight: Flagship Essentials
-
-### Ombre Flowy Dance Dress
-
-### Shoe Brush
 - **Pace Yourself:** The Sunday night late-night sets are legendary. Pace yourself throughout the weekend so you don't miss the 3 AM magic.

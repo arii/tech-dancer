@@ -119,12 +119,6 @@ This is my flagship one-stop Rainbow guide for JJO: why this event matters, what
 
 
 
-## Gear Spotlight: Rainbow Essentials
-
-### Rainbow Fringe Dance Dress
-
-### Sequin Bomber Jacket
-
 ## NorCal BestCal Merch Picks
 
 Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
