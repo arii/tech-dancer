@@ -21,7 +21,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       overflowX="hidden"
       width="full"
       minHeight="screen"
-      className="touch-pan-y"
+      className="touch-pan-y max-w-full min-w-0 overflow-x-clip"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -45,7 +45,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Box display="flex" minHeight="screen" width="full">
+      <Stack minHeight="screen" width="full" className="w-full max-w-full min-w-0 overflow-x-clip">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -60,6 +60,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           width="full"
           surface="bg"
           direction="col"
+          className="w-full max-w-full min-w-0 overflow-x-clip"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 10 }}
@@ -70,12 +71,13 @@ export function MainLayout({ children }: { children: ReactNode }) {
             marginX="auto"
             maxWidth="7xl"
             width="full"
+            className="min-w-0 max-w-full overflow-x-clip"
           >
             {children}
             <Footer />
           </Stack>
         </Stack>
-      </Box>
+      </Stack>
 
       <NewsletterBanner />
       <GlobalSearch />

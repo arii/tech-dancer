@@ -9,7 +9,7 @@ export function LatestPosts() {
   const posts = getPosts().slice(0, 3);
 
   return (
-    <Box as="section">
+    <Box as="section" className="w-full max-w-full min-w-0">
       <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
           Latest from BoomTick
@@ -37,7 +37,7 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
@@ -46,7 +46,7 @@ export function LatestPosts() {
               className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
             >
               {post.image ? (
-                <img src={post.image} alt={post.title} className="h-full w-full object-cover" />
+                <img src={post.image} alt={post.title} className="block h-full w-full max-w-full object-cover" />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />
               )}
