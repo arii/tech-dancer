@@ -76,21 +76,23 @@ async function interactivelyFixItem(
   );
 
   switch (action.toLowerCase()) {
-    case 'update-name':
+    case 'update-name': {
       const newName = await ask('Enter new name: ');
       if (newName) {
         update.name = newName;
         console.log(`✓ Name updated to: "${newName}"`);
       }
       break;
+    }
 
-    case 'update-desc':
+    case 'update-desc': {
       const newDesc = await ask('Enter new description: ');
       if (newDesc) {
         update.description = newDesc;
         console.log(`✓ Description updated`);
       }
       break;
+    }
 
     case 'mark-draft':
       update.draft = true;

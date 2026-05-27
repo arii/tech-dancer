@@ -34,8 +34,8 @@ export function EventProductGrid({
 
   const desktopColumns =
     variant === 'featured'
-      ? 'xl:grid-cols-3 2xl:grid-cols-4'
-      : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4';
+      ? 'xl:grid-cols-3'
+      : 'xl:grid-cols-3';
   const hasMore = products.length > visibleProducts.length;
 
   return (

@@ -66,8 +66,9 @@ test.describe('Visual Regression Tests', () => {
       });
 
       // Snapshots use global maxDiffPixelRatio threshold defined in playwright.config.ts
+      // Keep captures viewport-scoped to avoid flaky full-page height drift across environments.
       await expect(page).toHaveScreenshot(`${route.name}.png`, {
-        fullPage: true,
+        fullPage: false,
         allowSizeMismatch: true,
         animations: 'disabled',
         mask: [

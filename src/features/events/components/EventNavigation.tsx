@@ -37,21 +37,22 @@ export function EventNavigation() {
               key={tab.id}
               as="a"
               href={`#${tab.id}`}
-              paddingY={4}
+              paddingY={2}
+              paddingX={3}
+              radius="full"
+              className="group relative cursor-pointer hover:bg-white/10"
               shrink={false}
-              className="group relative cursor-pointer"
             >
               <Box
                 display="flex"
                 align="center"
-                gap={2}
+                gap={1}
                 color="dim"
-                className="group-hover:text-accent transition-colors whitespace-nowrap"
+                className="group-hover:text-white transition-colors whitespace-nowrap"
               >
-                <tab.icon size={14} />
                 <Text
                   variant="mono"
-                  size="xs"
+                  size="sm"
                   weight="font-bold"
                   uppercase
                   tracking="widest"

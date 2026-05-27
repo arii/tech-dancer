@@ -28,7 +28,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/merch',
-    lazy: () => import('@/features/shop/Shop').then(m => ({ Component: m.default })),
+    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
     label: 'Merch',
     icon: ShoppingBag,
     skeleton: 'grid',
