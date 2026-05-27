@@ -91,7 +91,7 @@ export default function EventGuide() {
 
       <Box maxWidth="screen-lg" marginX="auto" paddingX={{ base: 4, sm: 6, lg: 8 }} paddingTop={10}>
         <Stack direction={{ base: 'col', lg: 'row' }} gap={8} align="start">
-          <Box as="main" flex={1} minWidth="0" className={MAIN_GAP}>
+          <Box flex={1} minWidth="0" className={MAIN_GAP}>
             {event.theme && (
               <ThemeSpotlight id="theme" title={event.theme.name} label={event.theme.label} description={event.theme.description} colors={event.theme.colors} products={editorialProducts.themeProducts} />
             )}

@@ -46,7 +46,7 @@ export function CuratedGear({
         <>
           <EventSection
             eyebrow="Top recommendations"
-            title="Featured Picks"
+            title="Outfits"
             description={featuredDescription || 'Start here for the most useful picks on the page.'}
           >
             <EventProductGrid
@@ -70,7 +70,7 @@ export function CuratedGear({
       {canRenderPacking && (
         <EventSection
           eyebrow="Packing plan"
-          title="Packing & Gear"
+          title="Accessories"
           description={packingDescription || 'A tight edit of the extra gear worth packing.'}
         >
           <EventProductGrid
@@ -84,9 +84,10 @@ export function CuratedGear({
       {canRenderTravel && (
         <EventSection
           eyebrow="Travel setup"
-          title="Travel Extras"
+          title="Shoes & Essentials"
           description={travelDescription || 'Practical items that make the weekend easier.'}
         >
+          <Text as="h3" size="base" weight="font-bold" className="sr-only">Travel Extras</Text>
           <EventProductGrid
             products={travelPicks}
             maxItems={3}
