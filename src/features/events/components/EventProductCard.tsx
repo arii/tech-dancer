@@ -22,7 +22,7 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
   return (
     <Box as="article" border radius="xl" surface="surface" padding={3} height="full" className="overflow-hidden transition-colors hover:border-line-hover">
       <Stack direction="col" gap={3} height="full">
-        <Box className={cn('w-full rounded-lg bg-white overflow-hidden shrink-0', variant === 'featured' ? 'h-28' : 'h-24')}>
+        <Box className={cn('w-full rounded-lg bg-surface-alt overflow-hidden shrink-0', variant === 'featured' ? 'h-28' : 'h-24')}>
           {product.image ? (
             <Box as={isExternal ? 'a' : Link} href={isExternal ? href : undefined} to={!isExternal ? href : undefined} rel={isExternal ? 'noopener noreferrer sponsored' : undefined} target={isExternal ? '_blank' : undefined} display="flex" height="full" width="full" className="hover:opacity-90 transition-opacity">
               <Box padding={2} width="full" height="full">
