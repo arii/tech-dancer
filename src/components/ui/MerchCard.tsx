@@ -86,13 +86,14 @@ export function MerchCard(props: MerchCardProps) {
   return (
     <BaseCard
       {...rest}
+      data-testid="product-card"
       direction="col"
       gap={3}
       height="full"
       padding={6}
       href={shopUrl}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="sponsored noopener noreferrer"
       ariaLabel={`Shop BoomTick merch: ${title}`}
     >
       {/* Image zone */}

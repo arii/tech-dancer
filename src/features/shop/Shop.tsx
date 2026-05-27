@@ -43,14 +43,14 @@ export default function Shop() {
   return (
     <Box as="section" paddingY={4}>
       <SEO
-        title="Shop"
+        title="West Coast Swing Dance Merch"
         description="BoomTick Printful merch — hoodies, tees, and apparel for swing dancers."
       />
 
       <Box as="header" marginBottom={8}>
         <PageHeader
           label="SHOP"
-          title="BoomTick Merch"
+          title="West Coast Swing Dance Merch"
           description="Exclusive BoomTick apparel for swing dancers."
         />
 
@@ -63,6 +63,25 @@ export default function Shop() {
           />
           <ViewToggle view={view} onChange={setView} />
         </Box>
+      </Box>
+
+      <Box as="a"
+        href="https://www.printful.com/give-5-get-5/E27F83"
+        target="_blank"
+        rel="sponsored noopener noreferrer"
+        display="block"
+        radius="xl"
+        padding={6}
+        marginBottom={8}
+        className="bg-accent-purple/10 border border-accent-purple/20 transition-all hover:border-accent-purple/40"
+      >
+        <Stack direction="row" align="center" justify="between">
+          <Stack gap={1}>
+            <Text size="sm" weight="font-bold" color="white">Support the blog, save 5%</Text>
+            <Text size="xs" color="dim">Use our referral link for your next Printful order.</Text>
+          </Stack>
+          <Text variant="mono" size="xs" color="accent" weight="font-bold">CLAIM DISCOUNT →</Text>
+        </Stack>
       </Box>
 
       {/* Grid: Mobile-first stacking */}
@@ -89,6 +108,29 @@ export default function Shop() {
             />
           ))}
         </Stack>
+      )}
+
+      {merchItems.length > 6 && (
+        <Box marginTop={12}>
+          <Box as="a"
+            href="https://www.printful.com/give-5-get-5/E27F83"
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            display="block"
+            radius="xl"
+            padding={6}
+            marginBottom={8}
+            className="bg-accent-purple/10 border border-accent-purple/20 transition-all hover:border-accent-purple/40"
+          >
+            <Stack direction="row" align="center" justify="between">
+              <Stack gap={1}>
+                <Text size="sm" weight="font-bold" color="white">Support the blog, save 5%</Text>
+                <Text size="xs" color="dim">Use our referral link for your next Printful order.</Text>
+              </Stack>
+              <Text variant="mono" size="xs" color="accent" weight="font-bold">CLAIM DISCOUNT →</Text>
+            </Stack>
+          </Box>
+        </Box>
       )}
 
       {merchItems.length === 0 && (
