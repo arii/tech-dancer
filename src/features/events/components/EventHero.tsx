@@ -40,7 +40,9 @@ export function EventHero({
       direction="col"
       gap={0}
       overflow="hidden"
-      className="bg-slate-950 border-b border-white/10"
+      surface="bg"
+      border="b"
+      className="border-white/10"
     >
       {/* Background Image or Particle Fallback */}
       {image ? (
@@ -89,16 +91,15 @@ export function EventHero({
         animate={{ opacity: 1, y: 0 }}
         transition={motionTokens.page.transition}
       >
-        <Stack gap={6} maxWidth="720px">
+        <Stack gap={6} maxWidth="3xl">
           <Stack gap={2}>
             <Text
               variant="mono"
-              size="xs"
+              size="micro"
               weight="font-bold"
               color="accent"
               uppercase
               tracking="widest"
-              className="text-[11px] sm:text-xs"
             >
               {eyebrow}
             </Text>
@@ -115,7 +116,7 @@ export function EventHero({
             </Text>
           </Stack>
 
-          <Box display="flex" wrap gap={{ base: 4, md: 6 }} align="center" className="flex-col sm:flex-row items-start sm:items-center">
+          <Stack direction={{ base: "col", sm: "row" }} wrap gap={{ base: 4, md: 6 }} align={{ base: "start", sm: "center" }}>
             <Box display="flex" align="center" gap={2}>
               <Calendar className="w-4 h-4 md:w-5 md:h-5 text-accent" />
               <Text variant="body" size={{ base: "sm", md: "lg" }} weight="font-medium">
@@ -128,7 +129,7 @@ export function EventHero({
                 {location}
               </Text>
             </Box>
-          </Box>
+          </Stack>
         </Stack>
 
         {whyAttending && (

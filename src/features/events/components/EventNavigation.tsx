@@ -8,7 +8,9 @@ export function EventNavigation() {
       top={{ base: 16, lg: 0 }}
       zIndex={40}
       width="full"
-      className="bg-slate-950/80 backdrop-blur-md border-b border-white/10"
+      surface="bg"
+      border="b"
+      className="bg-bg/80 backdrop-blur-md border-white/10"
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
         {/* Right fade indicator for mobile horizontal scroll */}
@@ -38,7 +40,10 @@ export function EventNavigation() {
               as="a"
               href={`#${tab.id}`}
               shrink={false}
-              className="whitespace-nowrap rounded-full px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+              paddingX={4}
+              paddingY={2}
+              radius="full"
+              className="whitespace-nowrap text-sm text-dim hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
             >
               <Text
                 weight="font-semibold"

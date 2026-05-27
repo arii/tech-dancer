@@ -59,8 +59,10 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
           display="flex"
           align="center"
           justify="center"
+          aspect="16/9"
+          padding={6}
+          surface="muted"
           className={cn(
-            "bg-slate-100 p-6 aspect-[16/9]",
             isCompact ? "h-24 md:h-28" : "h-44 md:h-52"
           )}
         >
@@ -83,7 +85,9 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
                 src={showBack && product.backImage ? product.backImage : product.image}
                 alt={product.name} 
                 marginX="auto"
-                className="max-h-full max-w-[82%] object-contain pointer-events-none transition-opacity duration-300"
+                width="[82%]"
+                height="full"
+                className="object-contain pointer-events-none transition-opacity duration-300"
                 style={{ objectPosition: imagePosition }} // impeccable-ignore
                 loading="lazy" 
               />
@@ -99,39 +103,52 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
 
         <Stack gap={isCompact ? 2 : 3} height="full" flex={1} justify="between" minWidth="0">
           <Stack gap={1} minWidth="0">
-            <Text size="micro" weight="font-semibold" color="accent" className="uppercase tracking-[0.18em] text-[11px] opacity-70">
+            <Text
+              size="micro"
+              weight="font-semibold"
+              color="accent"
+              uppercase
+              tracking="emphasized"
+              className="opacity-70"
+            >
               {sourceBadge || 'Event Pick'}
             </Text>
-            <Text
-              as="h3"
-              size={variant === 'featured' ? { base: 'sm', md: 'base' } : 'xs'}
-              weight="font-bold"
-              color="white"
-              clamp={2}
-              className="leading-snug mt-1"
-            >
-              {product.name}
-            </Text>
-            <Text size="xs" color="dim" clamp={2} className="leading-relaxed mt-1">
-              {product.description}
-            </Text>
+            <Box marginTop={1}>
+              <Text
+                as="h3"
+                size={variant === 'featured' ? { base: 'sm', md: 'base' } : 'xs'}
+                weight="font-bold"
+                color="white"
+                clamp={2}
+                className="leading-snug"
+              >
+                {product.name}
+              </Text>
+            </Box>
+            <Box marginTop={1}>
+              <Text size="xs" color="dim" clamp={2} className="leading-relaxed">
+                {product.description}
+              </Text>
+            </Box>
           </Stack>
 
-          <Text
-            as={CtaTag}
-            variant="mono"
-            size="xs"
-            weight="font-bold"
-            color="accent"
-            className={cn(
-              "transition-colors mt-4 inline-flex",
-              !isExternal && 'hover:underline',
-              "group-hover:text-accent-hover"
-            )}
-            {...ctaProps}
-          >
-            {ctaLabel} →
-          </Text>
+          <Box marginTop={4} display="inline-flex">
+            <Text
+              as={CtaTag}
+              variant="mono"
+              size="xs"
+              weight="font-bold"
+              color="accent"
+              className={cn(
+                "transition-colors",
+                !isExternal && 'hover:underline',
+                "group-hover:text-accent-hover"
+              )}
+              {...ctaProps}
+            >
+              {ctaLabel} →
+            </Text>
+          </Box>
         </Stack>
       </Stack>
     </Box>

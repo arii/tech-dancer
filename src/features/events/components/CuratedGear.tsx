@@ -26,8 +26,8 @@ export function CuratedGear({
   travelDescription,
   showFullGearListCta = false,
 }: CuratedGearProps) {
-  const canRenderPacking = packingPicks.length >= 1;
-  const canRenderTravel = travelPicks.length >= 1;
+  const canRenderPacking = packingPicks.length > 1;
+  const canRenderTravel = travelPicks.length > 1;
 
   if (
     featuredPicks.length === 0 &&

@@ -26,7 +26,8 @@ export function EventSection({ id, eyebrow, title, description, children }: Even
               weight="font-semibold"
               color="accent"
               uppercase
-              className="tracking-[0.18em] text-[11px] opacity-70"
+              tracking="emphasized"
+              className="opacity-70"
             >
               {eyebrow}
             </Text>
@@ -36,9 +37,11 @@ export function EventSection({ id, eyebrow, title, description, children }: Even
           </Text>
         </Stack>
         {description && (
-          <Text size="sm" color="dim" className="max-w-3xl leading-6 opacity-90">
-            {description}
-          </Text>
+          <Box maxWidth="3xl">
+            <Text size="sm" color="dim" className="leading-6 opacity-90">
+              {description}
+            </Text>
+          </Box>
         )}
       </Stack>
       <Box marginTop={6}>
