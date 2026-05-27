@@ -1,12 +1,12 @@
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
 import { SourceBadge } from './SourceBadge';
-import { pickRest, cn } from '@/lib/utils';
+import { MerchImageSingle, MerchImagePair, MerchImageFeatured } from './merch/MerchImageDisplay';
+import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
-import { ASSET_PREFIX } from '@/config/constants';
 import { ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
-import { getMerchCardImageConfig, legacyImageToMerchImages } from '@/lib/merch/imageDisplay';
+import { getMerchImageConfig, legacyImageToMerchImages } from '@/lib/merch/imageDisplay';
 import { MerchImageView, MerchDisplayMode, MerchFeaturedSide } from '@/lib/types/content';
 import styles from './merch/MerchImages.module.css';
 
@@ -60,28 +60,27 @@ export function MerchCard(props: MerchCardProps) {
     'imageBack',
   ] as (keyof MerchCardProps)[]);
 
-  const cardImageUrl = props.cardImage || props.image || '';
-  const resolvedPrimarySrc = cardImageUrl.startsWith('http') ? cardImageUrl : `${ASSET_PREFIX}${cardImageUrl}`;
+  // Normalize images: use new format if available, fall back to legacy
+  const normalizedImages = images || legacyImageToMerchImages(image, imageBack);
 
-  const cropClass = props.cardCrop === 'front-print' ? styles.crop_front_print :
-                    props.cardCrop === 'back-print' ? styles.crop_back_print :
-                    props.cardCrop === 'hoodie' ? styles.crop_hoodie : '';
+  // Determine display configuration
+  const config = getMerchImageConfig(normalizedImages, displayMode, featuredSide);
 
-  // Render image based on primary image
+  // Render image based on display mode
   const renderImage = () => {
-    if (!resolvedPrimarySrc) {
-      return <CategoryPlaceholder category={category} />;
+    if (config.displayMode === 'pair' && config.primary && config.secondary) {
+      return <MerchImagePair images={[config.primary, config.secondary]} />;
     }
 
-    return (
-      <div className={styles.merch_card_media}>
-        <img
-          src={resolvedPrimarySrc}
-          alt={title}
-          className={cn(styles.merch_card_primary_image, cropClass)}
-        />
-      </div>
-    );
+    if (config.displayMode === 'featured' && config.primary) {
+      return <MerchImageFeatured primary={config.primary} secondary={config.secondary} />;
+    }
+
+    if (config.primary) {
+      return <MerchImageSingle image={config.primary} />;
+    }
+
+    return <CategoryPlaceholder category={category} />;
   };
 
   return (

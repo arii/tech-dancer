@@ -1,21 +1,39 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
-import { ASSET_PREFIX } from '@/config/constants';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
-import styles from '@/components/ui/merch/MerchImages.module.css';
+import { MerchImageSingle, MerchImagePair, MerchImageFeatured } from '@/components/ui/merch/MerchImageDisplay';
+import { getMerchImageConfig, legacyImageToMerchImages } from '@/lib/merch/imageDisplay';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
-  const resolvedPrimary = {
-    src: item.imageUrl.startsWith('http') ? item.imageUrl : `${ASSET_PREFIX}${item.imageUrl}`,
-    alt: item.title,
-  };
+  // Normalize images: use new format if available, fall back to legacy
+  const normalizedImages = item.images || legacyImageToMerchImages(item.imageUrl);
 
-  const cropClass = item.cardCrop === 'front-print' ? styles.crop_front_print :
-                    item.cardCrop === 'back-print' ? styles.crop_back_print :
-                    item.cardCrop === 'hoodie' ? styles.crop_hoodie : '';
+  // Determine display configuration: respect item's primaryImageLabel and showSecondaryInset options
+  const config = getMerchImageConfig(
+    normalizedImages,
+    item.showSecondaryInset ? 'featured' : undefined,
+    item.primaryImageLabel?.toLowerCase() as any
+  );
+
+  // Render image based on display mode
+  const renderImage = () => {
+    if (config.displayMode === 'pair' && config.primary && config.secondary) {
+      return <MerchImagePair images={[config.primary, config.secondary]} />;
+    }
+
+    if (config.displayMode === 'featured' && config.primary) {
+      return <MerchImageFeatured primary={config.primary} secondary={config.secondary} />;
+    }
+
+    if (config.primary) {
+      return <MerchImageSingle image={config.primary} />;
+    }
+
+    return <Box className="w-full aspect-video bg-surface-alt rounded-lg" />;
+  };
 
   return (
     <BaseCard
@@ -30,13 +48,13 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       rel="sponsored noopener noreferrer"
       ariaLabel={`Buy ${item.title} on storefront`}
     >
-      <div className={styles.merch_card_media}>
-        <img
-          src={resolvedPrimary.src}
-          alt={resolvedPrimary.alt}
-          className={cn(styles.merch_card_primary_image, cropClass)}
-        />
-      </div>
+      <Box
+        position="relative"
+        overflow="hidden"
+        radius="lg"
+      >
+        {renderImage()}
+      </Box>
 
       <Stack gap={3}>
         <Text as="h3" variant="body" size="lg" weight="font-bold" color="main" leading="tight" clamp={2} className="group-hover:text-accent transition-colors">

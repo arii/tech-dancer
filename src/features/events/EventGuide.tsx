@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { EventHero } from './components/EventHero';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
@@ -132,15 +131,6 @@ export default function EventGuide() {
       />
 
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingTop={8}>
-        <AffiliateDisclosure type="event" />
-      </Box>
-
-      <Box
-        maxWidth="screen-xl"
-        marginX="auto"
-        paddingX={{ base: 6, md: 12, lg: 24 }}
-        paddingBottom={12}
-      >
         <Stack direction={{ base: 'col', lg: 'row' }} gap={8} align="start">
           <Box as="main" flex={1} minWidth="0" className={MAIN_GAP}>
             {event.theme && (

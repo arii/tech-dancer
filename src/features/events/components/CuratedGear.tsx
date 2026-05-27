@@ -43,18 +43,28 @@ export function CuratedGear({
   return (
     <Box id={id} as="section" data-testid="gear" className={MAIN_GAP}>
       {featuredPicks.length > 0 && (
-        <EventSection
-          eyebrow="Top recommendations"
-          title="Featured Picks"
-          description={featuredDescription || 'Start here for the most useful picks on the page.'}
-        >
-          <EventProductGrid
-            products={featuredPicks}
-            variant="featured"
-            maxItems={3}
-            showMoreCta={false}
-          />
-        </EventSection>
+        <>
+          <EventSection
+            eyebrow="Top recommendations"
+            title="Featured Picks"
+            description={featuredDescription || 'Start here for the most useful picks on the page.'}
+          >
+            <EventProductGrid
+              products={featuredPicks}
+              variant="featured"
+              maxItems={3}
+              showMoreCta={false}
+            />
+          </EventSection>
+          {/* Affiliate disclosure moved directly after Featured Picks */}
+          <Box paddingTop={2}>
+            <Box maxWidth="screen-xl" paddingX={{ base: 3, md: 6 }}>
+              <Text size="xs" color="dim" className="max-w-2xl leading-relaxed italic">
+                As an Amazon Associate, I earn a small commission from qualifying purchases made through the links below at no extra cost to you. This helps support my event guides!
+              </Text>
+            </Box>
+          </Box>
+        </>
       )}
 
       {canRenderPacking && (
