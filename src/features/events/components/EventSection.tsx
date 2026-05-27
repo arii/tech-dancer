@@ -16,7 +16,7 @@ export function EventSection({ id, eyebrow, title, description, children }: Even
   }
 
   return (
-    <Box id={id} as="section" data-testid={id} className={SECTION_GAP}>
+    <Box id={id} data-testid={id} as="section" className={SECTION_GAP}>
       <Stack gap={2}>
         {eyebrow && (
           <Text

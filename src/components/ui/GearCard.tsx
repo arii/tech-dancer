@@ -33,6 +33,7 @@ interface GearCardProps extends BaseProps {
   imageFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
   imagePosition?: string;
   imagePadding?: boolean;
+  imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack';
   affiliateIds?: string[];
   [key: string]: unknown;
 }
