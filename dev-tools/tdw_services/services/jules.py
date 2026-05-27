@@ -25,6 +25,16 @@ class JulesClient:
             print(f"⚠️  Jules API list_sources failed: {e}")
             return []
 
+    def list_sessions(self) -> List[Dict[str, Any]]:
+        url = f"{self.base_url}/sessions"
+        try:
+            response = requests.get(url, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            return response.json().get("sessions", [])
+        except Exception as e:
+            print(f"⚠️  Jules API list_sessions failed: {e}")
+            return []
+
     def discover_source_id(self, repo_full_name: str) -> Optional[str]:
         sources = self.list_sources()
         for s in sources:
