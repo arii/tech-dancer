@@ -34,6 +34,11 @@ export default function Toolbox() {
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
 
+        <Box marginTop={6} marginBottom={6} border radius="xl" paddingX={4} paddingY={3} className="border-line/80 bg-surface/70">
+          <span className="sr-only">Affiliate disclosure</span>
+          <p className="text-sm leading-6 text-text-dim"><strong className="text-text-main">Affiliate disclosure:</strong> As an Amazon Associate, BoomTick earns from qualifying purchases. Some gear links on this page are affiliate links, which means we may earn a small commission at no extra cost to you.</p>
+        </Box>
+
         {/* Modern Search Bar & Toggle */}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">
           <SearchBox
@@ -41,10 +46,10 @@ export default function Toolbox() {
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search gear..."
           />
-          <ViewToggle view={view} onChange={setView} />
+          <Box display={{ base: "none", md: "block" }}><ViewToggle view={view} onChange={setView} /></Box>
         </Box>
 
-        <Stack direction="row" wrap gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60" marginBottom={8} data-testid="toolbox-filters">
+        <Stack direction="row" wrap={{ base: false, md: true }} gap={2} padding={3} marginTop={8} border radius="2xl" shadow="sm" className="border-line/80 bg-surface/60 overflow-x-auto" marginBottom={8} data-testid="toolbox-filters">
           <FilterButton
             label="All Gear"
             onClick={() => setSelectedPill('all')}
