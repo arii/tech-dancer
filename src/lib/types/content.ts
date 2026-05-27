@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { EventTheme, EventGear, EventFrontmatter } from './event-frontmatter.schema';
+
+export type { EventTheme, EventGear };
+
 export interface Post {
   type: 'post';
   draft?: boolean;
@@ -55,33 +59,10 @@ export interface Study {
   author: string;
 }
 
-export type EventRegion = 'NorCal' | 'SoCal' | 'Southwest' | 'Pacific Northwest' | 'South' | 'International' | 'Other';
-
-export interface Event {
-  type: "event";
-  draft?: boolean;
+export interface Event extends Omit<EventFrontmatter, 'theme' | 'gear'> {
   slug: string;
-  title: string;
-  date: string;
-  author: string;
-  category: string;
-  excerpt: string;
-  location: string;
-  city: string;
-  region?: EventRegion;
-  schedule: string;
-  description: string;
-  link?: string;
   content: string;
-  url?: string;
-  heroImage?: string;
-  whyAttending?: string;
-  // Reminder tool anchors
-  startDate?: string;
-  earlyBirdDate?: string;
-  registrationDeadline?: string;
-  hotelCutoffDate?: string;
-  packingReminderDate?: string;
+  link?: string;
   // Transformed content properties (flattened from frontmatter)
   themeName?: string;
   themeLabel?: string;
@@ -99,7 +80,6 @@ export interface Event {
   gearEssentialDescription?: string;
   gearTravelIds?: string[];
   gearTravelDescription?: string;
-  relatedEvents?: string[];
 }
 
 export type ContentItem = Post | Resource | Study | Event;
