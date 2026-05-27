@@ -80,10 +80,10 @@ gear:
     - "mints"
   travelDescription: "Packing gear for a busy weekend near Disneyland."
 
-earlyBirdDate: ""
-registrationDeadline: ""
-hotelCutoffDate: ""
-packingReminderDate: ""
+earlyBirdDate: "2026-02-24"
+registrationDeadline: "2026-06-03"
+hotelCutoffDate: "2026-05-12"
+packingReminderDate: "2026-05-25"
 
 relatedEvents:
   - "wild-wild-westie"
