@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
+import { CalendarDays, Backpack, Rocket } from 'lucide-react';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { NavLink } from 'react-router-dom';
 import { ActionButton } from './ActionButton';
@@ -124,20 +125,50 @@ export function HeroSection() {
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
 
 
-        <Stack direction="row" gap={4} marginTop={8} wrap className="opacity-0 hero-cta-anim">
-          <ActionButton as={NavLink} to="/events" variant="primary">
-            Explore Event Guides
+        <Stack
+          marginTop={8}
+          gap={3}
+          width="full"
+          maxWidth={{ base: "full", md: "2xl" }}
+          className="opacity-0 hero-cta-anim"
+        >
+          <ActionButton
+            as={NavLink}
+            to="/blog/why-finals-are-hard"
+            variant="primary"
+            className="min-h-12 justify-center md:justify-start normal-case"
+          >
+            <Stack direction="row" align="center" gap={2}>
+              <Rocket className="h-4 w-4" aria-hidden="true" />
+              <Text as="span" variant="mono" size="sm" color="bg" className="normal-case">New to WCS traveling? Start here</Text>
+            </Stack>
           </ActionButton>
-          <ActionButton as={NavLink} to="/gear" variant="secondary">
-            Browse Gear Reviews
-          </ActionButton>
-        </Stack>
 
-        <Box marginTop={5} className="opacity-0 hero-cta-anim">
-          <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent">
-            New to WCS traveling? Start here →
-          </Text>
-        </Box>
+          <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
+            <ActionButton
+              as={NavLink}
+              to="/events"
+              variant="secondary"
+              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+            >
+              <Stack direction="row" align="center" gap={2}>
+                <CalendarDays className="h-4 w-4" aria-hidden="true" />
+                <Text as="span" variant="mono" size="sm" color="main" className="normal-case">Explore Event Guides</Text>
+              </Stack>
+            </ActionButton>
+            <ActionButton
+              as={NavLink}
+              to="/gear"
+              variant="secondary"
+              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+            >
+              <Stack direction="row" align="center" gap={2}>
+                <Backpack className="h-4 w-4" aria-hidden="true" />
+                <Text as="span" variant="mono" size="sm" color="main" className="normal-case">Browse Gear Reviews</Text>
+              </Stack>
+            </ActionButton>
+          </Stack>
+        </Stack>
 
         <Stack
           direction="row"
