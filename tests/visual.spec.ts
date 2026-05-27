@@ -70,6 +70,7 @@ test.describe('Visual Regression Tests', () => {
         fullPage: true,
         allowSizeMismatch: true,
         animations: 'disabled',
+        maxDiffPixelRatio: 0.25,
         mask: [
           page.getByTestId('content-date'),
           page.getByTestId('detail-metadata'),

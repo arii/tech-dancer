@@ -12,7 +12,7 @@ import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
   return (
-    <Box as="main" className="pb-safe-bottom mx-auto w-full max-w-[1240px]">
+    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -23,19 +23,19 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+        className="w-full max-w-full min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
 
       {/* Remaining sections — tighter vertical rhythm on mobile */}
-      <Stack gap={{ base: 10, lg: 14 }} className="mt-12 lg:mt-16">
+      <Stack gap={{ base: 10, lg: 14 }} className="mt-12 w-full max-w-full min-w-0 lg:mt-16">
         <TopicGrid />
 
         <Box
           display="grid"
-          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <FeaturedEventGuide />
           <GearShelf />
@@ -43,7 +43,7 @@ export default function Home() {
 
         <Box
           display="grid"
-          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <LatestPosts />
           <DevLabCallout />
