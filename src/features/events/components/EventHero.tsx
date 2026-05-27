@@ -4,7 +4,6 @@ import { MapPin, Calendar, Palette, Building2, Target, Bell, Package } from 'luc
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
-import { EventNavigation } from './EventNavigation';
 
 interface EventHeroProps {
   title: string;
@@ -188,10 +187,6 @@ export function EventHero({
           </Box>
         </Stack>
       </Stack>
-
-      <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
-      </Box>
     </Stack>
   );
 }

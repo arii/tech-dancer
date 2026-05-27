@@ -33,6 +33,10 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
   });
 
   test('should render the action timeline with multiple rows', async ({ page }) => {
+    // The reminders section is conditionally rendered on mobile/desktop
+    // Let's ensure we are checking the mobile viewport for 'reminders'
+    await page.setViewportSize({ width: 375, height: 667 });
+
     const remindersSection = page.getByTestId('reminders');
     await expect(remindersSection).toBeVisible();
     // Using stable data-testid instead of .group class
@@ -55,8 +59,8 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     const hero = page.getByTestId('hero');
     await expect(hero.getByRole('heading', { name: 'Jack & Jill O\'Rama' })).toBeVisible();
 
-    // For EventNavigation, it's an overflowX auto box.
-    const eventNav = page.locator('.no-scrollbar.scroll-smooth');
+    // For EventNavigation, it's an overflowX auto box. We use the first one matching these classes to avoid strict mode violations
+    const eventNav = page.locator('.no-scrollbar.scroll-smooth').first();
     await expect(eventNav).toBeVisible();
   });
 });
