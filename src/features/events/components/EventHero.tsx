@@ -4,7 +4,6 @@ import { MapPin, Calendar, Palette, Building2, Target, Bell, Package } from 'luc
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { motionTokens } from '@/styles/motion';
 import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
-import { EventNavigation } from './EventNavigation';
 
 interface EventHeroProps {
   title: string;
@@ -73,7 +72,7 @@ export function EventHero({
       overflow="hidden"
       surface="bg"
     >
-      {/* Background Image or Particle Fallback */}
+
       {image ? (
         <Box position="absolute" inset zIndex={0}>
           <img
@@ -92,7 +91,7 @@ export function EventHero({
         <HeroParticleCanvas />
       )}
 
-      {/* Decorative accent */}
+
       <Box
         position="absolute"
         top={0}
@@ -160,7 +159,7 @@ export function EventHero({
             </Box>
           </Box>
 
-          {/* Metadata Pill Row */}
+
           <Box
             display="flex"
             gap={3}
@@ -188,10 +187,6 @@ export function EventHero({
           </Box>
         </Stack>
       </Stack>
-
-      <Box relative zIndex={20} marginTop="auto">
-        <EventNavigation />
-      </Box>
     </Stack>
   );
 }
