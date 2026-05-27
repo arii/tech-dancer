@@ -15,7 +15,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
   const config = getMerchImageConfig(
     normalizedImages,
     item.showSecondaryInset ? 'featured' : undefined,
-    item.primaryImageLabel?.toLowerCase() as any
+    item.primaryImageLabel?.toLowerCase() as 'front' | 'back' | 'side' | 'detail' | undefined
   );
 
   // Render image based on display mode

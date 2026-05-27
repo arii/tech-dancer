@@ -62,7 +62,7 @@ export function GearCard(props: GearCardProps) {
   ] as (keyof GearCardProps)[]);
 
   // Image display options
-  const mode = (props as any).imageMode || 'contain';
+  const mode = (props as Record<string, unknown>).imageMode as string || 'contain';
   const imagePosition = props.imagePosition || 'center';
 
   const imageSizeClasses: Record<string, string> = {

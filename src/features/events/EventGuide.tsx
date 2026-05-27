@@ -20,8 +20,6 @@ const THEME_MAX_ITEMS = 6;
 const TRAVEL_MAX_ITEMS = 3;
 const PACKING_MAX = 3;
 
-const SIDEBAR_WIDTH = '320px';
-
 const joinDescriptions = (...parts: Array<string | undefined>) => parts.filter(Boolean).join(' ');
 
 export default function EventGuide() {
@@ -194,7 +192,7 @@ export default function EventGuide() {
             )}
           </Box>
 
-          <Box as="aside" display={{ base: 'none', lg: 'block' }} width={SIDEBAR_WIDTH} shrink={false} className="space-y-4 sticky top-24">
+          <Box as="aside" display={{ base: 'none', lg: 'block' }} width={80} shrink={false} className="space-y-4 sticky top-24">
             <EventSidebar event={event} />
           </Box>
         </Stack>

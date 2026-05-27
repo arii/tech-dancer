@@ -22,12 +22,18 @@ export function FilterBar({ categories }: FilterBarProps) {
       paddingY={4}
     >
       <Box
-        className="bg-slate-900/50 border border-white/5 rounded-xl p-1 max-w-fit mx-auto overflow-hidden"
+        surface="surface"
+        bgOpacity={50}
+        padding={1}
+        radius="xl"
+        marginX="auto"
+        maxWidth="fit"
+        className="border border-white/5 overflow-hidden"
       >
         <Stack
           direction="row"
           gap={1}
-          className="overflow-x-auto no-scrollbar max-w-[calc(100vw-2rem)] sm:max-w-none"
+          className="overflow-x-auto no-scrollbar"
         >
           {categories.map((cat) => (
             <FilterButton

@@ -38,13 +38,6 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
 
   const isCompact = variant === 'compact';
 
-  const imageContainerClasses = cn(
-    "w-full rounded-xl bg-white overflow-hidden shrink-0 relative flex items-center justify-center",
-    isCompact ? "h-24 md:h-28" : "h-44 md:h-52",
-    (mode === "apparel" || mode === "contain") && "p-2",
-    mode === "square" && "p-3"
-  );
-
   const hasBackImage = !!product.backImage;
 
   return (
@@ -60,7 +53,22 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
       onMouseLeave={() => hasBackImage && setShowBack(false)}
     >
       <Stack direction="col" gap={isCompact ? 3 : 4} height="full">
-        <Box className={imageContainerClasses}>
+        <Box
+          width="full"
+          radius="xl"
+          overflow="hidden"
+          shrink={0}
+          position="relative"
+          display="flex"
+          align="center"
+          justify="center"
+          className={cn(
+            "bg-white",
+            isCompact ? "h-24 md:h-28" : "h-44 md:h-52",
+            (mode === "apparel" || mode === "contain") && "p-2",
+            mode === "square" && "p-3"
+          )}
+        >
           {product.image ? (
             <Box
               as={isExternal ? 'a' : Link}
@@ -71,13 +79,16 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
               display="flex"
               height="full"
               width="full"
-              className="hover:opacity-90 transition-opacity cursor-pointer items-center justify-center"
+              align="center"
+              justify="center"
+              className="hover:opacity-90 transition-opacity cursor-pointer"
               style={{ textDecoration: 'none' }} // impeccable-ignore
             >
-              <img 
+              <Box as="img"
                 src={showBack && product.backImage ? product.backImage : product.image}
                 alt={product.name} 
-                className="mx-auto max-h-full max-w-full object-contain pointer-events-none transition-opacity duration-300"
+                marginX="auto"
+                className="max-h-full max-w-full object-contain pointer-events-none transition-opacity duration-300"
                 style={{ objectPosition: imagePosition }} // impeccable-ignore
                 loading="lazy" 
               />

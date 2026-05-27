@@ -49,28 +49,34 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
   return (
     <Stack gap={6} className="w-full">
       {event && (
-        <Box border radius="xl" padding={6} surface="surface" className="bg-slate-900/40 backdrop-blur-sm border-white/5">
+        <Box border radius="xl" padding={6} surface="surface" bgOpacity={40} className="backdrop-blur-sm border-white/5">
           <Stack gap={5}>
             <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase className="tracking-widest opacity-80">
               Event snapshot
             </Text>
             <Stack gap={4}>
               <Box>
-                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60 mb-1">
-                  Category
-                </Text>
+                <Box marginBottom={1}>
+                  <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60">
+                    Category
+                  </Text>
+                </Box>
                 <Text size="sm" weight="font-medium">{event.category}</Text>
               </Box>
               <Box>
-                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60 mb-1">
-                  City
-                </Text>
+                <Box marginBottom={1}>
+                  <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60">
+                    City
+                  </Text>
+                </Box>
                 <Text size="sm" weight="font-medium">{event.city}</Text>
               </Box>
               <Box>
-                <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60 mb-1">
-                  Schedule
-                </Text>
+                <Box marginBottom={1}>
+                  <Text variant="mono" size="micro" color="dim" uppercase className="tracking-widest opacity-60">
+                    Schedule
+                  </Text>
+                </Box>
                 <Text size="sm" weight="font-medium">{event.schedule}</Text>
               </Box>
             </Stack>
@@ -79,7 +85,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
       )}
 
       {reminders.length > 0 && (
-        <Box border radius="xl" padding={6} surface="surface" className="bg-slate-900/40 backdrop-blur-sm border-white/5">
+        <Box border radius="xl" padding={6} surface="surface" bgOpacity={40} className="backdrop-blur-sm border-white/5">
           <Stack gap={5}>
             <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase className="tracking-widest opacity-80">
               Important Dates
@@ -89,7 +95,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
                 const Icon = reminder.icon;
 
                 return (
-                  <Box key={reminder.id} className="relative pl-4 border-l border-white/10 hover:border-accent/40 transition-colors">
+                  <Box key={reminder.id} paddingLeft={4} className="relative border-l border-white/10 hover:border-accent/40 transition-colors">
                     <Stack gap={1}>
                       <Box display="flex" align="center" gap={2}>
                         {Icon && <Icon className="h-3.5 w-3.5 text-accent opacity-80" />}
