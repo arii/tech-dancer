@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/codex/remove-temporary-files-and-update-.gitignore-zsuacp/sitemap.xml

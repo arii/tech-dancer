@@ -1,7 +1,0 @@
-const f={"\\":"\\\\",",":"\\,",";":"\\;","\n":"\\n","\r":""};function D(o){return o?o.replace(/[\\,;\n\r]/g,a=>f[a]??""):""}function T(o){const e=new TextEncoder().encode(o);if(e.length<=75)return o;const E=new TextDecoder;let c="",t=0,r=!0;for(;t<e.length;){const i=r?75:74;let n=t+i;if(n>=e.length){const l=e.subarray(t);r||(c+=`\r
- `),c+=E.decode(l);break}for(;n>t&&(e[n]&192)===128;)n--;if(n===t)for(n=t+i+1;n<e.length&&(e[n]&192)===128;)n++;const d=e.subarray(t,n);r||(c+=`\r
- `),c+=E.decode(d),t=n,r=!1}return c}function h(o,a,s){const e=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//BoomTick//WSDCReminders//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH"],E=a.map(t=>{const r=S=>{const p=S.getFullYear(),N=String(S.getMonth()+1).padStart(2,"0"),R=String(S.getDate()).padStart(2,"0");return`${p}${N}${R}`},i=r(t.date),n=t.endDate||t.date,d=new Date(n);d.setDate(d.getDate()+1);const l=r(d),A=s?`${t.description}
-
-Event URL: ${s}`:t.description,u=D(`WCS Action: ${t.label} (${o})`),C=D(A);return["BEGIN:VEVENT",`DTSTART;VALUE=DATE:${i}`,`DTEND;VALUE=DATE:${l}`,`SUMMARY:${u}`,`DESCRIPTION:${C}`,"STATUS:CONFIRMED","SEQUENCE:0","TRANSP:TRANSPARENT","END:VEVENT"].map(T).join(`\r
-`)}),c=["END:VCALENDAR"];return[...e.map(T),...E,...c.map(T)].join(`\r
-`)}function g(o,a){const s=new Blob([a],{type:"text/calendar;charset=utf-8"}),e=document.createElement("a");e.href=URL.createObjectURL(s),e.download=o,document.body.appendChild(e),e.click(),document.body.removeChild(e)}export{g as d,h as g};

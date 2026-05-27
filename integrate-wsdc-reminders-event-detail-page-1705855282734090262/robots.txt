@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/integrate-wsdc-reminders-event-detail-page-1705855282734090262/sitemap.xml

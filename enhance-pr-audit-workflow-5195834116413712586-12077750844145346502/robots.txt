@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/enhance-pr-audit-workflow-5195834116413712586-12077750844145346502/sitemap.xml

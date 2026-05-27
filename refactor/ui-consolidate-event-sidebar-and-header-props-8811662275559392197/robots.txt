@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/refactor/ui-consolidate-event-sidebar-and-header-props-8811662275559392197/sitemap.xml
