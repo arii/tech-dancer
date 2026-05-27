@@ -98,7 +98,7 @@ export function GearCard(props: GearCardProps) {
       {/* Image zone */}
       <Box
         position="relative"
-        minHeight={{ base: 'auto', md: '220px' }}
+        aspectRatio={isInternal ? "800 / 300" : "1 / 1"}
         overflow="hidden"
         radius="md"
         padding={shouldPadImage ? 4 : 0}

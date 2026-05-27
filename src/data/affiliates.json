@@ -122,7 +122,7 @@
         "url": "https://www.amazon.com/dp/B06XKBMKJY?&linkCode=ll2&tag=onasafari04-20&linkId=abca4152f64a2c6c164458d732c29dc4&language=en_US&ref_=as_li_ss_tl",
         "category": "gear",
         "description": "Rainbow bustle that glows in the dark and looks amazing under UV light.",
-        "image": "/images/gear/amazon/rainbow-bustle.jpg"
+        "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg"
     },
     "sequin-bomber-jacket": {
         "id": "sequin-bomber-jacket",
@@ -176,14 +176,6 @@
         "category": "travel",
         "description": "Essential for catching some sleep on flights or between sessions.",
         "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg",
-        "draft": true
-    },
-    "microfiber-towel": {
-        "id": "microfiber-towel",
-        "name": "Quick-Dry Microfiber Towel",
-        "url": "https://www.amazon.com/dp/B0925XQ4NZ?tag=onasafari04-20&linkCode=ll2&language=en_US",
-        "category": "travel",
-        "description": "Compact and fast-drying towel for the gym or pool.",
         "draft": true
     },
     "dry-shampoo": {

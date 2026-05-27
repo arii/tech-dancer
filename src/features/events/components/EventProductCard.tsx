@@ -33,11 +33,6 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
   const imagePosition = product.imagePosition || 'center';
   const shouldPadImage = product.imagePadding !== false;
 
-  const ImageWrapper = isExternal ? 'a' : Link;
-  const imageWrapperProps = isExternal
-    ? { href, rel: 'noopener noreferrer sponsored', target: '_blank' }
-    : { to: href };
-
   return (
     <Box
       as="article"
@@ -46,30 +41,40 @@ export function EventProductCard({ product, variant = 'compact' }: EventProductC
       surface="surface"
       padding={4}
       height="full"
-      maxHeight={64}
+      maxHeight={96}
       className="overflow-hidden transition-colors hover:border-line-hover relative"
     >
       <Stack direction={{ base: 'row', md: 'col' }} gap={4} height="full">
         <Box
-          as={ImageWrapper}
-          width={{ base: 24, md: 'full' }}
-          minHeight={{ base: 24, md: variant === 'featured' ? 56 : 40 }}
+          width={{ base: 32, md: 'full' }}
+          height={{ base: 32, md: variant === 'featured' ? 72 : 56 }}
           radius="lg"
           overflow="hidden"
           shrink={false}
           padding={shouldPadImage ? 3 : 0}
-          className={shouldPadImage ? "bg-surface-alt/30 hover:opacity-95 transition-opacity cursor-pointer" : "bg-surface-alt/20 hover:opacity-95 transition-opacity cursor-pointer"}
-          {...imageWrapperProps}
-          style={{ textDecoration: 'none' }} // impeccable-ignore
+          className={shouldPadImage ? "bg-surface-alt/30" : "bg-surface-alt/20"}
         >
           {product.image ? (
-            <img 
-              src={product.image} 
-              alt={product.name} 
-              className={`h-full w-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300 pointer-events-none`} 
-              style={{ objectPosition: imagePosition }} // impeccable-ignore
-              loading="lazy" 
-            />
+            <Box
+              as={isExternal ? 'a' : Link}
+              href={isExternal ? href : undefined}
+              to={!isExternal ? href : undefined}
+              rel={isExternal ? "noopener noreferrer sponsored" : undefined}
+              target={isExternal ? "_blank" : undefined}
+              display="flex"
+              height="full"
+              width="full"
+              className="hover:opacity-90 transition-opacity cursor-pointer"
+              style={{ textDecoration: 'none' }} // impeccable-ignore
+            >
+              <img 
+                src={product.image} 
+                alt={product.name} 
+                className={`h-full w-full ${imageFit === 'cover' ? 'object-cover' : 'object-contain'} transition-opacity duration-300 pointer-events-none`} 
+                style={{ objectPosition: imagePosition }} // impeccable-ignore
+                loading="lazy" 
+              />
+            </Box>
           ) : (
             <Box display="flex" align="center" justify="center" height="full" padding={3}>
               <Text variant="mono" size="xs" color="dim" uppercase className="tracking-wide text-center">
