@@ -80,22 +80,28 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
             </Text>
           ))}
         </Stack>
-        <Text
+        <Stack
           as="a"
+          direction="row"
+          align="center"
+          gap={1}
           href={item.href}
           target={isPrintful ? "_blank" : undefined}
           rel={isPrintful ? "sponsored noopener noreferrer" : "noopener noreferrer"}
-          variant="mono"
-          size="sm"
-          weight="font-bold"
-          color="accent"
-          tracking="wide"
-          className="inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label={`View ${item.title} on storefront`}
         >
-          {isPrintful ? 'SEE COLORS' : 'VIEW ITEM'}
+          <Text
+            variant="mono"
+            size="sm"
+            weight="font-bold"
+            color="accent"
+            tracking="wide"
+          >
+            {isPrintful ? 'SEE COLORS' : 'VIEW ITEM'}
+          </Text>
           <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} aria-hidden="true" />
-        </Text>
+        </Stack>
       </Box>
     </BaseCard>
   );

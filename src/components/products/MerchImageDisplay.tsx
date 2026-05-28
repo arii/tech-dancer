@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 import type {
@@ -101,7 +100,8 @@ export function MerchImageDisplay({
               alt={img.alt}
               maxWidth="full"
               maxHeight="full"
-              className="h-full w-full object-contain p-2 transition-transform duration-300 hover:scale-105"
+              padding={2}
+              className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
             />
             <Label>{img.side}</Label>
           </ImageLink>
@@ -124,7 +124,8 @@ export function MerchImageDisplay({
               alt={resolved.primary.alt}
               maxWidth="full"
               maxHeight="full"
-              className="h-full w-full object-contain p-4 transition-transform duration-300 hover:scale-105"
+              padding={4}
+              className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
             />
           )}
         </ImageLink>
@@ -146,7 +147,8 @@ export function MerchImageDisplay({
                 alt={resolved.secondary.alt}
                 maxWidth="full"
                 maxHeight="full"
-                className="h-full w-full object-contain p-1 transition-transform duration-300 hover:scale-110"
+                padding={1}
+                className="h-full w-full object-contain transition-transform duration-300 hover:scale-110"
               />
               <Label>{resolved.secondary.side}</Label>
             </ImageLink>
@@ -170,7 +172,8 @@ export function MerchImageDisplay({
             alt={resolved.primary.alt}
             maxWidth="full"
             maxHeight="full"
-            className="h-full w-full object-contain p-4 transition-transform duration-300 hover:scale-105"
+            padding={4}
+            className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
           />
         )}
         {resolved.primary?.side === 'back' && <Label>Back</Label>}
