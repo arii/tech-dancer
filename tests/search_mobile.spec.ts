@@ -12,7 +12,7 @@ test.describe('Global Search Modal - Mobile', () => {
     await page.getByRole('button', { name: 'Open menu' }).click();
 
     // Check if the menu is actually visible
-    await expect(page.locator('nav[aria-label="Mobile Navigation"]').locator('..').locator('div').filter({ hasText: 'Search' }).first()).toBeVisible();
+    await expect(page.getByRole('dialog', { name: 'Navigation menu' })).toBeVisible();
 
     // Use text selector to find "Search" button
     const searchButton = page.getByRole('button', { name: 'Search' });
