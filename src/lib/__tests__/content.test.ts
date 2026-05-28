@@ -36,9 +36,7 @@ theme:
   name: "Galactic"
   description: "Space themed event"
 gear:
-  recommendations:
-    - "Comfortable shoes"
-    - "Water bottle"
+  outfitIds: ["outfit-1"]
   essentials: ["Earplugs", "Towel"]
 ---
 Body content`;
@@ -50,7 +48,7 @@ Body content`;
       description: "Space themed event"
     });
     expect(data.gear).toEqual({
-      recommendations: ["Comfortable shoes", "Water bottle"],
+      outfitIds: ["outfit-1"],
       essentials: ["Earplugs", "Towel"]
     });
   });
@@ -70,5 +68,38 @@ Body`;
     // We can at least verify parseFrontmatter picks them up.
     expect(data.themeOutfitIds).toEqual(["outfit-1"]);
     expect(data.gearShoeIds).toEqual(["shoe-1"]);
+  });
+
+  it('should flatten event theme and gear in transform', () => {
+    const rawContent = `---
+type: event
+title: "Transformed Event"
+date: "2023-10-27"
+theme:
+  name: "Neon Night"
+  colors: ["cyan", "magenta"]
+gear:
+  outfitIds: ["outfit-neon"]
+  outfitDescription: "Bright and glowing"
+---
+Content body`;
+
+    const modules = {
+      '/content/events/test-event.md': rawContent
+    };
+
+    // @ts-expect-error - testing internal transform
+    const results = content._transform<content.Event>(modules);
+    const result = results[0];
+
+    expect(result.title).toBe("Transformed Event");
+    expect(result.themeName).toBe("Neon Night");
+    expect(result.themeColors).toEqual(["cyan", "magenta"]);
+    expect(result.gearOutfitIds).toEqual(["outfit-neon"]);
+    expect(result.gearOutfitDescription).toBe("Bright and glowing");
+
+    // Nested objects should be removed
+    expect(result.theme).toBeUndefined();
+    expect(result.gear).toBeUndefined();
   });
 });

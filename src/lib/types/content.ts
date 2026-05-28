@@ -59,28 +59,6 @@ export interface Study {
   author: string;
 }
 
-export interface EventTheme {
-  name: string;
-  label?: string;
-  description?: string;
-  colors?: string[];
-  outfitIds?: string[];
-  accessoryIds?: string[];
-}
-
-export interface EventGear {
-  outfitIds?: string[];
-  outfitDescription?: string;
-  accessoryIds?: string[];
-  accessoryDescription?: string;
-  shoeIds?: string[];
-  shoeDescription?: string;
-  essentialIds?: string[];
-  essentialDescription?: string;
-  travelIds?: string[];
-  travelDescription?: string;
-}
-
 export type EventRegion = 'NorCal' | 'SoCal' | 'Southwest' | 'Pacific Northwest' | 'South' | 'International' | 'Other';
 
 export interface Event {
@@ -108,9 +86,6 @@ export interface Event {
   registrationDeadline?: string;
   hotelCutoffDate?: string;
   packingReminderDate?: string;
-  // Gear and theme (resolved from affiliate IDs at render time)
-  theme?: EventTheme;
-  gear?: EventGear;
   // Flat alternatives for YAML parsers that don't handle nesting
   themeName?: string;
   themeLabel?: string;

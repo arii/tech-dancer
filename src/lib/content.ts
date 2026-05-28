@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear } from './types/content';
+import type { Post, Resource, Study, Event, ContentItem } from './types/content';
 
-export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear };
+export type { Post, Resource, Study, Event, ContentItem };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -48,7 +48,7 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
-function transform<T extends { date?: string; draft?: boolean }>(
+export function _transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
 ): T[] {
   const asArray = (val: unknown) => (Array.isArray(val) ? (val as string[]) : []);
@@ -99,88 +99,33 @@ function transform<T extends { date?: string; draft?: boolean }>(
       };
 
       if (data.type === "event") {
-        // Promote flat gear/theme fields into structured objects
-        const hasFlatTheme =
-          data.themeName ||
-          data.themeLabel ||
-          data.themeDescription ||
-          data.themeColors ||
-          data.themeOutfitIds ||
-          data.themeAccessoryIds;
-
-        const flatTheme: EventTheme | undefined = hasFlatTheme
-          ? {
-              name: String(data.themeName || ""),
-              label: data.themeLabel ? String(data.themeLabel) : undefined,
-              description: data.themeDescription
-                ? String(data.themeDescription)
-                : undefined,
-              colors: asArray(data.themeColors),
-              outfitIds: asArray(data.themeOutfitIds),
-              accessoryIds: asArray(data.themeAccessoryIds),
-            }
-          : undefined;
-
-        const hasFlatGear =
-          data.gearOutfitIds ||
-          data.gearOutfitDescription ||
-          data.gearAccessoryIds ||
-          data.gearAccessoryDescription ||
-          data.gearShoeIds ||
-          data.gearShoeDescription ||
-          data.gearEssentialIds ||
-          data.gearEssentialDescription ||
-          data.gearTravelIds ||
-          data.gearTravelDescription;
-
-        const flatGear: EventGear | undefined = hasFlatGear
-          ? {
-              outfitIds: asArray(data.gearOutfitIds),
-              outfitDescription: data.gearOutfitDescription ? String(data.gearOutfitDescription) : undefined,
-              accessoryIds: asArray(data.gearAccessoryIds),
-              accessoryDescription: data.gearAccessoryDescription ? String(data.gearAccessoryDescription) : undefined,
-              shoeIds: asArray(data.gearShoeIds),
-              shoeDescription: data.gearShoeDescription ? String(data.gearShoeDescription) : undefined,
-              essentialIds: asArray(data.gearEssentialIds),
-              essentialDescription: data.gearEssentialDescription ? String(data.gearEssentialDescription) : undefined,
-              travelIds: asArray(data.gearTravelIds),
-              travelDescription: data.gearTravelDescription ? String(data.gearTravelDescription) : undefined,
-            }
-          : undefined;
-
-        // Normalize nested theme if present
+        // Flatten nested theme if present
         const nestedTheme = data.theme as Record<string, unknown> | undefined;
-        const normalizedNestedTheme: EventTheme | undefined = nestedTheme
-          ? {
-              name: String(nestedTheme.name || ""),
-              label: nestedTheme.label ? String(nestedTheme.label) : undefined,
-              description: nestedTheme.description ? String(nestedTheme.description) : undefined,
-              colors: asArray(nestedTheme.colors),
-              outfitIds: asArray(nestedTheme.outfitIds),
-              accessoryIds: asArray(nestedTheme.accessoryIds),
-            }
-          : undefined;
+        result.themeName = nestedTheme?.name ? String(nestedTheme.name) : (data.themeName ? String(data.themeName) : undefined);
+        result.themeLabel = nestedTheme?.label ? String(nestedTheme.label) : (data.themeLabel ? String(data.themeLabel) : undefined);
+        result.themeDescription = nestedTheme?.description ? String(nestedTheme.description) : (data.themeDescription ? String(data.themeDescription) : undefined);
+        result.themeColors = asArray(nestedTheme?.colors || data.themeColors);
+        result.themeOutfitIds = asArray(nestedTheme?.outfitIds || data.themeOutfitIds);
+        result.themeAccessoryIds = asArray(nestedTheme?.accessoryIds || data.themeAccessoryIds);
 
-        // Normalize nested gear if present
+        // Flatten nested gear if present
         const nestedGear = data.gear as Record<string, unknown> | undefined;
-        const normalizedNestedGear: EventGear | undefined = nestedGear
-          ? {
-              outfitIds: asArray(nestedGear.outfitIds),
-              outfitDescription: nestedGear.outfitDescription ? String(nestedGear.outfitDescription) : undefined,
-              accessoryIds: asArray(nestedGear.accessoryIds),
-              accessoryDescription: nestedGear.accessoryDescription ? String(nestedGear.accessoryDescription) : undefined,
-              shoeIds: asArray(nestedGear.shoeIds),
-              shoeDescription: nestedGear.shoeDescription ? String(nestedGear.shoeDescription) : undefined,
-              essentialIds: asArray(nestedGear.essentialIds),
-              essentialDescription: nestedGear.essentialDescription ? String(nestedGear.essentialDescription) : undefined,
-              travelIds: asArray(nestedGear.travelIds),
-              travelDescription: nestedGear.travelDescription ? String(nestedGear.travelDescription) : undefined,
-            }
-          : undefined;
+        result.gearOutfitIds = asArray(nestedGear?.outfitIds || data.gearOutfitIds);
+        result.gearOutfitDescription = nestedGear?.outfitDescription ? String(nestedGear.outfitDescription) : (data.gearOutfitDescription ? String(data.gearOutfitDescription) : undefined);
+        result.gearAccessoryIds = asArray(nestedGear?.accessoryIds || data.gearAccessoryIds);
+        result.gearAccessoryDescription = nestedGear?.accessoryDescription ? String(nestedGear.accessoryDescription) : (data.gearAccessoryDescription ? String(data.gearAccessoryDescription) : undefined);
+        result.gearShoeIds = asArray(nestedGear?.shoeIds || data.gearShoeIds);
+        result.gearShoeDescription = nestedGear?.shoeDescription ? String(nestedGear.shoeDescription) : (data.gearShoeDescription ? String(data.gearShoeDescription) : undefined);
+        result.gearEssentialIds = asArray(nestedGear?.essentialIds || data.gearEssentialIds);
+        result.gearEssentialDescription = nestedGear?.essentialDescription ? String(nestedGear.essentialDescription) : (data.gearEssentialDescription ? String(data.gearEssentialDescription) : undefined);
+        result.gearTravelIds = asArray(nestedGear?.travelIds || data.gearTravelIds);
+        result.gearTravelDescription = nestedGear?.travelDescription ? String(nestedGear.travelDescription) : (data.gearTravelDescription ? String(data.gearTravelDescription) : undefined);
 
-        result.theme = normalizedNestedTheme ?? flatTheme;
-        result.gear = normalizedNestedGear ?? flatGear;
         result.relatedEvents = asArray(data.relatedEvents);
+
+        // Cleanup nested objects
+        delete result.theme;
+        delete result.gear;
       }
 
       return result as unknown as T;
@@ -198,10 +143,10 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
-  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
-  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
+  posts: _transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
+  resources: _transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
+  studies: _transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
+  events: _transform<Event>(contentModules.events as Record<string, string | ContentModule>)
 };
 
 const maps = {

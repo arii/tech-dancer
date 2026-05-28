@@ -79,13 +79,13 @@ export default function EventGuide() {
             <Stack gap={SECTION_SPACING}>
               <AffiliateDisclosure type="event" />
 
-              {event.theme && (
+              {event.themeName && (
                 <ThemeSpotlight
                   id="theme"
-                  title={event.theme.name}
-                  label={event.theme.label}
-                  description={event.theme.description || ''}
-                  colors={event.theme.colors}
+                  title={event.themeName}
+                  label={event.themeLabel}
+                  description={event.themeDescription || ''}
+                  colors={event.themeColors}
                   outfits={themeOutfits}
                   accessories={themeAccessories}
                 />
