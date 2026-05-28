@@ -23,7 +23,7 @@ theme:
     breathable tops, and accessories that will not interfere with partner
     connection.
   outfitIds:
-    - dance-boots
+    - bloch-grecian
     - sequin-bomber-jacket
     - ombre-dance-dress
     - love-neon-lead-shirt
@@ -34,7 +34,7 @@ theme:
     - electric-fan
 gear:
   shoeIds:
-    - dance-boots
+    - bloch-grecian
     - bloch-grecian
     - suede-sheets
   essentialIds:
