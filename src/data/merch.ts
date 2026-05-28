@@ -1,10 +1,21 @@
+import type {
+  MerchImageDisplayMode,
+  MerchProductImage,
+} from '@/data/products/catalog';
 
 export interface MerchProduct {
   id: string;
   title: string;
   description: string;
   price: string;
+
+  // Keep legacy field temporarily for migration/backward compatibility.
   imageUrl: string;
+
+  // New preferred image model.
+  images?: MerchProductImage[];
+  imageDisplayMode?: MerchImageDisplayMode;
+
   printfulUrl: string;
   collections: string[];
   roles?: ('lead' | 'follow' | 'switch')[];
@@ -25,6 +36,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'A vibrant neon t-shirt featuring a stylized LOVE design, perfect for follows who want to stand out on the social dance floor.',
     price: '24.50',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf5f177de8__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf5f177de8__360',
+        side: 'front',
+        alt: 'Front view of LOVE Neon Ask Me to Follow t-shirt',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow',
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['follow'],
@@ -36,6 +55,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Show off your lead pride with this high-visibility neon tee. Comfortable, breathable, and ready for long nights of social dancing.',
     price: '24.00',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf58bde26a__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf58bde26a__360',
+        side: 'front',
+        alt: 'Front view of LOVE Neon Ask Me to Lead t-shirt',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-lead',
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['lead'],
@@ -47,6 +74,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Premium oversized high-neck tee featuring the War Eagle design. A staple for NorCal dancers who value both style and comfort.',
     price: '22.00',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0ba0a711254__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0ba0a711254__360',
+        side: 'front',
+        alt: 'Front view of War Eagle oversized t-shirt',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Oversized', 'Dance Apparel', 'Streetwear'],
@@ -57,6 +92,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'The ultimate versatile dance shirt. Neon LOVE design that celebrates the freedom to lead, follow, or switch roles effortlessly.',
     price: '24.00',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-679-6a0b93c3dcf19__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-679-6a0b93c3dcf19__360',
+        side: 'front',
+        alt: 'Front view of Lead Follow or Switch LOVE shirt',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon',
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['lead', 'follow', 'switch'],
@@ -68,6 +111,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Lightweight and breathable tank top featuring the iconic NorCal BestCal bear. Perfect for high-energy workshops and summer social sets.',
     price: '18.50',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-537-6a0b755a9a348__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-537-6a0b755a9a348__360',
+        side: 'front',
+        alt: "Front view of Men's Bear Tank NorCal BestCal",
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/mens-bear-tank-nor-cal-best-cal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Tank Top', 'Workshop Wear', 'Summer'],
@@ -78,6 +129,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Stylish and functional cropped top for the NorCal dancer. Designed for maximum range of motion and breathability during intense rounds.',
     price: '20.50',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-636-6a0b71ea8fae2__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-636-6a0b71ea8fae2__360',
+        side: 'front',
+        alt: 'Front view of NorCal BestCal cropped top',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-cropped-top',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Cropped Top', 'Competition Wear', 'Breathable'],
@@ -88,6 +147,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Cozy yet lightweight crop hoodie featuring the Golden Gate Bridge. Ideal for layering between rounds or staying warm during travel.',
     price: '34.00',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-317-6a0b6eab9f0f4__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-317-6a0b6eab9f0f4__360',
+        side: 'front',
+        alt: 'Front view of NorCal BestCal Golden Gate crop hoodie',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-crop-hoodie',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Hoodie', 'Travel', 'Layering'],
@@ -98,6 +165,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Celebrate Pride with the iconic Golden Gate Bridge in rainbow colors. A must-have for the summer dance circuit and Pride month events.',
     price: '23.00',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360',
+        side: 'front',
+        alt: 'Front view of NorCal BestCal Golden Gate rainbow pride shirt',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt',
     collections: ['norcal-bestcal', 'rainbow-pride'],
     tags: ['NorCal', 'Pride', 'Golden Gate', 'West Coast Swing'],
@@ -108,6 +183,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'Classic California bear design with a Pride twist. Show your NorCal roots and your support for the LGBTQ+ dance community.',
     price: '15.50',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360',
+        side: 'front',
+        alt: 'Front view of NorCal BestCal pride bear apparel',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel',
     collections: ['norcal-bestcal', 'rainbow-pride'],
     tags: ['NorCal', 'Pride', 'California Bear', 'Social Dance'],
@@ -118,6 +201,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'High-quality unisex t-shirt featuring the Lead/Follow/Switch message. A classic choice for social dancers of all roles and styles.',
     price: '18.64',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-71-6a0b962244279__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-71-6a0b962244279__360',
+        side: 'front',
+        alt: 'Front view of LOVE Lead Follow or Switch unisex shirt',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/unisex-t-shirt',
     collections: ['lead-follow-switch'],
     roles: ['lead', 'follow', 'switch'],
@@ -129,6 +220,14 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     description: 'The signature NorCal BestCal apparel. Clean, classic design that marks you as part of the Northern California dance community.',
     price: '12.00',
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a07b116ea5ce__360',
+    images: [
+      {
+        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a07b116ea5ce__360',
+        side: 'front',
+        alt: 'Front view of NorCal BestCal classic tee',
+      },
+    ],
+    imageDisplayMode: 'single',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Classic', 'Team Apparel', 'Essential'],

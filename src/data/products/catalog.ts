@@ -11,12 +11,28 @@ export type ProductUseCase =
   | 'norcal'
   | 'role-shirt';
 
+export type MerchImageDisplayMode =
+  | 'single'
+  | 'both-equal'
+  | 'front-prominent'
+  | 'back-prominent';
+
+export type MerchImageSide = 'front' | 'back';
+
+export interface MerchProductImage {
+  src: string;
+  side: MerchImageSide;
+  alt: string;
+}
+
 export interface ProductCatalogItem {
   id: string;
   source: ProductSource;
   title: string;
   description: string;
   imageUrl: string;
+  images?: MerchProductImage[];
+  imageDisplayMode?: MerchImageDisplayMode;
   href: string;
   price?: string;
   collections: string[];
