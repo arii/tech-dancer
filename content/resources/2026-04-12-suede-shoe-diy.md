@@ -3,18 +3,15 @@ type: resource
 title: "How to Suede Your Own Dance Shoes for $15"
 date: "2026-04-12"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Dance Gear"
 excerpt: "The $15 DIY hack for perfect traction on any ballroom floor."
-affiliateIds:
-  - suede-sheets
-  - barge-cement
+image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
+affiliateIds: ["suede-sheets", "barge-cement"]
 tags:
   - diy
   - footwear
   - budget
-rating: 4.7
 verdict: "Best Budget Hack"
-priceCategory: "$"
 updatedDate: "Mar 2024"
 ---
 
