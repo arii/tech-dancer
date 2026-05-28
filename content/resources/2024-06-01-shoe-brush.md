@@ -6,7 +6,6 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Keep your suede soles clean and grippy."
-image: ""
 affiliateIds: ["shoe-brush"]
 tags: ["gear", "shoes"]
 verdict: "Essential maintenance"
