@@ -15,19 +15,15 @@ heroImage: ""
 description: "A cornerstone of the NorCal dance community, offering top-tier instruction and a welcoming social environment every Wednesday."
 
 whyAttending: >
-  Mission City Swing is the heartbeat of the South Bay WCS community. Whether
-  you're a beginner or a seasoned pro, the welcoming atmosphere and consistent
-  quality of instruction make it a weekly must-visit.
-
+  Mission City Swing is the heartbeat of the South Bay WCS community. Whether you're a beginner or a seasoned pro, the welcoming atmosphere and consistent quality of instruction make it a weekly must-visit.
 theme:
   name: "Community Social"
   label: "Weekly Style"
   description: "Casual and comfortable styles for weekly workshops and social dancing."
   outfitIds:
-    - "sequin-bomber-jacket"
+  - sequin-bomber-jacket
   accessoryIds:
-    - "hand-sanitizer"
-
+  - hand-sanitizer
 gear:
   outfitIds: []
   outfitDescription: "Breathable social attire that moves with you."
@@ -51,11 +47,9 @@ hotelCutoffDate: ""
 packingReminderDate: ""
 
 relatedEvents:
-  - "boogie-by-the-bay"
-  - "swingtacular-the-galactic-open"
+- boogie-by-the-bay
+- swingtacular-the-galactic-open
 ---
-
-# Mission City Swing
 
 Weekly social dance in San Jose.
 
