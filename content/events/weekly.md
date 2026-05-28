@@ -71,9 +71,23 @@ Here are some of the best regional West Coast Swing event lists and calendars to
 *   **[Madison WCS Club Directory](https://mwcsc.org/dance-events/dance-conventions/):** Centralizes convention tracking, weekenders, and local dances across Wisconsin, Minnesota, and Illinois.
 *   **[West Coast Swing Chicago](https://www.westcoastswingonline.com/west-coast-swing-chicago/):** The primary aggregator group used to track regional events, guest intensives, and weekend schedules across the Chicagoland area.
 
+## Southern California (SoCal)
+
+*   **[West Coast Swing San Diego](https://westcoastswingsandiego.com/):** A dedicated local aggregator tracking regional parties and workshops. The scene features regular intensives and weekly social dances driven heavily by champion dancers like Parker Dearborn. You can also connect directly via the [Swing with Parker Facebook Group](https://www.facebook.com/groups/775454775799778/) to track his specific weekly classes, Project Swing socials, and OGSD pop-ups. [1, 2, 3, 4, 5, 6]
+
 ## Global & National Directories
 If you are traveling outside these pockets or looking for major multi-day weekenders, use these broader aggregators:
 
 *   **[Your Dance Buddy Calendar](https://www.yourdancebuddy.com/):** An interactive global database focused strictly on West Coast Swing that allows you to filter by social-only events versus WSDC Registry Competitions.
 *   **[Dance Place Event Directory](https://www.westcoastswingonline.com/west-coast-swing-events/):** A highly searchable worldwide event platform featuring regional filters and travel apps.
 *   **[World Swing Dance Council Event List](https://www.worldsdc.com/events/):** The official global standard list for registry events if you are planning travel around official Jack & Jill points.
+
+---
+[1] [https://westcoastswingsandiego.com](https://westcoastswingsandiego.com/calendar/105/)
+[2] [https://sdwestie.com](https://sdwestie.com/community/)
+[3] [https://csdhof.com](https://csdhof.com/hof-inductees/parker-dearborn-2)
+[4] [https://www.facebook.com](https://www.facebook.com/groups/wcssandiego/posts/10163898404101999/)
+[5] [https://www.facebook.com](https://www.facebook.com/groups/775454775799778/)
+[6] [https://www.facebook.com](https://www.facebook.com/groups/168408877185/)
+[7] [https://www.facebook.com](https://www.facebook.com/westcoastswingsandiego/)
+[8] https://westcoastswingsandiego.com

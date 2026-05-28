@@ -1,11 +1,25 @@
 // impeccable-ignore-file
+
+/**
+ * GearCard component for displaying gear items in grid/list view.
+ *
+ * NOTE: Star rating display has been removed from the card footer pending
+ * Amazon affiliate approval for dynamic content updates. This prevents showing
+ * static editorial ratings that could conflict with live Amazon reviews.
+ *
+ * The component still accepts a rating property for backward compatibility,
+ * but it is not displayed. See ResourceGrid.tsx for dynamic rating integration
+ * once affiliate approval is obtained.
+ *
+ * Reference: https://github.com/arii/tech-dancer/issues/1604
+ */
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
-import { BaseCard } from './BaseCard';
+import { NavLink } from 'react-router-dom';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
-import { Star, ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import { CategoryPlaceholder } from './CategoryPlaceholder';
 
 interface GearCardProps extends BaseProps {
@@ -32,7 +46,7 @@ export function GearCard(props: GearCardProps) {
     title,
     category,
     excerpt,
-    rating,
+    rating: _rating,
     verdict,
     image: propsImage,
     affiliateIds,
@@ -51,7 +65,6 @@ export function GearCard(props: GearCardProps) {
   });
 
   const isExternal = /^https?:\/\//.test(resolvedHref);
-  const isInternal = !isExternal;
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
@@ -61,53 +74,99 @@ export function GearCard(props: GearCardProps) {
     : rawImage;
 
   return (
-    <BaseCard
+    <Stack
+      as="article"
       {...rest}
       direction="col"
       gap={3}
       height="full"
       padding={6}
-      to={isInternal ? resolvedHref : undefined}
-      href={!isInternal ? resolvedHref : undefined}
-      rel={!isInternal ? "noopener noreferrer sponsored" : undefined}
-      ariaLabel={isInternal ? `Read gear review: ${title}` : `Open external gear link: ${title}`}
+      radius="lg"
+      border
+      className="group relative bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40"
     >
-      {/* Image zone */}
-      <Box
-        position="relative"
-        aspect="video"
-        overflow="hidden"
-        radius="md"
-        className="bg-surface-alt/20"
-      >
-        {image ? (
-          <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
-        ) : (
-          <CategoryPlaceholder category={category} />
-        )}
-        {/* Dark overlay */}
+      {/* Image zone - with explicit link for external affiliates */}
+      {isExternal ? (
         <Box
-          position="absolute"
-          inset
-          className="bg-black/15 pointer-events-none"
-          aria-hidden="true"
-        />
-        {/* Category badge */}
-        <Box
-          position="absolute"
-          top={3}
-          right={3}
-          paddingX={2}
-          paddingY={1}
-          radius="full"
-          opacity={80}
-          className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          as="a"
+          href={resolvedHref}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          aria-label={`View ${title} on Amazon`}
+          position="relative"
+          aspect="video"
+          overflow="hidden"
+          radius="md"
+          className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-            {category}
-          </Text>
+          {image ? (
+            <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
+          ) : (
+            <CategoryPlaceholder category={category} />
+          )}
+          {/* Dark overlay */}
+          <Box
+            position="absolute"
+            inset
+            className="bg-black/15 pointer-events-none"
+            aria-hidden="true"
+          />
+          {/* Category badge */}
+          <Box
+            position="absolute"
+            top={3}
+            right={3}
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacity={80}
+            className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+              {category}
+            </Text>
+          </Box>
         </Box>
-      </Box>
+      ) : (
+        <Box
+          as={NavLink}
+          to={resolvedHref}
+          position="relative"
+          aspect="video"
+          overflow="hidden"
+          radius="md"
+          className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          {image ? (
+            <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
+          ) : (
+            <CategoryPlaceholder category={category} />
+          )}
+          {/* Dark overlay */}
+          <Box
+            position="absolute"
+            inset
+            className="bg-black/15 pointer-events-none"
+            aria-hidden="true"
+          />
+          {/* Category badge */}
+          <Box
+            position="absolute"
+            top={3}
+            right={3}
+            paddingX={2}
+            paddingY={1}
+            radius="full"
+            opacity={80}
+            className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          >
+            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+              {category}
+            </Text>
+          </Box>
+        </Box>
+      )}
+
       <Stack gap={2}>
         {verdict && (
           <Box marginBottom={2}>
@@ -116,17 +175,44 @@ export function GearCard(props: GearCardProps) {
             </Text>
           </Box>
         )}
-        <Text
-          as="h3"
-          variant="body"
-          size="lg"
-          weight="font-bold"
+        {/* Title with link for external affiliates */}
+        {isExternal ? (
+          <Box
+            as="h3"
+            className="group-hover:text-accent transition-colors"
+          >
+            <Box
+              as="a"
+              href={resolvedHref}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="outline-none focus-visible:ring-2 focus-visible:ring-accent hover:underline"
+            >
+              <Text
+                variant="body"
+                size="lg"
+                weight="font-bold"
+                color="main"
+                leading="tight"
+                className="group-hover:text-accent transition-colors line-clamp-2"
+              >
+                {title}
+              </Text>
+            </Box>
+          </Box>
+        ) : (
+          <Text
+            as="h3"
+            variant="body"
+            size="lg"
+            weight="font-bold"
             color="main"
             leading="tight"
             className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
+          >
+            {title}
+          </Text>
+        )}
 
         <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
            {excerpt}
@@ -134,15 +220,16 @@ export function GearCard(props: GearCardProps) {
       </Stack>
 
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
-        {rating !== undefined && (
-          <Box display="flex" align="center" gap={1.5}>
-            <Star size={14} className="text-accent fill-accent" aria-hidden="true" />
-            <Text variant="mono" size="xs" weight="font-bold" color="accent">
-              {rating.toFixed(1)}/5
-            </Text>
-          </Box>
-        )}
-        <Box display="flex" align="center" gap={1.5} className="group-hover:translate-x-1 transition-transform">
+        {/* View Deal / Read Review button */}
+        <Box
+          as="a"
+          href={resolvedHref}
+          {...(isExternal && { target: "_blank", rel: "noopener noreferrer sponsored" })}
+          display="flex"
+          align="center"
+          gap={1.5}
+          className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
             {isExternal ? "View deal" : "Read review"}
           </Text>
@@ -153,6 +240,6 @@ export function GearCard(props: GearCardProps) {
           )}
         </Box>
       </Box>
-    </BaseCard>
+    </Stack>
   );
 }

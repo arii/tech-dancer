@@ -2,6 +2,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
@@ -76,6 +77,8 @@ export default function EventGuide() {
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
+              <AffiliateDisclosure type="event" />
+
               {event.theme && (
                 <ThemeSpotlight
                   id="theme"
