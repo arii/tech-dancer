@@ -1,25 +1,20 @@
 ---
 type: event
-title: "Phoenix 4th of July"
-date: "2026-07-02"
-startDate: "2026-07-02"
-author: "Ariel Anders"
-category: "WSDC Registry Event"
-excerpt: "Celebrate Independence Day at one of the most luxurious resorts on the swing circuit."
-location: "JW Marriott Scottsdale Camelback Inn Resort & Spa"
-city: "Scottsdale, AZ"
-region: "Southwest"
-schedule: "July 2 - 5, 2026"
-url: "https://phoenix4thofjuly.com"
-heroImage: ""
-description: "Known for the 'Paradise Ballroom' and the legendary All-Star Pool Party, Phoenix 4th of July combines a high-level WSDC competition with a luxury vacation vibe. Highlights include a massive fireworks display and the Red, White & Blue theme night."
-
+title: Phoenix 4th of July
+date: '2026-07-02'
+startDate: '2026-07-02'
+author: Ariel Anders
+category: WSDC Registry Event
+excerpt: Celebrate Independence Day at one of the most luxurious resorts on the swing circuit.
+location: JW Marriott Scottsdale Camelback Inn Resort & Spa
+city: Scottsdale, AZ
+region: Southwest
+schedule: July 2 - 5, 2026
+url: https://phoenix4thofjuly.com
+heroImage: ''
+description: Known for the 'Paradise Ballroom' and the legendary All-Star Pool Party, Phoenix 4th of July combines a high-level WSDC competition with a luxury vacation vibe. Highlights include a massive fireworks display and the Red, White & Blue theme night.
 whyAttending: >
-  Phoenix 4th of July is more than just a dance event; it's a luxury getaway.
-  Between the world-class resort amenities, the incredible pool party, and the
-  high-caliber competition, it offers a unique 'vacation-style' experience that
-  dancers look forward to all year.
-
+  Phoenix 4th of July is more than just a dance event; it's a luxury getaway. Between the world-class resort amenities, the incredible pool party, and the high-caliber competition, it offers a unique 'vacation-style' experience that dancers look forward to all year.
 theme:
   name: "Red, White & Blue"
   label: "Patriotic Theme"
@@ -28,9 +23,8 @@ theme:
     - "rainbow-bustle"
     - "sequin-bomber-jacket"
   accessoryIds:
-    - "pride-sunglasses"
-    - "rave-fan"
-
+  - pride-sunglasses
+  - rave-fan
 gear:
   outfitIds:
     - "ombre-dance-dress"
@@ -59,12 +53,10 @@ hotelCutoffDate: "2026-06-09"
 packingReminderDate: ""
 
 relatedEvents:
-  - "wild-wild-westie"
-  - "jack-and-jill-orama"
-  - "swingtacular-the-galactic-open"
+- wild-wild-westie
+- jack-and-jill-orama
+- swingtacular-the-galactic-open
 ---
-
-# Phoenix 4th of July
 
 Celebrate Independence Day at one of the most luxurious resorts on the swing circuit.
 
