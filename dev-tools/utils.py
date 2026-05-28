@@ -36,8 +36,26 @@ def get_ollama_review_model() -> str:
     return os.environ.get("OLLAMA_REVIEW_MODEL", "code-reviewer")
 
 def get_ollama_synthesis_model() -> str:
-    """Dynamic getter for the Synthesis model."""
-    return os.environ.get("OLLAMA_SYNTHESIS_MODEL", "llama3.2")
+    """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
+    env_val = os.environ.get("OLLAMA_SYNTHESIS_MODEL")
+    if env_val:
+        return env_val
+    try:
+        from dev_tools_sdk.config import load_project_config
+        config = load_project_config()
+        return config.ollama_synthesis_model
+    except Exception:
+        # Fallback to direct json reading if sdk not available
+        try:
+            import json
+            config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev-tools", "project_config.json")
+            if not os.path.exists(config_path):
+                config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
+            with open(config_path, "r") as f:
+                raw = json.load(f)
+                return raw.get("ollama_synthesis_model", "llama3.2")
+        except Exception:
+            return "llama3.2"
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
