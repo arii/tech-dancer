@@ -45,7 +45,7 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="grid w-full max-w-full min-w-0 bg-surface touch-pan-y md:grid-cols-[260px_1fr] md:h-[200px]"
+        className="grid w-full max-w-full min-w-0 bg-surface touch-pan-y md:grid-cols-[260px_1fr] md:min-h-[220px]"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

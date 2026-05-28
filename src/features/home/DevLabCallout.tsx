@@ -30,7 +30,7 @@ export function DevLabCallout() {
         size="xs"
         color="accent"
         weight="font-bold"
-        className="hover:underline"
+        className="mt-4 block hover:underline"
       >
         Explore the DevAI Lab →
       </Text>
