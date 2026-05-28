@@ -32,7 +32,7 @@ export default defineConfig(({mode}) => {
   const fullAppUrl = new URL(base, hostname).href;
 
   // Automatically discover dynamic routes
-  const { all: dynamicRoutes, detailed: routeDetails } = getAllRoutes();
+  const { sitemap: dynamicRoutes, detailed: routeDetails } = getAllRoutes();
 
   // Create lastmod mapping for the sitemap plugin
   const lastmodMap = Object.fromEntries(
