@@ -37,7 +37,7 @@ class TestFixCIValidation(unittest.TestCase):
             td_cli.handle_fix_ci(args)
 
         self.assertEqual(cm.exception.code, 401)
-        self.assertIn("Missing JULES_API_KEY", cm.exception.message)
+        self.assertIn("Missing JULES_API_KEY or ANTIGRAVITY_API_KEY", cm.exception.message)
 
     @patch('td_cli.get_github_token')
     @patch('td_cli.get_repo_name')

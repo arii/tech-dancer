@@ -95,7 +95,7 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
     for attempt in range(1, max_retries + 1):
         try:
             try:
-                with urllib.request.urlopen(req, timeout=900) as response:
+                with urllib.request.urlopen(req, timeout=120) as response:
                     res_data = json.loads(response.read().decode("utf-8"))
                     return res_data.get("response")
             except (urllib.error.HTTPError, urllib.error.URLError) as e:
