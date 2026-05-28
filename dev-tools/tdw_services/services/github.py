@@ -10,7 +10,7 @@ class GitHubClient:
         if not token:
             # Try to get token from utils if not provided
             try:
-                from utils import get_github_token
+                from dev_tools_sdk.utils.auth import get_github_token
                 token = get_github_token()
             except ImportError:
                 token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
