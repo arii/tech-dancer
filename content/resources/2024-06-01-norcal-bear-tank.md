@@ -11,7 +11,9 @@ tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Cool & Casual"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/mens-bear-tank-nor-cal-best-cal
-sku: mens-bear-tank-norcal
+internalSku: mens-bear-tank-norcal
+fulfillmentType: "print-on-demand"
+provider: "printful"
 ---
 
 Stay cool in the SoCal heat with this NorCal Best Cal bear tank top, a social dancing essential.

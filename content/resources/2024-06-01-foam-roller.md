@@ -10,6 +10,8 @@ affiliateIds: ["foam-roller"]
 tags: ["recovery", "health"]
 verdict: "Best for post-event"
 updatedDate: "Jun 2024"
+affiliateProvider: "amazon"
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 Recovery is key to surviving a weekend event.

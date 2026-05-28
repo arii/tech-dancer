@@ -13,7 +13,9 @@ updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/war-eagle-shirt
 displayMode: "pair"
 featuredSide: "back"
-sku: war-eagle-oversized
+internalSku: war-eagle-oversized
+fulfillmentType: "print-on-demand"
+provider: "printful"
 ---
 
 The War Eagle oversized t-shirt offers a modern high-neck silhouette and maximum comfort for long dance weekends.

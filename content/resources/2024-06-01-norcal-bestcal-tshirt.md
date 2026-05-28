@@ -11,7 +11,9 @@ tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Essential Merch"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-bestcal-tshirt
-sku: norcal-bestcal-classic
+internalSku: norcal-bestcal-classic
+fulfillmentType: "print-on-demand"
+provider: "printful"
 ---
 
 The core piece of the NorCal BestCal collection. Simple, bold, and indispensable for Team NorCal.

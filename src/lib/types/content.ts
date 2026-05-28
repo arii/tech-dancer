@@ -40,11 +40,35 @@ export interface Resource {
   durability?: number;
   value?: number;
   specs?: Record<string, string>;
+
+  // SEO & Metadata
+  seoTitle?: string;
+  seoDescription?: string;
+  imageAlt?: string;
+
   // Merch-specific fields
   shopUrl?: string;
-  sku?: string;
+  sku?: string; // Legacy
+  internalSku?: string;
+  printfulProductId?: string;
+  printfulVariantIds?: string[];
   displayMode?: string;
   featuredSide?: string;
+
+  productType?: "shirt" | "hoodie" | "hat" | "sticker" | "bag" | "other";
+  fulfillmentType?: "print-on-demand";
+  provider?: "printful";
+
+  shippingPolicySummary?: string;
+  returnPolicySummary?: string;
+
+  // Gear / Affiliate-specific fields
+  affiliateProvider?: "amazon" | "other";
+  affiliateDisclosure?: string;
+  priceDisplayPolicy?: "do-not-display-static-price" | "manually-reviewed";
+  availabilityDisplayPolicy?: "do-not-display-static-availability" | "manually-reviewed";
+  recommendedFor?: string[];
+  eventUseCase?: string;
 }
 
 export interface Study {

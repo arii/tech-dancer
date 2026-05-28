@@ -5,7 +5,6 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
-import { DEFAULT_RETURN_POLICY } from '@/utils/schema';
 import { GearPostDetail } from './components/GearPostDetail';
 
 export default function GearPost() {
@@ -20,7 +19,12 @@ export default function GearPost() {
 
   const structuredData = useMemo(() => {
     if (!resource) return null;
-    return {
+
+    const isMerch = !!resource.shopUrl;
+    const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const schema: any = {
       "@context": "https://schema.org",
       "@type": "Product",
       "name": resource.title,
@@ -30,62 +34,35 @@ export default function GearPost() {
         "@type": "Brand",
         "name": "BoomTick"
       },
-      "sku": resource.sku || resource.slug,
+      "sku": resource.internalSku || resource.slug,
       "offers": {
         "@type": "Offer",
-        "price": resource.priceCategory === 'premium' ? '45.00' : '25.00',
-        "priceCurrency": "USD",
         "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        "availability": "https://schema.org/InStock",
-        "shippingDetails": {
-          "@type": "OfferShippingDetails",
-          "shippingRate": {
-            "@type": "MonetaryAmount",
-            "value": "5.80",
-            "currency": "USD"
-          },
-          "shippingDestination": {
-            "@type": "DefinedRegion",
-            "addressCountry": "US"
-          },
-          "deliveryTime": {
-            "@type": "ShippingDeliveryTime",
-            "handlingTime": {
-              "@type": "QuantitativeValue",
-              "minValue": 1,
-              "maxValue": 3,
-              "unitCode": "DAY"
-            },
-            "transitTime": {
-              "@type": "QuantitativeValue",
-              "minValue": 2,
-              "maxValue": 5,
-              "unitCode": "DAY"
-            }
-          }
-        },
-        "hasMerchantReturnPolicy": DEFAULT_RETURN_POLICY
-      },
-      "review": {
-        "@type": "Review",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": resource.rating || 5,
-          "bestRating": "5"
-        },
-        "author": {
-          "@type": "Person",
-          "name": "Ariel Anders",
-          "url": `${BASE_URL}/about`
-        },
-        "datePublished": resource.date
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": resource.rating || 5,
-        "reviewCount": "1"
+        ...(isMerch ? { "availability": "https://schema.org/InStock" } : {})
       }
     };
+
+    if (isMerch) {
+      schema.offers.shippingDetails = {
+        "@type": "OfferShippingDetails",
+        "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "US"
+        }
+      };
+      schema.offers.hasMerchantReturnPolicy = {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "US",
+        "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
+        "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
+      };
+    } else if (isAmazon) {
+      // For Amazon/affiliate, use a more compliant description and avoid static price/rating
+      schema.description = `${resource.excerpt} As an Amazon Associate, BoomTick may earn from qualifying purchases.`;
+    }
+
+    return schema;
   }, [resource]);
 
   if (!resource) {
@@ -104,8 +81,8 @@ export default function GearPost() {
   return (
     <>
       <SEO
-        title={resource.title}
-        description={resource.excerpt}
+        title={resource.seoTitle || resource.title}
+        description={resource.seoDescription || resource.excerpt}
         type="article"
         image={resource.image}
         schema={structuredData}

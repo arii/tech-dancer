@@ -11,7 +11,9 @@ tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "Trendy & Airy"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-crop-top
-sku: norcal-bestcal-cropped-top
+internalSku: norcal-bestcal-cropped-top
+fulfillmentType: "print-on-demand"
+provider: "printful"
 ---
 
 A stylish crop top designed for movement and regional pride.
