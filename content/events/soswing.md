@@ -11,7 +11,7 @@ city: Ashland, OR
 region: Pacific Northwest
 schedule: May 14 - 17, 2026
 url: https://soswing.com
-heroImage: '/assets/events/jjo-hero.jpg'
+heroImage: ''
 description: SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing.
 whyAttending: >
   SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge field.
@@ -30,19 +30,31 @@ theme:
     - rave-fan
     - neck-fan
 gear:
+  outfitIds:
+    - ombre-dance-dress
+    - norcal-crop-top
+    - love-unisex-shirt
+  outfitDescription: "Comfortable and expressive pieces for a community-focused weekend."
+  accessoryIds:
+    - rave-fan
+    - neck-fan
+  accessoryDescription: "Low-profile cooling for the intimate hotel ballroom."
   shoeIds:
     - bloch-grecian
     - dance-socks
+  shoeDescription: "Reliable footwear for workshops and community sets."
   essentialIds:
     - loop-experience
     - foam-roller
     - mints
     - shoe-brush
+  essentialDescription: "Standard recovery for the relaxed PNW circuit pace."
   travelIds:
     - compression-cubes
     - travel-pillow
     - portable-charger
     - hanging-toiletry-bag
+  travelDescription: "Road-trip or regional flight essentials for Southern Oregon."
 
 earlyBirdDate: "2026-03-01"
 registrationDeadline: "2026-05-10"
@@ -59,7 +71,7 @@ Ashland is a theatre town — beautiful, small, and surprisingly walkable from t
 
 ## Ashland travel notes
 
-This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring downtown Ashland, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear. Late-night food options in Ashland are limited, so having snacks and a reusable water bottle is key.
+This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring downtown Ashland, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear. Late-night food options in Ashland are limited, so having snacks and a reusable water bottle is helpful.
 
 ### Who this event is best for
 SOswing is ideal for dancers who prefer intimate settings over massive convention centers. It's particularly great for first-time competitors who might find larger events overwhelming, and for those who enjoy a "road trip" vibe with scenic views.
@@ -75,9 +87,6 @@ SOswing is ideal for dancers who prefer intimate settings over massive conventio
 - **Food:** There are great restaurants in downtown Ashland, but the hotel restaurant is also solid for a quick bite between workshops.
 
 ## Change Checklist
-- [x] Verified 2026 dates (May 14-17).
-- [x] Improved SOswing with Ashland / intimate-community specificity.
-- [x] Set theme to "PNW Community Weekend".
-- [x] Focused gear on regional travel and comfort.
-- [x] Added "Ashland travel notes" section.
-- [x] Removed empty Community Reviews section.
+- [x] Removed incorrect JJO hero image.
+- [x] Restored gear section descriptions.
+- [x] Softened food/water claims.

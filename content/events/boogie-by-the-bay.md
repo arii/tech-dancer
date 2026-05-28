@@ -31,19 +31,32 @@ theme:
     - rave-fan
     - electric-fan
 gear:
+  outfitIds:
+    - sequin-bomber-jacket
+    - ombre-dance-dress
+    - norcal-gate-crop-hoodie
+    - norcal-bestcal-tshirt
+  outfitDescription: "Polished and practical pieces for a major NorCal weekend."
+  accessoryIds:
+    - rave-fan
+    - electric-fan
+  accessoryDescription: "Functional cooling for intense social dancing sessions."
   shoeIds:
     - bloch-grecian
     - suede-sheets
+  shoeDescription: "Reliable footwear for the fast Hyatt ballroom floor."
   essentialIds:
     - loop-experience
     - foam-roller
     - shoe-brush
     - liquid-iv
+  essentialDescription: "Essentials for a high-intensity competition weekend."
   travelIds:
     - compression-cubes
     - portable-charger
     - mints
     - hanging-toiletry-bag
+  travelDescription: "Packing gear for an airport-hotel stay."
 
 earlyBirdDate: "2026-07-01"
 registrationDeadline: "2026-10-04"
@@ -78,14 +91,12 @@ The Hyatt is massive. The ballroom is located on the ground floor, while the atr
 October in the Bay Area is usually mild, but Burlingame can be foggy and chilly in the evenings due to its proximity to the water. Bring a light jacket for walks to nearby restaurants.
 
 ### Ballroom Pacing
-The floor at BBTB is legendary—large, fast, and often crowded. During workshops, the instructors move quickly, so stay focused. During social dancing, the energy peaks around 1:00 AM and often carries through until breakfast.
+The floor at BBTB is legendary—large, fast, and often crowded. The spotlight finals and late-night social dancing are major highlights of the weekend.
 
 ### Nearby Food
-While the hotel restaurant is convenient, there are several great options within walking distance or a short Uber ride in downtown Burlingame. Max's of Burlingame is a dancer favorite for late-night or pre-comp meals.
+While the hotel restaurant (3Sixty) is convenient, there are several great options within walking distance or a short Uber ride in downtown Burlingame. Max's of Burlingame is a dancer favorite for late-night or pre-comp meals.
 
 ## Change Checklist
-- [x] Improved Boogie by the Bay with polished NorCal recommendations.
-- [x] Set theme to "Classic San Francisco / Flagship Weekend".
-- [x] Curated NorCal BestCal and polished social-dance pieces.
-- [x] Added sections for flagship weekend packing strategy and product curation.
-- [x] Removed empty Community Reviews section.
+- [x] Restored gear section descriptions.
+- [x] Softened "must-watch" claim for Sunday show.
+- [x] Verified airport and venue details.

@@ -23,7 +23,6 @@ theme:
     breathable tops, and accessories that will not interfere with partner
     connection.
   outfitIds:
-    - bloch-grecian
     - sequin-bomber-jacket
     - ombre-dance-dress
     - love-neon-lead-shirt
@@ -33,19 +32,32 @@ theme:
     - rave-fan
     - electric-fan
 gear:
+  outfitIds:
+    - sequin-bomber-jacket
+    - ombre-dance-dress
+    - love-neon-lead-shirt
+    - love-neon-follow-shirt
+    - love-neon-switch-shirt
+  outfitDescription: "Breathable pieces that handle the high-energy Texas vibe."
+  accessoryIds:
+    - rave-fan
+    - electric-fan
+  accessoryDescription: "High-power cooling for the high-energy ballroom floor."
   shoeIds:
     - bloch-grecian
-    - bloch-grecian
     - suede-sheets
+  shoeDescription: "The Dallas Hyatt ballroom floor is fantastic but can be fast."
   essentialIds:
     - liquid-iv
     - loop-experience
     - foam-roller
     - shoe-brush
+  essentialDescription: "Recovery and maintenance for an intense competition weekend."
   travelIds:
     - compression-cubes
     - travel-bottles
     - portable-charger
+  travelDescription: "Travel gear for a major convention weekend."
 
 earlyBirdDate: "2026-03-15"
 registrationDeadline: "2026-06-28"
@@ -62,7 +74,7 @@ Wild Wild Westie is famous for its "go big or go home" Texas attitude. Held at t
 
 ## Western theme notes
 
-Because the available product set does not currently include true Western apparel, do not fake it. Use this weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. These suede-soled dance boots are a great way to bridge the gap between "Western look" and "dance-ready."
+Because the available product set does not currently include true Western apparel, do not fake it. Use this weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. Because the current product set does not include true Western footwear, keep Western boots for photos and use actual dance shoes for social dancing.
 
 ### Dallas Airport Logistics
 - **DFW Airport:** About 25-30 minutes away. This is the primary hub for American Airlines and offers the most flight options.
@@ -73,14 +85,14 @@ Because the available product set does not currently include true Western appare
 The WWW room block at the Hyatt Regency Dallas is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
 
 ### Summer Heat Notes
-Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-controlled. You can easily spend the entire weekend without leaving the AC. If you do go outside, be prepared for intense humidity. Even though you're indoors, the Dallas summer heat and intense dancing mean you need to stay on top of your hydration—Liquid I.V. and portable fans are mandatory.
+Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-controlled. You can easily spend the entire weekend without leaving the AC. If you do go outside, be prepared for intense humidity. Even though you're indoors, the Dallas summer heat and intense dancing mean it is useful to pack hydration support and portable fans.
 
 ### Comp/Social Energy
-The competition field at WWW is deep. Jack & Jill heats can have 100+ couples in certain divisions. The social dancing energy is equally intense, peaking around 2:00 AM and often continuing until the sun comes up over the Dallas skyline.
+The competition field at WWW is deep. Jack & Jill heats can have many couples in certain divisions. The social dancing energy is equally intense, peaking around 2:00 AM and often continuing until the sun comes up over the Dallas skyline.
 
 ## Change Checklist
-- [x] Improved Wild Wild Westie with Western/Texas specificity.
-- [x] Set theme to "Texas Spirit / Wild West".
-- [x] Curated practical gear with Western-inspired suggestions in prose.
-- [x] Added Western theme notes.
-- [x] Removed empty Community Reviews section.
+- [x] Fixed Wild Wild Westie product taxonomy (moved bloch-grecian to shoes).
+- [x] Deduplicated gear IDs.
+- [x] Softened claims about hydration, fans, and heat.
+- [x] Removed "dance boots" reference and clarified footwear advice.
+- [x] Restored gear section descriptions.

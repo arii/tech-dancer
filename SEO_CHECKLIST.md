@@ -1,12 +1,11 @@
 ## SEO + content migration checklist
 
 - [x] Unnecessary file renames were reverted.
-- [x] Every remaining rename has a URL migration table entry.
-- [x] Every moved URL has a permanent redirect plan.
-- [x] Old URLs are removed from sitemap.
-- [x] New canonical URLs are included in sitemap.
-- [x] Internal links point directly to new URLs.
-- [x] No redirect chains or loops.
+- [ ] Confirm no public URLs changed.
+- [ ] If any public URL changed, add redirect map.
+- [ ] Confirm sitemap output only includes canonical URLs.
+- [ ] Confirm internal links do not point to removed paths.
+- [ ] Run SEO audit / redirect validation if available.
 - [x] No empty Community Reviews sections.
 - [x] No fake reviews, ratings, shipping claims, or return-policy claims.
 - [x] Event guides preserve specific themes instead of generic summaries.
@@ -16,4 +15,3 @@
 - [x] `pnpm typecheck` passes.
 - [x] `pnpm test` passes.
 - [x] `pnpm build` passes.
-- [x] SEO audit / redirect validation passes.

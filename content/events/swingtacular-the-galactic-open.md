@@ -32,18 +32,32 @@ theme:
     - electric-fan
     - pride-sunglasses
 gear:
+  outfitIds:
+    - sequin-bomber-jacket
+    - reflective-crop-tops
+    - mesh-fishnet-top
+    - ombre-dance-dress
+  outfitDescription: "Metallic, neon, and blacklight-friendly futuristic styles."
+  accessoryIds:
+    - rave-fan
+    - electric-fan
+    - pride-sunglasses
+  accessoryDescription: "Futuristic cooling and styling for a dark ballroom."
   shoeIds:
     - bloch-grecian
     - dance-socks
+  shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
   essentialIds:
     - loop-experience
     - foam-roller
     - shoe-brush
     - mints
+  essentialDescription: "Essentials for a high-intensity weekend in the Bay Area."
   travelIds:
     - compression-cubes
     - travel-steamer
     - portable-charger
+  travelDescription: "Organized packing for your galactic mission."
 
 earlyBirdDate: "2026-05-01"
 registrationDeadline: "2026-08-02"
@@ -56,7 +70,7 @@ relatedEvents:
 - phoenix-4th-of-july
 ---
 
-Swingtacular is the event where WCS meets Comicon. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
+Swingtacular is where WCS meets a full galactic theme weekend. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
 
 ## Galactic theme notes
 
@@ -64,7 +78,7 @@ This is the event where metallics, neons, mesh, reflective pieces, and futuristi
 
 ## What to pack for the SFO Hyatt
 
-Swingtacular is an airport-hotel event, so the useful gear is practical: a portable charger for long days, packing cubes to keep theme outfits organized, a steamer for theme outfits, and shoe maintenance gear. Don't forget high-quality earplugs; the late-night social energy is intense and the volume reflects that.
+Swingtacular is an airport-hotel event, so the useful gear is practical: a portable charger for long days, packing cubes to keep theme outfits organized, a steamer for theme outfits, and shoe maintenance gear. High-quality earplugs are useful to pack; the event is known for leaning hard into production, lighting, and theme.
 
 ### Production & Show Notes
 The Saturday night shows at Swingtacular are high-production events with professional lighting, sound, and staging. Get to the ballroom early to secure a good seat—it's often standing room only for the showcase.
@@ -75,7 +89,6 @@ The Saturday night shows at Swingtacular are high-production events with profess
 - **Hotel Hub:** The atrium is the place to be for late-night social energy and catching up with friends between workshops.
 
 ## Change Checklist
-- [x] Expanded Swingtacular as Alien / Galactic, not generic filler.
-- [x] Restored and curated practical product IDs (steamer, charger, shoe care).
-- [x] Added sections for Galactic theme notes and Hyatt packing.
-- [x] Removed empty Community Reviews section.
+- [x] Refined Swingtacular wording (removed Comicon, softened production claims).
+- [x] Restored gear section descriptions.
+- [x] Verified Burlingame logistics.

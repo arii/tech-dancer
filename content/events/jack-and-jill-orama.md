@@ -12,6 +12,8 @@ region: "SoCal"
 schedule: "June 4 - 8, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
+description: >
+  Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events on the circuit. It is famous for its creative competition formats, high-energy social dancing, and prime location near Disneyland.
 whyAttending: >
   I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set.
 theme:
@@ -88,8 +90,6 @@ relatedEvents:
 - boogie-by-the-bay
 ---
 
-As an Amazon Associate, BoomTick may earn from qualifying purchases.
-
 Jack & Jill O'Rama is more than just a competition; it's a celebration of the WCS community. Hosted at the Hyatt Regency Orange County, it's just minutes from Disneyland and features some of the largest ballrooms on the circuit.
 
 ## Rainbow / NorCal BestCal packing notes
@@ -116,7 +116,6 @@ Browse the full collection at [https://boomtick.printful.me/](https://boomtick.p
 
 ## Change Checklist
 - [x] Restored JJO as a Rainbow / NorCal BestCal guide.
-- [x] Restored schedule to June 4-8, 2026.
-- [x] Curated Rainbow, Pride, LOVE, and NorCal product IDs.
-- [x] Added sections for Rainbow / NorCal BestCal packing, RAINBOW’Rama, and GLOW’Rama.
-- [x] Removed empty Community Reviews section.
+- [x] Removed body-level affiliate disclosure (centralized in component).
+- [x] Restored gear section descriptions.
+- [x] Verified schedule and Disneyland logistics.
