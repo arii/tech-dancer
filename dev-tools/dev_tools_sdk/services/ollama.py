@@ -2,7 +2,7 @@ from __future__ import annotations
 from utils import call_ollama, is_ollama_available
 
 class OllamaService:
-    def __init__(self, model: str = "llama3", base_url: str = None):
+    def __init__(self, model: str = "qwen2.5-coder:7b", base_url: str = None):
         self.model = model
         self.base_url = base_url
 
