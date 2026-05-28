@@ -3,9 +3,15 @@ import FolioGrid from '@/components/ui/FolioGrid';
 import { EventCard } from '@/components/ui/EventCard';
 import { getEvents, Event } from '@/lib/content';
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export default function EventsFeed() {
-  const events = getEvents();
+  const { data: events = [] } = useQuery({
+    queryKey: ['events'],
+    queryFn: getEvents,
+    initialData: getEvents,
+  });
+
   const categories = useMemo(() => {
     const cats = Array.from(new Set(events.filter(e => e.region).map(e => e.region!)));
     return ['All', ...cats];

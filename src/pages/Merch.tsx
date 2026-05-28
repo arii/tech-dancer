@@ -10,9 +10,14 @@ import { generateMerchSchema } from '@/utils/schema';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 import FolioGrid from '@/components/ui/FolioGrid';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Merch() {
-  const products = getAllMerchProducts();
+  const { data: products = [] } = useQuery({
+    queryKey: ['merch'],
+    queryFn: getAllMerchProducts,
+    initialData: getAllMerchProducts,
+  });
 
   const categories = COLLECTIONS.map(c => ({ id: c.id, label: c.label }));
 
