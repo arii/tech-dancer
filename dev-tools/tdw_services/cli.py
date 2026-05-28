@@ -8,10 +8,11 @@ from tdw_services.orchestrator import Orchestrator
 # Import legacy utils for backwards compatibility during migration
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
+import os
 from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
 
 # Constants
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
+AUDIT_CHECK_DIRS = os.environ.get('AUDIT_CHECK_DIRS', 'src/features,src/pages,src/components,src/layouts,src/App.tsx').split(',')
 
 # CLI Group
 @click.group()
