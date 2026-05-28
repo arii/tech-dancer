@@ -1,7 +1,9 @@
+import { Sparkles } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventHero } from './components/EventHero';
+import { EventNavigation } from './components/EventNavigation';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { EventSidebar } from '@/components/ui/EventSidebar';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
@@ -70,14 +72,52 @@ export default function EventGuide() {
         date={event.schedule}
         eyebrow={event.category}
         image={event.heroImage}
-        whyAttending={event.whyAttending}
+        theme={event.theme?.name}
+        venue={event.location}
+        bestFor={event.category}
+        deadline={event.registrationDeadline}
+        packingCue={event.packingReminderDate}
       />
 
-      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 4, md: 12, lg: 24 }} paddingY={{ base: 8, md: 16 }}>
-        <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 12, lg: 16 }}>
+      <EventNavigation />
+
+      <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
+        {event.whyAttending && (
+          <Box
+            data-testid="why-attending"
+            maxWidth="3xl"
+            marginBottom={16}
+            padding={{ base: 6, md: 8 }}
+            radius="2xl"
+            className="bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group"
+          >
+
+            <Box
+              position="absolute"
+              top={-20}
+              right={-20}
+              width={40}
+              height={40}
+              className="bg-accent/10 blur-3xl rounded-full"
+            />
+
+            <Stack gap={4}>
+              <Box display="flex" align="center" gap={2} color="accent">
+                <Sparkles size={16} />
+                <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">
+                  Why I&apos;m Attending
+                </Text>
+              </Box>
+              <Text variant="body" size="lg" leading="relaxed" color="white" className="relative z-10 italic font-medium opacity-90">
+                &ldquo;{event.whyAttending}&rdquo;
+              </Text>
+            </Stack>
+          </Box>
+        )}
+        <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
-              <AffiliateDisclosure type="event" />
+              <AffiliateDisclosure />
 
               {event.theme && (
                 <ThemeSpotlight
@@ -113,7 +153,9 @@ export default function EventGuide() {
               )}
             </Stack>
           </Box>
-          <EventSidebar event={event} />
+          <Box display={{ base: 'none', lg: 'block' }}>
+            <EventSidebar event={event} />
+          </Box>
         </Grid>
       </Box>
     </Box>

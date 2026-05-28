@@ -10,6 +10,8 @@ affiliateIds: ["running-belt"]
 tags: ["travel", "packing", "storage"]
 verdict: "Best for carry-on"
 updatedDate: "Jun 2024"
+affiliateProvider: "amazon"
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 Discreet waist belt that holds essentials without the bounce. Essentially a low-profile fanny pack, it's particularly great for social dancing and high-energy styles like Lindy Hop, allowing you to carry your ID, cash, or phone safely without it getting in the way.
