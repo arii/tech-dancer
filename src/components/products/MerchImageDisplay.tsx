@@ -57,7 +57,7 @@ const Label = ({ children }: { children: React.ReactNode }) => (
     paddingX={1.5}
     paddingY={0.5}
     radius="sm"
-    className="bg-surface/80 backdrop-blur-sm border border-line/20"
+    className="bg-surface/80 backdrop-blur-sm border border-line/20 z-30"
   >
     <Text size="micro" weight="font-bold" color="dim" uppercase tracking="wider">
       {children}
@@ -115,6 +115,7 @@ export function MerchImageDisplay({
       <Box
         position="relative"
         height={{ base: 72, md: 80 }}
+        className="group/display"
       >
         <ImageLink href={href} title={title} className="h-full border border-line/20 bg-surface-alt/35">
           {resolved.primary && (
@@ -125,20 +126,21 @@ export function MerchImageDisplay({
               maxWidth="full"
               maxHeight="full"
               padding={4}
-              className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
+              className="h-full w-full object-contain transition-transform duration-300 group-hover/display:scale-105"
             />
           )}
+          {resolved.primary && <Label>{resolved.primary.side}</Label>}
         </ImageLink>
 
         {resolved.secondary && (
           <Box
             position="absolute"
             bottom={3}
-            right={3}
+            left={3}
             width={24}
             height={24}
             radius="md"
-            className="z-20 shadow-lg border-2 border-surface bg-surface-alt"
+            className="z-20 shadow-lg border-2 border-surface bg-surface-alt overflow-hidden"
           >
             <ImageLink href={href} title={title} className="h-full">
               <Box

@@ -38,12 +38,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf5f177de8__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf5f177de8__360',
+        src: '/assets/gear/love-neon-tshirt-ask-me-to-follow-back.webp',
+        side: 'back',
+        alt: 'Back of LOVE Neon T-Shirt with Ask Me to Follow design',
+      },
+      {
+        src: '/assets/gear/love-neon-tshirt-ask-me-to-follow-front.webp',
         side: 'front',
-        alt: 'Front view of LOVE Neon Ask Me to Follow t-shirt',
+        alt: 'Front of LOVE Neon T-Shirt',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow',
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['follow'],
@@ -57,12 +62,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf58bde26a__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-679-6a0bf58bde26a__360',
+        src: '/assets/gear/love-neon-tshirt-ask-me-to-lead-back.webp',
+        side: 'back',
+        alt: 'Back of LOVE Neon T-Shirt with Ask Me to Lead design',
+      },
+      {
+        src: '/assets/gear/love-neon-tshirt-ask-me-to-lead-front.webp',
         side: 'front',
-        alt: 'Front view of LOVE Neon Ask Me to Lead t-shirt',
+        alt: 'Front of LOVE Neon T-Shirt',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-lead',
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['lead'],
@@ -76,12 +86,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0ba0a711254__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0ba0a711254__360',
+        src: '/assets/gear/war-eagle-oversized-high-neck-t-shirt-back.webp',
+        side: 'back',
+        alt: 'Back of War Eagle Oversized High Neck T-Shirt',
+      },
+      {
+        src: '/assets/gear/war-eagle-oversized-high-neck-t-shirt-front.webp',
         side: 'front',
-        alt: 'Front view of War Eagle oversized t-shirt',
+        alt: 'Front of War Eagle Oversized High Neck T-Shirt',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Oversized', 'Dance Apparel', 'Streetwear'],
@@ -94,12 +109,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-679-6a0b93c3dcf19__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-679-6a0b93c3dcf19__360',
+        src: '/assets/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp',
+        side: 'back',
+        alt: 'Back of Lead Follow or Switch LOVE Shirt in Neon',
+      },
+      {
+        src: '/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp',
         side: 'front',
-        alt: 'Front view of Lead Follow or Switch LOVE shirt',
+        alt: 'Front of Lead Follow or Switch LOVE Shirt in Neon',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon',
     collections: ['lead-follow-switch', 'rainbow-pride'],
     roles: ['lead', 'follow', 'switch'],
@@ -113,12 +133,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-537-6a0b755a9a348__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-537-6a0b755a9a348__360',
+        src: '/assets/gear/norcal-bear-tank-front.webp',
         side: 'front',
         alt: "Front view of Men's Bear Tank NorCal BestCal",
       },
+      {
+        src: '/assets/gear/norcal-bear-tank-back.webp',
+        side: 'back',
+        alt: "Back view of Men's Bear Tank NorCal BestCal",
+      },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/mens-bear-tank-nor-cal-best-cal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Tank Top', 'Workshop Wear', 'Summer'],
@@ -131,12 +156,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-636-6a0b71ea8fae2__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-636-6a0b71ea8fae2__360',
+        src: '/assets/gear/norcal-crop-top-front.webp',
         side: 'front',
         alt: 'Front view of NorCal BestCal cropped top',
       },
+      {
+        src: '/assets/gear/norcal-crop-top-back.webp',
+        side: 'back',
+        alt: 'Back view of NorCal BestCal cropped top',
+      },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-cropped-top',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Cropped Top', 'Competition Wear', 'Breathable'],
@@ -149,7 +179,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-317-6a0b6eab9f0f4__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-317-6a0b6eab9f0f4__360',
+        src: '/assets/gear/norcal-gate-crop-hoodie.webp',
         side: 'front',
         alt: 'Front view of NorCal BestCal Golden Gate crop hoodie',
       },
@@ -167,12 +197,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-823-6a0b6ad05e8a7__360',
+        src: '/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp',
         side: 'front',
-        alt: 'Front view of NorCal BestCal Golden Gate rainbow pride shirt',
+        alt: 'Front of NorCal BestCal Golden Gate Rainbow Pride Shirt',
+      },
+      {
+        src: '/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-back.webp',
+        side: 'back',
+        alt: 'Back of NorCal BestCal Golden Gate Rainbow Pride Shirt',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt',
     collections: ['norcal-bestcal', 'rainbow-pride'],
     tags: ['NorCal', 'Pride', 'Golden Gate', 'West Coast Swing'],
@@ -185,12 +220,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a0b6a31c4326__360',
+        src: '/assets/gear/norcal-best-cal-pride-california-bear-apparel-front.webp',
         side: 'front',
-        alt: 'Front view of NorCal BestCal pride bear apparel',
+        alt: 'Front of NorCal BestCal pride bear apparel',
+      },
+      {
+        src: '/assets/gear/norcal-best-cal-pride-california-bear-apparel-back.webp',
+        side: 'back',
+        alt: 'Back of NorCal BestCal pride bear apparel',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel',
     collections: ['norcal-bestcal', 'rainbow-pride'],
     tags: ['NorCal', 'Pride', 'California Bear', 'Social Dance'],
@@ -203,12 +243,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-71-6a0b962244279__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/87343-71-6a0b962244279__360',
+        src: '/assets/gear/unisex-t-shirt-back.webp',
+        side: 'back',
+        alt: 'Back view of LOVE Lead Follow or Switch unisex shirt',
+      },
+      {
+        src: '/assets/gear/unisex-t-shirt-front.webp',
         side: 'front',
         alt: 'Front view of LOVE Lead Follow or Switch unisex shirt',
       },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/unisex-t-shirt',
     collections: ['lead-follow-switch'],
     roles: ['lead', 'follow', 'switch'],
@@ -222,12 +267,17 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageUrl: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a07b116ea5ce__360',
     images: [
       {
-        src: 'https://cdn.printful.me/t/quick-stores/products/w168/18182963-71-6a07b116ea5ce__360',
+        src: '/assets/gear/norcal-bestcal-front.webp',
         side: 'front',
         alt: 'Front view of NorCal BestCal classic tee',
       },
+      {
+        src: '/assets/gear/norcal-bestcal-back.webp',
+        side: 'back',
+        alt: 'Back view of NorCal BestCal classic tee',
+      },
     ],
-    imageDisplayMode: 'single',
+    imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Classic', 'Team Apparel', 'Essential'],
