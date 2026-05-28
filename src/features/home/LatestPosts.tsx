@@ -46,7 +46,7 @@ export function LatestPosts() {
               className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
             >
               {post.image ? (
-                <img src={post.image} alt={post.title} className="block h-full w-full max-w-full object-cover" />
+                <img src={post.image} alt="" aria-hidden="true" className="block h-full w-full max-w-full object-cover" />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />
               )}
