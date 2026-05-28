@@ -1,22 +1,19 @@
 import { Box } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
-import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { GearCard } from '@/components/ui/GearCard';
-import { ViewToggle } from '@/components/ui/ViewToggle';
-import { ListRow } from '@/components/ui/ListRow';
-import { SearchBox } from '@/components/ui/SearchBox';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { Search } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
-import { GearCard } from '@/components/ui/GearCard';
 import { getResources } from "@/lib/content";
+import { useQuery } from '@tanstack/react-query';
 
 export default function Toolbox() {
-  const resources = getResources();
+  const { data: resources = [] } = useQuery({
+    queryKey: ['resources'],
+    queryFn: getResources,
+    initialData: getResources,
+  });
 
   const categories = [
     { id: 'all', label: 'All Gear' },
@@ -38,18 +35,10 @@ export default function Toolbox() {
 
         <AffiliateDisclosure type="gear" />
 
-        {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">
-          <SearchBox
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search gear..."
-          />
-          <ViewToggle view={view} onChange={setView} />
-        </Box>
+      </Box>
 
       <FolioGrid
-        items={resources}
+        items={resources as unknown as Parameters<typeof FolioGrid>[0]['items']}
         categoryTitle="Gear Reviews"
         label="THE TOOLBOX"
         description="Rigorous testing and honest takes on the gear that keeps you moving."
@@ -60,7 +49,7 @@ export default function Toolbox() {
         renderItem={(item) => (
           <GearCard
             key={item.slug}
-            {...item}
+            {...(item as unknown as Parameters<typeof GearCard>[0])}
             basePath="/gear"
           />
         )}

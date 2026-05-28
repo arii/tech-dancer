@@ -183,13 +183,12 @@ export function GearCard(props: GearCardProps) {
           variant="body"
           size="xl"
           weight="font-bold"
-            color="main"
-            leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
-          >
-            {title}
-          </Text>
-        )}
+          color="main"
+          leading="tight"
+          className="group-hover:text-accent transition-colors line-clamp-2"
+        >
+          {title}
+        </Text>
 
         <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3">
            {excerpt}
