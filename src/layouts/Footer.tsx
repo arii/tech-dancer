@@ -34,7 +34,7 @@ export function Footer() {
         </Stack>
 
         <Box>
-          <Text variant="body" size="xs" color="dim" weight="font-medium" className="italic opacity-80">
+          <Text variant="body" size="xs" color="dim" weight="font-medium" className="not-italic opacity-80">
             As an Amazon Associate I earn from qualifying purchases.
           </Text>
         </Box>

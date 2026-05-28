@@ -98,7 +98,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
               </Box>
             )}
           </Box>
-          <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight italic">
+          <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight not-italic">
             As an Amazon Associate I earn from qualifying purchases.
           </Text>
         </Stack>
