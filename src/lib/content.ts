@@ -86,6 +86,27 @@ export function _transform<T extends { date?: string; draft?: boolean }>(
         packingReminderDate: data.packingReminderDate ? String(data.packingReminderDate) : undefined,
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
+        internalSku: data.internalSku ? String(data.internalSku) : (data.sku ? String(data.sku) : undefined),
+        priceCategory: data.priceCategory ? String(data.priceCategory) : undefined,
+
+        // New SEO & Policy Fields
+        seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
+        seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
+        imageAlt: data.imageAlt ? String(data.imageAlt) : undefined,
+        productType: data.productType ? String(data.productType) : undefined,
+        fulfillmentType: data.fulfillmentType ? String(data.fulfillmentType) : undefined,
+        provider: data.provider ? String(data.provider) : undefined,
+        shippingPolicySummary: data.shippingPolicySummary ? String(data.shippingPolicySummary) : undefined,
+        returnPolicySummary: data.returnPolicySummary ? String(data.returnPolicySummary) : undefined,
+        affiliateProvider: data.affiliateProvider ? String(data.affiliateProvider) : undefined,
+        affiliateDisclosure: data.affiliateDisclosure ? String(data.affiliateDisclosure) : undefined,
+        priceDisplayPolicy: data.priceDisplayPolicy ? String(data.priceDisplayPolicy) : undefined,
+        availabilityDisplayPolicy: data.availabilityDisplayPolicy ? String(data.availabilityDisplayPolicy) : undefined,
+        recommendedFor: asArray(data.recommendedFor),
+        eventUseCase: data.eventUseCase ? String(data.eventUseCase) : undefined,
+        printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
+        printfulVariantIds: asArray(data.printfulVariantIds),
+
         content: content || "",
         slug: slugFrom(path),
       };

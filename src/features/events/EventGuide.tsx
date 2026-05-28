@@ -117,7 +117,7 @@ export default function EventGuide() {
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
-              <AffiliateDisclosure type="event" />
+              <AffiliateDisclosure />
 
               {event.themeName && (
                 <ThemeSpotlight
