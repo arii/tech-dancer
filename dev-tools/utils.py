@@ -27,7 +27,11 @@ def get_ollama_url() -> str:
 
 def get_ollama_model() -> str:
     """Dynamic getter for Ollama Model."""
-    return os.environ.get("OLLAMA_MODEL", "llama3.2")
+    return os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+
+def get_ollama_review_model() -> str:
+    """Dynamic getter for the dedicated Code Reviewer model."""
+    return os.environ.get("OLLAMA_REVIEW_MODEL", "code-reviewer")
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
