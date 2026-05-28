@@ -67,6 +67,7 @@ export function GearCard(props: GearCardProps) {
   // Internal links should always start with / (they are resolve by the router)
   // while external links will start with http
   const isExternal = resolvedHref.startsWith('http');
+  const isInternal = !isExternal;
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
