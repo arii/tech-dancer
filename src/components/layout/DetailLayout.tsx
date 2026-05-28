@@ -81,16 +81,17 @@ export function DetailLayout({
 
           {/* Hero Image */}
           {image && (
-            <Box
-              as={motion.div}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              overflow="hidden"
-              border
-              radius="lg"
-              className="bg-surface-alt"
-            >
-              {imageBack && showImagePair ? (
+            <Stack gap={2}>
+              <Box
+                as={motion.div}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                overflow="hidden"
+                border
+                radius="lg"
+                className="bg-surface-alt"
+              >
+                {imageBack && showImagePair ? (
                 <Grid cols={{ base: 1, md: 2 }} gap={4} padding={4}>
                   <Stack gap={2}>
                     <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">
@@ -161,7 +162,15 @@ export function DetailLayout({
                 </>
               )}
             </Box>
+            {/* Illustration comment for sketches */}
+            {displayImage?.includes('/sketches/') && (
+              <Text variant="mono" size="xs" color="dim" className="italic">
+                Illustration
+              </Text>
+            )}
+          </Stack>
           )}
+
 
           <Grid cols={{ base: 1, lg: sidebar ? 3 : 1 }} gap={10}>
             {/* Content - first on mobile via order classes */}
