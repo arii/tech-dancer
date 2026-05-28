@@ -74,9 +74,11 @@ function transform<T extends { date?: string; draft?: boolean }>(
       const result: Record<string, unknown> = {
         ...data,
         title: String(data.title || "Untitled"),
+        dek: data.dek ? String(data.dek) : undefined,
         category: String(data.category || "General"),
         region: (data.region && VALID_REGIONS.includes(String(data.region))) ? String(data.region) : undefined,
         excerpt: String(data.excerpt || ""),
+        status: data.status ? String(data.status) : undefined,
         date: String(data.date || ""),
         author: String(data.author || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
@@ -114,6 +116,13 @@ function transform<T extends { date?: string; draft?: boolean }>(
         eventUseCase: data.eventUseCase ? String(data.eventUseCase) : undefined,
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
+
+        // Editorial Article Fields
+        hero: data.hero as Record<string, unknown> | undefined,
+        sidebar: data.sidebar as Record<string, unknown> | undefined,
+        heroConfig: data.heroConfig as Record<string, unknown> | undefined,
+        sidebarConfig: data.sidebarConfig as Record<string, unknown> | undefined,
+        related: asArray(data.related),
 
         content: content || "",
         slug: slugFrom(path),
