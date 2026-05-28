@@ -1,4 +1,4 @@
-import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar } from 'lucide-react';
+import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, Tag } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -42,7 +42,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Event Resource Guides',
+    label: 'Event Guides',
     icon: Calendar,
     skeleton: 'grid',
     isMobileVisible: true
@@ -55,7 +55,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
-    label: 'DevAI Portfolio',
+    label: 'DevAI Lab',
     icon: Database,
     skeleton: 'grid',
     isMobileVisible: true
@@ -74,7 +74,7 @@ export const routes: RouteConfig[] = [
     path: '/merch',
     lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
     label: 'Merch',
-    icon: ShoppingBag,
+    icon: Tag,
     skeleton: 'grid',
     isMobileVisible: true
   },
@@ -93,6 +93,11 @@ export const routes: RouteConfig[] = [
     skeleton: 'simple'
   },
   {
+    path: '/subscribe',
+    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
+  },
+  {
     path: '/preview',
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',
@@ -107,4 +112,11 @@ export const routes: RouteConfig[] = [
 
 export const MOBILE_NAV_ROUTES = routes.filter((r): r is RouteConfig & { label: string, icon: LucideIcon } =>
   !!(r.label && r.icon && r.isMobileVisible)
+);
+
+export const TOP_NAV_PATHS = ['/events', '/gear', '/blog', '/merch', '/research', '/about'] as const;
+
+export const TOP_NAV_ROUTES = routes.filter(
+  (r): r is RouteConfig & { label: string } =>
+    !!(r.label && TOP_NAV_PATHS.includes(r.path as typeof TOP_NAV_PATHS[number]))
 );

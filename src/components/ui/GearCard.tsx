@@ -64,7 +64,9 @@ export function GearCard(props: GearCardProps) {
     gearSlug: slug
   });
 
-  const isExternal = /^https?:\/\//.test(resolvedHref);
+  // Internal links should always start with / (they are resolve by the router)
+  // while external links will start with http
+  const isExternal = resolvedHref.startsWith('http');
   const affiliate = affiliateManager.getLink(affiliateId);
 
   // Ensure image is normalized with ASSET_PREFIX if it's a root-relative path
@@ -196,24 +198,37 @@ export function GearCard(props: GearCardProps) {
 
       <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
         {/* View Deal / Read Review button */}
-        <Box
-          as="a"
-          href={resolvedHref}
-          {...(isExternal && { target: "_blank", rel: "noopener noreferrer sponsored" })}
-          display="flex"
-          align="center"
-          gap={1.5}
-          className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
-            {isExternal ? "View deal" : "Read review"}
-          </Text>
-          {isExternal ? (
+        {isExternal ? (
+          <Box
+            as="a"
+            href={resolvedHref}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            display="flex"
+            align="center"
+            gap={1.5}
+            className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+              View deal
+            </Text>
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
-          ) : (
+          </Box>
+        ) : (
+          <Box
+            as={NavLink}
+            to={resolvedHref}
+            display="flex"
+            align="center"
+            gap={1.5}
+            className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+              Read review
+            </Text>
             <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />
-          )}
-        </Box>
+          </Box>
+        )}
       </Box>
     </Stack>
   );
