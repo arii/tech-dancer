@@ -86,7 +86,7 @@ createRoot(document.getElementById('root')!).render(
           <RouterProvider
             router={router}
             fallbackElement={
-              <Box minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+              <Box as="main" id="main-content" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
                 <Box
                   width={8}
                   height={8}

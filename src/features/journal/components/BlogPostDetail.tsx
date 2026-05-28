@@ -2,6 +2,7 @@ import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 import { DetailLayout } from '@/components/layout/DetailLayout';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post } from '@/lib/content';
 
 interface BlogPostDetailProps {
@@ -31,16 +32,19 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       onBack={onBack}
       backLabel={backLabel}
       headerExtras={
-        <Stack direction="row" gap={4} marginTop={6}>
-          <Stack direction="row" align="center" gap={2} color="dim">
-             <Box width={8} height={8} radius="full" surface="muted" />
-             <Text variant="mono" size="xs">{post.author}</Text>
+        <Stack gap={6}>
+          <Stack direction="row" gap={4} marginTop={6}>
+            <Stack direction="row" align="center" gap={2} color="dim">
+               <Box width={8} height={8} radius="full" surface="muted" />
+               <Text variant="mono" size="xs">{post.author}</Text>
+            </Stack>
+            <Box flex />
+            <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-accent-sky hover:bg-accent-sky/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
+              <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-accent-sky" />
+              <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
+            </Stack>
           </Stack>
-          <Box flex />
-          <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-accent-sky hover:bg-accent-sky/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
-            <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-accent-sky" />
-            <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
-          </Stack>
+          <AffiliateDisclosure />
         </Stack>
       }
     >

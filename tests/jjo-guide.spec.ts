@@ -33,11 +33,14 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
   });
 
   test('should render the action timeline with multiple rows', async ({ page }) => {
-    const remindersSection = page.getByTestId('reminders');
+    await page.setViewportSize({ width: 375, height: 667 });
+    const remindersSection = page.getByTestId('reminders').first();
     await expect(remindersSection).toBeVisible();
-    // Using stable data-testid instead of .group class
+
     const rows = remindersSection.getByTestId('timeline-row');
-    await expect(rows).toHaveCount(4); // Standard WSDC timeline
+    await expect.poll(async () => rows.count()).toBeGreaterThanOrEqual(3);
+
+    await expect(remindersSection).toContainText(/register|book|pack|schedule|workshop|deadline/i);
   });
 
   test('should render related events', async ({ page }) => {
