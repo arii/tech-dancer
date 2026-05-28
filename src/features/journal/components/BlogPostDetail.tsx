@@ -44,7 +44,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
               <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
             </Stack>
           </Stack>
-          <AffiliateDisclosure type="blog" />
+          <AffiliateDisclosure />
         </Stack>
       }
     >
