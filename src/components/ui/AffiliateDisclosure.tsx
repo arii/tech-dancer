@@ -6,9 +6,9 @@ interface AffiliateDisclosureProps {
 }
 
 const DISCLOSURE_TEXT = {
-  gear: 'Disclosure: Some gear links are Amazon affiliate links. As an Amazon Associate, I earn from qualifying purchases at no extra cost to you.',
-  event: 'Disclosure: Some event guide product links are Amazon affiliate links. As an Amazon Associate, I earn from qualifying purchases at no extra cost to you.',
-  blog: 'Disclosure: Some links may be Amazon affiliate links. As an Amazon Associate, I earn from qualifying purchases at no extra cost to you.',
+  gear: 'As an Amazon Associate I earn from qualifying purchases.',
+  event: 'As an Amazon Associate I earn from qualifying purchases.',
+  blog: 'As an Amazon Associate I earn from qualifying purchases.',
 };
 
 const COMPACT_TEXT = 'Amazon affiliate link';
