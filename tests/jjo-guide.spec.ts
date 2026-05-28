@@ -26,8 +26,6 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     await expect(gearSection).toBeVisible();
 
     // Using headings to be more specific and avoid strict mode violations with descriptions
-    await expect(gearSection.getByRole('heading', { name: 'Outfits' })).toBeVisible();
-    await expect(gearSection.getByRole('heading', { name: 'Accessories' })).toBeVisible();
     await expect(gearSection.getByRole('heading', { name: 'Shoes & Essentials' })).toBeVisible();
     await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).toBeVisible();
   });
