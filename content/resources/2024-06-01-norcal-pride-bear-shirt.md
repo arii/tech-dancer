@@ -11,6 +11,9 @@ tags: ["merch", "norcal", "rainbow", "pride"]
 verdict: "California Classic"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-pride-bear-shirt
+internalSku: norcal-bestcal-pride-bear
+fulfillmentType: "print-on-demand"
+provider: "printful"
 ---
 
 The NorCal Best Cal Pride California Bear shirt combines the state's iconic symbol with the rainbow flag. High-quality fabric and a comfortable fit make it perfect for long workshop days and late-night social dancing.

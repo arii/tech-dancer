@@ -5,12 +5,19 @@ import json
 import re
 import requests
 from typing import Optional, Dict, Any, List
-from utils import call_ollama, is_ollama_available, clean_llm_output, get_ollama_model
+from utils import (
+    call_ollama,
+    is_ollama_available,
+    clean_llm_output,
+    get_ollama_model,
+    get_ollama_review_model,
+    get_ollama_synthesis_model
+)
 
 # Model used for per-file chunk review (code-aware, focused)
-_REVIEW_MODEL = "code-reviewer"
+_REVIEW_MODEL = get_ollama_review_model()
 # Lighter/faster model used only for the final synthesis step
-_SYNTHESIS_MODEL = "llama3.2"
+_SYNTHESIS_MODEL = get_ollama_synthesis_model()
 
 # Per-file chunk review schema (small – easy for a 7B model)
 _CHUNK_SCHEMA = {

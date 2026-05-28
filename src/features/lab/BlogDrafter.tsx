@@ -231,6 +231,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                    <Grid cols={3} gap={4}>
                       <Stack gap={2}>
                         <Text variant="mono" size="micro" color="dim">RATING (0-5)</Text>
+                        {/* Internal Note: Ratings are editorial-only and currently hidden from public UI per compliance */}
                         <Box as="input" type="number" step="0.1" value={data.rating} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('rating', parseFloat(e.target.value))} className={inputs.base} />
                       </Stack>
                       <Stack gap={2}>
