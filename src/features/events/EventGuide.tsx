@@ -75,17 +75,16 @@ export default function EventGuide() {
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
             <Stack gap={SECTION_SPACING}>
+              <AffiliateDisclosure type="event" />
+
               {event.themeName && (
-                <>
-                  <AffiliateDisclosure type="event" />
-                  <ThemeSpotlight
-                    id="theme"
-                    title={event.themeName}
-                    label={event.themeLabel}
-                    description={event.themeDescription || ''}
-                    colors={event.themeColors}
-                  />
-                </>
+                <ThemeSpotlight
+                  id="theme"
+                  title={event.themeName}
+                  label={event.themeLabel}
+                  description={event.themeDescription || ''}
+                  colors={event.themeColors}
+                />
               )}
 
               {gearSections.length > 0 && (
