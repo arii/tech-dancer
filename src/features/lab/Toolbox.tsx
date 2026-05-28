@@ -37,7 +37,7 @@ export default function Toolbox() {
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
 
-        <AffiliateDisclosure type="gear" />
+        <AffiliateDisclosure />
 
         {/* Modern Search Bar & Toggle */}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">

@@ -1,6 +1,7 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { NavLink } from 'react-router-dom';
+import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
 
 export function Footer() {
   const legalLinks = [
@@ -32,6 +33,13 @@ export function Footer() {
             )
           </Text>
         </Stack>
+
+        <Box>
+          <Text variant="body" size="xs" color="dim" weight="font-medium" className="not-italic opacity-80">
+            {DISCLOSURE_TEXT}
+          </Text>
+        </Box>
+
         <Stack direction="row" gap={2} align="center">
           {legalLinks.map((link) => (
             <ActionButton
