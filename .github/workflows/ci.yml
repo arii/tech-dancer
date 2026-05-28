@@ -246,11 +246,13 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH || true
-          CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())"); export CHROME_PATH || true
+          set -eu
+          export VITE_BASE_PATH="/${REPO_NAME}/"
+          export CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          echo "VITE_BASE_PATH=$VITE_BASE_PATH"
+          echo "CHROME_PATH=$CHROME_PATH"
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           REPO_NAME: ${{ github.event.repository.name }}
 
       - name: Upload Test Results
