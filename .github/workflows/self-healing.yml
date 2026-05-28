@@ -31,7 +31,6 @@ jobs:
       HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
       HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
       OLLAMA_MODEL: "qwen2.5-coder:1.5b"
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout trusted code
         uses: actions/checkout@v4
