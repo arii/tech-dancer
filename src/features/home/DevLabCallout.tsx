@@ -26,6 +26,8 @@ export function DevLabCallout() {
       <Text
         as={NavLink}
         to="/research"
+        display="block"
+        marginTop={4}
         variant="mono"
         size="xs"
         color="accent"

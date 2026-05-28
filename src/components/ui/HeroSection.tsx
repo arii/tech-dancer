@@ -136,6 +136,8 @@ export function HeroSection() {
               as={NavLink}
               to="/events"
               variant="primary"
+              paddingX={6}
+              radius="lg"
               className="min-h-12 justify-center md:justify-start flex-1 normal-case"
             >
               Explore Event Guides
@@ -144,6 +146,8 @@ export function HeroSection() {
               as={NavLink}
               to="/gear"
               variant="secondary"
+              paddingX={6}
+              radius="lg"
               className="min-h-12 justify-center md:justify-start flex-1 normal-case"
             >
               Browse Gear Reviews
