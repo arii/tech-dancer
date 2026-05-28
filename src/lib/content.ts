@@ -99,11 +99,14 @@ export function _transform<T extends { date?: string; draft?: boolean }>(
       };
 
       if (data.type === "event") {
+        const getString = (nestedVal: unknown, flatVal: unknown) =>
+          nestedVal ? String(nestedVal) : flatVal ? String(flatVal) : undefined;
+
         // Flatten nested theme if present
         const nestedTheme = data.theme as Record<string, unknown> | undefined;
-        result.themeName = nestedTheme?.name ? String(nestedTheme.name) : (data.themeName ? String(data.themeName) : undefined);
-        result.themeLabel = nestedTheme?.label ? String(nestedTheme.label) : (data.themeLabel ? String(data.themeLabel) : undefined);
-        result.themeDescription = nestedTheme?.description ? String(nestedTheme.description) : (data.themeDescription ? String(data.themeDescription) : undefined);
+        result.themeName = getString(nestedTheme?.name, data.themeName);
+        result.themeLabel = getString(nestedTheme?.label, data.themeLabel);
+        result.themeDescription = getString(nestedTheme?.description, data.themeDescription);
         result.themeColors = asArray(nestedTheme?.colors || data.themeColors);
         result.themeOutfitIds = asArray(nestedTheme?.outfitIds || data.themeOutfitIds);
         result.themeAccessoryIds = asArray(nestedTheme?.accessoryIds || data.themeAccessoryIds);
@@ -111,15 +114,15 @@ export function _transform<T extends { date?: string; draft?: boolean }>(
         // Flatten nested gear if present
         const nestedGear = data.gear as Record<string, unknown> | undefined;
         result.gearOutfitIds = asArray(nestedGear?.outfitIds || data.gearOutfitIds);
-        result.gearOutfitDescription = nestedGear?.outfitDescription ? String(nestedGear.outfitDescription) : (data.gearOutfitDescription ? String(data.gearOutfitDescription) : undefined);
+        result.gearOutfitDescription = getString(nestedGear?.outfitDescription, data.gearOutfitDescription);
         result.gearAccessoryIds = asArray(nestedGear?.accessoryIds || data.gearAccessoryIds);
-        result.gearAccessoryDescription = nestedGear?.accessoryDescription ? String(nestedGear.accessoryDescription) : (data.gearAccessoryDescription ? String(data.gearAccessoryDescription) : undefined);
+        result.gearAccessoryDescription = getString(nestedGear?.accessoryDescription, data.gearAccessoryDescription);
         result.gearShoeIds = asArray(nestedGear?.shoeIds || data.gearShoeIds);
-        result.gearShoeDescription = nestedGear?.shoeDescription ? String(nestedGear.shoeDescription) : (data.gearShoeDescription ? String(data.gearShoeDescription) : undefined);
+        result.gearShoeDescription = getString(nestedGear?.shoeDescription, data.gearShoeDescription);
         result.gearEssentialIds = asArray(nestedGear?.essentialIds || data.gearEssentialIds);
-        result.gearEssentialDescription = nestedGear?.essentialDescription ? String(nestedGear.essentialDescription) : (data.gearEssentialDescription ? String(data.gearEssentialDescription) : undefined);
+        result.gearEssentialDescription = getString(nestedGear?.essentialDescription, data.gearEssentialDescription);
         result.gearTravelIds = asArray(nestedGear?.travelIds || data.gearTravelIds);
-        result.gearTravelDescription = nestedGear?.travelDescription ? String(nestedGear.travelDescription) : (data.gearTravelDescription ? String(data.gearTravelDescription) : undefined);
+        result.gearTravelDescription = getString(nestedGear?.travelDescription, data.gearTravelDescription);
 
         result.relatedEvents = asArray(data.relatedEvents);
 
