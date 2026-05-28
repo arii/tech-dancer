@@ -94,14 +94,13 @@ test.describe('Visual Regression Tests', () => {
           ...commonScreenshotOptions,
           clip: { x: 0, y: 0, width: viewport.width, height: 1900 },
         });
-        continue;
+      } else {
+        // Snapshots use global maxDiffPixelRatio threshold defined in playwright.config.ts
+        await expect(page).toHaveScreenshot(`${route.name}.png`, {
+          ...commonScreenshotOptions,
+          fullPage: true,
+        });
       }
-
-      // Snapshots use global maxDiffPixelRatio threshold defined in playwright.config.ts
-      await expect(page).toHaveScreenshot(`${route.name}.png`, {
-        ...commonScreenshotOptions,
-        fullPage: true,
-      });
     });
   }
 });
