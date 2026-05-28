@@ -10,6 +10,8 @@ affiliateIds: ["portable-steamer"]
 tags: ["travel", "clothing", "competition"]
 verdict: "Essential for Competitors"
 updatedDate: "Nov 2023"
+affiliateProvider: "amazon"
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 ## Competition Ready, Anywhere
