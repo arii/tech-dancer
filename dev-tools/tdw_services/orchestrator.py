@@ -105,7 +105,8 @@ class Orchestrator:
         try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
-            prompt = f"Analyze this file for bugs, style issues, and potential improvements:\n\n{content}"
+            # Truncate content to 20000 characters to accommodate smaller context windows in local Ollama models
+            prompt = f"Analyze this file for bugs, style issues, and potential improvements:\n\n{content[:20000]}"
             return self.ai.generate(prompt)
         except Exception as e:
             raise CLIError(f"Failed to analyze file: {e}")
