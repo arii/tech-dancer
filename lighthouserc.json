@@ -5,7 +5,7 @@
       "startServerReadyPattern": "localhost:",
       "numberOfRuns": 1,
       "settings": {
-        "chromeFlags": "--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu"
+        "chromeFlags": "--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu --disable-software-rasterizer"
       }
     },
     "assert": {
