@@ -15,19 +15,15 @@ heroImage: ""
 description: "Weekly social dance and classes at Mission City Swing."
 
 whyAttending: >
-  Weekly classes are the foundation of any dancer's growth. Mission City Swing
-  offers a consistent, high-quality environment to hone your skills, learn new
-  concepts, and connect with the local community every week.
-
+  Weekly classes are the foundation of any dancer's growth. Mission City Swing offers a consistent, high-quality environment to hone your skills, learn new concepts, and connect with the local community every week.
 theme:
   name: "City Style"
   label: "Urban Social"
   description: "Modern urban looks for the SF social scene."
   outfitIds:
-    - "sequin-bomber-jacket"
+  - sequin-bomber-jacket
   accessoryIds:
-    - "hand-sanitizer"
-
+  - hand-sanitizer
 gear:
   outfitIds: []
   outfitDescription: "Layered social attire for the San Francisco microclimate."
@@ -46,11 +42,9 @@ gear:
   travelDescription: "Commuter-friendly organization for SF social nights."
 
 relatedEvents:
-  - "boogie-by-the-bay"
-  - "mission-city-swing"
+- boogie-by-the-bay
+- mission-city-swing
 ---
-
-# Weekly Class
 
 Mission City Swing is the hub for WCS in San Francisco. Join us every Wednesday for classes and social dancing.
 

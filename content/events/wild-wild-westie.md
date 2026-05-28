@@ -1,25 +1,20 @@
 ---
 type: event
-title: "Wild Wild Westie"
-date: "2026-07-02"
-startDate: "2026-07-02"
-author: "Ariel Anders"
-category: "WSDC Registry Event"
-excerpt: "Dallas event. Book the hotel room block immediately as it fills fast."
-location: "Westin Dallas Fort Worth Airport"
-city: "Dallas, TX"
-region: "South"
-schedule: "July 2 - 5, 2026"
-url: "https://wildwildwestie.com"
-heroImage: "/assets/events/wild-wild-westie-hero.svg"
-description: "Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere."
-
+title: Wild Wild Westie
+date: '2026-07-02'
+startDate: '2026-07-02'
+author: Ariel Anders
+category: WSDC Registry Event
+excerpt: Dallas event. Book the hotel room block immediately as it fills fast.
+location: Westin Dallas Fort Worth Airport
+city: Dallas, TX
+region: South
+schedule: July 2 - 5, 2026
+url: https://wildwildwestie.com
+heroImage: /assets/events/wild-wild-westie-hero.svg
+description: Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere.
 whyAttending: >
-  Wild Wild Westie is legendary for its intense competition and high-octane
-  social dancing. If you want to test your skills against some of the best
-  dancers on the circuit while enjoying true Texas-sized hospitality, this
-  is the event for you.
-
+  Wild Wild Westie is legendary for its intense competition and high-octane social dancing. If you want to test your skills against some of the best dancers on the circuit while enjoying true Texas-sized hospitality, this is the event for you.
 theme:
   name: "Texas Spirit / Wild West"
   label: "Wild West Theme"
@@ -28,8 +23,7 @@ theme:
     - "sequin-bomber-jacket"
     - "rainbow-bustle"
   accessoryIds:
-    - "rave-fan"
-
+  - rave-fan
 gear:
   outfitIds:
     - "ombre-dance-dress"
@@ -58,12 +52,10 @@ hotelCutoffDate: ""
 packingReminderDate: ""
 
 relatedEvents:
-  - "boogie-by-the-bay"
-  - "jack-and-jill-orama"
-  - "phoenix-4th-of-july"
+- boogie-by-the-bay
+- jack-and-jill-orama
+- phoenix-4th-of-july
 ---
-
-# Wild Wild Westie
 
 Dallas event. Book the hotel room block immediately as it fills fast.
 

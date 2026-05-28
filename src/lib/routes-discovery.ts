@@ -54,9 +54,9 @@ export function getAllRoutes() {
   });
 
   // 1. Static routes from configuration (excluding parameterized and catch-all)
-  // Use canonicalPath if available, and filter out routes marked as sitemap: false
-  const staticRoutes = routes
-    .filter(r => r.sitemap !== false && r.path !== '*' && !r.path.includes(':'))
+  // Use canonicalPath if available
+  const allStaticRoutes = routes
+    .filter(r => r.path !== '*' && !r.path.includes(':'))
     .map(r => {
       let lastmod;
       if (contentLastModMap[r.path]) {
@@ -79,7 +79,8 @@ export function getAllRoutes() {
 
       return {
         path: resolveCanonical(r.path, r),
-        lastmod
+        lastmod,
+        sitemap: r.sitemap !== false
       };
     });
 
@@ -87,29 +88,37 @@ export function getAllRoutes() {
   // Use canonicalPath if available to avoid duplicates (e.g. /ux-auditor vs /research/ux-auditor)
   const toolRoutes = RESEARCH_TOOLS.map(tool => ({
     path: resolveCanonical(`/research/${tool.id}`, tool),
-    lastmod: getFileLastMod('src/config/research-tools.ts')
+    lastmod: getFileLastMod('src/config/research-tools.ts'),
+    sitemap: true
   }));
 
-  const allRoutes = [...staticRoutes, ...toolRoutes, ...contentRoutes];
+  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: true }));
+
+  const allRoutesRaw = [...allStaticRoutes, ...toolRoutes, ...contentRoutesMapped];
 
   // Deduplicate routes to ensure each path is only listed once, prioritizing the one with the most recent lastmod if duplicates exist
-  const uniqueRoutesMap = new Map<string, string>();
-  allRoutes.forEach(r => {
-    if (!uniqueRoutesMap.has(r.path) || r.lastmod > uniqueRoutesMap.get(r.path)!) {
-      uniqueRoutesMap.set(r.path, r.lastmod);
+  const uniqueRoutesMap = new Map<string, { lastmod: string, sitemap: boolean }>();
+  allRoutesRaw.forEach(r => {
+    const existing = uniqueRoutesMap.get(r.path);
+    if (!existing || r.lastmod > existing.lastmod) {
+      uniqueRoutesMap.set(r.path, { lastmod: r.lastmod, sitemap: r.sitemap });
     }
   });
 
-  const uniqueRoutes = Array.from(uniqueRoutesMap.entries()).map(([path, lastmod]) => ({
+  const uniqueRoutes = Array.from(uniqueRoutesMap.entries()).map(([path, info]) => ({
     path,
-    lastmod
+    ...info
   }));
 
+  const sitemapRoutes = uniqueRoutes.filter(r => r.sitemap);
+
   return {
-    static: staticRoutes.map(r => r.path),
+    static: allStaticRoutes.filter(r => r.sitemap).map(r => r.path),
     tools: toolRoutes.map(r => r.path),
     content: contentRoutes.map(r => r.path),
-    all: uniqueRoutes.map(r => r.path),
-    detailed: uniqueRoutes
+    stubs: uniqueRoutes.map(r => r.path),
+    sitemap: sitemapRoutes.map(r => r.path),
+    all: sitemapRoutes.map(r => r.path),
+    detailed: sitemapRoutes
   };
 }
