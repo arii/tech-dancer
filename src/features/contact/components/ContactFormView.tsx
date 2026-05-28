@@ -4,6 +4,7 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { inputs } from '@/styles/design-tokens';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { FormField } from './FormField';
+import { EmailForm } from '@/features/email-capture/EmailForm';
 import { cn } from '@/lib/utils';
 import type { BaseSyntheticEvent } from 'react';
 
@@ -123,6 +124,18 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
               </ActionButton>
             </Box>
           </Stack>
+        </Stack>
+
+        <Stack id="newsletter-section" gap={8} paddingTop={12} border="t" borderColor="line/50">
+          <Stack gap={2}>
+            <Text variant="headline" size="2xl" weight="font-black">Newsletter</Text>
+            <Text variant="body" size="base" color="main">
+              Prefer to just stay updated? Join the mailing list for monthly deep-dives into dance research, gear, and travel tips.
+            </Text>
+          </Stack>
+          <Box maxWidth="md">
+            <EmailForm />
+          </Box>
         </Stack>
       </Stack>
     </Box>
