@@ -8,20 +8,22 @@ describe('getAllRoutes', () => {
     expect(all.length).toBe(unique.size);
   });
 
-  it('should exclude /preview from the sitemap', () => {
-    const { all } = getAllRoutes();
-    expect(all).not.toContain('/preview');
+  it('should exclude /preview from the sitemap but include in stubs', () => {
+    const { sitemap, stubs } = getAllRoutes();
+    expect(sitemap).not.toContain('/preview');
+    expect(stubs).toContain('/preview');
   });
 
-  it('should exclude catch-all route', () => {
-    const { all } = getAllRoutes();
-    expect(all).not.toContain('*');
+  it('should exclude catch-all route from both sitemap and stubs', () => {
+    const { sitemap, stubs } = getAllRoutes();
+    expect(sitemap).not.toContain('*');
+    expect(stubs).not.toContain('*');
   });
 
   it('should use canonical path for UX Auditor', () => {
-    const { all } = getAllRoutes();
-    expect(all).toContain('/ux-auditor');
-    expect(all).not.toContain('/research/ux-auditor');
+    const { sitemap } = getAllRoutes();
+    expect(sitemap).toContain('/ux-auditor');
+    expect(sitemap).not.toContain('/research/ux-auditor');
   });
 
   it('should handle tool routes correctly', () => {

@@ -16,7 +16,7 @@ test.describe('accessibility', () => {
 
   test('homepage should not have any automatically detectable accessibility issues', async ({ page }) => {
     // Wait for hero animations to complete to ensure stable contrast checks
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
@@ -27,6 +27,7 @@ test.describe('accessibility', () => {
     // Open search modal
     await page.keyboard.press('Control+k');
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
+    await page.waitForTimeout(5000);
 
     const results = await new AxeBuilder({ page })
       .disableRules(['region', 'color-contrast'])
