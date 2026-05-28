@@ -15,22 +15,17 @@ heroImage: "/assets/events/boogie-by-the-bay-hero.svg"
 description: "One of the longest-running and most prestigious events in the world. Boogie by the Bay features the Champions/All-Star Jack & Jill, professional intensives, and a massive ballroom floor that hosts dancers from every corner of the globe."
 
 whyAttending: >
-  Boogie by the Bay is a cornerstone of the West Coast Swing calendar. It's where
-  tradition meets high-level competition, all in a beautiful setting. The atmosphere
-  is electric, especially during the Champions Jack & Jill, making it an unmissable
-  experience for any serious dancer.
-
+  Boogie by the Bay is a cornerstone of the West Coast Swing calendar. It's where tradition meets high-level competition, all in a beautiful setting. The atmosphere is electric, especially during the Champions Jack & Jill, making it an unmissable experience for any serious dancer.
 theme:
   name: "Classic San Francisco"
   label: "Flagship Theme"
   description: "Classic and sophisticated attire for San Francisco's premier dance weekend."
   outfitIds:
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
+  - sequin-bomber-jacket
+  - ombre-dance-dress
   accessoryIds:
-    - "rainbow-earrings"
-    - "rave-fan"
-
+  - rainbow-earrings
+  - rave-fan
 gear:
   outfitIds:
     - "sequin-bomber-jacket"
@@ -61,12 +56,10 @@ hotelCutoffDate: ""
 packingReminderDate: ""
 
 relatedEvents:
-  - "jack-and-jill-orama"
-  - "swingtacular-the-galactic-open"
-  - "wild-wild-westie"
+- jack-and-jill-orama
+- swingtacular-the-galactic-open
+- wild-wild-westie
 ---
-
-# Boogie by the Bay
 
 The flagship event of The Next Generation Swing Dance Club, held every Columbus Day weekend.
 

@@ -14,7 +14,9 @@ export function getEventSchema(event: Event) {
     : undefined;
 
   // Split city and state (e.g., "Burlingame, CA")
-  const [locality, region] = event.city.split(',').map(s => s.trim());
+  const parts = (event.city || '').split(',').map(s => s.trim());
+  const locality = parts[0] || '';
+  const region = parts[1];
 
   return {
     "@context": "https://schema.org",
