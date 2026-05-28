@@ -35,12 +35,20 @@ theme:
     - "#0000FF"
     - "#4B0082"
     - "#8B00FF"
+  outfitIds:
+    - "rainbow-bustle"
+    - "rainbow-sequin-bomber-jacket"
+  accessoryIds:
+    - "rainbow-earrings"
+    - "pride-sunglasses"
+    - "rainbow-bob-wig"
+    - "led-scrunchies"
+
 # ── Curated Gear ───────────────────────────────────────
 gear:
   outfitIds:
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
     - "rainbow-sequin-bomber-jacket"
-    - "rainbow-bustle-skirt"
   outfitDescription: "Statement pieces for the main event and social dancing."
   accessoryIds:
     - "rainbow-earrings"

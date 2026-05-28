@@ -40,9 +40,29 @@ theme:
     - "#008026"
     - "#004DFF"
     - "#750787"
+  outfitIds:
+    - "rainbow-bustle"
+    - "sequin-bomber-jacket"
+    - "ombre-dance-dress"
+    - "love-neon-follow-shirt"
+    - "love-neon-lead-shirt"
+    - "war-eagle-shirt"
+    - "love-neon-switch-shirt"
+    - "norcal-bear-tank"
+    - "norcal-crop-top"
+    - "norcal-gate-crop-hoodie"
+    - "norcal-pride-gate-shirt"
+    - "norcal-pride-bear-shirt"
+    - "love-unisex-shirt"
+    - "norcal-bestcal-tshirt"
+  accessoryIds:
+    - "rainbow-earrings"
+    - "pride-sunglasses"
+    - "rainbow-fan"
+
 gear:
   outfitIds:
-    - "rainbow-fringe-dress"
+    - "rainbow-bustle"
     - "sequin-bomber-jacket"
     - "ombre-dance-dress"
     - "love-neon-follow-shirt"
@@ -80,9 +100,9 @@ gear:
     - "mints"
   travelDescription: "Packing gear for a busy weekend near Disneyland."
 
-earlyBirdDate: "2026-02-24"
-registrationDeadline: "2026-06-03"
-hotelCutoffDate: "2026-05-12"
+earlyBirdDate: "2026-04-15"
+registrationDeadline: "2026-05-31"
+hotelCutoffDate: "2026-05-15"
 packingReminderDate: "2026-05-25"
 
 relatedEvents:
@@ -97,17 +117,7 @@ This is my flagship one-stop Rainbow guide for JJO: why this event matters, what
 
 ## Community Reviews
 
-> "JJO is the 'vibe' event of SoCal. Ben Morris always adds creative competition formats that keep things fresh. The social dancing is top-tier, and the location is basically on Disneyland's doorstep." — *California Local*
 
-> "The finals watch parties are legendary. It's one of the few events that feels like a massive community celebration as much as it does a competition." — *Pro Lead*
-
-## Gear Spotlight: Rainbow Essentials
-
-### Rainbow Fringe Dance Dress
-> "This was the hit of the JJO Rainbow night! The fringe adds so much energy to every swing and extension. It's surprisingly breathable, which is key for those 2 a.m. social sets." — *Customer Review*
-
-### Sequin Bomber Jacket
-> "SoCal nights can get a bit chilly in the hotel hallways, and this jacket is the perfect way to stay warm while staying completely on-theme. The sequins look amazing under the ballroom lights." — *Verified Purchase*
 
 ## NorCal BestCal Merch Picks
 

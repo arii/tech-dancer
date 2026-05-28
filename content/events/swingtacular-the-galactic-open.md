@@ -28,6 +28,12 @@ theme:
     - "#6366f1"
     - "#a855f7"
     - "#ec4899"
+  outfitIds:
+    - "sequin-bomber-jacket"
+    - "rainbow-bustle"
+  accessoryIds:
+    - "rave-fan"
+    - "pride-sunglasses"
 
 gear:
   outfitIds:
@@ -68,9 +74,7 @@ San Francisco event. Check for roommate pairings on the Facebook group early.
 
 ## Community Reviews
 
-> "The production value is insane. It's not just a dance event; it's a visual experience. Saturday night feels like a futuristic rave where everyone happens to be world-class at West Coast Swing." — *Frequent Attendee*
 
-> "Best lighting on the circuit, hands down. The Hyatt ballroom is huge, and they really know how to fill it with energy." — *Pro Dancer*
 
 ## Pro Tips
 
@@ -79,10 +83,3 @@ San Francisco event. Check for roommate pairings on the Facebook group early.
 - **Food Options:** The hotel restaurant is convenient but can be pricey. There are several good dining options within a short Uber ride in Burlingame.
 - **Production:** Make sure to be in the ballroom for the Saturday night shows—the production quality is some of the best in the business.
 
-## Gear Spotlight: Alien Essentials
-
-### Loop Experience Earplugs
-> "As a lead who spends 8+ hours a day in the ballroom, these are a lifesaver. Swingtacular has *huge* sound, and these take the edge off without losing the music's clarity." — *Amazon Review*
-
-### Sequin Bomber Jacket
-> "Perfect for the Alien theme! It catches the lasers in the Swingtacular ballroom beautifully. Lightweight enough to dance in all night." — *Customer Review*
