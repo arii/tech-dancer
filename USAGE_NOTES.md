@@ -59,8 +59,8 @@ Technical debt is tracked using **GitHub Actions Variables** instead of local fi
 When a PR intentionally and legitimately increases one of these metrics, an admin must update the baseline in GitHub after the PR is merged:
 
 ```bash
-# Update bundle size baseline to 3080KB
-gh variable set BUNDLE_BASELINE_KB --body 3080
+# Update bundle size baseline to 3090KB
+gh variable set BUNDLE_BASELINE_KB --body 3090
 
 # Update 'any' count baseline to 50
 gh variable set ANY_COUNT_BASELINE --body 50
