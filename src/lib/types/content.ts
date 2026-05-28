@@ -37,12 +37,6 @@ export interface Resource {
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
-  shopUrl?: string;
-  displayMode?: string;
-  featuredSide?: string;
-  shopUrl?: string;
-  displayMode?: string;
-  featuredSide?: string;
   durability?: number;
   value?: number;
   specs?: Record<string, string>;
