@@ -104,11 +104,15 @@ export function withSimulationDelay<T>(fn: () => T | Promise<T>, delayMs = 800) 
  * strings are parsed as local time instead of UTC to prevent off-by-one errors.
  */
 export function parseDate(dateStr: string): Date {
+  if (!dateStr) return new Date();
   if (dateStr.includes('T')) {
     return new Date(dateStr);
   }
   // For YYYY-MM-DD, parse as local
-  const [year, month, day] = dateStr.split('-').map(Number);
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return new Date(dateStr);
+
+  const [year, month, day] = parts.map(Number);
   return new Date(year, month - 1, day);
 }
 
