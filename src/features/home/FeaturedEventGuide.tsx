@@ -54,6 +54,8 @@ export function FeaturedEventGuide() {
           <img
             src={event.heroImage}
             alt={event.title}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover object-top"
           />
           {/* Subtle gradient at bottom to soften any embedded text */}
