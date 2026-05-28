@@ -5,9 +5,9 @@ import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
 const PICKS = [
-  { label: 'Earplugs', image: null, imageText: '📷 loop-earplugs.jpg', href: '/gear/2023-10-01-loop-earplugs' },
-  { label: 'Steamer', image: null, imageText: '📷 travel-steamer.jpg', href: '/gear/2023-11-01-travel-steamer' },
-  { label: 'Portable Speaker', image: null, imageText: '📷 ue-wonderboom.jpg', href: '/gear/2024-01-01-portable-speaker' },
+  { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.jpg', href: '/gear/2023-10-01-loop-earplugs' },
+  { label: 'Steamer', image: '/images/gear/sketches/travel-steamer.jpg', href: '/gear/2023-11-01-travel-steamer' },
+  { label: 'Portable Speaker', image: '/images/gear/sketches/ue-wonderboom.jpg', href: '/gear/2024-01-01-portable-speaker' },
 ];
 
 export function GearShelf() {
