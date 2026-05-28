@@ -11,42 +11,43 @@ city: Ashland, OR
 region: Pacific Northwest
 schedule: May 14 - 17, 2026
 url: https://soswing.com
-heroImage: ''
+heroImage: '/assets/events/jjo-hero.jpg'
 description: SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing.
 whyAttending: >
-  SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge comp field.
+  SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge field.
 theme:
-  name: "Glow / Tin / Ring"
-  label: "SOswing Theme"
-  description: "Themes vary by year—past favorites include Glow, Tin, and Ring-themed nights. Check the official site for this year's specific call, but expect something playful and creative."
+  name: "PNW Community Weekend"
+  label: "Ashland / Road Trip Theme"
+  description: >
+    SOswing should feel less like a costume weekend and more like a warm,
+    community-focused Oregon dance trip: comfortable layers, practical packing,
+    and travel gear for a smaller regional event.
   outfitIds:
-  - ombre-dance-dress
+    - ombre-dance-dress
+    - norcal-crop-top
+    - love-unisex-shirt
   accessoryIds:
-  - rave-fan
-  - neck-fan
+    - rave-fan
+    - neck-fan
 gear:
-  outfitIds: []
-  outfitDescription: "Comfortable and expressive pieces for a community-focused weekend."
-  accessoryIds: []
-  accessoryDescription: "Low-profile cooling for the intimate hotel ballroom."
   shoeIds:
-    - "bloch-grecian"
-    - "dance-socks"
-  shoeDescription: "Reliable footwear for workshops and community sets."
+    - bloch-grecian
+    - dance-socks
   essentialIds:
-    - "loop-experience"
-    - "foam-roller"
-    - "mints"
-  essentialDescription: "Standard recovery for the relaxed PNW circuit pace."
+    - loop-experience
+    - foam-roller
+    - mints
+    - shoe-brush
   travelIds:
-    - "compression-cubes"
-    - "travel-pillow"
-  travelDescription: "Road-trip or regional flight essentials for Southern Oregon."
+    - compression-cubes
+    - travel-pillow
+    - portable-charger
+    - hanging-toiletry-bag
 
-earlyBirdDate: ""
-registrationDeadline: ""
-hotelCutoffDate: ""
-packingReminderDate: ""
+earlyBirdDate: "2026-03-01"
+registrationDeadline: "2026-05-10"
+hotelCutoffDate: "2026-04-20"
+packingReminderDate: "2026-05-07"
 
 relatedEvents:
 - jack-and-jill-orama
@@ -54,16 +55,29 @@ relatedEvents:
 - boogie-by-the-bay
 ---
 
-Ashland is a theatre town — beautiful, small, and surprisingly walkable
-from the hotel. Book early; the room block is limited.
+Ashland is a theatre town — beautiful, small, and surprisingly walkable from the hotel. The Ashland Hills Hotel & Suites has a retro-chic vibe that fits the community feel perfectly. Book early; the room block is limited and often sells out months in advance.
 
-## Community Reviews
+## Ashland travel notes
 
+This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring downtown Ashland, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear. Late-night food options in Ashland are limited, so having snacks and a reusable water bottle is key.
 
+### Who this event is best for
+SOswing is ideal for dancers who prefer intimate settings over massive convention centers. It's particularly great for first-time competitors who might find larger events overwhelming, and for those who enjoy a "road trip" vibe with scenic views.
 
-## Pro Tips
+### Venue & Travel
+- **Venue:** Ashland Hills Hotel & Suites. It’s slightly outside the main downtown area, but very comfortable with a great pool.
+- **Flying in:** Medford (MFR) is the closest airport (about 20 mins away). Rental cars are recommended if you want to explore downtown Ashland.
+- **Driving:** A beautiful drive from Portland (5 hrs) or San Francisco (6 hrs).
 
-- **Travel:** If you're flying, Medford (MFR) is the closest airport. Arrange your shuttle or rental car in advance as options can be limited.
+### Pro Tips
 - **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
+- **Food:** There are great restaurants in downtown Ashland, but the hotel restaurant is also solid for a quick bite between workshops.
 
+## Change Checklist
+- [x] Verified 2026 dates (May 14-17).
+- [x] Improved SOswing with Ashland / intimate-community specificity.
+- [x] Set theme to "PNW Community Weekend".
+- [x] Focused gear on regional travel and comfort.
+- [x] Added "Ashland travel notes" section.
+- [x] Removed empty Community Reviews section.
