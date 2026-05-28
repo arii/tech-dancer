@@ -60,7 +60,7 @@ When a PR intentionally and legitimately increases one of these metrics, an admi
 
 ```bash
 # Update bundle size baseline to 3100KB
-gh variable set BUNDLE_BASELINE_KB --body 3100
+gh variable set BUNDLE_BASELINE_KB --body 3080
 
 # Update 'any' count baseline to 50
 gh variable set ANY_COUNT_BASELINE --body 50
