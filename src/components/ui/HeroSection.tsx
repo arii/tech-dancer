@@ -50,7 +50,7 @@ export function HeroSection() {
       >
 
 
-        <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" />
+        <Wordmark variant="hero" className="pointer-events-none hero-logo-anim" />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
@@ -58,7 +58,7 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 pointer-events-auto hero-headline-anim"
+          className="pointer-events-auto hero-headline-anim"
         >
           <Text
             as="span"
