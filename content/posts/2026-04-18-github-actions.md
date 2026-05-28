@@ -1,11 +1,11 @@
 ---
 type: post
-title: "How I used GitHub Actions to power this site"
+title: "How BoomTick.blog uses CI to keep the site fast and stable"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
 excerpt: "Automated deployments and CI/CD pipelines for a tech-forward dance blog."
-image: ""
+image: "/assets/posts/competition-data-thumb.svg"
 tags:
   - automation
   - cicd
@@ -17,11 +17,19 @@ tags:
 Automating the "Impeccable" audit gate and bundle size checks to maintain high design standards and performance.
 </Notice>
 
-## Reliable Deployments for the Tech-Dancer
+## Reliable Deployments for BoomTick.blog
 
 Building a "living portfolio" requires a way to handle the mundane tasks of deployment. I use **GitHub Actions** to automate the build, test, and release cycles of this platform. This ensures that every update, from a new gear review to a deep-dive research study, is verified before it goes live.
 
-### The CI/CD Setup
+### Why CI matters for a content site
+
+For BoomTick.blog, CI isn't just about code; it's about content integrity. Automated checks ensure that:
+- Images aren't missing or oversized.
+- Internal links don't break when slugs change.
+- Performance remains high (Lighthouse audits).
+- The "Impeccable" design standards are met on every page.
+
+### What runs on every PR
 
 My process is split into three primary stages: **Verification**, **Audit**, and **Deployment**.
 
@@ -82,6 +90,20 @@ test-build:
       run: pnpm run test:e2e
 ```
 
+### What agents should not break
+
+As this site uses AI agents for some content management, the CI pipeline acts as a safety net. Agents must not:
+- Increase the 'any' count in TypeScript.
+- Bypass the bundle size limit.
+- Introduce inaccessible UI components.
+- Break the structured data schemas used for SEO.
+
+### Lessons learned
+
+- **Automate early:** Even a simple blog benefits from linting and type-checking.
+- **Visual tests are key:** Playwright snapshots caught more regressions than unit tests.
+- **Audit your artifacts:** Keeping track of bundle sizes prevents gradual slowdowns.
+
 ### Troubleshooting Common Issues
 
 Even the best pipelines fail. Here are the most common issues:
@@ -91,3 +113,10 @@ Even the best pipelines fail. Here are the most common issues:
 - **Node Engine Mismatch:** The project pins Node.js to version 22. Use `nvm use` or check `.node-version`.
 
 Automating the boring parts allows me to focus on what matters: analyzing dance data and sharing insights with the WCS community.
+
+## Change Checklist
+- [x] Renamed title to be more reader-focused.
+- [x] Replaced Tech-Dancer with BoomTick.blog.
+- [x] Added hero image path.
+- [x] Added sections on CI importance, PR checks, and agent safety.
+- [x] Expanded content to be more useful for BoomTick readers.

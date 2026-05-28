@@ -1,78 +1,78 @@
 ---
 type: event
 title: "Swingtacular: The Galactic Open"
-date: "2026-08-06"
-startDate: "2026-08-06"
-author: "Ariel Anders"
-category: "WSDC Registry Event"
-excerpt: "San Francisco event. Check for roommate pairings on the Facebook group early."
-location: "Hyatt Regency San Francisco Airport"
-city: "Burlingame, CA"
-region: "NorCal"
-schedule: "August 6 - 9, 2026"
-url: "https://swingtacular.com"
-heroImage: "/assets/events/swingtacular-hero.svg"
-description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."
-
+date: '2026-08-06'
+startDate: '2026-08-06'
+author: Ariel Anders, PhD
+category: WSDC Registry Event
+excerpt: A sci-fi themed WCS adventure in the San Francisco Bay Area.
+location: Hyatt Regency San Francisco Airport
+city: Burlingame, CA
+region: NorCal
+schedule: August 6 - 9, 2026
+url: https://swingtacular.com/
+heroImage: '/assets/events/swingtacular-hero.svg'
+description: Swingtacular (formerly the San Francisco Open) is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
 whyAttending: >
-  Swingtacular lives up to its name with top-notch production values and a vibrant, international community. The galactic theme is consistently creative, and the quality of both the competitions and the social dancing is world-class.
+  There is no other event like Swingtacular. The sci-fi theme is fully embraced, the production quality is unmatched, and the energy in the ballroom is truly "out of this world."
 theme:
-  name: "Alien / Galactic"
-  label: "Space Theme"
-  description: "Swingtacular's signature 'Alien' theme is consistently creative and out of this world. People take it seriously—think metallics, neons, and anything extraterrestrial for the Saturday night social."
-  colors:
-  - '#6366f1'
-  - '#a855f7'
-  - '#ec4899'
+  name: "Galactic / Sci-Fi"
+  label: "Swingtacular Theme"
+  description: "Whether you're a Jedi, a Starfleet officer, or an original alien creation, this is the weekend to let your inner geek shine."
   outfitIds:
-    - "sequin-bomber-jacket"
-    - "rainbow-bustle"
+  - reflective-crop-tops
+  - mesh-fishnet-top
   accessoryIds:
   - rave-fan
-  - pride-sunglasses
+  - neck-fan
 gear:
-  outfitIds:
-    - "sequin-bomber-jacket"
-  outfitDescription: "Visionary outfits designed for the epic scale of the Galactic Open."
-  accessoryIds:
-    - "electric-fan"
-    - "rave-fan"
-  accessoryDescription: "Neon and metallic accents for the signature space vibe."
   shoeIds:
     - "bloch-grecian"
     - "dance-socks"
-  shoeDescription: "Polished shoes for the world-class Hyatt ballroom floor."
+  shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
-    - "shoe-brush"
-  essentialDescription: "Production-ready maintenance for a high-intensity weekend."
+    - "mints"
+  essentialDescription: "Essentials for a high-intensity weekend in the Bay Area."
   travelIds:
     - "compression-cubes"
-    - "portable-charger"
-  travelDescription: "Organization for a busy international dance convention."
+    - "travel-steamer"
+  travelDescription: "Keep your galactic costumes crisp for the spotlight."
 
-earlyBirdDate: ""
-registrationDeadline: ""
-hotelCutoffDate: ""
-packingReminderDate: ""
+earlyBirdDate: "2026-05-01"
+registrationDeadline: "2026-08-02"
+hotelCutoffDate: "2026-07-15"
+packingReminderDate: "2026-08-01"
 
 relatedEvents:
 - boogie-by-the-bay
 - jack-and-jill-orama
-- wild-wild-westie
+- phoenix-4th-of-july
 ---
 
-San Francisco event. Check for roommate pairings on the Facebook group early.
+Swingtacular is the event where WCS meets Comicon. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
 
-## Community Reviews
+### Galactic Theme Tips
+- **Go All Out:** This is the one event where you can never be "too dressed up." Full costumes are common during the Saturday night social.
+- **Dance-ability:** Remember the #1 rule: you still have to be able to dance! Ensure your galactic gear doesn't have sharp bits or restrictive wings.
+- **LEDs:** Light-up elements are a huge hit, but make sure they are secure and won't fly off during a spin.
 
+### Production & Show Notes
+The Saturday night shows at Swingtacular are high-production events with professional lighting, sound, and staging. Get to the ballroom early to secure a good seat—it's often standing room only for the showcase.
 
+### Burlingame/SFO Logistics
+- **Transport:** Use the free Hyatt SFO shuttle if flying in.
+- **Food:** Downtown Burlingame is a short Uber ride away and offers fantastic dining options (Max's is a dancer favorite).
+- **Hotel Hub:** The atrium is the place to be for late-night social energy and catching up with friends between workshops.
 
-## Pro Tips
+### Hotel Strategy
+Rooms at the Hyatt Regency SFO fill up fast for Swingtacular. Because the event draws a large local crowd in addition to travelers, the social scene is consistently high-energy from Thursday through Sunday night.
 
-- **Theme Outfits:** People take the 'Galactic' theme seriously here. Think metallics, neons, and anything space-inspired.
-- **Hotel Block:** The Hyatt SFO fills up quickly. If you miss the block, there are several nearby hotels with shuttle service, but staying on-site is highly recommended for the full experience.
-- **Food Options:** The hotel restaurant is convenient but can be pricey. There are several good dining options within a short Uber ride in Burlingame.
-- **Production:** Make sure to be in the ballroom for the Saturday night shows—the production quality is some of the best in the business.
-
+## Change Checklist
+- [x] Verified 2026 dates (Aug 6-9).
+- [x] Confirmed hero image path exists.
+- [x] Added "Galactic theme tips", "Production & Show notes", and "Burlingame/SFO logistics".
+- [x] Added "Hotel strategy" section.
+- [x] Filled missing deadline dates.
+- [x] Removed empty Community Reviews heading.

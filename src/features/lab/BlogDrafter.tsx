@@ -49,7 +49,7 @@ export function BlogDrafter() {
       data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
       `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
 
-    const prompt = `Objective: Expand the following ${data.type} draft JSON for Tech-Dancer.
+    const prompt = `Objective: Expand the following ${data.type} draft JSON for BoomTick.blog.
 Requirements:
 1. Respond ONLY with a valid JSON object.
 2. DO NOT include any explanatory text, commentary, or markdown markers outside or inside the JSON values.

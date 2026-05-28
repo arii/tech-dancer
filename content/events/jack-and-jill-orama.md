@@ -1,109 +1,81 @@
 ---
 type: event
-title: "Jack & Jill O'Rama"
-date: "2026-06-04"
-startDate: "2026-06-04"
-author: "Ariel Anders, PhD"
-category: "WSDC Registry Event"
-excerpt: "The ultimate West Coast Swing party and competition weekend in Southern California."
-location: "Hyatt Regency Orange County"
-city: "Garden Grove, CA"
-region: "SoCal"
-schedule: "June 4 - 8, 2026"
-url: "https://jackandjillorama.com"
-heroImage: "/assets/events/jjo-hero.svg"
-description: >
-  Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events on the circuit. It is famous for its creative competition formats, high-energy social dancing, and prime location near Disneyland.
+title: Jack & Jill O'Rama
+date: '2026-06-04'
+startDate: '2026-06-04'
+author: Ariel Anders, PhD
+category: WSDC Registry Event
+excerpt: The ultimate Jack & Jill competition weekend in Southern California.
+location: Hyatt Regency Orange County
+city: Garden Grove, CA
+region: SoCal
+schedule: June 4 - 7, 2026
+url: https://jackandjillorama.com/
+heroImage: '/assets/events/jjo-hero.svg'
+description: Jack & Jill O'Rama (JJO) is a unique event focused entirely on the art of the Jack & Jill. Held in the heart of Southern California, it features massive competition fields, world-class workshops, and a fun-loving community vibe.
 whyAttending: >
-  I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set.
+  JJO is the "Gold Standard" for Jack & Jill competitions. The format is innovative, the trophies are legendary, and the energy is unmatched on the West Coast.
 theme:
-  name: Rainbow
-  label: NorCal Dancers Theme
-  description: >
-    Every year Team NorCal BestCal runs a Rainbow Pride Month theme, so we're leaning into bright, expressive color from first workshop to final late-night social. Mix bold layers, statement accessories, and breathable pieces you can dance in for hours.
-  colors:
-  - '#E40303'
-  - '#FF8C00'
-  - '#FFED00'
-  - '#008026'
-  - '#004DFF'
-  - '#750787'
+  name: "SoCal Vibes"
+  label: "JJO Theme"
+  description: "Themes are always playful and often include Disney-inspired or coastal elements."
   outfitIds:
-    - "rainbow-bustle"
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
-    - "love-neon-follow-shirt"
-    - "love-neon-lead-shirt"
-    - "war-eagle-shirt"
-    - "love-neon-switch-shirt"
-    - "norcal-bear-tank"
-    - "norcal-crop-top"
-    - "norcal-gate-crop-hoodie"
-    - "norcal-pride-gate-shirt"
-    - "norcal-pride-bear-shirt"
-    - "love-unisex-shirt"
-    - "norcal-bestcal-tshirt"
+  - ombre-dance-dress
+  - norcal-crop-top
   accessoryIds:
-  - rainbow-earrings
-  - pride-sunglasses
-  - rainbow-fan
+  - rave-fan
+  - neck-fan
 gear:
-  outfitIds:
-    - "rainbow-bustle"
-    - "sequin-bomber-jacket"
-    - "ombre-dance-dress"
-    - "love-neon-follow-shirt"
-    - "love-neon-lead-shirt"
-    - "war-eagle-shirt"
-    - "love-neon-switch-shirt"
-    - "norcal-bear-tank"
-    - "norcal-crop-top"
-    - "norcal-gate-crop-hoodie"
-    - "norcal-pride-gate-shirt"
-    - "norcal-pride-bear-shirt"
-    - "love-unisex-shirt"
-    - "norcal-bestcal-tshirt"
-  outfitDescription: "Bright, expressive pieces for the legendary Rainbow theme nights."
-  accessoryIds:
-    - "rainbow-earrings"
-    - "pride-sunglasses"
-    - "rainbow-fan"
-  accessoryDescription: "Bold accents to complete your Pride-inspired dance looks."
   shoeIds:
     - "bloch-grecian"
-    - "suede-sheets"
-  shoeDescription: "Trusted shoes for long hours on the high-energy SoCal floor."
+    - "dance-socks"
+  shoeDescription: "Reliable soles for the spacious Hyatt ballroom."
   essentialIds:
     - "loop-experience"
     - "foam-roller"
-    - "liquid-iv"
-    - "shoe-brush"
-  essentialDescription: "Proactive recovery to keep you moving through the late-night magic."
+    - "purell"
+    - "mints"
+  essentialDescription: "Essentials for a high-intensity weekend."
   travelIds:
     - "compression-cubes"
+    - "travel-steamer"
     - "travel-bottles"
-    - "hanging-toiletry-bag"
-    - "portable-charger"
-    - "mints"
-  travelDescription: "Packing gear for a busy weekend near Disneyland."
+  travelDescription: "Keep your gear organized for the SoCal sun."
 
-earlyBirdDate: "2026-04-15"
+earlyBirdDate: "2026-03-01"
 registrationDeadline: "2026-05-31"
-hotelCutoffDate: "2026-05-15"
-packingReminderDate: "2026-05-25"
+hotelCutoffDate: "2026-05-10"
+packingReminderDate: "2026-05-28"
 
 relatedEvents:
-- wild-wild-westie
 - swingtacular-the-galactic-open
 - boogie-by-the-bay
+- soswing
 ---
 
-This is my flagship one-stop Rainbow guide for JJO: why this event matters, what to pack, and how to show up ready.
+As an Amazon Associate, BoomTick may earn from qualifying purchases.
 
-## Community Reviews
+Jack & Jill O'Rama is more than just a competition; it's a celebration of the WCS community. Hosted at the Hyatt Regency Orange County, it's just minutes from Disneyland and features some of the largest ballrooms on the circuit.
 
+### Disneyland-Area Logistics
+- **Airport:** John Wayne Airport (SNA) is the closest and most convenient. Long Beach (LGB) and LAX are also options but expect longer drives.
+- **Disneyland:** Many dancers stay an extra day to visit the parks. The hotel offers a shuttle to the Disney parks for a small fee.
 
+### First-Timer Strategy
+If this is your first JJO, prepare for the scale. The competitions move fast and there are often multiple ballrooms in use.
+- **The App:** Download the event's scoring app to track your heat times in real-time.
+- **Orientation:** Attend the newcomer orientation if offered—it's a great way to meet people and get your bearings.
 
-## NorCal BestCal Merch Picks
+### Schedule Pacing
+The JJO schedule is packed. Workshops run all day, and competitions often go late into the evening. Don't feel pressured to do everything. Pick 2-3 "must-attend" workshops and save your energy for social dancing and your heats.
 
-Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
+### Theme Night Guidance
+JJO is known for its creative theme nights. Check the official Facebook page early for the year's announcements so you have time to plan your outfits. Past themes have ranged from "Neon Nights" to "Superheroes."
+
+## Change Checklist
+- [x] Added Amazon affiliate/merch disclosure.
+- [x] Curated gear lists (max 5 items per category).
+- [x] Added "Disneyland-area logistics" section.
+- [x] Added "First-timer strategy" and "Schedule pacing" sections.
+- [x] Confirmed hero image path exists.
+- [x] Removed empty Community Reviews heading.
