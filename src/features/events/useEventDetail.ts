@@ -22,7 +22,7 @@ export interface ResolvedGearSection {
 export function resolveAffiliateLinks(ids: string[] = []): AffiliateLink[] {
   return ids
     .map((id) => affiliateManager.getLink(id))
-    .filter((l): l is AffiliateLink => !!l);
+    .filter((l): l is AffiliateLink => !!l && !l.draft);
 }
 
 /**
