@@ -20,8 +20,8 @@ theme:
   label: "Patriotic Theme"
   description: "Expressive patriotic looks for the legendary Red, White & Blue celebration. Think flags, stars, stripes, and anything that screams summer holiday."
   outfitIds:
-  - rainbow-fringe-dress
-  - sequin-bomber-jacket
+    - "rainbow-bustle"
+    - "sequin-bomber-jacket"
   accessoryIds:
   - pride-sunglasses
   - rave-fan
@@ -62,9 +62,7 @@ Celebrate Independence Day at one of the most luxurious resorts on the swing cir
 
 ## Community Reviews
 
-> "The pool party is absolutely legendary. There's nothing like dancing in Scottsdale with a cocktail in hand and the best dancers in the world nearby. It's the ultimate 'vacation' event." — *Travel Dancer*
 
-> "The Paradise Ballroom is stunning, but honestly, the fireworks over the resort are what make this a core memory every year." — *Event Regular*
 
 ## Pro Tips
 
@@ -73,10 +71,3 @@ Celebrate Independence Day at one of the most luxurious resorts on the swing cir
 - **Pool Party:** The All-Star Pool Party is legendary. It happens during the day, so bring plenty of sunscreen and a hat.
 - **Fireworks:** The resort hosts a spectacular fireworks display on the 4th. Find a good spot early for the best view!
 
-## Gear Spotlight: Patriotic Essentials
-
-### Liquid I.V. Hydration Multiplier
-> "Absolute necessity for Phoenix in July. I drank one of these every morning before the workshops and another before the pool party. Kept me from crashing in the 110-degree heat." — *Amazon Review*
-
-### Neck Fan
-> "Game changer for the outdoor pool party. While everyone else was melting, I had my own personal breeze. It's quiet enough that I could still hear the music and talk to my friends." — *Verified Purchase*

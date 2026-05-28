@@ -29,17 +29,18 @@ theme:
   - '#4B0082'
   - '#8B00FF'
   outfitIds:
-  - rainbow-fringe-dress
-  - rainbow-sequin-bomber-jacket
-  - rainbow-bustle-skirt
+    - "rainbow-bustle"
+    - "rainbow-sequin-bomber-jacket"
   accessoryIds:
   - rainbow-earrings
   - pride-sunglasses
   - rainbow-bob-wig
   - led-scrunchies
 gear:
-  outfitIds: []
-  outfitDescription: Statement pieces for the main event and social dancing.
+  outfitIds:
+    - "rainbow-bustle"
+    - "rainbow-sequin-bomber-jacket"
+  outfitDescription: "Statement pieces for the main event and social dancing."
   accessoryIds:
   - holographic-rave-fan
   accessoryDescription: Pop of color and functional flair to keep you cool.

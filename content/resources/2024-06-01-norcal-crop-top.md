@@ -7,12 +7,10 @@ category: "fashion"
 excerpt: "Stylish cropped top for NorCal dancers."
 image: "/assets/gear/norcal-crop-top-front.webp"
 imageBack: "/assets/gear/norcal-crop-top-back.webp"
-affiliateIds: ["norcal-crop-top"]
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Trendy & Airy"
-priceCategory: "$$"
 updatedDate: "June 2024"
+shopUrl: https://boomtick.printful.me/norcal-crop-top
 ---
 
 A stylish crop top designed for movement and regional pride.

@@ -53,11 +53,24 @@ relatedEvents:
 
 Weekly social dance in San Jose.
 
-## Community Reviews
+## Attendance Frequency
+Wednesdays: I drop in for the points class and stay for the social dance.
 
-> "The South Bay's home for West Coast Swing. It's where most of us started, and it's where we keep coming back for the great floor and the even better people." — *San Jose Local*
+Sundays: I occasionally use the afternoon practice space to drill concepts at my own pace.
 
-> "The level of instruction here is top-notch. They bring in amazing guest pros, but the core community is what really makes it special every Wednesday night." — *Advanced Dancer*
+## Review: Mission City Swing
+**Where My West Coast Swing Journey Began**
+
+I started my West Coast Swing journey at Mission City Swing, and it remains the anchor of my weekly routine. I completed their entire core curriculum—spanning Levels 1 through 4—and even auditioned into the upper tiers as both a leader and a follower. These days, I skip the regular lessons, but I still pop into the beginner class to support the new dancers before jumping into the main event.
+
+*   **Unmatched Frequency:** I rely on MCS for consistency. They host a high-quality venue every single Wednesday night, alongside dedicated Sunday afternoon practice sessions. Having this predictable schedule makes keeping my skills sharp effortless.
+*   **Genuine Community:** This non-profit, community-run space focuses entirely on dancer growth and inclusion. I built my foundational dance network here. The welcoming atmosphere creates a zero-ego space where local regulars and visiting dancers actually focus on the connection.
+*   **Inspirational Music:** The DJs consistently deliver. They spin a brilliant mix of contemporary tracks, deep blues, and structural rhythm changes. This music actually drives creative expression and solid connection, rather than just repeating predictable radio hits.
+
+**The Advanced Track**
+For dancers looking to push their technique, MCS brings in champion instructors like Melissa Rutz to teach the specialized "Points Class." You need at least one WSDC point to attend, which keeps the room high-density, fast-paced, and filled with solid social dancers.
+
+Whether you are stepping into your first leveled series or looking to train with top-tier pros, MCS delivers the gold standard for weekly West Coast Swing in the Bay Area.
 
 ## Pro Tips
 

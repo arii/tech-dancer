@@ -65,20 +65,11 @@ The flagship event of The Next Generation Swing Dance Club, held every Columbus 
 
 ## Community Reviews
 
-> "The Champions Jack & Jill at Boogie is the gold standard. Seeing that many world-class dancers on one floor with the SF Bay as a backdrop (from the Hyatt) is unforgettable." — *International Competitor*
 
-> "This is where WCS history meets the next generation. It's a prestigious, well-run event with an incredible atmosphere. The Sunday night social dancing is the stuff of legends." — *Dance Historian*
 
 ## Pro Tips
 
 - **Room Location:** The Hyatt Regency SFO is massive. Request a room near the elevators if you want to minimize the walk to the ballroom.
 - **SF Weather:** San Francisco in October is often beautiful, but the bay breeze is real. Bring a light jacket for any ventures outside the hotel.
 
-## Gear Spotlight: Flagship Essentials
-
-### Ombre Flowy Dance Dress
-> "I wore this for the Boogie social and got so many compliments! The way the fabric moves makes every turn look sophisticated. It's exactly the kind of 'polished' look that fits the San Francisco vibe." — *Verified Reviewer*
-
-### Shoe Brush
-> "Essential for the Hyatt ballroom. The floor is massive and high-quality, but with that many dancers, you want to keep your soles clean for maximum control. This one fits perfectly in my dance bag." — *Customer Review*
 - **Pace Yourself:** The Sunday night late-night sets are legendary. Pace yourself throughout the weekend so you don't miss the 3 AM magic.
