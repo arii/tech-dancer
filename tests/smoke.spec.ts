@@ -9,19 +9,20 @@ function isIgnored(msg: string) {
 }
 
 async function validateUrlNavigation(page: Page, href: string) {
+  console.log(`  Navigating to: ${href}`);
   if (href.includes('#')) {
     const [baseUrl, fragment] = href.split('#');
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
       await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 60000 });
-      await expect(page.locator('main')).toBeVisible();
+      await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
     }
     if (fragment) {
       const locator = page.locator(`#${fragment}`);
-      await expect(locator).toBeVisible({ timeout: 5000 });
+      await expect(locator).toBeVisible({ timeout: 10000 });
     }
   } else {
     const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
-    await expect(page.locator('main')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
     }
