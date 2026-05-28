@@ -46,6 +46,10 @@ export interface Resource {
   durability?: number;
   value?: number;
   specs?: Record<string, string>;
+  // Merch-specific fields
+  shopUrl?: string;
+  displayMode?: string;
+  featuredSide?: string;
 }
 
 export interface Study {

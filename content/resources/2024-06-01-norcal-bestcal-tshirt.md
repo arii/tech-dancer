@@ -8,9 +8,7 @@ excerpt: "The original NorCal BestCal t-shirt."
 image: "/assets/gear/norcal-bestcal-front.webp"
 imageBack: "/assets/gear/norcal-bestcal-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Essential Merch"
-priceCategory: "$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-bestcal-tshirt
 ---

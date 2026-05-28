@@ -8,11 +8,11 @@ excerpt: "Unisex 'Lead, Follow, or Switch' LOVE shirt."
 image: "/assets/gear/unisex-t-shirt-front.webp"
 imageBack: "/assets/gear/unisex-t-shirt-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Classic & Inclusive"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/love-unisex-shirt
+displayMode: "pair"
+featuredSide: "back"
 ---
 
 A classic unisex fit for everyone in the community who loves to do it all on the floor.

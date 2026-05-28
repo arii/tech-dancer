@@ -8,9 +8,7 @@ excerpt: "Show your versatility on the dance floor with this neon 'Lead, Follow,
 image: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"
 imageBack: "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Versatile & Vibrant"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/lead-follow-switch-love-shirt-neon
 displayMode: "pair"

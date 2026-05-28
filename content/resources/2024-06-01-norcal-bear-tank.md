@@ -8,9 +8,7 @@ excerpt: "Comfortable men's tank top with the NorCal Best Cal bear design."
 image: "/assets/gear/norcal-bear-tank-front.webp"
 imageBack: "/assets/gear/norcal-bear-tank-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Cool & Casual"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/mens-bear-tank-nor-cal-best-cal
 ---

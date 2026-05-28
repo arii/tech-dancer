@@ -4,6 +4,7 @@ import { Box, Grid, Stack } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { useToolbox } from './useToolbox';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { GearCard } from '@/components/ui/GearCard';
 import { ViewToggle } from '@/components/ui/ViewToggle';
 import { ListRow } from '@/components/ui/ListRow';
@@ -33,6 +34,8 @@ export default function Toolbox() {
           title="Gear Reviews"
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
+
+        <AffiliateDisclosure type="gear" />
 
         {/* Modern Search Bar & Toggle */}
         <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">

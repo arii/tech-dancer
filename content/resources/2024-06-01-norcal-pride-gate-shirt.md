@@ -8,9 +8,7 @@ excerpt: "Classic Golden Gate bridge design with a vibrant rainbow twist for Nor
 image: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp"
 imageBack: "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Regional Pride"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-pride-golden-gate-shirt
 ---
