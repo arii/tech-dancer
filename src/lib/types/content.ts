@@ -48,7 +48,6 @@ export interface Resource {
 
   // Merch-specific fields
   shopUrl?: string;
-  sku?: string; // Legacy
   internalSku?: string;
   printfulProductId?: string;
   printfulVariantIds?: string[];
