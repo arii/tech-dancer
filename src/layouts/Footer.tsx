@@ -1,11 +1,12 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
+import { NavLink } from 'react-router-dom';
 
 export function Footer() {
   const legalLinks = [
-    { label: 'Contact', href: import.meta.env.BASE_URL + 'contact' },
-    { label: 'Privacy', href: import.meta.env.BASE_URL + 'about#privacy' },
-    { label: 'Terms', href: import.meta.env.BASE_URL + 'about#terms' },
+    { label: 'Contact', to: '/contact' },
+    { label: 'Privacy', to: '/about#privacy' },
+    { label: 'Terms', to: '/about#terms' },
   ];
 
   return (
@@ -42,8 +43,8 @@ export function Footer() {
           {legalLinks.map((link) => (
             <ActionButton
               key={link.label}
-              as="a"
-              href={link.href}
+              as={NavLink}
+              to={link.to}
               variant="ghost"
               paddingX={3}
               paddingY={1.5}
