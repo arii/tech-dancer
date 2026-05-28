@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { SuccessState } from '@/features/contact/components/SuccessState';
@@ -17,6 +18,24 @@ type ContactFormData = z.infer<typeof contactFormSchema>;
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    const intent = searchParams.get('intent');
+    const isSubscribePath = location.pathname === '/subscribe';
+
+    if (intent === 'subscribe' || isSubscribePath) {
+      // Small delay to ensure the DOM is fully ready
+      const timer = setTimeout(() => {
+        const section = document.getElementById('newsletter-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, location.pathname]);
 
   const {
     register,

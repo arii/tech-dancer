@@ -23,7 +23,9 @@ export function GlobalErrorBoundary() {
   const isProduction = import.meta.env.PROD;
 
   return (
-    <Box
+    <Stack
+      as="main"
+      id="main-content"
       display="flex"
       align="center"
       justify="center"
@@ -90,6 +92,6 @@ export function GlobalErrorBoundary() {
           </ActionButton>
         </Stack>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
