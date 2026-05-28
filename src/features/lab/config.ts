@@ -18,3 +18,5 @@ export const GEAR_PILLS = [
   { label: "Recommended", value: "Highly recommended" },
   { label: "Competition ready", value: "Competition ready" }
 ] as const;
+
+export const ALL_GEAR_FILTER = { label: "All gear", value: "all" } as const;

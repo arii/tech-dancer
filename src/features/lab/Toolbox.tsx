@@ -12,7 +12,7 @@ import { SearchBox } from '@/components/ui/SearchBox';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
 
-import { GEAR_PILLS } from "./config";
+import { GEAR_PILLS, ALL_GEAR_FILTER } from "./config";
 import { FilterButton } from '@/components/ui/FilterButton';
 
 export default function Toolbox() {
@@ -50,9 +50,9 @@ export default function Toolbox() {
         <Box display="flex" justify="center" marginTop={8} marginBottom={8} className="overflow-x-auto">
           <Box display="flex" gap="1" padding="1" radius="2xl" border className="border-line bg-surface-alt min-w-max" data-testid="toolbox-filters">
             <FilterButton
-              label="All gear"
-              onClick={() => setSelectedPill('all')}
-              isActive={selectedPill === 'all'}
+              label={ALL_GEAR_FILTER.label}
+              onClick={() => setSelectedPill(ALL_GEAR_FILTER.value)}
+              isActive={selectedPill === ALL_GEAR_FILTER.value}
               variant="quiet"
             />
             {GEAR_PILLS.map((pill) => (
