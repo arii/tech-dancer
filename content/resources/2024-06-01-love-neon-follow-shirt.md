@@ -8,9 +8,7 @@ excerpt: "Express your style and your role on the floor with this neon-inspired 
 image: "/assets/gear/love-neon-tshirt-ask-me-to-follow-front.webp"
 imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-follow-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Stylish & Social"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/follow-love-shirt-neon
 displayMode: "pair"

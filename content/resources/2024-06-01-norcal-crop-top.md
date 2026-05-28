@@ -8,9 +8,7 @@ excerpt: "Stylish cropped top for NorCal dancers."
 image: "/assets/gear/norcal-crop-top-front.webp"
 imageBack: "/assets/gear/norcal-crop-top-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Trendy & Airy"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-crop-top
 ---

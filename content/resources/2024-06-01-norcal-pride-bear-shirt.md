@@ -8,9 +8,7 @@ excerpt: "The iconic California bear, redesigned with Pride colors for the West 
 image: "/assets/gear/norcal-best-cal-pride-california-bear-apparel-front.webp"
 imageBack: "/assets/gear/norcal-best-cal-pride-california-bear-apparel-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "California Classic"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/norcal-pride-bear-shirt
 ---

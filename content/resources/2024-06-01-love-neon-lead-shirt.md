@@ -8,9 +8,7 @@ excerpt: "Express your style and your role on the floor with this neon-inspired 
 image: "/assets/gear/love-neon-tshirt-ask-me-to-lead-front.webp"
 imageBack: "/assets/gear/love-neon-tshirt-ask-me-to-lead-back.webp"
 tags: ["merch", "norcal", "rainbow", "pride"]
-rating: 5
 verdict: "Stylish & Social"
-priceCategory: "$$"
 updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/lead-love-shirt-neon
 displayMode: "pair"

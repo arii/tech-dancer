@@ -3,14 +3,12 @@ type: resource
 title: "Loop Experience Earplugs"
 date: "2023-10-01"
 author: "Ariel Anders, PhD"
-category: "gear"
+category: "Dance Gear"
 excerpt: "A must-have for protecting your hearing in loud ballroom and social dance settings without sacrificing sound quality."
-image: "/assets/gear/loop-earplugs.jpg"
+image: "/images/gear/sketches/loop-earplugs.jpg"
 affiliateIds: ["loop-experience"]
 tags: ["safety", "ballroom", "music"]
-rating: 5
 verdict: "Highly Recommended"
-priceCategory: "$$"
 updatedDate: "Oct 2023"
 ---
 
