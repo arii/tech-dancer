@@ -68,6 +68,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
       data.image = normalizeAsset(data.image);
       data.imageBack = normalizeAsset(data.imageBack);
       data.heroImage = normalizeAsset(data.heroImage);
+      data.authorAvatar = normalizeAsset(data.authorAvatar);
 
       const VALID_REGIONS = ['NorCal', 'SoCal', 'Southwest', 'Pacific Northwest', 'South', 'International', 'Other'];
 
@@ -81,6 +82,8 @@ function transform<T extends { date?: string; draft?: boolean }>(
         status: data.status ? String(data.status) : undefined,
         date: String(data.date || ""),
         author: String(data.author || ""),
+        authorAvatar: data.authorAvatar ? String(data.authorAvatar) : undefined,
+        readingTime: data.readingTime ? String(data.readingTime) : undefined,
         startDate: data.startDate ? String(data.startDate) : undefined,
         earlyBirdDate: data.earlyBirdDate
           ? String(data.earlyBirdDate)

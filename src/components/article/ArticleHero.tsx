@@ -51,19 +51,19 @@ export function ArticleHero({
             </Stack>
           )}
 
-          <Text as="h1" variant="display" size="4xl" weight="font-bold" className="text-slate-100 leading-[1.1]">
+          <Text as="h1" variant="display" size={{ base: "2xl", sm: "3xl", lg: "4xl" }} weight="font-bold" className="text-slate-100 leading-[1.15] lg:leading-[1.1]">
             {title}
           </Text>
 
           {dek && (
-            <Text size="lg" className="text-slate-400 leading-relaxed max-w-xl">
+            <Text size={{ base: "md", lg: "lg" }} className="text-slate-300 lg:text-slate-400 leading-relaxed max-w-xl">
               {dek}
             </Text>
           )}
         </Stack>
 
         {/* Mobile Visual (appears after title/dek on mobile) */}
-        <Box className="block lg:none">
+        <Box className="block lg:hidden">
           {visual}
         </Box>
 
@@ -74,7 +74,7 @@ export function ArticleHero({
         )}
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" gap={2} wrap className="overflow-x-auto pb-2 scrollbar-hide">
+          <Stack direction="row" gap={2} wrap className="pb-2">
             {tags.map((tag) => (
               <Box
                 key={tag}

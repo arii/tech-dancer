@@ -10,7 +10,7 @@ interface SidebarCardProps {
 
 function SidebarCard({ title, children }: SidebarCardProps) {
   return (
-    <Box className="rounded-2xl border border-slate-800/80 bg-slate-950/60 p-5 lg:p-6 backdrop-blur-sm">
+    <Box className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-5 lg:p-6 backdrop-blur-sm">
       <Stack gap={4}>
         <Text variant="mono" size="xs" weight="font-bold" className="text-cyan-400 uppercase tracking-widest border-b border-slate-800/50 pb-3">
           {title}

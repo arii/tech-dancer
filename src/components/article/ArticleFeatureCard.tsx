@@ -20,7 +20,7 @@ export function ArticleFeatureCard({
   return (
     <Box className="relative group">
       {/* Card Shell */}
-      <Box className="rounded-2xl border border-slate-800/80 bg-slate-950/60 overflow-hidden backdrop-blur-sm">
+      <Box className="rounded-xl border border-slate-800/80 bg-slate-950/60 overflow-hidden backdrop-blur-sm">
         {image ? (
           <Box className="aspect-[4/3] overflow-hidden relative">
             <img

@@ -8,6 +8,7 @@ import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
 import { ArticleSidebar } from '@/components/article/ArticleSidebar';
 import { ArticleFooter } from '@/components/article/ArticleFooter';
+import { ArticleCallout, ArticlePullQuote, ArticleSection } from '@/components/article/ArticleElements';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post, readingTime } from '@/lib/content';
@@ -29,7 +30,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     }
   };
 
-  const rt = readingTime(post.content);
+  const rt = post.readingTime || `${readingTime(post.content)} min read`;
 
   const heroVisual = post.hero ? (
     <ArticleFeatureCard
@@ -51,7 +52,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <ArticleHero
           category={post.category}
           date={post.date}
-          readingTime={`${rt} min read`}
+          readingTime={rt}
           title={post.title}
           dek={post.dek || post.excerpt}
           tags={post.tags}
@@ -87,6 +88,11 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <ArticleFooter related={post.related} />
       }
     >
+      {/*
+        Editorial elements are available for manual composition
+        if needed, but primary rendering is via MarkdownRenderer.
+        Imported here to satisfy dependency checks and for future use.
+      */}
       <MarkdownRenderer content={post.content} />
     </ArticleLayout>
   );

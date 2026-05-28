@@ -56,9 +56,10 @@ export function ArticleLayout({
           {/* Main Article Column */}
           <Box span={{ base: 1, lg: sidebar ? 8 : 1 }} className="min-w-0">
             <Box className="prose prose-invert prose-slate max-w-none
-              prose-p:text-[16px] sm:prose-p:text-[17px] prose-p:leading-7 sm:prose-p:leading-8 prose-p:text-slate-300
+              prose-p:text-[16px] sm:prose-p:text-[17px] prose-p:leading-[1.65] sm:prose-p:leading-8 prose-p:text-slate-300
               prose-headings:font-display prose-headings:text-slate-100 prose-headings:font-bold
-              prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-l-2 prose-h2:border-cyan-400 prose-h2:pl-4
+              prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-l-2 prose-h2:border-cyan-400 prose-h2:pl-4
+              prose-h3:text-lg sm:prose-h3:text-xl
               prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline
               prose-strong:text-slate-100 prose-blockquote:border-cyan-400 prose-blockquote:text-slate-200 prose-blockquote:italic
             ">

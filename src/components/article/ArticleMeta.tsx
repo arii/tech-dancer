@@ -29,15 +29,15 @@ export function ArticleMeta({
       </Box>
 
       {/* Meta Text */}
-      <Stack gap={0.5}>
-        <Text weight="font-bold" className="text-slate-200 text-sm">{author}</Text>
+      <Stack gap={0.5} className="mt-[-2px]">
+        <Text weight="font-bold" className="text-slate-200 text-sm leading-none">{author}</Text>
         <Stack direction="row" gap={2} align="center">
           {status ? (
             <Box className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-              <Text variant="mono" size="micro" className="text-emerald-400 font-bold uppercase">{status}</Text>
+              <Text variant="mono" size="micro" className="text-emerald-400 font-bold uppercase leading-none">{status}</Text>
             </Box>
           ) : (
-            date && <Text variant="mono" size="micro" className="text-slate-500 uppercase">{date}</Text>
+            date && <Text variant="mono" size="micro" className="text-slate-500 uppercase leading-none">{date}</Text>
           )}
         </Stack>
       </Stack>

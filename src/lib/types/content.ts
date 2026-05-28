@@ -12,6 +12,7 @@ export interface Post {
   date: string;
   author: string;
   authorAvatar?: string;
+  readingTime?: string;
   category: string;
   excerpt: string;
   content: string;
@@ -55,6 +56,8 @@ export interface Resource {
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
+  readingTime?: string;
   category: string;
   excerpt: string;
   content: string;
@@ -106,6 +109,7 @@ export interface Study {
   title: string;
   date: string;
   category: string;
+  readingTime?: string;
   excerpt: string;
   content: string;
   tags?: string[];
@@ -156,6 +160,8 @@ export interface Event {
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
+  readingTime?: string;
   category: string;
   excerpt: string;
   location: string;
