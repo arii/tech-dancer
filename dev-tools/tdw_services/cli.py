@@ -11,9 +11,6 @@ from scope_check import verify_pr_scope
 import os
 from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
 
-# Constants
-AUDIT_CHECK_DIRS = os.environ.get('AUDIT_CHECK_DIRS', 'src/features,src/pages,src/components,src/layouts,src/App.tsx').split(',')
-
 # CLI Group
 @click.group()
 @click.option('--json', 'json_output', is_flag=True, help='Output results in JSON format')
@@ -74,11 +71,12 @@ def resolve(ctx, file, base):
         out(ctx, f"✅ Resolved {len(resolved)} files.", data={"resolved": resolved})
 
 @gh.command()
+@click.option('--check-dirs', default=os.environ.get('AUDIT_CHECK_DIRS', 'src/features,src/pages,src/components,src/layouts,src/App.tsx'), help='Comma-separated list of directories to audit')
 @click.pass_context
-def audit(ctx):
+def audit(ctx, check_dirs):
     """Run a headless UI audit on the codebase."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.get_audit_results(targets=AUDIT_CHECK_DIRS)
+    res = orch.get_audit_results(targets=check_dirs.split(','))
     out(ctx, "Headless audit complete.", data=res)
 
 @gh.command()
