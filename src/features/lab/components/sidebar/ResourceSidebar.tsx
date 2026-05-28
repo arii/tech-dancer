@@ -6,13 +6,13 @@ import { ResourceGrid } from '../ResourceGrid';
 
 interface ResourceHeaderExtrasProps {
   author: string;
-  rating: number;
+  rating?: number;
   durability?: number;
   value?: number;
   priceCategory: string;
 }
 
-export function ResourceHeaderExtras({ author, rating, durability, value, priceCategory }: ResourceHeaderExtrasProps) {
+export function ResourceHeaderExtras({ author, rating: _rating, durability, value, priceCategory }: ResourceHeaderExtrasProps) {
   return (
     <Stack gap={6} marginTop={6}>
       <Stack direction="row" align="center" gap={2} color="dim">
@@ -21,7 +21,7 @@ export function ResourceHeaderExtras({ author, rating, durability, value, priceC
       </Stack>
 
       <ResourceGrid
-        rating={rating}
+        rating={0}
         durability={durability}
         value={value}
         priceCategory={priceCategory}

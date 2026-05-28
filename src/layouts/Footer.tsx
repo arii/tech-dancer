@@ -31,6 +31,13 @@ export function Footer() {
             )
           </Text>
         </Stack>
+
+        <Box>
+          <Text variant="body" size="xs" color="dim" weight="font-medium" className="italic opacity-80">
+            As an Amazon Associate I earn from qualifying purchases.
+          </Text>
+        </Box>
+
         <Stack direction="row" gap={2} align="center">
           {legalLinks.map((link) => (
             <ActionButton

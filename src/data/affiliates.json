@@ -102,7 +102,7 @@
   "garment-steamer": {
     "id": "garment-steamer",
     "name": "Portable Garment Steamer",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "travel",
     "description": "Keep your outfits wrinkle-free while traveling.",
     "gearSlug": "2023-11-01-travel-steamer",
@@ -121,7 +121,7 @@
   "foam-roller": {
     "id": "foam-roller",
     "name": "Foam Roller / Hypervolt",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "recovery",
     "description": "Good for sore legs, tight hips, and post-event recovery.",
     "draft": true,
@@ -140,7 +140,7 @@
   "ombre-dance-dress": {
     "id": "ombre-dance-dress",
     "name": "Ombre Flowy Dance Dress",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Gradient dress that moves beautifully with every turn.",
     "draft": true
@@ -148,7 +148,7 @@
   "rainbow-earrings": {
     "id": "rainbow-earrings",
     "name": "Rainbow Statement Earrings",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Bold accessories to complete your theme outfit.",
     "draft": true
@@ -156,7 +156,7 @@
   "pride-sunglasses": {
     "id": "pride-sunglasses",
     "name": "Pride Heart Sunglasses",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Fun sunglasses for pool parties and daytime events.",
     "draft": true
@@ -164,7 +164,7 @@
   "portable-charger": {
     "id": "portable-charger",
     "name": "Anker Portable Power Bank",
-    "url": "https://a.co/d/0f3nS8hg?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0CXDXP8VR?tag=onasafari04-20",
     "category": "travel",
     "description": "High-capacity charger to keep your phone alive during long event days.",
     "image": "/images/gear/amazon/anker-20000mah-power-bank.jpg",
@@ -173,7 +173,7 @@
   "travel-pillow": {
     "id": "travel-pillow",
     "name": "Memory Foam Travel Pillow",
-    "url": "https://a.co/d/0enuFqp9?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B079X5FTZR?tag=onasafari04-20",
     "category": "travel",
     "description": "this is good for long flights and has straps to secure the pillow and your neck",
     "image": "https://m.media-amazon.com/images/I/51bHGyZRrgL._AC_SL1080_.jpg"
@@ -181,7 +181,7 @@
   "microfiber-towel": {
     "id": "microfiber-towel",
     "name": "Quick-Dry Microfiber Towel",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "travel",
     "description": "Compact and fast-drying towel for the gym or pool.",
     "draft": true
@@ -189,7 +189,7 @@
   "dry-shampoo": {
     "id": "dry-shampoo",
     "name": "Oribe Dry Texturizing Spray",
-    "url": "https://a.co/d/06dLoxbA?tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B003NXM9HS?tag=onasafari04-20",
     "category": "travel",
     "description": "I love Oribe products and this one smells amazing while refreshing your hair between workshops and socials.",
     "image": "https://m.media-amazon.com/images/I/71enRpyGa+L._SL1500_.jpg"
@@ -207,7 +207,7 @@
   "liquid-iv": {
     "id": "liquid-iv",
     "name": "Liquid I.V. Hydration Multiplier",
-    "url": "https://a.co/d/0gUbbjrc?&tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B0BQ51S5BL?tag=onasafari04-20",
     "category": "recovery",
     "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
     "image": "https://m.media-amazon.com/images/I/41kfwQ6qx9L._AC_.jpg"
@@ -215,7 +215,7 @@
   "shoe-brush": {
     "id": "shoe-brush",
     "name": "Suede Shoe Brush",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Keep your suede soles clean and grippy.",
     "draft": true,
@@ -351,7 +351,7 @@
   "dance-bag": {
     "id": "dance-bag",
     "name": "Dance Bag",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "travel",
     "description": "Weekend essential dance bag for all levels.",
     "draft": true
@@ -359,7 +359,7 @@
   "rainbow-bob-wig": {
     "id": "rainbow-bob-wig",
     "name": "Rainbow Bob Wig",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Vibrant rainbow bob wig to complete your event look.",
     "draft": true
@@ -367,7 +367,7 @@
   "rainbow-sequin-bomber-jacket": {
     "id": "rainbow-sequin-bomber-jacket",
     "name": "Rainbow Sequin Bomber Jacket",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Dazzle on the dance floor with this rainbow sequin jacket.",
     "draft": true
@@ -375,7 +375,7 @@
   "holographic-rave-fan": {
     "id": "holographic-rave-fan",
     "name": "Holographic Rave Fan",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "gear",
     "description": "Keep cool and stay flashy with this holographic folding fan.",
     "draft": true,
@@ -408,14 +408,14 @@
   "princess-tiara": {
     "id": "princess-tiara",
     "name": "Princess Tiara",
-    "url": "https://a.co/d/07zZzzkh?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0816B3CYK?tag=onasafari04-20",
     "category": "gear",
     "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really."
   },
   "led-shot-glasses": {
     "id": "led-shot-glasses",
     "name": "LED Shot Glasses party pack",
-    "url": "https://a.co/d/01tPhh25?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B075B5D5F2?tag=onasafari04-20",
     "category": "gear",
     "description": "Colorful light up shot glasses perfect for parties."
   },
@@ -473,7 +473,7 @@
   "charging-cables": {
     "id": "charging-cables",
     "name": "Multi-Charging Cables (USB 3A Fast Charge)",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "travel",
     "description": "Fast-charging USB cables for keeping your devices powered during multi-day conventions.",
     "gearSlug": "2024-06-01-charging-cables",
@@ -483,7 +483,7 @@
   "fishnet-tights": {
     "id": "fishnet-tights",
     "name": "Fishnet Lace Tights",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "fashion",
     "description": "Six-pack of fishnet lace tights for elegant leg coverage and style.",
     "gearSlug": "2024-06-01-fishnet-tights",
@@ -502,7 +502,7 @@
   "shoe-dryer": {
     "id": "shoe-dryer",
     "name": "Electric Shoe Dryer and Deodorizer",
-    "url": "https://amazon.com",
+    "url": "https://amazon.com?tag=onasafari04-20",
     "category": "travel",
     "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
     "gearSlug": "2024-06-01-shoe-dryer",
@@ -519,7 +519,7 @@
   "piercing-aftercare-swabs": {
     "id": "piercing-aftercare-swabs",
     "name": "Dr. Piercing Aftercare Swabs",
-    "url": "https://a.co/d/0heZRdhE?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B000KM1656?tag=onasafari04-20",
     "category": "travel",
     "description": "perfect for travel individually wrapped swabs",
     "image": "/images/gear/amazon/mebak-piercing-aftercare-swabs-saline-solution-for-piercings-earring-n.jpg"
@@ -527,7 +527,7 @@
   "womens-long-zip-hoodie": {
     "id": "womens-long-zip-hoodie",
     "name": "Womens Long Zip Up Hoodies",
-    "url": "https://a.co/d/0cgqoZH5?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B07SR42WW4?tag=onasafari04-20",
     "category": "gear",
     "description": "Fun long hoodie perfect for a chilly ballroom length is nice for keeping part of your legs warm and looks good",
     "image": "/images/gear/amazon/ablanczoom-hoodies-for-women-casual-full-zip-up-hoodie-comfortable-wom.jpg"
@@ -535,7 +535,7 @@
   "convenience-travel-kit": {
     "id": "convenience-travel-kit",
     "name": "Convenience Travel Kit",
-    "url": "https://a.co/d/0eajAb55?tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B08HK9WS7S?tag=onasafari04-20",
     "category": "travel",
     "description": "when flying baggage prices are so high it can be more convenient and cheaper to ship products directly to the hotel",
     "image": "/images/gear/amazon/convenience-kits-international-women-s-15-pc-kit-featuring-palmer-s-ha.jpg"
@@ -543,7 +543,7 @@
   "bling-keychain-pill-case": {
     "id": "bling-keychain-pill-case",
     "name": "Bling Keychain Pill Case",
-    "url": "https://a.co/d/05QhhIru&tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0BXGX6CJM?tag=onasafari04-20",
     "category": "travel",
     "description": "Bling keychain pill case that is good for keeping small earplugs in.",
     "image": "/images/gear/amazon/wllhyf-2-pieces-bling-pill-container-waterproof-pill-bottle-case-porta.jpg"
