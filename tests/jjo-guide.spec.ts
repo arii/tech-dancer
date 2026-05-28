@@ -33,7 +33,8 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
   });
 
   test('should render the action timeline with multiple rows', async ({ page }) => {
-    const remindersSection = page.getByTestId('reminders');
+    await page.setViewportSize({ width: 375, height: 667 });
+    const remindersSection = page.getByTestId('reminders').first();
     await expect(remindersSection).toBeVisible();
     // Using stable data-testid instead of .group class
     const rows = remindersSection.getByTestId('timeline-row');

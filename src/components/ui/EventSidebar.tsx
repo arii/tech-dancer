@@ -81,7 +81,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
             <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
               Travel Reminders
             </Text>
-            <Stack gap={4}>
+            <Stack gap={4} data-testid="reminders">
               {calculateTimeline({
                 title: event?.title || 'Event',
                 startDate: finalStartDate,
@@ -94,6 +94,7 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
                 return (
                   <Box
                     key={reminder.id}
+                    data-testid="timeline-row"
                     border
                     padding={4}
                     surface="muted"
