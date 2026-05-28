@@ -66,13 +66,15 @@ export function RootLayout() {
       <MainLayout>
         <AnimatePresence mode="wait">
           <Box
-            as={motion.div}
+            as={motion.main}
+            id="main-content"
             key={location.pathname}
             initial={motionTokens.page.initial}
             animate={motionTokens.page.animate}
             exit={motionTokens.page.exit}
             transition={motionTokens.page.transition}
             height="full"
+            tabIndex={-1}
           >
             <Suspense fallback={<PageSkeleton variant={skeletonVariant} />}>
               <Outlet />

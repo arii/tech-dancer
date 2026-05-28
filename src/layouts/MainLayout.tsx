@@ -27,7 +27,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
     >
       <Box
         as="a"
-        href="#main-content"
+        href="#main-content-scroll"
         position="fixed"
         top={4}
         left={4}
@@ -49,8 +49,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
-          as="main"
-          id="main-content"
+          id="main-content-scroll"
           tabIndex={-1}
           ref={scrollRef}
           flex={1}
