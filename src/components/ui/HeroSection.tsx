@@ -81,7 +81,7 @@ export function HeroSection() {
             color="white"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            Travel better.
+            Dance better.
           </Text>
         </Stack>
 
@@ -116,8 +116,8 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Practical guides for West Coast Swing dancers — training notes, event travel tips, gear reviews,
-            and tools for better dance weekends.
+            Training tips, event resource guides, and gear reviews for competitive West Coast Swing dancers,
+            plus technical deep dives into building the platform with DevAI.
           </Text>
         </Stack>
 
