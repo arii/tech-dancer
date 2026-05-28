@@ -11,7 +11,7 @@ const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 
 // Automatically discover all routes
-const { all: STUB_ROUTES } = getAllRoutes();
+const { stubs: STUB_ROUTES } = getAllRoutes();
 
 // Filter out root path as it already has index.html
 const filteredRoutes = STUB_ROUTES.filter(route => route !== '/');
