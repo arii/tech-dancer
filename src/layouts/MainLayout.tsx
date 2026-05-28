@@ -21,7 +21,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       overflowX="hidden"
       width="full"
       minHeight="screen"
-      className="touch-pan-y"
+      className="touch-pan-y max-w-full min-w-0 overflow-x-clip"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -45,7 +45,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Box display="flex" minHeight="screen" width="full">
+      <Stack minHeight="screen" width="full" className="w-full max-w-full min-w-0 overflow-x-clip">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -54,27 +54,29 @@ export function MainLayout({ children }: { children: ReactNode }) {
           ref={scrollRef}
           flex={1}
           position="relative"
-          paddingTop={{ base: 16, lg: 0 }}
+          paddingTop={{ base: 16, lg: 16 }}
           maxWidth="full"
           width="full"
           surface="bg"
           direction="col"
+          className="w-full max-w-full min-w-0 overflow-x-clip"
         >
           <Stack
-            paddingX={{ base: 4, md: 6, lg: 12, xl: 20 }}
-            paddingTop={{ base: 16, md: 12 }}
+            paddingX={{ base: 4, md: 6, lg: 10 }}
+            paddingTop={{ base: 8, md: 6 }}
             paddingBottom={{ base: 28, md: 12 }}
             flex={1}
             direction="col"
-            marginX={{ base: "auto", lg: 0 }}
+            marginX="auto"
             maxWidth="7xl"
             width="full"
+            className="min-w-0 max-w-full overflow-x-clip"
           >
             {children}
             <Footer />
           </Stack>
         </Stack>
-      </Box>
+      </Stack>
 
       <NewsletterBanner />
       <GlobalSearch />
