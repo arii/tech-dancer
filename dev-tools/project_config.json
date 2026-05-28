@@ -5,5 +5,6 @@
   ],
   "monolithic_pr_threshold": 3,
   "base_branch": "origin/main",
-  "use_gemini_fallback": false
+  "use_gemini_fallback": false,
+  "ollama_synthesis_model": "llama3.2"
 }

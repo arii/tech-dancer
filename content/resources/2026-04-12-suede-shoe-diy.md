@@ -13,6 +13,8 @@ tags:
   - budget
 verdict: "Best Budget Hack"
 updatedDate: "Mar 2024"
+affiliateProvider: "amazon"
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 ## The Pain Point: Inconsistent Traction
@@ -52,7 +54,5 @@ These modification have survived 8+ hour social sets at major conventions. The b
 ## Verdict
 
 Suede your own shoes. It's the only way to get a truly robust connection on unpredictable ballroom floors.
-
----
 
 _Affiliate disclosure: Links in this guide may earn a commission at no cost to you._

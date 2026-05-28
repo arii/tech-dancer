@@ -21,16 +21,10 @@ export function EventBodyExtras() {
 
 interface EventSidebarProps {
   event?: Event;
-  startDate?: string;
-  earlyBirdDate?: string;
-  hotelCutoffDate?: string;
 }
 
-export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate }: EventSidebarProps) {
+export function EventSidebar({ event }: EventSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const finalStartDate = event?.startDate || startDate;
-  const finalEarlyBirdDate = event?.earlyBirdDate || earlyBirdDate;
-  const finalHotelCutoffDate = event?.hotelCutoffDate || hotelCutoffDate;
 
   return (
     <Box as="aside" className="h-full">

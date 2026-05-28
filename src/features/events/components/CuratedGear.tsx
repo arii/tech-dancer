@@ -31,6 +31,11 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
                   </Box>
                 )}
               </Box>
+              <SectionHeader
+                data-testid={`gear-section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
+                title={section.label}
+                size="sm"
+              />
               {section.description && (
                 <Text variant="body" size="sm" color="dim" className="leading-relaxed italic">
                   {section.description}

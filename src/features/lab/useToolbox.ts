@@ -28,8 +28,11 @@ export function useToolbox() {
   const groupedResources = useMemo(() => {
     let filteredResources = resources;
 
+    // Exclude merch items from gear page - they should only be on dedicated shop page
+    filteredResources = filteredResources.filter(r => !r.shopUrl);
+
     if (selectedPill && selectedPill !== 'all') {
-      filteredResources = resources.filter(resource => {
+      filteredResources = filteredResources.filter(resource => {
         switch (selectedPill) {
           case 'Best for travel':
             return safeSearch(resource.category, 'travel') || resource.tags?.includes('travel');
