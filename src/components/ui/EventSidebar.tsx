@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { calculateTimeline } from '@/features/lab/wsdc-reminders/lib/timeline-utils';
 import { Event } from '@/lib/content';
 
 export function EventHeaderExtras({ author }: { author: string }) {
@@ -21,16 +20,10 @@ export function EventBodyExtras() {
 
 interface EventSidebarProps {
   event?: Event;
-  startDate?: string;
-  earlyBirdDate?: string;
-  hotelCutoffDate?: string;
 }
 
-export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate }: EventSidebarProps) {
+export function EventSidebar({ event }: EventSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const finalStartDate = event?.startDate || startDate;
-  const finalEarlyBirdDate = event?.earlyBirdDate || earlyBirdDate;
-  const finalHotelCutoffDate = event?.hotelCutoffDate || hotelCutoffDate;
 
   return (
     <Box as="aside">
@@ -74,49 +67,6 @@ export function EventSidebar({ event, startDate, earlyBirdDate, hotelCutoffDate 
               </Box>
             </Stack>
           </Box>
-        )}
-
-        {finalStartDate && (
-          <Stack gap={4}>
-            <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
-              Travel Reminders
-            </Text>
-            <Stack gap={4} data-testid="reminders">
-              {calculateTimeline({
-                title: event?.title || 'Event',
-                startDate: finalStartDate,
-                earlyBirdDate: finalEarlyBirdDate,
-                hotelCutoffDate: finalHotelCutoffDate,
-              }, {
-                filterIds: ['flight-track', 'early-bird', 'hotel-block', 'comp-window', 'cancel-safety']
-              }).map((reminder) => {
-                const Icon = reminder.icon!;
-                return (
-                  <Box
-                    key={reminder.id}
-                    data-testid="timeline-row"
-                    border
-                    padding={4}
-                    surface="muted"
-                    className="hover:border-accent transition-colors"
-                  >
-                    <Stack gap={2}>
-                      <Box display="flex" align="center" gap={2} color="brand">
-                        <Icon className="w-4 h-4" />
-                        <Text variant="mono" size="xs" weight="font-bold">{reminder.label.toUpperCase()}</Text>
-                      </Box>
-                      <Text variant="mono" size="tiny" color="dim">
-                        Target: {reminder.date.toLocaleDateString()}
-                      </Text>
-                      <Text variant="body" size="xs" color="dim">
-                        {reminder.description}
-                      </Text>
-                    </Stack>
-                  </Box>
-                );
-              })}
-            </Stack>
-          </Stack>
         )}
       </Stack>
     </Box>
