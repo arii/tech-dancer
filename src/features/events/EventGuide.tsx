@@ -139,9 +139,7 @@ export default function EventGuide() {
                 />
               )}
 
-              <Box display={{ base: 'block', lg: 'none' }}>
-                <EventReminders id="reminders" event={event} />
-              </Box>
+              <EventReminders id="reminders" event={event} />
 
               <EventTravel id="travel" notes={event.description} />
 
