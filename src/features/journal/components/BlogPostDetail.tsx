@@ -8,7 +8,6 @@ import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
 import { ArticleSidebar } from '@/components/article/ArticleSidebar';
 import { ArticleFooter } from '@/components/article/ArticleFooter';
-import { ArticleCallout, ArticlePullQuote, ArticleSection } from '@/components/article/ArticleElements';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post, readingTime } from '@/lib/content';
