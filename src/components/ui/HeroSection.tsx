@@ -116,8 +116,7 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Practical guides for West Coast Swing dancers — training notes, event travel tips, gear reviews,
-            and tools for better dance weekends.
+            Training notes, event guides, gear reviews, and practical tools for better West Coast Swing weekends.
           </Text>
         </Stack>
 

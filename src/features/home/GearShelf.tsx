@@ -51,6 +51,7 @@ export function GearShelf() {
                 <img
                   src={`${ASSET_PREFIX}${image}`}
                   alt=""
+                  aria-hidden="true"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : imageText ? (
@@ -85,7 +86,12 @@ export function GearShelf() {
             >
               <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
                 {image ? (
-                  <img src={`${ASSET_PREFIX}${image}`} alt="" className="block h-full w-full max-w-full object-cover" />
+                  <img
+                    src={`${ASSET_PREFIX}${image}`}
+                    alt=""
+                    aria-hidden="true"
+                    className="block h-full w-full max-w-full object-cover"
+                  />
                 ) : imageText ? (
                   <Text variant="body" size="xs" weight="font-bold" className="text-center">
                     [{imageText}]

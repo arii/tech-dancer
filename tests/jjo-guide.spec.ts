@@ -32,6 +32,16 @@ test.describe('Jack & Jill O\'Rama Guide', () => {
     await expect(gearSection.getByRole('heading', { name: 'Travel Extras' })).toBeVisible();
   });
 
+  test('should render the action timeline with multiple rows', async ({ page }) => {
+    const remindersSection = page.getByTestId('reminders');
+    await expect(remindersSection).toBeVisible();
+
+    const rows = remindersSection.getByTestId('timeline-row');
+    await expect.poll(async () => rows.count()).toBeGreaterThanOrEqual(3);
+
+    await expect(remindersSection).toContainText(/register|book|pack|schedule|workshop|deadline/i);
+  });
+
   test('should render related events', async ({ page }) => {
     const relatedSection = page.getByTestId('related');
     await expect(relatedSection).toBeVisible();
