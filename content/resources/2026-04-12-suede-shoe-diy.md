@@ -1,20 +1,17 @@
 ---
 type: resource
-title: "How to Suede Your Own Dance Shoes for $15"
+title: "How to Suede Your Own Dance Shoes"
 date: "2026-04-12"
 author: "Ariel Anders, PhD"
-category: "Gear"
-excerpt: "The $15 DIY hack for perfect traction on any ballroom floor."
-affiliateIds:
-  - suede-sheets
-  - barge-cement
+category: "Dance Gear"
+excerpt: "The DIY hack for perfect traction on any ballroom floor."
+image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
+affiliateIds: ["suede-sheets", "barge-cement"]
 tags:
   - diy
   - footwear
   - budget
-rating: 4.7
 verdict: "Best Budget Hack"
-priceCategory: "$"
 updatedDate: "Mar 2024"
 ---
 
@@ -24,7 +21,7 @@ There is nothing worse than arriving at a major WSDC convention only to find tha
 
 ## The Solution: How to Suede Your Shoes
 
-Instead of paying the $180 "dance shoe tax" for flimsy professional shoes, I use a $15 DIY approach to convert my favorite comfortable sneakers into dance shoes.
+Instead of paying for expensive professional shoes, I use a DIY approach to convert my favorite comfortable sneakers into dance shoes.
 
 ### Required Gear
 
