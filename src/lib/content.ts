@@ -80,18 +80,10 @@ export function _transform<T extends { date?: string; draft?: boolean }>(
         date: String(data.date || ""),
         author: String(data.author || ""),
         startDate: data.startDate ? String(data.startDate) : undefined,
-        earlyBirdDate: data.earlyBirdDate
-          ? String(data.earlyBirdDate)
-          : undefined,
-        registrationDeadline: data.registrationDeadline
-          ? String(data.registrationDeadline)
-          : undefined,
-        hotelCutoffDate: data.hotelCutoffDate
-          ? String(data.hotelCutoffDate)
-          : undefined,
-        packingReminderDate: data.packingReminderDate
-          ? String(data.packingReminderDate)
-          : undefined,
+        earlyBirdDate: data.earlyBirdDate ? String(data.earlyBirdDate) : undefined,
+        registrationDeadline: data.registrationDeadline ? String(data.registrationDeadline) : undefined,
+        hotelCutoffDate: data.hotelCutoffDate ? String(data.hotelCutoffDate) : undefined,
+        packingReminderDate: data.packingReminderDate ? String(data.packingReminderDate) : undefined,
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
         content: content || "",
@@ -99,10 +91,11 @@ export function _transform<T extends { date?: string; draft?: boolean }>(
       };
 
       if (data.type === "event") {
-        const getString = (nestedVal: unknown, flatVal: unknown) =>
-          nestedVal ? String(nestedVal) : flatVal ? String(flatVal) : undefined;
+        const getString = (nestedVal: unknown, flatVal: unknown) => {
+          const value = nestedVal ?? flatVal;
+          return value == null || value === "" ? undefined : String(value);
+        };
 
-        // Flatten nested theme if present
         const nestedTheme = data.theme as Record<string, unknown> | undefined;
         result.themeName = getString(nestedTheme?.name, data.themeName);
         result.themeLabel = getString(nestedTheme?.label, data.themeLabel);
@@ -111,22 +104,17 @@ export function _transform<T extends { date?: string; draft?: boolean }>(
         result.themeOutfitIds = asArray(nestedTheme?.outfitIds || data.themeOutfitIds);
         result.themeAccessoryIds = asArray(nestedTheme?.accessoryIds || data.themeAccessoryIds);
 
-        // Flatten nested gear if present
         const nestedGear = data.gear as Record<string, unknown> | undefined;
-        result.gearOutfitIds = asArray(nestedGear?.outfitIds || data.gearOutfitIds);
-        result.gearOutfitDescription = getString(nestedGear?.outfitDescription, data.gearOutfitDescription);
-        result.gearAccessoryIds = asArray(nestedGear?.accessoryIds || data.gearAccessoryIds);
-        result.gearAccessoryDescription = getString(nestedGear?.accessoryDescription, data.gearAccessoryDescription);
-        result.gearShoeIds = asArray(nestedGear?.shoeIds || data.gearShoeIds);
-        result.gearShoeDescription = getString(nestedGear?.shoeDescription, data.gearShoeDescription);
-        result.gearEssentialIds = asArray(nestedGear?.essentialIds || data.gearEssentialIds);
-        result.gearEssentialDescription = getString(nestedGear?.essentialDescription, data.gearEssentialDescription);
-        result.gearTravelIds = asArray(nestedGear?.travelIds || data.gearTravelIds);
-        result.gearTravelDescription = getString(nestedGear?.travelDescription, data.gearTravelDescription);
+        const gearTypes = ['Outfit', 'Accessory', 'Shoe', 'Essential', 'Travel'];
+
+        gearTypes.forEach(type => {
+          const lowerType = type.toLowerCase();
+          result[`gear${type}Ids`] = asArray(nestedGear?.[`${lowerType}Ids`] || data[`gear${type}Ids`]);
+          result[`gear${type}Description`] = getString(nestedGear?.[`${lowerType}Description`], data[`gear${type}Description`]);
+        });
 
         result.relatedEvents = asArray(data.relatedEvents);
 
-        // Cleanup nested objects
         delete result.theme;
         delete result.gear;
       }
