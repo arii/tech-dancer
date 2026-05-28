@@ -5,9 +5,9 @@ import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
 const PICKS = [
-  { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.jpg', href: '/gear/2023-10-01-loop-earplugs' },
-  { label: 'Steamer', image: '/images/gear/sketches/travel-steamer.jpg', href: '/gear/2023-11-01-travel-steamer' },
-  { label: 'Portable Speaker', image: '/images/gear/sketches/ue-wonderboom.jpg', href: '/gear/2024-01-01-portable-speaker' },
+  { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.webp', href: '/gear/2023-10-01-loop-earplugs' },
+  { label: 'Steamer', image: '/images/gear/sketches/travel-steamer.webp', href: '/gear/2023-11-01-travel-steamer' },
+  { label: 'Portable Speaker', image: '/images/gear/sketches/ue-wonderboom.webp', href: '/gear/2024-01-01-portable-speaker' },
 ];
 
 export function GearShelf() {
@@ -51,6 +51,7 @@ export function GearShelf() {
                 <img
                   src={`${ASSET_PREFIX}${image}`}
                   alt=""
+                  aria-hidden="true"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : imageText ? (
@@ -85,7 +86,12 @@ export function GearShelf() {
             >
               <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
                 {image ? (
-                  <img src={`${ASSET_PREFIX}${image}`} alt="" className="block h-full w-full max-w-full object-cover" />
+                  <img
+                    src={`${ASSET_PREFIX}${image}`}
+                    alt=""
+                    aria-hidden="true"
+                    className="block h-full w-full max-w-full object-cover"
+                  />
                 ) : imageText ? (
                   <Text variant="body" size="xs" weight="font-bold" className="text-center">
                     [{imageText}]

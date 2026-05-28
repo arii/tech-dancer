@@ -7,7 +7,7 @@ const FEATURED = {
   eyebrow: 'FEATURED GUIDE',
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
-  image: '/assets/home/wcs-travel-pack.jpg',
+  image: '/assets/home/wcs-travel-pack.webp',
   href: '/gear',
 };
 
@@ -29,6 +29,9 @@ export function FeaturedGuidePanel() {
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         alt={FEATURED.title}
+        width={420}
+        height={600}
+        fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover object-center opacity-60 transition-opacity duration-500 group-hover:opacity-70"
         aria-hidden="true"
       />
