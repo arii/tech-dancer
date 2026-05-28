@@ -7,7 +7,7 @@ const DEFAULT_SHIPPING = {
   "@type": "OfferShippingDetails",
   "shippingRate": {
     "@type": "MonetaryAmount",
-    "value": "5.00",
+    "value": "5.80",
     "currency": "USD"
   },
   "shippingDestination": {
@@ -31,13 +31,10 @@ const DEFAULT_SHIPPING = {
   }
 };
 
-const DEFAULT_RETURN_POLICY = {
+export const DEFAULT_RETURN_POLICY = {
   "@type": "MerchantReturnPolicy",
   "applicableCountry": "US",
-  "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnPeriod",
-  "merchantReturnDays": 30,
-  "returnMethod": "https://schema.org/ReturnByMail",
-  "returnFees": "https://schema.org/FreeReturn"
+  "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy"
 };
 
 export function generateMerchSchema(products: ProductCatalogItem[]) {

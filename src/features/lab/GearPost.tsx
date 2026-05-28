@@ -5,6 +5,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
+import { DEFAULT_RETURN_POLICY } from '@/utils/schema';
 import { GearPostDetail } from './components/GearPostDetail';
 
 export default function GearPost() {
@@ -40,7 +41,7 @@ export default function GearPost() {
           "@type": "OfferShippingDetails",
           "shippingRate": {
             "@type": "MonetaryAmount",
-            "value": "5.00",
+            "value": "5.80",
             "currency": "USD"
           },
           "shippingDestination": {
@@ -63,14 +64,7 @@ export default function GearPost() {
             }
           }
         },
-        "hasMerchantReturnPolicy": {
-          "@type": "MerchantReturnPolicy",
-          "applicableCountry": "US",
-          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnPeriod",
-          "merchantReturnDays": 30,
-          "returnMethod": "https://schema.org/ReturnByMail",
-          "returnFees": "https://schema.org/FreeReturn"
-        }
+        "hasMerchantReturnPolicy": DEFAULT_RETURN_POLICY
       },
       "review": {
         "@type": "Review",
