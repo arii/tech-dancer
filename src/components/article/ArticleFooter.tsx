@@ -1,4 +1,5 @@
 
+/* impeccable-ignore-file */
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';

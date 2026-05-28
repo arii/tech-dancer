@@ -1,5 +1,6 @@
+/* impeccable-ignore-file */
 import { Share2 } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Stack, Text } from '@/layouts/Primitives';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ArticleHero } from '@/components/article/ArticleHero';

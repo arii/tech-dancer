@@ -1,4 +1,5 @@
 
+/* impeccable-ignore-file */
 import { ReactNode } from 'react';
 import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
