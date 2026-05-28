@@ -43,7 +43,28 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
         payload["body"] = warning + payload.get("body", "")
 
     if not dry_run:
-        pr.create_review(body=payload.get("body",""), comments=payload.get("comments",[]), event=event)
+        import github
+        def try_create_review(review_body, review_comments, review_event):
+            try:
+                pr.create_review(body=review_body, comments=review_comments, event=review_event)
+            except github.GithubException as e:
+                if e.status == 422:
+                    error_msg = json.dumps(e.data) if getattr(e, 'data', None) else str(e)
+                    if "Can not approve your own pull request" in error_msg and review_event != "COMMENT":
+                        print("⚠️  Cannot approve own PR. Retrying as COMMENT...")
+                        try_create_review(review_body, review_comments, "COMMENT")
+                        return
+                    if review_comments:
+                        print("⚠️  Failed to post inline comments due to line resolution error. Retrying with body comments...")
+                        fallback_body = review_body
+                        fallback_body += "\n\n### Inline Comments (Fallback due to Github line resolution errors)\n"
+                        for comment in review_comments:
+                            fallback_body += f"- **{comment.get('path')}:{comment.get('line')}**: {comment.get('body')}\n"
+                        try_create_review(fallback_body, [], review_event)
+                        return
+                raise e
+
+        try_create_review(payload.get("body",""), payload.get("comments",[]), event)
         if event == "REQUEST_CHANGES":
             labels = [l.name for l in pr.labels]
             if "needs-design-system-fix" not in labels and any(k in payload.get("body","").lower() for k in ['tailwind', 'token']):
