@@ -14,6 +14,7 @@ import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GEAR_PILLS } from "./config";
 import { FilterButton } from '@/components/ui/FilterButton';
+import { generateGearCatalogSchema } from '@/utils/schema';
 
 export default function Toolbox() {
   const { filteredCategories, searchTerm, setSearchTerm, view, setView, selectedPill, setSelectedPill } = useToolbox();
@@ -27,6 +28,7 @@ export default function Toolbox() {
       <SEO
         title="Toolbox"
         description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
+        jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
       <Box as="header" marginBottom={8}>
         <PageHeader

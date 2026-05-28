@@ -13,6 +13,7 @@ updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/love-unisex-shirt
 displayMode: "pair"
 featuredSide: "back"
+sku: love-lead-follow-switch-unisex
 ---
 
 A classic unisex fit for everyone in the community who loves to do it all on the floor.

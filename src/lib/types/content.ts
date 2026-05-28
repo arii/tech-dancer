@@ -42,6 +42,7 @@ export interface Resource {
   specs?: Record<string, string>;
   // Merch-specific fields
   shopUrl?: string;
+  sku?: string;
   displayMode?: string;
   featuredSide?: string;
 }

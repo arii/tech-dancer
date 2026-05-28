@@ -27,7 +27,50 @@ export default function GearPost() {
       "image": resource.image || `${BASE_URL}/assets/comp_analysis_hero.webp`,
       "brand": {
         "@type": "Brand",
-        "name": resource.category
+        "name": "BoomTick"
+      },
+      "sku": resource.sku || resource.slug,
+      "offers": {
+        "@type": "Offer",
+        "price": resource.priceCategory === 'premium' ? '45.00' : '25.00',
+        "priceCurrency": "USD",
+        "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+        "availability": "https://schema.org/InStock",
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": "5.00",
+            "currency": "USD"
+          },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": "US"
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": 1,
+              "maxValue": 3,
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": 2,
+              "maxValue": 5,
+              "unitCode": "DAY"
+            }
+          }
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "US",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnPeriod",
+          "merchantReturnDays": 30,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
+        }
       },
       "review": {
         "@type": "Review",

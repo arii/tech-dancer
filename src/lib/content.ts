@@ -94,6 +94,8 @@ function transform<T extends { date?: string; draft?: boolean }>(
           : undefined,
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
+        sku: data.sku ? String(data.sku) : undefined,
+        priceCategory: data.priceCategory ? String(data.priceCategory) : undefined,
         content: content || "",
         slug: slugFrom(path),
       };

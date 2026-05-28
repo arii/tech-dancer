@@ -13,6 +13,7 @@ updatedDate: "June 2024"
 shopUrl: https://boomtick.printful.me/lead-follow-switch-love-shirt-neon
 displayMode: "pair"
 featuredSide: "back"
+sku: lead-follow-switch-love-neon
 ---
 
 Perfect for the multi-role dancer, this neon shirt expresses the inclusive spirit of West Coast Swing.
