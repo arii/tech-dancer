@@ -91,7 +91,7 @@ export function HeroSection() {
           height={1.5}
           marginTop={6}
           radius="full"
-          className="opacity-0 pointer-events-none hero-line-anim"
+          className="pointer-events-none hero-line-anim"
         />
 
         {/* Tagline with Vertical Accent Bar */}
@@ -101,7 +101,7 @@ export function HeroSection() {
           gap={5}
           marginTop={{ base: 6, lg: 8 }}
           maxWidth="2xl"
-          className="opacity-0 hero-tagline-anim"
+          className="hero-tagline-anim"
         >
           <Box
             width="2px"
@@ -129,7 +129,7 @@ export function HeroSection() {
           gap={3}
           width="full"
           maxWidth={{ base: "full", md: "2xl" }}
-          className="opacity-0 hero-cta-anim"
+          className="hero-cta-anim"
         >
           <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
             <ActionButton
@@ -168,7 +168,7 @@ export function HeroSection() {
           marginY={4}
           height={12}
           overflow="hidden"
-          className="opacity-0 pointer-events-none hero-waveform-anim"
+          className="pointer-events-none hero-waveform-anim"
           aria-hidden="true"
         >
           {BARS.map((bar, i) => (
