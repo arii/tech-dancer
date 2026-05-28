@@ -3,6 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
 import { ResourceGrid } from '../ResourceGrid';
+import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
 
 interface ResourceHeaderExtrasProps {
   author: string;
@@ -99,7 +100,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
             )}
           </Box>
           <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight not-italic">
-            As an Amazon Associate I earn from qualifying purchases.
+            {DISCLOSURE_TEXT}
           </Text>
         </Stack>
       )}

@@ -4,7 +4,7 @@ interface AffiliateDisclosureProps {
   compact?: boolean;
 }
 
-const DISCLOSURE_TEXT = 'As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.';
+export const DISCLOSURE_TEXT = 'As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.';
 
 const COMPACT_TEXT = 'Amazon affiliate link';
 
