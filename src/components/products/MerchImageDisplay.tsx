@@ -1,4 +1,5 @@
-import { Box, Text } from '@/layouts/Primitives';
+import { useState, type ReactNode } from 'react';
+import { Box, Text, Grid } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 import type {
   MerchImageDisplayMode,
@@ -23,7 +24,7 @@ function resolveImageSrc(src: string) {
 interface ImageLinkProps {
   href: string;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   ariaLabel?: string;
 }
@@ -49,7 +50,7 @@ const ImageLink = ({
   </a>
 );
 
-const Label = ({ children }: { children: React.ReactNode }) => (
+const Label = ({ children }: { children: ReactNode }) => (
   <Box
     position="absolute"
     bottom={2}
@@ -57,7 +58,7 @@ const Label = ({ children }: { children: React.ReactNode }) => (
     paddingX={1.5}
     paddingY={0.5}
     radius="sm"
-    className="bg-surface/80 backdrop-blur-sm border border-line/20 z-30"
+    className="bg-surface/80 backdrop-blur-sm border border-line/20 z-10"
   >
     <Text size="micro" weight="font-bold" color="dim" uppercase tracking="wider">
       {children}
@@ -79,13 +80,18 @@ export function MerchImageDisplay({
     imageDisplayMode,
   });
 
-  if (resolved.mode === 'both-equal') {
+  const [activeSide, setActiveSide] = useState<'front' | 'back'>(
+    resolved.mode === 'back-prominent' ? 'back' : 'front'
+  );
+
+  const hasMultipleImages = (images?.length ?? 0) > 1;
+
+  if (resolved.mode === 'both-equal' && hasMultipleImages) {
     return (
-      <Box
-        display="grid"
-        gridCols={{ base: 2 }}
+      <Grid
+        cols={2}
         gap={2}
-        height={{ base: 72, md: 80 }}
+        height={{ base: 56, md: 72 }}
       >
         {resolved.equal.map((img, idx) => (
           <ImageLink
@@ -101,85 +107,91 @@ export function MerchImageDisplay({
               maxWidth="full"
               maxHeight="full"
               padding={2}
-              className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
+              className="h-full w-full object-contain transition-all duration-500 hover:scale-[1.02]"
             />
             <Label>{img.side}</Label>
           </ImageLink>
         ))}
-      </Box>
+      </Grid>
     );
   }
 
-  if (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') {
-    return (
-      <Box
-        position="relative"
-        height={{ base: 72, md: 80 }}
-        className="group/display"
-      >
-        <ImageLink href={href} title={title} className="h-full border border-line/20 bg-surface-alt/35">
-          {resolved.primary && (
-            <Box
-              as="img"
-              src={resolveImageSrc(resolved.primary.src)}
-              alt={resolved.primary.alt}
-              maxWidth="full"
-              maxHeight="full"
-              padding={4}
-              className="h-full w-full object-contain transition-transform duration-300 group-hover/display:scale-105"
-            />
-          )}
-          {resolved.primary && <Label>{resolved.primary.side}</Label>}
-        </ImageLink>
+  const activeImage = images?.find(img => img.side === activeSide) || resolved.primary;
+  const showToggle = hasMultipleImages && (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent');
 
-        {resolved.secondary && (
-          <Box
-            position="absolute"
-            bottom={3}
-            left={3}
-            width={24}
-            height={24}
-            radius="md"
-            className="z-20 shadow-lg border-2 border-surface bg-surface-alt overflow-hidden"
-          >
-            <ImageLink href={href} title={title} className="h-full">
-              <Box
-                as="img"
-                src={resolveImageSrc(resolved.secondary.src)}
-                alt={resolved.secondary.alt}
-                maxWidth="full"
-                maxHeight="full"
-                padding={1}
-                className="h-full w-full object-contain transition-transform duration-300 hover:scale-110"
-              />
-              <Label>{resolved.secondary.side}</Label>
-            </ImageLink>
-          </Box>
-        )}
-      </Box>
-    );
-  }
-
-  // Single mode (default)
   return (
     <Box
       position="relative"
-      height={{ base: 72, md: 80 }}
+      height={{ base: 56, md: 72 }}
+      className="group/display"
     >
-      <ImageLink href={href} title={title} className="h-full border border-line/20 bg-surface-alt/35">
-        {resolved.primary && (
+      <ImageLink
+        href={href}
+        title={title}
+        className="h-full border border-line/20 bg-surface-alt/35"
+      >
+        {activeImage && (
           <Box
             as="img"
-            src={resolveImageSrc(resolved.primary.src)}
-            alt={resolved.primary.alt}
+            src={resolveImageSrc(activeImage.src)}
+            alt={activeImage.alt}
             maxWidth="full"
             maxHeight="full"
             padding={4}
-            className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
+            className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-[1.02]"
           />
         )}
-        {resolved.primary?.side === 'back' && <Label>Back</Label>}
       </ImageLink>
+
+      {showToggle && (
+        <Box
+          position="absolute"
+          bottom={4}
+          left="50%"
+          padding={0.5}
+          className="-translate-x-1/2 flex items-center gap-0.5 rounded-full bg-surface/90 backdrop-blur-md border border-line/20 shadow-lg z-20"
+        >
+          {(['front', 'back'] as const).map((side) => {
+            const exists = images?.some(img => img.side === side);
+            if (!exists) return null;
+
+            const isActive = activeSide === side;
+
+            return (
+              <button
+                key={side}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setActiveSide(side);
+                }}
+                className={cn(
+                  "px-2 py-0.5 rounded-full transition-all duration-200 border border-transparent",
+                  isActive
+                    ? "bg-accent/80 text-white shadow-sm"
+                    : "text-text-dim hover:text-text-main hover:bg-surface-alt"
+                )}
+              >
+                <Text
+                  size="micro"
+                  weight="font-bold"
+                  uppercase
+                  tracking="wider"
+                  className="pointer-events-none"
+                  color={isActive ? "white" : "dim"}
+                >
+                  {side}
+                </Text>
+              </button>
+            );
+          })}
+        </Box>
+      )}
+
+      {!showToggle && activeImage?.side === 'back' && (
+        <Label>Back</Label>
+      )}
     </Box>
   );
 }

@@ -1,6 +1,5 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { BaseCard } from '@/components/ui/BaseCard';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
@@ -10,7 +9,8 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
   const isPrintful = item.disclosure === 'owned-printful';
 
   return (
-    <BaseCard
+    <Stack
+      as="article"
       gap={4}
       height="full"
       padding={5}
@@ -18,6 +18,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       border
       maxWidth="sm"
       data-testid="product-card"
+      className="group relative bg-surface transition-all duration-200"
     >
       <MerchImageDisplay
         title={item.title}
@@ -103,6 +104,6 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} aria-hidden="true" />
         </Stack>
       </Box>
-    </BaseCard>
+    </Stack>
   );
 }
