@@ -44,6 +44,17 @@ const CARD_STYLES = {
   verdict: "uppercase tracking-widest opacity-90"
 };
 
+/**
+ * Reusable background for product images that provides a neutral stage
+ * instead of a stark white rectangle.
+ */
+export const PRODUCT_STAGE_CLASS = cn(
+  "bg-slate-100",
+  "bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,0.92),rgba(226,232,240,0.86)_55%,rgba(203,213,225,0.72))]",
+  "border border-white/10",
+  "shadow-inner"
+);
+
 export function GearCard(props: GearCardProps) {
   const {
     slug,
@@ -117,9 +128,10 @@ export function GearCard(props: GearCardProps) {
       <Box
         position="relative"
         overflow="hidden"
-        radius="md"
+        radius="xl"
         className={cn(
-          "w-full bg-white shrink-0",
+          "w-full shrink-0",
+          PRODUCT_STAGE_CLASS,
           mobileImageSizeClasses[mode],
           imageSizeClasses[mode],
           mode === "apparel" && "p-4",

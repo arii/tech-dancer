@@ -4,7 +4,8 @@ import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
-import { pickRest } from '@/lib/utils';
+import { PRODUCT_STAGE_CLASS } from '@/components/ui/GearCard';
+import { pickRest, cn } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
@@ -63,8 +64,7 @@ export function ListRow(props: ListRowProps) {
         display="flex"
         align="center"
         justify="center"
-        border
-        className="bg-white border-line/30"
+        className={cn(PRODUCT_STAGE_CLASS, "border-line/30")}
       >
         {image ? (
           <img
