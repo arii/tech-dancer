@@ -6,6 +6,8 @@ import { getResourceBySlug } from '@/lib/content';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
+import type { SchemaProduct } from '@/utils/schema';
+import { AMAZON_AFFILIATE_DISCLOSURE } from '@/utils/schema';
 
 export default function GearPost() {
   const { slug } = useParams();
@@ -23,13 +25,16 @@ export default function GearPost() {
     const isMerch = !!resource.shopUrl;
     const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const schema: any = {
+    const schema: SchemaProduct = {
       "@context": "https://schema.org",
       "@type": "Product",
       "name": resource.title,
-      "description": resource.excerpt,
-      "image": resource.image || `${BASE_URL}/assets/comp_analysis_hero.webp`,
+      "description": isAmazon
+        ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}`
+        : resource.excerpt,
+      "image": resource.image
+        ? (resource.image.startsWith('http') ? resource.image : `${BASE_URL}${resource.image}`)
+        : `${BASE_URL}/assets/comp_analysis_hero.webp`,
       "brand": {
         "@type": "Brand",
         "name": "BoomTick"
@@ -38,29 +43,25 @@ export default function GearPost() {
       "offers": {
         "@type": "Offer",
         "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        ...(isMerch ? { "availability": "https://schema.org/InStock" } : {})
+        ...(isMerch ? {
+          "availability": "https://schema.org/InStock",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "US"
+            }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "US",
+            "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
+            "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
+          }
+        } : {})
       }
     };
-
-    if (isMerch) {
-      schema.offers.shippingDetails = {
-        "@type": "OfferShippingDetails",
-        "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "US"
-        }
-      };
-      schema.offers.hasMerchantReturnPolicy = {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "US",
-        "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
-        "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
-      };
-    } else if (isAmazon) {
-      // For Amazon/affiliate, use a more compliant description and avoid static price/rating
-      schema.description = `${resource.excerpt} As an Amazon Associate, BoomTick may earn from qualifying purchases.`;
-    }
 
     return schema;
   }, [resource]);
