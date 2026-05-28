@@ -10,14 +10,24 @@ function isIgnored(msg: string) {
 
 async function validateUrlNavigation(page: Page, href: string) {
   if (href.includes('#')) {
+<<<<<<< HEAD
     const [baseUrl, fragment] = href.split('#');
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
       await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 60000 });
       await expect(page.locator('main')).toBeVisible();
+=======
+    const [, fragment] = href.split('#');
+    const response = await page.goto(href);
+    await expect(page.locator('main')).toBeVisible();
+    if (response !== null) {
+      expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
+>>>>>>> b834c9447 (fix hash navigation smoke check for anchored links)
     }
     if (fragment) {
       const locator = page.locator(`#${fragment}`);
-      await expect(locator).toBeVisible({ timeout: 5000 });
+      await expect(locator).toHaveCount(1, { timeout: 5000 });
+      await locator.scrollIntoViewIfNeeded();
+      await expect(locator).toBeVisible({ timeout: 10000 });
     }
   } else {
     const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
