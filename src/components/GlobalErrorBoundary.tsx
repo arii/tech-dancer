@@ -24,6 +24,7 @@ export function GlobalErrorBoundary() {
 
   return (
     <Box
+      as="main"
       display="flex"
       align="center"
       justify="center"
