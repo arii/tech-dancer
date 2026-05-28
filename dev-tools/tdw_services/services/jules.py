@@ -25,6 +25,28 @@ class JulesClient:
             print(f"⚠️  Jules API list_sources failed: {e}")
             return []
 
+    def list_sessions(self, pageSize: int = 10) -> List[Dict[str, Any]]:
+        url = f"{self.base_url}/sessions"
+        params = {"pageSize": pageSize}
+        try:
+            response = requests.get(url, headers=self.headers, params=params, timeout=10)
+            response.raise_for_status()
+            return response.json().get("sessions", [])
+        except Exception as e:
+            print(f"⚠️  Jules API list_sessions failed: {e}")
+            return []
+
+    def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
+        clean_id = session_id.replace("sessions/", "")
+        url = f"{self.base_url}/sessions/{clean_id}"
+        try:
+            response = requests.get(url, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            print(f"⚠️  Jules API get_session failed: {e}")
+            return None
+
     def discover_source_id(self, repo_full_name: str) -> Optional[str]:
         sources = self.list_sources()
         for s in sources:
