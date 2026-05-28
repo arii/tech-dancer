@@ -30,8 +30,14 @@ def get_ollama_model() -> str:
     return os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
 
 def get_ollama_review_model() -> str:
-    """Dynamic getter for the dedicated Code Reviewer model."""
+    """Dynamic getter for the dedicated Code Reviewer model.
+    'code-reviewer' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on qwen2.5-coder:7b.
+    """
     return os.environ.get("OLLAMA_REVIEW_MODEL", "code-reviewer")
+
+def get_ollama_synthesis_model() -> str:
+    """Dynamic getter for the Synthesis model."""
+    return os.environ.get("OLLAMA_SYNTHESIS_MODEL", "llama3.2")
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""

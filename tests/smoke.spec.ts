@@ -14,15 +14,15 @@ async function validateUrlNavigation(page: Page, href: string) {
     const [baseUrl, fragment] = href.split('#');
     if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
       await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 60000 });
-      await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
+      await expect(page.locator('#main-content')).toBeVisible();
     }
     if (fragment) {
       const locator = page.locator(`#${fragment}`);
-      await expect(locator).toBeVisible({ timeout: 10000 });
+      await expect(locator).toBeVisible({ timeout: 5000 });
     }
   } else {
     const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
-    await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
+    await expect(page.locator('#main-content')).toBeVisible({ timeout: 10000 });
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
     }
@@ -33,14 +33,14 @@ test.describe('Navigation Smoke Tests', () => {
   test.describe.configure({ timeout: 120000 }); // 2 minute timeout for these tests
   test('homepage loads without console errors', async ({ page, pageErrors }) => {
     await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
-    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('#main-content')).toBeVisible();
     const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
     expect(filteredErrors).toHaveLength(0);
   });
 
   test('all nav links are reachable and error-free', async ({ page, pageErrors }) => {
     await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
-    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('#main-content')).toBeVisible();
 
     const links = await page.$$eval('nav a[href]', (anchors) =>
       anchors
@@ -61,8 +61,8 @@ test.describe('Navigation Smoke Tests', () => {
 
     for (const index of contentIndexes) {
       await page.goto(index, { waitUntil: 'networkidle', timeout: 60000 });
-      await expect(page.locator('main')).toBeVisible();
-      const exists = await page.$('main');
+      await expect(page.locator('#main-content')).toBeVisible();
+      const exists = await page.$('#main-content');
       if (!exists) continue;
 
       const contentLinks = await page.$$eval('a[href]', (anchors) =>
