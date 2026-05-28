@@ -64,7 +64,7 @@ export function RootLayout() {
   return (
     <Box height="full">
       <MainLayout>
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           <Box
             as={motion.div}
             key={location.pathname}
