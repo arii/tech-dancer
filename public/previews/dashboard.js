@@ -5,7 +5,14 @@
 
 const REPO_OWNER = 'arii';
 const REPO_NAME = 'tech-dancer';
-const BASE_URL = `https://${REPO_OWNER}.github.io/${REPO_NAME}`;
+
+const IS_GITHUB_PROJECT_SITE =
+  window.location.hostname === `${REPO_OWNER}.github.io`;
+
+const BASE_URL = IS_GITHUB_PROJECT_SITE
+  ? `https://${REPO_OWNER}.github.io/${REPO_NAME}`
+  : window.location.origin;
+
 const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const TRACKING_URL = `${BASE_URL}/REVIEW_TRACKING.md`;
 const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
