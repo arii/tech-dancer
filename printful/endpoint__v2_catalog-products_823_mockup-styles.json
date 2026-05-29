@@ -1,0 +1,1154 @@
+{
+  "data": [
+    {
+      "placement": "front",
+      "display_name": "Front print",
+      "technique": "dtg",
+      "print_area_width": 12.0,
+      "print_area_height": 16.0,
+      "print_area_type": "simple",
+      "dpi": 150,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "back",
+      "display_name": "Back print",
+      "technique": "dtg",
+      "print_area_width": 12.0,
+      "print_area_height": 16.0,
+      "print_area_type": "simple",
+      "dpi": 150,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "label_outside",
+      "display_name": "Outside label",
+      "technique": "dtg",
+      "print_area_width": 3.0,
+      "print_area_height": 3.0,
+      "print_area_type": "simple",
+      "dpi": 150,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "embroidery_chest_center",
+      "display_name": "Center chest",
+      "technique": "embroidery",
+      "print_area_width": 4.0,
+      "print_area_height": 4.0,
+      "print_area_type": "simple",
+      "dpi": 300,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "embroidery_chest_left",
+      "display_name": "Left chest",
+      "technique": "embroidery",
+      "print_area_width": 4.0,
+      "print_area_height": 4.0,
+      "print_area_type": "simple",
+      "dpi": 300,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "sleeve_left",
+      "display_name": "Left sleeve",
+      "technique": "dtg",
+      "print_area_width": 4.0,
+      "print_area_height": 3.5,
+      "print_area_type": "simple",
+      "dpi": 150,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "sleeve_right",
+      "display_name": "Right sleeve",
+      "technique": "dtg",
+      "print_area_width": 4.0,
+      "print_area_height": 3.5,
+      "print_area_type": "simple",
+      "dpi": 150,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "embroidery_sleeve_left_top",
+      "display_name": "Left sleeve top",
+      "technique": "embroidery",
+      "print_area_width": 2.0,
+      "print_area_height": 3.0,
+      "print_area_type": "simple",
+      "dpi": 300,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "embroidery_sleeve_right_top",
+      "display_name": "Right sleeve top",
+      "technique": "embroidery",
+      "print_area_width": 2.0,
+      "print_area_height": 3.0,
+      "print_area_type": "simple",
+      "dpi": 300,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    },
+    {
+      "placement": "label_inside",
+      "display_name": "Inside label",
+      "technique": "dtg",
+      "print_area_width": 2.0,
+      "print_area_height": 0.75,
+      "print_area_type": null,
+      "dpi": 300,
+      "mockup_styles": [
+        {
+          "id": 24883,
+          "category_name": "Flat",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24884,
+          "category_name": "Ghost",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24885,
+          "category_name": "Folded",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24886,
+          "category_name": "Flat",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24887,
+          "category_name": "Ghost",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24888,
+          "category_name": "Ghost",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 24889,
+          "category_name": "Ghost",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26033,
+          "category_name": "Ghost 2",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26159,
+          "category_name": "Ghost 2",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26160,
+          "category_name": "Ghost 2",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 26161,
+          "category_name": "Ghost 2",
+          "view_name": "Right",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29506,
+          "category_name": "Men's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29507,
+          "category_name": "Men's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29508,
+          "category_name": "Men's",
+          "view_name": "Left",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29509,
+          "category_name": "Women's",
+          "view_name": "Front",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29510,
+          "category_name": "Women's",
+          "view_name": "Back",
+          "restricted_to_variants": null
+        },
+        {
+          "id": 29511,
+          "category_name": "Women's",
+          "view_name": "Front 2",
+          "restricted_to_variants": null
+        }
+      ]
+    }
+  ],
+  "extra": [],
+  "paging": {
+    "total": 19,
+    "limit": 10,
+    "offset": 0
+  },
+  "_links": {
+    "self": {
+      "href": "https://api.printful.com/v2/catalog-products/823/mockup-styles?limit=10"
+    },
+    "next": {
+      "href": "https://api.printful.com/v2/catalog-products/823/mockup-styles?limit=10&offset=10"
+    },
+    "first": {
+      "href": "https://api.printful.com/v2/catalog-products/823/mockup-styles?limit=10"
+    },
+    "last": {
+      "href": "https://api.printful.com/v2/catalog-products/823/mockup-styles?limit=10&offset=10"
+    }
+  }
+}

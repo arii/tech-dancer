@@ -1,0 +1,1319 @@
+{
+  "code": 200,
+  "result": {
+    "product": {
+      "id": 823,
+      "main_category_id": 24,
+      "type": "T-SHIRT",
+      "description": "Upgrade your wardrobe with this oversized t-shirt made from 100% organic combed ring-spun cotton. It\u2019s designed with dropped shoulders and a wide collar, making it perfect for everyday streetwear outfits.\n\n\u2022 100% organic combed ring-spun cotton\n\u2022 Fabric weight: 5.9 oz./yd.\u00b2 (200 g/m\u00b2)\n\u2022 Oversized fit\n\u2022 Set-in sleeves\n\u2022 Dropped shoulders\n\u2022 1 \u00d7 1 rib at collar\n\u2022 Self-fabric neck tape on the inside of the back\n\u2022 The fabric of this product holds certifications for its organic cotton content under GOTS (Global Organic Textile Standard) and OCS (Organic Content Standard)\n\u2022 Blank product sourced from Bangladesh\n\nThe sizes correspond to a bigger size in the European market, customers from that region should order a size down.",
+      "type_name": "Stanley/Stella SATU020 | Blaster 2.0 Unisex Oversized T-Shirt",
+      "title": "Unisex Organic Oversized High Neck Blaster 2.0 T-Shirt | Stanley/Stella SATU020",
+      "brand": "Stanley/Stella",
+      "model": "SATU020",
+      "image": "https://files.cdn.printful.com/o/upload/product-catalog-img/56/562d1c7b3e97d51f8db3f388b8b22724_l",
+      "variant_count": 25,
+      "currency": "USD",
+      "options": [
+        {
+          "id": "thread_colors_chest_left",
+          "title": "Left chest thread colors",
+          "type": "multi_select",
+          "values": {
+            "#FFFFFF": "1801 White",
+            "#000000": "1800 Black",
+            "#96A1A8": "1718 Grey",
+            "#A67843": "1672 Old Gold",
+            "#FFCC00": "1951 Gold",
+            "#E25C27": "1987 Orange",
+            "#CC3366": "1910 Flamingo",
+            "#CC3333": "1839 Red",
+            "#660000": "1784 Maroon",
+            "#333366": "1966 Navy",
+            "#005397": "1842 Royal",
+            "#3399FF": "1695 Aqua/Teal",
+            "#6B5294": "1832 Purple",
+            "#01784E": "1751 Kelly Green",
+            "#7BA35A": "1848 Kiwi Green"
+          },
+          "additional_price": null,
+          "additional_price_breakdown": []
+        },
+        {
+          "id": "thread_colors_chest_center",
+          "title": "Center chest thread colors",
+          "type": "multi_select",
+          "values": {
+            "#FFFFFF": "1801 White",
+            "#000000": "1800 Black",
+            "#96A1A8": "1718 Grey",
+            "#A67843": "1672 Old Gold",
+            "#FFCC00": "1951 Gold",
+            "#E25C27": "1987 Orange",
+            "#CC3366": "1910 Flamingo",
+            "#CC3333": "1839 Red",
+            "#660000": "1784 Maroon",
+            "#333366": "1966 Navy",
+            "#005397": "1842 Royal",
+            "#3399FF": "1695 Aqua/Teal",
+            "#6B5294": "1832 Purple",
+            "#01784E": "1751 Kelly Green",
+            "#7BA35A": "1848 Kiwi Green"
+          },
+          "additional_price": null,
+          "additional_price_breakdown": []
+        },
+        {
+          "id": "thread_colors_sleeve_left_top",
+          "title": "Sleeve left top thread colors",
+          "type": "multi_select",
+          "values": {
+            "#FFFFFF": "1801 White",
+            "#000000": "1800 Black",
+            "#96A1A8": "1718 Grey",
+            "#A67843": "1672 Old Gold",
+            "#FFCC00": "1951 Gold",
+            "#E25C27": "1987 Orange",
+            "#CC3366": "1910 Flamingo",
+            "#CC3333": "1839 Red",
+            "#660000": "1784 Maroon",
+            "#333366": "1966 Navy",
+            "#005397": "1842 Royal",
+            "#3399FF": "1695 Aqua/Teal",
+            "#6B5294": "1832 Purple",
+            "#01784E": "1751 Kelly Green",
+            "#7BA35A": "1848 Kiwi Green"
+          },
+          "additional_price": null,
+          "additional_price_breakdown": []
+        },
+        {
+          "id": "thread_colors_sleeve_right_top",
+          "title": "Sleeve right top thread colors",
+          "type": "multi_select",
+          "values": {
+            "#FFFFFF": "1801 White",
+            "#000000": "1800 Black",
+            "#96A1A8": "1718 Grey",
+            "#A67843": "1672 Old Gold",
+            "#FFCC00": "1951 Gold",
+            "#E25C27": "1987 Orange",
+            "#CC3366": "1910 Flamingo",
+            "#CC3333": "1839 Red",
+            "#660000": "1784 Maroon",
+            "#333366": "1966 Navy",
+            "#005397": "1842 Royal",
+            "#3399FF": "1695 Aqua/Teal",
+            "#6B5294": "1832 Purple",
+            "#01784E": "1751 Kelly Green",
+            "#7BA35A": "1848 Kiwi Green"
+          },
+          "additional_price": null,
+          "additional_price_breakdown": []
+        },
+        {
+          "id": "notes",
+          "title": "Embroidery notes",
+          "type": "text",
+          "values": null,
+          "additional_price": null,
+          "additional_price_breakdown": []
+        }
+      ],
+      "dimensions": null,
+      "is_discontinued": false,
+      "avg_fulfillment_time": null,
+      "techniques": [
+        {
+          "key": "DTG",
+          "display_name": "DTG printing",
+          "is_default": true
+        },
+        {
+          "key": "EMBROIDERY",
+          "display_name": "Embroidery",
+          "is_default": false
+        },
+        {
+          "key": "DTFILM",
+          "display_name": "DTF printing",
+          "is_default": false
+        }
+      ],
+      "files": [
+        {
+          "id": "embroidery_chest_left",
+          "type": "embroidery_chest_left",
+          "title": "Left chest",
+          "additional_price": "2.95",
+          "options": []
+        },
+        {
+          "id": "embroidery_chest_center",
+          "type": "embroidery_chest_center",
+          "title": "Center chest",
+          "additional_price": "2.95",
+          "options": []
+        },
+        {
+          "id": "embroidery_sleeve_left_top",
+          "type": "embroidery_sleeve_left_top",
+          "title": "Left sleeve top",
+          "additional_price": "2.95",
+          "options": []
+        },
+        {
+          "id": "embroidery_sleeve_right_top",
+          "type": "embroidery_sleeve_right_top",
+          "title": "Right sleeve top",
+          "additional_price": "2.95",
+          "options": []
+        },
+        {
+          "id": "front",
+          "type": "front",
+          "title": "Front print",
+          "additional_price": null,
+          "options": []
+        },
+        {
+          "id": "back",
+          "type": "back",
+          "title": "Back print",
+          "additional_price": "5.95",
+          "options": []
+        },
+        {
+          "id": "label_outside",
+          "type": "label_outside",
+          "title": "Outside label",
+          "additional_price": "2.49",
+          "options": []
+        },
+        {
+          "id": "label_inside",
+          "type": "label_inside",
+          "title": "Inside label",
+          "additional_price": "0.99",
+          "options": []
+        },
+        {
+          "id": "sleeve_left",
+          "type": "sleeve_left",
+          "title": "Left sleeve",
+          "additional_price": "2.49",
+          "options": []
+        },
+        {
+          "id": "sleeve_right",
+          "type": "sleeve_right",
+          "title": "Right sleeve",
+          "additional_price": "2.49",
+          "options": []
+        },
+        {
+          "id": "front_dtf",
+          "type": "front_dtf",
+          "title": "Front print",
+          "additional_price": "5.95",
+          "options": []
+        },
+        {
+          "id": "back_dtf",
+          "type": "back_dtf",
+          "title": "Back print",
+          "additional_price": "5.95",
+          "options": []
+        },
+        {
+          "id": "front_large_dtf",
+          "type": "front_large_dtf",
+          "title": "Large front print",
+          "additional_price": "5.95",
+          "options": []
+        },
+        {
+          "id": "back_large_dtf",
+          "type": "back_large_dtf",
+          "title": "Large back print",
+          "additional_price": "5.95",
+          "options": []
+        },
+        {
+          "id": "short_sleeve_left_dtf",
+          "type": "short_sleeve_left_dtf",
+          "title": "Short left sleeve",
+          "additional_price": "2.49",
+          "options": []
+        },
+        {
+          "id": "short_sleeve_right_dtf",
+          "type": "short_sleeve_right_dtf",
+          "title": "Short right sleeve",
+          "additional_price": "2.49",
+          "options": []
+        },
+        {
+          "id": "mockup",
+          "type": "mockup",
+          "title": "Mockup",
+          "additional_price": null,
+          "options": []
+        }
+      ],
+      "origin_country": "Bangladesh"
+    },
+    "variants": [
+      {
+        "id": 21024,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Black / 2XL)",
+        "size": "2XL",
+        "color": "Black",
+        "color_code": "#171717",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21024_1768822980.jpg",
+        "price": "23.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21012,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Black / L)",
+        "size": "L",
+        "color": "Black",
+        "color_code": "#171717",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21024_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21006,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Black / M)",
+        "size": "M",
+        "color": "Black",
+        "color_code": "#171717",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21024_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21000,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Black / S)",
+        "size": "S",
+        "color": "Black",
+        "color_code": "#171717",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21024_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21018,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Black / XL)",
+        "size": "XL",
+        "color": "Black",
+        "color_code": "#171717",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21024_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21025,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (French Navy / 2XL)",
+        "size": "2XL",
+        "color": "French Navy",
+        "color_code": "#091629",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21025_1768822980.jpg",
+        "price": "23.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21013,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (French Navy / L)",
+        "size": "L",
+        "color": "French Navy",
+        "color_code": "#091629",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21025_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21007,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (French Navy / M)",
+        "size": "M",
+        "color": "French Navy",
+        "color_code": "#091629",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21025_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21001,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (French Navy / S)",
+        "size": "S",
+        "color": "French Navy",
+        "color_code": "#091629",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21025_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21019,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (French Navy / XL)",
+        "size": "XL",
+        "color": "French Navy",
+        "color_code": "#091629",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21025_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21026,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Heather Grey / 2XL)",
+        "size": "2XL",
+        "color": "Heather Grey",
+        "color_code": "#b0b0b0",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21026_1768822980.jpg",
+        "price": "23.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21014,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Heather Grey / L)",
+        "size": "L",
+        "color": "Heather Grey",
+        "color_code": "#b0b0b0",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21026_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21008,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Heather Grey / M)",
+        "size": "M",
+        "color": "Heather Grey",
+        "color_code": "#b0b0b0",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21026_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21002,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Heather Grey / S)",
+        "size": "S",
+        "color": "Heather Grey",
+        "color_code": "#b0b0b0",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21026_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21020,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Heather Grey / XL)",
+        "size": "XL",
+        "color": "Heather Grey",
+        "color_code": "#b0b0b0",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21026_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21028,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Stone / 2XL)",
+        "size": "2XL",
+        "color": "Stone",
+        "color_code": "#eddeb9",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21016_1768822980.jpg",
+        "price": "22.69",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21016,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Stone / L)",
+        "size": "L",
+        "color": "Stone",
+        "color_code": "#eddeb9",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21016_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21010,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Stone / M)",
+        "size": "M",
+        "color": "Stone",
+        "color_code": "#eddeb9",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21016_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21004,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Stone / S)",
+        "size": "S",
+        "color": "Stone",
+        "color_code": "#eddeb9",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21016_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21022,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (Stone / XL)",
+        "size": "XL",
+        "color": "Stone",
+        "color_code": "#eddeb9",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21016_1768822980.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21029,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (White / 2XL)",
+        "size": "2XL",
+        "color": "White",
+        "color_code": "#ffffff",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21017_1768822979.jpg",
+        "price": "23.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21017,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (White / L)",
+        "size": "L",
+        "color": "White",
+        "color_code": "#ffffff",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21017_1768822979.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21011,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (White / M)",
+        "size": "M",
+        "color": "White",
+        "color_code": "#ffffff",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21017_1768822979.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21005,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (White / S)",
+        "size": "S",
+        "color": "White",
+        "color_code": "#ffffff",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21017_1768822979.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      },
+      {
+        "id": 21023,
+        "product_id": 823,
+        "name": "Unisex Organic Oversized High Neck T-Shirt | Stanley/Stella SATU020 (White / XL)",
+        "size": "XL",
+        "color": "White",
+        "color_code": "#ffffff",
+        "color_code2": null,
+        "image": "https://files.cdn.printful.com/products/823/21017_1768822979.jpg",
+        "price": "21.10",
+        "in_stock": true,
+        "availability_regions": {
+          "EU": "Europe",
+          "EU_LV": "Latvia",
+          "US": "United States",
+          "UK": "United Kingdom"
+        },
+        "availability_status": [
+          {
+            "region": "EU",
+            "status": "in_stock"
+          },
+          {
+            "region": "EU_LV",
+            "status": "in_stock"
+          },
+          {
+            "region": "US",
+            "status": "in_stock"
+          },
+          {
+            "region": "UK",
+            "status": "in_stock"
+          }
+        ],
+        "material": [
+          {
+            "name": "cotton",
+            "percentage": 100.0
+          }
+        ]
+      }
+    ]
+  },
+  "extra": []
+}

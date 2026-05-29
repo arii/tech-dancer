@@ -1,0 +1,1150 @@
+{
+  "generated_at": "2026-05-29T05:50:20.211473+00:00",
+  "image_directory": "printful_template_images",
+  "purpose": "Agent worksheet for reviewing Printful product templates before adding selected products to the BoomTick store.",
+  "rules": [
+    "Do not add every color. Pick the strongest 2-4 colors unless the product truly needs more.",
+    "Prefer readable design contrast over completeness.",
+    "Improve titles for clarity, spacing, SEO, and normal human language.",
+    "Descriptions should mention West Coast Swing, social dance, partner dance, NorCal, pride/rainbow, or event use only when relevant to the actual design.",
+    "Do not invent reviews, ratings, shipping dates, return policy claims, or fake scarcity.",
+    "Flag any product where the mockup/design placement looks weak before adding it to the store."
+  ],
+  "templates": [
+    {
+      "template_id": 102951840,
+      "product_id": 411,
+      "external_product_id": null,
+      "original_title": "GoldenGate NorCal Best Cal Unisex Premium Sweatshirt",
+      "suggested_clean_title": "Golden Gate Nor Cal Best Cal Unisex Premium Sweatshirt",
+      "product_type_guess": "sweatshirt",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL"
+      ],
+      "all_colors": [
+        "Black",
+        "Charcoal Heather",
+        "Forest Green",
+        "Adobe",
+        "Latte",
+        "Dusty Rose",
+        "White"
+      ],
+      "suggested_colors": [
+        "Black",
+        "White",
+        "Charcoal Heather",
+        "Forest Green"
+      ],
+      "available_variant_ids": [
+        11249,
+        11250,
+        11251,
+        11252,
+        11253,
+        11254,
+        11255,
+        11256,
+        11257,
+        11258,
+        11259,
+        11260,
+        11261,
+        11262,
+        11263,
+        13258,
+        13260,
+        13261,
+        13863,
+        13864,
+        13865,
+        13866,
+        13867,
+        13868,
+        16156,
+        16157,
+        16158,
+        16159,
+        16160,
+        16161,
+        25526,
+        25527,
+        25528,
+        25529,
+        25530,
+        25531,
+        25532,
+        25533,
+        25534,
+        25535,
+        25536,
+        25537
+      ],
+      "variant_count": 42,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/27/27661a79b054f724b5c30d8e9a585a6a_l",
+      "local_image_path": "printful_template_images/102951840-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779504384,
+      "current_updated_at": 1779504429,
+      "draft_description": "A clean BoomTick sweatshirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Rainbow Pride Sweatshirt",
+        "final_description": "There's nowhere quite like Northern California \u2014 the fog rolling over the Golden Gate, the redwoods, the rainbow flags lining Castro Street, the energy of a city that's always been proudly itself. This NorCal Best Cal sweatshirt captures all of it in one bold, colorful statement piece.\n\nSoft, warm, and made to wear everywhere \u2014 LGBTQ+ pride events, Bay Area weekend markets, California festival season, social dance nights, or just a cold SF morning when the fog hasn't lifted yet. Designed for NorCal locals, Bay Area expats missing home, Golden Gate fans, and anyone who believes NorCal really is Best Cal.",
+        "final_short_description": "Wear the Bay. Rainbow Golden Gate pride for NorCal locals, SF lovers, and everyone who knows this is the best coast.",
+        "final_selected_colors": "Black, White, Charcoal Heather, Forest Green",
+        "final_selected_sizes": "S, M, L, XL, 2XL, 3XL",
+        "seo_keywords": "NorCal sweatshirt, NorCal Best Cal, Bay Area sweatshirt, Golden Gate sweatshirt, California pride sweatshirt, Northern California apparel, SF pride sweatshirt, LGBTQ+ pride sweatshirt, rainbow California sweatshirt, NorCal pride apparel, Bay Area pride clothing, San Francisco sweatshirt, California lifestyle sweatshirt, NorCal graphic sweatshirt",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "high"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102951840-colorway-default.jpg",
+        "printful_template_images/102951840-colorway-default.jpg",
+        "printful_template_images/102951840-colorway-default.jpg",
+        "printful_template_images/102951840-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102951768,
+      "product_id": 665,
+      "external_product_id": null,
+      "original_title": "GoldenGate NorCalBest Cal unisex cvc t shirt",
+      "suggested_clean_title": "Golden Gate Nor Cal Best Cal unisex CVC t shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL"
+      ],
+      "all_colors": [
+        "Black",
+        "Charcoal",
+        "Midnight Navy",
+        "Royal",
+        "Red",
+        "Military Green",
+        "Orange",
+        "White"
+      ],
+      "suggested_colors": [
+        "Black",
+        "White",
+        "Charcoal",
+        "Red"
+      ],
+      "available_variant_ids": [
+        16472,
+        16473,
+        16474,
+        16475,
+        16476,
+        16477,
+        16478,
+        16479,
+        16480,
+        16481,
+        16482,
+        16483,
+        16484,
+        16485,
+        16486,
+        16487,
+        16488,
+        16489,
+        16490,
+        16491,
+        16492,
+        16493,
+        16494,
+        16495,
+        16496,
+        16497,
+        16498,
+        16499,
+        16622,
+        16623,
+        16624,
+        16625,
+        16626,
+        16627,
+        16628,
+        16669,
+        16670,
+        16671,
+        16672,
+        16673,
+        16674,
+        16675,
+        16676,
+        16677,
+        16678,
+        16679,
+        16680,
+        16681,
+        16682,
+        48729,
+        48731,
+        48733,
+        48735,
+        48737,
+        48739,
+        48741
+      ],
+      "variant_count": 56,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/66/6695598bd640d279ced3bcf6cec0996c_l",
+      "local_image_path": "printful_template_images/102951768-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779504193,
+      "current_updated_at": 1779504218,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Rainbow Pride T-Shirt",
+        "final_description": "From the bridges to the bays, from the redwoods to the rainbows \u2014 this is Northern California. The NorCal Best Cal Pride Tee puts the Golden Gate front and center, wrapped in the colors of the rainbow, for everyone who calls the Bay Area home (or wishes they did).\n\nPerfect for SF Pride, Bay Area festivals, Castro Street strolls, California road trips, and any day you want to rep your region loud and proud. Fits the NorCal local, the LGBTQ+ ally, the social dancer, the weekend hiker, and the SF transplant who never looked back.",
+        "final_short_description": "Bold Bay Area energy. The Golden Gate, a rainbow sky, and proof that NorCal is Best Cal.",
+        "final_selected_colors": "Black, White, Charcoal, Red",
+        "final_selected_sizes": "XS, S, M, L, XL, 2XL, 3XL",
+        "seo_keywords": "NorCal t-shirt, NorCal Best Cal shirt, Bay Area t-shirt, Golden Gate t-shirt, California pride t-shirt, Northern California shirt, SF pride shirt, rainbow Bay Area shirt, LGBTQ pride California, NorCal graphic tee, San Francisco shirt, California lifestyle tee, NorCal apparel, pride festival shirt California",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "high"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102951768-colorway-default.jpg",
+        "printful_template_images/102951768-colorway-default.jpg",
+        "printful_template_images/102951768-colorway-default.jpg",
+        "printful_template_images/102951768-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102951453,
+      "product_id": 163,
+      "external_product_id": null,
+      "original_title": "NorCal BestCal Women's Racerback Tank",
+      "suggested_clean_title": "Nor Cal Best Cal Women's Racerback Tank",
+      "product_type_guess": "tank top",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "all_colors": [
+        "Vintage Black",
+        "Vintage Navy",
+        "Purple Rush",
+        "Vintage Royal",
+        "Premium Heather",
+        "Heather White"
+      ],
+      "suggested_colors": [
+        "Vintage Black",
+        "Vintage Navy",
+        "Purple Rush",
+        "Vintage Royal"
+      ],
+      "available_variant_ids": [
+        6621,
+        6622,
+        6623,
+        6624,
+        6625,
+        6636,
+        6637,
+        6638,
+        6639,
+        6640,
+        6641,
+        6642,
+        6643,
+        6644,
+        6645,
+        6651,
+        6652,
+        6653,
+        6654,
+        6655,
+        6656,
+        6657,
+        6658,
+        6659,
+        6660,
+        6671,
+        6672,
+        6673,
+        6674,
+        6675
+      ],
+      "variant_count": 30,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/5f/5fe0f4e59587a37abda0cb2dca73582d_l",
+      "local_image_path": "printful_template_images/102951453-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779503903,
+      "current_updated_at": 1779503903,
+      "draft_description": "A clean BoomTick tank top for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Rainbow Pride Racerback Tank",
+        "final_description": "Light, breezy, and unapologetically NorCal. This racerback tank brings the Golden Gate and the rainbow together for every warm-weather Bay Area moment \u2014 SF Pride, Folsom Street Fair, festival weekends, rooftop parties, dance socials, and every California afternoon that calls for bold colors and easy movement.\n\nThe vintage-washed color options give it a lived-in West Coast feel that pairs perfectly with the rainbow design. For NorCal locals, LGBTQ+ community members, festival regulars, and anyone who needs a tank that says something.",
+        "final_short_description": "California sun, rainbow skies, Golden Gate vibes. A NorCal pride tank made for festivals, dance floors, and every Bay Area day.",
+        "final_selected_colors": "Vintage Black, Vintage Navy, Purple Rush, Vintage Royal",
+        "final_selected_sizes": "XS, S, M, L, XL",
+        "seo_keywords": "NorCal tank top, pride racerback tank, Bay Area tank top, Golden Gate tank, California pride tank, NorCal Best Cal tank, rainbow pride tank, LGBTQ pride tank top, SF pride festival tank, Northern California racerback, festival tank top pride, women's pride tank, California lifestyle tank",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers, WCS & social dancers",
+        "notes": "Note: Sizing only goes up to XL. Verify if Printful offers 2XL+ options for this garment style to support size inclusivity.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "high"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102951453-colorway-default.jpg",
+        "printful_template_images/102951453-colorway-default.jpg",
+        "printful_template_images/102951453-colorway-default.jpg",
+        "printful_template_images/102951453-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102861895,
+      "product_id": 823,
+      "external_product_id": null,
+      "original_title": "Unisex Organic Oversized High Neck Blaster 2.0 T-Shirt | Stanley/Stella SATU020",
+      "suggested_clean_title": "Unisex Organic Oversized High Neck Blaster 2.0 T-Shirt | Stanley/Stella SATU020",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "S"
+      ],
+      "all_colors": [
+        "Black"
+      ],
+      "suggested_colors": [
+        "Black"
+      ],
+      "available_variant_ids": [
+        21000
+      ],
+      "variant_count": 1,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/00/00742f188fd2acd4db2b445530c3326f_l",
+      "local_image_path": "printful_template_images/102861895-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "back",
+          "display_name": "Back print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779336211,
+      "current_updated_at": 1779336211,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "maybe",
+        "final_title": "Rainbow War Eagle - Pride Back Print Organic Oversized Tee (Black)",
+        "final_description": "The front is clean. The back is everything. This oversized organic tee features a bold, soaring rainbow war eagle back print on deep black - a statement piece built for people who don't need to say a word to fill a room.\n\nThe boxy, high-neck oversized silhouette is intentional streetwear - wear it loose over a sports bra at a festival, throw it on after a late-night dance social, or pair it with anything that can handle a little competition from the back print. Organic cotton construction keeps it soft and breathable through long days and longer nights.\n\nMade for: SF Pride, queer spaces and community events, LGBTQ+ festival season, inclusive social dance communities (West Coast Swing, Lindy Hop, salsa, bachata, fusion, blues), and everyday wear for people who don't do invisible.",
+        "final_short_description": "A soaring rainbow statement for the back of the room. Bold, oversized, and unapologetically proud.",
+        "final_selected_colors": "Black",
+        "final_selected_sizes": "S",
+        "seo_keywords": "rainbow war eagle shirt, pride back print tee, LGBTQ pride oversized shirt, rainbow bird pride shirt, organic pride tee black, queer fashion oversized, SF Pride shirt, pride festival outfit, rainbow graphic back print, gender neutral pride shirt, inclusive community tee, oversized organic black tee, queer streetwear, pride apparel back print, dance community pride shirt",
+        "collection": "Rainbow Pride Collection",
+        "audience": "LGBTQ+ pride community, festival-goers, inclusive community, streetwear fashion",
+        "notes": "Hold/verify sizes",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "low"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102861895-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102774868,
+      "product_id": 679,
+      "external_product_id": null,
+      "original_title": "Love neon tshirt - ask me to lead",
+      "suggested_clean_title": "Love neon tshirt - ask me to lead",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL"
+      ],
+      "all_colors": [
+        "Safety Yellow"
+      ],
+      "suggested_colors": [
+        "Safety Yellow"
+      ],
+      "available_variant_ids": [
+        17067,
+        17068,
+        17069,
+        17070,
+        17071,
+        17072,
+        17089
+      ],
+      "variant_count": 7,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/04/0427469dec24dcf4bfb8fd3c924abe26_l",
+      "local_image_path": "printful_template_images/102774868-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTF printing"
+        },
+        {
+          "placement": "back",
+          "display_name": "Back print",
+          "technique": "DTF printing"
+        }
+      ],
+      "current_created_at": 1779167762,
+      "current_updated_at": 1779168575,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "Ask Me to Lead \u2014 LOVE Neon Performance Tee | Partner Dance Shirt",
+        "final_description": "Leading isn't a gender. It's a skill, a conversation, a choice \u2014 and this neon LOVE tee makes that choice impossible to miss from across the room.\n\nThe Ask Me to Lead tee is made for every leader on every social dance floor \u2014 West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, kizomba, zouk, ballroom. Whether you've been leading for 20 years or just switched roles at your last social, this is the shirt that announces it.\n\nPerformance fabric keeps you comfortable through hours of dancing. Safety Yellow puts you front and center under every dance floor light. The rainbow LOVE graphic nods to queer-inclusive dance culture, where you dance the role that feels right, not the one that was assigned.",
+        "final_short_description": "Any body leads. Any role is a choice. Wear it, own it, drive the floor.",
+        "final_selected_colors": "Safety Yellow",
+        "final_selected_sizes": "S, M, L, XL, 2XL, 3XL, 4XL",
+        "seo_keywords": "lead dance shirt, partner dance shirt, West Coast Swing lead shirt, social dance apparel, LGBTQ dance shirt, gender neutral dance shirt, salsa lead shirt, bachata partner shirt, Lindy Hop apparel, fusion dance shirt, dance role shirt, ask me to lead tee, neon dance shirt, queer dance community shirt, lead follow shirt, dance event outfit, performance dance tee",
+        "collection": "Dance Community Collection",
+        "audience": "West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, ballroom partner dancers",
+        "notes": "SEO Suggestion: Consider offering Black as a second color option to appeal to buyers who want the LOVE design but prefer a dark, low-visibility shirt.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102774868-colorway-default.jpg",
+        "printful_template_images/102774868-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102774864,
+      "product_id": 679,
+      "external_product_id": null,
+      "original_title": "LOVE neon tshirt - ask me to follow",
+      "suggested_clean_title": "LOVE neon tshirt - ask me to follow",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL"
+      ],
+      "all_colors": [
+        "Safety Yellow"
+      ],
+      "suggested_colors": [
+        "Safety Yellow"
+      ],
+      "available_variant_ids": [
+        17067,
+        17068,
+        17069,
+        17070,
+        17071,
+        17072,
+        17089
+      ],
+      "variant_count": 7,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/ce/ce28baadd47ece43595156b5b86459f8_l",
+      "local_image_path": "printful_template_images/102774864-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTF printing"
+        },
+        {
+          "placement": "back",
+          "display_name": "Back print",
+          "technique": "DTF printing"
+        }
+      ],
+      "current_created_at": 1779167753,
+      "current_updated_at": 1779168506,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "Ask Me to Switch - LOVE Neon Performance Tee | Partner Dance Shirt",
+        "final_description": "Switchers are the most versatile dancers in the room - fluid, adaptable, and endlessly fun to share a floor with. This tee is for the dancers who lead one song and follow the next, who trade roles mid-dance, who never felt like one lane was the whole story.\n\nSwitching isn't indecision. It's mastery. Whether you're a seasoned switcher in the West Coast Swing community, a fusion dancer who reads the connection and responds, or a Lindy Hopper who learned both sides because why wouldn't you - this shirt is your announcement.\n\nPerformance fabric keeps you moving through every song. Safety Yellow keeps you visible from across the room. The rainbow LOVE graphic signals you're in a space where roles belong to the dancer, not to assumptions - queer-friendly, body-positive, and open to everyone on the floor.\n\nFor switchers in: West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, kizomba, zouk, ballroom, and every dance where connection matters more than convention.",
+        "final_short_description": "Both roles. No rules. The floor is yours from every angle.",
+        "final_selected_colors": "Safety Yellow",
+        "final_selected_sizes": "S, M, L, XL, 2XL, 3XL, 4XL",
+        "seo_keywords": "switch dance shirt, dance switcher shirt, partner dance shirt, lead follow switch shirt, West Coast Swing switch shirt, social dance apparel, LGBTQ dance shirt, gender neutral dance shirt, dance role shirt, neon dance shirt, queer dance community, fusion dance shirt, Lindy Hop switch shirt, salsa dance shirt, bachata apparel, ask me to switch tee, both roles dance shirt, dance event outfit, performance dance tee, inclusive dance community shirt",
+        "collection": "Dance Community Collection",
+        "audience": "West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, ballroom partner dancers",
+        "notes": "Mockup mismatch: The template mockup currently displays the 'Follow' design. Remember to swap the mockup image in Printful to the actual 'Switch' design when publishing. | SEO Suggestion: Consider offering Black as a second color option to appeal to buyers who want the LOVE design but prefer a dark, low-visibility shirt.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102774864-colorway-default.jpg",
+        "printful_template_images/102774864-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102762977,
+      "product_id": 823,
+      "external_product_id": null,
+      "original_title": "Unisex organic oversized high neck t-shirt",
+      "suggested_clean_title": "Unisex organic oversized high neck t-shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "all_colors": [
+        "Black"
+      ],
+      "suggested_colors": [
+        "Black"
+      ],
+      "available_variant_ids": [
+        21000,
+        21006,
+        21012,
+        21018,
+        21024
+      ],
+      "variant_count": 5,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/61/612e0631debf357f66c9ed8469821429_l",
+      "local_image_path": "printful_template_images/102762977-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "back",
+          "display_name": "Back print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779146843,
+      "current_updated_at": 1779146843,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "Rainbow War Eagle \u2014 Pride Back Print Organic Oversized Tee (Black)",
+        "final_description": "The front is clean. The back is the whole thing. This oversized organic tee features a bold, vibrant rainbow war eagle back print designed for festival crowds, pride events, dance floors, and anyone who wants their outfit to say something worth turning around for.\n\nThe relaxed oversized cut feels intentional, not accidental \u2014 perfect for layering over a sports bra at a summer festival or wearing solo at an all-night dance social. Organic cotton construction keeps it comfortable through every set.\n\nMade for: SF Pride, queer spaces, inclusive dance communities (West Coast Swing, Lindy Hop, salsa, bachata, fusion), festival season, and everyday wear for people who don't blend in quietly.",
+        "final_short_description": "Turn around and make a statement. A soaring rainbow war eagle, organic oversized cut, and the kind of back print that starts conversations.",
+        "final_selected_colors": "Black",
+        "final_selected_sizes": "S, M, L, XL, 2XL",
+        "seo_keywords": "rainbow pride t-shirt, LGBTQ pride shirt, back print pride tee, oversized organic pride shirt, rainbow war eagle shirt, pride festival outfit, queer fashion shirt, inclusive community tee, pride apparel, dance pride shirt, festival pride shirt, rainbow graphic tee, gender neutral pride shirt",
+        "collection": "Rainbow Pride Collection",
+        "audience": "LGBTQ+ pride community, festival-goers, inclusive community, streetwear fashion",
+        "notes": "Design expansion: The Rainbow War Eagle series has strong back print appeal. Consider adding a third colorway like Olive, Burgundy, or Rust.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102762977-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102760851,
+      "product_id": 679,
+      "external_product_id": null,
+      "original_title": "Unisex performance crew neck t-shirt",
+      "suggested_clean_title": "Unisex performance crew neck t-shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL"
+      ],
+      "all_colors": [
+        "Safety Yellow"
+      ],
+      "suggested_colors": [
+        "Safety Yellow"
+      ],
+      "available_variant_ids": [
+        17067,
+        17068,
+        17069,
+        17070,
+        17071,
+        17072,
+        17089
+      ],
+      "variant_count": 7,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/c6/c691833b2ab6f028785728638bb0bd4e_l",
+      "local_image_path": "printful_template_images/102760851-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTF printing"
+        },
+        {
+          "placement": "back",
+          "display_name": "Back print",
+          "technique": "DTF printing"
+        }
+      ],
+      "current_created_at": 1779142999,
+      "current_updated_at": 1779143461,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "Lead . Follow . Switch - Partner Dance Role Tee | Social Dance Community",
+        "final_description": "Lead. Follow. Switch. Three checkboxes, one shirt, infinite dances. This neon performance tee is for the partner dancer who doesn't limit themselves to one role - and wants the whole room to know it.\n\nWhether you show up to a social dance ready to lead, follow, or read the connection and do both in the same song, this is your announcement. Wear it to a West Coast Swing weekend, a Lindy Hop exchange, a bachata social, a fusion event, or anywhere the dance floor is a conversation and you've got a lot to say.\n\nThe Safety Yellow colorway keeps you impossible to miss under any dance floor light. Performance fabric means you're comfortable from the first song to the last. And the checklist speaks for itself.\n\nQueer-inclusive. Role-positive. Any body, any role, any dance.",
+        "final_short_description": "Check all three. The dancer who does it all - this is your shirt.",
+        "final_selected_colors": "Safety Yellow",
+        "final_selected_sizes": "S, M, L, XL, 2XL, 3XL, 4XL",
+        "seo_keywords": "lead follow switch shirt, partner dance shirt, dance role shirt, West Coast Swing shirt, social dance apparel, Lindy Hop shirt, switcher dance tee, gender neutral dance shirt, LGBTQ dance community shirt, salsa bachata shirt, fusion dance shirt, blues dance apparel, neon dance shirt, performance dance tee, dance event outfit, queer dance shirt, inclusive dance community, all roles dance shirt, social dancer shirt, checklist dance shirt",
+        "collection": "Dance Community Collection",
+        "audience": "West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, ballroom partner dancers",
+        "notes": "SEO Suggestion: Consider offering Black as a second color option to appeal to buyers who want the LOVE design but prefer a dark, low-visibility shirt.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102760851-colorway-default.jpg",
+        "printful_template_images/102760851-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102756140,
+      "product_id": 537,
+      "external_product_id": null,
+      "original_title": "Men\u2019s premium tank top",
+      "suggested_clean_title": "Men\u2019s premium tank top",
+      "product_type_guess": "tank top",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "all_colors": [
+        "Black",
+        "White"
+      ],
+      "suggested_colors": [
+        "Black",
+        "White"
+      ],
+      "available_variant_ids": [
+        13591,
+        13592,
+        13593,
+        13594,
+        13595,
+        13803,
+        13804,
+        13805,
+        13806,
+        13807
+      ],
+      "variant_count": 10,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/d9/d9ccec77e9b98ec0e6b86bf5b1f6f55a_l",
+      "local_image_path": "printful_template_images/102756140-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779135778,
+      "current_updated_at": 1779135778,
+      "draft_description": "A clean BoomTick tank top for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Classic Tank Top | Bay Area Pride Tank",
+        "final_description": "Clean, classic, and unmistakably Northern California. This NorCal Best Cal tank brings the Golden Gate rainbow design to a versatile everyday tank that works as hard as you do \u2014 weekend farmers markets, SF Pride, Bay Area music festivals, hot-weather dance socials, or just a warm California afternoon.\n\nThe Black and White colorways keep it wearable with anything in your closet while the rainbow design does all the talking. A staple piece for Bay Area locals, NorCal expats, and everyone in the California community.",
+        "final_short_description": "The Bay on your chest. A NorCal pride classic for warm-weather weekends, festivals, and every day that calls for something bold.",
+        "final_selected_colors": "Black, White",
+        "final_selected_sizes": "S, M, L, XL, 2XL",
+        "seo_keywords": "NorCal tank top, Bay Area tank top, Golden Gate tank, California pride tank, NorCal Best Cal tank, Northern California apparel, SF pride tank, rainbow California tank, men's NorCal tank, unisex NorCal tank, Bay Area festival tank, California lifestyle tank, NorCal graphic tank",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102756140-colorway-default.jpg",
+        "printful_template_images/102756140-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102755431,
+      "product_id": 636,
+      "external_product_id": null,
+      "original_title": "Women\u2019s crop top",
+      "suggested_clean_title": "Women\u2019s crop top",
+      "product_type_guess": "product",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "all_colors": [
+        "Black",
+        "Mineral",
+        "Bubblegum",
+        "White"
+      ],
+      "suggested_colors": [
+        "Black",
+        "White",
+        "Mineral",
+        "Bubblegum"
+      ],
+      "available_variant_ids": [
+        16094,
+        16095,
+        16096,
+        16097,
+        16098,
+        16119,
+        16120,
+        16121,
+        16122,
+        16123,
+        17240,
+        17241,
+        17242,
+        17243,
+        17244,
+        20243,
+        20244,
+        20245,
+        20246,
+        20247
+      ],
+      "variant_count": 20,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/df/dfadf2f475fbafdb0b7dcdc14a2b1db4_l",
+      "local_image_path": "printful_template_images/102755431-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779134761,
+      "current_updated_at": 1779134902,
+      "draft_description": "A clean BoomTick product for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Crop Top | Bay Area Pride & Festival Wear",
+        "final_description": "NorCal energy in a festival-perfect crop. The Golden Gate rainbow design hits differently on a crop top \u2014 bold, playful, and completely at home at SF Pride, a Bay Area summer festival, a dance social, or a California beach day.\n\nThe Mineral and Bubblegum colorways are especially fun for festival season \u2014 pastel undertones that make the rainbow design pop without competing with it. Black and White keep it classic and versatile for everyday wear.\n\nFor NorCal locals, Bay Area regulars, festival regulars, and anyone who wears their pride in every season.",
+        "final_short_description": "NorCal pride, cropped and colorful. Festival-ready, dance-floor-ready, Bay Area\u2013ready.",
+        "final_selected_colors": "Black, White, Mineral, Bubblegum",
+        "final_selected_sizes": "XS, S, M, L, XL",
+        "seo_keywords": "NorCal crop top, Bay Area crop top, Golden Gate crop top, California pride crop, NorCal Best Cal crop, SF pride crop top, festival crop top pride, rainbow crop top California, Northern California crop shirt, women's NorCal shirt, crop tee pride, California lifestyle crop top",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102755431-colorway-default.jpg",
+        "printful_template_images/102755431-colorway-default.jpg",
+        "printful_template_images/102755431-colorway-default.jpg",
+        "printful_template_images/102755431-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102754648,
+      "product_id": 317,
+      "external_product_id": null,
+      "original_title": "Crop Hoodie",
+      "suggested_clean_title": "Crop Hoodie",
+      "product_type_guess": "hoodie",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "all_colors": [
+        "Black",
+        "Military Green",
+        "Storm",
+        "Peach"
+      ],
+      "suggested_colors": [
+        "Black",
+        "Military Green",
+        "Storm",
+        "Peach"
+      ],
+      "available_variant_ids": [
+        9633,
+        9634,
+        9635,
+        9636,
+        9637,
+        9641,
+        9643,
+        9644,
+        9645,
+        9646,
+        9647,
+        9648,
+        9649,
+        9650,
+        9651,
+        9652
+      ],
+      "variant_count": 16,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/0a/0a716aebacb4ef16fab8a173c5a59289_l",
+      "local_image_path": "printful_template_images/102754648-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779133694,
+      "current_updated_at": 1779133694,
+      "draft_description": "A clean BoomTick hoodie for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Crop Hoodie | Bay Area Pride Hoodie",
+        "final_description": "In Northern California, you're never more than a few hours from needing a hoodie \u2014 even in summer. This NorCal Best Cal crop hoodie is built for exactly that: Bay Area evenings when the fog rolls in, outdoor concert nights, festival closing ceremonies, late-night dance socials, and all the golden hours in between.\n\nThe Military Green and Peach colorways are standouts \u2014 earthy, warm, and perfectly matched to the rainbow Golden Gate design. Storm is a versatile fog-gray that screams SF. Black for when you want the rainbow to be the only thing they see.\n\nEqual parts wearable and expressive. For NorCal locals, Bay Area pride community, California festival-goers, and anyone who finds their people under rainbow flags and on dance floors.",
+        "final_short_description": "Fog-season approved. A NorCal pride crop hoodie for Bay Area evenings, festival nights, and every golden California moment.",
+        "final_selected_colors": "Black, Military Green, Storm, Peach",
+        "final_selected_sizes": "S, M, L, XL, 2XL",
+        "seo_keywords": "NorCal crop hoodie, Bay Area hoodie, Golden Gate hoodie, California pride hoodie, NorCal Best Cal hoodie, SF pride hoodie, crop hoodie pride, Northern California sweatshirt, NorCal festival hoodie, rainbow California hoodie, women's NorCal hoodie, LGBTQ pride hoodie California, Bay Area pride sweatshirt",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102754648-colorway-default.jpg",
+        "printful_template_images/102754648-colorway-default.jpg",
+        "printful_template_images/102754648-colorway-default.jpg",
+        "printful_template_images/102754648-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102753916,
+      "product_id": 823,
+      "external_product_id": null,
+      "original_title": "Unisex organic oversized high neck t-shirt",
+      "suggested_clean_title": "Unisex organic oversized high neck t-shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "all_colors": [
+        "French Navy"
+      ],
+      "suggested_colors": [
+        "French Navy"
+      ],
+      "available_variant_ids": [
+        21001,
+        21007,
+        21013,
+        21019,
+        21025
+      ],
+      "variant_count": 5,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/a1/a1cef1f907b0f1647b67ff44c0b6bced_l",
+      "local_image_path": "printful_template_images/102753916-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front",
+          "display_name": "Front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779132891,
+      "current_updated_at": 1779132891,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "Rainbow War Eagle \u2014 Pride Back Print Organic Oversized Tee (French Navy)",
+        "final_description": "Deep navy, bold rainbow. The Rainbow War Eagle back print hits even harder against a rich French Navy base. The contrast between the rich navy base and the vibrant rainbow design gives this one a more versatile, wearable feel \u2014 pride event ready but equally at home at a rooftop party or a night out in the Castro.\n\nOrganic oversized construction. Roomy through the shoulders for real movement on a dance floor. A conversation starter wherever it goes.\n\nPerfect for: pride events, queer dance nights, partner dance socials, bachata and salsa festivals, West Coast Swing events, Lindy Hop exchanges, fusion socials, or just living your most colorful life.",
+        "final_short_description": "Deep navy meets rainbow: a back print that commands the room without saying a word.",
+        "final_selected_colors": "French Navy",
+        "final_selected_sizes": "S, M, L, XL, 2XL",
+        "seo_keywords": "navy pride t-shirt, rainbow back print shirt, LGBTQ pride oversized tee, organic pride shirt navy, queer fashion, pride festival shirt, rainbow war eagle back print, inclusive dance community shirt, French navy pride tee, gender neutral pride apparel, dance community pride shirt, social dance outfit",
+        "collection": "Rainbow Pride Collection",
+        "audience": "LGBTQ+ pride community, festival-goers, inclusive community, streetwear fashion",
+        "notes": "Mockup mismatch: Mockup shows the NorCal BestCal script logo on the front instead of the Rainbow War Eagle back print. Verify and re-link the correct template print files in Printful before publishing.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102753916-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102750706,
+      "product_id": 71,
+      "external_product_id": null,
+      "original_title": "Unisex t-shirt",
+      "suggested_clean_title": "Unisex t-shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL",
+        "5XL"
+      ],
+      "all_colors": [
+        "Black Heather"
+      ],
+      "suggested_colors": [
+        "Black Heather"
+      ],
+      "available_variant_ids": [
+        8923,
+        8924,
+        8925,
+        8926,
+        8927,
+        8928,
+        8929,
+        9575,
+        12878
+      ],
+      "variant_count": 9,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/4b/4bdadf6f544d37e0cad65deba9bce571_l",
+      "local_image_path": "printful_template_images/102750706-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front_large",
+          "display_name": "Large front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1779128718,
+      "current_updated_at": 1779128791,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Classic Unisex Tee | Black Heather | Extended Sizes",
+        "final_description": "The definitive NorCal pride tee. Soft black heather fabric, a bold Golden Gate rainbow graphic, and a fit that works on every body \u2014 available from XS through 5XL so no one gets left out of the NorCal community.\n\nThis is the everyday Bay Area shirt: wear it to a farmer's market, a pride event, a Niner watch party, a WCS social, or just a Saturday in the sun. Classic, comfortable, and unmistakably Northern California.",
+        "final_short_description": "The NorCal classic, in soft black heather. XS to 5XL \u2014 because NorCal pride belongs to every body.",
+        "final_selected_colors": "Black Heather",
+        "final_selected_sizes": "XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+        "seo_keywords": "NorCal t-shirt black heather, Bay Area graphic tee, Golden Gate shirt, NorCal Best Cal shirt, Northern California tee, plus size NorCal shirt, extended size California shirt, Bay Area pride shirt, SF pride t-shirt, California graphic tee unisex, NorCal pride apparel all sizes",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102750706-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102679922,
+      "product_id": 71,
+      "external_product_id": null,
+      "original_title": "Unisex t-shirt",
+      "suggested_clean_title": "Unisex t-shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL",
+        "5XL"
+      ],
+      "all_colors": [
+        "Black Heather"
+      ],
+      "suggested_colors": [
+        "Black Heather"
+      ],
+      "available_variant_ids": [
+        8923,
+        8924,
+        8925,
+        8926,
+        8927,
+        8928,
+        8929,
+        9575,
+        12878
+      ],
+      "variant_count": 9,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/fb/fba557d105b309449b637c2910681171_l",
+      "local_image_path": "printful_template_images/102679922-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front_large",
+          "display_name": "Large front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1778965504,
+      "current_updated_at": 1778965504,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Script Logo Tee | Black Heather | Extended Sizes",
+        "final_description": "A softer take on NorCal pride \u2014 the script logo version of the Golden Gate rainbow design for anyone who wants the message with a little more handcrafted feel. The flowing NorCal BestCal script against the Golden Gate rainbow is the perfect blend of California warmth and Bay Area boldness.\n\nBlack heather keeps it versatile; the graphic does the rest. Available XS\u20135XL because everyone in the NorCal community deserves to rep home.",
+        "final_short_description": "The script says it best. Golden Gate rainbow with hand-lettered NorCal BestCal in soft black heather.",
+        "final_selected_colors": "Black Heather",
+        "final_selected_sizes": "XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+        "seo_keywords": "NorCal script shirt, NorCal Best Cal shirt, Bay Area shirt black heather, Golden Gate script tee, California pride t-shirt, Northern California script apparel, SF pride shirt, hand-lettered California shirt, NorCal graphic tee, Bay Area pride clothing extended sizes",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "Storefront Optimization: Both Product 13 and 14 are in Black Heather. Consider adding a Navy or Burgundy colorway to Product 14 (Script Logo) to visually distinguish the two designs on the storefront.",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102679922-colorway-default.jpg"
+      ]
+    },
+    {
+      "template_id": 102652643,
+      "product_id": 71,
+      "external_product_id": null,
+      "original_title": "Unisex t-shirt",
+      "suggested_clean_title": "Unisex t-shirt",
+      "product_type_guess": "t-shirt",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL",
+        "5XL"
+      ],
+      "all_colors": [
+        "White"
+      ],
+      "suggested_colors": [
+        "White"
+      ],
+      "available_variant_ids": [
+        4011,
+        4012,
+        4013,
+        4014,
+        4015,
+        5294,
+        5309,
+        9526,
+        12872
+      ],
+      "variant_count": 9,
+      "mockup_file_url": "https://files.cdn.printful.com/upload/product-templates/fe/fecc5787fd0b13df457821ced7cf8fc9_l",
+      "local_image_path": "printful_template_images/102652643-colorway-default.jpg",
+      "placements": [
+        {
+          "placement": "front_large",
+          "display_name": "Large front print",
+          "technique": "DTG printing"
+        }
+      ],
+      "current_created_at": 1778888173,
+      "current_updated_at": 1778888173,
+      "draft_description": "A clean BoomTick t-shirt for West Coast Swing dancers, social dancers, and NorCal dance friends. Designed for events, practice nights, workshops, and casual everyday wear.",
+      "agent_fields": {
+        "add_to_boomtick_store": "yes",
+        "final_title": "NorCal Best Cal \u2014 Golden Gate Classic Tee | White | Extended Sizes",
+        "final_description": "On white, the Golden Gate rainbow design sings. Every color in the spectrum pops against the bright white base \u2014 this is the version that photographs beautifully at outdoor festivals, pride parades, and Bay Area sunny days.\n\nThe NorCal Best Cal tee on white is a California summer staple \u2014 light, cheerful, and unmistakably Bay Area. Great for gifting to the NorCal local or expat in your life. Available XS through 5XL because NorCal pride is for everyone.",
+        "final_short_description": "White canvas, full rainbow. The NorCal pride classic that pops hardest in the sun.",
+        "final_selected_colors": "White",
+        "final_selected_sizes": "XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+        "seo_keywords": "NorCal white t-shirt, Bay Area white shirt, Golden Gate white tee, NorCal Best Cal white shirt, California pride white t-shirt, Northern California shirt white, SF pride white tee, rainbow California shirt white, California graphic tee white, NorCal apparel white, plus size NorCal shirt white, Bay Area pride shirt white",
+        "collection": "NorCal Pride & Bay Area Collection",
+        "audience": "Bay Area locals, SF locals, California pride supporters, festival-goers",
+        "notes": "",
+        "needs_design_fix": "no",
+        "needs_mockup_fix": "no",
+        "priority": "medium"
+      },
+      "downloaded_mockups": [
+        "printful_template_images/102652643-colorway-default.jpg"
+      ]
+    }
+  ]
+}
