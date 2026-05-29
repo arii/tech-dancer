@@ -34,30 +34,19 @@ export function Footer() {
             © 2026 BOOMTICK.BLOG
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10" />
-          <Text variant="mono" size="xs" color="body" className="hover:opacity-100 transition-opacity">
-            {isDev ? 'dev' : `v${appVersion}`} (
-            <a
-              href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
-            >
-              {commitSha.substring(0, 7)}
-            </a>
-            )
-          </Text>
-          <Box className="hidden md:block w-px h-3 bg-white/10 shrink-0" />
           <Text size="micro" color="dim" className="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">
-            v{appVersion} (
-            <a
-              href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
-            >
-              {commitSha.substring(0, 7)}
-            </a>
-            )
+            <span className="font-mono tracking-wider uppercase">
+              {isDev ? 'dev' : `v${appVersion}`} (
+              <a
+                href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
+              >
+                {commitSha.substring(0, 7)}
+              </a>
+              )
+            </span>
             {lastUpdated && ` · Last updated ${lastUpdated}`}
           </Text>
         </Stack>
