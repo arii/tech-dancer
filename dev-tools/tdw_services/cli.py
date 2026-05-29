@@ -139,6 +139,8 @@ def conflicts(ctx, base):
     res = orch.handle_conflicts(base_branch=base or 'main')
     if res['status'] == 'success':
         out(ctx, res['message'], data=res)
+    elif res['status'] == 'environment_error':
+        err(ctx, res['message'], code=2, data=res)
     else:
         err(ctx, res['message'], data=res)
 
