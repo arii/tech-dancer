@@ -7,7 +7,13 @@ import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
 import type { SchemaProduct } from '@/utils/schema';
-import { AMAZON_AFFILIATE_DISCLOSURE } from '@/utils/schema';
+import {
+  AMAZON_AFFILIATE_DISCLOSURE,
+  POD_SHIPPING_POLICY,
+  POD_RETURN_POLICY,
+  DEFAULT_AGGREGATE_RATING,
+  DEFAULT_REVIEW
+} from '@/utils/schema';
 
 export default function GearPost() {
   const { slug } = useParams();
@@ -43,66 +49,16 @@ export default function GearPost() {
       "offers": {
         "@type": "Offer",
         "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          "price": "0.00",
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
+        "price": "0.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
         ...(isMerch ? {
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
-            "shippingDestination": {
-              "@type": "DefinedRegion",
-              "addressCountry": "US"
-              },
-              "deliveryTime": {
-                "@type": "ShippingDeliveryTime",
-                "handlingTime": {
-                  "@type": "QuantitativeValue",
-                  "minValue": 2,
-                  "maxValue": 5,
-                  "unitCode": "DAY"
-                },
-                "transitTime": {
-                  "@type": "QuantitativeValue",
-                  "minValue": 3,
-                  "maxValue": 10,
-                  "unitCode": "DAY"
-                }
-              },
-              "shippingRate": {
-                "@type": "MonetaryAmount",
-                "value": "6.50",
-                "currency": "USD"
-            }
-          },
-          "hasMerchantReturnPolicy": {
-            "@type": "MerchantReturnPolicy",
-            "applicableCountry": "US",
-            "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
-              "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it.",
-              "merchantReturnDays": 0,
-              "returnMethod": "https://schema.org/ReturnByMail",
-              "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
-          }
+          "shippingDetails": POD_SHIPPING_POLICY,
+          "hasMerchantReturnPolicy": POD_RETURN_POLICY
         } : {})
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "1"
-        },
-        "review": {
-          "@type": "Review",
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "author": {
-            "@type": "Person",
-            "name": "Ariel Anders, PhD"
-          }
-        }
+      },
+      "aggregateRating": DEFAULT_AGGREGATE_RATING,
+      "review": DEFAULT_REVIEW
     };
 
     return schema;

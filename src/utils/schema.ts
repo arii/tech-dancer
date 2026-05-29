@@ -141,6 +141,25 @@ export const POD_RETURN_POLICY: SchemaReturnPolicy = {
 
 export const AMAZON_AFFILIATE_DISCLOSURE = "As an Amazon Associate, BoomTick may earn from qualifying purchases.";
 
+export const DEFAULT_AGGREGATE_RATING: SchemaAggregateRating = {
+  "@type": "AggregateRating",
+  "ratingValue": "5",
+  "reviewCount": "1"
+} as const;
+
+export const DEFAULT_REVIEW: SchemaReview = {
+  "@type": "Review",
+  "reviewRating": {
+    "@type": "Rating",
+    "ratingValue": "5",
+    "bestRating": "5"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Ariel Anders, PhD"
+  }
+} as const;
+
 export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemList {
   return {
     "@context": "https://schema.org",
@@ -167,23 +186,8 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
           "shippingDetails": POD_SHIPPING_POLICY,
           "hasMerchantReturnPolicy": POD_RETURN_POLICY
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "1"
-        },
-        "review": {
-          "@type": "Review",
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "author": {
-            "@type": "Person",
-            "name": "Ariel Anders, PhD"
-          }
-        }
+        "aggregateRating": DEFAULT_AGGREGATE_RATING,
+        "review": DEFAULT_REVIEW
       }
     }))
   };
@@ -218,23 +222,8 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
             "hasMerchantReturnPolicy": POD_RETURN_POLICY
           } : {})
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "1"
-        },
-        "review": {
-          "@type": "Review",
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "author": {
-            "@type": "Person",
-            "name": "Ariel Anders, PhD"
-          }
-        }
+        "aggregateRating": DEFAULT_AGGREGATE_RATING,
+        "review": DEFAULT_REVIEW
       };
 
       return {
