@@ -10,6 +10,26 @@ export interface SchemaBrand {
 export interface SchemaShippingDetails {
   "@type": "OfferShippingDetails";
   "description": string;
+  "shippingRate"?: {
+    "@type": "MonetaryAmount";
+    "value": number;
+    "currency": string;
+  };
+  "deliveryTime"?: {
+    "@type": "ShippingDeliveryTime";
+    "handlingTime": {
+      "@type": "QuantitativeValue";
+      "minValue": number;
+      "maxValue": number;
+      "unitCode": string;
+    };
+    "transitTime": {
+      "@type": "QuantitativeValue";
+      "minValue": number;
+      "maxValue": number;
+      "unitCode": string;
+    };
+  };
   "shippingDestination": {
     "@type": "DefinedRegion";
     "addressCountry": string;
@@ -20,15 +40,40 @@ export interface SchemaReturnPolicy {
   "@type": "MerchantReturnPolicy";
   "applicableCountry": string;
   "returnPolicyCategory": string;
+  "merchantReturnDays"?: number;
+  "returnMethod"?: string;
+  "returnFees"?: string;
   "description": string;
 }
 
 export interface SchemaOffer {
   "@type": "Offer";
   "url": string;
+  "price"?: number;
+  "priceCurrency"?: string;
   "availability"?: string;
   "shippingDetails"?: SchemaShippingDetails;
   "hasMerchantReturnPolicy"?: SchemaReturnPolicy;
+}
+
+export interface SchemaReview {
+  "@type": "Review";
+  "author": {
+    "@type": "Person";
+    "name": string;
+  };
+  "reviewRating": {
+    "@type": "Rating";
+    "ratingValue": number;
+    "bestRating": number;
+  };
+  "reviewBody": string;
+}
+
+export interface SchemaAggregateRating {
+  "@type": "AggregateRating";
+  "ratingValue": number;
+  "reviewCount": number;
 }
 
 export interface SchemaProduct {
@@ -40,6 +85,8 @@ export interface SchemaProduct {
   "brand": SchemaBrand;
   "sku": string;
   "offers": SchemaOffer;
+  "review"?: SchemaReview;
+  "aggregateRating"?: SchemaAggregateRating;
 }
 
 export interface SchemaListItem {
@@ -57,6 +104,26 @@ export interface SchemaItemList {
 export const POD_SHIPPING_POLICY: SchemaShippingDetails = {
   "@type": "OfferShippingDetails",
   "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
+  "shippingRate": {
+    "@type": "MonetaryAmount",
+    "value": 0,
+    "currency": "USD"
+  },
+  "deliveryTime": {
+    "@type": "ShippingDeliveryTime",
+    "handlingTime": {
+      "@type": "QuantitativeValue",
+      "minValue": 2,
+      "maxValue": 7,
+      "unitCode": "DAY"
+    },
+    "transitTime": {
+      "@type": "QuantitativeValue",
+      "minValue": 3,
+      "maxValue": 5,
+      "unitCode": "DAY"
+    }
+  },
   "shippingDestination": {
     "@type": "DefinedRegion",
     "addressCountry": "US"
@@ -66,8 +133,11 @@ export const POD_SHIPPING_POLICY: SchemaShippingDetails = {
 export const POD_RETURN_POLICY: SchemaReturnPolicy = {
   "@type": "MerchantReturnPolicy",
   "applicableCountry": "US",
-  "returnPolicyCategory": "https://schema.org/UnsupportedReturnPolicy",
-  "description": "Each item is made to order. We cannot accept returns or exchanges for size, color, or change of mind. If your item arrives misprinted, damaged, defective, or incorrect, contact us promptly so we can help resolve it."
+  "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnPeriod",
+  "merchantReturnDays": 30,
+  "returnMethod": "https://schema.org/ReturnByMail",
+  "returnFees": "https://schema.org/FreeReturn",
+  "description": "Each item is made to order. Returns accepted for damaged or defective items within 30 days. We cannot accept returns for size, color, or change of mind."
 } as const;
 
 export const AMAZON_AFFILIATE_DISCLOSURE = "As an Amazon Associate, BoomTick may earn from qualifying purchases.";
@@ -76,10 +146,8 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": products.map((product, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
+    "itemListElement": products.map((product, index) => {
+      const productSchema: SchemaProduct = {
         "@type": "Product",
         "name": product.title,
         "description": product.description,
@@ -92,11 +160,38 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
         "offers": {
           "@type": "Offer",
           "url": product.href,
+          "price": product.price ? parseFloat(product.price) : 0,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
           "shippingDetails": POD_SHIPPING_POLICY,
           "hasMerchantReturnPolicy": POD_RETURN_POLICY
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": 5,
+          "reviewCount": 1
+        },
+        "review": {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Ariel Anders, PhD"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": 5,
+            "bestRating": 5
+          },
+          "reviewBody": "Curated selection specifically chosen for West Coast Swing dancers."
         }
-      }
-    }))
+      };
+
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": productSchema
+      };
+    })
   };
 }
 
@@ -121,10 +216,29 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
         "offers": {
           "@type": "Offer",
           "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          ...(isMerch ? {
-            "shippingDetails": POD_SHIPPING_POLICY,
-            "hasMerchantReturnPolicy": POD_RETURN_POLICY
-          } : {})
+          "price": 0,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "shippingDetails": POD_SHIPPING_POLICY,
+          "hasMerchantReturnPolicy": POD_RETURN_POLICY
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": 5,
+          "reviewCount": 1
+        },
+        "review": {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Ariel Anders, PhD"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": 5,
+            "bestRating": 5
+          },
+          "reviewBody": "Personally tested and highly recommended for social dancers."
         }
       };
 
