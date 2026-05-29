@@ -22,7 +22,9 @@ test.describe('Merch Page', () => {
 
   test('should display product cards', async ({ page }) => {
     const productCards = page.getByTestId('product-card');
-    await expect(productCards).toHaveCount(11);
+    // Note: The count is 19 because some products appear in multiple editorial sections
+    // (Featured, Lead/Follow/Switch, NorCal, Pride) when the "All" filter is active.
+    await expect(productCards).toHaveCount(19);
   });
 
   test('should filter products by collection', async ({ page }) => {
@@ -35,7 +37,7 @@ test.describe('Merch Page', () => {
 
     // Reset filter
     await page.getByRole('button', { name: 'All' }).click();
-    await expect(filteredCards).toHaveCount(11);
+    await expect(filteredCards).toHaveCount(19);
   });
 
   test('should have correct attributes on Printful external links', async ({ page }) => {
