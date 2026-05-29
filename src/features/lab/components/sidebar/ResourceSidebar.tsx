@@ -58,8 +58,8 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
           <Stack gap={3}>
             {Object.entries(specs).map(([key, value]) => (
               <Stack key={key} gap={1}>
-                <Text variant="mono" size="micro" className="text-slate-500 uppercase">{key}</Text>
-                <Text size="xs" weight="font-bold" className="text-slate-300">{value}</Text>
+                <Text variant="mono" size="micro" color="dim" uppercase>{key}</Text>
+                <Text size="xs" weight="font-bold" color="body">{value}</Text>
               </Stack>
             ))}
           </Stack>
@@ -81,12 +81,14 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                   align="center"
                   justify="between"
                   padding={4}
-                  className="rounded-lg border border-slate-800 bg-slate-900/50 hover:border-cyan-400/50 group transition-all"
+                  surface="surface-alt"
+                  border
+                  className="rounded-lg hover:border-accent group transition-all"
                 >
-                  <Text variant="mono" size="xs" weight="font-bold" className="text-slate-200 group-hover:text-cyan-400 transition-colors">
+                  <Text variant="mono" size="xs" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
                     {link.name || link.label || link.url}
                   </Text>
-                  <ExternalLink className="w-4 h-4 text-cyan-400 opacity-30 group-hover:opacity-100 transition-opacity" />
+                  <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100 transition-opacity" />
                 </Box>
               ))}
               {affiliateLink && (
@@ -99,16 +101,18 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                   align="center"
                   justify="between"
                   padding={4}
-                  className="rounded-lg border border-slate-800 bg-slate-900/50 hover:border-cyan-400/50 group transition-all"
+                  surface="surface-alt"
+                  border
+                  className="rounded-lg hover:border-accent group transition-all"
                 >
-                  <Text variant="mono" size="xs" weight="font-bold" className="text-slate-200 group-hover:text-cyan-400 transition-colors">
+                  <Text variant="mono" size="xs" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
                     Buy on Amazon
                   </Text>
-                  <ExternalLink className="w-4 h-4 text-cyan-400 opacity-30 group-hover:opacity-100 transition-opacity" />
+                  <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100 transition-opacity" />
                 </Box>
               )}
             </Box>
-            <Text variant="mono" size="micro" className="text-slate-500 leading-tight not-italic">
+            <Text variant="mono" size="micro" color="dim" className="leading-tight not-italic">
               {DISCLOSURE_TEXT}
             </Text>
           </Stack>

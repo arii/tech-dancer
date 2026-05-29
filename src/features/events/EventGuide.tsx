@@ -37,7 +37,7 @@ export default function EventGuide() {
   if (isLoading) {
     return (
       <Box padding="panel" textAlign="center">
-        <Text variant="mono" size="xs" className="text-slate-400">Loading Guide...</Text>
+        <Text variant="mono" size="xs" color="dim">Loading Guide...</Text>
       </Box>
     );
   }
@@ -46,15 +46,15 @@ export default function EventGuide() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Text variant="display" size="2xl" className="text-slate-100">
+          <Text variant="display" size="2xl" color="main">
             {isError ? "Error Loading Event" : "Event Not Found"}
           </Text>
           {isError && error && (
-            <Text variant="body" size="sm" className="text-slate-400">
+            <Text variant="body" size="sm" color="dim">
               {error instanceof Error ? error.message : "An unexpected error occurred."}
             </Text>
           )}
-          <Box as="button" onClick={() => navigate('/events')} className="hover:text-cyan-400 transition-colors">
+          <Box as="button" onClick={() => navigate('/events')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Events</Text>
           </Box>
         </Stack>
@@ -136,7 +136,9 @@ export default function EventGuide() {
             data-testid="why-attending"
             padding={{ base: 6, md: 8 }}
             radius="2xl"
-            className="bg-slate-900/50 border border-slate-800/80 backdrop-blur-sm relative overflow-hidden group"
+            surface="surface-alt"
+            border
+            className="backdrop-blur-sm relative overflow-hidden group"
           >
             <Box
               position="absolute"
@@ -144,17 +146,17 @@ export default function EventGuide() {
               right={-20}
               width={40}
               height={40}
-              className="bg-cyan-400/5 blur-3xl rounded-full"
+              className="bg-accent/5 blur-3xl rounded-full"
             />
 
             <Stack gap={4}>
-              <Box display="flex" align="center" gap={2} className="text-cyan-400">
+              <Box display="flex" align="center" gap={2} color="accent">
                 <Sparkles size={16} />
                 <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">
                   Why I&apos;m Attending
                 </Text>
               </Box>
-              <Text variant="body" size="lg" leading="relaxed" className="relative z-10 italic font-medium text-slate-200">
+              <Text variant="body" size="lg" leading="relaxed" color="main" className="relative z-10 italic font-medium">
                 &ldquo;{event.whyAttending}&rdquo;
               </Text>
             </Stack>

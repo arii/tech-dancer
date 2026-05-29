@@ -1,4 +1,4 @@
-/* impeccable-ignore-file */
+
 import { Share2 } from 'lucide-react';
 import { Stack, Text } from '@/layouts/Primitives';
 

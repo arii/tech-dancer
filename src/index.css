@@ -1,6 +1,8 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "./styles/tokens.css";
-/* impeccable-ignore-file */
+@import "./styles/article-prose.css";
+
 
 @theme {
   /* Colors */

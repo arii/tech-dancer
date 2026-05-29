@@ -1,6 +1,7 @@
 
-/* impeccable-ignore-file */
+
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { ArticleCard } from './ArticleCard';
 
 interface ArticleFeatureCardProps {
   type?: string;
@@ -20,7 +21,7 @@ export function ArticleFeatureCard({
   return (
     <Box className="relative group">
       {/* Card Shell */}
-      <Box className="rounded-xl border border-slate-800/80 bg-slate-950/60 overflow-hidden backdrop-blur-sm">
+      <ArticleCard className="overflow-hidden">
         {image ? (
           <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] overflow-hidden relative">
             <img
@@ -28,24 +29,21 @@ export function ArticleFeatureCard({
               alt={title || "Feature visual"}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <Box className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+            <Box className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent" />
           </Box>
         ) : (
-          <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] bg-slate-900 flex items-center justify-center border-b border-slate-800/50 relative overflow-hidden">
-             {/* Fallback pattern */}
-             <Box className="absolute inset-0 opacity-20">
-               <Box className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/20 via-transparent to-transparent" />
-               <Box className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(30deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(150deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(30deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(150deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(60deg,#0891b277_25%,transparent_25.5%,transparent_75%,#0891b277_75%,#0891b277),linear-gradient(60deg,#0891b277_25%,transparent_25.5%,transparent_75%,#0891b277_75%,#0891b277)] bg-[length:40px_70px]" />
-             </Box>
+          <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] bg-surface flex items-center justify-center border-b border-line/50 relative overflow-hidden">
+             {/* Simplified Fallback pattern */}
+             <Box className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-cyan-500/10 via-transparent to-transparent" />
 
              {/* Data Card visualization placeholder if no image */}
              <Stack gap={4} align="center" className="p-8 text-center relative z-10 hidden lg:flex">
                 {type && (
-                  <Box className="px-2 py-1 rounded bg-cyan-500/10 border border-cyan-500/20">
-                    <Text variant="mono" size="micro" className="text-cyan-400 font-bold uppercase tracking-widest">{type}</Text>
+                  <Box className="px-2 py-1 rounded bg-accent/10 border border-cyan-500/20">
+                    <Text variant="mono" size="micro" className="text-accent font-bold uppercase tracking-widest">{type}</Text>
                   </Box>
                 )}
-                <Text variant="display" size="lg" className="text-slate-100">{title || "BoomTick.blog"}</Text>
+                <Text variant="display" size="lg" className="text-text-main">{title || "BoomTick.blog"}</Text>
                 {subtitle && <Text variant="mono" size="xs" color="dim">{subtitle}</Text>}
              </Stack>
           </Box>
@@ -53,25 +51,25 @@ export function ArticleFeatureCard({
 
         {/* Caption/Metadata below image/visual */}
         {(caption || (image && (title || subtitle))) && (
-          <Box className="p-5 lg:p-6 border-t border-slate-800/50 hidden lg:block">
+          <Box className="p-5 lg:p-6 border-t border-line/50 hidden lg:block">
             <Stack gap={1}>
               {!image && caption && (
-                <Text size="sm" className="text-slate-400 italic">{caption}</Text>
+                <Text size="sm" className="text-text-dim italic">{caption}</Text>
               )}
               {image && (
                  <>
-                   {title && <Text weight="font-bold" className="text-slate-200">{title}</Text>}
-                   {subtitle && <Text size="xs" className="text-slate-500">{subtitle}</Text>}
-                   {caption && <Text size="xs" className="text-slate-400 mt-2 italic">{caption}</Text>}
+                   {title && <Text weight="font-bold" color="body">{title}</Text>}
+                   {subtitle && <Text size="xs" className="text-text-dim">{subtitle}</Text>}
+                   {caption && <Text size="xs" color="dim" className="mt-2 italic">{caption}</Text>}
                  </>
               )}
             </Stack>
           </Box>
         )}
-      </Box>
+      </ArticleCard>
 
       {/* Decorative Accents */}
-      <Box className="absolute -top-2 -right-2 w-24 h-24 bg-cyan-500/5 blur-3xl rounded-full pointer-events-none" />
+      <Box className="absolute -top-2 -right-2 w-24 h-24 bg-accent/5 blur-3xl rounded-full pointer-events-none" />
       <Box className="absolute -bottom-2 -left-2 w-24 h-24 bg-indigo-500/5 blur-3xl rounded-full pointer-events-none" />
     </Box>
   );

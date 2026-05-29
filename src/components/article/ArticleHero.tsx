@@ -1,5 +1,5 @@
 
-/* impeccable-ignore-file */
+
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
 
@@ -25,24 +25,24 @@ export function ArticleHero({
   tags
 }: ArticleHeroProps) {
   return (
-    <Box className="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-14 py-10 lg:py-16 items-center">
+    <Box display="grid" lgGridCols="1.05fr 0.95fr" gap={8} lgGap={14} paddingY={10} lgPaddingY={16} align="center"> {/* impeccable-ignore */}
       {/* Content Column */}
       <Stack gap={{ base: 4, lg: 8 }}>
         <Stack gap={{ base: 3, lg: 4 }}>
           {(category || date || readingTime) && (
-            <Stack direction="row" gap={3} align="center" className="text-slate-400">
+            <Stack direction="row" gap={3} align="center" color="dim">
               {category && (
-                <Text variant="mono" size="xs" weight="font-bold" className="text-cyan-400 uppercase tracking-widest">
+                <Text variant="mono" size="xs" weight="font-bold" className="text-accent uppercase tracking-widest">
                   {category}
                 </Text>
               )}
-              {category && (date || readingTime) && <Box className="w-1 h-1 rounded-full bg-slate-700" />}
+              {category && (date || readingTime) && <Box className="w-1 h-1 rounded-full bg-line" />}
               {date && (
                 <Text variant="mono" size="xs">
                   {date}
                 </Text>
               )}
-              {date && readingTime && <Box className="w-1 h-1 rounded-full bg-slate-700" />}
+              {date && readingTime && <Box className="w-1 h-1 rounded-full bg-line" />}
               {readingTime && (
                 <Text variant="mono" size="xs">
                   {readingTime}
@@ -51,12 +51,12 @@ export function ArticleHero({
             </Stack>
           )}
 
-          <Text as="h1" variant="display" size={{ base: "2xl", sm: "3xl", lg: "4xl" }} weight="font-bold" className="text-slate-100 leading-[1.15] lg:leading-[1.1]">
+          <Text as="h1" variant="display" size={{ base: "2xl", sm: "3xl", lg: "4xl" }} weight="font-bold" className="text-text-main leading-tight lg:leading-none">
             {title}
           </Text>
 
           {dek && (
-            <Text size={{ base: "md", lg: "lg" }} className="text-slate-300 lg:text-slate-400 leading-relaxed max-w-xl">
+            <Text size={{ base: "md", lg: "lg" }} className="text-text-dim lg:text-text-dim leading-relaxed max-w-xl">
               {dek}
             </Text>
           )}
@@ -68,17 +68,17 @@ export function ArticleHero({
         </Box>
 
         {meta && (
-          <Box border="t" className="border-slate-800/80 pt-4 lg:pt-6">
+          <Box border="t" className="border-line/80 pt-4 lg:pt-6">
             {meta}
           </Box>
         )}
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" gap={2} wrap className="pb-2 hidden lg:flex">
+          <Stack direction="row" gap={2} wrap className="pb-2 hidden lg:flex"> {/* impeccable-ignore */}
             {tags.map((tag) => (
               <Box
                 key={tag}
-                className="px-3 py-1 rounded-full border border-slate-800 bg-slate-900/50 text-slate-400 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap"
+                className="px-3 py-1 rounded-full border border-line bg-surface/50 text-text-dim text-[11px] font-bold uppercase tracking-wider whitespace-nowrap" // impeccable-ignore
               >
                 {tag}
               </Box>

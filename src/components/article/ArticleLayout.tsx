@@ -1,5 +1,5 @@
 
-/* impeccable-ignore-file */
+
 import { ReactNode } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
@@ -23,8 +23,8 @@ export function ArticleLayout({
   children
 }: ArticleLayoutProps) {
   return (
-    <Box className="min-h-screen bg-[#020617] text-slate-200">
-      <Box className="max-w-[1200px] mx-auto px-5 sm:px-6 lg:px-8">
+    <Box className="min-h-screen bg-[#020617] text-text-body">
+      <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}> {/* impeccable-ignore */}
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
           <Stack
@@ -33,14 +33,14 @@ export function ArticleLayout({
             onClick={onBack}
             align="center"
             gap={2}
-            className="text-slate-400 hover:text-cyan-400 transition-colors group"
+            className="text-text-dim hover:text-accent transition-colors group"
           >
             <Icon
               icon={ArrowLeft}
               size="sm"
               className="transition-transform group-hover:-translate-x-1"
             />
-            <Box as="span" className="text-[10px] font-bold uppercase tracking-[0.2em]">
+            <Box as="span" className="text-[11px] font-bold uppercase tracking-widest">
               {backLabel}
             </Box>
           </Stack>
@@ -52,23 +52,16 @@ export function ArticleLayout({
         </Box>
 
         {/* Article Content Grid */}
-        <Box className="grid lg:grid-cols-[minmax(0,720px)_300px] gap-12 lg:gap-16">
+        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}"> {/* impeccable-ignore */}
           {/* Main Article Column */}
           <Box className={sidebar ? "min-w-0" : "min-w-0 lg:col-span-2"}>
-            <Box className="prose prose-invert prose-slate max-w-none lg:max-w-[720px]
-              prose-p:text-[16px] sm:prose-p:text-[17px] prose-p:leading-[1.65] sm:prose-p:leading-8 prose-p:text-slate-300
-              prose-headings:font-display prose-headings:text-slate-100 prose-headings:font-bold
-              prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-l-2 prose-h2:border-cyan-400 prose-h2:pl-4
-              prose-h3:text-lg sm:prose-h3:text-xl
-              prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-slate-100 prose-blockquote:border-cyan-400 prose-blockquote:text-slate-200 prose-blockquote:italic
-            ">
+            <Box className="article-prose">
               {children}
             </Box>
 
             {/* Footer / Related Posts */}
             {footer && (
-              <Box marginTop={20} border="t" className="border-slate-800/80 pt-12">
+              <Box marginTop={20} border="t" className="border-line/80 pt-12">
                 {footer}
               </Box>
             )}

@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
@@ -12,11 +12,32 @@ import {
   ArticleAffiliateCard
 } from '@/components/article/ArticleElements';
 
+/**
+ * Registry of custom components allowed in Markdown/MDX.
+ * Standardizes sanitization schema and component mapping.
+ */
+const CUSTOM_COMPONENTS = {
+  notice: { component: Notice, tags: ['notice', 'Notice'], attributes: ['type'] },
+  callout: { component: ArticleCallout, tags: ['callout'], attributes: ['title', 'variant'] },
+  pullquote: { component: ArticlePullQuote, tags: ['pullquote'], attributes: ['quote', 'author'] },
+  'article-section': { component: ArticleSection, tags: ['article-section'], attributes: ['title', 'id'] },
+  'affiliate-card': { component: ArticleAffiliateCard, tags: ['affiliate-card'], attributes: ['id', 'cta'] },
+} as const;
+
 interface MarkdownRendererProps {
   content: string;
 }
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+  // Dynamically build sanitization schema from registry
+  const customTags = Object.values(CUSTOM_COMPONENTS).flatMap(c => c.tags);
+  const customAttributes = Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
+    config.tags.forEach(tag => {
+      acc[tag] = config.attributes;
+    });
+    return acc;
+  }, {} as Record<string, string[]>);
+
   return (
     <Box className="prose-counters">
       <ReactMarkdown
@@ -24,19 +45,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [
-              ...(defaultSchema.tagNames || []),
-              'notice', 'Notice',
-              'callout', 'pullquote', 'article-section', 'affiliate-card'
-            ],
+            tagNames: [...(defaultSchema.tagNames || []), ...customTags],
             attributes: {
               ...defaultSchema.attributes,
-              notice: ['type'],
-              Notice: ['type'],
-              callout: ['title', 'variant'],
-              pullquote: ['quote', 'author'],
-              'article-section': ['title', 'id'],
-              'affiliate-card': ['id', 'cta']
+              ...customAttributes
             },
             clobberPrefix: ''
           }]
@@ -115,12 +127,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               {...props}
             />
           ),
-          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
-          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
-          callout: (props: React.ComponentProps<typeof ArticleCallout>) => <ArticleCallout {...props} />,
-          pullquote: (props: React.ComponentProps<typeof ArticlePullQuote>) => <ArticlePullQuote {...props} />,
-          'article-section': (props: React.ComponentProps<typeof ArticleSection>) => <ArticleSection {...props} />,
-          'affiliate-card': (props: React.ComponentProps<typeof ArticleAffiliateCard>) => <ArticleAffiliateCard {...props} />
+          // Map component implementations from registry
+          ...Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
+            config.tags.forEach(tag => {
+              const Component = config.component as ComponentType<Record<string, unknown>>;
+              acc[tag] = (props: Record<string, unknown>) => <Component {...props} />;
+            });
+            return acc;
+          }, {} as Record<string, (props: Record<string, unknown>) => JSX.Element>)
         }}
       >
         {content}

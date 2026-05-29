@@ -1,7 +1,8 @@
 
-/* impeccable-ignore-file */
+
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
+import { ArticleCard } from './ArticleCard';
 
 interface SidebarCardProps {
   title: string;
@@ -10,16 +11,16 @@ interface SidebarCardProps {
 
 export function SidebarCard({ title, children }: SidebarCardProps) {
   return (
-    <Box className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-5 lg:p-6 backdrop-blur-sm">
+    <ArticleCard className="p-5 lg:p-6">
       <Stack gap={4}>
-        <Text variant="mono" size="xs" weight="font-bold" className="text-cyan-400 uppercase tracking-widest border-b border-slate-800/50 pb-3">
+        <Text variant="mono" size="xs" weight="font-bold" color="accent" className="uppercase tracking-widest border-b border-line/50 pb-3">
           {title}
         </Text>
         <Box>
           {children}
         </Box>
       </Stack>
-    </Box>
+    </ArticleCard>
   );
 }
 
@@ -43,8 +44,8 @@ export function ArticleSidebar({
           <Stack gap={3}>
             {snapshot.map((item, i) => (
               <Stack key={i} direction="row" justify="between" align="center">
-                <Text variant="mono" size="micro" className="text-slate-500 uppercase">{item.label}</Text>
-                <Text size="xs" weight="font-bold" className="text-slate-300">{item.value}</Text>
+                <Text variant="mono" size="micro" className="text-text-dim uppercase">{item.label}</Text>
+                <Text size="xs" weight="font-bold" className="text-text-dim">{item.value}</Text>
               </Stack>
             ))}
           </Stack>
@@ -59,7 +60,7 @@ export function ArticleSidebar({
                 key={i}
                 as="a"
                 href={`#${item.id}`}
-                className="text-sm text-slate-400 hover:text-cyan-400 transition-colors py-1"
+                className="text-sm text-text-dim hover:text-accent transition-colors py-1"
               >
                 {item.label}
               </Box>
@@ -74,7 +75,7 @@ export function ArticleSidebar({
             {relatedTopics.map((topic, i) => (
               <Box
                 key={i}
-                className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold uppercase tracking-wider"
+                className="px-2 py-1 rounded bg-surface border border-line text-text-dim text-[11px] font-bold uppercase tracking-wider"
               >
                 {topic}
               </Box>
