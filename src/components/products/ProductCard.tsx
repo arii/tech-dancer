@@ -11,10 +11,11 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
     <BaseCard
       gap={4}
       height="full"
-      padding={5}
+      padding={{ base: 4, md: 5 }}
       radius="lg"
       border
-      maxWidth="sm"
+      maxWidth="full"
+      className="hover:border-accent/40"
       data-testid="product-card"
     >
       <MerchImageDisplay
@@ -32,7 +33,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           target="_blank"
           rel="sponsored noopener noreferrer"
           variant="body"
-          size="lg"
+          size={{ base: 'lg', md: 'xl' }}
           weight="font-bold"
           color="main"
           leading="tight"
@@ -42,7 +43,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           {item.title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={3}>
+        <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
           {item.description}
         </Text>
 
@@ -55,7 +56,6 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
                 paddingY={0.5}
                 radius="md"
                 surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                bgOpacity={10}
                 className={cn(
                   "border border-line/30",
                   role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
@@ -70,12 +70,14 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
         )}
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
-        <Stack direction="row" gap={2} wrap="wrap">
+      <Stack marginTop="auto" paddingTop={3} border="t" gap={3} className="border-line/30">
+        <Stack direction="row" gap={1.5} wrap="wrap">
           {item.tags.slice(0, 2).map((tag) => (
-            <Text key={tag} variant="mono" size="micro" color="dim" uppercase tracking="tighter" className="opacity-60">
-              {tag}
-            </Text>
+            <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
+              <Text variant="mono" size="xs" color="dim" uppercase tracking="tighter">
+                {tag}
+              </Text>
+            </Box>
           ))}
         </Stack>
         <Stack
@@ -85,16 +87,20 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           rel="sponsored noopener noreferrer"
           direction="row"
           align="center"
+          justify="center"
           gap={1}
-          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          width="full"
+          paddingY={3}
+          radius="md"
+          className="bg-accent hover:bg-accent-sky transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label={`View ${item.title} on Printful`}
         >
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+          <Text variant="mono" size="sm" weight="font-bold" color="bg" tracking="wide">
             SEE COLORS
           </Text>
-          <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} aria-hidden="true" />
+          <ArrowRight className={cn('w-3 h-3 text-bg', stroke.thick)} aria-hidden="true" />
         </Stack>
-      </Box>
+      </Stack>
     </BaseCard>
   );
 }

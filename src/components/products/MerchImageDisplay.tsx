@@ -29,9 +29,9 @@ function ImageLabel({ side }: { side: MerchProductImage['side'] }) {
   );
 }
 
-function ImageWell({ image }: { image: MerchProductImage }) {
+function ImageWell({ image, loading }: { image: MerchProductImage; loading?: 'eager' | 'lazy' }) {
   return (
-    <Box display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20">
+    <Box display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
@@ -39,19 +39,23 @@ function ImageWell({ image }: { image: MerchProductImage }) {
         width="full"
         height="full"
         padding={3}
+        loading={loading ?? 'lazy'}
+        onError={(event) => {
+          event.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
+        }}
         className="object-contain transition-transform duration-300 group-hover:scale-105"
       />
     </Box>
   );
 }
 
-function MerchImage({ image, label }: { image: MerchProductImage; label?: boolean }) {
-  if (!label) return <ImageWell image={image} />;
+function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
+  if (!label) return <ImageWell image={image} loading={loading} />;
 
   return (
     <Stack height="full" gap={1}>
       <Box flex height="full" minHeight="0">
-        <ImageWell image={image} />
+        <ImageWell image={image} loading={loading} />
       </Box>
       <ImageLabel side={image.side} />
     </Stack>
@@ -59,37 +63,48 @@ function MerchImage({ image, label }: { image: MerchProductImage; label?: boolea
 }
 
 function SingleImage({ image }: { image: MerchProductImage }) {
-  return <MerchImage image={image} label={image.side === 'back'} />;
+  return <MerchImage image={image} label={image.side === 'back'} loading="eager" />;
 }
 
 function EqualImages({ images }: { images: MerchProductImage[] }) {
   return (
     <Grid cols={2} gap={2} height="full">
-      {images.map((image) => (
-        <MerchImage key={`${image.side}-${image.src}`} image={image} label />
+      {images.map((image, index) => (
+        <MerchImage key={`${image.side}-${image.src}`} image={image} label loading={index === 0 ? 'eager' : 'lazy'} />
       ))}
     </Grid>
   );
 }
 
 function ProminentImages({ primary, secondary }: { primary: MerchProductImage; secondary?: MerchProductImage }) {
-  if (!secondary) return <MerchImage image={primary} />;
+  if (!secondary) return <MerchImage image={primary} loading="eager" />;
 
   return (
-    <Grid cols={5} gap={2} height="full">
-      <Box span={3} height="full">
-        <MerchImage image={primary} />
-      </Box>
-      <Box span={2} height="full">
+    <Box position="relative" height="full">
+      <MerchImage image={primary} loading="eager" label />
+      <Box position="absolute" inset height="full" className="opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus-within:opacity-100">
         <MerchImage image={secondary} label />
       </Box>
-    </Grid>
+    </Box>
+  );
+}
+
+function MobileImageScroller({ images }: { images: MerchProductImage[] }) {
+  return (
+    <Stack direction="row" gap={2} height="full" overflow="x-auto" className="snap-x snap-mandatory overscroll-x-contain">
+      {images.map((image, index) => (
+        <Box key={`${image.side}-${image.src}`} width="full" shrink={false} height="full" className="snap-center">
+          <MerchImage image={image} label={images.length > 1} loading={index === 0 ? 'eager' : 'lazy'} />
+        </Box>
+      ))}
+    </Stack>
   );
 }
 
 export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
   const primary = resolved.primary;
+  const mobileImages = [primary, resolved.secondary].filter((image): image is MerchProductImage => Boolean(image));
 
   if (!primary) return null;
 
@@ -101,18 +116,23 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 72, md: 80 }}
+      height={{ base: 64, md: 80 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-        <EqualImages images={resolved.equal} />
-      ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
-        <ProminentImages primary={primary} secondary={resolved.secondary} />
-      ) : (
-        <SingleImage image={primary} />
-      )}
+      <Box display={{ base: 'none', md: 'block' }} height="full">
+        {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+          <EqualImages images={resolved.equal} />
+        ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
+          <ProminentImages primary={primary} secondary={resolved.secondary} />
+        ) : (
+          <SingleImage image={primary} />
+        )}
+      </Box>
+      <Box display={{ base: 'block', md: 'none' }} height="full">
+        <MobileImageScroller images={mobileImages} />
+      </Box>
     </Box>
   );
 }
