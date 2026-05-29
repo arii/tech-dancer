@@ -63,7 +63,7 @@ export function ArticleHero({
         </Stack>
 
         {/* Mobile Visual (appears after title/dek on mobile) */}
-        <Box className="block lg:hidden max-h-[40vh] overflow-hidden rounded-xl">
+        <Box className="block lg:hidden h-56 sm:h-72 overflow-hidden rounded-xl">
           {visual}
         </Box>
 
@@ -74,7 +74,7 @@ export function ArticleHero({
         )}
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" gap={2} wrap className="pb-2">
+          <Stack direction="row" gap={2} wrap className="pb-2 hidden lg:flex">
             {tags.map((tag) => (
               <Box
                 key={tag}

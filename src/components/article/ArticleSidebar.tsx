@@ -8,7 +8,7 @@ interface SidebarCardProps {
   children: ReactNode;
 }
 
-function SidebarCard({ title, children }: SidebarCardProps) {
+export function SidebarCard({ title, children }: SidebarCardProps) {
   return (
     <Box className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-5 lg:p-6 backdrop-blur-sm">
       <Stack gap={4}>

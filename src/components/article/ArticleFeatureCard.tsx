@@ -39,7 +39,7 @@ export function ArticleFeatureCard({
              </Box>
 
              {/* Data Card visualization placeholder if no image */}
-             <Stack gap={4} align="center" className="p-8 text-center relative z-10">
+             <Stack gap={4} align="center" className="p-8 text-center relative z-10 hidden lg:flex">
                 {type && (
                   <Box className="px-2 py-1 rounded bg-cyan-500/10 border border-cyan-500/20">
                     <Text variant="mono" size="micro" className="text-cyan-400 font-bold uppercase tracking-widest">{type}</Text>
@@ -53,7 +53,7 @@ export function ArticleFeatureCard({
 
         {/* Caption/Metadata below image/visual */}
         {(caption || (image && (title || subtitle))) && (
-          <Box className="p-5 lg:p-6 border-t border-slate-800/50">
+          <Box className="p-5 lg:p-6 border-t border-slate-800/50 hidden lg:block">
             <Stack gap={1}>
               {!image && caption && (
                 <Text size="sm" className="text-slate-400 italic">{caption}</Text>

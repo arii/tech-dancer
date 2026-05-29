@@ -1,9 +1,9 @@
 import { ExternalLink } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
-import { SpecsTable } from '@/components/layout/DetailElements';
 import { ResourceGrid } from '../ResourceGrid';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
+import { SidebarCard } from '@/components/article/ArticleSidebar';
 
 interface ResourceHeaderExtrasProps {
   author: string;
@@ -52,57 +52,67 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
     .filter((link): link is NonNullable<typeof link> => !!link);
 
   return (
-    <Stack gap={8}>
-      {specs && Object.keys(specs).length > 0 && <SpecsTable specs={specs} />}
+    <Stack gap={6}>
+      {specs && Object.keys(specs).length > 0 && (
+        <SidebarCard title="Technical Specs">
+          <Stack gap={3}>
+            {Object.entries(specs).map(([key, value]) => (
+              <Stack key={key} gap={1}>
+                <Text variant="mono" size="micro" className="text-slate-500 uppercase">{key}</Text>
+                <Text size="xs" weight="font-bold" className="text-slate-300">{value}</Text>
+              </Stack>
+            ))}
+          </Stack>
+        </SidebarCard>
+      )}
 
       {(affiliateLinks.length > 0 || affiliateLink) && (
-        <Stack gap={4}>
-          <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
-            Where to Buy
-          </Text>
-          <Box display="grid" gap={3} gridCols={1}>
-            {affiliateLinks.map(link => (
-              <Box
-                key={link.id}
-                as="a"
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                display="flex"
-                align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all"
-              >
-                <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
-              </Box>
-            ))}
-            {affiliateLink && (
-              <Box
-                as="a"
-                href={affiliateLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                display="flex"
-                align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all"
-              >
-                <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
-              </Box>
-            )}
-          </Box>
-          <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight not-italic">
-            {DISCLOSURE_TEXT}
-          </Text>
-        </Stack>
+        <SidebarCard title="Where to Buy">
+          <Stack gap={4}>
+            <Box display="grid" gap={3} gridCols={1}>
+              {affiliateLinks.map(link => (
+                <Box
+                  key={link.id}
+                  as="a"
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  display="flex"
+                  align="center"
+                  justify="between"
+                  padding={4}
+                  className="rounded-lg border border-slate-800 bg-slate-900/50 hover:border-cyan-400/50 group transition-all"
+                >
+                  <Text variant="mono" size="xs" weight="font-bold" className="text-slate-200 group-hover:text-cyan-400 transition-colors">
+                    {link.name || link.label || link.url}
+                  </Text>
+                  <ExternalLink className="w-4 h-4 text-cyan-400 opacity-30 group-hover:opacity-100 transition-opacity" />
+                </Box>
+              ))}
+              {affiliateLink && (
+                <Box
+                  as="a"
+                  href={affiliateLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  display="flex"
+                  align="center"
+                  justify="between"
+                  padding={4}
+                  className="rounded-lg border border-slate-800 bg-slate-900/50 hover:border-cyan-400/50 group transition-all"
+                >
+                  <Text variant="mono" size="xs" weight="font-bold" className="text-slate-200 group-hover:text-cyan-400 transition-colors">
+                    Buy on Amazon
+                  </Text>
+                  <ExternalLink className="w-4 h-4 text-cyan-400 opacity-30 group-hover:opacity-100 transition-opacity" />
+                </Box>
+              )}
+            </Box>
+            <Text variant="mono" size="micro" className="text-slate-500 leading-tight not-italic">
+              {DISCLOSURE_TEXT}
+            </Text>
+          </Stack>
+        </SidebarCard>
       )}
     </Stack>
   );

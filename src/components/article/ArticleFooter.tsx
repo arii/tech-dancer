@@ -52,9 +52,6 @@ export function ArticleFooter({ related }: ArticleFooterProps) {
             </Box>
           </Stack>
 
-          <Text variant="mono" size="micro" className="text-slate-600">
-            Join 2,500+ dancers and tech enthusiasts.
-          </Text>
         </Stack>
       </Box>
 
