@@ -3,18 +3,21 @@ import sys
 import json
 import requests
 
+# Operational parameters from environment variables
 PRINTFUL_TOKEN = os.getenv("PRINTFUL_TOKEN")
 STORE_ID = os.getenv("PRINTFUL_STORE_ID")
 BASE_URL = "https://api.printful.com"
-CONFIG_PATH = "printful/config/product_metadata_map.json"
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "product_metadata_map.json")
+
+def fail(message):
+    print(f"ERROR: {message}")
+    sys.exit(1)
 
 if not PRINTFUL_TOKEN:
-    print("ERROR: PRINTFUL_TOKEN is not set.")
-    sys.exit(1)
+    fail("PRINTFUL_TOKEN is not set.")
 
 if not STORE_ID:
-    print("ERROR: PRINTFUL_STORE_ID is not set.")
-    sys.exit(1)
+    fail("PRINTFUL_STORE_ID is not set.")
 
 headers = {
     "Authorization": f"Bearer {PRINTFUL_TOKEN}",
@@ -27,8 +30,7 @@ def load_config():
         with open(CONFIG_PATH, "r") as f:
             return json.load(f)
     except Exception as e:
-        print(f"ERROR: Could not load config from {CONFIG_PATH}: {e}")
-        sys.exit(1)
+        fail(f"Could not load config from {CONFIG_PATH}: {e}")
 
 def main():
     config = load_config()
@@ -37,7 +39,7 @@ def main():
     print(f"Fetching synced products from store {STORE_ID}...")
     res = requests.get(f"{BASE_URL}/sync/products", headers=headers, timeout=30)
     if res.status_code != 200:
-        print("Failed to fetch products:", res.text)
+        print(f"Failed to fetch products: {res.text}")
         return
         
     products = res.json().get("result", [])
@@ -48,15 +50,19 @@ def main():
         prod_name = prod["name"]
         print(f"\nProcessing Product: {prod_name} (ID: {prod_id})")
         
-        # Look up metadata by Printful Sync Product ID as required by audit
+        # Data-driven lookup using Printful Sync Product ID as required by audit
         metadata = config.get(prod_id)
         if not metadata:
-            print(f"  Warning: No metadata entry found in config for product ID {prod_id}. Skipping.")
+            print(f"  Warning: No entry for sync_product_id {prod_id} in config. Skipping.")
             continue
             
         file_id = metadata.get("design_file_id")
         placement = metadata.get("placement")
         price = metadata.get("retail_price", "29.99")
+
+        if not file_id or not placement:
+            print(f"  Error: Missing design_file_id or placement in config for {prod_id}. Skipping.")
+            continue
 
         print(f"  Mapped to File ID: {file_id} on placement: {placement}, Price: {price}")
         
@@ -73,8 +79,8 @@ def main():
         # 3. Batch update variants
         for v in sync_variants:
             v_id = v["id"]
-            v_color = v.get("color")
-            v_size = v.get("size")
+            v_color = v.get("color", "N/A")
+            v_size = v.get("size", "N/A")
             
             # Setup payload
             payload = {

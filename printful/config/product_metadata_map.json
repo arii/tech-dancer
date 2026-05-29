@@ -1,14 +1,8 @@
 {
-  "SYNC_PRODUCT_ID_PLACEHOLDER_1": {
+  "SYNC_PRODUCT_ID_PLACEHOLDER": {
     "design_file_id": 990303036,
     "placement": "front",
     "retail_price": "29.99",
-    "notes": "Example for Circular NorCal"
-  },
-  "SYNC_PRODUCT_ID_PLACEHOLDER_2": {
-    "design_file_id": 990399734,
-    "placement": "front",
-    "retail_price": "45.00",
-    "notes": "Example for Sweatshirt"
+    "notes": "Example entry. Replace key with actual Printful Sync Product ID."
   }
 }

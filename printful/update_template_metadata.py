@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+import os
 import json
 from pathlib import Path
 
-JSON_PATH = Path("printful_template_agent_packet.json")
+# Use absolute path relative to script directory
+SCRIPT_DIR = Path(__file__).parent.absolute()
+JSON_PATH = SCRIPT_DIR / "printful_template_agent_packet.json"
 
 def apply_patches_logic(data):
     patches = {
@@ -155,7 +158,7 @@ def apply_final_tweaks_logic(data):
 
 def main():
     if not JSON_PATH.exists():
-        print("Error: JSON file not found.")
+        print(f"Error: JSON file not found at {JSON_PATH}")
         return
 
     with open(JSON_PATH, "r", encoding="utf-8") as f:
