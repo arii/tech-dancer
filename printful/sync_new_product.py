@@ -11,7 +11,7 @@ PRINTFUL_TOKEN = os.getenv("PRINTFUL_TOKEN")
 BASE_URL = "https://api.printful.com"
 STORE_ID = 18249113
 
-# File mapping from our design files library screenshot mapping
+# File mapping from our design files library
 DESIGN_FILES = {
     "rainbow_eagle": {"id": 990399734, "url": "https://files.cdn.printful.com/files/6bc/6bcb2338fc0fa3b9b4a7decc94feb1ff_preview.png"},
     "eagle": {"id": 992252789, "url": "https://files.cdn.printful.com/files/992/992252789_preview.png"},
@@ -22,25 +22,19 @@ DESIGN_FILES = {
     "circular_norcal": {"id": 990303036, "url": "https://files.cdn.printful.com/files/d47/d47b12ba9699c4562158168013a5c0c5_preview.png"}
 }
 
-# Catalog Product placement position mappings (front and back layout guidelines for SATU020)
+# Catalog Product placement position mappings
 POSITION_MAPPING = {
     823: {
-        "back": {
-            "area_width": 3000,
-            "area_height": 3000,
-            "width": 1088,
-            "height": 1449,
-            "top": 316,
-            "left": 964
-        },
-        "front": {
-            "area_width": 3000,
-            "area_height": 3000,
-            "width": 1088,
-            "height": 1449,
-            "top": 316,
-            "left": 964
-        }
+        "back": {"area_width": 3000, "area_height": 3000, "width": 1088, "height": 1449, "top": 316, "left": 964},
+        "front": {"area_width": 3000, "area_height": 3000, "width": 1088, "height": 1449, "top": 316, "left": 964}
+    },
+    411: {
+        "front": {"area_width": 3000, "area_height": 3000, "width": 1088, "height": 1449, "top": 316, "left": 964},
+        "back": {"area_width": 3000, "area_height": 3000, "width": 1088, "height": 1449, "top": 316, "left": 964}
+    },
+    665: {
+        "front": {"area_width": 3000, "area_height": 3000, "width": 1088, "height": 1449, "top": 316, "left": 964},
+        "back": {"area_width": 3000, "area_height": 3000, "width": 1088, "height": 1449, "top": 316, "left": 964}
     }
 }
 
@@ -53,7 +47,7 @@ headers = {
 def post_with_rate_limit(url, payload):
     while True:
         res = requests.post(url, headers=headers, json=payload, timeout=30)
-        if res.status_code == 200:
+        if res.status_code in [200, 201]:
             return res
         elif res.status_code == 429:
             body = res.json()
@@ -68,13 +62,31 @@ def post_with_rate_limit(url, payload):
             print(f"Error {res.status_code}: {res.text}")
             sys.exit(1)
 
+def get_lifestyle_mockup_styles(catalog_id):
+    try:
+        with open("printful/mockup_styles_specifications.json", "r") as f:
+            specs = json.load(f)
+            product_specs = specs.get(str(catalog_id), [])
+            style_ids = []
+            for placement_spec in product_specs:
+                for style in placement_spec.get("mockup_styles", []):
+                    cat_name = style.get("category_name", "")
+                    if any(kw in cat_name for kw in ["Lifestyle", "Men's", "Women's", "Model"]):
+                        style_ids.append(style["id"])
+            return list(set(style_ids))
+    except FileNotFoundError:
+        return []
+
 def main():
     parser = argparse.ArgumentParser(description="Create and Sync a new Printful product with correct artwork, prices, and mockups.")
     parser.add_argument("--name", required=True, help="Display Name of the product")
-    parser.add_argument("--catalog-id", type=int, required=True, help="Base Catalog Product ID (e.g. 823 for SATU020)")
-    parser.add_argument("--design", choices=DESIGN_FILES.keys(), required=True, help="Design keyword (e.g. rainbow_eagle)")
-    parser.add_argument("--placement", choices=["front", "back"], default="back", help="Fulfillment print placement (default: back)")
-    parser.add_argument("--price", default="29.99", help="Retail price for variants (default: 29.99)")
+    parser.add_argument("--catalog-id", type=int, required=True, help="Base Catalog Product ID")
+    parser.add_argument("--front-design", choices=DESIGN_FILES.keys(), help="Front design keyword")
+    parser.add_argument("--back-design", choices=DESIGN_FILES.keys(), help="Back design keyword")
+    parser.add_argument("--colors", help="Comma-separated target colors (e.g. 'black,white')")
+    parser.add_argument("--technique", default="dtg", choices=["dtg", "embroidery", "dtfilm"], help="Printing technique")
+    parser.add_argument("--price", default="29.99", help="Retail price")
+    parser.add_argument("--sync-product-id", type=int, help="Existing Sync Product ID to update")
     
     args = parser.parse_args()
     
@@ -82,176 +94,178 @@ def main():
         print("ERROR: PRINTFUL_TOKEN environment variable not set.")
         sys.exit(1)
         
-    design_info = DESIGN_FILES[args.design]
-    file_id = design_info["id"]
-    design_url = design_info["url"]
-    
-    # 1. Fetch catalog variant IDs for the product
-    print(f"Fetching catalog variant IDs for product {args.catalog_id}...")
+    placements = []
+    if args.front_design:
+        p_type = "front"
+        if args.technique == "dtfilm": p_type = "front_dtf"
+        elif args.technique == "embroidery": p_type = "embroidery_chest_center"
+        placements.append({"type": p_type, "design": args.front_design})
+
+    if args.back_design:
+        p_type = "back"
+        if args.technique == "dtfilm": p_type = "back_dtf"
+        placements.append({"type": p_type, "design": args.back_design})
+
+    if not placements:
+        print("ERROR: At least one design (front or back) must be specified.")
+        sys.exit(1)
+
+    # 1. Fetch catalog variants
+    print(f"Fetching catalog variants for product {args.catalog_id}...")
     res = requests.get(f"{BASE_URL}/products/{args.catalog_id}", headers=headers, timeout=30)
     if res.status_code != 200:
         print("Failed to get product catalog variants:", res.text)
         sys.exit(1)
         
     catalog_variants = res.json().get("result", {}).get("variants", [])
-    # Limit variants to Black for SATU020 as a default example
-    target_variants = [v for v in catalog_variants if v.get("color", "").lower() == "black"]
     
-    if not target_variants:
-        # Fallback to first 5 variants if black not found
-        target_variants = catalog_variants[:5]
-        
-    variant_ids = [v["id"] for v in target_variants]
-    print(f"Targeting catalog variant IDs: {variant_ids}")
+    target_colors = [c.strip().lower() for c in args.colors.split(",")] if args.colors else []
     
-    # 2. Create the Sync Product
-    sync_variants = []
-    for v_id in variant_ids:
-        sync_variants.append({
+    sync_variants_payload = []
+    for cv in catalog_variants:
+        color = cv.get("color", "").lower()
+        is_ignored = False
+        if target_colors and color not in target_colors:
+            is_ignored = True
+
+        variant_files = []
+        for p in placements:
+            variant_files.append({
+                "type": p["type"],
+                "id": DESIGN_FILES[p["design"]]["id"]
+            })
+
+        sync_variants_payload.append({
+            "variant_id": cv["id"],
             "retail_price": args.price,
-            "variant_id": v_id,
-            "files": [
-                {
-                    "type": args.placement,
-                    "id": file_id
-                }
-            ]
+            "is_ignored": is_ignored,
+            "files": variant_files
         })
+
+    if not target_colors:
+        found_colors = []
+        for cv in catalog_variants:
+            c = cv.get("color", "").lower()
+            if c and c not in found_colors:
+                found_colors.append(c)
+            if len(found_colors) >= 3:
+                break
         
-    product_payload = {
-        "sync_product": {
-            "name": args.name,
-            "external_id": f"{args.design}_{args.catalog_id}_{int(time.time())}"
-        },
-        "sync_variants": sync_variants
-    }
-    
-    print("\nCreating synced product shell...")
-    create_res = requests.post(f"{BASE_URL}/store/products", headers=headers, json=product_payload, timeout=30)
-    if create_res.status_code != 200:
-        print("Failed to create product shell:", create_res.text)
-        sys.exit(1)
-        
-    product_data = create_res.json().get("result", {})
-    sync_product_id = product_data.get("id")
-    print(f"Synced product created successfully! ID: {sync_product_id}")
-    
-    # 3. Generate Mockups
-    position = POSITION_MAPPING.get(args.catalog_id, {}).get(args.placement)
-    if not position:
-        # Fallback default position block
-        position = {
-            "area_width": 1800,
-            "area_height": 2400,
-            "width": 1800,
-            "height": 1800,
-            "top": 300,
-            "left": 0
+        for sv in sync_variants_payload:
+            cv = next(c for c in catalog_variants if c["id"] == sv["variant_id"])
+            if cv.get("color", "").lower() not in found_colors:
+                sv["is_ignored"] = True
+
+    sync_product_id = args.sync_product_id
+    if not sync_product_id:
+        print("\nCreating synced product shell...")
+        product_payload = {
+            "sync_product": {
+                "name": args.name,
+                "external_id": f"{int(time.time())}"
+            },
+            "sync_variants": sync_variants_payload
         }
-        
-    mockup_payload = {
-        "variant_ids": variant_ids,
-        "format": "jpg",
-        "files": [
-            {
-                "placement": args.placement,
-                "image_url": design_url,
-                "position": position
-            }
-        ]
-    }
+        create_res = requests.post(f"{BASE_URL}/store/products", headers=headers, json=product_payload, timeout=30)
+        if create_res.status_code != 200:
+            print("Failed to create product shell:", create_res.text)
+            sys.exit(1)
+        sync_product_id = create_res.json().get("result", {}).get("id")
+        print(f"Synced product created! ID: {sync_product_id}")
+    else:
+        print(f"\nUpdating existing synced product {sync_product_id}...")
+
+    # 2. Mockup Generation
+    lifestyle_style_ids = get_lifestyle_mockup_styles(args.catalog_id)
     
-    print(f"\nTriggering mockup generation task for catalog product {args.catalog_id}...")
+    mockup_files = []
+    for p in placements:
+        # Map back to simple front/back for position lookup if needed
+        lookup_type = "front" if "front" in p["type"] else "back"
+        pos = POSITION_MAPPING.get(args.catalog_id, {}).get(lookup_type, {
+            "area_width": 1800, "area_height": 2400, "width": 1800, "height": 1800, "top": 300, "left": 0
+        })
+        mockup_files.append({
+            "placement": p["type"],
+            "image_url": DESIGN_FILES[p["design"]]["url"],
+            "position": pos
+        })
+
+    variant_ids_for_mockup = [sv["variant_id"] for sv in sync_variants_payload if not sv["is_ignored"]]
+    
+    mockup_payload = {
+        "variant_ids": variant_ids_for_mockup,
+        "format": "jpg",
+        "files": mockup_files
+    }
+    if lifestyle_style_ids:
+        mockup_payload["mockup_style_ids"] = lifestyle_style_ids
+
+    print(f"\nTriggering mockup generation task (technique: {args.technique})...")
     task_url = f"{BASE_URL}/mockup-generator/create-task/{args.catalog_id}"
     task_res = post_with_rate_limit(task_url, mockup_payload)
     task_key = task_res.json().get("result", {}).get("task_key")
-    print(f"Mockup task started. Key: {task_key}")
     
-    # 4. Poll Mockup Generator
+    # 3. Poll Mockups
     mockup_urls = {}
-    print("Waiting for mockup generation to complete...")
-    for _ in range(20):
-        time.sleep(3)
+    primary_mockup_url = None
+    print("Waiting for mockups...")
+    for _ in range(30):
+        time.sleep(5)
         poll_res = requests.get(f"{BASE_URL}/mockup-generator/task?task_key={task_key}", headers=headers, timeout=30)
-        if poll_res.status_code != 200:
-            poll_res = requests.get(f"{BASE_URL}/mockup-generator/lookup-task?task_key={task_key}", headers=headers, timeout=30)
-            
         if poll_res.status_code == 200:
             task_data = poll_res.json().get("result", {})
-            status = task_data.get("status")
-            print(f"  Status: {status}")
-            
-            if status == "completed":
+            if task_data.get("status") == "completed":
                 mockups = task_data.get("mockups", [])
                 for item in mockups:
-                    v_list = item.get("variant_ids", [])
-                    extra_mockups = item.get("extra", []) or item.get("extra_mockups", [])
-                    
-                    # Find back mockup or fallback to primary mockup
-                    back_mockup = next((m for m in extra_mockups if args.placement in m.get("title", "").lower()), None)
-                    target_url = None
-                    if back_mockup:
-                        target_url = back_mockup.get("url")
-                    elif extra_mockups:
-                        target_url = extra_mockups[0].get("url")
-                    else:
-                        target_url = item.get("mockup_url")
-                        
-                    if target_url:
-                        for v_id in v_list:
-                            mockup_urls[v_id] = target_url
+                    v_ids = item.get("variant_ids", [])
+                    url = item.get("mockup_url")
+                    if not primary_mockup_url: primary_mockup_url = url
+                    for v_id in v_ids:
+                        mockup_urls[v_id] = url
                 break
-            elif status == "failed":
+            elif task_data.get("status") == "failed":
                 print("Mockup generation failed.")
                 sys.exit(1)
-                
-    if not mockup_urls:
-        print("Error: Could not retrieve mockup URLs.")
-        sys.exit(1)
-        
-    # 5. Fetch newly created sync variant details to get their IDs
+
+    # 4. Update Sync Variants
+    print("\nLinking assets to sync variants...")
     sync_details_res = requests.get(f"{BASE_URL}/sync/products/{sync_product_id}", headers=headers, timeout=30)
     created_sync_variants = sync_details_res.json().get("result", {}).get("sync_variants", [])
     
-    # 6. Apply mockups to each variant
-    primary_mockup_url = None
     for sv in created_sync_variants:
         sv_id = sv["id"]
-        cat_id = sv["variant_id"]
-        sv_size = sv.get("size")
+        cat_v_id = sv["variant_id"]
         
-        mockup_url = mockup_urls.get(cat_id)
-        if not mockup_url:
-            continue
-            
-        if not primary_mockup_url:
-            primary_mockup_url = mockup_url
-            
-        print(f"  Adding mockup to Sync Variant {sv_id} (Size {sv_size})...")
-        update_payload = {
-            "files": [
-                {
-                    "type": args.placement,
-                    "id": file_id
-                },
-                {
-                    "type": "preview",
-                    "url": mockup_url
-                }
-            ]
-        }
-        requests.put(f"{BASE_URL}/sync/variant/{sv_id}", headers=headers, json=update_payload, timeout=30)
+        intended = next((v for v in sync_variants_payload if v["variant_id"] == cat_v_id), None)
+        if not intended: continue
 
-    # 7. Update main product thumbnail
-    if primary_mockup_url:
-        print(f"\nSetting main product thumbnail to generated mockup image...")
-        thumbnail_payload = {
-            "sync_product": {
-                "thumbnail": primary_mockup_url
-            }
+        new_files = []
+        for p in placements:
+            new_files.append({
+                "type": p["type"],
+                "id": DESIGN_FILES[p["design"]]["id"]
+            })
+
+        m_url = mockup_urls.get(cat_v_id)
+        if m_url:
+            new_files.append({"type": "preview", "url": m_url})
+            
+        update_payload = {
+            "retail_price": intended["retail_price"],
+            "is_ignored": intended["is_ignored"],
+            "files": new_files
         }
-        requests.put(f"{BASE_URL}/store/products/{sync_product_id}", headers=headers, json=thumbnail_payload, timeout=30)
-        print("Product setup is complete!")
+
+        requests.put(f"{BASE_URL}/sync/variant/{sv_id}", headers=headers, json=update_payload, timeout=30)
+        print(f"  Updated sync variant {sv_id} (ignored={intended['is_ignored']})")
+
+    if primary_mockup_url:
+        requests.put(f"{BASE_URL}/store/products/{sync_product_id}", headers=headers, json={
+            "sync_product": {"thumbnail": primary_mockup_url}
+        }, timeout=30)
+
+    print(f"\nProduct setup complete! ID: {sync_product_id}")
 
 if __name__ == "__main__":
     main()
