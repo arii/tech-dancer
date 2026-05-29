@@ -42,7 +42,6 @@ gear:
   accessoryDescription: "Low-profile cooling for the intimate hotel ballroom."
   shoeIds:
     - bloch-grecian
-    - dance-socks
   shoeDescription: "Reliable footwear for workshops and community sets."
   essentialIds:
     - loop-experience

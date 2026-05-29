@@ -43,13 +43,11 @@ gear:
   accessoryDescription: "Essential cooling and sun protection for the legendary pool party."
   shoeIds:
     - bloch-grecian
-    - dance-socks
   shoeDescription: "Reliable soles for the ballroom floors."
   essentialIds:
     - liquid-iv
     - dry-shampoo
     - loop-experience
-    - foam-roller
   essentialDescription: "Heat-management and hydration essentials for Phoenix in July."
   travelIds:
     - travel-bottles

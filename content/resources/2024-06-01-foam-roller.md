@@ -1,19 +1,19 @@
 ---
 type: resource
-title: "Travel Foam Roller"
+title: "High-Density Foam Roller"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
-excerpt: "Stay limber on the road. A compact foam roller is essential for sore legs and tight hips after a long day of dancing."
+excerpt: "A high-density solid foam roller that is excellent for post-dance muscle recovery at home or local socials."
 image: "/images/gear/sketches/foam-roller.jpg"
 affiliateIds: ["foam-roller"]
-tags: ["recovery", "health", "travel"]
+tags: ["recovery", "health", "fitness"]
 verdict: "Essential for recovery"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-bestFor: ["Post-event", "Travel"]
+bestFor: ["Post-event", "Home Recovery"]
 ---
 
-## Recovery on the Go
+## Deep Tissue Recovery
 
-Don't let muscle tightness ruin your weekend. A hollow-core travel foam roller fits inside your luggage (you can even pack clothes inside it!) and provides much-needed relief for your calves and back after a day of workshops and a night of social dancing.
+Don't let muscle tightness ruin your weekly routine. While this solid-core foam roller is not hollow and is less convenient for packing in flight luggage, it is a high-density recovery essential to use at home or after your local weekly social dances to relieve sore calves, quads, and back muscles.

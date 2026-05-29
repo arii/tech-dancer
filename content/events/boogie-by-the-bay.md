@@ -5,7 +5,7 @@ date: '2026-10-08'
 startDate: '2026-10-08'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: San Francisco's flagship WCS event over Columbus Day weekend.
+excerpt: San Francisco's flagship WCS event held in Northern California.
 location: Hyatt Regency San Francisco Airport
 city: Burlingame, CA
 region: NorCal

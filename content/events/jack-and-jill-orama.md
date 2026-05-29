@@ -57,7 +57,6 @@ gear:
   shoeDescription: "Trusted shoes for long hours on the high-energy SoCal floor."
   essentialIds:
     - "loop-experience"
-    - "foam-roller"
     - "liquid-iv"
     - "hand-sanitizer"
   essentialDescription: "Proactive recovery and hygiene to keep you moving through the late-night magic."

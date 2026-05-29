@@ -42,7 +42,6 @@ gear:
   accessoryDescription: "Alien masks for grand entrances and futuristic fans for cooling."
   shoeIds:
     - bloch-grecian
-    - dance-socks
   shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
   essentialIds:
     - loop-experience
