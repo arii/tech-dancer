@@ -31,7 +31,7 @@ export function Footer() {
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={3} wrap>
           <Text variant="mono" size="tiny" color="dim" weight="font-semibold" className="tracking-widest shrink-0" data-testid="footer-copyright">
-            © 2026 BOOMTICK.BLOG
+            © {new Date().getFullYear()} BOOMTICK.BLOG
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10 shrink-0" />
           <Text size="micro" color="dim" className="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">
