@@ -4,19 +4,18 @@ import { MERCH_CATALOG_PRODUCTS } from '@/data/products/merch';
 import type { Resource } from '@/lib/types/content';
 
 describe('Schema Generation', () => {
-  it('should generate valid merch schema with all required fields', () => {
+  it('should generate valid merch schema with essential fields', () => {
     const merchSchema = generateMerchSchema(MERCH_CATALOG_PRODUCTS);
     const firstMerch = merchSchema.itemListElement[0].item;
 
     expect(firstMerch.offers.price).toBeDefined();
     expect(firstMerch.offers.priceCurrency).toBe('USD');
     expect(firstMerch.offers.availability).toBe('https://schema.org/InStock');
-    expect(firstMerch.aggregateRating).toBeDefined();
-    expect(firstMerch.review).toBeDefined();
-    expect(firstMerch.review?.author.name).toBe('Ariel Anders, PhD');
+    expect(firstMerch.offers.shippingDetails).toBeDefined();
+    expect(firstMerch.offers.hasMerchantReturnPolicy).toBeDefined();
   });
 
-  it('should generate valid gear schema with all required fields', () => {
+  it('should generate valid gear schema with basic fields', () => {
     const testGear: Resource = {
       type: 'resource',
       slug: 'test-gear',
@@ -30,11 +29,7 @@ describe('Schema Generation', () => {
     const gearSchema = generateGearCatalogSchema([testGear]);
     const firstGear = gearSchema.itemListElement[0].item;
 
-    expect(firstGear.offers.price).toBeDefined();
-    expect(firstGear.offers.priceCurrency).toBe('USD');
-    expect(firstGear.offers.availability).toBe('https://schema.org/InStock');
-    expect(firstGear.aggregateRating).toBeDefined();
-    expect(firstGear.review).toBeDefined();
-    expect(firstGear.review?.author.name).toBe('Ariel Anders, PhD');
+    expect(firstGear.name).toBe('Test Gear');
+    expect(firstGear.offers.url).toContain('test-gear');
   });
 });

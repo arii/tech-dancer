@@ -10,9 +10,7 @@ import type { SchemaProduct } from '@/utils/schema';
 import {
   AMAZON_AFFILIATE_DISCLOSURE,
   POD_SHIPPING_POLICY,
-  POD_RETURN_POLICY,
-  DEFAULT_AGGREGATE_RATING,
-  DEFAULT_REVIEW
+  POD_RETURN_POLICY
 } from '@/utils/schema';
 
 export default function GearPost() {
@@ -49,16 +47,14 @@ export default function GearPost() {
       "offers": {
         "@type": "Offer",
         "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        "price": "0.00",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
         ...(isMerch ? {
+          "price": "0.00",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
           "shippingDetails": POD_SHIPPING_POLICY,
           "hasMerchantReturnPolicy": POD_RETURN_POLICY
         } : {})
-      },
-      "aggregateRating": DEFAULT_AGGREGATE_RATING,
-      "review": DEFAULT_REVIEW
+      }
     };
 
     return schema;

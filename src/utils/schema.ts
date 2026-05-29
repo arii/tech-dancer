@@ -185,9 +185,7 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
           "availability": "https://schema.org/InStock",
           "shippingDetails": POD_SHIPPING_POLICY,
           "hasMerchantReturnPolicy": POD_RETURN_POLICY
-        },
-        "aggregateRating": DEFAULT_AGGREGATE_RATING,
-        "review": DEFAULT_REVIEW
+        }
       }
     }))
   };
@@ -214,16 +212,14 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
         "offers": {
           "@type": "Offer",
           "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          "price": "0.00", // Default or calculated price
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
           ...(isMerch ? {
+            "price": "0.00", // Default for owned merch
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
             "shippingDetails": POD_SHIPPING_POLICY,
             "hasMerchantReturnPolicy": POD_RETURN_POLICY
           } : {})
-        },
-        "aggregateRating": DEFAULT_AGGREGATE_RATING,
-        "review": DEFAULT_REVIEW
+        }
       };
 
       return {
