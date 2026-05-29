@@ -13,7 +13,6 @@ permissions:
   pull-requests: write
   actions: read
 
-
 jobs:
   repair:
     if: >
@@ -21,43 +20,42 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@jules-fix-local'))
     runs-on: ubuntu-latest
     env:
+      PYTHONPATH: dev-tools
+      OLLAMA_MODEL: qwen2.5-coder:1.5b
+      OLLAMA_SYNTHESIS_MODEL: qwen2.5-coder:1.5b
+      OLLAMA_BASE_URL: http://localhost:11434
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      EVENT_NAME: ${{ github.event_name }}
-      ISSUE_NUMBER: ${{ github.event.issue.number }}
-      RUN_ID: ${{ github.run_id }}
-      WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
-      WORKFLOW_RUN_SHA: ${{ github.event.workflow_run.head_sha }}
-      REPO: ${{ github.repository }}
-      HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
-      HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
-      OLLAMA_MODEL: "qwen2.5-coder:1.5b"
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Checkout trusted code
+      - name: Checkout Code (Trusted)
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
 
-      - name: Prepare trusted repair script
+      - name: Backup Trusted Dev-Tools
         run: |
-          mkdir -p /tmp/repair-tool
-          cp -r dev-tools/. /tmp/repair-tool/
-          chmod +x /tmp/repair-tool/repair.py
+          mkdir -p /tmp/trusted-dev-tools
+          cp -r dev-tools/. /tmp/trusted-dev-tools/
 
       - name: Checkout failing branch
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           if [ "$EVENT_NAME" == "workflow_run" ]; then
-            git fetch origin "$WORKFLOW_RUN_SHA"
-            git checkout "$WORKFLOW_RUN_SHA"
+            git fetch origin "$HEAD_SHA"
+            git checkout "$HEAD_SHA"
+          else
+            gh pr checkout "$ISSUE_NUMBER"
           fi
 
-      - name: Resolve PR branch (for ChatOps)
-        if: env.EVENT_NAME == 'issue_comment'
+      - name: Restore Trusted Dev-Tools
         run: |
-          PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,headRefOid)
-          echo "HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> "$GITHUB_ENV"
-          echo "HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> "$GITHUB_ENV"
-          gh pr checkout "$ISSUE_NUMBER"
+          rm -rf dev-tools
+          cp -r /tmp/trusted-dev-tools dev-tools
+          chmod +x dev-tools/low-compute-review.sh
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -87,48 +85,48 @@ jobs:
           if ! pnpm eslint . --fix; then echo "eslint failed"; exit 1; fi
           if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
 
-      - name: Install Ollama
+      - name: Setup Ollama
         run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
-          ollama serve &
-
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve > /tmp/ollama.log 2>&1 &
           echo "Waiting for Ollama to be ready..."
-          for _ in {1..20}; do
-            if curl -s http://localhost:11434/api/tags > /dev/null; then
+          for i in {1..15}; do
+            if curl -sf http://localhost:11434/api/tags > /dev/null; then
               echo "Ollama is ready!"
+              ollama list
               exit 0
             fi
+            echo "Waiting... ($i/15)"
             sleep 2
           done
-          echo "Ollama failed to start in time."
+          echo "Ollama failed to start"
+          cat /tmp/ollama.log
           exit 1
 
-      - name: Pull Model
-        run: ollama pull "$OLLAMA_MODEL"
+      - name: Validate CLI
+        run: |
+          python3 dev-tools/td_cli.py gh --help
+          python3 dev-tools/td_cli.py ai --help
 
-      - name: Fetch Logs & Run Repair
+      - name: Resolve PR Number
         env:
-          PYTHONPATH: /tmp/repair-tool
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           if [ "$EVENT_NAME" == "workflow_run" ]; then
-            TARGET_RUN_ID="$WORKFLOW_RUN_ID"
+            PR_NUMBER=$(gh pr list --head "$HEAD_BRANCH" --json number -q '.[0].number')
           else
-            TARGET_RUN_ID=$(gh run list --workflow CI --branch "$HEAD_REF" --status failure --limit 1 --json databaseId -q '.[0].databaseId')
+            PR_NUMBER="$ISSUE_NUMBER"
           fi
+          echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
 
-          if [ -n "$TARGET_RUN_ID" ]; then
-            echo "Fetching logs for run $TARGET_RUN_ID..."
-            gh run view "$TARGET_RUN_ID" --log > /tmp/ci_logs.txt
-
-            # Generate fresh structured logs from current state
-            if ! pnpm eslint . --format json > /tmp/eslint-errors.json; then echo "eslint failed"; exit 1; fi
-
-            python3 /tmp/repair-tool/repair.py /tmp/ci_logs.txt --eslint-json /tmp/eslint-errors.json
+      - name: Execute Review
+        run: |
+          if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
+            ./dev-tools/low-compute-review.sh "$PR_NUMBER" --no-cache
           else
-            echo "No failed run found to repair."
-            exit 0
+            echo "No PR found for this run. Skipping AI review."
           fi
 
       - name: Verify Fixes
@@ -149,55 +147,41 @@ jobs:
 
       - name: Commit & Push Changes
         if: steps.verify.outputs.success != 'false'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git config http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n "x-access-token:${GH_TOKEN}" | base64)"
 
             NEW_BRANCH="ai-repair-$RUN_ID"
             if [ "$EVENT_NAME" == "issue_comment" ]; then
-              NEW_BRANCH="ai-repair-pr-$ISSUE_NUMBER"
+              NEW_BRANCH="ai-repair-pr-$PR_NUMBER"
             fi
 
             git checkout -b "$NEW_BRANCH"
             git add .
             git commit -m "🤖 AI-generated fix for CI failures"
-            echo "::add-mask::${GH_TOKEN}"
-            git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
+            git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
 
-            # Capture failure summary for PR context
-            ERROR_SUMMARY=$(grep -i "error" /tmp/ci_logs.txt | tail -n 10 || echo "No explicit error lines found in logs.")
-
-            PR_MSG="Automated repair attempt for failed run $WORKFLOW_RUN_ID"
+            PR_MSG="Automated repair attempt for failed run."
             if [ "${{ steps.verify.outputs.success }}" == "success" ]; then
               PR_MSG="✅ $PR_MSG (Verified to pass lint/types)"
             else
               PR_MSG="⚠️ $PR_MSG (Partial fix, still has some issues)"
             fi
 
-            PR_MSG="${PR_MSG}
-
-            <details>
-            <summary>Last 10 Error Lines from CI Logs</summary>
-
-            \`\`\`
-            ${ERROR_SUMMARY}
-            \`\`\`
-
-            </details>"
-
             if [ "$EVENT_NAME" == "workflow_run" ]; then
               if [ "$HEAD_REPO" == "$REPO" ]; then
                 if ! gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH"; then echo "PR creation failed"; exit 1; fi
               fi
             else
-              gh pr comment "$ISSUE_NUMBER" --body "🤖 I've attempted to fix the CI failures. $PR_MSG. See the proposed changes in branch \`$NEW_BRANCH\`."
+              gh pr comment "$PR_NUMBER" --body "🤖 I've attempted to fix the CI failures. $PR_MSG. See the proposed changes in branch \`$NEW_BRANCH\`."
             fi
           else
             echo "No changes to commit."
           fi
-
-      - name: Cleanup repair tool
-        if: always()
-        run: rm -rf /tmp/repair-tool
