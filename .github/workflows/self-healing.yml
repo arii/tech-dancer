@@ -39,12 +39,16 @@ jobs:
           cp -r dev-tools/. /tmp/trusted-dev-tools/
 
       - name: Checkout failing branch
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          if [ "${{ github.event_name }}" == "workflow_run" ]; then
-            git fetch origin "${{ github.event.workflow_run.head_sha }}"
-            git checkout "${{ github.event.workflow_run.head_sha }}"
+          if [ "$EVENT_NAME" == "workflow_run" ]; then
+            git fetch origin "$HEAD_SHA"
+            git checkout "$HEAD_SHA"
           else
-            gh pr checkout "${{ github.event.issue.number }}"
+            gh pr checkout "$ISSUE_NUMBER"
           fi
 
       - name: Restore Trusted Dev-Tools
@@ -105,11 +109,15 @@ jobs:
           python3 dev-tools/td_cli.py ai --help
 
       - name: Resolve PR Number
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          if [ "${{ github.event_name }}" == "workflow_run" ]; then
-            PR_NUMBER=$(gh pr list --head "${{ github.event.workflow_run.head_branch }}" --json number -q '.[0].number')
+          if [ "$EVENT_NAME" == "workflow_run" ]; then
+            PR_NUMBER=$(gh pr list --head "$HEAD_BRANCH" --json number -q '.[0].number')
           else
-            PR_NUMBER="${{ github.event.issue.number }}"
+            PR_NUMBER="$ISSUE_NUMBER"
           fi
           echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
 
@@ -139,15 +147,16 @@ jobs:
 
       - name: Commit & Push Changes
         if: steps.verify.outputs.success != 'false'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-
-            EVENT_NAME="${{ github.event_name }}"
-            REPO="${{ github.repository }}"
-            RUN_ID="${{ github.run_id }}"
-            PR_NUMBER="${{ env.PR_NUMBER }}"
 
             NEW_BRANCH="ai-repair-$RUN_ID"
             if [ "$EVENT_NAME" == "issue_comment" ]; then
@@ -167,8 +176,6 @@ jobs:
             fi
 
             if [ "$EVENT_NAME" == "workflow_run" ]; then
-              HEAD_REPO="${{ github.event.workflow_run.head_repository.full_name }}"
-              HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
               if [ "$HEAD_REPO" == "$REPO" ]; then
                 if ! gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH"; then echo "PR creation failed"; exit 1; fi
               fi
