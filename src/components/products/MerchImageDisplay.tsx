@@ -9,6 +9,7 @@ interface MerchImageDisplayProps {
   imageUrl: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
+  isFeatured?: boolean;
 }
 
 function resolveImageSrc(src: string) {
@@ -63,9 +64,8 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
 }
 
 function SingleImage({ image }: { image: MerchProductImage }) {
-  // Show label only if it's back-only
-  const showLabel = image.side === 'back';
-  return <MerchImage image={image} label={showLabel} loading="eager" />;
+  // Show labels only when two images are visible (handled in EqualImages and ProminentImages)
+  return <MerchImage image={image} label={false} loading="eager" />;
 }
 
 function EqualImages({ images }: { images: MerchProductImage[] }) {
@@ -93,7 +93,7 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   );
 }
 
-export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode }: MerchImageDisplayProps) {
+export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
   const primary = resolved.primary;
   if (!primary) return null;
@@ -106,7 +106,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 44, sm: 52, md: 56, lg: 60 }} // Use spacing tokens (44 * 4 = 176px, 60 * 4 = 240px)
+      height={isFeatured ? { base: 60, sm: 72, md: 80 } : { base: 44, sm: 52, md: 56, lg: 60 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"

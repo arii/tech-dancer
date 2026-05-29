@@ -1,5 +1,5 @@
-import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { render, screen, within, cleanup } from '@testing-library/react';
+import { describe, expect, it, afterEach } from 'vitest';
 import { ProductCard } from './ProductCard';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 
@@ -23,18 +23,57 @@ const item: ProductCatalogItem = {
 };
 
 describe('ProductCard', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   it('renders front and back merch images without making the whole card a link', () => {
     render(<ProductCard item={item} />);
 
     expect(screen.getByAltText('Front view of test shirt')).toBeTruthy();
     expect(screen.getByAltText('Back view of test shirt')).toBeTruthy();
 
+    // Check for side labels since it's "both-equal"
+    expect(screen.getByText('Front')).toBeTruthy();
+    expect(screen.getByText('Back')).toBeTruthy();
+
     const card = screen.getByTestId('product-card');
     expect(card.tagName).toBe('ARTICLE');
-    expect(card.querySelector(':scope > a[aria-label="Buy Test Front Back Shirt on storefront"]')).toBeNull();
 
     const links = within(card).getAllByRole('link');
     expect(links).toHaveLength(3);
     expect(links.map((link) => link.getAttribute('href'))).toEqual([item.href, item.href, item.href]);
+
+    // Check CTA text for multi-image item
+    expect(screen.getByText('SEE OPTIONS')).toBeTruthy();
+  });
+
+  it('hides labels when single image mode is used', () => {
+    const singleItem = {
+      ...item,
+      imageDisplayMode: 'front-only' as const,
+      images: [item.images![0]]
+    };
+    render(<ProductCard item={singleItem} />);
+
+    expect(screen.getByAltText('Front view of test shirt')).toBeTruthy();
+    expect(screen.queryByText('Front')).toBeNull();
+    expect(screen.queryByText('Back')).toBeNull();
+
+    // Check CTA text for single-image item
+    expect(screen.getByText('VIEW ON PRINTFUL')).toBeTruthy();
+  });
+
+  it('applies featured styling when isFeatured is true', () => {
+    render(<ProductCard item={item} isFeatured />);
+    const card = screen.getByTestId('product-card');
+
+    // Check for featured classes (using classList because of cn utility)
+    expect(card.classList.contains('bg-accent/5')).toBe(true);
+    expect(card.classList.contains('border-accent/20')).toBe(true);
+
+    // Title should be larger
+    const title = screen.getByText(item.title);
+    expect(title.classList.contains('text-xl')).toBe(true); // lg:text-2xl is handled by responsive tokens which might not show in vitest-dom as expected, but we check the base
   });
 });

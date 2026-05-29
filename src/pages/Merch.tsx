@@ -117,14 +117,30 @@ export default function Merch() {
                     {section.description}
                   </Text>
                 </Stack>
-                <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
-                  {section.products.map((product) => (
-                    <ProductCard
-                      key={`${section.id}-${product.id}`}
-                      item={product}
-                    />
-                  ))}
-                </Grid>
+                {section.id === 'featured' ? (
+                  <Grid cols={{ base: 1, md: 3 }} gap={{ base: 6, md: 8 }}>
+                    <Box span={{ base: 1, md: 2 }}>
+                      <ProductCard item={section.products[0]} isFeatured />
+                    </Box>
+                    <Stack gap={{ base: 6, md: 8 }}>
+                      {section.products.slice(1, 3).map((product) => (
+                        <ProductCard
+                          key={`${section.id}-${product.id}`}
+                          item={product}
+                        />
+                      ))}
+                    </Stack>
+                  </Grid>
+                ) : (
+                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
+                    {section.products.map((product) => (
+                      <ProductCard
+                        key={`${section.id}-${product.id}`}
+                        item={product}
+                      />
+                    ))}
+                  </Grid>
+                )}
               </Stack>
             ))}
           </Stack>

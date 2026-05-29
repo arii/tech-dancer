@@ -6,7 +6,7 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
-export function ProductCard({ item }: { item: ProductCatalogItem }) {
+export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
     ? 'SEE OPTIONS'
@@ -16,11 +16,14 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
     <BaseCard
       gap={4}
       height="full"
-      padding={{ base: 4, md: 5 }}
+      padding={isFeatured ? { base: 5, md: 6 } : { base: 4, md: 5 }}
       radius="lg"
       border
       maxWidth="full"
-      className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
+      className={cn(
+        "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
+        isFeatured && "border-accent/20 bg-accent/5"
+      )}
       data-testid="product-card"
     >
       <MerchImageDisplay
@@ -29,6 +32,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
         imageUrl={item.imageUrl}
         images={item.images}
         imageDisplayMode={item.imageDisplayMode}
+        isFeatured={isFeatured}
       />
 
       <Stack gap={3}>
@@ -38,17 +42,17 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           target="_blank"
           rel="sponsored noopener noreferrer"
           variant="body"
-          size={{ base: 'lg', md: 'xl' }}
+          size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
           weight="font-bold"
           color="main"
           leading="tight"
-          clamp={2}
+          clamp={isFeatured ? 0 : 2}
           className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {item.title}
         </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
+        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
           {item.description}
         </Text>
 
