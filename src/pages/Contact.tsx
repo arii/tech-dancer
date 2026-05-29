@@ -1,6 +1,6 @@
 import { Mail, Github, Linkedin, Calendar, Terminal } from 'lucide-react';
 import { SEO } from '../components/SEO';
-import { Card } from '../components/ui/BaseCard';
+import { BaseCard } from '../components/ui/BaseCard';
 import { Text, Stack, Button, Box, Grid } from '@/layouts/Primitives';
 
 export default function Contact() {
@@ -20,7 +20,7 @@ export default function Contact() {
         </Text>
 
         <Grid cols={{ base: 1, sm: 2 }} gap={6}>
-          <Card padding={6}>
+          <BaseCard padding={6}>
             <Stack gap={6}>
               <Box display="inline-flex" height={12} width={12} align="center" justify="center" radius="lg" className="bg-accent/10">
                 <Mail className="h-6 w-6 text-accent" />
@@ -43,9 +43,9 @@ export default function Contact() {
                 Send Message
               </Button>
             </Stack>
-          </Card>
+          </BaseCard>
 
-          <Card padding={6}>
+          <BaseCard padding={6}>
             <Stack gap={6}>
               <Box display="inline-flex" height={12} width={12} align="center" justify="center" radius="lg" className="bg-accent/10">
                 <Github className="h-6 w-6 text-accent" />
@@ -70,7 +70,7 @@ export default function Contact() {
                 GitHub Repository
               </Button>
             </Stack>
-          </Card>
+          </BaseCard>
         </Grid>
 
         <Box marginTop={12} border="t" paddingTop={12}>
