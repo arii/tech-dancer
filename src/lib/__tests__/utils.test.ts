@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { cn, safeSearch, escapeRegExp, getHighlightedParts } from '../utils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { cn, safeSearch, escapeRegExp, getHighlightedParts, formatRelativeTime } from '../utils';
 
 describe('utils', () => {
   describe('cn', () => {
@@ -52,6 +52,41 @@ describe('utils', () => {
     it('splits text based on query', () => {
       expect(getHighlightedParts('Hello World', 'o')).toEqual(['Hell', 'o', ' W', 'o', 'rld']);
       expect(getHighlightedParts('Hello World', 'world')).toEqual(['Hello ', 'World', '']);
+    });
+  });
+
+  describe('formatRelativeTime', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-04-19T12:00:00Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('formats seconds correctly', () => {
+      const past = new Date('2026-04-19T11:59:50Z');
+      expect(formatRelativeTime(past)).toBe('10 seconds ago');
+    });
+
+    it('formats minutes correctly', () => {
+      const past = new Date('2026-04-19T11:55:00Z');
+      expect(formatRelativeTime(past)).toBe('5 minutes ago');
+    });
+
+    it('formats hours correctly', () => {
+      const past = new Date('2026-04-19T10:00:00Z');
+      expect(formatRelativeTime(past)).toBe('2 hours ago');
+    });
+
+    it('formats days correctly', () => {
+      const past = new Date('2026-04-17T12:00:00Z');
+      expect(formatRelativeTime(past)).toBe('2 days ago');
+    });
+
+    it('handles string input', () => {
+      expect(formatRelativeTime('2026-04-19T11:59:00Z')).toBe('1 minute ago');
     });
   });
 });

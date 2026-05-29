@@ -12,4 +12,5 @@ export interface RouteConfig extends Omit<RouteObject, 'children'> {
   sitemap?: boolean;
   canonicalPath?: string;
   isMobileVisible?: boolean;
+  isTopNav?: boolean;
 }
