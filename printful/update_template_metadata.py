@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+
+JSON_PATH = Path("printful_template_agent_packet.json")
+
+def apply_patches_logic(data):
+    patches = {
+        102861895: {
+            "final_title": "Rainbow Phoenix - Pride Back Print Organic Oversized Tee (Black)",
+            "final_short_description": "A soaring rainbow statement for the back of the room. Bold, oversized, and unapologetically proud.",
+            "final_description": (
+                "The front is clean. The back is everything. This oversized organic tee features a bold, soaring "
+                "rainbow phoenix back print on deep black - a statement piece built for people who don't need to "
+                "say a word to fill a room.\n\n"
+                "The boxy, high-neck oversized silhouette is intentional streetwear - wear it loose over a sports bra "
+                "at a festival, throw it on after a late-night dance social, or pair it with anything that can handle "
+                "a little competition from the back print. Organic cotton construction keeps it soft and breathable "
+                "through long days and longer nights.\n\n"
+                "Made for: SF Pride, queer spaces and community events, LGBTQ+ festival season, inclusive social "
+                "dance communities (West Coast Swing, Lindy Hop, salsa, bachata, fusion, blues), and everyday wear "
+                "for people who don't do invisible."
+            ),
+            "seo_keywords": (
+                "rainbow phoenix shirt, pride back print tee, LGBTQ pride oversized shirt, rainbow bird pride shirt, "
+                "organic pride tee black, queer fashion oversized, SF Pride shirt, pride festival outfit, rainbow graphic "
+                "back print, gender neutral pride shirt, inclusive community tee, oversized organic black tee, queer "
+                "streetwear, pride apparel back print, dance community pride shirt"
+            ),
+            "add_to_boomtick_store": "maybe",
+            "priority": "low",
+            "collection": "Rainbow Pride Collection",
+            "audience": "LGBTQ+ pride community, festival-goers, inclusive community, streetwear fashion"
+        },
+        102774864: {
+            "final_title": "Ask Me to Switch - LOVE Neon Performance Tee | Partner Dance Shirt",
+            "final_short_description": "Both roles. No rules. The floor is yours from every angle.",
+            "final_description": (
+                "Switchers are the most versatile dancers in the room - fluid, adaptable, and endlessly fun to "
+                "share a floor with. This tee is for the dancers who lead one song and follow the next, who trade "
+                "roles mid-dance, who never felt like one lane was the whole story.\n\n"
+                "Switching isn't indecision. It's mastery. Whether you're a seasoned switcher in the West Coast Swing "
+                "community, a fusion dancer who reads the connection and responds, or a Lindy Hopper who learned "
+                "both sides because why wouldn't you - this shirt is your announcement.\n\n"
+                "Performance fabric keeps you moving through every song. Safety Yellow keeps you visible from across "
+                "the room. The rainbow LOVE graphic signals you're in a space where roles belong to the dancer, not "
+                "to assumptions - queer-friendly, body-positive, and open to everyone on the floor.\n\n"
+                "For switchers in: West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, "
+                "kizomba, zouk, ballroom, and every dance where connection matters more than convention."
+            ),
+            "seo_keywords": (
+                "switch dance shirt, dance switcher shirt, partner dance shirt, lead follow switch shirt, "
+                "West Coast Swing switch shirt, social dance apparel, LGBTQ dance shirt, gender neutral dance shirt, "
+                "dance role shirt, neon dance shirt, queer dance community, fusion dance shirt, Lindy Hop switch shirt, "
+                "salsa dance shirt, bachata apparel, ask me to switch tee, both roles dance shirt, dance event outfit, "
+                "performance dance tee, inclusive dance community shirt"
+            ),
+            "add_to_boomtick_store": "yes",
+            "priority": "medium",
+            "collection": "Dance Community Collection",
+            "audience": "West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, ballroom partner dancers"
+        },
+        102760851: {
+            "final_title": "Lead . Follow . Switch - Partner Dance Role Tee | Social Dance Community",
+            "final_short_description": "Check all three. The dancer who does it all - this is your shirt.",
+            "final_description": (
+                "Lead. Follow. Switch. Three checkboxes, one shirt, infinite dances. This neon performance tee is "
+                "for the partner dancer who doesn't limit themselves to one role - and wants the whole room to know it.\n\n"
+                "Whether you show up to a social dance ready to lead, follow, or read the connection and do both in the "
+                "same song, this is your announcement. Wear it to a West Coast Swing weekend, a Lindy Hop exchange, "
+                "a bachata social, a fusion event, or anywhere the dance floor is a conversation and you've got "
+                "a lot to say.\n\n"
+                "The Safety Yellow colorway keeps you impossible to miss under any dance floor light. Performance fabric "
+                "means you're comfortable from the first song to the last. And the checklist speaks for itself.\n\n"
+                "Queer-inclusive. Role-positive. Any body, any role, any dance."
+            ),
+            "seo_keywords": (
+                "lead follow switch shirt, partner dance shirt, dance role shirt, West Coast Swing shirt, social dance "
+                "apparel, Lindy Hop shirt, switcher dance tee, gender neutral dance shirt, LGBTQ dance community shirt, "
+                "salsa bachata shirt, fusion dance shirt, blues dance apparel, neon dance shirt, performance dance tee, "
+                "dance event outfit, queer dance shirt, inclusive dance community, all roles dance shirt, social dancer "
+                "shirt, checklist dance shirt"
+            ),
+            "add_to_boomtick_store": "yes",
+            "priority": "medium",
+            "collection": "Dance Community Collection",
+            "audience": "West Coast Swing, Lindy Hop, salsa, bachata, Argentine tango, fusion, blues, ballroom partner dancers"
+        }
+    }
+    for t in data["templates"]:
+        tid = t["template_id"]
+        if tid in patches:
+            p = patches[tid]
+            t["agent_fields"].update({
+                "add_to_boomtick_store": p["add_to_boomtick_store"],
+                "final_title": p["final_title"],
+                "final_description": p["final_description"],
+                "final_short_description": p["final_short_description"],
+                "final_selected_colors": ", ".join(t["suggested_colors"]),
+                "final_selected_sizes": ", ".join(t["sizes"]),
+                "seo_keywords": p["seo_keywords"],
+                "collection": p["collection"],
+                "audience": p["audience"],
+                "notes": "Hold/verify sizes" if p["add_to_boomtick_store"] == "maybe" else "",
+                "priority": p["priority"]
+            })
+    print("Successfully patched templates 102861895, 102774864, and 102760851.")
+
+def apply_user_observations_logic(data):
+    for t in data["templates"]:
+        tid = t["template_id"]
+        af = t["agent_fields"]
+
+        if tid == 102951453:
+            af["collection"] = "NorCal Pride & Bay Area Collection"
+            af["audience"] = "Bay Area locals, SF locals, California pride supporters, festival-goers, WCS & social dancers"
+            af["notes"] = "Note: Sizing only goes up to XL. Verify if Printful offers 2XL+ options for this garment style to support size inclusivity."
+        elif tid == 102753916:
+            af["notes"] = (
+                "Mockup mismatch: Mockup shows the NorCal BestCal script logo on the front instead of the Rainbow War Eagle back print. "
+                "Verify and re-link the correct template print files in Printful before publishing."
+            )
+        elif tid in [102774868, 102774864, 102760851]:
+            current_notes = af.get("notes", "")
+            prefix = current_notes + " | " if current_notes else ""
+            af["notes"] = prefix + "SEO Suggestion: Consider offering Black as a second color option to appeal to buyers who want the LOVE design but prefer a dark, low-visibility shirt."
+        elif tid == 102679922:
+            af["notes"] = (
+                "Storefront Optimization: Both Product 13 and 14 are in Black Heather. "
+                "Consider adding a Navy or Burgundy colorway to Product 14 (Script Logo) to visually distinguish the two designs on the storefront."
+            )
+        elif tid in [102762977, 102753916]:
+            current_notes = af.get("notes", "")
+            prefix = current_notes + " | " if current_notes else ""
+            af["notes"] = prefix + "Design expansion: The Rainbow War Eagle series has strong back print appeal. Consider adding a third colorway like Olive, Burgundy, or Rust."
+    print("Synchronized user observations.")
+
+def apply_final_tweaks_logic(data):
+    for t in data["templates"]:
+        tid = t["template_id"]
+        if tid == 102774864:
+            t["agent_fields"]["notes"] = (
+                "Mockup mismatch: The template mockup currently displays the 'Follow' design. "
+                "Remember to swap the mockup image in Printful to the actual 'Switch' design when publishing."
+            )
+        elif tid == 102753916:
+            t["agent_fields"]["final_description"] = (
+                "Deep navy, bold rainbow. The Rainbow War Eagle back print hits even harder against a rich French Navy base. "
+                "The contrast between the rich navy base and the vibrant rainbow design gives this one a more versatile, wearable feel - "
+                "pride event ready but equally at home at a rooftop party or a night out in the Castro.\n\n"
+                "Organic oversized construction. Roomy through the shoulders for real movement on a dance floor. A conversation starter wherever it goes.\n\n"
+                "Perfect for: pride events, queer dance nights, partner dance socials, bachata and salsa festivals, West Coast Swing events, Lindy Hop exchanges, fusion socials, or just living your most colorful life."
+            )
+    print("Applied final tweaks and description assignments.")
+
+def main():
+    if not JSON_PATH.exists():
+        print("Error: JSON file not found.")
+        return
+
+    with open(JSON_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    apply_patches_logic(data)
+    apply_user_observations_logic(data)
+    apply_final_tweaks_logic(data)
+
+    with open(JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+    print("Successfully consolidated and applied all metadata updates.")
+
+if __name__ == "__main__":
+    main()

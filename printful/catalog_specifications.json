@@ -1,0 +1,443 @@
+{
+  "823": {
+    "product_id": 823,
+    "name": "Unisex Organic Oversized High Neck Blaster 2.0 T-Shirt | Stanley/Stella SATU020",
+    "brand": "Stanley/Stella",
+    "model": "SATU020",
+    "techniques": [
+      {
+        "key": "dtg",
+        "display_name": "DTG printing",
+        "is_default": true
+      },
+      {
+        "key": "embroidery",
+        "display_name": "Embroidery",
+        "is_default": false
+      },
+      {
+        "key": "dtfilm",
+        "display_name": "DTF printing",
+        "is_default": false
+      }
+    ],
+    "placements": [
+      {
+        "placement": "embroidery_chest_left",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_chest_center",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_sleeve_left_top",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_sleeve_right_top",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_outside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_inside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "sleeve_left",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "sleeve_right",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front_large_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back_large_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "short_sleeve_left_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "short_sleeve_right_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "mockup",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      }
+    ]
+  },
+  "411": {
+    "product_id": 411,
+    "name": "Unisex Premium Sweatshirt | Cotton Heritage M2480",
+    "brand": "Cotton Heritage",
+    "model": "M2480",
+    "techniques": [
+      {
+        "key": "dtg",
+        "display_name": "DTG printing",
+        "is_default": true
+      },
+      {
+        "key": "embroidery",
+        "display_name": "Embroidery",
+        "is_default": false
+      },
+      {
+        "key": "dtfilm",
+        "display_name": "DTF printing",
+        "is_default": false
+      }
+    ],
+    "placements": [
+      {
+        "placement": "embroidery_chest_left",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_chest_center",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_wrist_left",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_wrist_right",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front_large",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_outside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_inside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "sleeve_left",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "sleeve_right",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_inside_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "long_sleeve_left_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "long_sleeve_right_dtf",
+        "technique": "dtfilm",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "mockup",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      }
+    ]
+  },
+  "665": {
+    "product_id": 665,
+    "name": "Unisex CVC T-shirt | Next Level 6210",
+    "brand": "Next Level",
+    "model": "6210",
+    "techniques": [
+      {
+        "key": "dtg",
+        "display_name": "DTG printing",
+        "is_default": true
+      },
+      {
+        "key": "embroidery",
+        "display_name": "Embroidery",
+        "is_default": false
+      }
+    ],
+    "placements": [
+      {
+        "placement": "embroidery_chest_left",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_chest_center",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_sleeve_left_top",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_sleeve_right_top",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front_large",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back_large",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "sleeve_left",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "sleeve_right",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_outside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_inside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "mockup",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      }
+    ]
+  },
+  "163": {
+    "product_id": 163,
+    "name": "Women's Racerback Tank Top | Next Level 6733",
+    "brand": "Next Level",
+    "model": "6733",
+    "techniques": [
+      {
+        "key": "dtg",
+        "display_name": "DTG printing",
+        "is_default": true
+      }
+    ],
+    "placements": [
+      {
+        "placement": "front",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "mockup",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      }
+    ]
+  },
+  "511": {
+    "product_id": 511,
+    "name": "Youth Long Sleeve Tee | Bella + Canvas 3501Y",
+    "brand": "Bella + Canvas",
+    "model": "3501Y",
+    "techniques": [
+      {
+        "key": "dtg",
+        "display_name": "DTG printing",
+        "is_default": true
+      },
+      {
+        "key": "embroidery",
+        "display_name": "Embroidery",
+        "is_default": false
+      }
+    ],
+    "placements": [
+      {
+        "placement": "embroidery_chest_left",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "embroidery_chest_center",
+        "technique": "embroidery",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "front",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "back",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "label_inside",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      },
+      {
+        "placement": "mockup",
+        "technique": "dtg",
+        "print_area_width": null,
+        "print_area_height": null
+      }
+    ]
+  }
+}
