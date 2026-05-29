@@ -5,30 +5,66 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 
+const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
+const SWIPE_NAV_THRESHOLD = 48;
+
 export function FeaturedEventGuide() {
   const featured = getEvents().filter((event) => !!event.heroImage);
   const [index, setIndex] = useState(0);
 
-  const touchStartX = useRef<number | null>(null);
+  const pointerStartX = useRef(0);
+  const pointerStartY = useRef(0);
+  const hasSwiped = useRef(false);
 
   const goPrev = () => setIndex((i) => Math.max(0, i - 1));
   const goNext = () => setIndex((i) => Math.min(featured.length - 1, i + 1));
 
-  const handleTouchStart = (event: React.TouchEvent) => {
-    touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+  const handlePointerDown = (e: React.PointerEvent) => {
+    hasSwiped.current = false;
+    if (e.pointerType !== 'touch') return;
+    pointerStartX.current = e.clientX;
+    pointerStartY.current = e.clientY;
   };
 
-  const handleTouchEnd = (event: React.TouchEvent) => {
-    const startX = touchStartX.current;
-    const endX = event.changedTouches[0]?.clientX;
-    touchStartX.current = null;
-    if (startX == null || endX == null) return;
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'touch') return;
+    const deltaX = Math.abs(e.clientX - pointerStartX.current);
+    const deltaY = Math.abs(e.clientY - pointerStartY.current);
 
-    const deltaX = endX - startX;
-    const swipeThreshold = 40;
+    // Any movement beyond threshold (horizontal or vertical) suppresses subsequent click
+    if (deltaX > SWIPE_CLICK_CANCEL_THRESHOLD || deltaY > SWIPE_CLICK_CANCEL_THRESHOLD) {
+      hasSwiped.current = true;
+    }
+  };
 
-    if (deltaX <= -swipeThreshold) goNext();
-    if (deltaX >= swipeThreshold) goPrev();
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'touch') return;
+    const deltaX = e.clientX - pointerStartX.current;
+    const deltaY = e.clientY - pointerStartY.current;
+
+    if (Math.abs(deltaX) > SWIPE_NAV_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) goNext();
+      else goPrev();
+      // Keep hasSwiped true to suppress click
+      hasSwiped.current = true;
+    }
+  };
+
+  const handlePointerCancel = () => {
+    hasSwiped.current = false;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') goPrev();
+    if (e.key === 'ArrowRight') goNext();
+  };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (hasSwiped.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      hasSwiped.current = false;
+    }
   };
 
   const event = featured[index];
@@ -42,12 +78,23 @@ export function FeaturedEventGuide() {
 
       {/* Editorial card: image-led grid */}
       <Box
+        as="article"
         border
         radius="xl"
         overflow="hidden"
-        className="grid w-full max-w-full min-w-0 bg-surface touch-pan-y md:grid-cols-[260px_1fr] md:min-h-[200px]"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
+        aria-roledescription="carousel"
+        aria-label="Featured event guides"
+        data-gesture-handled="true"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+        onTouchStart={(e: React.TouchEvent) => e.stopPropagation()}
+        onTouchEnd={(e: React.TouchEvent) => e.stopPropagation()}
+        onClickCapture={handleCardClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
       >
         {/* Image column — full height, strong crop */}
         <Box position="relative" className="h-44 min-w-0 md:h-full">
@@ -63,7 +110,7 @@ export function FeaturedEventGuide() {
         </Box>
 
         {/* Content */}
-        <Stack gap={3} padding={6} className="min-w-0 justify-between">
+        <Stack gap={3} padding={6} className="min-w-0 justify-between" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="center" gap={2}>
               <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
@@ -101,7 +148,7 @@ export function FeaturedEventGuide() {
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
                   disabled={index === 0}
-                  aria-label="Previous event"
+                  aria-label="Previous featured event guide"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Box>
@@ -113,7 +160,7 @@ export function FeaturedEventGuide() {
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
                   disabled={index === featured.length - 1}
-                  aria-label="Next event"
+                  aria-label="Next featured event guide"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Box>
