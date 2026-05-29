@@ -38,7 +38,8 @@ This command will:
 After bumping the version locally, push the changes and the new tag to GitHub:
 
 ```bash
-git push origin main --tags
+git push origin main
+git push --tags
 ```
 
 ## Build Guard
