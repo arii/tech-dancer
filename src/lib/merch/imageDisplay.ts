@@ -17,16 +17,26 @@ export function resolveMerchImages(args: {
 }): ResolvedMerchImages {
   const images = args.images;
 
+  if (images.length < 2) {
+    return {
+      mode: 'single',
+      primary: images[0],
+      secondary: undefined,
+      equal: [],
+    };
+  }
+
   const mode = args.imageDisplayMode ?? 'single';
   const front = images.find((image) => image.side === 'front');
   const back = images.find((image) => image.side === 'back');
 
   if (mode === 'both-equal') {
+    const equalImages = front && back ? [front, back] : images.slice(0, 2);
     return {
       mode,
       primary: undefined,
       secondary: undefined,
-      equal: images.slice(0, 2),
+      equal: equalImages,
     };
   }
 
