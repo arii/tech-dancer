@@ -25,6 +25,7 @@ export default tseslint.config(
       }],
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/purity': 'off',
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
   {
