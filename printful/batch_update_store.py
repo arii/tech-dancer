@@ -1,105 +1,186 @@
 import os
 import sys
 import json
-import requests
+import argparse
+from datetime import datetime
 
-# Operational parameters from environment variables
-PRINTFUL_TOKEN = os.getenv("PRINTFUL_TOKEN")
-STORE_ID = os.getenv("PRINTFUL_STORE_ID")
-BASE_URL = "https://api.printful.com"
-CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "product_metadata_map.json")
+# Add the current directory to sys.path so we can import from lib
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-def fail(message):
-    print(f"ERROR: {message}")
-    sys.exit(1)
-
-if not PRINTFUL_TOKEN:
-    fail("PRINTFUL_TOKEN is not set.")
-
-if not STORE_ID:
-    fail("PRINTFUL_STORE_ID is not set.")
-
-headers = {
-    "Authorization": f"Bearer {PRINTFUL_TOKEN}",
-    "Content-Type": "application/json",
-    "X-PF-Store-ID": str(STORE_ID)
-}
-
-def load_config():
-    try:
-        with open(CONFIG_PATH, "r") as f:
-            return json.load(f)
-    except Exception as e:
-        fail(f"Could not load config from {CONFIG_PATH}: {e}")
+from lib.api import PrintfulClient
+from lib.config_validation import validate_config
+from lib.planning import build_update_plan
+from lib.logging import save_audit_log
 
 def main():
-    config = load_config()
+    parser = argparse.ArgumentParser(description="Batch update Printful sync variants.")
+    parser.add_argument("--dry-run", action="store_true", default=True, help="Only print planned changes (default)")
+    parser.add_argument("--apply", action="store_false", dest="dry_run", help="Actually apply changes to the store")
+    parser.add_argument("--store-id", help="Printful Store ID")
+    parser.add_argument("--confirm-store", help="Confirm store name or ID to allow --apply")
+    parser.add_argument("--product-id", action="append", help="Limit to specific sync product ID(s)")
+    parser.add_argument("--variant-id", action="append", help="Limit to specific sync variant ID(s)")
+    parser.add_argument("--color", action="append", help="Limit to specific color(s)")
+    parser.add_argument("--max-variants", type=int, help="Limit total number of variants to update")
+    parser.add_argument("--config", default="printful/config/product_metadata_map.json", help="Path to config file")
+    parser.add_argument("--catalog-specs", default="printful/config/catalog_specifications.json", help="Path to catalog specifications")
 
-    # 1. Fetch synced products in store
-    print(f"Fetching synced products from store {STORE_ID}...")
-    res = requests.get(f"{BASE_URL}/sync/products", headers=headers, timeout=30)
-    if res.status_code != 200:
-        print(f"Failed to fetch products: {res.text}")
-        return
-        
-    products = res.json().get("result", [])
-    print(f"Found {len(products)} products in store.")
+    args = parser.parse_args()
+
+    # Environment fallbacks
+    token = os.getenv("PRINTFUL_TOKEN")
+    store_id = args.store_id or os.getenv("PRINTFUL_STORE_ID")
+
+    if not token:
+        print("ERROR: PRINTFUL_TOKEN is not set.")
+        sys.exit(1)
+
+    if not store_id:
+        print("ERROR: --store-id or PRINTFUL_STORE_ID is required.")
+        sys.exit(1)
+
+    client = PrintfulClient(token, store_id)
+
+    # Fetch store info to get name and for verification
+    store_name = "Unknown"
+    try:
+        store_info = client.get_store_info()
+        store_name = store_info.get("name", "Unknown")
+    except Exception as e:
+        print(f"WARNING: Could not fetch store info: {e}")
+
+    # Safety checks for --apply
+    if not args.dry_run:
+        if not args.confirm_store:
+            print("ERROR: --apply requires --confirm-store <name-or-id>.")
+            sys.exit(1)
+        # Check against both ID and name
+        if args.confirm_store != str(store_id) and args.confirm_store.lower() != store_name.lower():
+            print(f"ERROR: --confirm-store '{args.confirm_store}' does not match store ID '{store_id}' or name '{store_name}'.")
+            sys.exit(1)
+        if not args.product_id and not args.variant_id:
+            print("ERROR: --apply requires --product-id or --variant-id. Refusing to update all store variants.")
+            sys.exit(1)
+
+    # Load and validate config
+    try:
+        with open(args.config, "r") as f:
+            config = json.load(f)
+        validate_config(config)
+    except Exception as e:
+        print(f"ERROR: Config validation failed: {e}")
+        sys.exit(1)
+
+    # Load catalog specs if available
+    catalog_specs = None
+    if os.path.exists(args.catalog_specs):
+        try:
+            with open(args.catalog_specs, "r") as f:
+                catalog_specs = json.load(f)
+        except Exception as e:
+            print(f"WARNING: Could not load catalog specs: {e}")
+
+    print(f"FETCHING data for store {store_name} ({store_id})...")
+    try:
+        if args.product_id:
+            raw_products = []
+            for pid in args.product_id:
+                raw_products.append(client.get_sync_product(pid))
+        else:
+            raw_products_list = client.list_sync_products()
+            raw_products = []
+            for p in raw_products_list:
+                raw_products.append(client.get_sync_product(p["id"]))
+    except Exception as e:
+        print(f"ERROR: Failed to fetch data from Printful: {e}")
+        sys.exit(1)
+
+    # 2. Build plan
+    try:
+        plan = build_update_plan(
+            raw_products,
+            config,
+            product_ids=args.product_id,
+            variant_ids=args.variant_id,
+            colors=args.color,
+            max_variants=args.max_variants,
+            catalog_specs=catalog_specs
+        )
+    except ValueError as e:
+        print(f"ERROR: Planning failed: {e}")
+        sys.exit(1)
+
+    # 3. Print plan
+    print("\n" + "="*40)
+    if args.dry_run:
+        print("DRY RUN — no live changes will be made")
+    else:
+        print("LIVE APPLY MODE")
+    print("="*40)
+    print(f"Store: {store_name} / {store_id}")
+    print(f"Products selected: {plan['products_selected']}")
+    print(f"Variants selected: {plan['variants_selected']}")
     
-    for prod in products:
-        prod_id = str(prod["id"])
-        prod_name = prod["name"]
-        print(f"\nProcessing Product: {prod_name} (ID: {prod_id})")
-        
-        # Data-driven lookup using Printful Sync Product ID as required by audit
-        metadata = config.get(prod_id)
-        if not metadata:
-            print(f"  Warning: No entry for sync_product_id {prod_id} in config. Skipping.")
-            continue
-            
-        file_id = metadata.get("design_file_id")
-        placement = metadata.get("placement")
-        price = metadata.get("retail_price", "29.99")
+    for prod_plan in plan["updates"]:
+        print(f"\nProduct: {prod_plan['product_name']}")
+        print(f"Sync product ID: {prod_plan['product_id']}")
+        if prod_plan['allowed_colors']:
+            print(f"Allowed colors: {', '.join(prod_plan['allowed_colors'])}")
+        for v in prod_plan["variants"]:
+            print(f"  Variant {v['variant_id']}")
+            print(f"    Color: {v['color']}, Size: {v['size']}")
+            print(f"    Current price: {v['current_price']}")
+            print(f"    New price: {v['new_price']}")
+            print(f"    Files: {', '.join([f'{f['type']}: {f['id']}' for f in v['files']])}")
 
-        if not file_id or not placement:
-            print(f"  Error: Missing design_file_id or placement in config for {prod_id}. Skipping.")
-            continue
+    print("\nSummary:")
+    print(f"  Products scanned: {plan['products_scanned']}")
+    print(f"  Products selected: {plan['products_selected']}")
+    print(f"  Variants selected: {plan['variants_selected']}")
+    print(f"  Variants skipped by color: {plan['variants_skipped_by_color']}")
+    print(f"  Variants skipped by missing config: {plan['variants_skipped_by_missing_config']}")
 
-        print(f"  Mapped to File ID: {file_id} on placement: {placement}, Price: {price}")
-        
-        # 2. Get detailed product variants
-        d_res = requests.get(f"{BASE_URL}/sync/products/{prod_id}", headers=headers, timeout=30)
-        if d_res.status_code != 200:
-            print(f"  Failed to fetch variants for {prod_name}")
-            continue
-            
-        detail = d_res.json().get("result", {})
-        sync_variants = detail.get("sync_variants", [])
-        print(f"  Updating {len(sync_variants)} variants...")
-        
-        # 3. Batch update variants
-        for v in sync_variants:
-            v_id = v["id"]
-            v_color = v.get("color", "N/A")
-            v_size = v.get("size", "N/A")
-            
-            # Setup payload
+    if args.dry_run:
+        print("  API writes: 0")
+        return
+
+    # 4. Apply changes
+    print("\nApplying updates...")
+    audit_log = {
+        "timestamp": datetime.now().isoformat(),
+        "store_id": store_id,
+        "store_name": store_name,
+        "dry_run": False,
+        "plan_summary": {
+            "products_selected": plan['products_selected'],
+            "variants_selected": plan['variants_selected']
+        },
+        "updates_attempted": [],
+        "updates_succeeded": [],
+        "updates_failed": []
+    }
+
+    for prod_plan in plan["updates"]:
+        for v in prod_plan["variants"]:
+            v_id = v["variant_id"]
             payload = {
-                "retail_price": price,
-                "files": [
-                    {
-                        "type": placement,
-                        "id": file_id
-                    }
-                ]
+                "retail_price": v["new_price"],
+                "files": v["files"]
             }
+            audit_entry = {"variant_id": v_id, "payload": payload}
+            audit_log["updates_attempted"].append(audit_entry)
             
-            # Call PUT /sync/variant/{id}
-            url = f"{BASE_URL}/sync/variant/{v_id}"
-            v_res = requests.put(url, headers=headers, json=payload, timeout=30)
-            if v_res.status_code == 200:
-                print(f"    [Updated] {v_color} / {v_size} -> Price: {price}")
-            else:
-                print(f"    [Error] {v_color} / {v_size}: {v_res.text}")
+            try:
+                print(f"  Updating variant {v_id}...", end=" ", flush=True)
+                client.update_sync_variant(v_id, payload)
+                print("OK")
+                audit_log["updates_succeeded"].append(v_id)
+            except Exception as e:
+                print(f"FAILED: {e}")
+                audit_log["updates_failed"].append({"variant_id": v_id, "error": str(e)})
+
+    log_path = save_audit_log(audit_log)
+    print(f"\nAudit log saved to: {log_path}")
 
 if __name__ == "__main__":
     main()

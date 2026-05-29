@@ -1,0 +1,28 @@
+{
+  "123456789": {
+    "retail_price": "35.00",
+    "placements": [
+      {
+        "type": "front",
+        "file_id": 111111111
+      },
+      {
+        "type": "back",
+        "file_id": 222222222
+      }
+    ],
+    "allowed_colors": ["Black", "Charcoal", "Navy"],
+    "notes": "Example: Premium Heavyweight Tee"
+  },
+  "987654321": {
+    "retail_price": "28.00",
+    "placements": [
+      {
+        "type": "front",
+        "file_id": 333333333
+      }
+    ],
+    "allowed_colors": ["White", "Heather Grey"],
+    "notes": "Example: Classic Unisex Tank"
+  }
+}
