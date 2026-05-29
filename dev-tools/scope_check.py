@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-from typing import List, Optional
+from typing import List, Optional, Set
 
 # Import run_command from utils
 from utils import run_command
@@ -12,7 +12,13 @@ def get_project_config():
         return {
             "core_dirs": ["src/layouts/", "src/components/"],
             "monolithic_pr_threshold": 3,
-            "base_branch": "origin/main"
+            "base_branch": "origin/main",
+            "content_scopes": {
+                "events": "content/events/",
+                "resources": "content/resources/",
+                "posts": "content/posts/",
+                "studies": "content/studies/"
+            }
         }
     with open(config_path) as f:
         return json.load(f)
@@ -33,7 +39,7 @@ def get_changed_files():
     return []
 
 def verify_pr_scope(file_list=None):
-    """Checks if a PR touches too many core layout/component files."""
+    """Checks if a PR touches too many core layout/component files or mixes content scopes."""
     if file_list is None:
         file_list = get_changed_files()
 
@@ -44,6 +50,31 @@ def verify_pr_scope(file_list=None):
     core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]
     if len(core_files) > threshold:
         return f"PR scope warning: Touching {len(core_files)} core files in {core_dirs}. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23)."
+
+    # Content Scope Check
+    content_scopes = config.get("content_scopes", {
+        "events": "content/events/",
+        "resources": "content/resources/",
+        "posts": "content/posts/",
+        "studies": "content/studies/"
+    })
+
+    active_scopes: Set[str] = set()
+    for f in file_list:
+        for scope_name, prefix in content_scopes.items():
+            if f.startswith(prefix):
+                active_scopes.add(scope_name)
+
+    if len(active_scopes) > 1:
+        return f"Content scope warning: Mixed content domains detected ({', '.join(active_scopes)}). PRs should be split by scope: Event Facts, Gear Assets, Merch Catalog, or Articles (AGENTS.md §21)."
+
+    # Mixed Content and Code Check
+    has_content = len(active_scopes) > 0
+    code_files = [f for f in file_list if f.startswith("src/") and not any(f.startswith(d) for d in core_dirs)]
+
+    if has_content and len(code_files) > 2:
+        return "PR scope warning: Mixing significant code changes with content updates. Consider splitting content corrections from feature development."
+
     return None
 
 if __name__ == "__main__":
