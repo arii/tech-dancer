@@ -22,7 +22,7 @@ test.describe('Merch Page', () => {
 
   test('should display product cards', async ({ page }) => {
     const productCards = page.getByTestId('product-card');
-    await expect(productCards).toHaveCount(11);
+    await expect(productCards).toHaveCount(16);
   });
 
   test('should filter products by collection', async ({ page }) => {
@@ -35,7 +35,7 @@ test.describe('Merch Page', () => {
 
     // Reset filter
     await page.getByRole('button', { name: 'All' }).click();
-    await expect(filteredCards).toHaveCount(11);
+    await expect(filteredCards).toHaveCount(16);
   });
 
   test('should have correct attributes on Printful external links', async ({ page }) => {
