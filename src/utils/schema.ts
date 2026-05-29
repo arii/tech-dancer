@@ -77,7 +77,7 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
     "@context": "https://schema.org",
     "@type": "ItemList",
     "itemListElement": products.map((product, index) => {
-      const primaryImage = product.imageUrl || (product.images && product.images[0]?.src) || '';
+      const primaryImage = product.images[0]?.src || '';
       const resolvedImage = primaryImage.startsWith('http')
         ? primaryImage
         : `${BASE_URL}${ASSET_PREFIX}${primaryImage}`;

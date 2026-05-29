@@ -6,7 +6,6 @@ export const MERCH_CATALOG_PRODUCTS: ProductCatalogItem[] = MERCH_PRODUCTS.map((
   source: 'owned-merch',
   title: item.title,
   description: item.description,
-  imageUrl: item.imageUrl,
   images: item.images,
   imageDisplayMode: item.imageDisplayMode,
   href: item.printfulUrl,

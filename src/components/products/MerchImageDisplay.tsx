@@ -11,8 +11,7 @@ import { cn } from '@/lib/utils';
 interface MerchImageDisplayProps {
   title: string;
   href: string;
-  imageUrl: string;
-  images?: MerchProductImage[];
+  images: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
 }
 
@@ -70,18 +69,16 @@ const Label = ({ children, position = 'bottom-right' }: { children: ReactNode; p
 export function MerchImageDisplay({
   title,
   href,
-  imageUrl,
   images,
   imageDisplayMode,
 }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({
     title,
-    imageUrl,
     images,
     imageDisplayMode,
   });
 
-  const hasMultipleImages = (images?.length ?? 0) > 1;
+  const hasMultipleImages = images.length > 1;
 
   // Single mode or fallback
   if (resolved.mode === 'single' || !hasMultipleImages) {
@@ -111,6 +108,33 @@ export function MerchImageDisplay({
 
   // Both equal mode - side by side
   if (resolved.mode === 'both-equal') {
+    // Ensure there are at least two images for this mode, otherwise fallback to single
+    if (resolved.equal.length < 2) {
+      const fallbackImg = resolved.equal[0];
+      return (
+        <Box
+          position="relative"
+          height={{ base: 56, md: 72 }}
+          className="group/display rounded-lg border border-line/20 bg-surface-alt/35 overflow-hidden"
+        >
+          <ImageLink href={href} title={title} className="h-full">
+            {fallbackImg && (
+              <Box
+                as="img"
+                src={resolveImageSrc(fallbackImg.src)}
+                alt={fallbackImg.alt}
+                maxWidth="full"
+                maxHeight="full"
+                padding={4}
+                className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
+              />
+            )}
+            {fallbackImg?.side === 'back' && <Label>Back</Label>}
+          </ImageLink>
+        </Box>
+      );
+    }
+
     return (
       <Grid
         cols={2}

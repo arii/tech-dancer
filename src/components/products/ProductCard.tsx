@@ -23,7 +23,6 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       <MerchImageDisplay
         title={item.title}
         href={item.href}
-        imageUrl={item.imageUrl}
         images={item.images}
         imageDisplayMode={item.imageDisplayMode}
       />

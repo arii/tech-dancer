@@ -10,22 +10,12 @@ export interface ResolvedMerchImages {
   equal: MerchProductImage[];
 }
 
-export function legacyImageToMerchImages(imageUrl: string, alt: string): MerchProductImage[] {
-  return [{ src: imageUrl, side: 'front', alt }];
-}
-
 export function resolveMerchImages(args: {
   title: string;
-  imageUrl?: string;
-  images?: MerchProductImage[];
+  images: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
 }): ResolvedMerchImages {
-  const images =
-    args.images && args.images.length > 0
-      ? args.images
-      : args.imageUrl
-        ? legacyImageToMerchImages(args.imageUrl, `${args.title} product image`)
-        : [];
+  const images = args.images;
 
   const mode = args.imageDisplayMode ?? 'single';
   const front = images.find((image) => image.side === 'front');

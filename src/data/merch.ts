@@ -4,8 +4,7 @@ export interface MerchProduct {
   title: string;
   description: string;
   price: string;
-  imageUrl?: string;
-  images?: MerchProductImage[];
+  images: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
   printfulUrl: string;
   collections: string[];

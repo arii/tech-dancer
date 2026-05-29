@@ -30,8 +30,7 @@ export interface ProductCatalogItem {
   source: ProductSource;
   title: string;
   description: string;
-  imageUrl?: string;
-  images?: MerchProductImage[];
+  images: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
   href: string;
   price?: string;
