@@ -22,11 +22,12 @@ export function resolveMerchImages(args: {
   const back = images.find((image) => image.side === 'back');
 
   if (mode === 'both-equal') {
+    const equalImages = front && back ? [front, back] : images.slice(0, 2);
     return {
       mode,
       primary: undefined,
       secondary: undefined,
-      equal: images.slice(0, 2),
+      equal: equalImages,
     };
   }
 

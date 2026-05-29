@@ -90,32 +90,6 @@ export function MerchImageDisplay({
 
   // Both equal mode - side by side
   if (resolved.mode === 'both-equal') {
-    // Ensure there are at least two images for this mode, otherwise fallback to single
-    if (resolved.equal.length < 2) {
-      const fallbackImg = resolved.equal[0];
-      return (
-        <Box
-          position="relative"
-          height={{ base: 56, md: 72 }}
-          className="group/display rounded-lg border border-line/20 bg-surface-alt/35 overflow-hidden"
-        >
-          <ImageLink href={href} title={title} className="h-full">
-            {fallbackImg && (
-              <Box
-                as="img"
-                src={resolveImageSrc(fallbackImg.src)}
-                alt={fallbackImg.alt}
-                maxWidth="full"
-                maxHeight="full"
-                padding={4}
-                className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
-              />
-            )}
-          </ImageLink>
-        </Box>
-      );
-    }
-
     return (
       <Grid
         cols={2}
