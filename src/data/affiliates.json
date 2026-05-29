@@ -387,7 +387,9 @@
     "name": "LED Light Up Scrunchies",
     "url": "https://www.amazon.com/dp/B08GM59R8R?tag=onasafari04-20",
     "category": "gear",
-    "description": "Add some glow to your hair with these LED scrunchies."
+    "description": "Add some glow to your hair with these LED scrunchies.",
+    "image": "/images/gear/amazon/led-scrunchies.jpg",
+    "imageMode": "contain"
   },
   "portable-steamer": {
     "id": "portable-steamer",
@@ -403,21 +405,27 @@
     "name": "Short Sleeve Romper",
     "url": "https://www.amazon.com/dp/B08QMP3YXK?tag=onasafari04-20",
     "category": "gear",
-    "description": "Fun romper to dance in and perfect for tall girls too!"
+    "description": "Fun romper to dance in and perfect for tall girls too!",
+    "image": "/images/gear/amazon/short-sleeve-romper.jpg",
+    "imageMode": "contain"
   },
   "princess-tiara": {
     "id": "princess-tiara",
     "name": "Princess Tiara",
     "url": "https://www.amazon.com/dp/B0816B3CYK?tag=onasafari04-20",
     "category": "gear",
-    "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really."
+    "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really.",
+    "image": "/images/gear/amazon/princess-tiara.jpg",
+    "imageMode": "contain"
   },
   "led-shot-glasses": {
     "id": "led-shot-glasses",
     "name": "LED Shot Glasses party pack",
     "url": "https://www.amazon.com/dp/B075B5D5F2?tag=onasafari04-20",
     "category": "gear",
-    "description": "Colorful light up shot glasses perfect for parties."
+    "description": "Colorful light up shot glasses perfect for parties.",
+    "image": "/images/gear/amazon/led-shot-glasses.jpg",
+    "imageMode": "contain"
   },
   "reflective-crop-tops": {
     "id": "reflective-crop-tops",
@@ -461,14 +469,18 @@
     "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
-    "gearSlug": "2024-01-01-portable-speaker"
+    "gearSlug": "2024-01-01-portable-speaker",
+    "image": "/images/gear/amazon/portable-speaker.jpg",
+    "imageMode": "contain"
   },
   "yellow-fun-romper": {
     "id": "yellow-fun-romper",
     "name": "Yellow Fun Romper",
     "url": "https://www.amazon.com/dp/B097XSKNRB?tag=onasafari04-20",
     "category": "gear",
-    "description": "Yellow fun romper that is great to dance in."
+    "description": "Yellow fun romper that is great to dance in.",
+    "image": "/images/gear/amazon/yellow-fun-romper.jpg",
+    "imageMode": "contain"
   },
   "charging-cables": {
     "id": "charging-cables",
@@ -508,13 +520,6 @@
     "gearSlug": "2024-06-01-shoe-dryer",
     "draft": true,
     "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
-  },
-  "barge-cement": {
-    "id": "barge-cement",
-    "name": "Barge All Purpose Cement",
-    "url": "https://www.amazon.com/dp/B0032YYOFS?tag=onasafari04-20",
-    "category": "gear",
-    "description": "Heavy duty waterproof glue for applying suede to shoes."
   },
   "piercing-aftercare-swabs": {
     "id": "piercing-aftercare-swabs",
