@@ -15,6 +15,7 @@ interface DetailLayoutProps {
   date: string;
   content: string;
   image?: string;
+  imageAlt?: string;
   imageBack?: string;
   onBack: () => void;
   backLabel: string;
@@ -32,6 +33,7 @@ export function DetailLayout({
   date,
   content,
   image,
+  imageAlt,
   imageBack,
   onBack,
   backLabel,
@@ -154,7 +156,7 @@ export function DetailLayout({
                   <ProductImageFrame
                     key={displayImage}
                     src={displayImage || ""}
-                    alt={`${title}${showBack ? ' – back view' : ''}`}
+                    alt={showBack ? `${title} – back view` : imageAlt || title}
                     objectFit={imageFit}
                     border={false}
                     radius="none"
