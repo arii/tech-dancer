@@ -8,6 +8,7 @@ from tdw_services.orchestrator import Orchestrator
 # Import legacy utils for backwards compatibility during migration
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
+import os
 from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
 
 # CLI Group
@@ -70,9 +71,13 @@ def resolve(ctx, file, base):
         out(ctx, f"✅ Resolved {len(resolved)} files.", data={"resolved": resolved})
 
 @gh.command()
+@click.option('--check-dirs', default=os.environ.get('AUDIT_CHECK_DIRS', 'src/features,src/pages,src/components,src/layouts,src/App.tsx'), help='Comma-separated list of directories to audit')
 @click.pass_context
-def audit(ctx):
-    out(ctx, "Headless audit functionality to be implemented.")
+def audit(ctx, check_dirs):
+    """Run a headless UI audit on the codebase."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_audit_results(targets=check_dirs.split(','))
+    out(ctx, "Headless audit complete.", data=res)
 
 @gh.command()
 @click.argument('pr_number', type=int)
@@ -338,14 +343,14 @@ def comment(ctx, pr, command, comment_id):
         out(ctx, res.get('message'), data=res)
 
 # ==========================================
-# JULES COMMAND GROUP
+# AGENT COMMAND GROUP
 # ==========================================
-@cli.group()
-def jules():
+@cli.group(name='agent')
+def agent_group():
     """Agent Operations"""
     pass
 
-@jules.command()
+@agent_group.command()
 @click.argument('branch')
 @click.argument('task')
 @click.pass_context
@@ -354,12 +359,28 @@ def dispatch(ctx, branch, task):
     res = orch.dispatch_jules_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
 
-@jules.command()
+@agent_group.command()
 @click.pass_context
 def sync(ctx):
-    out(ctx, "Jules sync functionality to be implemented.")
+    """Sync active agent sessions."""
+    orch = ctx.obj['ORCHESTRATOR']
+    sessions = orch.jules.list_sessions()
 
-@jules.command()
+    if not ctx.obj['JSON']:
+        if not sessions:
+            click.echo("No active agent sessions found.")
+        else:
+            click.echo(f"{'Session ID':<20} | {'Status':<15} | {'Created':<25}")
+            click.echo("-" * 65)
+            for s in sessions:
+                sid = s.get('name', 'N/A').split('/')[-1]
+                state = s.get('state', 'UNKNOWN')
+                created = s.get('createTime', 'N/A')
+                click.echo(f"{sid:<20} | {state:<15} | {created:<25}")
+
+    out(ctx, "Agent sync complete.", data={"sessions": sessions})
+
+@agent_group.command()
 @click.option('--pr-number', type=int)
 @click.option('--branch')
 @click.option('--api-key')
@@ -371,7 +392,7 @@ def fix_ci(ctx, pr_number, branch, api_key, dry_run):
     agent_name = res.get('agent_name', 'Jules')
     out(ctx, f"🚀 Initialized {agent_name} session for branch `{res['branch']}`", data=res)
 
-@jules.command()
+@agent_group.command()
 @click.option('--log')
 @click.option('--file')
 @click.option('--pr', type=int)
@@ -381,7 +402,7 @@ def repair_context(ctx, log, file, pr):
     res = orch.repair_context(log=log, log_file=file, pr_number=pr)
     out(ctx, f"Generated {len(res)} prompts.", data={"prompts": res})
 
-@jules.command()
+@agent_group.command()
 @click.option('--logs')
 @click.option('--stdin', is_flag=True)
 @click.option('--worktree', is_flag=True)
@@ -394,19 +415,23 @@ def repair(ctx, logs, stdin, worktree):
     else:
         err(ctx, res['message'], data=res)
 
-# ==========================================
-# ANTIGRAVITY COMMAND GROUP
-# ==========================================
-@cli.group()
-def antigravity():
-    """Antigravity Agent Operations"""
+# Register aliases for backwards compatibility
+@cli.group(name='jules')
+def jules_group():
+    """Agent Operations (alias for agent)"""
     pass
 
-antigravity.add_command(dispatch)
-antigravity.add_command(sync)
-antigravity.add_command(fix_ci)
-antigravity.add_command(repair_context)
-antigravity.add_command(repair)
+@cli.group(name='antigravity')
+def antigravity_group():
+    """Agent Operations (alias for agent)"""
+    pass
+
+for group in [jules_group, antigravity_group]:
+    group.add_command(dispatch)
+    group.add_command(sync)
+    group.add_command(fix_ci)
+    group.add_command(repair_context)
+    group.add_command(repair)
 
 if __name__ == "__main__":
     cli(obj={})

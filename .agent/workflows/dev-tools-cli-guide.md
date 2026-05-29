@@ -47,12 +47,12 @@ Once activated, you can run the `td-cli` command. You can also pass `--json` to 
 - `td-cli ai review <pr_number>`: Produce an AI code review from a PR diff using templates.
 - `td-cli ai analyze <file>`: Focus AI analysis and recommendations on a specific file.
 
-### Agent Operations (`td-cli antigravity` / `td-cli jules`)
+### Agent Operations (`td-cli agent` / `td-cli jules`)
 
-- `td-cli antigravity dispatch <branch> <task>`: Create an AI agent session and attach context for a specific task. (Note: `jules` can be used as an alias)
-- `td-cli antigravity sync`: Poll active agent sessions.
-- `td-cli antigravity fix-ci --pr-number <num>`: Automatically initialize an AI repair session to fix CI failures.
-- `td-cli antigravity repair --logs <file> [--worktree]`: Run an autonomous local repair agent based on CI logs.
+- `td-cli agent dispatch <branch> <task>`: Create an AI agent session and attach context for a specific task. (Note: `jules` and `antigravity` can be used as aliases)
+- `td-cli agent sync`: Poll active agent sessions.
+- `td-cli agent fix-ci --pr-number <num>`: Automatically initialize an AI repair session to fix CI failures.
+- `td-cli agent repair --logs <file> [--worktree]`: Run an autonomous local repair agent based on CI logs. Use `--worktree` to perform repairs in a temporary worktree instead of the current branch.
 - `td-cli antigravity repair-context --log <log> --file <file>`: Generate repair prompt context from logs.
 
 ## Legacy Compatibility
