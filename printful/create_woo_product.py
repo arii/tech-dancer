@@ -5,13 +5,14 @@ import json
 import time
 import argparse
 import requests
+import subprocess
 from requests.auth import HTTPBasicAuth
 
 WOO_KEY = os.getenv("WOO_CONSUMER_KEY")
 WOO_SECRET = os.getenv("WOO_CONSUMER_SECRET")
 WOO_URL = os.getenv("WOO_STORE_URL", "https://boomtick.blog")
 PRINTFUL_TOKEN = os.getenv("PRINTFUL_TOKEN")
-PRINTFUL_STORE_ID = 18249113
+PRINTFUL_STORE_ID = os.getenv("PRINTFUL_STORE_ID")
 
 def create_woo_product(name, description, price, categories=None, attributes=None):
     url = f"{WOO_URL}/wp-json/wc/v3/products"
@@ -36,6 +37,10 @@ def create_woo_product(name, description, price, categories=None, attributes=Non
     return product_data
 
 def poll_printful_sync(woo_product_id):
+    if not PRINTFUL_STORE_ID:
+        print("ERROR: PRINTFUL_STORE_ID must be set for polling.")
+        sys.exit(1)
+
     print(f"Waiting for Printful to sync WooCommerce product {woo_product_id}...")
     headers = {
         "Authorization": f"Bearer {PRINTFUL_TOKEN}",
@@ -46,9 +51,6 @@ def poll_printful_sync(woo_product_id):
         res = requests.get(f"https://api.printful.com/sync/products", headers=headers, timeout=30)
         if res.status_code == 200:
             products = res.json().get("result", [])
-            # Printful usually uses the WooCommerce product ID as external_id or in the name/description
-            # This depends on how the integration is set up.
-            # Often external_id in Printful matches WooCommerce product ID.
             for p in products:
                 if str(p.get("external_id")) == str(woo_product_id):
                     print(f"Printful sync detected! Sync Product ID: {p['id']}")
@@ -83,11 +85,14 @@ def main():
     sync_id = poll_printful_sync(woo_id)
 
     if sync_id:
-        # 3. Trigger sync_new_product logic (imported or called via subprocess)
+        # 3. Trigger sync_new_product logic
         print(f"Triggering sync logic for Printful ID {sync_id}...")
-        import subprocess
+        # Get absolute path to the sync script
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        sync_script = os.path.join(script_dir, "sync_new_product.py")
+
         cmd = [
-            "python3", "printful/sync_new_product.py",
+            "python3", sync_script,
             "--name", args.name,
             "--catalog-id", str(args.catalog_id),
             "--sync-product-id", str(sync_id),
