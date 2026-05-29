@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
-import { ASSET_PREFIX } from '@/config/constants';
+import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
@@ -16,34 +16,29 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       border
       maxWidth="sm"
       data-testid="product-card"
-      href={item.href}
-      rel="sponsored noopener noreferrer"
-      ariaLabel={`Buy ${item.title} on storefront`}
     >
-      <Box
-        position="relative"
-        display="flex"
-        align="center"
-        justify="center"
-        height={{ base: 72, md: 80 }}
-        overflow="hidden"
-        radius="lg"
-        className="bg-surface-alt/35"
-      >
-        <Box
-          as="img"
-          src={item.imageUrl.startsWith('http') ? item.imageUrl : `${ASSET_PREFIX}${item.imageUrl}`}
-          alt={item.title}
-          maxWidth="full"
-          maxHeight="full"
-          padding={4}
-          className="object-contain transition-transform duration-300 group-hover:scale-105"
-        />
-
-      </Box>
+      <MerchImageDisplay
+        title={item.title}
+        href={item.href}
+        imageUrl={item.imageUrl}
+        images={item.images}
+        imageDisplayMode={item.imageDisplayMode}
+      />
 
       <Stack gap={3}>
-        <Text as="h3" variant="body" size="lg" weight="font-bold" color="main" leading="tight" clamp={2} className="group-hover:text-accent transition-colors">
+        <Text
+          as="a"
+          href={item.href}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          variant="body"
+          size="lg"
+          weight="font-bold"
+          color="main"
+          leading="tight"
+          clamp={2}
+          className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
           {item.title}
         </Text>
 
@@ -83,12 +78,22 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
             </Text>
           ))}
         </Stack>
-        <Box display="flex" align="center" gap={1}>
+        <Stack
+          as="a"
+          href={item.href}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          direction="row"
+          align="center"
+          gap={1}
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={`View ${item.title} on Printful`}
+        >
           <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
             SEE COLORS
           </Text>
-          <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} />
-        </Box>
+          <ArrowRight className={cn('w-3 h-3 text-accent', stroke.thick)} aria-hidden="true" />
+        </Stack>
       </Box>
     </BaseCard>
   );
