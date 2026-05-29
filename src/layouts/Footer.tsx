@@ -10,6 +10,7 @@ export function Footer() {
 
   useEffect(() => {
     // Only set on client to avoid hydration mismatch
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLastUpdated(formatRelativeTime(import.meta.env.VITE_BUILD_TIME));
   }, []);
 
