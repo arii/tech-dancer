@@ -1,21 +1,22 @@
 ---
 type: resource
-title: "How to Suede Your Own Dance Shoes"
-date: "2026-04-12"
-author: "Ariel Anders, PhD"
-category: "Dance Gear"
-excerpt: "The DIY hack for perfect traction on any ballroom floor."
-image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
-affiliateIds: ["suede-sheets"]
+title: How to Suede Your Own Dance Shoes
+date: '2026-04-12'
+author: Ariel Anders, PhD
+category: Dance Gear
+excerpt: The DIY hack for perfect traction on any ballroom floor.
+image: /images/gear/amazon/suede-stick-on-sheets.jpg
+affiliateIds:
+- suede-sheets
 tags:
-  - diy
-  - footwear
-  - budget
-verdict: "Best Budget Hack"
-updatedDate: "Mar 2024"
-affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+- diy
+- footwear
+- budget
+verdict: Best Budget Hack
+updatedDate: Mar 2024
+affiliateProvider: amazon
 ---
+
 
 ## The Pain Point: Inconsistent Traction
 
