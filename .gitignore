@@ -82,11 +82,13 @@ link-validation-report.md
 pr_overlaps.txt
 workflow_overlaps.txt
 dev-tools/logs/reviews/*.md
-product-mockups/
+/product-mockups/
 
 # Antigravity
 .antigravity/
+.antigravity/cli/
 .antigravitycli/
 
 # Runtime audit reports
+# [Sensitive] Ensure these are never indexed
 .agent/workflows/ai-slop-audit-*.md
