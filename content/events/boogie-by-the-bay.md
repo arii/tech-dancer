@@ -23,19 +23,19 @@ theme:
     NorCal airport-hotel weekend: strong social dancing, competition rounds,
     chilly Bay Area evenings, and long nights in the ballroom.
   outfitIds:
-    - sequin-bomber-jacket
-    - ombre-dance-dress
     - norcal-gate-crop-hoodie
     - norcal-bestcal-tshirt
+    - love-unisex-shirt
+    - womens-long-zip-hoodie
   accessoryIds:
     - rave-fan
     - electric-fan
 gear:
   outfitIds:
-    - sequin-bomber-jacket
-    - ombre-dance-dress
     - norcal-gate-crop-hoodie
     - norcal-bestcal-tshirt
+    - love-unisex-shirt
+    - womens-long-zip-hoodie
   outfitDescription: "Polished and practical pieces for a major NorCal weekend."
   accessoryIds:
     - rave-fan
@@ -47,14 +47,12 @@ gear:
   shoeDescription: "Reliable footwear for the fast Hyatt ballroom floor."
   essentialIds:
     - loop-experience
-    - foam-roller
-    - shoe-brush
-    - liquid-iv
+    - mints
+    - hand-sanitizer
   essentialDescription: "Essentials for a high-intensity competition weekend."
   travelIds:
     - compression-cubes
     - portable-charger
-    - mints
     - hanging-toiletry-bag
   travelDescription: "Packing gear for an airport-hotel stay."
 
@@ -69,15 +67,11 @@ relatedEvents:
 - jack-and-jill-orama
 ---
 
-Boogie by the Bay is a cornerstone of the WCS circuit. Held at the Hyatt Regency SFO, the venue features a stunning 10-story atrium and is famous for its late-night social energy and competitive "California" vibe.
+Boogie by the Bay is a cornerstone of the WCS circuit. Held at the Hyatt Regency SFO, the venue features a stunning 10-story atrium and is famous for its late-night social energy and competitive \"California\" vibe.
 
 ## Flagship weekend packing strategy
 
 Boogie is less about a costume theme and more about showing up prepared for a polished, high-energy NorCal weekend. Prioritize reliable dance shoes, backup shoe maintenance, a portable charger, earplugs, and layers for the SFO/Burlingame weather shift. The atrium is a social hub, so having a comfortable but put-together look is key.
-
-## Product curation notes
-
-We use NorCal BestCal and Golden Gate pieces here as regional identity items to celebrate the local community. While JJO is the main Rainbow guide, Boogie is a great place to wear polished social-dance pieces that handle both intense workshops and late-night socials.
 
 ### Airport Logistics
 The hotel is located right next to San Francisco International Airport (SFO).
@@ -95,8 +89,3 @@ The floor at BBTB is legendary—large, fast, and often crowded. The spotlight f
 
 ### Nearby Food
 While the hotel restaurant (3Sixty) is convenient, there are several great options within walking distance or a short Uber ride in downtown Burlingame. Max's of Burlingame is a dancer favorite for late-night or pre-comp meals.
-
-## Change Checklist
-- [x] Restored gear section descriptions.
-- [x] Softened "must-watch" claim for Sunday show.
-- [x] Verified airport and venue details.

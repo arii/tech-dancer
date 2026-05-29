@@ -23,17 +23,17 @@ theme:
     community-focused Oregon dance trip: comfortable layers, practical packing,
     and travel gear for a smaller regional event.
   outfitIds:
-    - ombre-dance-dress
-    - norcal-crop-top
     - love-unisex-shirt
+    - norcal-bestcal-tshirt
+    - womens-long-zip-hoodie
   accessoryIds:
     - rave-fan
     - neck-fan
 gear:
   outfitIds:
-    - ombre-dance-dress
-    - norcal-crop-top
     - love-unisex-shirt
+    - norcal-bestcal-tshirt
+    - womens-long-zip-hoodie
   outfitDescription: "Comfortable and expressive pieces for a community-focused weekend."
   accessoryIds:
     - rave-fan
@@ -45,10 +45,9 @@ gear:
   shoeDescription: "Reliable footwear for workshops and community sets."
   essentialIds:
     - loop-experience
-    - foam-roller
     - mints
-    - shoe-brush
-  essentialDescription: "Standard recovery for the relaxed PNW circuit pace."
+    - hand-sanitizer
+  essentialDescription: "Standard recovery and hygiene for the relaxed PNW circuit pace."
   travelIds:
     - compression-cubes
     - travel-pillow
@@ -74,7 +73,7 @@ Ashland is a theatre town — beautiful, small, and surprisingly walkable from t
 This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring downtown Ashland, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear. Late-night food options in Ashland are limited, so having snacks and a reusable water bottle is helpful.
 
 ### Who this event is best for
-SOswing is ideal for dancers who prefer intimate settings over massive convention centers. It's particularly great for first-time competitors who might find larger events overwhelming, and for those who enjoy a "road trip" vibe with scenic views.
+SOswing is ideal for dancers who prefer intimate settings over massive convention centers. It's particularly great for first-time competitors who might find larger events overwhelming, and for those who enjoy a \"road trip\" vibe with scenic views.
 
 ### Venue & Travel
 - **Venue:** Ashland Hills Hotel & Suites. It’s slightly outside the main downtown area, but very comfortable with a great pool.
@@ -85,8 +84,3 @@ SOswing is ideal for dancers who prefer intimate settings over massive conventio
 - **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
 - **Food:** There are great restaurants in downtown Ashland, but the hotel restaurant is also solid for a quick bite between workshops.
-
-## Change Checklist
-- [x] Removed incorrect JJO hero image.
-- [x] Restored gear section descriptions.
-- [x] Softened food/water claims.

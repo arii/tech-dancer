@@ -17,8 +17,8 @@ description: This description field maps to the Travel & Venue Notes section.
 whyAttending: >
   This whyAttending field provides the main descriptive copy for the event hero. It highlights the unique value of attending this specific event.
 theme:
-  name: Rainbow Paradise
-  label: Rainbow Theme
+  name: Galactic Preview
+  label: Space Theme
   description: Vibrant colors and pride vibes for the big weekend.
   colors:
   - '#FF0000'

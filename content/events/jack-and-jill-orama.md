@@ -33,33 +33,25 @@ theme:
     - norcal-pride-bear-shirt
     - love-neon-switch-shirt
     - norcal-crop-top
+    - rainbow-bustle
     - sequin-bomber-jacket
     - ombre-dance-dress
-    - rainbow-bustle
     - love-neon-follow-shirt
     - love-neon-lead-shirt
-    - war-eagle-shirt
-    - norcal-bear-tank
-    - norcal-gate-crop-hoodie
-    - love-unisex-shirt
     - norcal-bestcal-tshirt
   accessoryIds:
     - rainbow-fan
-    - rainbow-earrings
-    - pride-sunglasses
 gear:
   outfitIds:
     - norcal-pride-gate-shirt
     - norcal-pride-bear-shirt
     - love-neon-switch-shirt
     - norcal-crop-top
+    - rainbow-bustle
     - sequin-bomber-jacket
-    - ombre-dance-dress
   outfitDescription: "Bright, expressive pieces for the legendary Rainbow theme nights."
   accessoryIds:
     - rainbow-fan
-    - rainbow-earrings
-    - pride-sunglasses
   accessoryDescription: "Bold accents to complete your Pride-inspired dance looks."
   shoeIds:
     - "bloch-grecian"
@@ -69,8 +61,8 @@ gear:
     - "loop-experience"
     - "foam-roller"
     - "liquid-iv"
-    - "shoe-brush"
-  essentialDescription: "Proactive recovery to keep you moving through the late-night magic."
+    - "hand-sanitizer"
+  essentialDescription: "Proactive recovery and hygiene to keep you moving through the late-night magic."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
@@ -108,14 +100,8 @@ If this is your first JJO, prepare for the scale. The competitions move fast and
 - **Orientation:** Attend the newcomer orientation if offered—it's a great way to meet people and get your bearings.
 
 ### Schedule Pacing
-The JJO schedule is packed. Workshops run all day, and competitions often go late into the evening. Don't feel pressured to do everything. Pick 2-3 "must-attend" workshops and save your energy for social dancing and your heats.
+The JJO schedule is packed. Workshops run all day, and competitions often go late into the evening. Don't feel pressured to do everything. Pick 2-3 \"must-attend\" workshops and save your energy for social dancing and your heats.
 
 ## NorCal BestCal Merch Picks
 
 Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
-
-## Change Checklist
-- [x] Restored JJO as a Rainbow / NorCal BestCal guide.
-- [x] Removed body-level affiliate disclosure (centralized in component).
-- [x] Restored gear section descriptions.
-- [x] Verified schedule and Disneyland logistics.

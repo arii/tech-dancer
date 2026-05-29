@@ -24,20 +24,18 @@ theme:
     connection.
   outfitIds:
     - sequin-bomber-jacket
-    - ombre-dance-dress
-    - love-neon-lead-shirt
-    - love-neon-follow-shirt
-    - love-neon-switch-shirt
+    - norcal-bear-tank
+    - love-unisex-shirt
+    - war-eagle-shirt
   accessoryIds:
     - rave-fan
     - electric-fan
 gear:
   outfitIds:
     - sequin-bomber-jacket
-    - ombre-dance-dress
-    - love-neon-lead-shirt
-    - love-neon-follow-shirt
-    - love-neon-switch-shirt
+    - norcal-bear-tank
+    - love-unisex-shirt
+    - war-eagle-shirt
   outfitDescription: "Breathable pieces that handle the high-energy Texas vibe."
   accessoryIds:
     - rave-fan
@@ -50,8 +48,7 @@ gear:
   essentialIds:
     - liquid-iv
     - loop-experience
-    - foam-roller
-    - shoe-brush
+    - mints
   essentialDescription: "Recovery and maintenance for an intense competition weekend."
   travelIds:
     - compression-cubes
@@ -70,11 +67,11 @@ relatedEvents:
 - jack-and-jill-orama
 ---
 
-Wild Wild Westie is famous for its "go big or go home" Texas attitude. Held at the iconic Hyatt Regency Dallas (the one with the glowing ball on top), it's a weekend of intense dancing, serious competition, and southern hospitality.
+Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the iconic Hyatt Regency Dallas (the one with the glowing ball on top), it's a weekend of intense dancing, serious competition, and southern hospitality.
 
 ## Western theme notes
 
-Because the available product set does not currently include true Western apparel, do not fake it. Use this weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. Because the current product set does not include true Western footwear, keep Western boots for photos and use actual dance shoes for social dancing.
+While our current product selection doesn't include specialized Western dance apparel, this is the perfect weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. Keep Western boots for photos and use proper dance shoes for social dancing to ensure safety and floor compliance.
 
 ### Dallas Airport Logistics
 - **DFW Airport:** About 25-30 minutes away. This is the primary hub for American Airlines and offers the most flight options.
@@ -89,10 +86,3 @@ Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-con
 
 ### Comp/Social Energy
 The competition field at WWW is deep. Jack & Jill heats can have many couples in certain divisions. The social dancing energy is equally intense, peaking around 2:00 AM and often continuing until the sun comes up over the Dallas skyline.
-
-## Change Checklist
-- [x] Fixed Wild Wild Westie product taxonomy (moved bloch-grecian to shoes).
-- [x] Deduplicated gear IDs.
-- [x] Softened claims about hydration, fans, and heat.
-- [x] Removed "dance boots" reference and clarified footwear advice.
-- [x] Restored gear section descriptions.

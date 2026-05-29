@@ -23,22 +23,22 @@ theme:
     fireworks, and lightweight dance outfits. Think Americana, stars, and stripes
     with high-performance, breathable fabrics.
   outfitIds:
-    - ombre-dance-dress
-    - sequin-bomber-jacket
+    - norcal-bear-tank
     - love-unisex-shirt
+    - sports-crop-tops
   accessoryIds:
     - rave-fan
-    - electric-fan
+    - neck-fan
     - pride-sunglasses
 gear:
   outfitIds:
-    - ombre-dance-dress
-    - sequin-bomber-jacket
+    - norcal-bear-tank
     - love-unisex-shirt
+    - sports-crop-tops
   outfitDescription: "Lightweight, vacation-ready styles for the desert heat."
   accessoryIds:
     - rave-fan
-    - electric-fan
+    - neck-fan
     - pride-sunglasses
   accessoryDescription: "Essential cooling and sun protection for the legendary pool party."
   shoeIds:
@@ -52,7 +52,6 @@ gear:
     - foam-roller
   essentialDescription: "Heat-management and hydration essentials for Phoenix in July."
   travelIds:
-    - microfiber-towel
     - travel-bottles
     - hanging-toiletry-bag
     - portable-charger
@@ -74,22 +73,15 @@ The JW Marriott Desert Ridge is one of the most beautiful venues on the circuit.
 
 This is Phoenix in July—temperatures will be well over 100°F. The guide here is practical: stay on top of your hydration, keep sunscreen ready for the pool parties, and have a plan for walking around the massive resort grounds. You can easily spend the entire weekend without leaving the AC if you choose, but the pool-party fireworks are a highlight.
 
-Consider electrolyte packets, a portable fan, and a quick-dry towel for the pool and resort parts of the weekend.
+Consider electrolyte packets, a portable fan, and high-utility travel gear for the pool and resort parts of the weekend.
 
 ### Resort Layout
 The resort is expansive. Give yourself 10-15 minutes to walk from your room to the ballroom. The pool area is central, making it easy to pop back and forth between a swim and a workshop.
 
 ### Pool Party Packing
-- **Water-safe gear:** Bring swimsuits that stay put and a quick-dry microfiber towel.
+- **Water-safe gear:** Bring swimsuits that stay put.
 - **Cover-ups:** For walking through the resort lobby to/from the pool.
 - **Dry Bag:** To keep your phone and room key safe while you're near the water.
 
 ### Hydration & Nutrition
 The resort has several high-end restaurants, but they can be pricey. There is a Starbucks on-site for your caffeine fix, and many dancers order grocery delivery for snacks and water to keep in their rooms.
-
-## Change Checklist
-- [x] Verified Phoenix venue and city.
-- [x] Removed incorrect hero image.
-- [x] Softened hydration/fan claims.
-- [x] Restored gear section descriptions.
-- [x] Ensured consistent Phoenix wording.

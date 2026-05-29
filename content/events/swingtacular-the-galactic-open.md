@@ -14,7 +14,7 @@ url: https://swingtacular.com/
 heroImage: '/assets/events/swingtacular-hero.svg'
 description: Swingtacular (formerly the San Francisco Open) is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
 whyAttending: >
-  There is no other event like Swingtacular. The sci-fi theme is fully embraced, the production quality is unmatched, and the energy in the ballroom is truly "out of this world."
+  There is no other event like Swingtacular. The sci-fi theme is fully embraced, and the energy in the ballroom is truly "out of this world." The event is known for leaning hard into production, lighting, and theme.
 theme:
   name: "Alien / Galactic"
   label: "Space Theme"
@@ -26,22 +26,21 @@ theme:
     - sequin-bomber-jacket
     - reflective-crop-tops
     - mesh-fishnet-top
-    - ombre-dance-dress
+    - led-scrunchies
   accessoryIds:
     - rave-fan
     - electric-fan
-    - pride-sunglasses
+    - led-shot-glasses
 gear:
   outfitIds:
     - sequin-bomber-jacket
     - reflective-crop-tops
     - mesh-fishnet-top
-    - ombre-dance-dress
   outfitDescription: "Metallic, neon, and blacklight-friendly futuristic styles."
   accessoryIds:
     - rave-fan
     - electric-fan
-    - pride-sunglasses
+    - led-shot-glasses
   accessoryDescription: "Futuristic cooling and styling for a dark ballroom."
   shoeIds:
     - bloch-grecian
@@ -49,13 +48,12 @@ gear:
   shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
   essentialIds:
     - loop-experience
-    - foam-roller
-    - shoe-brush
     - mints
+    - listerine-tabs
   essentialDescription: "Essentials for a high-intensity weekend in the Bay Area."
   travelIds:
     - compression-cubes
-    - travel-steamer
+    - portable-steamer
     - portable-charger
   travelDescription: "Organized packing for your galactic mission."
 
@@ -74,7 +72,7 @@ Swingtacular is where WCS meets a full galactic theme weekend. Held at the Hyatt
 
 ## Galactic theme notes
 
-This is the event where metallics, neons, mesh, reflective pieces, and futuristic accessories make sense. Keep the recommendations dance-safe: no sharp costume pieces, no loose LED strands, no wings or accessories that hit partners, and no anything that makes connection awkward. Think about "space opera," "alien," and "galactic" vibes that will glow under the heavy production lighting.
+This is the event where metallics, neons, mesh, reflective pieces, and futuristic accessories make sense. Keep the recommendations dance-safe: no sharp costume pieces, no loose LED strands, no wings or accessories that hit partners, and no anything that makes connection awkward. Think about \"space opera,\" \"alien,\" and \"galactic\" vibes that will glow under the heavy production lighting.
 
 ## What to pack for the SFO Hyatt
 
@@ -87,8 +85,3 @@ The Saturday night shows at Swingtacular are high-production events with profess
 - **Transport:** Use the free Hyatt SFO shuttle if flying in.
 - **Food:** Downtown Burlingame is a short Uber ride away and offers fantastic dining options (Max's is a dancer favorite).
 - **Hotel Hub:** The atrium is the place to be for late-night social energy and catching up with friends between workshops.
-
-## Change Checklist
-- [x] Refined Swingtacular wording (removed Comicon, softened production claims).
-- [x] Restored gear section descriptions.
-- [x] Verified Burlingame logistics.
