@@ -17,7 +17,7 @@ describe('Schema Generation', () => {
   });
 
   it('should generate valid gear schema with all required fields', () => {
-    const gearSchema = generateGearCatalogSchema([{
+    const testGear: Resource = {
       type: 'resource',
       slug: 'test-gear',
       title: 'Test Gear',
@@ -26,7 +26,8 @@ describe('Schema Generation', () => {
       category: 'Gear',
       excerpt: 'A test gear item',
       content: 'Content'
-    } as unknown as Resource]);
+    };
+    const gearSchema = generateGearCatalogSchema([testGear]);
     const firstGear = gearSchema.itemListElement[0].item;
 
     expect(firstGear.offers.price).toBeDefined();
