@@ -1,17 +1,17 @@
 ---
-type: resource
-title: "Compression Packing Cubes"
-date: "2024-06-01"
-author: "Ariel Anders, PhD"
-category: "Travel Gear"
-excerpt: "Maximize luggage space and keep your dance outfits organized and wrinkle-free."
-image: "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
+type: 'resource'
+title: 'Compression Packing Cubes'
+date: '2024-06-01'
+author: 'Ariel Anders, PhD'
+category: 'Travel Gear'
+excerpt: 'Maximize luggage space and keep your dance outfits organized and wrinkle-free.'
+image: '/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg'
 affiliateIds: ["compression-cubes"]
 tags: ["travel", "organization", "packing"]
-verdict: "Essential for air travel"
+verdict: 'Essential for air travel'
 bestFor: ["Air Travel", "Organization"]
-affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+affiliateProvider: 'amazon'
+affiliateDisclosure: 'As an Amazon Associate, BoomTick may earn from qualifying purchases.'
 ---
 
 ## Pack More, Stress Less

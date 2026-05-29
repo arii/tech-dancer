@@ -1,24 +1,24 @@
 ---
-type: event
-title: "Jack & Jill O'Rama"
-date: "2026-06-04"
-startDate: "2026-06-04"
-author: "Ariel Anders, PhD"
-category: "WSDC Registry Event"
-excerpt: "The ultimate West Coast Swing party and competition weekend in Southern California."
-location: "Hyatt Regency Orange County"
-city: "Garden Grove, CA"
-region: "SoCal"
-schedule: "June 4 - 8, 2026"
-url: "https://jackandjillorama.com"
-heroImage: "/assets/events/jjo-hero.svg"
+type: 'event'
+title: 'Jack & Jill O''Rama'
+date: '2026-06-04'
+startDate: '2026-06-04'
+author: 'Ariel Anders, PhD'
+category: 'WSDC Registry Event'
+excerpt: 'The ultimate West Coast Swing party and competition weekend in Southern California.'
+location: 'Hyatt Regency Orange County'
+city: 'Garden Grove, CA'
+region: 'SoCal'
+schedule: 'June 4 - 8, 2026'
+url: 'https://jackandjillorama.com'
+heroImage: '/assets/events/jjo-hero.svg'
 description: >
   Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events on the circuit. It is famous for its creative competition formats, high-energy social dancing, and prime location near Disneyland.
 whyAttending: >
   I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set.
 theme:
-  name: Rainbow
-  label: NorCal Pride Theme
+  name: 'Rainbow'
+  label: 'NorCal Pride Theme'
   description: >
     JJO coincides with Pride Month, and NorCal dancers represent their region with a massive rainbow presence. We lean into bright, expressive colors for every session. Mix bold layers and statement accessories that stand out in the hallway photos and on the dance floor.
   colors:
@@ -39,33 +39,33 @@ gear:
     - love-neon-lead-shirt
     - love-neon-follow-shirt
     - norcal-crop-top
-  outfitDescription: "Bright, expressive pieces for the legendary Rainbow theme nights and high-visibility Glow nights."
+  outfitDescription: 'Bright, expressive pieces for the legendary Rainbow theme nights and high-visibility Glow nights.'
   accessoryIds:
     - rainbow-fan
     - tripod
-  accessoryDescription: "Rainbow fans for the heat and a tripod for filming your competition videos."
+  accessoryDescription: 'Rainbow fans for the heat and a tripod for filming your competition videos.'
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
-  shoeDescription: "Trusted shoes for long hours on the high-energy SoCal floor."
+  shoeDescription: 'Trusted shoes for long hours on the high-energy SoCal floor.'
   essentialIds:
     - "loop-experience"
     - "foam-roller"
     - "liquid-iv"
     - "hand-sanitizer"
-  essentialDescription: "Proactive recovery and hygiene to keep you moving through the late-night magic."
+  essentialDescription: 'Proactive recovery and hygiene to keep you moving through the late-night magic.'
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
     - "hanging-toiletry-bag"
     - "portable-charger"
     - "mints"
-  travelDescription: "Packing gear for a busy weekend near Disneyland."
+  travelDescription: 'Packing gear for a busy weekend near Disneyland.'
 
-earlyBirdDate: "2026-04-15"
-registrationDeadline: "2026-05-31"
-hotelCutoffDate: "2026-05-15"
-packingReminderDate: "2026-05-25"
+earlyBirdDate: '2026-04-15'
+registrationDeadline: '2026-05-31'
+hotelCutoffDate: '2026-05-15'
+packingReminderDate: '2026-05-25'
 
 relatedEvents:
 - wild-wild-westie

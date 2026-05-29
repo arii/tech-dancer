@@ -1,17 +1,17 @@
 ---
-type: resource
-title: "Suede Shoe Brush"
-date: "2024-06-01"
-author: "Ariel Anders, PhD"
-category: "Dance Gear"
-excerpt: "Keep your suede soles clean and grippy for optimal floor connection."
-image: "/images/gear/amazon/dance-shoe-suede-brush.jpg"
+type: 'resource'
+title: 'Suede Shoe Brush'
+date: '2024-06-01'
+author: 'Ariel Anders, PhD'
+category: 'Dance Gear'
+excerpt: 'Keep your suede soles clean and grippy for optimal floor connection.'
+image: '/images/gear/amazon/dance-shoe-suede-brush.jpg'
 affiliateIds: ["shoe-brush"]
 tags: ["gear", "shoes", "maintenance"]
-verdict: "Essential maintenance"
-updatedDate: "Jun 2024"
-affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+verdict: 'Essential maintenance'
+updatedDate: 'Jun 2024'
+affiliateProvider: 'amazon'
+affiliateDisclosure: 'As an Amazon Associate, BoomTick may earn from qualifying purchases.'
 bestFor: ["Maintenance", "Suede Soles"]
 ---
 

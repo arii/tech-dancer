@@ -1,23 +1,23 @@
 ---
-type: event
-title: "Swingtacular: The Galactic Open"
+type: 'event'
+title: 'Swingtacular: The Galactic Open'
 date: '2026-08-06'
 startDate: '2026-08-06'
-author: Ariel Anders, PhD
-category: WSDC Registry Event
-excerpt: A sci-fi themed WCS adventure in the San Francisco Bay Area.
-location: Hyatt Regency San Francisco Airport
-city: Burlingame, CA
-region: NorCal
-schedule: August 6 - 9, 2026
-url: https://swingtacular.com/
+author: 'Ariel Anders, PhD'
+category: 'WSDC Registry Event'
+excerpt: 'A sci-fi themed WCS adventure in the San Francisco Bay Area.'
+location: 'Hyatt Regency San Francisco Airport'
+city: 'Burlingame, CA'
+region: 'NorCal'
+schedule: 'August 6 - 9, 2026'
+url: 'https://swingtacular.com/'
 heroImage: '/assets/events/swingtacular-hero.svg'
-description: Swingtacular is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
+description: 'Swingtacular is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It''s a weekend of world-class competition, immersive storytelling, and top-tier social dancing.'
 whyAttending: >
   There is no other event like Swingtacular. The sci-fi theme is fully embraced, and the energy in the ballroom is truly "out of this world." The event is known for leaning hard into production, lighting, and theme.
 theme:
-  name: "Alien / Galactic / Nerd"
-  label: "Space & Nerd Themes"
+  name: 'Alien / Galactic / Nerd'
+  label: 'Space & Nerd Themes'
   description: >
     Swingtacular's themes should lean metallic, neon, futuristic, and 'nerdy.'
     Prioritize items that read well in a dark ballroom without restricting movement.
@@ -35,30 +35,30 @@ gear:
     - nerd-set
     - reflective-crop-tops
     - sequin-bomber-jacket
-  outfitDescription: "Alien bodysuits for 'Dress to Impress', nerd sets for Nerd Night, and reflective pieces for the ballroom."
+  outfitDescription: 'Alien bodysuits for ''Dress to Impress'', nerd sets for Nerd Night, and reflective pieces for the ballroom.'
   accessoryIds:
     - alien-mask
     - rave-fan
-  accessoryDescription: "Alien masks for grand entrances and futuristic fans for cooling."
+  accessoryDescription: 'Alien masks for grand entrances and futuristic fans for cooling.'
   shoeIds:
     - bloch-grecian
     - dance-socks
-  shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
+  shoeDescription: 'Reliable footwear for the fast SFO Hyatt ballroom floor.'
   essentialIds:
     - loop-experience
     - mints
     - listerine-tabs
-  essentialDescription: "Essentials for a high-intensity weekend in the Bay Area."
+  essentialDescription: 'Essentials for a high-intensity weekend in the Bay Area.'
   travelIds:
     - compression-cubes
     - portable-steamer
     - portable-charger
-  travelDescription: "Organized packing for your galactic mission."
+  travelDescription: 'Organized packing for your galactic mission.'
 
-earlyBirdDate: "2026-05-01"
-registrationDeadline: "2026-08-02"
-hotelCutoffDate: "2026-07-15"
-packingReminderDate: "2026-08-01"
+earlyBirdDate: '2026-05-01'
+registrationDeadline: '2026-08-02'
+hotelCutoffDate: '2026-07-15'
+packingReminderDate: '2026-08-01'
 
 relatedEvents:
 - boogie-by-the-bay

@@ -1,17 +1,17 @@
 ---
-type: resource
-title: "Green Full-Body Spandex Suit"
-date: "2024-06-01"
-author: "Ariel Anders, PhD"
-category: "Dance Gear"
-excerpt: "The ultimate 'Dress to Impress' base for Galactic-themed events."
-image: "/images/gear/amazon/alien-body-suit.jpg"
+type: 'resource'
+title: 'Green Full-Body Spandex Suit'
+date: '2024-06-01'
+author: 'Ariel Anders, PhD'
+category: 'Dance Gear'
+excerpt: 'The ultimate ''Dress to Impress'' base for Galactic-themed events.'
+image: '/images/gear/amazon/alien-body-suit.jpg'
 affiliateIds: ["green-bodysuit"]
 tags: ["costume", "galactic", "theme"]
-verdict: "Galactic Essential"
+verdict: 'Galactic Essential'
 bestFor: ["Dress to Impress Night", "Alien Themes"]
-affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+affiliateProvider: 'amazon'
+affiliateDisclosure: 'As an Amazon Associate, BoomTick may earn from qualifying purchases.'
 ---
 
 ## Alien Aesthetic

@@ -1,23 +1,23 @@
 ---
-type: event
-title: Boogie by the Bay
+type: 'event'
+title: 'Boogie by the Bay'
 date: '2026-10-08'
 startDate: '2026-10-08'
-author: Ariel Anders, PhD
-category: WSDC Registry Event
-excerpt: San Francisco's flagship WCS event over Columbus Day weekend.
-location: Hyatt Regency San Francisco Airport
-city: Burlingame, CA
-region: NorCal
-schedule: October 8 - 11, 2026
-url: https://boogiebythebay.com/
+author: 'Ariel Anders, PhD'
+category: 'WSDC Registry Event'
+excerpt: 'San Francisco''s flagship WCS event over Columbus Day weekend.'
+location: 'Hyatt Regency San Francisco Airport'
+city: 'Burlingame, CA'
+region: 'NorCal'
+schedule: 'October 8 - 11, 2026'
+url: 'https://boogiebythebay.com/'
 heroImage: '/assets/events/boogie-by-the-bay-hero.svg'
-description: Boogie by the Bay is the premier West Coast Swing event in Northern California. Hosted by the The Next Generation Swing Dance Club, it features top-tier competitions, workshops, and social dancing in a beautiful waterfront setting near SFO.
+description: 'Boogie by the Bay is the premier West Coast Swing event in Northern California. Hosted by the The Next Generation Swing Dance Club, it features top-tier competitions, workshops, and social dancing in a beautiful waterfront setting near SFO.'
 whyAttending: >
   The highlight of the NorCal WCS calendar. The level of competition is exceptionally high, and the Sunday night show is always a must-watch.
 theme:
-  name: "Classic San Francisco / Flagship Weekend"
-  label: "Polished NorCal Theme"
+  name: 'Classic San Francisco / Flagship Weekend'
+  label: 'Polished NorCal Theme'
   description: >
     Boogie by the Bay should feel polished, layered, and practical for a major
     NorCal airport-hotel weekend: strong social dancing, competition rounds,
@@ -37,31 +37,31 @@ gear:
     - norcal-bestcal-tshirt
     - love-unisex-shirt
     - swimsuit
-  outfitDescription: "Polished pieces for the ballroom and a swimsuit for the outdoor hot tub."
+  outfitDescription: 'Polished pieces for the ballroom and a swimsuit for the outdoor hot tub.'
   accessoryIds:
     - visor
     - sunscreen
     - rave-fan
-  accessoryDescription: "Sun protection for the hot tub and fans for the ballroom."
+  accessoryDescription: 'Sun protection for the hot tub and fans for the ballroom.'
   shoeIds:
     - bloch-grecian
     - suede-sheets
-  shoeDescription: "Reliable footwear for the fast Hyatt ballroom floor."
+  shoeDescription: 'Reliable footwear for the fast Hyatt ballroom floor.'
   essentialIds:
     - loop-experience
     - mints
     - hand-sanitizer
-  essentialDescription: "Essentials for a high-intensity competition weekend."
+  essentialDescription: 'Essentials for a high-intensity competition weekend.'
   travelIds:
     - compression-cubes
     - portable-charger
     - hanging-toiletry-bag
-  travelDescription: "Compression packs are essential for flying into SFO."
+  travelDescription: 'Compression packs are essential for flying into SFO.'
 
-earlyBirdDate: "2026-07-01"
-registrationDeadline: "2026-10-04"
-hotelCutoffDate: "2026-09-15"
-packingReminderDate: "2026-10-01"
+earlyBirdDate: '2026-07-01'
+registrationDeadline: '2026-10-04'
+hotelCutoffDate: '2026-09-15'
+packingReminderDate: '2026-10-01'
 
 relatedEvents:
 - swingtacular-the-galactic-open

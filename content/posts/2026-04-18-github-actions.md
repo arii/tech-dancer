@@ -1,11 +1,11 @@
 ---
-type: post
-title: "How I used GitHub Actions to power this site"
-date: "2026-04-18"
-author: "Ariel Anders, PhD"
-category: "Tech"
-excerpt: "Automated deployments and CI/CD pipelines for a tech-forward dance blog."
-image: ""
+type: 'post'
+title: 'How I used GitHub Actions to power this site'
+date: '2026-04-18'
+author: 'Ariel Anders, PhD'
+category: 'Tech'
+excerpt: 'Automated deployments and CI/CD pipelines for a tech-forward dance blog.'
+image: ''
 tags:
   - automation
   - cicd

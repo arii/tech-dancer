@@ -1,24 +1,24 @@
 ---
-type: event
-title: SOswing
+type: 'event'
+title: 'SOswing'
 date: '2026-05-14'
 startDate: '2026-05-14'
-author: Ariel Anders, PhD
-category: WSDC Registry Event
-excerpt: A charming WCS experience in beautiful Ashland, OR.
-location: Ashland Hills Hotel & Suites
-city: Ashland, OR
-region: Pacific Northwest
-schedule: May 14 - 17, 2026
-url: https://soswing.com
+author: 'Ariel Anders, PhD'
+category: 'WSDC Registry Event'
+excerpt: 'A charming WCS experience in beautiful Ashland, OR.'
+location: 'Ashland Hills Hotel & Suites'
+city: 'Ashland, OR'
+region: 'Pacific Northwest'
+schedule: 'May 14 - 17, 2026'
+url: 'https://soswing.com'
 heroImage: '/assets/events/soswing-hero.svg'
 bestFor: ["Intimate settings", "First-time competitors", "Road-trip vibe"]
-description: SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing.
+description: 'SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its ''Westie'' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing.'
 whyAttending: >
   SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge field.
 theme:
-  name: "PNW Community Weekend"
-  label: "Ashland / Road Trip Theme"
+  name: 'PNW Community Weekend'
+  label: 'Ashland / Road Trip Theme'
   description: >
     SOswing should feel less like a costume weekend and more like a warm,
     community-focused Oregon dance trip: comfortable layers, practical packing,
@@ -35,31 +35,31 @@ gear:
     - love-unisex-shirt
     - norcal-bestcal-tshirt
     - womens-long-zip-hoodie
-  outfitDescription: "Comfortable and expressive pieces for a community-focused weekend."
+  outfitDescription: 'Comfortable and expressive pieces for a community-focused weekend.'
   accessoryIds:
     - rave-fan
     - neck-fan
-  accessoryDescription: "Low-profile cooling for the intimate hotel ballroom."
+  accessoryDescription: 'Low-profile cooling for the intimate hotel ballroom.'
   shoeIds:
     - bloch-grecian
     - dance-socks
-  shoeDescription: "Reliable footwear for workshops and community sets."
+  shoeDescription: 'Reliable footwear for workshops and community sets.'
   essentialIds:
     - loop-experience
     - mints
     - hand-sanitizer
-  essentialDescription: "Standard recovery and hygiene for the relaxed PNW circuit pace."
+  essentialDescription: 'Standard recovery and hygiene for the relaxed PNW circuit pace.'
   travelIds:
     - compression-cubes
     - travel-pillow
     - portable-charger
     - hanging-toiletry-bag
-  travelDescription: "Road-trip or regional flight essentials for Southern Oregon."
+  travelDescription: 'Road-trip or regional flight essentials for Southern Oregon.'
 
-earlyBirdDate: "2026-03-01"
-registrationDeadline: "2026-05-10"
-hotelCutoffDate: "2026-04-20"
-packingReminderDate: "2026-05-07"
+earlyBirdDate: '2026-03-01'
+registrationDeadline: '2026-05-10'
+hotelCutoffDate: '2026-04-20'
+packingReminderDate: '2026-05-07'
 
 relatedEvents:
 - jack-and-jill-orama

@@ -1,17 +1,17 @@
 ---
-type: resource
-title: "Slim Fanny Pack"
-date: "2024-06-01"
-author: "Ariel Anders, PhD"
-category: "Travel"
-excerpt: "Ultra-light bounce-free waist perfect for outdoor dancing at Lindy in the Park."
-image: "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
+type: 'resource'
+title: 'Slim Fanny Pack'
+date: '2024-06-01'
+author: 'Ariel Anders, PhD'
+category: 'Travel'
+excerpt: 'Ultra-light bounce-free waist perfect for outdoor dancing at Lindy in the Park.'
+image: '/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg'
 affiliateIds: ["running-belt"]
 tags: ["travel", "packing", "storage"]
-verdict: "Best for carry-on"
-updatedDate: "Jun 2024"
-affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+verdict: 'Best for carry-on'
+updatedDate: 'Jun 2024'
+affiliateProvider: 'amazon'
+affiliateDisclosure: 'As an Amazon Associate, BoomTick may earn from qualifying purchases.'
 bestFor: ["Carry-on"]
 ---
 

@@ -1,23 +1,23 @@
 ---
-type: event
-title: Phoenix 4th of July
+type: 'event'
+title: 'Phoenix 4th of July'
 date: '2026-07-02'
 startDate: '2026-07-02'
-author: Ariel Anders, PhD
-category: WSDC Registry Event
-excerpt: Heat, pool parties, and high-energy WCS in the Arizona desert.
-location: JW Marriott Phoenix Desert Ridge Resort & Spa
-city: Phoenix, AZ
-region: Southwest
-schedule: July 2 - 6, 2026
-url: https://phx4th.com/
+author: 'Ariel Anders, PhD'
+category: 'WSDC Registry Event'
+excerpt: 'Heat, pool parties, and high-energy WCS in the Arizona desert.'
+location: 'JW Marriott Phoenix Desert Ridge Resort & Spa'
+city: 'Phoenix, AZ'
+region: 'Southwest'
+schedule: 'July 2 - 6, 2026'
+url: 'https://phx4th.com/'
 heroImage: '/assets/events/phoenix-4th-of-july-hero.svg'
-description: Phoenix 4th of July is a legendary West Coast Swing event known for its incredible resort venue, massive pool parties, and competitive energy. It's one of the largest events in the Southwest and a highlight of the summer circuit.
+description: 'Phoenix 4th of July is a legendary West Coast Swing event known for its incredible resort venue, massive pool parties, and competitive energy. It''s one of the largest events in the Southwest and a highlight of the summer circuit.'
 whyAttending: >
   The combination of a world-class resort and world-class dancing is unbeatable. The pool parties are a unique WCS experience that you have to see to believe.
 theme:
-  name: "Red, White & Blue / Resort Weekend"
-  label: "Patriotic Pool + Ballroom Theme"
+  name: 'Red, White & Blue / Resort Weekend'
+  label: 'Patriotic Pool + Ballroom Theme'
   description: >
     Keep this guide focused on Phoenix heat, resort walking, pool-party prep,
     fireworks, and lightweight dance outfits. Think Americana, stars, and stripes
@@ -35,32 +35,32 @@ gear:
     - norcal-bear-tank
     - love-unisex-shirt
     - sports-crop-tops
-  outfitDescription: "Lightweight, vacation-ready styles for the desert heat."
+  outfitDescription: 'Lightweight, vacation-ready styles for the desert heat.'
   accessoryIds:
     - rave-fan
     - neck-fan
     - pride-sunglasses
-  accessoryDescription: "Essential cooling and sun protection for the legendary pool party."
+  accessoryDescription: 'Essential cooling and sun protection for the legendary pool party.'
   shoeIds:
     - bloch-grecian
     - dance-socks
-  shoeDescription: "Reliable soles for the ballroom floors."
+  shoeDescription: 'Reliable soles for the ballroom floors.'
   essentialIds:
     - liquid-iv
     - dry-shampoo
     - loop-experience
     - foam-roller
-  essentialDescription: "Heat-management and hydration essentials for Phoenix in July."
+  essentialDescription: 'Heat-management and hydration essentials for Phoenix in July.'
   travelIds:
     - travel-bottles
     - hanging-toiletry-bag
     - portable-charger
-  travelDescription: "Pool-side and resort travel gear."
+  travelDescription: 'Pool-side and resort travel gear.'
 
-earlyBirdDate: "2026-04-01"
-registrationDeadline: "2026-06-25"
-hotelCutoffDate: "2026-06-01"
-packingReminderDate: "2026-06-28"
+earlyBirdDate: '2026-04-01'
+registrationDeadline: '2026-06-25'
+hotelCutoffDate: '2026-06-01'
+packingReminderDate: '2026-06-28'
 
 relatedEvents:
 - wild-wild-westie

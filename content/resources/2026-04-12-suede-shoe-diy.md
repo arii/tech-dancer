@@ -1,5 +1,5 @@
 ---
-type: resource
+type: 'resource'
 title: 'How to Suede Your Own Dance Shoes'
 date: '2026-04-12'
 author: 'Ariel Anders, PhD'
