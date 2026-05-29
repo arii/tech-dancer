@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 
-const SWIPE_CLICK_CANCEL_THRESHOLD = 8;
+const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
 const SWIPE_NAV_THRESHOLD = 48;
 
 export function FeaturedEventGuide() {
@@ -31,7 +31,8 @@ export function FeaturedEventGuide() {
     const deltaX = Math.abs(e.clientX - pointerStartX.current);
     const deltaY = Math.abs(e.clientY - pointerStartY.current);
 
-    if (deltaX > SWIPE_CLICK_CANCEL_THRESHOLD && deltaX > deltaY) {
+    // Any movement beyond threshold (horizontal or vertical) suppresses subsequent click
+    if (deltaX > SWIPE_CLICK_CANCEL_THRESHOLD || deltaY > SWIPE_CLICK_CANCEL_THRESHOLD) {
       hasSwiped.current = true;
     }
   };
@@ -62,6 +63,7 @@ export function FeaturedEventGuide() {
     if (hasSwiped.current) {
       e.preventDefault();
       e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
       hasSwiped.current = false;
     }
   };
@@ -81,13 +83,14 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
+        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
+        onClickCapture={handleCardClick}
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >
@@ -130,7 +133,6 @@ export function FeaturedEventGuide() {
               color="accent"
               weight="font-bold"
               className="hover:underline"
-              onClick={handleCardClick}
             >
               Read the guide →
             </Text>
