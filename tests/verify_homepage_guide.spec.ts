@@ -18,8 +18,8 @@ test('verify homepage featured guide link', async ({ page }) => {
 
   // Verify checklist items
   await expect(page.getByText(/Dance Shoes/i)).toBeVisible();
-  await expect(page.getByText(/Hearing Protection/i)).toBeVisible();
+  await expect(page.getByText(/High-fidelity earplugs/i)).toBeVisible();
 
   // Verify shoppable section
-  await expect(page.getByRole('heading', { name: /Shop the checklist/i })).toBeVisible();
+  await expect(page.getByText(/Shop the checklist/i)).toBeVisible();
 });

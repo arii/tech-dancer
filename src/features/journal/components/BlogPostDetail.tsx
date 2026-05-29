@@ -39,6 +39,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       date={post.date}
       content={post.content}
       image={post.image}
+      imageAlt={post.imageAlt}
       onBack={onBack}
       backLabel={backLabel}
       headerExtras={

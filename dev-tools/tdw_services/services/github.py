@@ -13,11 +13,11 @@ class GitHubClient:
                 from utils import get_github_token
                 token = get_github_token()
             except ImportError:
-                token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+                token = os.environ.get("CODEX_GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
 
         self.token = token
         if not self.token:
-            raise ValueError("Missing GITHUB_TOKEN environment variable.")
+            raise ValueError("Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN.")
         self.repo = repo or os.environ.get("GITHUB_REPOSITORY") or os.environ.get("GH_REPO")
         if not self.repo:
             self.repo = self._detect_repo()

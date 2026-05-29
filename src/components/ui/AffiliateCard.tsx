@@ -13,6 +13,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
       padding={5}
       height="full"
       href={link.url}
+      rel="noopener noreferrer sponsored"
       ariaLabel={`Open ${link.name}`}
     >
       <Stack gap={2} flex={1}>

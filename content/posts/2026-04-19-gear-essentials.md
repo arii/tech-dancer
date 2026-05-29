@@ -9,11 +9,9 @@ imageAlt: "A flat-lay of WCS travel essentials including dance shoes, earplugs, 
 author: "BoomTick Team"
 affiliateIds:
   - "loop-experience"
-  - "travel-steamer"
+  - "portable-steamer"
   - "portable-speaker"
   - "portable-charger"
-  - "shoe-brush"
-  - "foam-roller"
 ---
 
 Based on advice and packing strategies shared by West Coast Swing dancers on community forums and blogs, here is a practical, direct list of items you must bring to a convention:

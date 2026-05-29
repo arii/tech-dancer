@@ -15,6 +15,7 @@ export interface Post {
   excerpt: string;
   content: string;
   image?: string;
+  imageAlt?: string;
   tags?: string[];
   affiliateIds?: string[];
 }
