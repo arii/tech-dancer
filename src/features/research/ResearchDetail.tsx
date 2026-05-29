@@ -12,7 +12,6 @@ import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ArticleHero } from '@/components/article/ArticleHero';
 import { ArticleMeta } from '@/components/article/ArticleMeta';
-import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
 

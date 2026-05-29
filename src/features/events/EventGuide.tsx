@@ -2,7 +2,6 @@ import { Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
-import { EventHero as LegacyEventHero } from './components/EventHero';
 import { EventNavigation } from './components/EventNavigation';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
