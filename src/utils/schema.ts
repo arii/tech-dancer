@@ -195,6 +195,7 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
     "@type": "ItemList",
     "itemListElement": resources.map((resource, index) => {
       const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
+      const isPOD = !!resource.shopUrl && resource.fulfillmentType === 'print-on-demand';
 
       const productSchema: SchemaProduct = {
         "@type": "Product",
@@ -208,7 +209,7 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
         "sku": resource.internalSku || resource.slug,
         "offers": createOfferSchema({
           url: resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          includePODPolicies: true // Apply policies universally for validation, using the refined versions.
+          includePODPolicies: isPOD
         })
       };
 
