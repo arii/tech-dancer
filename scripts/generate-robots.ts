@@ -4,7 +4,10 @@ import path from 'path';
 const APP_URL = process.env.VITE_APP_URL || 'https://boomtick.blog';
 const hostname = APP_URL.replace(/\/$/, '');
 
-const robotsContent = `User-agent: *
+const robotsContent = `# GENERATED FILE - DO NOT EDIT MANUALLY
+# Source: scripts/generate-robots.ts
+
+User-agent: *
 Allow: /
 Disallow: /preview
 Disallow: /previews/
