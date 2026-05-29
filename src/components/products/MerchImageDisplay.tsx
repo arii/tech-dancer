@@ -44,6 +44,7 @@ function ImageWell({ image, loading }: { image: MerchProductImage; loading?: 'ea
           event.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
         className="object-contain transition-transform duration-300 group-hover:scale-105"
+        style={{ objectFit: 'contain' }}
       />
     </Box>
   );
@@ -104,7 +105,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 80, md: 96 }}
+      height={{ base: 36, sm: 44, md: 64 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
