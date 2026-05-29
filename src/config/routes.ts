@@ -19,7 +19,8 @@ export const routes: RouteConfig[] = [
     label: 'Blog Posts',
     icon: BookOpen,
     skeleton: 'grid',
-    isMobileVisible: true
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/blog/:slug',
@@ -32,7 +33,8 @@ export const routes: RouteConfig[] = [
     label: 'Gear Reviews',
     icon: ShoppingBag,
     skeleton: 'grid',
-    isMobileVisible: true
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/gear/:slug',
@@ -45,7 +47,8 @@ export const routes: RouteConfig[] = [
     label: 'Event Guides',
     icon: Calendar,
     skeleton: 'grid',
-    isMobileVisible: true
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/events/:slug',
@@ -58,7 +61,8 @@ export const routes: RouteConfig[] = [
     label: 'DevAI Lab',
     icon: Database,
     skeleton: 'grid',
-    isMobileVisible: true
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/research/:id',
@@ -76,14 +80,16 @@ export const routes: RouteConfig[] = [
     label: 'Merch',
     icon: Tag,
     skeleton: 'grid',
-    isMobileVisible: true
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/about',
     lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
     label: 'About',
     icon: User,
-    skeleton: 'simple'
+    skeleton: 'simple',
+    isTopNav: true
   },
   {
     path: '/contact',
@@ -114,9 +120,6 @@ export const MOBILE_NAV_ROUTES = routes.filter((r): r is RouteConfig & { label: 
   !!(r.label && r.icon && r.isMobileVisible)
 );
 
-export const TOP_NAV_PATHS = ['/events', '/gear', '/blog', '/merch', '/research', '/about'] as const;
-
 export const TOP_NAV_ROUTES = routes.filter(
-  (r): r is RouteConfig & { label: string } =>
-    !!(r.label && TOP_NAV_PATHS.includes(r.path as typeof TOP_NAV_PATHS[number]))
+  (r): r is RouteConfig & { label: string } => !!(r.label && r.isTopNav)
 );
