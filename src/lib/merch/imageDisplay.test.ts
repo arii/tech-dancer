@@ -5,11 +5,11 @@ const front = { src: '/front.webp', side: 'front' as const, alt: 'Front view' };
 const back = { src: '/back.webp', side: 'back' as const, alt: 'Back view' };
 
 describe('resolveMerchImages', () => {
-  it('falls back to the legacy imageUrl as a single front image', () => {
+  it('falls back to the legacy imageUrl as a front-only image', () => {
     const resolved = resolveMerchImages({ title: 'Legacy shirt', imageUrl: '/legacy.webp' });
 
     expect(resolved).toEqual({
-      mode: 'single',
+      mode: 'front-only',
       primary: { src: '/legacy.webp', side: 'front', alt: 'Legacy shirt product image' },
       secondary: undefined,
       equal: [],
@@ -32,5 +32,17 @@ describe('resolveMerchImages', () => {
   it('promotes the requested side for prominent display modes', () => {
     expect(resolveMerchImages({ title: 'Front shirt', imageUrl: '/front.webp', images: [front, back], imageDisplayMode: 'front-prominent' }).primary).toBe(front);
     expect(resolveMerchImages({ title: 'Back shirt', imageUrl: '/back.webp', images: [front, back], imageDisplayMode: 'back-prominent' }).primary).toBe(back);
+  });
+
+  it('handles back-only mode', () => {
+    const resolved = resolveMerchImages({
+      title: 'Back only shirt',
+      imageUrl: '/front.webp',
+      images: [front, back],
+      imageDisplayMode: 'back-only',
+    });
+    expect(resolved.mode).toBe('back-only');
+    expect(resolved.primary).toBe(back);
+    expect(resolved.secondary).toBeUndefined();
   });
 });

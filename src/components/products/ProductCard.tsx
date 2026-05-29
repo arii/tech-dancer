@@ -7,6 +7,11 @@ import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
+  // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
+  const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
+    ? 'SEE OPTIONS'
+    : 'VIEW ON PRINTFUL';
+
   return (
     <BaseCard
       gap={4}
@@ -72,8 +77,18 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
 
       <Stack marginTop="auto" paddingTop={3} border="t" gap={3} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
-          {item.tags.slice(0, 2).map((tag) => (
-            <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
+          {item.tags.map((tag, index) => (
+            <Box
+              key={tag}
+              paddingX={2}
+              paddingY={0.5}
+              radius="md"
+              surface="alt"
+              className={cn(
+                "border border-line/20",
+                index >= 2 && "hidden sm:block" // Limit to 2 tags on mobile
+              )}
+            >
               <Text variant="mono" size="xs" color="dim" uppercase tracking="tighter">
                 {tag}
               </Text>
@@ -92,11 +107,12 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           width="full"
           paddingY={3}
           radius="md"
+          minHeight={11} // Spacing token 11 * 4 = 44px
           className="bg-accent hover:bg-accent-sky transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label={`View ${item.title} on Printful`}
         >
           <Text variant="mono" size="sm" weight="font-bold" color="bg" tracking="wide">
-            SEE COLORS
+            {ctaText}
           </Text>
           <ArrowRight className={cn('w-3 h-3 text-bg', stroke.thick)} aria-hidden="true" />
         </Stack>

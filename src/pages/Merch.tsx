@@ -1,5 +1,5 @@
-import { MessageCircle } from 'lucide-react';
-import { useState } from 'react';
+import { MessageCircle, Info } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -16,46 +16,125 @@ import { FilterButton } from '@/components/ui/FilterButton';
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState('all');
 
+  const allProducts = getAllMerchProducts();
   const filteredProducts = getMerchByCollection(activeCollection);
 
+  // Group products for editorial sections when "all" is active
+  const sections = useMemo(() => {
+    if (activeCollection !== 'all') return null;
+
+    return [
+      {
+        id: 'featured',
+        title: 'Featured Picks',
+        description: 'Best intro products and our strongest designs for the social floor.',
+        products: allProducts.slice(0, 3),
+      },
+      {
+        id: 'lead-follow-switch',
+        title: 'Lead, Follow, and Switch Dance Shirts',
+        description: 'Role-specific and gender-neutral designs for West Coast Swing dancers who lead, follow, switch, or just love the social floor.',
+        products: allProducts.filter(p => p.collections.includes('lead-follow-switch')),
+      },
+      {
+        id: 'norcal-bestcal',
+        title: 'NorCal BestCal Pride Apparel',
+        description: 'Bay Area, California, Golden Gate, and bear designs representing our Northern California roots.',
+        products: allProducts.filter(p => p.collections.includes('norcal-bestcal')),
+      },
+      {
+        id: 'rainbow-pride',
+        title: 'Rainbow Pride Dance Apparel',
+        description: 'Pride-focused designs celebrating an inclusive dance floor and social dance identity.',
+        products: allProducts.filter(p => p.collections.includes('rainbow-pride')),
+      }
+    ];
+  }, [activeCollection, allProducts]);
+
   return (
-    <Box>
+    <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center">
       <SEO
         title="West Coast Swing Dance Merch"
         description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
-        jsonLd={generateMerchSchema(getAllMerchProducts())}
+        jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap={8} width="full">
+      <Stack gap={{ base: 7, md: 9 }} width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
-          description="High-quality apparel designed for the social dance floor. From role-specific tees to NorCal pride gear, find something fun for your next dance weekend."
+          description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy."
         />
 
-        {/* Hero Referral Banner */}
-        <ReferralBanner layout="expanded" />
+        <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
+           <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer">
+              Shop Printful Store
+           </Button>
+           <Box flex="1 1 0%">
+            <ReferralBanner layout="compact" />
+           </Box>
+        </Stack>
 
-        {/* Collection Filters */}
-        <Box border="b" paddingBottom={4} className="border-line overflow-x-auto">
-          <Stack direction="row" gap={2} padding={1} className="min-w-max">
-            {COLLECTIONS.map((collection) => (
-              <FilterButton
-                key={collection.id}
-                label={collection.label}
-                isActive={activeCollection === collection.id}
-                onClick={() => setActiveCollection(collection.id)}
-              />
-            ))}
+        {/* Printful Disclosure */}
+        <Box padding={4} radius="md" surface="alt" border className="border-line/20">
+          <Stack direction="row" gap={3} align="center">
+            <Info className={cn("w-5 h-5 text-accent", stroke.thick)} />
+            <Text variant="body" size="sm" color="dim">
+              BoomTick merch links go to the BoomTick Printful storefront. Printful handles available colors, sizing, fulfillment, shipping, and checkout.
+            </Text>
           </Stack>
         </Box>
 
-        {/* Product Grid */}
-        <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} item={product} />
-          ))}
-        </Grid>
+        {/* Collection Filters */}
+        <Stack gap={4}>
+          <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
+            Browse by vibe
+          </Text>
+          <Box border="b" paddingBottom={4} className="border-line overflow-x-auto">
+            <Stack direction="row" gap={2} padding={1} className="min-w-max">
+              {COLLECTIONS.map((collection) => (
+                <FilterButton
+                  key={collection.id}
+                  label={collection.label}
+                  isActive={activeCollection === collection.id}
+                  onClick={() => setActiveCollection(collection.id)}
+                />
+              ))}
+            </Stack>
+          </Box>
+        </Stack>
+
+        {/* Product Sections or Grid */}
+        {activeCollection === 'all' && sections ? (
+          <Stack gap={12}>
+            {sections.map((section) => (
+              <Stack key={section.id} gap={6}>
+                <Stack gap={1}>
+                  <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
+                    {section.title}
+                  </Text>
+                  <Text variant="body" color="dim">
+                    {section.description}
+                  </Text>
+                </Stack>
+                <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
+                  {section.products.map((product) => (
+                    <ProductCard
+                      key={`${section.id}-${product.id}`}
+                      item={product}
+                    />
+                  ))}
+                </Grid>
+              </Stack>
+            ))}
+          </Stack>
+        ) : (
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} item={product} />
+            ))}
+          </Grid>
+        )}
 
         {/* Footer Callouts */}
         <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8}>
@@ -69,7 +148,7 @@ export default function Merch() {
                 <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
                   Have a Design Idea?
                 </Text>
-                <Text variant="body" size="sm" color="dim">
+                <Text variant="body" size="sm" color="dim" leading="relaxed">
                   We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
                 </Text>
               </Stack>
@@ -79,11 +158,16 @@ export default function Merch() {
             </Stack>
           </Box>
 
-          {/* Detailed Referral Box */}
-          <ReferralBanner layout="compact" />
+          <Box padding={8} radius="lg" border surface="card">
+             <Stack gap={6}>
+                <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
+                  Referral Discount
+                </Text>
+                <ReferralBanner layout="expanded" />
+             </Stack>
+          </Box>
         </Grid>
       </Stack>
     </Box>
   );
 }
-

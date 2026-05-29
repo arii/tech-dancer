@@ -63,7 +63,9 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
 }
 
 function SingleImage({ image }: { image: MerchProductImage }) {
-  return <MerchImage image={image} label={image.side === 'back'} loading="eager" />;
+  // Show label only if it's back-only
+  const showLabel = image.side === 'back';
+  return <MerchImage image={image} label={showLabel} loading="eager" />;
 }
 
 function EqualImages({ images }: { images: MerchProductImage[] }) {
@@ -104,18 +106,22 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 80, md: 96 }}
+      height={{ base: 44, sm: 52, md: 56, lg: 60 }} // Use spacing tokens (44 * 4 = 176px, 60 * 4 = 240px)
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-        <EqualImages images={resolved.equal} />
-      ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
-        <ProminentImages primary={primary} secondary={resolved.secondary} />
-      ) : (
-        <SingleImage image={primary} />
-      )}
+      <Stack align="center" justify="center" height="full" width="full">
+        <Box flex width="full" height="full" minHeight="0">
+          {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+            <EqualImages images={resolved.equal} />
+          ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
+            <ProminentImages primary={primary} secondary={resolved.secondary} />
+          ) : (
+            <SingleImage image={primary} />
+          )}
+        </Box>
+      </Stack>
     </Box>
   );
 }

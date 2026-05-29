@@ -21,7 +21,7 @@ export function resolveMerchImages(args: {
     ? args.images
     : legacyImageToMerchImages(args.imageUrl, `${args.title} product image`);
 
-  const mode = args.imageDisplayMode ?? 'single';
+  const mode = args.imageDisplayMode ?? 'front-only';
   const front = images.find((image) => image.side === 'front');
   const back = images.find((image) => image.side === 'back');
 
@@ -55,9 +55,18 @@ export function resolveMerchImages(args: {
     };
   }
 
+  if (mode === 'back-only') {
+    return {
+      mode,
+      primary: back ?? images[0],
+      secondary: undefined,
+      equal: [],
+    };
+  }
+
   return {
-    mode: 'single',
-    primary: images[0],
+    mode: 'front-only',
+    primary: front ?? images[0],
     secondary: undefined,
     equal: [],
   };
