@@ -8,7 +8,7 @@ import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
-  role: "MIT Roboticist // WCS BoomTick",
+  role: "MIT Roboticist // WCS Tech-Dancer",
   sections: [
     {
       id: "dance-background",

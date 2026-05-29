@@ -13,7 +13,7 @@ interface EventHeroProps {
   eyebrow?: string;
   theme?: string;
   venue?: string;
-  bestFor?: string | string[];
+  bestFor?: string;
   deadline?: string;
   packingCue?: string;
   id?: string;
@@ -51,7 +51,7 @@ export function EventHero({
   eyebrow = "Event Resource Guide",
   theme,
   venue,
-  bestFor: bestForProp,
+  bestFor,
   deadline,
   packingCue,
   id
@@ -175,12 +175,8 @@ export function EventHero({
             {venue && (
               <MetadataPill icon={Building2} label="Venue" value={venue} />
             )}
-            {bestForProp && (
-              <MetadataPill
-                icon={Target}
-                label="Best for"
-                value={Array.isArray(bestForProp) ? bestForProp.join(', ') : bestForProp}
-              />
+            {bestFor && (
+              <MetadataPill icon={Target} label="Best for" value={bestFor} />
             )}
             {deadline && (
               <MetadataPill icon={Bell} label="Deadline" value={deadline} />

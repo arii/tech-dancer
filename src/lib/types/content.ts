@@ -17,7 +17,6 @@ export interface Post {
   image?: string;
   tags?: string[];
   affiliateIds?: string[];
-  bestFor?: string[];
 }
 
 export interface Resource {
@@ -68,7 +67,6 @@ export interface Resource {
   priceDisplayPolicy?: "do-not-display-static-price" | "manually-reviewed";
   availabilityDisplayPolicy?: "do-not-display-static-availability" | "manually-reviewed";
   recommendedFor?: string[];
-  bestFor?: string[];
   eventUseCase?: string;
 }
 
@@ -155,7 +153,6 @@ export interface Event {
   gearTravelIds?: string[];
   gearTravelDescription?: string;
   relatedEvents?: string[];
-  bestFor?: string[];
 }
 
 export type ContentItem = Post | Resource | Study | Event;
