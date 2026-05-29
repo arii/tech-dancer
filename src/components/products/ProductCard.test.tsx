@@ -26,8 +26,8 @@ describe('ProductCard', () => {
   it('renders front and back merch images without making the whole card a link', () => {
     render(<ProductCard item={item} />);
 
-    expect(screen.getAllByAltText('Front view of test shirt').length).toBeGreaterThan(0);
-    expect(screen.getAllByAltText('Back view of test shirt').length).toBeGreaterThan(0);
+    expect(screen.getByAltText('Front view of test shirt')).toBeTruthy();
+    expect(screen.getByAltText('Back view of test shirt')).toBeTruthy();
 
     const card = screen.getByTestId('product-card');
     expect(card.tagName).toBe('ARTICLE');

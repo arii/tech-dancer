@@ -80,32 +80,20 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   if (!secondary) return <MerchImage image={primary} loading="eager" />;
 
   return (
-    <Box position="relative" height="full">
-      <MerchImage image={primary} loading="eager" label />
-      <Box position="absolute" inset height="full" className="opacity-0 transition-opacity duration-300 group-hover:opacity-100 focus-within:opacity-100">
+    <Grid cols={5} gap={2} height="full">
+      <Box span={3} height="full">
+        <MerchImage image={primary} loading="eager" label />
+      </Box>
+      <Box span={2} height="full">
         <MerchImage image={secondary} label />
       </Box>
-    </Box>
-  );
-}
-
-function MobileImageScroller({ images }: { images: MerchProductImage[] }) {
-  return (
-    <Stack direction="row" gap={2} height="full" overflow="x-auto" className="snap-x snap-mandatory overscroll-x-contain">
-      {images.map((image, index) => (
-        <Box key={`${image.side}-${image.src}`} width="full" shrink={false} height="full" className="snap-center">
-          <MerchImage image={image} label={images.length > 1} loading={index === 0 ? 'eager' : 'lazy'} />
-        </Box>
-      ))}
-    </Stack>
+    </Grid>
   );
 }
 
 export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
   const primary = resolved.primary;
-  const mobileImages = [primary, resolved.secondary].filter((image): image is MerchProductImage => Boolean(image));
-
   if (!primary) return null;
 
   return (
@@ -116,23 +104,18 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 64, md: 80 }}
+      height={{ base: 80, md: 96 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      <Box display={{ base: 'none', md: 'block' }} height="full">
-        {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-          <EqualImages images={resolved.equal} />
-        ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
-          <ProminentImages primary={primary} secondary={resolved.secondary} />
-        ) : (
-          <SingleImage image={primary} />
-        )}
-      </Box>
-      <Box display={{ base: 'block', md: 'none' }} height="full">
-        <MobileImageScroller images={mobileImages} />
-      </Box>
+      {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+        <EqualImages images={resolved.equal} />
+      ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
+        <ProminentImages primary={primary} secondary={resolved.secondary} />
+      ) : (
+        <SingleImage image={primary} />
+      )}
     </Box>
   );
 }

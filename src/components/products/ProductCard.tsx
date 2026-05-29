@@ -15,7 +15,7 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       radius="lg"
       border
       maxWidth="full"
-      className="hover:border-accent/40"
+      className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
       data-testid="product-card"
     >
       <MerchImageDisplay
