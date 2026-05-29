@@ -20,10 +20,10 @@ export function FeaturedEventGuide() {
   const goNext = () => setIndex((i) => Math.min(featured.length - 1, i + 1));
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    hasSwiped.current = false;
     if (e.pointerType !== 'touch') return;
     pointerStartX.current = e.clientX;
     pointerStartY.current = e.clientY;
-    hasSwiped.current = false;
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -62,6 +62,7 @@ export function FeaturedEventGuide() {
     if (hasSwiped.current) {
       e.preventDefault();
       e.stopPropagation();
+      hasSwiped.current = false;
     }
   };
 
