@@ -1,0 +1,65 @@
+import fs from 'fs';
+import path from 'path';
+
+export const DEFAULT_AFFILIATE_TAG = 'onasafari04-20';
+export const AFFILIATES_JSON_PATH = path.join(process.cwd(), 'src/data/affiliates.json');
+export const AMAZON_IMAGE_DIR = path.join(process.cwd(), 'public/images/gear/amazon');
+export const GEAR_ASSET_DIR = path.join(process.cwd(), 'public/assets/gear');
+
+export interface AffiliateItem {
+  id: string;
+  name: string;
+  url: string;
+  category: string;
+  description: string;
+  draft?: boolean;
+  gearSlug?: string;
+  image?: string;
+  imageMode?: string;
+}
+
+export function readAffiliates(): Record<string, AffiliateItem> {
+  if (!fs.existsSync(AFFILIATES_JSON_PATH)) {
+    return {};
+  }
+  return JSON.parse(fs.readFileSync(AFFILIATES_JSON_PATH, 'utf-8'));
+}
+
+export function writeAffiliates(data: Record<string, AffiliateItem>) {
+  fs.writeFileSync(AFFILIATES_JSON_PATH, JSON.stringify(data, null, 2) + '\n');
+}
+
+export function normalizeAmazonUrl(url: string, tag: string = DEFAULT_AFFILIATE_TAG): string {
+  try {
+    const urlObj = new URL(url);
+    if (!urlObj.hostname.includes('amazon.')) {
+      return url;
+    }
+
+    const asinMatch = url.match(/\/(dp|gp\/product)\/([A-Z0-9]{10})/);
+    if (asinMatch) {
+      const asin = asinMatch[2];
+      const normalized = new URL(`https://www.amazon.com/dp/${asin}`);
+      normalized.searchParams.set('tag', tag);
+      return normalized.toString();
+    }
+
+    // If it's just amazon.com with no ASIN, just add the tag
+    urlObj.searchParams.set('tag', tag);
+    return urlObj.toString();
+  } catch (e) {
+    return url;
+  }
+}
+
+export function extractAsin(url: string): string | null {
+  const asinMatch = url.match(/\/(dp|gp\/product)\/([A-Z0-9]{10})/);
+  return asinMatch ? asinMatch[2] : null;
+}
+
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w ]+/g, '')
+    .replace(/ +/g, '-');
+}
