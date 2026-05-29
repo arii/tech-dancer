@@ -1,4 +1,5 @@
 ---
+draft: true
 type: post
 title: "Redesigning the Editorial Experience"
 dek: "A deep dive into the new BoomTick layout system and how it improves readability across all devices."

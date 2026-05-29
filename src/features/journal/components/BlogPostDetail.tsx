@@ -78,7 +78,9 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           custom={
             <Stack gap={6}>
               {post.sidebar?.custom}
-              <AffiliateDisclosure />
+              {post.tags?.some(tag => tag.toLowerCase().includes('gear') || tag.toLowerCase().includes('review')) && (
+                <AffiliateDisclosure />
+              )}
             </Stack>
           }
         />

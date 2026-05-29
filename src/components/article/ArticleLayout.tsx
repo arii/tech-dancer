@@ -26,7 +26,7 @@ export function ArticleLayout({
     <Box className="min-h-screen bg-[#020617] text-slate-200">
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 5, sm: 6, lg: 8 }}>
         {/* Navigation */}
-        <Box paddingY={8}>
+        <Box paddingY={{ base: 6, lg: 8 }}>
           <Stack
             as="button"
             direction="row"
@@ -47,15 +47,15 @@ export function ArticleLayout({
         </Box>
 
         {/* Hero Section */}
-        <Box paddingBottom={{ base: 10, lg: 16 }}>
+        <Box paddingBottom={{ base: 8, lg: 16 }}>
           {hero}
         </Box>
 
         {/* Article Content Grid */}
-        <Grid cols={{ base: 1, lg: sidebar ? 12 : 1 }} gap={{ base: 12, lg: 16 }}>
+        <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 12, lg: 16 }}>
           {/* Main Article Column */}
-          <Box span={{ base: 1, lg: sidebar ? 8 : 1 }} className="min-w-0">
-            <Box className="prose prose-invert prose-slate max-w-none
+          <Box span={{ base: 1, lg: sidebar ? 8 : 10 }} className={sidebar ? "min-w-0" : "min-w-0 lg:col-start-2"}>
+            <Box className="prose prose-invert prose-slate max-w-none lg:max-w-[72ch]
               prose-p:text-[16px] sm:prose-p:text-[17px] prose-p:leading-[1.65] sm:prose-p:leading-8 prose-p:text-slate-300
               prose-headings:font-display prose-headings:text-slate-100 prose-headings:font-bold
               prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-l-2 prose-h2:border-cyan-400 prose-h2:pl-4

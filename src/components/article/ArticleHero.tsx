@@ -27,8 +27,8 @@ export function ArticleHero({
   return (
     <Box className="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-14 items-center">
       {/* Content Column */}
-      <Stack gap={{ base: 6, lg: 8 }}>
-        <Stack gap={4}>
+      <Stack gap={{ base: 4, lg: 8 }}>
+        <Stack gap={{ base: 3, lg: 4 }}>
           {(category || date || readingTime) && (
             <Stack direction="row" gap={3} align="center" className="text-slate-400">
               {category && (
@@ -63,12 +63,12 @@ export function ArticleHero({
         </Stack>
 
         {/* Mobile Visual (appears after title/dek on mobile) */}
-        <Box className="block lg:hidden">
+        <Box className="block lg:hidden max-h-[40vh] overflow-hidden rounded-xl">
           {visual}
         </Box>
 
         {meta && (
-          <Box border="t" className="border-slate-800/80 pt-6">
+          <Box border="t" className="border-slate-800/80 pt-4 lg:pt-6">
             {meta}
           </Box>
         )}

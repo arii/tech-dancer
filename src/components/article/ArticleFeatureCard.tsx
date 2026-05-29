@@ -22,7 +22,7 @@ export function ArticleFeatureCard({
       {/* Card Shell */}
       <Box className="rounded-xl border border-slate-800/80 bg-slate-950/60 overflow-hidden backdrop-blur-sm">
         {image ? (
-          <Box className="aspect-[4/3] overflow-hidden relative">
+          <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] overflow-hidden relative">
             <img
               src={image}
               alt={title || "Feature visual"}
@@ -31,15 +31,21 @@ export function ArticleFeatureCard({
             <Box className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
           </Box>
         ) : (
-          <Box className="aspect-[4/3] bg-slate-900 flex items-center justify-center border-b border-slate-800/50">
+          <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] bg-slate-900 flex items-center justify-center border-b border-slate-800/50 relative overflow-hidden">
+             {/* Fallback pattern */}
+             <Box className="absolute inset-0 opacity-20">
+               <Box className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/20 via-transparent to-transparent" />
+               <Box className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(30deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(150deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(30deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(150deg,#0891b2_12%,transparent_12.5%,transparent_87%,#0891b2_87.5%,#0891b2),linear-gradient(60deg,#0891b277_25%,transparent_25.5%,transparent_75%,#0891b277_75%,#0891b277),linear-gradient(60deg,#0891b277_25%,transparent_25.5%,transparent_75%,#0891b277_75%,#0891b277)] bg-[length:40px_70px]" />
+             </Box>
+
              {/* Data Card visualization placeholder if no image */}
-             <Stack gap={4} align="center" className="p-8 text-center">
+             <Stack gap={4} align="center" className="p-8 text-center relative z-10">
                 {type && (
                   <Box className="px-2 py-1 rounded bg-cyan-500/10 border border-cyan-500/20">
                     <Text variant="mono" size="micro" className="text-cyan-400 font-bold uppercase tracking-widest">{type}</Text>
                   </Box>
                 )}
-                {title && <Text variant="display" size="lg" className="text-slate-100">{title}</Text>}
+                <Text variant="display" size="lg" className="text-slate-100">{title || "BoomTick.blog"}</Text>
                 {subtitle && <Text variant="mono" size="xs" color="dim">{subtitle}</Text>}
              </Stack>
           </Box>
