@@ -6,7 +6,7 @@ author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "The DIY hack for perfect traction on any ballroom floor."
 image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
-affiliateIds: ["suede-sheets", "barge-cement"]
+affiliateIds: ["suede-sheets"]
 tags:
   - diy
   - footwear
@@ -30,14 +30,13 @@ Instead of paying for expensive professional shoes, I use a DIY approach to conv
 | Asset             | What it does    | Value     |
 | ----------------- | --------------- | --------- |
 | Adhesive Suede    | Better grip     | High      |
-| Barge Cement      | Strong glue     | Critical  |
 | Isopropyl Alcohol | Cleans the sole | Essential |
 
 ### Step-by-Step Protocol
 
-1.  **Clean the sole**: Clean the rubber sole with isopropyl alcohol. Any oils will mess up the glue during 4:00 AM social sets.
-2.  **Glue it**: Apply a thin layer of Barge Cement to both the shoe and the suede. Wait for it to become tacky.
-3.  **Let it dry**: Press the surfaces together and let cure for 24 hours. They will hold up on any social floor.
+1.  **Clean the sole**: Clean the rubber sole with isopropyl alcohol. Any oils will mess up the adhesive during 4:00 AM social sets.
+2.  **Apply suede**: Peel the backing and stick the adhesive suede to the sole. Press firmly.
+3.  **Let it cure**: Let the adhesive cure for 24 hours. They will hold up on any social floor.
 
 ## Suede Coverage Analysis Diagram
 
