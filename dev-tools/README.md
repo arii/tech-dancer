@@ -32,8 +32,8 @@ This script installs and configures:
 
 | Variable | Required? | Purpose |
 |---|---|---|
-| `CODEX_GH_TOKEN` | **Recommended (preferred)** | Primary secret for Codex/Jules/Antigravity agent runs; setup maps it to `GH_TOKEN`/`GITHUB_TOKEN` for `gh` + dev-tools commands. |
-| `GITHUB_TOKEN` or `GH_TOKEN` | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
+| `CODEX_GH_TOKEN` (string) | **Recommended (preferred)** | Primary secret for Codex/Jules/Antigravity agent runs; setup maps it to `GH_TOKEN` for `gh` + dev-tools commands. |
+| `GH_TOKEN` (string) | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
 | `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
@@ -62,7 +62,7 @@ export GEMINI_API_KEY="<key>"
 - `SKIP_VALIDATION=1` — skip post-install validation checks.
 - `SKIP_REMOTE_CONFIG=1` — skip `origin` remote auto-configuration.
 - `PNPM_VERSION` — override pnpm version (default `10.28.2`).
-- `NODE_MAJOR` — override Node major used for apt installation (default `22`).
+- `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
 
 
 ### Non-Traditional Workflows (Deploy, Antigravity, Jules, Ollama)

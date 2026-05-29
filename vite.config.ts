@@ -62,6 +62,7 @@ export default defineConfig(({mode}) => {
         process.env.GITHUB_SHA ||
         'dev'
       ),
+      'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
     },
     plugins: [
       react(),

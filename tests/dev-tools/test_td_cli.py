@@ -43,12 +43,14 @@ class TestTDCLI(unittest.TestCase):
         # Verify comment was NOT created
         mock_issue.create_comment.assert_not_called()
 
+    @patch('tdw_services.services.github.GitHubClient.fetch_check_runs')
     @patch('submit_review.get_github_token')
     @patch('submit_review.get_repo_name')
     @patch('submit_review.get_github_client')
     @patch('os.path.exists')
     @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='# Review\n```json\n{"body": "Approved"}\n```')
-    def test_submit_review_dry_run_default(self, mock_file, mock_exists, mock_get_client, mock_repo, mock_token):
+    @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
+    def test_submit_review_dry_run_default(self, mock_file, mock_exists, mock_get_client, mock_repo, mock_token, mock_fetch_checks):
         """Test that submit_review defaults to dry-run True"""
         mock_exists.return_value = True
         mock_token.return_value = "fake-token"
@@ -62,12 +64,14 @@ class TestTDCLI(unittest.TestCase):
         # Verify review was NOT created
         mock_pr.create_review.assert_not_called()
 
+    @patch('tdw_services.services.github.GitHubClient.fetch_check_runs')
     @patch('submit_review.get_github_token')
     @patch('submit_review.get_repo_name')
     @patch('submit_review.get_github_client')
     @patch('os.path.exists')
     @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='# Review\n```json\n{"body": "Approved"}\n```')
-    def test_submit_review_execute(self, mock_file, mock_exists, mock_get_client, mock_repo, mock_token):
+    @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
+    def test_submit_review_execute(self, mock_file, mock_exists, mock_get_client, mock_repo, mock_token, mock_fetch_checks):
         """Test that submit_review executes when dry_run is False"""
         mock_exists.return_value = True
         mock_token.return_value = "fake-token"
