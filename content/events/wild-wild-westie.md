@@ -23,19 +23,15 @@ theme:
     breathable tops, and accessories that will not interfere with partner
     connection.
   outfitIds:
-    - sequin-bomber-jacket
-    - norcal-bear-tank
-    - love-unisex-shirt
     - war-eagle-shirt
+    - love-unisex-shirt
   accessoryIds:
     - rave-fan
     - electric-fan
 gear:
   outfitIds:
-    - sequin-bomber-jacket
-    - norcal-bear-tank
-    - love-unisex-shirt
     - war-eagle-shirt
+    - love-unisex-shirt
   outfitDescription: "Breathable pieces that handle the high-energy Texas vibe."
   accessoryIds:
     - rave-fan

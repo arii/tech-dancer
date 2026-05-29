@@ -12,36 +12,34 @@ region: NorCal
 schedule: August 6 - 9, 2026
 url: https://swingtacular.com/
 heroImage: '/assets/events/swingtacular-hero.svg'
-description: Swingtacular (formerly the San Francisco Open) is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
+description: Swingtacular is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
 whyAttending: >
   There is no other event like Swingtacular. The sci-fi theme is fully embraced, and the energy in the ballroom is truly "out of this world." The event is known for leaning hard into production, lighting, and theme.
 theme:
-  name: "Alien / Galactic"
-  label: "Space Theme"
+  name: "Alien / Galactic / Nerd"
+  label: "Space & Nerd Themes"
   description: >
-    Swingtacular's galactic theme should lean metallic, neon, blacklight-friendly,
-    futuristic, and dance-safe. Prioritize items that read well in a dark ballroom
-    without restricting spins, connection, or floorcraft.
+    Swingtacular's themes should lean metallic, neon, futuristic, and 'nerdy.'
+    Prioritize items that read well in a dark ballroom without restricting movement.
   outfitIds:
-    - sequin-bomber-jacket
+    - green-bodysuit
+    - nerd-set
     - reflective-crop-tops
-    - mesh-fishnet-top
-    - led-scrunchies
+    - sequin-bomber-jacket
   accessoryIds:
+    - alien-mask
     - rave-fan
-    - electric-fan
-    - led-shot-glasses
 gear:
   outfitIds:
-    - sequin-bomber-jacket
+    - green-bodysuit
+    - nerd-set
     - reflective-crop-tops
-    - mesh-fishnet-top
-  outfitDescription: "Metallic, neon, and blacklight-friendly futuristic styles."
+    - sequin-bomber-jacket
+  outfitDescription: "Alien bodysuits for 'Dress to Impress', nerd sets for Nerd Night, and reflective pieces for the ballroom."
   accessoryIds:
+    - alien-mask
     - rave-fan
-    - electric-fan
-    - led-shot-glasses
-  accessoryDescription: "Futuristic cooling and styling for a dark ballroom."
+  accessoryDescription: "Alien masks for grand entrances and futuristic fans for cooling."
   shoeIds:
     - bloch-grecian
     - dance-socks
@@ -70,16 +68,20 @@ relatedEvents:
 
 Swingtacular is where WCS meets a full galactic theme weekend. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
 
-## Galactic theme notes
+## Galactic & Nerd Theme notes
 
-This is the event where metallics, neons, mesh, reflective pieces, and futuristic accessories make sense. Keep the recommendations dance-safe: no sharp costume pieces, no loose LED strands, no wings or accessories that hit partners, and no anything that makes connection awkward. Think about \"space opera,\" \"alien,\" and \"galactic\" vibes that will glow under the heavy production lighting.
+This is the event where metallics, neons, and futuristic accessories make sense.
+- **Nerd Night:** A classic Swingtacular tradition. Pack a **nerd set** with glasses and suspenders for a quick and easy costume that doesn't restrict your dancing.
+- **Dress to Impress / Alien Theme:** For the big theme night, a **green bodysuit** or metallic reflective gear is the way to go. If you're going all out, an **alien mask** makes for a great grand entrance or hallway photo (just remember to swap it for something more breathable before hitting the social floor!).
+
+Keep all costume pieces dance-safe: no sharp edges, no loose LED strands, and nothing that restricts connection or floorcraft.
 
 ## What to pack for the SFO Hyatt
 
-Swingtacular is an airport-hotel event, so the useful gear is practical: a portable charger for long days, packing cubes to keep theme outfits organized, a steamer for theme outfits, and shoe maintenance gear. High-quality earplugs are useful to pack; the event is known for leaning hard into production, lighting, and theme.
+Swingtacular is an airport-hotel event, so the useful gear is practical: a portable charger for long days, packing cubes to keep theme outfits organized, and a steamer for those metallic fabrics. High-quality earplugs are a must; the event is known for its high-production sound and lighting.
 
 ### Production & Show Notes
-The Saturday night shows at Swingtacular are high-production events with professional lighting, sound, and staging. Get to the ballroom early to secure a good seat—it's often standing room only for the showcase.
+The Saturday night shows are high-production events with professional lighting, sound, and staging. Get to the ballroom early to secure a good seat—it's often standing room only for the showcase.
 
 ### Burlingame/SFO Logistics
 - **Transport:** Use the free Hyatt SFO shuttle if flying in.

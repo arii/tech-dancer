@@ -67,11 +67,11 @@ relatedEvents:
 - boogie-by-the-bay
 ---
 
-Ashland is a theatre town — beautiful, small, and surprisingly walkable from the hotel. The Ashland Hills Hotel & Suites has a retro-chic vibe that fits the community feel perfectly. Book early; the room block is limited and often sells out months in advance.
+Ashland is beautiful, small, and surprisingly walkable from the hotel. The Ashland Hills Hotel & Suites has a retro-chic vibe that fits the community feel perfectly. Book early; the room block is limited and often sells out months in advance.
 
 ## Ashland travel notes
 
-This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring downtown Ashland, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear. Late-night food options in Ashland are limited, so having snacks and a reusable water bottle is helpful.
+This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring Southern Oregon, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear.
 
 ### Venue & Travel
 - **Venue:** Ashland Hills Hotel & Suites. It’s slightly outside the main downtown area, but very comfortable with a great pool.
@@ -79,6 +79,7 @@ This is a regional trip guide, so prioritize practical travel: Medford (MFR) air
 - **Driving:** A beautiful drive from Portland (5 hrs) or San Francisco (6 hrs).
 
 ### Pro Tips
-- **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
+- **Groceries:** The **Ashland Co-op** is highly recommended and has great groceries. There is also a **Safeway** within a 10-minute walk of the hotel, which is very convenient for snacks and supplies.
+- **Transport Tip:** If you are traveling back to the airport for a very early flight and cannot get a Lyft or Uber (service is not as supported in Ashland), **use a taxi**. Arrange this in advance.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
 - **Food:** There are great restaurants in downtown Ashland, but the hotel restaurant is also solid for a quick bite between workshops.
