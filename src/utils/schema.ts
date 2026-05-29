@@ -104,11 +104,6 @@ export interface SchemaItemList {
 export const POD_SHIPPING_POLICY: SchemaShippingDetails = {
   "@type": "OfferShippingDetails",
   "description": "Made to order. Production and shipping times vary by product and destination. Final delivery estimates are shown at checkout.",
-  "shippingRate": {
-    "@type": "MonetaryAmount",
-    "value": 0,
-    "currency": "USD"
-  },
   "deliveryTime": {
     "@type": "ShippingDeliveryTime",
     "handlingTime": {
@@ -135,12 +130,33 @@ export const POD_RETURN_POLICY: SchemaReturnPolicy = {
   "applicableCountry": "US",
   "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnPeriod",
   "merchantReturnDays": 30,
-  "returnMethod": "https://schema.org/ReturnByMail",
-  "returnFees": "https://schema.org/FreeReturn",
   "description": "Each item is made to order. Returns accepted for damaged or defective items within 30 days. We cannot accept returns for size, color, or change of mind."
 } as const;
 
 export const AMAZON_AFFILIATE_DISCLOSURE = "As an Amazon Associate, BoomTick may earn from qualifying purchases.";
+
+/**
+ * Shared helper to create the Offers schema for products.
+ */
+function createOfferSchema(params: {
+  url: string;
+  price?: number;
+  priceCurrency?: string;
+  availability?: string;
+  includePODPolicies?: boolean;
+}): SchemaOffer {
+  return {
+    "@type": "Offer",
+    "url": params.url,
+    ...(params.price !== undefined && { "price": params.price }),
+    "priceCurrency": params.priceCurrency || "USD",
+    "availability": params.availability || "https://schema.org/InStock",
+    ...(params.includePODPolicies && {
+      "shippingDetails": POD_SHIPPING_POLICY,
+      "hasMerchantReturnPolicy": POD_RETURN_POLICY
+    })
+  };
+}
 
 export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemList {
   return {
@@ -157,33 +173,11 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
           "name": "BoomTick"
         },
         "sku": product.id,
-        "offers": {
-          "@type": "Offer",
-          "url": product.href,
-          "price": product.price ? parseFloat(product.price) : 0,
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
-          "shippingDetails": POD_SHIPPING_POLICY,
-          "hasMerchantReturnPolicy": POD_RETURN_POLICY
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": 5,
-          "reviewCount": 1
-        },
-        "review": {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Ariel Anders, PhD"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": 5,
-            "bestRating": 5
-          },
-          "reviewBody": "Curated selection specifically chosen for West Coast Swing dancers."
-        }
+        "offers": createOfferSchema({
+          url: product.href,
+          price: product.price ? parseFloat(product.price) : undefined,
+          includePODPolicies: true
+        })
       };
 
       return {
@@ -212,33 +206,10 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
           "name": "BoomTick"
         },
         "sku": resource.internalSku || resource.slug,
-        "offers": {
-          "@type": "Offer",
-          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-          "price": 0,
-          "priceCurrency": "USD",
-          "availability": "https://schema.org/InStock",
-          "shippingDetails": POD_SHIPPING_POLICY,
-          "hasMerchantReturnPolicy": POD_RETURN_POLICY
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": 5,
-          "reviewCount": 1
-        },
-        "review": {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Ariel Anders, PhD"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": 5,
-            "bestRating": 5
-          },
-          "reviewBody": "Personally tested and highly recommended for social dancers."
-        }
+        "offers": createOfferSchema({
+          url: resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
+          includePODPolicies: true // Apply policies universally for validation, using the refined versions.
+        })
       };
 
       return {
