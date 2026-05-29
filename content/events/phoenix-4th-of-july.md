@@ -11,7 +11,7 @@ city: Phoenix, AZ
 region: Southwest
 schedule: July 2 - 6, 2026
 url: https://phx4th.com/
-heroImage: ''
+heroImage: '/assets/events/phoenix-4th-of-july-hero.svg'
 description: Phoenix 4th of July is a legendary West Coast Swing event known for its incredible resort venue, massive pool parties, and competitive energy. It's one of the largest events in the Southwest and a highlight of the summer circuit.
 whyAttending: >
   The combination of a world-class resort and world-class dancing is unbeatable. The pool parties are a unique WCS experience that you have to see to believe.

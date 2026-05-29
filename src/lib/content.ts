@@ -111,6 +111,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
         priceDisplayPolicy: data.priceDisplayPolicy ? String(data.priceDisplayPolicy) : undefined,
         availabilityDisplayPolicy: data.availabilityDisplayPolicy ? String(data.availabilityDisplayPolicy) : undefined,
         recommendedFor: asArray(data.recommendedFor),
+        bestFor: asArray(data.bestFor),
         eventUseCase: data.eventUseCase ? String(data.eventUseCase) : undefined,
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),

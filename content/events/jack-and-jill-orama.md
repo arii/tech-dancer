@@ -28,17 +28,6 @@ theme:
   - '#008026'
   - '#004DFF'
   - '#750787'
-  outfitIds:
-    - norcal-pride-gate-shirt
-    - norcal-pride-bear-shirt
-    - love-neon-switch-shirt
-    - norcal-crop-top
-    - rainbow-bustle
-    - sequin-bomber-jacket
-    - ombre-dance-dress
-    - love-neon-follow-shirt
-    - love-neon-lead-shirt
-    - norcal-bestcal-tshirt
   accessoryIds:
     - rainbow-fan
 gear:

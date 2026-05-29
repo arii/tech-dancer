@@ -11,7 +11,8 @@ city: Ashland, OR
 region: Pacific Northwest
 schedule: May 14 - 17, 2026
 url: https://soswing.com
-heroImage: ''
+heroImage: '/assets/events/soswing-hero.svg'
+bestFor: ["Intimate settings", "First-time competitors", "Road-trip vibe"]
 description: SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing.
 whyAttending: >
   SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge field.
@@ -71,9 +72,6 @@ Ashland is a theatre town — beautiful, small, and surprisingly walkable from t
 ## Ashland travel notes
 
 This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring downtown Ashland, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear. Late-night food options in Ashland are limited, so having snacks and a reusable water bottle is helpful.
-
-### Who this event is best for
-SOswing is ideal for dancers who prefer intimate settings over massive convention centers. It's particularly great for first-time competitors who might find larger events overwhelming, and for those who enjoy a \"road trip\" vibe with scenic views.
 
 ### Venue & Travel
 - **Venue:** Ashland Hills Hotel & Suites. It’s slightly outside the main downtown area, but very comfortable with a great pool.

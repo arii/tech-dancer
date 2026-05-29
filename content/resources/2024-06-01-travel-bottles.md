@@ -12,6 +12,7 @@ verdict: "Best for carry-on"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
 affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+bestFor: ["Carry-on"]
 ---
 
 Perfect for shampoo, conditioner, and body wash.

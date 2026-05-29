@@ -74,7 +74,7 @@ export default function EventGuide() {
         image={event.heroImage}
         theme={event.theme?.name}
         venue={event.location}
-        bestFor={event.category}
+        bestFor={event.bestFor && event.bestFor.length > 0 ? event.bestFor : event.category}
         deadline={event.registrationDeadline}
         packingCue={event.packingReminderDate}
       />
