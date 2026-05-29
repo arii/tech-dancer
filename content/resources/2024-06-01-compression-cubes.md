@@ -11,7 +11,6 @@ tags: ["travel", "organization", "packing"]
 verdict: "Essential for air travel"
 bestFor: ["Air Travel", "Organization"]
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 ## Pack More, Stress Less

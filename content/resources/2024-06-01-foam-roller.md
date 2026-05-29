@@ -11,7 +11,6 @@ tags: ["recovery", "health", "travel"]
 verdict: "Essential for recovery"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 bestFor: ["Post-event", "Travel"]
 ---
 

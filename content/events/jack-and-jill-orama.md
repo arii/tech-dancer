@@ -28,6 +28,13 @@ theme:
   - '#008026'
   - '#004DFF'
   - '#750787'
+  outfitIds:
+    - norcal-pride-gate-shirt
+    - norcal-pride-bear-shirt
+    - love-neon-switch-shirt
+    - love-neon-lead-shirt
+    - love-neon-follow-shirt
+    - norcal-crop-top
   accessoryIds:
     - rainbow-fan
     - tripod

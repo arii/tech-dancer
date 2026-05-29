@@ -11,7 +11,6 @@ tags: ["fashion", "footwear", "elegance"]
 verdict: "Best for elegance"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 bestFor: ["Elegance"]
 ---
 

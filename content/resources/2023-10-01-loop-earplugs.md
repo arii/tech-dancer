@@ -11,7 +11,6 @@ tags: ["safety", "ballroom", "music"]
 verdict: "Highly Recommended"
 updatedDate: "Oct 2023"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 ## Why Dancers Need Hearing Protection

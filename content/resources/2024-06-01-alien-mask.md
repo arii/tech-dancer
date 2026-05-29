@@ -5,13 +5,12 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Commit to the Galactic theme with a high-quality alien mask."
-image: "/images/gear/sketches/alien-mask.jpg"
+image: "/images/gear/amazon/alien-mask.jpg"
 affiliateIds: ["alien-mask"]
 tags: ["costume", "galactic", "theme"]
 verdict: "Thematic commitment"
 bestFor: ["Theme Nights", "Galactic Open"]
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 ## Out of This World

@@ -6,7 +6,7 @@ startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
 excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
-location: Hyatt Regency Dallas
+location: Hyatt Regency DFW International Airport, 2334 North International Parkway
 city: Dallas, TX
 region: South
 schedule: July 2 - 5, 2026

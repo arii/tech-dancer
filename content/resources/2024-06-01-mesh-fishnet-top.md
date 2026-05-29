@@ -11,7 +11,6 @@ tags: ["fashion", "style", "layering"]
 verdict: "Best for layering"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 bestFor: ["Layering"]
 ---
 
