@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Fashion"
 excerpt: "Reflective casual crop tops for visibility and style on and off the dance floor."
-image: "/images/gear/amazon/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.jpg"
+image: "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.png"
 affiliateIds: ["reflective-crop-tops"]
 tags: ["fashion", "visibility"]
 verdict: "Great for visibility"

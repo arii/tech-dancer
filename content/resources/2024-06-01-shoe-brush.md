@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Keep your suede soles clean and grippy for optimal floor connection."
-image: "/images/gear/amazon/dance-shoe-suede-brush.jpg"
+image: "/images/gear/sketches/shoe-brush.jpg"
 affiliateIds: ["shoe-brush"]
 tags: ["gear", "shoes", "maintenance"]
 verdict: "Essential maintenance"
