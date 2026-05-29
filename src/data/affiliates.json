@@ -2,7 +2,7 @@
   "loop-quiet": {
     "id": "loop-quiet",
     "name": "Loop Quiet 2 Ear Plugs",
-    "url": "https://www.amazon.com/dp/B0D3V61JC8?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0D3V61JC8?tag=onasafari04-20",
     "category": "gear",
     "description": "The quiet version of the loop earplugs are good for very loud ballrooms and sleeping with roommates.",
     "image": "/images/gear/amazon/loop-quiet-2-ear-plugs.jpg",
@@ -11,7 +11,7 @@
   "bloch-grecian": {
     "id": "bloch-grecian",
     "name": "Bloch Grecian Sandal",
-    "url": "https://www.amazon.com/dp/B0C62ZTGXL?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0C62ZTGXL?tag=onasafari04-20",
     "category": "gear",
     "description": "Popular shoe worn by champion swing dancers. Requires foot strength.",
     "image": "/images/gear/amazon/bloch-women-s-grecian-sandal-dance-shoes.jpg",
@@ -20,7 +20,7 @@
   "loop-experience": {
     "id": "loop-experience",
     "name": "Loop Experience Ear Plugs",
-    "url": "https://www.amazon.com/dp/B0D4DZDHZ1?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0D4DZDHZ1?tag=onasafari04-20",
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
     "gearSlug": "2023-10-01-loop-earplugs",
@@ -30,7 +30,7 @@
   "suede-sheets": {
     "id": "suede-sheets",
     "name": "Suede Stick-on Sheets",
-    "url": "https://www.amazon.com/dp/B07FZYY6J6?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B07FZYY6J6?tag=onasafari04-20",
     "category": "gear",
     "description": "Turn regular sneakers into dance shoes for indoor floors.",
     "image": "/images/gear/amazon/suede-stick-on-sheets.jpg",
@@ -39,7 +39,7 @@
   "compression-cubes": {
     "id": "compression-cubes",
     "name": "Compression Packing Cubes",
-    "url": "https://www.amazon.com/dp/B07XLFXJ7D?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B07XLFXJ7D?tag=onasafari04-20",
     "category": "travel",
     "description": "Save space and keep outfits organized.",
     "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg",
@@ -48,7 +48,7 @@
   "travel-bottles": {
     "id": "travel-bottles",
     "name": "Silicone Travel Bottles",
-    "url": "https://www.amazon.com/dp/B0G1TSYYRW?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0G1TSYYRW?tag=onasafari04-20",
     "category": "travel",
     "description": "Leak-proof refillable containers for TSA-approved liquids.",
     "image": "/images/gear/amazon/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.jpg",
@@ -57,7 +57,7 @@
   "dance-socks": {
     "id": "dance-socks",
     "name": "2 FEET Dance Socks",
-    "url": "https://www.amazon.com/dp/B0FP2PY1WW?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0FP2PY1WW?tag=onasafari04-20",
     "category": "gear",
     "description": "Slip over sneakers for smooth pivots and turns on wood floors.",
     "image": "/images/gear/amazon/2-feet-sock-for-dancing-on-smooth-floors-over-sneakers-smooth-pivots-t.jpg",
@@ -66,7 +66,7 @@
   "listerine-tabs": {
     "id": "listerine-tabs",
     "name": "Listerine Ready! Tabs",
-    "url": "https://www.amazon.com/dp/B088VCG8JH?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B088VCG8JH?tag=onasafari04-20",
     "category": "travel",
     "description": "Revolutionary 4-hour fresh breath in a chewable tablet.",
     "image": "/images/gear/amazon/listerine-ready-tabs-chewable-tablets-with-clean-mint-flavor-revolutio.jpg",
@@ -75,7 +75,7 @@
   "rave-fan": {
     "id": "rave-fan",
     "name": "Zolee Large Rave Fan",
-    "url": "https://www.amazon.com/dp/B07QXLKP1R?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B07QXLKP1R?tag=onasafari04-20",
     "category": "gear",
     "description": "Stay cool while adding a touch of flair to your performance.",
     "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg",
@@ -84,7 +84,7 @@
   "neck-fan": {
     "id": "neck-fan",
     "name": "OLV Neck Fan",
-    "url": "https://www.amazon.com/dp/B0BQWC8B7D?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0BQWC8B7D?tag=onasafari04-20",
     "category": "gear",
     "description": "Keeps you cooler during hot workshops, comps, and late nights.",
     "image": "/images/gear/amazon/olv-neck-fan-5000mah-foldable-neck-fan-portable-rechargeable-led-displ.jpg",
@@ -93,7 +93,7 @@
   "hanging-toiletry-bag": {
     "id": "hanging-toiletry-bag",
     "name": "Relavel Hanging Toiletry Bag",
-    "url": "https://www.amazon.com/dp/B07TBCXCJH?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B07TBCXCJH?tag=onasafari04-20",
     "category": "travel",
     "description": "Waterproof and spacious organizer for all your toiletries.",
     "image": "/images/gear/amazon/relavel-travel-hanging-toiletry-bag-for-men-women-travel-kit-shaving-b.jpg",
@@ -102,7 +102,7 @@
   "garment-steamer": {
     "id": "garment-steamer",
     "name": "Portable Garment Steamer",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Keep your outfits wrinkle-free while traveling.",
     "gearSlug": "2023-11-01-travel-steamer",
@@ -113,7 +113,7 @@
   "epsom-salt": {
     "id": "epsom-salt",
     "name": "Epsom Salt / Bath Bombs",
-    "url": "https://www.amazon.com/Amazon-Basics-Magnesium-Sulfate-1-Pack/dp/B0BXTS6L35?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0BXTS6L35?tag=onasafari04-20",
     "category": "recovery",
     "description": "I like to pack a ziplock bag of this or just order prime groceries at the event and include this",
     "image": "https://m.media-amazon.com/images/I/71LqUR0-ceL._AC_SL1500_.jpg"
@@ -121,7 +121,7 @@
   "foam-roller": {
     "id": "foam-roller",
     "name": "Foam Roller / Hypervolt",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "recovery",
     "description": "Good for sore legs, tight hips, and post-event recovery.",
     "draft": true,
@@ -131,7 +131,7 @@
   "sequin-bomber-jacket": {
     "id": "sequin-bomber-jacket",
     "name": "Sequin Bomber Jacket",
-    "url": "https://www.amazon.com/dp/B06XHV5X5G?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B06XHV5X5G?tag=onasafari04-20",
     "category": "gear",
     "description": "Flashy jacket to stand out on the social floor.",
     "image": "/images/gear/amazon/cresay-women-s-sequin-fitted-long-sleeve-zipper-blazer-bomber-jacket-r.jpg",
@@ -140,7 +140,7 @@
   "ombre-dance-dress": {
     "id": "ombre-dance-dress",
     "name": "Ombre Flowy Dance Dress",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Gradient dress that moves beautifully with every turn.",
     "draft": true
@@ -148,7 +148,7 @@
   "rainbow-earrings": {
     "id": "rainbow-earrings",
     "name": "Rainbow Statement Earrings",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Bold accessories to complete your theme outfit.",
     "draft": true
@@ -156,7 +156,7 @@
   "pride-sunglasses": {
     "id": "pride-sunglasses",
     "name": "Pride Heart Sunglasses",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Fun sunglasses for pool parties and daytime events.",
     "draft": true
@@ -181,7 +181,7 @@
   "microfiber-towel": {
     "id": "microfiber-towel",
     "name": "Quick-Dry Microfiber Towel",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Compact and fast-drying towel for the gym or pool.",
     "draft": true
@@ -197,7 +197,7 @@
   "electric-fan": {
     "id": "electric-fan",
     "name": "Handheld Mini Fan",
-    "url": "https://www.amazon.com/dp/B08LQNP7N2?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B08LQNP7N2?tag=onasafari04-20",
     "category": "gear",
     "description": "A life-saver on a crowded, hot dance floor.",
     "draft": true,
@@ -215,7 +215,7 @@
   "shoe-brush": {
     "id": "shoe-brush",
     "name": "Suede Shoe Brush",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Keep your suede soles clean and grippy.",
     "draft": true,
@@ -225,7 +225,7 @@
   "mints": {
     "id": "mints",
     "name": "Altoids Peppermint Mints",
-    "url": "https://www.amazon.com/ALTOIDS-Curiously-Strong-Individual-1-76-Ounce/dp/B09QPR3J2B?crid=1JJYA4NTLDUI8&dib=eyJ2IjoiMSJ9.S6xHBieEj_kl1b7YSroF7HInWJL3s5AEMQvLYiGgBaZpBI478iBDeuwVeFa5k1SG5d0oYVYuajaa4O4DI1KMZ8eSwZlb-z31om-LseEWE3zHfpb4HurO89ZU7jhfCdQf2Mcy6h9FT3KjJ8lgc7j6uczyHJHmZE31BQ_i1zPSr0usE8N-flO4RKH7T0xk2HQisPZs_6TXRXTzSaik18e7GIYg93VzMsy7cmSiyNtAt0bIKGuMqjTNXiRbP7Ll9q78Kol8nzN-VBP8DFPAdZpf2At4fzkallQZnOZ2Y3mBuWk.IqwCnSeO0D3yfh0mNE0Fs_d4ikNJx-1k7VLJUwU-ytM&dib_tag=se&keywords=altoid+peppermint&qid=1779840032&sprefix=altoid+peper%2Caps%2C210&sr=8-7&linkCode=ll2&tag=onasafari04-20&linkId=63364f49a83e62faaa7fe4ef919be05c&language=en_US&ref_=as_li_ss_tl",
+    "url": "https://www.amazon.com/dp/B09QPR3J2B?tag=onasafari04-20",
     "category": "travel",
     "description": "Essential for social dancing confidence.",
     "image": "/images/gear/amazon/altoids-peppermint-mints.jpg",
@@ -234,7 +234,7 @@
   "hand-sanitizer": {
     "id": "hand-sanitizer",
     "name": "Purell Advanced Hand Sanitizer",
-    "url": "https://www.amazon.com/dp/B00EAQX2LE?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B00EAQX2LE?tag=onasafari04-20",
     "category": "travel",
     "description": "Stay healthy while dancing with hundreds of people.",
     "image": "/images/gear/amazon/purell-advanced-hand-sanitizer.jpg",
@@ -243,7 +243,7 @@
   "rainbow-fan": {
     "id": "rainbow-fan",
     "name": "Rainbow Folding Fan",
-    "url": "https://www.amazon.com/dp/B0C5LR17SB?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0C5LR17SB?tag=onasafari04-20",
     "category": "gear",
     "description": "Show your pride while staying cool.",
     "image": "/images/gear/amazon/rainbow-folding-hand-fan.jpg",
@@ -351,7 +351,7 @@
   "dance-bag": {
     "id": "dance-bag",
     "name": "Dance Bag",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Weekend essential dance bag for all levels.",
     "draft": true
@@ -359,7 +359,7 @@
   "rainbow-bob-wig": {
     "id": "rainbow-bob-wig",
     "name": "Rainbow Bob Wig",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Vibrant rainbow bob wig to complete your event look.",
     "draft": true
@@ -367,7 +367,7 @@
   "rainbow-sequin-bomber-jacket": {
     "id": "rainbow-sequin-bomber-jacket",
     "name": "Rainbow Sequin Bomber Jacket",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Dazzle on the dance floor with this rainbow sequin jacket.",
     "draft": true
@@ -375,7 +375,7 @@
   "holographic-rave-fan": {
     "id": "holographic-rave-fan",
     "name": "Holographic Rave Fan",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "gear",
     "description": "Keep cool and stay flashy with this holographic folding fan.",
     "draft": true,
@@ -385,14 +385,16 @@
   "led-scrunchies": {
     "id": "led-scrunchies",
     "name": "LED Light Up Scrunchies",
-    "url": "https://www.amazon.com/dp/B08GM59R8R?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B08GM59R8R?tag=onasafari04-20",
     "category": "gear",
-    "description": "Add some glow to your hair with these LED scrunchies."
+    "description": "Add some glow to your hair with these LED scrunchies.",
+    "image": "/images/gear/amazon/led-scrunchies.jpg",
+    "imageMode": "contain"
   },
   "portable-steamer": {
     "id": "portable-steamer",
     "name": "Portable Garment Steamer",
-    "url": "https://www.amazon.com/dp/B08J45WG5B?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B08J45WG5B?tag=onasafari04-20",
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
     "image": "/images/gear/amazon/oghom-portable-garment-steamer.jpg",
@@ -401,28 +403,34 @@
   "short-sleeve-romper": {
     "id": "short-sleeve-romper",
     "name": "Short Sleeve Romper",
-    "url": "https://www.amazon.com/dp/B08QMP3YXK?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B08QMP3YXK?tag=onasafari04-20",
     "category": "gear",
-    "description": "Fun romper to dance in and perfect for tall girls too!"
+    "description": "Fun romper to dance in and perfect for tall girls too!",
+    "image": "/images/gear/amazon/short-sleeve-romper.jpg",
+    "imageMode": "contain"
   },
   "princess-tiara": {
     "id": "princess-tiara",
     "name": "Princess Tiara",
     "url": "https://www.amazon.com/dp/B0816B3CYK?tag=onasafari04-20",
     "category": "gear",
-    "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really."
+    "description": "Gorgeous princess tiara perfect for dancing while celebrating your birthday or any other reason, really.",
+    "image": "/images/gear/amazon/princess-tiara.jpg",
+    "imageMode": "contain"
   },
   "led-shot-glasses": {
     "id": "led-shot-glasses",
     "name": "LED Shot Glasses party pack",
     "url": "https://www.amazon.com/dp/B075B5D5F2?tag=onasafari04-20",
     "category": "gear",
-    "description": "Colorful light up shot glasses perfect for parties."
+    "description": "Colorful light up shot glasses perfect for parties.",
+    "image": "/images/gear/amazon/led-shot-glasses.jpg",
+    "imageMode": "contain"
   },
   "reflective-crop-tops": {
     "id": "reflective-crop-tops",
     "name": "Reflective Casual Crop Tops",
-    "url": "https://www.amazon.com/dp/B0953CF3DH?th=1&psc=1&linkCode=ll2&tag=onasafari04-20&linkId=ebc13ca80c87e9eeae13571ddf9a1797&language=en_US&ref_=as_li_ss_tl",
+    "url": "https://www.amazon.com/dp/B0953CF3DH?tag=onasafari04-20",
     "category": "fashion",
     "description": "Reflective casual crop tops for visibility and style on and off the dance floor.",
     "gearSlug": "2024-06-01-reflective-crop-tops",
@@ -431,7 +439,7 @@
   "pumpkin-headbands": {
     "id": "pumpkin-headbands",
     "name": "Halloween Pumpkin Headbands",
-    "url": "https://www.amazon.com/dp/B07TCYV8VN?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B07TCYV8VN?tag=onasafari04-20",
     "category": "fashion",
     "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
     "gearSlug": "2024-06-01-pumpkin-headbands",
@@ -440,7 +448,7 @@
   "sports-crop-tops": {
     "id": "sports-crop-tops",
     "name": "Sports Crop Tank Tops",
-    "url": "https://www.amazon.com/dp/B08X6RM32P?th=1&psc=1&linkCode=ll2&tag=onasafari04-20&linkId=8d5e984a6ad36da3637154b65d565c6f&language=en_US&ref_=as_li_ss_tl",
+    "url": "https://www.amazon.com/dp/B08X6RM32P?tag=onasafari04-20",
     "category": "fashion",
     "description": "Comfortable and stylish crop tops for dancing.",
     "gearSlug": "2024-06-01-crop-tops",
@@ -449,7 +457,7 @@
   "mesh-fishnet-top": {
     "id": "mesh-fishnet-top",
     "name": "Mesh Fishnet Top",
-    "url": "https://www.amazon.com/dp/B0CT5H2YZM?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0CT5H2YZM?tag=onasafari04-20",
     "category": "fashion",
     "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
     "gearSlug": "2024-06-01-mesh-fishnet-top",
@@ -458,22 +466,26 @@
   "portable-speaker": {
     "id": "portable-speaker",
     "name": "Portable Bluetooth Speaker (UE Wonderboom 4)",
-    "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
-    "gearSlug": "2024-01-01-portable-speaker"
+    "gearSlug": "2024-01-01-portable-speaker",
+    "image": "/images/gear/amazon/portable-speaker.jpg",
+    "imageMode": "contain"
   },
   "yellow-fun-romper": {
     "id": "yellow-fun-romper",
     "name": "Yellow Fun Romper",
-    "url": "https://www.amazon.com/dp/B097XSKNRB?tag=onasafari04-20&linkCode=ll2&language=en_US",
+    "url": "https://www.amazon.com/dp/B097XSKNRB?tag=onasafari04-20",
     "category": "gear",
-    "description": "Yellow fun romper that is great to dance in."
+    "description": "Yellow fun romper that is great to dance in.",
+    "image": "/images/gear/amazon/yellow-fun-romper.jpg",
+    "imageMode": "contain"
   },
   "charging-cables": {
     "id": "charging-cables",
     "name": "Multi-Charging Cables (USB 3A Fast Charge)",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Fast-charging USB cables for keeping your devices powered during multi-day conventions.",
     "gearSlug": "2024-06-01-charging-cables",
@@ -483,7 +495,7 @@
   "fishnet-tights": {
     "id": "fishnet-tights",
     "name": "Fishnet Lace Tights",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "fashion",
     "description": "Six-pack of fishnet lace tights for elegant leg coverage and style.",
     "gearSlug": "2024-06-01-fishnet-tights",
@@ -493,7 +505,7 @@
   "running-belt": {
     "id": "running-belt",
     "name": "Slim Running Belt",
-    "url": "https://www.amazon.com/dp/B073XSHTWR?linkCode=ll2&tag=onasafari04-20&language=en_US",
+    "url": "https://www.amazon.com/dp/B073XSHTWR?tag=onasafari04-20",
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
     "gearSlug": "2024-06-01-running-belt",
@@ -502,19 +514,12 @@
   "shoe-dryer": {
     "id": "shoe-dryer",
     "name": "Electric Shoe Dryer and Deodorizer",
-    "url": "https://amazon.com?tag=onasafari04-20",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
     "gearSlug": "2024-06-01-shoe-dryer",
     "draft": true,
     "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
-  },
-  "barge-cement": {
-    "id": "barge-cement",
-    "name": "Barge All Purpose Cement",
-    "url": "https://www.amazon.com/dp/B0032YYOFS?tag=onasafari04-20&linkCode=ll2&language=en_US",
-    "category": "gear",
-    "description": "Heavy duty waterproof glue for applying suede to shoes."
   },
   "piercing-aftercare-swabs": {
     "id": "piercing-aftercare-swabs",
@@ -551,7 +556,7 @@
   "rainbow-bustle": {
     "id": "rainbow-bustle",
     "name": "Rainbow Bustle Skirt",
-    "url": "https://www.amazon.com/dp/B06XKBMKJY?&linkCode=ll2&tag=onasafari04-20&linkId=abca4152f64a2c6c164458d732c29dc4&language=en_US&ref_=as_li_ss_tl",
+    "url": "https://www.amazon.com/dp/B06XKBMKJY?tag=onasafari04-20",
     "category": "gear",
     "description": "A fun and flowy rainbow bustle skirt for themed nights.",
     "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg",
