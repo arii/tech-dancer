@@ -16,13 +16,16 @@ export function legacyImageToMerchImages(imageUrl: string, alt: string): MerchPr
 
 export function resolveMerchImages(args: {
   title: string;
-  imageUrl: string;
+  imageUrl?: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
 }): ResolvedMerchImages {
-  const images = args.images?.length
-    ? args.images
-    : legacyImageToMerchImages(args.imageUrl, `${args.title} product image`);
+  const images =
+    args.images && args.images.length > 0
+      ? args.images
+      : args.imageUrl
+        ? legacyImageToMerchImages(args.imageUrl, `${args.title} product image`)
+        : [];
 
   const mode = args.imageDisplayMode ?? 'single';
   const front = images.find((image) => image.side === 'front');
@@ -31,8 +34,8 @@ export function resolveMerchImages(args: {
   if (mode === 'both-equal') {
     return {
       mode,
-      primary: front ?? images[0],
-      secondary: back ?? images.find((image) => image.src !== (front ?? images[0])?.src),
+      primary: undefined,
+      secondary: undefined,
       equal: images.slice(0, 2),
     };
   }
