@@ -1,0 +1,10 @@
+*.png
+*.json
+!config/*.json
+!test_data/*.json
+!*.md
+*.png
+*.json
+!config/*.json
+!test_data/*.json
+!*.md

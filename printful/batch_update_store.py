@@ -3,13 +3,21 @@ import sys
 import json
 import requests
 
+# Operational parameters from environment variables
 PRINTFUL_TOKEN = os.getenv("PRINTFUL_TOKEN")
+STORE_ID = os.getenv("PRINTFUL_STORE_ID")
 BASE_URL = "https://api.printful.com"
-STORE_ID = 18249113
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "product_metadata_map.json")
+
+def fail(message):
+    print(f"ERROR: {message}")
+    sys.exit(1)
 
 if not PRINTFUL_TOKEN:
-    print("ERROR: PRINTFUL_TOKEN is not set.")
-    sys.exit(1)
+    fail("PRINTFUL_TOKEN is not set.")
+
+if not STORE_ID:
+    fail("PRINTFUL_STORE_ID is not set.")
 
 headers = {
     "Authorization": f"Bearer {PRINTFUL_TOKEN}",
@@ -17,54 +25,46 @@ headers = {
     "X-PF-Store-ID": str(STORE_ID)
 }
 
-# Design mapping
-DESIGN_FILES = {
-    "circular_norcal": 990303036,      # drawing-1.png
-    "california_norcal": 990275069,    # drawing.png
-    "rainbow_eagle": 990399734,        # rainbow_eagle.png
-    "ask_to_lead": 990501278,          # ask_to_lead.png
-    "ask_to_follow": 990501277,        # ask_to_follow.png
-    "lead_follow_switch": 990379733,   # leadfollowswitch.png
-    "wings_eagle": 992252789           # eagle.png
-}
-
-def determine_design_file(product_name):
-    name = product_name.lower()
-    if "sweatshirt" in name or "goldengate" in name or "norcal" in name or "best cal" in name:
-        return DESIGN_FILES["circular_norcal"], "front"
-    elif "follow" in name:
-        return DESIGN_FILES["ask_to_follow"], "front"
-    elif "lead" in name:
-        return DESIGN_FILES["ask_to_lead"], "front"
-    elif "switch" in name:
-        # Switch checklist design
-        return DESIGN_FILES["lead_follow_switch"], "front"
-    elif "war eagle" in name or "eagle" in name or "new_template" in name:
-        return DESIGN_FILES["rainbow_eagle"], "front"
-    return None, None
+def load_config():
+    try:
+        with open(CONFIG_PATH, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        fail(f"Could not load config from {CONFIG_PATH}: {e}")
 
 def main():
+    config = load_config()
+
     # 1. Fetch synced products in store
-    print("Fetching synced products from store...")
+    print(f"Fetching synced products from store {STORE_ID}...")
     res = requests.get(f"{BASE_URL}/sync/products", headers=headers, timeout=30)
     if res.status_code != 200:
-        print("Failed to fetch products:", res.text)
+        print(f"Failed to fetch products: {res.text}")
         return
         
     products = res.json().get("result", [])
     print(f"Found {len(products)} products in store.")
     
     for prod in products:
-        prod_id = prod["id"]
+        prod_id = str(prod["id"])
         prod_name = prod["name"]
         print(f"\nProcessing Product: {prod_name} (ID: {prod_id})")
         
-        file_id, placement = determine_design_file(prod_name)
-        if not file_id:
-            print("  Could not automatically map design file for this product. Skipping.")
+        # Data-driven lookup using Printful Sync Product ID as required by audit
+        metadata = config.get(prod_id)
+        if not metadata:
+            print(f"  Warning: No entry for sync_product_id {prod_id} in config. Skipping.")
             continue
             
-        print(f"  Mapped to File ID: {file_id} on placement: {placement}")
+        file_id = metadata.get("design_file_id")
+        placement = metadata.get("placement")
+        price = metadata.get("retail_price", "29.99")
+
+        if not file_id or not placement:
+            print(f"  Error: Missing design_file_id or placement in config for {prod_id}. Skipping.")
+            continue
+
+        print(f"  Mapped to File ID: {file_id} on placement: {placement}, Price: {price}")
         
         # 2. Get detailed product variants
         d_res = requests.get(f"{BASE_URL}/sync/products/{prod_id}", headers=headers, timeout=30)
@@ -79,14 +79,8 @@ def main():
         # 3. Batch update variants
         for v in sync_variants:
             v_id = v["id"]
-            v_name = v.get("name")
-            v_color = v.get("color")
-            v_size = v.get("size")
-            
-            # Determine retail price based on product type
-            price = "29.99"
-            if "sweatshirt" in prod_name.lower():
-                price = "45.00"
+            v_color = v.get("color", "N/A")
+            v_size = v.get("size", "N/A")
             
             # Setup payload
             payload = {
@@ -103,7 +97,7 @@ def main():
             url = f"{BASE_URL}/sync/variant/{v_id}"
             v_res = requests.put(url, headers=headers, json=payload, timeout=30)
             if v_res.status_code == 200:
-                print(f"    [Updated] {v_color} / {v_size} -> Price: ${price}")
+                print(f"    [Updated] {v_color} / {v_size} -> Price: {price}")
             else:
                 print(f"    [Error] {v_color} / {v_size}: {v_res.text}")
 
