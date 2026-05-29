@@ -63,7 +63,6 @@ export function FeaturedEventGuide() {
     if (hasSwiped.current) {
       e.preventDefault();
       e.stopPropagation();
-      e.nativeEvent.stopImmediatePropagation();
       hasSwiped.current = false;
     }
   };
@@ -86,10 +85,13 @@ export function FeaturedEventGuide() {
         className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
+        data-gesture-handled="true"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
+        onTouchStart={(e: React.TouchEvent) => e.stopPropagation()}
+        onTouchEnd={(e: React.TouchEvent) => e.stopPropagation()}
         onClickCapture={handleCardClick}
         onKeyDown={handleKeyDown}
         tabIndex={0}

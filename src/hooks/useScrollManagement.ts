@@ -135,7 +135,10 @@ export function useScrollManagement(
 
         // Respect touch-action: pan-y or none which explicitly disable horizontal panning for the browser
         const touchAction = style.getPropertyValue('touch-action');
-        if (touchAction === 'pan-y' || touchAction === 'none') return true;
+        if (touchAction.includes('pan-y') || touchAction.includes('none')) return true;
+
+        // Respect explicit data attribute opt-outs for global swipe navigation
+        if (el.dataset.gestureHandled === 'true') return true;
 
         const overflowX = style.getPropertyValue('overflow-x');
         const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'overlay') && el.scrollWidth > el.clientWidth;
