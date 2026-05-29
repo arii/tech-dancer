@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   handle-command:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/ollama')
+    if: github.event.issue.pull_request && (contains(github.event.comment.body, '/ollama-fix') || contains(github.event.comment.body, '/ollama-review'))
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: dev-tools
@@ -71,8 +71,19 @@ jobs:
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
           ollama serve > /tmp/ollama.log 2>&1 &
-          sleep 5
-          ollama list
+          echo "Waiting for Ollama to be ready..."
+          for i in {1..15}; do
+            if curl -sf http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama is ready!"
+              ollama list
+              exit 0
+            fi
+            echo "Waiting... ($i/15)"
+            sleep 2
+          done
+          echo "Ollama failed to start"
+          cat /tmp/ollama.log
+          exit 1
 
       - name: Validate CLI
         run: |
