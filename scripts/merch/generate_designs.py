@@ -6,6 +6,10 @@ import cairosvg
 import io
 import os
 
+# --- CENTRALIZED CONFIGURATION ---
+WIDTH, HEIGHT = 1200, 1200
+NEON_YELLOW = (0.88, 0.96, 0.0)
+
 def load_svg_to_surface(svg_path, target_width, target_height):
     """Converts an SVG file to a Cairo PNG surface scaled to target dimensions."""
     try:
@@ -42,8 +46,6 @@ def draw_text_with_stroke(ctx, text, x, y, font_size, font_face="Cooper Black"):
     ctx.fill()
 
 def generate_front_design(output_path, heart_svg):
-    WIDTH, HEIGHT = 1200, 1200
-    NEON_YELLOW = (0.88, 0.96, 0.0)
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
     ctx = cairo.Context(surface)
 
@@ -62,8 +64,6 @@ def generate_front_design(output_path, heart_svg):
     print(f"✓ Generated {output_path}")
 
 def generate_back_design(output_path, check_svg):
-    WIDTH, HEIGHT = 1200, 1200
-    NEON_YELLOW = (0.88, 0.96, 0.0)
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
     ctx = cairo.Context(surface)
 

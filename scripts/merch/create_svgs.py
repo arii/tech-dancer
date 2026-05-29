@@ -4,8 +4,13 @@ except ImportError:
     import cairo
 import math
 import os
+import subprocess
 
-# Define the exact brand colors from the design
+# --- CENTRALIZED CONFIGURATION ---
+WIDTH, HEIGHT = 1200, 1200
+NEON_YELLOW = (0.88, 0.96, 0.0)
+DEFAULT_LINE_WIDTH = 16
+
 RAINBOW_COLORS = [
     (0.89, 0.10, 0.11),  # Red
     (0.96, 0.49, 0.00),  # Orange
@@ -15,7 +20,7 @@ RAINBOW_COLORS = [
     (0.52, 0.28, 0.63)   # Purple
 ]
 
-def draw_outline(ctx, line_width=14):
+def draw_outline(ctx, line_width=DEFAULT_LINE_WIDTH):
     """Draws a bold, rounded black outline around the current path."""
     ctx.set_source_rgb(0, 0, 0)
     ctx.set_line_width(line_width)
@@ -24,10 +29,19 @@ def draw_outline(ctx, line_width=14):
     ctx.stroke()
 
 def draw_star_path(ctx):
-    """Draws a custom, organic, chubby 5-point star."""
+    """Draws a custom, organic, chubby 5-point star.
+
+    This function generates a star shape using 10 vertices (5 tips and 5 valleys).
+    To achieve an 'organic' look, segments between vertices are drawn as cubic
+    Bezier curves. The curves are calculated by creating a virtual control point
+    between each pair of vertices and converting the resulting quadratic Bezier
+    to its cubic equivalent for Cairo.
+    """
     center_x, center_y = 300, 300
-    r_outer = 210
-    r_inner = 95
+    r_outer = 210  # Radius for the star tips
+    r_inner = 95   # Radius for the star valleys
+
+    # 1. Generate the 10 core vertices of the star
     points = []
     for i in range(5):
         angle_out = -math.pi / 2 + i * (2 * math.pi / 5)
@@ -35,18 +49,24 @@ def draw_star_path(ctx):
         points.append((center_x + r_outer * math.cos(angle_out), center_y + r_outer * math.sin(angle_out)))
         points.append((center_x + r_inner * math.cos(angle_in), center_y + r_inner * math.sin(angle_in)))
 
+    # 2. Draw curved segments between vertices
     ctx.move_to(points[0][0], points[0][1])
     for i in range(10):
         next_idx = (i + 1) % 10
         P0_x, P0_y = ctx.get_current_point()
         next_pt_x, next_pt_y = points[next_idx]
+
+        # Calculate a virtual quadratic control point (P1) that 'puffs' the segment
         mid_angle = -math.pi/2 + (i + 0.5) * (math.pi / 5)
-        r_ctrl = (r_outer + r_inner) / 2 * 1.15 if i % 2 == 0 else (r_outer + r_inner) / 2 * 0.85
+        # r_ctrl factor > 1.0 makes legs bulge; < 1.0 makes them pinched
+        r_ctrl = (r_outer + r_inner) / 2 * (1.15 if i % 2 == 0 else 0.85)
         ctrl_x = center_x + r_ctrl * math.cos(mid_angle)
         ctrl_y = center_y + r_ctrl * math.sin(mid_angle)
-        P1_x, P1_y = ctrl_x, ctrl_y
-        ctx.curve_to(P0_x + 2/3 * (P1_x - P0_x), P0_y + 2/3 * (P1_y - P0_y),
-                     next_pt_x + 2/3 * (P1_x - next_pt_x), next_pt_y + 2/3 * (P1_y - next_pt_y),
+
+        # Convert quadratic Bezier (P0, P1, next_pt) to cubic (P0, CP1, CP2, next_pt)
+        # Formula: CP1 = P0 + 2/3(P1-P0), CP2 = next_pt + 2/3(P1-next_pt)
+        ctx.curve_to(P0_x + 2/3 * (ctrl_x - P0_x), P0_y + 2/3 * (ctrl_y - P0_y),
+                     next_pt_x + 2/3 * (ctrl_x - next_pt_x), next_pt_y + 2/3 * (ctrl_y - next_pt_y),
                      next_pt_x, next_pt_y)
     ctx.close_path()
 
@@ -74,42 +94,45 @@ def draw_heart_path(ctx):
 
 def draw_check_path(ctx):
     """Draws a stylish, organic rainbow checkmark."""
-    # Custom path for a "swoosh" style checkmark
     ctx.move_to(100, 350)
     ctx.curve_to(150, 450, 200, 500, 250, 500)
     ctx.curve_to(350, 500, 450, 300, 550, 100)
-    # Give it some thickness even as a path
-    # Actually, the requirement was stripes INSIDE the shape.
-    # So we need a closed shape for the checkmark.
     ctx.curve_to(450, 250, 350, 400, 250, 400)
     ctx.curve_to(200, 400, 150, 350, 100, 300)
     ctx.close_path()
 
-def render_path_to_svg(filename, draw_func, canvas_size=600, line_width=16):
-    """Renders a path drawing function to an SVG file with rainbow stripes and outline."""
+def render_path_to_svg(filename, draw_func, canvas_size=600, line_width=DEFAULT_LINE_WIDTH):
+    """Renders a path drawing function to an SVG file with rainbow stripes and outline.
+    Optimized to minimize redundant clipPath definitions.
+    """
     surface = cairo.SVGSurface(filename, canvas_size, canvas_size)
     ctx = cairo.Context(surface)
 
-    # Use the drawn shape as a clipping path
+    ctx.save()
     draw_func(ctx)
     ctx.clip()
 
-    # Draw vertical rectangular stripes
     num_colors = len(RAINBOW_COLORS)
     stripe_width = canvas_size / num_colors
     for i, color in enumerate(RAINBOW_COLORS):
         ctx.set_source_rgb(*color)
         ctx.rectangle(i * stripe_width, 0, stripe_width, canvas_size)
         ctx.fill()
+    ctx.restore()
 
-    ctx.reset_clip()
-
-    # Draw the outline
+    # Draw the outline separately
     draw_func(ctx)
     draw_outline(ctx, line_width)
 
     surface.finish()
-    print(f"✓ Created {filename}")
+
+    # Run SVGO optimization if available
+    try:
+        subprocess.run(["pnpm", "svgo", filename, "--quiet"], check=False)
+    except Exception:
+        pass
+
+    print(f"✓ Created and Optimized {filename}")
 
 if __name__ == "__main__":
     output_dir = "scripts/merch/assets"
