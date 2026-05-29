@@ -25,7 +25,7 @@ export function ArticleHero({
   tags
 }: ArticleHeroProps) {
   return (
-    <Box className="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-14 items-center">
+    <Box className="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-14 py-10 lg:py-16 items-center">
       {/* Content Column */}
       <Stack gap={{ base: 4, lg: 8 }}>
         <Stack gap={{ base: 3, lg: 4 }}>

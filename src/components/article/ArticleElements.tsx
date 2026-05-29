@@ -2,7 +2,61 @@
 /* impeccable-ignore-file */
 import { Box, Text, Stack } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { Quote } from 'lucide-react';
+import { Quote, ExternalLink } from 'lucide-react';
+import { affiliateManager } from '@/lib/affiliateManager';
+
+interface ArticleAffiliateCardProps {
+  id: string;
+  cta?: string;
+}
+
+export function ArticleAffiliateCard({ id, cta = "View Product" }: ArticleAffiliateCardProps) {
+  const link = affiliateManager.getLink(id);
+
+  if (!link) return null;
+
+  return (
+    <Box className="my-8 rounded-2xl border border-slate-800/80 bg-slate-950/60 overflow-hidden group hover:border-cyan-500/30 transition-all duration-300">
+      <Stack direction={{ base: 'column', md: 'row' }} gap={0}>
+        {link.image && (
+          <Box className="w-full md:w-48 lg:w-64 aspect-square overflow-hidden border-b md:border-b-0 md:border-r border-slate-800/50">
+            <img
+              src={link.image}
+              alt={link.name}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          </Box>
+        )}
+        <Stack gap={4} className="p-6 lg:p-8 flex-1 justify-center">
+          <Stack gap={2}>
+            <Text variant="mono" size="micro" className="text-cyan-400 font-bold uppercase tracking-widest">
+              {link.category || 'Featured Gear'}
+            </Text>
+            <Text variant="display" size="xl" className="text-slate-100">
+              {link.name}
+            </Text>
+            {link.description && (
+              <Text size="sm" className="text-slate-400 leading-relaxed line-clamp-2">
+                {link.description}
+              </Text>
+            )}
+          </Stack>
+
+          <Box
+            as="a"
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 text-slate-200 font-bold transition-all w-fit"
+          >
+            <span>{cta}</span>
+            <ExternalLink size={14} className="text-cyan-400" />
+          </Box>
+        </Stack>
+      </Stack>
+    </Box>
+  );
+}
 
 interface ArticleCalloutProps {
   title?: string;
@@ -70,7 +124,7 @@ export function ArticleSection({ title, id, children }: ArticleSectionProps) {
         as="h2"
         variant="display"
         size="2xl"
-        className="text-slate-100 font-bold mb-8 border-l-2 border-cyan-400 pl-4"
+        className="text-slate-100 font-bold mb-8"
       >
         {title}
       </Text>

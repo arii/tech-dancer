@@ -5,6 +5,12 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { Notice } from './Notice';
+import {
+  ArticleCallout,
+  ArticlePullQuote,
+  ArticleSection,
+  ArticleAffiliateCard
+} from '@/components/article/ArticleElements';
 
 interface MarkdownRendererProps {
   content: string;
@@ -18,11 +24,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice'],
+            tagNames: [
+              ...(defaultSchema.tagNames || []),
+              'notice', 'Notice',
+              'callout', 'pullquote', 'article-section', 'affiliate-card'
+            ],
             attributes: {
               ...defaultSchema.attributes,
               notice: ['type'],
-              Notice: ['type']
+              Notice: ['type'],
+              callout: ['title', 'variant'],
+              pullquote: ['quote', 'author'],
+              'article-section': ['title', 'id'],
+              'affiliate-card': ['id', 'cta']
             },
             clobberPrefix: ''
           }]
@@ -102,7 +116,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             />
           ),
           notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
-          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
+          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
+          callout: (props: React.ComponentProps<typeof ArticleCallout>) => <ArticleCallout {...props} />,
+          pullquote: (props: React.ComponentProps<typeof ArticlePullQuote>) => <ArticlePullQuote {...props} />,
+          'article-section': (props: React.ComponentProps<typeof ArticleSection>) => <ArticleSection {...props} />,
+          'affiliate-card': (props: React.ComponentProps<typeof ArticleAffiliateCard>) => <ArticleAffiliateCard {...props} />
         }}
       >
         {content}
