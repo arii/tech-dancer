@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { Box, Text, Grid } from '@/layouts/Primitives';
+import { Box, Grid } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 import type {
   MerchImageDisplayMode,
@@ -49,23 +49,6 @@ const ImageLink = ({
   </a>
 );
 
-const Label = ({ children, position = 'bottom-right' }: { children: ReactNode; position?: 'bottom-right' | 'bottom-left' }) => (
-  <Box
-    position="absolute"
-    bottom={2}
-    right={position === 'bottom-right' ? 2 : 'auto'}
-    left={position === 'bottom-left' ? 2 : 'auto'}
-    paddingX={1.5}
-    paddingY={0.5}
-    radius="sm"
-    className="bg-surface/80 backdrop-blur-sm border border-line/20 z-20"
-  >
-    <Text size="micro" weight="font-bold" color="dim" uppercase tracking="wider">
-      {children}
-    </Text>
-  </Box>
-);
-
 export function MerchImageDisplay({
   title,
   href,
@@ -100,7 +83,6 @@ export function MerchImageDisplay({
               className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
             />
           )}
-          {resolved.primary?.side === 'back' && <Label>Back</Label>}
         </ImageLink>
       </Box>
     );
@@ -129,7 +111,6 @@ export function MerchImageDisplay({
                 className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
               />
             )}
-            {fallbackImg?.side === 'back' && <Label>Back</Label>}
           </ImageLink>
         </Box>
       );
@@ -158,7 +139,6 @@ export function MerchImageDisplay({
               padding={2}
               className="h-full w-full object-contain transition-all duration-500 hover:scale-105"
             />
-            <Label>{img.side}</Label>
           </ImageLink>
         ))}
       </Grid>
@@ -166,7 +146,6 @@ export function MerchImageDisplay({
   }
 
   // Prominent modes (front-prominent or back-prominent)
-  const isBackProminent = resolved.mode === 'back-prominent';
   const primaryImage = resolved.primary;
   const secondaryImage = resolved.secondary;
 
@@ -189,7 +168,6 @@ export function MerchImageDisplay({
             className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
           />
         )}
-        <Label>{isBackProminent ? 'Back' : 'Front'}</Label>
       </ImageLink>
 
       {/* Secondary Image Inset */}
@@ -218,7 +196,6 @@ export function MerchImageDisplay({
               padding={1}
               className="h-full w-full object-contain"
             />
-            <Label position="bottom-left">{secondaryImage.side}</Label>
           </ImageLink>
         </Box>
       )}

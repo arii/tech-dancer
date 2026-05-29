@@ -43,7 +43,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of LOVE Neon Ask Me to Follow t-shirt',
       },
     ],
-    imageDisplayMode: 'back-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow',
     collections: ['lead-follow-switch', 'rainbow-pride'],
@@ -68,7 +68,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of LOVE Neon Ask Me to Lead t-shirt',
       },
     ],
-    imageDisplayMode: 'back-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-lead',
     collections: ['lead-follow-switch', 'rainbow-pride'],
@@ -93,7 +93,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of War Eagle Oversized T-Shirt',
       },
     ],
-    imageDisplayMode: 'back-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt',
     collections: ['norcal-bestcal'],
@@ -117,7 +117,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of Lead Follow or Switch LOVE Neon Shirt',
       },
     ],
-    imageDisplayMode: 'back-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon',
     collections: ['lead-follow-switch', 'rainbow-pride'],
@@ -142,7 +142,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: "Back view of Men's Bear Tank NorCal BestCal",
       },
     ],
-    imageDisplayMode: 'front-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/mens-bear-tank-nor-cal-best-cal',
     collections: ['norcal-bestcal'],
@@ -166,7 +166,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of NorCal BestCal Cropped Top',
       },
     ],
-    imageDisplayMode: 'front-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/norcal-best-cal-cropped-top',
     collections: ['norcal-bestcal'],
@@ -209,7 +209,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of NorCal BestCal Golden Gate Rainbow Pride Shirt',
       },
     ],
-    imageDisplayMode: 'front-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt',
     collections: ['norcal-bestcal', 'rainbow-pride'],
@@ -233,7 +233,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of NorCal BestCal Pride Bear Apparel',
       },
     ],
-    imageDisplayMode: 'front-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl:
       'https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel',
     collections: ['norcal-bestcal', 'rainbow-pride'],
@@ -257,7 +257,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of LOVE Lead Follow or Switch Unisex Shirt',
       },
     ],
-    imageDisplayMode: 'back-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl: 'https://boomtick.printful.me/product/unisex-t-shirt',
     collections: ['lead-follow-switch'],
     roles: ['lead', 'follow', 'switch'],
@@ -281,7 +281,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
         alt: 'Back view of NorCal BestCal Classic Tee',
       },
     ],
-    imageDisplayMode: 'front-prominent',
+    imageDisplayMode: 'both-equal',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal',
     collections: ['norcal-bestcal'],
     tags: ['NorCal', 'Classic', 'Team Apparel', 'Essential'],
