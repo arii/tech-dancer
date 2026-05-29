@@ -5,13 +5,12 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "Stay limber on the road. A compact foam roller is essential for sore legs and tight hips after a long day of dancing."
-image: "/images/gear/sketches/foam-roller.jpg"
+image: "/images/gear/amazon/hyperice-vyper-foam-roller.jpg"
 affiliateIds: ["foam-roller"]
 tags: ["recovery", "health", "travel"]
 verdict: "Essential for recovery"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 bestFor: ["Post-event", "Travel"]
 ---
 

@@ -6,7 +6,7 @@ startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
 excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
-location: Hyatt Regency Dallas
+location: Hyatt Regency DFW International Airport, 2334 North International Parkway
 city: Dallas, TX
 region: South
 schedule: July 2 - 5, 2026
@@ -63,22 +63,22 @@ relatedEvents:
 - jack-and-jill-orama
 ---
 
-Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the iconic Hyatt Regency Dallas (the one with the glowing ball on top), it's a weekend of intense dancing, serious competition, and southern hospitality.
+Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the iconic Hyatt Regency DFW, it's a weekend of intense dancing, serious competition, and southern hospitality.
 
 ## Western theme notes
 
 While our current product selection doesn't include specialized Western dance apparel, this is the perfect weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. Keep Western boots for photos and use proper dance shoes for social dancing to ensure safety and floor compliance.
 
 ### Dallas Airport Logistics
-- **DFW Airport:** About 25-30 minutes away. This is the primary hub for American Airlines and offers the most flight options.
-- **Dallas Love Field (DAL):** About 15 minutes away. This is the primary hub for Southwest Airlines.
-- **Transport:** Both airports are easily accessible via Uber/Lyft. DART (light rail) also runs from DFW directly to the hotel (Union Station stop).
+- **DFW Airport:** The hotel is located right at DFW Airport, making it extremely convenient for those flying in.
+- **Dallas Love Field (DAL):** About 30-40 minutes away depending on traffic. This is the primary hub for Southwest Airlines.
+- **Transport:** If flying into DFW, the hotel offers a complimentary 24-hour shuttle from all terminals. If flying into DAL, Uber/Lyft is recommended.
 
 ### Hotel-Room-Block Urgency
-The WWW room block at the Hyatt Regency Dallas is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
+The WWW room block is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
 
 ### Summer Heat Notes
 Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-controlled. You can easily spend the entire weekend without leaving the AC. If you do go outside, be prepared for intense humidity. Even though you're indoors, the Dallas summer heat and intense dancing mean it is useful to pack hydration support and portable fans.
 
 ### Comp/Social Energy
-The competition field at WWW is deep. Jack & Jill heats can have many couples in certain divisions. The social dancing energy is equally intense, peaking around 2:00 AM and often continuing until the sun comes up over the Dallas skyline.
+The competition field at WWW is deep. Jack & Jill heats can have many couples in certain divisions. The social dancing energy is equally intense, peaking around 2:00 AM and often continuing until the sun comes up.
