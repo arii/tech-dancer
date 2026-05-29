@@ -31,6 +31,16 @@ export default defineConfig(({mode}) => {
   const hostname = resolveHostname().replace(/\/$/, '');
   const fullAppUrl = new URL(base, hostname).href;
 
+  const appVersion = process.env.npm_package_version || '0.0.0';
+
+  // Guard: Production builds must have a valid version (not 0.0.0)
+  if (isProd && appVersion === '0.0.0') {
+    throw new Error(
+      'PRODUCTION BUILD FAILURE: package.json version is 0.0.0. ' +
+      'Please use "pnpm release:patch|minor|major" to set a real version before deploying.'
+    );
+  }
+
   // Automatically discover dynamic routes
   const { sitemap: dynamicRoutes, detailed: routeDetails } = getAllRoutes();
 
@@ -56,12 +66,13 @@ export default defineConfig(({mode}) => {
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
       'import.meta.env.VITE_APP_URL': JSON.stringify(fullAppUrl),
-      'import.meta.env.VITE_APP_VERSION': JSON.stringify(process.env.npm_package_version || '0.0.0'),
+      'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion),
       'import.meta.env.VITE_COMMIT_SHA': JSON.stringify(
         process.env.VERCEL_GIT_COMMIT_SHA ||
         process.env.GITHUB_SHA ||
         'dev'
       ),
+      'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
     },
     plugins: [
       react(),

@@ -7,15 +7,8 @@ from typing import Optional, List, Dict, Any
 
 class GitHubClient:
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None):
-        if not token:
-            # Try to get token from utils if not provided
-            try:
-                from utils import get_github_token
-                token = get_github_token()
-            except ImportError:
-                token = os.environ.get("CODEX_GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
-
-        self.token = token
+        from utils import get_github_token
+        self.token = token or get_github_token()
         if not self.token:
             raise ValueError("Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN.")
         self.repo = repo or os.environ.get("GITHUB_REPOSITORY") or os.environ.get("GH_REPO")
