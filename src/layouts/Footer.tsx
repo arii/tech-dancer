@@ -25,12 +25,12 @@ export function Footer() {
       <Box paddingY={12} paddingX={4} surface="bg" border="t" opacity={80}>
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Stack direction="row" align="center" gap={3} className="flex-wrap">
+        <Stack direction="row" align="center" gap={3} wrap>
           <Text variant="mono" size="tiny" color="dim" weight="font-semibold" className="tracking-widest shrink-0" data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10 shrink-0" />
-          <Text size="micro" color="dim" className="opacity-40 hover:opacity-100 transition-opacity whitespace-nowrap">
+          <Text size="micro" color="dim" className="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">
             <span className="font-mono tracking-wider uppercase">
               v{import.meta.env.VITE_APP_VERSION} (
               <a
