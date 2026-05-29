@@ -17,14 +17,10 @@ function resolveImageSrc(src: string) {
   return `${ASSET_PREFIX}/${src}`;
 }
 
-function sideLabel(side: MerchProductImage['side']) {
-  return side === 'front' ? 'Front' : 'Back';
-}
-
 function ImageLabel({ side }: { side: MerchProductImage['side'] }) {
   return (
     <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="wide" align="center">
-      {sideLabel(side)}
+      {side}
     </Text>
   );
 }
@@ -60,10 +56,6 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
       <ImageLabel side={image.side} />
     </Stack>
   );
-}
-
-function SingleImage({ image }: { image: MerchProductImage }) {
-  return <MerchImage image={image} label={image.side === 'back'} loading="eager" />;
 }
 
 function EqualImages({ images }: { images: MerchProductImage[] }) {
@@ -114,7 +106,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
         <ProminentImages primary={primary} secondary={resolved.secondary} />
       ) : (
-        <SingleImage image={primary} />
+        <MerchImage image={primary} label={primary.side === 'back'} loading="eager" />
       )}
     </Box>
   );
