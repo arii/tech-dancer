@@ -6,6 +6,7 @@ const hostname = APP_URL.replace(/\/$/, '');
 
 const robotsContent = `User-agent: *
 Allow: /
+Disallow: /preview
 Disallow: /previews/
 Disallow: /404.html
 

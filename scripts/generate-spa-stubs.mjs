@@ -11,10 +11,12 @@ const DIST_DIR = path.resolve(__dirname, '../dist');
 const INDEX_HTML = path.join(DIST_DIR, 'index.html');
 
 // Automatically discover all routes
-const { stubs: STUB_ROUTES } = getAllRoutes();
+const { detailed: ROUTES_DETAILS } = getAllRoutes();
 
-// Filter out root path as it already has index.html
-const filteredRoutes = STUB_ROUTES.filter(route => route !== '/');
+// Filter out root path as it already has index.html, and only include routes intended for sitemap
+const filteredRoutes = ROUTES_DETAILS
+  .filter(route => route.path !== '/' && route.sitemap)
+  .map(route => route.path);
 
 async function generateStubs() {
   if (!fs.existsSync(INDEX_HTML)) {

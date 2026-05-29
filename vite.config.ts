@@ -72,7 +72,7 @@ export default defineConfig(({mode}) => {
         basePath: base.replace(/\/$/, ''),
         dynamicRoutes: dynamicRoutes.filter(route => route !== '/').map(route => route.replace(/\/$/, '') || '/'),
         // Exclude infrastructure pages that are not real app routes
-        exclude: ['/404', '/previews', '/previews/'],
+        exclude: ['/404', '/preview', '/previews', '/previews/'],
         generateRobotsTxt: false,
         xmlns: {
           news: false,
