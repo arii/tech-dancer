@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { Box, Text, Grid, Stack } from '@/layouts/Primitives';
+import { type ReactNode } from 'react';
+import { Box, Text, Grid } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 import type {
   MerchImageDisplayMode,
@@ -42,7 +42,7 @@ const ImageLink = ({
     target="_blank"
     aria-label={ariaLabel || `View ${title} on Printful`}
     className={cn(
-      'block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent overflow-hidden',
+      'block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent overflow-hidden',
       className
     )}
   >
@@ -50,15 +50,16 @@ const ImageLink = ({
   </a>
 );
 
-const Label = ({ children }: { children: ReactNode }) => (
+const Label = ({ children, position = 'bottom-right' }: { children: ReactNode; position?: 'bottom-right' | 'bottom-left' }) => (
   <Box
     position="absolute"
     bottom={2}
-    right={2}
+    right={position === 'bottom-right' ? 2 : 'auto'}
+    left={position === 'bottom-left' ? 2 : 'auto'}
     paddingX={1.5}
     paddingY={0.5}
     radius="sm"
-    className="bg-surface/80 backdrop-blur-sm border border-line/20 z-10"
+    className="bg-surface/80 backdrop-blur-sm border border-line/20 z-20"
   >
     <Text size="micro" weight="font-bold" color="dim" uppercase tracking="wider">
       {children}
@@ -80,25 +81,49 @@ export function MerchImageDisplay({
     imageDisplayMode,
   });
 
-  const [activeSide, setActiveSide] = useState<'front' | 'back'>(
-    resolved.mode === 'back-prominent' ? 'back' : 'front'
-  );
-
   const hasMultipleImages = (images?.length ?? 0) > 1;
 
-  if (resolved.mode === 'both-equal' && hasMultipleImages) {
+  // Single mode or fallback
+  if (resolved.mode === 'single' || !hasMultipleImages) {
+    return (
+      <Box
+        position="relative"
+        height={{ base: 56, md: 72 }}
+        className="group/display rounded-lg border border-line/20 bg-surface-alt/35 overflow-hidden"
+      >
+        <ImageLink href={href} title={title} className="h-full">
+          {resolved.primary && (
+            <Box
+              as="img"
+              src={resolveImageSrc(resolved.primary.src)}
+              alt={resolved.primary.alt}
+              maxWidth="full"
+              maxHeight="full"
+              padding={4}
+              className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
+            />
+          )}
+          {resolved.primary?.side === 'back' && <Label>Back</Label>}
+        </ImageLink>
+      </Box>
+    );
+  }
+
+  // Both equal mode - side by side
+  if (resolved.mode === 'both-equal') {
     return (
       <Grid
         cols={2}
         gap={2}
         height={{ base: 56, md: 72 }}
+        className="group/display"
       >
         {resolved.equal.map((img, idx) => (
           <ImageLink
             key={img.src + idx}
             href={href}
             title={title}
-            className="relative h-full border border-line/20 bg-surface-alt/35"
+            className="relative h-full rounded-lg border border-line/20 bg-surface-alt/35"
           >
             <Box
               as="img"
@@ -116,85 +141,62 @@ export function MerchImageDisplay({
     );
   }
 
-  const activeImage = images?.find(img => img.side === activeSide) || resolved.primary;
-  const showToggle = hasMultipleImages && (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent');
+  // Prominent modes (front-prominent or back-prominent)
+  const isBackProminent = resolved.mode === 'back-prominent';
+  const primaryImage = resolved.primary;
+  const secondaryImage = resolved.secondary;
 
   return (
     <Box
       position="relative"
       height={{ base: 56, md: 72 }}
-      className="group/display"
+      className="group/display rounded-lg border border-line/20 bg-surface-alt/35 overflow-hidden"
     >
-      <ImageLink
-        href={href}
-        title={title}
-        className="h-full border border-line/20 bg-surface-alt/35"
-      >
-        {activeImage && (
+      {/* Primary Image */}
+      <ImageLink href={href} title={title} className="h-full">
+        {primaryImage && (
           <Box
             as="img"
-            src={resolveImageSrc(activeImage.src)}
-            alt={activeImage.alt}
+            src={resolveImageSrc(primaryImage.src)}
+            alt={primaryImage.alt}
             maxWidth="full"
             maxHeight="full"
             padding={4}
             className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
           />
         )}
+        <Label>{isBackProminent ? 'Back' : 'Front'}</Label>
       </ImageLink>
 
-      {showToggle && (
-        <Stack
-          direction="row"
-          align="center"
-          gap={0.5}
+      {/* Secondary Image Inset */}
+      {secondaryImage && (
+        <Box
           position="absolute"
-          bottom={4}
-          left="50%"
-          padding={0.5}
-          radius="full"
-          className="-translate-x-1/2 bg-surface/90 backdrop-blur-md border border-line/20 shadow-lg z-20"
+          bottom={2}
+          left={2}
+          width="30%"
+          height="30%"
+          radius="md"
+          className="z-10 bg-surface border border-line/40 shadow-xl overflow-hidden hover:scale-110 transition-transform duration-300"
         >
-          {(['front', 'back'] as const).map((side) => {
-            const exists = images?.some(img => img.side === side);
-            if (!exists) return null;
-
-            const isActive = activeSide === side;
-
-            return (
-              <button
-                key={side}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setActiveSide(side);
-                }}
-                className={cn(
-                  "px-2 py-0.5 rounded-full transition-all duration-200 border border-transparent",
-                  isActive
-                    ? "bg-accent/80 text-white shadow-sm"
-                    : "text-text-dim hover:text-text-main hover:bg-surface-alt"
-                )}
-              >
-                <Text
-                  size="micro"
-                  weight="font-bold"
-                  uppercase
-                  tracking="wider"
-                  className="pointer-events-none"
-                  color={isActive ? "white" : "dim"}
-                >
-                  {side}
-                </Text>
-              </button>
-            );
-          })}
-        </Stack>
-      )}
-
-      {!showToggle && activeImage?.side === 'back' && (
-        <Label>Back</Label>
+          <ImageLink
+            href={href}
+            title={title}
+            className="h-full w-full"
+            ariaLabel={`View ${secondaryImage.side} of ${title} on Printful`}
+          >
+            <Box
+              as="img"
+              src={resolveImageSrc(secondaryImage.src)}
+              alt={secondaryImage.alt}
+              maxWidth="full"
+              maxHeight="full"
+              padding={1}
+              className="h-full w-full object-contain"
+            />
+            <Label position="bottom-left">{secondaryImage.side}</Label>
+          </ImageLink>
+        </Box>
       )}
     </Box>
   );
