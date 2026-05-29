@@ -4,17 +4,21 @@ on:
   issue_comment:
     types: [created]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
   handle-command:
-    if: github.event.issue.pull_request && (startsWith(github.event.comment.body, '/ollama-fix') || startsWith(github.event.comment.body, '/ollama-review'))
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/ollama')
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: dev-tools
+      OLLAMA_MODEL: qwen2.5-coder:1.5b
+      OLLAMA_SYNTHESIS_MODEL: qwen2.5-coder:1.5b
+      OLLAMA_BASE_URL: http://localhost:11434
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -40,12 +44,6 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
-      - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
-
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -69,39 +67,32 @@ jobs:
             pnpm install --frozen-lockfile
           fi
 
-      - name: Start Ollama Server
+      - name: Setup Ollama
         run: |
-          ollama serve > ollama_output.log 2>&1 &
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve > /tmp/ollama.log 2>&1 &
           sleep 5
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
+          ollama list
 
-      - name: Pull & Build Models
+      - name: Validate CLI
         run: |
-          ollama pull qwen2.5-coder:7b
-          ollama create code-reviewer -f dev-tools/CodeReviewer.mf
+          python3 dev-tools/td_cli.py gh --help
+          python3 dev-tools/td_cli.py ai --help
 
       - name: Resolve PR Branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_JSON=$(gh pr view "${{ github.event.issue.number }}" --json headRefName)
           HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)
           echo "HEAD_REF=$HEAD_REF" >> "$GITHUB_ENV"
           gh pr checkout "${{ github.event.issue.number }}"
 
-      - name: Execute Command
-        env:
-          PYTHONPATH: "$(pwd)/dev-tools"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMAND_BODY: ${{ github.event.comment.body }}
+      - name: Execute Review
         run: |
-          python3 dev-tools/td_cli.py ai comment \
-            --pr ${{ github.event.issue.number }} \
-            --command "$COMMAND_BODY" \
-            --comment-id ${{ github.event.comment.id }}
+          chmod +x dev-tools/low-compute-review.sh
+          ./dev-tools/low-compute-review.sh "${{ github.event.issue.number }}" --no-cache
 
       - name: Commit Fixes
-        if: startsWith(github.event.comment.body, '/ollama-fix')
+        if: contains(github.event.comment.body, '/ollama-fix')
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-resolved merge conflicts using /ollama-fix"
