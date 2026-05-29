@@ -76,27 +76,34 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": products.map((product, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": product.title,
-        "description": product.description,
-        "image": product.imageUrl.startsWith('http') ? product.imageUrl : `${BASE_URL}${ASSET_PREFIX}${product.imageUrl}`,
-        "brand": {
-          "@type": "Brand",
-          "name": "BoomTick"
-        },
-        "sku": product.id,
-        "offers": {
-          "@type": "Offer",
-          "url": product.href,
-          "shippingDetails": POD_SHIPPING_POLICY,
-          "hasMerchantReturnPolicy": POD_RETURN_POLICY
+    "itemListElement": products.map((product, index) => {
+      const primaryImage = product.imageUrl || (product.images && product.images[0]?.src) || '';
+      const resolvedImage = primaryImage.startsWith('http')
+        ? primaryImage
+        : `${BASE_URL}${ASSET_PREFIX}${primaryImage}`;
+
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "Product",
+          "name": product.title,
+          "description": product.description,
+          "image": resolvedImage,
+          "brand": {
+            "@type": "Brand",
+            "name": "BoomTick"
+          },
+          "sku": product.id,
+          "offers": {
+            "@type": "Offer",
+            "url": product.href,
+            "shippingDetails": POD_SHIPPING_POLICY,
+            "hasMerchantReturnPolicy": POD_RETURN_POLICY
+          }
         }
-      }
-    }))
+      };
+    })
   };
 }
 
