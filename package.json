@@ -1,9 +1,12 @@
 {
   "name": "react-example",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "release:patch": "pnpm version patch",
+    "release:minor": "pnpm version minor",
+    "release:major": "pnpm version major",
     "setup:playwright": "playwright install --with-deps chromium",
     "dev": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && vite --port=3000 --host=0.0.0.0",
     "prebuild": "tsx scripts/generate-assets.ts",
