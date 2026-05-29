@@ -19,6 +19,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    concurrency:
+      # Build jobs for the same branch can be cancelled if a newer push arrives
+      # to save CI minutes, as only the latest build for a branch is relevant.
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v4
@@ -95,9 +100,17 @@ jobs:
     concurrency:
       # Use a global concurrency group for all gh-pages writes to prevent conflicts
       # and ensure sequential deployment across all branches.
+      #
+      # NOTE: This ensures only one deployment script runs at a time. However,
+      # pushing to 'gh-pages' triggers an internal 'pages build and deployment'
+      # workflow by GitHub. Those internal runs may still show as 'Cancelled' if
+      # multiple deployments are queued here, as GitHub prefers the latest push.
       group: gh-pages-deploy
       cancel-in-progress: false
     steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v4
+
       - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
