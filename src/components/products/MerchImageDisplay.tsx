@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Box, Text, Grid } from '@/layouts/Primitives';
+import { Box, Text, Grid, Stack } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 import type {
   MerchImageDisplayMode,
@@ -107,7 +107,7 @@ export function MerchImageDisplay({
               maxWidth="full"
               maxHeight="full"
               padding={2}
-              className="h-full w-full object-contain transition-all duration-500 hover:scale-[1.02]"
+              className="h-full w-full object-contain transition-all duration-500 hover:scale-105"
             />
             <Label>{img.side}</Label>
           </ImageLink>
@@ -138,18 +138,22 @@ export function MerchImageDisplay({
             maxWidth="full"
             maxHeight="full"
             padding={4}
-            className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-[1.02]"
+            className="h-full w-full object-contain transition-all duration-500 group-hover/display:scale-105"
           />
         )}
       </ImageLink>
 
       {showToggle && (
-        <Box
+        <Stack
+          direction="row"
+          align="center"
+          gap={0.5}
           position="absolute"
           bottom={4}
           left="50%"
           padding={0.5}
-          className="-translate-x-1/2 flex items-center gap-0.5 rounded-full bg-surface/90 backdrop-blur-md border border-line/20 shadow-lg z-20"
+          radius="full"
+          className="-translate-x-1/2 bg-surface/90 backdrop-blur-md border border-line/20 shadow-lg z-20"
         >
           {(['front', 'back'] as const).map((side) => {
             const exists = images?.some(img => img.side === side);
@@ -186,7 +190,7 @@ export function MerchImageDisplay({
               </button>
             );
           })}
-        </Box>
+        </Stack>
       )}
 
       {!showToggle && activeImage?.side === 'back' && (
