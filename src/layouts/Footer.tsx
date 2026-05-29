@@ -2,8 +2,17 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { NavLink } from 'react-router-dom';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
+import { formatRelativeTime } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 export function Footer() {
+  const [lastUpdated, setLastUpdated] = useState<string>('');
+
+  useEffect(() => {
+    // Only set on client to avoid hydration mismatch
+    setLastUpdated(formatRelativeTime(import.meta.env.VITE_BUILD_TIME));
+  }, []);
+
   const legalLinks = [
     { label: 'Contact', to: '/contact' },
     { label: 'Privacy', to: '/about#privacy' },
@@ -31,6 +40,7 @@ export function Footer() {
               {import.meta.env.VITE_COMMIT_SHA.substring(0, 7)}
             </a>
             )
+            {lastUpdated && ` · Last updated ${lastUpdated}`}
           </Text>
         </Stack>
 
