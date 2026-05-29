@@ -5,7 +5,6 @@ import {
   readAffiliates,
   writeAffiliates,
   normalizeAmazonUrl,
-  DEFAULT_AFFILIATE_TAG
 } from './utils';
 
 async function main() {
@@ -46,7 +45,7 @@ async function main() {
     }
 
     // Also check for event recommendations
-    const eventMatches = content.match(/-\s+([a-zA-Z0-9-]+)/g);
+    // const _eventMatches = content.match(/-\s+([a-zA-Z0-9-]+)/g);
     if (file.includes('events/')) {
         // This is a bit broad, but let's see if we can narrow it down if needed.
         // For now, let's just use the affiliateIds check as it is more explicit.

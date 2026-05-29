@@ -47,7 +47,7 @@ export function normalizeAmazonUrl(url: string, tag: string = DEFAULT_AFFILIATE_
     // If it's just amazon.com with no ASIN, just add the tag
     urlObj.searchParams.set('tag', tag);
     return urlObj.toString();
-  } catch (e) {
+  } catch {
     return url;
   }
 }

@@ -66,7 +66,7 @@ async function main() {
   const existing = affiliates[id];
 
   const newItem: AffiliateItem = {
-    ...(existing || {}),
+    ...existing,
     id,
     name: title,
     url: normalizedUrl,
