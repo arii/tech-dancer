@@ -12,7 +12,7 @@ export function Footer() {
 
   const appVersion = import.meta.env.VITE_APP_VERSION || '0.0.0';
   const commitSha = import.meta.env.VITE_COMMIT_SHA || 'dev';
-  const isDev = import.meta.env.DEV || appVersion === '0.0.0' || appVersion === 'dev';
+  const isDev = import.meta.env.DEV || appVersion === '0.0.0';
 
   return (
     <Box as="footer" marginTop="auto" width="full">
