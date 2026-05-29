@@ -200,7 +200,6 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
     "@context": "https://schema.org",
     "@type": "ItemList",
     "itemListElement": resources.map((resource, index) => {
-      const isMerch = !!resource.shopUrl;
       const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
 
       const productSchema: SchemaProduct = {
