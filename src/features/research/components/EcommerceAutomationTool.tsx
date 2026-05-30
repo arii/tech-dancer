@@ -5,8 +5,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Palette,
-  CloudUpload,
-  Globe
+  CloudUpload
 } from 'lucide-react';
 import {
   Box,
@@ -20,34 +19,34 @@ import { Icon } from '@/components/ui/Icon';
 export function EcommerceAutomationTool() {
   const workflowItems = [
     {
-      icon: Palette,
-      title: 'Programmatic Design Gen',
-      description: 'Automated SVG/PNG design generation using CairoSVG and Cooper Black font stacks for brand-consistent merch.'
-    },
-    {
       icon: CloudUpload,
-      title: 'Printful API Storefront Sync',
-      description: 'Prototyping dry-run-first workflows that generate reviewable update plans before any human-approved storefront mutation.'
-    },
-    {
-      icon: Globe,
-      title: 'Amazon Affiliate Pipeline',
-      description: 'Standardized ingestion and asset management for Amazon-sourced gear, ensuring canonical affiliate metadata.'
+      title: 'Printful API Template Pulls',
+      description: 'Automated extraction of product templates and variants through API scripts to seed the automation pipeline.'
     },
     {
       icon: Search,
       title: 'Metadata Agent Packets',
-      description: 'Generate structured data packets for AI agents to perform title and description reviews.'
+      description: 'Generating structured agent packets for AI-assisted title and description review against brand standards.'
+    },
+    {
+      icon: Palette,
+      title: 'SEO-Safe Product Copy',
+      description: 'Improving SEO copy for West Coast Swing, NorCal, rainbow pride, and role-fluid dance merch while avoiding unsupported claims.'
     },
     {
       icon: CheckCircle2,
-      title: 'Human-in-the-Loop QA',
-      description: 'Audit front/back product mockups and image crops for visual quality before live storefront publishing.'
+      title: 'Mockup & Image QA',
+      description: 'Auditing front/back product mockups and image crops for visual fidelity before live publishing.'
     },
     {
       icon: Palette,
       title: 'Color Option Curation',
       description: 'Curating the best product colors for each design rather than publishing every available Printful option.'
+    },
+    {
+      icon: CloudUpload,
+      title: 'Human-in-the-Loop Updates',
+      description: 'Executing human-approved storefront updates via API once all metadata and image QA checks pass.'
     }
   ];
 
@@ -125,17 +124,17 @@ export function EcommerceAutomationTool() {
             <Box border radius="xl" padding={6} surface="surface">
               <Stack gap={4} align="center">
                 <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Design Gen</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Templates</Text>
                   <Icon icon={ArrowRight} size="xs" color="dim" />
                   <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
                   <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Dry-run Plan</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">AI Recommendations</Text>
                   <Icon icon={ArrowRight} size="xs" color="dim" />
                   <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Human Review</Text>
                   <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Approved Sync</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">API Sync</Text>
                   <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Storefront</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">SEO-Safe Merch Page</Text>
                 </Box>
                 <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
               </Stack>
