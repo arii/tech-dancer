@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { normalizeAmazonUrl, extractAsin, slugify, DEFAULT_AFFILIATE_TAG } from '../scripts/affiliate/utils';
+import { describe, it, expect, afterEach } from 'vitest';
+import { normalizeAmazonUrl, extractAsin, slugify } from '../scripts/affiliate/utils';
 
 describe('Affiliate Tool Utilities', () => {
   describe('Environment Tag Application', () => {
