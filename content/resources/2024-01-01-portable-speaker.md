@@ -11,7 +11,7 @@ tags: ["practice", "music", "travel"]
 verdict: "Best for Travel"
 updatedDate: "Jan 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+bestFor: ["Travel"]
 ---
 
 ## Practice Anywhere
