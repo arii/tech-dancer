@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { normalizeAmazonUrl, extractAsin, slugify } from '../scripts/affiliate/utils';
+import { normalizeAmazonUrl, extractAsin, slugify, getAffiliateTag } from '../scripts/affiliate/utils';
 
 describe('Affiliate Tool Utilities', () => {
   describe('Environment Tag Application', () => {
@@ -11,12 +11,12 @@ describe('Affiliate Tool Utilities', () => {
 
     it('should use DEFAULT_AFFILIATE_TAG if environment variable is not set', () => {
         delete process.env.AMAZON_AFFILIATE_TAG;
-        // We need to re-import or manually check against the exported constant
-        // since it's evaluated at module load time.
-        // For simplicity in this test environment, we'll just check normalizeAmazonUrl behavior.
-        const url = 'https://www.amazon.com/dp/B0D3V61JC8';
-        const normalized = normalizeAmazonUrl(url);
-        expect(normalized).toContain('tag=onasafari04-20');
+        expect(getAffiliateTag()).toBe('onasafari04-20');
+    });
+
+    it('should use AMAZON_AFFILIATE_TAG from environment if set', () => {
+      process.env.AMAZON_AFFILIATE_TAG = 'custom-tag';
+      expect(getAffiliateTag()).toBe('custom-tag');
     });
   });
 
@@ -72,6 +72,18 @@ describe('Affiliate Tool Utilities', () => {
     it('should convert text to a URL-friendly slug', () => {
       expect(slugify('Loop Quiet 2 Ear Plugs')).toBe('loop-quiet-2-ear-plugs');
       expect(slugify('Product with !@# Special Characters')).toBe('product-with-special-characters');
+    });
+  });
+
+  describe('Failure Modes and Guardrails', () => {
+    it('should return original URL for non-Amazon links (normalization)', () => {
+      const url = 'https://example.com/some-product';
+      expect(normalizeAmazonUrl(url)).toBe(url);
+    });
+
+    it('should return null for URLs without ASIN', () => {
+      expect(extractAsin('https://www.amazon.com/s?k=dance')).toBe(null);
+      expect(extractAsin('https://www.amazon.com/dp/INVALID')).toBe(null);
     });
   });
 });

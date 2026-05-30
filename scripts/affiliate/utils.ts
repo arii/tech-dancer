@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
-export const DEFAULT_AFFILIATE_TAG = process.env.AMAZON_AFFILIATE_TAG || 'onasafari04-20';
+export const DEFAULT_AFFILIATE_TAG = 'onasafari04-20';
+
+export function getAffiliateTag(): string {
+  return process.env.AMAZON_AFFILIATE_TAG || DEFAULT_AFFILIATE_TAG;
+}
 export const AFFILIATES_JSON_PATH = path.join(process.cwd(), 'src/data/affiliates.json');
 export const AMAZON_IMAGE_DIR = path.join(process.cwd(), 'public/images/gear/amazon');
 export const GEAR_ASSET_DIR = path.join(process.cwd(), 'public/assets/gear');
@@ -29,7 +33,7 @@ export function writeAffiliates(data: Record<string, AffiliateItem>) {
   fs.writeFileSync(AFFILIATES_JSON_PATH, JSON.stringify(data, null, 2) + '\n');
 }
 
-export function normalizeAmazonUrl(url: string, tag: string = DEFAULT_AFFILIATE_TAG): string {
+export function normalizeAmazonUrl(url: string, tag: string = getAffiliateTag()): string {
   try {
     const urlObj = new URL(url);
     if (!urlObj.hostname.includes('amazon.')) {
