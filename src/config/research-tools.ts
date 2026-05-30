@@ -101,5 +101,15 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['Automation', 'Calendar', 'WCS'],
     canonicalPath: '/research/wsdc-event-reminders'
+  },
+  {
+    id: 'ecommerce-automation',
+    title: 'Ecommerce Automation Experiments',
+    subtitle: 'Printful & Merch Pipeline',
+    description: 'Extending DevAI workflows into ecommerce operations, including API-driven template ingestion, SEO-safe copy generation, and human-in-the-loop catalog curation.',
+    category: 'Business Automation',
+    status: 'In Progress',
+    tags: ['Printful API', 'Metadata ETL', 'SEO Gen', 'Workflow'],
+    canonicalPath: '/research/ecommerce-automation'
   }
 ];

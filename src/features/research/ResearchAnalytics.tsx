@@ -13,6 +13,7 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
   if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
   if (tool.id.includes('hrm')) return Globe;
+  if (tool.id.includes('ecommerce')) return Activity;
   return Search;
 }
 
@@ -21,7 +22,7 @@ export default function ResearchAnalytics() {
   const { studies, tools } = useResearch();
 
   const flagshipTools = tools.filter(t => t.isFlagship);
-  const engineeringTools = tools.filter(t => !t.isFlagship);
+  const engineeringTools = tools.filter(t => !t.isFlagship && t.id !== 'ecommerce-automation');
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
@@ -159,6 +160,71 @@ export default function ResearchAnalytics() {
             </Text>
           </Stack>
         </Grid>
+
+        <Stack gap={8}>
+          <Box paddingBottom={4} border="b">
+            <Text variant="headline" size="2xl" weight="font-black">Ecommerce Automation Experiments</Text>
+          </Box>
+          <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden group hover:border-accent/20 transition-colors">
+            <Grid cols={{ base: 1, lg: 3 }} gap={12}>
+              <Stack gap={6} className="lg:col-span-2">
+                <Text variant="body" size="lg" color="body" className="leading-relaxed">
+                  I am extending the same DevAI workflow patterns into ecommerce operations for BoomTick merch.
+                </Text>
+                <Text variant="body" size="md" color="dim" className="leading-relaxed">
+                  Current experiments include API-driven Printful template pulls, product metadata packets, AI-assisted title and description review, SEO-safe product copy, front/back mockup QA, color-option curation, and human-in-the-loop storefront updates.
+                </Text>
+                <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
+                    {['Printful API', 'Metadata ETL', 'SEO Gen', 'Workflow'].map(tag => (
+                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                            {tag}
+                        </Text>
+                    ))}
+                </Box>
+                <Box
+                  as="button"
+                  onClick={() => navigate('/research/ecommerce-automation')}
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  marginTop={4}
+                  className="text-accent group-hover:translate-x-1 transition-transform"
+                >
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest">View Workflow Items</Text>
+                  <ArrowRight className="w-4 h-4" />
+                </Box>
+              </Stack>
+              <Stack gap={6} justify="center">
+                <Box padding={6} border radius="lg" surface="surface" className="border-accent/5">
+                  <Stack gap={4} align="center">
+                    <Stack gap={2} align="center" width="full">
+                        <Box display="flex" align="center" gap={2}>
+                             <Text variant="mono" size="micro" color="dim">TEMPLATE</Text>
+                             <ArrowRight className="w-3 h-3 text-dim" />
+                             <Text variant="mono" size="micro" color="dim">PACKET</Text>
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <ArrowRight className="w-3 h-3 text-dim rotate-90" />
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <Text variant="mono" size="micro" color="accent" weight="bold">AI_REC</Text>
+                             <ArrowRight className="w-3 h-3 text-accent" />
+                             <Text variant="mono" size="micro" color="dim">REVIEW</Text>
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <ArrowRight className="w-3 h-3 text-dim rotate-90" />
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <Text variant="mono" size="micro" color="dim">STOREFRONT</Text>
+                        </Box>
+                    </Stack>
+                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>SEO-SAFE PIPELINE</Text>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Grid>
+          </Box>
+        </Stack>
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
