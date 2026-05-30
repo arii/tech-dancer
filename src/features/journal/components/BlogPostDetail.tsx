@@ -27,7 +27,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   const affiliateLinks = (post.affiliateIds || [])
     .map(id => {
-      const link = affiliateManager.getLinkById(id);
+      const link = affiliateManager.getLink(id);
       if (!link && import.meta.env.DEV) {
         console.warn(`[BlogPostDetail] Affiliate link with ID "${id}" not found.`);
       }
