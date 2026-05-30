@@ -5,12 +5,10 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { Notice } from './Notice';
-import {
-  ArticleCallout,
-  ArticlePullQuote,
-  ArticleSection,
-  ArticleAffiliateCard
-} from '@/components/article/ArticleElements';
+import { ArticleCallout } from '@/components/article/ArticleCallout';
+import { ArticlePullQuote } from '@/components/article/ArticlePullQuote';
+import { ArticleSection } from '@/components/article/ArticleSection';
+import { ArticleAffiliateCard } from '@/components/article/ArticleAffiliateCard';
 
 /**
  * Registry of custom components allowed in Markdown/MDX.

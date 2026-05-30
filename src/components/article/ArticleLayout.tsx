@@ -23,8 +23,8 @@ export function ArticleLayout({
   children
 }: ArticleLayoutProps) {
   return (
-    <Box className="min-h-screen bg-[#020617] text-text-body">
-      <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}> {/* impeccable-ignore */}
+    <Box className="min-h-screen bg-bg text-text-body">
+      <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}>
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
           <Stack
@@ -40,7 +40,7 @@ export function ArticleLayout({
               size="sm"
               className="transition-transform group-hover:-translate-x-1"
             />
-            <Box as="span" className="text-[11px] font-bold uppercase tracking-widest">
+            <Box as="span" className="text-tiny font-bold uppercase tracking-widest">
               {backLabel}
             </Box>
           </Stack>
@@ -52,7 +52,7 @@ export function ArticleLayout({
         </Box>
 
         {/* Article Content Grid */}
-        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}"> {/* impeccable-ignore */}
+        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}>
           {/* Main Article Column */}
           <Box className={sidebar ? "min-w-0" : "min-w-0 lg:col-span-2"}>
             <Box className="article-prose">

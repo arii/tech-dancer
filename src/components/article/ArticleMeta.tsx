@@ -16,7 +16,9 @@ export function ArticleMeta({
   status
 }: ArticleMetaProps) {
   return (
-    <Stack direction="row" align="center" gap={4}>
+        <>
+      {author && (
+        <Stack direction="row" align="center" gap={4}>
       {/* Author Avatar/Icon */}
       <Box className="w-10 h-10 rounded-full border border-line bg-surface overflow-hidden flex-shrink-0">
         {authorAvatar ? (
@@ -41,6 +43,8 @@ export function ArticleMeta({
           )}
         </Stack>
       </Stack>
-    </Stack>
+        </Stack>
+      )}
+    </>
   );
 }

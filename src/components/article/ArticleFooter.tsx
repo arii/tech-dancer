@@ -1,6 +1,7 @@
 
 
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { EmailForm } from '@/features/email-capture/EmailForm';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ArticleCard } from './ArticleCard';
@@ -38,22 +39,11 @@ export function ArticleFooter({ related }: ArticleFooterProps) {
             Get the latest WCS competition data, gear reviews, and technical guides sent straight to your inbox. No fluff, just the good stuff.
           </Text>
 
-          <Stack direction={{ base: 'column', sm: 'row' }} gap={3} className="w-full max-w-md mt-4">
-            <Box
-              as="input"
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-5 py-3 rounded-xl bg-bg border border-line text-text-body focus:outline-none focus:border-cyan-500/50 transition-colors"
-            />
-            <Box
-              as="button"
-              className="px-6 py-3 rounded-xl bg-accent hover:bg-cyan-400 text-bg font-bold transition-colors whitespace-nowrap"
-            >
-              Subscribe
-            </Box>
-          </Stack>
 
-        </Stack>
+<Box className="w-full max-w-md mt-4">
+            <EmailForm />
+          </Box>
+</Stack>
       </ArticleCard>
 
       {/* Related Content */}

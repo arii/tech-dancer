@@ -75,7 +75,7 @@ export function ArticleSidebar({
             {relatedTopics.map((topic, i) => (
               <Box
                 key={i}
-                className="px-2 py-1 rounded bg-surface border border-line text-text-dim text-[11px] font-bold uppercase tracking-wider"
+                className="px-2 py-1 rounded bg-surface border border-line text-text-dim text-tiny font-bold uppercase tracking-wider"
               >
                 {topic}
               </Box>

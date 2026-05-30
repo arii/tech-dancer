@@ -24,9 +24,13 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
       subtitle={post.hero.subtitle}
       caption={post.hero.caption}
       image={post.hero.image || post.image}
+      imageBack={post.imageBack}
+      showImagePair={!!post.imageBack}
     />
   ) : post.image ? (
-    <ArticleFeatureCard image={post.image} />
+    <ArticleFeatureCard image={post.image}
+      imageBack={post.imageBack}
+      showImagePair={!!post.imageBack} />
   ) : null;
 
   return (

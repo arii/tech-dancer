@@ -3,6 +3,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventNavigation } from './components/EventNavigation';
+
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
@@ -116,9 +117,7 @@ export default function EventGuide() {
               <SidebarCard title="Navigation">
                 <EventNavigation />
               </SidebarCard>
-              <SidebarCard title="Compliance">
-                <AffiliateDisclosure />
-              </SidebarCard>
+
             </Stack>
           }
         />
@@ -176,11 +175,15 @@ export default function EventGuide() {
         )}
 
         {gearSections.length > 0 && (
-          <CuratedGear
+          <>
+            <AffiliateDisclosure />
+
+            <CuratedGear
             id="gear"
             title={`Gear for ${event.title}`}
             sections={gearSections}
-          />
+            />
+          </>
         )}
 
         <EventReminders id="reminders" event={event} />

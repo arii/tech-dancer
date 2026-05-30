@@ -25,7 +25,7 @@ export function ArticleHero({
   tags
 }: ArticleHeroProps) {
   return (
-    <Box display="grid" lgGridCols="1.05fr 0.95fr" gap={8} lgGap={14} paddingY={10} lgPaddingY={16} align="center"> {/* impeccable-ignore */}
+    <Box display="grid" lgGridCols="1.05fr 0.95fr" gap={8} lgGap={14} paddingY={10} lgPaddingY={16} align="center">
       {/* Content Column */}
       <Stack gap={{ base: 4, lg: 8 }}>
         <Stack gap={{ base: 3, lg: 4 }}>
@@ -63,9 +63,11 @@ export function ArticleHero({
         </Stack>
 
         {/* Mobile Visual (appears after title/dek on mobile) */}
+        {visual && (
         <Box className="block lg:hidden h-56 sm:h-72 overflow-hidden rounded-xl">
           {visual}
         </Box>
+        )}
 
         {meta && (
           <Box border="t" className="border-line/80 pt-4 lg:pt-6">
@@ -74,11 +76,11 @@ export function ArticleHero({
         )}
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" gap={2} wrap className="pb-2 hidden lg:flex"> {/* impeccable-ignore */}
+          <Stack direction="row" gap={2} wrap className="pb-2 hidden lg:flex">
             {tags.map((tag) => (
               <Box
                 key={tag}
-                className="px-3 py-1 rounded-full border border-line bg-surface/50 text-text-dim text-[11px] font-bold uppercase tracking-wider whitespace-nowrap" // impeccable-ignore
+                className="px-3 py-1 rounded-full border border-line bg-surface/50 text-text-dim text-tiny font-bold uppercase tracking-wider whitespace-nowrap"
               >
                 {tag}
               </Box>

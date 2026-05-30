@@ -9,6 +9,8 @@ interface ArticleFeatureCardProps {
   subtitle?: string;
   caption?: string;
   image?: string;
+  imageBack?: string;
+  showImagePair?: boolean;
 }
 
 export function ArticleFeatureCard({
@@ -24,11 +26,22 @@ export function ArticleFeatureCard({
       <ArticleCard className="overflow-hidden">
         {image ? (
           <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] overflow-hidden relative">
-            <img
-              src={image}
-              alt={title || "Feature visual"}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+            {showImagePair && imageBack ? (
+              <Box className="w-full h-full flex transition-transform duration-700 group-hover:scale-105">
+                <Box className="flex-1 border-r border-line/50">
+                  <img src={image} alt={title || "Feature visual front"} className="w-full h-full object-contain" />
+                </Box>
+                <Box className="flex-1">
+                  <img src={imageBack} alt={title || "Feature visual back"} className="w-full h-full object-contain" />
+                </Box>
+              </Box>
+            ) : (
+              <img
+                src={image}
+                alt={title || "Feature visual"}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            )}
             <Box className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent" />
           </Box>
         ) : (
