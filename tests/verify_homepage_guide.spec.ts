@@ -21,5 +21,5 @@ test('verify homepage featured guide link', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Ballroom Bag/i })).toBeVisible();
 
   // Verify shoppable section exists with accessible heading
-  await expect(page.getByText(/Shop selected items/i)).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Shop selected items/i })).toBeVisible();
 });

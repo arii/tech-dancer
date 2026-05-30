@@ -69,7 +69,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <Box border="t" paddingTop={10} marginTop={10} className="border-line/30">
           <Stack gap={6}>
             <Stack direction="row" align="center" justify="between">
-              <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+              <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
                 Shop selected items
               </Text>
               <AffiliateDisclosure />

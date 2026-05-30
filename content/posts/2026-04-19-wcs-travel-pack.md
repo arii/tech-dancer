@@ -21,7 +21,6 @@ Here is a practical packing checklist for a smoother West Coast Swing weekend, b
 ### Footwear & Shoe Care
  * **At least two pairs of dance shoes:** Rotating your shoes once or twice a day gives your feet a "change of scenery" and prevents intense soreness from pressure points. Suede-soled shoes (like Latin practice heels or practice sandals) are standard.
  * **Suede shoe brush:** Helpful for cleaning off dirt and restoring grip if the ballroom floor gets slick or dusty.
- ![Suede Shoe Brush](/images/gear/amazon/dance-shoe-suede-brush.jpg)
  * **Shoe glue:** For emergency repairs if a sole starts peeling mid-event.
  * **Friction protection:** Blister care pads, athletic tape, or friction-reducing sticks. If you wear open-toed dance sandals, bringing sock-length nylons can prevent strap friction and blisters.
  * **Baking soda or baby powder:** To dry out damp shoes and eliminate odor after hours of dancing.
@@ -38,7 +37,6 @@ Keep a small backpack or messenger bag with you in the ballroom so you don't hav
  * **A small sweat towel:** Useful for wiping down your face and arms between dances.
  * **A handheld fan:** A battery-powered fan or a manual folding fan is helpful for cooling down on the sidelines.
  * **High-fidelity earplugs:** Ballroom sound systems can be loud. Dampening earplugs (like Loops) protect your hearing while still letting you hear the music and talk to your partners.
- ![Loop Earplugs](/images/gear/sketches/loop-earplugs.jpg)
  * **Reusable water bottle & electrolyte packets:** Powdered mixes (like Liquid I.V.) help prevent muscle cramps and dehydration from hours of active sweating.
 
 ### Hygiene & Close-Connection Etiquette
@@ -49,7 +47,6 @@ Keep a small backpack or messenger bag with you in the ballroom so you don't hav
 ### Recovery & Downtime
  * **A swimsuit:** Early morning hot tub/jacuzzi hangouts are a common social tradition at swing events and can be a great way to soothe aching muscles.
  * **A lacrosse ball or hollow foam roller:** Useful for rolling out tight arches, calves, and lower back muscles.
- ![Foam Roller](/images/gear/amazon/hyperice-vyper-foam-roller.jpg)
  * **Pain relievers:** Standard over-the-counter anti-inflammatories (like ibuprofen or paracetamol) for sore joints and sleep-deprivation headaches.
  * **Protein bars & quick snacks:** Keep nuts, fruit, or protein bars in your room and bag. You may get hungry at 3:00 AM when hotel restaurants are closed.
 
@@ -61,5 +58,4 @@ Because social dancing often runs until 4:00 AM or 5:00 AM, many dancers find th
 
 ### Miscellaneous Tech & Tools
  * **High-capacity power bank:** Your phone battery can drain quickly from recording workshop recaps, taking videos of friends, and looking up late-night songs.
- ![Portable Power Bank](/images/gear/amazon/anker-20000mah-power-bank.jpg)
  * **Emergency utility kit:** Pack a few safety pins, a travel sewing kit, and spare earring back stoppers in case of a wardrobe malfunction.
