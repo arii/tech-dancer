@@ -1,16 +1,9 @@
-
 import { Share2 } from 'lucide-react';
-import { Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
-import { ArticleLayout } from '@/components/article/ArticleLayout';
-import { ArticleHero } from '@/components/article/ArticleHero';
-import { ArticleMeta } from '@/components/article/ArticleMeta';
-import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
-import { ArticleSidebar } from '@/components/article/ArticleSidebar';
-import { ArticleFooter } from '@/components/article/ArticleFooter';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { DetailLayout } from '@/components/layout/DetailLayout';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
-import { Post, readingTime } from '@/lib/content';
+import { Post } from '@/lib/content';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -29,72 +22,46 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     }
   };
 
-  const rt = post.readingTime || `${readingTime(post.content)} min read`;
-
-  const heroVisual = post.hero ? (
-    <ArticleFeatureCard
-      type={post.hero.type}
-      title={post.hero.title}
-      subtitle={post.hero.subtitle}
-      caption={post.hero.caption}
-      image={post.hero.image || post.image}
-    />
-  ) : post.image ? (
-    <ArticleFeatureCard image={post.image} />
-  ) : null;
-
   return (
-    <ArticleLayout
+    <DetailLayout
+      title={post.title}
+      category={post.category}
+      date={post.date}
+      content={post.content}
+      image={post.image}
       onBack={onBack}
       backLabel={backLabel}
-      hero={
-        <ArticleHero
-          category={post.category}
-          date={post.date}
-          readingTime={rt}
-          title={post.title}
-          dek={post.dek || post.excerpt}
-          tags={post.tags}
-          meta={
-            <Stack direction="row" justify="between" align="center" width="full">
-              <ArticleMeta
-                author={post.author}
-                authorAvatar={post.authorAvatar}
-                status={post.status}
-              />
-              <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
-                <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-cyan-300" />
-                <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-cyan-300">SHARE</Text>
-              </Stack>
+      headerExtras={
+        <Stack gap={6}>
+          <Stack direction="row" gap={4} marginTop={6}>
+            <Stack direction="row" align="center" gap={2} color="dim">
+               <Box width={8} height={8} radius="full" surface="muted" />
+               <Text variant="mono" size="xs">{post.author}</Text>
             </Stack>
-          }
-          visual={heroVisual}
-        />
-      }
-      sidebar={
-        <ArticleSidebar
-          snapshot={post.sidebar?.snapshot}
-          relatedTopics={post.tags}
-          custom={
-            <Stack gap={6}>
-              {post.sidebar?.custom}
-              {post.tags?.some(tag => tag.toLowerCase().includes('gear') || tag.toLowerCase().includes('review')) && (
-                <AffiliateDisclosure />
-              )}
+            <Box flex />
+            <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-accent-sky hover:bg-accent-sky/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
+              <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-accent-sky" />
+              <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
             </Stack>
-          }
-        />
-      }
-      footer={
-        <ArticleFooter related={post.related} />
+          </Stack>
+          <AffiliateDisclosure />
+        </Stack>
       }
     >
-      {/*
-        Editorial elements are available for manual composition
-        if needed, but primary rendering is via MarkdownRenderer.
-        Imported here to satisfy dependency checks and for future use.
-      */}
-      <MarkdownRenderer content={post.content} />
-    </ArticleLayout>
+      {post.tags && post.tags.length > 0 && (
+        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+          <Stack gap={4}>
+            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
+            <Stack direction="row" wrap gap={2}>
+              {post.tags.map(tag => (
+                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                  <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
+                </Box>
+              ))}
+            </Stack>
+          </Stack>
+        </Box>
+      )}
+    </DetailLayout>
   );
 }

@@ -21,59 +21,67 @@ export default function Merch() {
   return (
     <Box>
       <SEO
-        title="West Coast Swing Dance Merch | BoomTick"
-        description="BoomTick merch for West Coast Swing dancers, NorCal pride, rainbow pride, and role-fluid social dance energy. Shop lead, follow, switch, and WCS-inspired apparel."
+        title="Shop WCS Dance Merch | Role Pride & NorCal Apparel | BoomTick"
+        description="Elevate your social dance style with BoomTick's curated West Coast Swing merch. Featuring role-pride tees, NorCal BestCal designs, and rainbow pride apparel."
         jsonLd={generateMerchSchema(getAllMerchProducts())}
       />
 
-      <Stack gap={8} width="full">
-        <Grid cols={{ base: 1, md: 2 }} gap={{ base: 8, md: 12 }} align="center">
-          <PageHeader
-            label="STORE"
-            title="West Coast Swing Dance Merch"
-            description="Role-pride apparel, NorCal love, rainbow pride, and social dance floor energy."
-            border="none"
-            paddingBottom={0}
-            descriptionMaxWidth="full"
-            cta={
-              <Stack gap={4}>
-                <Stack direction={{ base: 'col', sm: 'row' }} gap={4}>
-                  <Button
-                    as="a"
-                    href="https://boomtick.printful.me"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="primary"
-                    className="w-full sm:w-fit"
-                  >
-                    Shop Printful Store
-                  </Button>
-                  <Button
-                    as="a"
-                    href="#featured"
-                    variant="outline"
-                    className="w-full sm:w-fit"
-                  >
-                    Browse Featured Picks
-                  </Button>
-                </Stack>
-                <Box padding={4} radius="2xl" border className="bg-surface-alt/40 border-line/50">
-                  <Text variant="body" size="xs" color="dim" leading="relaxed">
+      <Stack gap={{ base: 6, md: 8 }} width="full">
+        {/* Hero Section */}
+        <Box as="section" marginX="auto" maxWidth="7xl" width="full">
+          <Grid cols={{ base: 1, md: 2 }} gap={{ base: 6, md: 12 }} align="center">
+            <PageHeader
+              label="STORE"
+              title="West Coast Swing Dance Merch"
+              description="Role-pride apparel, NorCal love, rainbow pride, and social dance floor energy."
+              border="none"
+              paddingBottom={0}
+              descriptionMaxWidth="full"
+              cta={
+                <Stack gap={6}>
+                  <Stack direction={{ base: 'col', sm: 'row' }} gap={4}>
+                    <Button
+                      as="a"
+                      href="https://boomtick.printful.me"
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      variant="primary"
+                      className="w-full sm:w-fit"
+                    >
+                      Shop Printful Store
+                    </Button>
+                    <Button
+                      as="a"
+                      href="#featured"
+                      variant="outline"
+                      className="w-full sm:w-fit"
+                    >
+                      Browse Featured Picks
+                    </Button>
+                  </Stack>
+                  <Text variant="body" size="micro" color="dim" leading="relaxed">
                     Heads up: merch opens in the BoomTick Printful store. Printful handles colors, sizing, checkout, shipping, and fulfillment.
                   </Text>
-                </Box>
-              </Stack>
-            }
-          />
-          <ReferralBanner layout="expanded" />
-        </Grid>
+                </Stack>
+              }
+            />
+            <Box display={{ base: 'none', md: 'block' }}>
+              <ReferralBanner layout="expanded" />
+            </Box>
+          </Grid>
+        </Box>
 
         {/* Collection Filters */}
-        <Stack gap={3}>
-          <Text variant="body" size="sm" color="dim" weight="font-medium">
-            Browse by vibe — Find the design that matches your dance-floor personality.
-          </Text>
-          <Box id="featured" border="b" paddingBottom={4} className="border-line overflow-x-auto">
+        <Stack gap={4} marginTop={2}>
+          <Stack gap={1.5}>
+            <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="tight">
+              Browse by vibe
+            </Text>
+            <Text variant="body" size="sm" color="dim">
+              Find the design that matches your dance-floor personality.
+            </Text>
+          </Stack>
+          <Box id="featured" border="b" paddingBottom={3} className="border-line overflow-x-auto">
             <Stack direction="row" gap={2} padding={1} className="min-w-max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton
@@ -88,7 +96,7 @@ export default function Merch() {
         </Stack>
 
         {/* Product Grid */}
-        <Grid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap={{ base: 5, md: 8 }}>
+        <Grid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap={4} mdGap={6}>
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} item={product} />
           ))}
@@ -123,4 +131,3 @@ export default function Merch() {
     </Box>
   );
 }
-
