@@ -1,8 +1,8 @@
 export interface ResearchCTA {
   label: string;
   url: string;
-  icon?: string;
   isExternal?: boolean;
+  variant?: 'primary' | 'outline' | 'ghost';
 }
 
 export interface ResearchTool {
@@ -14,9 +14,6 @@ export interface ResearchTool {
   status: string;
   tags: string[];
   canonicalPath?: string;
-  externalUrl?: string;
-  externalLinkDisplayLabel?: string;
-  sourceUrl?: string;
   isFlagship?: boolean;
   image?: string;
   proves?: string[];
@@ -36,9 +33,9 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     image: '/assets/posts/boomtick-and-b-thumb.svg', // Fallback to existing asset if possible
     proves: ['Frontend architecture', 'Product thinking', 'Content systems', 'SEO', 'Automation', 'Design iteration'],
     ctas: [
-      { label: 'View site', url: 'https://boomtick.blog', isExternal: true },
-      { label: 'Read architecture article', url: '/research/architecture' },
-      { label: 'View GitHub workflow', url: 'https://github.com/arii/boomtick/tree/main/.github/workflows', isExternal: true }
+      { label: 'View site', url: 'https://boomtick.blog', isExternal: true, variant: 'primary' },
+      { label: 'Read architecture article', url: '/research/architecture', variant: 'outline' },
+      { label: 'View GitHub workflow', url: 'https://github.com/arii/boomtick/tree/main/.github/workflows', isExternal: true, variant: 'ghost' }
     ]
   },
   {
@@ -53,9 +50,9 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     image: '/assets/research/repo-auditor-ai.png',
     proves: ['DevAI orchestration', 'GitHub workflow automation', 'PR review systems', 'Prompt pipelines', 'Repo-aware tooling'],
     ctas: [
-      { label: 'Read case study', url: '/research/repo-auditor-case-study' },
-      { label: 'View repo', url: 'https://github.com/arii/hrm-project-management', isExternal: true },
-      { label: 'View workflow', url: 'https://github.com/arii/hrm-project-management/tree/main/.github/workflows', isExternal: true }
+      { label: 'Read case study', url: '/research/repo-auditor-case-study', variant: 'primary' },
+      { label: 'View repo', url: 'https://github.com/arii/hrm-project-management', isExternal: true, variant: 'outline' },
+      { label: 'View workflow', url: 'https://github.com/arii/hrm-project-management/tree/main/.github/workflows', isExternal: true, variant: 'ghost' }
     ]
   },
   {
@@ -66,10 +63,11 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
-    externalUrl: 'https://arii.github.io/hrm/',
-    externalLinkDisplayLabel: 'View HRM',
     isFlagship: false,
-    image: '/assets/research/hrm-flagship.png'
+    image: '/assets/research/hrm-flagship.png',
+    ctas: [
+      { label: 'View HRM', url: 'https://arii.github.io/hrm/', isExternal: true, variant: 'outline' }
+    ]
   },
   {
     id: 'gitops-pr-reviewer',

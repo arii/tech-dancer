@@ -1,13 +1,13 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate, Link } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, CheckCircle2 } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Globe, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
-import { ResearchTool } from '@/config/research-tools';
+import { ResearchTool, ResearchCTA } from '@/config/research-tools';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -17,6 +17,187 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   return Search;
 }
 
+const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+
+function ToolImage({ tool, className }: { tool: ResearchTool; className?: string }) {
+  if (!tool.image) return null;
+  const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
+  return (
+    <Box
+      span={{ base: 1, md: 2 }}
+      height={{ base: 32, md: 'full' }}
+      overflow="hidden"
+      border={{ base: 'b', md: 'r' }}
+      surface="muted"
+      className={cn("border-accent/5 opacity-80", className)}
+    >
+      <img
+        src={src}
+        alt={`${tool.title} interface preview`}
+        loading="lazy"
+        className="w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
+      />
+    </Box>
+  );
+}
+
+function ToolCTA({ cta }: { cta: ResearchCTA }) {
+  const isExternal = cta.isExternal;
+  const variant = cta.variant || 'outline';
+
+  return (
+    <Button
+      as={isExternal ? 'a' : Link}
+      href={isExternal ? cta.url : undefined}
+      to={!isExternal ? cta.url : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      variant={variant}
+      size="sm"
+      gap={2}
+      className="text-xs tracking-widest font-bold uppercase"
+    >
+      {cta.label}
+      {isExternal && <Icon icon={ExternalLink} size="xs" />}
+    </Button>
+  );
+}
+
+function FlagshipCard({ tool }: { tool: ResearchTool }) {
+  return (
+    <BaseCard
+      padding={0}
+      gap={0}
+      surface="surface"
+      className="border-accent/10 h-full overflow-hidden"
+    >
+      <Grid cols={{ base: 1, md: 5 }} gap={0} height="full">
+        <ToolImage tool={tool} />
+        <Stack
+          span={{ base: 1, md: tool.image ? 3 : 5 }}
+          gap={{ base: 4, md: 6 }}
+          padding={{ base: 6, md: 8 }}
+          flex={1}
+          className="min-w-0" // Prevent horizontal overflow
+        >
+          <Box display="flex" justify="between" align="start" width="full">
+            <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
+              <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+            </Box>
+            <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
+              Flagship
+            </Text>
+          </Box>
+
+          <Stack gap={4}>
+            <Stack gap={1}>
+              <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                {tool.category}
+              </Text>
+              <Text variant="display" size="2xl" weight="font-black">
+                {tool.title}
+              </Text>
+              <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
+                {tool.subtitle}
+              </Text>
+            </Stack>
+
+            <Text variant="body" size="md" color="dim" className="leading-relaxed">
+              {tool.description}
+            </Text>
+
+            {tool.proves && (
+              <Stack gap={2}>
+                <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>
+                  Proves
+                </Text>
+                <Grid cols={{ base: 1, sm: 2 }} gapX={4} gapY={1.5}>
+                  {tool.proves.map(item => (
+                    <Box key={item} display="flex" align="center" gap={2}>
+                      <Icon icon={CheckCircle2} size="xs" color="accent" className="opacity-50" />
+                      <Text size="xs" color="body" weight="font-medium">{item}</Text>
+                    </Box>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
+          </Stack>
+
+          <Stack gap={3} marginTop="auto" paddingTop={4}>
+            <Box display="flex" wrap="wrap" gap={2}>
+              {tool.tags.map(tag => (
+                <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                  {tag}
+                </Text>
+              ))}
+            </Box>
+
+            <Box display="flex" wrap="wrap" gap={3}>
+              {tool.ctas?.map((cta) => (
+                <ToolCTA key={cta.url} cta={cta} />
+              ))}
+            </Box>
+          </Stack>
+        </Stack>
+      </Grid>
+    </BaseCard>
+  );
+}
+
+function EngineeringToolCard({ tool }: { tool: ResearchTool }) {
+  return (
+    <Stack
+      as={Link}
+      to={tool.canonicalPath || `/research/${tool.id}`}
+      padding={6}
+      paddingBottom={10}
+      gap={4}
+      height="full"
+      align="start"
+      textAlign="left"
+      className={cn(cardVariants({ interactive: true }), "min-w-0")} // Prevent overflow
+    >
+      <Stack gap={4} width="full">
+        <Box display="flex" justify="between" align="start" width="full">
+          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
+            <Icon icon={getToolIcon(tool)} size="md" color="dim" />
+          </Box>
+          <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
+            {tool.status}
+          </Text>
+        </Box>
+        <Stack gap={3}>
+          <Stack gap={1}>
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
+                  {tool.category}
+              </Text>
+              <Text variant="display" size="xl" weight="font-black">
+                  {tool.title}
+              </Text>
+          </Stack>
+          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
+              {tool.subtitle}
+          </Text>
+          <Text size="sm" color="dim">
+            {tool.description}
+          </Text>
+          <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
+              {tool.tags.map(tag => (
+                  <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
+                      {tag}
+                  </Text>
+              ))}
+          </Box>
+        </Stack>
+      </Stack>
+      <Box display="flex" align="center" gap={2} marginTop="auto">
+        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
+        <Icon icon={ArrowRight} size="md" color="accent" />
+      </Box>
+    </Stack>
+  );
+}
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
@@ -24,10 +205,8 @@ export default function ResearchAnalytics() {
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
 
-  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-
   return (
-    <Box as="section">
+    <Box as="section" className="overflow-x-hidden">
       <SEO
         title="DevAI Portfolio | AI Orchestration & ML Engineering"
         description="Showcase of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
@@ -53,141 +232,7 @@ export default function ResearchAnalytics() {
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={8}>
             {flagshipTools.map((tool) => (
-              <BaseCard
-                key={tool.id}
-                padding={0}
-                gap={0}
-                surface="surface"
-                className="border-accent/10 h-full overflow-hidden"
-              >
-                <Grid cols={{ base: 1, md: 5 }} gap={0} height="full">
-                  {tool.image && (
-                    <Box
-                      span={{ base: 1, md: 2 }}
-                      height={{ base: 32, md: 'full' }}
-                      overflow="hidden"
-                      border={{ base: 'b', md: 'r' }}
-                      surface="muted"
-                      className="border-accent/5 opacity-80"
-                    >
-                      <img
-                        src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
-                        alt={tool.title}
-                        className="w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
-                      />
-                    </Box>
-                  )}
-                  <Stack
-                    span={{ base: 1, md: tool.image ? 3 : 5 }}
-                    gap={{ base: 4, md: 6 }}
-                    padding={{ base: 4, md: 8 }}
-                    flex={1}
-                  >
-                    <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
-                        <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
-                      </Box>
-                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
-                        Flagship
-                      </Text>
-                    </Box>
-
-                    <Stack gap={4}>
-                      <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                          {tool.category}
-                        </Text>
-                        <Text variant="display" size="2xl" weight="font-black">
-                          {tool.title}
-                        </Text>
-                        <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
-                          {tool.subtitle}
-                        </Text>
-                      </Stack>
-
-                      <Text variant="body" size="md" color="dim" className="leading-relaxed">
-                        {tool.description}
-                      </Text>
-
-                      {tool.proves && (
-                        <Stack gap={2}>
-                          <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>
-                            Proves
-                          </Text>
-                          <Grid cols={{ base: 1, sm: 2 }} gapX={4} gapY={1.5}>
-                            {tool.proves.map(item => (
-                              <Box key={item} display="flex" align="center" gap={2}>
-                                <Icon icon={CheckCircle2} size="xs" color="accent" className="opacity-50" />
-                                <Text size="xs" color="body" weight="font-medium">{item}</Text>
-                              </Box>
-                            ))}
-                          </Grid>
-                        </Stack>
-                      )}
-                    </Stack>
-
-                    <Stack gap={3} marginTop="auto" paddingTop={4}>
-                      <Box display="flex" wrap="wrap" gap={2}>
-                        {tool.tags.map(tag => (
-                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                            {tag}
-                          </Text>
-                        ))}
-                      </Box>
-
-                      <Box display="flex" wrap="wrap" gap={3}>
-                        {tool.ctas?.map((cta) => (
-                          <Button
-                            key={cta.label}
-                            as={cta.isExternal ? 'a' : Link}
-                            href={cta.isExternal ? cta.url : undefined}
-                            to={!cta.isExternal ? cta.url : undefined}
-                            target={cta.isExternal ? "_blank" : undefined}
-                            rel={cta.isExternal ? "noopener noreferrer" : undefined}
-                            variant="outline"
-                            size="sm"
-                            gap={2}
-                            className="text-xs tracking-widest font-bold uppercase"
-                          >
-                            {cta.label}
-                            {cta.isExternal && <Icon icon={ExternalLink} size="xs" />}
-                          </Button>
-                        ))}
-                        {!tool.ctas && tool.externalUrl && (
-                          <Button
-                            as="a"
-                            href={tool.externalUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            variant="outline"
-                            size="sm"
-                            gap={2}
-                            className="text-xs tracking-widest font-bold uppercase"
-                          >
-                            {tool.externalLinkDisplayLabel || 'Open Link'}
-                            <Icon icon={ExternalLink} size="xs" />
-                          </Button>
-                        )}
-                        {!tool.ctas && tool.sourceUrl && (
-                          <Button
-                            as="a"
-                            href={tool.sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            variant="ghost"
-                            size="sm"
-                            gap={2}
-                            className="text-xs tracking-widest font-bold uppercase"
-                          >
-                            Source
-                            <Icon icon={Github} size="xs" />
-                          </Button>
-                        )}
-                      </Box>
-                    </Stack>
-                  </Stack>
-                </Grid>
-              </BaseCard>
+              <FlagshipCard key={tool.id} tool={tool} />
             ))}
           </Grid>
         </Stack>
@@ -214,56 +259,7 @@ export default function ResearchAnalytics() {
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
             {engineeringTools.map((tool) => (
-              <Stack
-                key={tool.id}
-                as={Link}
-                to={tool.canonicalPath || `/research/${tool.id}`}
-                padding={6}
-                paddingBottom={10}
-                gap={4}
-                height="full"
-                align="start"
-                textAlign="left"
-                className={cardVariants({ interactive: true })}
-              >
-                <Stack gap={4} width="full">
-                  <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
-                      <Icon icon={getToolIcon(tool)} size="md" color="dim" />
-                    </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
-                      {tool.status}
-                    </Text>
-                  </Box>
-                  <Stack gap={3}>
-                    <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
-                            {tool.category}
-                        </Text>
-                        <Text variant="display" size="xl" weight="font-black">
-                            {tool.title}
-                        </Text>
-                    </Stack>
-                    <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
-                        {tool.subtitle}
-                    </Text>
-                    <Text size="sm" color="dim">
-                      {tool.description}
-                    </Text>
-                    <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                        {tool.tags.map(tag => (
-                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                                {tag}
-                            </Text>
-                        ))}
-                    </Box>
-                  </Stack>
-                </Stack>
-                <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
-                  <Icon icon={ArrowRight} size="md" color="accent" />
-                </Box>
-              </Stack>
+              <EngineeringToolCard key={tool.id} tool={tool} />
             ))}
           </Grid>
         </Stack>
