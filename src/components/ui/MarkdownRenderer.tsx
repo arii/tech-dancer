@@ -2,9 +2,9 @@
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import { ASSET_PREFIX } from '@/config/constants';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
+import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 
 interface MarkdownRendererProps {
@@ -96,9 +96,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
           img: ({node: _node, src, ...props}) => {
-            const normalizedSrc = (src?.startsWith('/') && !src.startsWith(ASSET_PREFIX))
-              ? `${ASSET_PREFIX}${src}`
-              : src;
+            const normalizedSrc = normalizeAsset(src || '');
             return (
               <img
                 src={normalizedSrc}
