@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/migrate-event-editorial-storyboard-7065757936021281572-13695104869206687912/sitemap.xml

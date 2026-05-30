@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/rebrand-devai-portfolio-dashboard-15714420732196313927/sitemap.xml

@@ -1,6 +1,0 @@
-import{c as s,j as t,S as i,T as c,B as d,f as l}from"./index-CRb6pSJG.js";/**
- * @license lucide-react v0.546.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const p=[["path",{d:"M10 12.5 8 15l2 2.5",key:"1tg20x"}],["path",{d:"m14 12.5 2 2.5-2 2.5",key:"yinavb"}],["path",{d:"M14 2v4a2 2 0 0 0 2 2h4",key:"tnqrlb"}],["path",{d:"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z",key:"1mlx9k"}]],a=s("file-code",p),n={py:a,sh:l,mjs:a,json:a,default:a};function h(r){const e=r.split(".").pop()||"";return n[e]||n.default}function u({assets:r}){return t.jsxs(i,{gap:4,children:[t.jsx(c,{variant:"mono",size:"micro",color:"dim",uppercase:!0,tracking:"widest",opacity:.5,children:"Core Architectural Assets"}),t.jsx(i,{gap:2,children:r.map(e=>{const o=e.icon||h(e.path);return t.jsxs(d,{display:"flex",align:"center",gap:3,padding:3,border:!0,radius:"md",surface:"surface",children:[t.jsx(o,{size:16,className:"text-accent"}),t.jsx(c,{variant:"mono",size:"xs",children:e.path}),t.jsx(c,{variant:"mono",size:"micro",color:"dim",marginLeft:"auto",opacity:.6,children:e.label})]},e.path)})})]})}export{u as A};

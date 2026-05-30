@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feature-theme-spotlight-inspiration-16673367113095139622-18154520186536654759/sitemap.xml

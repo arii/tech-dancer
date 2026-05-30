@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/review-gear-page-filters-merch-separation-7581110104653872743-14763097145608722497/sitemap.xml

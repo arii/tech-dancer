@@ -1,6 +1,0 @@
-import{c as i,a0 as s}from"./index-DkySWHDz.js";import{u as n}from"./useQuery-8ODPUg4D.js";/**
- * @license lucide-react v0.546.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const r=[["path",{d:"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2",key:"169zse"}]],y=i("activity",r),o=[{id:"wcs-scraper",name:"WCS Scoring Scraper",category:"Data Tools",status:"Active",layman:"Scrapes and analyzes scoring data from WCS competitions to show trends and results."},{id:"blog-drafter",name:"AI Blog Drafter",category:"Content Tools",status:"Active",layman:"Uses AI to help draft and refine blog posts with human feedback."},{id:"ux-auditor",name:"UX Auditor",category:"Testing Tools",status:"Active",layman:"Checks for visual changes and accessibility issues across different screen sizes.",canonicalPath:"/ux-auditor"},{id:"wsdc-event-reminders",name:"Event Reminders",category:"Utility Tools",status:"Active",layman:"Syncs important event dates and early-bird deadlines directly to your calendar."}];function m(){const{data:a=[]}=n({queryKey:["studies"],queryFn:s,initialData:s});return{studies:a,tools:o,getTool:t=>o.find(e=>e.id===t),getStudy:t=>a.find(e=>e.slug===t)}}export{y as A,m as u};
