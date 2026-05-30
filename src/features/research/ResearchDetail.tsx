@@ -105,7 +105,7 @@ export default function ResearchDetail() {
           date={study.date}
           content={study.content}
           onBack={() => navigate('/research')}
-          backLabel="Back to Portfolio"
+          backLabel="Back to DevAI Portfolio"
         />
       </>
     );

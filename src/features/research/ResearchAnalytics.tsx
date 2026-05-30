@@ -120,7 +120,16 @@ export default function ResearchAnalytics() {
                   )}
                   <Stack gap={6} padding={8} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/20 bg-accent/5">
+                      <Box
+                        width={12}
+                        height={12}
+                        surface="muted"
+                        radius="lg"
+                        display="flex"
+                        align="center"
+                        justify="center"
+                        className="border border-accent/20 bg-accent/5 shadow-sm shadow-accent/5"
+                      >
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                       </Box>
                       <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
@@ -233,7 +242,16 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/20 bg-accent/5">
+                    <Box
+                      width={10}
+                      height={10}
+                      surface="muted"
+                      radius="md"
+                      display="flex"
+                      align="center"
+                      justify="center"
+                      className="border border-accent/10 bg-accent/5 shadow-sm shadow-accent/5"
+                    >
                       <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
                     {tool.status !== 'Active' && (
@@ -267,17 +285,19 @@ export default function ResearchAnalytics() {
                   </Stack>
                 </Stack>
                 <ActionButton
-                  variant="ghost"
+                  variant="secondary"
                   size="sm"
-                  paddingX={0}
+                  paddingX={4}
+                  paddingY={2}
+                  radius="md"
                   gap={2}
-                  className="hover:bg-transparent"
                   marginTop="auto"
+                  className="w-fit"
                 >
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest">
                     {tool.ctaLabel || 'View Assets'}
                   </Text>
-                  <Icon icon={ArrowRight} size="md" color="accent" />
+                  <Icon icon={ArrowRight} size="md" />
                 </ActionButton>
               </Stack>
             ))}
