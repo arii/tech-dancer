@@ -1,9 +1,10 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Check } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
@@ -26,27 +27,75 @@ export default function ResearchAnalytics() {
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
   return (
-    <Box as="section">
+    <Box as="section" className="relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <Box
+        position="absolute"
+        top={-20}
+        right={-20}
+        width={96}
+        height={96}
+        radius="full"
+        className="bg-accent/5 blur-3xl -z-10 pointer-events-none"
+      />
+      <Box
+        position="absolute"
+        bottom="1/3"
+        left={-20}
+        width={64}
+        height={64}
+        radius="full"
+        className="bg-accent/5 blur-3xl -z-10 pointer-events-none"
+      />
+
       <SEO
         title="DevAI Portfolio | AI Systems & Orchestration"
         description="A portfolio of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
       />
-      <Stack gap={12}>
+      <Stack gap={12} className="relative z-10">
         <PageHeader
-          label="DEVAI_PORTFOLIO"
           title="DevAI Portfolio"
           description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
           as="h1"
         />
 
-        <Box maxWidth="2xl">
+        <Stack gap={8} maxWidth="2xl">
           <Text variant="body" size="lg" color="body">
-            Grounded DevAI solutions built for production systems. From <strong>custom RAG pipelines</strong> to <strong>autonomous repository auditing</strong>, these projects demonstrate practical applications of agentic workflows and AI engineering in modern software delivery.
+            Grounded DevAI solutions built for production systems. These projects demonstrate practical applications of agentic workflows and AI engineering in modern software delivery.
           </Text>
-        </Box>
+          <Stack gap={3}>
+            {[
+              { title: 'Custom RAG Pipelines', desc: 'Grounded production solutions.' },
+              { title: 'Autonomous Repository Auditing', desc: 'Practical agentic workflows.' },
+              { title: 'AI Engineering', desc: 'Modern software delivery.' }
+            ].map((item, i) => (
+              <Box key={i} display="flex" align="start" gap={3}>
+                <Box marginTop={1} color="accent">
+                  <Check size={16} strokeWidth={3} />
+                </Box>
+                <Text size="sm" color="body">
+                  <strong>{item.title}</strong> — {item.desc}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
+          <Box paddingTop={2}>
+            <ActionButton
+              as="a"
+              href="#flagship"
+              variant="primary"
+              paddingX={6}
+              paddingY={3}
+              radius="md"
+              className="w-fit"
+            >
+              Explore Projects
+            </ActionButton>
+          </Box>
+        </Stack>
 
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+        <Stack gap={8} id="flagship">
+          <Box paddingBottom={4} display="flex" direction={{ base: "col", md: "row" }} justify="between" align={{ base: "start", md: "end" }} border="b" gap={2}>
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
           </Box>
@@ -71,7 +120,7 @@ export default function ResearchAnalytics() {
                   )}
                   <Stack gap={6} padding={8} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
+                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/20 bg-accent/5">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                       </Box>
                       <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
@@ -88,7 +137,7 @@ export default function ResearchAnalytics() {
                           {tool.title}
                         </Text>
                       </Stack>
-                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
+                      <Text size="sm" color="body" weight="font-bold" uppercase tracking="tighter">
                         {tool.subtitle}
                       </Text>
                       <Text variant="body" size="md" color="dim" className="leading-relaxed">
@@ -98,7 +147,7 @@ export default function ResearchAnalytics() {
 
                     <Box display="flex" wrap="wrap" gap={2}>
                       {tool.tags.map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                        <Text key={tag} variant="mono" size="micro" paddingX={1.5} paddingY={0.5} radius="sm" color="dim" className="bg-surface-alt/50 border border-line/10">
                           {tag}
                         </Text>
                       ))}
@@ -106,21 +155,23 @@ export default function ResearchAnalytics() {
 
                     <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
                       {tool.externalUrl && (
-                        <Box
+                        <ActionButton
                           as="a"
                           href={tool.externalUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          display="flex"
-                          align="center"
-                          gap={2}
-                          className="text-accent hover:opacity-80 transition-colors z-20"
+                          variant="accent"
+                          size="sm"
+                          paddingX={4}
+                          paddingY={2}
+                          radius="md"
+                          className="z-20"
                         >
                           <Text weight="font-bold" size="xs" uppercase tracking="widest">
                             {tool.ctaLabel || tool.externalLinkDisplayLabel || 'Open Link'}
                           </Text>
-                          <ExternalLink className="w-4 h-4" />
-                        </Box>
+                          <ExternalLink className="ml-2 w-4 h-4" />
+                        </ActionButton>
                       )}
                       {tool.sourceUrl && (
                         <Box
@@ -161,7 +212,7 @@ export default function ResearchAnalytics() {
         </Grid>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+          <Box paddingBottom={4} display="flex" direction={{ base: "col", md: "row" }} justify="between" align={{ base: "start", md: "end" }} border="b" gap={2}>
             <Text variant="headline" size="2xl" weight="font-black">DevAI Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} PROJECTS</Text>
           </Box>
@@ -181,7 +232,7 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
+                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/20 bg-accent/5">
                       <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
                     {tool.status !== 'Active' && (
@@ -199,7 +250,7 @@ export default function ResearchAnalytics() {
                             {tool.title}
                         </Text>
                     </Stack>
-                    <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
+                    <Text size="micro" color="body" weight="font-bold" uppercase tracking="tighter">
                         {tool.subtitle}
                     </Text>
                     <Text size="sm" color="dim">
@@ -207,19 +258,25 @@ export default function ResearchAnalytics() {
                     </Text>
                     <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
                         {tool.tags.map(tag => (
-                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
+                            <Text key={tag} variant="mono" size="micro" paddingX={1.5} paddingY={0.5} radius="sm" color="dim" className="bg-surface-alt/50 border border-line/10">
                                 {tag}
                             </Text>
                         ))}
                     </Box>
                   </Stack>
                 </Stack>
-                <Box display="flex" align="center" gap={2} marginTop="auto">
+                <ActionButton
+                  variant="ghost"
+                  size="sm"
+                  paddingX={0}
+                  className="hover:bg-transparent"
+                  marginTop="auto"
+                >
                   <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
                     {tool.ctaLabel || 'View Assets'}
                   </Text>
-                  <Icon icon={ArrowRight} size="md" color="accent" />
-                </Box>
+                  <Icon icon={ArrowRight} size="md" color="accent" className="ml-2" />
+                </ActionButton>
               </Stack>
             ))}
           </Grid>
