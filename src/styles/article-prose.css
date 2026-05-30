@@ -1,10 +1,55 @@
 
+.prose-counters {
+  counter-reset: section;
+}
+
+.prose-section {
+  counter-increment: section;
+}
+
+.prose-section-number::before {
+  content: counter(section, decimal-leading-zero);
+}
+
 .article-prose {
-  @apply prose prose-invert prose-slate max-w-none lg:max-w-[720px];
-  @apply prose-p:text-[16px] sm:prose-p:text-[17px] prose-p:leading-[1.65] sm:prose-p:leading-8 prose-p:text-text-dim;
-  @apply prose-headings:font-display prose-headings:text-text-main prose-headings:font-bold;
-  @apply prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-l prose-h2:border-accent prose-h2:pl-4;
-  @apply prose-h3:text-lg sm:prose-h3:text-xl;
-  @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
-  @apply prose-strong:text-text-main prose-blockquote:border-accent prose-blockquote:text-text-body prose-blockquote:italic;
+  @apply max-w-none;
+}
+
+.article-prose p {
+  @apply text-text-dim/90 leading-relaxed mb-6 font-medium;
+  font-size: clamp(1rem, 1.15vw, 1.08rem);
+}
+
+.article-prose h2 {
+  @apply text-text-main font-bold mt-16 mb-8 tracking-tight;
+  font-size: clamp(1.65rem, 2.2vw, 2.35rem);
+}
+
+.article-prose h3 {
+  @apply text-text-main font-bold mt-12 mb-6 tracking-tight;
+  font-size: 1.25rem;
+}
+
+.article-prose ul {
+  @apply space-y-3 mb-8;
+}
+
+.article-prose ol {
+  @apply space-y-4 mb-8;
+}
+
+.article-prose li {
+  @apply text-text-dim/90 font-medium leading-relaxed;
+}
+
+.article-prose strong {
+  @apply text-text-main font-bold;
+}
+
+.article-prose a {
+  @apply text-accent hover:underline transition-all;
+}
+
+.article-prose blockquote {
+  @apply border-l-0 pl-0 italic font-medium text-text-dim;
 }

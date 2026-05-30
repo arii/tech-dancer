@@ -52,7 +52,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/events/:slug',
-    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
+    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.EventGuide })),
     skeleton: 'post'
   },
   {

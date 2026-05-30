@@ -2,31 +2,32 @@ import { Box, Text } from '@/layouts/Primitives';
 
 interface AffiliateDisclosureProps {
   compact?: boolean;
+  provider?: 'amazon' | 'generic';
 }
 
-export const DISCLOSURE_TEXT = 'As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.';
+export const DISCLOSURE_TEXT = 'Disclosure: This post may include affiliate links. BoomTick may earn a commission if you purchase through them.';
+export const AMAZON_DISCLOSURE = 'Disclosure: As an Amazon Associate, BoomTick may earn from qualifying purchases.';
 
-const COMPACT_TEXT = 'Amazon affiliate link';
+const COMPACT_TEXT = 'Affiliate Disclosure';
 
-export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProps) {
-  const text = compact ? COMPACT_TEXT : DISCLOSURE_TEXT;
+export function AffiliateDisclosure({ compact = false, provider = 'amazon' }: AffiliateDisclosureProps) {
+  const text = compact ? COMPACT_TEXT : (provider === 'amazon' ? AMAZON_DISCLOSURE : DISCLOSURE_TEXT);
 
   return (
     <Box
-      paddingX={6}
-      paddingY={3}
-      marginY={6}
-      surface="muted"
-      radius="sm"
+      paddingX={5}
+      paddingY={4}
+      marginY={8}
+      surface="surface"
+      radius="lg"
       border
-      className="border-line/30"
+      className="border-line/40 bg-surface/20"
     >
       <Text
-        variant="body"
         size="sm"
-        color="body"
+        color="dim"
         weight="font-medium"
-        className="not-italic"
+        className="leading-relaxed opacity-80"
       >
         {text}
       </Text>

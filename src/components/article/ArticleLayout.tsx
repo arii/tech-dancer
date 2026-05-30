@@ -1,7 +1,7 @@
 
 
 import { ReactNode } from 'react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { ArrowLeft } from 'lucide-react';
 
@@ -23,8 +23,8 @@ export function ArticleLayout({
   children
 }: ArticleLayoutProps) {
   return (
-    <Box className="min-h-screen bg-[#020617] text-text-body">
-      <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}> {/* impeccable-ignore */}
+    <Box minHeight="screen" surface="default" className="text-text-body">
+      <Box maxWidth="7xl" marginX="auto" paddingX={{ base: 5, sm: 6, lg: 8 }}>
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
           <Stack
@@ -40,28 +40,41 @@ export function ArticleLayout({
               size="sm"
               className="transition-transform group-hover:-translate-x-1"
             />
-            <Box as="span" className="text-[11px] font-bold uppercase tracking-widest">
+            <Text
+              as="span"
+              variant="mono"
+              size="micro"
+              weight="font-bold"
+              tracking="widest"
+              className="uppercase"
+            >
               {backLabel}
-            </Box>
+            </Text>
           </Stack>
         </Box>
 
         {/* Hero Section */}
-        <Box paddingBottom={{ base: 8, lg: 16 }}>
+        <Box paddingBottom={{ base: 12, lg: 20 }}>
           {hero}
         </Box>
 
         {/* Article Content Grid */}
-        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}"> {/* impeccable-ignore */}
+        <Box
+          display="grid"
+          lgGridCols={sidebar ? "minmax(0, 45rem) 20rem" : "minmax(0, 45rem)"}
+          gap={16}
+          lgGap={24}
+          align="start"
+        >
           {/* Main Article Column */}
-          <Box className={sidebar ? "min-w-0" : "min-w-0 lg:col-span-2"}>
+          <Box minWidth={0}>
             <Box className="article-prose">
               {children}
             </Box>
 
             {/* Footer / Related Posts */}
             {footer && (
-              <Box marginTop={20} border="t" className="border-line/80 pt-12">
+              <Box marginTop={20} border="t" paddingTop={12} className="border-line/80">
                 {footer}
               </Box>
             )}
@@ -70,7 +83,7 @@ export function ArticleLayout({
           {/* Sidebar */}
           {sidebar && (
             <Box className="order-last lg:order-none">
-              <Stack gap={8} className="sticky top-8">
+              <Stack gap={10} className="sticky top-8">
                 {sidebar}
               </Stack>
             </Box>

@@ -1,26 +1,27 @@
-
-import { Share2, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
 import { EventNavigation } from './components/EventNavigation';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { ThemeSpotlight } from './components/ThemeSpotlight';
 import { CuratedGear } from './components/CuratedGear';
 import { EventReminders } from './components/EventReminders';
 import { EventTravel } from './components/EventTravel';
 import { EventNotes } from './components/EventNotes';
+import { RelatedEvents } from './components/RelatedEvents';
 import { useEventDetail } from './useEventDetail';
 import { SECTION_SPACING } from './constants';
 import { getEventSchema } from './schema';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
-import { PostHeader } from '@/components/article/PostHeader';
+import { ArticleHero } from '@/components/article/ArticleHero';
+import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
 import { ArticleSidebar, SidebarCard } from '@/components/article/ArticleSidebar';
-import { ArticleFooter } from '@/components/article/ArticleFooter';
-import { readingTime as getReadingTime } from '@/lib/content';
+import { readingTime } from '@/lib/content';
 
-export function EventGuide() {
+export default function EventGuide() {
   const {
     event,
     isLoading,
@@ -61,24 +62,7 @@ export function EventGuide() {
     );
   }
 
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: event.title,
-        text: event.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
-    }
-  };
-
-  const shareAction = (
-    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
-      <Share2 className="w-3.5 h-3.5" />
-      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
-    </Stack>
-  );
-
-  const rt = event.readingTime || `${getReadingTime(event.content)} min read`;
+  const rt = event.readingTime || `${readingTime(event.content)} min read`;
 
   const heroVisual = event.heroConfig ? (
     <ArticleFeatureCard
@@ -108,30 +92,37 @@ export function EventGuide() {
       onBack={() => navigate('/events')}
       backLabel="Back to Events"
       hero={
-        <PostHeader
+        <ArticleHero
           category={event.category}
           date={event.schedule}
-          readTime={rt}
+          readingTime={rt}
           title={event.title}
           dek={event.dek || event.excerpt}
-          author={event.author}
-          authorAvatar={event.authorAvatar}
-          shareAction={shareAction}
+          meta={
+            <ArticleMeta
+              author={event.author}
+              authorAvatar={event.authorAvatar}
+              status={event.status}
+            />
+          }
           visual={heroVisual}
-          tags={event.tags}
         />
       }
       sidebar={
         <ArticleSidebar
           snapshot={sidebarSnapshot}
           custom={
-            <SidebarCard title="Event Navigation">
-              <EventNavigation />
-            </SidebarCard>
+            <Stack gap={6}>
+              <SidebarCard title="Navigation">
+                <EventNavigation />
+              </SidebarCard>
+              <SidebarCard title="Compliance">
+                <AffiliateDisclosure />
+              </SidebarCard>
+            </Stack>
           }
         />
       }
-      footer={<ArticleFooter related={relatedEvents} />}
     >
       <SEO
         title={`${event.title} | Event Resource Guide`}
@@ -197,6 +188,13 @@ export function EventGuide() {
         <EventTravel id="travel" notes={event.description} />
 
         <EventNotes id="notes" content={event.content} />
+
+        {relatedEvents.length > 0 && (
+          <RelatedEvents
+            id="related"
+            events={relatedEvents}
+          />
+        )}
       </Stack>
     </ArticleLayout>
   );

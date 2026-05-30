@@ -1,2 +1,2 @@
-import ResearchDetail from '@/features/research/ResearchDetail';
+import { ResearchDetail } from '@/features/research/ResearchDetail';
 export default ResearchDetail;

@@ -3,8 +3,7 @@ import { Share2 } from 'lucide-react';
 import { Stack, Text } from '@/layouts/Primitives';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
-import { ArticleHero } from '@/components/article/ArticleHero';
-import { ArticleMeta } from '@/components/article/ArticleMeta';
+import { PostHeader } from '@/components/article/PostHeader';
 import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
 import { ArticleSidebar } from '@/components/article/ArticleSidebar';
 import { ArticleFooter } from '@/components/article/ArticleFooter';
@@ -43,42 +42,47 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     <ArticleFeatureCard image={post.image} />
   ) : null;
 
+  const shareAction = (
+    <Stack
+      as="button"
+      direction="row"
+      onClick={share}
+      align="center"
+      gap={1.5}
+      className="text-text-dim/60 hover:text-accent transition-colors group/share"
+    >
+      <Share2 className="w-3.5 h-3.5" />
+      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+    </Stack>
+  );
+
   return (
     <ArticleLayout
       onBack={onBack}
       backLabel={backLabel}
       hero={
-        <ArticleHero
+        <PostHeader
           category={post.category}
           date={post.date}
           readingTime={rt}
           title={post.title}
           dek={post.dek || post.excerpt}
           tags={post.tags}
-          meta={
-            <Stack direction="row" justify="between" align="center" width="full">
-              <ArticleMeta
-                author={post.author}
-                authorAvatar={post.authorAvatar}
-                status={post.status}
-              />
-              <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
-                <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-cyan-300" />
-                <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-cyan-300">SHARE</Text>
-              </Stack>
-            </Stack>
-          }
+          author={post.author}
+          authorAvatar={post.authorAvatar}
+          shareAction={shareAction}
           visual={heroVisual}
         />
       }
       sidebar={
         <ArticleSidebar
           snapshot={post.sidebar?.snapshot}
-          relatedTopics={post.tags}
+          gearMentioned={post.sidebar?.gearMentioned}
+          relatedGuides={post.sidebar?.relatedGuides}
           custom={
             <Stack gap={6}>
               {post.sidebar?.custom}
-              {post.tags?.some(tag => tag.toLowerCase().includes('gear') || tag.toLowerCase().includes('review')) && (
+              {(post.tags?.some(tag => tag.toLowerCase().includes('gear') || tag.toLowerCase().includes('review')) || post.affiliateProvider) && (
                 <AffiliateDisclosure />
               )}
             </Stack>
@@ -89,11 +93,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <ArticleFooter related={post.related} />
       }
     >
-      {/*
-        Editorial elements are available for manual composition
-        if needed, but primary rendering is via MarkdownRenderer.
-        Imported here to satisfy dependency checks and for future use.
-      */}
       <MarkdownRenderer content={post.content} />
     </ArticleLayout>
   );

@@ -1,21 +1,23 @@
+
 import { useMemo, lazy, Suspense } from 'react';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Database, Activity, Search, Share2 } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
 import { SEO } from '@/components/SEO';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
-import { BASE_URL, SITE_NAME } from '@/config/constants';
+import { BASE_URL } from '@/config/constants';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
-import { ArticleHero } from '@/components/article/ArticleHero';
-import { ArticleMeta } from '@/components/article/ArticleMeta';
+import { PostHeader } from '@/components/article/PostHeader';
+import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
+import { ArticleSidebar } from '@/components/article/ArticleSidebar';
+import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import { readingTime } from '@/lib/content';
+import { readingTime as getReadingTime } from '@/lib/content';
 
-// Lazy load tool components to help with bundle size
+// Lazy load tool components
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
 const WSDCReminders = lazy(() => import('@/features/lab/wsdc-reminders/WSDCReminders'));
 const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
@@ -30,98 +32,71 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'scope-blast-radius': BlastRadiusTool,
 };
 
-export default function ResearchDetail() {
+export function ResearchDetail() {
   const navigate = useNavigate();
   const { id: paramId } = useParams();
   const { pathname } = useLocation();
-
   const { getTool, getStudy } = useResearch();
 
   const id = useMemo(() => {
     if (paramId) return paramId;
     const segments = pathname.split('/').filter(Boolean);
-    // Find the segment after 'research' to identify the tool
     const resIndex = segments.indexOf('research');
     if (resIndex !== -1 && segments[resIndex + 1]) {
       return segments[resIndex + 1];
     }
-    // Fallback to the last segment if we are in this component
     return segments[segments.length - 1] || null;
   }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
 
-  const structuredData = useMemo(() => {
-    if (tool) {
-      return {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": tool.title,
-        "description": tool.description,
-        "applicationCategory": "EducationalApplication"
-      };
+  const share = () => {
+    const title = study?.title || tool?.title || 'Research';
+    const text = study?.excerpt || tool?.description || '';
+    if (navigator.share) {
+      navigator.share({ title, text, url: window.location.href }).catch(console.error);
     }
-    if (study) {
-      return {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": study.title,
-        "description": study.excerpt,
-        "author": {
-          "@type": "Person",
-          "name": study.author || "Ariel Anders",
-          "url": `${BASE_URL}/about`
-        },
-        "datePublished": study.date,
-        "publisher": {
-          "@type": "Organization",
-          "name": SITE_NAME
-        }
-      };
-    }
-    return null;
-  }, [tool, study]);
+  };
 
-  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // pathname is relative to basename in React Router 6/7.
-  const isResearchPath = useMemo(() => {
-    const segments = pathname.split('/').filter(Boolean);
-    return segments.includes('research');
-  }, [pathname]);
-
-  if (tool?.canonicalPath && pathname !== tool.canonicalPath && isResearchPath) {
-    return <Navigate to={tool.canonicalPath} replace />;
-  }
+  const shareAction = (
+    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
+      <Share2 className="w-3.5 h-3.5" />
+      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+    </Stack>
+  );
 
   if (study) {
-    const rt = study.readingTime || `${readingTime(study.content)} min read`;
-
+    const rt = study.readingTime || `${getReadingTime(study.content)} min read`;
     return (
       <>
-        <SEO
-          title={study.title}
-          description={study.excerpt}
-          type="article"
-          schema={structuredData}
-        />
+        <SEO title={study.title} description={study.excerpt} type="article" />
         <ArticleLayout
           onBack={() => navigate('/research')}
           backLabel="Back to Portfolio"
           hero={
-            <ArticleHero
-              category={study.category}
+            <PostHeader
+              category={study.category || 'Research'}
               date={study.date}
-              readingTime={rt}
+              readTime={rt}
               title={study.title}
               dek={study.excerpt}
-              meta={
-                <ArticleMeta
-                  author={study.author}
-                />
-              }
+              author={study.author}
+              authorAvatar={study.authorAvatar}
+              shareAction={shareAction}
+              visual={study.image ? <ArticleFeatureCard image={study.image} /> : null}
+              tags={study.tags}
             />
           }
+          sidebar={
+            <ArticleSidebar
+              snapshot={[
+                { label: 'Project', value: study.category || 'Research' },
+                { label: 'Status', value: study.status || 'Published' },
+              ]}
+            />
+          }
+          footer={<ArticleFooter related={study.related} />}
         >
           <MarkdownRenderer content={study.content} />
         </ArticleLayout>
@@ -143,92 +118,78 @@ export default function ResearchDetail() {
     );
   }
 
+  // Handle canonical redirects
+  if (tool.canonicalPath && pathname !== tool.canonicalPath && pathname.includes('research')) {
+    return <Navigate to={tool.canonicalPath} replace />;
+  }
+
   return (
-    <Box as="section" padding="panel">
+    <ArticleLayout
+      onBack={() => navigate('/research')}
+      backLabel="Back to Portfolio"
+      hero={
+        <PostHeader
+          category={`PROJECT // ${tool.category}`}
+          title={tool.title}
+          dek={tool.description}
+          shareAction={shareAction}
+        />
+      }
+      sidebar={
+        <ArticleSidebar
+          snapshot={[
+            { label: 'Status', value: tool.status },
+            { label: 'Source', value: 'PUBLIC REGISTRY' },
+          ]}
+          custom={
+            <Stack gap={4} border radius="md" padding="compact" surface="surface-alt">
+              <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">LAB METRICS</Text>
+              <Stack gap={3}>
+                <Box display="flex" align="center" gap={3}>
+                  <Activity className="w-4 h-4 text-accent" />
+                  <StatusBadge label={tool.status} />
+                </Box>
+                <Box display="flex" align="center" gap={3}>
+                  <Database className="w-4 h-4 text-accent" />
+                  <Text variant="mono" size="xs">WSDC REGISTRY</Text>
+                </Box>
+              </Stack>
+            </Stack>
+          }
+        />
+      }
+    >
       <SEO
         title={tool.title}
         description={tool.description}
         type="website"
-        schema={structuredData}
         canonical={tool.canonicalPath ? `${BASE_URL}${tool.canonicalPath}` : undefined}
       />
-      <Stack gap={12}>
-        <Box 
-          as="button" 
-          onClick={() => navigate('/research')}
-          display="flex" 
-          align="center" 
-          gap={2}
-          color="dim"
-          className="hover:text-accent transition-all group"
-          cursor="pointer"
-        >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
-        </Box>
 
-        <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
-          <Stack gap={12}>
-            {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
-              <Suspense fallback={
-                <Box padding={20} display="flex" align="center" justify="center">
-                  <Activity className="animate-spin text-accent" />
-                </Box>
-              }>
-                {(() => {
-                  const ToolComponent = TOOL_REGISTRY[id];
-                  return <ToolComponent />;
-                })()}
-              </Suspense>
-            ) : (
-              <Stack gap={12}>
-                <Stack gap={4}>
-                    <PageHeader
-                      label={`PROJECT // ${tool.category}`}
-                      title={tool.title}
-                      paddingBottom={0}
-                      border="none"
-                    />
-                  <Box border radius="md" surface="default" padding="compact">
-                    <Text variant="body" size="lg" color="dim">{tool.description}</Text>
-                  </Box>
-                </Stack>
-
-                <Grid cols={{ base: 1, md: 2 }} gap={12}>
-                  <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Status</Text>
-                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                      <Activity className="w-4 h-4 text-accent" />
-                      <StatusBadge label={tool.status} />
-                    </Box>
-                  </Stack>
-                  <Stack gap={4}>
-                    <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
-                    <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
-                      <Database className="w-4 h-4 text-accent" />
-                      <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
-                    </Box>
-                  </Stack>
-                </Grid>
-
-                {tool.status === 'Coming Soon' && (
-                  <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
-                    <Stack gap={4} align="center" textAlign="center">
-                      <Search className="w-8 h-8 text-accent opacity-50" />
-                      <Stack gap={2}>
-                        <Text variant="display" size="xl">Work in Progress</Text>
-                        <Text variant="body" size="sm" color="dim" maxWidth="md">
-                          This tool is currently being built. We are finishing the data analysis and layout.
-                        </Text>
-                      </Stack>
-                    </Stack>
-                  </Box>
-                )}
-              </Stack>
-            )}
+      {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
+        <Suspense fallback={
+          <Box padding={20} display="flex" align="center" justify="center">
+            <Activity className="animate-spin text-accent" />
+          </Box>
+        }>
+          {(() => {
+            const ToolComponent = TOOL_REGISTRY[id];
+            return <ToolComponent />;
+          })()}
+        </Suspense>
+      ) : (
+        <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
+          <Stack gap={4} align="center" textAlign="center">
+            <Search className="w-8 h-8 text-accent opacity-50" />
+            <Stack gap={2}>
+              <Text variant="display" size="xl">Work in Progress</Text>
+              <Text variant="body" size="sm" color="dim" maxWidth="md">
+                This tool is currently being built. We are finishing the data analysis and layout.
+              </Text>
+            </Stack>
           </Stack>
         </Box>
-      </Stack>
-    </Box>
+      )}
+    </ArticleLayout>
   );
 }

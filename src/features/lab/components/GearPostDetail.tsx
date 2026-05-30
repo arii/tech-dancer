@@ -1,64 +1,74 @@
-import { Resource, readingTime } from '@/lib/content';
-import { VerdictCallout } from '@/components/layout/DetailElements';
-import { ResourceSidebar } from './sidebar/ResourceSidebar';
+
+import { Share2 } from 'lucide-react';
+import { Stack, Text } from '@/layouts/Primitives';
 import { ArticleLayout } from '@/components/article/ArticleLayout';
-import { ArticleHero } from '@/components/article/ArticleHero';
-import { ArticleMeta } from '@/components/article/ArticleMeta';
+import { PostHeader } from '@/components/article/PostHeader';
 import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
+import { ArticleSidebar } from '@/components/article/ArticleSidebar';
 import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
+import { Post, readingTime } from '@/lib/content';
 
 interface GearPostDetailProps {
-  post: Resource;
+  post: Post;
   onBack: () => void;
   backLabel: string;
 }
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
-  const rt = post.readingTime || `${readingTime(post.content)} min read`;
+  const share = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: post.title,
+        text: post.excerpt,
+        url: window.location.href,
+      }).catch(console.error);
+    }
+  };
 
-  const heroVisual = post.hero ? (
-    <ArticleFeatureCard
-      type={post.hero.type}
-      title={post.hero.title}
-      subtitle={post.hero.subtitle}
-      caption={post.hero.caption}
-      image={post.hero.image || post.image}
-    />
-  ) : post.image ? (
-    <ArticleFeatureCard image={post.image} />
-  ) : null;
+  const shareAction = (
+    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
+      <Share2 className="w-3.5 h-3.5" />
+      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+    </Stack>
+  );
+
+  const rt = post.readingTime || `${readingTime(post.content)} min read`;
 
   return (
     <ArticleLayout
       onBack={onBack}
       backLabel={backLabel}
       hero={
-        <ArticleHero
-          category={post.category}
+        <PostHeader
+          category={post.category || "Gear Review"}
           date={post.date}
-          readingTime={rt}
+          readTime={rt}
           title={post.title}
           dek={post.dek || post.excerpt}
+          author={post.author}
+          authorAvatar={post.authorAvatar}
+          shareAction={shareAction}
+          visual={post.image ? <ArticleFeatureCard image={post.image} /> : null}
           tags={post.tags}
-          meta={
-            <ArticleMeta
-              author={post.author}
-              authorAvatar={post.authorAvatar}
-              status={post.status}
-            />
-          }
-          visual={heroVisual}
         />
       }
       sidebar={
-        <ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />
+        <ArticleSidebar
+          snapshot={post.sidebar?.snapshot}
+          gearMentioned={post.sidebar?.gearMentioned}
+          relatedGuides={post.sidebar?.relatedGuides}
+          custom={
+            <Stack gap={6}>
+              {post.sidebar?.custom}
+              <AffiliateDisclosure />
+            </Stack>
+          }
+        />
       }
-      footer={
-        <ArticleFooter related={post.related} />
-      }
+      footer={<ArticleFooter related={post.related} />}
     >
-      {post.verdict && <VerdictCallout verdict={post.verdict} />}
       <MarkdownRenderer content={post.content} />
     </ArticleLayout>
   );

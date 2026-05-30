@@ -12,10 +12,6 @@ import {
   ArticleAffiliateCard
 } from '@/components/article/ArticleElements';
 
-/**
- * Registry of custom components allowed in Markdown/MDX.
- * Standardizes sanitization schema and component mapping.
- */
 const CUSTOM_COMPONENTS = {
   notice: { component: Notice, tags: ['notice', 'Notice'], attributes: ['type'] },
   callout: { component: ArticleCallout, tags: ['callout'], attributes: ['title', 'variant'] },
@@ -29,7 +25,6 @@ interface MarkdownRendererProps {
 }
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  // Dynamically build sanitization schema from registry
   const customTags = Object.values(CUSTOM_COMPONENTS).flatMap(c => c.tags);
   const customAttributes = Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
     config.tags.forEach(tag => {
@@ -62,9 +57,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             return <a href={href} {...props} rel="noopener noreferrer" target="_blank" />;
           },
           blockquote: ({node: _node, ...props}) => (
-            <Box border surface="warning" padding={6} marginY={8} radius="none">
-               <Text variant="mono" size="tiny" weight="font-bold" intent="warning" tracking="widest" marginBottom={2} display="block">Key Takeaway</Text>
-               <blockquote className="italic font-medium" {...props} />
+            <Box border surface="muted" padding={6} marginY={8} radius="lg" className="border-accent/20">
+               <Text variant="mono" size="tiny" weight="font-bold" color="accent" tracking="widest" marginBottom={2} display="block" className="uppercase">Key Takeaway</Text>
+               <blockquote className="italic font-medium text-text-dim" {...props} />
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
@@ -72,15 +67,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <Text
                 variant="mono"
                 size="micro"
-                color="dim"
-                weight="font-bold"
+                color="accent"
+                weight="font-extrabold"
                 tracking="utility"
                 display="block"
                 marginBottom={3}
-                className="prose-section-number"
+                className="prose-section-number uppercase"
               />
-              <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
-              <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
+              <Text as="h2" variant="h2" size="4xl" color="main" weight="font-bold" margin={0} className="tracking-tight" {...props} />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
@@ -90,15 +84,30 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 variant="h3"
                 size="xl"
                 color="main"
+                weight="font-bold"
                 margin={0}
-                paddingLeft={4}
-                className="border-l-2 border-accent/30"
+                className="border-l-2 border-accent/40 pl-4"
                 {...props}
               />
             </Box>
           ),
+          p: ({node: _node, ...props}) => (
+            <Text as="p" size="md" color="dim" className="leading-relaxed mb-6" {...props} />
+          ),
+          ul: ({node: _node, ...props}) => (
+            <Box as="ul" className="space-y-3 mb-8 list-none" {...props} />
+          ),
+          li: ({node: _node, ...props}) => (
+            <Box as="li" display="flex" gap={3} className="text-text-dim">
+              <Text color="accent" weight="font-bold" className="mt-1">•</Text>
+              <Text size="md" color="dim" className="leading-relaxed" {...props} />
+            </Box>
+          ),
+          ol: ({node: _node, ...props}) => (
+            <Box as="ol" className="space-y-4 mb-8 list-decimal list-inside" {...props} />
+          ),
           table: ({node: _node, ...props}) => (
-            <Box width="full" overflowX="auto" marginY={8} radius="lg" border className="overflow-hidden">
+            <Box width="full" overflowX="auto" marginY={8} radius="lg" border className="overflow-hidden border-line/40">
               <Box as="table" width="full" className="border-collapse" {...props} />
             </Box>
           ),
@@ -109,32 +118,31 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               size="xs"
               color="dim"
               uppercase
-              weight="font-bold"
+              weight="font-extrabold"
               padding={4}
               textAlign="left"
               surface="surface"
-              className="border-b border-line"
+              className="border-b border-line/60"
               {...props}
             />
           ),
           td: ({node: _node, ...props}) => (
-            <Box as="td" padding={4} className="border-b border-line/50" {...props} />
+            <Box as="td" padding={4} className="border-b border-line/40 text-text-dim" {...props} />
           ),
           img: ({node: _node, ...props}) => (
             <img
-              className="rounded-lg shadow-sm"
+              className="rounded-xl shadow-2xl border border-line/40"
               loading="lazy"
               {...props}
             />
           ),
-          // Map component implementations from registry
           ...Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
             config.tags.forEach(tag => {
-              const Component = config.component as ComponentType<Record<string, unknown>>;
-              acc[tag] = (props: Record<string, unknown>) => <Component {...props} />;
+              const Component = config.component as any;
+              acc[tag] = (props: any) => <Component {...props} />;
             });
             return acc;
-          }, {} as Record<string, (props: Record<string, unknown>) => JSX.Element>)
+          }, {} as any)
         }}
       >
         {content}
