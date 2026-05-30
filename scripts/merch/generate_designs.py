@@ -6,8 +6,20 @@ import cairosvg
 import io
 import os
 import sys
+import subprocess
 
-# --- CONFIGURATION ---
+# --- ASSET PATHS ---
+SOURCE_DIR = "scripts/merch/source"
+GENERATED_DIR = "scripts/merch/generated"
+FONTS_DIR = "scripts/merch/fonts"
+PUBLIC_ASSETS_DIR = "public/assets/merch"
+
+HEART_SVG = f"{SOURCE_DIR}/rainbow_heart.svg"
+CHECK_SVG = f"{SOURCE_DIR}/rainbow_check.svg"
+STAR_SVG = f"{GENERATED_DIR}/rainbow_star.svg"
+SPARKLE_SVG = f"{GENERATED_DIR}/rainbow_sparkle.svg"
+
+# --- CONSTANTS ---
 PRINT_WIDTH = 4500
 PRINT_HEIGHT = 5400
 PREVIEW_WIDTH = 1200
@@ -17,18 +29,40 @@ PREVIEW_HEIGHT = 1200
 DESIGN_WIDTH = 1200
 DESIGN_HEIGHT = 1200
 
-NEON_YELLOW = (0.88, 0.96, 0.0)
+NEON_YELLOW_HEX = "#e0f500"
 FONT_NAME = "Cooper Black"
 
-# Assets
-SOURCE_DIR = "scripts/merch/source"
-GENERATED_DIR = "scripts/merch/generated"
-HEART_SVG = f"{SOURCE_DIR}/rainbow_heart.svg"
-CHECK_SVG = f"{SOURCE_DIR}/rainbow_check.svg"
-STAR_SVG = f"{GENERATED_DIR}/rainbow_star.svg"
-SPARKLE_SVG = f"{GENERATED_DIR}/rainbow_sparkle.svg"
+# Front Design Constants
+FRONT_FONT_SIZE = 240
+FRONT_GAP = 16
+FRONT_HEART_WIDTH = 170
+FRONT_HEART_HEIGHT = 150
+FRONT_BASE_Y = 660
+FRONT_CAP_HEIGHT_RATIO = 0.7
+
+# Back Design Constants
+BACK_ITEMS = ["Lead", "Follow", "Switch"]
+BACK_FONT_SIZE = 124
+BACK_CHECK_SIZE = 128
+BACK_CHECK_GAP = 32
+BACK_LINE_SPACING = 165
+BACK_Y_OFFSET = 50
+BACK_CAP_HEIGHT_RATIO = 0.7
+
+# Shapes Sheet Constants
+SHEET_SIZE = 1200
+SHEET_DIVIDER_WIDTH = 4
+SHEET_LABEL_FONT_SIZE = 24
+
+def hex_to_rgb(hex_str):
+    """Converts hex color string to RGB tuple (0-1)."""
+    hex_str = hex_str.lstrip('#')
+    return tuple(int(hex_str[i:i+2], 16) / 255.0 for i in (0, 2, 4))
+
+NEON_YELLOW_RGB = hex_to_rgb(NEON_YELLOW_HEX)
 
 def get_scale(target_width, target_height):
+    """Calculates scaling factor from design coordinates to target resolution."""
     return target_width / DESIGN_WIDTH
 
 def load_svg_to_surface(svg_path, width, height):
@@ -41,11 +75,19 @@ def load_svg_to_surface(svg_path, width, height):
         # Return empty surface as fallback
         return cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
 
-def draw_svg_as_image(ctx, svg_path, x, y, width, height):
-    """Renders any SVG file as an image onto the Cairo context."""
-    svg_surface = load_svg_to_surface(svg_path, width, height)
-    ctx.set_source_surface(svg_surface, x, y)
+def draw_svg_as_image(ctx, svg_path, x, y, width, height, current_scale=1.0):
+    """Renders any SVG file as an image onto the Cairo context, ensuring high-res scaling."""
+    # Scale width and height to target resolution for cairosvg to render high-res PNG
+    svg_surface = load_svg_to_surface(svg_path, width * current_scale, height * current_scale)
+
+    ctx.save()
+    # Move to the design coordinates
+    ctx.translate(x, y)
+    # Scale down the context so the high-res surface fits the design-scale coordinate system
+    ctx.scale(1.0 / current_scale, 1.0 / current_scale)
+    ctx.set_source_surface(svg_surface, 0, 0)
     ctx.paint()
+    ctx.restore()
 
 def get_text_extents(ctx, text):
     """Helper to handle both cairocffi (tuple) and pycairo (object) extents."""
@@ -64,10 +106,14 @@ def get_text_extents(ctx, text):
     return ext
 
 def check_font_availability(font_name):
-    """Checks if a font is available in the system via fc-list."""
+    """Checks if a font is available in the system via fc-match."""
     try:
-        output = subprocess.check_output(["fc-list"], stderr=subprocess.STDOUT).decode()
-        return font_name.lower() in output.lower()
+        # Using fc-match is more reliable for checking how Cairo will resolve the font
+        output = subprocess.check_output(["fc-match", font_name], stderr=subprocess.STDOUT).decode()
+        # If it returns a different font (e.g. DejaVu Sans), it means it didn't find the match
+        if font_name.lower().replace(" ", "") not in output.lower().replace(" ", ""):
+            return False
+        return True
     except Exception:
         return False
 
@@ -90,6 +136,7 @@ def draw_text_with_stroke(ctx, text, x, y, font_size, font_face=FONT_NAME):
     ctx.fill()
 
 def generate_front_design(output_path, is_preview=False):
+    """Generates the 'LOVE' front shirt design."""
     target_w = PREVIEW_WIDTH if is_preview else PRINT_WIDTH
     target_h = PREVIEW_HEIGHT if is_preview else PRINT_HEIGHT
     scale = get_scale(target_w, target_h)
@@ -99,47 +146,47 @@ def generate_front_design(output_path, is_preview=False):
     ctx.scale(scale, scale)
 
     if is_preview:
-        ctx.set_source_rgb(*NEON_YELLOW)
+        ctx.set_source_rgb(*NEON_YELLOW_RGB)
         ctx.paint()
 
     # Layout for LOVE
-    font_size = 240
     ctx.select_font_face(FONT_NAME, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    ctx.set_font_size(font_size)
+    ctx.set_font_size(FRONT_FONT_SIZE)
 
     extents_L = get_text_extents(ctx, "L")
     extents_O = get_text_extents(ctx, "O")
     extents_E = get_text_extents(ctx, "E")
 
-    gap = 20
-    heart_w = 230
-    heart_h = 205
+    total_width = (extents_L.x_advance + FRONT_GAP +
+                   extents_O.x_advance + FRONT_GAP +
+                   FRONT_HEART_WIDTH + FRONT_GAP +
+                   extents_E.x_advance)
 
-    total_width = extents_L.x_advance + gap + extents_O.x_advance + gap + heart_w + gap + extents_E.x_advance
     start_x = (DESIGN_WIDTH - total_width) / 2
-    base_y = 660
 
     # L
-    draw_text_with_stroke(ctx, "L", start_x, base_y, font_size)
-    curr_x = start_x + extents_L.x_advance + gap
+    draw_text_with_stroke(ctx, "L", start_x, FRONT_BASE_Y, FRONT_FONT_SIZE)
+    curr_x = start_x + extents_L.x_advance + FRONT_GAP
 
     # O
-    draw_text_with_stroke(ctx, "O", curr_x, base_y, font_size)
-    curr_x += extents_O.x_advance + gap
+    draw_text_with_stroke(ctx, "O", curr_x, FRONT_BASE_Y, FRONT_FONT_SIZE)
+    curr_x += extents_O.x_advance + FRONT_GAP
 
     # Heart (V)
     heart_x = curr_x
-    heart_y = base_y - 205 + 20 # Tune visually
-    draw_svg_as_image(ctx, HEART_SVG, heart_x, heart_y, heart_w, heart_h)
-    curr_x += heart_w + gap
+    cap_height = FRONT_FONT_SIZE * FRONT_CAP_HEIGHT_RATIO
+    heart_y = (FRONT_BASE_Y - cap_height / 2) - (FRONT_HEART_HEIGHT / 2) + 5
+    draw_svg_as_image(ctx, HEART_SVG, heart_x, heart_y, FRONT_HEART_WIDTH, FRONT_HEART_HEIGHT, scale)
+    curr_x += FRONT_HEART_WIDTH + FRONT_GAP
 
     # E
-    draw_text_with_stroke(ctx, "E", curr_x, base_y, font_size)
+    draw_text_with_stroke(ctx, "E", curr_x, FRONT_BASE_Y, FRONT_FONT_SIZE)
 
     surface.write_to_png(output_path)
     print(f"✓ Generated {output_path}")
 
 def generate_back_design(output_path, is_preview=False):
+    """Generates the 'Lead/Follow/Switch' back shirt design."""
     target_w = PREVIEW_WIDTH if is_preview else PRINT_WIDTH
     target_h = PREVIEW_HEIGHT if is_preview else PRINT_HEIGHT
     scale = get_scale(target_w, target_h)
@@ -149,42 +196,42 @@ def generate_back_design(output_path, is_preview=False):
     ctx.scale(scale, scale)
 
     if is_preview:
-        ctx.set_source_rgb(*NEON_YELLOW)
+        ctx.set_source_rgb(*NEON_YELLOW_RGB)
         ctx.paint()
-
-    items = ["Lead", "Follow", "Switch"]
-    text_font_size = 124
-    check_size = 128
-    check_gap = 32
-    line_spacing = 165
 
     # Measure to center
     ctx.select_font_face(FONT_NAME, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    ctx.set_font_size(text_font_size)
+    ctx.set_font_size(BACK_FONT_SIZE)
 
     max_text_w = 0
-    for item in items:
+    for item in BACK_ITEMS:
         ext = get_text_extents(ctx, item)
         max_text_w = max(max_text_w, ext.x_advance)
 
-    group_w = check_size + check_gap + max_text_w
-    group_h = (len(items) - 1) * line_spacing + text_font_size
-    start_x = (DESIGN_WIDTH - group_w) / 2
-    start_y = (DESIGN_HEIGHT - group_h) / 2 + 100 # Shift down slightly for back placement
+    cap_height = BACK_FONT_SIZE * BACK_CAP_HEIGHT_RATIO
 
-    for i, item in enumerate(items):
-        curr_y = start_y + (i * line_spacing)
-        # Vertically center check with text cap height
-        check_y = curr_y - (text_font_size * 0.75) + (text_font_size * 0.7 - check_size)/2
-        draw_svg_as_image(ctx, CHECK_SVG, start_x, check_y, check_size, check_size)
-        draw_text_with_stroke(ctx, item, start_x + check_size + check_gap, curr_y, text_font_size)
+    group_w = BACK_CHECK_SIZE + BACK_CHECK_GAP + max_text_w
+    group_h = (len(BACK_ITEMS) - 1) * BACK_LINE_SPACING + cap_height
+    start_x = (DESIGN_WIDTH - group_w) / 2
+    start_y = (DESIGN_HEIGHT - group_h) / 2 + BACK_Y_OFFSET
+
+    for i, item in enumerate(BACK_ITEMS):
+        curr_y = start_y + (i * BACK_LINE_SPACING) + cap_height
+
+        # Check visual center alignment:
+        # SVG visual center is 0.5 * check_size
+        # Text visual center is curr_y - cap_height / 2
+        check_y = (curr_y - cap_height / 2) - (0.5 * BACK_CHECK_SIZE)
+
+        draw_svg_as_image(ctx, CHECK_SVG, start_x, check_y, BACK_CHECK_SIZE, BACK_CHECK_SIZE, scale)
+        draw_text_with_stroke(ctx, item, start_x + BACK_CHECK_SIZE + BACK_CHECK_GAP, curr_y, BACK_FONT_SIZE)
 
     surface.write_to_png(output_path)
     print(f"✓ Generated {output_path}")
 
 def generate_shapes_sheet(output_path):
-    SIZE = 1200
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, SIZE, SIZE)
+    """Generates a preview sheet showing all rainbow shapes."""
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, SHEET_SIZE, SHEET_SIZE)
     ctx = cairo.Context(surface)
 
     # Off-white background
@@ -193,7 +240,7 @@ def generate_shapes_sheet(output_path):
 
     # Dividers
     ctx.set_source_rgb(0.90, 0.90, 0.92)
-    ctx.set_line_width(4)
+    ctx.set_line_width(SHEET_DIVIDER_WIDTH)
     ctx.move_to(600, 40); ctx.line_to(600, 1160)
     ctx.move_to(40, 600); ctx.line_to(1160, 600)
     ctx.stroke()
@@ -210,11 +257,11 @@ def generate_shapes_sheet(output_path):
         ty = (i // 2) * 600
         ctx.save()
         ctx.translate(tx, ty)
-        draw_svg_as_image(ctx, asset['path'], 60, 60, 480, 480)
+        draw_svg_as_image(ctx, asset['path'], 60, 60, 480, 480, 1.0) # 1:1 scale for sheet
 
         # Label
         ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
-        ctx.set_font_size(24)
+        ctx.set_font_size(SHEET_LABEL_FONT_SIZE)
         ctx.set_source_rgb(0.2, 0.2, 0.25)
         ext = get_text_extents(ctx, asset['label'])
         ctx.move_to(300 - ext.width/2, 550)
@@ -224,17 +271,17 @@ def generate_shapes_sheet(output_path):
     surface.write_to_png(output_path)
     print(f"✓ Generated {output_path}")
 
-import subprocess
-
 if __name__ == "__main__":
     if not check_font_availability(FONT_NAME):
         print(f"CRITICAL ERROR: Font '{FONT_NAME}' not found in system font cache.", file=sys.stderr)
-        print(f"Please place the font in scripts/merch/fonts/ and run scripts/merch/setup_env.sh", file=sys.stderr)
+        print(f"\nTroubleshooting steps:", file=sys.stderr)
+        print(f"1. Ensure 'Cooper Black' font file (e.g., .ttf or .otf) is in {FONTS_DIR}", file=sys.stderr)
+        print(f"2. Run 'scripts/merch/setup_env.sh' to register the font and refresh the cache.", file=sys.stderr)
+        print(f"3. Verify manual installation with 'fc-list | grep \"Cooper Black\"'", file=sys.stderr)
         sys.exit(1)
 
-    public_dir = "public/assets/merch"
-    previews_dir = f"{public_dir}/previews"
-    print_dir = f"{public_dir}/print"
+    previews_dir = f"{PUBLIC_ASSETS_DIR}/previews"
+    print_dir = f"{PUBLIC_ASSETS_DIR}/print"
     os.makedirs(previews_dir, exist_ok=True)
     os.makedirs(print_dir, exist_ok=True)
 
