@@ -239,7 +239,7 @@ export default function ResearchAnalytics() {
                     Current experiments include API-driven Printful template pulls, SEO-safe product copy generation, image QA, and human-in-the-loop catalog review.
                   </Text>
                   <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                      {['Printful API', 'SEO Safety', 'Image QA', 'Workflow'].map(tag => (
+                      {['Printful API', 'SEO Safety', 'Image QA'].map(tag => (
                           <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
                               {tag}
                           </Text>

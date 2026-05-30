@@ -15,6 +15,8 @@ import {
 } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Icon } from '@/components/ui/Icon';
+import { SEO } from '@/components/SEO';
+import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 
 export function EcommerceAutomationTool() {
   const workflowItems = [
@@ -59,14 +61,19 @@ export function EcommerceAutomationTool() {
 
   return (
     <Stack gap={8}>
-      <Box paddingBottom={8} borderBottom>
+      <SEO
+        title="Ecommerce Automation Experiments | DevAI Portfolio"
+        description="Experiments in API-driven Printful sync, SEO-safe product metadata generation, and human-in-the-loop catalog review."
+        canonical={`${BASE_URL}/research/ecommerce-automation`}
+      />
+      <Box paddingBottom={8} border="b">
         <Stack gap={4}>
           <Box display="flex" align="center" gap={3}>
             <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Business Automation</Text>
             <StatusBadge label="In Progress" />
           </Box>
           <Stack gap={2}>
-            <Text variant="display" size="4xl" weight="font-black">Ecommerce Automation Experiments</Text>
+            <Text variant="display" size="4xl" weight="font-black" as="h1">Ecommerce Automation Experiments</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
               Building reviewable automation experiments for asset generation, metadata packets, product-image QA, and human-approved storefront sync.
               Focusing on niche-aware SEO for <strong>West Coast Swing</strong>, <strong>NorCal</strong>, <strong>rainbow pride</strong>, and <strong>role-fluid dance</strong> communities.
@@ -77,7 +84,7 @@ export function EcommerceAutomationTool() {
 
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         <Stack gap={6}>
-          <Text variant="headline" size="xl" weight="font-black">Active Experiments</Text>
+          <Text variant="headline" size="xl" weight="font-black" as="h2">Active Experiments</Text>
           <Stack gap={4}>
             {workflowItems.map((item, index) => (
               <Box key={index} border radius="lg" padding={4} surface="default">
@@ -97,7 +104,7 @@ export function EcommerceAutomationTool() {
 
         <Stack gap={8}>
           <Stack gap={6}>
-            <Text variant="headline" size="xl" weight="font-black">SEO & Policy Safety</Text>
+            <Text variant="headline" size="xl" weight="font-black" as="h2">SEO & Policy Safety</Text>
             <Box border radius="xl" padding={6} surface="muted">
               <Stack gap={4}>
                 <Box display="flex" align="center" gap={2}>
@@ -120,7 +127,7 @@ export function EcommerceAutomationTool() {
           </Stack>
 
           <Stack gap={6}>
-            <Text variant="headline" size="xl" weight="font-black">Pipeline Architecture</Text>
+            <Text variant="headline" size="xl" weight="font-black" as="h2">Pipeline Architecture</Text>
             <Box border radius="xl" padding={6} surface="surface">
               <Stack gap={4} align="center">
                 <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
@@ -142,6 +149,47 @@ export function EcommerceAutomationTool() {
           </Stack>
         </Stack>
       </Grid>
+
+      <Stack gap={6}>
+        <Text variant="headline" size="xl" weight="font-black" as="h2">Visual Image QA Examples</Text>
+        <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
+          <Box border radius="lg" overflow="hidden" surface="default">
+            <Box padding={4}>
+              <img
+                src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-front.webp`}
+                alt="NorCal BestCal Front Mockup"
+                className="w-full aspect-square object-contain"
+              />
+            </Box>
+            <Box padding={4} border="t">
+              <Text size="xs" weight="bold">FRONT QA CHECK</Text>
+              <Text size="micro" color="dim">Center alignment and color profile validation.</Text>
+            </Box>
+          </Box>
+          <Box border radius="lg" overflow="hidden" surface="default">
+            <Box padding={4}>
+              <img
+                src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-back.webp`}
+                alt="NorCal BestCal Back Mockup"
+                className="w-full aspect-square object-contain"
+              />
+            </Box>
+            <Box padding={4} border="t">
+              <Text size="xs" weight="bold">BACK QA CHECK</Text>
+              <Text size="micro" color="dim">Print area boundaries and text legibility.</Text>
+            </Box>
+          </Box>
+          <Box border radius="lg" overflow="hidden" surface="default" display="flex" align="center" justify="center" padding={8}>
+             <Stack gap={4} align="center" textAlign="center">
+                <Icon icon={CheckCircle2} size="xl" color="accent" />
+                <Stack gap={2}>
+                  <Text size="sm" weight="bold">PASSING QUALITY</Text>
+                  <Text size="micro" color="dim">Automated crop analysis confirms centering within precise tolerance.</Text>
+                </Stack>
+             </Stack>
+          </Box>
+        </Grid>
+      </Stack>
     </Stack>
   );
 }
