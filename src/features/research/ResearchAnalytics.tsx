@@ -1,10 +1,11 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
@@ -25,27 +26,69 @@ export default function ResearchAnalytics() {
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
+  const skills = [
+    { name: 'React', icon: Layout },
+    { name: 'Vite', icon: Zap },
+    { name: 'TypeScript', icon: Code },
+    { name: 'GitHub Actions', icon: Workflow },
+    { name: 'Vercel', icon: Rocket },
+    { name: 'Playwright', icon: Microscope },
+    { name: 'Python', icon: Terminal },
+    { name: 'LLM workflows', icon: SearchCode },
+    { name: 'SEO-safe automation', icon: Search },
+    { name: 'ecommerce automation', icon: Database },
+  ];
+
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio | AI Orchestration & ML Engineering"
-        description="Showcase of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
+        title="DevAI Systems Portfolio"
+        description="DevAI portfolio by Ariel Anders featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel/GitHub Actions workflows, ecommerce automation, and production React/Vite systems."
       />
       <Stack gap={12}>
         <PageHeader
-          label="DEVAI_PORTFOLIO"
-          title="DevAI Portfolio as a Platform"
-          description="Real-world examples of AI-assisted product development, DevAI orchestration consoles, and high-fidelity telemetry pipelines."
+          label="HIRE_ME"
+          title="DevAI Systems Portfolio"
+          description="AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps."
           as="h1"
+          cta={
+            <Box display="flex" wrap="wrap" gap={4}>
+              <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
+                View flagship projects
+              </ActionButton>
+              <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
+                Read implementation articles
+              </ActionButton>
+              <ActionButton as="a" href="/contact" variant="accent" paddingX={6} paddingY={3} gap={2}>
+                <Icon icon={Send} size="sm" />
+                Contact
+              </ActionButton>
+            </Box>
+          }
         />
 
-        <Box maxWidth="2xl">
-          <Text variant="body" size="lg" color="body">
-            Grounded DevAI solutions built to ship products, not hype. From <strong>custom RAG pipelines</strong> to <strong>autonomous repository auditing</strong>, these projects demonstrate practical applications of prompt engineering and agentic workflows in modern software engineering.
-          </Text>
-        </Box>
-
         <Stack gap={8}>
+          <Box maxWidth="2xl">
+            <Text variant="body" size="lg" color="body">
+              I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
+            </Text>
+          </Box>
+
+          <Box paddingY={6} border="y" className="border-accent/10">
+            <Grid cols={{ base: 2, sm: 3, md: 5 }} gap={4}>
+              {skills.map((skill) => (
+                <Box key={skill.name} display="flex" align="center" gap={2}>
+                  <Icon icon={skill.icon} size="sm" color="accent" />
+                  <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="tighter">
+                    {skill.name}
+                  </Text>
+                </Box>
+              ))}
+            </Grid>
+          </Box>
+        </Stack>
+
+        <Stack gap={8} id="flagship">
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
@@ -222,7 +265,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         {studies.length > 0 && (
-          <Stack gap={8}>
+          <Stack gap={8} id="articles">
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
               <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
