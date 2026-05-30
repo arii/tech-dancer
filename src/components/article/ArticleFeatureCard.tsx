@@ -19,31 +19,53 @@ export function ArticleFeatureCard({
   image
 }: ArticleFeatureCardProps) {
   return (
-    <Box className="relative group">
+    <Box position="relative" className="group">
       {/* Card Shell */}
       <ArticleCard className="overflow-hidden">
         {image ? (
-          <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] overflow-hidden relative">
+          <Box position="relative" aspect="16/9" overflow="hidden">
             <img
               src={image}
               alt={title || "Feature visual"}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <Box className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent" />
+            <Box position="absolute" inset={0} className="bg-gradient-to-t from-bg/80 via-transparent to-transparent" />
           </Box>
         ) : (
-          <Box className="aspect-[4/3] sm:aspect-video lg:aspect-[4/3] bg-surface flex items-center justify-center border-b border-line/50 relative overflow-hidden">
+          <Box
+            position="relative"
+            aspect="16/9"
+            surface="surface"
+            border="b"
+            display="flex"
+            align="center"
+            justify="center"
+            overflow="hidden"
+            className="border-line/50"
+          >
              {/* Simplified Fallback pattern */}
-             <Box className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-cyan-500/10 via-transparent to-transparent" />
+             <Box
+               position="absolute"
+               inset={0}
+               opacity={10}
+               className="bg-accent blur-3xl"
+             />
 
              {/* Data Card visualization placeholder if no image */}
-             <Stack gap={4} align="center" className="p-8 text-center relative z-10 hidden lg:flex">
+             <Stack
+                gap={4}
+                align="center"
+                padding={8}
+                display={{ base: 'none', lg: 'flex' }}
+                position="relative"
+                className="text-center z-10"
+             >
                 {type && (
-                  <Box className="px-2 py-1 rounded bg-accent/10 border border-cyan-500/20">
-                    <Text variant="mono" size="micro" className="text-accent font-bold uppercase tracking-widest">{type}</Text>
+                  <Box paddingX={2} paddingY={1} radius="sm" className="bg-accent/10 border border-accent/20">
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="utility">{type}</Text>
                   </Box>
                 )}
-                <Text variant="display" size="lg" className="text-text-main">{title || "BoomTick.blog"}</Text>
+                <Text variant="display" size="lg" color="main">{title || "BoomTick.blog"}</Text>
                 {subtitle && <Text variant="mono" size="xs" color="dim">{subtitle}</Text>}
              </Stack>
           </Box>
@@ -51,16 +73,16 @@ export function ArticleFeatureCard({
 
         {/* Caption/Metadata below image/visual */}
         {(caption || (image && (title || subtitle))) && (
-          <Box className="p-5 lg:p-6 border-t border-line/50 hidden lg:block">
+          <Box padding={{ base: 5, lg: 6 }} border="t" display={{ base: 'none', lg: 'block' }} className="border-line/50">
             <Stack gap={1}>
               {!image && caption && (
-                <Text size="sm" className="text-text-dim italic">{caption}</Text>
+                <Text size="sm" color="dim" className="italic">{caption}</Text>
               )}
               {image && (
                  <>
                    {title && <Text weight="font-bold" color="body">{title}</Text>}
-                   {subtitle && <Text size="xs" className="text-text-dim">{subtitle}</Text>}
-                   {caption && <Text size="xs" color="dim" className="mt-2 italic">{caption}</Text>}
+                   {subtitle && <Text size="xs" color="dim">{subtitle}</Text>}
+                   {caption && <Text size="xs" color="dim" marginTop={2} className="italic">{caption}</Text>}
                  </>
               )}
             </Stack>
@@ -69,8 +91,8 @@ export function ArticleFeatureCard({
       </ArticleCard>
 
       {/* Decorative Accents */}
-      <Box className="absolute -top-2 -right-2 w-24 h-24 bg-accent/5 blur-3xl rounded-full pointer-events-none" />
-      <Box className="absolute -bottom-2 -left-2 w-24 h-24 bg-indigo-500/5 blur-3xl rounded-full pointer-events-none" />
+      <Box position="absolute" top={-2} right={-2} width={24} height={24} radius="full" className="bg-accent/5 blur-3xl pointer-events-none" />
+      <Box position="absolute" bottom={-2} left={-2} width={24} height={24} radius="full" className="bg-accent/5 blur-3xl pointer-events-none opacity-50" />
     </Box>
   );
 }

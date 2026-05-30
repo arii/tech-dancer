@@ -1,5 +1,4 @@
 
-
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface ArticleMetaProps {
@@ -18,26 +17,26 @@ export function ArticleMeta({
   return (
     <Stack direction="row" align="center" gap={4}>
       {/* Author Avatar/Icon */}
-      <Box className="w-10 h-10 rounded-full border border-line bg-surface overflow-hidden flex-shrink-0">
+      <Box width={10} height={10} radius="full" border surface="surface" overflow="hidden" flex="0 0 auto">
         {authorAvatar ? (
           <img src={authorAvatar} alt={author} className="w-full h-full object-cover" />
         ) : (
-          <Box className="w-full h-full flex items-center justify-center text-text-dim">
+          <Box width="full" height="full" display="flex" align="center" justify="center" color="dim">
             <Text variant="mono" size="xs">{author.charAt(0)}</Text>
           </Box>
         )}
       </Box>
 
       {/* Meta Text */}
-      <Stack gap={0.5} className="mt-[-2px]">
-        <Text weight="font-bold" className="text-text-body text-sm leading-none">{author}</Text>
+      <Stack gap={0.5} marginTop={-0.5}>
+        <Text weight="font-bold" color="body" size="sm" leading="none">{author}</Text>
         <Stack direction="row" gap={2} align="center">
           {status ? (
-            <Box className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-              <Text variant="mono" size="micro" className="text-emerald-400 font-bold uppercase leading-none">{status}</Text>
+            <Box paddingX={1.5} paddingY={0.5} radius="sm" className="bg-brand-green-bg border border-brand-green-border">
+              <Text variant="mono" size="micro" color="main" weight="font-bold" uppercase leading="none" className="text-brand-green-status">{status}</Text>
             </Box>
           ) : (
-            date && <Text variant="mono" size="micro" className="text-text-dim uppercase leading-none">{date}</Text>
+            date && <Text variant="mono" size="micro" color="dim" uppercase leading="none">{date}</Text>
           )}
         </Stack>
       </Stack>

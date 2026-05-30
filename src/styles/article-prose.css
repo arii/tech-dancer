@@ -16,26 +16,33 @@
 }
 
 .article-prose p {
-  @apply text-text-dim/90 leading-relaxed mb-6 font-medium;
+  @apply text-text-dim/90 leading-relaxed font-medium;
   font-size: clamp(1rem, 1.15vw, 1.08rem);
+  margin-bottom: var(--spacing-6);
 }
 
 .article-prose h2 {
-  @apply text-text-main font-bold mt-16 mb-8 tracking-tight;
+  @apply text-text-main font-bold tracking-tight;
   font-size: clamp(1.65rem, 2.2vw, 2.35rem);
+  margin-top: var(--spacing-16);
+  margin-bottom: var(--spacing-8);
 }
 
 .article-prose h3 {
-  @apply text-text-main font-bold mt-12 mb-6 tracking-tight;
+  @apply text-text-main font-bold tracking-tight;
   font-size: 1.25rem;
+  margin-top: var(--spacing-12);
+  margin-bottom: var(--spacing-6);
 }
 
 .article-prose ul {
-  @apply space-y-3 mb-8;
+  @apply space-y-3;
+  margin-bottom: var(--spacing-8);
 }
 
 .article-prose ol {
-  @apply space-y-4 mb-8;
+  @apply space-y-4;
+  margin-bottom: var(--spacing-8);
 }
 
 .article-prose li {
@@ -51,5 +58,6 @@
 }
 
 .article-prose blockquote {
-  @apply border-l-0 pl-0 italic font-medium text-text-dim;
+  @apply border-l-0 italic font-medium text-text-dim;
+  padding-left: 0;
 }

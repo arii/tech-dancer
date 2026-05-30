@@ -9,6 +9,7 @@ import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post, readingTime } from '@/lib/content';
+import { useShare } from '@/hooks/useShare';
 
 interface GearPostDetailProps {
   post: Post;
@@ -17,20 +18,19 @@ interface GearPostDetailProps {
 }
 
 export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps) {
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
-    }
+  const { share } = useShare();
+
+  const handleShare = () => {
+    share({
+      title: post.title,
+      text: post.excerpt,
+    });
   };
 
   const shareAction = (
-    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
+    <Stack as="button" direction="row" onClick={handleShare} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
       <Share2 className="w-3.5 h-3.5" />
-      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+      <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="utility">SHARE</Text>
     </Stack>
   );
 

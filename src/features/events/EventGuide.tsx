@@ -18,7 +18,9 @@ import { PostHeader } from '@/components/article/PostHeader';
 import { ArticleFeatureCard } from '@/components/article/ArticleFeatureCard';
 import { ArticleSidebar, SidebarCard } from '@/components/article/ArticleSidebar';
 import { ArticleFooter } from '@/components/article/ArticleFooter';
+import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { readingTime as getReadingTime } from '@/lib/content';
+import { useShare } from '@/hooks/useShare';
 
 export function EventGuide() {
   const {
@@ -32,6 +34,8 @@ export function EventGuide() {
     relatedEvents,
     navigate,
   } = useEventDetail();
+
+  const { share } = useShare();
 
   if (isLoading) {
     return (
@@ -61,20 +65,17 @@ export function EventGuide() {
     );
   }
 
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: event.title,
-        text: event.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
-    }
+  const handleShare = () => {
+    share({
+      title: event.title,
+      text: event.excerpt,
+    });
   };
 
   const shareAction = (
-    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
+    <Stack as="button" direction="row" onClick={handleShare} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
       <Share2 className="w-3.5 h-3.5" />
-      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+      <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="utility">SHARE</Text>
     </Stack>
   );
 
@@ -125,9 +126,12 @@ export function EventGuide() {
         <ArticleSidebar
           snapshot={sidebarSnapshot}
           custom={
-            <SidebarCard title="Event Navigation">
-              <EventNavigation />
-            </SidebarCard>
+            <Stack gap={6}>
+              <SidebarCard title="Event Navigation">
+                <EventNavigation />
+              </SidebarCard>
+              <AffiliateDisclosure />
+            </Stack>
           }
         />
       }
@@ -155,13 +159,14 @@ export function EventGuide() {
               right={-20}
               width={40}
               height={40}
-              className="bg-accent/5 blur-3xl rounded-full"
+              radius="full"
+              className="bg-accent/5 blur-3xl"
             />
 
             <Stack gap={4}>
               <Box display="flex" align="center" gap={2} color="accent">
                 <Sparkles size={16} />
-                <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest">
+                <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="utility">
                   Why I&apos;m Attending
                 </Text>
               </Box>

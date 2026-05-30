@@ -34,31 +34,50 @@ export function PostHeader({
           {(category || date || readTime) && (
             <Stack direction="row" gap={3} align="center">
               {category && (
-                <Text variant="mono" size="xs" weight="font-extrabold" className="text-accent uppercase tracking-[0.18em]">
+                <Text variant="mono" size="xs" weight="font-extrabold" color="accent" uppercase tracking="utility">
                   {category}
                 </Text>
               )}
-              {category && (date || readTime) && <Box className="w-1 h-1 rounded-full bg-line/60" />}
+              {category && (date || readTime) && (
+                <Box width={1} height={1} radius="full" className="bg-line/60" />
+              )}
               {date && (
-                <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="utility">
                   {date}
                 </Text>
               )}
-              {date && readTime && <Box className="w-1 h-1 rounded-full bg-line/60" />}
+              {date && readTime && (
+                <Box width={1} height={1} radius="full" className="bg-line/60" />
+              )}
               {readTime && (
-                <Text variant="mono" size="xs" color="dim" weight="font-bold">
+                <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="utility">
                   {readTime}
                 </Text>
               )}
             </Stack>
           )}
 
-          <Text as="h1" variant="display" size={{ base: "3xl", sm: "4xl", lg: "5xl" }} weight="font-bold" className="text-text-main leading-[1.05] tracking-tight">
+          <Text
+            as="h1"
+            variant="display"
+            size={{ base: "3xl", sm: "4xl", lg: "5xl" }}
+            weight="font-bold"
+            color="main"
+            leading="tight"
+            tracking="tight"
+            className="leading-none break-words"
+          >
             {title}
           </Text>
 
           {dek && (
-            <Text size={{ base: "md", lg: "xl" }} className="text-text-dim/90 leading-relaxed max-w-2xl font-medium">
+            <Text
+              size={{ base: "md", lg: "xl" }}
+              color="dim"
+              leading="relaxed"
+              weight="font-medium"
+              className="max-w-2xl opacity-90"
+            >
               {dek}
             </Text>
           )}
@@ -66,7 +85,7 @@ export function PostHeader({
 
         {/* Hero Visual - Editorial placement (full width after dek) */}
         {visual && (
-          <Box className="w-full overflow-hidden rounded-2xl border border-line/40 shadow-2xl">
+          <Box width="full" overflow="hidden" radius="2xl" border className="border-line/40 shadow-2xl">
             {visual}
           </Box>
         )}
@@ -82,9 +101,24 @@ export function PostHeader({
           className="border-line/40"
         >
           <Stack direction="row" align="center" gap={4}>
-            {authorAvatar && (
-              <Box as="img" src={authorAvatar} alt={author} className="w-10 h-10 rounded-full border border-line/60" />
-            )}
+            <Box
+              width={10}
+              height={10}
+              radius="full"
+              border
+              surface="surface"
+              overflow="hidden"
+              flex="0 0 auto"
+              className="border-line/60"
+            >
+              {authorAvatar ? (
+                <img src={authorAvatar} alt={author} className="w-full h-full object-cover" />
+              ) : (
+                <Box width="full" height="full" display="flex" align="center" justify="center" color="dim">
+                  <Text variant="mono" size="xs">{(author || 'A').charAt(0)}</Text>
+                </Box>
+              )}
+            </Box>
             <Stack gap={0.5}>
               <Text size="sm" weight="font-bold" color="main">
                 {author || 'Ariel Anders, PhD'}
@@ -98,9 +132,14 @@ export function PostHeader({
               {tags.map((tag) => (
                 <Box
                   key={tag}
-                  className="px-3 py-1 rounded-full border border-line/60 bg-surface/30 text-text-dim text-[10px] font-extrabold uppercase tracking-widest whitespace-nowrap"
+                  paddingX={3}
+                  paddingY={1}
+                  radius="full"
+                  border
+                  surface="surface-alt"
+                  className="border-line/60 whitespace-nowrap"
                 >
-                  {tag}
+                  <Text variant="mono" size="micro" color="dim" uppercase tracking="utility">{tag}</Text>
                 </Box>
               ))}
             </Stack>

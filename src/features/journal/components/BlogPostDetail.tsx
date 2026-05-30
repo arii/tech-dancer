@@ -10,6 +10,7 @@ import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post, readingTime } from '@/lib/content';
+import { useShare } from '@/hooks/useShare';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -18,14 +19,13 @@ interface BlogPostDetailProps {
 }
 
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
-    }
+  const { share } = useShare();
+
+  const handleShare = () => {
+    share({
+      title: post.title,
+      text: post.excerpt,
+    });
   };
 
   const rt = post.readingTime || `${readingTime(post.content)} min read`;
@@ -46,13 +46,13 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     <Stack
       as="button"
       direction="row"
-      onClick={share}
+      onClick={handleShare}
       align="center"
       gap={1.5}
       className="text-text-dim/60 hover:text-accent transition-colors group/share"
     >
       <Share2 className="w-3.5 h-3.5" />
-      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+      <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="utility">SHARE</Text>
     </Stack>
   );
 

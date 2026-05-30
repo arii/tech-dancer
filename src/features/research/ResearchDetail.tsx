@@ -51,6 +51,20 @@ export function ResearchDetail() {
   const tool = id ? getTool(id) : null;
   const study = !tool && id ? getStudy(id) : null;
 
+  if (!tool && !study) {
+    return (
+      <Box padding="panel" textAlign="center">
+        <Stack gap={8} align="center">
+          <Search size={48} className="opacity-20" />
+          <Text variant="display" size="2xl">Content Not Found</Text>
+          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
+            <Text variant="mono" size="xs">Back to Portfolio</Text>
+          </Box>
+        </Stack>
+      </Box>
+    );
+  }
+
   const share = () => {
     const title = study?.title || tool?.title || 'Research';
     const text = study?.excerpt || tool?.description || '';
@@ -104,22 +118,8 @@ export function ResearchDetail() {
     );
   }
 
-  if (!tool) {
-    return (
-      <Box padding="panel" textAlign="center">
-        <Stack gap={8} align="center">
-          <Search size={48} className="opacity-20" />
-          <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Portfolio</Text>
-          </Box>
-        </Stack>
-      </Box>
-    );
-  }
-
   // Handle canonical redirects
-  if (tool.canonicalPath && pathname !== tool.canonicalPath && pathname.includes('research')) {
+  if (tool && tool.canonicalPath && pathname !== tool.canonicalPath && pathname.includes('research')) {
     return <Navigate to={tool.canonicalPath} replace />;
   }
 
