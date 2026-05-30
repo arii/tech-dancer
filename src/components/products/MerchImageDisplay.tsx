@@ -44,7 +44,6 @@ function ImageWell({ image, loading }: { image: MerchProductImage; loading?: 'ea
           event.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
         className="object-contain transition-transform duration-300 group-hover:scale-105"
-        style={{ objectFit: 'contain' }}
       />
     </Box>
   );

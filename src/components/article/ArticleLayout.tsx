@@ -52,7 +52,7 @@ export function ArticleLayout({
         </Box>
 
         {/* Article Content Grid */}
-        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}"> {/* impeccable-ignore */}
+        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}> {/* impeccable-ignore */}
           {/* Main Article Column */}
           <Box className={sidebar ? "min-w-0" : "min-w-0 lg:col-span-2"}>
             <Box className="article-prose">

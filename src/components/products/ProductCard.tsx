@@ -1,10 +1,8 @@
-import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
-import { stroke } from '@/styles/design-tokens';
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
   return (
