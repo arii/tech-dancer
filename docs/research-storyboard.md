@@ -1,187 +1,85 @@
-# UX Storyboard & Visual Redesign Plan: /research
+# Actionable UX Storyboard: /research Redesign
 
 ## Goal
-Optimize the `/research` (DevAI Portfolio) page for hiring managers and recruiters to quickly evaluate DevAI and AI engineering capabilities.
+Optimize the DevAI Portfolio for high-signal recruiting.
 
-## Desktop Storyboard
+## Implementation Roadmap
 
-### Frame 1: Landing / First Viewport
-- **Navigation**: DevAI Systems Portfolio (Label: `HIRE_ME`)
-- **Main Heading**: AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
-- **Primary CTAs**:
-  - `[View flagship projects]` (Anchor to Frame 2)
-  - `[Read implementation articles]` (Anchor to Frame 5)
-  - `[Contact]` (Anchor to Frame 7)
-- **Skill Chips**: `React` · `Vite` · `TypeScript` · `GitHub Actions` · `Vercel` · `Playwright` · `Python` · `LLM workflows`
+### Frame 1: Hero & Capability Alignment
+- **Current Baseline**: Large H1 and intro text.
+- **Problem**: Text-heavy intro delays "proof of work" on mobile.
+- **Goal**: Establish technical stack and mission in first viewport.
+- **Action**:
+  - Reduce vertical padding by 20%.
+  - Wrap skills into max 2 rows.
+  - Add "Explore Projects" anchor CTA.
+- **Responsive Priority**: Maximum (First Viewport).
+- **Implementation**: PR-A (Layout Primitives)
 
-### Frame 2: Featured Outputs (Flagship Projects)
-- **Section Heading**: Featured Outputs
-- **Layout**: Two large, high-impact cards (side-by-side or stacked with distinct visual weight).
-- **Cards**:
-  1. **BoomTick.blog** (The system itself)
-  2. **RepoAuditor AI**
-- **Card Content Structure (Max 160 chars per block)**:
-  - **Problem**: Brief description of the manual pain point or architectural gap.
-  - **Solution**: Specific AI/Automation intervention (e.g., "RAG-driven drafting").
-  - **Outcome**: The "So what?" (e.g., "Reduced review time by 70%").
-  - **Stack**: Key technologies.
-  - **CTA**: `[View Project]` / `[Source Code]`
-- **Examples**:
-  - **RepoAuditor AI**:
-    - *Problem*: High-velocity multi-repo PRs led to missed style regressions and "logic rot" that human reviewers couldn't catch at scale.
-    - *Solution*: Orchestrated a multi-agent prompt pipeline using Ollama to audit diffs against local design tokens and architectural constraints.
-    - *Outcome*: 100% detection of layout anti-patterns and automated triage of 500+ daily telemetry events before human eyes touch the code.
+### Frame 2: Flagship Proof (Featured Outputs)
+- **Current Baseline**: 2-column grid of project cards.
+- **Problem**: Problem/Solution/Outcome logic is buried in long descriptions.
+- **Goal**: Surface ROI and scale metrics immediately.
+- **Action**:
+  - Implement 160-char blocks for Problem/Solution/Outcome.
+  - Add visual "Proves" tags for specific skills (e.g., "RAG", "Multi-Agent").
+- **Responsive Priority**: Maximum (Primary Proof).
+- **Implementation**: PR-B (Content Configuration)
 
-### Frame 3: DevAI Architecture Map
-- **Section Heading**: How the systems fit together
-- **Component**: `DevAIEcosystemMap` (Minimalist SVG/Canvas component).
-- **Data Structure**:
+### Frame 3: System Orchestration Map (Future Work)
+- **Baseline**: None.
+- **Problem**: Users see isolated tools, not a cohesive DevAI system.
+- **Goal**: Visualize how "Blog -> Audit -> Pipeline" connects.
+- **Action**: Create `DevAIEcosystemMap` SVG component using the following node/edge data:
   ```json
-  {
-    "nodes": [
-      { "id": "platform", "label": "Content Platform", "icon": "Globe" },
-      { "id": "pr-review", "label": "PR Review Console", "icon": "Terminal" },
-      { "id": "pipelines", "label": "Data Pipelines", "icon": "Database" }
-    ],
-    "edges": [
-      { "from": "platform", "to": "pr-review", "label": "Audit Flow" },
-      { "from": "pipelines", "to": "platform", "label": "Sync" }
-    ]
-  }
+  {"nodes": ["Platform", "Review Console", "Data ETL"], "edges": ["Audit Flow", "Sync"]}
   ```
-- **Visual**: A clean flow diagram showing orchestration connectivity rather than dense text.
+- **Responsive Priority**: Medium (Deferred on mobile).
+- **Implementation**: PR-C (Visual Components)
 
-### Frame 4: Supporting Systems
-- **Section Heading**: Engineering Systems
-- **Group 1: Infrastructure & QA**
-  - AI PR Review Agent
-  - PR Impact & Dependency Analyzer
-  - Playwright Visual QA & UX Auditor
-- **Group 2: Data & Content**
-  - Data Pipeline & Telemetry ETL
-  - AI Content Drafting Workflow
-  - Event Calendar Automation
-- **Visual Style**: Compact cards or list items. Less visual weight than Frame 2.
+### Frame 4: Engineering Systems Consolidation
+- **Current Baseline**: Multi-card grid.
+- **Problem**: "Wall of cards" on mobile (1200px+ scroll depth).
+- **Goal**: Scannable secondary proof.
+- **Action**:
+  - Desktop: Keep grid.
+  - Mobile: Transform cards into 48px rows with [Icon][Title][Status].
+  - Tap row to expand description.
+- **Responsive Priority**: High (Density Fix).
+- **Implementation**: PR-A (Layout Primitives)
 
-### Frame 5: Articles & Implementation Guides
-- **Section Heading**: Implementation Guides
-- **Content**:
-  - Data scraper with GitHub Actions
-  - Vercel + GitHub Actions deployment
-  - AI PR review agent
-  - Multi-agent prompt generators
-  - Printful product metadata automation
-- **Visual Style**: Clean list or grid of article cards with metadata (date, category).
+### Frame 5: Standardized Implementation Guides
+- **Current Baseline**: Mixed-style article cards.
+- **Problem**: Inconsistent metadata and infinite scrolling.
+- **Goal**: Direct traffic to technical deep-dives.
+- **Action**:
+  - Limit to 3 items.
+  - Card style: Large title + Mono metadata (Date · Category).
+  - Add `See All Articles` ghost button linking to `/blog?category=research`.
+- **Responsive Priority**: Medium.
+- **Implementation**: PR-B (Content Configuration)
 
-### Frame 6: In-progress Ecommerce Automation
-- **Section Heading**: Ecommerce automation experiments
-- **Content**:
-  - Printful API scripts
-  - Product metadata packets
-  - SEO-safe descriptions
-  - Merch image QA
-  - Human-in-the-loop review
-- **Note**: Highlights current R&D and "under-the-hood" DevAI work.
+### Frame 6: Ecommerce R&D Section (Future Work)
+- **Baseline**: Hidden/Internal tools.
+- **Problem**: Current automation work (Printful/SEO) is invisible to recruiters.
+- **Goal**: Demonstrate current active research.
+- **Action**: Add single "In-Progress: SEO-Safe Merch Automation" block.
+- **Responsive Priority**: Low.
+- **Implementation**: PR-D (R&D Showcase)
 
-### Frame 7: Hire / Contact CTA
-- **Section Heading**: Looking for DevAI engineering work
-- **Main Copy**: Currently open to roles focusing on AI orchestration, developer experience, and automated delivery pipelines.
-- **CTAs**:
-  - `[Contact Ariel]` (Email/Form)
-  - `[GitHub Profile]`
-  - `[LinkedIn]`
-
----
-
-## Mobile Storyboard (Responsive Flow)
-
-To maintain hierarchy and prevent "mobile wall-of-cards" fatigue, the responsive layout follows a strict consolidation strategy.
-
-### Frame 1: Hero & Immediate Proof
-- **Visual Stacking**: Heading -> Dek -> Skills -> Primary CTAs.
-- **Design Note**: Reduce vertical padding by 25% compared to desktop. Skills are wrapped chips (max 2 rows) to ensure the first Flagship card is visible "above the fold" or within a single scroll.
-- **Priority**: High. This frame must establish credibility immediately.
-
-### Frame 2: Flagship Projects (Consolidated)
-- **Layout**: 100% width vertical stack.
-- **Card Interior**:
-  - Image/Mockup (Optional, if used: aspect-ratio 16:9).
-  - Title and **Outcome** are primary.
-  - **Problem/Solution/Stack** are condensed into a single "Technical Breakdown" accordion or a tightly spaced metadata list.
-- **Priority**: Maximum. These are the primary proof points for hiring.
-
-### Frame 3: Architecture Diagram (Deferred/Simplified)
-- **Behavior**: Replaced by a high-level summary text block or a single static "System Map" image that fits the viewport width.
-- **Priority**: Medium. Deferred to allow users to reach specific projects faster.
-
-### Frame 4: Engineering & Supporting Systems (Compact List)
-- **Behavior**: Collapse from cards into a **single-column list of rows**.
-- **Interaction**: Each row shows `[Icon] [Title] [Status]`. Tapping expands to show the description and `[View Assets]` CTA.
-- **Goal**: Minimize vertical scroll depth from ~1200px to ~400px.
-- **Priority**: Low. Secondary proof.
-
-### Frame 5: Implementation Guides (Scrollable Row or List)
-- **Layout**: Vertical list of clean, text-only cards showing `Title` (large) and `Date · Category` (mono/micro).
-- **Limit**: Show only the **3 most recent articles** initially.
-- **CTA**: `[See All Articles]` (Styled as `variant="ghost"` with a thin border).
-- **Behavior**: Tapping navigates to `/blog?category=research` for the full index.
-- **Priority**: Medium.
-
-### Frame 6: Ecommerce Automation (Footer Teaser)
-- **Layout**: Condensed into a single "Current R&D" text box.
-- **Priority**: Low.
-
-### Frame 7: Sticky Hire CTA
-- **Behavior**: A prominent, high-contrast section at the bottom.
-- **Interaction**: The `[Contact]` button remains distinct and large for "fat-finger" accessibility.
+### Frame 7: Hardened Hiring CTA
+- **Current Baseline**: Standard footer.
+- **Problem**: Weak "Contact" signals.
+- **Goal**: Immediate conversion for hiring managers.
+- **Action**:
+  - Sticky mobile CTA (surface: accent) appearing after Frame 2.
+  - Desktop: High-contrast "Open for Work" banner.
+- **Responsive Priority**: High (Conversion).
+- **Implementation**: PR-A (Layout Primitives)
 
 ---
 
-## Visual Baseline & Implementation Delta
-
-To ensure implementation PRs remain grounded, the following checkpoints define the current baseline and the intended redesign deltas.
-
-### Baseline Checkpoints (Preserve)
-- **Visual Style**: Dark editorial system with high-contrast accenting (Cyan/Accent).
-- **Hero Layout**: Large H1 type and concise intro text.
-- **Project Previews**: High-impact flagship previews (Currently HRM and RepoAuditor).
-- **Mobile Stack**: Vertical stacking of hero and project modules.
-
-### Implementation Delta (Future Work)
-- **New Section: Frame 3 (Architecture Map)**: Adding a visual "DevAI Ecosystem" component that currently does not exist.
-- **New Section: Frame 6 (Ecommerce Automation)**: Formalizing the "under-the-hood" R&D work into an editorial section.
-- **Refinement: Frame 4 (Engineering Systems)**: Redesigning the current engineering grid into compact rows for mobile density.
-- **Refinement: Frame 5 (Implementation Guides)**: Standardizing article cards and introducing a "Show More" limit for mobile.
-
----
-
-## Visual Design Plan
-
-### 1. Hierarchy & Scanning
-- **Dominance**: Flagship projects (BoomTick, RepoAuditor) must use larger typography and potentially background accents or thumbnails to stand out from secondary tools.
-- **Density Control**: Use "compact rows" for secondary engineering systems on mobile to prevent the "wall of cards" fatigue.
-- **Section Breaks**: Use subtle border-tops or background shifts to clearly demarcate the 7 frames.
-
-### 2. Storytelling Components
-- **Problem/Solution/Outcome Blocks**: Standardize these within the flagship cards to give recruiters quick, "at-a-glance" wins.
-- **Architecture Diagram**: Use the `ArchitecturalAssetsList` style or a new minimalist SVG component to visualize the "DevAI Ecosystem".
-
-### 3. Navigation & Interaction
-- **Table of Contents / Quick Links**: A sticky secondary nav or a well-placed hero list to allow jumping between "Projects", "Articles", and "Systems".
-- **CTA States**:
-  - **Default**: standard token-based colors (accent/white).
-  - **Hover**: `scale(1.02)`, brighten `10%`.
-  - **Active**: `scale(0.98)`, transition `motion-quick`.
-  - **Loading**: `opacity-60`, cursor `wait`.
-- **Mobile Sticky CTA (Frame 7)**:
-  - **Style**: Fixed bottom position, `width-full`, `surface="accent"`, `color="white"`.
-  - **Animation**: Fades in only when user scrolls past Frame 2 (Featured Outputs).
-
-## Acceptance Criteria Check
-- [x] UX storyboard exists in markdown.
-- [x] Desktop and mobile layouts described.
-- [x] Flagship projects are visually dominant.
-- [x] Secondary tools are compact on mobile.
-- [x] Page has clear hiring CTA.
-- [x] Visual plan includes articles and ecommerce work.
-- [x] Storyboard is ready for implementation agent.
+## Visual Baseline Checkpoints (Do Not Break)
+- **Style**: Dark editorial system (Background: `muted/surface`, Accent: `cyan`).
+- **Typography**: Display H1 for hero, Mono micro for metadata.
+- **Interactivity**: 200ms `motion-quick` transitions on all CTAs.
