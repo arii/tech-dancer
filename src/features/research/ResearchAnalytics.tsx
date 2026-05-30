@@ -12,9 +12,15 @@ import { ResearchTool } from '@/config/research-tools';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
-  if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
+  if (
+    tool.category.includes('Automation') ||
+    tool.id.includes('scraper') ||
+    tool.id.includes('pipeline') ||
+    tool.id.includes('ecommerce')
+  ) {
+    return Activity;
+  }
   if (tool.id.includes('hrm')) return Globe;
-  if (tool.id.includes('ecommerce')) return Activity;
   return Search;
 }
 
@@ -23,7 +29,7 @@ export default function ResearchAnalytics() {
   const { studies, tools } = useResearch();
 
   const flagshipTools = tools.filter(t => t.isFlagship);
-  const engineeringTools = tools.filter(t => !t.isFlagship && t.id !== 'ecommerce-automation');
+  const engineeringTools = tools.filter(t => !t.isFlagship && !t.excludeFromEngineeringTools);
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 

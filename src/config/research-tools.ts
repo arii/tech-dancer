@@ -11,6 +11,7 @@ export interface ResearchTool {
   externalLinkDisplayLabel?: string;
   sourceUrl?: string;
   isFlagship?: boolean;
+  excludeFromEngineeringTools?: boolean;
   image?: string;
 }
 
@@ -110,6 +111,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Business Automation',
     status: 'In Progress',
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
-    canonicalPath: '/research/ecommerce-automation'
+    canonicalPath: '/research/ecommerce-automation',
+    excludeFromEngineeringTools: true
   }
 ];
