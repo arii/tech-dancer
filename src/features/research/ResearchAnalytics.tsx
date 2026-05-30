@@ -5,6 +5,7 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ActionButton } from '@/components/ui/ActionButton';
+import { DecorativeGlow } from '@/components/ui/DecorativeGlow';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
@@ -29,24 +30,8 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section" className="relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <Box
-        position="absolute"
-        top={-20}
-        right={-20}
-        width={96}
-        height={96}
-        radius="full"
-        className="bg-accent/5 blur-3xl -z-10 pointer-events-none"
-      />
-      <Box
-        position="absolute"
-        bottom="1/3"
-        left={-20}
-        width={64}
-        height={64}
-        radius="full"
-        className="bg-accent/5 blur-3xl -z-10 pointer-events-none"
-      />
+      <DecorativeGlow size={96} top={-20} right={-20} />
+      <DecorativeGlow size={64} bottom="1/3" left={-20} />
 
       <SEO
         title="DevAI Portfolio | AI Systems & Orchestration"

@@ -5,6 +5,7 @@ import { calculateJourneyTimeline } from '@/features/lab/wsdc-reminders/lib/time
 import { generateICS, downloadICS } from '@/features/lab/wsdc-reminders/lib/ics-generator';
 import { Event } from '@/lib/content';
 import { ActionButton } from '@/components/ui/ActionButton';
+import { DecorativeGlow } from '@/components/ui/DecorativeGlow';
 import { cn } from '@/lib/utils';
 
 interface EventRemindersProps {
@@ -106,14 +107,11 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       surface="surface"
       className="overflow-hidden"
     >
-      <Box
-        position="absolute"
+      <DecorativeGlow
+        size={64}
         top={-5}
         right={-5}
-        width={64}
-        height={64}
-        radius="full"
-        className="bg-accent-purple/5 blur-3xl -z-10 pointer-events-none"
+        color="bg-accent-purple"
       />
 
       <Stack gap={10}>
