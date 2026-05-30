@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, CheckCircle2 } from 'lucide-react';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -13,6 +13,7 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
   if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
   if (tool.id.includes('hrm')) return Globe;
+  if (tool.id.includes('boomtick')) return Globe;
   return Search;
 }
 
@@ -47,10 +48,10 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Featured Outputs</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>FLAGSHIP PROJECTS</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          <Grid cols={{ base: 1, xl: 2 }} gap={8}>
             {flagshipTools.map((tool) => (
               <BaseCard
                 key={tool.id}
@@ -59,17 +60,29 @@ export default function ResearchAnalytics() {
                 surface="surface"
                 className="border-accent/10 h-full overflow-hidden"
               >
-                <Stack gap={0} height="full">
+                <Grid cols={{ base: 1, md: 5 }} gap={0} height="full">
                   {tool.image && (
-                    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
+                    <Box
+                      span={{ base: 1, md: 2 }}
+                      height={{ base: 48, md: 'full' }}
+                      overflow="hidden"
+                      border={{ base: 'b', md: 'r' }}
+                      surface="muted"
+                      className="border-accent/5 opacity-80"
+                    >
                       <img
                         src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
                         alt={tool.title}
-                        className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
+                        className="w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
                       />
                     </Box>
                   )}
-                  <Stack gap={6} padding={8} flex={1}>
+                  <Stack
+                    span={{ base: 1, md: tool.image ? 3 : 5 }}
+                    gap={6}
+                    padding={8}
+                    flex={1}
+                  >
                     <Box display="flex" justify="between" align="start" width="full">
                       <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
@@ -79,7 +92,7 @@ export default function ResearchAnalytics() {
                       </Text>
                     </Box>
 
-                    <Stack gap={3}>
+                    <Stack gap={4}>
                       <Stack gap={1}>
                         <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
                           {tool.category}
@@ -87,59 +100,93 @@ export default function ResearchAnalytics() {
                         <Text variant="display" size="2xl" weight="font-black">
                           {tool.title}
                         </Text>
+                        <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
+                          {tool.subtitle}
+                        </Text>
                       </Stack>
-                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
-                        {tool.subtitle}
-                      </Text>
+
                       <Text variant="body" size="md" color="dim" className="leading-relaxed">
                         {tool.description}
                       </Text>
+
+                      {tool.proves && (
+                        <Stack gap={2}>
+                          <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>
+                            Proves
+                          </Text>
+                          <Grid cols={{ base: 1, sm: 2 }} gapX={4} gapY={1.5}>
+                            {tool.proves.map(item => (
+                              <Box key={item} display="flex" align="center" gap={2}>
+                                <Icon icon={CheckCircle2} size="xs" color="accent" className="opacity-50" />
+                                <Text size="xs" color="body" weight="font-medium">{item}</Text>
+                              </Box>
+                            ))}
+                          </Grid>
+                        </Stack>
+                      )}
                     </Stack>
 
-                    <Box display="flex" wrap="wrap" gap={2}>
-                      {tool.tags.map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                          {tag}
-                        </Text>
-                      ))}
-                    </Box>
-
-                    <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
-                      {tool.externalUrl && (
-                        <Box
-                          as="a"
-                          href={tool.externalUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          display="flex"
-                          align="center"
-                          gap={2}
-                          className="text-accent hover:opacity-80 transition-colors z-20"
-                        >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
-                            {tool.externalLinkDisplayLabel || 'Open Link'}
+                    <Stack gap={3} marginTop="auto" paddingTop={4}>
+                      <Box display="flex" wrap="wrap" gap={2}>
+                        {tool.tags.map(tag => (
+                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                            {tag}
                           </Text>
-                          <ExternalLink className="w-4 h-4" />
-                        </Box>
-                      )}
-                      {tool.sourceUrl && (
-                        <Box
-                          as="a"
-                          href={tool.sourceUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          display="flex"
-                          align="center"
-                          gap={2}
-                          className="text-dim hover:text-accent transition-colors z-20"
-                        >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
-                          <Github className="w-4 h-4" />
-                        </Box>
-                      )}
-                    </Box>
+                        ))}
+                      </Box>
+
+                      <Box display="flex" wrap="wrap" gap={3}>
+                        {tool.ctas?.map((cta) => (
+                          <Button
+                            key={cta.label}
+                            as={cta.isExternal ? 'a' : 'button'}
+                            onClick={cta.isExternal ? undefined : () => navigate(cta.url)}
+                            href={cta.isExternal ? cta.url : undefined}
+                            target={cta.isExternal ? "_blank" : undefined}
+                            rel={cta.isExternal ? "noopener noreferrer" : undefined}
+                            variant="outline"
+                            size="sm"
+                            gap={2}
+                            className="text-xs tracking-widest font-bold uppercase"
+                          >
+                            {cta.label}
+                            {cta.isExternal && <Icon icon={ExternalLink} size="xs" />}
+                          </Button>
+                        ))}
+                        {!tool.ctas && tool.externalUrl && (
+                          <Button
+                            as="a"
+                            href={tool.externalUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            variant="outline"
+                            size="sm"
+                            gap={2}
+                            className="text-xs tracking-widest font-bold uppercase"
+                          >
+                            {tool.externalLinkDisplayLabel || 'Open Link'}
+                            <Icon icon={ExternalLink} size="xs" />
+                          </Button>
+                        )}
+                        {!tool.ctas && tool.sourceUrl && (
+                          <Button
+                            as="a"
+                            href={tool.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            variant="ghost"
+                            size="sm"
+                            gap={2}
+                            className="text-xs tracking-widest font-bold uppercase"
+                          >
+                            Source
+                            <Icon icon={Github} size="xs" />
+                          </Button>
+                        )}
+                      </Box>
+                    </Stack>
                   </Stack>
-                </Stack>
+                </Grid>
               </BaseCard>
             ))}
           </Grid>

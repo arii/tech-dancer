@@ -1,3 +1,10 @@
+export interface ResearchCTA {
+  label: string;
+  url: string;
+  icon?: string;
+  isExternal?: boolean;
+}
+
 export interface ResearchTool {
   id: string;
   title: string;
@@ -12,35 +19,57 @@ export interface ResearchTool {
   sourceUrl?: string;
   isFlagship?: boolean;
   image?: string;
+  proves?: string[];
+  ctas?: ResearchCTA[];
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
+    id: 'boomtick-blog',
+    title: 'BoomTick.blog',
+    subtitle: 'Production React/Vite content platform',
+    description: 'A full-stack content platform with blog posts, gear reviews, event guides, merch integration, affiliate disclosures, SEO metadata, and automated visual QA.',
+    category: 'Product Platform',
+    status: 'Active',
+    tags: ['React', 'Vite', 'TypeScript', 'GitHub Actions', 'Vercel', 'Playwright', 'Structured Content', 'Affiliate Data'],
+    isFlagship: true,
+    image: '/assets/posts/boomtick-and-b-thumb.svg', // Fallback to existing asset if possible
+    proves: ['Frontend architecture', 'Product thinking', 'Content systems', 'SEO', 'Automation', 'Design iteration'],
+    ctas: [
+      { label: 'View site', url: 'https://boomtick.blog', isExternal: true },
+      { label: 'Read architecture article', url: '/research/architecture' },
+      { label: 'View GitHub workflow', url: 'https://github.com/arii/boomtick/tree/main/.github/workflows', isExternal: true }
+    ]
+  },
+  {
+    id: 'repo-auditor-ai',
+    title: 'RepoAuditor AI',
+    subtitle: 'DevAI Workflow Console',
+    description: 'A workflow console for analyzing pull requests, reviewing code quality, checking CI failures, identifying risky changes, and generating structured agent instructions.',
+    category: 'DevAI Tooling',
+    status: 'Active',
+    tags: ['GitHub API', 'LLM-assisted review', 'Python tooling', 'CI diagnostics', 'Prompt generation', 'Workflow state management'],
+    isFlagship: true,
+    image: '/assets/research/repo-auditor-ai.png',
+    proves: ['DevAI orchestration', 'GitHub workflow automation', 'PR review systems', 'Prompt pipelines', 'Repo-aware tooling'],
+    ctas: [
+      { label: 'Read case study', url: '/research/repo-auditor-case-study' },
+      { label: 'View repo', url: 'https://github.com/arii/hrm-project-management', isExternal: true },
+      { label: 'View workflow', url: 'https://github.com/arii/hrm-project-management/tree/main/.github/workflows', isExternal: true }
+    ]
+  },
+  {
     id: 'hrm-flagship',
     title: 'HRM (Heart Rate Monitor)',
-    subtitle: 'Flagship Training Dashboard',
+    subtitle: 'Training Dashboard',
     description: 'The original product built using AI-assisted engineering. It integrates Web Bluetooth heart-rate telemetry with Spotify API context, demonstrating full-stack Dev AI orchestration for complex browser-based applications.',
     category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     externalUrl: 'https://arii.github.io/hrm/',
     externalLinkDisplayLabel: 'View HRM',
-    isFlagship: true,
+    isFlagship: false,
     image: '/assets/research/hrm-flagship.png'
-  },
-  {
-    id: 'repo-auditor-ai',
-    title: 'RepoAuditor AI',
-    subtitle: 'DevAI Workflow Console',
-    description: 'A purpose-built AI orchestration console for GitHub. It leverages custom prompt engineering to audit pull requests, analyze workflow health, and generate structured issues for Jules coding agents, unblocking rapid multi-repo development.',
-    category: 'DevAI Tooling',
-    status: 'Active',
-    tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
-    externalUrl: 'https://repo-auditor-ai.vercel.app/',
-    externalLinkDisplayLabel: 'Open RepoAuditor AI',
-    sourceUrl: 'https://github.com/arii/hrm-project-management',
-    isFlagship: true,
-    image: '/assets/research/repo-auditor-ai.png'
   },
   {
     id: 'gitops-pr-reviewer',
