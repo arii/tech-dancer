@@ -34,13 +34,8 @@ FONT_NAME = "Cooper Black"
 # Front Design Constants
 FRONT_FONT_SIZE = 240
 FRONT_GAP = 16
-# The heart path in the 600x600 SVG is approx 450 units tall.
-# We want the heart itself to be ~85% of cap height.
-# cap_height = 240 * 0.7 = 168
-# target_heart_height = 168 * 0.85 = 142.8
-# SVG_VIEWPORT_SIZE = 600
-# FRONT_HEART_SIZE = (target_heart_height / 450) * 600 = (142.8 / 450) * 600 = 190.4
-FRONT_HEART_SIZE = 190
+# Increase heart size for better 'V' weight (approx 94% of cap height)
+FRONT_HEART_SIZE = 210
 FRONT_BASE_Y = 660
 FRONT_CAP_HEIGHT_RATIO = 0.7
 
