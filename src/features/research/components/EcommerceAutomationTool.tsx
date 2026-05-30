@@ -1,9 +1,6 @@
 import {
-  ShoppingBag,
-  Cpu,
   ShieldCheck,
   Search,
-  Eye,
   CheckCircle2,
   AlertTriangle,
   ArrowRight,
