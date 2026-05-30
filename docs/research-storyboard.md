@@ -117,6 +117,24 @@ To maintain hierarchy and prevent "mobile wall-of-cards" fatigue, the responsive
 
 ---
 
+## Visual Baseline & Implementation Delta
+
+To ensure implementation PRs remain grounded, the following checkpoints define the current baseline and the intended redesign deltas.
+
+### Baseline Checkpoints (Preserve)
+- **Visual Style**: Dark editorial system with high-contrast accenting (Cyan/Accent).
+- **Hero Layout**: Large H1 type and concise intro text.
+- **Project Previews**: High-impact flagship previews (Currently HRM and RepoAuditor).
+- **Mobile Stack**: Vertical stacking of hero and project modules.
+
+### Implementation Delta (Future Work)
+- **New Section: Frame 3 (Architecture Map)**: Adding a visual "DevAI Ecosystem" component that currently does not exist.
+- **New Section: Frame 6 (Ecommerce Automation)**: Formalizing the "under-the-hood" R&D work into an editorial section.
+- **Refinement: Frame 4 (Engineering Systems)**: Redesigning the current engineering grid into compact rows for mobile density.
+- **Refinement: Frame 5 (Implementation Guides)**: Standardizing article cards and introducing a "Show More" limit for mobile.
+
+---
+
 ## Visual Design Plan
 
 ### 1. Hierarchy & Scanning
