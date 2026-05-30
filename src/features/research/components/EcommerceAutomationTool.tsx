@@ -43,6 +43,11 @@ export function EcommerceAutomationTool() {
       icon: CheckCircle2,
       title: 'Human-in-the-Loop QA',
       description: 'Audit front/back product mockups and image crops for visual quality before live storefront publishing.'
+    },
+    {
+      icon: Palette,
+      title: 'Color Option Curation',
+      description: 'Curating the best product colors for each design rather than publishing every available Printful option.'
     }
   ];
 
@@ -65,7 +70,7 @@ export function EcommerceAutomationTool() {
             <Text variant="display" size="4xl" weight="font-black">Ecommerce Automation Experiments</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
               Extending DevAI workflow patterns into ecommerce operations for BoomTick merch.
-              Implementing end-to-end automation from asset generation to multi-platform storefront synchronization.
+              Focusing on niche-aware SEO for <strong>West Coast Swing</strong>, <strong>NorCal</strong>, <strong>rainbow pride</strong>, and <strong>role-fluid dance</strong> communities.
             </Text>
           </Stack>
         </Stack>
@@ -120,15 +125,17 @@ export function EcommerceAutomationTool() {
             <Box border radius="xl" padding={6} surface="surface">
               <Stack gap={4} align="center">
                 <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Design Gen</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Printful Templates</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Printful Sync</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
+                  <ArrowRight className="w-3 h-3 text-dim" />
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent" className="bg-accent/10">AI Recommendations</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
                   <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent" className="bg-accent/10">Human Review</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Amazon Integration</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">API/Storefront Update</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Storefront</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">SEO-Safe Merch Page</Text>
                 </Box>
                 <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
               </Stack>

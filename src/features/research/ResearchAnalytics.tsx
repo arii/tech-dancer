@@ -172,7 +172,7 @@ export default function ResearchAnalytics() {
                   Automated merch operations including programmatic design generation and Printful API sync.
                 </Text>
                 <Text variant="body" size="md" color="dim" className="leading-relaxed">
-                  Current experiments include programmatic design generation (CairoSVG), Printful API storefront sync, Amazon affiliate asset management, SEO-safe product copy, and human-in-the-loop catalog review.
+                  Current experiments include CairoSVG design generation, Printful API sync, and niche SEO for West Coast Swing, NorCal, rainbow pride, and role-fluid dance merch.
                 </Text>
                 <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
                     {['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'].map(tag => (
@@ -199,26 +199,26 @@ export default function ResearchAnalytics() {
                   <Stack gap={4} align="center">
                     <Stack gap={2} align="center" width="full">
                         <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="dim">IMAGE_GEN</Text>
+                             <Text variant="mono" size="micro" color="dim">TEMPLATES</Text>
                              <ArrowRight className="w-3 h-3 text-dim" />
-                             <Text variant="mono" size="micro" color="dim">SYNC</Text>
+                             <Text variant="mono" size="micro" color="dim">METADATA</Text>
                         </Box>
                         <Box display="flex" align="center" gap={2}>
                              <ArrowRight className="w-3 h-3 text-dim rotate-90" />
                         </Box>
                         <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="accent" weight="bold">HUMAN_QA</Text>
+                             <Text variant="mono" size="micro" color="accent" weight="bold">AI_REC</Text>
                              <ArrowRight className="w-3 h-3 text-accent" />
-                             <Text variant="mono" size="micro" color="dim">REVIEW</Text>
+                             <Text variant="mono" size="micro" color="accent" weight="bold">HUMAN_QA</Text>
                         </Box>
                         <Box display="flex" align="center" gap={2}>
                              <ArrowRight className="w-3 h-3 text-dim rotate-90" />
                         </Box>
                         <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="dim">AMAZON_SYNC</Text>
+                             <Text variant="mono" size="micro" color="dim">STOREFRONT_SYNC</Text>
                         </Box>
                     </Stack>
-                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>MULTI-PLATFORM SYNC</Text>
+                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>CATALOG PIPELINE</Text>
                   </Stack>
                 </Box>
               </Stack>
