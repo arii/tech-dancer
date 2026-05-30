@@ -28,20 +28,20 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio | AI Orchestration & ML Engineering"
-        description="Showcase of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
+        title="DevAI Portfolio | AI Orchestration & Systems"
+        description="A portfolio of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
       />
       <Stack gap={12}>
         <PageHeader
           label="DEVAI_PORTFOLIO"
-          title="DevAI Portfolio as a Platform"
-          description="Real-world examples of AI-assisted product development, DevAI orchestration consoles, and high-fidelity telemetry pipelines."
+          title="DevAI Portfolio & Systems"
+          description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
           as="h1"
         />
 
         <Box maxWidth="2xl">
           <Text variant="body" size="lg" color="body">
-            Grounded DevAI solutions built to ship products, not hype. From <strong>custom RAG pipelines</strong> to <strong>autonomous repository auditing</strong>, these projects demonstrate practical applications of prompt engineering and agentic workflows in modern software engineering.
+            Grounded DevAI solutions built for production systems. From <strong>custom RAG pipelines</strong> to <strong>autonomous repository auditing</strong>, these projects demonstrate practical applications of agentic workflows and AI engineering in modern software delivery.
           </Text>
         </Box>
 
@@ -117,7 +117,7 @@ export default function ResearchAnalytics() {
                           className="text-accent hover:opacity-80 transition-colors z-20"
                         >
                           <Text weight="font-bold" size="xs" uppercase tracking="widest">
-                            {tool.externalLinkDisplayLabel || 'Open Link'}
+                            {tool.ctaLabel || tool.externalLinkDisplayLabel || 'Open Link'}
                           </Text>
                           <ExternalLink className="w-4 h-4" />
                         </Box>
@@ -162,8 +162,8 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
+            <Text variant="headline" size="2xl" weight="font-black">DevAI Systems</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} PROJECTS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
             {engineeringTools.map((tool) => (
@@ -184,9 +184,11 @@ export default function ResearchAnalytics() {
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
                       <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
-                      {tool.status}
-                    </Text>
+                    {tool.status !== 'Active' && (
+                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
+                        {tool.status}
+                      </Text>
+                    )}
                   </Box>
                   <Stack gap={3}>
                     <Stack gap={1}>
@@ -213,7 +215,9 @@ export default function ResearchAnalytics() {
                   </Stack>
                 </Stack>
                 <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
+                    {tool.ctaLabel || 'View Assets'}
+                  </Text>
                   <Icon icon={ArrowRight} size="md" color="accent" />
                 </Box>
               </Stack>

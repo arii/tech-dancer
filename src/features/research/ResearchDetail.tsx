@@ -118,7 +118,7 @@ export default function ResearchDetail() {
           <Search size={48} className="opacity-20" />
           <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Portfolio</Text>
+            <Text variant="mono" size="xs">Back to DevAI Portfolio</Text>
           </Box>
         </Stack>
       </Box>
@@ -146,7 +146,7 @@ export default function ResearchDetail() {
           cursor="pointer"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
+          <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to DevAI Portfolio</Text>
         </Box>
 
         <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
