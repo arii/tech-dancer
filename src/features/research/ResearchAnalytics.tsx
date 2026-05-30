@@ -24,7 +24,7 @@ export default function ResearchAnalytics() {
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
-  const contactPath = routes.find(r => r.label === 'Contact')?.path || '/contact';
+  const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
@@ -88,18 +88,16 @@ export default function ResearchAnalytics() {
             </Text>
           </Box>
 
-          <Box className="border-accent/10">
-            <Grid cols={{ base: 2, sm: 4, md: 5 }} gap={2}>
-              {skills.map((skill) => (
-                <Box key={skill.name} display="flex" align="center" gap={2}>
-                  <Icon icon={skill.icon} size="sm" color="accent" />
-                  <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="tighter">
-                    {skill.name}
-                  </Text>
-                </Box>
-              ))}
-            </Grid>
-          </Box>
+          <Grid as="ul" cols={{ base: 2, sm: 4, md: 5 }} gap={2}>
+            {skills.map((skill) => (
+              <Box as="li" key={skill.name} display="flex" align="center" gap={2}>
+                <Icon icon={skill.icon} size="sm" color="accent" />
+                <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="tighter">
+                  {skill.name}
+                </Text>
+              </Box>
+            ))}
+          </Grid>
         </Stack>
 
         <Stack gap={6} id="flagship" marginTop={2}>
@@ -203,14 +201,14 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden group">
+          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
               HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
             </Text>
           </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden group">
+          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
