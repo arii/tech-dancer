@@ -6,6 +6,7 @@ import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
+import { Tag } from '@/components/ui/Tag';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool, ResearchCTA } from '@/config/research-tools';
@@ -56,7 +57,6 @@ function ToolCTA({ cta }: { cta: ResearchCTA }) {
       variant={variant}
       size="sm"
       gap={2}
-      className="text-xs tracking-widest font-bold uppercase"
     >
       {cta.label}
       {isExternal && <Icon icon={ExternalLink} size="xs" />}
@@ -127,9 +127,7 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
           <Stack gap={3} marginTop="auto" paddingTop={4}>
             <Box display="flex" wrap="wrap" gap={2}>
               {tool.tags.map(tag => (
-                <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                  {tag}
-                </Text>
+                <Tag key={tag}>{tag}</Tag>
               ))}
             </Box>
 
@@ -184,9 +182,7 @@ function EngineeringToolCard({ tool }: { tool: ResearchTool }) {
           </Text>
           <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
               {tool.tags.map(tag => (
-                  <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                      {tag}
-                  </Text>
+                  <Tag key={tag} variant="compact">{tag}</Tag>
               ))}
           </Box>
         </Stack>
@@ -207,7 +203,7 @@ export default function ResearchAnalytics() {
   const engineeringTools = tools.filter(t => !t.isFlagship);
 
   return (
-    <Box as="section" className="overflow-x-hidden">
+    <Box as="section">
       <SEO
         title="DevAI Portfolio | AI Orchestration & ML Engineering"
         description="Showcase of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."

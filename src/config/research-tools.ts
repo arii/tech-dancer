@@ -30,7 +30,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['React', 'Vite', 'TypeScript', 'GitHub Actions', 'Vercel', 'Playwright', 'Structured Content', 'Affiliate Data'],
     isFlagship: true,
-    image: '/assets/posts/boomtick-and-b-thumb.svg', // Fallback to existing asset if possible
+    image: '/assets/posts/boomtick-and-b-thumb.svg',
     proves: ['Frontend architecture', 'Product thinking', 'Content systems', 'SEO', 'Automation', 'Design iteration'],
     ctas: [
       { label: 'View site', url: 'https://boomtick.blog', isExternal: true, variant: 'primary' },
