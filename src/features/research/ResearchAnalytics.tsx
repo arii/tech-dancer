@@ -1,5 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate, NavLink } from 'react-router-dom';
+import { routes } from '@/config/routes';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -23,6 +24,7 @@ export default function ResearchAnalytics() {
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
+  const contactPath = routes.find(r => r.label === 'Contact')?.path || '/contact';
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
@@ -46,30 +48,39 @@ export default function ResearchAnalytics() {
         description="DevAI portfolio by Ariel Anders featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel/GitHub Actions workflows, ecommerce automation, and production React/Vite systems."
       />
       <Stack gap={4}>
-        <PageHeader
-          label="HIRE_ME"
-          title="DevAI Systems Portfolio"
-          description="AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps."
-          as="h1"
-          paddingBottom={0}
-          border="none"
-          cta={
-            <Box display="flex" wrap="wrap" gap={3}>
-              <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
-                View flagship projects
-              </ActionButton>
-              <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
-                Read implementation articles
-              </ActionButton>
-              <ActionButton as={NavLink} to="/contact" variant="accent" paddingX={6} paddingY={3} gap={2}>
-                <Icon icon={Send} size="sm" />
-                Contact
-              </ActionButton>
-            </Box>
-          }
-        />
+        <Stack gap={2}>
+          <PageHeader
+            label="HIRE_ME"
+            title="DevAI Systems Portfolio"
+            as="h1"
+            paddingBottom={0}
+            border="none"
+          />
+          <Text
+            variant="body"
+            size={{ base: "lg", lg: "xl" }}
+            color="dim"
+            maxWidth="prose"
+            className="leading-relaxed text-pretty"
+          >
+            AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
+          </Text>
 
-        <Stack gap={3}>
+          <Box display="flex" wrap="wrap" gap={3} marginTop={2}>
+            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
+              View flagship projects
+            </ActionButton>
+            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
+              Read implementation articles
+            </ActionButton>
+            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2}>
+              <Icon icon={Send} size="sm" />
+              Contact
+            </ActionButton>
+          </Box>
+        </Stack>
+
+        <Stack gap={2}>
           <Box maxWidth="2xl">
             <Text variant="body" size="lg" color="body">
               I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
@@ -77,7 +88,7 @@ export default function ResearchAnalytics() {
           </Box>
 
           <Box className="border-accent/10">
-            <Grid cols={{ base: 2, sm: 3, md: 5 }} gap={4}>
+            <Grid cols={{ base: 2, sm: 4, md: 5 }} gap={2}>
               {skills.map((skill) => (
                 <Box key={skill.name} display="flex" align="center" gap={2}>
                   <Icon icon={skill.icon} size="sm" color="accent" />
