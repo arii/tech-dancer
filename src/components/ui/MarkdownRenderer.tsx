@@ -43,23 +43,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={8} className="prose-section group">
+            <Box marginTop={12} marginBottom={6} className="prose-section group">
               <Text
                 variant="mono"
-                size="micro"
-                color="dim"
-                weight="font-bold"
-                tracking="utility"
                 display="block"
-                marginBottom={3}
-                className="prose-section-number"
+                marginBottom={1}
+                className="editorial-section-number"
               />
-              <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
-              <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
+              <Text as="h2" variant="h2" size="3xl" color="brand" margin={0} leading="tight" {...props} />
+              <Box height={0.5} width={12} marginTop={4} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box marginTop={12} marginBottom={6}>
+            <Box marginTop={8} marginBottom={4}>
               <Text
                 as="h3"
                 variant="h3"
@@ -95,13 +91,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({node: _node, src, ...props}) => {
+          img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
               <img
                 src={normalizedSrc}
                 className="rounded-lg shadow-sm"
                 loading="lazy"
+                alt={alt || "Article illustration"}
                 {...props}
               />
             );

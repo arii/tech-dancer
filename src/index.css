@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
+@plugin "@tailwindcss/typography";
 /* impeccable-ignore-file */
 
 @theme {
@@ -142,12 +143,16 @@
     background-size: 20px 20px;
   }
 
-  /* Markdown Counters */
+  /* Editorial Counters */
   .prose-counters { counter-reset: section; }
   .prose-section { counter-increment: section; }
-  .prose-section-number::before {
+  .editorial-section-number::before {
     content: counter(section, decimal-leading-zero);
-    margin-right: 0.5rem;
+    @apply text-accent font-black text-xs tracking-tight;
+  }
+  .editorial-section-number::after {
+    content: " / SECTION";
+    @apply opacity-40 ml-2 text-micro font-bold tracking-[0.2em];
   }
 
   /* Brand SVG Utilities */
@@ -237,6 +242,16 @@
   }
   .prose a {
     @apply text-accent decoration-accent/30 underline decoration-1 underline-offset-4 transition-all hover:decoration-accent hover:text-accent/80;
+  }
+
+  .prose-editorial {
+    @apply prose prose-slate prose-invert max-w-none;
+    @apply prose-p:font-sans prose-p:text-text-body prose-p:leading-[1.85] prose-p:text-lg prose-p:mb-8 prose-p:text-pretty;
+    @apply prose-headings:font-display prose-headings:text-text-main prose-headings:tracking-tighter prose-headings:font-black;
+    @apply prose-strong:text-text-main prose-strong:font-black;
+    @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
+    @apply prose-li:text-text-body prose-li:text-lg prose-li:leading-relaxed;
+    @apply prose-img:rounded-2xl prose-img:border prose-img:border-line/30;
   }
 }
 
