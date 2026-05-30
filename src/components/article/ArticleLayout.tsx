@@ -24,7 +24,7 @@ export function ArticleLayout({
 }: ArticleLayoutProps) {
   return (
     <Box minHeight="screen" surface="default" className="text-text-body">
-      <Box maxWidth="7xl" marginX="auto" paddingX={{ base: 5, sm: 6, lg: 8 }}>
+      <Box maxWidth="6xl" marginX="auto" paddingX={{ base: 5, sm: 6, lg: 8 }}>
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
           <Stack

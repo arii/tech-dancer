@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 interface PostHeaderProps {
   category?: string;
   date?: string;
-  readingTime?: string;
+  readTime?: string;
   title: string;
   dek?: string;
   author?: string;
@@ -18,7 +18,7 @@ interface PostHeaderProps {
 export function PostHeader({
   category,
   date,
-  readingTime,
+  readTime,
   title,
   dek,
   author,
@@ -31,23 +31,23 @@ export function PostHeader({
     <Stack gap={{ base: 8, lg: 12 }}>
       <Stack gap={{ base: 6, lg: 8 }} maxWidth="4xl">
         <Stack gap={{ base: 3, lg: 4 }}>
-          {(category || date || readingTime) && (
+          {(category || date || readTime) && (
             <Stack direction="row" gap={3} align="center">
               {category && (
                 <Text variant="mono" size="xs" weight="font-extrabold" className="text-accent uppercase tracking-[0.18em]">
                   {category}
                 </Text>
               )}
-              {category && (date || readingTime) && <Box className="w-1 h-1 rounded-full bg-line/60" />}
+              {category && (date || readTime) && <Box className="w-1 h-1 rounded-full bg-line/60" />}
               {date && (
                 <Text variant="mono" size="xs" color="dim" weight="font-bold">
                   {date}
                 </Text>
               )}
-              {date && readingTime && <Box className="w-1 h-1 rounded-full bg-line/60" />}
-              {readingTime && (
+              {date && readTime && <Box className="w-1 h-1 rounded-full bg-line/60" />}
+              {readTime && (
                 <Text variant="mono" size="xs" color="dim" weight="font-bold">
-                  {readingTime}
+                  {readTime}
                 </Text>
               )}
             </Stack>

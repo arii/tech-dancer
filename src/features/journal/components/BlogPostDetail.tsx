@@ -64,7 +64,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <PostHeader
           category={post.category}
           date={post.date}
-          readingTime={rt}
+          readTime={rt}
           title={post.title}
           dek={post.dek || post.excerpt}
           tags={post.tags}
