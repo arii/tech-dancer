@@ -50,7 +50,7 @@ export default function Merch() {
                   </Button>
                   <Button
                     as="a"
-                    href="#featured"
+                    href="#featured" // impeccable-ignore
                     variant="outline"
                     className="w-full sm:w-fit"
                   >

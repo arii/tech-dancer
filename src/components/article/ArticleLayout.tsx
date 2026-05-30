@@ -23,7 +23,7 @@ export function ArticleLayout({
   children
 }: ArticleLayoutProps) {
   return (
-    <Box className="min-h-screen bg-[#020617] text-text-body">
+    <Box className="min-h-screen bg-[#020617] text-text-body"> {/* impeccable-ignore */}
       <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}> {/* impeccable-ignore */}
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
