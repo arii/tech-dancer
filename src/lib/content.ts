@@ -115,7 +115,9 @@ function transform<T extends { date?: string; draft?: boolean }>(
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
 
-        status: data.status ? String(data.status) : undefined,
+        status: (data.status && ['published', 'draft', 'planned'].includes(String(data.status)))
+          ? (String(data.status) as 'published' | 'draft' | 'planned')
+          : undefined,
         readTime: data.readTime ? String(data.readTime) : undefined,
 
         content: content || "",
