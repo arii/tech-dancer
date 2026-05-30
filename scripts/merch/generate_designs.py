@@ -9,13 +9,12 @@ import sys
 import subprocess
 
 # --- ASSET PATHS ---
-SOURCE_DIR = "scripts/merch/source"
 GENERATED_DIR = "scripts/merch/generated"
 FONTS_DIR = "scripts/merch/fonts"
 PUBLIC_ASSETS_DIR = "public/assets/merch"
 
-HEART_SVG = f"{SOURCE_DIR}/rainbow_heart.svg"
-CHECK_SVG = f"{SOURCE_DIR}/rainbow_check.svg"
+HEART_SVG = f"{GENERATED_DIR}/rainbow_heart.svg"
+CHECK_SVG = f"{GENERATED_DIR}/rainbow_check.svg"
 STAR_SVG = f"{GENERATED_DIR}/rainbow_star.svg"
 SPARKLE_SVG = f"{GENERATED_DIR}/rainbow_sparkle.svg"
 
@@ -35,8 +34,13 @@ FONT_NAME = "Cooper Black"
 # Front Design Constants
 FRONT_FONT_SIZE = 240
 FRONT_GAP = 16
-FRONT_HEART_WIDTH = 170
-FRONT_HEART_HEIGHT = 150
+# The heart path in the 600x600 SVG is approx 450 units tall.
+# We want the heart itself to be ~85% of cap height.
+# cap_height = 240 * 0.7 = 168
+# target_heart_height = 168 * 0.85 = 142.8
+# SVG_VIEWPORT_SIZE = 600
+# FRONT_HEART_SIZE = (target_heart_height / 450) * 600 = (142.8 / 450) * 600 = 190.4
+FRONT_HEART_SIZE = 190
 FRONT_BASE_Y = 660
 FRONT_CAP_HEIGHT_RATIO = 0.7
 
@@ -159,7 +163,7 @@ def generate_front_design(output_path, is_preview=False):
 
     total_width = (extents_L.x_advance + FRONT_GAP +
                    extents_O.x_advance + FRONT_GAP +
-                   FRONT_HEART_WIDTH + FRONT_GAP +
+                   FRONT_HEART_SIZE + FRONT_GAP +
                    extents_E.x_advance)
 
     start_x = (DESIGN_WIDTH - total_width) / 2
@@ -175,9 +179,10 @@ def generate_front_design(output_path, is_preview=False):
     # Heart (V)
     heart_x = curr_x
     cap_height = FRONT_FONT_SIZE * FRONT_CAP_HEIGHT_RATIO
-    heart_y = (FRONT_BASE_Y - cap_height / 2) - (FRONT_HEART_HEIGHT / 2) + 5
-    draw_svg_as_image(ctx, HEART_SVG, heart_x, heart_y, FRONT_HEART_WIDTH, FRONT_HEART_HEIGHT, scale)
-    curr_x += FRONT_HEART_WIDTH + FRONT_GAP
+    # Center the heart vertically relative to the cap height
+    heart_y = (FRONT_BASE_Y - cap_height / 2) - (FRONT_HEART_SIZE / 2) + 5
+    draw_svg_as_image(ctx, HEART_SVG, heart_x, heart_y, FRONT_HEART_SIZE, FRONT_HEART_SIZE, scale)
+    curr_x += FRONT_HEART_SIZE + FRONT_GAP
 
     # E
     draw_text_with_stroke(ctx, "E", curr_x, FRONT_BASE_Y, FRONT_FONT_SIZE)

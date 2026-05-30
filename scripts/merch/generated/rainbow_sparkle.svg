@@ -1,1 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><defs><clipPath id="a"><path d="M75 75h25v450H75Zm0 0"/></clipPath><clipPath id="b"><path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></clipPath><clipPath id="c"><path d="M100 75h100v450H100Zm0 0"/></clipPath><clipPath id="d"><path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></clipPath><clipPath id="e"><path d="M200 75h100v450H200Zm0 0"/></clipPath><clipPath id="f"><path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></clipPath><clipPath id="g"><path d="M300 75h100v450H300Zm0 0"/></clipPath><clipPath id="h"><path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></clipPath><clipPath id="i"><path d="M400 75h100v450H400Zm0 0"/></clipPath><clipPath id="j"><path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></clipPath><clipPath id="k"><path d="M500 75h25v450h-25Zm0 0"/></clipPath><clipPath id="l"><path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></clipPath></defs><g clip-path="url(#a)"><g clip-path="url(#b)"><path fill="#e21b18" d="M0 0h100v600H0Zm0 0"/></g></g><g clip-path="url(#c)"><g clip-path="url(#d)"><path fill="#ef7614" d="M100 0h100v600H100Zm0 0"/></g></g><g clip-path="url(#e)"><g clip-path="url(#f)"><path fill="#efc106" d="M200 0h100v600H200Zm0 0"/></g></g><g clip-path="url(#g)"><g clip-path="url(#h)"><path fill="#5eaa37" d="M300 0h100v600H300Zm0 0"/></g></g><g clip-path="url(#i)"><g clip-path="url(#j)"><path fill="#3583c2" d="M400 0h100v600H400Zm0 0"/></g></g><g clip-path="url(#k)"><g clip-path="url(#l)"><path fill="#8247a5" d="M500 0h100v600H500Zm0 0"/></g></g><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="16" d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225m0 0"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <clipPath id="rainbow-clip">
+      <path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#rainbow-clip)">
+    <rect x="75.00" y="0" width="75.00" height="600" fill="#e21b18"/>
+    <rect x="150.00" y="0" width="75.00" height="600" fill="#ef7614"/>
+    <rect x="225.00" y="0" width="75.00" height="600" fill="#efc106"/>
+    <rect x="300.00" y="0" width="75.00" height="600" fill="#5eaa37"/>
+    <rect x="375.00" y="0" width="75.00" height="600" fill="#3583c2"/>
+    <rect x="450.00" y="0" width="75.00" height="600" fill="#8247a5"/>
+  </g>
+  <path d="M300 75c0 110 115 225 225 225-110 0-225 115-225 225 0-110-115-225-225-225 110 0 225-115 225-225z" fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
