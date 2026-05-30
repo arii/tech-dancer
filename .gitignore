@@ -92,3 +92,6 @@ dev-tools/logs/reviews/*.md
 # Runtime audit reports
 # [Sensitive] Ensure these are never indexed
 .agent/workflows/ai-slop-audit-*.md
+
+# Merch Generation
+scripts/merch/fonts/*.ttf

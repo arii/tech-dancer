@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <clipPath id="rainbow-clip">
+      <path d="M100 350q75 150 150 150c100 0 200-200 300-400-100 150-200 300-300 300-50 0-100-50-150-100z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#rainbow-clip)">
+    <rect x="0" y="0" width="100" height="600" fill="#e21b18"/>
+    <rect x="100" y="0" width="100" height="600" fill="#ef7614"/>
+    <rect x="200" y="0" width="100" height="600" fill="#efc106"/>
+    <rect x="300" y="0" width="100" height="600" fill="#5eaa37"/>
+    <rect x="400" y="0" width="100" height="600" fill="#3583c2"/>
+    <rect x="500" y="0" width="100" height="600" fill="#8247a5"/>
+  </g>
+  <path d="M100 350q75 150 150 150c100 0 200-200 300-400-100 150-200 300-300 300-50 0-100-50-150-100z" fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

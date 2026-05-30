@@ -7,6 +7,7 @@ FONT_FILE="scripts/merch/fonts/CooperBlack.ttf"
 
 if [ ! -f "$FONT_FILE" ]; then
     echo "Error: Font file $FONT_FILE not found."
+    echo "Please place a licensed copy of CooperBlack.ttf in scripts/merch/fonts/"
     exit 1
 fi
 
