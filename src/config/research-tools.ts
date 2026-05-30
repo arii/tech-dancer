@@ -63,10 +63,12 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
-    isFlagship: false,
+    isFlagship: true,
     image: '/assets/research/hrm-flagship.png',
+    proves: ['Hardware APIs', 'OAuth integration', 'State synchronization', 'Cross-platform state'],
     ctas: [
-      { label: 'View HRM', url: 'https://arii.github.io/hrm/', isExternal: true, variant: 'outline' }
+      { label: 'View HRM', url: 'https://arii.github.io/hrm/', isExternal: true, variant: 'primary' },
+      { label: 'Read case study', url: '/research/hrm-case-study', variant: 'outline' }
     ]
   },
   {

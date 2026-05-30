@@ -1,5 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate, Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Globe, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -230,7 +231,7 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black">Featured Outputs</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>FLAGSHIP PROJECTS</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={8}>
+          <Grid cols={1} gap={8}>
             {flagshipTools.map((tool) => (
               <FlagshipCard key={tool.id} tool={tool} />
             ))}
