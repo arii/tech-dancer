@@ -45,7 +45,8 @@ export default function ResearchAnalytics() {
     <Box as="section">
       <SEO
         title="DevAI Systems Portfolio"
-        description="DevAI portfolio by Ariel Anders featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel/GitHub Actions workflows, ecommerce automation, and production React/Vite systems."
+        description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
+        keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
       <Stack gap={4}>
         <Stack gap={2}>
