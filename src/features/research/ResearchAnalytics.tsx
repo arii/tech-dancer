@@ -165,12 +165,13 @@ export default function ResearchAnalytics() {
                           paddingX={4}
                           paddingY={2}
                           radius="md"
+                          gap={2}
                           className="z-20"
                         >
                           <Text weight="font-bold" size="xs" uppercase tracking="widest">
                             {tool.ctaLabel || tool.externalLinkDisplayLabel || 'Open Link'}
                           </Text>
-                          <ExternalLink className="ml-2 w-4 h-4" />
+                          <ExternalLink className="w-4 h-4" />
                         </ActionButton>
                       )}
                       {tool.sourceUrl && (
@@ -269,13 +270,14 @@ export default function ResearchAnalytics() {
                   variant="ghost"
                   size="sm"
                   paddingX={0}
+                  gap={2}
                   className="hover:bg-transparent"
                   marginTop="auto"
                 >
                   <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
                     {tool.ctaLabel || 'View Assets'}
                   </Text>
-                  <Icon icon={ArrowRight} size="md" color="accent" className="ml-2" />
+                  <Icon icon={ArrowRight} size="md" color="accent" />
                 </ActionButton>
               </Stack>
             ))}
