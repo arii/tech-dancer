@@ -13,13 +13,13 @@ test('verify homepage featured guide link', async ({ page }) => {
   await cta.click();
 
   // Verify it lands on the correct page
-  await expect(page).toHaveURL(/\/blog\/2026-04-19-gear-essentials/);
+  await expect(page).toHaveURL(/\/blog\/2026-04-19-wcs-travel-pack/);
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
 
-  // Verify checklist items
-  await expect(page.getByText(/Dance Shoes/i)).toBeVisible();
-  await expect(page.getByText(/High-fidelity earplugs/i)).toBeVisible();
+  // Verify checklist landmarks or sections
+  await expect(page.getByRole('heading', { name: /Footwear & Shoe Care/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Ballroom Bag/i })).toBeVisible();
 
-  // Verify shoppable section
-  await expect(page.getByText(/Shop the checklist/i)).toBeVisible();
+  // Verify shoppable section exists with accessible heading
+  await expect(page.getByText(/Shop selected items/i)).toBeVisible();
 });

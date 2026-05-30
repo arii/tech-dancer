@@ -292,51 +292,13 @@ class Orchestrator:
 
         def run(cmd):
             res = run_command(cmd, check=False, shell=True)
-            return res.returncode, res.stdout.strip(), res.stderr.strip()
-
-        origin_code, origin_url, _ = run("git config --get remote.origin.url")
-        origin_fix = "git remote add origin https://github.com/arii/tech-dancer.git"
-
-        if origin_code != 0 or not origin_url:
-            return {
-                "status": "environment_error",
-                "message": f"Missing origin remote. Fix: {origin_fix}",
-            }
-
-        github_remote_patterns = (
-            r"^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\.git)?/?$",
-            r"^git@github\.com:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\.git)?$",
-        )
-        if not any(re.match(pattern, origin_url) for pattern in github_remote_patterns):
-            return {
-                "status": "environment_error",
-                "message": f"Malformed origin remote: {origin_url}. Fix: {origin_fix}",
-            }
-
-        token = os.getenv("CODEX_GH_TOKEN") or os.getenv("GITHUB_TOKEN")
-        if not token:
-            return {
-                "status": "environment_error",
-                "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN.",
-            }
-        if re.search(r"[\s\[\]{}<>]", token):
-            return {
-                "status": "environment_error",
-                "message": "Invalid GitHub token value; token-derived URL would be malformed. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid token.",
-            }
-
-        fetch_code, _, fetch_err = run("git fetch origin")
-        if fetch_code != 0:
-            return {
-                "status": "environment_error",
-                "message": f"Unable to fetch origin. Check the remote and token. Fix: {origin_fix}; Set CODEX_GH_TOKEN or GITHUB_TOKEN. {fetch_err}",
-            }
-
-        code, merge_base, _ = run(f"git merge-base origin/{base_branch} HEAD")
+            return res.returncode, res.stdout.strip()
+        run("git fetch origin")
+        code, merge_base = run(f"git merge-base origin/{base_branch} HEAD")
         if code == 0 and merge_base:
             run(f"git reset --soft {merge_base}")
             run('git commit -m "chore: squashed commits prior to conflict resolution"')
-        merge_code, _, _ = run(f"git merge origin/{base_branch}")
+        merge_code, _ = run(f"git merge origin/{base_branch}")
         if merge_code != 0:
             return {"status": "manual_intervention_required", "message": "Complex conflicts remain. Please resolve manually."}
         run("pnpm test -u")

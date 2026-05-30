@@ -96,7 +96,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
           img: ({node: _node, src, ...props}) => {
-            const normalizedSrc = src?.startsWith('/') ? `${ASSET_PREFIX}${src}` : src;
+            const normalizedSrc = (src?.startsWith('/') && !src.startsWith(ASSET_PREFIX))
+              ? `${ASSET_PREFIX}${src}`
+              : src;
             return (
               <img
                 src={normalizedSrc}

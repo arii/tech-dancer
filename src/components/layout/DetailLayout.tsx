@@ -13,6 +13,7 @@ interface DetailLayoutProps {
   title: string;
   category: string;
   date: string;
+  updated?: string;
   content: string;
   image?: string;
   imageAlt?: string;
@@ -31,6 +32,7 @@ export function DetailLayout({
   title,
   category,
   date,
+  updated,
   content,
   image,
   imageAlt,
@@ -74,7 +76,7 @@ export function DetailLayout({
         <Stack gap={10}>
           {/* Header */}
           <PageHeader
-            label={`${category} • ${date} • ${rt} min read`}
+            label={`${category} • Published ${date}${updated ? ` · Updated ${updated}` : ''} • ${rt} min read`}
             title={title}
             border="none"
             paddingBottom={0}
