@@ -1,10 +1,11 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
@@ -228,29 +229,60 @@ export default function ResearchAnalytics() {
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+            <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={12}>
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
                   padding={8}
-                  gap={4}
+                  gap={6}
                   onClick={() => navigate(`/research/${study.slug}`)}
+                  height="full"
                   className={cardVariants({ interactive: true })}
                 >
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
-                  </Box>
-                  <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black">
-                      {study.title}
-                    </Text>
-                    <Text variant="body" size="sm" color="dim">
+                  <Stack gap={4}>
+                    <Box display="flex" justify="between" align="center">
+                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                      {study.status && <StatusBadge label={study.status} />}
+                    </Box>
+
+                    <Stack gap={2}>
+                      <Text variant="display" size="2xl" weight="font-black">
+                        {study.title}
+                      </Text>
+                      <Box display="flex" align="center" gap={4}>
+                        <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
+                        {study.readTime && (
+                          <Box display="flex" align="center" gap={1} opacity={0.5}>
+                            <Clock size={12} className="text-dim" />
+                            <Text variant="mono" size="micro" color="dim">{study.readTime}</Text>
+                          </Box>
+                        )}
+                      </Box>
+                    </Stack>
+
+                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
                       {study.excerpt}
                     </Text>
+
+                    {study.tags && study.tags.length > 0 && (
+                      <Box display="flex" wrap="wrap" gap={2}>
+                        {study.tags.map(tag => (
+                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
+                            {tag}
+                          </Text>
+                        ))}
+                      </Box>
+                    )}
                   </Stack>
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
+
+                  <Box display="flex" align="center" gap={2} marginTop="auto" paddingTop={4}>
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
+                      {study.status === 'planned'
+                        ? 'Coming Soon'
+                        : study.status === 'draft'
+                          ? 'View Draft'
+                          : 'Read Article'}
+                    </Text>
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
                 </Stack>

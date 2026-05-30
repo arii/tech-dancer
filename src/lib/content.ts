@@ -115,6 +115,9 @@ function transform<T extends { date?: string; draft?: boolean }>(
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
 
+        status: data.status ? String(data.status) : undefined,
+        readTime: data.readTime ? String(data.readTime) : undefined,
+
         content: content || "",
         slug: slugFrom(path),
       };

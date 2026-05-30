@@ -81,6 +81,8 @@ export interface Study {
   content: string;
   tags?: string[];
   author: string;
+  status?: 'published' | 'draft' | 'planned';
+  readTime?: string;
 }
 
 export interface EventTheme {
