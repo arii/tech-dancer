@@ -45,14 +45,16 @@ export default function ResearchAnalytics() {
         title="DevAI Systems Portfolio"
         description="DevAI portfolio by Ariel Anders featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel/GitHub Actions workflows, ecommerce automation, and production React/Vite systems."
       />
-      <Stack gap={12}>
+      <Stack gap={4}>
         <PageHeader
           label="HIRE_ME"
           title="DevAI Systems Portfolio"
           description="AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps."
           as="h1"
+          paddingBottom={0}
+          border="none"
           cta={
-            <Box display="flex" wrap="wrap" gap={4}>
+            <Box display="flex" wrap="wrap" gap={3}>
               <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
                 View flagship projects
               </ActionButton>
@@ -67,14 +69,14 @@ export default function ResearchAnalytics() {
           }
         />
 
-        <Stack gap={8}>
+        <Stack gap={3}>
           <Box maxWidth="2xl">
             <Text variant="body" size="lg" color="body">
               I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
             </Text>
           </Box>
 
-          <Box paddingY={6} border="y" className="border-accent/10">
+          <Box className="border-accent/10">
             <Grid cols={{ base: 2, sm: 3, md: 5 }} gap={4}>
               {skills.map((skill) => (
                 <Box key={skill.name} display="flex" align="center" gap={2}>
@@ -88,8 +90,8 @@ export default function ResearchAnalytics() {
           </Box>
         </Stack>
 
-        <Stack gap={8} id="flagship">
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+        <Stack gap={6} id="flagship" marginTop={2}>
+          <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
           </Box>
