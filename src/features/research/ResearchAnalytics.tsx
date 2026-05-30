@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -51,7 +51,7 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black">Featured Outputs</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>FLAGSHIP PROJECTS</Text>
           </Box>
-          <Grid cols={{ base: 1, xl: 2 }} gap={8}>
+          <Grid cols={{ base: 1, md: 2 }} gap={8}>
             {flagshipTools.map((tool) => (
               <BaseCard
                 key={tool.id}
@@ -64,7 +64,7 @@ export default function ResearchAnalytics() {
                   {tool.image && (
                     <Box
                       span={{ base: 1, md: 2 }}
-                      height={{ base: 48, md: 'full' }}
+                      height={{ base: 32, md: 'full' }}
                       overflow="hidden"
                       border={{ base: 'b', md: 'r' }}
                       surface="muted"
@@ -79,8 +79,8 @@ export default function ResearchAnalytics() {
                   )}
                   <Stack
                     span={{ base: 1, md: tool.image ? 3 : 5 }}
-                    gap={6}
-                    padding={8}
+                    gap={{ base: 4, md: 6 }}
+                    padding={{ base: 4, md: 8 }}
                     flex={1}
                   >
                     <Box display="flex" justify="between" align="start" width="full">
@@ -139,9 +139,9 @@ export default function ResearchAnalytics() {
                         {tool.ctas?.map((cta) => (
                           <Button
                             key={cta.label}
-                            as={cta.isExternal ? 'a' : 'button'}
-                            onClick={cta.isExternal ? undefined : () => navigate(cta.url)}
+                            as={cta.isExternal ? 'a' : Link}
                             href={cta.isExternal ? cta.url : undefined}
+                            to={!cta.isExternal ? cta.url : undefined}
                             target={cta.isExternal ? "_blank" : undefined}
                             rel={cta.isExternal ? "noopener noreferrer" : undefined}
                             variant="outline"
@@ -216,8 +216,8 @@ export default function ResearchAnalytics() {
             {engineeringTools.map((tool) => (
               <Stack
                 key={tool.id}
-                as="button"
-                onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
+                as={Link}
+                to={tool.canonicalPath || `/research/${tool.id}`}
                 padding={6}
                 paddingBottom={10}
                 gap={4}
