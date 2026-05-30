@@ -106,10 +106,10 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     id: 'ecommerce-automation',
     title: 'Ecommerce Automation Experiments',
     subtitle: 'Printful & Merch Pipeline',
-    description: 'Extending DevAI workflows into ecommerce operations, including API-driven template ingestion, SEO-safe copy generation, and human-in-the-loop catalog curation.',
+    description: 'Automated merch operations including programmatic design generation, Printful API storefront sync, and incoming Amazon affiliate integration workflows.',
     category: 'Business Automation',
     status: 'In Progress',
-    tags: ['Printful API', 'Metadata ETL', 'SEO Gen', 'Workflow'],
+    tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
     canonicalPath: '/research/ecommerce-automation'
   }
 ];

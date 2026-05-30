@@ -169,13 +169,13 @@ export default function ResearchAnalytics() {
             <Grid cols={{ base: 1, lg: 3 }} gap={12}>
               <Stack gap={6} className="lg:col-span-2">
                 <Text variant="body" size="lg" color="body" className="leading-relaxed">
-                  I am extending the same DevAI workflow patterns into ecommerce operations for BoomTick merch.
+                  Automated merch operations including programmatic design generation and Printful API sync.
                 </Text>
                 <Text variant="body" size="md" color="dim" className="leading-relaxed">
-                  Current experiments include API-driven Printful template pulls, product metadata packets, AI-assisted title and description review, SEO-safe product copy, front/back mockup QA, color-option curation, and human-in-the-loop storefront updates.
+                  Current experiments include programmatic design generation (CairoSVG), Printful API storefront sync, Amazon affiliate asset management, SEO-safe product copy, and human-in-the-loop catalog review.
                 </Text>
                 <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                    {['Printful API', 'Metadata ETL', 'SEO Gen', 'Workflow'].map(tag => (
+                    {['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'].map(tag => (
                         <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
                             {tag}
                         </Text>
@@ -199,15 +199,15 @@ export default function ResearchAnalytics() {
                   <Stack gap={4} align="center">
                     <Stack gap={2} align="center" width="full">
                         <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="dim">TEMPLATE</Text>
+                             <Text variant="mono" size="micro" color="dim">IMAGE_GEN</Text>
                              <ArrowRight className="w-3 h-3 text-dim" />
-                             <Text variant="mono" size="micro" color="dim">PACKET</Text>
+                             <Text variant="mono" size="micro" color="dim">SYNC</Text>
                         </Box>
                         <Box display="flex" align="center" gap={2}>
                              <ArrowRight className="w-3 h-3 text-dim rotate-90" />
                         </Box>
                         <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="accent" weight="bold">AI_REC</Text>
+                             <Text variant="mono" size="micro" color="accent" weight="bold">HUMAN_QA</Text>
                              <ArrowRight className="w-3 h-3 text-accent" />
                              <Text variant="mono" size="micro" color="dim">REVIEW</Text>
                         </Box>
@@ -215,10 +215,10 @@ export default function ResearchAnalytics() {
                              <ArrowRight className="w-3 h-3 text-dim rotate-90" />
                         </Box>
                         <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="dim">STOREFRONT</Text>
+                             <Text variant="mono" size="micro" color="dim">AMAZON_SYNC</Text>
                         </Box>
                     </Stack>
-                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>SEO-SAFE PIPELINE</Text>
+                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>MULTI-PLATFORM SYNC</Text>
                   </Stack>
                 </Box>
               </Stack>

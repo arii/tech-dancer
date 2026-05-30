@@ -6,7 +6,10 @@ import {
   Eye,
   CheckCircle2,
   AlertTriangle,
-  ArrowRight
+  ArrowRight,
+  Palette,
+  CloudUpload,
+  Globe
 } from 'lucide-react';
 import {
   Box,
@@ -20,9 +23,19 @@ import { Icon } from '@/components/ui/Icon';
 export function EcommerceAutomationTool() {
   const workflowItems = [
     {
-      icon: Cpu,
-      title: 'API Template Ingestion',
-      description: 'Pull Printful templates, products, and color variants directly through API scripts to ensure data accuracy.'
+      icon: Palette,
+      title: 'Programmatic Design Gen',
+      description: 'Automated SVG/PNG design generation using CairoSVG and Cooper Black font stacks for brand-consistent merch.'
+    },
+    {
+      icon: CloudUpload,
+      title: 'Printful API Storefront Sync',
+      description: 'Pushing synced products and mockups directly to Printful/WooCommerce storefronts via automated batch scripts.'
+    },
+    {
+      icon: Globe,
+      title: 'Amazon Affiliate Pipeline',
+      description: 'Standardized ingestion and asset management for Amazon-sourced gear, ensuring canonical affiliate metadata.'
     },
     {
       icon: Search,
@@ -30,19 +43,9 @@ export function EcommerceAutomationTool() {
       description: 'Generate structured data packets for AI agents to perform title and description reviews.'
     },
     {
-      icon: ShoppingBag,
-      title: 'SEO Copy Generation',
-      description: 'Optimized copy for West Coast Swing, NorCal, rainbow pride, and role-fluid dance merch niches.'
-    },
-    {
-      icon: Eye,
-      title: 'Mockup & Crop Audit',
-      description: 'Automated auditing of front/back product mockups and responsive image crops for visual quality.'
-    },
-    {
       icon: CheckCircle2,
-      title: 'Color Option Curation',
-      description: 'Human-in-the-loop selection of the best product colors rather than publishing every generic option.'
+      title: 'Human-in-the-Loop QA',
+      description: 'Audit front/back product mockups and image crops for visual quality before live storefront publishing.'
     }
   ];
 
@@ -64,8 +67,8 @@ export function EcommerceAutomationTool() {
           <Stack gap={2}>
             <Text variant="display" size="4xl" weight="font-black">Ecommerce Automation Experiments</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-              I am extending the same DevAI workflow patterns into ecommerce operations for BoomTick merch.
-              This demonstrates practical business automation through API integration and human-in-the-loop curation.
+              Extending DevAI workflow patterns into ecommerce operations for BoomTick merch.
+              Implementing end-to-end automation from asset generation to multi-platform storefront synchronization.
             </Text>
           </Stack>
         </Stack>
@@ -73,7 +76,7 @@ export function EcommerceAutomationTool() {
 
       <Grid cols={{ base: 1, md: 2 }} gap={8}>
         <Stack gap={6}>
-          <Text variant="headline" size="xl" weight="font-black">Experiment Goals</Text>
+          <Text variant="headline" size="xl" weight="font-black">Active Experiments</Text>
           <Stack gap={4}>
             {workflowItems.map((item, index) => (
               <Box key={index} border radius="lg" padding={4} surface="default">
@@ -120,17 +123,17 @@ export function EcommerceAutomationTool() {
             <Box border radius="xl" padding={6} surface="surface">
               <Stack gap={4} align="center">
                 <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Printful API</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Design Gen</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Printful Sync</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent" className="bg-accent/10">AI Recommendation</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent" className="bg-accent/10">Human Review</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Human Review</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Amazon Integration</Text>
                   <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Storefront Update</Text>
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Storefront</Text>
                 </Box>
-                <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">SEO-SAFE MERCH PIPELINE</Text>
+                <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
               </Stack>
             </Box>
           </Stack>
