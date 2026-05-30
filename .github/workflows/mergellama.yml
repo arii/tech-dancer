@@ -6,6 +6,7 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  OLLAMA_MODEL: qwen2.5-coder:1.5b
 
 permissions:
   contents: write
@@ -44,21 +45,26 @@ jobs:
 
       - name: Setup Ollama
         run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve > /tmp/ollama.log 2>&1 &
+          echo "Waiting for Ollama to be ready..."
+          for i in {1..15}; do
+            if curl -sf http://localhost:11434/api/tags > /dev/null; then
+              echo "Ollama is ready!"
+              exit 0
+            fi
+            echo "Waiting... ($i/15)"
+            sleep 2
+          done
+          echo "Ollama failed to start"
+          cat /tmp/ollama.log
+          exit 1
 
-      - name: Install Click
-        run: pip install click
-
-      - name: Start Ollama Server
-        run: |
-          ollama serve > ollama_output.log 2>&1 &
-          sleep 5
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
+      - name: Install Dependencies
+        run: pip install click PyGithub requests
 
       - name: Pull Model
-        run: ollama pull qwen2.5-coder:7b
+        run: ollama pull ${{ env.OLLAMA_MODEL }}
 
       - name: Find and Resolve Conflicts
         run: |
