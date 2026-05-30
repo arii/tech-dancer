@@ -77,13 +77,43 @@ Optimize the `/research` (DevAI Portfolio) page for hiring managers and recruite
 
 ## Mobile Storyboard (Responsive Flow)
 
-1. **Hero + Hiring CTA**: Compact version of Frame 1.
-2. **Skill Chips**: Horizontally scrollable or wrapped chips.
-3. **Featured Outputs**: 2 large cards (vertical stack), prioritized as the main proof of work.
-4. **Implementation Articles**: Compact cards for easier scrolling.
-5. **Supporting Systems**: Compact rows (icon + title), minimizing vertical "wall of cards" effect.
-6. **Ecommerce Experiments**: Brief summary section.
-7. **Contact CTA**: Large, sticky-ready button or prominent final section.
+To maintain hierarchy and prevent "mobile wall-of-cards" fatigue, the responsive layout follows a strict consolidation strategy.
+
+### Frame 1: Hero & Immediate Proof
+- **Visual Stacking**: Heading -> Dek -> Skills -> Primary CTAs.
+- **Design Note**: Reduce vertical padding by 25% compared to desktop. Skills are wrapped chips (max 2 rows) to ensure the first Flagship card is visible "above the fold" or within a single scroll.
+- **Priority**: High. This frame must establish credibility immediately.
+
+### Frame 2: Flagship Projects (Consolidated)
+- **Layout**: 100% width vertical stack.
+- **Card Interior**:
+  - Image/Mockup (Optional, if used: aspect-ratio 16:9).
+  - Title and **Outcome** are primary.
+  - **Problem/Solution/Stack** are condensed into a single "Technical Breakdown" accordion or a tightly spaced metadata list.
+- **Priority**: Maximum. These are the primary proof points for hiring.
+
+### Frame 3: Architecture Diagram (Deferred/Simplified)
+- **Behavior**: Replaced by a high-level summary text block or a single static "System Map" image that fits the viewport width.
+- **Priority**: Medium. Deferred to allow users to reach specific projects faster.
+
+### Frame 4: Engineering & Supporting Systems (Compact List)
+- **Behavior**: Collapse from cards into a **single-column list of rows**.
+- **Interaction**: Each row shows `[Icon] [Title] [Status]`. Tapping expands to show the description and `[View Assets]` CTA.
+- **Goal**: Minimize vertical scroll depth from ~1200px to ~400px.
+- **Priority**: Low. Secondary proof.
+
+### Frame 5: Implementation Guides (Scrollable Row or List)
+- **Layout**: Vertical list of clean, text-only cards (Title + Date).
+- **Limit**: Show only the **3 most recent articles** with a `[See All Articles]` button to prevent infinite scrolling.
+- **Priority**: Medium.
+
+### Frame 6: Ecommerce Automation (Footer Teaser)
+- **Layout**: Condensed into a single "Current R&D" text box.
+- **Priority**: Low.
+
+### Frame 7: Sticky Hire CTA
+- **Behavior**: A prominent, high-contrast section at the bottom.
+- **Interaction**: The `[Contact]` button remains distinct and large for "fat-finger" accessibility.
 
 ---
 
