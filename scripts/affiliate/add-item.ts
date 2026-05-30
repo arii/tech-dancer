@@ -165,7 +165,8 @@ Added a new Amazon affiliate item: **${title}**
 ## Checklist
 - [x] Normalized Amazon URL with tracking tag
 - [x] Downloaded and validated product image
-- [x] Updated \`src/data/affiliates.json\`
+- [x] Updated
+\`src/data/affiliates.json\`
 - [ ] Verified affiliate disclosure presence
 - [ ] Verified sponsored-link attribute verification
 - [ ] Verified display on relevant content pages
@@ -204,7 +205,7 @@ function updateContentFile(filePath: string, affiliateId: string, dryRun: boolea
   ];
 
   if (!allowedRoots.some(root => fullPath.startsWith(root + path.sep))) {
-    throw new Error(`--target-content must be inside content roots (posts, resources, events). Got: ${filePath}`);
+    throw new Error('--target-content must be inside content roots (posts, resources, events). Got: ' + filePath);
   }
 
   if (!fs.existsSync(fullPath)) {
