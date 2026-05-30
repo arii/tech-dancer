@@ -28,13 +28,13 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio | AI Orchestration & Systems"
+        title="DevAI Portfolio | AI Systems & Orchestration"
         description="A portfolio of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
       />
       <Stack gap={12}>
         <PageHeader
           label="DEVAI_PORTFOLIO"
-          title="DevAI Portfolio & Systems"
+          title="DevAI Portfolio"
           description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
           as="h1"
         />
