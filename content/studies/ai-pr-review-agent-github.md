@@ -4,7 +4,7 @@ date: "2024-04-01"
 category: "DevAI"
 excerpt: "Step-by-step guide to building an autonomous AI agent that audits pull requests for code quality, security vulnerabilities, and style guide adherence."
 tags: ["DevAI", "AI Agent", "GitHub API", "Code Review"]
-readTime: "12 min"
+readTime: 12
 status: "published"
 author: "Ariel Anders"
 ---

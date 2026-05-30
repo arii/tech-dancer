@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear } from './types/content';
+import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
 
-export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear };
+export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -47,6 +47,27 @@ const contentModules = {
 };
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
+
+/**
+ * Validates and normalizes content status.
+ */
+function normalizeStatus(val: unknown): ContentStatus | undefined {
+  if (typeof val !== 'string') return undefined;
+  const status = val.toLowerCase() as ContentStatus;
+  return ['published', 'draft', 'planned'].includes(status) ? status : undefined;
+}
+
+/**
+ * Normalizes reading time to a numeric value.
+ */
+function normalizeReadTime(val: unknown): number | undefined {
+  if (typeof val === 'number') return val;
+  if (typeof val === 'string') {
+    const parsed = parseInt(val.replace(/[^\d]/g, ''), 10);
+    return isNaN(parsed) ? undefined : parsed;
+  }
+  return undefined;
+}
 
 function transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
@@ -115,10 +136,8 @@ function transform<T extends { date?: string; draft?: boolean }>(
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
 
-        status: (data.status && ['published', 'draft', 'planned'].includes(String(data.status)))
-          ? (String(data.status) as 'published' | 'draft' | 'planned')
-          : undefined,
-        readTime: data.readTime ? String(data.readTime) : undefined,
+        status: normalizeStatus(data.status),
+        readTime: normalizeReadTime(data.readTime),
 
         content: content || "",
         slug: slugFrom(path),

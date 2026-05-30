@@ -4,7 +4,7 @@ date: "2024-03-22"
 category: "DevAI"
 excerpt: "A technical deep dive into automating the bridge between raw scraped data and a modern React/Vite frontend using GitHub Actions workflows."
 tags: ["React", "Vite", "GitHub Actions", "Data Sync"]
-readTime: "10 min"
+readTime: 10
 status: "published"
 author: "Ariel Anders"
 ---

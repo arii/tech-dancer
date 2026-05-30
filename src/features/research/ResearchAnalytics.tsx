@@ -225,7 +225,7 @@ export default function ResearchAnalytics() {
         {studies.length > 0 && (
           <Stack gap={8}>
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-              <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
 
@@ -254,7 +254,7 @@ export default function ResearchAnalytics() {
                         {study.readTime && (
                           <Box display="flex" align="center" gap={1} opacity={0.5}>
                             <Clock size={12} className="text-dim" />
-                            <Text variant="mono" size="micro" color="dim">{study.readTime}</Text>
+                            <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
                           </Box>
                         )}
                       </Box>

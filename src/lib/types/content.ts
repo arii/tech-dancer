@@ -70,6 +70,8 @@ export interface Resource {
   eventUseCase?: string;
 }
 
+export type ContentStatus = 'published' | 'draft' | 'planned';
+
 export interface Study {
   type: 'study';
   draft?: boolean;
@@ -81,8 +83,8 @@ export interface Study {
   content: string;
   tags?: string[];
   author: string;
-  status?: 'published' | 'draft' | 'planned';
-  readTime?: string;
+  status?: ContentStatus;
+  readTime?: number;
 }
 
 export interface EventTheme {

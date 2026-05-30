@@ -4,7 +4,7 @@ date: "2024-04-05"
 category: "DevAI"
 excerpt: "Explore the architecture of multi-agent systems where specialized agents collaborate to generate high-precision prompts for automated code analysis."
 tags: ["Multi-Agent", "Prompt Engineering", "Code Review"]
-readTime: "15 min"
+readTime: 15
 status: "planned"
 author: "Ariel Anders"
 ---

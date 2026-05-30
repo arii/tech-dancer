@@ -4,7 +4,7 @@ date: "2024-04-10"
 category: "DevAI"
 excerpt: "Automate the debugging process by using AI agents to analyze failed CI logs, identify root causes, and suggest fixes directly in your PR."
 tags: ["GitHub Actions", "CI/CD", "AI Debugging", "Automation"]
-readTime: "9 min"
+readTime: 9
 status: "published"
 author: "Ariel Anders"
 ---

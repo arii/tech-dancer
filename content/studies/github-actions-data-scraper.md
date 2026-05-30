@@ -4,7 +4,7 @@ date: "2024-03-20"
 category: "Automation"
 excerpt: "Learn how to build a robust, serverless data scraper using GitHub Actions. This guide covers scheduling, secret management, and handling dynamic content."
 tags: ["GitHub Actions", "Scraping", "Automation", "DevAI"]
-readTime: "8 min"
+readTime: 8
 status: "published"
 author: "Ariel Anders"
 ---

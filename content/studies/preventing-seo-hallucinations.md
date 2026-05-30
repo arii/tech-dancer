@@ -4,7 +4,7 @@ date: "2024-04-25"
 category: "SEO"
 excerpt: "Technical strategies for ensuring AI-generated JSON-LD structured data remains accurate and trustworthy for search engines."
 tags: ["SEO", "Structured Data", "AI Safety", "JSON-LD"]
-readTime: "7 min"
+readTime: 7
 status: "published"
 author: "Ariel Anders"
 ---

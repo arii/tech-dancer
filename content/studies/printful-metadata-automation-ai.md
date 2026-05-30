@@ -4,7 +4,7 @@ date: "2024-04-20"
 category: "Ecommerce"
 excerpt: "Learn how to use AI to generate SEO-optimized product descriptions and metadata, then sync them automatically to Printful via GitHub Actions."
 tags: ["Printful", "Ecommerce", "SEO", "Automation"]
-readTime: "13 min"
+readTime: 13
 status: "published"
 author: "Ariel Anders"
 ---

@@ -4,7 +4,7 @@ date: "2024-04-15"
 category: "QA Automation"
 excerpt: "Combine the precision of Playwright visual comparisons with the semantic understanding of AI to eliminate false positives in UI testing."
 tags: ["Playwright", "Visual Regression", "AI Review", "Testing"]
-readTime: "11 min"
+readTime: 11
 status: "draft"
 author: "Ariel Anders"
 ---

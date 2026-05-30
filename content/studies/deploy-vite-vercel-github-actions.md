@@ -4,7 +4,7 @@ date: "2024-03-25"
 category: "DevOps"
 excerpt: "Optimize your deployment pipeline by combining the speed of Vercel with the flexibility of GitHub Actions for advanced CI/CD checks."
 tags: ["Vercel", "Vite", "GitHub Actions", "Deployment"]
-readTime: "6 min"
+readTime: 6
 status: "published"
 author: "Ariel Anders"
 ---
