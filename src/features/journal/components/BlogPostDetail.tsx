@@ -1,6 +1,7 @@
+import { ShareButton } from "@/components/ui/ShareButton";
 
-import { Share2 } from 'lucide-react';
-import { Stack, Text } from '@/layouts/Primitives';
+
+import { Stack } from '@/layouts/Primitives';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { PostHeader } from '@/components/article/PostHeader';
@@ -18,15 +19,6 @@ interface BlogPostDetailProps {
 }
 
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
-    }
-  };
 
   const rt = post.readingTime || `${readingTime(post.content)} min read`;
 
@@ -42,19 +34,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     <ArticleFeatureCard image={post.image} />
   ) : null;
 
-  const shareAction = (
-    <Stack
-      as="button"
-      direction="row"
-      onClick={share}
-      align="center"
-      gap={1.5}
-      className="text-text-dim/60 hover:text-accent transition-colors group/share"
-    >
-      <Share2 className="w-3.5 h-3.5" />
-      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
-    </Stack>
-  );
 
   return (
     <ArticleLayout
@@ -70,7 +49,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           author={post.author}
           authorAvatar={post.authorAvatar}
-          shareAction={shareAction}
+          shareAction=<ShareButton title={post.title} text={post.excerpt} />
           visual={heroVisual}
         />
       }
