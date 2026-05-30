@@ -20,18 +20,36 @@ Optimize the `/research` (DevAI Portfolio) page for hiring managers and recruite
 - **Cards**:
   1. **BoomTick.blog** (The system itself)
   2. **RepoAuditor AI**
-- **Card Content Structure**:
-  - **Problem**: What was the challenge?
-  - **Solution**: How was AI used to solve it?
-  - **Outcome**: Measurable result or system capability.
+- **Card Content Structure (Max 160 chars per block)**:
+  - **Problem**: Brief description of the manual pain point or architectural gap.
+  - **Solution**: Specific AI/Automation intervention (e.g., "RAG-driven drafting").
+  - **Outcome**: The "So what?" (e.g., "Reduced review time by 70%").
   - **Stack**: Key technologies.
   - **CTA**: `[View Project]` / `[Source Code]`
+- **Examples**:
+  - **RepoAuditor AI**:
+    - *Problem*: High-velocity multi-repo PRs led to missed style regressions and "logic rot" that human reviewers couldn't catch at scale.
+    - *Solution*: Orchestrated a multi-agent prompt pipeline using Ollama to audit diffs against local design tokens and architectural constraints.
+    - *Outcome*: 100% detection of layout anti-patterns and automated triage of 500+ daily telemetry events before human eyes touch the code.
 
 ### Frame 3: DevAI Architecture Map
 - **Section Heading**: How the systems fit together
-- **Visual**: A simple, high-level diagram (SVG or styled CSS blocks) showing the flow:
-  `Content Platform` <-> `PR Review Console` <-> `Data Pipelines` <-> `Quality Automation` <-> `Ecommerce Experiments`
-- **Focus**: Connectivity and system orchestration rather than dense text.
+- **Component**: `DevAIEcosystemMap` (Minimalist SVG/Canvas component).
+- **Data Structure**:
+  ```json
+  {
+    "nodes": [
+      { "id": "platform", "label": "Content Platform", "icon": "Globe" },
+      { "id": "pr-review", "label": "PR Review Console", "icon": "Terminal" },
+      { "id": "pipelines", "label": "Data Pipelines", "icon": "Database" }
+    ],
+    "edges": [
+      { "from": "platform", "to": "pr-review", "label": "Audit Flow" },
+      { "from": "pipelines", "to": "platform", "label": "Sync" }
+    ]
+  }
+  ```
+- **Visual**: A clean flow diagram showing orchestration connectivity rather than dense text.
 
 ### Frame 4: Supporting Systems
 - **Section Heading**: Engineering Systems
@@ -103,8 +121,10 @@ To maintain hierarchy and prevent "mobile wall-of-cards" fatigue, the responsive
 - **Priority**: Low. Secondary proof.
 
 ### Frame 5: Implementation Guides (Scrollable Row or List)
-- **Layout**: Vertical list of clean, text-only cards (Title + Date).
-- **Limit**: Show only the **3 most recent articles** with a `[See All Articles]` button to prevent infinite scrolling.
+- **Layout**: Vertical list of clean, text-only cards showing `Title` (large) and `Date · Category` (mono/micro).
+- **Limit**: Show only the **3 most recent articles** initially.
+- **CTA**: `[See All Articles]` (Styled as `variant="ghost"` with a thin border).
+- **Behavior**: Tapping navigates to `/blog?category=research` for the full index.
 - **Priority**: Medium.
 
 ### Frame 6: Ecommerce Automation (Footer Teaser)
@@ -146,8 +166,16 @@ To ensure implementation PRs remain grounded, the following checkpoints define t
 - **Problem/Solution/Outcome Blocks**: Standardize these within the flagship cards to give recruiters quick, "at-a-glance" wins.
 - **Architecture Diagram**: Use the `ArchitecturalAssetsList` style or a new minimalist SVG component to visualize the "DevAI Ecosystem".
 
-### 3. Navigation
+### 3. Navigation & Interaction
 - **Table of Contents / Quick Links**: A sticky secondary nav or a well-placed hero list to allow jumping between "Projects", "Articles", and "Systems".
+- **CTA States**:
+  - **Default**: standard token-based colors (accent/white).
+  - **Hover**: `scale(1.02)`, brighten `10%`.
+  - **Active**: `scale(0.98)`, transition `motion-quick`.
+  - **Loading**: `opacity-60`, cursor `wait`.
+- **Mobile Sticky CTA (Frame 7)**:
+  - **Style**: Fixed bottom position, `width-full`, `surface="accent"`, `color="white"`.
+  - **Animation**: Fades in only when user scrolls past Frame 2 (Featured Outputs).
 
 ## Acceptance Criteria Check
 - [x] UX storyboard exists in markdown.
