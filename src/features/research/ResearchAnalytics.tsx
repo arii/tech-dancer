@@ -162,71 +162,6 @@ export default function ResearchAnalytics() {
         </Grid>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Ecommerce Automation Experiments</Text>
-          </Box>
-          <Box padding={8} border radius="xl" surface="muted" className="relative overflow-hidden group hover:border-accent/20 transition-colors">
-            <Grid cols={{ base: 1, lg: 3 }} gap={12}>
-              <Stack gap={6} className="lg:col-span-2">
-                <Text variant="body" size="lg" color="body" className="leading-relaxed">
-                  Automated merch operations including programmatic design generation and Printful API sync.
-                </Text>
-                <Text variant="body" size="md" color="dim" className="leading-relaxed">
-                  Current experiments include CairoSVG design generation, Printful API sync, and niche SEO for West Coast Swing, NorCal, rainbow pride, and role-fluid dance merch.
-                </Text>
-                <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                    {['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'].map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                            {tag}
-                        </Text>
-                    ))}
-                </Box>
-                <Box
-                  as="button"
-                  onClick={() => navigate('/research/ecommerce-automation')}
-                  display="flex"
-                  align="center"
-                  gap={2}
-                  marginTop={4}
-                  className="text-accent group-hover:translate-x-1 transition-transform"
-                >
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest">View Workflow Items</Text>
-                  <ArrowRight className="w-4 h-4" />
-                </Box>
-              </Stack>
-              <Stack gap={6} justify="center">
-                <Box padding={6} border radius="lg" surface="surface" className="border-accent/5">
-                  <Stack gap={4} align="center">
-                    <Stack gap={2} align="center" width="full">
-                        <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="dim">TEMPLATES</Text>
-                             <ArrowRight className="w-3 h-3 text-dim" />
-                             <Text variant="mono" size="micro" color="dim">METADATA</Text>
-                        </Box>
-                        <Box display="flex" align="center" gap={2}>
-                             <ArrowRight className="w-3 h-3 text-dim rotate-90" />
-                        </Box>
-                        <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="accent" weight="bold">AI_REC</Text>
-                             <ArrowRight className="w-3 h-3 text-accent" />
-                             <Text variant="mono" size="micro" color="accent" weight="bold">HUMAN_QA</Text>
-                        </Box>
-                        <Box display="flex" align="center" gap={2}>
-                             <ArrowRight className="w-3 h-3 text-dim rotate-90" />
-                        </Box>
-                        <Box display="flex" align="center" gap={2}>
-                             <Text variant="mono" size="micro" color="dim">STOREFRONT_SYNC</Text>
-                        </Box>
-                    </Stack>
-                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>CATALOG PIPELINE</Text>
-                  </Stack>
-                </Box>
-              </Stack>
-            </Grid>
-          </Box>
-        </Stack>
-
-        <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
@@ -324,6 +259,71 @@ export default function ResearchAnalytics() {
             </Grid>
           </Stack>
         )}
+
+        <Stack gap={8}>
+          <Box paddingBottom={4} border="b">
+            <Text variant="headline" size="2xl" weight="font-black">Ecommerce Automation Experiments</Text>
+          </Box>
+          <Box padding={8} border radius="xl" surface="muted">
+            <Grid cols={{ base: 1, lg: 3 }} gap={12}>
+              <Stack gap={6} className="lg:col-span-2">
+                <Text variant="body" size="lg" color="body">
+                  Automated merch operations including programmatic design generation and Printful API sync.
+                </Text>
+                <Text variant="body" size="md" color="dim">
+                  Current experiments include CairoSVG design generation, Printful API sync, and niche SEO for West Coast Swing, NorCal, rainbow pride, and role-fluid dance merch.
+                </Text>
+                <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
+                    {['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'].map(tag => (
+                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim">
+                            {tag}
+                        </Text>
+                    ))}
+                </Box>
+                <Box
+                  as="button"
+                  onClick={() => navigate('/research/ecommerce-automation')}
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  marginTop={4}
+                  color="accent"
+                >
+                  <Text weight="font-bold" size="xs" uppercase tracking="widest">View Workflow Items</Text>
+                  <Icon icon={ArrowRight} size="sm" />
+                </Box>
+              </Stack>
+              <Stack gap={6} justify="center">
+                <Box padding={6} border radius="lg" surface="surface">
+                  <Stack gap={4} align="center">
+                    <Stack gap={2} align="center" width="full">
+                        <Box display="flex" align="center" gap={2}>
+                             <Text variant="mono" size="micro" color="dim">DESIGN</Text>
+                             <Icon icon={ArrowRight} size="xs" color="dim" />
+                             <Text variant="mono" size="micro" color="dim">PACKET</Text>
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <Icon icon={ArrowRight} size="xs" color="dim" className="rotate-90" />
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <Text variant="mono" size="micro" color="accent" weight="bold">DRY-RUN</Text>
+                             <Icon icon={ArrowRight} size="xs" color="accent" />
+                             <Text variant="mono" size="micro" color="accent" weight="bold">REVIEW</Text>
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <Icon icon={ArrowRight} size="xs" color="dim" className="rotate-90" />
+                        </Box>
+                        <Box display="flex" align="center" gap={2}>
+                             <Text variant="mono" size="micro" color="dim">SYNC</Text>
+                        </Box>
+                    </Stack>
+                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>CATALOG PIPELINE</Text>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Grid>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   );

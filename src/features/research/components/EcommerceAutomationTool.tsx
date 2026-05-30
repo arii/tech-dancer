@@ -27,7 +27,7 @@ export function EcommerceAutomationTool() {
     {
       icon: CloudUpload,
       title: 'Printful API Storefront Sync',
-      description: 'Pushing synced products and mockups directly to Printful/WooCommerce storefronts via automated batch scripts.'
+      description: 'Prototyping dry-run-first workflows that generate reviewable update plans before any human-approved storefront mutation.'
     },
     {
       icon: Globe,
@@ -69,7 +69,7 @@ export function EcommerceAutomationTool() {
           <Stack gap={2}>
             <Text variant="display" size="4xl" weight="font-black">Ecommerce Automation Experiments</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-              Extending DevAI workflow patterns into ecommerce operations for BoomTick merch.
+              Building reviewable automation experiments for asset generation, metadata packets, product-image QA, and human-approved storefront sync.
               Focusing on niche-aware SEO for <strong>West Coast Swing</strong>, <strong>NorCal</strong>, <strong>rainbow pride</strong>, and <strong>role-fluid dance</strong> communities.
             </Text>
           </Stack>
@@ -99,7 +99,7 @@ export function EcommerceAutomationTool() {
         <Stack gap={8}>
           <Stack gap={6}>
             <Text variant="headline" size="xl" weight="font-black">SEO & Policy Safety</Text>
-            <Box border radius="xl" padding={6} surface="muted" className="border-accent/10">
+            <Box border radius="xl" padding={6} surface="muted">
               <Stack gap={4}>
                 <Box display="flex" align="center" gap={2}>
                   <Icon icon={ShieldCheck} size="sm" color="accent" />
@@ -111,7 +111,7 @@ export function EcommerceAutomationTool() {
                 <Stack gap={2}>
                   {safetyRules.map((rule, index) => (
                     <Box key={index} display="flex" align="center" gap={2}>
-                      <AlertTriangle className="w-3 h-3 text-accent/50" />
+                      <Icon icon={AlertTriangle} size="xs" color="accent" opacity={0.5} />
                       <Text size="xs" color="dim">{rule}</Text>
                     </Box>
                   ))}
@@ -125,17 +125,17 @@ export function EcommerceAutomationTool() {
             <Box border radius="xl" padding={6} surface="surface">
               <Stack gap={4} align="center">
                 <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Printful Templates</Text>
-                  <ArrowRight className="w-3 h-3 text-dim" />
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Design Gen</Text>
+                  <Icon icon={ArrowRight} size="xs" color="dim" />
                   <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
-                  <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent" className="bg-accent/10">AI Recommendations</Text>
-                  <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent" className="bg-accent/10">Human Review</Text>
-                  <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">API/Storefront Update</Text>
-                  <ArrowRight className="w-3 h-3 text-dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">SEO-Safe Merch Page</Text>
+                  <Icon icon={ArrowRight} size="xs" color="dim" />
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Dry-run Plan</Text>
+                  <Icon icon={ArrowRight} size="xs" color="dim" />
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Human Review</Text>
+                  <Icon icon={ArrowRight} size="xs" color="dim" />
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Approved Sync</Text>
+                  <Icon icon={ArrowRight} size="xs" color="dim" />
+                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Storefront</Text>
                 </Box>
                 <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
               </Stack>
