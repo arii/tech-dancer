@@ -1,16 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-  <defs>
-    <clipPath id="rainbow-clip">
-      <path d="M100 350q75 150 150 150c100 0 200-200 300-400-100 150-200 300-300 300-50 0-100-50-150-100z"/>
-    </clipPath>
-  </defs>
-  <g clip-path="url(#rainbow-clip)">
-    <rect x="0" y="0" width="100" height="600" fill="#e21b18"/>
-    <rect x="100" y="0" width="100" height="600" fill="#ef7614"/>
-    <rect x="200" y="0" width="100" height="600" fill="#efc106"/>
-    <rect x="300" y="0" width="100" height="600" fill="#5eaa37"/>
-    <rect x="400" y="0" width="100" height="600" fill="#3583c2"/>
-    <rect x="500" y="0" width="100" height="600" fill="#8247a5"/>
-  </g>
-  <path d="M100 350q75 150 150 150c100 0 200-200 300-400-100 150-200 300-300 300-50 0-100-50-150-100z" fill="none" stroke="#000" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="600" viewBox="0 0 600 600">
+<defs>
+<clipPath id="clip-0">
+<path clip-rule="nonzero" d="M 100 100 L 200 100 L 200 500 L 100 500 Z M 100 100 "/>
+</clipPath>
+<clipPath id="clip-1">
+<path clip-rule="nonzero" d="M 100 350 C 150 450 200 500 250 500 C 350 500 450 300 550 100 C 450 250 350 400 250 400 C 200 400 150 350 100 300 Z M 100 350 "/>
+</clipPath>
+<clipPath id="clip-2">
+<path clip-rule="nonzero" d="M 200 100 L 300 100 L 300 500 L 200 500 Z M 200 100 "/>
+</clipPath>
+<clipPath id="clip-3">
+<path clip-rule="nonzero" d="M 100 350 C 150 450 200 500 250 500 C 350 500 450 300 550 100 C 450 250 350 400 250 400 C 200 400 150 350 100 300 Z M 100 350 "/>
+</clipPath>
+<clipPath id="clip-4">
+<path clip-rule="nonzero" d="M 300 100 L 400 100 L 400 500 L 300 500 Z M 300 100 "/>
+</clipPath>
+<clipPath id="clip-5">
+<path clip-rule="nonzero" d="M 100 350 C 150 450 200 500 250 500 C 350 500 450 300 550 100 C 450 250 350 400 250 400 C 200 400 150 350 100 300 Z M 100 350 "/>
+</clipPath>
+<clipPath id="clip-6">
+<path clip-rule="nonzero" d="M 400 100 L 500 100 L 500 500 L 400 500 Z M 400 100 "/>
+</clipPath>
+<clipPath id="clip-7">
+<path clip-rule="nonzero" d="M 100 350 C 150 450 200 500 250 500 C 350 500 450 300 550 100 C 450 250 350 400 250 400 C 200 400 150 350 100 300 Z M 100 350 "/>
+</clipPath>
+<clipPath id="clip-8">
+<path clip-rule="nonzero" d="M 500 100 L 550 100 L 550 500 L 500 500 Z M 500 100 "/>
+</clipPath>
+<clipPath id="clip-9">
+<path clip-rule="nonzero" d="M 100 350 C 150 450 200 500 250 500 C 350 500 450 300 550 100 C 450 250 350 400 250 400 C 200 400 150 350 100 300 Z M 100 350 "/>
+</clipPath>
+</defs>
+<g clip-path="url(#clip-0)">
+<g clip-path="url(#clip-1)">
+<path fill-rule="nonzero" fill="rgb(93.72549%, 46.27451%, 7.843137%)" fill-opacity="1" d="M 100 0 L 200 0 L 200 600 L 100 600 Z M 100 0 "/>
+</g>
+</g>
+<g clip-path="url(#clip-2)">
+<g clip-path="url(#clip-3)">
+<path fill-rule="nonzero" fill="rgb(93.72549%, 75.686275%, 2.352941%)" fill-opacity="1" d="M 200 0 L 300 0 L 300 600 L 200 600 Z M 200 0 "/>
+</g>
+</g>
+<g clip-path="url(#clip-4)">
+<g clip-path="url(#clip-5)">
+<path fill-rule="nonzero" fill="rgb(36.862745%, 66.666667%, 21.568627%)" fill-opacity="1" d="M 300 0 L 400 0 L 400 600 L 300 600 Z M 300 0 "/>
+</g>
+</g>
+<g clip-path="url(#clip-6)">
+<g clip-path="url(#clip-7)">
+<path fill-rule="nonzero" fill="rgb(20.784314%, 51.372549%, 76.078431%)" fill-opacity="1" d="M 400 0 L 500 0 L 500 600 L 400 600 Z M 400 0 "/>
+</g>
+</g>
+<g clip-path="url(#clip-8)">
+<g clip-path="url(#clip-9)">
+<path fill-rule="nonzero" fill="rgb(50.980392%, 27.843137%, 64.705882%)" fill-opacity="1" d="M 500 0 L 600 0 L 600 600 L 500 600 Z M 500 0 "/>
+</g>
+</g>
+<path fill="none" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0%, 0%, 0%)" stroke-opacity="1" stroke-miterlimit="10" d="M 100 350 C 150 450 200 500 250 500 C 350 500 450 300 550 100 C 450 250 350 400 250 400 C 200 400 150 350 100 300 Z M 100 350 "/>
 </svg>

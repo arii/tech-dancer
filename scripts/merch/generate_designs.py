@@ -34,7 +34,7 @@ FONT_NAME = "Cooper Black"
 # Front Design Constants
 FRONT_FONT_SIZE = 240
 FRONT_GAP = 16
-# Increase heart size for better 'V' weight (approx 94% of cap height)
+# Optimal heart size for 'V' visual weight
 FRONT_HEART_SIZE = 210
 FRONT_BASE_Y = 660
 FRONT_CAP_HEIGHT_RATIO = 0.7
