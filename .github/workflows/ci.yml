@@ -179,17 +179,11 @@ jobs:
     name: Build & E2E
     needs: lint-typecheck
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
-      env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Install system utilities
         run: |
-          apt-get update
-          apt-get install -y lsof gh
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          sudo apt-get update
+          sudo apt-get install -y lsof gh
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -216,6 +210,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install Playwright Browsers
+        run: pnpm run setup:playwright
 
       - name: Set up Python
         uses: actions/setup-python@v5
