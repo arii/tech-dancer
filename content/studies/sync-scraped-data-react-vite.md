@@ -1,31 +1,29 @@
 ---
 title: "Using GitHub Actions to Sync Scraped Data into a React/Vite Site"
-date: "2024-03-22"
+date: "2024-04-03"
 category: "DevAI"
-excerpt: "A technical deep dive into automating the bridge between raw scraped data and a modern React/Vite frontend using GitHub Actions workflows."
-tags: ["React", "Vite", "GitHub Actions", "Data Sync"]
+excerpt: "A deep dive into the 'Git-as-Database' pattern: how to automate pull requests and data normalization to keep a static site updated with external data."
+tags: ["React", "Vite", "GitHub Actions", "Automation"]
 readTime: 10
 status: "published"
 author: "Ariel Anders"
 ---
 
-# Syncing Scraped Data into React/Vite
+# The Git-as-Database Pattern
 
-Once you have a scraper running, the next challenge is getting that data into your frontend application. This article explores a GitOps-driven approach to data synchronization.
+For many content-heavy sites, a traditional database is overkill. Instead, we use GitHub Actions to fetch data and commit it directly to the repository as JSON or Markdown.
 
-## The GitOps Data Pipeline
+## The Synchronization Loop
 
-Instead of a traditional database, we can treat our repository as the source of truth. When the scraper updates a JSON file in the repo, it can trigger a site rebuild.
+1.  **Extraction**: The scraper runs (see our previous article).
+2.  **Normalization**: A Python script validates the scraped data against our Zod schema.
+3.  **Commit**: The action uses `stefanzweifel/git-auto-commit-action` to push changes.
+4.  **Deployment**: Vercel detects the commit and triggers a new static build.
 
-### Workflow Orchestration
+## Handling Conflicts
 
-1. **Scraper Run**: GitHub Action scrapes data and saves to `src/data/results.json`.
-2. **Auto-Commit**: The action commits the change back to the `main` branch.
-3. **Deployment Trigger**: The push to `main` triggers your Vercel or GitHub Pages deployment.
-4. **Site Rebuild**: The new data is bundled into the production build of your Vite app.
+When multiple scrapers run, we use a dedicated `data-sync` branch. This prevents main branch pollution and allows for manual review if the data looks suspicious (e.g., a 50% drop in event counts).
 
-## Benefits
+## Performance Benefits
 
-- **Simplicity**: No database to manage or pay for.
-- **Performance**: Data is served as static assets, ensuring maximum speed.
-- **Version Control**: Every data update is tracked in git history.
+Because the data is local to the Vite build, there are zero runtime API calls for the user. This results in near-instant page loads and perfect SEO.

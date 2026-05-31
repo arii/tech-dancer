@@ -1,25 +1,31 @@
 ---
 title: "Automating Printful Product Metadata with AI and GitHub Workflows"
-date: "2024-04-20"
-category: "Ecommerce"
-excerpt: "Learn how to use AI to generate SEO-optimized product descriptions and metadata, then sync them automatically to Printful via GitHub Actions."
-tags: ["Printful", "Ecommerce", "SEO", "Automation"]
-readTime: 13
+date: "2024-04-15"
+category: "DevAI"
+excerpt: "Scale your ecommerce operations by using AI to generate SEO-optimized product titles, descriptions, and tags directly from Printful sync data."
+tags: ["Ecommerce", "Printful", "AI Automation", "SEO"]
+readTime: 11
 status: "published"
 author: "Ariel Anders"
 ---
 
-# Printful Automation with AI
+# Scaling Ecommerce with AI
 
-Managing a large catalog of print-on-demand products is a massive task. We've automated the generation of product descriptions and metadata using specialized AI agents.
+Managing hundreds of product variants in Printful is a manual nightmare. We've automated the metadata generation process using a combination of the Printful API and OpenAI.
 
-## Workflow Overview
+## The Automation Engine
 
-- **Design Ingestion**: New artwork is uploaded to a specific directory in the repo.
-- **AI Copywriting**: An agent analyzes the design and generates a name, description, and tags based on the Booomtick brand voice.
-- **API Integration**: A GitHub Action uses the Printful API to create the product and sync the generated metadata.
-- **SEO Validation**: A secondary agent checks the generated copy for SEO best practices and hallucinations.
+1.  **Catalog Scan**: A GitHub Action polls the Printful `/sync/products` endpoint for new items.
+2.  **Metadata Generation**: For each new product, the agent analyzes the product type (e.g., "Unisex Cotton Tee") and the design name to generate:
+    *   An SEO-optimized title (e.g., "Ask Me to Follow Neon Tee")
+    *   A compelling, human-friendly description.
+    *   Relevant role badges (Lead, Follow, Switch).
+3.  **WooCommerce Sync**: The metadata is pushed to our WooCommerce storefront via the REST API.
 
-## Efficiency Gains
+## Design Patterns
 
-This system reduces the time required to launch a new merch collection from hours to minutes, ensuring consistent quality and SEO performance across the entire catalog.
+We use a "Vibe Map" in our prompts to ensure the AI uses the correct tone for the Booomtick brand: "playful, social-dance aware, and NorCal coded."
+
+## Operational Savings
+
+What used to take 20 minutes per product now happens in under 30 seconds, with zero human intervention required for standard catalog updates.

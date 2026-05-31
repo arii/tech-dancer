@@ -1,29 +1,42 @@
 ---
 title: "How to Build a Data Scraper with GitHub Actions"
-date: "2024-03-20"
-category: "Automation"
-excerpt: "Learn how to build a robust, serverless data scraper using GitHub Actions. This guide covers scheduling, secret management, and handling dynamic content."
-tags: ["GitHub Actions", "Scraping", "Automation", "DevAI"]
-readTime: 8
+date: "2024-04-01"
+category: "DevAI"
+excerpt: "Learn how to orchestrate a robust web scraper using Python and GitHub Actions, featuring automatic retries, proxy rotation, and headless browser management."
+tags: ["Python", "GitHub Actions", "Web Scraping", "Playwright"]
+readTime: 12
 status: "published"
 author: "Ariel Anders"
 ---
 
-# How to Build a Data Scraper with GitHub Actions
+# Scraping at Scale with GitHub Actions
 
-Data scraping doesn't always require a dedicated server. With GitHub Actions, you can build a robust, scheduled scraping pipeline that runs entirely within your repository's CI/CD environment.
+Web scraping often requires infrastructure that is difficult to maintain. By leveraging GitHub Actions, we can run scheduled scraping jobs for free (within limit) without managing servers.
 
-## Why GitHub Actions?
+## Key Components
 
-GitHub Actions provides a generous free tier for public repositories and a reliable infrastructure for running scheduled tasks (cron jobs). This makes it an ideal platform for lightweight to medium-scale scraping tasks.
+1.  **Workflow Trigger**: Using `schedule` to run the scraper nightly.
+2.  **Environment Setup**: Using `actions/setup-python` and installing `playwright` dependencies.
+3.  **Data Persistence**: Storing results in the repository or an external S3 bucket.
+4.  **Error Handling**: Implementing slack notifications on failure using `rtCamp/action-slack-notify`.
 
-## Key Implementation Steps
+## Implementation Strategy
 
-1. **Environment Setup**: Define your workflow in `.github/workflows/scrape.yml`.
-2. **Scheduling**: Use the `schedule` event to run your scraper at specific intervals.
-3. **Dependencies**: Install necessary libraries (e.g., BeautifulSoup, Playwright) within the runner.
-4. **Data Persistence**: Commit the scraped data back to the repository or upload it as an artifact.
+We use Playwright for its robust handling of dynamic content. The scraper is designed to be "polite," respecting `robots.txt` and implementing random delays to avoid rate limiting.
 
-## Conclusion
+```python
+# Example snippet from our scraper logic
+from playwright.sync_api import sync_playwright
 
-By leveraging GitHub Actions, you can automate data collection without the overhead of managing infrastructure, providing a clean and cost-effective solution for your data needs.
+def scrape_site(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url, wait_until="networkidle")
+        # Logic to extract events
+        browser.close()
+```
+
+## Why This Matters
+
+This approach allows us to maintain a fresh dataset of swing dance events without manual intervention, serving as the foundation for our automated content pipeline.

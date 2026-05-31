@@ -1,29 +1,29 @@
 ---
 title: "How to Build an AI PR Review Agent for GitHub"
-date: "2024-04-01"
+date: "2024-04-07"
 category: "DevAI"
-excerpt: "Step-by-step guide to building an autonomous AI agent that audits pull requests for code quality, security vulnerabilities, and style guide adherence."
-tags: ["DevAI", "AI Agent", "GitHub API", "Code Review"]
-readTime: 12
+excerpt: "Automate code reviews using LLMs. Learn how to build an agent that understands your project's coding standards and provides actionable feedback."
+tags: ["AI", "Code Review", "LLM", "GitHub Actions"]
+readTime: 15
 status: "published"
 author: "Ariel Anders"
 ---
 
-# Building an AI PR Review Agent
+# Elevating Code Quality with AI
 
-AI agents are transforming how we perform code reviews. By integrating LLMs directly into your PR workflow, you can catch common bugs and style issues before a human even looks at the code.
+Code review is a bottleneck. Our AI PR Review Agent uses GPT-4 to perform first-pass reviews, catching common anti-patterns and style violations before a human ever looks at the code.
 
 ## System Architecture
 
-An effective AI review agent needs access to the PR diff and the project's coding standards.
+1.  **Event Trigger**: `pull_request` event (opened or synchronized).
+2.  **Context Gathering**: The agent fetches the PR diff and relevant files.
+3.  **Prompt Engineering**: We use a "System Prompt" that defines our project's specific rules (e.g., "Use Tailwind tokens instead of arbitrary values").
+4.  **Feedback Loop**: The agent posts comments on specific lines using the GitHub Checks API.
 
-### Core Components
+## Case Study: Catching Tailwind Anti-patterns
 
-- **GitHub Webhooks**: Trigger the agent when a PR is opened or updated.
-- **Context Retrieval**: Fetch the diff and relevant file context using the GitHub API.
-- **Prompt Engineering**: Instruct the LLM to act as a senior engineer, focusing on specific metrics like security or maintainability.
-- **Review Submission**: Post comments back to the PR using `pull_request_review` events.
+The agent is trained to spot `-[123px]` arbitrary values in our Tailwind code. When it finds one, it suggests the nearest design token (e.g., `spacing-4`).
 
-## Results
+## Human-in-the-Loop
 
-Integrating an AI agent reduces the "nitpick" overhead for human reviewers, allowing them to focus on high-level architectural concerns while the AI handles the routine checks.
+AI reviews are meant to *assist*, not replace. Developers can reply to the AI's comment to "discuss" a suggestion, or simply ignore it if the context is missing.

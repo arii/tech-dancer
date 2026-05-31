@@ -1,28 +1,45 @@
 ---
 title: "Deploying a Vite React App with Vercel and GitHub Actions"
-date: "2024-03-25"
-category: "DevOps"
-excerpt: "Optimize your deployment pipeline by combining the speed of Vercel with the flexibility of GitHub Actions for advanced CI/CD checks."
-tags: ["Vercel", "Vite", "GitHub Actions", "Deployment"]
-readTime: 6
+date: "2024-04-05"
+category: "Engineering"
+excerpt: "Optimize your deployment pipeline with advanced Vercel configurations, preview environment security, and custom CI checks."
+tags: ["Vercel", "CI/CD", "Vite", "React"]
+readTime: 8
 status: "published"
 author: "Ariel Anders"
 ---
 
-# Deploying Vite with Vercel and GitHub Actions
+# Beyond the Default Vercel Integration
 
-While Vercel offers seamless GitHub integration, using GitHub Actions as an intermediary allows for more complex CI/CD workflows, such as visual regression testing or custom security audits.
+While Vercel's "Connect to GitHub" feature is great, production apps often need more control. We use the Vercel CLI within GitHub Actions to orchestrate complex deployments.
 
-## The Hybrid Approach
+## Why Use GitHub Actions for Vercel?
 
-By using the Vercel CLI within a GitHub Action, you gain full control over when and how your application is deployed.
+- **Pre-deployment Checks**: Run Vitest and Playwright tests *before* Vercel starts building.
+- **Environment Variable Injection**: Securely inject secrets from GitHub Actions into the Vercel build environment.
+- **Conditional Deploys**: Only deploy if specific directories (e.g., `src/`) have changed.
 
-## Implementation Guide
+## Workflow Example
 
-1. **Vercel Tokens**: Store your `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` in GitHub Secrets.
-2. **Workflow Configuration**: Use the `vercel/actions` or run `vercel build` and `vercel deploy --prebuilt` directly.
-3. **Custom Gates**: Add steps for `pnpm run audit`, `pnpm test`, or Playwright E2E tests before the final deployment step.
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build and Test
+        run: pnpm run build && pnpm run test
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          vercel-args: '--prod'
+```
 
-## Why use this?
+## Security Considerations
 
-This setup ensures that your site is only updated if all your custom quality gates pass, providing a higher level of confidence than the default "deploy on push" behavior.
+We use Vercel's "Deployment Protection" to ensure that preview URLs are only accessible to team members, preventing leakers or scrapers from seeing unfinished work.

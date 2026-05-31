@@ -1,27 +1,30 @@
 ---
 title: "Preventing SEO Hallucinations in Product Structured Data"
-date: "2024-04-25"
-category: "SEO"
-excerpt: "Technical strategies for ensuring AI-generated JSON-LD structured data remains accurate and trustworthy for search engines."
-tags: ["SEO", "Structured Data", "AI Safety", "JSON-LD"]
-readTime: 7
+date: "2024-04-17"
+category: "Engineering"
+excerpt: "AI-generated content can sometimes hallucinate technical details. Learn how to implement strict schema validation for SEO and JSON-LD."
+tags: ["SEO", "JSON-LD", "Validation", "AI Safety"]
+readTime: 10
 status: "published"
 author: "Ariel Anders"
 ---
 
-# Preventing SEO Hallucinations
+# Trust but Verify: SEO Integrity
 
-AI is great at writing copy, but it can hallucinate technical details like prices, stock levels, or specifications. This is particularly dangerous for structured data (JSON-LD).
+AI models are great at prose but poor at maintaining strict data structures. When generating JSON-LD for product pages, a single hallucinated price or rating can lead to a Google Search Console penalty.
 
-## Our Strategy: Verification Gates
+## The "Conservative Schema" Policy
 
-We implement a strict multi-stage verification process for all AI-generated SEO data.
+We implement a multi-layered defense against SEO hallucinations:
 
-1. **Schema Validation**: Ensure the generated JSON follows the official schema.org specifications.
-2. **Fact Checking**: Cross-reference AI-generated values with the source-of-truth database (e.g., Printful API results).
-3. **Conservative Defaults**: If the AI is uncertain about a field (like shipping costs), we omit it rather than risk providing incorrect data to search engines.
-4. **Human-in-the-loop**: High-impact SEO changes require manual approval in the PR.
+1.  **Static Field Enforcement**: We never allow the AI to generate fields like `price`, `availability`, or `sku`. These are pulled directly from the source of truth (WooCommerce/Printful).
+2.  **Zod Validation**: All AI-generated metadata (titles, descriptions) is validated against a strict Zod schema before being committed.
+3.  **Duplicate Prefix Prevention**: Our `getImageUrl` helper ensures that base URLs and asset prefixes aren't doubled up, a common error in automated content generation.
 
-## Results
+## Audit Trails
 
-By prioritizing accuracy over completeness, we maintain high trust with search engines while still leveraging the creative power of AI for descriptions and titles.
+Every piece of AI-generated content is tagged in our internal database with the model version and the prompt hash used to generate it. This allows for rapid rollbacks if a specific model version starts producing low-quality results.
+
+## Impact
+
+By strictly separating "Creative Prose" (AI-driven) from "Transactional Data" (System-driven), we maintain 100% accuracy in our structured data while benefiting from AI's scale.
