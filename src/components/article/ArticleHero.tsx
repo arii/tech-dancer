@@ -70,17 +70,17 @@ export function ArticleHero({
         )}
 
         {meta && (
-          <Box border="t" className="border-line/80 pt-4 lg:pt-6">
+          <Box border="t" className="border-line/80" paddingTop={{ base: 4, lg: 6 }}>
             {meta}
           </Box>
         )}
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" gap={2} wrap className="pb-2 hidden lg:flex">
+          <Stack direction="row" gap={2} wrap paddingBottom={2} display={{ base: "none", lg: "flex" }}>
             {tags.map((tag) => (
               <Box
                 key={tag}
-                className="px-3 py-1 rounded-full border border-line bg-surface/50 text-text-dim text-tiny font-bold uppercase tracking-wider whitespace-nowrap"
+                paddingX={3} paddingY={1} radius="full" border surface="surface" className="bg-surface/50 text-text-dim text-tiny font-bold uppercase tracking-wider whitespace-nowrap" // impeccable-ignore
               >
                 {tag}
               </Box>

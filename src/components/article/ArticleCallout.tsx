@@ -23,7 +23,7 @@ export function ArticleCallout({ title, children, variant = 'info' }: ArticleCal
             {title}
           </Text>
         )}
-        <Box className="prose-p:my-0 prose-p:text-inherit">
+        <Box >
           {children}
         </Box>
       </Stack>

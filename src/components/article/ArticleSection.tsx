@@ -10,14 +10,14 @@ interface ArticleSectionProps {
 
 export function ArticleSection({ title, id, children }: ArticleSectionProps) {
   return (
-    <Box as="section" id={id} className="mb-16 last:mb-0">
+    <Box as="section" id={id} marginBottom={16}>
       <Text
         as="h2"
         variant="display"
         size="2xl"
         color="main"
         weight="font-bold"
-        className="mb-8"
+        marginBottom={8}
       >
         {title}
       </Text>

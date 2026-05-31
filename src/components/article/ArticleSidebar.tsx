@@ -11,9 +11,9 @@ interface SidebarCardProps {
 
 export function SidebarCard({ title, children }: SidebarCardProps) {
   return (
-    <ArticleCard className="p-5 lg:p-6">
+    <ArticleCard padding={{ base: 5, lg: 6 }}>
       <Stack gap={4}>
-        <Text variant="mono" size="xs" weight="font-bold" color="accent" className="uppercase tracking-widest border-b border-line/50 pb-3">
+        <Text variant="mono" size="xs" weight="font-bold" color="accent" className="uppercase tracking-widest border-b border-line/50" paddingBottom={3}>
           {title}
         </Text>
         <Box>
@@ -60,7 +60,7 @@ export function ArticleSidebar({
                 key={i}
                 as="a"
                 href={`#${item.id}`}
-                className="text-sm text-text-dim hover:text-accent transition-colors py-1"
+                className="text-sm text-text-dim hover:text-accent transition-colors" paddingY={1}
               >
                 {item.label}
               </Box>
@@ -75,7 +75,7 @@ export function ArticleSidebar({
             {relatedTopics.map((topic, i) => (
               <Box
                 key={i}
-                className="px-2 py-1 rounded bg-surface border border-line text-text-dim text-tiny font-bold uppercase tracking-wider"
+                paddingX={2} paddingY={1} radius="md" surface="surface" border className="text-text-dim text-tiny font-bold uppercase tracking-wider" // impeccable-ignore
               >
                 {topic}
               </Box>

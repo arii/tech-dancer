@@ -24,7 +24,7 @@ export function ArticleLayout({
 }: ArticleLayoutProps) {
   return (
     <Box className="min-h-screen bg-bg text-text-body">
-      <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}>
+      <Box maxWidth="6xl" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}>
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
           <Stack
@@ -40,9 +40,9 @@ export function ArticleLayout({
               size="sm"
               className="transition-transform group-hover:-translate-x-1"
             />
-            <Box as="span" className="text-tiny font-bold uppercase tracking-widest">
+            <Text as="span" size="xs" weight="font-bold" uppercase className="tracking-widest">
               {backLabel}
-            </Box>
+            </Text>
           </Stack>
         </Box>
 
@@ -52,7 +52,7 @@ export function ArticleLayout({
         </Box>
 
         {/* Article Content Grid */}
-        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}>
+        <Box display="grid" lgGridCols="minmax(0,var(--spacing-prose-width)) var(--spacing-sidebar-width)" gap={12} lgGap={16}>
           {/* Main Article Column */}
           <Box className={sidebar ? "min-w-0" : "min-w-0 lg:col-span-2"}>
             <Box className="article-prose">
@@ -61,7 +61,7 @@ export function ArticleLayout({
 
             {/* Footer / Related Posts */}
             {footer && (
-              <Box marginTop={20} border="t" className="border-line/80 pt-12">
+              <Box marginTop={20} border="t" className="border-line/80" paddingTop={12}>
                 {footer}
               </Box>
             )}
