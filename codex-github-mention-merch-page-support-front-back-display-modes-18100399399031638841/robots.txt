@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/codex-github-mention-merch-page-support-front-back-display-modes-18100399399031638841/sitemap.xml

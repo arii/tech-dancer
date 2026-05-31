@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/review/merch-front-back-display-modes-10982862365595450883-11083618194466683073/sitemap.xml

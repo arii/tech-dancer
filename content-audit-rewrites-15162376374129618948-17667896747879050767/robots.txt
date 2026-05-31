@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/content-audit-rewrites-15162376374129618948-17667896747879050767/sitemap.xml
