@@ -37,18 +37,7 @@ Optimize the DevAI Portfolio for high-signal recruiting.
 - **Responsive Priority**: Medium (Deferred on mobile).
 - **Implementation**: PR-C (Visual Components)
 
-### Frame 4: Engineering Systems Consolidation
-- **Current Baseline**: Multi-card grid.
-- **Problem**: "Wall of cards" on mobile (1200px+ scroll depth).
-- **Goal**: Scannable secondary proof.
-- **Action**:
-  - Desktop: Keep grid.
-  - Mobile: Transform cards into 48px rows with [Icon][Title][Status].
-  - Tap row to expand description.
-- **Responsive Priority**: High (Density Fix).
-- **Implementation**: PR-A (Layout Primitives)
-
-### Frame 5: Standardized Implementation Guides
+### Frame 4: Standardized Implementation Guides
 - **Current Baseline**: Mixed-style article cards.
 - **Problem**: Inconsistent metadata and infinite scrolling.
 - **Goal**: Direct traffic to technical deep-dives.
@@ -56,8 +45,19 @@ Optimize the DevAI Portfolio for high-signal recruiting.
   - Limit to 3 items.
   - Card style: Large title + Mono metadata (Date · Category).
   - Add `See All Articles` ghost button linking to `/blog?category=research`.
-- **Responsive Priority**: Medium.
+- **Responsive Priority**: Medium (Mobile Order: 4).
 - **Implementation**: PR-B (Content Configuration)
+
+### Frame 5: Engineering Systems Consolidation
+- **Current Baseline**: Multi-card grid.
+- **Problem**: "Wall of cards" on mobile (1200px+ scroll depth).
+- **Goal**: Scannable secondary proof.
+- **Action**:
+  - Desktop: Keep grid.
+  - Mobile: Transform cards into 48px rows with [Icon][Title][Status].
+  - Tap row to expand description.
+- **Responsive Priority**: High (Mobile Order: 5).
+- **Implementation**: PR-A (Layout Primitives)
 
 ### Frame 6: Ecommerce R&D Section (Future Work)
 - **Baseline**: Hidden/Internal tools.
