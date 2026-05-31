@@ -12,7 +12,7 @@ export function DevLabCallout() {
           <Terminal className="h-4 w-4 text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-          DevAI Lab
+          DevAI Portfolio
         </Text>
       </Stack>
 
@@ -34,7 +34,7 @@ export function DevLabCallout() {
         weight="font-bold"
         className="hover:underline"
       >
-        Explore the DevAI Lab →
+        Explore the DevAI Portfolio →
       </Text>
     </Box>
   );
