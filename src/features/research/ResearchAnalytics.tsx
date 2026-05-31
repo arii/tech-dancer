@@ -65,11 +65,13 @@ export default function ResearchAnalytics() {
                 padding={0}
                 gap={0}
                 surface="surface"
-                className="border-accent/10 h-full overflow-hidden"
+                height="full"
+                overflow="hidden"
+                border
               >
                 <Stack gap={0} height="full">
                   {tool.image && (
-                    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
+                    <Box width="full" height={48} overflow="hidden" border="b">
                       <img
                         src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
                         alt={tool.title}
@@ -79,10 +81,10 @@ export default function ResearchAnalytics() {
                   )}
                   <Stack gap={6} padding={8} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
+                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                       </Box>
-                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
+                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" surface="muted">
                         Flagship
                       </Text>
                     </Box>
@@ -99,7 +101,7 @@ export default function ResearchAnalytics() {
                       <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
                         {tool.subtitle}
                       </Text>
-                      <Text variant="body" size="md" color="dim" className="leading-relaxed">
+                      <Text variant="body" size="md" color="dim" leading="relaxed">
                         {tool.description}
                       </Text>
                     </Stack>
@@ -156,13 +158,13 @@ export default function ResearchAnalytics() {
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6}>
             <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
+            <Text variant="body" size="lg" color="body" leading="relaxed">
               HRM exposed the need for sophisticated <strong>AI orchestration</strong> in repository operations. From automated PR reviews to diagnosing CI failures, the project demanded a <strong>Dev AI</strong> console capable of precise <strong>prompt engineering</strong> and structured agent handoff. <strong>RepoAuditor AI</strong> was built to close this loop, now serving as the backbone for <strong>ML engineering</strong> workflows across tech-dancer/BoomTick.
             </Text>
           </Stack>
           <Stack gap={6}>
             <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
+            <Text variant="body" size="lg" color="body" leading="relaxed">
               Shipping high-fidelity products requires more than just AI hype—it requires practical <strong>AI orchestration</strong> and robust <strong>RAG</strong> pipelines. By focusing on <strong>ML engineering</strong> that keeps the developer in the loop, we maintain high standards while leveraging <strong>Dev AI</strong> to handle high-scale telemetry and complex multi-platform integrations.
             </Text>
           </Stack>
@@ -189,7 +191,7 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
+                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center">
                       <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
                     <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
