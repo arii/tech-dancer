@@ -38,7 +38,7 @@ export function EcommerceAutomationTool() {
     {
       icon: CheckCircle2,
       title: 'Mockup & Image QA',
-      description: 'Auditing front/back product mockups and image crops for visual fidelity before live publishing.'
+      description: 'Auditing front/back product mockups and image crops for visual fidelity before storefront synchronization.'
     },
     {
       icon: Palette,
@@ -47,8 +47,8 @@ export function EcommerceAutomationTool() {
     },
     {
       icon: CloudUpload,
-      title: 'Human-in-the-Loop Updates',
-      description: 'Executing human-approved storefront updates via API once all metadata and image QA checks pass.'
+      title: 'Human-in-the-Loop Sync',
+      description: 'Prototyping dry-run-first Printful/WooCommerce sync workflows that generate reviewable update plans before any human-approved storefront mutation.'
     }
   ];
 
@@ -140,18 +140,18 @@ export function EcommerceAutomationTool() {
                   className="hide-scrollbar"
                   paddingBottom={1}
                 >
-                  <Box display="flex" align="center" gap={2} shrink={0}>
+                  <Box display="flex" align="center" gap={2} shrink={0} flexWrap="nowrap">
                     <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Templates</Text>
                     <Icon icon={ArrowRight} size="xs" color="dim" />
                     <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
                     <Icon icon={ArrowRight} size="xs" color="dim" />
                     <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">AI Recommendations</Text>
                     <Icon icon={ArrowRight} size="xs" color="dim" />
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Dry-run Plan</Text>
+                    <Icon icon={ArrowRight} size="xs" color="dim" />
                     <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Human Review</Text>
                     <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">API Sync</Text>
-                    <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">SEO-Safe Merch Page</Text>
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Approved Sync</Text>
                   </Box>
                 </Box>
                 <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
@@ -165,11 +165,11 @@ export function EcommerceAutomationTool() {
         <Text variant="headline" size="xl" weight="font-black" as="h2">Visual Image QA Examples</Text>
         <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
           <Box border radius="lg" overflow="hidden" surface="default">
-            <Box padding={4}>
+            <Box padding={4} aspect="square" display="flex" align="center" justify="center">
               <img
                 src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-front.webp`}
                 alt="NorCal BestCal Front Mockup"
-                className="w-full aspect-square object-contain"
+                className="max-w-full max-h-full object-contain"
               />
             </Box>
             <Box padding={4} border="t">
@@ -178,11 +178,11 @@ export function EcommerceAutomationTool() {
             </Box>
           </Box>
           <Box border radius="lg" overflow="hidden" surface="default">
-            <Box padding={4}>
+            <Box padding={4} aspect="square" display="flex" align="center" justify="center">
               <img
                 src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-back.webp`}
                 alt="NorCal BestCal Back Mockup"
-                className="w-full aspect-square object-contain"
+                className="max-w-full max-h-full object-contain"
               />
             </Box>
             <Box padding={4} border="t">

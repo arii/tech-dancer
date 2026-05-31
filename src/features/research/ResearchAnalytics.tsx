@@ -229,83 +229,6 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Stack gap={8}>
-          <Stack
-            paddingBottom={4}
-            direction={{ base: 'col', sm: 'row' }}
-            align={{ base: 'start', sm: 'center' }}
-            gap={4}
-            border="b"
-          >
-            <Text variant="headline" size="2xl" weight="font-black">Ecommerce Automation Experiments</Text>
-            <StatusBadge label="In Progress" />
-          </Stack>
-          <Box padding={{ base: 5, sm: 8 }} border radius="xl" surface="muted">
-            <Grid cols={12} gap={8}>
-              <Box span={{ base: 12, lg: 7 }}>
-                <Stack gap={6}>
-                  <Text variant="body" size="lg" color="body" weight="font-bold">
-                    I am extending the same DevAI workflow patterns into ecommerce operations for BoomTick merch.
-                  </Text>
-                  <Text variant="body" size="md" color="dim">
-                    Current experiments include API-driven Printful template pulls, SEO-safe product copy generation, image QA, and human-in-the-loop catalog review.
-                  </Text>
-                  <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                      {['Printful API', 'SEO Safety', 'Image QA'].map(tag => (
-                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                              {tag}
-                          </Text>
-                      ))}
-                  </Box>
-                  <Box
-                    as="button"
-                    onClick={() => navigate('/research/ecommerce-automation')}
-                    display="flex"
-                    align="center"
-                    gap={2}
-                    marginTop={4}
-                    className="text-accent hover:opacity-80 transition-opacity"
-                  >
-                    <Text weight="font-bold" size="xs" uppercase tracking="widest">View Workflow Items</Text>
-                    <Icon icon={ArrowRight} size="sm" />
-                  </Box>
-                </Stack>
-              </Box>
-              <Box span={{ base: 12, lg: 5 }} display="flex" align="center">
-                <Box width="full" padding={{ base: 4, sm: 6 }} border radius="lg" surface="surface" className="border-accent/10">
-                  <Stack gap={4} align="center">
-                    <Box
-                      display="flex"
-                      align="center"
-                      gap={2}
-                      justify="center"
-                      width="full"
-                      overflowX="auto"
-                      className="hide-scrollbar"
-                      paddingBottom={1}
-                    >
-                      <Box display="flex" align="center" gap={2} shrink={0}>
-                        <Text variant="mono" size="micro" color="dim">TEMPLATES</Text>
-                        <Icon icon={ArrowRight} size="xs" color="dim" />
-                        <Text variant="mono" size="micro" color="dim">PACKET</Text>
-                        <Icon icon={ArrowRight} size="xs" color="dim" />
-                        <Text variant="mono" size="micro" color="accent" weight="bold">AI RECS</Text>
-                        <Icon icon={ArrowRight} size="xs" color="accent" />
-                        <Text variant="mono" size="micro" color="accent" weight="bold">REVIEW</Text>
-                        <Icon icon={ArrowRight} size="xs" color="dim" />
-                        <Text variant="mono" size="micro" color="dim">SYNC</Text>
-                        <Icon icon={ArrowRight} size="xs" color="dim" />
-                        <Text variant="mono" size="micro" color="dim">STOREFRONT</Text>
-                      </Box>
-                    </Box>
-                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>CATALOG PIPELINE</Text>
-                  </Stack>
-                </Box>
-              </Box>
-            </Grid>
-          </Box>
-        </Stack>
-
         {studies.length > 0 && (
           <Stack gap={8}>
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
@@ -343,6 +266,84 @@ export default function ResearchAnalytics() {
             </Grid>
           </Stack>
         )}
+
+        <Stack gap={8}>
+          <Stack
+            paddingBottom={4}
+            direction={{ base: 'col', sm: 'row' }}
+            align={{ base: 'start', sm: 'center' }}
+            gap={4}
+            border="b"
+          >
+            <Text variant="headline" size="2xl" weight="font-black">Ecommerce Automation Experiments</Text>
+            <StatusBadge label="In Progress" />
+          </Stack>
+          <Box padding={{ base: 5, sm: 8 }} border radius="xl" surface="muted">
+            <Grid cols={12} gap={8}>
+              <Box span={{ base: 12, lg: 7 }}>
+                <Stack gap={6}>
+                  <Text variant="body" size="lg" color="body" weight="font-bold" leading="relaxed">
+                    I am extending the same DevAI workflow patterns into ecommerce operations for BoomTick merch.
+                  </Text>
+                  <Text variant="body" size="md" color="dim" leading="relaxed">
+                    Building reviewable automation experiments for asset generation, metadata packets, product-image QA, and human-approved storefront sync.
+                  </Text>
+                  <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
+                      {['Printful API', 'SEO Safety', 'Image QA'].map(tag => (
+                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" surface="muted">
+                              {tag}
+                          </Text>
+                      ))}
+                  </Box>
+                  <Box
+                    as="button"
+                    onClick={() => navigate('/research/ecommerce-automation')}
+                    display="flex"
+                    align="center"
+                    gap={2}
+                    marginTop={4}
+                    color="accent"
+                    className="hover:opacity-80 transition-opacity"
+                  >
+                    <Text weight="font-bold" size="xs" uppercase tracking="widest">View Workflow Items</Text>
+                    <Icon icon={ArrowRight} size="sm" />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box span={{ base: 12, lg: 5 }} display="flex" align="center">
+                <Box width="full" padding={{ base: 4, sm: 6 }} border radius="lg" surface="surface">
+                  <Stack gap={4} align="center">
+                    <Box
+                      display="flex"
+                      align="center"
+                      gap={2}
+                      justify="center"
+                      width="full"
+                      overflowX="auto"
+                      className="hide-scrollbar"
+                      paddingBottom={1}
+                    >
+                      <Box display="flex" align="center" gap={2} shrink={0}>
+                        <Text variant="mono" size="micro" color="dim">TEMPLATES</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">PACKET</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="accent" weight="bold">AI RECS</Text>
+                        <Icon icon={ArrowRight} size="xs" color="accent" />
+                        <Text variant="mono" size="micro" color="accent" weight="bold">DRY-RUN</Text>
+                        <Icon icon={ArrowRight} size="xs" color="accent" />
+                        <Text variant="mono" size="micro" color="accent" weight="bold">REVIEW</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">SYNC</Text>
+                      </Box>
+                    </Box>
+                    <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>CATALOG PIPELINE</Text>
+                  </Stack>
+                </Box>
+              </Box>
+            </Grid>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   );
