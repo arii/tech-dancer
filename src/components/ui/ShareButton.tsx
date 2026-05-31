@@ -21,7 +21,7 @@ export function ShareButton({ title, text, url }: ShareButtonProps) {
       className="text-text-dim/60 hover:text-accent transition-colors group/share"
     >
       <Share2 className="w-3.5 h-3.5" />
-      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+      <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="wider">SHARE</Text>
     </Stack>
   );
 }

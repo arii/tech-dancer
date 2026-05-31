@@ -35,7 +35,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
           dek={post.dek || post.excerpt}
           author={post.author}
           authorAvatar={post.authorAvatar}
-          shareAction=<ShareButton title={post.title} text={post.excerpt} />
+          shareAction={<ShareButton title={post.title} text={post.excerpt} />}
           visual={post.image ? <ArticleFeatureCard image={post.image} /> : null}
           tags={post.tags}
         />

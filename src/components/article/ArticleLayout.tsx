@@ -47,7 +47,6 @@ export function ArticleLayout({
               weight="font-bold"
               tracking="widest"
               uppercase
-
             >
               {backLabel}
             </Text>

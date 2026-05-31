@@ -102,7 +102,7 @@ export function EventGuide() {
           dek={event.dek || event.excerpt}
           author={event.author}
           authorAvatar={event.authorAvatar}
-          shareAction=<ShareButton title={event.title} text={event.excerpt} />
+          shareAction={<ShareButton title={event.title} text={event.excerpt} />}
           visual={heroVisual}
           tags={event.tags}
         />

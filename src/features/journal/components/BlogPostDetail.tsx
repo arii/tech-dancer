@@ -49,7 +49,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           author={post.author}
           authorAvatar={post.authorAvatar}
-          shareAction=<ShareButton title={post.title} text={post.excerpt} />
+          shareAction={<ShareButton title={post.title} text={post.excerpt} />}
           visual={heroVisual}
         />
       }
