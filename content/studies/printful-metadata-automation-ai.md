@@ -2,30 +2,30 @@
 title: "Automating Printful Product Metadata with AI and GitHub Workflows"
 date: "2024-04-15"
 category: "DevAI"
-excerpt: "Scale your ecommerce operations by using AI to generate SEO-optimized product titles, descriptions, and tags directly from Printful sync data."
+excerpt: "Learn how we use AI to generate SEO-optimized product titles and descriptions, reducing repetitive manual catalog work."
 tags: ["Ecommerce", "Printful", "AI Automation", "SEO"]
 readTime: 11
-status: "published"
+status: "draft"
+draft: true
 author: "Ariel Anders"
 ---
 
 # Scaling Ecommerce with AI
 
-Managing hundreds of product variants in Printful is a manual nightmare. We've automated the metadata generation process using a combination of the Printful API and OpenAI.
+Managing product metadata for large collections can be a significant manual overhead. We are exploring ways to automate this using the Printful API and LLMs.
 
-## The Automation Engine
+## The Automation Goal
 
-1.  **Catalog Scan**: A GitHub Action polls the Printful `/sync/products` endpoint for new items.
-2.  **Metadata Generation**: For each new product, the agent analyzes the product type (e.g., "Unisex Cotton Tee") and the design name to generate:
-    *   An SEO-optimized title (e.g., "Ask Me to Follow Neon Tee")
-    *   A compelling, human-friendly description.
-    *   Relevant role badges (Lead, Follow, Switch).
-3.  **WooCommerce Sync**: The metadata is pushed to our WooCommerce storefront via the REST API.
+Our objective is to reduce repetitive merch-launch work by generating reviewable metadata packets and dry-run update plans:
 
-## Design Patterns
+1.  **Catalog Scan**: Monitoring the Printful `/sync/products` endpoint for new items.
+2.  **Metadata Generation**: Using AI to analyze product types and design names to suggest SEO-optimized titles and human-friendly descriptions.
+3.  **Validation**: A human-in-the-loop step to verify and refine the generated metadata before syncing.
 
-We use a "Vibe Map" in our prompts to ensure the AI uses the correct tone for the Booomtick brand: "playful, social-dance aware, and NorCal coded."
+## Design Standards
 
-## Operational Savings
+We use a "Vibe Map" in our prompts to ensure the AI uses the correct tone for the BoomTick brand: "playful, social-dance aware, and NorCal coded."
 
-What used to take 20 minutes per product now happens in under 30 seconds, with zero human intervention required for standard catalog updates.
+## Planned Impact
+
+By automating the baseline copy generation, we aim to focus human effort on final editorial polish rather than bulk data entry.

@@ -2,36 +2,27 @@
 title: "Designing Multi-Agent Prompt Generators for Code Review"
 date: "2024-04-09"
 category: "DevAI"
-excerpt: "Why one prompt isn't enough. Learn how to orchestrate multiple specialized agents to generate higher-quality code review feedback."
-tags: ["Prompt Engineering", "Multi-Agent Systems", "AI"]
-readTime: 14
+excerpt: "Improving AI review quality through collaborative agent workflows."
+tags: ["AI Agents", "Prompt Engineering", "Code Review"]
+readTime: 18
 status: "published"
 author: "Ariel Anders"
 ---
 
-# The Multi-Agent Advantage
+# Collaborative Prompt Engineering
 
-A single large prompt often suffers from "attention loss." By splitting the review task into multiple agents, we achieve 40% higher accuracy in identifying logic bugs.
+Single-agent prompts often struggle with complex code reviews. Multi-agent systems use specialized prompts to improve depth and accuracy.
 
-## Our Agent Roles
+## The Multi-Agent Workflow
 
-- **The Architect**: Focuses on high-level design, file structure, and dependency management.
-- **The Security Specialist**: Scans for SQL injection, XSS, and insecure dependency versions.
-- **The Performance Auditor**: Looks for unnecessary re-renders in React and inefficient SQL queries.
-- **The Stylist**: Ensures adherence to the `eslint` and `prettier` configurations.
+1.  **Auditor Agent**: Identifies specific violations of the design system.
+2.  **Architect Agent**: Reviews the structural integrity and pattern usage.
+3.  **Synthesizer Agent**: Combines findings into a cohesive, actionable review.
 
-## Orchestration Logic
+## Implementation Details
 
-We use a "Lead Agent" to synthesize the findings from these four specialists into a single, cohesive PR summary. This prevents "notification fatigue" for the developer.
+We use a "chain-of-thought" approach where each agent passes its findings to the next, building a more comprehensive understanding of the changes.
 
-```mermaid
-graph TD
-    PR[Pull Request Diff] --> Orchestrator
-    Orchestrator --> Architect
-    Orchestrator --> Security
-    Orchestrator --> Performance
-    Architect --> Summary
-    Security --> Summary
-    Performance --> Summary
-    Summary --> PR_Comment[Final GitHub Comment]
-```
+## Results
+
+This approach has significantly improved the quality of automated feedback, making it more useful for human developers during the merge process.

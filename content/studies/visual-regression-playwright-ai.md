@@ -1,36 +1,30 @@
 ---
 title: "Building a Visual Regression Workflow with Playwright and AI Review"
-date: "2024-04-13"
-category: "Engineering"
-excerpt: "Visual regressions are hard to catch. Learn how to combine Playwright screenshots with AI vision models to automate UI testing."
-tags: ["Playwright", "Visual Regression", "AI Vision", "Testing"]
+date: "2024-04-12"
+category: "DevAI"
+excerpt: "Automate UI testing and catch visual regressions before they hit production."
+tags: ["Playwright", "Visual Testing", "AI", "Frontend"]
 readTime: 13
 status: "published"
 author: "Ariel Anders"
 ---
 
-# AI-Powered Visual Testing
+# Automated Visual Verification
 
-Standard visual regression tools (like Pixelmatch) are often too sensitive, flagging 1px shifts or anti-aliasing differences as failures. By using AI Vision (GPT-4V), we can distinguish between "broken UI" and "expected rendering variance."
+UI changes are hard to test with unit tests alone. Our visual regression workflow uses Playwright to capture and compare screenshots.
 
 ## The Workflow
 
-1.  **Baseline Generation**: Playwright takes screenshots of key routes on the `main` branch.
-2.  **Comparison**: On a PR, Playwright takes new screenshots.
-3.  **Vision Analysis**: If a diff is detected, both images are sent to the AI agent.
-4.  **Semantic Approval**: The agent determines if the change is intentional (e.g., a planned CSS change) or a regression.
+1.  **Capture**: Capturing desktop and mobile screenshots for every PR.
+2.  **Comparison**: Using AI to analyze visual diffs and distinguish between intentional changes and regressions.
+3.  **Reporting**: Providing a visual report to reviewers within the GitHub UI.
 
-## Handling Dynamic Content
+## Technology Stack
 
-One of the biggest challenges in visual testing is dynamic data (like dates). We use Playwright's `mask` feature to hide these elements before screenshotting, ensuring the AI focuses only on the layout and components.
+*   **Playwright**: For cross-browser screenshot capture.
+*   **Gemini/GPT-4**: For intelligent image analysis.
+*   **GitHub Actions**: For orchestrating the entire process.
 
-```javascript
-await page.screenshot({
-  path: 'screenshot.png',
-  mask: [page.locator('.dynamic-date')]
-});
-```
+## Impact
 
-## Results
-
-Since implementing AI review, our false-positive rate for visual regressions has dropped by 85%, allowing developers to trust the CI signals again.
+This system has helped us catch several breaking UI changes in our navigation and grid layouts before they reached our users.

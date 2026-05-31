@@ -235,9 +235,18 @@ export default function ResearchAnalytics() {
                   key={study.slug}
                   padding={8}
                   gap={6}
-                  onClick={() => navigate(`/research/${study.slug}`)}
+                  onClick={() => {
+                    if (study.status === 'published') {
+                      navigate(`/research/${study.slug}`);
+                    }
+                  }}
                   height="full"
-                  className={cardVariants({ interactive: true })}
+                  className={cardVariants({
+                    interactive: study.status === 'published',
+                    surface: study.status === 'published' ? 'surface' : 'muted'
+                  })}
+                  opacity={study.status === 'published' ? 1 : 0.7}
+                  cursor={study.status === 'published' ? 'pointer' : 'default'}
                 >
                   <Stack gap={4}>
                     <Box display="flex" justify="between" align="center">
@@ -280,7 +289,7 @@ export default function ResearchAnalytics() {
                       {study.status === 'planned'
                         ? 'Coming Soon'
                         : study.status === 'draft'
-                          ? 'View Draft'
+                          ? 'Draft in Progress'
                           : 'Read Article'}
                     </Text>
                     <Icon icon={FileText} size="sm" color="accent" />

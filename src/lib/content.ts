@@ -69,8 +69,9 @@ function normalizeReadTime(val: unknown): number | undefined {
   return undefined;
 }
 
-function transform<T extends { date?: string; draft?: boolean }>(
+function transform<T extends { date?: string; draft?: boolean; type?: string; status?: string }>(
   modules: Record<string, string | ContentModule>,
+  defaultType?: string
 ): T[] {
   const asArray = (val: unknown) => (Array.isArray(val) ? (val as string[]) : []);
 
@@ -78,6 +79,8 @@ function transform<T extends { date?: string; draft?: boolean }>(
     .map(([path, raw]) => {
       const contentStr = typeof raw === "string" ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
+
+      const type = (data.type || defaultType) as string;
 
       const normalizeAsset = (val: unknown) => {
         if (val === "") return undefined;
@@ -94,6 +97,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       const result: Record<string, unknown> = {
         ...data,
+        type,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
         region: (data.region && VALID_REGIONS.includes(String(data.region))) ? String(data.region) : undefined,
@@ -230,7 +234,14 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       return result as unknown as T;
     })
-    .filter((item) => !item.draft)
+    .filter((item) => {
+      // Allow draft studies so they can be shown as "Planned" or "Coming Soon" cards
+      // on the Research page without being indexed as full articles.
+      if (item.draft) {
+        return item.type === 'study' && (item.status === 'planned' || item.status === 'draft');
+      }
+      return true;
+    })
     .sort((a, b) => {
       const timeA = a.date ? new Date(a.date).getTime() : 0;
       const timeB = b.date ? new Date(b.date).getTime() : 0;
@@ -243,10 +254,10 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
-  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
-  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
+  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
+  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
+  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>, 'event')
 };
 
 const maps = {

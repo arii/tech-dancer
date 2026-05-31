@@ -1,29 +1,28 @@
 ---
 title: "Using GitHub Actions to Sync Scraped Data into a React/Vite Site"
-date: "2024-04-03"
+date: "2024-04-09"
 category: "DevAI"
-excerpt: "A deep dive into the 'Git-as-Database' pattern: how to automate pull requests and data normalization to keep a static site updated with external data."
-tags: ["React", "Vite", "GitHub Actions", "Automation"]
-readTime: 10
+excerpt: "Connecting your backend scraping workflows to your frontend UI seamlessly."
+tags: ["React", "Vite", "GitHub Actions", "Data Sync"]
+readTime: 16
 status: "published"
 author: "Ariel Anders"
 ---
 
-# The Git-as-Database Pattern
+# Closing the Data Loop
 
-For many content-heavy sites, a traditional database is overkill. Instead, we use GitHub Actions to fetch data and commit it directly to the repository as JSON or Markdown.
+Building a data-driven site requires a reliable way to move data from scrapers to the frontend.
 
-## The Synchronization Loop
+## The Synchronization Engine
 
-1.  **Extraction**: The scraper runs (see our previous article).
-2.  **Normalization**: A Python script validates the scraped data against our Zod schema.
-3.  **Commit**: The action uses `stefanzweifel/git-auto-commit-action` to push changes.
-4.  **Deployment**: Vercel detects the commit and triggers a new static build.
+1.  **ETL Process**: Scraped data is transformed into a clean JSON or Parquet format.
+2.  **Commitment**: Data files are committed to the repository, triggering a new build.
+3.  **Vite Loading**: The React application fetches the latest data artifacts during the build or at runtime.
 
-## Handling Conflicts
+## Implementation Details
 
-When multiple scrapers run, we use a dedicated `data-sync` branch. This prevents main branch pollution and allows for manual review if the data looks suspicious (e.g., a 50% drop in event counts).
+We use Zod for schema validation at the boundary between the data layer and the UI, ensuring that malformed data never breaks the user experience.
 
-## Performance Benefits
+## Benefits
 
-Because the data is local to the Vite build, there are zero runtime API calls for the user. This results in near-instant page loads and perfect SEO.
+This approach provides a "serverless" backend that is easy to maintain and highly performant for static site deployments.
