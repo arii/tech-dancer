@@ -128,20 +128,31 @@ export function EcommerceAutomationTool() {
 
           <Stack gap={6}>
             <Text variant="headline" size="xl" weight="font-black" as="h2">Pipeline Architecture</Text>
-            <Box border radius="xl" padding={6} surface="surface">
+            <Box border radius="xl" padding={{ base: 4, sm: 6 }} surface="surface">
               <Stack gap={4} align="center">
-                <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Templates</Text>
-                  <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
-                  <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">AI Recommendations</Text>
-                  <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Human Review</Text>
-                  <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">API Sync</Text>
-                  <Icon icon={ArrowRight} size="xs" color="dim" />
-                  <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">SEO-Safe Merch Page</Text>
+                <Box
+                  display="flex"
+                  align="center"
+                  gap={2}
+                  justify="center"
+                  width="full"
+                  overflowX="auto"
+                  className="hide-scrollbar"
+                  paddingBottom={1}
+                >
+                  <Box display="flex" align="center" gap={2} shrink={0}>
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Templates</Text>
+                    <Icon icon={ArrowRight} size="xs" color="dim" />
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
+                    <Icon icon={ArrowRight} size="xs" color="dim" />
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">AI Recommendations</Text>
+                    <Icon icon={ArrowRight} size="xs" color="dim" />
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Human Review</Text>
+                    <Icon icon={ArrowRight} size="xs" color="dim" />
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">API Sync</Text>
+                    <Icon icon={ArrowRight} size="xs" color="dim" />
+                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">SEO-Safe Merch Page</Text>
+                  </Box>
                 </Box>
                 <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
               </Stack>

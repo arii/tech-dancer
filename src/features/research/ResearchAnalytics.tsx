@@ -230,11 +230,17 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" align="center" gap={4} border="b">
+          <Stack
+            paddingBottom={4}
+            direction={{ base: 'col', sm: 'row' }}
+            align={{ base: 'start', sm: 'center' }}
+            gap={4}
+            border="b"
+          >
             <Text variant="headline" size="2xl" weight="font-black">Ecommerce Automation Experiments</Text>
             <StatusBadge label="In Progress" />
-          </Box>
-          <Box padding={8} border radius="xl" surface="muted">
+          </Stack>
+          <Box padding={{ base: 5, sm: 8 }} border radius="xl" surface="muted">
             <Grid cols={12} gap={8}>
               <Box span={{ base: 12, lg: 7 }}>
                 <Stack gap={6}>
@@ -266,20 +272,31 @@ export default function ResearchAnalytics() {
                 </Stack>
               </Box>
               <Box span={{ base: 12, lg: 5 }} display="flex" align="center">
-                <Box width="full" padding={6} border radius="lg" surface="surface" className="border-accent/10">
+                <Box width="full" padding={{ base: 4, sm: 6 }} border radius="lg" surface="surface" className="border-accent/10">
                   <Stack gap={4} align="center">
-                    <Box display="flex" align="center" gap={2} wrap="wrap" justify="center">
-                      <Text variant="mono" size="micro" color="dim">TEMPLATES</Text>
-                      <Icon icon={ArrowRight} size="xs" color="dim" />
-                      <Text variant="mono" size="micro" color="dim">PACKET</Text>
-                      <Icon icon={ArrowRight} size="xs" color="dim" />
-                      <Text variant="mono" size="micro" color="accent" weight="bold">AI RECS</Text>
-                      <Icon icon={ArrowRight} size="xs" color="accent" />
-                      <Text variant="mono" size="micro" color="accent" weight="bold">REVIEW</Text>
-                      <Icon icon={ArrowRight} size="xs" color="dim" />
-                      <Text variant="mono" size="micro" color="dim">SYNC</Text>
-                      <Icon icon={ArrowRight} size="xs" color="dim" />
-                      <Text variant="mono" size="micro" color="dim">STOREFRONT</Text>
+                    <Box
+                      display="flex"
+                      align="center"
+                      gap={2}
+                      justify="center"
+                      width="full"
+                      overflowX="auto"
+                      className="hide-scrollbar"
+                      paddingBottom={1}
+                    >
+                      <Box display="flex" align="center" gap={2} shrink={0}>
+                        <Text variant="mono" size="micro" color="dim">TEMPLATES</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">PACKET</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="accent" weight="bold">AI RECS</Text>
+                        <Icon icon={ArrowRight} size="xs" color="accent" />
+                        <Text variant="mono" size="micro" color="accent" weight="bold">REVIEW</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">SYNC</Text>
+                        <Icon icon={ArrowRight} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">STOREFRONT</Text>
+                      </Box>
                     </Box>
                     <Text size="micro" color="accent" uppercase weight="font-black" tracking="widest" opacity={0.6}>CATALOG PIPELINE</Text>
                   </Stack>
