@@ -12,7 +12,6 @@ tags: ["travel", "electronics"]
 verdict: "Essential for travel"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 Don't let your phone die during workshops.

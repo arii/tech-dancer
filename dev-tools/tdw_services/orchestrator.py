@@ -4,7 +4,8 @@ import re
 import json
 import sys
 from datetime import datetime, timezone
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
+from urllib.parse import quote, urlparse
 from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
@@ -232,7 +233,63 @@ class Orchestrator:
             formatted.append({"prs": list(pr_pair), "files": files})
         return formatted
 
+    def _get_conflicts_github_token(self) -> Tuple[Optional[str], Optional[str]]:
+        if os.environ.get("CODEX_GH_TOKEN"):
+            return os.environ["CODEX_GH_TOKEN"], "CODEX_GH_TOKEN"
+        if os.environ.get("GITHUB_TOKEN"):
+            return os.environ["GITHUB_TOKEN"], "GITHUB_TOKEN"
+        return None, None
+
+    def _validate_github_token_for_conflicts(self, repo_slug: str) -> Optional[Dict[str, str]]:
+        token, token_source = self._get_conflicts_github_token()
+        if not token:
+            return {
+                "status": "environment_error",
+                "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
+            }
+
+        if any(char.isspace() for char in token) or any(ord(char) < 32 for char in token):
+            return {
+                "status": "environment_error",
+                "message": f"Invalid GitHub token from {token_source}; token-derived URL would be malformed. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid GitHub token.",
+            }
+
+        token_url = f"https://x-access-token:{quote(token, safe='')}@github.com/{repo_slug}.git"
+        parsed = urlparse(token_url)
+        if parsed.scheme != "https" or parsed.hostname != "github.com" or not parsed.username or not parsed.password:
+            return {
+                "status": "environment_error",
+                "message": f"Invalid GitHub token-derived URL from {token_source}. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid GitHub token.",
+            }
+        return None
+
+    def _validate_origin_remote_for_conflicts(self) -> Tuple[Optional[str], Optional[Dict[str, str]]]:
+        res = run_command(["git", "remote", "get-url", "origin"], check=False, log_on_error=False)
+        if res.returncode != 0 or not res.stdout.strip():
+            return None, {
+                "status": "environment_error",
+                "message": "Missing GitHub origin remote. Fix with: git remote add origin https://github.com/arii/tech-dancer.git",
+            }
+
+        remote_url = res.stdout.strip()
+        match = re.match(r"^(?:https://(?:[^/@]+(?::[^/@]*)?@)?github\.com/|git@github\.com:)([^/\s]+/[^/\s]+?)(?:\.git)?/?$", remote_url)
+        if not match or any(char in remote_url for char in "[]{}<>|\\^`") or any(char.isspace() for char in remote_url):
+            return None, {
+                "status": "environment_error",
+                "message": f"Malformed GitHub origin remote: {remote_url}. Fix with: git remote set-url origin https://github.com/arii/tech-dancer.git",
+            }
+
+        repo_slug = match.group(1)
+        token_error = self._validate_github_token_for_conflicts(repo_slug)
+        if token_error:
+            return None, token_error
+        return repo_slug, None
+
     def handle_conflicts(self, base_branch='main'):
+        _, environment_error = self._validate_origin_remote_for_conflicts()
+        if environment_error:
+            return environment_error
+
         def run(cmd):
             res = run_command(cmd, check=False, shell=True)
             return res.returncode, res.stdout.strip()

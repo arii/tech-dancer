@@ -2,6 +2,7 @@
 title: "WCS Scraper: Initial Synchronization & Data Integrity Study"
 date: "2026-05-13"
 category: "Data Science"
+image: "/assets/posts/competition-data-thumb.svg"
 excerpt: "Analysis of the initial large-scale synchronization of West Coast Swing competition results, focusing on historical backfill and data accuracy."
 ---
 

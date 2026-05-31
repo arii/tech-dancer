@@ -1,5 +1,15 @@
 export type ProductSource = 'affiliate' | 'owned-merch';
 
+export type MerchImageDisplayMode = 'single' | 'both-equal' | 'front-prominent' | 'back-prominent';
+
+export type MerchImageSide = 'front' | 'back';
+
+export interface MerchProductImage {
+  src: string;
+  side: MerchImageSide;
+  alt: string;
+}
+
 export type ProductUseCase =
   | 'event-theme'
   | 'travel'
@@ -17,6 +27,8 @@ export interface ProductCatalogItem {
   title: string;
   description: string;
   imageUrl: string;
+  images?: MerchProductImage[];
+  imageDisplayMode?: MerchImageDisplayMode;
   href: string;
   price?: string;
   collections: string[];
