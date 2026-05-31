@@ -90,7 +90,6 @@ export function PostHeader({
           </Box>
         )}
 
-        {/* Author / Share / Tags Row */}
         <Stack
           direction={{ base: 'column', md: 'row' }}
           justify="between"
@@ -120,9 +119,11 @@ export function PostHeader({
               )}
             </Box>
             <Stack gap={0.5}>
-              <Text size="sm" weight="font-bold" color="main">
-                {author || 'Ariel Anders, PhD'}
-              </Text>
+              {author && (
+                <Text size="sm" weight="font-bold" color="main">
+                  {author}
+                </Text>
+              )}
               {shareAction}
             </Stack>
           </Stack>

@@ -43,7 +43,6 @@ export function ArticleFeatureCard({
             overflow="hidden"
             className="border-line/50"
           >
-             {/* Simplified Fallback pattern */}
              <Box
                position="absolute"
                inset={0}
@@ -51,7 +50,6 @@ export function ArticleFeatureCard({
                className="bg-accent blur-3xl"
              />
 
-             {/* Data Card visualization placeholder if no image */}
              <Stack
                 gap={4}
                 align="center"
@@ -65,7 +63,7 @@ export function ArticleFeatureCard({
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="utility">{type}</Text>
                   </Box>
                 )}
-                <Text variant="display" size="lg" color="main">{title || "BoomTick.blog"}</Text>
+                <Text variant="display" size="lg" color="main">{title}</Text>
                 {subtitle && <Text variant="mono" size="xs" color="dim">{subtitle}</Text>}
              </Stack>
           </Box>
