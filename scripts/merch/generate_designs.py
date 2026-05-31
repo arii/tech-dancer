@@ -2,23 +2,14 @@ try:
     import cairocffi as cairo
 except ImportError:
     import cairo
-import cairosvg
 import io
 import os
 import sys
 import subprocess
 
 # --- ASSET PATHS ---
-SOURCE_DIR = "scripts/merch/source"
-GENERATED_DIR = "scripts/merch/generated"
 FONTS_DIR = "scripts/merch/fonts"
 PUBLIC_ASSETS_DIR = "public/assets/merch"
-
-# Use generated assets which now contain high-fidelity 6-color versions of all shapes
-HEART_SVG = f"{GENERATED_DIR}/rainbow_heart.svg"
-CHECK_SVG = f"{GENERATED_DIR}/rainbow_check.svg"
-STAR_SVG = f"{GENERATED_DIR}/rainbow_star.svg"
-SPARKLE_SVG = f"{GENERATED_DIR}/rainbow_sparkle.svg"
 
 # --- CONSTANTS ---
 PRINT_WIDTH = 4500
@@ -32,6 +23,16 @@ DESIGN_HEIGHT = 1200
 
 NEON_YELLOW_HEX = "#e0f500"
 FONT_NAME = "Cooper Black"
+
+# Reference Palette (from PR feedback)
+RAINBOW_HEX = [
+    "#e21b18", # Red
+    "#ef7614", # Orange
+    "#efc106", # Yellow
+    "#5eaa37", # Green
+    "#3583c2", # Blue
+    "#8247a5", # Purple
+]
 
 # Front Design Constants
 FRONT_FONT_SIZE = 240
@@ -60,32 +61,93 @@ def hex_to_rgb(hex_str):
     hex_str = hex_str.lstrip('#')
     return tuple(int(hex_str[i:i+2], 16) / 255.0 for i in (0, 2, 4))
 
+RAINBOW_COLORS = [hex_to_rgb(h) for h in RAINBOW_HEX]
 NEON_YELLOW_RGB = hex_to_rgb(NEON_YELLOW_HEX)
+
+# --- SHAPE PATHS ---
+
+def draw_heart_path(ctx):
+    """High-fidelity 'puffy' heart path based on reference proportions."""
+    ctx.move_to(300, 200)
+    ctx.curve_to(300, 100, 100, 100, 100, 250)
+    ctx.curve_to(100, 400, 300, 500, 300, 550)
+    ctx.curve_to(300, 500, 500, 400, 500, 250)
+    ctx.curve_to(500, 100, 300, 100, 300, 200)
+    ctx.close_path()
+
+def draw_check_path(ctx):
+    """High-fidelity checkmark path matching the reference swoop."""
+    ctx.move_to(100, 350)
+    # Quadratic approximation: (100,350) Q(175,500) (250,500)
+    ctx.curve_to(150, 450, 200, 500, 250, 500)
+    ctx.curve_to(350, 500, 450, 300, 550, 100)
+    ctx.curve_to(450, 250, 350, 400, 250, 400)
+    ctx.curve_to(200, 400, 150, 350, 100, 300)
+    ctx.close_path()
+
+def draw_star_path(ctx):
+    """Polished, puffy 5-point star path."""
+    ctx.move_to(300, 80)
+    ctx.curve_to(316.67, 152.67, 346, 203.33, 369, 224)
+    ctx.curve_to(441, 221.33, 492.33, 236, 509, 264)
+    ctx.curve_to(448.33, 288, 409, 314.67, 389, 340)
+    ctx.curve_to(413.67, 406.67, 395.33, 453.33, 371, 480)
+    ctx.curve_to(323.67, 440, 276.33, 440, 229, 480)
+    ctx.curve_to(204.67, 453.33, 186.33, 406.67, 211, 340)
+    ctx.curve_to(191, 314.67, 151.67, 288, 91, 264)
+    ctx.curve_to(112.33, 234.67, 163.67, 221.33, 231, 224)
+    ctx.curve_to(260.33, 200.67, 283.33, 152.67, 300, 80)
+    ctx.close_path()
+
+def draw_sparkle_path(ctx):
+    """Puffy 4-point sparkle path."""
+    ctx.move_to(300, 75)
+    ctx.curve_to(300, 185, 415, 300, 525, 300)
+    ctx.curve_to(415, 300, 300, 415, 300, 525)
+    ctx.curve_to(300, 415, 185, 300, 75, 300)
+    ctx.curve_to(185, 300, 300, 185, 300, 75)
+    ctx.close_path()
+
+def draw_rainbow_shape(ctx, draw_func, x, y, size):
+    """Renders a shape with 6 aligned rainbow stripes and a black outline."""
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(size / 600.0, size / 600.0)
+
+    # Calculate bounding box of the path to align stripes
+    ctx.new_path()
+    draw_func(ctx)
+    x1, y1, x2, y2 = ctx.path_extents()
+
+    # 1. Clip and paint stripes
+    ctx.save()
+    ctx.clip()
+
+    shape_w = x2 - x1
+    if shape_w == 0: shape_w = 600.0
+    stripe_w = shape_w / 6.0
+
+    for i, color in enumerate(RAINBOW_COLORS):
+        ctx.set_source_rgb(*color)
+        ctx.rectangle(x1 + i * stripe_w, y1, stripe_w + 0.5, y2 - y1)
+        ctx.fill()
+    ctx.restore()
+
+    # 2. Draw black outline
+    draw_func(ctx)
+    ctx.set_source_rgb(0, 0, 0)
+    ctx.set_line_width(16) # DEFAULT_LINE_WIDTH from create_svgs
+    ctx.set_line_join(cairo.LINE_JOIN_ROUND)
+    ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+    ctx.stroke()
+
+    ctx.restore()
+
+# --- LAYOUT HELPERS ---
 
 def get_scale(target_width, target_height):
     """Calculates scaling factor from design coordinates to target resolution."""
     return target_width / DESIGN_WIDTH
-
-def load_svg_to_surface(svg_path, width, height):
-    """Converts an SVG file to a Cairo PNG surface scaled to target dimensions.
-    Fails loudly if the SVG cannot be loaded.
-    """
-    png_data = cairosvg.svg2png(url=svg_path, output_width=int(width), output_height=int(height))
-    return cairo.ImageSurface.create_from_png(io.BytesIO(png_data))
-
-def draw_svg_as_image(ctx, svg_path, x, y, width, height, current_scale=1.0):
-    """Renders any SVG file as an image onto the Cairo context, ensuring high-res scaling."""
-    # Scale width and height to target resolution for cairosvg to render high-res PNG
-    svg_surface = load_svg_to_surface(svg_path, width * current_scale, height * current_scale)
-
-    ctx.save()
-    # Move to the design coordinates
-    ctx.translate(x, y)
-    # Scale down the context so the high-res surface fits the design-scale coordinate system
-    ctx.scale(1.0 / current_scale, 1.0 / current_scale)
-    ctx.set_source_surface(svg_surface, 0, 0)
-    ctx.paint()
-    ctx.restore()
 
 def get_text_extents(ctx, text):
     """Helper to handle both cairocffi (tuple) and pycairo (object) extents."""
@@ -106,9 +168,7 @@ def get_text_extents(ctx, text):
 def check_font_availability(font_name):
     """Checks if a font is available in the system via fc-match."""
     try:
-        # Using fc-match is more reliable for checking how Cairo will resolve the font
         output = subprocess.check_output(["fc-match", font_name], stderr=subprocess.STDOUT).decode()
-        # If it returns a different font (e.g. DejaVu Sans), it means it didn't find the match
         if font_name.lower().replace(" ", "") not in output.lower().replace(" ", ""):
             return False
         return True
@@ -175,7 +235,7 @@ def generate_front_design(output_path, is_preview=False):
     cap_height = FRONT_FONT_SIZE * FRONT_CAP_HEIGHT_RATIO
     # Center the heart vertically relative to the cap height
     heart_y = (FRONT_BASE_Y - cap_height / 2) - (FRONT_HEART_SIZE / 2) + 5
-    draw_svg_as_image(ctx, HEART_SVG, heart_x, heart_y, FRONT_HEART_SIZE, FRONT_HEART_SIZE, scale)
+    draw_rainbow_shape(ctx, draw_heart_path, heart_x, heart_y, FRONT_HEART_SIZE)
     curr_x += FRONT_HEART_SIZE + FRONT_GAP
 
     # E
@@ -185,11 +245,7 @@ def generate_front_design(output_path, is_preview=False):
     print(f"✓ Generated {output_path}")
 
 def generate_back_design(output_path, checked_roles=None, is_preview=False):
-    """Generates the 'Lead/Follow/Switch' back shirt design.
-
-    checked_roles: List of roles to display with a rainbow checkmark.
-                   Available: ["Lead", "Follow", "Switch"]. If None, all are checked.
-    """
+    """Generates the 'Lead/Follow/Switch' back shirt design."""
     if checked_roles is None:
         checked_roles = BACK_ITEMS
 
@@ -223,14 +279,10 @@ def generate_back_design(output_path, checked_roles=None, is_preview=False):
 
     for i, item in enumerate(BACK_ITEMS):
         curr_y = start_y + (i * BACK_LINE_SPACING) + cap_height
-
-        # Check visual center alignment:
-        # SVG visual center is 0.5 * check_size
-        # Text visual center is curr_y - cap_height / 2
         check_y = (curr_y - cap_height / 2) - (0.5 * BACK_CHECK_SIZE)
 
         if item in checked_roles:
-            draw_svg_as_image(ctx, CHECK_SVG, start_x, check_y, BACK_CHECK_SIZE, BACK_CHECK_SIZE, scale)
+            draw_rainbow_shape(ctx, draw_check_path, start_x, check_y, BACK_CHECK_SIZE)
         else:
             # Draw empty checkbox outline (retro circle style)
             ctx.set_source_rgb(0, 0, 0)
@@ -262,27 +314,24 @@ def generate_shapes_sheet(output_path):
     ctx.stroke()
 
     shapes = [
-        {'path': CHECK_SVG, 'label': "Rainbow Check (Generated)"},
-        {'path': HEART_SVG, 'label': "Rainbow Heart (Generated)"},
-        {'path': STAR_SVG, 'label': "Rainbow Star (Generated)"},
-        {'path': SPARKLE_SVG, 'label': "Rainbow Sparkle (Generated)"},
+        {'func': draw_check_path, 'label': "Rainbow Check"},
+        {'func': draw_heart_path, 'label': "Rainbow Heart"},
+        {'func': draw_star_path, 'label': "Rainbow Star"},
+        {'func': draw_sparkle_path, 'label': "Rainbow Sparkle"},
     ]
 
     for i, asset in enumerate(shapes):
         tx = (i % 2) * 600
         ty = (i // 2) * 600
-        ctx.save()
-        ctx.translate(tx, ty)
-        draw_svg_as_image(ctx, asset['path'], 60, 60, 480, 480, 1.0) # 1:1 scale for sheet
+        draw_rainbow_shape(ctx, asset['func'], tx + 60, ty + 60, 480)
 
         # Label
         ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
         ctx.set_font_size(SHEET_LABEL_FONT_SIZE)
         ctx.set_source_rgb(0.2, 0.2, 0.25)
         ext = get_text_extents(ctx, asset['label'])
-        ctx.move_to(300 - ext.width/2, 550)
+        ctx.move_to(tx + 300 - ext.width/2, ty + 550)
         ctx.show_text(asset['label'])
-        ctx.restore()
 
     surface.write_to_png(output_path)
     print(f"✓ Generated {output_path}")
@@ -290,10 +339,6 @@ def generate_shapes_sheet(output_path):
 if __name__ == "__main__":
     if not check_font_availability(FONT_NAME):
         print(f"CRITICAL ERROR: Font '{FONT_NAME}' not found in system font cache.", file=sys.stderr)
-        print(f"\nTroubleshooting steps:", file=sys.stderr)
-        print(f"1. Ensure 'Cooper Black' font file (e.g., .ttf or .otf) is in {FONTS_DIR}", file=sys.stderr)
-        print(f"2. Run 'scripts/merch/setup_env.sh' to register the font and refresh the cache.", file=sys.stderr)
-        print(f"3. Verify manual installation with 'fc-list | grep \"Cooper Black\"'", file=sys.stderr)
         sys.exit(1)
 
     previews_dir = f"{PUBLIC_ASSETS_DIR}/previews"

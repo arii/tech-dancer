@@ -11,11 +11,6 @@ env:
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
-      env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     permissions:
       contents: write
       pull-requests: write
@@ -40,6 +35,10 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install -r etl/requirements.txt
+
+      - name: Install Playwright Browsers
+        run: |
+          python3 -m playwright install --with-deps chromium
 
       - name: Run Pytest - Data Validation
         run: |
