@@ -9,12 +9,15 @@ import sys
 import subprocess
 
 # --- ASSET PATHS ---
+SOURCE_DIR = "scripts/merch/source"
 GENERATED_DIR = "scripts/merch/generated"
 FONTS_DIR = "scripts/merch/fonts"
 PUBLIC_ASSETS_DIR = "public/assets/merch"
 
-HEART_SVG = f"{GENERATED_DIR}/rainbow_heart.svg"
-CHECK_SVG = f"{GENERATED_DIR}/rainbow_check.svg"
+# Source assets are the official reference SVGs
+HEART_SVG = f"{SOURCE_DIR}/rainbow_heart.svg"
+CHECK_SVG = f"{SOURCE_DIR}/rainbow_check.svg"
+# Generated assets are derived to match the source style
 STAR_SVG = f"{GENERATED_DIR}/rainbow_star.svg"
 SPARKLE_SVG = f"{GENERATED_DIR}/rainbow_sparkle.svg"
 
@@ -34,7 +37,7 @@ FONT_NAME = "Cooper Black"
 # Front Design Constants
 FRONT_FONT_SIZE = 240
 FRONT_GAP = 16
-# Optimal heart size for 'V' visual weight
+# Optimal heart size for 'V' visual weight (94% of cap height)
 FRONT_HEART_SIZE = 210
 FRONT_BASE_Y = 660
 FRONT_CAP_HEIGHT_RATIO = 0.7
@@ -185,8 +188,15 @@ def generate_front_design(output_path, is_preview=False):
     surface.write_to_png(output_path)
     print(f"✓ Generated {output_path}")
 
-def generate_back_design(output_path, is_preview=False):
-    """Generates the 'Lead/Follow/Switch' back shirt design."""
+def generate_back_design(output_path, checked_roles=None, is_preview=False):
+    """Generates the 'Lead/Follow/Switch' back shirt design.
+
+    checked_roles: List of roles to display with a rainbow checkmark.
+                   Available: ["Lead", "Follow", "Switch"]. If None, all are checked.
+    """
+    if checked_roles is None:
+        checked_roles = BACK_ITEMS
+
     target_w = PREVIEW_WIDTH if is_preview else PRINT_WIDTH
     target_h = PREVIEW_HEIGHT if is_preview else PRINT_HEIGHT
     scale = get_scale(target_w, target_h)
@@ -223,7 +233,18 @@ def generate_back_design(output_path, is_preview=False):
         # Text visual center is curr_y - cap_height / 2
         check_y = (curr_y - cap_height / 2) - (0.5 * BACK_CHECK_SIZE)
 
-        draw_svg_as_image(ctx, CHECK_SVG, start_x, check_y, BACK_CHECK_SIZE, BACK_CHECK_SIZE, scale)
+        if item in checked_roles:
+            draw_svg_as_image(ctx, CHECK_SVG, start_x, check_y, BACK_CHECK_SIZE, BACK_CHECK_SIZE, scale)
+        else:
+            # Draw empty checkbox outline (black circle/box would work, but reference just omits)
+            # For this retro style, we draw a black circle with white fill to represent empty check.
+            ctx.set_source_rgb(0, 0, 0)
+            ctx.set_line_width(BACK_CHECK_SIZE * 0.12)
+            ctx.arc(start_x + BACK_CHECK_SIZE/2, check_y + BACK_CHECK_SIZE/2, BACK_CHECK_SIZE/3, 0, 2*3.14159)
+            ctx.stroke_preserve()
+            ctx.set_source_rgb(1, 1, 1)
+            ctx.fill()
+
         draw_text_with_stroke(ctx, item, start_x + BACK_CHECK_SIZE + BACK_CHECK_GAP, curr_y, BACK_FONT_SIZE)
 
     surface.write_to_png(output_path)
@@ -246,10 +267,10 @@ def generate_shapes_sheet(output_path):
     ctx.stroke()
 
     shapes = [
-        {'path': CHECK_SVG, 'label': "Rainbow Check"},
-        {'path': HEART_SVG, 'label': "Rainbow Heart"},
-        {'path': STAR_SVG, 'label': "Rainbow Star"},
-        {'path': SPARKLE_SVG, 'label': "Rainbow Sparkle"},
+        {'path': CHECK_SVG, 'label': "Rainbow Check (Source)"},
+        {'path': HEART_SVG, 'label': "Rainbow Heart (Source)"},
+        {'path': STAR_SVG, 'label': "Rainbow Star (Derived)"},
+        {'path': SPARKLE_SVG, 'label': "Rainbow Sparkle (Derived)"},
     ]
 
     for i, asset in enumerate(shapes):
@@ -285,11 +306,20 @@ if __name__ == "__main__":
     os.makedirs(previews_dir, exist_ok=True)
     os.makedirs(print_dir, exist_ok=True)
 
-    # Previews (Neon Yellow)
+    # 1. Front (Always same)
     generate_front_design(f"{previews_dir}/shirt_front_preview.png", is_preview=True)
-    generate_back_design(f"{previews_dir}/shirt_back_preview.png", is_preview=True)
-    generate_shapes_sheet(f"{previews_dir}/rainbow_shapes_sheet.png")
-
-    # Print Assets (Transparent)
     generate_front_design(f"{print_dir}/shirt_front_print.png", is_preview=False)
-    generate_back_design(f"{print_dir}/shirt_back_print.png", is_preview=False)
+
+    # 2. Back variations
+    variations = [
+        ("lead", ["Lead"]),
+        ("follow", ["Follow"]),
+        ("all", ["Lead", "Follow", "Switch"])
+    ]
+
+    for suffix, roles in variations:
+        generate_back_design(f"{previews_dir}/shirt_back_{suffix}_preview.png", checked_roles=roles, is_preview=True)
+        generate_back_design(f"{print_dir}/shirt_back_{suffix}_print.png", checked_roles=roles, is_preview=False)
+
+    # 3. Reference sheet
+    generate_shapes_sheet(f"{previews_dir}/rainbow_shapes_sheet.png")
