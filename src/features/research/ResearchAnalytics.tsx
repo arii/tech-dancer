@@ -46,7 +46,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8} maxWidth="2xl">
           <Text variant="body" size="lg" color="body">
-            Grounded DevAI solutions built for production systems. These projects demonstrate practical applications of agentic workflows and AI engineering in modern software delivery.
+            Practical AI-integrated systems built for production environments. These projects demonstrate the application of agentic workflows, RAG pipelines, and automated engineering in modern software delivery.
           </Text>
           <Stack gap={3}>
             {[
@@ -208,7 +208,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" direction={{ base: "col", md: "row" }} justify="between" align={{ base: "start", md: "end" }} border="b" gap={2}>
-            <Text variant="headline" size="2xl" weight="font-black">DevAI Systems</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} PROJECTS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
