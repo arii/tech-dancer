@@ -38,7 +38,8 @@
     "preinstall": "node scripts/check-runtime.mjs",
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
-    "affiliate:audit": "tsx scripts/affiliate/audit.ts"
+    "affiliate:audit": "tsx scripts/affiliate/audit.ts",
+    "review:ux:mobile:audit": "tsx scripts/mobile-ux-audit.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -3,6 +3,7 @@ import os
 import re
 import json
 import sys
+import tempfile
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse
@@ -93,6 +94,130 @@ class Orchestrator:
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
         with open(cache_file, 'w') as f: json.dump(review_result, f)
         return review_result
+
+    def parse_pr_review_comments(self, file_path: str) -> Dict[int, str]:
+        """Parse ready-to-post PR comments from the repository review markdown format."""
+        if not os.path.isfile(file_path):
+            raise CLIError(f"Review comments file not found: {file_path}")
+
+        with open(file_path, 'r', encoding='utf-8') as review_file:
+            content = review_file.read()
+
+        headings = list(re.finditer(r"^## PR #(\d+)\b.*$", content, re.MULTILINE))
+        if not headings:
+            raise CLIError(f"No `## PR #<number>` sections found in {file_path}")
+
+        comments: Dict[int, str] = {}
+        for index, heading in enumerate(headings):
+            pr_number = int(heading.group(1))
+            if pr_number in comments:
+                raise CLIError(f"Duplicate review comment section for PR #{pr_number}")
+
+            section_end = headings[index + 1].start() if index + 1 < len(headings) else len(content)
+            section = content[heading.end():section_end]
+            comment_match = re.search(r"```markdown\s*\n(.*?)\n```", section, re.DOTALL)
+            if not comment_match or not comment_match.group(1).strip():
+                raise CLIError(f"Missing fenced markdown review comment for PR #{pr_number}")
+            comments[pr_number] = comment_match.group(1).strip()
+
+        return comments
+
+    def post_pr_review_comments(
+        self,
+        file_path: str,
+        pr_numbers: Optional[List[int]] = None,
+        replace: bool = False,
+        dry_run: bool = True,
+    ) -> Dict[str, Any]:
+        """Post top-level PR comments parsed from a markdown review snapshot.
+
+        The default is a local-only dry run. Executed runs add a stable marker to each
+        comment so rerunning the command is idempotent. Use ``replace`` to update a
+        previously posted comment instead of skipping it.
+        """
+        parsed_comments = self.parse_pr_review_comments(file_path)
+        selected_numbers = pr_numbers or list(parsed_comments)
+        missing_numbers = sorted(set(selected_numbers) - set(parsed_comments))
+        if missing_numbers:
+            missing = ", ".join(f"#{number}" for number in missing_numbers)
+            raise CLIError(f"Review comments file has no section for: {missing}")
+
+        github = None
+        if not dry_run:
+            try:
+                github = self.github
+            except ValueError as error:
+                raise CLIError(f"Cannot post PR review comments: {error}", code=401) from error
+
+        results = []
+        for pr_number in selected_numbers:
+            marker = f"<!-- td-cli:pr-review-comment pr={pr_number} -->"
+            body = f"{parsed_comments[pr_number]}\n\n---\n{marker}\n*Posted by `td_cli.py gh post-review-comments`.*"
+            action = "would_create"
+            comment_url = None
+
+            if github:
+                try:
+                    pr_details = github.fetch_pr_details(pr_number)
+                    if pr_details.get('state') != 'open':
+                        results.append({"pr": pr_number, "action": "skipped_not_open", "url": pr_details.get('html_url')})
+                        continue
+
+                    existing_comments = github.fetch_issue_comments(pr_number)
+                    existing = next((comment for comment in existing_comments if marker in (comment.get('body') or '')), None)
+                    if existing and not replace:
+                        action = "skipped_existing"
+                        comment_url = existing.get('html_url')
+                    elif existing:
+                        updated = github.update_issue_comment(existing['id'], body)
+                        action = "updated"
+                        comment_url = updated.get('html_url')
+                    else:
+                        created = github.create_issue_comment(pr_number, body)
+                        action = "created"
+                        comment_url = created.get('html_url')
+                except CLIError:
+                    raise
+                except Exception as error:
+                    raise CLIError(f"Failed to post review comment for PR #{pr_number}: {error}") from error
+
+            results.append({"pr": pr_number, "action": action, "url": comment_url})
+
+        return {
+            "status": "success",
+            "dry_run": dry_run,
+            "source": file_path,
+            "count": len(results),
+            "comments": results,
+        }
+
+    def mobile_ux_audit(
+        self,
+        base_url: str = "http://localhost:3000/",
+        routes: Optional[List[str]] = None,
+        output_dir: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Run the Playwright iPhone audit and return its JSON report."""
+        audit_dir = output_dir or tempfile.mkdtemp(prefix="tech-dancer-mobile-audit-")
+        command = [
+            "pnpm", "exec", "tsx", "scripts/mobile-ux-audit.ts",
+            "--base-url", base_url,
+            "--output-dir", audit_dir,
+        ]
+        if routes:
+            command.extend(["--routes", ",".join(routes)])
+
+        result = run_command(command, check=False)
+        if result.returncode != 0:
+            raise CLIError("Mobile UX audit failed. Ensure the app is running and Playwright Chromium is installed.", code=result.returncode)
+
+        report_path = os.path.join(audit_dir, "mobile-ux-audit.json")
+        if not os.path.isfile(report_path):
+            raise CLIError(f"Mobile UX audit did not produce its report: {report_path}")
+        with open(report_path, 'r', encoding='utf-8') as report_file:
+            report = json.load(report_file)
+        report['reportPath'] = report_path
+        return report
 
     def resolve_conflict(self, file_path: str) -> bool:
         """

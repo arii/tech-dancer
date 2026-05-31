@@ -70,6 +70,49 @@ def resolve(ctx, file, base):
         resolved = orch.resolve_conflicts_headless()
         out(ctx, f"✅ Resolved {len(resolved)} files.", data={"resolved": resolved})
 
+@gh.command('mobile-audit')
+@click.option('--base-url', default='http://localhost:3000/', show_default=True, help='Running app URL to inspect')
+@click.option('--route', 'routes', multiple=True, help='Audit only the selected route; may be repeated')
+@click.option('--output-dir', type=click.Path(file_okay=False), help='Directory for screenshots and JSON report')
+@click.option('--fail-on-errors', is_flag=True, help='Exit non-zero when clipped or overflowing mobile content is found')
+@click.pass_context
+def mobile_audit(ctx, base_url, routes, output_dir, fail_on_errors):
+    """Audit mobile layouts with Playwright iPhone emulation."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.mobile_ux_audit(base_url=base_url, routes=list(routes) or None, output_dir=output_dir)
+        if not ctx.obj['JSON']:
+            for audit in res['audits']:
+                for finding in audit['findings']:
+                    click.echo(f"- {audit['route']} [{finding['severity']}] {finding['kind']}: {finding['detail']}")
+            click.echo(f"Report: {res['reportPath']}")
+        message = f"Mobile UX audit complete: {res['errorCount']} error(s), {res['warningCount']} warning(s)."
+        if fail_on_errors and res['errorCount']:
+            err(ctx, message, code=1, data=res)
+        out(ctx, message, data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
+@gh.command('post-review-comments')
+@click.argument('file', type=click.Path(exists=True, dir_okay=False))
+@click.option('--pr', 'pr_numbers', multiple=True, type=int, help='Post only the selected PR number; may be repeated')
+@click.option('--replace', is_flag=True, help='Update an existing td_cli-posted comment instead of skipping it')
+@click.option('--dry-run/--execute', default=True, help='Preview locally or post comments to GitHub')
+@click.pass_context
+def post_review_comments(ctx, file, pr_numbers, replace, dry_run):
+    """Post fenced markdown comments from a PR review snapshot."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.post_pr_review_comments(file, pr_numbers=list(pr_numbers) or None, replace=replace, dry_run=dry_run)
+        verb = 'Prepared' if dry_run else 'Processed'
+        if not ctx.obj['JSON']:
+            for comment in res['comments']:
+                suffix = f": {comment['url']}" if comment.get('url') else ''
+                click.echo(f"- PR #{comment['pr']}: {comment['action']}{suffix}")
+        out(ctx, f"✅ {verb} {res['count']} PR review comment(s).", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
 @gh.command()
 @click.option('--check-dirs', default=os.environ.get('AUDIT_CHECK_DIRS', 'src/features,src/pages,src/components,src/layouts,src/App.tsx'), help='Comma-separated list of directories to audit')
 @click.pass_context

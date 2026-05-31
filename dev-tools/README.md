@@ -182,6 +182,28 @@ Orchestrates the PR technical audit lifecycle.
   - `--cleanup`: Remove temporary review files on success.
 - **Usage**: `python3 dev-tools/td_cli.py gh audit-pr 368 --fetch --audit`
 
+#### `gh mobile-audit`
+Runs the Playwright mobile UX auditor with **iPhone 12 browser emulation**, full-page screenshots, and DOM measurements for clipped content, elements outside the viewport, document-level horizontal overflow, and intentional horizontal-scroll regions that need an affordance review. Start the app first with `pnpm run dev`.
+- **Flags**:
+  - `--base-url <URL>`: Inspect a running app URL (default: `http://localhost:3000/`).
+  - `--route <PATH>`: Audit only a selected route; repeat the flag for multiple routes.
+  - `--output-dir <PATH>`: Save screenshots and `mobile-ux-audit.json` to a specific directory.
+  - `--fail-on-errors`: Exit non-zero if clipped or overflowing mobile content is detected.
+- **Usage**:
+  - Review all standard routes: `python3 dev-tools/td_cli.py gh mobile-audit`
+  - Gate selected routes: `python3 dev-tools/td_cli.py gh mobile-audit --route / --route /gear --fail-on-errors`
+
+#### `gh post-review-comments <FILE>`
+Posts ready-to-copy PR review comments from a markdown snapshot directly to the matching pull requests. The command parses `## PR #<NUMBER>` headings and the fenced `markdown` block beneath each heading. It is a local-only dry run unless `--execute` is passed, and executed comments include a stable marker so repeated runs skip duplicates by default.
+- **Flags**:
+  - `--pr <PR_NUMBER>`: Post only a selected PR; repeat the flag to select multiple PRs.
+  - `--replace`: Update comments previously posted by this command instead of skipping them.
+  - `--execute`: Post comments to GitHub. Omit this flag to preview safely.
+- **Usage**:
+  - Preview all comments: `python3 dev-tools/td_cli.py gh post-review-comments docs/reviews/open-pr-review-comments-2026-05-30.md`
+  - Post selected comments: `python3 dev-tools/td_cli.py gh post-review-comments docs/reviews/open-pr-review-comments-2026-05-30.md --pr 1761 --pr 1760 --execute`
+  - Refresh existing posted comments: `python3 dev-tools/td_cli.py gh post-review-comments docs/reviews/open-pr-review-comments-2026-05-30.md --replace --execute`
+
 #### `gh validate-issue <ISSUE_NUMBER>`
 Validates GitHub Issues against repo standards.
 - **Flags**:

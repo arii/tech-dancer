@@ -33,6 +33,33 @@ class TestModernCLI(unittest.TestCase):
         self.assertTrue(kwargs['fetch'])
         self.assertFalse(kwargs['audit'])
 
+    @patch('tdw_services.orchestrator.Orchestrator.mobile_ux_audit')
+    def test_mobile_audit_calls_orchestrator(self, mock_mobile_audit):
+        mock_mobile_audit.return_value = {"errorCount": 0, "warningCount": 0, "audits": [], "reportPath": '/tmp/report.json'}
+        result = self.runner.invoke(cli, ['gh', 'mobile-audit', '--route', '/', '--route', '/gear'])
+
+        self.assertEqual(result.exit_code, 0)
+        mock_mobile_audit.assert_called_once_with(base_url='http://localhost:3000/', routes=['/', '/gear'], output_dir=None)
+
+    @patch('tdw_services.orchestrator.Orchestrator.mobile_ux_audit')
+    def test_mobile_audit_can_fail_on_layout_errors(self, mock_mobile_audit):
+        mock_mobile_audit.return_value = {"errorCount": 1, "warningCount": 0, "audits": [], "reportPath": '/tmp/report.json'}
+        result = self.runner.invoke(cli, ['gh', 'mobile-audit', '--fail-on-errors'])
+
+        self.assertEqual(result.exit_code, 1)
+        self.assertIn('1 error(s)', result.output)
+
+    @patch('tdw_services.orchestrator.Orchestrator.post_pr_review_comments')
+    def test_post_review_comments_calls_orchestrator(self, mock_post):
+        mock_post.return_value = {"status": "success", "count": 1, "comments": []}
+        with self.runner.isolated_filesystem():
+            with open('reviews.md', 'w', encoding='utf-8') as review_file:
+                review_file.write('## PR #123\n\n```markdown\nLooks good.\n```\n')
+            result = self.runner.invoke(cli, ['gh', 'post-review-comments', 'reviews.md', '--pr', '123'])
+
+        self.assertEqual(result.exit_code, 0)
+        mock_post.assert_called_once_with('reviews.md', pr_numbers=[123], replace=False, dry_run=True)
+
     @patch('tdw_services.orchestrator.Orchestrator.analyze_file')
     def test_analyze_calls_orchestrator(self, mock_analyze):
         mock_analyze.return_value = "solid code"

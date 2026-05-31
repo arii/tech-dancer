@@ -10,7 +10,7 @@ class GitHubClient:
         from utils import get_github_token
         self.token = token or get_github_token()
         if not self.token:
-            raise ValueError("Missing GITHUB_TOKEN environment variable.")
+            raise ValueError("Missing GitHub token. Set CODEX_GH_TOKEN, GH_TOKEN, or GITHUB_TOKEN.")
         self.repo = repo or os.environ.get("GITHUB_REPOSITORY") or os.environ.get("GH_REPO")
         if not self.repo:
             self.repo = self._detect_repo()
@@ -108,8 +108,16 @@ class GitHubClient:
                     return f"Failed to fetch logs for job {job_id} after fallback: {str(fallback_e)}"
             return f"Failed to fetch logs for job {job_id}: {error_msg}"
 
+    def fetch_issue_comments(self, number: int) -> List[Dict[str, Any]]:
+        """Fetch top-level conversation comments for an issue or pull request."""
+        return self._request('GET', f'/repos/{self.repo}/issues/{number}/comments?per_page=100')
+
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})
+
+    def update_issue_comment(self, comment_id: int, body: str) -> Dict[str, Any]:
+        """Update an existing top-level issue or pull-request comment."""
+        return self._request('PATCH', f'/repos/{self.repo}/issues/comments/{comment_id}', json_data={'body': body})
 
     def create_review(self, number: int, body: str, comments: List[Dict[str, Any]], event: str) -> Dict[str, Any]:
         data = {
