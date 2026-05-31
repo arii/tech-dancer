@@ -24,6 +24,28 @@ def hex_to_rgb(hex_str):
 
 RAINBOW_COLORS = [hex_to_rgb(h) for h in RAINBOW_HEX]
 
+def draw_heart_path(ctx):
+    """High-fidelity 'puffy' heart path based on reference proportions."""
+    ctx.move_to(300, 200)
+    ctx.curve_to(300, 100, 100, 100, 100, 250)
+    ctx.curve_to(100, 400, 300, 500, 300, 550)
+    ctx.curve_to(300, 500, 500, 400, 500, 250)
+    ctx.curve_to(500, 100, 300, 100, 300, 200)
+    ctx.close_path()
+
+def draw_check_path(ctx):
+    """High-fidelity checkmark path matching the reference swoop."""
+    ctx.move_to(100, 350)
+    # Quadratic curve to (175, 500) with control point (250, 500)
+    ctx.curve_to(175, 500, 175, 500, 250, 500)
+    # Long swoop
+    ctx.curve_to(350, 500, 450, 300, 550, 100)
+    # Back-side swoop
+    ctx.curve_to(450, 250, 350, 400, 250, 400)
+    # Return to start
+    ctx.curve_to(200, 400, 150, 350, 100, 300)
+    ctx.close_path()
+
 def draw_star_path(ctx):
     """Polished, puffy 5-point star path."""
     ctx.move_to(300, 80)
@@ -48,11 +70,11 @@ def draw_sparkle_path(ctx):
     ctx.close_path()
 
 def render_path_to_svg(filename, draw_func, canvas_size=600):
-    """Renders a Cairo path function to an SVG with rainbow stripes and outline."""
+    """Renders a Cairo path function to an SVG with 6-color rainbow stripes and outline."""
     surface = cairo.SVGSurface(filename, canvas_size, canvas_size)
     ctx = cairo.Context(surface)
 
-    # 1. Clip and paint stripes
+    # 1. Clip and paint 6 stripes
     ctx.save()
     draw_func(ctx)
     ctx.clip()
@@ -81,5 +103,7 @@ if __name__ == "__main__":
     output_dir = "scripts/merch/generated"
     os.makedirs(output_dir, exist_ok=True)
 
+    render_path_to_svg(f"{output_dir}/rainbow_heart.svg", draw_heart_path)
+    render_path_to_svg(f"{output_dir}/rainbow_check.svg", draw_check_path)
     render_path_to_svg(f"{output_dir}/rainbow_star.svg", draw_star_path)
     render_path_to_svg(f"{output_dir}/rainbow_sparkle.svg", draw_sparkle_path)

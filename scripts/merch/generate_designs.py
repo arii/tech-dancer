@@ -14,10 +14,9 @@ GENERATED_DIR = "scripts/merch/generated"
 FONTS_DIR = "scripts/merch/fonts"
 PUBLIC_ASSETS_DIR = "public/assets/merch"
 
-# Source assets are the official reference SVGs
-HEART_SVG = f"{SOURCE_DIR}/rainbow_heart.svg"
-CHECK_SVG = f"{SOURCE_DIR}/rainbow_check.svg"
-# Generated assets are derived to match the source style
+# Use generated assets which now contain high-fidelity 6-color versions of all shapes
+HEART_SVG = f"{GENERATED_DIR}/rainbow_heart.svg"
+CHECK_SVG = f"{GENERATED_DIR}/rainbow_check.svg"
 STAR_SVG = f"{GENERATED_DIR}/rainbow_star.svg"
 SPARKLE_SVG = f"{GENERATED_DIR}/rainbow_sparkle.svg"
 
@@ -263,10 +262,10 @@ def generate_shapes_sheet(output_path):
     ctx.stroke()
 
     shapes = [
-        {'path': CHECK_SVG, 'label': "Rainbow Check (Source)"},
-        {'path': HEART_SVG, 'label': "Rainbow Heart (Source)"},
-        {'path': STAR_SVG, 'label': "Rainbow Star (Derived)"},
-        {'path': SPARKLE_SVG, 'label': "Rainbow Sparkle (Derived)"},
+        {'path': CHECK_SVG, 'label': "Rainbow Check (Generated)"},
+        {'path': HEART_SVG, 'label': "Rainbow Heart (Generated)"},
+        {'path': STAR_SVG, 'label': "Rainbow Star (Generated)"},
+        {'path': SPARKLE_SVG, 'label': "Rainbow Sparkle (Generated)"},
     ]
 
     for i, asset in enumerate(shapes):
