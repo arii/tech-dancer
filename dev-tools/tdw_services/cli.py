@@ -88,12 +88,46 @@ def audit(ctx, check_dirs):
 @click.option('--dry-run/--execute', default=True)
 @click.option('--base')
 @click.option('--event')
+@click.option('--mobile-url', help='Run the mobile browser overflow audit against this deployed or local base URL during --audit.')
+@click.option('--mobile-route', 'mobile_routes', multiple=True, help='Route to inspect with --mobile-url. Repeat for multiple routes; defaults to /.')
 @click.pass_context
-def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, event):
+def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, event, mobile_url, mobile_routes):
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.audit_pr(pr_number, fetch=fetch, audit=run_audit, submit=submit, cleanup=cleanup, dry_run=dry_run, event=event)
+        res = orch.audit_pr(pr_number, fetch=fetch, audit=run_audit, submit=submit, cleanup=cleanup, dry_run=dry_run, event=event, mobile_url=mobile_url, mobile_routes=mobile_routes)
         out(ctx, f"✅ Audit PR #{pr_number} action complete.", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
+@gh.command('audit-mobile')
+@click.option('--url', required=True, help='Deployed or local base URL to inspect in a mobile browser.')
+@click.option('--route', 'routes', multiple=True, help='Route to inspect. Repeat for multiple routes; defaults to /.')
+@click.option('--output-dir', default='test-results/mobile-ux-audit', show_default=True, help='Directory for JSON and screenshot artifacts.')
+@click.pass_context
+def audit_mobile(ctx, url, routes, output_dir):
+    """Run Chromium at mobile widths and fail on viewport overflow."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.audit_mobile(url, list(routes), output_dir=output_dir)
+        if res.get('status') == 'failure':
+            err(ctx, f"Mobile UX audit found {res['findingCount']} overflow issue(s). See {res['reportPath']} and screenshots in {output_dir}.", data=res)
+        out(ctx, f"✅ Mobile UX audit passed for {len(res['results'])} route/viewport checks. Artifacts: {res['reportPath']}", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
+@gh.command('comment-pr')
+@click.argument('pr_number', type=int)
+@click.option('--body', help='Markdown comment text. Prefer --body-file for multi-line reviews.')
+@click.option('--body-file', type=click.Path(dir_okay=False), help="Read Markdown from a file, or use '-' to read stdin.")
+@click.option('--dry-run/--execute', default=True, help='Preview by default; use --execute to post to GitHub.')
+@click.pass_context
+def comment_pr(ctx, pr_number, body, body_file, dry_run):
+    """Preview or post a Markdown comment directly to a PR conversation."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.comment_pr(pr_number, body=body, body_file=body_file, dry_run=dry_run)
+        action = 'Would post' if dry_run else 'Posted'
+        out(ctx, f"✅ {action} comment on PR #{pr_number}.", data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
 

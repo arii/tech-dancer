@@ -33,6 +33,55 @@ class TestModernCLI(unittest.TestCase):
         self.assertTrue(kwargs['fetch'])
         self.assertFalse(kwargs['audit'])
 
+    @patch('tdw_services.orchestrator.Orchestrator.audit_mobile')
+    def test_audit_mobile_calls_orchestrator_with_routes(self, mock_audit_mobile):
+        mock_audit_mobile.return_value = {
+            "status": "success",
+            "results": [{}, {}],
+            "findingCount": 0,
+            "reportPath": "test-results/mobile-ux-audit/report.json",
+        }
+
+        result = self.runner.invoke(cli, ['gh', 'audit-mobile', '--url', 'http://localhost:4173', '--route', '/', '--route', '/blog'])
+
+        self.assertEqual(result.exit_code, 0)
+        mock_audit_mobile.assert_called_once_with('http://localhost:4173', ['/', '/blog'], output_dir='test-results/mobile-ux-audit')
+        self.assertIn('Mobile UX audit passed', result.output)
+
+    @patch('tdw_services.orchestrator.Orchestrator.audit_mobile')
+    def test_audit_mobile_returns_failure_for_overflow(self, mock_audit_mobile):
+        mock_audit_mobile.return_value = {
+            "status": "failure",
+            "results": [{}],
+            "findingCount": 2,
+            "reportPath": "test-results/mobile-ux-audit/report.json",
+        }
+
+        result = self.runner.invoke(cli, ['gh', 'audit-mobile', '--url', 'http://localhost:4173'])
+
+        self.assertNotEqual(result.exit_code, 0)
+        self.assertIn('found 2 overflow issue(s)', result.output)
+
+    @patch('tdw_services.orchestrator.Orchestrator.comment_pr')
+    def test_comment_pr_defaults_to_dry_run(self, mock_comment):
+        mock_comment.return_value = {"status": "success", "pr": 123, "dry_run": True, "posted": False}
+
+        result = self.runner.invoke(cli, ['gh', 'comment-pr', '123', '--body', '## Review'])
+
+        self.assertEqual(result.exit_code, 0)
+        mock_comment.assert_called_once_with(123, body='## Review', body_file=None, dry_run=True)
+        self.assertIn('Would post comment on PR #123', result.output)
+
+    @patch('tdw_services.orchestrator.Orchestrator.comment_pr')
+    def test_comment_pr_execute_posts(self, mock_comment):
+        mock_comment.return_value = {"status": "success", "pr": 123, "dry_run": False, "posted": True}
+
+        result = self.runner.invoke(cli, ['gh', 'comment-pr', '123', '--body-file', '-', '--execute'], input='## Review\n')
+
+        self.assertEqual(result.exit_code, 0)
+        mock_comment.assert_called_once_with(123, body=None, body_file='-', dry_run=False)
+        self.assertIn('Posted comment on PR #123', result.output)
+
     @patch('tdw_services.orchestrator.Orchestrator.analyze_file')
     def test_analyze_calls_orchestrator(self, mock_analyze):
         mock_analyze.return_value = "solid code"

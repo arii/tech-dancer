@@ -32,6 +32,7 @@
     "review:ux:prep": "pnpm run setup:playwright && pnpm run audit",
     "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
     "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
+    "review:ux:audit:mobile": "tsx scripts/mobile-ux-audit.ts",
     "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context",
     "doctor": "node scripts/check-runtime.mjs",
     "check:runtime-files": "node scripts/check-runtime-files.mjs",

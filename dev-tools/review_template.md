@@ -13,6 +13,7 @@ For EVERY changed file, verify against these standards. Mark as `- [x]` when ver
 - [ ] Responsibility creep: Component does not take on state/logic belonging in parent/hook.
 - [ ] Import bloat: No unnecessary `import React from 'react'` (React 17+).
 - [ ] Token compliance: Uses established design tokens (no raw Tailwind values or inline styles).
+- [ ] Mobile browser UX: Ran `gh audit-mobile` for affected routes; no text or visible element extends outside the 360px or 390px viewport.
 - [ ] Audit ratio: If > 100 lines added, identified at least 10 lines to refactor/remove.
 
 ## CI Log Triage

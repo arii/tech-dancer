@@ -182,6 +182,39 @@ Orchestrates the PR technical audit lifecycle.
   - `--cleanup`: Remove temporary review files on success.
 - **Usage**: `python3 dev-tools/td_cli.py gh audit-pr 368 --fetch --audit`
 
+#### `gh audit-mobile`
+Runs a real Chromium browser at 360px and 390px mobile widths, captures full-page screenshots, and fails when the page is missing mobile viewport metadata, visible content extends outside the viewport, or content exceeds an unclipped container. Findings include the affected route, viewport width, selector, and measured overflow so review comments can recommend a specific fix.
+- **Flags**:
+  - `--url <BASE_URL>`: Required deployed or local URL to inspect.
+  - `--route <PATH>`: Route to inspect. Repeat this flag for multiple routes; defaults to `/`.
+  - `--output-dir <PATH>`: Directory for `report.json` and screenshots; defaults to `test-results/mobile-ux-audit`.
+- **Setup**: Run `pnpm run setup:playwright` once when Chromium is not already provisioned by the environment.
+- **Usage**:
+
+  ```bash
+  python3 dev-tools/td_cli.py gh audit-mobile --url http://localhost:4173 --route / --route /blog
+  python3 dev-tools/td_cli.py gh audit-pr 368 --fetch --audit --mobile-url http://localhost:4173 --mobile-route /blog
+  ```
+
+Run this audit for perceptible web-application changes and include its overflow findings in PR feedback. The screenshot artifacts are intentionally written beneath `test-results/`, which is ignored by Git.
+
+#### `gh comment-pr <PR_NUMBER>`
+Posts a Markdown comment directly to the PR conversation. The command is safe by default: it previews the action unless `--execute` is provided.
+- **Flags**:
+  - `--body "<MARKDOWN>"`: Post a short inline Markdown comment.
+  - `--body-file <PATH>`: Read a multi-line Markdown comment from a file.
+  - `--body-file -`: Read Markdown from stdin, which is convenient for generated review comments.
+  - `--execute`: Post the comment to GitHub. Without this flag, the command performs a dry run.
+- **Usage**:
+
+  ```bash
+  python3 dev-tools/td_cli.py gh comment-pr 368 --body-file review.md
+  python3 dev-tools/td_cli.py gh comment-pr 368 --body-file review.md --execute
+  cat review.md | python3 dev-tools/td_cli.py gh comment-pr 368 --body-file - --execute
+  ```
+
+Use `gh comment-pr` for a normal PR conversation comment. Use `gh audit-pr <PR_NUMBER> --submit --execute` when you need the structured review event and optional inline diff comments from `pr-review-<PR_NUMBER>.md`.
+
 #### `gh validate-issue <ISSUE_NUMBER>`
 Validates GitHub Issues against repo standards.
 - **Flags**:
