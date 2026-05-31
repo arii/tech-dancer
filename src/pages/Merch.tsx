@@ -22,7 +22,7 @@ export default function Merch() {
     <Box>
       <SEO
         title="West Coast Swing Dance Merch"
-        description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
+        description="Shop BoomTick merch for West Coast Swing dancers, including role-pride tees, NorCal designs, rainbow pride apparel, and dance-weekend layers."
         jsonLd={generateMerchSchema(getAllMerchProducts())}
       />
 

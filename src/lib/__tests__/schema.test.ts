@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { generateMerchSchema, generateGearCatalogSchema } from '../../utils/schema';
+import { generateMerchSchema, generateGearCatalogSchema, getImageUrl } from '../../utils/schema';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import type { Resource } from '@/lib/types/content';
+import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 
 describe('Schema generation', () => {
   describe('generateMerchSchema', () => {
-    it('should only include stable fields by default for non-printful merch', () => {
+    it('should only include stable fields and no risky fields', () => {
       const mockProducts: ProductCatalogItem[] = [
         {
           id: 'test-id',
@@ -14,33 +15,6 @@ describe('Schema generation', () => {
           description: 'Test Description',
           imageUrl: '/test-image.jpg',
           href: '/test-product',
-          collections: ['test'],
-          tags: ['test'],
-          disclosure: 'none'
-        }
-      ];
-
-      const schema = generateMerchSchema(mockProducts);
-      const product = schema.itemListElement[0].item;
-
-      expect(product.name).toBe('Test Product');
-      expect(product.sku).toBe('test-id');
-      expect(product.aggregateRating).toBeUndefined();
-      expect(product.review).toBeUndefined();
-      expect(product.offers.shippingDetails).toBeUndefined();
-      expect(product.offers.hasMerchantReturnPolicy).toBeUndefined();
-      expect(product.offers.availability).toBeUndefined();
-    });
-
-    it('should include price and policies for printful merch', () => {
-      const mockProducts: ProductCatalogItem[] = [
-        {
-          id: 'printful-id',
-          source: 'owned-merch',
-          title: 'Printful Product',
-          description: 'Printful Description',
-          imageUrl: '/printful-image.jpg',
-          href: '/printful-product',
           price: '$25.00',
           collections: ['test'],
           tags: ['test'],
@@ -51,38 +25,24 @@ describe('Schema generation', () => {
       const schema = generateMerchSchema(mockProducts);
       const product = schema.itemListElement[0].item;
 
-      expect(product.offers.price).toBe('25.00');
-      expect(product.offers.priceCurrency).toBe('USD');
-      expect(product.offers.shippingDetails).toBeDefined();
-      expect(product.offers.hasMerchantReturnPolicy).toBeDefined();
-      expect(product.offers.availability).toBe('https://schema.org/InStock');
+      expect(product.name).toBe('Test Product');
+      expect(product.sku).toBe('test-id');
+
+      // Risky fields should be undefined (and should not even be in the type)
+      const json = JSON.stringify(product);
+      expect(json).not.toContain('price');
+      expect(json).not.toContain('availability');
+      expect(json).not.toContain('shippingDetails');
+      expect(json).not.toContain('hasMerchantReturnPolicy');
+      expect(json).not.toContain('aggregateRating');
+      expect(json).not.toContain('review');
+
+      expect(product.offers.url).toBe('/test-product');
     });
   });
 
   describe('generateGearCatalogSchema', () => {
-    it('should not include ratings or policies if not provided', () => {
-      const mockResources: Resource[] = [
-        {
-          type: 'resource',
-          slug: 'test-gear',
-          title: 'Test Gear',
-          date: '2023-01-01',
-          author: 'Ariel Anders, PhD',
-          category: 'Gear',
-          excerpt: 'Test Excerpt',
-          content: 'Test Content'
-        }
-      ];
-
-      const schema = generateGearCatalogSchema(mockResources);
-      const product = schema.itemListElement[0].item;
-
-      expect(product.aggregateRating).toBeUndefined();
-      expect(product.review).toBeUndefined();
-      expect(product.offers.shippingDetails).toBeUndefined();
-    });
-
-    it('should include ratings and reviews when verified source data exists', () => {
+    it('should not include ratings, reviews, or risky offer claims for gear', () => {
       const mockResources: Resource[] = [
         {
           type: 'resource',
@@ -94,63 +54,53 @@ describe('Schema generation', () => {
           excerpt: 'Test Excerpt',
           content: 'Test Content',
           rating: 4.5,
-          verdict: 'Excellent gear'
-        }
-      ];
-
-      const schema = generateGearCatalogSchema(mockResources);
-      const product = schema.itemListElement[0].item;
-
-      expect(product.aggregateRating).toBeDefined();
-      expect(product.aggregateRating?.ratingValue).toBe(4.5);
-      expect(product.review).toBeDefined();
-      expect(product.review?.[0].reviewRating.ratingValue).toBe(4.5);
-      expect(product.review?.[0].author.name).toBe('Test Author');
-    });
-
-    it('should NOT include review if verdict is present but rating is missing', () => {
-      const mockResources: Resource[] = [
-        {
-          type: 'resource',
-          slug: 'test-gear',
-          title: 'Test Gear',
-          date: '2023-01-01',
-          author: 'Ariel Anders, PhD',
-          category: 'Gear',
-          excerpt: 'Test Excerpt',
-          content: 'Test Content',
-          verdict: 'Excellent gear'
-        }
-      ];
-
-      const schema = generateGearCatalogSchema(mockResources);
-      const product = schema.itemListElement[0].item;
-
-      expect(product.review).toBeUndefined();
-    });
-
-    it('should include policies for owned merch in gear catalog', () => {
-      const mockResources: Resource[] = [
-        {
-          type: 'resource',
-          slug: 'merch-gear',
-          title: 'Merch Gear',
-          date: '2023-01-01',
-          author: 'Ariel Anders, PhD',
-          category: 'Gear',
-          excerpt: 'Test Excerpt',
-          content: 'Test Content',
-          shopUrl: 'https://printful.com/test',
+          verdict: 'Excellent gear',
+          shopUrl: 'https://example.com/test',
           provider: 'printful'
         }
       ];
 
       const schema = generateGearCatalogSchema(mockResources);
       const product = schema.itemListElement[0].item;
+      const json = JSON.stringify(product);
 
-      expect(product.offers.shippingDetails).toBeDefined();
-      expect(product.offers.hasMerchantReturnPolicy).toBeDefined();
-      expect(product.offers.availability).toBe('https://schema.org/InStock');
+      expect(product.name).toBe('Test Gear');
+      expect(json).not.toContain('aggregateRating');
+      expect(json).not.toContain('review');
+      expect(json).not.toContain('price');
+      expect(json).not.toContain('availability');
+      expect(json).not.toContain('shippingDetails');
+      expect(json).not.toContain('hasMerchantReturnPolicy');
+
+      expect(product.offers.url).toBe('https://example.com/test');
+    });
+  });
+
+  describe('getImageUrl', () => {
+    it('should handle various URL formats without duplication', () => {
+      const baseUrl = BASE_URL;
+      const assetPrefix = ASSET_PREFIX;
+
+      // Relative path
+      expect(getImageUrl('/assets/foo.webp')).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+
+      // Path without leading slash
+      expect(getImageUrl('assets/foo.webp')).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+
+      // External URL
+      expect(getImageUrl('https://example.com/foo.webp')).toBe('https://example.com/foo.webp');
+
+      // Already contains base URL
+      expect(getImageUrl(`${baseUrl}/assets/foo.webp`)).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+
+      // Already contains asset prefix (if prefix is not '/')
+      if (assetPrefix !== '' && assetPrefix !== '/') {
+         expect(getImageUrl(`${assetPrefix}/assets/foo.webp`)).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+      }
+    });
+
+    it('should fallback to defaultUrl if url is missing', () => {
+      expect(getImageUrl(undefined, '/default.jpg')).toBe(`${BASE_URL}${ASSET_PREFIX}/default.jpg`);
     });
   });
 });
