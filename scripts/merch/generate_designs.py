@@ -68,14 +68,11 @@ def get_scale(target_width, target_height):
     return target_width / DESIGN_WIDTH
 
 def load_svg_to_surface(svg_path, width, height):
-    """Converts an SVG file to a Cairo PNG surface scaled to target dimensions."""
-    try:
-        png_data = cairosvg.svg2png(url=svg_path, output_width=int(width), output_height=int(height))
-        return cairo.ImageSurface.create_from_png(io.BytesIO(png_data))
-    except Exception as e:
-        print(f"Error loading {svg_path}: {e}")
-        # Return empty surface as fallback
-        return cairo.ImageSurface(cairo.FORMAT_ARGB32, int(width), int(height))
+    """Converts an SVG file to a Cairo PNG surface scaled to target dimensions.
+    Fails loudly if the SVG cannot be loaded.
+    """
+    png_data = cairosvg.svg2png(url=svg_path, output_width=int(width), output_height=int(height))
+    return cairo.ImageSurface.create_from_png(io.BytesIO(png_data))
 
 def draw_svg_as_image(ctx, svg_path, x, y, width, height, current_scale=1.0):
     """Renders any SVG file as an image onto the Cairo context, ensuring high-res scaling."""
@@ -236,8 +233,7 @@ def generate_back_design(output_path, checked_roles=None, is_preview=False):
         if item in checked_roles:
             draw_svg_as_image(ctx, CHECK_SVG, start_x, check_y, BACK_CHECK_SIZE, BACK_CHECK_SIZE, scale)
         else:
-            # Draw empty checkbox outline (black circle/box would work, but reference just omits)
-            # For this retro style, we draw a black circle with white fill to represent empty check.
+            # Draw empty checkbox outline (retro circle style)
             ctx.set_source_rgb(0, 0, 0)
             ctx.set_line_width(BACK_CHECK_SIZE * 0.12)
             ctx.arc(start_x + BACK_CHECK_SIZE/2, check_y + BACK_CHECK_SIZE/2, BACK_CHECK_SIZE/3, 0, 2*3.14159)
