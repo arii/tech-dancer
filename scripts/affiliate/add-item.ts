@@ -165,8 +165,7 @@ Added a new Amazon affiliate item: **${title}**
 ## Checklist
 - [x] Normalized Amazon URL with tracking tag
 - [x] Downloaded and validated product image
-- [x] Updated
-\`src/data/affiliates.json\`
+- [x] Updated \`src/data/affiliates.json\`
 - [ ] Verified affiliate disclosure presence
 - [ ] Verified sponsored-link attribute verification
 - [ ] Verified display on relevant content pages
