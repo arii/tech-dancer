@@ -1,1 +1,0 @@
-import{j as l,B as u,h as c}from"./index-DXkfwYu-.js";function p({size:t=64,top:o,right:e,bottom:s,left:n,color:a="bg-accent",opacity:r="5",className:i}){return l.jsx(u,{position:"absolute",top:o,right:e,bottom:s,left:n,width:t,height:t,radius:"full",className:c(`${a}/${r} blur-3xl -z-10 pointer-events-none`,i)})}export{p as D};
