@@ -1,4 +1,3 @@
-import { ArrowDown } from "lucide-react";
 import {
   ShieldCheck,
   Search,
@@ -129,12 +128,10 @@ export function EcommerceAutomationTool() {
 
           <Stack gap={6}>
             <Text variant="headline" size="xl" weight="font-black" as="h2">Pipeline Architecture</Text>
-            <Box border radius="xl" padding={{ base: 6, sm: 8 }} surface="surface">
-              <Stack gap={6} align="center">
-                {/* Responsive layout: vertical stack on mobile, horizontal row on larger screens */}
+            <Box border radius="xl" padding={{ base: 6, sm: 8 }} surface="surface" overflowX="auto">
+              <Stack gap={6} align="center" minWidth="max-content">
                 <Box
                   display="flex"
-                  direction={{ base: 'col', md: 'row' }}
                   align="center"
                   justify="center"
                   gap={3}
@@ -151,9 +148,9 @@ export function EcommerceAutomationTool() {
                     <Box
                       key={step.label}
                       display="flex"
-                      direction={{ base: 'col', md: 'row' }}
                       align="center"
                       gap={3}
+                      shrink={0}
                     >
                       {/* Step Badge */}
                       <Text
@@ -171,17 +168,10 @@ export function EcommerceAutomationTool() {
                         {step.label}
                       </Text>
 
-                      {/* Arrow Connector: pointing Down on mobile, Right on desktop */}
+                      {/* Arrow Connector: always pointing right in horizontal scroll layout */}
                       {index < arr.length - 1 && (
-                        <Box display="flex" align="center" justify="center">
-                          {/* Icon visible on mobile */}
-                          <Box display={{ base: 'block', md: 'none' }}>
-                            <Icon icon={ArrowDown} size="sm" color="dim" />
-                          </Box>
-                          {/* Icon visible on desktop */}
-                          <Box display={{ base: 'none', md: 'block' }}>
-                            <Icon icon={ArrowRight} size="sm" color="dim" />
-                          </Box>
+                        <Box display="flex" align="center" justify="center" shrink={0}>
+                          <Icon icon={ArrowRight} size="sm" color="dim" />
                         </Box>
                       )}
                     </Box>
