@@ -13,7 +13,7 @@ test('verify homepage featured guide link', async ({ page }) => {
   await cta.click();
 
   // Verify it lands on the correct page
-  await expect(page).toHaveURL(/\/blog\/2026-04-19-wcs-travel-pack/);
+  await expect(page).toHaveURL(/\/blog\/2026-04-19-gear-essentials/);
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
 
   // Verify checklist landmarks or sections
