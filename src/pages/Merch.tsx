@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
@@ -21,90 +20,102 @@ export default function Merch() {
   return (
     <Box>
       <SEO
-        title="Shop WCS Dance Merch | Role Pride & NorCal Apparel | BoomTick"
-        description="Elevate your social dance style with BoomTick's curated West Coast Swing merch. Featuring role-pride tees, NorCal BestCal designs, and rainbow pride apparel."
+        title="Shop WCS Dance Merch | BoomTick"
+        description="BoomTick merch for West Coast Swing dancers, NorCal pride, rainbow pride, and role-fluid social dance energy. Shop lead, follow, switch, and WCS-inspired apparel."
         jsonLd={generateMerchSchema(getAllMerchProducts())}
       />
 
-      <Stack gap={{ base: 6, md: 8 }} width="full">
+      <Stack gap={10} width="full">
         {/* Hero Section */}
-        <Box as="section" marginX="auto" maxWidth="7xl" width="full">
-          <Grid cols={{ base: 1, md: 2 }} gap={{ base: 6, md: 12 }} align="center">
-            <PageHeader
-              label="STORE"
-              title="West Coast Swing Dance Merch"
-              description="Role-pride apparel, NorCal love, rainbow pride, and social dance floor energy."
-              border="none"
-              paddingBottom={0}
-              descriptionMaxWidth="full"
-              cta={
-                <Stack gap={6}>
-                  <Stack direction={{ base: 'col', sm: 'row' }} gap={4}>
-                    <Button
-                      as="a"
-                      href="https://boomtick.printful.me"
-                      target="_blank"
-                      rel="sponsored noopener noreferrer"
-                      variant="primary"
-                      className="w-full sm:w-fit"
-                    >
-                      Shop Printful Store
-                    </Button>
-                    <Button
-                      as="a"
-                      href="#featured"
-                      variant="outline"
-                      className="w-full sm:w-fit"
-                    >
-                      Browse Featured Picks
-                    </Button>
-                  </Stack>
-                  <Text variant="body" size="micro" color="dim" leading="relaxed">
-                    Heads up: merch opens in the BoomTick Printful store. Printful handles colors, sizing, checkout, shipping, and fulfillment.
-                  </Text>
-                </Stack>
-              }
-            />
+        <Box as="section" marginX="auto" maxWidth="7xl" paddingX={{ base: 4, md: 6 }} paddingY={{ base: 6, md: 10 }}>
+          <Grid cols={{ base: 1, md: 2 }} gap={8} align="center">
+            <Stack gap={6}>
+              <Stack gap={2}>
+                <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
+                  OFFICIAL STOREFRONT
+                </Text>
+                <Text as="h1" variant="headline" size={{ base: '4xl', md: '5xl' }} weight="font-bold" tracking="tight">
+                  West Coast Swing Dance Merch
+                </Text>
+                <Text variant="body" size="lg" color="dim" leading="relaxed">
+                  Role-pride apparel, NorCal love, rainbow pride, and social dance floor energy. Made for the WCS community.
+                </Text>
+              </Stack>
+
+              <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
+                <Button
+                  as="a"
+                  href="https://boomtick.printful.me"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  variant="primary"
+                  size="lg"
+                  width={{ base: 'full', sm: 'fit' }}
+                >
+                  Shop Printful Store
+                </Button>
+                <Button
+                  onClick={() => document.getElementById('browse')?.scrollIntoView({ behavior: 'smooth' })}
+                  variant="outline"
+                  size="lg"
+                  width={{ base: 'full', sm: 'fit' }}
+                >
+                  Browse Picks
+                </Button>
+              </Stack>
+
+              <Text size="micro" color="dim" italic>
+                Heads up: merch opens in the BoomTick Printful store. Printful handles colors, sizing, checkout, shipping, and fulfillment.
+              </Text>
+            </Stack>
+
             <Box display={{ base: 'none', md: 'block' }}>
-              <ReferralBanner layout="expanded" />
+              <ReferralBanner layout="compact" />
             </Box>
           </Grid>
         </Box>
 
-        {/* Collection Filters */}
-        <Stack gap={4} marginTop={2}>
-          <Stack gap={1.5}>
-            <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="tight">
-              Browse by vibe
-            </Text>
-            <Text variant="body" size="sm" color="dim">
-              Find the design that matches your dance-floor personality.
-            </Text>
-          </Stack>
-          <Box id="featured" border="b" paddingBottom={3} className="border-line overflow-x-auto">
-            <Stack direction="row" gap={2} padding={1} className="min-w-max">
-              {COLLECTIONS.map((collection) => (
-                <FilterButton
-                  key={collection.id}
-                  label={collection.label}
-                  isActive={activeCollection === collection.id}
-                  onClick={() => setActiveCollection(collection.id)}
-                />
-              ))}
+        {/* Mobile Promo Card */}
+        <Box display={{ base: 'block', md: 'none' }} paddingX={4}>
+          <ReferralBanner layout="compact" />
+        </Box>
+
+        {/* Browse Section */}
+        <Stack id="browse" gap={8} scrollMarginTop={20}>
+          <Stack gap={4}>
+            <Stack gap={1}>
+              <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
+                Browse by vibe
+              </Text>
+              <Text variant="body" size="sm" color="dim">
+                Find the design that matches your dance-floor personality.
+              </Text>
             </Stack>
-          </Box>
+
+            <Box border="b" paddingBottom={4} overflow="x-auto" className="border-line">
+              <Stack direction="row" gap={2} padding={1} className="min-w-max">
+                {COLLECTIONS.map((collection) => (
+                  <FilterButton
+                    key={collection.id}
+                    label={collection.label}
+                    isActive={activeCollection === collection.id}
+                    onClick={() => setActiveCollection(collection.id)}
+                  />
+                ))}
+              </Stack>
+            </Box>
+          </Stack>
+
+          {/* Product Grid */}
+          <Grid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap={6}>
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} item={product} />
+            ))}
+          </Grid>
         </Stack>
 
-        {/* Product Grid */}
-        <Grid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap={4} mdGap={6}>
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} item={product} />
-          ))}
-        </Grid>
-
         {/* Footer Callouts */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8}>
-          {/* Design Suggestions */}
+        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8} paddingTop={12} className="border-t border-line">
           <Box padding={8} radius="lg" border surface="card">
             <Stack gap={6}>
               <Box padding={3} radius="full" width="fit" className="bg-accent/10 text-accent">
@@ -124,8 +135,16 @@ export default function Merch() {
             </Stack>
           </Box>
 
-          {/* Detailed Referral Box */}
-          <ReferralBanner layout="compact" />
+          <Box padding={8} radius="lg" border surface="card" display="flex" align="center" justify="center">
+            <Stack gap={4} align="center" textAlign="center">
+              <Text variant="headline" size="lg" weight="font-bold">
+                Storefront Notice
+              </Text>
+              <Text variant="body" size="sm" color="dim">
+                BoomTick merch links open in the BoomTick Printful storefront. Printful manages product options, sizing, checkout, fulfillment, shipping, and applicable return policies.
+              </Text>
+            </Stack>
+          </Box>
         </Grid>
       </Stack>
     </Box>

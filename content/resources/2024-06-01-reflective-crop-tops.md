@@ -11,6 +11,7 @@ tags: ["fashion", "visibility"]
 verdict: "Great for visibility"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 Comfortable reflective crop tops perfect for social dancing and visibility during evening events.

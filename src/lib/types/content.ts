@@ -8,24 +8,56 @@ export interface Post {
   draft?: boolean;
   slug: string;
   title: string;
+  dek?: string;
   date: string;
   author: string;
   authorAvatar?: string;
+  readingTime?: string;
   category: string;
   excerpt: string;
   content: string;
   image?: string;
   tags?: string[];
   affiliateIds?: string[];
+  status?: string;
+  hero?: {
+    type?: string;
+    title?: string;
+    subtitle?: string;
+    caption?: string;
+    image?: string;
+  };
+  sidebar?: {
+    snapshot?: Array<{ label: string; value: string }>;
+    links?: Array<{ label: string; href: string }>;
+    custom?: React.ReactNode;
+  };
+  related?: Array<{ title: string; href: string }>;
 }
 
 export interface Resource {
   type: 'resource';
+  dek?: string;
+  status?: string;
+  hero?: {
+    type?: string;
+    title?: string;
+    subtitle?: string;
+    caption?: string;
+    image?: string;
+  };
+  sidebarConfig?: {
+    snapshot?: Array<{ label: string; value: string }>;
+    links?: Array<{ label: string; href: string }>;
+  };
+  related?: Array<{ title: string; href: string }>;
   draft?: boolean;
   slug: string;
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
+  readingTime?: string;
   category: string;
   excerpt: string;
   content: string;
@@ -77,6 +109,7 @@ export interface Study {
   title: string;
   date: string;
   category: string;
+  readingTime?: string;
   excerpt: string;
   content: string;
   tags?: string[];
@@ -109,11 +142,26 @@ export type EventRegion = 'NorCal' | 'SoCal' | 'Southwest' | 'Pacific Northwest'
 
 export interface Event {
   type: "event";
+  dek?: string;
+  status?: string;
+  heroConfig?: {
+    type?: string;
+    title?: string;
+    subtitle?: string;
+    caption?: string;
+  };
+  sidebarConfig?: {
+    snapshot?: Array<{ label: string; value: string }>;
+    links?: Array<{ label: string; href: string }>;
+  };
+  related?: Array<{ title: string; href: string }>;
   draft?: boolean;
   slug: string;
   title: string;
   date: string;
   author: string;
+  authorAvatar?: string;
+  readingTime?: string;
   category: string;
   excerpt: string;
   location: string;

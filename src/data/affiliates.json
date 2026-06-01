@@ -42,7 +42,7 @@
     "url": "https://www.amazon.com/dp/B07XLFXJ7D?tag=onasafari04-20",
     "category": "travel",
     "description": "Save space and keep outfits organized.",
-    "image": "/images/gear/sketches/compression-cubes.jpg",
+    "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg",
     "imageMode": "wide"
   },
   "travel-bottles": {
@@ -120,11 +120,12 @@
   },
   "foam-roller": {
     "id": "foam-roller",
-    "name": "Foam Roller",
-    "url": "https://a.co/d/060ddIVz",
+    "name": "Foam Roller / Hypervolt",
+    "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "recovery",
-    "description": "Solid-core foam roller great for post-dance deep tissue recovery, though less travel-friendly than hollow models.",
-    "image": "/images/gear/sketches/foam-roller.jpg",
+    "description": "Good for sore legs, tight hips, and post-event recovery.",
+    "draft": true,
+    "image": "/images/gear/amazon/hyperice-vyper-foam-roller.jpg",
     "imageMode": "contain"
   },
   "sequin-bomber-jacket": {
@@ -210,6 +211,16 @@
     "category": "recovery",
     "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
     "image": "https://m.media-amazon.com/images/I/41kfwQ6qx9L._AC_.jpg"
+  },
+  "shoe-brush": {
+    "id": "shoe-brush",
+    "name": "Suede Shoe Brush",
+    "url": "https://amazon.com/?tag=onasafari04-20",
+    "category": "gear",
+    "description": "Keep your suede soles clean and grippy.",
+    "draft": true,
+    "image": "/images/gear/amazon/dance-shoe-suede-brush.jpg",
+    "imageMode": "contain"
   },
   "mints": {
     "id": "mints",
@@ -498,7 +509,7 @@
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
     "gearSlug": "2024-06-01-running-belt",
-    "image": "/images/gear/sketches/fanny-pack.png"
+    "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
   },
   "shoe-dryer": {
     "id": "shoe-dryer",
@@ -550,66 +561,5 @@
     "description": "A fun and flowy rainbow bustle skirt for themed nights.",
     "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg",
     "imageMode": "apparel"
-  },
-  "tripod": {
-    "id": "tripod",
-    "name": "Compact Travel Tripod",
-    "url": "https://www.amazon.com/dp/B08BZDKDBP?tag=onasafari04-20",
-    "category": "gear",
-    "description": "Perfect for filming your competition heats and practice sessions.",
-    "draft": true,
-    "image": ""
-  },
-  "alien-mask": {
-    "id": "alien-mask",
-    "name": "Alien Latex Mask",
-    "url": "https://a.co/d/0jg488qU",
-    "category": "gear",
-    "description": "Commit to the Galactic theme with a high-quality alien mask.",
-    "image": "/images/gear/sketches/alien-mask.png",
-    "imageMode": "contain"
-  },
-  "green-bodysuit": {
-    "id": "green-bodysuit",
-    "name": "Green Alien Bodysuit",
-    "url": "https://www.amazon.com/dp/B00TGBQ0YY?tag=onasafari04-20",
-    "category": "gear",
-    "description": "The perfect base for a Galactic theme outfit.",
-    "image": "/images/gear/sketches/green-bodysuit.png"
-  },
-  "nerd-set": {
-    "id": "nerd-set",
-    "name": "Nerd Hat, Socks, Bowtie & Suspenders Set",
-    "url": "https://a.co/d/0hvRgmAd",
-    "category": "gear",
-    "description": "Quick and easy costume for Nerd Night.",
-    "image": "/images/gear/sketches/suspenders.png",
-    "imageMode": "contain"
-  },
-  "sunscreen": {
-    "id": "sunscreen",
-    "name": "Sunscreen",
-    "url": "https://www.amazon.com/dp/B001P97U6C?tag=onasafari04-20",
-    "category": "travel",
-    "description": "Essential for pool parties.",
-    "draft": true,
-    "image": ""
-  },
-  "visor": {
-    "id": "visor",
-    "name": "Sun Visor",
-    "url": "https://a.co/d/0iUAm96D",
-    "category": "gear",
-    "description": "Sun protection for the hot tub.",
-    "image": "/images/gear/sketches/visor.png"
-  },
-  "light-up-suspenders": {
-    "id": "light-up-suspenders",
-    "name": "Light Up Suspenders",
-    "url": "https://a.co/d/04mny83c",
-    "category": "gear",
-    "description": "Stand out on the dance floor with these battery-operated LED light up suspenders.",
-    "image": "/images/gear/sketches/glow_suspenders.jpeg",
-    "imageMode": "contain"
   }
 }

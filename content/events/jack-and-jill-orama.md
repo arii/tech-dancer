@@ -18,9 +18,9 @@ whyAttending: >
   I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set.
 theme:
   name: Rainbow
-  label: NorCal Pride Theme
+  label: NorCal Dancers Theme
   description: >
-    JJO coincides with Pride Month, and NorCal dancers represent their region with a massive rainbow presence. We lean into bright, expressive colors for every session. Mix bold layers and statement accessories that stand out in the hallway photos and on the dance floor.
+    Every year Team NorCal BestCal runs a Rainbow Pride Month theme, so we're leaning into bright, expressive color from first workshop to final late-night social. Mix bold layers, statement accessories, and breathable pieces you can dance in for hours.
   colors:
   - '#E40303'
   - '#FF8C00'
@@ -29,37 +29,56 @@ theme:
   - '#004DFF'
   - '#750787'
   outfitIds:
-    - norcal-pride-gate-shirt
-    - norcal-pride-bear-shirt
-    - love-neon-switch-shirt
-    - love-neon-lead-shirt
-    - love-neon-follow-shirt
-    - norcal-crop-top
+    - "rainbow-bustle"
+    - "sequin-bomber-jacket"
+    - "ombre-dance-dress"
+    - "love-neon-follow-shirt"
+    - "love-neon-lead-shirt"
+    - "war-eagle-shirt"
+    - "love-neon-switch-shirt"
+    - "norcal-bear-tank"
+    - "norcal-crop-top"
+    - "norcal-gate-crop-hoodie"
+    - "norcal-pride-gate-shirt"
+    - "norcal-pride-bear-shirt"
+    - "love-unisex-shirt"
+    - "norcal-bestcal-tshirt"
   accessoryIds:
-    - rainbow-fan
-    - tripod
+  - rainbow-earrings
+  - pride-sunglasses
+  - rainbow-fan
 gear:
   outfitIds:
-    - norcal-pride-gate-shirt
-    - norcal-pride-bear-shirt
-    - love-neon-switch-shirt
-    - love-neon-lead-shirt
-    - love-neon-follow-shirt
-    - norcal-crop-top
-  outfitDescription: "Bright, expressive pieces for the legendary Rainbow theme nights and high-visibility Glow nights."
+    - "rainbow-bustle"
+    - "sequin-bomber-jacket"
+    - "ombre-dance-dress"
+    - "love-neon-follow-shirt"
+    - "love-neon-lead-shirt"
+    - "war-eagle-shirt"
+    - "love-neon-switch-shirt"
+    - "norcal-bear-tank"
+    - "norcal-crop-top"
+    - "norcal-gate-crop-hoodie"
+    - "norcal-pride-gate-shirt"
+    - "norcal-pride-bear-shirt"
+    - "love-unisex-shirt"
+    - "norcal-bestcal-tshirt"
+  outfitDescription: "Bright, expressive pieces for the legendary Rainbow theme nights."
   accessoryIds:
-    - rainbow-fan
-    - tripod
-  accessoryDescription: "Rainbow fans for the heat and a tripod for filming your competition videos."
+    - "rainbow-earrings"
+    - "pride-sunglasses"
+    - "rainbow-fan"
+  accessoryDescription: "Bold accents to complete your Pride-inspired dance looks."
   shoeIds:
     - "bloch-grecian"
     - "suede-sheets"
   shoeDescription: "Trusted shoes for long hours on the high-energy SoCal floor."
   essentialIds:
     - "loop-experience"
+    - "foam-roller"
     - "liquid-iv"
-    - "hand-sanitizer"
-  essentialDescription: "Proactive recovery and hygiene to keep you moving through the late-night magic."
+    - "shoe-brush"
+  essentialDescription: "Proactive recovery to keep you moving through the late-night magic."
   travelIds:
     - "compression-cubes"
     - "travel-bottles"
@@ -79,28 +98,11 @@ relatedEvents:
 - boogie-by-the-bay
 ---
 
-Jack & Jill O'Rama is more than just a competition; it's a celebration of the WCS community. Hosted at the Hyatt Regency Orange County, it's just minutes from Disneyland and features some of the largest ballrooms on the circuit.
+This is my flagship one-stop Rainbow guide for JJO: why this event matters, what to pack, and how to show up ready.
 
-## NorCal Representation & Rainbow Packing
+## Community Reviews
 
-JJO is where NorCal dancers truly represent. Because the event falls during Pride Month, we prioritize bright, high-visibility outfits that work for both the massive "RAINBOW’Rama" energy and the "GLOW’Rama" blacklight moments.
 
-For Glow night, visibility is key. The **Love Neon** t-shirts (Lead/Follow/Switch) are made with safety yellow fabric, making them highly visible under blacklight so your partner and the judges can clearly see your movement.
-
-### Capture Your Progress
-With the level of competition so high at JJO, you'll definitely want videos of your heats. We've added a **compact tripod** to the gear list—it's essential for getting stable, usable footage of your rounds for later review.
-
-### Disneyland-Area Logistics
-- **Airport:** John Wayne Airport (SNA) is the closest and most convenient. Long Beach (LGB) and LAX are also options but expect longer drives.
-- **Disneyland:** Many dancers stay an extra day to visit the parks for Disney Dancer Day. The hotel offers a shuttle to the Disney parks for a small fee.
-
-### First-Timer Strategy
-If this is your first JJO, prepare for the scale. The competitions move fast and there are often multiple ballrooms in use.
-- **The App:** Download the event's scoring app to track your heat times in real-time.
-- **Orientation:** Attend the newcomer orientation if offered—it's a great way to meet people and get your bearings.
-
-### Schedule Pacing
-The JJO schedule is packed. Workshops run all day, and competitions often go late into the evening. Don't feel pressured to do everything. Pick 2-3 \"must-attend\" workshops and save your energy for social dancing and your heats.
 
 ## NorCal BestCal Merch Picks
 

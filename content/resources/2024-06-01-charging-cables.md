@@ -11,6 +11,7 @@ tags: ["travel", "electronics", "essentials"]
 verdict: "Essential for travel"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 3-pack of fast-charging USB cables perfect for convention weekends. Having backups means you're never without power.

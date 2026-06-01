@@ -11,7 +11,7 @@ tags: ["fashion", "halloween", "accessories"]
 verdict: "Best for theming"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-bestFor: ["Theming"]
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 Perfect for Halloween-themed social dances. Lightweight and won't interfere with dancing.

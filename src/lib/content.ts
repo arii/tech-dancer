@@ -68,17 +68,22 @@ function transform<T extends { date?: string; draft?: boolean }>(
       data.image = normalizeAsset(data.image);
       data.imageBack = normalizeAsset(data.imageBack);
       data.heroImage = normalizeAsset(data.heroImage);
+      data.authorAvatar = normalizeAsset(data.authorAvatar);
 
       const VALID_REGIONS = ['NorCal', 'SoCal', 'Southwest', 'Pacific Northwest', 'South', 'International', 'Other'];
 
       const result: Record<string, unknown> = {
         ...data,
         title: String(data.title || "Untitled"),
+        dek: data.dek ? String(data.dek) : undefined,
         category: String(data.category || "General"),
         region: (data.region && VALID_REGIONS.includes(String(data.region))) ? String(data.region) : undefined,
         excerpt: String(data.excerpt || ""),
+        status: data.status ? String(data.status) : undefined,
         date: String(data.date || ""),
         author: String(data.author || ""),
+        authorAvatar: data.authorAvatar ? String(data.authorAvatar) : undefined,
+        readingTime: data.readingTime ? String(data.readingTime) : undefined,
         startDate: data.startDate ? String(data.startDate) : undefined,
         earlyBirdDate: data.earlyBirdDate
           ? String(data.earlyBirdDate)
@@ -114,6 +119,13 @@ function transform<T extends { date?: string; draft?: boolean }>(
         eventUseCase: data.eventUseCase ? String(data.eventUseCase) : undefined,
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
+
+        // Editorial Article Fields
+        hero: data.hero as Record<string, unknown> | undefined,
+        sidebar: data.sidebar as Record<string, unknown> | undefined,
+        heroConfig: data.heroConfig as Record<string, unknown> | undefined,
+        sidebarConfig: data.sidebarConfig as Record<string, unknown> | undefined,
+        related: asArray(data.related),
 
         content: content || "",
         slug: slugFrom(path),

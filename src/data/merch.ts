@@ -27,7 +27,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'love-neon-follow',
     title: 'Ask Me to Follow Neon Tee',
-    description: 'A bright role-pride tee for followers who want the message visible from across the room.',
+    description: 'A bright social-dance tee for followers who want the message visible from across the room.',
     price: '24.50',
     imageUrl: gearImage('love-neon-tshirt-ask-me-to-follow-back.webp'),
     images: [

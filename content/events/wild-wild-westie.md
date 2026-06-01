@@ -3,82 +3,70 @@ type: event
 title: Wild Wild Westie
 date: '2026-07-02'
 startDate: '2026-07-02'
-author: Ariel Anders, PhD
+author: Ariel Anders
 category: WSDC Registry Event
-excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
-location: Hyatt Regency DFW International Airport, 2334 North International Parkway
+excerpt: Dallas event. Book the hotel room block immediately as it fills fast.
+location: Westin Dallas Fort Worth Airport
 city: Dallas, TX
 region: South
 schedule: July 2 - 5, 2026
-url: https://wildwildwestie.com/
-heroImage: '/assets/events/wild-wild-westie-hero.svg'
-description: Wild Wild Westie (WWW) is one of the most competitive and high-energy events on the WCS circuit. Held over the 4th of July weekend, it attracts top dancers from across the globe for intense competitions and legendary late-night social dancing.
+url: https://wildwildwestie.com
+heroImage: /assets/events/wild-wild-westie-hero.svg
+description: Wild Wild Westie is a premier WCS event in Dallas, known for its high energy and competitive atmosphere.
 whyAttending: >
-  If you love competition, WWW is the place to be. The energy in the ballroom is electric, and the level of talent in the Jack & Jills is incredible.
+  Wild Wild Westie is legendary for its intense competition and high-octane social dancing. If you want to test your skills against some of the best dancers on the circuit while enjoying true Texas-sized hospitality, this is the event for you.
 theme:
   name: "Texas Spirit / Wild West"
   label: "Wild West Theme"
-  description: >
-    Keep the styling Western-inspired but danceable: denim, bold layers,
-    breathable tops, and accessories that will not interfere with partner
-    connection.
+  description: "Bold Texas-inspired styles for a high-octane weekend. Think Western-chic, denim, boots, and anything that captures the legendary spirit of Dallas."
   outfitIds:
-    - war-eagle-shirt
-    - love-unisex-shirt
+    - "sequin-bomber-jacket"
+    - "rainbow-bustle"
   accessoryIds:
-    - rave-fan
-    - electric-fan
+  - rave-fan
 gear:
   outfitIds:
-    - war-eagle-shirt
-    - love-unisex-shirt
-  outfitDescription: "Breathable pieces that handle the high-energy Texas vibe."
+    - "ombre-dance-dress"
+  outfitDescription: "Standout pieces for intense Dallas competitions."
   accessoryIds:
-    - rave-fan
-    - electric-fan
+    - "electric-fan"
   accessoryDescription: "High-power cooling for the high-energy ballroom floor."
   shoeIds:
-    - bloch-grecian
-    - suede-sheets
-  shoeDescription: "The Dallas Hyatt ballroom floor is fantastic but can be fast."
+    - "bloch-grecian"
+    - "suede-sheets"
+  shoeDescription: "High-traction shoes for the fast Texas social floor."
   essentialIds:
-    - liquid-iv
-    - loop-experience
-    - mints
-  essentialDescription: "Recovery and maintenance for an intense competition weekend."
+    - "liquid-iv"
+    - "shoe-brush"
+    - "loop-experience"
+  essentialDescription: "Competition-grade recovery and hydration tools."
   travelIds:
-    - compression-cubes
-    - travel-bottles
-    - portable-charger
-  travelDescription: "Travel gear for a major convention weekend."
+    - "compression-cubes"
+    - "travel-bottles"
+    - "portable-charger"
+  travelDescription: "Organization for a major Southern dance hub."
 
-earlyBirdDate: "2026-03-15"
-registrationDeadline: "2026-06-28"
-hotelCutoffDate: "2026-06-10"
-packingReminderDate: "2026-06-25"
+earlyBirdDate: "2026-05-31"
+registrationDeadline: "2026-07-02"
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
-- phoenix-4th-of-july
-- swingtacular-the-galactic-open
+- boogie-by-the-bay
 - jack-and-jill-orama
+- phoenix-4th-of-july
 ---
 
-Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the iconic Hyatt Regency Dallas (the one with the glowing ball on top), it's a weekend of intense dancing, serious competition, and southern hospitality.
+Dallas event. Book the hotel room block immediately as it fills fast.
 
-## Western theme notes
+## Community Reviews
 
-While our current product selection doesn't include specialized Western dance apparel, this is the perfect weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. Keep Western boots for photos and use proper dance shoes for social dancing to ensure safety and floor compliance.
 
-### Dallas Airport Logistics
-- **DFW Airport:** About 25-30 minutes away. This is the primary hub for American Airlines and offers the most flight options.
-- **Dallas Love Field (DAL):** About 15 minutes away. This is the primary hub for Southwest Airlines.
-- **Transport:** Both airports are easily accessible via Uber/Lyft. DART (light rail) also runs from DFW directly to the hotel (Union Station stop).
 
-### Hotel-Room-Block Urgency
-The WWW room block at the Hyatt Regency Dallas is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
+## Pro Tips
 
-### Summer Heat Notes
-Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-controlled. You can easily spend the entire weekend without leaving the AC. If you do go outside, be prepared for intense humidity. Even though you're indoors, the Dallas summer heat and intense dancing mean it is useful to pack hydration support and portable fans.
+- **Hotel Block:** This is one of the fastest-filling room blocks on the circuit. Do not wait.
+- **Energy Levels:** The social dancing here can go very late and be very intense. Make sure to schedule some downtime during the day.
+- **Hydration:** Even though you're indoors, the Dallas summer heat and intense dancing mean you need to stay on top of your hydration.
+- **Workshops:** The leveled workshops here are excellent. Try to attend as many as your energy levels allow.
 
-### Comp/Social Energy
-The competition field at WWW is deep. Jack & Jill heats can have many couples in certain divisions. The social dancing energy is equally intense, peaking around 2:00 AM and often continuing until the sun comes up over the Dallas skyline.

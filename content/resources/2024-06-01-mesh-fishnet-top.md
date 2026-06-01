@@ -11,7 +11,7 @@ tags: ["fashion", "style", "layering"]
 verdict: "Best for layering"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-bestFor: ["Layering"]
+affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
 ---
 
 Versatile mesh fishnet top that works over dance tanks or as a statement piece for social dancing.

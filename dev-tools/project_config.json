@@ -6,11 +6,5 @@
   "monolithic_pr_threshold": 3,
   "base_branch": "origin/main",
   "use_gemini_fallback": false,
-  "ollama_synthesis_model": "llama3.2",
-  "content_scopes": {
-    "events": "content/events/",
-    "resources": "content/resources/",
-    "posts": "content/posts/",
-    "studies": "content/studies/"
-  }
+  "ollama_synthesis_model": "llama3.2"
 }

@@ -1,88 +1,78 @@
 ---
 type: event
 title: "Swingtacular: The Galactic Open"
-date: '2026-08-06'
-startDate: '2026-08-06'
-author: Ariel Anders, PhD
-category: WSDC Registry Event
-excerpt: A sci-fi themed WCS adventure in the San Francisco Bay Area.
-location: Hyatt Regency San Francisco Airport
-city: Burlingame, CA
-region: NorCal
-schedule: August 6 - 9, 2026
-url: https://swingtacular.com/
-heroImage: '/assets/events/swingtacular-hero.svg'
-description: Swingtacular is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
+date: "2026-08-06"
+startDate: "2026-08-06"
+author: "Ariel Anders"
+category: "WSDC Registry Event"
+excerpt: "San Francisco event. Check for roommate pairings on the Facebook group early."
+location: "Hyatt Regency San Francisco Airport"
+city: "Burlingame, CA"
+region: "NorCal"
+schedule: "August 6 - 9, 2026"
+url: "https://swingtacular.com"
+heroImage: "/assets/events/swingtacular-hero.svg"
+description: "Swingtacular is a high-production event featuring incredible lighting, sound, and a fun galactic theme. Managed by Dance Geek Productions, it draws an international crowd for intense competition and non-stop social dancing."
+
 whyAttending: >
-  There is no other event like Swingtacular. The sci-fi theme is fully embraced, and the energy in the ballroom is truly "out of this world." The event is known for leaning hard into production, lighting, and theme.
+  Swingtacular lives up to its name with top-notch production values and a vibrant, international community. The galactic theme is consistently creative, and the quality of both the competitions and the social dancing is world-class.
 theme:
-  name: "Alien / Galactic / Nerd"
-  label: "Space & Nerd Themes"
-  description: >
-    Swingtacular's themes should lean metallic, neon, futuristic, and 'nerdy.'
-    Prioritize items that read well in a dark ballroom without restricting movement.
+  name: "Alien / Galactic"
+  label: "Space Theme"
+  description: "Swingtacular's signature 'Alien' theme is consistently creative and out of this world. People take it seriously—think metallics, neons, and anything extraterrestrial for the Saturday night social."
+  colors:
+  - '#6366f1'
+  - '#a855f7'
+  - '#ec4899'
   outfitIds:
-    - green-bodysuit
-    - nerd-set
-    - reflective-crop-tops
-    - sequin-bomber-jacket
+    - "sequin-bomber-jacket"
+    - "rainbow-bustle"
   accessoryIds:
-    - alien-mask
-    - rave-fan
+  - rave-fan
+  - pride-sunglasses
 gear:
   outfitIds:
-    - green-bodysuit
-    - nerd-set
-    - reflective-crop-tops
-    - sequin-bomber-jacket
-  outfitDescription: "Alien bodysuits for 'Dress to Impress', nerd sets for Nerd Night, and reflective pieces for the ballroom."
+    - "sequin-bomber-jacket"
+  outfitDescription: "Visionary outfits designed for the epic scale of the Galactic Open."
   accessoryIds:
-    - alien-mask
-    - rave-fan
-  accessoryDescription: "Alien masks for grand entrances and futuristic fans for cooling."
+    - "electric-fan"
+    - "rave-fan"
+  accessoryDescription: "Neon and metallic accents for the signature space vibe."
   shoeIds:
-    - bloch-grecian
-  shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
+    - "bloch-grecian"
+    - "dance-socks"
+  shoeDescription: "Polished shoes for the world-class Hyatt ballroom floor."
   essentialIds:
-    - loop-experience
-    - mints
-    - listerine-tabs
-  essentialDescription: "Essentials for a high-intensity weekend in the Bay Area."
+    - "loop-experience"
+    - "foam-roller"
+    - "shoe-brush"
+  essentialDescription: "Production-ready maintenance for a high-intensity weekend."
   travelIds:
-    - compression-cubes
-    - portable-steamer
-    - portable-charger
-  travelDescription: "Organized packing for your galactic mission."
+    - "compression-cubes"
+    - "portable-charger"
+  travelDescription: "Organization for a busy international dance convention."
 
-earlyBirdDate: "2026-05-01"
-registrationDeadline: "2026-08-02"
-hotelCutoffDate: "2026-07-15"
-packingReminderDate: "2026-08-01"
+earlyBirdDate: ""
+registrationDeadline: ""
+hotelCutoffDate: ""
+packingReminderDate: ""
 
 relatedEvents:
 - boogie-by-the-bay
 - jack-and-jill-orama
-- phoenix-4th-of-july
+- wild-wild-westie
 ---
 
-Swingtacular is where WCS meets a full galactic theme weekend. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
+San Francisco event. Check for roommate pairings on the Facebook group early.
 
-## Galactic & Nerd Theme notes
+## Community Reviews
 
-This is the event where metallics, neons, and futuristic accessories make sense.
-- **Nerd Night:** A classic Swingtacular tradition. Pack a **nerd set** with glasses and suspenders for a quick and easy costume that doesn't restrict your dancing.
-- **Dress to Impress / Alien Theme:** For the big theme night, a **green bodysuit** or metallic reflective gear is the way to go. If you're going all out, an **alien mask** makes for a great grand entrance or hallway photo (just remember to swap it for something more breathable before hitting the social floor!).
 
-Keep all costume pieces dance-safe: no sharp edges, no loose LED strands, and nothing that restricts connection or floorcraft.
 
-## What to pack for the SFO Hyatt
+## Pro Tips
 
-Swingtacular is an airport-hotel event, so the useful gear is practical: a portable charger for long days, packing cubes to keep theme outfits organized, and a steamer for those metallic fabrics. High-quality earplugs are a must; the event is known for its high-production sound and lighting.
+- **Theme Outfits:** People take the 'Galactic' theme seriously here. Think metallics, neons, and anything space-inspired.
+- **Hotel Block:** The Hyatt SFO fills up quickly. If you miss the block, there are several nearby hotels with shuttle service, but staying on-site is highly recommended for the full experience.
+- **Food Options:** The hotel restaurant is convenient but can be pricey. There are several good dining options within a short Uber ride in Burlingame.
+- **Production:** Make sure to be in the ballroom for the Saturday night shows—the production quality is some of the best in the business.
 
-### Production & Show Notes
-The Saturday night shows are high-production events with professional lighting, sound, and staging. Get to the ballroom early to secure a good seat—it's often standing room only for the showcase.
-
-### Burlingame/SFO Logistics
-- **Transport:** Use the free Hyatt SFO shuttle if flying in.
-- **Food:** Downtown Burlingame is a short Uber ride away and offers fantastic dining options (Max's is a dancer favorite).
-- **Hotel Hub:** The atrium is the place to be for late-night social energy and catching up with friends between workshops.

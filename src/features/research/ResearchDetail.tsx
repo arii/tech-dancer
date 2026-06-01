@@ -9,7 +9,11 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 
-import { DetailLayout } from '@/components/layout/DetailLayout';
+import { ArticleLayout } from '@/components/article/ArticleLayout';
+import { ArticleHero } from '@/components/article/ArticleHero';
+import { ArticleMeta } from '@/components/article/ArticleMeta';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { readingTime } from '@/lib/content';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -91,6 +95,8 @@ export default function ResearchDetail() {
   }
 
   if (study) {
+    const rt = study.readingTime || `${readingTime(study.content)} min read`;
+
     return (
       <>
         <SEO
@@ -99,14 +105,26 @@ export default function ResearchDetail() {
           type="article"
           schema={structuredData}
         />
-        <DetailLayout
-          title={study.title}
-          category={study.category}
-          date={study.date}
-          content={study.content}
+        <ArticleLayout
           onBack={() => navigate('/research')}
           backLabel="Back to Portfolio"
-        />
+          hero={
+            <ArticleHero
+              category={study.category}
+              date={study.date}
+              readingTime={rt}
+              title={study.title}
+              dek={study.excerpt}
+              meta={
+                <ArticleMeta
+                  author={study.author}
+                />
+              }
+            />
+          }
+        >
+          <MarkdownRenderer content={study.content} />
+        </ArticleLayout>
       </>
     );
   }
