@@ -28,15 +28,15 @@ export default function Merch() {
 
       <Stack gap={10} width="full">
         {/* Hero Section */}
-        <Box as="section" marginX="auto" maxWidth="7xl" paddingX={{ base: 4, md: 6 }} paddingY={{ base: 6, md: 10 }}>
-          <Grid cols={{ base: 1, md: 2 }} gap={8} align="center">
-            <Stack gap={6}>
+        <Box as="section" marginX="auto" maxWidth="7xl" paddingX={{ base: 4, md: 6 }} paddingY={{ base: 4, md: 10 }}>
+          <Grid cols={{ base: 1, md: 2 }} gap={{ base: 6, md: 8 }} align="center">
+            <Stack gap={{ base: 5, md: 6 }}>
               <Stack gap={2}>
                 <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
                   OFFICIAL STOREFRONT
                 </Text>
                 <Text as="h1" variant="headline" size={{ base: '4xl', md: '5xl' }} weight="font-bold" tracking="tight">
-                  West Coast Swing Dance Merch
+                  Dance Merch
                 </Text>
                 <Text variant="body" size="lg" color="dim" leading="relaxed">
                   Role-pride apparel, NorCal love, rainbow pride, and social dance floor energy. Made for the WCS community.
@@ -76,13 +76,8 @@ export default function Merch() {
           </Grid>
         </Box>
 
-        {/* Mobile Promo Card */}
-        <Box display={{ base: 'block', md: 'none' }} paddingX={4}>
-          <ReferralBanner layout="compact" />
-        </Box>
-
         {/* Browse Section */}
-        <Stack id="browse" gap={8} scrollMarginTop={20}>
+        <Stack id="browse" gap={6} scrollMarginTop={20}>
           <Stack gap={4}>
             <Stack gap={1}>
               <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
@@ -114,6 +109,11 @@ export default function Merch() {
             ))}
           </Grid>
         </Stack>
+
+        {/* Mobile Promo Card */}
+        <Box display={{ base: 'block', md: 'none' }} paddingX={4} marginTop={4}>
+          <ReferralBanner layout="compact" />
+        </Box>
 
         {/* Footer Callouts */}
         <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8} paddingTop={12} className="border-t border-line">
