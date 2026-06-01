@@ -12,6 +12,7 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   basePath: string;
   date?: string;
   readingTime?: string;
+  ctaLabel?: string;
   [key: string]: unknown;
 }
 
@@ -24,6 +25,7 @@ export function ContentCard(props: ContentCardProps) {
     basePath,
     date,
     readingTime,
+    ctaLabel,
   } = props;
 
   const motionProps = pickRest(props, [
@@ -89,10 +91,10 @@ export function ContentCard(props: ContentCardProps) {
 
       <Box display="flex" align="center" justify="between" marginTop="auto">
         <Text variant="mono" size="xs" color="dim" data-testid="content-date">
-          {[date, readingTime].filter(Boolean).join(' • ') || category}
+          {(!ctaLabel || date || readingTime) && ([date, readingTime].filter(Boolean).join(' • ') || category)}
         </Text>
-        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-          Read article
+        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" uppercase>
+          {ctaLabel || 'Read article'}
         </Text>
       </Box>
     </BaseCard>

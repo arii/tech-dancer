@@ -1,7 +1,6 @@
 import { Sparkles } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { DecorativeGlow } from '@/components/ui/DecorativeGlow';
 
 import { EventHero } from './components/EventHero';
 import { EventNavigation } from './components/EventNavigation';
@@ -93,11 +92,13 @@ export default function EventGuide() {
             className="bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group"
           >
 
-            <DecorativeGlow
-              size={40}
+            <Box
+              position="absolute"
               top={-20}
               right={-20}
-              opacity="10"
+              width={40}
+              height={40}
+              className="bg-accent/10 blur-3xl rounded-full"
             />
 
             <Stack gap={4}>

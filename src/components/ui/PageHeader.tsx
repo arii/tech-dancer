@@ -4,7 +4,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import type { BaseProps } from '@/layouts/Box';
 
 interface PageHeaderProps {
-  label?: string;
+  label: string;
   title: string;
   description?: string;
   as?: keyof JSX.IntrinsicElements;
@@ -32,11 +32,9 @@ export function PageHeader({
       border={border}
     >
       <Stack gap={4}>
-        {label && (
-          <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
-            {label}
-          </Text>
-        )}
+        <Text variant="mono" size="xs" color="brand" weight="font-black" tracking="wide-editorial" uppercase>
+          {label}
+        </Text>
         <Text as={as} variant="headline" size={titleSize} weight="font-black" leading="tight" tracking="tight">
           {title}
         </Text>
