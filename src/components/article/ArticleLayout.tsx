@@ -46,7 +46,7 @@ export function ArticleLayout({
               size="micro"
               weight="font-bold"
               tracking="widest"
-              uppercase
+              className="uppercase"
             >
               {backLabel}
             </Text>

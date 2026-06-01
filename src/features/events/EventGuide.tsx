@@ -1,6 +1,5 @@
-import { ShareButton } from "@/components/ui/ShareButton";
 
-import { Sparkles } from 'lucide-react';
+import { Share2, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 
@@ -62,7 +61,22 @@ export function EventGuide() {
     );
   }
 
+  const share = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: event.title,
+        text: event.excerpt,
+        url: window.location.href,
+      }).catch(console.error);
+    }
+  };
 
+  const shareAction = (
+    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
+      <Share2 className="w-3.5 h-3.5" />
+      <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
+    </Stack>
+  );
 
   const rt = event.readingTime || `${getReadingTime(event.content)} min read`;
 
@@ -102,7 +116,7 @@ export function EventGuide() {
           dek={event.dek || event.excerpt}
           author={event.author}
           authorAvatar={event.authorAvatar}
-          shareAction={<ShareButton title={event.title} text={event.excerpt} />}
+          shareAction={shareAction}
           visual={heroVisual}
           tags={event.tags}
         />

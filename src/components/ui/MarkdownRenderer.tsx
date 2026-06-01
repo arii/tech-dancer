@@ -138,11 +138,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           ...Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
             config.tags.forEach(tag => {
-              const Component = config.component as React.ElementType;
-              acc[tag] = (props: Record<string, unknown>) => <Component {...props} />;
+              const Component = config.component as any;
+              acc[tag] = (props: any) => <Component {...props} />;
             });
             return acc;
-          }, {} as Record<string, React.ElementType>)
+          }, {} as any)
         }}
       >
         {content}
