@@ -17,12 +17,15 @@ export default function ResearchAnalytics() {
   );
 
   // Map ResearchTool to ContentItem format expected by FolioGrid
-  const contentItems = filteredTools.map(tool => ({
+  const contentItems: ContentItem[] = filteredTools.map(tool => ({
+    type: 'study', // Default to study for tool cards
     slug: tool.id,
     title: tool.title,
     category: tool.category,
     excerpt: tool.description,
-    date: tool.status === 'Active' ? undefined : tool.status,
+    content: tool.description, // Required for ContentItem
+    author: 'Ariel Anders', // Required for ContentItem
+    date: tool.status === 'Active' ? '' : tool.status,
     tags: tool.tags,
     ctaLabel: tool.ctaLabel,
   }));
@@ -35,7 +38,7 @@ export default function ResearchAnalytics() {
       />
 
       <FolioGrid
-        items={contentItems as unknown as ContentItem[]}
+        items={contentItems}
         categoryTitle="DevAI Portfolio"
         basePath="/research"
         label="PORTFOLIO"

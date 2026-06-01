@@ -17,6 +17,7 @@ export interface Post {
   image?: string;
   tags?: string[];
   affiliateIds?: string[];
+  ctaLabel?: string;
 }
 
 export interface Resource {
@@ -68,6 +69,7 @@ export interface Resource {
   availabilityDisplayPolicy?: "do-not-display-static-availability" | "manually-reviewed";
   recommendedFor?: string[];
   eventUseCase?: string;
+  ctaLabel?: string;
 }
 
 export interface Study {
@@ -81,6 +83,7 @@ export interface Study {
   content: string;
   tags?: string[];
   author: string;
+  ctaLabel?: string;
 }
 
 export interface EventTheme {
@@ -153,6 +156,7 @@ export interface Event {
   gearTravelIds?: string[];
   gearTravelDescription?: string;
   relatedEvents?: string[];
+  ctaLabel?: string;
 }
 
 export type ContentItem = Post | Resource | Study | Event;
