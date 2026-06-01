@@ -49,7 +49,7 @@ class TestConflictsEnvironmentValidation(unittest.TestCase):
 
         self.assertEqual(result['status'], 'environment_error')
         self.assertIn('Missing GitHub token', result['message'])
-        self.assertIn('Set CODEX_GH_TOKEN, GH_TOKEN, or GITHUB_TOKEN', result['message'])
+        self.assertIn('Set CODEX_GH_TOKEN or GITHUB_TOKEN', result['message'])
         self.assertEqual(mock_run.call_count, 1)
 
     @patch.dict(os.environ, {'CODEX_GH_TOKEN': 'bad token', 'GITHUB_TOKEN': 'github-token'}, clear=True)
