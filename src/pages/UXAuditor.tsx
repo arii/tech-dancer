@@ -112,7 +112,7 @@ export default function UXAuditor() {
   return (
     <Stack gap={8} width="full">
       <SEO
-        title="Visual UX Auditor | Perception Telemetry System"
+        title="Playwright Visual QA & UX Auditor | Perception Telemetry System"
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
         canonical={`${BASE_URL}${toolConfig?.canonicalPath || '/ux-auditor'}`}
       />
@@ -125,8 +125,8 @@ export default function UXAuditor() {
       >
         <Box>
           <PageHeader
-            label="Visual UX Auditor"
-            title="Multimodal AI Analysis"
+            label="PORTFOLIO"
+            title="Playwright Visual QA & UX Auditor"
             description="Automated visual regression and UX improvement suggestions across viewports."
           />
         </Box>

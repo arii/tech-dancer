@@ -119,7 +119,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       <Stack gap={10}>
         <Stack gap={2}>
           <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
-            Event Reminders
+            Event Calendar Automation
           </Text>
           <Text variant="headline" size="3xl" weight="font-black">
             Stay on Top of What Matters
@@ -216,7 +216,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
           >
             <Stack direction="row" align="center" gap={2}>
               <Bell className="w-5 h-5 text-bg" />
-              <Text size="md" color="bg">Set Event Reminders</Text>
+              <Text size="md" color="bg">Set Calendar Reminders</Text>
             </Stack>
           </ActionButton>
         </Stack>

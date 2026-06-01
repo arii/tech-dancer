@@ -45,7 +45,7 @@ describe('EventReminders', () => {
 
   it('should show confirmation state after clicking the CTA', () => {
     render(<EventReminders event={createMockEvent({ registrationDeadline: '2024-05-15' })} />);
-    fireEvent.click(screen.getByText(/Set Event Reminders/i));
+    fireEvent.click(screen.getByText(/Set Calendar Reminders/i));
     expect(screen.getByText(/You're All Set!/i)).toBeTruthy();
   });
 });
