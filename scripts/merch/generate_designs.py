@@ -36,7 +36,7 @@ RAINBOW_HEX = [
 
 # Front Design Constants
 FRONT_FONT_SIZE = 240
-FRONT_GAP = 16
+FRONT_GAP = 12
 # Optimal heart size for 'V' visual weight (94% of cap height)
 FRONT_HEART_SIZE = 210
 FRONT_BASE_Y = 660
@@ -46,7 +46,7 @@ FRONT_CAP_HEIGHT_RATIO = 0.7
 BACK_ITEMS = ["Lead", "Follow", "Switch"]
 BACK_FONT_SIZE = 124
 BACK_CHECK_SIZE = 128
-BACK_CHECK_GAP = 32
+BACK_CHECK_GAP = 24
 BACK_LINE_SPACING = 165
 BACK_Y_OFFSET = 50
 BACK_CAP_HEIGHT_RATIO = 0.7
@@ -67,20 +67,26 @@ NEON_YELLOW_RGB = hex_to_rgb(NEON_YELLOW_HEX)
 # --- SHAPE PATHS ---
 
 def draw_heart_path(ctx):
-    """High-fidelity 'puffy' heart path based on reference proportions."""
+    """High-fidelity 'puffy' heart path from reference SVG trace."""
     ctx.move_to(300, 200)
+    # Left hump
     ctx.curve_to(300, 100, 100, 100, 100, 250)
+    # Bottom left to tip
     ctx.curve_to(100, 400, 300, 500, 300, 550)
+    # Tip to bottom right
     ctx.curve_to(300, 500, 500, 400, 500, 250)
+    # Right hump back to start
     ctx.curve_to(500, 100, 300, 100, 300, 200)
     ctx.close_path()
 
 def draw_check_path(ctx):
-    """High-fidelity checkmark path matching the reference swoop."""
+    """High-fidelity checkmark path from reference SVG trace."""
     ctx.move_to(100, 350)
-    # Quadratic approximation: (100,350) Q(175,500) (250,500)
+    # Down swoop (Quadratic: 100,350 Q 175,500 250,500)
     ctx.curve_to(150, 450, 200, 500, 250, 500)
+    # Long up swoop
     ctx.curve_to(350, 500, 450, 300, 550, 100)
+    # Return path (outer edge)
     ctx.curve_to(450, 250, 350, 400, 250, 400)
     ctx.curve_to(200, 400, 150, 350, 100, 300)
     ctx.close_path()
@@ -108,35 +114,53 @@ def draw_sparkle_path(ctx):
     ctx.curve_to(185, 300, 300, 185, 300, 75)
     ctx.close_path()
 
-def draw_rainbow_shape(ctx, draw_func, x, y, size):
+def get_shape_extents(draw_func):
+    """Calculates actual bounding box of a shape path."""
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 1, 1)
+    ctx = cairo.Context(surface)
+    draw_func(ctx)
+    return ctx.path_extents() # x1, y1, x2, y2
+
+def draw_rainbow_shape(ctx, draw_func, x, y, size, center_in_box=True):
     """Renders a shape with 6 aligned rainbow stripes and a black outline."""
     ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(size / 600.0, size / 600.0)
 
-    # Calculate bounding box of the path to align stripes
-    ctx.new_path()
-    draw_func(ctx)
-    x1, y1, x2, y2 = ctx.path_extents()
+    # Measure the shape in its 600x600 design space
+    x1, y1, x2, y2 = get_shape_extents(draw_func)
+    sw = x2 - x1
+    sh = y2 - y1
 
-    # 1. Clip and paint stripes
+    # Scale to target size
+    scale = size / 600.0
+
+    if center_in_box:
+        # Align the shape's visual center to the target (x,y)
+        # This is more reliable than top-left for varied shapes
+        ctx.translate(x, y)
+        ctx.scale(scale, scale)
+        # Shift so the visual center of the path is at 0,0
+        ctx.translate(-(x1 + sw/2.0), -(y1 + sh/2.0))
+    else:
+        ctx.translate(x, y)
+        ctx.scale(scale, scale)
+
+    # 1. Clip and paint 6 stripes based on shape width
     ctx.save()
+    draw_func(ctx)
     ctx.clip()
 
-    shape_w = x2 - x1
-    if shape_w == 0: shape_w = 600.0
-    stripe_w = shape_w / 6.0
-
+    stripe_w = sw / 6.0
     for i, color in enumerate(RAINBOW_COLORS):
         ctx.set_source_rgb(*color)
-        ctx.rectangle(x1 + i * stripe_w, y1, stripe_w + 0.5, y2 - y1)
+        # Use a small overlap (0.5) to avoid anti-aliasing gaps
+        ctx.rectangle(x1 + i * stripe_w, y1, stripe_w + 0.5, sh)
         ctx.fill()
     ctx.restore()
 
     # 2. Draw black outline
     draw_func(ctx)
     ctx.set_source_rgb(0, 0, 0)
-    ctx.set_line_width(16) # DEFAULT_LINE_WIDTH from create_svgs
+    ctx.set_line_width(16)
     ctx.set_line_join(cairo.LINE_JOIN_ROUND)
     ctx.set_line_cap(cairo.LINE_CAP_ROUND)
     ctx.stroke()
@@ -194,7 +218,7 @@ def draw_text_with_stroke(ctx, text, x, y, font_size, font_face=FONT_NAME):
     ctx.fill()
 
 def generate_front_design(output_path, is_preview=False):
-    """Generates the 'LOVE' front shirt design."""
+    """Generates the 'LOVE' front shirt design with measurement-based centering."""
     target_w = PREVIEW_WIDTH if is_preview else PRINT_WIDTH
     target_h = PREVIEW_HEIGHT if is_preview else PRINT_HEIGHT
     scale = get_scale(target_w, target_h)
@@ -215,9 +239,13 @@ def generate_front_design(output_path, is_preview=False):
     extents_O = get_text_extents(ctx, "O")
     extents_E = get_text_extents(ctx, "E")
 
+    # Measure the heart actual visual width
+    hx1, hy1, hx2, hy2 = get_shape_extents(draw_heart_path)
+    heart_visual_w = (hx2 - hx1) * (FRONT_HEART_SIZE / 600.0)
+
     total_width = (extents_L.x_advance + FRONT_GAP +
                    extents_O.x_advance + FRONT_GAP +
-                   FRONT_HEART_SIZE + FRONT_GAP +
+                   heart_visual_w + FRONT_GAP +
                    extents_E.x_advance)
 
     start_x = (DESIGN_WIDTH - total_width) / 2
@@ -231,12 +259,13 @@ def generate_front_design(output_path, is_preview=False):
     curr_x += extents_O.x_advance + FRONT_GAP
 
     # Heart (V)
-    heart_x = curr_x
+    # We use centered placement in a virtual slot
+    heart_center_x = curr_x + heart_visual_w / 2.0
     cap_height = FRONT_FONT_SIZE * FRONT_CAP_HEIGHT_RATIO
-    # Center the heart vertically relative to the cap height
-    heart_y = (FRONT_BASE_Y - cap_height / 2) - (FRONT_HEART_SIZE / 2) + 5
-    draw_rainbow_shape(ctx, draw_heart_path, heart_x, heart_y, FRONT_HEART_SIZE)
-    curr_x += FRONT_HEART_SIZE + FRONT_GAP
+    heart_center_y = FRONT_BASE_Y - cap_height / 2.0 + 5
+
+    draw_rainbow_shape(ctx, draw_heart_path, heart_center_x, heart_center_y, FRONT_HEART_SIZE)
+    curr_x += heart_visual_w + FRONT_GAP
 
     # E
     draw_text_with_stroke(ctx, "E", curr_x, FRONT_BASE_Y, FRONT_FONT_SIZE)
@@ -272,27 +301,33 @@ def generate_back_design(output_path, checked_roles=None, is_preview=False):
 
     cap_height = BACK_FONT_SIZE * BACK_CAP_HEIGHT_RATIO
 
-    group_w = BACK_CHECK_SIZE + BACK_CHECK_GAP + max_text_w
+    # Use fixed check column width to ensure text alignment
+    check_col_w = BACK_CHECK_SIZE * 0.8
+
+    group_w = check_col_w + BACK_CHECK_GAP + max_text_w
     group_h = (len(BACK_ITEMS) - 1) * BACK_LINE_SPACING + cap_height
     start_x = (DESIGN_WIDTH - group_w) / 2
     start_y = (DESIGN_HEIGHT - group_h) / 2 + BACK_Y_OFFSET
 
     for i, item in enumerate(BACK_ITEMS):
         curr_y = start_y + (i * BACK_LINE_SPACING) + cap_height
-        check_y = (curr_y - cap_height / 2) - (0.5 * BACK_CHECK_SIZE)
+
+        # Center check in its column
+        check_center_x = start_x + check_col_w / 2.0
+        check_center_y = curr_y - cap_height / 2.0
 
         if item in checked_roles:
-            draw_rainbow_shape(ctx, draw_check_path, start_x, check_y, BACK_CHECK_SIZE)
+            draw_rainbow_shape(ctx, draw_check_path, check_center_x, check_center_y, BACK_CHECK_SIZE)
         else:
             # Draw empty checkbox outline (retro circle style)
             ctx.set_source_rgb(0, 0, 0)
-            ctx.set_line_width(BACK_CHECK_SIZE * 0.12)
-            ctx.arc(start_x + BACK_CHECK_SIZE/2, check_y + BACK_CHECK_SIZE/2, BACK_CHECK_SIZE/3, 0, 2*3.14159)
+            ctx.set_line_width(BACK_CHECK_SIZE * 0.1)
+            ctx.arc(check_center_x, check_center_y, BACK_CHECK_SIZE * 0.3, 0, 2*3.14159)
             ctx.stroke_preserve()
             ctx.set_source_rgb(1, 1, 1)
             ctx.fill()
 
-        draw_text_with_stroke(ctx, item, start_x + BACK_CHECK_SIZE + BACK_CHECK_GAP, curr_y, BACK_FONT_SIZE)
+        draw_text_with_stroke(ctx, item, start_x + check_col_w + BACK_CHECK_GAP, curr_y, BACK_FONT_SIZE)
 
     surface.write_to_png(output_path)
     print(f"✓ Generated {output_path}")
@@ -323,7 +358,7 @@ def generate_shapes_sheet(output_path):
     for i, asset in enumerate(shapes):
         tx = (i % 2) * 600
         ty = (i // 2) * 600
-        draw_rainbow_shape(ctx, asset['func'], tx + 60, ty + 60, 480)
+        draw_rainbow_shape(ctx, asset['func'], tx + 300, ty + 300, 480)
 
         # Label
         ctx.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
