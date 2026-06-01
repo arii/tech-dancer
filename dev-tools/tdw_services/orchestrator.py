@@ -236,6 +236,8 @@ class Orchestrator:
     def _get_conflicts_github_token(self) -> Tuple[Optional[str], Optional[str]]:
         if os.environ.get("CODEX_GH_TOKEN"):
             return os.environ["CODEX_GH_TOKEN"], "CODEX_GH_TOKEN"
+        if os.environ.get("GH_TOKEN"):
+            return os.environ["GH_TOKEN"], "GH_TOKEN"
         if os.environ.get("GITHUB_TOKEN"):
             return os.environ["GITHUB_TOKEN"], "GITHUB_TOKEN"
         return None, None
@@ -245,13 +247,13 @@ class Orchestrator:
         if not token:
             return {
                 "status": "environment_error",
-                "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
+                "message": "Missing GitHub token. Set CODEX_GH_TOKEN, GH_TOKEN, or GITHUB_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
             }
 
         if any(char.isspace() for char in token) or any(ord(char) < 32 for char in token):
             return {
                 "status": "environment_error",
-                "message": f"Invalid GitHub token from {token_source}; token-derived URL would be malformed. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid GitHub token.",
+                "message": f"Invalid GitHub token from {token_source}; token-derived URL would be malformed. Set CODEX_GH_TOKEN, GH_TOKEN, or GITHUB_TOKEN to a valid GitHub token.",
             }
 
         token_url = f"https://x-access-token:{quote(token, safe='')}@github.com/{repo_slug}.git"
@@ -259,7 +261,7 @@ class Orchestrator:
         if parsed.scheme != "https" or parsed.hostname != "github.com" or not parsed.username or not parsed.password:
             return {
                 "status": "environment_error",
-                "message": f"Invalid GitHub token-derived URL from {token_source}. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid GitHub token.",
+                "message": f"Invalid GitHub token-derived URL from {token_source}. Set CODEX_GH_TOKEN, GH_TOKEN, or GITHUB_TOKEN to a valid GitHub token.",
             }
         return None
 
@@ -294,42 +296,11 @@ class Orchestrator:
             res = run_command(cmd, check=False, shell=True)
             return res.returncode, res.stdout.strip(), res.stderr.strip()
 
-        origin_code, origin_url, _ = run("git config --get remote.origin.url")
-        origin_fix = "git remote add origin https://github.com/arii/tech-dancer.git"
-
-        if origin_code != 0 or not origin_url:
-            return {
-                "status": "environment_error",
-                "message": f"Missing origin remote. Fix: {origin_fix}",
-            }
-
-        github_remote_patterns = (
-            r"^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\.git)?/?$",
-            r"^git@github\.com:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\.git)?$",
-        )
-        if not any(re.match(pattern, origin_url) for pattern in github_remote_patterns):
-            return {
-                "status": "environment_error",
-                "message": f"Malformed origin remote: {origin_url}. Fix: {origin_fix}",
-            }
-
-        token = os.getenv("CODEX_GH_TOKEN") or os.getenv("GITHUB_TOKEN")
-        if not token:
-            return {
-                "status": "environment_error",
-                "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN.",
-            }
-        if re.search(r"[\s\[\]{}<>]", token):
-            return {
-                "status": "environment_error",
-                "message": "Invalid GitHub token value; token-derived URL would be malformed. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid token.",
-            }
-
         fetch_code, _, fetch_err = run("git fetch origin")
         if fetch_code != 0:
             return {
                 "status": "environment_error",
-                "message": f"Unable to fetch origin. Check the remote and token. Fix: {origin_fix}; Set CODEX_GH_TOKEN or GITHUB_TOKEN. {fetch_err}",
+                "message": f"Unable to fetch origin. Check the remote and token. Fix with: git remote set-url origin https://github.com/arii/tech-dancer.git; Set CODEX_GH_TOKEN, GH_TOKEN, or GITHUB_TOKEN. {fetch_err}",
             }
 
         code, merge_base, _ = run(f"git merge-base origin/{base_branch} HEAD")

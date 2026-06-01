@@ -26,7 +26,13 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   };
 
   const affiliateLinks = (post.affiliateIds || [])
-    .map(id => affiliateManager.getLink(id))
+    .map(id => {
+      const link = affiliateManager.getLink(id);
+      if (!link && import.meta.env.DEV) {
+        console.warn(`[BlogPostDetail] Affiliate link with ID "${id}" not found.`);
+      }
+      return link;
+    })
     .filter((link): link is NonNullable<typeof link> => !!link);
 
   const featuredAffiliates = affiliateLinks.slice(0, 3);
@@ -37,6 +43,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       title={post.title}
       category={post.category}
       date={post.date}
+      updated={post.updated}
       content={post.content}
       image={post.image}
       imageAlt={post.imageAlt}
@@ -55,16 +62,18 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
               <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
             </Stack>
           </Stack>
-          <AffiliateDisclosure />
         </Stack>
       }
     >
       {affiliateLinks.length > 0 && (
         <Box border="t" paddingTop={10} marginTop={10} className="border-line/30">
           <Stack gap={6}>
-            <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-              Shop the checklist
-            </Text>
+            <Stack direction="row" align="center" justify="between">
+              <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                Shop selected items
+              </Text>
+              <AffiliateDisclosure />
+            </Stack>
 
             {/* Featured items (Grid of cards) */}
             <Grid cols={{ base: 1, md: 3 }} gap={4}>
