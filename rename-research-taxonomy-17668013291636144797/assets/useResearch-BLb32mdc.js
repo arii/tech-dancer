@@ -1,0 +1,1 @@
+import{u as i}from"./useQuery-NuSnseuj.js";import{P as s}from"./index-CsJSP6Lo.js";import{R as u}from"./research-tools-C6wzv17l.js";function g(){const{data:o=[]}=i({queryKey:["studies"],queryFn:s,initialData:s});return{studies:o,tools:u,getTool:t=>u.find(e=>e.id===t),getStudy:t=>o.find(e=>e.slug===t)}}export{g as u};
