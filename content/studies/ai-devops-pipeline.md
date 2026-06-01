@@ -13,7 +13,18 @@ Stop relying on expensive third-party LLM APIs for CI/CD. For the Tech-Dancer pl
 
 Here is the architecture of the Tech-Dancer automation suite.
 
-## 1. Local LLM Orchestration with Ollama
+## 1. Context Aggregation: Simpler Prompts via Pre-Fetched Data
+
+A common mistake in DevAI is forcing the agent to spend tokens querying the codebase for basic context. Instead, we use **aggregation scripts** like `td-cli gh audit-pr --fetch` and `td-cli gh aggregate`.
+
+These tools pre-process the PR diffs, CI logs, and linked issue descriptions into a single, high-density context file. This allows us to use much simpler, more focused prompts for the LLM because the "heavy lifting" of data collection is already done.
+
+```bash
+# Example: Aggregating multiple PRs into a single technical context
+python3 dev-tools/td_cli.py gh aggregate --target-branch consolidated-fix --pr-numbers 123 124 125
+```
+
+## 2. Local LLM Orchestration with Ollama
 
 The heart of the pipeline is a local model orchestration layer. Instead of sending code to an external provider, we use the `code-reviewer` model (a custom-prompted Qwen2.5 derivative) running via Ollama.
 
@@ -34,61 +45,22 @@ def review_file(file_path):
     print(review)
 ```
 
-## 2. CI Log Triage and Automated Debugging
+## 3. Autonomous Repair with `@jules-fix-ci`
 
-When a build fails, the `triage_failure.py` script parses the raw logs and identifies the root cause using a local synthesis model. This prevents developers from digging through 1,000+ lines of Vite build output.
+When a CI run fails, we don't just alert the developer; we offer an autonomous fix. By commenting `@jules-fix-ci` on a PR, we trigger a dedicated GitHub Action that initializes an AI repair session using `td-cli agent fix-ci`.
 
-```python
-# dev-tools/triage_failure.py
-import sys
-from utils import call_ollama
+This tool automatically triages the failure logs, maps them to specific lines of code, and generates a proposed fix—often before the developer has even seen the notification.
 
-def triage_log(log_data):
-    prompt = f"Analyze this CI failure log and identify the failing line and fix:\n\n{log_data}"
-    return call_ollama(prompt, model="llama3.2")
+## 4. Multi-State Review Invocation
 
-if __name__ == "__main__":
-    log_data = sys.stdin.read()
-    print(triage_log(log_data))
-```
-
-## 3. Playwright Visual Regression Gates
-
-We use Playwright not just for functional tests, but as a visual telemetry system. Any change to the `src/features` layer triggers a visual regression comparison to ensure design token consistency across desktop and mobile.
-
-```typescript
-// playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
-  testDir: './tests',
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-  },
-  projects: [
-    { name: 'Desktop Chrome', use: { ...devices['Desktop Chrome'] } },
-    { name: 'Mobile Safari', use: { ...devices['iPhone 12'] } },
-  ],
-});
-```
-
-## 4. Automated PR Review Submission
-
-The final step is the automated submission of the agent's findings back to GitHub. The `submit_review.py` script integrates with the `gh` CLI to post inline comments, ensuring that AI-driven feedback is as actionable as a human peer review.
+Feedback must be actionable. Our `submit_review.py` script handles different comment types—`APPROVE`, `REQUEST_CHANGES`, and `COMMENT`—based on the agent's findings. This "multi-state" invocation ensures that critical design system violations (like raw Tailwind arbitrary values) strictly block the build, while minor suggestions are posted as non-blocking comments.
 
 ```python
-# dev-tools/submit_review.py excerpts
-from utils import get_github_client, get_repo_name
-
-def submit_review(pr_number, review_payload):
-    repo = get_github_client().get_repo(get_repo_name())
-    pr = repo.get_pull(int(pr_number))
-
-    # Post review with inline comments extracted from the local model output
-    pr.create_review(
-        body=review_payload.get("body"),
-        comments=review_payload.get("comments"),
-        event="COMMENT"
-    )
+# dev-tools/submit_review.py logic
+event = "REQUEST_CHANGES" if "Not Approved" in payload else "APPROVE"
+pr.create_review(body=payload["body"], comments=payload["comments"], event=event)
 ```
+
+## 5. Playwright Visual Regression Gates
+
+We use Playwright as a visual telemetry system. Any change to the `src/features` layer triggers a visual regression comparison. If a shift is detected, the AI UX Auditor analyzes the screenshot diff to determine if the regression was an intentional design update or an accidental break.
