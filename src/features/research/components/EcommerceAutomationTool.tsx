@@ -1,3 +1,4 @@
+import { ArrowDown } from "lucide-react";
 import {
   ShieldCheck,
   Search,
@@ -128,33 +129,67 @@ export function EcommerceAutomationTool() {
 
           <Stack gap={6}>
             <Text variant="headline" size="xl" weight="font-black" as="h2">Pipeline Architecture</Text>
-            <Box border radius="xl" padding={{ base: 4, sm: 6 }} surface="surface">
-              <Stack gap={4} align="center">
+            <Box border radius="xl" padding={{ base: 6, sm: 8 }} surface="surface">
+              <Stack gap={6} align="center">
+                {/* Responsive layout: vertical stack on mobile, horizontal row on larger screens */}
                 <Box
                   display="flex"
+                  direction={{ base: 'col', md: 'row' }}
                   align="center"
-                  gap={2}
                   justify="center"
+                  gap={3}
                   width="full"
-                  overflowX="auto"
-                  className="hide-scrollbar"
-                  paddingBottom={1}
                 >
-                  <Box display="flex" align="center" gap={2} shrink={0} flexWrap="nowrap">
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Templates</Text>
-                    <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Metadata Packet</Text>
-                    <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">AI Recommendations</Text>
-                    <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Dry-run Plan</Text>
-                    <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="accent">Human Review</Text>
-                    <Icon icon={ArrowRight} size="xs" color="dim" />
-                    <Text variant="mono" size="micro" paddingX={2} paddingY={1} border radius="sm" surface="muted">Approved Sync</Text>
-                  </Box>
+                  {[
+                    { label: 'Templates', active: false },
+                    { label: 'Metadata Packet', active: false },
+                    { label: 'AI Recommendations', active: true },
+                    { label: 'Dry-run Plan', active: true },
+                    { label: 'Human Review', active: true },
+                    { label: 'Approved Sync', active: false },
+                  ].map((step, index, arr) => (
+                    <Box
+                      key={step.label}
+                      display="flex"
+                      direction={{ base: 'col', md: 'row' }}
+                      align="center"
+                      gap={3}
+                    >
+                      {/* Step Badge */}
+                      <Text
+                        variant="mono"
+                        size="micro"
+                        paddingX={3}
+                        paddingY={2}
+                        border
+                        radius="sm"
+                        weight="font-bold"
+                        uppercase
+                        tracking="widest"
+                        surface={step.active ? 'accent' : 'muted'}
+                      >
+                        {step.label}
+                      </Text>
+
+                      {/* Arrow Connector: pointing Down on mobile, Right on desktop */}
+                      {index < arr.length - 1 && (
+                        <Box display="flex" align="center" justify="center">
+                          {/* Icon visible on mobile */}
+                          <Box display={{ base: 'block', md: 'none' }}>
+                            <Icon icon={ArrowDown} size="sm" color="dim" />
+                          </Box>
+                          {/* Icon visible on desktop */}
+                          <Box display={{ base: 'none', md: 'block' }}>
+                            <Icon icon={ArrowRight} size="sm" color="dim" />
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+                  ))}
                 </Box>
-                <Text size="micro" color="dim" uppercase weight="font-bold" tracking="widest">MULTI-PLATFORM SYNC PIPELINE</Text>
+                <Text size="micro" color="dim" uppercase weight="font-black" tracking="widest" opacity={0.6}>
+                  MULTI-PLATFORM SYNC PIPELINE
+                </Text>
               </Stack>
             </Box>
           </Stack>
