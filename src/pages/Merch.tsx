@@ -25,11 +25,11 @@ export default function Merch() {
         jsonLd={generateMerchSchema(getAllMerchProducts())}
       />
 
-      <Stack gap={10} width="full">
+      <Stack gap={{ base: 6, md: 10 }} width="full">
         {/* Hero Section */}
-        <Box as="section" marginX="auto" maxWidth="7xl" paddingX={{ base: 4, md: 6 }} paddingY={{ base: 6, md: 10 }}>
-          <Grid cols={{ base: 1, md: 2 }} gap={8} align="center">
-            <Stack gap={6}>
+        <Box as="section" marginX="auto" maxWidth="7xl" paddingX={{ base: 4, md: 6 }} paddingTop={{ base: 2, md: 10 }} paddingBottom={{ base: 4, md: 10 }}>
+          <Grid cols={{ base: 1, md: 2 }} gap={{ base: 6, md: 8 }} align="center">
+            <Stack gap={{ base: 4, md: 6 }}>
               <Stack gap={2}>
                 <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">
                   OFFICIAL STOREFRONT
@@ -37,12 +37,12 @@ export default function Merch() {
                 <Text as="h1" variant="headline" size={{ base: '4xl', md: '5xl' }} weight="font-bold" tracking="tight">
                   West Coast Swing Dance Merch
                 </Text>
-                <Text variant="body" size="lg" color="dim" leading="relaxed">
+                <Text variant="body" size={{ base: 'base', md: 'lg' }} color="dim" leading="relaxed">
                   Role-pride apparel, NorCal love, rainbow pride, and social dance floor energy. Made for the WCS community.
                 </Text>
               </Stack>
 
-              <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
+              <Stack direction={{ base: 'column', sm: 'row' }} gap={3}>
                 <Button
                   as="a"
                   href="https://boomtick.printful.me"
@@ -64,7 +64,7 @@ export default function Merch() {
                 </Button>
               </Stack>
 
-              <Text size="micro" color="dim" italic>
+              <Text size="micro" color="dim" italic leading="snug">
                 Heads up: merch opens in the BoomTick Printful store. Printful handles colors, sizing, checkout, shipping, and fulfillment.
               </Text>
             </Stack>
@@ -75,13 +75,13 @@ export default function Merch() {
           </Grid>
         </Box>
 
-        {/* Mobile Promo Card */}
+        {/* Mobile Promo Card - Compacted */}
         <Box display={{ base: 'block', md: 'none' }} paddingX={4}>
           <ReferralBanner layout="compact" />
         </Box>
 
         {/* Browse Section */}
-        <Stack id="browse" gap={8} scrollMarginTop={20}>
+        <Stack id="browse" gap={{ base: 4, md: 8 }} scrollMarginTop={20}>
           <Stack gap={4}>
             <Stack gap={1}>
               <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
@@ -107,7 +107,7 @@ export default function Merch() {
           </Stack>
 
           {/* Product Grid */}
-          <Grid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap={6}>
+          <Grid cols={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap={{ base: 4, md: 6 }}>
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}
@@ -135,8 +135,8 @@ export default function Merch() {
             </Stack>
           </Box>
 
-          <Box padding={8} radius="lg" border surface="card" display="flex" align="center" justify="center">
-            <Stack gap={4} align="center" textAlign="center">
+          <Box padding={8} radius="lg" border surface="card" display="flex" align="center" justify="center" textAlign="center">
+            <Stack gap={4} align="center">
               <Text variant="headline" size="lg" weight="font-bold">
                 Storefront Notice
               </Text>

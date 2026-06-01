@@ -171,6 +171,11 @@ When multiple agents work simultaneously:
   ```
 - **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
 - **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
+- **Split Content PRs**: Do not mix content domains. Create separate PRs for:
+  - **Event Facts**: Factual corrections (venue, city, dates, URL). Must include source URL.
+  - **Gear Assets**: Broken image/path fixes. Mark missing assets as `draft: true`.
+  - **Merch Catalog**: Copy or layout updates. List product removals explicitly.
+  - **Articles**: Editorial updates. Provide rationale for date changes.
 - **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
 
 ### Baseline Maintenance

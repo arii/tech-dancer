@@ -44,15 +44,20 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
       <Stack gap={4}>
         <Stack gap={1}>
           <Text
-            as="h3"
+            as="a"
+            href={item.href}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
             variant="body"
             size="lg"
             weight="font-bold"
             color="main"
             leading="tight"
-            className="group-hover:text-accent transition-colors"
+            className="hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            {item.title}
+            <Box as="h3" display="inline">
+              {item.title}
+            </Box>
           </Text>
 
           <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
