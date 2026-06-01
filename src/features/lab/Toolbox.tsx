@@ -27,7 +27,7 @@ export default function Toolbox() {
     <Box as="section" paddingY={4}>
       <SEO
         title="Toolbox"
-        description="Rigorous testing and honest takes on the gear that keeps you moving. Gear reviews for West Coast Swing dancers."
+        description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
         jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
       <Box as="header" marginBottom={8}>
