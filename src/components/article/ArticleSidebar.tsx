@@ -38,8 +38,6 @@ interface ArticleSidebarProps {
   snapshot?: Array<{ label: string; value: string }>;
   toc?: Array<{ label: string; id: string }>;
   relatedTopics?: string[];
-  gearMentioned?: unknown;
-  relatedGuides?: unknown;
   custom?: ReactNode;
 }
 
@@ -57,7 +55,7 @@ export function ArticleSidebar({
             {snapshot.map((item, i) => (
               <Stack key={i} direction="row" justify="between" align="center">
                 <Text variant="mono" size="micro" color="dim" uppercase>{item.label}</Text>
-                <Text size="xs" weight="font-bold" color="dim">{item.value}</Text>
+                <Text size="xs" weight="font-bold" color="dim" textAlign="right">{item.value}</Text>
               </Stack>
             ))}
           </Stack>

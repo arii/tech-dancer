@@ -26,7 +26,7 @@ export default function BlogPost() {
       "description": post.excerpt,
       "author": {
         "@type": "Person",
-        "name": post.author || "Ariel Anders",
+        "name": post.author,
         "url": `${BASE_URL}/about`
       },
       "datePublished": post.date,

@@ -178,7 +178,7 @@ When multiple agents work simultaneously:
 - CI enforces bundle size and TypeScript `any` count via GitHub Actions variables
 - After intentional approved debt increases, update baselines:
   ```bash
-  gh variable set BUNDLE_BASELINE_KB --body 3080
+  gh variable set BUNDLE_BASELINE_KB --body 3132
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 

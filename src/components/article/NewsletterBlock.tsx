@@ -1,5 +1,6 @@
 
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { EmailForm } from '@/features/email-capture/EmailForm';
 
 interface NewsletterBlockProps {
   compact?: boolean;
@@ -46,29 +47,9 @@ export function NewsletterBlock({ compact = false }: NewsletterBlockProps) {
           </Stack>
         )}
 
-        <Stack direction={{ base: 'column', sm: 'row' }} gap={3} width="full" maxWidth={compact ? 'full' : 'md'} marginX="auto" marginTop={2}>
-          <Box
-            as="input"
-            type="email"
-            placeholder="Enter your email"
-            flex="1"
-            paddingX={5}
-            paddingY={3}
-            radius="xl"
-            className="bg-bg/60 border border-line/80 text-text-body focus:outline-none focus:border-accent/50 transition-colors placeholder:text-text-dim/40"
-          />
-          <Box
-            as="button"
-            paddingX={6}
-            paddingY={3}
-            radius="xl"
-            color="bg"
-            weight="font-bold"
-            className="bg-accent hover:bg-surface-alt transition-all active:scale-95 whitespace-nowrap"
-          >
-            Subscribe
-          </Box>
-        </Stack>
+        <Box width="full" maxWidth={compact ? 'full' : 'md'} marginX={compact ? undefined : "auto"} marginTop={2}>
+          <EmailForm />
+        </Box>
       </Stack>
     </Box>
   );

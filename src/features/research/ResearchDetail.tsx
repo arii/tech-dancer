@@ -16,6 +16,7 @@ import { ArticleSidebar } from '@/components/article/ArticleSidebar';
 import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime as getReadingTime } from '@/lib/content';
+import { useShare } from '@/hooks/useShare';
 
 // Lazy load tool components
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -37,6 +38,7 @@ export function ResearchDetail() {
   const { id: paramId } = useParams();
   const { pathname } = useLocation();
   const { getTool, getStudy } = useResearch();
+  const { share } = useShare();
 
   const id = useMemo(() => {
     if (paramId) return paramId;
@@ -65,16 +67,15 @@ export function ResearchDetail() {
     );
   }
 
-  const share = () => {
-    const title = study?.title || tool?.title || 'Research';
-    const text = study?.excerpt || tool?.description || '';
-    if (navigator.share) {
-      navigator.share({ title, text, url: window.location.href }).catch(console.error);
-    }
+  const handleShare = () => {
+    share({
+      title: study?.title || tool?.title || 'Research',
+      text: study?.excerpt || tool?.description || '',
+    });
   };
 
   const shareAction = (
-    <Stack as="button" direction="row" onClick={share} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
+    <Stack as="button" direction="row" onClick={handleShare} align="center" gap={1.5} className="text-text-dim/60 hover:text-accent transition-colors">
       <Share2 className="w-3.5 h-3.5" />
       <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wider">SHARE</Text>
     </Stack>

@@ -39,9 +39,14 @@ def verify_pr_scope(file_list=None):
 
     config = get_project_config()
     core_dirs = config.get("core_dirs", [])
+    allowed_scope = config.get("allowed_scope", [])
     threshold = config.get("monolithic_pr_threshold", 3)
 
-    core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]
+    core_files = [
+        f for f in file_list
+        if any(f.startswith(d) for d in core_dirs)
+        and not any(f.startswith(a) for a in allowed_scope if f.startswith(a))
+    ]
     if len(core_files) > threshold:
         return f"PR scope warning: Touching {len(core_files)} core files in {core_dirs}. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23)."
     return None

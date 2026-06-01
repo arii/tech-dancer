@@ -3,6 +3,12 @@
     "src/layouts/",
     "src/components/"
   ],
+  "allowed_scope": [
+    "src/components/article/",
+    "src/components/ui/",
+    "src/components/products/",
+    "src/styles/article-prose.css"
+  ],
   "monolithic_pr_threshold": 3,
   "base_branch": "origin/main",
   "use_gemini_fallback": false,

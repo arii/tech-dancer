@@ -1,6 +1,4 @@
 import Papa from 'papaparse';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { WCSRecord } from './useWCSData';
 
 export function useExport() {
@@ -22,8 +20,13 @@ export function useExport() {
     data: (string | number)[][];
   }
 
-  const exportPDF = (options: PDFOptions) => {
+  const exportPDF = async (options: PDFOptions) => {
     const { title = 'Report', filename = 'export', headers, data } = options;
+
+    // Dynamic imports to keep these heavy libraries out of the main/feature chunks
+    const { jsPDF } = await import('jspdf');
+    const { default: autoTable } = await import('jspdf-autotable');
+
     const doc = new jsPDF();
 
     doc.setFontSize(18);
