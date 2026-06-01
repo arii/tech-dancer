@@ -18,6 +18,9 @@ export interface ResearchTool {
   image?: string;
   proves?: string[];
   ctas?: ResearchCTA[];
+  problem?: string;
+  solution?: string;
+  outcome?: string;
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
@@ -32,6 +35,9 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     isFlagship: true,
     image: '/assets/posts/boomtick-and-b-thumb.svg',
     proves: ['Frontend architecture', 'Product thinking', 'Content systems', 'SEO', 'Automation', 'Design iteration'],
+    problem: 'Fragmented West Coast Swing content and lack of professional-grade dance resources.',
+    solution: 'A production React/Vite content platform with blog posts, gear reviews, event guides, merch integration, and automated visual QA.',
+    outcome: 'An optimized, SEO-friendly hub that proves frontend architecture, product thinking, and robust automation pipelines.',
     ctas: [
       { label: 'View site', url: 'https://boomtick.blog', isExternal: true, variant: 'primary' },
       { label: 'Read architecture article', url: '/research/architecture', variant: 'outline' },
@@ -49,6 +55,9 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     isFlagship: true,
     image: '/assets/research/repo-auditor-ai.png',
     proves: ['DevAI orchestration', 'GitHub workflow automation', 'PR review systems', 'Prompt pipelines', 'Repo-aware tooling'],
+    problem: 'Inefficient manual PR reviews and difficulty tracking CI health across multiple repositories.',
+    solution: 'A workflow console for analyzing pull requests, reviewing code quality, checking CI failures, and generating structured agent instructions.',
+    outcome: 'Scalable DevAI orchestration that reduces review friction and provides high-precision repo-aware context for agentic workflows.',
     ctas: [
       { label: 'Read case study', url: '/research/repo-auditor-case-study', variant: 'primary' },
       { label: 'View repo', url: 'https://github.com/arii/hrm-project-management', isExternal: true, variant: 'outline' },
@@ -66,6 +75,9 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     isFlagship: true,
     image: '/assets/research/hrm-flagship.png',
     proves: ['Hardware APIs', 'OAuth integration', 'State synchronization', 'Cross-platform state'],
+    problem: 'Difficulty synchronizing workout telemetry with playback context for professional-grade performance metrics.',
+    solution: 'A training dashboard integrating Web Bluetooth heart-rate telemetry with Spotify API context.',
+    outcome: 'A complex browser-based application demonstrating hardware API mastery and DevAI orchestration for real-time telemetry.',
     ctas: [
       { label: 'View HRM', url: 'https://arii.github.io/hrm/', isExternal: true, variant: 'primary' },
       { label: 'Read case study', url: '/research/hrm-case-study', variant: 'outline' }

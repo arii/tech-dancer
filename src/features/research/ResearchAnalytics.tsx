@@ -65,37 +65,62 @@ function ToolCTA({ cta }: { cta: ResearchCTA }) {
 }
 
 function FlagshipCard({ tool }: { tool: ResearchTool }) {
+  const isPrimary = tool.id === 'boomtick-blog' || tool.id === 'repo-auditor-ai';
+
   return (
     <BaseCard
       padding={0}
       gap={0}
-      surface="surface"
-      className="border-accent/10 h-full overflow-hidden"
+      surface={isPrimary ? "muted" : "surface"}
+      className={cn(
+        "border-accent/10 h-full overflow-hidden transition-all duration-300",
+        isPrimary && "ring-1 ring-accent/20 shadow-xl shadow-accent/5"
+      )}
     >
       <Grid cols={{ base: 1, md: 5 }} gap={0} height="full">
-        <ToolImage tool={tool} />
+        <ToolImage tool={tool} className={cn(isPrimary && "opacity-90")} />
         <Stack
           span={{ base: 1, md: tool.image ? 3 : 5 }}
           gap={{ base: 4, md: 6 }}
-          padding={{ base: 6, md: 8 }}
+          padding={{ base: 6, md: 10 }}
           flex={1}
           className="min-w-0" // Prevent horizontal overflow
         >
           <Box display="flex" justify="between" align="start" width="full">
-            <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
-              <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+            <Box
+              width={isPrimary ? 14 : 12}
+              height={isPrimary ? 14 : 12}
+              surface="surface"
+              border
+              radius="lg"
+              display="flex"
+              align="center"
+              justify="center"
+              className="border-accent/10 shadow-sm"
+            >
+              <Icon icon={getToolIcon(tool)} size={isPrimary ? "xl" : "lg"} color="accent" />
             </Box>
-            <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
-              Flagship
+            <Text
+              size="micro"
+              weight="font-bold"
+              uppercase
+              tracking="widest"
+              color="accent"
+              paddingX={4}
+              paddingY={1.5}
+              radius="full"
+              className="bg-accent/10 border border-accent/20"
+            >
+              Flagship Output
             </Text>
           </Box>
 
-          <Stack gap={4}>
+          <Stack gap={6}>
             <Stack gap={1}>
               <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
                 {tool.category}
               </Text>
-              <Text variant="display" size="2xl" weight="font-black">
+              <Text variant="display" size={isPrimary ? "3xl" : "2xl"} weight="font-black">
                 {tool.title}
               </Text>
               <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
@@ -103,19 +128,36 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
               </Text>
             </Stack>
 
-            <Text variant="body" size="md" color="dim" className="leading-relaxed">
-              {tool.description}
-            </Text>
+            {tool.problem && tool.solution && tool.outcome ? (
+              <Grid cols={{ base: 1, lg: 3 }} gap={6} paddingY={4} border="y" className="border-accent/5">
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>Problem</Text>
+                  <Text size="sm" color="body" className="leading-relaxed">{tool.problem}</Text>
+                </Stack>
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>Solution</Text>
+                  <Text size="sm" color="body" className="leading-relaxed">{tool.solution}</Text>
+                </Stack>
+                <Stack gap={2}>
+                  <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>Outcome</Text>
+                  <Text size="sm" color="body" weight="font-semibold" className="leading-relaxed">{tool.outcome}</Text>
+                </Stack>
+              </Grid>
+            ) : (
+              <Text variant="body" size="md" color="dim" className="leading-relaxed">
+                {tool.description}
+              </Text>
+            )}
 
             {tool.proves && (
-              <Stack gap={2}>
+              <Stack gap={3}>
                 <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>
-                  Proves
+                  Proves (Hiring Skills)
                 </Text>
-                <Grid cols={{ base: 1, sm: 2 }} gapX={4} gapY={1.5}>
+                <Grid cols={{ base: 1, sm: 2, lg: 3 }} gapX={6} gapY={2}>
                   {tool.proves.map(item => (
                     <Box key={item} display="flex" align="center" gap={2}>
-                      <Icon icon={CheckCircle2} size="xs" color="accent" className="opacity-50" />
+                      <Icon icon={CheckCircle2} size="xs" color="accent" className="opacity-60" />
                       <Text size="xs" color="body" weight="font-medium">{item}</Text>
                     </Box>
                   ))}
@@ -124,14 +166,19 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
             )}
           </Stack>
 
-          <Stack gap={3} marginTop="auto" paddingTop={4}>
-            <Box display="flex" wrap="wrap" gap={2}>
-              {tool.tags.map(tag => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </Box>
+          <Stack gap={4} marginTop="auto" paddingTop={6}>
+            <Stack gap={2}>
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
+                Stack
+              </Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {tool.tags.map(tag => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </Box>
+            </Stack>
 
-            <Box display="flex" wrap="wrap" gap={3}>
+            <Box display="flex" wrap="wrap" gap={3} paddingTop={2}>
               {tool.ctas?.map((cta) => (
                 <ToolCTA key={cta.url} cta={cta} />
               ))}
@@ -188,7 +235,7 @@ function EngineeringToolCard({ tool }: { tool: ResearchTool }) {
         </Stack>
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
-        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
+        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Project Details</Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Box>
     </Stack>
