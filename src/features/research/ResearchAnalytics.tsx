@@ -1,15 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { FilterBar } from '@/components/ui/FilterBar';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { useResearch } from './useResearch';
 import { useSearchParam } from '@/hooks/useSearchParam';
-import { ResearchTool } from '@/config/research-tools';
-import { ContentCard } from '@/components/ui/ContentCard';
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
   const { tools } = useResearch();
   const [activeCategory] = useSearchParam('category', 'All');
 
