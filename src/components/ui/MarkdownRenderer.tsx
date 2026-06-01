@@ -86,13 +86,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 color="main"
                 weight="font-bold"
                 margin={0}
-                className="border-l-2 border-accent/40 pl-4"
+                className="border-l-2 border-accent/40" paddingLeft={4}
                 {...props}
               />
             </Box>
           ),
           p: ({node: _node, ...props}) => (
-            <Text as="p" size="md" color="dim" className="leading-relaxed mb-6" {...props} />
+            <Text as="p" size="md" color="dim" className="leading-relaxed" marginY={6} {...props} />
           ),
           ul: ({node: _node, ...props}) => (
             <Box as="ul" className="space-y-3 mb-8 list-none" {...props} />
@@ -138,11 +138,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           ...Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
             config.tags.forEach(tag => {
-              const Component = config.component as any;
-              acc[tag] = (props: any) => <Component {...props} />;
+              const Component = config.component as React.ElementType;
+              acc[tag] = (props: Record<string, unknown>) => <Component {...props} />;
             });
             return acc;
-          }, {} as any)
+          }, {} as Record<string, React.ElementType>)
         }}
       >
         {content}
