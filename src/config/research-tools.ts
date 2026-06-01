@@ -111,6 +111,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Business Automation',
     status: 'In Progress',
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
-    canonicalPath: '/research/ecommerce-automation'
+    canonicalPath: '/research/ecommerce-automation',
+    excludeFromEngineeringTools: true
   }
 ];
