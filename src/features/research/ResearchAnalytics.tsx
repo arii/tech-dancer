@@ -4,6 +4,7 @@ import { FilterBar } from '@/components/ui/FilterBar';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { useResearch } from './useResearch';
 import { useSearchParam } from '@/hooks/useSearchParam';
+import { ContentItem } from '@/lib/content';
 
 export default function ResearchAnalytics() {
   const { tools } = useResearch();
@@ -34,7 +35,7 @@ export default function ResearchAnalytics() {
       />
 
       <FolioGrid
-        items={contentItems as any}
+        items={contentItems as unknown as ContentItem[]}
         categoryTitle="DevAI Portfolio"
         basePath="/research"
         label="PORTFOLIO"
