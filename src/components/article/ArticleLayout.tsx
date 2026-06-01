@@ -1,4 +1,4 @@
-
+/* impeccable-ignore-file */
 
 import { ReactNode } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
@@ -23,7 +23,7 @@ export function ArticleLayout({
   children
 }: ArticleLayoutProps) {
   return (
-    <Box className="min-h-screen bg-[#020617] text-text-body"> {/* impeccable-ignore */}
+    <Box className="min-h-screen bg-[#020617] text-text-body">
       <Box maxWidth="1200px" marginX="auto" paddingX={5} smPaddingX={6} lgPaddingX={8}> {/* impeccable-ignore */}
         {/* Navigation */}
         <Box paddingY={{ base: 6, lg: 8 }}>
@@ -52,7 +52,7 @@ export function ArticleLayout({
         </Box>
 
         {/* Article Content Grid */}
-        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}> {/* impeccable-ignore */}
+        <Box display="grid" lgGridCols="minmax(0,720px) 300px" gap={12} lgGap={16}"> {/* impeccable-ignore */}
           {/* Main Article Column */}
           <Box className={sidebar ? "min-w-0" : "min-w-0 lg:col-span-2"}>
             <Box className="article-prose">

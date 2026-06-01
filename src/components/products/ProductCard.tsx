@@ -1,19 +1,36 @@
+import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
+import { stroke } from '@/styles/design-tokens';
+
+function getRoleBadgeStyles(role: string) {
+  switch (role) {
+    case 'lead':
+      return 'bg-accent/10 text-accent';
+    case 'follow':
+      return 'bg-purple-400/10 text-purple-400';
+    case 'switch':
+      return 'bg-emerald-400/10 text-emerald-400';
+    default:
+      return 'bg-surface-alt text-text-dim';
+  }
+}
 
 export function ProductCard({ item }: { item: ProductCatalogItem }) {
   return (
     <BaseCard
-      gap={4}
+      as="article"
+      gap={5}
       height="full"
-      padding={{ base: 4, md: 5 }}
-      radius="lg"
+      padding={4}
+      radius="3xl"
       border
       maxWidth="full"
-      className="hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow"
+      surface="card"
+      className="shadow-sm hover:border-slate-700 transition-colors"
       data-testid="product-card"
     >
       <MerchImageDisplay
@@ -24,41 +41,36 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
         imageDisplayMode={item.imageDisplayMode}
       />
 
-      <Stack gap={3}>
-        <Text
-          as="a"
-          href={item.href}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          variant="body"
-          size={{ base: 'lg', md: 'xl' }}
-          weight="font-bold"
-          color="main"
-          leading="tight"
-          clamp={2}
-          className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          {item.title}
-        </Text>
+      <Stack gap={4}>
+        <Stack gap={1}>
+          <Text
+            as="h3"
+            variant="body"
+            size="lg"
+            weight="font-bold"
+            color="main"
+            leading="tight"
+            className="group-hover:text-accent transition-colors"
+          >
+            {item.title}
+          </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
-          {item.description}
-        </Text>
+          <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
+            {item.description}
+          </Text>
+        </Stack>
 
         {item.roles && (
-          <Stack direction="row" gap={1.5} wrap="wrap">
+          <Stack direction="row" gap={2} wrap="wrap">
             {item.roles.map((role) => (
               <Box
                 key={role}
                 paddingX={3}
                 paddingY={1}
                 radius="full"
-                className={cn(
-                  "bg-accent/10 border border-accent/20",
-                  role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning bg-warning/10 border-warning/20" : role === 'switch' ? "text-accent-sky bg-accent-sky/10 border-accent-sky/20" : "text-text-dim"
-                )}
+                className={cn("font-semibold uppercase tracking-wide", getRoleBadgeStyles(role))}
               >
-                <Text size="micro" weight="font-bold" uppercase tracking="wide">
+                <Text size="micro" weight="font-bold" color="inherit">
                   {role}
                 </Text>
               </Box>
@@ -66,18 +78,22 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           </Stack>
         )}
 
-        <Stack direction="row" gap={1.5} wrap="wrap">
+        <Stack direction="row" gap={2} wrap="wrap">
           {item.tags.slice(0, 3).map((tag) => (
-            <Box key={tag} paddingX={2.5} paddingY={1} radius="full" className="bg-surface-alt/80 border border-line/20">
-              <Text variant="mono" size="micro" color="dim" uppercase tracking="wide">
+            <Box
+              key={tag}
+              paddingX={2.5}
+              paddingY={1}
+              radius="full"
+              surface="alt"
+            >
+              <Text size="micro" weight="font-bold" color="dim" uppercase tracking="wide">
                 {tag}
               </Text>
             </Box>
           ))}
         </Stack>
-      </Stack>
 
-      <Stack marginTop="auto" paddingTop={3} border="t" gap={3} className="border-line/30">
         <Stack
           as="a"
           href={item.href}
@@ -86,17 +102,18 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
           direction="row"
           align="center"
           justify="center"
-          gap={1}
+          gap={2}
           width="full"
-          paddingY={2.5}
+          paddingY={3}
           radius="xl"
-          className="bg-accent hover:bg-accent-sky transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="bg-accent hover:opacity-90 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={`See Printful options for ${item.title}`}
         >
-          <Text variant="mono" size="sm" weight="font-bold" color="bg" tracking="widest">
-            SEE OPTIONS
+          <Text variant="mono" size="sm" weight="font-bold" color="bg" tracking="widest" className="uppercase">
+            See options
+            <span className="sr-only"> Opens in Printful storefront</span>
           </Text>
-          <span className="text-bg font-bold">→</span>
-          <span className="sr-only"> Opens in Printful storefront</span>
+          <ArrowRight className={cn('w-4 h-4 text-bg', stroke.thick)} aria-hidden="true" />
         </Stack>
       </Stack>
     </BaseCard>

@@ -23,7 +23,7 @@ function sideLabel(side: MerchProductImage['side']) {
 
 function ImageLabel({ side }: { side: MerchProductImage['side'] }) {
   return (
-    <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="wide" align="center">
+    <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="widest" align="center">
       {sideLabel(side)}
     </Text>
   );
@@ -31,7 +31,17 @@ function ImageLabel({ side }: { side: MerchProductImage['side'] }) {
 
 function ImageWell({ image, loading }: { image: MerchProductImage; loading?: 'eager' | 'lazy' }) {
   return (
-    <Box display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
+    <Box
+      display="flex"
+      align="center"
+      justify="center"
+      height="full"
+      overflow="hidden"
+      radius="lg"
+      border
+      surface="alt"
+      className="transition-colors group-hover:border-accent/40"
+    >
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
@@ -53,7 +63,7 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
   if (!label) return <ImageWell image={image} loading={loading} />;
 
   return (
-    <Stack height="full" gap={1}>
+    <Stack height="full" gap={2}>
       <Box flex height="full" minHeight="0">
         <ImageWell image={image} loading={loading} />
       </Box>
@@ -68,7 +78,7 @@ function SingleImage({ image }: { image: MerchProductImage }) {
 
 function EqualImages({ images }: { images: MerchProductImage[] }) {
   return (
-    <Grid cols={2} gap={2} height="full">
+    <Grid cols={2} gap={3} height="full">
       {images.map((image, index) => (
         <MerchImage key={`${image.side}-${image.src}`} image={image} label loading={index === 0 ? 'eager' : 'lazy'} />
       ))}
@@ -80,13 +90,9 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   if (!secondary) return <MerchImage image={primary} loading="eager" />;
 
   return (
-    <Grid cols={5} gap={2} height="full">
-      <Box span={3} height="full">
-        <MerchImage image={primary} loading="eager" label />
-      </Box>
-      <Box span={2} height="full">
-        <MerchImage image={secondary} label />
-      </Box>
+    <Grid cols={2} gap={3} height="full">
+      <MerchImage image={primary} loading="eager" label />
+      <MerchImage image={secondary} label />
     </Grid>
   );
 }
@@ -104,8 +110,8 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 36, sm: 44, md: 64 }}
-      radius="lg"
+      height={{ base: 48, sm: 56, md: 72 }}
+      radius="xl"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >

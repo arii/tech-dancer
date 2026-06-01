@@ -26,8 +26,8 @@ test.describe('Merch Page', () => {
   });
 
   test('should filter products by collection', async ({ page }) => {
-    // Click on 'Lead/Follow/Switch' filter
-    await page.getByRole('button', { name: 'Lead/Follow/Switch' }).click();
+    // Click on 'Role Pride' filter
+    await page.getByRole('button', { name: 'Role Pride' }).click();
 
     // Check that we only see relevant products (should be 4 based on data)
     const filteredCards = page.getByTestId('product-card');

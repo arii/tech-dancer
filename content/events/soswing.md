@@ -66,4 +66,3 @@ from the hotel. Book early; the room block is limited.
 - **Travel:** If you're flying, Medford (MFR) is the closest airport. Arrange your shuttle or rental car in advance as options can be limited.
 - **Sightseeing:** Take some time to visit Lithia Park or catch a show at the Oregon Shakespeare Festival if you can.
 - **Late Night:** The social dancing goes late, and the atmosphere is very intimate. It's a great place to get dances with people you might usually be intimidated by at larger events.
-
