@@ -57,19 +57,21 @@ export default function ResearchAnalytics() {
             paddingBottom={0}
             border="none"
           />
-          <Text variant="body" size="lg" color="dim" maxWidth="prose" className="leading-relaxed">
+          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" className="leading-relaxed text-pretty">
             I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
           </Text>
-          <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={4}>
+          <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
             {skills.map((skill) => (
-              <Box key={skill.name} display="flex" align="center" gap={2}>
-                <Icon icon={skill.icon} size="sm" color="accent" />
+              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" className="border-accent/20 bg-accent/5">
+                <Box display={{ base: 'none', md: 'flex' }}>
+                  <Icon icon={skill.icon} size="sm" color="accent" />
+                </Box>
                 <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">
                   {skill.name}
                 </Text>
               </Box>
             ))}
-          </Grid>
+          </Box>
 
           <Box display="flex" wrap="wrap" gap={3} marginTop={2}>
             <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest">
