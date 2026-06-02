@@ -4,6 +4,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
+import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 import { ArticleCallout } from '@/components/article/ArticleCallout';
 import { ArticlePullQuote } from '@/components/article/ArticlePullQuote';
@@ -133,6 +134,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             });
             return acc;
           }, {} as Record<string, (props: Record<string, unknown>) => JSX.Element>)
+          img: ({node: _node, src, ...props}) => {
+            const normalizedSrc = normalizeAsset(src || '');
+            return (
+              <img
+                src={normalizedSrc}
+                className="rounded-lg shadow-sm"
+                loading="lazy"
+                {...props}
+              />
+            );
+          },
+          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
+          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
         }}
       >
         {content}

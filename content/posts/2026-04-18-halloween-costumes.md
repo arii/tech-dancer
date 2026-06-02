@@ -1,7 +1,7 @@
 ---
 type: post
 title: "Halloween costumes you can dance in"
-date: "2026-04-18"
+date: "2026-10-31"
 author: "Ariel Anders, PhD"
 category: "Gear"
 dek: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test."
@@ -39,6 +39,7 @@ Always test your costume in a private practice session before hitting the social
 <article-section title="The Pumpkin Outfit">
 
 I've stress-tested a specific **Pumpkin outfit** that works perfectly for the social floor. It includes a low-profile headband and lightweight stickers.
+The key is keeping the costume flexible. Avoid anything that restricts the ribcage or the shoulder blades. You want to look like a pumpkin but move with the freedom of a social dancer.
 
 <affiliate-card id="pumpkin-headbands" cta="Get the Headbands" />
 

@@ -1,6 +1,7 @@
 
 import { Share2 } from 'lucide-react';
 import { Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
 import { ArticleHero } from '@/components/article/ArticleHero';
@@ -11,6 +12,10 @@ import { ArticleFooter } from '@/components/article/ArticleFooter';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post, readingTime } from '@/lib/content';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { CompactAffiliateLink } from '@/components/ui/CompactAffiliateLink';
+import { Post } from '@/lib/content';
+import { affiliateManager } from '@/lib/affiliateManager';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -45,6 +50,28 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
 
   return (
     <ArticleLayout
+  const affiliateLinks = (post.affiliateIds || [])
+    .map(id => {
+      const link = affiliateManager.getLink(id);
+      if (!link && import.meta.env.DEV) {
+        console.warn(`[BlogPostDetail] Affiliate link with ID "${id}" not found.`);
+      }
+      return link;
+    })
+    .filter((link): link is NonNullable<typeof link> => !!link);
+
+  const featuredAffiliates = affiliateLinks.slice(0, 3);
+  const remainingAffiliates = affiliateLinks.slice(3);
+
+  return (
+    <DetailLayout
+      title={post.title}
+      category={post.category}
+      date={post.date}
+      updated={post.updated}
+      content={post.content}
+      image={post.image}
+      imageAlt={post.imageAlt}
       onBack={onBack}
       backLabel={backLabel}
       hero={
@@ -96,5 +123,53 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       */}
       <MarkdownRenderer content={post.content} />
     </ArticleLayout>
+          </Stack>
+        </Stack>
+      }
+    >
+      {affiliateLinks.length > 0 && (
+        <Box border="t" paddingTop={10} marginTop={10} className="border-line/30">
+          <Stack gap={6}>
+            <Stack direction="row" align="center" justify="between">
+              <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                Shop selected items
+              </Text>
+              <AffiliateDisclosure />
+            </Stack>
+
+            {/* Featured items (Grid of cards) */}
+            <Grid cols={{ base: 1, md: 3 }} gap={4}>
+              {featuredAffiliates.map(link => (
+                <AffiliateCard key={link.id} link={link} />
+              ))}
+            </Grid>
+
+            {/* Remaining items (Compact list) */}
+            {remainingAffiliates.length > 0 && (
+              <Stack gap={3} marginTop={2}>
+                {remainingAffiliates.map(link => (
+                  <CompactAffiliateLink key={link.id} link={link} />
+                ))}
+              </Stack>
+            )}
+          </Stack>
+        </Box>
+      )}
+
+      {post.tags && post.tags.length > 0 && (
+        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+          <Stack gap={4}>
+            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
+            <Stack direction="row" wrap gap={2}>
+              {post.tags.map(tag => (
+                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                  <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
+                </Box>
+              ))}
+            </Stack>
+          </Stack>
+        </Box>
+      )}
+    </DetailLayout>
   );
 }

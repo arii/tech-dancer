@@ -8,7 +8,7 @@ const FEATURED = {
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/home/wcs-travel-pack.webp',
-  href: '/gear',
+  href: '/blog/2026-04-19-gear-essentials',
 };
 
 export function FeaturedGuidePanel() {
