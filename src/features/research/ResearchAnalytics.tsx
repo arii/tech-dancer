@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Globe, CheckCircle2 } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
@@ -243,7 +243,6 @@ function EngineeringToolCard({ tool }: { tool: ResearchTool }) {
 }
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   const flagshipTools = tools.filter(t => t.isFlagship);
@@ -319,9 +318,10 @@ export default function ResearchAnalytics() {
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
+                  as={Link}
+                  to={`/research/${study.slug}`}
                   padding={8}
                   gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
                   className={cardVariants({ interactive: true })}
                 >
                   <Box display="flex" justify="between" align="center">
