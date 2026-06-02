@@ -12,7 +12,7 @@ city: San Francisco, CA
 region: NorCal
 schedule: October 1 - 4, 2026
 url: https://example.com/sample-event
-heroImage: /assets/events/jjo-hero.svg
+heroImage: '/assets/events/jjo-hero.svg'
 description: This description field maps to the Travel & Venue Notes section.
 whyAttending: >
   This whyAttending field provides the main descriptive copy for the event hero. It highlights the unique value of attending this specific event.

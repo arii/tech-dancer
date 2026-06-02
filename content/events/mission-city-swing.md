@@ -36,6 +36,7 @@ gear:
   essentialIds:
     - "mints"
     - "hand-sanitizer"
+    - "foam-roller"
   essentialDescription: "Quick hygiene and focus tools for social dancing."
   travelIds:
     - "portable-charger"

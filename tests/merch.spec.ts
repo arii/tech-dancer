@@ -6,8 +6,8 @@ test.describe('Merch Page', () => {
   });
 
   test('should load the merch page with correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/West Coast Swing Dance Merch/);
-    await expect(page.getByRole('heading', { name: /West Coast Swing Dance Merch/i })).toBeVisible();
+    await expect(page).toHaveTitle(/Shop WCS Dance Merch \| BoomTick/);
+    await expect(page.getByRole('heading', { name: /Dance Merch/i })).toBeVisible();
   });
 
   test('should display referral banners with correct links', async ({ page }) => {

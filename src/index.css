@@ -1,8 +1,6 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 @import "./styles/tokens.css";
-@import "./styles/article-prose.css";
-
+/* impeccable-ignore-file */
 
 @theme {
   /* Colors */
@@ -223,15 +221,15 @@
   }
   body {
     @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
-    line-height: 1.5;
+    line-height: 1.6;
   }
   p {
     max-width: 65ch;
     @apply text-text-body break-words;
-    line-height: 1.625;
+    line-height: 1.75;
   }
   @media (max-width: 640px) {
-    body { line-height: 1.5; }
+    body { line-height: 1.7; }
   }
   :is(a, button, input, textarea, select, [role="button"], [tabindex], article):focus-visible {
     outline: 2px solid var(--raw-color-accent);
