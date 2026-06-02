@@ -1,7 +1,7 @@
 
 
 import { ReactNode } from 'react';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { ArrowLeft } from 'lucide-react';
 

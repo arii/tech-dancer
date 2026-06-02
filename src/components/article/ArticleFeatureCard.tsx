@@ -18,7 +18,9 @@ export function ArticleFeatureCard({
   title,
   subtitle,
   caption,
-  image
+  image,
+  imageBack,
+  showImagePair
 }: ArticleFeatureCardProps) {
   return (
     <Box className="relative group">
