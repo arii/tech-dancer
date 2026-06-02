@@ -14,11 +14,6 @@ jobs:
   update-snapshots:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '@update-snapshots')
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
-      env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     permissions:
       contents: write
       pull-requests: write
@@ -75,6 +70,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm run setup:playwright
 
       - name: Build project
         run: pnpm run build
