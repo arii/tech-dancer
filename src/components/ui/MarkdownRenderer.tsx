@@ -119,21 +119,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({node: _node, ...props}) => (
-            <img
-              className="rounded-lg shadow-sm"
-              loading="lazy"
-              {...props}
-            />
-          ),
           // Map component implementations from registry
           ...Object.entries(CUSTOM_COMPONENTS).reduce((acc, [_, config]) => {
             config.tags.forEach(tag => {
-              const Component = config.component as ComponentType<Record<string, unknown>>;
+              const Component = config.component as React.ComponentType<Record<string, unknown>>;
               acc[tag] = (props: Record<string, unknown>) => <Component {...props} />;
             });
             return acc;
-          }, {} as Record<string, (props: Record<string, unknown>) => JSX.Element>)
+          }, {} as Record<string, (props: Record<string, unknown>) => JSX.Element>),
           img: ({node: _node, src, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
