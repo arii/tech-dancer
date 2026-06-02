@@ -6,6 +6,7 @@ import { BASE_URL, SITE_NAME, GOOGLE_SITE_VERIFICATION, ASSET_PREFIX } from '@/c
 interface SEOProps {
   title: string;
   description: string;
+  keywords?: string;
   type?: 'website' | 'article' | 'profile';
   image?: string;
   canonical?: string;
@@ -17,6 +18,7 @@ interface SEOProps {
 export function SEO({
   title,
   description,
+  keywords,
   type = 'website',
   image,
   canonical,
@@ -63,6 +65,7 @@ export function SEO({
       {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={url} />
 
       {/* Open Graph / Facebook */}
