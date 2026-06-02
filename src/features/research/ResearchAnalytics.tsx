@@ -1,15 +1,11 @@
 import { Icon } from '@/components/ui/Icon';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
-import { SEO } from '@/components/SEO';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { BaseCard } from '@/components/ui/BaseCard';
 import { Tag } from '@/components/ui/Tag';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -256,7 +252,6 @@ export default function ResearchAnalytics() {
   const engineeringTools = tools.filter(t => !t.isFlagship);
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
-  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
   const skills = [
     { name: 'React', icon: Layout },
@@ -296,11 +291,13 @@ export default function ResearchAnalytics() {
           >
             AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
           </Text>
+        </Stack>
 
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Featured Outputs</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>FLAGSHIP PROJECTS</Text>
+          </Box>
           <Box display="flex" wrap="wrap" gap={3} marginTop={2}>
             <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
               View flagship projects
