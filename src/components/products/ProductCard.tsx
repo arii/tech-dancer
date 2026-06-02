@@ -43,17 +43,24 @@ export function ProductCard({ item }: { item: ProductCatalogItem }) {
 
       <Stack gap={4}>
         <Stack gap={1}>
-          <Text
-            as="h3"
-            variant="body"
-            size="lg"
-            weight="font-bold"
-            color="main"
-            leading="tight"
-            className="group-hover:text-accent transition-colors"
+          <a
+            href={item.href}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm w-fit"
           >
-            {item.title}
-          </Text>
+            <Text
+              as="h3"
+              variant="body"
+              size="lg"
+              weight="font-bold"
+              color="main"
+              leading="tight"
+              className="group-hover:text-accent transition-colors"
+            >
+              {item.title}
+            </Text>
+          </a>
 
           <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
             {item.description}
