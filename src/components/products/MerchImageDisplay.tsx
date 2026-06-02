@@ -32,7 +32,7 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
-        className="object-contain transition-transform duration-300 group-hover:scale-105"
+        className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
       />
     </Box>
   );
@@ -94,7 +94,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={isFeatured ? { base: 60, sm: 72, md: 80 } : { base: 44, sm: 52, md: 56, lg: 60 }}
+      height={isFeatured ? { base: 48, sm: 56, md: 72 } : { base: 36, sm: 44, md: 52 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
