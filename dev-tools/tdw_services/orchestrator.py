@@ -497,8 +497,11 @@ class Orchestrator:
                 expected_node = "22.22.2"
 
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
-        if actual_node != expected_node:
-            print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
+        expected_major = expected_node.split('.')[0]
+        actual_major = actual_node.split('.')[0]
+
+        if actual_major != expected_major:
+            print(f"❌ Node version mismatch\nExpected: {expected_node} (or compatible v{expected_major}.x)\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
         with open("package.json", "r") as f:

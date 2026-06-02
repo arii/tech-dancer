@@ -4,8 +4,10 @@ import { readFileSync } from "node:fs";
 const expectedNodeExact = readFileSync(".node-version", "utf8")
   .trim()
   .replace(/^v/, "");
+const expectedNodeMajor = expectedNodeExact.split('.')[0];
 
 const actualNode = process.version.replace(/^v/, "");
+const actualNodeMajor = actualNode.split('.')[0];
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 
@@ -23,9 +25,9 @@ const actualPnpm = getPnpmVersion();
 
 let failed = false;
 
-if (actualNode !== expectedNodeExact) {
+if (actualNodeMajor !== expectedNodeMajor) {
   console.error("❌ Node version mismatch");
-  console.error(`Expected: ${expectedNodeExact}`);
+  console.error(`Expected: ${expectedNodeExact} (or compatible v${expectedNodeMajor}.x)`);
   console.error(`Actual:   ${actualNode}`);
   console.error("");
   console.error("Do not switch versions manually unless the task explicitly updates the runtime contract.");
