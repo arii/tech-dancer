@@ -5,13 +5,13 @@ import { journalVariants } from '@/lib/variants';
 interface EditorialHeroProps {
   src: string;
   alt: string;
-  aspectRatio?: "video" | "square" | string;
+  aspectRatio?: "video" | "square" | string | { base?: string, md?: string, lg?: string };
 }
 
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = "video" }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "video", md: "video" } }: EditorialHeroProps) {
   return (
     <Box
       width="full"
@@ -27,6 +27,7 @@ export function EditorialHero({ src, alt, aspectRatio = "video" }: EditorialHero
         objectFit="cover"
         border={false}
         radius="none"
+        aspect={aspectRatio}
       />
     </Box>
   );

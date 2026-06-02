@@ -60,17 +60,9 @@ export function EditorialLayout({
         <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 12, lg: 16 }} align="start">
           {/* Main Article Column */}
           <Box span={{ base: 1, lg: 8 }} width="full" maxWidth={{ lg: "3xl" }}>
-            <Stack gap={12}>
-              <Box className="article-content-wrapper" width="full">
-                {children}
-              </Box>
-
-              {footer && (
-                <Box marginTop={4}>
-                  {footer}
-                </Box>
-              )}
-            </Stack>
+            <Box className="article-content-wrapper" width="full">
+              {children}
+            </Box>
           </Box>
 
           {/* Sidebar */}
@@ -79,6 +71,15 @@ export function EditorialLayout({
               <Stack gap={8} position={{ lg: "sticky" }} top={32}>
                 {sidebar}
               </Stack>
+            </Box>
+          )}
+
+          {/* Footer */}
+          {footer && (
+            <Box span={{ base: 1, lg: 8 }} width="full" maxWidth={{ lg: "3xl" }}>
+              <Box marginTop={{ base: 12, lg: 0 }}>
+                {footer}
+              </Box>
             </Box>
           )}
         </Grid>
