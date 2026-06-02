@@ -93,6 +93,8 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
                 index >= 2 && "hidden sm:block" // Limit to 2 tags on mobile
               )}
             >
+          {item.tags.slice(0, 3).map((tag) => (
+            <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
               <Text variant="mono" size="xs" color="dim" uppercase tracking="tighter">
                 {tag}
               </Text>
@@ -112,12 +114,15 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           paddingY={3}
           radius="md"
           minHeight={11} // Spacing token 11 * 4 = 44px
+          minHeight={11}
           className="bg-accent hover:bg-accent-sky transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label={`View ${item.title} on Printful`}
         >
           <Text variant="mono" size="sm" weight="font-bold" color="bg" tracking="wide">
             {ctaText}
           </Text>
+              See options on Printful →
+            </Text>
           <ArrowRight className={cn('w-3 h-3 text-bg', stroke.thick)} aria-hidden="true" />
         </Stack>
       </Stack>

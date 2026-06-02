@@ -18,47 +18,35 @@ function resolveImageSrc(src: string) {
   return `${ASSET_PREFIX}/${src}`;
 }
 
-function sideLabel(side: MerchProductImage['side']) {
-  return side === 'front' ? 'Front' : 'Back';
-}
-
-function ImageLabel({ side }: { side: MerchProductImage['side'] }) {
-  return (
-    <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="wide" align="center">
-      {sideLabel(side)}
-    </Text>
-  );
-}
-
-function ImageWell({ image, loading }: { image: MerchProductImage; loading?: 'eager' | 'lazy' }) {
-  return (
-    <Box display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
+function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
+  const imgWell = (
+    <Box position="relative" display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
         alt={image.alt}
         width="full"
         height="full"
-        padding={3}
+        padding={2}
         loading={loading ?? 'lazy'}
-        onError={(event) => {
-          event.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
+        onError={(e) => {
+          e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
         className="object-contain transition-transform duration-300 group-hover:scale-105"
       />
     </Box>
   );
-}
 
-function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
-  if (!label) return <ImageWell image={image} loading={loading} />;
+  if (!label) return imgWell;
 
   return (
     <Stack height="full" gap={1}>
       <Box flex height="full" minHeight="0">
-        <ImageWell image={image} loading={loading} />
+        {imgWell}
       </Box>
-      <ImageLabel side={image.side} />
+      <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="wide" align="center">
+        {image.side === 'front' ? 'Front' : 'Back'}
+      </Text>
     </Stack>
   );
 }
@@ -107,6 +95,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       aria-label={`View ${title} on Printful`}
       display="block"
       height={isFeatured ? { base: 60, sm: 72, md: 80 } : { base: 44, sm: 52, md: 56, lg: 60 }}
+      height={{ base: 48, md: 56 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -122,6 +111,13 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
           )}
         </Box>
       </Stack>
+      {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+        <EqualImages images={resolved.equal} />
+      ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
+        <ProminentImages primary={primary} secondary={resolved.secondary} />
+      ) : (
+        <MerchImage image={primary} label={primary.side === 'back'} loading="eager" />
+      )}
     </Box>
   );
 }

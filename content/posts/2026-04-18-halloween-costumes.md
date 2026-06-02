@@ -1,7 +1,7 @@
 ---
 type: post
 title: "Halloween costumes you can dance in"
-date: "2026-04-18"
+date: "2026-10-31"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "How to stay thematic without sacrificing your spin or frame. Featuring the pumpkin outfit stress-test."
@@ -23,6 +23,6 @@ I've stress-tested a specific **Pumpkin outfit** that works perfectly for the so
 - **Headband:** Low profile, doesn't catch on partner's arms during turns.
 - **Jack O' Lantern Stickers:** Lightweight, zero drag.
 
-The key is Keeping the costume flexible. Avoid anything that restricts the ribcage or the shoulder blades. You want to look like a pumpkin but move like a technical dancer.
+The key is keeping the costume flexible. Avoid anything that restricts the ribcage or the shoulder blades. You want to look like a pumpkin but move with the freedom of a social dancer.
 
 [Check out the Gear specific review here](/gear)
