@@ -1,32 +1,44 @@
+import { FilterBar } from '@/components/ui/FilterBar';
+import FolioGrid from '@/components/ui/FolioGrid';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, ArrowRight, ExternalLink, Github, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket, Cpu, Activity, Globe, FileText, LucideIcon } from 'lucide-react';
+import { Search, ArrowRight, ExternalLink, Github, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
-import { cardVariants } from '@/lib/variants';
-import { ResearchTool } from '@/config/research-tools';
-
-function getToolIcon(tool: ResearchTool): LucideIcon {
-  if (tool.category.includes('DevAI')) return Cpu;
-  if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
-  if (tool.id.includes('hrm')) return Globe;
-  return Search;
-}
+import { useSearchParam } from '@/hooks/useSearchParam';
+import { ContentItem } from '@/lib/content';
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
-  const { studies, tools } = useResearch();
+  const { tools } = useResearch();
+  const [activeCategory] = useSearchParam('category', 'All');
 
+  const categories = ['All', ...new Set(tools.map(t => t.category))];
+
+  const filteredTools = tools.filter(tool =>
+    activeCategory === 'All' || tool.category === activeCategory
+  );
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
-  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  // Map ResearchTool to ContentItem format expected by FolioGrid
+  const contentItems: ContentItem[] = filteredTools.map(tool => ({
+    type: 'study', // Default to study for tool cards
+    slug: tool.id,
+    title: tool.title,
+    category: tool.category,
+    excerpt: tool.description,
+    content: tool.description, // Required for ContentItem
+    author: 'Ariel Anders', // Required for ContentItem
+    date: tool.status === 'Active' ? '' : tool.status,
+    tags: tool.tags,
+    ctaLabel: tool.ctaLabel,
+  }));
 
   const skills = [
     { name: 'React', icon: Layout },
@@ -284,38 +296,20 @@ export default function ResearchAnalytics() {
               <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
-
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
-              {studies.map((study) => (
-                <Stack
-                  key={study.slug}
-                  padding={8}
-                  gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                  className={cardVariants({ interactive: true })}
-                >
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
-                  </Box>
-                  <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black">
-                      {study.title}
-                    </Text>
-                    <Text variant="body" size="sm" color="dim">
-                      {study.excerpt}
-                    </Text>
-                  </Stack>
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
-                    <Icon icon={FileText} size="sm" color="accent" />
-                  </Box>
-                </Stack>
-              ))}
-            </Grid>
           </Stack>
         )}
       </Stack>
+
+      <FolioGrid
+        items={contentItems}
+        categoryTitle="DevAI Portfolio"
+        basePath="/research"
+        label="PORTFOLIO"
+        description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
+        searchPlaceholder="Search projects..."
+      >
+        <FilterBar categories={categories} />
+      </FolioGrid>
     </Box>
   );
 }
