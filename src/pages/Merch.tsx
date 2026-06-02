@@ -67,13 +67,11 @@ export default function Merch() {
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy."
         />
 
-        <Stack direction={{ base: 'col', sm: 'row' }} gap={4}>
+        <Stack gap={4} align="start">
            <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer">
               Shop Printful Store
            </Button>
-           <Box flex="1 1 0%">
-            <ReferralBanner layout="compact" />
-           </Box>
+           <ReferralBanner layout="compact" />
         </Stack>
 
         {/* Printful Disclosure */}
