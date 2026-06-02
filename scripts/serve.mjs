@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
     reqPath = reqPath.slice(BASE_PATH.length - 1);
   }
 
-  let safePath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '');
+  let safePath = path.normalize(reqPath).replace(/^(\.\.[/\\])+/, '');
   let filePath = path.join(DIST_DIR, safePath);
 
   try {
@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
     if (stat.isDirectory()) {
       filePath = path.join(filePath, 'index.html');
     }
-  } catch (err) {
+  } catch {
     filePath = path.join(DIST_DIR, 'index.html');
   }
 
