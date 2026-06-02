@@ -52,12 +52,14 @@ export default function ResearchAnalytics() {
         <Stack gap={2}>
           <PageHeader
             label="HIRE_ME"
-            title="I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype."
-            titleSize="fluid-6"
+            title="DevAI Systems Portfolio"
             as="h1"
             paddingBottom={0}
             border="none"
           />
+          <Text variant="body" size="lg" color="dim" maxWidth="prose" className="leading-relaxed">
+            I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
+          </Text>
           <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={4}>
             {skills.map((skill) => (
               <Box key={skill.name} display="flex" align="center" gap={2}>
