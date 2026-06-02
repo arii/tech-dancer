@@ -1,11 +1,9 @@
-import { Box } from '@/layouts/Primitives';
-import { SEO } from '@/components/SEO';
 import { FilterBar } from '@/components/ui/FilterBar';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, ArrowRight, ExternalLink, Github, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket, Cpu, Activity, Globe, LucideIcon } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -14,10 +12,19 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentItem } from '@/lib/content';
+import { ResearchTool } from '@/config/research-tools';
+
+function getToolIcon(tool: ResearchTool): LucideIcon {
+  if (tool.category.includes('DevAI')) return Cpu;
+  if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
+  if (tool.id.includes('hrm')) return Globe;
+  return Search;
+}
 
 export default function ResearchAnalytics() {
   const { tools } = useResearch();
   const [activeCategory] = useSearchParam('category', 'All');
+  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
   const categories = ['All', ...new Set(tools.map(t => t.category))];
 
@@ -58,9 +65,6 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Portfolio | AI Systems & Orchestration"
-        description="A portfolio of AI-assisted product development, DevAI orchestration consoles, and high-fidelity RAG telemetry pipelines."
-      />
         title="DevAI Systems Portfolio"
         description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
@@ -301,6 +305,9 @@ export default function ResearchAnalytics() {
               <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
+          </Stack>
+        )}
+      </Stack>
 
       <FolioGrid
         items={contentItems}
