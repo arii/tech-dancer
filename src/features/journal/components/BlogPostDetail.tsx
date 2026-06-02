@@ -62,9 +62,9 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                 authorAvatar={post.authorAvatar}
                 status={post.status}
               />
-              <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
-                <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-cyan-300" />
-                <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-cyan-300">SHARE</Text>
+              <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-accent/80 hover:bg-accent/10 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
+                <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-accent/80" />
+                <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent/80">SHARE</Text>
               </Stack>
             </Stack>
           }

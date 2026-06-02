@@ -21,7 +21,7 @@ sidebar:
       value: "Social Floors"
 related:
   - title: "Suede Shoe DIY"
-    href: "/gear/suede-shoe-diy"
+    href: "/gear/2026-04-12-suede-shoe-diy"
   - title: "Gear Essentials"
     href: "/blog/2026-04-19-gear-essentials"
 ---

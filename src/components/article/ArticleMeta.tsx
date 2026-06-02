@@ -16,31 +16,35 @@ export function ArticleMeta({
   status
 }: ArticleMetaProps) {
   return (
-    <Stack direction="row" align="center" gap={4}>
+        <>
+      {author && (
+        <Stack direction="row" align="center" gap={4}>
       {/* Author Avatar/Icon */}
-      <Box className="w-10 h-10 rounded-full border border-line bg-surface overflow-hidden flex-shrink-0">
+      <Box width={10} height={10} radius="full" border surface="surface" overflow="hidden" shrink={false}>
         {authorAvatar ? (
           <img src={authorAvatar} alt={author} className="w-full h-full object-cover" />
         ) : (
-          <Box className="w-full h-full flex items-center justify-center text-text-dim">
+          <Box width="full" height="full" display="flex" align="center" justify="center" className="text-text-dim">
             <Text variant="mono" size="xs">{author.charAt(0)}</Text>
           </Box>
         )}
       </Box>
 
       {/* Meta Text */}
-      <Stack gap={0.5} className="mt-[-2px]">
+      <Stack gap={0.5} marginTop={-0.5}>
         <Text weight="font-bold" className="text-text-body text-sm leading-none">{author}</Text>
         <Stack direction="row" gap={2} align="center">
           {status ? (
-            <Box className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-              <Text variant="mono" size="micro" className="text-emerald-400 font-bold uppercase leading-none">{status}</Text>
+            <Box paddingX={1.5} paddingY={0.5} radius="md" border className="bg-accent/10 border-accent/20">
+              <Text variant="mono" size="micro" weight="font-bold" uppercase color="accent" className="leading-none">{status}</Text>
             </Box>
           ) : (
             date && <Text variant="mono" size="micro" className="text-text-dim uppercase leading-none">{date}</Text>
           )}
         </Stack>
       </Stack>
-    </Stack>
+        </Stack>
+      )}
+    </>
   );
 }

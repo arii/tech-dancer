@@ -1,6 +1,7 @@
 
 
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { EmailForm } from '@/features/email-capture/EmailForm';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ArticleCard } from './ArticleCard';
@@ -20,12 +21,12 @@ export function ArticleFooter({ related }: ArticleFooterProps) {
   return (
     <Stack gap={16}>
       {/* Subscribe Section */}
-      <ArticleCard className="p-8 lg:p-12 text-center relative overflow-hidden bg-surface/40">
+      <ArticleCard padding={{ base: 8, lg: 12 }} textAlign="center" position="relative" overflow="hidden" surface="surface-alt">
         {/* Background Accents */}
-        <Box className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] -mr-32 -mt-32 rounded-full" />
-        <Box className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/5 blur-[100px] -ml-32 -mb-32 rounded-full" />
+        <Box position="absolute" top={0} right={0} width={64} height={64} className="bg-accent/5 rounded-full blur-3xl" marginRight={-32} marginTop={-32} />
+        <Box position="absolute" bottom={0} left={0} width={64} height={64} className="bg-accent-purple/5 rounded-full blur-3xl" marginLeft={-32} marginBottom={-32} />
 
-        <Stack gap={6} align="center" className="relative z-10 max-w-2xl mx-auto">
+        <Stack gap={6} align="center" position="relative" zIndex={10} maxWidth="2xl" marginX="auto">
           <Stack gap={2}>
             <Text variant="mono" size="xs" weight="font-bold" color="accent" className="uppercase tracking-widest">
               Stay Connected
@@ -38,22 +39,11 @@ export function ArticleFooter({ related }: ArticleFooterProps) {
             Get the latest WCS competition data, gear reviews, and technical guides sent straight to your inbox. No fluff, just the good stuff.
           </Text>
 
-          <Stack direction={{ base: 'column', sm: 'row' }} gap={3} className="w-full max-w-md mt-4">
-            <Box
-              as="input"
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-5 py-3 rounded-xl bg-bg border border-line text-text-body focus:outline-none focus:border-cyan-500/50 transition-colors"
-            />
-            <Box
-              as="button"
-              className="px-6 py-3 rounded-xl bg-accent hover:bg-cyan-400 text-bg font-bold transition-colors whitespace-nowrap"
-            >
-              Subscribe
-            </Box>
-          </Stack>
 
-        </Stack>
+<Box width="full" maxWidth="md" marginTop={4}>
+            <EmailForm />
+          </Box>
+</Stack>
       </ArticleCard>
 
       {/* Related Content */}
@@ -68,7 +58,7 @@ export function ArticleFooter({ related }: ArticleFooterProps) {
                 key={i}
                 as={Link}
                 to={post.href}
-                className="group p-6 bg-bg/40 hover:border-cyan-500/30 transition-all"
+                padding={6} className="group bg-bg/40 hover:border-cyan-500/30 transition-all"
               >
                 <Stack direction="row" justify="between" align="center" gap={4}>
                   <Stack gap={1}>
