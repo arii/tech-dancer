@@ -1,18 +1,11 @@
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, NavLink } from 'react-router-dom';
-import { routes } from '@/config/routes';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { SEO } from '@/components/SEO';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { BaseCard } from '@/components/ui/BaseCard';
-import { cardVariants } from '@/components/ui/card';
-import { Studies } from '@/data/studies';
+import { cardVariants } from '@/lib/variants';
 
 const Research = () => {
   const navigate = useNavigate();
-
-  const studies: Studies[] = [];
 
   const engineeringTools = [
     // List of engineering tools
