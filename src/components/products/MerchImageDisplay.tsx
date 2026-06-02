@@ -95,7 +95,6 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       aria-label={`View ${title} on Printful`}
       display="block"
       height={isFeatured ? { base: 60, sm: 72, md: 80 } : { base: 44, sm: 52, md: 56, lg: 60 }}
-      height={{ base: 48, md: 56 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -111,13 +110,6 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
           )}
         </Box>
       </Stack>
-      {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-        <EqualImages images={resolved.equal} />
-      ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
-        <ProminentImages primary={primary} secondary={resolved.secondary} />
-      ) : (
-        <MerchImage image={primary} label={primary.side === 'back'} loading="eager" />
-      )}
     </Box>
   );
 }

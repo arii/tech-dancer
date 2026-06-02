@@ -28,8 +28,6 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'love-neon-follow',
     title: 'LOVE Neon Tee — Ask Me to Follow',
     description: 'A bright role-pride dance tee for followers who want the message visible on the social floor. Designed for West Coast Swing dancers, partner dance weekends, rainbow pride events, and NorCal dance friends.',
-    title: 'LOVE Neon Tee - Ask Me to Follow',
-    description: 'A bright role-pride tee for followers who want the message visible on the social floor.',
     price: '24.50',
     imageUrl: gearImage('love-neon-tshirt-ask-me-to-follow-back.webp'),
     images: [
@@ -46,8 +44,6 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'love-neon-lead',
     title: 'LOVE Neon Tee — Ask Me to Lead',
     description: 'A high-visibility role-pride tee for leaders who want to be seen from across the room. Perfect for West Coast Swing social dancing, gender-neutral dance roles, and inclusive dance weekend outfits.',
-    title: 'LOVE Neon Tee - Ask Me to Lead',
-    description: 'A high-visibility tee for leaders who want to be seen from across the room.',
     price: '24.00',
     imageUrl: gearImage('love-neon-tshirt-ask-me-to-lead-back.webp'),
     images: [
@@ -64,6 +60,19 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'lead-follow-switch-love-neon',
     title: 'Lead / Follow / Switch LOVE Tee',
     description: 'The ultimate versatile dance shirt featuring a neon checklist for role-fluid dancers. Celebrates the freedom of gender-neutral dance roles on the West Coast Swing social floor.',
+    price: '24.00',
+    imageUrl: gearImage('lead-follow-or-switch-love-shirt-in-neon-back.webp'),
+    images: [
+      { src: gearImage('lead-follow-or-switch-love-shirt-in-neon-front.webp'), side: 'front', alt: 'Front view of Lead Follow or Switch LOVE Shirt in Neon' },
+      { src: gearImage('lead-follow-or-switch-love-shirt-in-neon-back.webp'), side: 'back', alt: 'Back view of Lead Follow or Switch LOVE Shirt in Neon with role checklist' },
+    ],
+    imageDisplayMode: 'back-prominent',
+    printfulUrl: 'https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon',
+    collections: ['lead-follow-switch', 'rainbow-pride'],
+    roles: ['lead', 'follow', 'switch'],
+    tags: ['Role Pride', 'Versatile', 'Neon'],
+  },
+  {
     id: 'war-eagle-oversized',
     title: 'War Eagle Oversized High Neck Tee',
     description: 'A relaxed NorCal tee with the War Eagle design for dance weekends and casual wear.',
@@ -98,6 +107,18 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'norcal-bestcal-golden-gate-pride',
     title: 'NorCal BestCal Golden Gate Pride Tee',
     description: 'Celebrate Bay Area pride with the Golden Gate Bridge in rainbow colors. A vibrant NorCal pride apparel choice for your next West Coast Swing event or summer dance circuit.',
+    price: '18.50',
+    imageUrl: gearImage('norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp'),
+    images: [
+      { src: gearImage('norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp'), side: 'front', alt: 'Front view of NorCal BestCal Golden Gate Rainbow Pride Shirt' },
+      { src: gearImage('norcal-bestcal-golden-gate-rainbow-pride-shirt-back.webp'), side: 'back', alt: 'Back view of NorCal BestCal Golden Gate Rainbow Pride Shirt' },
+    ],
+    imageDisplayMode: 'front-prominent',
+    printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt',
+    collections: ['norcal-bestcal', 'rainbow-pride'],
+    tags: ['NorCal', 'Pride', 'Golden Gate'],
+  },
+  {
     id: 'mens-bear-tank-norcal',
     title: 'NorCal BestCal Bear Tank',
     description: 'Lightweight and breathable tank top featuring the iconic NorCal BestCal bear.',
@@ -160,8 +181,6 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'norcal-bestcal-pride-bear',
     title: 'NorCal BestCal Pride Bear Shirt',
     description: 'The iconic California bear gets a rainbow pride makeover for NorCal dancers. Show your local spirit and LGTBQ+ support on the partner dance floor.',
-    title: 'NorCal BestCal Pride California Tee',
-    description: 'Classic California bear design with a Pride twist to show your NorCal roots.',
     price: '15.50',
     imageUrl: gearImage('norcal-best-cal-pride-california-bear-apparel-front.webp'),
     images: [
@@ -177,8 +196,6 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'love-lead-follow-switch-unisex',
     title: 'LOVE Lead Follow or Switch Unisex Shirt',
     description: 'A classic role-neutral shirt for social dancers who love the Lead/Follow/Switch message. A staple for West Coast Swing enthusiasts and inclusive partner dance communities.',
-    title: 'LOVE Lead Follow or Switch Unisex Tee',
-    description: 'A classic choice for social dancers of all roles and styles.',
     price: '18.64',
     imageUrl: gearImage('unisex-t-shirt-back.webp'),
     images: [
@@ -252,7 +269,6 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     id: 'norcal-bestcal-classic',
     title: 'NorCal BestCal Classic Tee',
     description: 'The signature Northern California dance shirt. A clean, classic design that marks you as part of the NorCal partner dance community.',
-    description: 'Clean, classic design that marks you as part of the Northern California dance community.',
     price: '12.00',
     imageUrl: gearImage('norcal-bestcal-front.webp'),
     images: [
