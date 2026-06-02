@@ -13,8 +13,10 @@ interface DetailLayoutProps {
   title: string;
   category: string;
   date: string;
+  updated?: string;
   content: string;
   image?: string;
+  imageAlt?: string;
   imageBack?: string;
   onBack: () => void;
   backLabel: string;
@@ -30,8 +32,10 @@ export function DetailLayout({
   title,
   category,
   date,
+  updated,
   content,
   image,
+  imageAlt,
   imageBack,
   onBack,
   backLabel,
@@ -72,7 +76,7 @@ export function DetailLayout({
         <Stack gap={10}>
           {/* Header */}
           <PageHeader
-            label={`${category} • ${date} • ${rt} min read`}
+            label={`${category} • Published ${date}${updated ? ` · Updated ${updated}` : ''} • ${rt} min read`}
             title={title}
             border="none"
             paddingBottom={0}
@@ -154,7 +158,7 @@ export function DetailLayout({
                   <ProductImageFrame
                     key={displayImage}
                     src={displayImage || ""}
-                    alt={`${title}${showBack ? ' – back view' : ''}`}
+                    alt={showBack ? `${title} – back view` : imageAlt || title}
                     objectFit={imageFit}
                     border={false}
                     radius="none"

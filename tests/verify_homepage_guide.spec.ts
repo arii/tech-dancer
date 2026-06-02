@@ -1,0 +1,25 @@
+
+import { test, expect } from './fixtures/visual';
+
+test('verify homepage featured guide link', async ({ page }) => {
+  await page.goto('./');
+
+  // Find the WCS Travel Pack card
+  const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
+  await expect(guideLink).toBeVisible();
+
+  // Click the link or Read the guide CTA
+  const cta = page.getByRole('link', { name: /Read the guide/i }).first();
+  await cta.click();
+
+  // Verify it lands on the correct page
+  await expect(page).toHaveURL(/\/blog\/2026-04-19-gear-essentials/);
+  await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
+
+  // Verify checklist landmarks or sections
+  await expect(page.getByRole('heading', { name: /Footwear & Shoe Care/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Ballroom Bag/i })).toBeVisible();
+
+  // Verify shoppable section exists with accessible heading
+  await expect(page.getByRole('heading', { name: /Shop selected items/i })).toBeVisible();
+});
