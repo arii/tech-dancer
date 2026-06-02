@@ -1,6 +1,5 @@
 
 import { Share2 } from 'lucide-react';
-import { Stack, Text } from '@/layouts/Primitives';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 import { ArticleLayout } from '@/components/article/ArticleLayout';
@@ -14,7 +13,6 @@ import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { Post, readingTime } from '@/lib/content';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { CompactAffiliateLink } from '@/components/ui/CompactAffiliateLink';
-import { Post } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
 
 interface BlogPostDetailProps {
@@ -48,8 +46,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     <ArticleFeatureCard image={post.image} />
   ) : null;
 
-  return (
-    <ArticleLayout
   const affiliateLinks = (post.affiliateIds || [])
     .map(id => {
       const link = affiliateManager.getLink(id);
@@ -64,14 +60,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const remainingAffiliates = affiliateLinks.slice(3);
 
   return (
-    <DetailLayout
-      title={post.title}
-      category={post.category}
-      date={post.date}
-      updated={post.updated}
-      content={post.content}
-      image={post.image}
-      imageAlt={post.imageAlt}
+    <ArticleLayout
       onBack={onBack}
       backLabel={backLabel}
       hero={
@@ -122,11 +111,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         Imported here to satisfy dependency checks and for future use.
       */}
       <MarkdownRenderer content={post.content} />
-    </ArticleLayout>
-          </Stack>
-        </Stack>
-      }
-    >
+
       {affiliateLinks.length > 0 && (
         <Box border="t" paddingTop={10} marginTop={10} className="border-line/30">
           <Stack gap={6}>
@@ -170,6 +155,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           </Stack>
         </Box>
       )}
-    </DetailLayout>
+    </ArticleLayout>
   );
 }
