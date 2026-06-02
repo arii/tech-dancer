@@ -1,4 +1,4 @@
-import { MessageCircle, Info } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
@@ -64,25 +64,19 @@ export default function Merch() {
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
-          description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy."
+          description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
+          paddingBottom={6}
+          cta={
+            <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
+              <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary">
+                 Shop Printful Store
+              </Button>
+              <Box flex="1 1 0%">
+                <ReferralBanner layout="compact" />
+              </Box>
+            </Stack>
+          }
         />
-
-        <Stack gap={4} align="start">
-           <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer">
-              Shop Printful Store
-           </Button>
-           <ReferralBanner layout="compact" />
-        </Stack>
-
-        {/* Printful Disclosure */}
-        <Box padding={4} radius="md" surface="alt" border className="border-line/20">
-          <Stack direction="row" gap={3} align="center">
-            <Info className={cn("w-5 h-5 text-accent", stroke.thick)} />
-            <Text variant="body" size="sm" color="dim">
-              BoomTick merch links go to the BoomTick Printful storefront. Printful handles available colors, sizing, fulfillment, shipping, and checkout.
-            </Text>
-          </Stack>
-        </Box>
 
         {/* Collection Filters */}
         <Stack gap={4}>
