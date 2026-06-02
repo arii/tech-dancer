@@ -112,9 +112,9 @@ export function FeaturedEventGuide() {
         {/* Content */}
         <Stack gap={3} padding={6} className="min-w-0 justify-between" aria-live="polite">
           <Stack gap={1.5}>
-            <Box display="flex" align="center" gap={2}>
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
-              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full truncate">
+            <Box display="flex" align="start" gap={2}>
+              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full leading-normal">
                 {event.location}
               </Text>
             </Box>
