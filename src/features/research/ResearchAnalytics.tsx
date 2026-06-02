@@ -52,53 +52,38 @@ export default function ResearchAnalytics() {
         <Stack gap={2}>
           <PageHeader
             label="HIRE_ME"
-            title="DevAI Systems Portfolio"
+            title="I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype."
+            titleSize="fluid-6"
             as="h1"
             paddingBottom={0}
             border="none"
           />
-          <Text
-            variant="body"
-            size={{ base: "lg", lg: "xl" }}
-            color="dim"
-            maxWidth="prose"
-            className="leading-relaxed text-pretty"
-          >
-            AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
-          </Text>
+          <Grid cols={{ base: 1, md: 2 }} gap={4} marginTop={4}>
+            {skills.map((skill) => (
+              <Box key={skill.name} display="flex" align="center" gap={2}>
+                <Icon icon={skill.icon} size="sm" color="accent" />
+                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">
+                  {skill.name}
+                </Text>
+              </Box>
+            ))}
+          </Grid>
 
           <Box display="flex" wrap="wrap" gap={3} marginTop={2}>
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
-              View flagship projects
+            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest">
+              View Flagship Projects
             </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
-              Read implementation articles
+            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest">
+              Read Implementation Articles
             </ActionButton>
-            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2}>
+            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest">
               <Icon icon={Send} size="sm" />
               Contact
             </ActionButton>
           </Box>
         </Stack>
 
-        <Stack gap={2}>
-          <Box maxWidth="2xl">
-            <Text variant="body" size="lg" color="body">
-              I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
-            </Text>
-          </Box>
 
-          <Grid as="ul" cols={{ base: 2, sm: 4, md: 5 }} gap={2}>
-            {skills.map((skill) => (
-              <Box as="li" key={skill.name} display="flex" align="center" gap={2}>
-                <Icon icon={skill.icon} size="sm" color="accent" />
-                <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="tighter">
-                  {skill.name}
-                </Text>
-              </Box>
-            ))}
-          </Grid>
-        </Stack>
 
         <Stack gap={6} id="flagship" marginTop={2}>
           <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
@@ -159,38 +144,38 @@ export default function ResearchAnalytics() {
                       ))}
                     </Box>
 
-                    <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
+                    <Box display="flex" wrap="wrap" gap={4} marginTop="auto" paddingTop={4}>
                       {tool.externalUrl && (
-                        <Box
+                        <ActionButton
                           as="a"
                           href={tool.externalUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          display="flex"
-                          align="center"
-                          gap={2}
-                          className="text-accent hover:opacity-80 transition-colors z-20"
+                          variant="primary"
+                          paddingX={4}
+                          paddingY={2}
+                          className="z-20"
                         >
                           <Text weight="font-bold" size="xs" uppercase tracking="widest">
                             {tool.externalLinkDisplayLabel || 'Open Link'}
                           </Text>
-                          <ExternalLink className="w-4 h-4" />
-                        </Box>
+                          <Icon icon={ExternalLink} size="sm" />
+                        </ActionButton>
                       )}
                       {tool.sourceUrl && (
-                        <Box
+                        <ActionButton
                           as="a"
                           href={tool.sourceUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          display="flex"
-                          align="center"
-                          gap={2}
-                          className="text-dim hover:text-accent transition-colors z-20"
+                          variant="secondary"
+                          paddingX={4}
+                          paddingY={2}
+                          className="z-20"
                         >
                           <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
-                          <Github className="w-4 h-4" />
-                        </Box>
+                          <Icon icon={Github} size="sm" />
+                        </ActionButton>
                       )}
                     </Box>
                   </Stack>
