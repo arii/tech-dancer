@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { useState } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { CompactAffiliateLink } from '@/components/ui/CompactAffiliateLink';
@@ -94,44 +94,44 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       }
       footer={
         <Stack gap={12}>
-          {hasAffiliate && <AffiliateDisclosure />}
           <EditorialRelated items={relatedItems} />
           <EditorialNewsletter />
         </Stack>
+      }
+      sidebar={
+        hasAffiliate ? (
+          <Box>
+            <Stack gap={6}>
+              <Stack direction="row" align="center" justify="between">
+                <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                  Shop selected items
+                </Text>
+                <AffiliateDisclosure compact={true} />
+              </Stack>
+
+              {/* Featured items */}
+              <Stack gap={3}>
+                {featuredAffiliates.map(link => (
+                  <AffiliateCard key={link.id} link={link} />
+                ))}
+              </Stack>
+
+              {/* Remaining items (Compact list) */}
+              {remainingAffiliates.length > 0 && (
+                <Stack gap={3} marginTop={2}>
+                  {remainingAffiliates.map(link => (
+                    <CompactAffiliateLink key={link.id} link={link} />
+                  ))}
+                </Stack>
+              )}
+            </Stack>
+          </Box>
+        ) : undefined
       }
     >
       <Box className="prose-editorial">
         <MarkdownRenderer content={post.content} />
       </Box>
-
-      {hasAffiliate && (
-        <Box border="t" paddingTop={10} marginTop={10} className="border-line/30">
-          <Stack gap={6}>
-            <Stack direction="row" align="center" justify="between">
-              <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-                Shop selected items
-              </Text>
-              <AffiliateDisclosure />
-            </Stack>
-
-            {/* Featured items (Grid of cards) */}
-            <Grid cols={{ base: 1, md: 3 }} gap={4}>
-              {featuredAffiliates.map(link => (
-                <AffiliateCard key={link.id} link={link} />
-              ))}
-            </Grid>
-
-            {/* Remaining items (Compact list) */}
-            {remainingAffiliates.length > 0 && (
-              <Stack gap={3} marginTop={2}>
-                {remainingAffiliates.map(link => (
-                  <CompactAffiliateLink key={link.id} link={link} />
-                ))}
-              </Stack>
-            )}
-          </Stack>
-        </Box>
-      )}
 
       {post.tags && post.tags.length > 0 && (
         <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
