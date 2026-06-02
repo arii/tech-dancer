@@ -23,7 +23,7 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 export default function ResearchAnalytics() {
-  const { tools } = useResearch();
+  const { tools, studies } = useResearch();
   const [activeCategory] = useSearchParam('category', 'All');
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
