@@ -19,7 +19,7 @@ export function DevLabCallout() {
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed">
-        Welcome to my active research sandbox. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+        Welcome to my DevAI Systems Portfolio. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
       </Text>
 
       {/* CTA */}
