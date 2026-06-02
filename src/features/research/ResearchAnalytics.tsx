@@ -29,15 +29,12 @@ export default function ResearchAnalytics() {
 
   const categories = ['All', ...new Set(tools.map(t => t.category))];
 
-  const filteredTools = tools.filter(tool =>
-    activeCategory === 'All' || tool.category === activeCategory
-  );
-  const flagshipTools = tools.filter(t => t.isFlagship);
-  const engineeringTools = tools.filter(t => !t.isFlagship);
+  const flagshipTools = tools.filter(t => t.isFlagship && (activeCategory === 'All' || t.category === activeCategory));
+  const engineeringTools = tools.filter(t => !t.isFlagship && (activeCategory === 'All' || t.category === activeCategory));
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   // Map ResearchTool to ContentItem format expected by FolioGrid
-  const contentItems: ContentItem[] = filteredTools.map(tool => ({
+  const contentItems: ContentItem[] = engineeringTools.map(tool => ({
     type: 'study', // Default to study for tool cards
     slug: tool.id,
     title: tool.title,
