@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-const expectedNodeExact = "22.22.2";
+const expectedNodeExact = "22.22.1";
 const expectedNodeMajorForVercel = "22.x";
 const expectedPnpm = "10.28.2";
 

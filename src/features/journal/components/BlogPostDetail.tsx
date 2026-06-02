@@ -1,6 +1,5 @@
 // impeccable-ignore-file
 import { useState } from 'react';
-import { Share2 } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
