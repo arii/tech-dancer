@@ -2,10 +2,7 @@
 import { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
-import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { CompactAffiliateLink } from '@/components/ui/CompactAffiliateLink';
 import { Post, readingTime, getPosts } from '@/lib/content';
-import { affiliateManager } from '@/lib/affiliateManager';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
@@ -49,21 +46,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     }
   };
 
-  const affiliateLinks = (post.affiliateIds || [])
-    .map(id => {
-      const link = affiliateManager.getLink(id);
-      if (!link && import.meta.env.DEV) {
-        console.warn(`[BlogPostDetail] Affiliate link with ID "${id}" not found.`);
-      }
-      return link;
-    })
-    .filter((link): link is NonNullable<typeof link> => !!link);
-
-  const featuredAffiliates = affiliateLinks.slice(0, 3);
-  const remainingAffiliates = affiliateLinks.slice(3);
-
-  const hasAffiliate = affiliateLinks.length > 0;
-
   const relatedItems = getPosts()
     .filter(p => p.slug !== post.slug && (p.category === post.category || p.tags.some(t => post.tags.includes(t))))
     .slice(0, 3)
@@ -89,7 +71,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           onShare={share}
           isShared={isCopied}
-          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "21/9", md: "video" }} /> : undefined}
+          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} /> : undefined}
         />
       }
       footer={
@@ -98,37 +80,15 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           <EditorialNewsletter />
         </Stack>
       }
-      sidebar={
-        hasAffiliate ? (
-          <Box>
-            <Stack gap={6}>
-              <Stack direction="row" align="center" justify="between">
-                <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-                  Shop selected items
-                </Text>
-                <AffiliateDisclosure compact={true} />
-              </Stack>
-
-              {/* Featured items */}
-              <Stack gap={3}>
-                {featuredAffiliates.map(link => (
-                  <AffiliateCard key={link.id} link={link} />
-                ))}
-              </Stack>
-
-              {/* Remaining items (Compact list) */}
-              {remainingAffiliates.length > 0 && (
-                <Stack gap={3} marginTop={2}>
-                  {remainingAffiliates.map(link => (
-                    <CompactAffiliateLink key={link.id} link={link} />
-                  ))}
-                </Stack>
-              )}
-            </Stack>
-          </Box>
-        ) : undefined
-      }
     >
+      <Box paddingBottom={8}>
+        <Stack direction={{ base: 'column', sm: 'row' }} align={{ base: 'start', sm: 'center' }} justify="between" border="b" borderColor="line" paddingBottom={4} gap={4} className="border-opacity-30">
+          <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+            Shop selected items
+          </Text>
+          <AffiliateDisclosure compact={true} />
+        </Stack>
+      </Box>
       <Box className="prose-editorial">
         <MarkdownRenderer content={post.content} />
       </Box>

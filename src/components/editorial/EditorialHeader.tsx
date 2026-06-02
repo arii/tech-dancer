@@ -32,9 +32,9 @@ export function EditorialHeader({
   hero,
 }: EditorialHeaderProps) {
   return (
-    <Stack gap={10}>
-      <Stack gap={5}>
-        <Text variant="mono" size="tiny" color="dim" weight="font-black" uppercase tracking="widest">
+    <Stack gap={12}>
+      <Stack gap={6}>
+        <Text variant="mono" size="xs" color="dim" weight="font-black" uppercase tracking="widest">
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" className="opacity-40">•</Text> {date} <Text as="span" marginX={2} color="line" className="opacity-40">•</Text> {readTime}
         </Text>
 
@@ -50,16 +50,16 @@ export function EditorialHeader({
       </Stack>
 
       {hero && (
-        <Box width="full">
+        <Box width="full" paddingBottom={4}>
           {hero}
         </Box>
       )}
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={6} className="border-opacity-30">
-        <Stack direction="row" align="center" gap={3}>
+      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-30">
+        <Stack direction="row" align="center" gap={4} className="min-w-0 flex-1">
            <AuthorAvatar src={authorAvatarSrc} name={author} />
-           <Stack gap={0.5}>
-             <Text variant="mono" size="xs" weight="font-black" tracking="wide">BY {author.toUpperCase()}</Text>
+           <Stack gap={1} className="min-w-0">
+             <Text variant="mono" size="xs" weight="font-black" tracking="wide" className="truncate">BY {author.toUpperCase()}</Text>
              {onShare && (
                <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
                  <Share2 className="w-3.5 h-3.5" />

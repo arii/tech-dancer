@@ -24,7 +24,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
           <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100 transition-opacity" />
         </Box>
 
-        <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors">
+        <Text variant="body" size="base" weight="font-bold" className="group-hover:text-accent transition-colors relative z-20 pointer-events-none">
           {link.name}
         </Text>
 

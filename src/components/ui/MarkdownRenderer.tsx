@@ -1,11 +1,14 @@
 // impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
+import { AffiliateCard } from './AffiliateCard';
+import { affiliateManager } from '@/lib/affiliateManager';
 
 interface MarkdownRendererProps {
   content: string;
@@ -15,20 +18,28 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
       <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice'],
+            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input'],
             attributes: {
               ...defaultSchema.attributes,
-              notice: ['type'],
-              Notice: ['type']
+              notice: ['type', 'id'],
+              Notice: ['type', 'id'],
+              input: ['type', 'checked', 'disabled']
             },
             clobberPrefix: ''
           }]
         ]}
         components={{
+          input: ({node: _node, checked, disabled, type, ...props}: any) => {
+            if (type === 'checkbox') {
+              return <input type="checkbox" defaultChecked={checked} className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer mt-1" {...props} />;
+            }
+            return <input type={type} defaultChecked={checked} disabled={disabled} {...props} />;
+          },
           a: ({node: _node, href, ...props}) => {
             const isInternal = href?.startsWith('/');
             if (isInternal) {
@@ -103,8 +114,32 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               />
             );
           },
-          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
-          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
+          notice: (props: any) => {
+            if (props.type === 'affiliate' && props.id) {
+              const link = affiliateManager.getLink(props.id);
+              if (link) {
+                return (
+                  <Box marginY={4} width="full" maxWidth="sm">
+                    <AffiliateCard link={link} />
+                  </Box>
+                );
+              }
+            }
+            return <Notice {...props} />;
+          },
+          Notice: (props: any) => {
+            if (props.type === 'affiliate' && props.id) {
+              const link = affiliateManager.getLink(props.id);
+              if (link) {
+                return (
+                  <Box marginY={4} width="full" maxWidth="sm">
+                    <AffiliateCard link={link} />
+                  </Box>
+                );
+              }
+            }
+            return <Notice {...props} />;
+          }
         }}
       >
         {content}

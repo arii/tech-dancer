@@ -11,7 +11,7 @@ interface EditorialHeroProps {
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "video", md: "video" } }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" } }: EditorialHeroProps) {
   return (
     <Box
       width="full"
