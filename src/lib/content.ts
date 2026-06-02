@@ -69,7 +69,6 @@ function normalizeReadTime(val: unknown): number | undefined {
   return undefined;
 }
 
-function transform<T extends { date?: string; draft?: boolean; type?: string; status?: string }>(
 export function normalizeAsset(val: unknown) {
   if (val === "" || val === undefined || val === null) return undefined;
   if (typeof val !== "string") return val;
