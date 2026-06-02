@@ -48,6 +48,15 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
+export function normalizeAsset(val: unknown) {
+  if (val === "" || val === undefined || val === null) return undefined;
+  if (typeof val !== "string") return val;
+  if (val.startsWith("/") && !val.startsWith(ASSET_PREFIX)) {
+    return `${ASSET_PREFIX}${val}`;
+  }
+  return val;
+}
+
 function transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
 ): T[] {
@@ -57,13 +66,6 @@ function transform<T extends { date?: string; draft?: boolean }>(
     .map(([path, raw]) => {
       const contentStr = typeof raw === "string" ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
-
-      const normalizeAsset = (val: unknown) => {
-        if (val === "") return undefined;
-        return typeof val === "string" && val.startsWith("/")
-          ? `${ASSET_PREFIX}${val}`
-          : val;
-      };
 
       data.image = normalizeAsset(data.image);
       data.imageBack = normalizeAsset(data.imageBack);
