@@ -89,7 +89,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           onShare={share}
           isShared={isCopied}
-          hero={post.image ? <EditorialHero src={post.image} alt={post.title} /> : undefined}
+          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "21/9", md: "video" }} /> : undefined}
         />
       }
       footer={
