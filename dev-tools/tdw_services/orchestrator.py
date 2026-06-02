@@ -499,7 +499,7 @@ class Orchestrator:
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
         if actual_node != expected_node:
             print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
-            pass
+            raise CLIError("Node version mismatch. Do not switch versions manually.")
 
         with open("package.json", "r") as f:
             pkg = json.load(f)
