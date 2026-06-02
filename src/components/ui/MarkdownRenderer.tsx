@@ -4,6 +4,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
+import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 
 interface MarkdownRendererProps {
@@ -94,13 +95,17 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({node: _node, ...props}) => (
-            <img
-              className="rounded-lg shadow-sm"
-              loading="lazy"
-              {...props}
-            />
-          ),
+          img: ({node: _node, src, ...props}) => {
+            const normalizedSrc = normalizeAsset(src || '');
+            return (
+              <img
+                src={normalizedSrc}
+                className="rounded-lg shadow-sm"
+                loading="lazy"
+                {...props}
+              />
+            );
+          },
           notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
           Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
         }}

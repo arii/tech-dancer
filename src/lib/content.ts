@@ -70,6 +70,16 @@ function normalizeReadTime(val: unknown): number | undefined {
 }
 
 function transform<T extends { date?: string; draft?: boolean; type?: string; status?: string }>(
+export function normalizeAsset(val: unknown) {
+  if (val === "" || val === undefined || val === null) return undefined;
+  if (typeof val !== "string") return val;
+  if (val.startsWith("/") && !val.startsWith(ASSET_PREFIX)) {
+    return `${ASSET_PREFIX}${val}`;
+  }
+  return val;
+}
+
+function transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
   defaultType?: string
 ): T[] {
