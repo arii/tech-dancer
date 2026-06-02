@@ -16,6 +16,9 @@ import { ContentItem } from '@/lib/content';
 export default function ResearchAnalytics() {
   const { tools } = useResearch();
   const [activeCategory] = useSearchParam('category', 'All');
+  const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+    ? import.meta.env.BASE_URL.slice(0, -1)
+    : import.meta.env.BASE_URL;
 
   const categories = ['All', ...new Set(tools.map(t => t.category))];
 
