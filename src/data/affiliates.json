@@ -19,7 +19,7 @@
   },
   "loop-experience": {
     "id": "loop-experience",
-    "name": "Loop Experience Ear Plugs",
+    "name": "Loop Experience 2 Ear Plugs",
     "url": "https://www.amazon.com/dp/B0D4DZDHZ1?tag=onasafari04-20",
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
@@ -456,6 +456,16 @@
     "id": "portable-speaker",
     "name": "Portable Bluetooth Speaker (UE Wonderboom 4)",
     "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20",
+    "category": "gear",
+    "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
+    "gearSlug": "2024-01-01-portable-speaker",
+    "image": "/images/gear/amazon/portable-speaker.jpg",
+    "imageMode": "contain"
+  },
+  "jbl-flip-6": {
+    "id": "jbl-flip-6",
+    "name": "JBL Flip 6",
+    "url": "https://www.amazon.com/dp/B09GK544PP?tag=onasafari04-20",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
     "gearSlug": "2024-01-01-portable-speaker",
