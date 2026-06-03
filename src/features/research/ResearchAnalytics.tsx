@@ -4,7 +4,7 @@ import FolioGrid from '@/components/ui/FolioGrid';
 import { Icon } from '@/components/ui/Icon';
 import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, Activity, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, Activity, Cpu, FileText, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -243,6 +243,36 @@ export default function ResearchAnalytics() {
               <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
+
+            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+              {studies.map((study) => (
+                <Stack
+                  key={study.slug}
+                  padding={8}
+                  gap={4}
+                  as={NavLink}
+                  to={`/research/${study.slug}`}
+                  className={cardVariants({ interactive: true })}
+                >
+                  <Box display="flex" justify="between" align="center">
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                    <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
+                  </Box>
+                  <Stack gap={2}>
+                    <Text variant="display" size="2xl" weight="font-black">
+                      {study.title}
+                    </Text>
+                    <Text variant="body" size="sm" color="dim">
+                      {study.excerpt}
+                    </Text>
+                  </Stack>
+                  <Box display="flex" align="center" gap={2} marginTop="auto">
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
+                    <Icon icon={FileText} size="sm" color="accent" />
+                  </Box>
+                </Stack>
+              ))}
+            </Grid>
           </Stack>
         )}
       </Stack>
