@@ -2,14 +2,11 @@ import { Icon } from '@/components/ui/Icon';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Tag } from '@/components/ui/Tag';
-import { NavLink } from 'react-router-dom';
-import { routes } from '@/config/routes';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, CheckCircle2, Globe, Send } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, CheckCircle2, Globe } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
-import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool, ResearchCTA } from '@/config/research-tools';
@@ -84,8 +81,8 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
         <ToolImage tool={tool} className={cn(isPrimary && "opacity-90")} />
         <Stack
           span={{ base: 1, md: tool.image ? 3 : 5 }}
-          gap={{ base: 4, md: 6 }}
-          padding={{ base: 6, md: 10 }}
+          gap={{ base: 4, md: 5 }}
+          padding={{ base: 6, md: 8 }}
           flex={1}
           className="min-w-0" // Prevent horizontal overflow
         >
@@ -118,7 +115,7 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
             </Text>
           </Box>
 
-          <Stack gap={6}>
+          <Stack gap={5}>
             <Stack gap={1}>
               <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
                 {tool.category}
@@ -132,7 +129,7 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
             </Stack>
 
             {tool.problem && tool.solution && tool.outcome ? (
-              <Grid cols={{ base: 1, lg: 3 }} gap={6} paddingY={4} border="y" className="border-accent/5">
+              <Grid cols={{ base: 1, lg: 3 }} gap={4} paddingY={4} border="y" className="border-accent/5">
                 <Stack gap={2}>
                   <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.6}>Problem</Text>
                   <Text size="sm" color="body" className="leading-relaxed">{tool.problem}</Text>
@@ -250,10 +247,6 @@ export default function ResearchAnalytics() {
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
-  const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
-
-
-
 
   return (
     <Box as="section">
@@ -262,8 +255,8 @@ export default function ResearchAnalytics() {
         description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
-      <Stack gap={4}>
-        <Stack gap={2}>
+      <Stack gap={8}>
+        <Stack gap={4}>
           <PageHeader
             label="HIRE_ME"
             title="DevAI Systems Portfolio"
@@ -271,47 +264,23 @@ export default function ResearchAnalytics() {
             paddingBottom={0}
             border="none"
           />
-          <Text
-            variant="body"
-            size={{ base: "lg", lg: "xl" }}
-            color="dim"
-            maxWidth="prose"
-            className="leading-relaxed text-pretty"
-          >
-            Software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
-          </Text>
-        </Stack>
-
-        <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Featured Outputs</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>FLAGSHIP PROJECTS</Text>
-          </Box>
-          <Box display="flex" wrap="wrap" gap={3} marginTop={2}>
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
-              View flagship projects
-            </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
-              Read implementation articles
-            </ActionButton>
-            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2}>
-              <Icon icon={Send} size="sm" />
-              Contact
-            </ActionButton>
-          </Box>
-        </Stack>
-
-        <Stack gap={2}>
-          <Box maxWidth="2xl">
+          <Stack gap={4} maxWidth="prose">
+            <Text
+              variant="body"
+              size={{ base: "lg", lg: "xl" }}
+              color="dim"
+              className="leading-relaxed text-pretty"
+            >
+              Software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
+            </Text>
             <Text variant="body" size="lg" color="body">
               I build engineering systems that turn messy workflows into repeatable software. Grounded solutions built to ship products, not hype.
             </Text>
-          </Box>
-
-
+          </Stack>
         </Stack>
 
-        <Stack gap={6} id="flagship" marginTop={2}>
+
+        <Stack gap={6} id="flagship" marginTop={4}>
           <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
@@ -323,24 +292,7 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
-            </Text>
-          </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              Shipping high-fidelity products requires practical AI orchestration, not just hype. My automation frameworks are built for scale, ensuring that tooling remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
-            </Text>
-          </Stack>
-        </Grid>
-
-        <Stack gap={8}>
+        <Stack gap={8} marginTop={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
