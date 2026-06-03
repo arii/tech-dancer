@@ -1,6 +1,6 @@
 import { useMemo, lazy, Suspense } from 'react';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
+import { Database, Activity, Search, ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
@@ -8,8 +8,10 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-
-import { DetailLayout } from '@/components/layout/DetailLayout';
+import { EditorialLayout } from '@/components/editorial/EditorialLayout';
+import { EditorialHeader } from '@/components/editorial/EditorialHeader';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { readingTime } from '@/lib/content';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -38,12 +40,10 @@ export default function ResearchDetail() {
   const id = useMemo(() => {
     if (paramId) return paramId;
     const segments = pathname.split('/').filter(Boolean);
-    // Find the segment after 'research' to identify the tool
     const resIndex = segments.indexOf('research');
     if (resIndex !== -1 && segments[resIndex + 1]) {
       return segments[resIndex + 1];
     }
-    // Fallback to the last segment if we are in this component
     return segments[segments.length - 1] || null;
   }, [paramId, pathname]);
 
@@ -81,8 +81,6 @@ export default function ResearchDetail() {
     return null;
   }, [tool, study]);
 
-  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // pathname is relative to basename in React Router 6/7.
   const isResearchPath = useMemo(() => {
     const segments = pathname.split('/').filter(Boolean);
     return segments.includes('research');
@@ -93,6 +91,7 @@ export default function ResearchDetail() {
   }
 
   if (study) {
+    const rt = `${readingTime(study.content)} min read`;
     return (
       <>
         <SEO
@@ -101,14 +100,25 @@ export default function ResearchDetail() {
           type="article"
           schema={structuredData}
         />
-        <DetailLayout
-          title={study.title}
-          category={study.category}
-          date={study.date}
-          content={study.content}
+        <EditorialLayout
           onBack={() => navigate('/research')}
           backLabel="Back to Portfolio"
-        />
+          header={
+            <EditorialHeader
+              category={study.category}
+              date={study.date}
+              readTime={rt}
+              title={study.title}
+              dek={study.excerpt}
+              author={study.author}
+              authorAvatarSrc={study.authorImage}
+            />
+          }
+        >
+          <Box className="prose-editorial">
+            <MarkdownRenderer content={study.content} />
+          </Box>
+        </EditorialLayout>
       </>
     );
   }

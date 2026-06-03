@@ -73,6 +73,9 @@ export default defineConfig(({mode}) => {
         'dev'
       ),
       'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
+      'import.meta.env.VITE_IS_VERCEL': JSON.stringify(
+        process.env.VERCEL === '1' ? 'true' : 'false'
+      ),
     },
     plugins: [
       react(),
