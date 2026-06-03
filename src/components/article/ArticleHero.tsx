@@ -91,7 +91,7 @@ export function ArticleHero({
 
       {/* Desktop Visual Column */}
       {visual && (
-        <Box className="hidden lg:block">
+        <Box className="hidden lg:block hero-visual">
           {visual}
         </Box>
       )}
