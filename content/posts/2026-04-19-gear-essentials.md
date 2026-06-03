@@ -12,7 +12,7 @@ author: "Ariel Anders, PhD"
 affiliateIds:
   - "loop-experience"
   - "portable-steamer"
-  - "portable-speaker"
+  - "jbl-flip-6"
   - "portable-charger"
 ---
 
@@ -60,6 +60,6 @@ Because social dancing often runs until 4:00 AM or 5:00 AM, many dancers find th
 
 ### Miscellaneous Tech & Tools
 - **High-capacity power bank:** Your phone battery can drain quickly from recording workshop recaps, taking videos of friends, and looking up late-night songs.
-<notice type="affiliate" id="portable-speaker" />
+<notice type="affiliate" id="jbl-flip-6" />
 <notice type="affiliate" id="portable-charger" />
 - **Emergency utility kit:** Pack a few safety pins, a travel sewing kit, and spare earring back stoppers in case of a wardrobe malfunction.
