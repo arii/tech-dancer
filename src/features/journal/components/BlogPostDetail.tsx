@@ -83,6 +83,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       sidebar={
         affiliateLinks.length > 0 ? (
           <Stack gap={6}>
+            <AffiliateDisclosure compact={true} />
             <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
               Shop selected items
             </Text>
@@ -91,7 +92,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                 <AffiliateCard key={link.id} link={link} />
               ))}
             </Stack>
-            <AffiliateDisclosure compact={true} />
           </Stack>
         ) : undefined
       }
