@@ -95,6 +95,182 @@ File: `.github/workflows/security.yml`
 - [x] Findings recorded
 - [x] Fix recommendations written
 
+### Workflow: `wcs_etl.yml`
+
+File: `.github/workflows/wcs_etl.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `update-snapshots.yml`
+
+File: `.github/workflows/update-snapshots.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `self-healing.yml`
+
+File: `.github/workflows/self-healing.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `prune-stale-previews.yml`
+
+File: `.github/workflows/prune-stale-previews.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `ollama-chatops.yml`
+
+File: `.github/workflows/ollama-chatops.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `mergellama.yml`
+
+File: `.github/workflows/mergellama.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `mass-audit-prs.yml`
+
+File: `.github/workflows/mass-audit-prs.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `jules-fix-trigger.yml`
+
+File: `.github/workflows/jules-fix-trigger.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `issue_to_pr.yml`
+
+File: `.github/workflows/issue_to_pr.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `codeql.yml`
+
+File: `.github/workflows/codeql.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
+### Workflow: `auto-conflict-resolver.yml`
+
+File: `.github/workflows/auto-conflict-resolver.yml`
+
+- [x] Workflow file inspected
+- [x] Recent runs inspected
+- [x] Failed runs inspected where available
+- [x] Successful runs inspected where available
+- [x] Slowest jobs identified
+- [x] Artifacts inspected where available
+- [x] Cache usage checked
+- [x] Trigger rules checked
+- [x] Permissions checked
+- [x] Findings recorded
+- [x] Fix recommendations written
+
 ## Findings
 
 ### Finding: Playwright tests failing due to missing elements

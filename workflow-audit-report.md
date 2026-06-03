@@ -9,9 +9,20 @@ All workflows inside `.github/workflows/`.
 - `deploy.yml`
 - `validate_issue.yml`
 - `security.yml`
+- `wcs_etl.yml`
+- `update-snapshots.yml`
+- `self-healing.yml`
+- `prune-stale-previews.yml`
+- `ollama-chatops.yml`
+- `mergellama.yml`
+- `mass-audit-prs.yml`
+- `jules-fix-trigger.yml`
+- `issue_to_pr.yml`
+- `codeql.yml`
+- `auto-conflict-resolver.yml`
 
 ## 3. Run sampling strategy
-`gh run list` limit to 10 for success and failures.
+`gh run list` limit to 20 for success, failures, and other events including manual dispatches.
 
 ## 4. Table of sampled runs
 | Run ID | Workflow | Event | Branch/PR | Status | Duration | Why sampled |
