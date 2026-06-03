@@ -15,7 +15,7 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
   return (
     <Box
       width="full"
-      radius="2xl"
+      radius="lg"
       overflow="hidden"
       border
       className={journalVariants.card({ variant: 'hero' })}

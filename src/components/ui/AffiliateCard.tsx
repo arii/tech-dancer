@@ -10,7 +10,7 @@ interface AffiliateCardProps {
 export function AffiliateCard({ link }: AffiliateCardProps) {
   return (
     <BaseCard
-      padding={5}
+      padding={{ base: 3, md: 4 }}
       height="full"
       href={link.url}
       rel="noopener noreferrer sponsored"

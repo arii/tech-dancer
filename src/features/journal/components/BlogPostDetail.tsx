@@ -83,17 +83,15 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       sidebar={
         affiliateLinks.length > 0 ? (
           <Stack gap={6}>
-            <Stack direction="row" align="center" justify="between">
-              <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-                Shop selected items
-              </Text>
-              <AffiliateDisclosure compact={true} />
-            </Stack>
+            <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+              Shop selected items
+            </Text>
             <Stack gap={4}>
               {affiliateLinks.map(link => (
                 <AffiliateCard key={link.id} link={link} />
               ))}
             </Stack>
+            <AffiliateDisclosure compact={true} />
           </Stack>
         ) : undefined
       }
