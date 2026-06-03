@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Ultra-light bounce-free waist perfect for outdoor dancing at Lindy in the Park."
-image: "/images/gear/sketches/fanny-pack.png"
+image: "/images/gear/sketches/fanny-pack.webp"
 affiliateIds: ["running-belt"]
 tags: ["travel", "packing", "storage"]
 verdict: "Best for carry-on"
