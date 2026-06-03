@@ -91,13 +91,8 @@ jobs:
           echo "${{ github.sha }}" > dist/.commit-sha
 
           # Create verification marker
-          cat <<EOF > dist/.deploy.json
-          {
-            "branch": "${REF_NAME}",
-            "sha": "${{ github.sha }}",
-            "deployedAt": $(date +%s)
-          }
-EOF
+          printf '{\n  "branch": "%s",\n  "sha": "%s",\n  "deployedAt": %s\n}\n' \
+            "${REF_NAME}" "${{ github.sha }}" "$(date +%s)" > dist/.deploy.json
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
