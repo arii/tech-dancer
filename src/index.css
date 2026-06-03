@@ -146,8 +146,10 @@
   .prose-counters { counter-reset: section; }
   .prose-section { counter-increment: section; }
   .prose-section-number::before {
-    content: counter(section, decimal-leading-zero);
-    margin-right: 0.5rem;
+    content: "STEP " counter(section, decimal-leading-zero) " ——";
+    letter-spacing: 0.15em;
+    font-size: 0.65rem;
+    opacity: 0.5;
   }
 
   /* Brand SVG Utilities */
