@@ -43,7 +43,7 @@ export function EditorialHeader({
         </Text>
 
         {dek && (
-          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" weight="font-medium" opacity={90} className="text-pretty">
+          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" className="text-pretty font-medium opacity-90">
             {dek}
           </Text>
         )}

@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { journalVariants } from '@/lib/variants';
 
 interface EditorialLayoutProps {
   onBack: () => void;
@@ -38,12 +37,12 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
-            className={journalVariants.navLink()}
+            className="text-text-dim hover:text-accent transition-colors group cursor-pointer"
           >
             <Icon
               icon={ArrowLeft}
               size="sm"
-              className={journalVariants.navIcon()}
+              className="transition-transform group-hover:-translate-x-1"
             />
             <Text variant="mono" size="xs" weight="font-bold" uppercase>
               {backLabel}
@@ -61,7 +60,7 @@ export function EditorialLayout({
           {/* Main Article Column */}
           <Box span={{ base: 1, lg: 8 }} width="full" maxWidth={{ lg: "3xl" }}>
             <Stack gap={12}>
-              <Box width="full">
+              <Box className="article-content-wrapper" width="full">
                 {children}
               </Box>
 

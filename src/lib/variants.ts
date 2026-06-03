@@ -128,7 +128,7 @@ export const journalVariants = {
         hero: "bg-surface-alt border-line/30",
       },
       interactive: {
-        true: "hover:border-accent/50 hover:bg-surface/50 group cursor-pointer",
+        true: "hover:border-accent/50 hover:bg-surface/50 cursor-pointer group",
         false: ""
       }
     },
@@ -139,9 +139,6 @@ export const journalVariants = {
   }),
   shareAction: cva("text-text-dim hover:text-accent transition-colors group"),
   tag: cva("border-line/50 hover:border-accent transition-colors cursor-default"),
-  navLink: cva("text-text-dim hover:text-accent transition-colors group cursor-pointer"),
-  navIcon: cva("transition-transform group-hover:-translate-x-1"),
-  relatedLinkText: cva("group-hover:text-accent transition-colors")
 };
 
 /**

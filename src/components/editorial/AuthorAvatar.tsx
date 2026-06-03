@@ -14,37 +14,25 @@ export function AuthorAvatar({ src, name, size = 10 }: AuthorAvatarProps) {
     .toUpperCase()
     .slice(0, 2);
 
-  if (src) {
-    return (
-      <Box
-        as="img"
-        src={src}
-        alt={name}
-        width={size}
-        height={size}
-        radius="full"
-        border={true}
-        shadow="sm"
-        className="object-cover"
-      />
-    );
-  }
-
   return (
     <Box
+      as={src ? "img" : "div"}
+      {...(src ? { src, alt: name, className: "object-cover" } : {})}
       width={size}
       height={size}
       radius="full"
-      surface="muted"
-      display="flex"
-      align="center"
-      justify="center"
       border={true}
       shadow="sm"
+      surface={src ? undefined : "muted"}
+      display={src ? undefined : "flex"}
+      align={src ? undefined : "center"}
+      justify={src ? undefined : "center"}
     >
-      <Text variant="mono" size="micro" weight="font-bold" color="dim" opacity={70}>
-        {initials}
-      </Text>
+      {!src && (
+        <Text variant="mono" size="micro" weight="font-bold" color="dim" opacity={70}>
+          {initials}
+        </Text>
+      )}
     </Box>
   );
 }
