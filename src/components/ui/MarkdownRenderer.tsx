@@ -105,13 +105,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <img
-                src={normalizedSrc}
-                className="rounded-lg shadow-sm"
-                loading="lazy"
-                alt={alt || "Article illustration"}
-                {...props}
-              />
+              <Box marginY={8} width="full" display="flex" justifyContent="center">
+                <img
+                  src={normalizedSrc}
+                  className="rounded-lg shadow-sm w-full max-w-full"
+                  loading="lazy"
+                  alt={alt || "Article illustration"}
+                  {...props}
+                />
+              </Box>
             );
           },
           notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
