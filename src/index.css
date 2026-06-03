@@ -151,6 +151,7 @@
     letter-spacing: 0.15em;
     font-size: 0.65rem;
     opacity: 0.5;
+  }
   .editorial-section-number::before {
     content: counter(section, decimal-leading-zero);
     @apply text-accent font-black text-xs tracking-tight;
