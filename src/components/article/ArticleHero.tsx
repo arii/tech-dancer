@@ -25,7 +25,7 @@ export function ArticleHero({
   tags
 }: ArticleHeroProps) {
   return (
-    <Box display="grid" lgGridCols="1.05fr 0.95fr" gap={8} lgGap={14} paddingY={10} lgPaddingY={16} align="center">
+    <Box display="grid" lgGridCols={visual ? "1.05fr 0.95fr" : "1fr"} gap={8} lgGap={14} paddingY={10} lgPaddingY={16} align="center">
       {/* Content Column */}
       <Stack gap={{ base: 4, lg: 8 }}>
         <Stack gap={{ base: 3, lg: 4 }}>
@@ -80,7 +80,7 @@ export function ArticleHero({
             {tags.map((tag) => (
               <Box
                 key={tag}
-                paddingX={3} paddingY={1} radius="full" border surface="surface" className="bg-surface/50 text-text-dim text-tiny font-bold uppercase tracking-wider whitespace-nowrap" // impeccable-ignore
+                paddingX={3} paddingY={1} radius="full" border surface="surface" className="bg-surface/50 text-text-dim text-xs font-bold uppercase tracking-wider whitespace-nowrap"
               >
                 {tag}
               </Box>
@@ -90,9 +90,11 @@ export function ArticleHero({
       </Stack>
 
       {/* Desktop Visual Column */}
-      <Box className="hidden lg:block">
-        {visual}
-      </Box>
+      {visual && (
+        <Box className="hidden lg:block">
+          {visual}
+        </Box>
+      )}
     </Box>
   );
 }

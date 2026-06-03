@@ -29,11 +29,13 @@ export function ArticleFeatureCard({
         {image ? (
           <Box aspect={{ base: "4/3", sm: "video", lg: "4/3" }} overflow="hidden" position="relative">
             {showImagePair && imageBack ? (
-              <Box width="full" height="full" display="flex" className="transition-transform duration-700 group-hover:scale-105">
-                <Box flex={1} className="border-r border-line/50">
+              <Box width="full" height="full" display="flex" className="transition-transform duration-700 group-hover:scale-105 bg-surface-alt">
+                <Box flex={1} className="border-r border-line/50" padding={4}>
+                  <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim" marginBottom={2}>Front</Text>
                   <img src={image} alt={title || "Feature visual front"} className="w-full h-full object-contain" />
                 </Box>
-                <Box flex={1}>
+                <Box flex={1} padding={4}>
+                  <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim" marginBottom={2}>Back</Text>
                   <img src={imageBack} alt={title || "Feature visual back"} className="w-full h-full object-contain" />
                 </Box>
               </Box>
