@@ -17,6 +17,19 @@ import { Box } from './layouts/Primitives';
 import { motionTokens } from './styles/motion';
 import { getSkeletonVariant } from './lib/utils';
 
+export function HydrateFallback() {
+  return (
+    <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+      <Box
+        width={8}
+        height={8}
+        radius="full"
+        className="border-4 border-accent border-t-transparent animate-spin"
+      />
+    </Box>
+  );
+}
+
 export function RootLayout() {
   const location = useLocation();
 
@@ -80,7 +93,7 @@ export function RootLayout() {
           </Box>
         </AnimatePresence>
       </MainLayout>
-      {import.meta.env.PROD && window.location.hostname !== 'localhost' && (
+      {import.meta.env.VITE_IS_VERCEL === 'true' && (
         <>
           <Analytics />
           <SpeedInsights />
@@ -97,6 +110,7 @@ export const routes = [
   {
     path: '/',
     element: <RootLayout />,
+    HydrateFallback: HydrateFallback,
     errorElement: <GlobalErrorBoundary />,
     children: routeConfig.map((route) => ({
       ...route,
