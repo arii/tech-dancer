@@ -3,7 +3,6 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -117,7 +116,7 @@ export default function ResearchAnalytics() {
               >
                 <Stack gap={0} height="full">
                   {tool.image && (
-                    <Box width="full" maxHeight="300px" overflow="hidden" border="b" className="border-accent/5">
+                    <Box width="full" maxHeight={72} overflow="hidden" border="b" className="border-accent/5">
                       <img
                         src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
                         alt={tool.title}
