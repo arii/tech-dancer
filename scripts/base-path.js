@@ -1,11 +1,4 @@
 /**
- * Normalizes a path to ensure it starts and ends with a single slash
- * @param {string} p
- * @returns {string}
- */
-export const normalizePath = (p) => ("/" + p + "/").replace(/\/+/g, "/");
-
-/**
  * Resolves the base path based on environment variables
  * @returns {string}
  */
