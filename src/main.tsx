@@ -74,6 +74,14 @@ const getBasename = (): string => {
   return buildBase;
 };
 
+// Restore GitHub Pages SPA redirect
+const redirect = sessionStorage.getItem('ghpages_redirect');
+if (redirect) {
+  sessionStorage.removeItem('ghpages_redirect');
+  // Replace the current history entry with the real path
+  window.history.replaceState(null, '', '/tech-dancer' + redirect);
+}
+
 const router = createBrowserRouter(routes, {
   basename: getBasename(),
 });
