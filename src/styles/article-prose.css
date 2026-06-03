@@ -8,3 +8,10 @@
   @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
   @apply prose-strong:text-text-main prose-blockquote:border-accent prose-blockquote:text-text-body prose-blockquote:italic;
 }
+
+.hero-visual {
+  @apply overflow-hidden rounded-xl;
+}
+.hero-visual img {
+  @apply object-contain max-h-[300px]; /* impeccable-ignore */
+}

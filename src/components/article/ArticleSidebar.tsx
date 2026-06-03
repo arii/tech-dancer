@@ -75,7 +75,7 @@ export function ArticleSidebar({
             {relatedTopics.map((topic, i) => (
               <Box
                 key={i}
-                paddingX={2} paddingY={1} radius="md" surface="surface" border className="text-text-dim text-tiny font-bold uppercase tracking-wider" // impeccable-ignore
+                paddingX={2} paddingY={1} radius="md" surface="surface" border className="text-text-dim text-xs font-bold uppercase tracking-wider"
               >
                 {topic}
               </Box>
