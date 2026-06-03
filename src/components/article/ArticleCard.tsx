@@ -19,7 +19,7 @@ export function ArticleCard({ children, className = "", as, ...props }: ArticleC
       as={as}
       radius="xl"
       border
-      className={`border-line/80 bg-bg/60 backdrop-blur-sm ${className}`} // impeccable-ignore - Complex backdrop composition.
+      className={`border-line/80 bg-bg/60 backdrop-blur-sm ${className}`}
       {...props}
     >
       {children}

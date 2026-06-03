@@ -116,9 +116,11 @@ export default function ResearchDetail() {
               title={study.title}
               dek={study.excerpt}
               meta={
-                <ArticleMeta
-                  author={study.author}
-                />
+                study.author ? (
+                  <ArticleMeta
+                    author={study.author}
+                  />
+                ) : null
               }
             />
           }

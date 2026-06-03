@@ -46,7 +46,7 @@ export function ArticleAffiliateCard({ id, cta = "View Product" }: ArticleAffili
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            display="inline-flex" align="center" gap={2} paddingX={6} paddingY={3} radius="xl" surface="surface" border className="hover:border-accent/50 hover:bg-surface-alt font-bold transition-all w-fit" // impeccable-ignore - Non-standard hover transition
+            display="inline-flex" align="center" gap={2} paddingX={6} paddingY={3} radius="xl" surface="surface" border className="hover:border-accent/50 hover:bg-surface-alt font-bold transition-all w-fit"
           >
             <span>{cta}</span>
             <ExternalLink size={14} className="text-accent" />
