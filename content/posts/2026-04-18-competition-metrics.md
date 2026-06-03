@@ -1,6 +1,6 @@
 ---
 type: post
-title: "Coming Soon: Data Pipeline & Telemetry ETL"
+title: "Coming Soon: WCS Competition Data Scraper"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
@@ -22,7 +22,7 @@ A careful, respectful way to use public scoring data to analyze progression and 
 
 In West Coast Swing, we are judged by humans. Humans are great, but results can vary from heat to heat. While one event result only tells part of the story, looking at scores across multiple events can reveal helpful patterns about how you're progressing and how different panels see your dancing.
 
-I am excited to announce the development of the **Data Pipeline & Telemetry ETL**, a tool designed to make competition results easier to understand.
+I am excited to announce the development of the **WCS Competition Data Scraper**, a tool designed to make competition results easier to understand.
 
 ### Core Philosophy
 

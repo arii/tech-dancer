@@ -11,7 +11,7 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
   {
     path: 'dev-tools/scope_check.py',
     label: 'Impact Analyzer',
-    description: 'Calculates the impact and dependency scope of code changes.',
+    description: 'Calculates semantic blast radius of code changes.',
     toolId: TOOL_ID_SCOPE_BLAST_RADIUS
   },
   {
