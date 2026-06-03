@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Leak-proof refillable containers for TSA-approved liquids."
-image: "/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.png"
+image: "/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.webp"
 affiliateIds: ["travel-bottles"]
 tags: ["travel", "packing"]
 verdict: "Best for carry-on"
