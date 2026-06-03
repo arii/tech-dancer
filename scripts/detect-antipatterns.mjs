@@ -140,7 +140,8 @@ const CONFIG = {
       name: 'Hardcoded Pixel Value (CSS)',
       pattern: /(?<![\w-])\d+px(?![\w-])/g,
       severity: 'minor',
-      message: 'Avoid hardcoded pixel values in CSS. Use design tokens.'
+      message: 'Avoid hardcoded pixel values in CSS. Use design tokens.',
+      filePattern: /\.(css|scss|tsx|ts)$/
     }
   ],
   deprecated: {
