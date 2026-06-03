@@ -38,7 +38,6 @@ function ToolImage({ tool, className }: { tool: ResearchTool; className?: string
         alt={`${tool.title} interface preview`}
         loading="lazy"
         className="absolute inset-0 w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
-        /* impeccable-ignore */
       />
     </Box>
   );
