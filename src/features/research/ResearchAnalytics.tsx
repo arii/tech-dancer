@@ -99,8 +99,8 @@ export default function ResearchAnalytics() {
             <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
               View flagship projects
             </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
-              Read implementation articles
+            <ActionButton as="a" href="#portfolio" variant="secondary" paddingX={6} paddingY={3}>
+              View portfolio
             </ActionButton>
             <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2}>
               <Icon icon={Send} size="sm" />
@@ -250,6 +250,7 @@ export default function ResearchAnalytics() {
       </Stack>
 
       <FolioGrid
+        id="portfolio"
         items={portfolioGridItems}
         categoryTitle=""
         basePath="/research"
