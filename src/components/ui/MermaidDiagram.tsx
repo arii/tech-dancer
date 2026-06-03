@@ -41,7 +41,6 @@ interface MermaidDiagramProps {
 export function MermaidDiagram({ code }: MermaidDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
-  const [rendered, setRendered] = useState(false);
   const idRef = useRef(`mermaid-${++diagramCounter}`);
 
   useEffect(() => {
@@ -65,8 +64,6 @@ export function MermaidDiagram({ code }: MermaidDiagramProps) {
           svgEl.setAttribute('width', '100%');
           svgEl.style.maxWidth = '100%';
         }
-
-        setRendered(true);
       } catch (e) {
         if (!cancelled) {
           setError(e instanceof Error ? e.message : 'Diagram render error');
