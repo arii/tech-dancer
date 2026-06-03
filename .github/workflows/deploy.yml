@@ -153,7 +153,7 @@ jobs:
           echo "Fetching open PRs for pruning..."
           gh pr list --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
 
-          for i in $(seq 1 $MAX_RETRIES); do
+          for i in $(seq 1 "$MAX_RETRIES"); do
             echo "Deployment attempt $i..."
             rm -rf ../gh-pages-repo
 
@@ -202,7 +202,7 @@ jobs:
 
             # 5. Prune stale previews and update metadata
             # We copy the script to the current directory to run it easily
-            cp ../scripts/manage-previews.sh ./manage-previews.sh
+            cp "$GITHUB_WORKSPACE/scripts/manage-previews.sh" ./manage-previews.sh
             chmod +x ./manage-previews.sh
             ./manage-previews.sh ../open_prs.txt
             rm ./manage-previews.sh
@@ -220,8 +220,6 @@ jobs:
                 echo "PUSH_COMPLETE=true" >> $GITHUB_ENV
 
                 # 7. Post-deploy verification
-                # Poll the public URL for the .deploy.json marker
-                VERIFY_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}/raw/gh-pages/${DEST_DIR}/.deploy.json"
                 # Actually we should use the public URL
                 if [ "$REF_NAME" = "main" ]; then
                   PUBLIC_VERIFY_URL="https://${OWNER}.github.io/${REPO_NAME}/.deploy.json"
