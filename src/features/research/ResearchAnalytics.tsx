@@ -1,11 +1,12 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
@@ -270,33 +271,73 @@ export default function ResearchAnalytics() {
         {studies.length > 0 && (
           <Stack gap={8} id="articles">
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-              <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+            <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={12}>
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
                   padding={8}
-                  gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                  className={cardVariants({ interactive: true })}
+                  gap={6}
+                  onClick={() => {
+                    if (study.status === 'published') {
+                      navigate(`/research/${study.slug}`);
+                    }
+                  }}
+                  height="full"
+                  className={cardVariants({
+                    interactive: study.status === 'published',
+                    surface: study.status === 'published' ? 'surface' : 'muted'
+                  })}
+                  opacity={study.status === 'published' ? 1 : 0.7}
+                  cursor={study.status === 'published' ? 'pointer' : 'default'}
                 >
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
-                  </Box>
-                  <Stack gap={2}>
-                    <Text variant="display" size="2xl" weight="font-black">
-                      {study.title}
-                    </Text>
-                    <Text variant="body" size="sm" color="dim">
+                  <Stack gap={4}>
+                    <Box display="flex" justify="between" align="center">
+                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                      {study.status && <StatusBadge label={study.status} />}
+                    </Box>
+
+                    <Stack gap={2}>
+                      <Text variant="display" size="2xl" weight="font-black">
+                        {study.title}
+                      </Text>
+                      <Box display="flex" align="center" gap={4}>
+                        <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
+                        {study.readTime && (
+                          <Box display="flex" align="center" gap={1} opacity={0.5}>
+                            <Clock size={12} className="text-dim" />
+                            <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
+                          </Box>
+                        )}
+                      </Box>
+                    </Stack>
+
+                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
                       {study.excerpt}
                     </Text>
+
+                    {study.tags && study.tags.length > 0 && (
+                      <Box display="flex" wrap="wrap" gap={2}>
+                        {study.tags.map(tag => (
+                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
+                            {tag}
+                          </Text>
+                        ))}
+                      </Box>
+                    )}
                   </Stack>
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
+
+                  <Box display="flex" align="center" gap={2} marginTop="auto" paddingTop={4}>
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
+                      {study.status === 'planned'
+                        ? 'Coming Soon'
+                        : study.status === 'draft'
+                          ? 'Draft in Progress'
+                          : 'Read Article'}
+                    </Text>
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
                 </Stack>
