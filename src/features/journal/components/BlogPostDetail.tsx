@@ -105,7 +105,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       </Box>
 
       {hasAffiliate && (
-        <Box border="t" paddingTop={10} marginTop={10} className="border-line/30">
+        <Box border="t" paddingTop={10} marginTop={10}>
           <Stack gap={6}>
             <Stack direction="row" align="center" justify="between">
               <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
@@ -134,12 +134,12 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       )}
 
       {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+        <Box border="t" paddingTop={12} marginTop={12}>
           <Stack gap={4}>
             <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
             <Stack direction="row" wrap gap={2}>
               {post.tags.map(tag => (
-                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className={journalVariants.tag()}>
                   <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
                 </Box>
               ))}

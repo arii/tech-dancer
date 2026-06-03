@@ -43,7 +43,7 @@ export function EditorialLayout({
             <Icon
               icon={ArrowLeft}
               size="sm"
-              className="transition-transform group-hover:-translate-x-1"
+              className={journalVariants.navIcon()}
             />
             <Text variant="mono" size="xs" weight="font-bold" uppercase>
               {backLabel}
@@ -61,7 +61,7 @@ export function EditorialLayout({
           {/* Main Article Column */}
           <Box span={{ base: 1, lg: 8 }} width="full" maxWidth={{ lg: "3xl" }}>
             <Stack gap={12}>
-              <Box className="article-content-wrapper" width="full">
+              <Box width="full">
                 {children}
               </Box>
 

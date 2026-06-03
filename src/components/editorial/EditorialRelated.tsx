@@ -17,7 +17,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
   if (items.length === 0) return null;
 
   return (
-    <Box paddingY={12} border="t" borderColor="line" className="border-opacity-30">
+    <Box paddingY={12} border="t">
       <Stack gap={6}>
         <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
           {title}
@@ -32,7 +32,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
                       {item.category.toUpperCase()}
                     </Text>
                   )}
-                  <Text variant="body" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
+                  <Text variant="body" size="lg" weight="font-bold" color="main" className={journalVariants.relatedLinkText()}>
                     {item.title}
                   </Text>
                 </Stack>

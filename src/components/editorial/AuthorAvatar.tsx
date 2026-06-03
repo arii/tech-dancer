@@ -23,7 +23,9 @@ export function AuthorAvatar({ src, name, size = 10 }: AuthorAvatarProps) {
         width={size}
         height={size}
         radius="full"
-        className="object-cover border border-line/20 shadow-sm"
+        border={true}
+        shadow="sm"
+        className="object-cover"
       />
     );
   }
@@ -37,9 +39,10 @@ export function AuthorAvatar({ src, name, size = 10 }: AuthorAvatarProps) {
       display="flex"
       align="center"
       justify="center"
-      className="border border-line/20 shadow-sm"
+      border={true}
+      shadow="sm"
     >
-      <Text variant="mono" size="micro" weight="font-bold" color="dim" className="opacity-70">
+      <Text variant="mono" size="micro" weight="font-bold" color="dim" opacity={70}>
         {initials}
       </Text>
     </Box>
