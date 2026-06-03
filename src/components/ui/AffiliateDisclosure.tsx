@@ -4,29 +4,29 @@ interface AffiliateDisclosureProps {
   compact?: boolean;
 }
 
-export const DISCLOSURE_TEXT = 'As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.';
+export const DISCLOSURE_TEXT = 'As an Amazon Associate, I earn from qualifying purchases.';
 
-const COMPACT_TEXT = 'Amazon affiliate link';
+const COMPACT_TEXT = 'As an Amazon Associate, I earn from qualifying purchases.';
 
 export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProps) {
   const text = compact ? COMPACT_TEXT : DISCLOSURE_TEXT;
 
   return (
     <Box
-      paddingX={6}
-      paddingY={3}
+      paddingX={4}
+      paddingY={2}
       marginY={6}
       surface="muted"
       radius="sm"
       border
-      className="border-line/30"
+      className="border-line/30 inline-block"
     >
       <Text
         variant="body"
         size="sm"
-        color="body"
+        color="dim"
         weight="font-medium"
-        className="not-italic"
+        className="italic"
       >
         {text}
       </Text>

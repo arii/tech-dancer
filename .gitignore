@@ -93,4 +93,5 @@ dev-tools/logs/reviews/*.md
 # [Sensitive] Ensure these are never indexed
 .agent/workflows/ai-slop-audit-*.md
 test_venv/
-.venv/
+.venv
+dev-tools/logs/audits/
