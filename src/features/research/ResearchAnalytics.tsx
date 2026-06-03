@@ -26,15 +26,16 @@ export default function ResearchAnalytics() {
   const [activeCategory] = useSearchParam('category', 'All');
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
-  const categories = ['All', ...new Set(tools.map(t => t.category))];
+  const categories = ['All', ...new Set([...tools.map(t => t.category), ...studies.map(s => s.category)])];
 
   const flagshipTools = tools.filter(t => t.isFlagship && (activeCategory === 'All' || t.category === activeCategory));
   const engineeringTools = tools.filter(t => !t.isFlagship && (activeCategory === 'All' || t.category === activeCategory));
+  const filteredStudies = studies.filter(s => activeCategory === 'All' || s.category === activeCategory);
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   // Map ResearchTool to ContentItem format expected by FolioGrid
-  const contentItems: ContentItem[] = engineeringTools.map(tool => ({
-    type: 'study', // Default to study for tool cards
+  const engineeringToolItems = engineeringTools.map(tool => ({
+    type: 'tool',
     slug: tool.id,
     title: tool.title,
     category: tool.category,
@@ -43,8 +44,17 @@ export default function ResearchAnalytics() {
     author: 'Ariel Anders', // Required for ContentItem
     date: tool.status === 'Active' ? '' : tool.status,
     tags: tool.tags,
-    ctaLabel: tool.ctaLabel,
+    ctaLabel: tool.ctaLabel || 'View Assets',
+  })) as unknown as ContentItem[];
+
+  const studyItems: ContentItem[] = filteredStudies.map(study => ({
+    ...study,
+    type: 'study',
+    author: study.author || 'Ariel Anders',
+    ctaLabel: study.ctaLabel || 'Read Article',
   }));
+
+  const portfolioGridItems = [...engineeringToolItems, ...studyItems];
 
   const skills = [
     { name: 'React', icon: Layout },
@@ -89,8 +99,8 @@ export default function ResearchAnalytics() {
             <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3}>
               View flagship projects
             </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3}>
-              Read implementation articles
+            <ActionButton as="a" href="#portfolio" variant="secondary" paddingX={6} paddingY={3}>
+              View portfolio
             </ActionButton>
             <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2}>
               <Icon icon={Send} size="sm" />
@@ -237,21 +247,14 @@ export default function ResearchAnalytics() {
 
 
 
-        {studies.length > 0 && (
-          <Stack gap={8} id="articles">
-            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-              <Text variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
-            </Box>
-          </Stack>
-        )}
       </Stack>
 
       <FolioGrid
-        items={contentItems}
-        categoryTitle="DevAI Portfolio"
+        id="portfolio"
+        items={portfolioGridItems}
+        categoryTitle=""
         basePath="/research"
-        label="PORTFOLIO"
+        label="PORTFOLIO & ARTICLES"
         description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
         searchPlaceholder="Search projects..."
       >
