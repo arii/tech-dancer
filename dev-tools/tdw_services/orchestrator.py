@@ -129,12 +129,7 @@ class Orchestrator:
         replace: bool = False,
         dry_run: bool = True,
     ) -> Dict[str, Any]:
-        """Post top-level PR comments parsed from a markdown review snapshot.
-
-        The default is a local-only dry run. Executed runs add a stable marker to each
-        comment so rerunning the command is idempotent. Use ``replace`` to update a
-        previously posted comment instead of skipping it.
-        """
+        """Post top-level PR comments parsed from a markdown review snapshot."""
         parsed_comments = self.parse_pr_review_comments(file_path)
         selected_numbers = pr_numbers or list(parsed_comments)
         missing_numbers = sorted(set(selected_numbers) - set(parsed_comments))
