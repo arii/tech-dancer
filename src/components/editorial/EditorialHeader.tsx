@@ -56,7 +56,7 @@ export function EditorialHeader({
       )}
 
       <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-30">
-        <Stack direction="row" align="center" gap={4} className="min-w-0 flex-1">
+        <Stack direction="row" align="center" gap={4} flex={1} className="min-w-0">
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1} className="min-w-0">
              <Text variant="mono" size="xs" weight="font-black" tracking="wide" className="truncate">BY {author.toUpperCase()}</Text>
