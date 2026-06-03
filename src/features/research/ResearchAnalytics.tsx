@@ -254,7 +254,7 @@ export default function ResearchAnalytics() {
         items={portfolioGridItems}
         categoryTitle=""
         basePath="/research"
-        label="PORTFOLIO"
+        label="PORTFOLIO & ARTICLES"
         description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
         searchPlaceholder="Search projects..."
       >
