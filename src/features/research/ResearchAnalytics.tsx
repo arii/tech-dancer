@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { Tag } from '@/components/ui/Tag';
 import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, CheckCircle2, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, CheckCircle2, Globe, Send } from 'lucide-react';
 import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -253,24 +253,13 @@ export default function ResearchAnalytics() {
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
 
-  const skills = [
-    { name: 'React', icon: Layout },
-    { name: 'Vite', icon: Zap },
-    { name: 'TypeScript', icon: Code },
-    { name: 'GitHub Actions', icon: Workflow },
-    { name: 'Vercel', icon: Rocket },
-    { name: 'Playwright', icon: Microscope },
-    { name: 'Python', icon: Terminal },
-    { name: 'LLM workflows', icon: SearchCode },
-    { name: 'SEO-safe automation', icon: Search },
-    { name: 'ecommerce automation', icon: Database },
-  ];
+
 
   return (
     <Box as="section">
       <SEO
         title="DevAI Systems Portfolio"
-        description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
+        description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
       <Stack gap={4}>
@@ -289,7 +278,7 @@ export default function ResearchAnalytics() {
             maxWidth="prose"
             className="leading-relaxed text-pretty"
           >
-            AI-assisted software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
+            Software systems: GitHub review agents, data pipelines, scraping workflows, Vercel deployments, ecommerce automation, and production React apps.
           </Text>
         </Stack>
 
@@ -315,20 +304,11 @@ export default function ResearchAnalytics() {
         <Stack gap={2}>
           <Box maxWidth="2xl">
             <Text variant="body" size="lg" color="body">
-              I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
+              I build engineering systems that turn messy workflows into repeatable software. Grounded solutions built to ship products, not hype.
             </Text>
           </Box>
 
-          <Grid as="ul" cols={{ base: 2, sm: 4, md: 5 }} gap={2}>
-            {skills.map((skill) => (
-              <Box as="li" key={skill.name} display="flex" align="center" gap={2}>
-                <Icon icon={skill.icon} size="sm" color="accent" />
-                <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="tighter">
-                  {skill.name}
-                </Text>
-              </Box>
-            ))}
-          </Grid>
+
         </Stack>
 
         <Stack gap={6} id="flagship" marginTop={2}>
@@ -355,7 +335,7 @@ export default function ResearchAnalytics() {
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
+              Shipping high-fidelity products requires practical AI orchestration, not just hype. My automation frameworks are built for scale, ensuring that tooling remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
             </Text>
           </Stack>
         </Grid>
