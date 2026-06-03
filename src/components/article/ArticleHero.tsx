@@ -64,7 +64,7 @@ export function ArticleHero({
 
         {/* Mobile Visual (appears after title/dek on mobile) */}
         {visual && (
-        <Box className="block lg:hidden h-56 sm:h-72 overflow-hidden rounded-xl">
+        <Box className="block lg:hidden h-56 sm:h-72 hero-visual">
           {visual}
         </Box>
         )}
