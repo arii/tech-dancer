@@ -20,6 +20,7 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       border
       className={journalVariants.card({ variant: 'hero' })}
       aspect={aspectRatio}
+      maxHeight={{ lg: 96 }}
     >
       <ProductImageFrame
         src={src}
@@ -27,7 +28,8 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
         objectFit="cover"
         border={false}
         radius="none"
-        aspect={aspectRatio}
+        aspect="auto"
+        className="w-full h-full lg:max-h-96"
       />
     </Box>
   );
