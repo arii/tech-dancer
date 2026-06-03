@@ -34,7 +34,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           }]
         ]}
         components={{
-          input: ({node: _node, checked, disabled, type, ...props}: any) => {
+          input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return <input type="checkbox" defaultChecked={checked} className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer mt-1" {...props} />;
             }
@@ -114,7 +114,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               />
             );
           },
-          notice: (props: any) => {
+          notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
             if (props.type === 'affiliate' && props.id) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
@@ -125,9 +125,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 );
               }
             }
-            return <Notice {...props} />;
+            return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
           },
-          Notice: (props: any) => {
+          Notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
             if (props.type === 'affiliate' && props.id) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
@@ -138,7 +138,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 );
               }
             }
-            return <Notice {...props} />;
+            return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
           }
         }}
       >
