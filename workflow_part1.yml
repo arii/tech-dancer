@@ -1,0 +1,133 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    concurrency:
+      # Build jobs for the same branch can be cancelled if a newer push arrives
+      # to save CI minutes, as only the latest build for a branch is relevant.
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate pinned pnpm
+        run: corepack prepare pnpm@10.28.2 --activate
+
+      - name: Validate Runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Site
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+          OWNER: ${{ github.repository_owner }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          # 1. Determine Base Path
+          if [ "$REF_NAME" = "main" ]; then
+            VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
+            VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/"; export VITE_APP_URL
+          else
+            VITE_BASE_PATH=/$REPO_NAME/$REF_NAME/; export VITE_BASE_PATH
+            VITE_APP_URL="https://$OWNER.github.io/$REPO_NAME/$REF_NAME/"; export VITE_APP_URL
+          fi
+
+          # 2. Build the Application
+          pnpm run build
+
+          # 3. SEO Aggregation (Only on Main)
+          if [ "$REF_NAME" = "main" ]; then
+            # Generate robots.txt pointing at canonical sitemap location
+            {
+              echo "User-agent: *"
+              echo "Allow: /$REPO_NAME/"
+              echo "Disallow: /$REPO_NAME/previews/"
+              echo "Disallow: /$REPO_NAME/404.html"
+              echo "Sitemap: https://$OWNER.github.io/$REPO_NAME/sitemap.xml"
+            } > dist/robots.txt
+
+            echo "SEO assets generated successfully."
+          fi
+
+          # 4. Generate metadata for deployment tracking
+          git log -1 --format=%ct > dist/.commit-timestamp
+          date +%s > dist/.deploy-timestamp
+          echo "${{ github.sha }}" > dist/.commit-sha
+
+          # Create verification marker
+          printf '{\n  "branch": "%s",\n  "sha": "%s",\n  "deployedAt": %s\n}\n' \
+            "${REF_NAME}" "${{ github.sha }}" "$(date +%s)" > dist/.deploy.json
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-assets
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      # Use a global concurrency group for all gh-pages writes to prevent conflicts
+      # and ensure sequential deployment across all branches.
+      #
+      # NOTE: This ensures only one deployment script runs at a time. However,
+      # pushing to 'gh-pages' triggers an internal 'pages build and deployment'
+      # workflow by GitHub. Those internal runs may still show as 'Cancelled' if
+      # multiple deployments are queued here, as GitHub prefers the latest push.
+      group: gh-pages-deploy
+      cancel-in-progress: false
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v4
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-assets
+          path: ../dist-assets
+
+      - name: Deploy to gh-pages branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REF_NAME: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
