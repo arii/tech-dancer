@@ -85,7 +85,13 @@ jobs:
             echo "SEO assets generated successfully."
           fi
 
-          git log -1 --format=%ct > dist/.timestamp
+          # 4. Generate metadata for deployment tracking
+          git log -1 --format=%ct > dist/.commit-timestamp
+          date +%s > dist/.deploy-timestamp
+          echo "${GITHUB_SHA}" > dist/.commit-sha
+
+          # Create verification marker
+          jq -n --arg b "$REF_NAME" --arg s "$GITHUB_SHA" --argjson t "$(date +%s)" '{"branch":$b,"sha":$s,"deployedAt":$t}' > dist/.deploy.json
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
@@ -100,11 +106,6 @@ jobs:
     concurrency:
       # Use a global concurrency group for all gh-pages writes to prevent conflicts
       # and ensure sequential deployment across all branches.
-      #
-      # NOTE: This ensures only one deployment script runs at a time. However,
-      # pushing to 'gh-pages' triggers an internal 'pages build and deployment'
-      # workflow by GitHub. Those internal runs may still show as 'Cancelled' if
-      # multiple deployments are queued here, as GitHub prefers the latest push.
       group: gh-pages-deploy
       cancel-in-progress: false
     steps:
@@ -122,7 +123,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REF_NAME: ${{ github.ref_name }}
           REPOSITORY: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
+          # 0. Pre-deploy guard: Skip if superseded
+          echo "Checking if $GITHUB_SHA is still the latest for $REF_NAME..."
+          LATEST_SHA=$(git ls-remote origin "refs/heads/${REF_NAME}" | awk '{print $1}')
+          if [ -n "$LATEST_SHA" ] && [ "$LATEST_SHA" != "$GITHUB_SHA" ]; then
+            echo "Skipping stale deploy: $GITHUB_SHA is not latest for $REF_NAME ($LATEST_SHA)"
+            exit 0
+          fi
+
           # Deployment parameters
           if [ "$REF_NAME" = "main" ]; then
             DEST_DIR="."
@@ -132,17 +143,21 @@ jobs:
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.git"
           MAX_RETRIES=5
 
-          for i in $(seq 1 $MAX_RETRIES); do
+          # Prepare Open PR branches list for pruning
+          echo "Fetching open PRs for pruning..."
+          gh pr list --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
+
+          for i in $(seq 1 "$MAX_RETRIES"); do
             echo "Deployment attempt $i..."
             rm -rf ../gh-pages-repo
 
             # 1. Clone or initialize gh-pages
             if git clone --depth=1 --branch gh-pages "$REPO_URL" ../gh-pages-repo; then
-              cd ../gh-pages-repo
+              cd ../gh-pages-repo || exit
             else
               echo "gh-pages branch not found or clone failed. Initializing new repo..."
               mkdir -p ../gh-pages-repo
-              cd ../gh-pages-repo
+              cd ../gh-pages-repo || exit
               git init
               git checkout -b gh-pages
               git remote add origin "$REPO_URL"
@@ -157,7 +172,7 @@ jobs:
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
-              cp -r ../dist-assets/* .
+              cp -r ../dist-assets/* ./
             fi
             touch .nojekyll
 
@@ -179,20 +194,12 @@ jobs:
               cp "$DEST_DIR/404.html" ./404.html
             fi
 
-            # 5. Update Previews Index and Metadata
-            mkdir -p previews
-            find . -maxdepth 3 -name "index.html" | while read -r index_file; do
-              DIR=$(dirname "$index_file" | sed 's|^\./||')
-              [[ "$DIR" =~ ^(\.|\.\.|assets|tmp|previews)$ ]] && continue
-              TS=$(cat "$DIR/.timestamp" 2>/dev/null)
-              if [ -z "$TS" ]; then
-                TS=$(git log -1 --format=%ct -- "$DIR" 2>/dev/null)
-              fi
-              if [ -z "$TS" ]; then
-                TS=$(date +%s)
-              fi
-              echo "$DIR $TS"
-            done | jq -R -n '[inputs | select(length > 0) | split(" ") | select(length == 2 and .[1] != "") | {(.[0]): (.[1] | tonumber)}] | add // {}' > previews/data.json
+            # 5. Prune stale previews and update metadata
+            # We copy the script to the current directory to run it easily
+            cp "$GITHUB_WORKSPACE/scripts/manage-previews.sh" ./manage-previews.sh
+            chmod +x ./manage-previews.sh
+            ./manage-previews.sh ../open_prs.txt
+            rm ./manage-previews.sh
 
             # Use the latest dashboard UI from the current deployment
             cp ../dist-assets/previews/index.html previews/index.html
@@ -203,7 +210,35 @@ jobs:
             git add .
             if git commit -m "deploy: $GITHUB_SHA [skip ci]"; then
               if git push origin gh-pages; then
-                echo "Push successful!"
+                echo "Push successful! Waiting for GitHub Pages to publish..."
+                echo "PUSH_COMPLETE=true" >> "$GITHUB_ENV"
+
+                # 7. Post-deploy verification
+                # Actually we should use the public URL
+                if [ "$REF_NAME" = "main" ]; then
+                  PUBLIC_VERIFY_URL="https://${OWNER}.github.io/${REPO_NAME}/.deploy.json"
+                else
+                  PUBLIC_VERIFY_URL="https://${OWNER}.github.io/${REPO_NAME}/${REF_NAME}/.deploy.json"
+                fi
+
+                echo "Verifying publish at $PUBLIC_VERIFY_URL"
+                ATTEMPTS=0
+                MAX_ATTEMPTS=30 # 5 minutes with 10s sleep
+                while [ "$ATTEMPTS" -lt "$MAX_ATTEMPTS" ]; do
+                  RESPONSE=$(curl -sSL "$PUBLIC_VERIFY_URL" || echo "{}")
+                  REMOTE_SHA=$(echo "$RESPONSE" | jq -r '.sha' 2>/dev/null || echo "none")
+                  if [ "$REMOTE_SHA" = "$GITHUB_SHA" ]; then
+                    echo "Publish verified! SHA $GITHUB_SHA is live."
+                    echo "VERIFIED=true" >> "$GITHUB_ENV"
+                    exit 0
+                  fi
+                  echo "Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS: SHA $REMOTE_SHA does not match $GITHUB_SHA. Retrying in 10s..."
+                  sleep 10
+                  ATTEMPTS=$((ATTEMPTS+1))
+                done
+
+                echo "Verification timed out. Pushed but not yet verified."
+                echo "VERIFIED=false" >> "$GITHUB_ENV"
                 exit 0
               fi
             else
@@ -213,13 +248,14 @@ jobs:
 
             echo "Attempt $i failed. Retrying in $((i * 5))s..."
             sleep $((i * 5))
-            cd -
+            cd - || exit
           done
 
           echo "Failed to deploy after $MAX_RETRIES attempts."
           exit 1
 
-      - name: Update Deployment Feedback
+      - name: Update Deployment Feedback (Initial Push)
+        if: env.PUSH_COMPLETE == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -237,9 +273,69 @@ jobs:
               timeStyle: 'short'
             });
 
+            if (branchName === 'main') return;
+
+            console.log(`Setting initial feedback for branch: ${branchName}`);
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open'
+            });
+
+            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
+            for (const pr of matchingPRs) {
+              const commentTag = `<!-- preview-url-comment-${branchName} -->`;
+              const body = [
+                `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
+                '',
+                `⏳ **Build complete; waiting for GitHub Pages publish...**`,
+                `- **Preview URL:** ${previewUrl}`,
+                `- **Preview Dashboard:** ${dashboardUrl}`,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                '',
+                commentTag
+              ].join('\n');
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: pr.number,
+              });
+
+              const existingComment = comments.find(c => c.body.includes(commentTag));
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
+              } else {
+                await github.rest.issues.createComment({ issue_number: pr.number, owner, repo, body });
+              }
+            }
+
+      - name: Update Deployment Feedback (Final Result)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+            const baseUrl = `https://${owner}.github.io/${repo}/`;
+            const previewUrl = branchName === 'main' ? baseUrl : `https://${owner}.github.io/${repo}/${branchName}/`;
+            const dashboardUrl = `https://${owner}.github.io/${repo}/previews/index.html`;
+            const isVerified = process.env.VERIFIED === 'true';
+            const markerUrl = branchName === 'main'
+              ? `${baseUrl}.deploy.json`
+              : `${baseUrl}${branchName}/.deploy.json`;
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
             // Update Job Summary
             await core.summary
-              .addHeading('🚀 Deployment Complete!')
+              .addHeading(isVerified ? '✅ Deployment Verified!' : '⚠️ Deployment Pushed (Pending Verify)')
               .addTable([
                 ['Site', 'URL'],
                 ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
@@ -264,12 +360,18 @@ jobs:
             for (const pr of matchingPRs) {
               console.log(`Updating feedback for PR #${pr.number}`);
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
+              const statusLine = isVerified
+                ? `✅ **Published and verified**`
+                : `⚠️ **Pushed to gh-pages but public URL did not verify within timeout**`;
+
               const body = [
                 `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
                 '',
-                `- **Main Site:** ${baseUrl}`,
+                statusLine,
                 `- **Preview URL:** ${previewUrl}`,
                 `- **Preview Dashboard:** ${dashboardUrl}`,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                `- **Marker File:** [verify here](${markerUrl})`,
                 '',
                 commentTag
               ].join('\n');
