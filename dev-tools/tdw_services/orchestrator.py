@@ -481,7 +481,10 @@ class Orchestrator:
                             "severity": "major",
                         })
             res["auto_findings"] = auto_findings
-            run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+            try:
+                run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+            except Exception:
+                pass
         if submit:
             from submit_review import submit_review
             submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)

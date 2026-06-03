@@ -87,8 +87,6 @@ function artifactName(route: string, viewport: MobileViewport): string {
 }
 
 async function findOverflow(page: Page): Promise<OverflowFinding[]> {
-  // tsx/esbuild names nested serialized functions with this helper. Install the
-  // no-op browser equivalent before page.evaluate executes the scanner.
   await page.evaluate('globalThis.__name = target => target');
   return page.evaluate(() => {
     const viewportWidth = document.documentElement.clientWidth;
