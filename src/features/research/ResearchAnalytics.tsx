@@ -27,17 +27,17 @@ function ToolImage({ tool, className }: { tool: ResearchTool; className?: string
   return (
     <Box
       span={{ base: 1, md: 2 }}
-      height={{ base: 32, md: 'full' }}
+      height={{ base: 48, md: 64, lg: 'full' }} // Restrict max height, especially on mobile/tablet
       overflow="hidden"
       border={{ base: 'b', md: 'r' }}
       surface="muted"
-      className={cn("border-accent/5 opacity-80", className)}
+      className={cn("border-accent/5 opacity-80 relative", className)}
     >
       <img
         src={src}
         alt={`${tool.title} interface preview`}
         loading="lazy"
-        className="w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
+        className="absolute inset-0 w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
       />
     </Box>
   );
