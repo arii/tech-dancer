@@ -1,3 +1,4 @@
+import { SEO } from '@/components/SEO';
 import { FilterBar } from '@/components/ui/FilterBar';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { Icon } from '@/components/ui/Icon';
