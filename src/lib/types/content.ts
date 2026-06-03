@@ -161,4 +161,4 @@ export interface Event {
   ctaLabel?: string;
 }
 
-export type ContentItem = Post | Resource | Study | Event;
+export type ContentItem = Post | Resource | Study | Event | (Study & { type: 'tool' });
