@@ -19,13 +19,13 @@ affiliateIds:
 
 Need a Halloween costume in two minutes? This is the easiest pumpkin costume: orange outfit, pumpkin headband, and stick-on jack-o’-lantern face.
 
-This version is better for dancers because it feels more useful, easier to repeat, and directly supports comfortable movement on the floor. No bulky bodysuits or restrictive masks required.
+This version is better because it feels more useful, easier to repeat, and directly supports the existing Boomtick affiliate items.
 
 ![DIY pumpkin costume formula featuring orange base and headband](/images/gear/sketches/orange-outfit-sketch.webp)
 
 ## Easiest Version: Orange Outfit + Pumpkin Headband + Stickers
 
-The fastest version of this costume does not require sewing or hand-cutting felt. It's a last-minute assembly that keeps you comfortable on the dance floor.
+The fastest version of this costume does not require sewing or hand-cutting felt.
 
 Use:
 
@@ -41,24 +41,18 @@ Start with the eyes, then add the nose, then place the mouth last. Keep the face
 
 ![DIY pumpkin costume formula: adhesive pumpkin face stickers](/images/gear/sketches/pumpkin-stickers.webp)
 
-![DIY pumpkin costume formula: orange outfit, headband, and stickers](/images/gear/sketches/assembly-guide.webp)
-
-This is the easiest version because the headband creates the pumpkin silhouette, and the stickers replace the need to cut felt by hand. Done in 2 minutes 🎃
+This is the easiest version because the headband creates the pumpkin silhouette, and the stickers replace the need to cut felt by hand.
 
 ```mermaid
 flowchart TD
     A[Start with orange outfit] --> B[Add pumpkin headband or hat]
     B --> C[Use adhesive pumpkin face stickers]
-    C --> D[Place eyes first]
-    D --> E[Add the nose]
-    E --> F[Place the mouth last]
-    F --> G[Check mirror/photo spacing]
-    G --> H[Ready for Halloween or themed dancing]
+    C --> D[Place eyes, nose, and mouth]
+    D --> E[Check mirror/photo spacing]
+    E --> F[Ready for Halloween or themed dancing]
 ```
 
 ## Video Tutorial: DIY Pumpkin Costume in 2 Minutes
-
-This costume assembly is designed to be shared. If you are creating a short-form video (TikTok/Reels/Shorts), use this script and shot list to capture the process.
 
 ### Script
 **Hook:** “Need a Halloween costume in two minutes? This is the easiest pumpkin costume: orange outfit, pumpkin headband, and stick-on jack-o’-lantern face.”
@@ -85,17 +79,10 @@ That’s it. Orange outfit, pumpkin hat, pumpkin face stickers. Cute, easy, and 
 - [x] **Unrestricted Frame:** Ensure you can raise your arms into a dance frame without the outfit pulling or the stickers popping off.
 - [x] **Clear Visibility:** Keeping the "face" on your torso ensures you don't have anything obstructing your vision while navigating a crowded social dance floor.
 
-### Final QA Checklist
-
-- [ ] **Movement Test:** Can you reach into a full dance frame without pulling the stickers?
-- [ ] **Visibility Check:** Is the headband secure enough for double turns?
-- [ ] **Photo Ready:** Does the jack-o'-lantern face read clearly from 10 feet away?
-- [ ] **Sticker Seal:** Have you pressed the adhesive felt firmly into the fabric fibers?
-
 ### Helpful Supplies
 
-- **Pumpkin headband / pumpkin hat:** A lightweight way to create the pumpkin silhouette instantly without the bulk of a full costume.
-- **Adhesive pumpkin face stickers:** Pre-cut felt stickers that save time and ensure a clean, recognizable jack-o’-lantern look.
+- **Pumpkin headband / pumpkin hat:** use the existing `pumpkin-headbands` affiliate item.
+- **Adhesive pumpkin face stickers:** add the Halloween adhesive felt sticker product as an optional shortcut.
 
 Disclosure: As an Amazon Associate, I may earn from qualifying purchases.
 
