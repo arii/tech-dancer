@@ -87,7 +87,7 @@ test-build:
 Even the best pipelines fail. Here are the most common issues:
 
 - **Stale Lockfile:** If CI fails on the `Verify lockfile integrity` step, run `pnpm install` locally.
-- **Visual QA Failure:** If UI changes are intentional, run `pnpm test:e2e --update-snapshots`.
+- **Visual Regression Failure:** If UI changes are intentional, run `pnpm test:e2e --update-snapshots`.
 - **Node Engine Mismatch:** The project pins Node.js to version 22. Use `nvm use` or check `.node-version`.
 
 Automating the boring parts allows me to focus on what matters: analyzing dance data and sharing insights with the WCS community.

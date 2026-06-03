@@ -34,7 +34,7 @@ export function DevLabCallout() {
         weight="font-bold"
         className="hover:underline"
       >
-        Explore the DevAI Portfolio →
+        View Portfolio →
       </Text>
     </Box>
   );

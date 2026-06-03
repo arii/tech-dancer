@@ -8,5 +8,4 @@ export const IGNORED_ERROR_PATTERNS = [
   /chrome-extension/,
   /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/, // Common adblocker/extension interference
   /Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin/, // External media with restrictive CORP/COEP headers
-  /Invalid Parquet signature/, // Ignore LFS pointer files in CI environments
 ];
