@@ -12,7 +12,6 @@ export interface ResearchTool {
   sourceUrl?: string;
   isFlagship?: boolean;
   image?: string;
-  ctaLabel?: string;
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
@@ -20,95 +19,87 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     id: 'hrm-flagship',
     title: 'HRM (Heart Rate Monitor)',
     subtitle: 'Flagship Training Dashboard',
-    description: 'Flagship AI-engineered dashboard integrating Web Bluetooth heart-rate telemetry with Spotify API context to demonstrate full-stack DevAI orchestration.',
+    description: 'The original product built using AI-assisted engineering. It integrates Web Bluetooth heart-rate telemetry with Spotify API context, demonstrating full-stack Dev AI orchestration for complex browser-based applications.',
     category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     externalUrl: 'https://arii.github.io/hrm/',
     externalLinkDisplayLabel: 'View HRM',
-    ctaLabel: 'Read case study',
     isFlagship: true,
     image: '/assets/research/hrm-flagship.png'
   },
   {
     id: 'repo-auditor-ai',
-    title: 'RepoAuditor AI — GitHub PR Review Console',
-    subtitle: 'GitHub AI Orchestration',
+    title: 'RepoAuditor AI',
+    subtitle: 'DevAI Workflow Console',
     description: 'A purpose-built AI orchestration console for GitHub. It leverages custom prompt engineering to audit pull requests, analyze workflow health, and generate structured issues for Jules coding agents, unblocking rapid multi-repo development.',
-    category: 'DevAI System',
+    category: 'DevAI Tooling',
     status: 'Active',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
     externalUrl: 'https://repo-auditor-ai.vercel.app/',
     externalLinkDisplayLabel: 'Open RepoAuditor AI',
     sourceUrl: 'https://github.com/arii/hrm-project-management',
-    ctaLabel: 'View demo',
     isFlagship: true,
     image: '/assets/research/repo-auditor-ai.png'
   },
   {
     id: 'gitops-pr-reviewer',
-    title: 'AI PR Review Agent',
-    subtitle: 'Local GitOps Code Review',
-    description: 'A repo-aware PR review workflow that uses local or hosted LLMs to audit scope, code quality, repeated patterns, and CI failure context before generating structured review guidance.',
+    title: 'GitOps Code Review Agent',
+    subtitle: 'Automated Local PR Auditing',
+    description: 'A model-agnostic ML engineering example using local LLMs to audit code style and pattern consistency. It serves as a GitOps-driven RAG prototype for private codebase documentation and policy enforcement.',
     category: 'DevAI System',
     status: 'Active',
     tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
-    ctaLabel: 'View workflow',
     canonicalPath: '/research/gitops-pr-reviewer'
   },
   {
     id: 'scope-blast-radius',
-    title: 'PR Impact & Dependency Analyzer',
-    subtitle: 'Static Change Impact Analysis',
-    description: 'Analyzes changed files, dependency paths, and workspace scope to estimate the likely impact of a PR before assigning review or test strategy.',
+    title: 'Blast-Radius Analyzer',
+    subtitle: 'Static Workspace Dependency Checker',
+    description: 'Demonstrates AI-assisted static analysis by calculating the semantic impact of code changes. Essential for AI orchestration to minimize token waste and provide agents with high-precision context.',
     category: 'DevAI System',
     status: 'Active',
     tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
-    ctaLabel: 'View repo',
     canonicalPath: '/research/scope-blast-radius'
   },
   {
     id: 'ux-auditor',
-    title: 'Playwright Visual QA & UX Auditor',
-    subtitle: 'Automated Visual Regression',
-    description: 'A screenshot and Lighthouse workflow for detecting layout regressions, mobile issues, accessibility concerns, and UX drift across site pages.',
+    title: 'Visual Regression & UX Auditor',
+    subtitle: 'Perception Telemetry System',
+    description: 'An AI-assisted perception pipeline that maps DOM shifts to visual regressions. It uses automated Playwright workflows to provide high-fidelity telemetry for AI-driven frontend optimization.',
     category: 'Perception Debugging',
     status: 'Active',
     tags: ['Automation', 'Visual Regression', 'Lighthouse', 'Playwright'],
-    ctaLabel: 'View workflow',
     canonicalPath: '/ux-auditor'
   },
   {
     id: 'wcs-scraper',
-    title: 'Data Pipeline & Telemetry ETL',
-    subtitle: 'RAG Ingestion Pipeline',
-    description: 'A data engineering showcase for DevAI systems, transforming raw competitive dance records into compressed Parquet formats. This enables efficient RAG indexing and complex analytical queries.',
+    title: 'High-Scale Telemetry Ingestion ETL',
+    subtitle: 'Scraper-to-Parquet Pipeline',
+    description: 'A data engineering showcase for Dev AI systems, transforming raw competitive dance records into compressed Parquet formats. This enables efficient RAG indexing and complex analytical queries.',
     category: 'Data Engineering',
     status: 'Active',
     tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
-    ctaLabel: 'View workflow',
     canonicalPath: '/research/wcs-scraper'
   },
   {
     id: 'blog-drafter',
-    title: 'AI Content Drafting Workflow',
-    subtitle: 'Prompt Engineering Platform',
-    description: 'Human-in-the-loop content workflow combining RAG with structured templates to maintain brand consistency and editorial quality for technical blog posts.',
+    title: 'AI Blog Drafter',
+    subtitle: 'Human-in-the-Loop Content Engine',
+    description: 'A prompt engineering platform designed for brand-consistent content generation. It combines RAG over existing blog posts with a human-in-the-loop workflow to maintain editorial quality.',
     category: 'Content Tools',
     status: 'Active',
     tags: ['LLM', 'Content Generation', 'Productivity'],
-    ctaLabel: 'View workflow',
     canonicalPath: '/research/blog-drafter'
   },
   {
     id: 'wsdc-event-reminders',
-    title: 'Event Calendar Automation',
-    subtitle: 'Automated Calendar Synchronization',
+    title: 'Event Reminders',
+    subtitle: 'WCS Calendar Integration',
     description: 'A utility tool showcasing AI-assisted automation of calendar synchronization. It extracts logistics from fragmented data sources to maintain high-precision schedule telemetry.',
     category: 'Utility Tools',
     status: 'Active',
     tags: ['Automation', 'Calendar', 'WCS'],
-    ctaLabel: 'View demo',
     canonicalPath: '/research/wsdc-event-reminders'
   }
 ];

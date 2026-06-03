@@ -11,7 +11,7 @@ export function BlastRadiusTool() {
     <Box border radius="lg" padding={8} surface="default">
       <Stack gap={8}>
         <Stack gap={4}>
-          <Text variant="headline" size="xl" weight="font-black">PR Impact & Dependency Analyzer</Text>
+          <Text variant="headline" size="xl" weight="font-black">Semantic Blast-Radius Analysis</Text>
           <Text variant="body" color="dim">
             Automatically maps and isolates code-change scopes. By analyzing the dependency tree of modified files, this agent identifies downstream side-effects, allowing us to prevent cascading breaks before running expensive integration suites.
           </Text>

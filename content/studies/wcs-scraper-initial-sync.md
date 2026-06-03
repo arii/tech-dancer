@@ -1,18 +1,18 @@
 ---
-title: "Data Pipeline & Telemetry ETL: Initial Synchronization & Data Integrity Study"
+title: "WCS Scraper: Initial Synchronization & Data Integrity Study"
 date: "2026-05-13"
 category: "Data Science"
 image: "/assets/posts/competition-data-thumb.svg"
 excerpt: "Analysis of the initial large-scale synchronization of West Coast Swing competition results, focusing on historical backfill and data accuracy."
 ---
 
-# Data Pipeline & Telemetry ETL: Initial Synchronization Study
+# WCS Scraper: Initial Synchronization Study
 
-This study documents the initial deployment and synchronization phase of the Data Pipeline & Telemetry ETL tool. Our goal is to provide a comprehensive, transparent, and accurate dataset of West Coast Swing preliminary competition results for research and statistical analysis.
+This study documents the initial deployment and synchronization phase of the WCS Scraper tool. Our goal is to provide a comprehensive, transparent, and accurate dataset of West Coast Swing preliminary competition results for research and statistical analysis.
 
 ## Synchronization Progress
 
-As of May 2026, we have successfully implemented the core Data Pipeline & Telemetry ETL and completed the following:
+As of May 2026, we have successfully implemented the core data processing pipeline and completed the following:
 
 - **2026 Data**: Real-time results from the 2026 season are being captured with high accuracy.
 - **Historical Results**: We are currently processing results from 2023 to 2025 to provide better historical context for our analysis.

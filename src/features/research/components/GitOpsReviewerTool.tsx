@@ -11,7 +11,7 @@ export function GitOpsReviewerTool() {
     <Box border radius="lg" padding={8} surface="default">
       <Stack gap={8}>
         <Stack gap={4}>
-          <Text variant="headline" size="xl" weight="font-black">AI PR Review Agent</Text>
+          <Text variant="headline" size="xl" weight="font-black">Automating the Outer Loop</Text>
           <Text variant="body" color="dim">
             To maintain architectural consistency and prevent regression at scale, I built and integrated deterministic GitOps agents directly into the code review lifecycle.
           </Text>

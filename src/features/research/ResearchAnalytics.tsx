@@ -1,6 +1,3 @@
-import { SEO } from '@/components/SEO';
-import { FilterBar } from '@/components/ui/FilterBar';
-import FolioGrid from '@/components/ui/FolioGrid';
 import { Icon } from '@/components/ui/Icon';
 import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
@@ -10,8 +7,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
-import { useSearchParam } from '@/hooks/useSearchParam';
-import { ContentItem } from '@/lib/content';
+import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
@@ -22,37 +18,14 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 export default function ResearchAnalytics() {
-  const { tools, studies } = useResearch();
-  const [activeCategory] = useSearchParam('category', 'All');
-  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const navigate = useNavigate();
+  const { studies, tools } = useResearch();
 
-  const categories = ['All', ...new Set([...tools.map(t => t.category), ...studies.map(s => s.category)])];
-
-  const flagshipTools = tools.filter(t => t.isFlagship && (activeCategory === 'All' || t.category === activeCategory));
-  const engineeringTools = tools.filter(t => !t.isFlagship && (activeCategory === 'All' || t.category === activeCategory));
-  const filteredStudies = studies.filter(s => activeCategory === 'All' || s.category === activeCategory);
+  const flagshipTools = tools.filter(t => t.isFlagship);
+  const engineeringTools = tools.filter(t => !t.isFlagship);
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
-  // Map ResearchTool to ContentItem format expected by FolioGrid
-  const engineeringToolItems = engineeringTools.map(tool => ({
-    type: 'tool',
-    slug: tool.id,
-    title: tool.title,
-    category: tool.category,
-    excerpt: tool.description,
-    content: tool.description, // Required for ContentItem
-    author: 'Ariel Anders', // Required for ContentItem
-    date: tool.status === 'Active' ? '' : tool.status,
-    tags: tool.tags,
-    ctaLabel: tool.ctaLabel || 'View Assets',
-  })) as unknown as ContentItem[];
-
-  const studyItems: ContentItem[] = filteredStudies.map(study => ({
-    ...study,
-    type: 'study',
-    author: study.author || 'Ariel Anders',
-    ctaLabel: study.ctaLabel || 'Read Article',
-  }));
+  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
   const portfolioGridItems = [...engineeringToolItems, ...studyItems];
 
@@ -249,17 +222,37 @@ export default function ResearchAnalytics() {
 
       </Stack>
 
-      <FolioGrid
-        id="portfolio"
-        items={portfolioGridItems}
-        categoryTitle=""
-        basePath="/research"
-        label="PORTFOLIO & ARTICLES"
-        description="Real-world examples of AI-assisted product development, orchestration consoles, and automated engineering workflows."
-        searchPlaceholder="Search projects..."
-      >
-        <FilterBar categories={categories} />
-      </FolioGrid>
+            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+              {studies.map((study) => (
+                <Stack
+                  key={study.slug}
+                  padding={8}
+                  gap={4}
+                  onClick={() => navigate(`/research/${study.slug}`)}
+                  className={cardVariants({ interactive: true })}
+                >
+                  <Box display="flex" justify="between" align="center">
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                    <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
+                  </Box>
+                  <Stack gap={2}>
+                    <Text variant="display" size="2xl" weight="font-black">
+                      {study.title}
+                    </Text>
+                    <Text variant="body" size="sm" color="dim">
+                      {study.excerpt}
+                    </Text>
+                  </Stack>
+                  <Box display="flex" align="center" gap={2} marginTop="auto">
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">Read Article</Text>
+                    <Icon icon={FileText} size="sm" color="accent" />
+                  </Box>
+                </Stack>
+              ))}
+            </Grid>
+          </Stack>
+        )}
+      </Stack>
     </Box>
   );
 }

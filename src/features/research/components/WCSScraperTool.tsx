@@ -260,7 +260,7 @@ export function WCSScraperTool() {
             <StatusBadge label="active" />
           </Box>
           <Stack gap={2}>
-            <Text variant="display" size="4xl" weight="font-black">Data Pipeline & Telemetry ETL</Text>
+            <Text variant="display" size="4xl" weight="font-black">WCS Scoring Analysis</Text>
             <Text variant="body" size="lg" color="dim" maxWidth="3xl">
               A tool for extracting and analyzing public West Coast Swing competition results.
               Provides transparency on scoring patterns and promotion trends through data analysis.
