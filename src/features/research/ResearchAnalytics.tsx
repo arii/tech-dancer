@@ -12,6 +12,7 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentItem } from '@/lib/content';
+import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
