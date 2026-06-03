@@ -434,6 +434,15 @@
     "gearSlug": "2024-06-01-pumpkin-headbands",
     "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.png"
   },
+  "pumpkin-stickers": {
+    "id": "pumpkin-stickers",
+    "name": "Halloween Adhesive Felt Stickers",
+    "url": "https://www.amazon.com/dp/B0DGDZ8G4H?tag=onasafari04-20",
+    "category": "fashion",
+    "description": "Adhesive felt pumpkin stickers for easy costume assembly.",
+    "gearSlug": "2024-06-01-pumpkin-stickers",
+    "image": "https://m.media-amazon.com/images/I/614MO9Q+hxL._AC_SL1500_.jpg"
+  },
   "sports-crop-tops": {
     "id": "sports-crop-tops",
     "name": "Sports Crop Tank Tops",
