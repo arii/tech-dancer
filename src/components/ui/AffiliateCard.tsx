@@ -28,7 +28,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
           {link.name}
         </Text>
 
-        <Text variant="body" size="xs" color="dim" className="line-clamp-2 leading-relaxed">
+        <Text variant="body" size="xs" color="dim" className="leading-relaxed">
           {link.description}
         </Text>
       </Stack>

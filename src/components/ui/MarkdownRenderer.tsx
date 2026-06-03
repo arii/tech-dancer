@@ -108,7 +108,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <Box marginY={8} width="full" display="flex" justifyContent="center">
                 <img
                   src={normalizedSrc}
-                  className="rounded-lg shadow-sm w-full max-w-full"
+                  className="rounded-lg shadow-sm"
                   loading="lazy"
                   alt={alt || "Article illustration"}
                   {...props}
@@ -121,7 +121,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={4} width="full" maxWidth="sm">
+                  <Box marginY={4} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
@@ -134,7 +134,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={4} width="full" maxWidth="sm">
+                  <Box marginY={4} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
