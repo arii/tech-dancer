@@ -25,7 +25,6 @@ else
 fi
 
 NOW=$(date +%s)
-CHANGES_MADE=false
 
 echo "Scanning for stale previews..."
 
@@ -110,7 +109,6 @@ while IFS= read -r index_file; do
     if [ "$SHOULD_PRUNE" = true ]; then
         echo "Pruning $dir: $REASON"
         git rm -rf --ignore-unmatch -- "$dir"
-        CHANGES_MADE=true
     fi
 done < <(find . -mindepth 2 -maxdepth 4 -name "index.html")
 
@@ -157,11 +155,13 @@ while IFS= read -r index_file; do
     if [ "$FIRST" = false ]; then
         echo "," >> "$TEMP_JSON"
     fi
-    echo "  \"$dir\": {" >> "$TEMP_JSON"
-    echo "    \"commitTimestamp\": $COMMIT_TS," >> "$TEMP_JSON"
-    echo "    \"deployTimestamp\": $DEPLOY_TS," >> "$TEMP_JSON"
-    echo "    \"sha\": \"$SHA\"" >> "$TEMP_JSON"
-    echo "  }" >> "$TEMP_JSON"
+    {
+        echo "  \"$dir\": {"
+        echo "    \"commitTimestamp\": $COMMIT_TS,"
+        echo "    \"deployTimestamp\": $DEPLOY_TS,"
+        echo "    \"sha\": \"$SHA\""
+        echo "  }"
+    } >> "$TEMP_JSON"
     FIRST=false
 done < <(find . -mindepth 2 -maxdepth 4 -name "index.html" | sort)
 
@@ -176,5 +176,4 @@ if git diff --cached --quiet; then
     echo "No changes made."
 else
     echo "Changes staged for commit."
-    CHANGES_MADE=true
 fi
