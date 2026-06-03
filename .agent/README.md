@@ -9,6 +9,7 @@
 ### Automation Configuration
 
 - **audit.config.yaml** - Unified configuration defining all banned language categories, terms, and standard fixes.
+- **docs/agent/issue-audit-rules.md** - Standards for GitHub issue auditing and closure.
 
 ### Workflows
 
@@ -76,7 +77,8 @@ Follow the audit report to fix violations in priority order:
 
 ## Standards
 
-All content must follow rules defined in `audit.config.yaml`. No weak intensifiers, corporate speak, credential crutch, passive voice, invented scar tissue, or AI clichés. Active voice only, specific terminology, direct language.
+- **Language**: All content must follow rules defined in `audit.config.yaml`. No weak intensifiers, corporate speak, credential crutch, passive voice, invented scar tissue, or AI clichés. Active voice only, specific terminology, direct language.
+- **Issue Auditing**: All issue audits and PR linkages must follow `docs/agent/issue-audit-rules.md`.
 
 ---
 
