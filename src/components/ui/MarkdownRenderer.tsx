@@ -7,6 +7,7 @@ import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
+
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 
