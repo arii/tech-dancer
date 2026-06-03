@@ -23,6 +23,7 @@ interface FolioGridProps {
   as?: keyof JSX.IntrinsicElements;
   renderItem?: (item: ContentItem) => ReactNode;
   searchPlaceholder?: string;
+  id?: string;
 }
 
 export default function FolioGrid({
@@ -36,7 +37,8 @@ export default function FolioGrid({
   onViewChange,
   as,
   renderItem,
-  searchPlaceholder: propsSearchPlaceholder
+  searchPlaceholder: propsSearchPlaceholder,
+  id
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
@@ -53,7 +55,7 @@ export default function FolioGrid({
   });
 
   return (
-    <Box as="section" height="full">
+    <Box as="section" height="full" id={id}>
       <Box as="header" marginBottom={12}>
         <PageHeader
           label={label || "FOLIO"}

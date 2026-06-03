@@ -7,5 +7,5 @@ export const CONTENT_METADATA_KEYS = [
   'theme', 'gear', 'themeName', 'themeLabel', 'themeDescription', 'themeColors',
   'themeOutfitIds', 'themeAccessoryIds', 'gearOutfitIds', 'gearAccessoryIds',
   'gearShoeIds', 'gearEssentialIds', 'gearTravelIds', 'relatedEvents',
-  'basePath', 'readingTime'
+  'basePath', 'readingTime', 'ctaLabel'
 ] as const;
