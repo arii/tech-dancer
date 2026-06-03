@@ -29,13 +29,12 @@ describe('Schema generation', () => {
       expect(product.sku).toBe('test-id');
 
       // Risky fields should be undefined (and should not even be in the type)
-      const json = JSON.stringify(product);
-      expect(json).not.toContain('price');
-      expect(json).not.toContain('availability');
-      expect(json).not.toContain('shippingDetails');
-      expect(json).not.toContain('hasMerchantReturnPolicy');
-      expect(json).not.toContain('aggregateRating');
-      expect(json).not.toContain('review');
+      expect(product as Record<string, unknown>).not.toHaveProperty('price');
+      expect(product as Record<string, unknown>).not.toHaveProperty('availability');
+      expect(product as Record<string, unknown>).not.toHaveProperty('shippingDetails');
+      expect(product as Record<string, unknown>).not.toHaveProperty('hasMerchantReturnPolicy');
+      expect(product as Record<string, unknown>).not.toHaveProperty('aggregateRating');
+      expect(product as Record<string, unknown>).not.toHaveProperty('review');
 
       expect(product.offers.url).toBe('/test-product');
     });
@@ -62,15 +61,14 @@ describe('Schema generation', () => {
 
       const schema = generateGearCatalogSchema(mockResources);
       const product = schema.itemListElement[0].item;
-      const json = JSON.stringify(product);
 
       expect(product.name).toBe('Test Gear');
-      expect(json).not.toContain('aggregateRating');
-      expect(json).not.toContain('review');
-      expect(json).not.toContain('price');
-      expect(json).not.toContain('availability');
-      expect(json).not.toContain('shippingDetails');
-      expect(json).not.toContain('hasMerchantReturnPolicy');
+      expect(product as Record<string, unknown>).not.toHaveProperty('aggregateRating');
+      expect(product as Record<string, unknown>).not.toHaveProperty('review');
+      expect(product as Record<string, unknown>).not.toHaveProperty('price');
+      expect(product as Record<string, unknown>).not.toHaveProperty('availability');
+      expect(product as Record<string, unknown>).not.toHaveProperty('shippingDetails');
+      expect(product as Record<string, unknown>).not.toHaveProperty('hasMerchantReturnPolicy');
 
       expect(product.offers.url).toBe('https://example.com/test');
     });
