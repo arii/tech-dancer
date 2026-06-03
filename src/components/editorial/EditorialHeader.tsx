@@ -50,7 +50,7 @@ export function EditorialHeader({
       </Stack>
 
       {hero && (
-        <Box width="full">
+        <Box width="full" paddingBottom={4}>
           {hero}
         </Box>
       )}
@@ -58,8 +58,8 @@ export function EditorialHeader({
       <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" paddingY={6}>
         <Stack direction="row" align="center" gap={3}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
-           <Stack gap={0.5}>
-             <Text variant="mono" size="xs" weight="font-black" tracking="wide">BY {author.toUpperCase()}</Text>
+           <Stack gap={1}>
+             <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
                <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
                  <Share2 className="w-3.5 h-3.5" />

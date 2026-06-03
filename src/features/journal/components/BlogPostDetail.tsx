@@ -1,11 +1,10 @@
 // impeccable-ignore-file
 import { useState } from 'react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
-import { CompactAffiliateLink } from '@/components/ui/CompactAffiliateLink';
-import { Post, readingTime, getPosts } from '@/lib/content';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { Post, readingTime, getPosts } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
@@ -50,21 +49,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     }
   };
 
-  const affiliateLinks = (post.affiliateIds || [])
-    .map(id => {
-      const link = affiliateManager.getLink(id);
-      if (!link && import.meta.env.DEV) {
-        console.warn(`[BlogPostDetail] Affiliate link with ID "${id}" not found.`);
-      }
-      return link;
-    })
-    .filter((link): link is NonNullable<typeof link> => !!link);
-
-  const featuredAffiliates = affiliateLinks.slice(0, 3);
-  const remainingAffiliates = affiliateLinks.slice(3);
-
-  const hasAffiliate = affiliateLinks.length > 0;
-
   const relatedItems = getPosts()
     .filter(p => p.slug !== post.slug && (p.category === post.category || p.tags.some(t => post.tags.includes(t))))
     .slice(0, 3)
@@ -73,6 +57,10 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       href: `/blog/${p.slug}`,
       category: p.category
     }));
+
+  const affiliateLinks = (post.affiliateIds || [])
+    .map(id => affiliateManager.getLink(id))
+    .filter((link): link is NonNullable<typeof link> => !!link);
 
   return (
     <EditorialLayout
@@ -90,12 +78,26 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           onShare={share}
           isShared={isCopied}
-          hero={post.image ? <EditorialHero src={post.image} alt={post.title} /> : undefined}
+          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} /> : undefined}
         />
+      }
+      sidebar={
+        affiliateLinks.length > 0 ? (
+          <Stack gap={6}>
+            <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+              Shop selected items
+            </Text>
+            <Stack gap={4}>
+              {affiliateLinks.map(link => (
+                <AffiliateCard key={link.id} link={link} />
+              ))}
+            </Stack>
+            <AffiliateDisclosure compact={true} />
+          </Stack>
+        ) : undefined
       }
       footer={
         <Stack gap={12}>
-          {hasAffiliate && <AffiliateDisclosure />}
           <EditorialRelated items={relatedItems} />
           <EditorialNewsletter />
         </Stack>

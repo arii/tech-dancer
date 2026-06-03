@@ -13,20 +13,20 @@ export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProp
 
   return (
     <Box
-      paddingX={6}
-      paddingY={3}
+      paddingX={4}
+      paddingY={2}
       marginY={6}
       surface="muted"
       radius="sm"
       border
-      className="border-line/30"
+      className="border-line/30 inline-block"
     >
       <Text
         variant="body"
         size="sm"
-        color="body"
+        color="dim"
         weight="font-medium"
-        className="not-italic"
+        className="italic"
       >
         {text}
       </Text>

@@ -253,6 +253,14 @@
     @apply prose-li:text-text-body prose-li:text-lg prose-li:leading-relaxed;
     @apply prose-img:rounded-2xl prose-img:border prose-img:border-line/30;
   }
+
+  .prose-editorial li:has(input[type="checkbox"]:checked) {
+    @apply opacity-50 line-through;
+  }
+
+  .prose-editorial input[type="checkbox"] {
+    @apply mr-2 accent-accent cursor-pointer w-4 h-4;
+  }
 }
 
 .panel { @apply bg-bg p-4 sm:p-6 md:p-12 relative overflow-hidden w-full; }
