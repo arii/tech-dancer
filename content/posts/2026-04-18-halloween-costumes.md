@@ -1,7 +1,7 @@
 ---
 type: post
 title: "DIY Pumpkin Costume in 2 Minutes"
-date: "2026-06-03"
+date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Easiest DIY pumpkin costume: orange outfit + pumpkin headband + stick-on jack-o’-lantern face. No sewing, no felt cutting, still cute enough for Halloween dancing."
