@@ -88,8 +88,8 @@ export default function Merch() {
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
-          <Box border="b" paddingBottom={4} className="border-line overflow-x-auto">
-            <Stack direction="row" gap={2} padding={1} className="min-w-max">
+          <Box border="b" paddingBottom={4} overflowX="auto">
+            <Stack direction="row" gap={2} padding={1} minWidth="max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton
                   key={collection.id}
