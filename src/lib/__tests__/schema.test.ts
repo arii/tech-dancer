@@ -35,7 +35,8 @@ describe('Schema generation', () => {
       expect(json).not.toContain('shippingDetails');
       expect(json).not.toContain('hasMerchantReturnPolicy');
       expect(json).not.toContain('aggregateRating');
-      expect(json).not.toContain('review');
+      expect(json).not.toContain('"review"');
+      expect(json).not.toContain('"reviews"');
 
       expect(product.offers.url).toBe('/test-product');
     });
@@ -66,7 +67,8 @@ describe('Schema generation', () => {
 
       expect(product.name).toBe('Test Gear');
       expect(json).not.toContain('aggregateRating');
-      expect(json).not.toContain('review');
+      expect(json).not.toContain('"review"');
+      expect(json).not.toContain('"reviews"');
       expect(json).not.toContain('price');
       expect(json).not.toContain('availability');
       expect(json).not.toContain('shippingDetails');
