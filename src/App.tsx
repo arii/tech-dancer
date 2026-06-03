@@ -19,7 +19,7 @@ import { getSkeletonVariant } from './lib/utils';
 
 export function HydrateFallback() {
   return (
-    <Box as="main" id="main-content" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+    <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
       <Box
         width={8}
         height={8}

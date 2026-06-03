@@ -91,7 +91,7 @@ createRoot(document.getElementById('root')!).render(
             router={router}
             future={{ v7_startTransition: true }}
             fallbackElement={
-              <Box as="main" id="main-content" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+              <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
                 <Box
                   width={8}
                   height={8}
