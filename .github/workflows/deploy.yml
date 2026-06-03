@@ -178,7 +178,7 @@ jobs:
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
-              cp -r ../dist-assets/* .
+              cp -r ../dist-assets/* ./
             fi
             touch .nojekyll
 
