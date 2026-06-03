@@ -51,6 +51,8 @@ def generate_report():
     for res in all_results:
         route = res['route']
         vp = res['viewport']
+        screenshot = res.get('screenshot', 'N/A')
+        is_mobile = 'mobile' in vp.lower()
 
         # 1. Accessibility (Axe)
         if res.get('accessibility') and res['accessibility'].get('violations'):
@@ -63,7 +65,14 @@ def generate_report():
                     "category": "Accessibility",
                     "severity": "High" if v['impact'] in ['critical', 'serious'] else "Medium",
                     "evidence": f"Axe violation: {v['description']}. Found on {len(v['nodes'])} elements.",
-                    "recommendation": f"Fix {v['id']} issues. Help: {v['helpUrl']}"
+                    "recommendation": f"Fix {v['id']} issues. Help: {v['helpUrl']}",
+                    "screenshot": screenshot,
+                    "user_impact": "Users with disabilities may be unable to navigate or interact with the page effectively.",
+                    "acceptance_criteria": [
+                        "Lighthouse/Axe accessibility audit passes for this category",
+                        "Element is keyboard accessible",
+                        "Screen reader announcements are clear"
+                    ]
                 }
                 findings.append(finding)
 
@@ -76,7 +85,13 @@ def generate_report():
                 "category": "Layout",
                 "severity": "High",
                 "evidence": f"Detected {len(res['overflow'])} elements overflowing viewport.",
-                "recommendation": "Ensure all elements use responsive widths and handle long content with word-wrap or overflow-x: auto."
+                "recommendation": "Ensure all elements use responsive widths and handle long content with word-wrap or overflow-x: auto.",
+                "screenshot": screenshot,
+                "user_impact": "Causes janky scrolling and potential content cut-off.",
+                "acceptance_criteria": [
+                    "No horizontal scrolling at tested width",
+                    "All elements are contained within the viewport"
+                ]
             }
             findings.append(finding)
 
@@ -89,7 +104,13 @@ def generate_report():
                 "category": "Mobile UX",
                 "severity": "Medium",
                 "evidence": f"Found {len(res['tapTargets'])} interactive elements smaller than 44x44px.",
-                "recommendation": "Increase padding or dimensions of interactive elements to at least 44x44px for better mobile usability."
+                "recommendation": "Increase padding or dimensions of interactive elements to at least 44x44px for better mobile usability.",
+                "screenshot": screenshot,
+                "user_impact": "Makes interactive elements difficult to tap on a phone, leading to user frustration.",
+                "acceptance_criteria": [
+                    "All interactive elements meet the 44x44px minimum target size",
+                    "Adequate spacing between adjacent links/buttons"
+                ]
             }
             findings.append(finding)
 
@@ -103,7 +124,13 @@ def generate_report():
                 "category": "Performance",
                 "severity": "Medium",
                 "evidence": f"Found {len(oversized_images)} images where natural size is significantly larger than rendered size.",
-                "recommendation": "Use responsive image sets (srcset) or serve optimized crops for smaller viewports."
+                "recommendation": "Use responsive image sets (srcset) or serve optimized crops for smaller viewports.",
+                "screenshot": screenshot,
+                "user_impact": "Increases page load time and consumes excessive bandwidth.",
+                "acceptance_criteria": [
+                    "Images are appropriately sized for the viewport",
+                    "Lighthouse performance score is maintained or improved"
+                ]
             }
             findings.append(finding)
 
@@ -118,7 +145,13 @@ def generate_report():
                     "category": "UX",
                     "severity": "Medium",
                     "evidence": f"Hero occupies {int(atf['heroViewportPercentage'])}% of viewport and no CTA is visible.",
-                    "recommendation": "Reduce hero height or move primary CTA higher to ensure it is visible above the fold."
+                    "recommendation": "Reduce hero height or move primary CTA higher to ensure it is visible above the fold.",
+                    "screenshot": screenshot,
+                    "user_impact": "Primary page purpose and next steps are unclear upon initial load.",
+                    "acceptance_criteria": [
+                        "Primary page purpose is clear above the fold",
+                        "Primary CTA is visible without scrolling"
+                    ]
                 }
                 findings.append(finding)
 
@@ -135,6 +168,7 @@ def generate_report():
             report_lines.append(f"- **Category:** {f['category']}")
             report_lines.append(f"- **Severity:** {f['severity']}")
             report_lines.append(f"- **Evidence:** {f['evidence']}")
+            report_lines.append(f"- **Screenshot:** `{f['screenshot']}`")
             report_lines.append(f"- **Recommendation:** {f['recommendation']}\n")
 
             # Generate Issue Draft
@@ -143,10 +177,19 @@ def generate_report():
             issue_path = os.path.join(issues_dir, f"{issue_slug}.md")
             with open(issue_path, 'w') as issue_file:
                 issue_file.write(f"## Problem\n{f['title']}\n\n")
-                issue_file.write(f"## Route / Viewport\n- Route: {f['route']}\n- Viewport: {f['viewport']}\n\n")
-                issue_file.write(f"## Evidence\n{f['evidence']}\n\n")
-                issue_file.write(f"## Recommended Fix\n{f['recommendation']}\n\n")
-                issue_file.write(f"## Severity\n{f['severity']}\n")
+                issue_file.write(f"## Route / viewport\n- Route: {f['route']}\n- Viewport: {f['viewport']}\n\n")
+                issue_file.write(f"## Evidence\n- {f['evidence']}\n- Screenshot: `{f['screenshot']}`\n\n")
+                issue_file.write(f"## User impact\n{f.get('user_impact', 'N/A')}\n\n")
+                issue_file.write(f"## Recommended fix\n{f['recommendation']}\n\n")
+                issue_file.write("## Acceptance criteria\n")
+                for ac in f.get('acceptance_criteria', []):
+                    issue_file.write(f"- [ ] {ac}\n")
+
+                # Add cross-viewport regression check
+                other = "mobile" if "desktop" in f['viewport'].lower() else "desktop"
+                issue_file.write(f"- [ ] No new {other} regressions\n")
+
+                issue_file.write(f"\n## Severity\n{f['severity']}\n")
 
     report_path = os.path.join(artifacts_dir, "ux-audit-report.md")
     with open(report_path, 'w') as f:
