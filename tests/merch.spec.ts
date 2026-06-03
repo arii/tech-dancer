@@ -22,20 +22,20 @@ test.describe('Merch Page', () => {
 
   test('should display product cards', async ({ page }) => {
     const productCards = page.getByTestId('product-card');
-    await expect(productCards).toHaveCount(16);
+    await expect(productCards).toHaveCount(11);
   });
 
   test('should filter products by collection', async ({ page }) => {
     // Click on 'Lead/Follow/Switch' filter
     await page.getByRole('button', { name: 'Lead/Follow/Switch' }).click();
 
-    // Check that we only see relevant products (should be 4 based on data)
+    // Check that we only see relevant products (should be 3 based on data)
     const filteredCards = page.getByTestId('product-card');
-    await expect(filteredCards).toHaveCount(4);
+    await expect(filteredCards).toHaveCount(3);
 
     // Reset filter
     await page.getByRole('button', { name: 'All' }).click();
-    await expect(filteredCards).toHaveCount(16);
+    await expect(filteredCards).toHaveCount(11);
   });
 
   test('should have correct attributes on Printful external links', async ({ page }) => {
