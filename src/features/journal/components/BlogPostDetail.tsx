@@ -9,6 +9,7 @@ import { affiliateManager } from '@/lib/affiliateManager';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
+import { journalVariants } from '@/lib/variants';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
