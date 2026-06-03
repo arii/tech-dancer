@@ -1,26 +1,3 @@
-<<<<<<< SEARCH
-function ToolImage({ tool, className }: { tool: ResearchTool; className?: string }) {
-  if (!tool.image) return null;
-  const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
-  return (
-    <Box
-      span={{ base: 1, md: 2 }}
-      height={{ base: 32, md: 'full' }}
-      overflow="hidden"
-      border={{ base: 'b', md: 'r' }}
-      surface="muted"
-      className={cn("border-accent/5 opacity-80", className)}
-    >
-      <img
-        src={src}
-        alt={`${tool.title} interface preview`}
-        loading="lazy"
-        className="w-full h-full object-cover object-top hover:opacity-100 transition-opacity duration-500"
-      />
-    </Box>
-  );
-}
-=======
 function ToolImage({ tool, className }: { tool: ResearchTool; className?: string }) {
   if (!tool.image) return null;
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
@@ -42,4 +19,3 @@ function ToolImage({ tool, className }: { tool: ResearchTool; className?: string
     </Box>
   );
 }
->>>>>>> REPLACE
