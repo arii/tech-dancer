@@ -5,7 +5,7 @@
 - Open issues checked: 0
 - Existing duplicates found: 0
 - New agent policy issues created: 1
-- New desktop UX issues created: 3
+- New desktop UX issues created: 4
 - New mobile UX issues created: 3
 - New AI slop content issues created: 2
 - Candidates skipped: 0
@@ -134,3 +134,15 @@
 **Outcome:** Created
 **Issue:** AI Slop Content Issue
 **Reason:** Post is an empty placeholder for a "Comprehensive Financial Strategy Guide" full of generic filler, "What's Coming", and lacks actionable content.
+### Route: `/research` (UX Auditor Tool)
+
+- [x] Desktop screenshot reviewed
+- [x] Lighthouse checked where relevant
+- [x] Existing issues checked
+- [x] Evidence collected
+- [x] Issue created or skipped
+- [x] Status recorded
+
+**Outcome:** Created
+**Issue:** Desktop UX Issue (Bug)
+**Reason:** URL input field is broken/unusable without select-all-on-focus, viewport renderings are faked via scaled placeholder images rather than real responsive iframes, and the Gemini API integration is entirely mocked out, rendering the tool non-functional for its intended purpose.
