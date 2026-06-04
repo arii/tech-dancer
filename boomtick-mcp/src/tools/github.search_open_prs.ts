@@ -9,16 +9,17 @@ export const SearchOpenPrsInputSchema = z.object({
 });
 
 export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInputSchema>) {
+  const params = SearchOpenPrsInputSchema.parse(args);
   const ghArgs = [
     "pr",
     "list",
-    "--state", args.state,
-    "--limit", args.maxResults.toString(),
+    "--state", params.state,
+    "--limit", params.maxResults.toString(),
     "--json", "number,title,author,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,updatedAt,url"
   ];
 
-  if (args.labels && args.labels.length > 0) {
-    ghArgs.push("--label", args.labels.join(","));
+  if (params.labels && params.labels.length > 0) {
+    ghArgs.push("--label", params.labels.join(","));
   }
 
   const result = await runCommand("gh", ghArgs);
@@ -29,7 +30,7 @@ export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInp
 
   let prs = JSON.parse(result.stdout);
 
-  if (!args.includeDrafts) {
+  if (!params.includeDrafts) {
     prs = prs.filter((pr: any) => !pr.isDraft);
   }
 

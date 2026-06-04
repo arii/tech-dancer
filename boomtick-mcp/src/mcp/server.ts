@@ -40,6 +40,8 @@ export class BoomtickMCPServer {
       {
         capabilities: {
           tools: {},
+          resources: {},
+          prompts: {},
         },
       }
     );
