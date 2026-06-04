@@ -1,11 +1,14 @@
 // impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
+import { AffiliateCard } from './AffiliateCard';
+import { affiliateManager } from '@/lib/affiliateManager';
 
 interface MarkdownRendererProps {
   content: string;
@@ -15,20 +18,28 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
       <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice'],
+            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input'],
             attributes: {
               ...defaultSchema.attributes,
-              notice: ['type'],
-              Notice: ['type']
+              notice: ['type', 'id'],
+              Notice: ['type', 'id'],
+              input: ['type', 'checked', 'disabled']
             },
             clobberPrefix: ''
           }]
         ]}
         components={{
+          input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
+            if (type === 'checkbox') {
+              return <input type="checkbox" defaultChecked={checked} className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer mt-1" {...props} />;
+            }
+            return <input type={type} defaultChecked={checked} disabled={disabled} {...props} />;
+          },
           a: ({node: _node, href, ...props}) => {
             const isInternal = href?.startsWith('/');
             if (isInternal) {
@@ -43,23 +54,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={8} className="prose-section group">
+            <Box marginTop={12} marginBottom={6} className="prose-section group">
               <Text
                 variant="mono"
-                size="micro"
-                color="dim"
-                weight="font-bold"
-                tracking="utility"
                 display="block"
-                marginBottom={3}
-                className="prose-section-number"
+                marginBottom={1}
+                className="editorial-section-number"
               />
-              <Text as="h2" variant="h2" size="4xl" color="brand" margin={0} {...props} />
-              <Box height={0.5} width={16} marginTop={6} className="bg-accent transition-all group-hover:w-24" />
+              <Text as="h2" variant="h2" size="3xl" color="brand" margin={0} leading="tight" {...props} />
+              <Box height={0.5} width={12} marginTop={4} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box marginTop={12} marginBottom={6}>
+            <Box marginTop={8} marginBottom={4}>
               <Text
                 as="h3"
                 variant="h3"
@@ -95,19 +102,46 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({node: _node, src, ...props}) => {
+          img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <img
-                src={normalizedSrc}
-                className="rounded-lg shadow-sm"
-                loading="lazy"
-                {...props}
-              />
+              <Box marginY={8} width="full" display="flex" justifyContent="center">
+                <img
+                  src={normalizedSrc}
+                  className="rounded-lg shadow-sm"
+                  loading="lazy"
+                  alt={alt || "Article illustration"}
+                  {...props}
+                />
+              </Box>
             );
           },
-          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
-          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />
+          notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
+            if (props.type === 'affiliate' && props.id) {
+              const link = affiliateManager.getLink(props.id);
+              if (link) {
+                return (
+                  <Box marginY={4} width="full">
+                    <AffiliateCard link={link} />
+                  </Box>
+                );
+              }
+            }
+            return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
+          },
+          Notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
+            if (props.type === 'affiliate' && props.id) {
+              const link = affiliateManager.getLink(props.id);
+              if (link) {
+                return (
+                  <Box marginY={4} width="full">
+                    <AffiliateCard link={link} />
+                  </Box>
+                );
+              }
+            }
+            return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
+          }
         }}
       >
         {content}

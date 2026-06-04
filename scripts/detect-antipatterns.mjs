@@ -134,13 +134,15 @@ const CONFIG = {
       name: 'Raw Hex Color (CSS)',
       pattern: /(?<!#|[\w-])#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\w-])/g,
       severity: 'minor',
-      message: 'Raw hex color in CSS. Use design tokens or CSS variables.'
+      message: 'Raw hex color in CSS. Use design tokens or CSS variables.',
+      filePattern: /\.(css|scss|tsx|ts)$/
     },
     {
       name: 'Hardcoded Pixel Value (CSS)',
       pattern: /(?<![\w-])\d+px(?![\w-])/g,
       severity: 'minor',
-      message: 'Avoid hardcoded pixel values in CSS. Use design tokens.'
+      message: 'Avoid hardcoded pixel values in CSS. Use design tokens.',
+      filePattern: /\.(css|scss|tsx|ts)$/
     }
   ],
   deprecated: {
