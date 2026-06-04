@@ -74,8 +74,20 @@ const getBasename = (): string => {
   return buildBase;
 };
 
+// Restore GitHub Pages SPA redirect
+const redirect = sessionStorage.getItem('ghpages_redirect');
+if (redirect) {
+  sessionStorage.removeItem('ghpages_redirect');
+  // Replace the current history entry with the real path
+  window.history.replaceState(null, '', '/tech-dancer' + redirect);
+}
+
 const router = createBrowserRouter(routes, {
   basename: getBasename(),
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
 });
 
 createRoot(document.getElementById('root')!).render(
@@ -85,8 +97,9 @@ createRoot(document.getElementById('root')!).render(
         <ThemeProvider>
           <RouterProvider
             router={router}
+            future={{ v7_startTransition: true }}
             fallbackElement={
-              <Box as="main" id="main-content" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+              <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
                 <Box
                   width={8}
                   height={8}

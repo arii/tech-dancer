@@ -158,6 +158,8 @@ When multiple agents work simultaneously:
 
 ### PR Review Lifecycle
 
+Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
+
 1. **Fetch context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch`
 2. **Perform audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit`
 3. **Submit review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup`

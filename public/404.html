@@ -2,54 +2,16 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Tech-Dancer // Redirecting...</title>
-    <script type="text/javascript">
-      // SPA redirect for GitHub Pages.
-      // This script handles redirects for both the main deployment (/tech-dancer/)
-      // and branch preview deployments (/tech-dancer/<branch>/).
-      // It probes the path hierarchy to find the deepest index.html.
-      (function () {
-        var l = window.location;
-        var pathParts = l.pathname.split('/').filter(function (p) { return p !== ''; });
-
-        function redirect(baseDepth) {
-          var basePath = '/' + pathParts.slice(0, baseDepth).join('/') + '/';
-          var routePath = pathParts.slice(baseDepth).join('/').replace(/&/g, '~and~');
-          l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            basePath + '?/' + routePath +
-            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
-          );
-        }
-
-        // Probing depths to find where the app is actually hosted
-        var checks = pathParts.map(function (_, i) {
-          var depth = i + 1;
-          return fetch(
-            '/' + pathParts.slice(0, depth).join('/') + '/index.html',
-            { method: 'HEAD', cache: 'no-store' }
-          )
-            .then(function (r) { return r.ok ? depth : 0; })
-            .catch(function () { return 0; });
-        });
-
-        Promise.all(checks).then(function (depths) {
-          var best = 0;
-          for (var i = 0; i < depths.length; i++) {
-            if (depths[i] > best) best = depths[i];
-          }
-
-          if (best > 0) {
-            redirect(best);
-          } else {
-            // Fallback to the known repo base if all probes fail
-            redirect(1);
-          }
-        });
-      })();
+    <title>BoomTick</title>
+    <script>
+      // GitHub Pages SPA redirect
+      // Stores the path and redirects to index.html
+      const base = '/tech-dancer';
+      const path = window.location.pathname.replace(base, '') || '/';
+      const search = window.location.search;
+      const hash = window.location.hash;
+      sessionStorage.setItem('ghpages_redirect', path + search + hash);
+      window.location.replace(base + '/');
     </script>
   </head>
-  <body>
-  </body>
 </html>
