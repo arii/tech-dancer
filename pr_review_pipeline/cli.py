@@ -2,7 +2,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 import json
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, List, Any
 from pathlib import Path
 
 from pr_review_pipeline.config import settings
@@ -26,21 +26,15 @@ def run_pipeline(
     mode: str = "dry-run",
     repo: Optional[str] = None
 ):
-    # Use a custom generator in OllamaClient to capture raw output if needed
     ollama = OllamaClient()
     store = VectorStore()
     retriever = Retriever(store)
     gh = GitHubClient(repo=repo)
 
-    raw_logs = []
-
     # 2. Spec Validation
     with console.status("Validating PR specification..."):
         context = retriever.get_context("PR description requirements and template")
         validator = SpecValidator(ollama)
-        # To capture raw output, we might need to modify SpecValidator or OllamaClient
-        # For simplicity, we'll just assume the JSON is the key artifact.
-        # But let's add a wrapper to capture it.
         spec_report = validator.validate(pr_details, context)
         spec_report.pr_number = pr_number
 
@@ -117,19 +111,22 @@ def run_pipeline(
         console.print(f"\n[bold blue]Artifacts saved to {output_dir}[/bold blue]")
 
 @app.command()
-def index(repo_path: str = "."):
+def index(repo_path: str = ".", recursive: bool = False):
     """Index repository guidance files (CODEX.md, README.md, etc.)"""
     console.print(f"Indexing {repo_path}...")
     store = VectorStore()
     chunker = MarkdownChunker()
 
-    docs = ["CODEX.md", "README.md", "CONTRIBUTING.md", ".github/pull_request_template.md"]
-    for doc_name in docs:
-        doc_path = Path(repo_path) / doc_name
-        if doc_path.exists():
-            console.print(f"  Indexing {doc_name}...")
+    if recursive:
+        docs = list(Path(repo_path).rglob("*.md"))
+    else:
+        docs = [Path(repo_path) / d for d in ["CODEX.md", "README.md", "CONTRIBUTING.md", ".github/pull_request_template.md"]]
+
+    for doc_path in docs:
+        if doc_path.exists() and doc_path.is_file():
+            console.print(f"  Indexing {doc_path}...")
             content = doc_path.read_text()
-            chunks = chunker.chunk(content, doc_name)
+            chunks = chunker.chunk(content, str(doc_path))
             store.add_chunks(chunks)
 
     console.print("[bold green]Indexing complete![/bold green]")

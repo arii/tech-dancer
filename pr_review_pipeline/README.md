@@ -2,6 +2,10 @@
 
 A lightweight, CPU-friendly Python CLI for local RAG-assisted pull request review.
 
+## 🚀 Quick Start Tutorial
+
+New to the pipeline? Check out our **[End-to-End Tutorial](pr_review_pipeline/TUTORIAL.md)** to get up and running in 5 minutes!
+
 ## Installation
 
 ```bash
@@ -27,18 +31,21 @@ pip install -e .
    ```bash
    cp .env.example .env
    ```
-3. **GitHub CLI**: Ensure `gh` is installed and authenticated.
+3. **GitHub CLI**: Ensure \`gh\` is installed and authenticated.
    ```bash
    gh auth login
    ```
 
 ## Commands
 
-The pipeline is available via the `pr-review` command:
+The pipeline is available via the \`pr-review\` command:
 
 ```bash
 # Index repository guidance files (CODEX.md, README.md, etc.)
 pr-review index --repo-path .
+
+# Index all markdown files in a directory recursively
+pr-review index --repo-path docs/ --recursive
 
 # Retrieve relevant repository context for a query
 pr-review retrieve "test plan required"
@@ -55,12 +62,15 @@ pr-review review-pr --pr 1791 --mode dry-run
 
 ## Modes
 
-- `dry-run` (Default): Writes reports to `outputs/pr-{number}/` but makes no remote changes.
-- `create`: Creates GitHub issues for any blocking findings.
+- \`dry-run\` (Default): Writes reports to \`outputs/pr-{number}/\` but makes no remote changes.
+- \`create\`: Creates GitHub issues for any blocking findings.
 
 ## Development & Testing
 
 ```bash
 # Run the test suite
 pytest tests/test_pipeline.py
+
+# Run the tutorial verification script
+./scripts/verify-rag-pipeline.sh
 ```

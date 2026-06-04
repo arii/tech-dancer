@@ -1,0 +1,11 @@
+diff --git a/src/components/Button.tsx b/src/components/Button.tsx
+new file mode 100644
+index 0000000..e69de29
+--- /dev/null
++++ b/src/components/Button.tsx
+@@ -0,0 +1,5 @@
++export const Button = ({ children, onClick }) => (
++  <button onClick={onClick} className="btn-primary">
++    {children}
++  </button>
++);
