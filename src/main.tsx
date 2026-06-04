@@ -58,8 +58,9 @@ const getBasename = (): string => {
       const segment = segments[i];
       const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(segment);
       const isIndexHtml = segment === 'index.html';
+      const isStaticPath = ['previews', 'assets', 'public', 'dist'].includes(segment);
 
-      if (isStandardRoute || isIndexHtml) {
+      if (isStandardRoute || isIndexHtml || isStaticPath) {
         break;
       }
       lastBaseSegmentIndex = i;
