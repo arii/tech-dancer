@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/codex-migrate-boomtick-homepage-layout-k9h7b9-3815934475569134876/sitemap.xml

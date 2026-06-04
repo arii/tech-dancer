@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/codex/fix-text-visibility-issue-in-featured-guide-5orowu/sitemap.xml

@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/review/consolidate-gear-images-affiliate-disclosure-15081235576120865203/sitemap.xml

@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/modernize-card-layouts-18233829648229116613-8170127313018072396/sitemap.xml
