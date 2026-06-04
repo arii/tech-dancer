@@ -27,7 +27,7 @@ function ToolImage({ tool, className }: { tool: ResearchTool; className?: string
   return (
     <Box
       span={{ base: 1, md: 2 }}
-      height={{ base: 48, md: 64, lg: 'full' }} // Restrict max height, especially on mobile/tablet
+      height={{ base: 64, md: 72, lg: 'full' }} // Provide better aspect ratio for screenshots
       overflow="hidden"
       border={{ base: 'b', md: 'r' }}
       surface="muted"
@@ -158,7 +158,7 @@ function FlagshipCard({ tool }: { tool: ResearchTool }) {
                   {tool.proves.map(item => (
                     <Box key={item} display="flex" align="center" gap={2}>
                       <Icon icon={CheckCircle2} size="xs" color="accent" className="opacity-60" />
-                      <Text size="xs" color="body" weight="font-medium">{item}</Text>
+                      <Text size="sm" color="body" weight="font-medium">{item}</Text>
                     </Box>
                   ))}
                 </Grid>
@@ -196,12 +196,12 @@ function EngineeringToolCard({ tool }: { tool: ResearchTool }) {
       as={Link}
       to={tool.canonicalPath || `/research/${tool.id}`}
       padding={6}
-      paddingBottom={10}
+      paddingBottom={6}
       gap={4}
       height="full"
       align="start"
       textAlign="left"
-      className={cn(cardVariants({ interactive: true }), "min-w-0")} // Prevent overflow
+      className={cn(cardVariants({ interactive: true }), "min-w-0", "hover:border-accent/40")} // Prevent overflow
     >
       <Stack gap={4} width="full">
         <Box display="flex" justify="between" align="start" width="full">
@@ -317,7 +317,7 @@ export default function ResearchAnalytics() {
                   key={study.slug}
                   as={Link}
                   to={`/research/${study.slug}`}
-                  padding={8}
+                  padding={6}
                   gap={4}
                   className={cardVariants({ interactive: true })}
                 >
