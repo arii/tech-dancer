@@ -100,3 +100,5 @@ run_all.sh
 update_status.sh
 create_prs.sh
 generate_report.sh
+.venv
+dev-tools/logs/audits/
