@@ -229,3 +229,14 @@
 - [x] Feedback provided
 - [x] Merge readiness assessment
 - **Notes:** Adds UX Storyboard doc. Ensure Node major version checking script fixes don't cause `deploy` pipeline to fail.
+
+
+## PR #1873
+- [x] Reviewed
+- [x] Desktop UX review completed
+- [x] Mobile UX review completed
+- [x] Main branch conflict check completed
+- [x] CI status checked
+- [x] Feedback provided
+- [x] Merge readiness assessment
+- **Notes:** Supersedes 1870. Restores preview metadata variables and dynamic base paths. Fails E2E build. `src/main.tsx` is still not parsing the new 404 query param structure.
