@@ -19,7 +19,7 @@ interface SearchResult {
 }
 
 export function GlobalSearch() {
-  const { query, setQuery, isOpen, open, close } = useGlobalSearch();
+  const { query, setQuery, isOpen, close } = useGlobalSearch();
   
   const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [
