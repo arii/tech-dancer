@@ -74,7 +74,7 @@ export default function ResearchAnalytics() {
             ))}
           </Box>
 
-          <Box display="flex" gap={3} marginTop={2} className="flex-col sm:flex-row w-full sm:w-auto">
+          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width="full" className="sm:w-auto">
             <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" className="w-full sm:w-auto">
               View Flagship Projects
             </ActionButton>
@@ -85,7 +85,7 @@ export default function ResearchAnalytics() {
               <Icon icon={Send} size="sm" />
               Contact
             </ActionButton>
-          </Box>
+          </Stack>
         </Stack>
 
 
@@ -149,7 +149,7 @@ export default function ResearchAnalytics() {
                       ))}
                     </Box>
 
-                    <Box display="flex" gap={4} marginTop="auto" paddingTop={4} className="flex-col sm:flex-row w-full sm:w-auto">
+                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width="full" className="sm:w-auto">
                       {tool.externalUrl && (
                         <ActionButton
                           as="a"
@@ -161,7 +161,7 @@ export default function ResearchAnalytics() {
                           paddingY={2}
                           className="z-20 w-full sm:w-auto"
                         >
-                          <span className="font-bold text-xs uppercase tracking-widest text-inherit">
+                          <span className="font-bold text-xs uppercase tracking-widest">
                             {tool.externalLinkDisplayLabel || 'Open Link'}
                           </span>
                           <Icon icon={ExternalLink} size="sm" />
@@ -178,11 +178,11 @@ export default function ResearchAnalytics() {
                           paddingY={2}
                           className="z-20 w-full sm:w-auto"
                         >
-                          <span className="font-bold text-xs uppercase tracking-widest text-inherit">Source Repo</span>
+                          <span className="font-bold text-xs uppercase tracking-widest">Source Repo</span>
                           <Icon icon={Github} size="sm" />
                         </ActionButton>
                       )}
-                    </Box>
+                    </Stack>
                   </Stack>
                 </Stack>
               </BaseCard>
