@@ -1,0 +1,30 @@
+{
+  "name": "boomtick-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local MCP server for Boomtick PR rescue and merge-conflict workflows.",
+  "bin": {
+    "boomtick-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "verify:tools": "pnpm build && tsx test/verify-tools.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vitest": "^4.1.5"
+  }
+}
