@@ -73,10 +73,10 @@ export default function Merch() {
           paddingBottom={6}
           cta={
             <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
-              <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary">
+              <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
                  Shop Printful Store
               </Button>
-              <Button as="a" href={PRINTFUL_REFERRAL.URL} target="_blank" rel="sponsored noopener noreferrer" variant="outline">
+              <Button as="a" href={PRINTFUL_REFERRAL.URL} target="_blank" rel="sponsored noopener noreferrer" variant="outline" width={{ base: 'full', sm: 'auto' }}>
                  Claim $5 Discount
               </Button>
             </Stack>
@@ -116,18 +116,17 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, md: 3 }} gap={{ base: 6, md: 8 }}>
+                  <Grid cols={{ base: 1, md: 4 }} gap={{ base: 6, md: 8 }}>
                     <Box span={{ base: 1, md: 2 }}>
                       <ProductCard item={section.products[0]} isFeatured />
                     </Box>
-                    <Stack gap={{ base: 6, md: 8 }}>
-                      {section.products.slice(1, 3).map((product) => (
+                    {section.products.slice(1, 3).map((product) => (
+                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, md: 1 }}>
                         <ProductCard
-                          key={`${section.id}-${product.id}`}
                           item={product}
                         />
-                      ))}
-                    </Stack>
+                      </Box>
+                    ))}
                   </Grid>
                 ) : (
                   <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>

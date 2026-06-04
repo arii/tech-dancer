@@ -27,7 +27,7 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         alt={image.alt}
         width="full"
         height="full"
-        padding={2}
+        padding={{ base: 4, md: 6 }}
         loading={loading ?? 'lazy'}
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
@@ -94,7 +94,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={isFeatured ? { base: 48, sm: 56, md: 104 } : { base: 36, sm: 44, md: 52 }}
+      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
