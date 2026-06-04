@@ -82,8 +82,13 @@ if (redirect) {
   window.history.replaceState(null, '', '/tech-dancer' + redirect);
 }
 
+// Clean trailing slashes from basename (except for root '/')
+const cleanBasename = (base: string): string => {
+  return base === '/' ? '/' : base.replace(/\/$/, '');
+};
+
 const router = createBrowserRouter(routes, {
-  basename: getBasename(),
+  basename: cleanBasename(getBasename()),
   future: {
     v7_startTransition: true,
     v7_relativeSplatPath: true,
