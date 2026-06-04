@@ -115,3 +115,29 @@ gh variable set ANY_COUNT_BASELINE --body 50
 
 - **Valid Line Ranges**: The system provides explicit ranges in the context file to prevent GitHub API 422 errors.
 - **Dry Run Default**: Most mutating CLI commands require `--execute` to actually perform actions on GitHub.
+
+### 4. Lightweight CPU RAG PR Review Pipeline (Portfolio)
+
+A modern, multi-agent RAG pipeline for automated PR reviews and issue creation. This tool demonstrates structured agent handoffs and repository-aware context retrieval.
+
+#### Setup
+1. Install dependencies:
+   ```bash
+   pip install -e .
+   ```
+2. Index the repository:
+   ```bash
+   pr-review index
+   ```
+
+#### Execution
+```bash
+# Review a PR and generate artifacts
+pr-review review-pr --pr <PR_NUMBER>
+
+# Review using local fixtures (smoke test)
+pr-review review-fixture \
+  --pr-description tests/fixtures/pr_missing_test_plan.md \
+  --diff tests/fixtures/diff_accessibility_issue.patch \
+  --codex tests/fixtures/sample_codex.md
+```

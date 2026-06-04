@@ -3,18 +3,29 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tech-dancer-dev-tools-sdk"
+name = "pr-review-pipeline"
 version = "0.1.0"
-description = "Unified SDK and CLI for Tech Dancer dev-tools"
+description = "Lightweight local RAG PR review pipeline"
 requires-python = ">=3.11"
-dependencies = []
-
-[tool.setuptools]
-package-dir = {"" = "dev-tools"}
-
-[tool.setuptools.packages.find]
-where = ["dev-tools"]
-include = ["dev_tools_sdk*"]
+dependencies = [
+    "typer",
+    "rich",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+    "requests",
+    "chromadb",
+    "sentence-transformers",
+    "unidiff",
+    "pytest",
+    "PyGithub",
+]
 
 [project.scripts]
-td-sdk-cli = "dev_tools_sdk.cli:main"
+pr-review = "pr_review_pipeline.cli:app"
+
+[tool.setuptools]
+packages = ["pr_review_pipeline", "pr_review_pipeline.agents", "pr_review_pipeline.rag", "pr_review_pipeline.schemas"]
+
+[tool.setuptools.package-data]
+pr_review_pipeline = ["prompts/*.md"]
