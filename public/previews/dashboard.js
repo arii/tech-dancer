@@ -303,14 +303,6 @@ function renderCard(deployment, isIdxEven) {
             el('span', { innerHTML: ICONS.clock }),
             type === 'merged' ? `Merged ${timeAgo(Math.floor(new Date(deployment.merged_at).getTime() / 1000))}` : timeAgo(Math.floor(new Date(pr.updated_at).getTime() / 1000))
         ]),
-        deployment.commitTimestamp && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1', title: 'Source code change' }, [
-            el('span', { innerHTML: ICONS.clock }),
-            `Built from commit: ${timeAgo(deployment.commitTimestamp)}`
-        ]),
-        deployment.deployTimestamp && el('span', { className: 'text-[10px] sm:text-xs text-slate-400 flex items-center gap-1', title: 'GitHub Pages publish' }, [
-            el('span', { innerHTML: ICONS.clock }),
-            `Published: ${timeAgo(deployment.deployTimestamp)}`
-        ]),
         el('div', { className: 'sm:hidden w-full mt-1' }, [badgeContainer.cloneNode(true)])
     ]);
 
@@ -439,9 +431,6 @@ async function init() {
             grid.before(warning);
         }
 
-        const dataRes = await fetch('./data.json').catch(() => ({ json: () => ({}) }));
-        const metadata = await dataRes.json();
-
         const allFoldersRaw = Array.from(new Set(treeData.tree
             .filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
             .map(i => getBaseBranchName(i.path.replace('/index.html', '')))
@@ -450,7 +439,6 @@ async function init() {
 
         state.deployments = allFoldersRaw.map(name => {
             const pr = prs.find(p => p.head.ref === name);
-            const meta = metadata[name] || {};
             return {
                 name,
                 pr,
@@ -458,10 +446,7 @@ async function init() {
                 isAuto: pr && (pr.user.login.includes('bot') || pr.user.login === 'dependabot'),
                 isDraft: pr?.draft || false,
                 isStale: pr && (Date.now() - new Date(pr.updated_at).getTime()) > 14 * 24 * 60 * 60 * 1000,
-                updated_at: meta.deployTimestamp || (pr ? new Date(pr.updated_at).getTime() / 1000 : 0),
-                commitTimestamp: meta.commitTimestamp,
-                deployTimestamp: meta.deployTimestamp,
-                sha: meta.sha
+                updated_at: pr ? new Date(pr.updated_at).getTime() : 0
             };
         }).sort((a, b) => b.updated_at - a.updated_at);
 
