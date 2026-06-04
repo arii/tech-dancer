@@ -11,6 +11,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
 from tdw_services.services.jules import JulesClient
+from tdw_services.services.rag import ReviewRAGStore, collect_spec_documents
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -90,9 +91,110 @@ class Orchestrator:
         cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
         if os.path.exists(cache_file):
             with open(cache_file, 'r') as f: return json.load(f)
+
+        # Retrieval-augmented review context: use a local JSON vector index when
+        # present, and always make current CODEX/AGENTS standards available even
+        # before the first historical index has been built.
+        pr_details['ragContext'] = self.get_review_rag_context(pr_diff)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
         with open(cache_file, 'w') as f: json.dump(review_result, f)
         return review_result
+
+    def build_review_rag_index(self, limit: int = 30, index_path: str | None = None) -> Dict[str, Any]:
+        """Build a JSON-backed RAG index from standards, closed PRs, and review comments."""
+        store = ReviewRAGStore(index_path=index_path or os.environ.get("REVIEW_RAG_INDEX_PATH", ".agent/review-rag-index.json"))
+        documents = collect_spec_documents()
+        indexed_prs = 0
+        indexed_comments = 0
+        indexed_ci_failures = 0
+
+        try:
+            closed_pulls = self.github.fetch_closed_pulls(limit=limit) if limit > 0 else []
+            for pr in closed_pulls:
+                number = pr.get('number')
+                title = pr.get('title') or f"PR #{number}"
+                body = pr.get('body') or ""
+                merged = pr.get('merged_at') or ""
+                if body.strip():
+                    documents.append({
+                        "source_type": "pull_request",
+                        "title": f"PR #{number}: {title}",
+                        "text": body,
+                        "metadata": {"number": number, "url": pr.get('html_url'), "merged_at": merged},
+                    })
+                    indexed_prs += 1
+
+                for comment in self.github.fetch_pr_review_comments(number):
+                    body = comment.get('body') or ""
+                    if body.strip():
+                        documents.append({
+                            "source_type": "review_comment",
+                            "title": f"PR #{number} review comment: {title}",
+                            "text": body,
+                            "metadata": {"number": number, "url": comment.get('html_url'), "path": comment.get('path')},
+                        })
+                        indexed_comments += 1
+
+                for comment in self.github.fetch_pr_issue_comments(number):
+                    body = comment.get('body') or ""
+                    if body.strip():
+                        documents.append({
+                            "source_type": "pr_discussion",
+                            "title": f"PR #{number} discussion: {title}",
+                            "text": body,
+                            "metadata": {"number": number, "url": comment.get('html_url')},
+                        })
+                        indexed_comments += 1
+
+                head_sha = (pr.get('head') or {}).get('sha')
+                fix_commit = pr.get('merge_commit_sha') or head_sha
+                if head_sha:
+                    for run in self.github.fetch_check_runs(head_sha):
+                        if run.get('conclusion') != 'failure':
+                            continue
+                        logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
+                        findings = extract_failing_info(logs)
+                        if findings:
+                            failure_text = "\n".join(
+                                f"{item.get('type')}: {item.get('file')}:{item.get('line')} {item.get('message')}"
+                                for item in findings[:20]
+                            )
+                        else:
+                            failure_text = logs[-5000:]
+                        if failure_text.strip():
+                            documents.append({
+                                "source_type": "ci_failure",
+                                "title": f"PR #{number} CI failure: {run.get('name')}",
+                                "text": f"Failure observed on {head_sha}. Fix/merge commit after this failure: {fix_commit}.\n{failure_text}",
+                                "metadata": {"number": number, "check": run.get('name'), "fix_commit": fix_commit, "url": run.get('url')},
+                            })
+                            indexed_ci_failures += 1
+        except Exception as exc:
+            # Standards-only indexes are still valuable in token- or network-limited environments.
+            warning = str(exc)
+        else:
+            warning = None
+
+        chunk_count = store.replace(documents)
+        return {
+            "status": "success" if warning is None else "partial",
+            "index_path": store.index_path,
+            "documents": len(documents),
+            "chunks": chunk_count,
+            "pull_requests": indexed_prs,
+            "comments": indexed_comments,
+            "ci_failures": indexed_ci_failures,
+            "warning": warning,
+        }
+
+    def get_review_rag_context(self, diff: str, index_path: str | None = None) -> Dict[str, Any]:
+        """Retrieve historical and standards context for a PR diff."""
+        store = ReviewRAGStore(index_path=index_path or os.environ.get("REVIEW_RAG_INDEX_PATH", ".agent/review-rag-index.json"))
+        if not store.chunks:
+            # Review retrieval must be side-effect free: make standards available
+            # in memory without creating an untracked .agent index during review.
+            store.replace(collect_spec_documents(), persist=False)
+        return store.build_prompt_context(diff)
 
     def resolve_conflict(self, file_path: str) -> bool:
         """
@@ -702,66 +804,6 @@ class Orchestrator:
                         p = pipeline.generate_prompt(line)
                         if p: prompts.append(p)
         return prompts
-
-    def run_ux_audit(self, route=None, all_routes=False, desktop=False, mobile=False, screenshots_only=False, images_only=False, contrast_only=False, overflow_only=False):
-        """
-        Runs the UX audit suite using Playwright.
-        """
-        # Ensure routes are discovered
-        run_command(["pnpm", "exec", "tsx", "scripts/ux-discover-routes.ts"])
-
-        routes = ["/"]
-        if all_routes:
-            with open("artifacts/ux-audit/routes.json", "r") as f:
-                routes = json.load(f)["routes"]
-        elif route:
-            routes = [route]
-
-        viewports = []
-        if desktop: viewports = ["desktop-1280", "desktop-1440"]
-        elif mobile: viewports = ["mobile-375", "mobile-390", "mobile-430"]
-
-        flags = []
-        if images_only: flags.append("--images-only")
-        if overflow_only: flags.append("--overflow-only")
-        if contrast_only: flags.append("--contrast-only")
-
-        results = []
-        for r in routes:
-            cmd = ["pnpm", "exec", "tsx", "scripts/ux-audit-runner.ts", r]
-            if viewports:
-                for vp in viewports:
-                    res = run_command(cmd + [vp] + flags, check=False)
-                    results.append({"route": r, "viewport": vp, "status": "success" if res.returncode == 0 else "error"})
-            else:
-                res = run_command(cmd + flags, check=False)
-                results.append({"route": r, "status": "success" if res.returncode == 0 else "error"})
-
-        return {"status": "success", "results": results}
-
-    def run_lighthouse(self, route=None):
-        """
-        Runs Lighthouse audits.
-        """
-        # Ensure routes are discovered
-        run_command(["pnpm", "exec", "tsx", "scripts/ux-discover-routes.ts"])
-
-        cmd = ["pnpm", "exec", "tsx", "scripts/ux-lighthouse-runner.ts"]
-        if route:
-            # Note: Lighthouse runner might need updates to handle single route arg if desired,
-            # but for now it uses routes.json.
-            pass
-
-        res = run_command(cmd, check=False)
-        return {"status": "success" if res.returncode == 0 else "error", "output": res.stdout}
-
-    def generate_ux_report(self):
-        """
-        Aggregates results into a Markdown report.
-        """
-        from tdw_services.ux_report import generate_report
-        generate_report()
-        return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
 
     def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
         """

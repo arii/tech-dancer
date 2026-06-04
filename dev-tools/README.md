@@ -208,17 +208,6 @@ Generates a high-precision prompt for fixing a specific CI error. It maps the er
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
 - **Usage**: `python3 dev-tools/td_cli.py gh bundle-size`
 
-#### `ux` command group
-Dedicated commands for performing UX/UI audits.
-- **Prerequisite**: Requires the local development server to be running (e.g. `pnpm run dev` at `http://localhost:3000`) and Playwright browsers to be installed (`pnpm run setup:playwright` or `npx playwright install`).
-- **Commands**:
-  - `ux audit`: Runs Playwright UX audits (accessibility, layout overflow, images, above-the-fold) across discovered routes.
-    - *Usage*: `python3 dev-tools/td_cli.py ux audit` (supports `--route <path>`, `--all-routes`, `--desktop`, `--mobile`).
-  - `ux report`: Compiles the generated JSON findings into a unified Markdown report at `artifacts/ux-audit/ux-audit-report.md` and generates issue drafts.
-    - *Usage*: `python3 dev-tools/td_cli.py ux report`
-  - `ux lighthouse`: Runs Lighthouse audits against the discovered routes.
-    - *Usage*: `python3 dev-tools/td_cli.py ux lighthouse`
-
 ---
 
 ## 🧪 Quality Gates

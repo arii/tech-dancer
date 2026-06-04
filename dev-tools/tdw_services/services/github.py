@@ -61,6 +61,22 @@ class GitHubClient:
         except requests.exceptions.RequestException as e:
              raise Exception(f"GitHub API Error: {e}")
 
+
+    def fetch_closed_pulls(self, limit: int = 30) -> List[Dict[str, Any]]:
+        """Fetch recently closed pull requests for RAG indexing."""
+        pulls = self._request('GET', f'/repos/{self.repo}/pulls?state=closed&sort=updated&direction=desc&per_page={limit}')
+        return pulls if isinstance(pulls, list) else []
+
+    def fetch_pr_review_comments(self, number: int) -> List[Dict[str, Any]]:
+        """Fetch review comments left on a pull request."""
+        comments = self._request('GET', f'/repos/{self.repo}/pulls/{number}/comments?per_page=100')
+        return comments if isinstance(comments, list) else []
+
+    def fetch_pr_issue_comments(self, number: int) -> List[Dict[str, Any]]:
+        """Fetch conversation comments on a pull request issue thread."""
+        comments = self._request('GET', f'/repos/{self.repo}/issues/{number}/comments?per_page=100')
+        return comments if isinstance(comments, list) else []
+
     def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the list of files changed in a PR."""
         return self._request('GET', f'/repos/{self.repo}/pulls/{number}/files')

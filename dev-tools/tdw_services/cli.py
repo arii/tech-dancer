@@ -265,72 +265,6 @@ def pre_submit(ctx):
     res = orch.pre_submit_checks()
     out(ctx, "Pre-submit checks complete.", data={"results": res})
 
-# ==========================================
-# UX COMMAND GROUP
-# ==========================================
-@cli.group()
-def ux():
-    """UX Audit Operations"""
-    pass
-
-@ux.command()
-@click.option('--route', help='Specific route to audit')
-@click.option('--all-routes', is_flag=True, help='Audit all discovered routes')
-@click.option('--desktop', is_flag=True, help='Audit desktop viewports')
-@click.option('--mobile', is_flag=True, help='Audit mobile viewports')
-@click.pass_context
-def audit(ctx, route, all_routes, desktop, mobile):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.run_ux_audit(route=route, all_routes=all_routes, desktop=desktop, mobile=mobile)
-    out(ctx, "UX Audit complete.", data=res)
-
-@ux.command()
-@click.pass_context
-def report(ctx):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.generate_ux_report()
-    out(ctx, "UX Report generated.", data=res)
-
-@ux.command()
-@click.option('--route', help='Specific route for Lighthouse')
-@click.pass_context
-def lighthouse(ctx, route):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.run_lighthouse(route=route)
-    out(ctx, "Lighthouse audit complete.", data=res)
-
-@ux.command()
-@click.option('--route', help='Specific route for screenshots')
-@click.pass_context
-def screenshots(ctx, route):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.run_ux_audit(route=route, screenshots_only=True)
-    out(ctx, "Screenshots captured.", data=res)
-
-@ux.command()
-@click.option('--route', help='Specific route for image audit')
-@click.pass_context
-def images(ctx, route):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.run_ux_audit(route=route, images_only=True)
-    out(ctx, "Image audit complete.", data=res)
-
-@ux.command()
-@click.option('--route', help='Specific route for contrast check')
-@click.pass_context
-def contrast(ctx, route):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.run_ux_audit(route=route, contrast_only=True)
-    out(ctx, "Contrast check complete.", data=res)
-
-@ux.command()
-@click.option('--route', help='Specific route for overflow check')
-@click.pass_context
-def overflow(ctx, route):
-    orch = ctx.obj['ORCHESTRATOR']
-    res = orch.run_ux_audit(route=route, overflow_only=True)
-    out(ctx, "Overflow check complete.", data=res)
-
 @cli.command()
 @click.pass_context
 def build(ctx):
@@ -388,6 +322,19 @@ def review(ctx, pr_number, no_cache):
         print(f"    reviewComment  : {res.get('reviewComment', '')[:500]}", file=_sys.stderr)
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
+
+@ai.command(name='index-rag')
+@click.option('--limit', type=int, default=30, help='Number of recently closed PRs to index')
+@click.option('--index-path', default=None, help='Path to the JSON vector index')
+@click.pass_context
+def index_rag(ctx, limit, index_path):
+    """Build the RepoAuditor RAG index from standards, closed PRs, and review comments."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.build_review_rag_index(limit=limit, index_path=index_path)
+    msg = f"✅ RAG index built: {res['chunks']} chunks from {res['documents']} documents at {res['index_path']}"
+    if res.get('warning'):
+        msg += f" (partial: {res['warning']})"
+    out(ctx, msg, data=res)
 
 @ai.command()
 @click.argument('file')
