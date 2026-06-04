@@ -703,6 +703,193 @@ class Orchestrator:
                         if p: prompts.append(p)
         return prompts
 
+
+    def parse_pr_review_comments(self, file_path: str) -> Dict[int, str]:
+        """Parse ready-to-post PR comments from the repository review markdown format."""
+        if not os.path.isfile(file_path):
+            raise CLIError(f"Review comments file not found: {file_path}")
+
+        with open(file_path, 'r', encoding='utf-8') as review_file:
+            content = review_file.read()
+
+        headings = list(re.finditer(r"^## PR #(\d+)\b.*$", content, re.MULTILINE))
+        if not headings:
+            raise CLIError(f"No `## PR #<number>` sections found in {file_path}")
+
+        comments = {}
+        for index, heading in enumerate(headings):
+            pr_number = int(heading.group(1))
+            if pr_number in comments:
+                raise CLIError(f"Duplicate review comment section for PR #{pr_number}")
+
+            section_end = headings[index + 1].start() if index + 1 < len(headings) else len(content)
+            section = content[heading.end():section_end]
+            comment_match = re.search(r"```markdown\s*\n(.*?)\n```", section, re.DOTALL)
+            if not comment_match or not comment_match.group(1).strip():
+                raise CLIError(f"Missing fenced markdown review comment for PR #{pr_number}")
+            comments[pr_number] = comment_match.group(1).strip()
+
+        return comments
+
+    def post_pr_review_comments(
+        self,
+        file_path: str,
+        pr_numbers: Optional[List[int]] = None,
+        replace: bool = False,
+        dry_run: bool = True,
+    ) -> Dict[str, Any]:
+        """Post top-level PR comments parsed from a markdown review snapshot."""
+        parsed_comments = self.parse_pr_review_comments(file_path)
+        selected_numbers = pr_numbers or list(parsed_comments)
+        missing_numbers = sorted(set(selected_numbers) - set(parsed_comments))
+        if missing_numbers:
+            missing = ", ".join(f"#{number}" for number in missing_numbers)
+            raise CLIError(f"Review comments file has no section for: {missing}")
+
+        github = None
+        if not dry_run:
+            try:
+                github = self.github
+            except ValueError as error:
+                raise CLIError(f"Cannot post PR review comments: {error}", code=401) from error
+
+        results = []
+        for pr_number in selected_numbers:
+            marker = f"<!-- td-cli:pr-review-comment pr={pr_number} -->"
+            body = f"{parsed_comments[pr_number]}\n\n---\n{marker}\n*Posted by `td_cli.py gh post-review-comments`.*"
+            action = "would_create"
+            comment_url = None
+
+            if github:
+                try:
+                    pr_details = github.fetch_pr_details(pr_number)
+                    if pr_details.get('state') != 'open':
+                        results.append({"pr": pr_number, "action": "skipped_not_open", "url": pr_details.get('html_url')})
+                        continue
+
+                    existing_comments = github.fetch_issue_comments(pr_number)
+                    existing = next((comment for comment in existing_comments if marker in (comment.get('body') or '')), None)
+                    if existing and not replace:
+                        action = "skipped_existing"
+                        comment_url = existing.get('html_url')
+                    elif existing:
+                        updated = github.update_issue_comment(existing['id'], body)
+                        action = "updated"
+                        comment_url = updated.get('html_url')
+                    else:
+                        created = github.create_issue_comment(pr_number, body)
+                        action = "created"
+                        comment_url = created.get('html_url')
+                except CLIError:
+                    raise
+                except Exception as error:
+                    raise CLIError(f"Failed to post review comment for PR #{pr_number}: {error}") from error
+
+            results.append({"pr": pr_number, "action": action, "url": comment_url})
+
+        return {
+            "status": "success",
+            "dry_run": dry_run,
+            "source": file_path,
+            "count": len(results),
+            "comments": results,
+        }
+
+    def comment_pr(self, pr_number: int, body: Optional[str] = None, body_file: Optional[str] = None, dry_run: bool = True) -> Dict[str, Any]:
+        """Post a Markdown comment to a PR conversation, or preview it in dry-run mode."""
+        if body and body_file:
+            raise CLIError("Provide either --body or --body-file, not both.")
+        if body_file:
+            if body_file == "-":
+                import sys
+                body = sys.stdin.read()
+            else:
+                if not os.path.exists(body_file):
+                    raise CLIError(f"Comment file missing: {body_file}")
+                with open(body_file, encoding="utf-8") as comment_file:
+                    body = comment_file.read()
+        if not body or not body.strip():
+            raise CLIError("PR comment body is empty. Provide --body, --body-file <PATH>, or --body-file - for stdin.")
+
+        comment_body = body.strip()
+        result = {
+            "status": "success",
+            "pr": pr_number,
+            "dry_run": dry_run,
+            "posted": False,
+            "body": comment_body,
+        }
+        if not dry_run:
+            github = None
+            try:
+                github = self.github
+            except ValueError as error:
+                raise CLIError("Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN before running `gh comment-pr --execute`.", code=401)
+            response = github.create_issue_comment(pr_number, comment_body)
+            result["posted"] = True
+            result["comment"] = response
+        return result
+
+    def run_ux_audit(self, route=None, all_routes=False, desktop=False, mobile=False, screenshots_only=False, images_only=False, contrast_only=False, overflow_only=False):
+        """
+        Runs the UX audit suite using Playwright.
+        """
+        # Ensure routes are discovered
+        run_command(["pnpm", "exec", "tsx", "scripts/ux-discover-routes.ts"])
+
+        routes = ["/"]
+        if all_routes:
+            with open("artifacts/ux-audit/routes.json", "r") as f:
+                routes = json.load(f)["routes"]
+        elif route:
+            routes = [route]
+
+        viewports = []
+        if desktop: viewports = ["desktop-1280", "desktop-1440"]
+        elif mobile: viewports = ["mobile-375", "mobile-390", "mobile-430"]
+
+        flags = []
+        if images_only: flags.append("--images-only")
+        if overflow_only: flags.append("--overflow-only")
+        if contrast_only: flags.append("--contrast-only")
+
+        results = []
+        for r in routes:
+            cmd = ["pnpm", "exec", "tsx", "scripts/ux-audit-runner.ts", r]
+            if viewports:
+                for vp in viewports:
+                    res = run_command(cmd + [vp] + flags, check=False)
+                    results.append({"route": r, "viewport": vp, "status": "success" if res.returncode == 0 else "error"})
+            else:
+                res = run_command(cmd + flags, check=False)
+                results.append({"route": r, "status": "success" if res.returncode == 0 else "error"})
+
+        return {"status": "success", "results": results}
+
+    def run_lighthouse(self, route=None):
+        """
+        Runs Lighthouse audits.
+        """
+        # Ensure routes are discovered
+        run_command(["pnpm", "exec", "tsx", "scripts/ux-discover-routes.ts"])
+
+        cmd = ["pnpm", "exec", "tsx", "scripts/ux-lighthouse-runner.ts"]
+        if route:
+            # Note: Lighthouse runner might need updates to handle single route arg if desired,
+            # but for now it uses routes.json.
+            pass
+
+        res = run_command(cmd, check=False)
+        return {"status": "success" if res.returncode == 0 else "error", "output": res.stdout}
+
+    def generate_ux_report(self):
+        """
+        Aggregates results into a Markdown report.
+        """
+        from tdw_services.ux_report import generate_report
+        generate_report()
+        return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
+
     def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
         """
         Aggregates multiple PRs into a single target branch and creates a consolidated PR.

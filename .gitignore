@@ -92,3 +92,11 @@ dev-tools/logs/reviews/*.md
 # Runtime audit reports
 # [Sensitive] Ensure these are never indexed
 .agent/workflows/ai-slop-audit-*.md
+pr-data/
+consolidate.exit
+consolidate.log
+consolidate.sh
+run_all.sh
+update_status.sh
+create_prs.sh
+generate_report.sh

@@ -93,7 +93,7 @@ export function RootLayout() {
           </Box>
         </AnimatePresence>
       </MainLayout>
-      {import.meta.env.PROD && window.location.hostname !== 'localhost' && (
+      {import.meta.env.VITE_IS_VERCEL === 'true' && (
         <>
           <Analytics />
           <SpeedInsights />
