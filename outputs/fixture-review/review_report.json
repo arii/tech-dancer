@@ -1,0 +1,19 @@
+{
+  "pr_number": 0,
+  "overall_status": "commented",
+  "findings": [
+    {
+      "id": "MOCK-001",
+      "severity": "nit",
+      "category": "mock",
+      "file": null,
+      "line": null,
+      "title": "Ollama Offline",
+      "description": "The review was generated using mock data because Ollama is offline.",
+      "evidence": null,
+      "suggested_fix": null
+    }
+  ],
+  "summary": "Mock review summary.",
+  "recommended_tests": []
+}

@@ -1,0 +1,9 @@
+typer
+rich
+pydantic
+python-dotenv
+requests
+chromadb
+sentence-transformers
+unidiff
+pytest
