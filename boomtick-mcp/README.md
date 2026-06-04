@@ -99,3 +99,5 @@ node dist/index.js
 - **Build**: `pnpm run build`
 - **Test**: `pnpm test`
 - **Verify**: `pnpm run run-evals`
+
+For detailed verification steps, see [docs/testing.md](./docs/testing.md).
