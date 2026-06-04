@@ -12,9 +12,10 @@ python -m pr_review_pipeline index --repo-path .
 python -m pr_review_pipeline retrieve "test plan required"
 
 # Review a PR based on local fixture files
-python -m pr_review_pipeline review-fixture \
-  --description-file tests/fixtures/pr_description.md \
-  --diff-file tests/fixtures/diff.patch \
+python -m pr_review_pipeline review-fixture \\
+  tests/fixtures/pr_missing_test_plan.md \\
+  tests/fixtures/diff_accessibility_issue.patch \\
+  --codex-file tests/fixtures/sample_codex.md \\
   --mode dry-run
 
 # Review a GitHub Pull Request

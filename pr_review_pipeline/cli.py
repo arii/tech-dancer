@@ -26,15 +26,21 @@ def run_pipeline(
     mode: str = "dry-run",
     repo: Optional[str] = None
 ):
+    # Use a custom generator in OllamaClient to capture raw output if needed
     ollama = OllamaClient()
     store = VectorStore()
     retriever = Retriever(store)
     gh = GitHubClient(repo=repo)
 
+    raw_logs = []
+
     # 2. Spec Validation
     with console.status("Validating PR specification..."):
         context = retriever.get_context("PR description requirements and template")
         validator = SpecValidator(ollama)
+        # To capture raw output, we might need to modify SpecValidator or OllamaClient
+        # For simplicity, we'll just assume the JSON is the key artifact.
+        # But let's add a wrapper to capture it.
         spec_report = validator.validate(pr_details, context)
         spec_report.pr_number = pr_number
 
@@ -59,6 +65,19 @@ def run_pipeline(
 
     with open(output_dir / "blocking_issues.json", "w") as f:
         f.write(issue_plan.model_dump_json(indent=2))
+
+    # Generate issue preview markdown
+    issue_preview_md = f"# Issue Preview for PR #{pr_number}\n\n"
+    if not issue_plan.issues:
+        issue_preview_md += "No blocking issues identified.\n"
+    for issue in issue_plan.issues:
+        issue_preview_md += f"## {issue.title}\n"
+        issue_preview_md += f"**Labels:** {', '.join(issue.labels)}\n\n"
+        issue_preview_md += f"{issue.body}\n\n"
+        issue_preview_md += "---\n\n"
+
+    with open(output_dir / "issue_preview.md", "w") as f:
+        f.write(issue_preview_md)
 
     # Generate human-readable summary
     summary_md = f"# PR #{pr_number} Review Summary\n\n"
@@ -158,22 +177,32 @@ def review_pr(
 
 @app.command()
 def review_fixture(
-    description_file: str,
-    diff_file: str,
+    pr_description: str = typer.Option(..., "--pr-description", help="Path to PR description markdown"),
+    diff: str = typer.Option(..., "--diff", help="Path to PR diff patch"),
+    codex: Optional[str] = typer.Option(None, "--codex", help="Path to CODEX guidance markdown"),
     mode: str = "dry-run"
 ):
     """Review a PR based on local fixture files"""
     console.print(f"Starting review for fixture (mode: {mode})")
 
-    pr_body = Path(description_file).read_text()
-    diff = Path(diff_file).read_text()
+    pr_body = Path(pr_description).read_text()
+    diff_content = Path(diff).read_text()
     pr_details = {"title": "Fixture PR", "body": pr_body, "number": 0}
+
+    # If a codex file is provided, index it first
+    if codex:
+        console.print(f"Indexing custom codex: {codex}")
+        store = VectorStore()
+        chunker = MarkdownChunker()
+        content = Path(codex).read_text()
+        chunks = chunker.chunk(content, codex)
+        store.add_chunks(chunks)
 
     # Create output directory
     out_dir = Path(settings.output_dir) / "fixture-review"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    run_pipeline(0, pr_details, diff, out_dir, mode)
+    run_pipeline(0, pr_details, diff_content, out_dir, mode)
 
 if __name__ == "__main__":
     app()

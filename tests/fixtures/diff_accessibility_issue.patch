@@ -1,0 +1,11 @@
+diff --git a/src/components/ProductCard.tsx b/src/components/ProductCard.tsx
+index 1234567..890abcd 100644
+--- a/src/components/ProductCard.tsx
++++ b/src/components/ProductCard.tsx
+@@ -40,5 +40,5 @@ export const ProductCard = ({ product }) => {
+   return (
+-    <div onClick={handleClick}>
++    <div onClick={handleClick} className="clickable-card">
+       <h3>{product.name}</h3>
+     </div>
+   );
