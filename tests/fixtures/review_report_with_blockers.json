@@ -1,0 +1,26 @@
+{
+  "pr_number": 1791,
+  "overall_status": "changes_requested",
+  "findings": [
+    {
+      "id": "REV-001",
+      "severity": "blocking",
+      "category": "accessibility",
+      "file": "src/components/ProductCard.tsx",
+      "line": 42,
+      "title": "Clickable div is not keyboard accessible",
+      "description": "A div with onClick cannot be reached by keyboard users.",
+      "evidence": "<div onClick={handleOpen}>",
+      "suggested_fix": "Use a button."
+    },
+    {
+      "id": "NIT-001",
+      "severity": "nit",
+      "category": "style",
+      "title": "Consider clearer copy",
+      "description": "Copy could be clearer."
+    }
+  ],
+  "summary": "Changes requested.",
+  "recommended_tests": ["pnpm run test"]
+}

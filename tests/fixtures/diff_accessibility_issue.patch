@@ -1,0 +1,9 @@
+diff --git a/src/components/ProductCard.tsx b/src/components/ProductCard.tsx
+index 1111111..2222222 100644
+--- a/src/components/ProductCard.tsx
++++ b/src/components/ProductCard.tsx
+@@ -39,6 +39,7 @@ export function ProductCard() {
+   return (
++    <div onClick={handleOpen}>Open product</div>
+   )
+ }

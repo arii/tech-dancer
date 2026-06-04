@@ -79,6 +79,8 @@ public/data
 link-validation-report.md
 
 # Dynamically generated analysis artifacts
+outputs/
+.rag/
 pr_overlaps.txt
 workflow_overlaps.txt
 dev-tools/logs/reviews/*.md
