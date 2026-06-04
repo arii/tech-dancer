@@ -14,6 +14,7 @@ import { healthHandler } from "./tools.js";
 import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
 import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
+import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
 import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
 import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
 import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
@@ -126,6 +127,18 @@ export class BoomtickMCPServer {
             mimeType: "application/json",
             description: "The validation report for a specific repair branch.",
           },
+          {
+            uri: "repo://lighthouse/{branch}",
+            name: "Lighthouse Report",
+            mimeType: "application/json",
+            description: "Lighthouse CI report for a specific branch.",
+          },
+          {
+            uri: "repo://playwright/{branch}",
+            name: "Playwright Report",
+            mimeType: "application/json",
+            description: "Playwright test report for a specific branch.",
+          },
         ],
       };
     });
@@ -163,6 +176,20 @@ export class BoomtickMCPServer {
         const logs = await readCiLogsHandler({ prNumber });
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(logs, null, 2) }],
+        };
+      }
+      if (uri.startsWith("repo://lighthouse/")) {
+        const branch = uri.split("/").pop() || "";
+        const report = await runLighthouseHandler({ route: "/", worktreePath: `../boomtick-mcp-rescue-${branch}` });
+        return {
+          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(report, null, 2) }],
+        };
+      }
+      if (uri.startsWith("repo://playwright/")) {
+        const branch = uri.split("/").pop() || "";
+        const report = await runPlaywrightHandler({ worktreePath: `../boomtick-mcp-rescue-${branch}` });
+        return {
+          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(report, null, 2) }],
         };
       }
       throw new Error(`Resource not found: ${uri}`);
@@ -203,6 +230,18 @@ export class BoomtickMCPServer {
                 prNumber: { type: "number" },
               },
               required: ["prNumber"],
+            },
+          },
+          {
+            name: "github.checkout_branch",
+            description: "Checkout a specific branch in the repository or worktree.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                branch: { type: "string" },
+                worktreePath: { type: "string" },
+              },
+              required: ["branch"],
             },
           },
           {
@@ -361,6 +400,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await getPrDiffHandler(GetPrDiffInputSchema.parse(request.params.arguments)));
           case "github.get_merge_conflict_files":
             return createSuccessResult(await getMergeConflictFilesHandler(GetMergeConflictFilesInputSchema.parse(request.params.arguments)));
+          case "github.checkout_branch":
+            return createSuccessResult(await checkoutBranchHandler(CheckoutBranchInputSchema.parse(request.params.arguments)));
           case "repo.get_changed_files":
             return createSuccessResult(await getChangedFilesHandler(GetChangedFilesInputSchema.parse(request.params.arguments || {})));
           case "repo.get_package_scripts":
