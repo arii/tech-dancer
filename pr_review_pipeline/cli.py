@@ -116,6 +116,14 @@ def index(repo_path: str = "."):
     console.print("[bold green]Indexing complete![/bold green]")
 
 @app.command()
+def retrieve(query: str):
+    """Retrieve relevant repository context for a query"""
+    store = VectorStore()
+    retriever = Retriever(store)
+    context = retriever.get_context(query)
+    console.print(context)
+
+@app.command()
 def review_pr(
     pr: int,
     repo: str = settings.github_repo,

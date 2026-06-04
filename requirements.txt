@@ -1,9 +1,11 @@
 typer
 rich
 pydantic
+pydantic-settings
 python-dotenv
 requests
 chromadb
 sentence-transformers
 unidiff
 pytest
+PyGithub

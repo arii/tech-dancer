@@ -1,6 +1,0 @@
-diff --git a/src/app.py b/src/app.py
-index e69de29..e1f0e4c 100644
---- a/src/app.py
-+++ b/src/app.py
-@@ -0,0 +1 @@
-+print('hello world')
