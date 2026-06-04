@@ -120,6 +120,12 @@ export class BoomtickMCPServer {
             mimeType: "application/json",
             description: "The design tokens used in the repository.",
           },
+          {
+            uri: "repo://repair-report/{branch}",
+            name: "Repair Report",
+            mimeType: "application/json",
+            description: "The validation report for a specific repair branch.",
+          },
         ],
       };
     });
@@ -136,6 +142,13 @@ export class BoomtickMCPServer {
         const routeMap = await getRouteMapHandler();
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(routeMap, null, 2) }],
+        };
+      }
+      if (uri === "repo://design-tokens") {
+        const tokensPath = path.join(config.repoPath, "src/styles/design-tokens.ts");
+        const content = await fs.readFile(tokensPath, "utf-8");
+        return {
+          contents: [{ uri, mimeType: "text/typescript", text: content }],
         };
       }
       if (uri.startsWith("repo://diff/")) {

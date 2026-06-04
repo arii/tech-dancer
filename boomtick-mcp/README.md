@@ -57,6 +57,18 @@ Run the server via stdio:
 node dist/index.js
 ```
 
+## Future Roadmap
+
+### ContentOps + Merch Compliance
+- `content.validate_affiliate_disclosure`: Ensure Amazon mandatory wording is present.
+- `content.check_trademark_risk`: Flag potential trademark issues in blog posts.
+- `amazon.validate_affiliate_card`: Verify affiliate links and product names match media.
+
+### UX Regression + Spec-Driven Redesign
+- `ux.capture_screenshot`: Capture multi-viewport screenshots.
+- `ux.compare_screenshots`: Detect visual regressions using Playwright.
+- `ux.run_accessibility_check`: Automated Axe-core audits.
+
 ## Development
 - **Build**: `pnpm run build`
 - **Test**: `pnpm test`
