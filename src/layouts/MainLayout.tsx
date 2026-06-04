@@ -1,18 +1,31 @@
-import { useRef } from 'react';
+import { useRef, lazy, Suspense } from 'react';
 import { ReactNode } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
 import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
-import { GlobalSearch } from '@/components/GlobalSearch';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
+import { useGlobalSearch } from '@/hooks/useGlobalSearch';
+import { useCommandKey } from '@/hooks/useHotkeys';
+
+const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })));
+
+
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const { isOpen: isSearchOpen, open: openSearch } = useGlobalSearch();
+
+  useCommandKey('k', (e) => {
+    e.preventDefault();
+    openSearch();
+  }, [openSearch]);
 
   const { handleTouchStart, handleTouchEnd } = useScrollManagement(scrollRef, touchStartRef);
+
+
 
   return (
     <Box
@@ -80,7 +93,11 @@ export function MainLayout({ children }: { children: ReactNode }) {
       </Stack>
 
       <NewsletterBanner />
-      <GlobalSearch />
+      {isSearchOpen && (
+        <Suspense fallback={null}>
+          <GlobalSearch />
+        </Suspense>
+      )}
     </Box>
   );
 }

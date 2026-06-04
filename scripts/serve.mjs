@@ -1,6 +1,7 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import zlib from 'zlib';
 import { fileURLToPath } from 'url';
 import { getBasePath } from './base-path.js';
 
@@ -70,10 +71,28 @@ const server = http.createServer((req, res) => {
     if (ext.match(/\.(css|js|mjs|png|jpg|jpeg|gif|svg|webp|ico|woff2|woff|ttf|webmanifest)$/)) {
       headers['Cache-Control'] = 'public, max-age=31536000, immutable';
     }
-    res.writeHead(200, headers);
-    res.end(data);
+
+    const acceptEncoding = req.headers['accept-encoding'] || '';
+    const compressable = ext.match(/\.(html|css|js|mjs|json|svg|txt|xml)$/);
+
+    if (compressable && acceptEncoding.includes('gzip')) {
+      headers['Content-Encoding'] = 'gzip';
+      zlib.gzip(data, (zlibErr, compressed) => {
+        if (zlibErr) {
+          res.writeHead(200, headers);
+          res.end(data);
+          return;
+        }
+        res.writeHead(200, headers);
+        res.end(compressed);
+      });
+    } else {
+      res.writeHead(200, headers);
+      res.end(data);
+    }
   });
 });
+
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${PORT}${BASE_PATH}`);
