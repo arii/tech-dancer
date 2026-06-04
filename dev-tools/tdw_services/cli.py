@@ -323,6 +323,19 @@ def review(ctx, pr_number, no_cache):
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 
+@ai.command(name='index-rag')
+@click.option('--limit', type=int, default=30, help='Number of recently closed PRs to index')
+@click.option('--index-path', default=None, help='Path to the JSON vector index')
+@click.pass_context
+def index_rag(ctx, limit, index_path):
+    """Build the RepoAuditor RAG index from standards, closed PRs, and review comments."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.build_review_rag_index(limit=limit, index_path=index_path)
+    msg = f"✅ RAG index built: {res['chunks']} chunks from {res['documents']} documents at {res['index_path']}"
+    if res.get('warning'):
+        msg += f" (partial: {res['warning']})"
+    out(ctx, msg, data=res)
+
 @ai.command()
 @click.argument('file')
 @click.pass_context

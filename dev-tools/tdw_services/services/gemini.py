@@ -5,6 +5,7 @@ import json
 import re
 import requests
 from typing import Optional, Dict, Any, List
+from tdw_services.services.rag import format_chunks_for_prompt
 from utils import (
     call_ollama,
     is_ollama_available,
@@ -194,6 +195,7 @@ class LocalAIClient:
             f"- {c.get('name')}: {c.get('status')} ({c.get('conclusion','Pending')})"
             for c in checks
         ) if checks else "No checks found."
+        rag_context = pr.get('ragContext') or {}
 
         ci_failures = [c for c in checks if c.get('conclusion') == 'failure']
         has_ci_failures = bool(ci_failures)
@@ -210,6 +212,7 @@ class LocalAIClient:
         print(f"  Gemini fallback  : {'enabled' if self.use_gemini_fallback else 'DISABLED'}")
         print(f"  Diff size        : {len(diff):,} chars")
         print(f"  CI failures      : {failing_names}")
+        print(f"  RAG queries      : {len(rag_context.get('queries', []))}")
         print(f"{'='*60}\n")
 
         if not ollama_ok and not self.use_gemini_fallback:
@@ -254,7 +257,7 @@ class LocalAIClient:
             t0 = time.time()
             print(f"  [{i:>2}/{len(reviewable)}] 🤖 {label} ({chunk['added_lines']} added lines{', truncated' if chunk['truncated'] else ''}) …", end="", flush=True)
 
-            prompt = self._build_chunk_prompt(chunk, pr_title, checks_summary)
+            prompt = self._build_chunk_prompt(chunk, pr_title, checks_summary, rag_context)
             raw = None
             try:
                 raw = call_ollama(prompt, model=_REVIEW_MODEL, schema=_CHUNK_SCHEMA, max_retries=2)
@@ -297,7 +300,7 @@ class LocalAIClient:
         # ── Phase B: synthesis ────────────────────────────────────────────────
         print(f"🔗 Synthesising {len(file_reviews)} chunk review(s) → final verdict …", end="", flush=True)
         t0 = time.time()
-        final = self._synthesize_review(file_reviews, pr_num, pr_title, has_ci_failures, ci_failures)
+        final = self._synthesize_review(file_reviews, pr_num, pr_title, has_ci_failures, ci_failures, rag_context)
         elapsed = time.time() - t0
         print(f" done ({elapsed:.1f}s)\n", flush=True)
 
@@ -312,14 +315,20 @@ class LocalAIClient:
         self._write_review_file(pr_num, pr, final, chunks, file_reviews)
         return final
 
-    def _build_chunk_prompt(self, chunk: Dict, pr_title: str, checks_summary: str) -> str:
+    def _build_chunk_prompt(self, chunk: Dict, pr_title: str, checks_summary: str, rag_context: Optional[Dict] = None) -> str:
         trunc_note = "\n(Note: diff was truncated to fit context window)" if chunk.get('truncated') else ""
+        rag_context = rag_context or {}
+        relevant_context = format_chunks_for_prompt(rag_context.get('historical_chunks', []), max_chars=4500)
+        codex_context = format_chunks_for_prompt(rag_context.get('codex_chunks', []), max_chars=3500)
         return (
             f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
             f'PR title: {pr_title}\n'
             f'CI status: {checks_summary}\n\n'
+            f'RELEVANT HISTORICAL CONTEXT (retrieved from past PRs, review comments, and CI logs):\n{relevant_context}\n\n'
+            f'CODING STANDARDS (from CODEX.md / AGENTS.md):\n{codex_context}\n\n'
             f'Rules:\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
+            f'- Flag contradictions with retrieved historical decisions or documented standards.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
@@ -403,6 +412,7 @@ class LocalAIClient:
         pr_title: str,
         has_ci_failures: bool,
         ci_failures: List[Dict],
+        rag_context: Optional[Dict] = None,
     ) -> Dict:
         """Call the lighter llama3.2 model to produce the final verdict from structured per-chunk data."""
         total_issues = sum(len(fr.get('issues', [])) for fr in file_reviews)
@@ -426,9 +436,15 @@ class LocalAIClient:
         if has_ci_failures:
             ci_note = f"\nCI FAILURES: {', '.join(c.get('name','?') for c in ci_failures)} – must NOT recommend Approved.\n"
 
+        rag_context = rag_context or {}
+        relevant_context = format_chunks_for_prompt(rag_context.get('historical_chunks', []), max_chars=3000)
+        codex_context = format_chunks_for_prompt(rag_context.get('codex_chunks', []), max_chars=2500)
+
         prompt = (
             f"You are summarising a code review for PR #{pr_num} – \"{pr_title}\".\n"
             f"{ci_note}\n"
+            f"RELEVANT HISTORICAL CONTEXT:\n{relevant_context}\n\n"
+            f"CODING STANDARDS:\n{codex_context}\n\n"
             f"Per-file results:\n"
             f"  Blocking : {blocking_files or 'none'}\n"
             f"  Needs changes: {needs_files or 'none'}\n"
@@ -437,6 +453,7 @@ class LocalAIClient:
             f"Total issues found: {total_issues}\n\n"
             f"Issue details:\n{findings_str if findings_str else '  (none)'}\n\n"
             f"Write a concise PR review body (reviewComment) summarising the above findings.\n"
+            f"Mention any contradictions with historical context or documented standards when present.\n"
             f"Choose recommendation: 'Approved', 'Approved with Minor Changes', or 'Not Approved'.\n"
             f"Suggest 1-3 labels (e.g. 'needs-changes', 'lgtm', 'ci-failing').\n"
             f"Output ONLY valid JSON, no prose outside it."
