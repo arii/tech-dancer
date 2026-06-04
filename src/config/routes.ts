@@ -114,7 +114,7 @@ export const routes: RouteConfig[] = [
     Component: () => {
       const base = import.meta.env.BASE_URL || '/';
       const cleanBase = base.endsWith('/') ? base : base + '/';
-      window.location.replace(cleanBase + 'previews/');
+      window.location.replace(cleanBase + 'previews/index.html');
       return null;
     },
     sitemap: false
