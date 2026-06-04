@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -19,7 +19,6 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   const flagshipTools = tools.filter(t => t.isFlagship);
@@ -124,7 +123,7 @@ export default function ResearchAnalytics() {
                       />
                     </Box>
                   )}
-                  <Stack gap={6} padding={8} flex={1}>
+                  <Stack gap={6} padding={{ base: 6, md: 8 }} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
                       <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
@@ -159,7 +158,7 @@ export default function ResearchAnalytics() {
                       ))}
                     </Box>
 
-                    <Box display="flex" gap={4} marginTop="auto" paddingTop={4}>
+                    <Box display="flex" wrap="wrap" gap={4} marginTop="auto" paddingTop={4}>
                       {tool.externalUrl && (
                         <Box
                           as="a"
@@ -201,14 +200,14 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
+          <Stack gap={6} padding={{ base: 6, md: 8 }} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
               HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
             </Text>
           </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
+          <Stack gap={6} padding={{ base: 6, md: 8 }} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
@@ -226,15 +225,14 @@ export default function ResearchAnalytics() {
             {engineeringTools.map((tool) => (
               <Stack
                 key={tool.id}
-                as="button"
-                onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
-                padding={6}
-                paddingBottom={10}
+                as={NavLink}
+                to={tool.canonicalPath || `/research/${tool.id}`}
+                padding={{ base: 6, md: 8 }}
                 gap={4}
                 height="full"
                 align="start"
                 textAlign="left"
-                className={cardVariants({ interactive: true })}
+                className={cardVariants({ interactive: true, className: 'no-underline' })}
               >
                 <Stack gap={4} width="full">
                   <Box display="flex" justify="between" align="start" width="full">
@@ -289,10 +287,11 @@ export default function ResearchAnalytics() {
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
-                  padding={8}
+                  as={NavLink}
+                  to={`/research/${study.slug}`}
+                  padding={{ base: 6, md: 8 }}
                   gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
-                  className={cardVariants({ interactive: true })}
+                  className={cardVariants({ interactive: true, className: 'no-underline block' })}
                 >
                   <Box display="flex" justify="between" align="center">
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
