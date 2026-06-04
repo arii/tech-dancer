@@ -1,0 +1,60 @@
+1871	OPEN	UX Auditor tool is completely broken and requires complete overhaul	bug, desktop-ux-review	2026-06-04T09:36:43Z
+1868	OPEN	Move generic WCS Competition Scraper post back to draft	ai-slop-content-review	2026-06-04T08:58:30Z
+1867	OPEN	Reduce excessive stack gap spacing in About page mobile view	mobile-ux-review	2026-06-04T08:58:29Z
+1866	OPEN	Replace horizontal scrolling in GearShelf mobile view	mobile-ux-review	2026-06-04T08:58:28Z
+1865	OPEN	Normalize mobile grid card heights in TopicGrid	mobile-ux-review	2026-06-04T08:58:27Z
+1864	OPEN	Reduce desktop list fatigue in /research tools grid	desktop-ux-review	2026-06-04T08:58:46Z
+1863	OPEN	Improve Desktop rhythm on /merch by constraining footer callouts	desktop-ux-review	2026-06-04T08:58:24Z
+1862	OPEN	Adjust desktop hero decorative image overlay sizing	desktop-ux-review	2026-06-04T08:58:39Z
+1861	OPEN	Replace raw div with Box primitive in FeaturedEventGuide	agent-policy-violation	2026-06-04T08:58:22Z
+1849	OPEN	Update @jules-fix-ci prompt to self-review, fix, validate, and publish PRs		2026-06-04T02:23:31Z
+1841	OPEN	# Lightweight CPU RAG Multi-Agent PR Review Pipeline	jules	2026-06-04T02:22:55Z
+1840	OPEN	boomtick mcp	jules	2026-06-04T02:52:04Z
+1837	OPEN	Move placeholder 'Financial Strategy Guide' to draft mode until content is added	ai-slop-content-review	2026-06-03T23:23:07Z
+1836	OPEN	Reduce mobile metadata wrapping and improve tap targets on cards	mobile-ux-review	2026-06-03T23:23:05Z
+1835	OPEN	Fix oversized hero image on desktop pushing content below the fold	desktop-ux-review	2026-06-03T23:23:04Z
+1834	OPEN	Fix raw background and alpha channel utility classes in Navigation components	agent-policy-violation	2026-06-03T23:23:03Z
+1833	OPEN	Remove arbitrary max-width Tailwind class from Home layout	agent-policy-violation	2026-06-03T23:23:20Z
+1832	OPEN	Replace raw div and arbitrary styling in Equalizer component with standard primitives	agent-policy-violation	2026-06-03T23:23:20Z
+1819	OPEN	improve visual regressiion tools		2026-06-03T20:30:49Z
+1816	OPEN	Update AGENTS.md with affiliate, SEO, and URL stability requirements		2026-06-03T18:53:49Z
+1799	OPEN	update pumpkin post	jules, blocked	2026-06-04T00:09:07Z
+1794	OPEN	Investigate and Resolve Lighthouse CI Performance Regression	bug, performance, follow-up, automated-dispatch, lighthouse	2026-06-03T21:19:07Z
+1776	OPEN	Dedup tooling	needs-clarification	2026-06-03T23:25:51Z
+1767	OPEN	Verify MerchImageDisplay Height Responsiveness	UX, follow-up, automated-dispatch, visual-design	2026-06-03T21:19:14Z
+1766	OPEN	Address Anti-Pattern Audit Failure - ProductCard Role Badge Styling	refactor, follow-up, automated-dispatch, anti-pattern, code-quality	2026-06-03T21:19:16Z
+1765	OPEN	Fix E2E Test Failures for Merch Page	bug, follow-up, automated-dispatch, e2e-tests, critical	2026-06-03T21:19:17Z
+1764	OPEN	Abstract Common Title Styling in Sidebar and Footer	refactor, follow-up, automated-dispatch, code-quality	2026-06-03T21:19:19Z
+1763	OPEN	Ensure Critical Information Visibility on Mobile Hero/Feature Cards	enhancement, Accessibility, UX, follow-up, automated-dispatch, Mobile	2026-06-03T21:19:21Z
+1762	OPEN	[Workflow Audit] Consolidated Health Report	automated-dispatch, workflow-audit, report	2026-05-30T05:11:05Z
+1751	OPEN	Research page: add in-progress ecommerce and Printful automation section	jules, blocked	2026-06-03T23:25:33Z
+1749	OPEN	Research page: add UX storyboard and visual redesign plan	jules, blocked	2026-06-03T23:25:36Z
+1748	OPEN	Research page: add SEO-focused DevAI implementation articles	jules, blocked	2026-06-03T23:25:40Z
+1747	OPEN	Research page: feature BoomTick.blog and RepoAuditor AI as flagship outputs	jules, blocked	2026-06-03T23:25:44Z
+1746	OPEN	Research page: rename and clarify project taxonomy	jules	2026-06-03T21:19:37Z
+1738	OPEN	Add dry-run and validation guardrails for Printful store mutation scripts		2026-05-30T00:41:41Z
+1736	OPEN	Protect affiliate disclosure and outbound-link compliance		2026-05-30T00:41:42Z
+1732	OPEN	Update BoomTick Merch descriptions, colors, and mockups via Printful API	jules	2026-06-03T21:19:39Z
+1703	OPEN	Update Ollama ChatOps and self-healing workflows to use improved dev-tools CLI path	automation, ci, dev-tools	2026-05-30T00:41:41Z
+1693	OPEN	Redesign BoomTick blog post pages for editorial desktop and mobile layouts	jules	2026-06-03T21:19:42Z
+1688	OPEN	Merch page: support front/back display modes for Printful product cards	enhancement, jules	2026-06-03T23:26:16Z
+1634	OPEN	Split PR 1535: Subscribe route only	needs-clarification	2026-06-03T23:25:55Z
+1627	OPEN	Refine `GearCard` Image Styling for Consistency	UX, follow-up, automated-dispatch, code-quality, design	2026-06-03T21:19:45Z
+1626	OPEN	Remove or Document `impeccable-ignore-file` Comments	jules, refactor, follow-up, automated-dispatch, code-quality	2026-06-03T21:19:47Z
+1625	OPEN	Complete Image Localization for All Existing Gear Cards	bug, follow-up, automated-dispatch, Data Integrity	2026-06-03T21:19:48Z
+1624	OPEN	Standardize Image Storage Paths and Naming Conventions	jules, refactor, follow-up, automated-dispatch, cleanup, maintainability	2026-06-03T21:19:50Z
+1589	OPEN	Make Flagship Project External Link Labels Configurable	refactor, follow-up, automated-dispatch, frontend	2026-06-03T21:19:51Z
+1588	OPEN	Refine Tag Styling in Flagship Cards and Remove `impeccable-ignore`	refactor, tech-debt, follow-up, automated-dispatch, frontend	2026-05-30T00:42:15Z
+1581	OPEN	Event resources: QA cleanup, audit, and content verification	ai-generated, cleanup, Audit, QA, Events, verification	2026-06-03T21:19:53Z
+1580	OPEN	Event resources: mobile responsive storyboard polish	ai-generated, ui, frontend, Mobile, Responsive, Events	2026-06-03T21:19:55Z
+1579	OPEN	Event resources: migrate reminders into checklist/sidebar system	ai-generated, frontend, Events, reminders, sidebar, checklist	2026-05-30T00:42:34Z
+1578	OPEN	Event resources: rebuild Gear tab into grouped product sections	ai-generated, frontend, Events, gear, products, grouping	2026-06-03T21:19:56Z
+1577	OPEN	Event resources: rebuild Theme tab with capped curated products	ai-generated, frontend, Events, products, tabs, curation	2026-06-03T21:19:58Z
+1575	OPEN	Event resources: migrate guide pages to compact editorial storyboard	ai-generated, jules, refactor, frontend, migration, Events, storyboard	2026-06-03T21:19:59Z
+1564	OPEN	Add curated gear sections to existing event guides	enhancement, jules	2026-06-03T21:20:06Z
+1555	OPEN	Improve shared card layouts across event guides, blog posts, gear, and merch pages	enhancement, jules, design, needs-clarification	2026-06-03T23:26:00Z
+1521	OPEN	Add featured merch section to the landing page	jules	2026-06-03T21:20:11Z
+1331	OPEN	Event guide theme spotlight: implement theme inspiration section from storyboard	jules, blocked	2026-06-03T23:25:47Z
+1329	OPEN	Event Resource Guide: implement storyboard-aligned end-to-end journey	needs-clarification	2026-06-03T23:26:04Z
+1327	OPEN	Article/detail UX: improve mobile reading comfort and share/back controls	jules	2026-06-03T21:20:16Z
+1247	OPEN	create gear images	jules, needs-clarification	2026-06-03T23:26:08Z
