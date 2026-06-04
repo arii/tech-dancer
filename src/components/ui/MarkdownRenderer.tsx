@@ -157,8 +157,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           hr: ({node: _node, ...props}) => (
             <Box marginY={10} height={0} className="border-t border-line/40" {...props} />
           ),
-          notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
-          Notice: (props: React.ComponentProps<typeof Notice>) => <Notice {...props} />,
           code: ({ node: _node, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
