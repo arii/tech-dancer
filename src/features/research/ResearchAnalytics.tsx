@@ -74,14 +74,14 @@ export default function ResearchAnalytics() {
             ))}
           </Box>
 
-          <Box display="flex" wrap="wrap" gap={3} marginTop={2}>
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest">
+          <Box display="flex" gap={3} marginTop={2} className="flex-col sm:flex-row w-full sm:w-auto">
+            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" className="w-full sm:w-auto">
               View Flagship Projects
             </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest">
+            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" className="w-full sm:w-auto">
               Read Implementation Articles
             </ActionButton>
-            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest">
+            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest" className="w-full sm:w-auto">
               <Icon icon={Send} size="sm" />
               Contact
             </ActionButton>
@@ -149,7 +149,7 @@ export default function ResearchAnalytics() {
                       ))}
                     </Box>
 
-                    <Box display="flex" wrap="wrap" gap={4} marginTop="auto" paddingTop={4}>
+                    <Box display="flex" gap={4} marginTop="auto" paddingTop={4} className="flex-col sm:flex-row w-full sm:w-auto">
                       {tool.externalUrl && (
                         <ActionButton
                           as="a"
@@ -159,11 +159,11 @@ export default function ResearchAnalytics() {
                           variant="primary"
                           paddingX={4}
                           paddingY={2}
-                          className="z-20"
+                          className="z-20 w-full sm:w-auto"
                         >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
+                          <span className="font-bold text-xs uppercase tracking-widest text-inherit">
                             {tool.externalLinkDisplayLabel || 'Open Link'}
-                          </Text>
+                          </span>
                           <Icon icon={ExternalLink} size="sm" />
                         </ActionButton>
                       )}
@@ -176,9 +176,9 @@ export default function ResearchAnalytics() {
                           variant="secondary"
                           paddingX={4}
                           paddingY={2}
-                          className="z-20"
+                          className="z-20 w-full sm:w-auto"
                         >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
+                          <span className="font-bold text-xs uppercase tracking-widest text-inherit">Source Repo</span>
                           <Icon icon={Github} size="sm" />
                         </ActionButton>
                       )}
@@ -193,14 +193,14 @@ export default function ResearchAnalytics() {
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
           <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
+            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
               HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
             </Text>
           </Stack>
           <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
+            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
             <Text variant="body" size="lg" color="body" className="leading-relaxed">
               Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
             </Text>
