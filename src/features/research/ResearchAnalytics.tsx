@@ -105,7 +105,7 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          <Grid cols={{ base: 1, lg: 2 }} gap={6}>
             {flagshipTools.map((tool) => (
               <BaseCard
                 key={tool.id}
@@ -200,7 +200,7 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
+        <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
           <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
             <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h3" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
@@ -222,7 +222,7 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+          <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={{ base: 6, lg: 12 }}>
             {engineeringTools.map((tool) => (
               <Stack
                 key={tool.id}
@@ -285,7 +285,7 @@ export default function ResearchAnalytics() {
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2 }} gap={8}>
+            <Grid cols={{ base: 1, lg: 2 }} gap={8}>
               {studies.map((study) => (
                 <Stack
                   key={study.slug}

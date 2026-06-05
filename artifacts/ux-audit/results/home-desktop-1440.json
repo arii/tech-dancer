@@ -1,7 +1,7 @@
 {
   "route": "/",
   "viewport": "desktop-1440",
-  "timestamp": "2026-06-03T23:51:37.329Z",
+  "timestamp": "2026-06-04T16:00:38.991Z",
   "accessibility": {
     "testEngine": {
       "name": "axe-core",
@@ -17,7 +17,7 @@
       "orientationAngle": 0,
       "orientationType": "landscape-primary"
     },
-    "timestamp": "2026-06-03T23:51:36.560Z",
+    "timestamp": "2026-06-04T16:00:37.867Z",
     "url": "http://localhost:3000/",
     "toolOptions": {
       "reporter": "v1"
@@ -4911,7 +4911,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<span class=\"font-sans max-w-[65ch] text-text-dim text-xs font-medium not-italic opacity-80\">As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.</span>",
+            "html": "<span class=\"font-sans max-w-[65ch] text-text-dim text-xs font-medium not-italic opacity-80\">As an Amazon Associate, I earn from qualifying purchases.</span>",
             "target": [
               ".font-medium"
             ]
@@ -10248,7 +10248,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<div class=\"\"><span class=\"font-sans max-w-[65ch] text-text-dim text-xs font-medium not-italic opacity-80\">As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.</span></div>",
+            "html": "<div class=\"\"><span class=\"font-sans max-w-[65ch] text-text-dim text-xs font-medium not-italic opacity-80\">As an Amazon Associate, I earn from qualifying purchases.</span></div>",
             "target": [
               ".sm\\:flex-row > div:nth-child(2)"
             ]
@@ -10268,7 +10268,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<span class=\"font-sans max-w-[65ch] text-text-dim text-xs font-medium not-italic opacity-80\">As an Amazon Associate, this page contains affiliate links. We earn a commission if you make a purchase.</span>",
+            "html": "<span class=\"font-sans max-w-[65ch] text-text-dim text-xs font-medium not-italic opacity-80\">As an Amazon Associate, I earn from qualifying purchases.</span>",
             "target": [
               ".font-medium"
             ]
@@ -11069,8 +11069,8 @@
     {
       "src": "http://localhost:3000/assets/home/wcs-travel-pack.webp",
       "alt": "The WCS Travel Pack",
-      "naturalWidth": 840,
-      "naturalHeight": 840,
+      "naturalWidth": 1254,
+      "naturalHeight": 1254,
       "renderedWidth": 418,
       "renderedHeight": 593.1875,
       "loading": "auto",
@@ -11089,8 +11089,8 @@
     {
       "src": "http://localhost:3000/images/gear/sketches/loop-earplugs.webp",
       "alt": "",
-      "naturalWidth": 200,
-      "naturalHeight": 99,
+      "naturalWidth": 800,
+      "naturalHeight": 397,
       "renderedWidth": 114.4375,
       "renderedHeight": 114.4375,
       "loading": "auto",
@@ -11099,8 +11099,8 @@
     {
       "src": "http://localhost:3000/images/gear/sketches/travel-steamer.webp",
       "alt": "",
-      "naturalWidth": 200,
-      "naturalHeight": 99,
+      "naturalWidth": 800,
+      "naturalHeight": 397,
       "renderedWidth": 114.453125,
       "renderedHeight": 114.453125,
       "loading": "auto",
@@ -11109,8 +11109,8 @@
     {
       "src": "http://localhost:3000/images/gear/sketches/ue-wonderboom.webp",
       "alt": "",
-      "naturalWidth": 200,
-      "naturalHeight": 99,
+      "naturalWidth": 800,
+      "naturalHeight": 397,
       "renderedWidth": 114.4375,
       "renderedHeight": 114.4375,
       "loading": "auto",
@@ -11119,8 +11119,8 @@
     {
       "src": "http://localhost:3000/images/gear/sketches/loop-earplugs.webp",
       "alt": "",
-      "naturalWidth": 200,
-      "naturalHeight": 99,
+      "naturalWidth": 800,
+      "naturalHeight": 397,
       "renderedWidth": 0,
       "renderedHeight": 0,
       "loading": "auto",
@@ -11129,8 +11129,8 @@
     {
       "src": "http://localhost:3000/images/gear/sketches/travel-steamer.webp",
       "alt": "",
-      "naturalWidth": 200,
-      "naturalHeight": 99,
+      "naturalWidth": 800,
+      "naturalHeight": 397,
       "renderedWidth": 0,
       "renderedHeight": 0,
       "loading": "auto",
@@ -11139,8 +11139,8 @@
     {
       "src": "http://localhost:3000/images/gear/sketches/ue-wonderboom.webp",
       "alt": "",
-      "naturalWidth": 200,
-      "naturalHeight": 99,
+      "naturalWidth": 800,
+      "naturalHeight": 397,
       "renderedWidth": 0,
       "renderedHeight": 0,
       "loading": "auto",
@@ -11159,8 +11159,8 @@
     {
       "src": "http://localhost:3000/assets/home/wcs-travel-pack.webp",
       "alt": "",
-      "naturalWidth": 840,
-      "naturalHeight": 840,
+      "naturalWidth": 1254,
+      "naturalHeight": 1254,
       "renderedWidth": 72,
       "renderedHeight": 56,
       "loading": "auto",
@@ -11173,5 +11173,5 @@
     "visibleCTACount": 1,
     "hasPrimaryCTA": true
   },
-  "screenshot": "/home/ari/tech-dancer/artifacts/ux-audit/screenshots/home-desktop-1440.png"
+  "screenshot": "/app/artifacts/ux-audit/screenshots/home-desktop-1440.png"
 }
