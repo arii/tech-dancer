@@ -117,7 +117,8 @@ export const routes: RouteConfig[] = [
       window.location.replace(cleanBase + 'previews/index.html');
       return null;
     },
-    sitemap: false
+    sitemap: false,
+    stub: false
   },
   {
     path: '*',
