@@ -2,12 +2,12 @@
 
 ## Summary
 
-- Total open issues reviewed: 57 / 57
-- Issues recommended to keep open: 43
-- Issues recommended for clarification: 3
+- Total open issues reviewed: 41 / 41
+- Issues recommended to keep open: 31
+- Issues recommended for clarification: 2
 - Issues recommended to merge: 0
-- Issues recommended to close: 3
-- Issues blocked by PRs or other work: 8
+- Issues recommended to close: 1
+- Issues blocked by PRs or other work: 7
 
 ## Issue Checklist
 
@@ -28,7 +28,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -50,34 +50,12 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Critical bug that is actively impacting users and needs to be addressed immediately.
 
-### Issue #1868 — Move generic WCS Competition Scraper post back to draft
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Completed, close
-**Reason:**
-**Summary:** Move generic WCS Competition Scraper post back to draft
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** Content has been identified as AI slop and should be removed or hidden. Marking as completed to close.
-
-**Detailed Reason:** Content has been identified as AI slop and should be removed or hidden. Marking as completed to close.
-
-### Issue #1867 — Reduce excessive stack gap spacing in About page mobile view
+### Issue #1867 — Consolidated: Mobile UX Polishing (About Page Spacing, GearShelf Scrolling)
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -89,51 +67,7 @@
 
 **Recommendation:** Keep open
 **Reason:**
-**Summary:** Reduce excessive stack gap spacing in About page mobile view
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1866 — Replace horizontal scrolling in GearShelf mobile view
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Replace horizontal scrolling in GearShelf mobile view
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1865 — Normalize mobile grid card heights in TopicGrid
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Normalize mobile grid card heights in TopicGrid
+**Summary:** Consolidated: Mobile UX Polishing (About Page Spacing, GearShelf Scrolling)
 **Relevance:** The issue is relevant.
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
@@ -160,7 +94,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -182,12 +116,12 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
 
-### Issue #1862 — Adjust desktop hero decorative image overlay sizing
+### Issue #1861 — Consolidated: Replace raw div and arbitrary Tailwind styling with Box/Tokens across Home and Navigation
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -199,34 +133,12 @@
 
 **Recommendation:** Keep open
 **Reason:**
-**Summary:** Adjust desktop hero decorative image overlay sizing
+**Summary:** Consolidated: Replace raw div and arbitrary Tailwind styling with Box/Tokens across Home and Navigation
 **Relevance:** The issue is relevant.
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1861 — Replace raw div with Box primitive in FeaturedEventGuide
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Replace raw div with Box primitive in FeaturedEventGuide
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Agent policy violation must be corrected to maintain repository standards.
@@ -248,7 +160,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -270,12 +182,12 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
 
-### Issue #1837 — Move placeholder 'Financial Strategy Guide' to draft mode until content is added
+### Issue #1837 — Consolidated: Move placeholder and overpromising 'Financial Strategy Guide' and 'WCS Competition Scraper' posts to draft mode
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -287,17 +199,17 @@
 
 **Recommendation:** Completed, close
 **Reason:**
-**Summary:** Move placeholder 'Financial Strategy Guide' to draft mode until content is added
+**Summary:** Consolidated: Move placeholder and overpromising 'Financial Strategy Guide' and 'WCS Competition Scraper' posts to draft mode
 **Relevance:** The issue is relevant.
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** Content has been identified as AI slop and should be removed or hidden. Marking as completed to close.
 
 **Detailed Reason:** Content has been identified as AI slop and should be removed or hidden. Marking as completed to close.
 
-### Issue #1836 — Reduce mobile metadata wrapping and improve tap targets on cards
+### Issue #1836 — Consolidated: Normalize mobile card heights, reduce metadata wrapping, and improve tap targets
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -309,17 +221,17 @@
 
 **Recommendation:** Keep open
 **Reason:**
-**Summary:** Reduce mobile metadata wrapping and improve tap targets on cards
+**Summary:** Consolidated: Normalize mobile card heights, reduce metadata wrapping, and improve tap targets
 **Relevance:** The issue is relevant.
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
 
-### Issue #1835 — Fix oversized hero image on desktop pushing content below the fold
+### Issue #1835 — Consolidated: Fix oversized hero image and decorative overlay on desktop pushing content below the fold
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -331,81 +243,15 @@
 
 **Recommendation:** Keep open
 **Reason:**
-**Summary:** Fix oversized hero image on desktop pushing content below the fold
+**Summary:** Consolidated: Fix oversized hero image and decorative overlay on desktop pushing content below the fold
 **Relevance:** The issue is relevant.
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1834 — Fix raw background and alpha channel utility classes in Navigation components
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Fix raw background and alpha channel utility classes in Navigation components
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Agent policy violation must be corrected to maintain repository standards.
-
-### Issue #1833 — Remove arbitrary max-width Tailwind class from Home layout
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Remove arbitrary max-width Tailwind class from Home layout
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Agent policy violation must be corrected to maintain repository standards.
-
-### Issue #1832 — Replace raw div and arbitrary styling in Equalizer component with standard primitives
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Replace raw div and arbitrary styling in Equalizer component with standard primitives
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Agent policy violation must be corrected to maintain repository standards.
 
 ### Issue #1819 — improve visual regressiion tools
 
@@ -424,7 +270,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -446,7 +292,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -490,32 +336,10 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1776 — Dedup tooling
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Duplicate, close
-**Reason:**
-**Summary:** Dedup tooling
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** Issue is a duplicate of a broader tracking issue and should be consolidated.
-
-**Detailed Reason:** Issue is a duplicate of a broader tracking issue and should be consolidated.
 
 ### Issue #1767 — Verify MerchImageDisplay Height Responsiveness
 
@@ -534,7 +358,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -556,7 +380,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -578,7 +402,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -600,29 +424,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1763 — Ensure Critical Information Visibility on Mobile Hero/Feature Cards
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Ensure Critical Information Visibility on Mobile Hero/Feature Cards
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -644,7 +446,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -754,7 +556,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue requires further clarification on requirements before implementation can proceed.
@@ -776,7 +578,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -798,7 +600,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -820,7 +622,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -842,7 +644,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -864,7 +666,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -886,7 +688,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -908,7 +710,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -930,7 +732,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -952,7 +754,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -974,7 +776,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -996,7 +798,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -1018,7 +820,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
@@ -1040,12 +842,12 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is blocked by dependencies or other repository work.
 
-### Issue #1580 — Event resources: mobile responsive storyboard polish
+### Issue #1579 — Epic: Event Resource Guide Redesign
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -1057,117 +859,7 @@
 
 **Recommendation:** Keep open
 **Reason:**
-**Summary:** Event resources: mobile responsive storyboard polish
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1579 — Event resources: migrate reminders into checklist/sidebar system
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Event resources: migrate reminders into checklist/sidebar system
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1578 — Event resources: rebuild Gear tab into grouped product sections
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Event resources: rebuild Gear tab into grouped product sections
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1577 — Event resources: rebuild Theme tab with capped curated products
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Event resources: rebuild Theme tab with capped curated products
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1575 — Event resources: migrate guide pages to compact editorial storyboard
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Event resources: migrate guide pages to compact editorial storyboard
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is still relevant and requires implementation. No duplicate found. Not currently blocked by an active PR.
-
-### Issue #1564 — Add curated gear sections to existing event guides
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open
-**Reason:**
-**Summary:** Add curated gear sections to existing event guides
+**Summary:** Epic: Event Resource Guide Redesign
 **Relevance:** The issue is relevant.
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
@@ -1194,7 +886,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue requires further clarification on requirements before implementation can proceed.
@@ -1216,51 +908,7 @@
 **Actionable:** Yes, it is actionable.
 **Related PRs/Files:** Checked related files mentioned in the title.
 **Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
+**Specific Edits:** Updated description to include specifications.
 **Closing Reason:** N/A
 
 **Detailed Reason:** Issue is blocked by dependencies or other repository work.
-
-### Issue #1331 — Event guide theme spotlight: implement theme inspiration section from storyboard
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Blocked by another issue or PR
-**Reason:**
-**Summary:** Event guide theme spotlight: implement theme inspiration section from storyboard
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue is blocked by dependencies or other repository work.
-
-### Issue #1329 — Event Resource Guide: implement storyboard-aligned end-to-end journey
-
-- [x] Relevance checked
-- [x] Duplicate check completed
-- [x] Related PRs checked
-- [x] Current implementation checked
-- [x] Labels / milestone reviewed
-- [x] Audit note written
-- [x] Recommendation recorded
-
-**Recommendation:** Keep open, needs clarification
-**Reason:**
-**Summary:** Event Resource Guide: implement storyboard-aligned end-to-end journey
-**Relevance:** The issue is relevant.
-**Actionable:** Yes, it is actionable.
-**Related PRs/Files:** Checked related files mentioned in the title.
-**Next Action:** Proceed with the recommendation.
-**Specific Edits:** N/A
-**Closing Reason:** N/A
-
-**Detailed Reason:** Issue requires further clarification on requirements before implementation can proceed.
