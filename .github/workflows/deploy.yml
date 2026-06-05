@@ -195,11 +195,8 @@ jobs:
             fi
 
             # 5. Prune stale previews and update metadata
-            # We copy the script to the current directory to run it easily
-            cp "$GITHUB_WORKSPACE/scripts/manage-previews.sh" ./manage-previews.sh
-            chmod +x ./manage-previews.sh
-            ./manage-previews.sh ../open_prs.txt
-            rm ./manage-previews.sh
+            # We run the script directly from the workspace
+            bash "$GITHUB_WORKSPACE/scripts/manage-previews.sh" ../open_prs.txt
 
             # Use the latest dashboard UI from the current deployment
             cp ../dist-assets/previews/index.html previews/index.html
