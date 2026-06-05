@@ -14,7 +14,7 @@ export const OpenReplacementPrInputSchema = z.object({
 
 export async function openReplacementPrHandler(args: z.infer<typeof OpenReplacementPrInputSchema>) {
   if (!args.pushMode) {
-    throw new Error("pushMode must be true to push and open a replacement PR.");
+    throw new Error("pushMode must be true to push and open a replacement PR. Ensure you pass 'pushMode': true in your tool call.");
   }
   // Push the branch
   const pushResult = await runCommand("git", ["push", "origin", args.repairBranch], { cwd: args.worktreePath });

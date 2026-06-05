@@ -10,7 +10,7 @@ export const CommitPatchInputSchema = z.object({
 
 export async function commitPatchHandler(args: z.infer<typeof CommitPatchInputSchema>) {
   if (!args.writeMode) {
-    throw new Error("writeMode must be true to commit changes.");
+    throw new Error("writeMode must be true to commit changes. Ensure you pass 'writeMode': true in your tool call.");
   }
   const statusResult = await runCommand("git", ["status", "--porcelain"], { cwd: args.worktreePath });
   const changedFiles = statusResult.stdout.trim().split("\n").filter(l => l.length > 0).map(l => l.substring(3));
