@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BoomTick</title>
+    <script>
+      // GitHub Pages SPA redirect
+      // Stores the path and redirects to index.html
+      const base = '/tech-dancer';
+      const path = window.location.pathname.replace(base, '') || '/';
+      const search = window.location.search;
+      const hash = window.location.hash;
+      sessionStorage.setItem('ghpages_redirect', path + search + hash);
+      window.location.replace(base + '/');
+    </script>
+  </head>
+</html>
