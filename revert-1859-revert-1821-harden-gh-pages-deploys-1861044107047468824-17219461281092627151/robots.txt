@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/revert-1859-revert-1821-harden-gh-pages-deploys-1861044107047468824-17219461281092627151/sitemap.xml
