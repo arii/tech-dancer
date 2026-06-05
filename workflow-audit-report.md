@@ -33,6 +33,86 @@ Inspected `gh run list --limit 100` and several targeted queries by status. Foun
 | 26947644387 | CI | pull_request | jules-* | success | 5m48s | PR triggered CI |
 | 26973383201 | Auto Conflict Resolver | issue_comment | main | skipped | 1s | Recent skipped run due to noisy trigger |
 | 26962078335 | Deploy to GitHub Pages | push | feat/* | success | 6m49s | Long running deploy |
+| 27035776269 | pages-build-deployment | dynamic | gh-pages | success | 3m5s | Successful run |
+| 27035733621 | pages-build-deployment | dynamic | gh-pages | cancelled | 59s | Skipped/Cancelled check |
+| 27035678121 | Security & Quality Scan | pull_request | feat/research-devai-articles-9321642612728069924 | failure | 47s | Failed run |
+| 27035678116 | CodeQL Advanced | pull_request | feat/research-devai-articles-9321642612728069924 | success | 1m19s | Successful run |
+| 27035678112 | CI | pull_request | feat/research-devai-articles-9321642612728069924 | failure | 1m2s | Failed run |
+| 27035678104 | Auto-Resolve Merge Conflicts | pull_request | feat/research-devai-articles-9321642612728069924 | success | 2m46s | Successful run |
+| 27035678090 | Merge Conflict Check | pull_request | feat/research-devai-articles-9321642612728069924 | success | 46s | Successful run |
+| 27035677582 | Deploy to GitHub Pages | push | feat/research-devai-articles-9321642612728069924 | success | 2m13s | Successful run |
+| 27035659396 | Auto-Resolve Merge Conflicts | pull_request | jules-issue-audit-10497150502403896205 | success | 2m1s | Successful run |
+| 27035656987 | Deploy to GitHub Pages | push | jules-issue-audit-10497150502403896205 | success | 1m45s | Successful run |
+| 27035652532 | pages-build-deployment | dynamic | gh-pages | cancelled | 1m52s | Skipped/Cancelled check |
+| 27035582264 | Auto-Resolve Merge Conflicts | pull_request | jules-issue-dispatch-3831688233700496748 | success | 2m43s | Successful run |
+| 27035582257 | Merge Conflict Check | pull_request | jules-issue-dispatch-3831688233700496748 | success | 49s | Successful run |
+| 27035580430 | Deploy to GitHub Pages | push | jules-issue-dispatch-3831688233700496748 | success | 1m40s | Successful run |
+| 27035478851 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035478822 | Issue to Content PR | issues | main | skipped | 9s | Skipped/Cancelled check |
+| 27035397098 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035397044 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035353192 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035353186 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035351927 | Validate Issue Quality | issues | main | success | 13s | Successful run |
+| 27035351925 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035350875 | Validate Issue Quality | issues | main | success | 15s | Successful run |
+| 27035350849 | Issue to Content PR | issues | main | skipped | 2s | Skipped/Cancelled check |
+| 27035350272 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035350255 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035350167 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035350154 | Validate Issue Quality | issues | main | success | 15s | Successful run |
+| 27035349454 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035349443 | Validate Issue Quality | issues | main | success | 15s | Successful run |
+| 27035348508 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035348454 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035347697 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035347626 | Validate Issue Quality | issues | main | success | 19s | Successful run |
+| 27035316863 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035316778 | Validate Issue Quality | issues | main | success | 21s | Successful run |
+| 27035315281 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035315231 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035315211 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035315206 | Validate Issue Quality | issues | main | success | 13s | Successful run |
+| 27035314734 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035314728 | Validate Issue Quality | issues | main | success | 20s | Successful run |
+| 27035313790 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035313762 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035313200 | Validate Issue Quality | issues | main | success | 19s | Successful run |
+| 27035313175 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035311949 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035311936 | Validate Issue Quality | issues | main | success | 24s | Successful run |
+| 27035311574 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035311535 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035310916 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035310888 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035310498 | Validate Issue Quality | issues | main | success | 15s | Successful run |
+| 27035310492 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035309783 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035309736 | Validate Issue Quality | issues | main | success | 18s | Successful run |
+| 27035309155 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035309097 | Validate Issue Quality | issues | main | success | 17s | Successful run |
+| 27035307924 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035307894 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035307094 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035307087 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035306756 | Validate Issue Quality | issues | main | success | 14s | Successful run |
+| 27035306740 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035305653 | Issue to Content PR | issues | main | skipped | 7s | Skipped/Cancelled check |
+| 27035305629 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035305160 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035305145 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035304589 | Validate Issue Quality | issues | main | success | 24s | Successful run |
+| 27035304573 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035303873 | Validate Issue Quality | issues | main | success | 15s | Successful run |
+| 27035303842 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035303435 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035303409 | Validate Issue Quality | issues | main | success | 16s | Successful run |
+| 27035303347 | pages-build-deployment | dynamic | gh-pages | success | 2m52s | Successful run |
+| 27035301934 | Validate Issue Quality | issues | main | success | 18s | Successful run |
+| 27035301932 | Issue to Content PR | issues | main | skipped | 2s | Skipped/Cancelled check |
+| 27035301408 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
+| 27035301393 | Validate Issue Quality | issues | main | success | 15s | Successful run |
+| 27035300764 | Issue to Content PR | issues | main | skipped | 1s | Skipped/Cancelled check |
 
 *(Due to API constraints fetching older individual logs via 404, we mapped trends across 100+ items from `gh run list`)*
 
@@ -202,3 +282,53 @@ Create a central `issue-comment-dispatcher.yml` that triggers on `issue_comment`
 ---
 
 **Note**: The recommendation to add `cache: pip` was originally proposed but removed from implementation. GitHub Action's `setup-python` requires a dependency file (like `requirements.txt`) to generate a cache key. Since workflows like `ci.yml` run inline installations (e.g. `pip install PyGithub click`), adding the cache flag would cause fatal errors. Thus, this optimization cannot be safely applied without modifying how dependencies are managed in those workflows.
+
+## New Finding: Redundant GitHub Pages Deployment Workflow
+
+**Severity:** medium
+**Priority:** P1
+**Workflow:** `Deploy to GitHub Pages`
+**File:** `.github/workflows/deploy-pages.yml`
+**Jobs affected:** `build`, `deploy`
+**Evidence:**
+- `deploy-pages.yml` pushes to GitHub Pages via Vercel-specific / v3 actions.
+- `deploy.yml` does the actual deployment handling branch-based previews and SEO robots.txt generation.
+- Two workflows attempting to deploy to Pages can create conflicts.
+
+### Problem
+The `.github/workflows/deploy-pages.yml` is essentially unused or redundant, taking up space and creating potential confusion or duplicate work, as `deploy.yml` implements the custom preview routing system that is actively maintained.
+
+### Impact
+- unnecessary CI cost
+- confusing agent output
+
+### Recommended fix
+Delete `.github/workflows/deploy-pages.yml`.
+
+### Acceptance criteria
+- [x] The workflow still validates the intended behavior
+- [x] Runtime is reduced or justified
+- [x] Failure output is easier to understand
+- [x] Required checks still pass
+
+## New Finding: Playwright artifact names do not use run_id
+
+**Severity:** low
+**Priority:** P3
+**Workflow:** `CI`
+**File:** `.github/workflows/ci.yml`
+**Jobs affected:** `test-build`
+**Evidence:**
+- The `Upload Test Results` step saves the artifact generically as `playwright-report`.
+
+### Problem
+Artifacts with the exact same name uploaded by different jobs could cause issues or limit uniqueness of downloads.
+
+### Impact
+- confusing agent output
+
+### Recommended fix
+Add `-${{ github.run_id }}` to the playwright report name.
+
+### Acceptance criteria
+- [x] Artifacts are better organized
