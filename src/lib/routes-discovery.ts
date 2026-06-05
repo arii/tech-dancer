@@ -81,7 +81,7 @@ export function getAllRoutes() {
         path: resolveCanonical(r.path, r),
         lastmod,
         sitemap: r.sitemap !== false,
-        stub: (r as any).stub !== false
+        stub: (r as { stub?: boolean }).stub !== false
       };
     });
 
@@ -103,7 +103,7 @@ export function getAllRoutes() {
   allRoutesRaw.forEach(r => {
     const existing = uniqueRoutesMap.get(r.path);
     if (!existing || r.lastmod > existing.lastmod) {
-      uniqueRoutesMap.set(r.path, { lastmod: r.lastmod, sitemap: r.sitemap, stub: (r as any).stub !== false });
+      uniqueRoutesMap.set(r.path, { lastmod: r.lastmod, sitemap: r.sitemap, stub: (r as { stub?: boolean }).stub !== false });
     }
   });
 
