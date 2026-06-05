@@ -4,3 +4,5 @@ setup-agent.sh
 **/setup-agent.sh
 public/previews/
 tests/
+artifacts/
+
