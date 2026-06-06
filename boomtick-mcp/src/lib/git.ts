@@ -4,7 +4,10 @@ import path from "path";
 import fs from "fs/promises";
 
 export async function createWorktree(branch: string, prNumber: number): Promise<string> {
-  const worktreePath = path.resolve(config.repoPath, `../boomtick-mcp-rescue-${prNumber}`);
+  const safePrNumber = parseInt(prNumber.toString(), 10);
+  if (isNaN(safePrNumber)) throw new Error("Invalid PR number");
+  // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+  const worktreePath = path.resolve(config.repoPath, `../boomtick-mcp-rescue-${safePrNumber}`);
 
   // Clean up if exists
   try {
