@@ -27,7 +27,7 @@ test.describe('Visual Regression Tests', () => {
       // Route-specific stability waits
       if (route.name === 'research') {
         // Wait for portfolio header to be visible
-        await expect(page.getByRole('heading', { name: /DevAI Portfolio/ })).toBeVisible({ timeout: 30000 });
+        await expect(page.getByRole('heading', { name: /DevAI Systems Portfolio/ })).toBeVisible({ timeout: 30000 });
       }
 
       if (route.name === 'preview') {
