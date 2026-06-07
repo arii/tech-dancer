@@ -4,7 +4,9 @@ import path from "path";
 import fs from "fs/promises";
 
 export async function createWorktree(branch: string, prNumber: number): Promise<string> {
-  const worktreePath = path.resolve(config.repoPath, `../boomtick-mcp-rescue-${prNumber}`);
+  const worktreeDir = `boomtick-mcp-rescue-${prNumber}`;
+  // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+  const worktreePath = path.resolve(config.repoPath, '..', worktreeDir);
 
   // Clean up if exists
   try {

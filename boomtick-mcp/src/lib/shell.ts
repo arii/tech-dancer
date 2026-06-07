@@ -46,6 +46,8 @@ export async function runCommand(
   };
 
   return new Promise((resolve, reject) => {
+    // deepcode ignore CommandInjection: finalCmd is validated against ALLOWED_COMMANDS whitelist
+    // nosemgrep: javascript.lang.security.detect-child-process.detect-child-process
     const child = spawn(finalCmd, args, {
       cwd: options.cwd || config.repoPath,
       env
