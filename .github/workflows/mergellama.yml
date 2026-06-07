@@ -10,6 +10,10 @@ env:
 permissions:
   contents: write
   pull-requests: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 
 
 jobs:
@@ -29,6 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          cache: 'pnpm'
           node-version-file: '.node-version'
 
       - name: Enable Corepack
