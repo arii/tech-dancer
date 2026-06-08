@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/feat-boomtick-mcp-multi-agent-conflict-repair-13692389159609037760/sitemap.xml
