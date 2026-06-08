@@ -82,7 +82,14 @@ export class BoomtickMCPServer {
 
     this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
       const name = request.params.name;
-      const promptPath = path.join(config.repoPath, `boomtick-mcp/src/agents/${name}.prompt.md`);
+
+      const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
+      const promptPath = path.resolve(agentsDir, `${name}.prompt.md`);
+
+      if (!promptPath.startsWith(agentsDir + path.sep)) {
+        throw new Error("Path traversal detected");
+      }
+
       try {
         const content = await fs.readFile(promptPath, "utf-8");
         return {
