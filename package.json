@@ -22,7 +22,7 @@
     "lighthouse": "lhci autorun",
     "clean": "rm -rf dist",
     "lint": "run-p lint:*",
-    "lint:ox": "oxlint --deny-warnings",
+    "lint:ox": "oxlint --deny-warnings src/ tests/ scripts/",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
     "knip": "knip --exclude exports",

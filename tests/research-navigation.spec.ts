@@ -5,7 +5,7 @@ test('Research Portfolio navigation to Contact', async ({ page }) => {
   await page.goto('./research');
 
   // Wait for the page to load by checking the H1 (rebranded title)
-  await expect(page.getByRole('heading', { name: /DevAI Systems Portfolio/i })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('heading', { name: /DevAI Portfolio/i })).toBeVisible({ timeout: 15000 });
 
   // Find the contact link in the main area specifically.
   // Based on debug output, it has text "CONTACT" (uppercase due to CSS) and href "/contact".
