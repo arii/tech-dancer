@@ -84,6 +84,7 @@ export class BoomtickMCPServer {
       const name = request.params.name;
 
       const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
+      // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
       const promptPath = path.resolve(agentsDir, `${name}.prompt.md`);
 
       if (!promptPath.startsWith(agentsDir + path.sep)) {

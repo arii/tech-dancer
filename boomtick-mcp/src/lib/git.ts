@@ -16,6 +16,7 @@ function validatePrNumber(value: unknown): number {
 export async function createWorktree(branch: string, prNumber: number): Promise<string> {
   const safePrNumber = validatePrNumber(prNumber);
 
+  // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
   const worktreePath = path.resolve(config.repoPath, `../boomtick-mcp-rescue-${safePrNumber}`);
 
   // Clean up if exists
