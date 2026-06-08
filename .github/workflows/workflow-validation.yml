@@ -31,11 +31,9 @@ jobs:
       - name: Download actionlint
         id: get_actionlint
         run: |
-          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash > download-actionlint.sh
-          bash download-actionlint.sh
-          rm download-actionlint.sh
+          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash
         shell: bash
 
       - name: Lint workflow logic with actionlint
-        run: ${{ steps.get_actionlint.outputs.executable }} -color
+        run: ./actionlint -color
         shell: bash
