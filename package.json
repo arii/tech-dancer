@@ -15,7 +15,7 @@
     "build:analyze": "ANALYZE=true vite build",
     "build:profile": "vite build --profile",
     "prepreview": "node scripts/cleanup-ports.mjs",
-    "preview": "node scripts/serve.mjs",
+    "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test --grep-invert 'visual comparison|Jack & Jill O.Rama'",

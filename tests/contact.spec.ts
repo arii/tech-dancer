@@ -55,15 +55,6 @@ test.describe('Contact Form', () => {
   });
 
   test('should submit form successfully', async ({ page }) => {
-    // Intercept contact API request and mock success response
-    await page.route('**/api/contact', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ success: true }),
-      });
-    });
-
     await page.fill('input[name="name"]', 'John Doe');
     await page.fill('input[name="email"]', 'john@example.com');
     await page.selectOption('select[name="subject"]', 'General Feedback');
