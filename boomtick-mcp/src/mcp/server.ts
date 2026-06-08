@@ -81,7 +81,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
       const name = request.params.name;
 
       const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
@@ -164,7 +164,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request: any) => {
       const uri = request.params.uri;
       if (uri === "repo://package-json") {
         const content = await fs.readFile(path.join(config.repoPath, "package.json"), "utf-8");
@@ -437,7 +437,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
       try {
         switch (request.params.name) {
           case "boomtick.health":

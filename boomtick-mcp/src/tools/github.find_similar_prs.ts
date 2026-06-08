@@ -7,7 +7,7 @@ export const FindSimilarPrsInputSchema = z.object({
   minSharedFiles: z.number().optional().default(1),
 });
 
-export async function findSimilarPrsHandler(args: z.infer<typeof FindSimilarPrsInputSchema>) {
+export async function findSimilarPrsHandler(args: Partial<z.infer<typeof FindSimilarPrsInputSchema>>) {
   const params = FindSimilarPrsInputSchema.parse(args);
 
   // Fetch PRs with their files
@@ -28,7 +28,7 @@ export async function findSimilarPrsHandler(args: z.infer<typeof FindSimilarPrsI
       const pr2 = prs[j];
       const files2 = (pr2.files || []).map((f: any) => f.path);
 
-      const sharedFiles = files2.filter(f => files1.has(f));
+      const sharedFiles = files2.filter((f: string) => files1.has(f));
 
       if (sharedFiles.length >= params.minSharedFiles) {
         const key = [pr1.number, pr2.number].sort().join("-");

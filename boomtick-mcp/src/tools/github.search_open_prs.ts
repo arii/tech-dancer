@@ -9,7 +9,7 @@ export const SearchOpenPrsInputSchema = z.object({
   labels: z.array(z.string()).optional(),
 });
 
-export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInputSchema>) {
+export async function searchOpenPrsHandler(args: Partial<z.infer<typeof SearchOpenPrsInputSchema>>) {
   const params = SearchOpenPrsInputSchema.parse(args);
   const fields = [
     "number",
