@@ -56,7 +56,7 @@ test.describe('Search and Filter URL Persistence', () => {
     const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
     await searchButton.click();
 
-    const searchInput = page.getByPlaceholder(/Search BoomTick/i);
+    const searchInput = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await expect(searchInput).toBeVisible();
     await searchInput.fill('swing');
     await expect(page).toHaveURL(/q=swing/);
@@ -65,7 +65,7 @@ test.describe('Search and Filter URL Persistence', () => {
 
     // The modal should open automatically because 'modal=true' is in the URL
     // No need to click the search button again.
-    const searchInputReload = page.getByPlaceholder(/Search BoomTick/i);
+    const searchInputReload = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await expect(searchInputReload).toBeVisible({ timeout: 35000 });
     await expect(searchInputReload).toHaveValue('swing');
 
