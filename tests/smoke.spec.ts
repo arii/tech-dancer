@@ -22,7 +22,7 @@ async function validateUrlNavigation(page: Page, href: string) {
     }
   } else {
     const response = await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await expect(page.locator('#main-content')).toBeVisible({ timeout: 25000 });
+    await expect(page.locator('main')).toBeVisible({ timeout: 25000 });
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
     }
