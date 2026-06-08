@@ -42,7 +42,7 @@ export async function getPrDiffHandler(args: z.infer<typeof GetPrDiffInputSchema
 
   return {
     prNumber: args.prNumber,
-    files: files.map((f: any) => ({
+    files: files.map((f: unknown) => ({
       path: f.path,
       status: f.status || "modified", // gh pr view --json files doesn't always provide status in same way as API
       additions: f.additions,

@@ -31,7 +31,7 @@ export async function readCiLogsHandler(args: z.infer<typeof ReadCiLogsInputSche
   }
 
   const checks = checksResult.stdout.trim().split("\n").filter(l => l.length > 0).map(l => JSON.parse(l));
-  const failedChecks = checks.filter((c: any) => c.conclusion === "failure");
+  const failedChecks = checks.filter((c: unknown) => c.conclusion === "failure");
 
   const logs: Record<string, string> = {};
 

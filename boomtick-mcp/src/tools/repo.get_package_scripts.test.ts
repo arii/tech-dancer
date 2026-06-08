@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { getPackageScriptsHandler } from "./repo.get_package_scripts.js";
 import fs from "fs/promises";
-import { config } from "../config.js";
 
 vi.mock("fs/promises");
 

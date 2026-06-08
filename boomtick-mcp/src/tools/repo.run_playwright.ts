@@ -18,15 +18,15 @@ export async function runPlaywrightHandler(args: z.infer<typeof RunPlaywrightInp
   try {
     if (results.stdout.includes("{")) {
       const report = JSON.parse(results.stdout.substring(results.stdout.indexOf("{")));
-      failedTests = report.suites.flatMap((s: any) =>
-        s.specs.filter((spec: any) => !spec.ok).map((spec: any) => ({
+      failedTests = report.suites.flatMap((s: unknown) =>
+        s.specs.filter((spec: unknown) => !spec.ok).map((spec: unknown) => ({
           title: spec.title,
           file: spec.file,
           error: spec.tests?.[0]?.results?.[0]?.error?.message || "Unknown error"
         }))
       );
     }
-  } catch (e) {}
+  } catch { /* ignore */ }
 
   return {
     success: results.exitCode === 0,

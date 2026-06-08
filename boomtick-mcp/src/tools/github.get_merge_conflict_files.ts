@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
 import { createWorktree, removeWorktree } from "../lib/git.js";
-import { config } from "../config.js";
 
 export const GetMergeConflictFilesInputSchema = z.object({
   prNumber: z.number(),
@@ -29,11 +28,12 @@ export async function getMergeConflictFilesHandler(args: z.infer<typeof GetMerge
 
   const worktreePath = await createWorktree(`origin/${headRefName}`, args.prNumber);
   let conflictFiles: string[] = [];
-  let commandLog = "";
+
+
 
   try {
     const mergeResult = await runCommand("git", ["merge", "--no-commit", "--no-ff", `origin/${args.baseBranch}`], { cwd: worktreePath });
-    commandLog = mergeResult.stdout + mergeResult.stderr;
+
 
     if (mergeResult.exitCode !== 0) {
       const diffResult = await runCommand("git", ["diff", "--name-only", "--diff-filter=U"], { cwd: worktreePath });
@@ -50,6 +50,5 @@ export async function getMergeConflictFilesHandler(args: z.infer<typeof GetMerge
     baseBranch: args.baseBranch,
     headRef: headRefName,
     conflictFiles,
-    commandLog
-  };
+    };
 }

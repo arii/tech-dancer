@@ -4,7 +4,7 @@ export interface ToolResult extends CallToolResult {
   isError?: boolean;
 }
 
-export function createSuccessResult(data: any): ToolResult {
+export function createSuccessResult(data: unknown): ToolResult {
   return {
     content: [
       {

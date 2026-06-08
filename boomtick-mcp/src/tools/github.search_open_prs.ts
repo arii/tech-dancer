@@ -31,7 +31,7 @@ export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInp
   let prs = JSON.parse(result.stdout);
 
   if (!params.includeDrafts) {
-    prs = prs.filter((pr: any) => !pr.isDraft);
+    prs = prs.filter((pr: unknown) => !pr.isDraft);
   }
 
   return { prs };
