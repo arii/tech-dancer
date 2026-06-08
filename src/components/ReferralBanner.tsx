@@ -11,9 +11,9 @@ interface ReferralBannerProps {
 }
 
 export function ReferralBanner({ layout = 'expanded', className }: ReferralBannerProps) {
-  const isExpanded = layout === 'expanded';
+  const isCompact = layout === 'compact';
 
-  const config = isExpanded ? {
+  const config = isCompact ? {
     heading: PRINTFUL_REFERRAL.HERO_HEADING,
     subheading: PRINTFUL_REFERRAL.HERO_SUBHEADING,
     buttonText: `Claim ${PRINTFUL_REFERRAL.DISCOUNT_AMOUNT} Discount`,
@@ -36,22 +36,22 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
   return (
     <Box
       width="full"
-      padding={isExpanded ? 6 : 8}
+      padding={isCompact ? 6 : 8}
       radius="lg"
       border
       surface={config.surface}
       className={className}
     >
       <Stack
-        direction={isExpanded ? { base: 'col', md: 'row' } : 'col'}
+        direction={isCompact ? { base: 'col', md: 'row' } : 'col'}
         gap={6}
-        align={isExpanded ? 'center' : 'start'}
+        align={isCompact ? 'center' : 'start'}
         justify="between"
       >
         <Stack
-          direction={isExpanded ? 'row' : 'col'}
-          gap={isExpanded ? 4 : 6}
-          align={isExpanded ? 'center' : 'start'}
+          direction={isCompact ? 'row' : 'col'}
+          gap={isCompact ? 4 : 6}
+          align={isCompact ? 'center' : 'start'}
         >
           <Box
             padding={3}
@@ -62,7 +62,7 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
             <Gift className={cn("w-6 h-6", stroke.thick)} />
           </Box>
 
-          <Stack gap={isExpanded ? 1 : 2}>
+          <Stack gap={isCompact ? 1 : 2}>
             <Text
               variant="headline"
               size={config.headingSize}
@@ -84,7 +84,7 @@ export function ReferralBanner({ layout = 'expanded', className }: ReferralBanne
           target="_blank"
           rel="sponsored noopener noreferrer"
           variant="primary"
-          className={cn(!isExpanded && "w-fit")}
+          className={cn(!isCompact && "w-fit")}
         >
           {config.buttonText}
         </Button>
