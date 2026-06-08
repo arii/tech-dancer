@@ -142,10 +142,12 @@ export default defineConfig(({mode}) => {
             }
 
             // 2. SPA fallback: serve index.html for any non-asset path under base.
+            // Exclude paths that already end with a file extension (including .html)
+            // so that static files like previews/index.html are served directly.
             if (
               pathname.startsWith(baseWithSlash) &&
               !pathname.startsWith(`${baseWithSlash}assets/`) &&
-              !pathname.match(/\.(js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
+              !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
             ) {
               req.url = `${baseWithSlash}index.html`;
             }
