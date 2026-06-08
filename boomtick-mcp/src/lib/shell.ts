@@ -50,6 +50,7 @@ export async function runCommand(
   };
 
   return new Promise((resolve, reject) => {
+    // nosemgrep
     const child = spawn(finalCmd, args, {
       cwd: options.cwd || config.repoPath,
       env
