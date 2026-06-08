@@ -41,11 +41,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
   ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
   BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   lint-typecheck:

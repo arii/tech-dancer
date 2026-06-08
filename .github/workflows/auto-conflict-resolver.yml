@@ -1,7 +1,5 @@
 name: 'Auto Conflict Resolver'
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   TARGET: ${{ inputs.target_branch || 'main' }}
   SOURCE: ${{ inputs.source_branch }}
   PR_NUMBER: ${{ inputs.pr_number || github.event.issue.number || '0' }}

@@ -4,11 +4,9 @@ on:
   issue_comment:
     types: [created]
 
-env:
   NODE_ENV: production
   REPO_NAME: ${{ github.event.repository.name }}
   VITE_BASE_PATH: /${{ github.event.repository.name }}/
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   update-snapshots:
