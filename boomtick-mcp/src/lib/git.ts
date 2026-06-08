@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs/promises";
 
 export async function createWorktree(branch: string, prNumber: number): Promise<string> {
-  const worktreePath = path.resolve(config.repoPath, `../boomtick-mcp-rescue-${prNumber}`);
+  const worktreePath = path.resolve(config.repoPath, `../boomtick-mcp-rescue-${String(prNumber).replace(/[^0-9]/g, "")}`);
 
   // Clean up if exists
   try {

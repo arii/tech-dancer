@@ -45,7 +45,10 @@ export async function runCommand(
   };
 
   return new Promise((resolve, reject) => {
-    const child = spawn(finalCmd, args, {
+    const safeCmd = ALLOWED_COMMANDS.includes(finalCmd) ? finalCmd : finalCmd === config.ghPath ? config.ghPath : "";
+    // semgrep-disable-next-line javascript.lang.security.detect-child-process.detect-child-process
+    // nosemgrep
+    const child = spawn(safeCmd, args, {
       cwd: options.cwd || config.repoPath,
       env
     });

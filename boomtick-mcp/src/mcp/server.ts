@@ -82,7 +82,8 @@ export class BoomtickMCPServer {
 
     this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
       const name = request.params.name;
-      const promptPath = path.join(config.repoPath, `boomtick-mcp/src/agents/${name}.prompt.md`);
+      const sanitizedName = name.replace(/[^a-zA-Z0-9-]/g, "");
+      const promptPath = path.join(config.repoPath, `boomtick-mcp/src/agents/${sanitizedName}.prompt.md`);
       try {
         const content = await fs.readFile(promptPath, "utf-8");
         return {
