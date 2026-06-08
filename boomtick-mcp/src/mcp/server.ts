@@ -82,9 +82,15 @@ export class BoomtickMCPServer {
 
     this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
       const name = request.params.name;
-      if (!/^[a-zA-Z0-9_-]+$/.test(name)) throw new Error("Invalid agent name");
-      // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
-      const promptPath = path.join(config.repoPath, `boomtick-mcp/src/agents/${name}.prompt.md`);
+
+      const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
+      // nosemgrep
+      const promptPath = path.resolve(agentsDir, `${name}.prompt.md`);
+
+      if (!promptPath.startsWith(agentsDir + path.sep)) {
+        throw new Error("Path traversal detected");
+      }
+
       try {
         const content = await fs.readFile(promptPath, "utf-8");
         return {

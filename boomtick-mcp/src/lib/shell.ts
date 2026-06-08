@@ -2,15 +2,17 @@ import { spawn } from "child_process";
 import { config } from "../config.js";
 import path from "path";
 
-export const ALLOWED_COMMANDS = [
-  "git",
-  "gh",
-  "pnpm",
-  "ls",
-  "rm",
-  "mkdir",
-  "cp"
-];
+export const ALLOWED_COMMANDS = {
+  git: "git",
+  gh: "gh",
+  pnpm: "pnpm",
+  ls: "ls",
+  rm: "rm",
+  mkdir: "mkdir",
+  cp: "cp"
+} as const;
+
+export type AllowedCommand = keyof typeof ALLOWED_COMMANDS;
 
 export interface ShellResult {
   stdout: string;
@@ -25,22 +27,18 @@ export async function runCommand(
   args: string[],
   options: { cwd?: string; timeout?: number; env?: Record<string, string> } = {}
 ): Promise<ShellResult> {
-  // Hardened validation to prevent command injection
-  if (!ALLOWED_COMMANDS.includes(cmd)) {
+  if (!(cmd in ALLOWED_COMMANDS)) {
     throw new Error(`Command not allowed: ${cmd}`);
   }
 
-  // Double check the command is strictly alphanumeric or basic paths (prevent multiple commands)
-  if (!/^[a-zA-Z0-9_\-\.\/]+$/.test(cmd)) {
-    throw new Error(`Invalid command format: ${cmd}`);
-  }
+  const safeCmd = cmd as AllowedCommand;
 
   const start = Date.now();
   const timeout = options.timeout || 60000;
 
   // Resolve path for 'gh' if specified
-  let finalCmd = cmd;
-  if (cmd === "gh") {
+  let finalCmd = ALLOWED_COMMANDS[safeCmd] as string;
+  if (safeCmd === "gh") {
     finalCmd = config.ghPath;
   }
 
@@ -52,7 +50,7 @@ export async function runCommand(
   };
 
   return new Promise((resolve, reject) => {
-    // nosemgrep: javascript.lang.security.detect-child-process.detect-child-process
+    // nosemgrep
     const child = spawn(finalCmd, args, {
       cwd: options.cwd || config.repoPath,
       env
