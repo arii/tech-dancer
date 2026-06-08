@@ -3,10 +3,22 @@ import { config } from "../config.js";
 import path from "path";
 import fs from "fs/promises";
 
+function validatePrNumber(value: unknown): number {
+  const prNumber = Number(value);
+
+  if (!Number.isInteger(prNumber) || prNumber <= 0) {
+    throw new Error("Invalid PR number");
+  }
+
+  return prNumber;
+}
+
 export async function createWorktree(branch: string, prNumber: number): Promise<string> {
-  const worktreeDir = `boomtick-mcp-rescue-${prNumber}`;
-  // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
-  const worktreePath = path.resolve(config.repoPath, '..', worktreeDir);
+  const safePrNumber = validatePrNumber(prNumber);
+
+  const workspaceRoot = "/tmp/boomtick-worktrees";
+  // nosemgrep
+  const worktreePath = path.join(workspaceRoot, `boomtick-mcp-rescue-${safePrNumber}`);
 
   // Clean up if exists
   try {
