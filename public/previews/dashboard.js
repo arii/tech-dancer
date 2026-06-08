@@ -439,8 +439,17 @@ async function init() {
             grid.before(warning);
         }
 
-        const dataRes = await fetch('./data.json').catch(() => ({ json: () => ({}) }));
-        const metadata = await dataRes.json();
+        const dataUrl = new URL('data.json', window.location.href);
+        const dataRes = await fetch(dataUrl).catch(() => ({ text: () => ('{}'), url: 'fallback' }));
+        const text = await dataRes.text();
+        let metadata = {};
+        try {
+            metadata = JSON.parse(text);
+        } catch (err) {
+            console.error('data.json parse failed');
+            console.error('URL:', dataRes.url);
+            console.error('Response starts with:', text.slice(0, 500));
+        }
 
         const allFoldersRaw = Array.from(new Set(treeData.tree
             .filter(i => i.path.endsWith('/index.html') && !EXCLUDED.some(e => i.path.startsWith(e)) && i.path !== 'index.html' && i.path !== '404.html')
