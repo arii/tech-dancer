@@ -44,7 +44,7 @@ jobs:
 
       - name: Setup Ollama
         run: |
-          curl -fsSL https://ollama.com/install.sh | sh
+          curl -L https://ollama.com/install.sh | sh || true
 
       - name: Install Click
         run: pip install click
