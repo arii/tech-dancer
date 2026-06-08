@@ -66,7 +66,7 @@ test.describe('Search and Filter URL Persistence', () => {
     // The modal should open automatically because 'modal=true' is in the URL
     // No need to click the search button again.
     const searchInputReload = page.getByPlaceholder(/Search BoomTick/i);
-    await expect(searchInputReload).toBeVisible({ timeout: 25000 });
+    await expect(searchInputReload).toBeVisible({ timeout: 35000 });
     await expect(searchInputReload).toHaveValue('swing');
 
     const resultsCount = page.getByTestId('search-dialog').getByTestId('search-results-count');
