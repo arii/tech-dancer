@@ -12,6 +12,7 @@ import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { healthHandler } from "./tools.js";
 import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
+import { findSimilarPrsHandler, FindSimilarPrsInputSchema } from "../tools/github.find_similar_prs.js";
 import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
@@ -147,6 +148,18 @@ export class BoomtickMCPServer {
             mimeType: "application/json",
             description: "Playwright test report for a specific branch.",
           },
+          {
+            uri: "repo://pr-similarity",
+            name: "PR Similarity Report",
+            mimeType: "application/json",
+            description: "Analysis of file overlaps between open pull requests.",
+          },
+          {
+            uri: "repo://pr-files/{number}",
+            name: "PR Changed Files",
+            mimeType: "application/json",
+            description: "The list of changed files for a specific pull request.",
+          },
         ],
       };
     });
@@ -176,7 +189,20 @@ export class BoomtickMCPServer {
         const prNumber = parseInt(uri.split("/").pop() || "");
         const diff = await getPrDiffHandler({ prNumber });
         return {
-          contents: [{ uri, mimeType: "text/plain", text: diff.diffText }],
+          contents: [{ uri, mimeType: "text/plain", text: diff.diffText || "" }],
+        };
+      }
+      if (uri.startsWith("repo://pr-files/")) {
+        const prNumber = parseInt(uri.split("/").pop() || "");
+        const result = await getPrDiffHandler({ prNumber, includeDiff: false });
+        return {
+          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result.files, null, 2) }],
+        };
+      }
+      if (uri === "repo://pr-similarity") {
+        const result = await findSimilarPrsHandler({});
+        return {
+          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }],
         };
       }
       if (uri.startsWith("repo://ci/")) {
@@ -224,8 +250,21 @@ export class BoomtickMCPServer {
               properties: {
                 state: { type: "string", enum: ["open", "closed", "all"] },
                 includeDrafts: { type: "boolean" },
+                includeFiles: { type: "boolean" },
                 maxResults: { type: "number" },
                 labels: { type: "array", items: { type: "string" } },
+              },
+            },
+          },
+          {
+            name: "github.find_similar_prs",
+            description: "Find pull requests that touch the same files.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                state: { type: "string", enum: ["open", "closed", "all"] },
+                maxResults: { type: "number" },
+                minSharedFiles: { type: "number" },
               },
             },
           },
@@ -236,6 +275,7 @@ export class BoomtickMCPServer {
               type: "object",
               properties: {
                 prNumber: { type: "number" },
+                includeDiff: { type: "boolean" },
               },
               required: ["prNumber"],
             },
@@ -404,6 +444,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await healthHandler());
           case "github.search_open_prs":
             return createSuccessResult(await searchOpenPrsHandler(SearchOpenPrsInputSchema.parse(request.params.arguments || {})));
+          case "github.find_similar_prs":
+            return createSuccessResult(await findSimilarPrsHandler(FindSimilarPrsInputSchema.parse(request.params.arguments || {})));
           case "github.get_pr_diff":
             return createSuccessResult(await getPrDiffHandler(GetPrDiffInputSchema.parse(request.params.arguments)));
           case "github.get_merge_conflict_files":
