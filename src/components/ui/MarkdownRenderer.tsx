@@ -1,3 +1,4 @@
+import React from 'react';
 // impeccable-ignore-file
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -39,7 +40,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         components={{
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
-              return <input type="checkbox" defaultChecked={checked} className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer mt-1" {...props} />;
+              return <Box as="input" type="checkbox" defaultChecked={checked} width={4} height={4} marginTop={1} className="rounded border-line focus:ring-accent accent-accent cursor-pointer" {...props} />;
             }
             return <input type={type} defaultChecked={checked} disabled={disabled} {...props} />;
           },
@@ -51,31 +52,42 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             return <a href={href} {...props} rel="noopener noreferrer" target="_blank" />;
           },
           blockquote: ({node: _node, children, ...props}) => {
-            // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
-            const childArray = Array.isArray(children) ? children : [children];
             let label = 'Note';
-            const firstChild = childArray[0];
-            if (firstChild && typeof firstChild === 'object' && 'props' in firstChild) {
-              const pChildren = (firstChild as React.ReactElement).props?.children;
-              const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
-              const firstStrong = pArr.find(
-                (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as React.ReactElement).type === 'strong'
-              ) as React.ReactElement | undefined;
-              if (firstStrong?.props?.children) {
-                const raw = Array.isArray(firstStrong.props.children)
-                  ? firstStrong.props.children.join('')
-                  : String(firstStrong.props.children);
-                label = raw.replace(/:$/, '').trim();
-              }
+
+            const findStrongLabel = (nodes: React.ReactNode): string | null => {
+              let result: string | null = null;
+              React.Children.forEach(nodes, (child) => {
+                if (result) return;
+                if (!React.isValidElement(child)) return;
+
+                if (child.type === 'strong' && child.props.children) {
+                  const raw = Array.isArray(child.props.children)
+                    ? child.props.children.join('')
+                    : String(child.props.children);
+                  result = raw.replace(/:$/, '').trim();
+                  return;
+                }
+
+                if (child.props.children) {
+                  result = findStrongLabel(child.props.children);
+                }
+              });
+              return result;
+            };
+
+            const foundLabel = findStrongLabel(children);
+            if (foundLabel) {
+              label = foundLabel;
             }
+
             return (
               <Box border surface="warning" padding={6} marginY={8} radius="md">
                 <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
                   {label}
                 </Text>
-                <blockquote className="italic font-medium text-text-main" {...props}>
+                <Text as="blockquote" variant="body" weight="font-medium" color="main" className="italic" {...props}>
                   {children}
-                </blockquote>
+                </Text>
               </Box>
             );
           },
@@ -132,9 +144,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             const normalizedSrc = normalizeAsset(src || '');
             return (
               <Box marginY={8} width="full" display="flex" justifyContent="center">
-                <img
+                <Box as="img"
                   src={normalizedSrc}
-                  className="rounded-lg shadow-sm"
+                  radius="lg"
+                  shadow="sm"
                   loading="lazy"
                   alt={alt || "Article illustration"}
                   {...props}
@@ -143,7 +156,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, ...props}) => (
-            <p className="text-text-dim leading-relaxed my-4 text-base" {...props} />
+            <Text as="p" color="dim" marginY={4} className="leading-relaxed text-base" {...props} />
           ),
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
@@ -152,7 +165,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="ol" marginY={4} paddingLeft={6} className="list-decimal space-y-1.5" {...props} />
           ),
           li: ({node: _node, ...props}) => (
-            <Box as="li" className="text-text-dim leading-relaxed" {...props} />
+            <Text as="li" color="dim" className="leading-relaxed" {...props} />
           ),
           hr: ({node: _node, ...props}) => (
             <Box marginY={10} height={0} className="border-t border-line/40" {...props} />
@@ -203,12 +216,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             // Inline code
             return (
-              <code
-                className="px-1.5 py-0.5 rounded text-[0.8em] font-mono bg-surface border border-line text-accent"
+              <Box
+                as="code"
+                paddingX={1}
+                paddingY={0.5}
+                radius="sm"
+                surface="surface"
+                border
+                color="accent"
+                className="text-[0.8em] font-mono"
                 {...props}
               >
                 {children}
-              </code>
+              </Box>
             );
           },
           notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
