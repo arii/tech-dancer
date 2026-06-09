@@ -94,3 +94,8 @@ dev-tools/logs/reviews/*.md
 .agent/workflows/ai-slop-audit-*.md
 .venv
 dev-tools/logs/audits/
+pr_data/
+open_prs.json
+pr_numbers.txt
+init_review_status.py
+gather_pr_data.py
