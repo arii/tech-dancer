@@ -27,8 +27,6 @@ export default function ResearchAnalytics() {
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
-  const portfolioGridItems = [...engineeringToolItems, ...studyItems];
-
   const skills = [
     { name: 'React', icon: Layout },
     { name: 'Vite', icon: Zap },
@@ -279,9 +277,12 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-
-      </Stack>
-
+        {studies.length > 0 && (
+          <Stack gap={8}>
+            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+              <Text variant="headline" size="2xl" weight="font-black">Research & Analysis</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} ARTICLES</Text>
+            </Box>
             <Grid cols={{ base: 1, md: 2 }} gap={8}>
               {studies.map((study) => (
                 <Stack
