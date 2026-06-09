@@ -65,12 +65,12 @@ export default function Merch() {
         jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap={{ base: 7, md: 9 }} width="full" maxWidth="screen-xl">
+      <Stack gap={{ base: 5, md: 6 }} width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
-          paddingBottom={6}
+          paddingBottom={4}
           cta={
             <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
               <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
@@ -84,11 +84,11 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={4}>
+        <Stack gap={3}>
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
-          <Box border="b" paddingBottom={4} overflowX="auto">
+          <Box border="b" paddingBottom={2} overflowX="auto">
             <Stack direction="row" gap={2} padding={1} minWidth="max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton
@@ -104,9 +104,9 @@ export default function Merch() {
 
         {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (
-          <Stack gap={12}>
+          <Stack gap={8}>
             {sections.map((section) => (
-              <Stack key={section.id} gap={6}>
+              <Stack key={section.id} gap={5}>
                 <Stack gap={1}>
                   <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
                     {section.title}

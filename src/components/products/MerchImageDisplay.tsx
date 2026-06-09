@@ -27,12 +27,11 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         alt={image.alt}
         width="full"
         height="full"
-        padding={{ base: 4, md: 8, lg: 12, xl: 16 }}
         loading={loading ?? 'lazy'}
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
-        className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
+        className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
       />
     </Box>
   );
@@ -94,7 +93,8 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
+      aspect="3/4"
+      maxHeight={{ base: 80, lg: 96 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
