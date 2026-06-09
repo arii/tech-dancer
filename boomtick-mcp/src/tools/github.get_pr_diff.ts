@@ -6,14 +6,13 @@ export const GetPrDiffInputSchema = z.object({
   includeDiff: z.boolean().optional().default(true),
 });
 
-export async function getPrDiffHandler(args: Partial<z.infer<typeof GetPrDiffInputSchema>>) {
+export async function getPrDiffHandler(args: z.input<typeof GetPrDiffInputSchema>) {
   const params = GetPrDiffInputSchema.parse(args);
-
   // Get files list
   const filesResult = await runCommand("gh", [
     "pr",
     "view",
-    params.prNumber.toString(),
+    args.prNumber.toString(),
     "--json", "files"
   ]);
 

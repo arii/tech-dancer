@@ -13,6 +13,7 @@ import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { healthHandler } from "./tools.js";
 import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
 import { findSimilarPrsHandler, FindSimilarPrsInputSchema } from "../tools/github.find_similar_prs.js";
+import { triagePrHandler, TriagePrInputSchema } from "../tools/github.triage_pr.js";
 import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
@@ -81,7 +82,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
       const name = request.params.name;
 
       const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
@@ -164,7 +165,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
       const uri = request.params.uri;
       if (uri === "repo://package-json") {
         const content = await fs.readFile(path.join(config.repoPath, "package.json"), "utf-8");
@@ -236,7 +237,7 @@ export class BoomtickMCPServer {
         tools: [
           {
             name: "boomtick.health",
-            description: "MCP server health/config check.",
+            description: "MCP server health check.",
             inputSchema: { type: "object", properties: {} },
           },
           {
@@ -251,6 +252,18 @@ export class BoomtickMCPServer {
                 maxResults: { type: "number" },
                 labels: { type: "array", items: { type: "string" } },
               },
+            },
+          },
+          {
+            name: "github.triage_pr",
+            description: "Deterministic PR triage (fetch, analyze, comment).",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prNumber: { type: "number" },
+                detailed: { type: "boolean" },
+              },
+              required: ["prNumber"],
             },
           },
           {
@@ -428,7 +441,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       try {
         switch (request.params.name) {
           case "boomtick.health":
@@ -437,6 +450,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await searchOpenPrsHandler(SearchOpenPrsInputSchema.parse(request.params.arguments || {})));
           case "github.find_similar_prs":
             return createSuccessResult(await findSimilarPrsHandler(FindSimilarPrsInputSchema.parse(request.params.arguments || {})));
+          case "github.triage_pr":
+            return createSuccessResult(await triagePrHandler(TriagePrInputSchema.parse(request.params.arguments)));
           case "github.get_pr_diff":
             return createSuccessResult(await getPrDiffHandler(GetPrDiffInputSchema.parse(request.params.arguments)));
           case "github.get_merge_conflict_files":

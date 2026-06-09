@@ -7,10 +7,9 @@ export const FindSimilarPrsInputSchema = z.object({
   minSharedFiles: z.number().optional().default(1),
 });
 
-export async function findSimilarPrsHandler(args: Partial<z.infer<typeof FindSimilarPrsInputSchema>>) {
+export async function findSimilarPrsHandler(args: z.input<typeof FindSimilarPrsInputSchema>) {
   const params = FindSimilarPrsInputSchema.parse(args);
 
-  // Fetch PRs with their files
   const { prs } = await searchOpenPrsHandler({
     state: params.state,
     maxResults: params.maxResults,
@@ -18,43 +17,23 @@ export async function findSimilarPrsHandler(args: Partial<z.infer<typeof FindSim
     includeDrafts: true
   });
 
-  const similarityMap: Record<string, { pr1: any, pr2: any, sharedFiles: string[] }> = {};
-
+  const results: any[] = [];
   for (let i = 0; i < prs.length; i++) {
-    const pr1 = prs[i];
-    const files1 = new Set((pr1.files || []).map((f: any) => f.path));
-
+    const f1 = new Set((prs[i].files || []).map((f: any) => f.path));
     for (let j = i + 1; j < prs.length; j++) {
-      const pr2 = prs[j];
-      const files2 = (pr2.files || []).map((f: any) => f.path);
-
-      const sharedFiles = files2.filter((f: string) => files1.has(f));
-
-      if (sharedFiles.length >= params.minSharedFiles) {
-        const key = [pr1.number, pr2.number].sort().join("-");
-        similarityMap[key] = {
-          pr1: {
-            number: pr1.number,
-            title: pr1.title,
-            url: pr1.url,
-            author: pr1.author
-          },
-          pr2: {
-            number: pr2.number,
-            title: pr2.title,
-            url: pr2.url,
-            author: pr2.author
-          },
-          sharedFiles
-        };
+      const shared = (prs[j].files || []).map((f: any) => f.path).filter((f: string) => f1.has(f));
+      if (shared.length >= params.minSharedFiles) {
+        results.push({
+          pr1: { number: prs[i].number, title: prs[i].title, url: prs[i].url },
+          pr2: { number: prs[j].number, title: prs[j].title, url: prs[j].url },
+          sharedFiles: shared
+        });
       }
     }
   }
 
-  const results = Object.values(similarityMap).sort((a, b) => b.sharedFiles.length - a.sharedFiles.length);
-
   return {
     count: results.length,
-    similarPrs: results
+    similarPrs: results.sort((a, b) => b.sharedFiles.length - a.sharedFiles.length)
   };
 }

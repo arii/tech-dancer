@@ -9,25 +9,10 @@ export const SearchOpenPrsInputSchema = z.object({
   labels: z.array(z.string()).optional(),
 });
 
-export async function searchOpenPrsHandler(args: Partial<z.infer<typeof SearchOpenPrsInputSchema>>) {
+export async function searchOpenPrsHandler(args: z.input<typeof SearchOpenPrsInputSchema>) {
   const params = SearchOpenPrsInputSchema.parse(args);
-  const fields = [
-    "number",
-    "title",
-    "author",
-    "headRefName",
-    "baseRefName",
-    "isDraft",
-    "mergeStateStatus",
-    "reviewDecision",
-    "statusCheckRollup",
-    "updatedAt",
-    "url"
-  ];
-
-  if (params.includeFiles) {
-    fields.push("files");
-  }
+  const fields = ["number", "title", "author", "headRefName", "baseRefName", "isDraft", "mergeStateStatus", "reviewDecision", "statusCheckRollup", "updatedAt", "url"];
+  if (params.includeFiles) fields.push("files");
 
   const ghArgs = [
     "pr",
