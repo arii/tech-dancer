@@ -1,7 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
-import { Search, Activity, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -28,8 +27,6 @@ export default function ResearchAnalytics() {
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-
-  const portfolioGridItems = [...engineeringToolItems, ...studyItems];
 
   const skills = [
     { name: 'React', icon: Layout },
@@ -270,8 +267,12 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-
-      </Stack>
+        {studies.length > 0 && (
+          <Stack gap={8} id="articles">
+            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
+            </Box>
 
             <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={12}>
               {studies.map((study) => (

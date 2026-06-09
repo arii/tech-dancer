@@ -162,4 +162,4 @@ export interface Event {
   relatedEvents?: string[];
 }
 
-export type ContentItem = Post | Resource | Study | Event | (Study & { type: 'tool' });
+export type ContentItem = Post | Resource | Study | Event;
