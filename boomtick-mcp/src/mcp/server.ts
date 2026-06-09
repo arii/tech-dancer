@@ -18,21 +18,16 @@ import { repairPrepareHandler, RepairPrepareInputSchema } from "../tools/github.
 import { repairFinalizeHandler, RepairFinalizeInputSchema } from "../tools/github.repair_finalize.js";
 import { getContextHandler, GetContextInputSchema } from "../tools/repo.get_context.js";
 import { verifyRepairHandler, VerifyRepairInputSchema } from "../tools/repo.verify_repair.js";
-import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
-import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
-import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
-import { searchOpenPrsHandler } from "../tools/github.search_open_prs.js";
-import { getPrDiffHandler } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
 import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
-import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
-import { getRouteMapHandler } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
+import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
+import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
+import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
 import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
-import { openReplacementPrHandler } from "../tools/github.open_replacement_pr.js";
-import { commentTriageSummaryHandler } from "../tools/github.comment_triage_summary.js";
+import { getPrDiff } from "../lib/gh.js";
 import fs from "fs/promises";
 import path from "path";
 
@@ -87,7 +82,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
       const name = request.params.name;
 
       const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
@@ -170,7 +165,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request: any) => {
       const uri = request.params.uri;
       if (uri === "repo://package-json") {
         const content = await fs.readFile(path.join(config.repoPath, "package.json"), "utf-8");
@@ -179,9 +174,9 @@ export class BoomtickMCPServer {
         };
       }
       if (uri === "repo://routes") {
-        const routeMap = await getRouteMapHandler();
+        const result = await getContextHandler();
         return {
-          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(routeMap, null, 2) }],
+          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result.routeMap, null, 2) }],
         };
       }
       if (uri === "repo://design-tokens") {
@@ -193,14 +188,14 @@ export class BoomtickMCPServer {
       }
       if (uri.startsWith("repo://diff/")) {
         const prNumber = parseInt(uri.split("/").pop() || "");
-        const diff = await getPrDiffHandler({ prNumber });
+        const diff = await getPrDiff({ prNumber });
         return {
           contents: [{ uri, mimeType: "text/plain", text: diff.diffText || "" }],
         };
       }
       if (uri.startsWith("repo://pr-files/")) {
         const prNumber = parseInt(uri.split("/").pop() || "");
-        const result = await getPrDiffHandler({ prNumber, includeDiff: false });
+        const result = await getPrDiff({ prNumber, includeDiff: false });
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result.files, null, 2) }],
         };
@@ -380,10 +375,6 @@ export class BoomtickMCPServer {
             return createSuccessResult(await checkoutBranchHandler(CheckoutBranchInputSchema.parse(request.params.arguments)));
           case "repo.get_changed_files":
             return createSuccessResult(await getChangedFilesHandler(GetChangedFilesInputSchema.parse(request.params.arguments || {})));
-          case "repo.get_package_scripts":
-            return createSuccessResult(await getPackageScriptsHandler());
-          case "repo.get_route_map":
-            return createSuccessResult(await getRouteMapHandler());
           case "repo.read_ci_logs":
             return createSuccessResult(await readCiLogsHandler(ReadCiLogsInputSchema.parse(request.params.arguments)));
           case "repo.create_repair_branch":

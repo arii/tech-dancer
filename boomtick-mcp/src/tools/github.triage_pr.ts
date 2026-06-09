@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { getPrDiffHandler } from "./github.get_pr_diff.js";
-import { commentTriageSummaryHandler } from "./github.comment_triage_summary.js";
+import { getPrDiff, commentPr } from "../lib/gh.js";
 
 export const TriagePrInputSchema = z.object({
   prNumber: z.number(),
@@ -10,13 +9,13 @@ export const TriagePrInputSchema = z.object({
 export async function triagePrHandler(args: z.input<typeof TriagePrInputSchema>) {
   const params = TriagePrInputSchema.parse(args);
 
-  // 1. Fetch metadata and files in one go (server-side aggregation)
-  const prInfo = await getPrDiffHandler({
+  // 1. Fetch metadata and files
+  const prInfo = await getPrDiff({
     prNumber: params.prNumber,
     includeDiff: params.detailed
   });
 
-  // 2. Deterministic analysis: Identify potential bottlenecks or risks
+  // 2. Deterministic analysis
   const highRiskFiles = prInfo.files
     .filter((f: any) => f.path.includes("src/layouts") || f.path.includes("src/components"))
     .map((f: any) => f.path);
@@ -31,7 +30,7 @@ export async function triagePrHandler(args: z.input<typeof TriagePrInputSchema>)
 
 Automated triage complete. Ready for ${status === "HIGH_RISK" ? "senior review" : "standard repair"}.`;
 
-  await commentTriageSummaryHandler({
+  await commentPr({
     prNumber: params.prNumber,
     body: body
   });

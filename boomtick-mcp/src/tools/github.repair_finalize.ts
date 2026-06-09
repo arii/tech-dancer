@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { commitPatchHandler } from "./repo.commit_patch.js";
 import { verifyRepairHandler } from "./repo.verify_repair.js";
-import { openReplacementPrHandler } from "./github.open_replacement_pr.js";
-import { commentTriageSummaryHandler } from "./github.comment_triage_summary.js";
+import { createPr, commentPr } from "../lib/gh.js";
+import { runCommand } from "../lib/shell.js";
 
 export const RepairFinalizeInputSchema = z.object({
   prNumber: z.number(),
@@ -27,26 +27,35 @@ export async function repairFinalizeHandler(args: z.input<typeof RepairFinalizeI
   // 2. Verify
   const verification = await verifyRepairHandler({ worktreePath: params.worktreePath });
 
-  // 3. Open replacement PR
-  const pr = await openReplacementPrHandler({
-    originalPrNumber: params.prNumber,
-    repairBranch: params.repairBranch,
-    baseBranch: "main", // Assuming main for repairs
-    title: `fix: conflict repair for #${params.prNumber}`,
-    body: `Automated repair for PR #${params.prNumber}.\n\nVerification Status: ${verification.status}`,
-    pushMode: params.pushMode,
-    draft: false
-  });
+  if (params.pushMode) {
+    // 3. Push branch
+    await runCommand("git", ["push", "origin", params.repairBranch], { cwd: params.worktreePath });
 
-  // 4. Comment on original PR
-  await commentTriageSummaryHandler({
-    prNumber: params.prNumber,
-    body: `🔧 Repair complete. Replacement PR: ${pr.url}`
-  });
+    // 4. Open replacement PR
+    const url = await createPr({
+      baseBranch: "main",
+      repairBranch: params.repairBranch,
+      title: `fix: conflict repair for #${params.prNumber}`,
+      body: `Automated repair for PR #${params.prNumber}.\n\nVerification Status: ${verification.status}`,
+      draft: false,
+      worktreePath: params.worktreePath
+    });
+
+    // 5. Comment on original PR
+    await commentPr({
+      prNumber: params.prNumber,
+      body: `🔧 Repair complete. Replacement PR: ${url}`
+    });
+
+    return {
+      status: "SUCCESS",
+      replacementPrUrl: url,
+      verification
+    };
+  }
 
   return {
-    status: "SUCCESS",
-    replacementPrUrl: pr.url,
+    status: "DRY_RUN",
     verification
   };
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { searchOpenPrsHandler } from "./github.search_open_prs.js";
+import { listPrs } from "../lib/gh.js";
 
 export const FindSimilarPrsInputSchema = z.object({
   state: z.enum(["open", "closed", "all"]).optional().default("open"),
@@ -10,7 +10,7 @@ export const FindSimilarPrsInputSchema = z.object({
 export async function findSimilarPrsHandler(args: z.input<typeof FindSimilarPrsInputSchema>) {
   const params = FindSimilarPrsInputSchema.parse(args);
 
-  const { prs } = await searchOpenPrsHandler({
+  const prs = await listPrs({
     state: params.state,
     maxResults: params.maxResults,
     includeFiles: true,

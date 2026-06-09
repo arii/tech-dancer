@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createRepairBranchHandler } from "./repo.create_repair_branch.js";
 import { checkoutBranchHandler } from "./github.checkout_branch.js";
-import { getPrDiffHandler } from "./github.get_pr_diff.js";
+import { getPrDiff } from "../lib/gh.js";
 import { readCiLogsHandler } from "./repo.read_ci_logs.js";
 import { getChangedFilesHandler } from "./repo.get_changed_files.js";
 
@@ -26,7 +26,7 @@ export async function repairPrepareHandler(args: z.input<typeof RepairPrepareInp
 
   // 3. Gather PR details
   const [diff, files, logs] = await Promise.all([
-    getPrDiffHandler({ prNumber: params.prNumber }),
+    getPrDiff({ prNumber: params.prNumber }),
     getChangedFilesHandler({ head: branchInfo.repairBranch, base: "main" }),
     readCiLogsHandler({ prNumber: params.prNumber })
   ]);

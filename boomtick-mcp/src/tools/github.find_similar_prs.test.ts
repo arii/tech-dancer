@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
 import { findSimilarPrsHandler } from "./github.find_similar_prs.js";
-import * as searchPrs from "./github.search_open_prs.js";
+import * as gh from "../lib/gh.js";
 
-vi.mock("./github.search_open_prs.js", () => ({
-  searchOpenPrsHandler: vi.fn()
+vi.mock("../lib/gh.js", () => ({
+  listPrs: vi.fn()
 }));
 
 describe("github.find_similar_prs", () => {
@@ -25,7 +25,7 @@ describe("github.find_similar_prs", () => {
       }
     ];
 
-    vi.mocked(searchPrs.searchOpenPrsHandler).mockResolvedValue({ prs: mockPrs } as any);
+    vi.mocked(gh.listPrs).mockResolvedValue(mockPrs as any);
 
     const result = await findSimilarPrsHandler({ state: "open", maxResults: 10, minSharedFiles: 1 });
 
