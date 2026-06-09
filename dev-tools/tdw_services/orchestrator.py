@@ -895,7 +895,7 @@ class StructureAnalyzer:
         matched = False
         pattern = rule.get("pattern", "")
         # A simple heuristic: if it looks like a regex or has spaces, treat as content search
-        is_filename_pattern = not ("*" in pattern or " " in pattern or "\" in pattern or "|" in pattern or "^" in pattern)
+        is_filename_pattern = not ("*" in pattern or " " in pattern or "\\" in pattern or "|" in pattern or "^" in pattern)
 
         for fp in self.walk_files(base):
             if is_filename_pattern and fp.endswith(pattern):
