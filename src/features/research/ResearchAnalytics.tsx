@@ -1,6 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { SEO } from '@/components/SEO';
+import { NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { Search, Activity, Cpu, LucideIcon, ExternalLink, Github, Globe, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket, ArrowRight, FileText } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -19,7 +18,6 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   const flagshipTools = tools.filter(t => t.isFlagship);
@@ -43,11 +41,6 @@ export default function ResearchAnalytics() {
 
   return (
     <Box as="section">
-      <SEO
-        title="DevAI Portfolio"
-        description="DevAI portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
-        keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
-      />
       <Stack gap={4}>
         <Stack gap={2}>
           <PageHeader
@@ -226,8 +219,8 @@ export default function ResearchAnalytics() {
             {engineeringTools.map((tool) => (
               <Stack
                 key={tool.id}
-                as="button"
-                onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
+                as="a"
+                href={tool.canonicalPath || `/research/${tool.id}`}
                 padding={6}
                 paddingBottom={10}
                 gap={4}
@@ -290,7 +283,8 @@ export default function ResearchAnalytics() {
                   key={study.slug}
                   padding={8}
                   gap={4}
-                  onClick={() => navigate(`/research/${study.slug}`)}
+                  as="a"
+                  href={`/research/${study.slug}`}
                   className={cardVariants({ interactive: true })}
                 >
                   <Box display="flex" justify="between" align="center">
