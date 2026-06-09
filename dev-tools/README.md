@@ -86,7 +86,14 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
   - `python3 dev-tools/td_cli.py antigravity repair --worktree`
 
 > [!NOTE]
-> Jules operates on a **distinct architectural paradigm** from standard stateless LLM tools (like Copilot or Gemini). Jules is a **stateful, macro-agent** that autonomously executes complex, multi-file engineering tasks, self-corrects based on CI feedback, and **always submits its own Pull Request** upon completion. Because of its autonomy, it requires highly precise, deterministic instructions passed to the session.
+> **Agent Sessions vs. Local LLMs**
+>
+> *   **Agent Sessions (Jules)**: Jules operates on a **distinct architectural paradigm** from standard stateless LLM tools. Jules is a **stateful, macro-agent** that autonomously executes complex, multi-file engineering tasks, self-corrects based on CI feedback, and **always submits its own Pull Request** upon completion. Because of its autonomy, it requires highly precise, deterministic instructions passed to the session.
+> *   **Local LLM Workflows (Copilot, AGY, Ollama)**: These are typically stateless, interactive assistants used in the immediate environment for code generation, local PR reviews, or chatting about the codebase. They act as assistants rather than autonomous engineers.
+>
+> **When to use which:**
+> *   Use **Local LLMs** for real-time assistance, answering questions about the codebase, local debugging, or quick local PR reviews.
+> *   Use **Agent Sessions (Jules)** for large, autonomous engineering tasks that require modifying multiple files, running tests iteratively, and pushing independent PRs.
 
 #### 3) Ollama Local Review Workflows
 - Optional local runtime vars:
