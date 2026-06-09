@@ -29,7 +29,7 @@ const MIME_TYPES = {
   '.woff2': 'font/woff2'
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.statusCode = 405;
     res.end('Method Not Allowed');
@@ -47,15 +47,16 @@ const server = http.createServer((req, res) => {
   let filePath = path.join(DIST_DIR, safePath);
 
   try {
-    const stat = fs.statSync(filePath);
+    const stat = await fs.promises.stat(filePath);
     if (stat.isDirectory()) {
       filePath = path.join(filePath, 'index.html');
     }
+    await fs.promises.access(filePath, fs.constants.F_OK);
+    const finalStat = await fs.promises.stat(filePath);
+    if (!finalStat.isFile()) {
+        filePath = path.join(DIST_DIR, 'index.html');
+    }
   } catch {
-    filePath = path.join(DIST_DIR, 'index.html');
-  }
-
-  if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     filePath = path.join(DIST_DIR, 'index.html');
   }
 

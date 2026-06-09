@@ -24,7 +24,7 @@
           l.replace(
             l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
             basePath + '?/' + routePath +
-            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            (l.search ? '&' + encodeURIComponent(l.search.slice(1)) : '') +
             l.hash
           );
         }
