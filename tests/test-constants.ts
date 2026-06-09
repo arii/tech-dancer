@@ -8,5 +8,4 @@ export const IGNORED_ERROR_PATTERNS = [
   /chrome-extension/,
   /Failed to load resource: net::ERR_BLOCKED_BY_CLIENT/, // Common adblocker/extension interference
   /Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin/, // External media with restrictive CORP/COEP headers
-  /Failed to load WCS data: Error: Invalid Parquet signature/, // Ignore Parquet errors in CI/E2E if LFS is not initialized
 ];
