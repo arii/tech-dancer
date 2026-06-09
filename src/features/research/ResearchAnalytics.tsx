@@ -12,7 +12,7 @@ import { cardVariants } from '@/lib/variants';
 import { ResearchTool, ResearchCTA } from '@/config/research-tools';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
-  if (tool.category.includes('DevAI')) return Cpu;
+  if (tool.category.includes('Engineering')) return Cpu;
   if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
   if (tool.id.includes('hrm')) return Globe;
   if (tool.id.includes('boomtick')) return Globe;
@@ -251,15 +251,15 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Systems Portfolio"
-        description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
-        keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
+        title="Systems Portfolio"
+        description="Engineering systems portfolio by Ariel Anders. High-fidelity automation featuring GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
+        keywords="Engineering, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
       <Stack gap={8}>
         <Stack gap={4}>
           <PageHeader
             label="HIRE_ME"
-            title="DevAI Systems Portfolio"
+            title="Systems Portfolio"
             as="h1"
             paddingBottom={0}
             border="none"
@@ -294,7 +294,7 @@ export default function ResearchAnalytics() {
 
         <Stack gap={8} marginTop={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>

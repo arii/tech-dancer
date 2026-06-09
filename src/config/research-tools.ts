@@ -47,17 +47,17 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'repo-auditor-ai',
     title: 'RepoAuditor AI',
-    subtitle: 'DevAI Workflow Console',
+    subtitle: 'Workflow Console',
     description: 'A workflow console for analyzing pull requests, reviewing code quality, checking CI failures, identifying risky changes, and generating structured agent instructions.',
-    category: 'DevAI Tooling',
+    category: 'Tooling',
     status: 'Active',
     tags: ['GitHub API', 'LLM-assisted review', 'Python tooling', 'CI diagnostics', 'Prompt generation', 'Workflow state management'],
     isFlagship: true,
     image: '/assets/research/repo-auditor-ai.png',
-    proves: ['DevAI orchestration', 'GitHub workflow automation', 'PR review systems', 'Prompt pipelines', 'Repo-aware tooling'],
+    proves: ['Orchestration', 'GitHub workflow automation', 'PR review systems', 'Prompt pipelines', 'Repo-aware tooling'],
     problem: 'Inefficient manual PR reviews and difficulty tracking CI health across multiple repositories.',
     solution: 'A workflow console for analyzing pull requests, reviewing code quality, checking CI failures, and generating structured agent instructions.',
-    outcome: 'Scalable DevAI orchestration that reduces review friction and provides high-precision repo-aware context for agentic workflows.',
+    outcome: 'Scalable Orchestration that reduces review friction and provides high-precision repo-aware context for agentic workflows.',
     ctas: [
       { label: 'Read case study', url: '/research/repo-auditor-case-study', variant: 'primary' },
       { label: 'View repo', url: 'https://github.com/arii/hrm-project-management', isExternal: true, variant: 'outline' },
@@ -88,7 +88,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     title: 'GitOps Code Review Agent',
     subtitle: 'Automated Local PR Auditing',
     description: 'A local code review system that automates static analysis and codebase policy enforcement.',
-    category: 'DevAI System',
+    category: 'System',
     status: 'Active',
     tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
     canonicalPath: '/research/gitops-pr-reviewer'
@@ -98,7 +98,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     title: 'Blast-Radius Analyzer',
     subtitle: 'Static Workspace Dependency Checker',
     description: 'A static analysis tool that calculates the scope of code changes across a workspace, mapping dependencies to provide precise context.',
-    category: 'DevAI System',
+    category: 'System',
     status: 'Active',
     tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
     canonicalPath: '/research/scope-blast-radius'
@@ -106,7 +106,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'ux-auditor',
     title: 'Visual Regression & UX Auditor',
-    subtitle: 'Perception Telemetry System',
+    subtitle: 'Visual Regression System',
     description: 'A visual regression pipeline that maps DOM shifts using automated Playwright workflows to provide telemetry for frontend debugging.',
     category: 'Perception Debugging',
     status: 'Active',
