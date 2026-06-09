@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>BoomTick</title>
+    <title>Tech-Dancer // Redirecting...</title>
     <script type="text/javascript">
       // SPA redirect for GitHub Pages.
       // This script handles redirects for both the main deployment (/tech-dancer/)
@@ -10,15 +10,21 @@
       // It probes the path hierarchy to find the deepest index.html.
       (function () {
         var l = window.location;
+        
+        // Prevent infinite redirect loops
+        if (l.search.includes('?/')) {
+          return;
+        }
+        
         var pathParts = l.pathname.split('/').filter(function (p) { return p !== ''; });
 
         function redirect(baseDepth) {
           var basePath = '/' + pathParts.slice(0, baseDepth).join('/') + '/';
-          var routePath = encodeURIComponent(pathParts.slice(baseDepth).join('/'));
+          var routePath = pathParts.slice(baseDepth).join('/').replace(/&/g, '~and~');
           l.replace(
             l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
             basePath + '?/' + routePath +
-            (l.search ? '&' + encodeURIComponent(l.search.slice(1)) : '') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
             l.hash
           );
         }

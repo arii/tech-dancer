@@ -99,9 +99,6 @@ export function getAllRoutes() {
   const allRoutesRaw = [...allStaticRoutes, ...toolRoutesMapped, ...contentRoutesMapped];
 
   // Deduplicate routes to ensure each path is only listed once, prioritizing the one with the most recent lastmod if duplicates exist
-  // The `stub` property indicates whether a dummy `index.html` file (a SPA stub) should be generated for this route
-  // during the build process to support direct navigation without 404ing on static hosts like GitHub pages.
-  // It defaults to true for most paths, but can be disabled.
   const uniqueRoutesMap = new Map<string, { lastmod: string, sitemap: boolean, stub?: boolean }>();
   allRoutesRaw.forEach(r => {
     const existing = uniqueRoutesMap.get(r.path);
