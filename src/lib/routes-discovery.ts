@@ -99,7 +99,7 @@ export function getAllRoutes() {
   const allRoutesRaw = [...allStaticRoutes, ...toolRoutesMapped, ...contentRoutesMapped];
 
   // Deduplicate routes to ensure each path is only listed once, prioritizing the one with the most recent lastmod if duplicates exist
-  const uniqueRoutesMap = new Map<string, { lastmod: string, sitemap: boolean }>();
+  const uniqueRoutesMap = new Map<string, { lastmod: string, sitemap: boolean, stub?: boolean }>();
   allRoutesRaw.forEach(r => {
     const existing = uniqueRoutesMap.get(r.path);
     if (!existing || r.lastmod > existing.lastmod) {
