@@ -58,8 +58,9 @@ const getBasename = (): string => {
       const segment = segments[i];
       const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(segment);
       const isIndexHtml = segment === 'index.html';
+      const isStaticPath = ['previews', 'assets', 'public', 'dist'].includes(segment);
 
-      if (isStandardRoute || isIndexHtml) {
+      if (isStandardRoute || isIndexHtml || isStaticPath) {
         break;
       }
       lastBaseSegmentIndex = i;
@@ -82,8 +83,13 @@ if (redirect) {
   window.history.replaceState(null, '', '/tech-dancer' + redirect);
 }
 
+// Clean trailing slashes from basename (except for root '/')
+const cleanBasename = (base: string): string => {
+  return base === '/' ? '/' : base.replace(/\/$/, '');
+};
+
 const router = createBrowserRouter(routes, {
-  basename: getBasename(),
+  basename: cleanBasename(getBasename()),
   future: {
     v7_startTransition: true,
     v7_relativeSplatPath: true,

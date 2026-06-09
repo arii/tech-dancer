@@ -98,15 +98,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     concurrency:
-      # Use a global concurrency group for all gh-pages writes to prevent conflicts
-      # and ensure sequential deployment across all branches.
-      #
-      # NOTE: This ensures only one deployment script runs at a time. However,
-      # pushing to 'gh-pages' triggers an internal 'pages build and deployment'
-      # workflow by GitHub. Those internal runs may still show as 'Cancelled' if
-      # multiple deployments are queued here, as GitHub prefers the latest push.
-      group: gh-pages-deploy
-      cancel-in-progress: false
+      # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v4

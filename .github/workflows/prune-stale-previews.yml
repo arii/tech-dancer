@@ -5,7 +5,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 concurrency:
-  group: gh-pages-deploy
+  group: prune-stale-previews
   cancel-in-progress: false
 
 

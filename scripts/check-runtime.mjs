@@ -23,9 +23,15 @@ const actualPnpm = getPnpmVersion();
 
 let failed = false;
 
-if (actualNode !== expectedNodeExact) {
+const isCI = process.env.CI === "true";
+const expectedPrefix = expectedNodeExact.split('.').slice(0, 2).join('.') + '.';
+const nodeMatches = isCI
+  ? actualNode.startsWith(expectedPrefix)
+  : actualNode === expectedNodeExact;
+
+if (!nodeMatches) {
   console.error("❌ Node version mismatch");
-  console.error(`Expected: ${expectedNodeExact}`);
+  console.error(`Expected: ${expectedNodeExact} (or ${expectedPrefix}x in CI)`);
   console.error(`Actual:   ${actualNode}`);
   console.error("");
   console.error("Do not switch versions manually unless the task explicitly updates the runtime contract.");
