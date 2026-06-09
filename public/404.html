@@ -20,7 +20,7 @@
 
         function redirect(baseDepth) {
           var basePath = '/' + pathParts.slice(0, baseDepth).join('/') + '/';
-          var routePath = pathParts.slice(baseDepth).join('/').replace(/&/g, '~and~');
+          var routePath = encodeURIComponent(pathParts.slice(baseDepth).join('/'));
           l.replace(
             l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
             basePath + '?/' + routePath +
