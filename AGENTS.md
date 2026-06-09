@@ -177,7 +177,7 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
   - **Event Facts**: Factual corrections (venue, city, dates, URL). Must include source URL.
   - **Gear Assets**: Broken image/path fixes. Mark missing assets as `draft: true`.
   - **Merch Catalog**: Copy or layout updates. List product removals explicitly.
-  - **Articles**: Editorial updates. Provide rationale for date changes.
+  - **Articles**: Editorial updates. Provide rationale for date changes. **NEVER** change the filename/date-prefix of a published post (e.g., `2026-04-18-post-title.md`) as this alters the URL, breaks SEO, and causes 404 errors.
 - **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
 
 ### Baseline Maintenance
