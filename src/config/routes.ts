@@ -110,6 +110,17 @@ export const routes: RouteConfig[] = [
     sitemap: false
   },
   {
+    path: '/previews',
+    Component: () => {
+      const base = import.meta.env.BASE_URL || '/';
+      const cleanBase = base.endsWith('/') ? base : base + '/';
+      window.location.replace(cleanBase + 'previews/index.html');
+      return null;
+    },
+    sitemap: false,
+    stub: false
+  },
+  {
     path: '*',
     lazy: () => import('@/pages/NotFound').then(m => ({ Component: m.default })),
     skeleton: 'simple'
