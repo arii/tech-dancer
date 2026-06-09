@@ -22,7 +22,10 @@ export interface BaseProps {
   marginX?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginY?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   gap?: ResponsiveProp<number | string>
+  gapX?: ResponsiveProp<number | string>
+  gapY?: ResponsiveProp<number | string>
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
+  borderColor?: string
   smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
@@ -81,7 +84,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     margin,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
-    gap, border, smBorder, mdBorder, lgBorder, xlBorder,
+    gap, gapX, gapY, border, borderColor, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
@@ -127,6 +130,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "r" && "border-r border-line",
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
+      borderColor && getVal(borderColor, "border"),
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),
@@ -176,6 +180,8 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           radiusProp && RADIUS_MAP[radiusProp],
           borderClasses,
           getResponsiveClasses(gap, "", s("gap")),
+          getResponsiveClasses(gapX, "", s("gap-x")),
+          getResponsiveClasses(gapY, "", s("gap-y")),
           getResponsiveClasses(padding, "", s("p")),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
           getResponsiveClasses(paddingTop, "", s("pt")),

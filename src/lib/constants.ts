@@ -16,5 +16,5 @@ export const CONTENT_METADATA_KEYS = [
   'affiliateDisclosure', 'priceDisplayPolicy', 'availabilityDisplayPolicy',
   'recommendedFor', 'eventUseCase', 'region', 'gearOutfitDescription',
   'gearAccessoryDescription', 'gearShoeDescription', 'gearEssentialDescription',
-  'gearTravelDescription'
+  'gearTravelDescription', 'bestFor'
 ] as const;
