@@ -91,7 +91,12 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       const type = (data.type || defaultType) as string;
 
-
+      const normalizeAsset = (val: unknown) => {
+        if (val === "") return undefined;
+        return typeof val === "string" && val.startsWith("/")
+          ? `${ASSET_PREFIX}${val}`
+          : val;
+      };
 
       data.image = normalizeAsset(data.image);
       data.imageBack = normalizeAsset(data.imageBack);

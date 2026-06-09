@@ -52,42 +52,31 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             return <a href={href} {...props} rel="noopener noreferrer" target="_blank" />;
           },
           blockquote: ({node: _node, children, ...props}) => {
+            // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
+            const childArray = Array.isArray(children) ? children : [children];
             let label = 'Note';
-
-            const findStrongLabel = (nodes: React.ReactNode): string | null => {
-              let result: string | null = null;
-              React.Children.forEach(nodes, (child) => {
-                if (result) return;
-                if (!React.isValidElement(child)) return;
-
-                if (child.type === 'strong' && child.props.children) {
-                  const raw = Array.isArray(child.props.children)
-                    ? child.props.children.join('')
-                    : String(child.props.children);
-                  result = raw.replace(/:$/, '').trim();
-                  return;
-                }
-
-                if (child.props.children) {
-                  result = findStrongLabel(child.props.children);
-                }
-              });
-              return result;
-            };
-
-            const foundLabel = findStrongLabel(children);
-            if (foundLabel) {
-              label = foundLabel;
+            const firstChild = childArray[0];
+            if (firstChild && typeof firstChild === 'object' && 'props' in firstChild) {
+              const pChildren = (firstChild as React.ReactElement).props?.children;
+              const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
+              const firstStrong = pArr.find(
+                (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as React.ReactElement).type === 'strong'
+              ) as React.ReactElement | undefined;
+              if (firstStrong?.props?.children) {
+                const raw = Array.isArray(firstStrong.props.children)
+                  ? firstStrong.props.children.join('')
+                  : String(firstStrong.props.children);
+                label = raw.replace(/:$/, '').trim();
+              }
             }
-
             return (
               <Box border surface="warning" padding={6} marginY={8} radius="md">
                 <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
                   {label}
                 </Text>
-                <Text as="blockquote" variant="body" weight="font-medium" color="main" className="italic" {...props}>
+                <blockquote className="italic font-medium text-text-main" {...props}>
                   {children}
-                </Text>
+                </blockquote>
               </Box>
             );
           },
@@ -173,12 +162,35 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           code: ({ node: _node, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
+            const isMermaid = language === 'mermaid';
             const codeString = String(children).replace(/\n$/, '');
-            const isBlock = codeString.includes('\n') || !!language;
 
-            if (language === 'mermaid') {
-              return <MermaidDiagram code={codeString} />;
+            if (isMermaid) {
+              try {
+                const bytes = new TextEncoder().encode(codeString);
+                let binary = '';
+                const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                  binary += String.fromCharCode(bytes[i]);
+                }
+                const base64 = window.btoa(binary);
+                const diagramUrl = `https://mermaid.ink/svg/${base64}`;
+                return (
+                  <Box marginY={8} width="full" display="flex" justifyContent="center">
+                    <img
+                      src={diagramUrl}
+                      alt="Workflow Diagram"
+                      className="rounded-lg shadow-sm max-w-full max-h-[400px] object-contain"
+                      loading="lazy"
+                    />
+                  </Box>
+                );
+              } catch (e) {
+                console.error('Failed to render mermaid diagram', e);
+              }
             }
+
+            const isBlock = codeString.includes('\n') || !!language;
 
             if (isBlock) {
               return (
@@ -216,19 +228,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             // Inline code
             return (
-              <Box
-                as="code"
-                paddingX={1}
-                paddingY={0.5}
-                radius="sm"
-                surface="surface"
-                border
-                color="accent"
-                className="text-[0.8em] font-mono"
+              <code
+                className="px-1.5 py-0.5 rounded text-[0.8em] font-mono bg-surface border border-line text-accent"
                 {...props}
               >
                 {children}
-              </Box>
+              </code>
             );
           },
           notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
