@@ -169,7 +169,7 @@ The repository uses custom Node version logic and pnpm activation logic (`corepa
 Abstract the repeated setup steps into a composite GitHub Action within the repository to DRY (Don't Repeat Yourself) the workflow files.
 
 ### Acceptance criteria
-- [ ] Workflows are refactored to use the composite action
+- [x] Workflows are refactored to use the composite action
 - [ ] Required checks still pass
 - [ ] No security regression
 
@@ -195,8 +195,8 @@ Workflows use `on: issue_comment` unconditionally, and then use `if: github.even
 Create a central `issue-comment-dispatcher.yml` that triggers on `issue_comment`, checks the comment body for keywords, and uses the GitHub API (`gh workflow run`) or `repository_dispatch` to trigger the specific workflow (like `ollama-chatops` or `update-snapshots`).
 
 ### Acceptance criteria
-- [ ] Run history is no longer flooded with skipped jobs on every comment.
-- [ ] Tools continue to trigger properly when their keyword is invoked.
+- [x] Run history is no longer flooded with skipped jobs on every comment.
+- [x] Tools continue to trigger properly when their keyword is invoked.
 
 
 ---

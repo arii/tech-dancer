@@ -4,13 +4,19 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   TARGET: ${{ inputs.target_branch || 'main' }}
   SOURCE: ${{ inputs.source_branch }}
-  PR_NUMBER: ${{ inputs.pr_number || github.event.issue.number || '0' }}
+  PR_NUMBER: ${{ inputs.pr_number || inputs.issue_number || '0' }}
 
 on:
-  issue_comment:
-    types: [created]
   workflow_dispatch:
     inputs:
+      issue_number:
+        description: 'Issue number'
+        required: false
+        type: string
+      comment_body:
+        description: 'Comment body'
+        required: false
+        type: string
       target_branch:
         description: 'The branch to merge into'
         required: true
@@ -40,9 +46,7 @@ on:
 
 jobs:
   merge_and_resolve:
-    if: >
-      github.event_name != 'issue_comment' ||
-      (github.event.issue.pull_request && contains(github.event.comment.body, '@conflict-resolve'))
+
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -94,22 +98,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version-file: '.node-version'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-
-      - name: Validate Runtime
+      - name: Check active runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor

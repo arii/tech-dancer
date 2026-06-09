@@ -1,8 +1,16 @@
 name: Jules Fix CI
 
 on:
-  issue_comment:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number'
+        required: true
+        type: string
+      comment_body:
+        description: 'Comment body'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -13,12 +21,7 @@ permissions:
 
 jobs:
   trigger-jules:
-    if: |
-      github.event.issue.pull_request &&
-      contains(github.event.comment.body, '@jules-fix-ci') &&
-      (github.event.comment.author_association == 'OWNER' ||
-       github.event.comment.author_association == 'MEMBER' ||
-       github.event.comment.author_association == 'COLLABORATOR')
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -59,4 +62,4 @@ jobs:
           # Export PYTHONPATH to ensure modules can find each other
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           # Capture both stdout and stderr for better diagnostic visibility
-          python3 dev-tools/td_cli.py jules fix-ci --pr-number ${{ github.event.issue.number }} --execute 2>&1
+          python3 dev-tools/td_cli.py jules fix-ci --pr-number ${{ inputs.issue_number }} --execute 2>&1

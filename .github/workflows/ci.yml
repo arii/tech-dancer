@@ -57,20 +57,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version-file: '.node-version'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Validate Runtime
         run: |
@@ -121,12 +109,7 @@ jobs:
     steps:
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version-file: '.node-version'
-      - run: corepack enable && corepack prepare pnpm@10.28.2 --activate
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
       - uses: actions/setup-python@v5
         with:
@@ -173,12 +156,7 @@ jobs:
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version-file: '.node-version'
-      - run: corepack enable && corepack prepare pnpm@10.28.2 --activate
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
       - uses: actions/setup-python@v5
         with:
