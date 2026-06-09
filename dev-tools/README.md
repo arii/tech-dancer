@@ -35,7 +35,7 @@ This script installs and configures:
 | `CODEX_GH_TOKEN` (string) | **Recommended (preferred)** | Primary secret for Codex/Jules/Antigravity agent runs; setup maps it to `GH_TOKEN` for `gh` + dev-tools commands. |
 | `GH_TOKEN` (string) | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
-| `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
+| `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py agents ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 | `OLLAMA_URL` | Optional | Override local Ollama endpoint (default shown by `snapshot.sh`). |
 | `OLLAMA_MODEL` | Optional | Override local Ollama model selection. |
@@ -195,14 +195,14 @@ Detects potential merge conflicts across all open PRs.
   - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
 - **Usage**: `python3 dev-tools/td_cli.py gh conflicts`
 
-#### `jules repair-context`
+#### `agents repair-context`
 Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
 - **Flags**:
   - `--log <LOG_LINE>`: Process a single raw log line.
   - `--file <FILE_PATH>`: Process all errors in a log file.
 - **Usage**:
   - `pnpm repair-context --log "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"`
-  - `python3 dev-tools/td_cli.py jules repair-context --file logs/ci_failure.log`
+  - `python3 dev-tools/td_cli.py agents repair-context --file logs/ci_failure.log`
 
 #### `gh ratchet-any` / `gh bundle-size`
 CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).

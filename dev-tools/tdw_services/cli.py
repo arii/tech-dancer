@@ -424,7 +424,7 @@ def agent_group():
 @click.pass_context
 def dispatch(ctx, branch, task):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.dispatch_jules_review(branch, task)
+    res = orch.dispatch_agents_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
 
 @agent_group.command()
@@ -432,7 +432,7 @@ def dispatch(ctx, branch, task):
 def sync(ctx):
     """Sync active agent sessions."""
     orch = ctx.obj['ORCHESTRATOR']
-    sessions = orch.jules.list_sessions()
+    sessions = orch.agents.list_sessions()
 
     if not ctx.obj['JSON']:
         if not sessions:
@@ -484,14 +484,14 @@ def repair(ctx, logs, stdin, worktree):
         err(ctx, res['message'], data=res)
 
 # Register aliases for backwards compatibility
-@cli.group(name='jules')
+@cli.group(name='agents')
 def jules_group():
-    """Agent Operations (alias for agent)"""
+    """Agent Operations"""
     pass
 
 @cli.group(name='antigravity')
 def antigravity_group():
-    """Agent Operations (alias for agent)"""
+    """Agent Operations"""
     pass
 
 for group in [jules_group, antigravity_group]:
