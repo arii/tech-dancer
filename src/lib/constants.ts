@@ -8,4 +8,5 @@ export const CONTENT_METADATA_KEYS = [
   'themeOutfitIds', 'themeAccessoryIds', 'gearOutfitIds', 'gearAccessoryIds',
   'gearShoeIds', 'gearEssentialIds', 'gearTravelIds', 'relatedEvents',
   'basePath', 'readingTime', 'ctaLabel'
+  'basePath', 'readingTime', 'status', 'readTime'
 ] as const;
