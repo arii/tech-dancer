@@ -641,7 +641,7 @@ Compare the current branch against `main`, identify issues, fix them directly, v
 ## Steps
 
 1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin main`.
-2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, `git diff`, and `git diff --cached`.
+2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, and `git diff --cached`.
 3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
 4. Fix the issues directly.
 5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
