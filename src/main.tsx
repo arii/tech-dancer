@@ -48,10 +48,11 @@ const getBasename = (): string => {
   const segments = fullPath.split('/').filter(Boolean);
   const baseSegments = buildBaseClean.split('/').filter(Boolean);
 
-  // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
+  // 2. Heuristic: If we are on GitHub Pages (e.g. *.github.io) and in a subdirectory deeper than buildBase,
   // find the last segment that is NOT a known route. This allows for
   // multi-segment branch names (e.g. fix/ux-nav-errors).
-  if (segments.length > baseSegments.length) {
+  const isGithubPages = window.location.hostname.endsWith('.github.io');
+  if (isGithubPages && segments.length > baseSegments.length) {
     let lastBaseSegmentIndex = baseSegments.length - 1;
 
     for (let i = baseSegments.length; i < segments.length; i++) {
