@@ -10,7 +10,7 @@ from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
-from tdw_services.services.jules import JulesClient
+from tdw_services.services.agents import JulesClient
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
