@@ -10,7 +10,7 @@ export const CreateRepairBranchInputSchema = z.object({
 
 export async function createRepairBranchHandler(args: z.infer<typeof CreateRepairBranchInputSchema>) {
   if (!args.writeMode) {
-    throw new Error("writeMode must be true to create a repair branch. Ensure you pass 'writeMode': true in your tool call. Ensure you pass 'writeMode': true in your tool call.");
+    throw new Error("writeMode must be true to create a repair branch. Ensure you pass 'writeMode': true in your tool call.");
   }
   const prResult = await runCommand("gh", [
     "pr",
