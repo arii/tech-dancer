@@ -23,7 +23,6 @@ Recommendation: Prioritize and merge as Step 2. Will need to resolve any minor c
 ## PR #1791
 
 Preview-Specific Files:
-- `scripts/serve.mjs`
 - `playwright.config.ts` (if applicable)
 - `tests/utils/playwright-helpers.ts` (if applicable)
 Purpose: Overhaul merch page, add standalone static preview server, preview generation support, screenshot path resolution.
