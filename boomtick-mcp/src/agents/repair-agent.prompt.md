@@ -10,7 +10,7 @@ GRANTED:
   mcp: boomtick/*
   command: pnpm
   command: python3
-  write_file: /home/ari/tech-dancer
+  write_file: {REPO_PATH}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## DETERMINISTIC EXECUTION CONTRACT

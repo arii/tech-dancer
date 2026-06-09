@@ -236,15 +236,12 @@ export class BoomtickMCPServer {
         tools: [
           {
             name: "boomtick.health",
-            description: "Check the health and configuration of the MCP server.",
-            inputSchema: {
-              type: "object",
-              properties: {},
-            },
+            description: "MCP server health/config check.",
+            inputSchema: { type: "object", properties: {} },
           },
           {
             name: "github.search_open_prs",
-            description: "Search for open pull requests in the repository.",
+            description: "Search open PRs.",
             inputSchema: {
               type: "object",
               properties: {
@@ -258,7 +255,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "github.find_similar_prs",
-            description: "Find pull requests that touch the same files.",
+            description: "Find PRs touching the same files.",
             inputSchema: {
               type: "object",
               properties: {
@@ -270,7 +267,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "github.get_pr_diff",
-            description: "Get the diff and changed files for a pull request.",
+            description: "Get PR diff and file list.",
             inputSchema: {
               type: "object",
               properties: {
@@ -282,7 +279,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "github.checkout_branch",
-            description: "Checkout a specific branch in the repository or worktree.",
+            description: "Checkout branch/worktree.",
             inputSchema: {
               type: "object",
               properties: {
@@ -294,7 +291,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "github.get_merge_conflict_files",
-            description: "Detect files that conflict when a PR is merged with the base branch.",
+            description: "List merge conflict files for a PR.",
             inputSchema: {
               type: "object",
               properties: {
@@ -306,7 +303,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "repo.get_changed_files",
-            description: "Get the list of changed files between two refs.",
+            description: "List changed files between refs.",
             inputSchema: {
               type: "object",
               properties: {
@@ -317,23 +314,17 @@ export class BoomtickMCPServer {
           },
           {
             name: "repo.get_package_scripts",
-            description: "Get the scripts defined in package.json.",
-            inputSchema: {
-              type: "object",
-              properties: {},
-            },
+            description: "List package.json scripts.",
+            inputSchema: { type: "object", properties: {} },
           },
           {
             name: "repo.get_route_map",
-            description: "Get the mapping of routes to content files.",
-            inputSchema: {
-              type: "object",
-              properties: {},
-            },
+            description: "Map routes to content files.",
+            inputSchema: { type: "object", properties: {} },
           },
           {
             name: "repo.read_ci_logs",
-            description: "Read CI logs for a given pull request.",
+            description: "Read CI logs for a PR.",
             inputSchema: {
               type: "object",
               properties: {
@@ -344,7 +335,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "repo.create_repair_branch",
-            description: "Create a new repair branch from a PR branch.",
+            description: "Create repair branch from PR.",
             inputSchema: {
               type: "object",
               properties: {
@@ -357,7 +348,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "repo.run_tests",
-            description: "Run repository tests and checks.",
+            description: "Run repo tests/checks.",
             inputSchema: {
               type: "object",
               properties: {
@@ -405,7 +396,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "github.open_replacement_pr",
-            description: "Open a new PR that replaces or repairs the original PR.",
+            description: "Open repair/replacement PR.",
             inputSchema: {
               type: "object",
               properties: {
@@ -423,7 +414,7 @@ export class BoomtickMCPServer {
           },
           {
             name: "github.comment_triage_summary",
-            description: "Comment on the original PR with a diagnosis and replacement link.",
+            description: "Comment triage diagnosis on PR.",
             inputSchema: {
               type: "object",
               properties: {
