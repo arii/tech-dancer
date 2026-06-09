@@ -45,7 +45,7 @@ test.describe('Research Tools Mobile UX', () => {
       expect(overflowX).toBe(false);
 
       // Take a screenshot for visual verification
-      await page.screenshot({ path: `tests/screenshots/mobile-${tool.path.replace(/\//g, '-')}.png`, fullPage: true });
+      await page.screenshot({ path: `tests/visual.spec.ts-snapshots/mobile-${tool.path.replace(/\//g, '-')}.png`, fullPage: true });
     });
   }
 });
