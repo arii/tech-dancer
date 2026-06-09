@@ -7,5 +7,14 @@ export const CONTENT_METADATA_KEYS = [
   'theme', 'gear', 'themeName', 'themeLabel', 'themeDescription', 'themeColors',
   'themeOutfitIds', 'themeAccessoryIds', 'gearOutfitIds', 'gearAccessoryIds',
   'gearShoeIds', 'gearEssentialIds', 'gearTravelIds', 'relatedEvents',
-  'basePath', 'readingTime', 'status', 'readTime'
+  'basePath', 'readingTime', 'status', 'readTime',
+  // Additional post and resource keys to prevent DOM property pollution
+  'draft', 'imageAlt', 'updated', 'imageBack', 'seoTitle', 'seoDescription',
+  'shopUrl', 'internalSku', 'printfulProductId', 'printfulVariantIds',
+  'displayMode', 'featuredSide', 'productType', 'fulfillmentType', 'provider',
+  'shippingPolicySummary', 'returnPolicySummary', 'affiliateProvider',
+  'affiliateDisclosure', 'priceDisplayPolicy', 'availabilityDisplayPolicy',
+  'recommendedFor', 'eventUseCase', 'region', 'gearOutfitDescription',
+  'gearAccessoryDescription', 'gearShoeDescription', 'gearEssentialDescription',
+  'gearTravelDescription'
 ] as const;
