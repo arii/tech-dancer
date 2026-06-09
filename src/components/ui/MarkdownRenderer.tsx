@@ -9,7 +9,6 @@ import { Box, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
-import { MermaidDiagram } from './MermaidDiagram';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 
@@ -37,36 +36,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           }]
         ]}
         components={{
-          code: ({node: _node, className, children, ...props}) => {
-            const match = /language-(\w+)/.exec(className || '');
-            const isMermaid = match && match[1] === 'mermaid';
-            if (isMermaid) {
-              const codeString = String(children).replace(/\n$/, '');
-              try {
-                const bytes = new TextEncoder().encode(codeString);
-                let binary = '';
-                const len = bytes.byteLength;
-                for (let i = 0; i < len; i++) {
-                  binary += String.fromCharCode(bytes[i]);
-                }
-                const base64 = window.btoa(binary);
-                const diagramUrl = `https://mermaid.ink/svg/${base64}`;
-                return (
-                  <Box marginY={8} width="full" display="flex" justifyContent="center">
-                    <img
-                      src={diagramUrl}
-                      alt="Workflow Diagram"
-                      className="rounded-lg shadow-sm max-w-full max-h-[400px] object-contain"
-                      loading="lazy"
-                    />
-                  </Box>
-                );
-              } catch (e) {
-                console.error('Failed to render mermaid diagram', e);
-              }
-            }
-            return <code className={className} {...props}>{children}</code>;
-          },
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return <input type="checkbox" defaultChecked={checked} className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer mt-1" {...props} />;
@@ -190,12 +159,35 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           code: ({ node: _node, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
+            const isMermaid = language === 'mermaid';
             const codeString = String(children).replace(/\n$/, '');
-            const isBlock = codeString.includes('\n') || !!language;
 
-            if (language === 'mermaid') {
-              return <MermaidDiagram code={codeString} />;
+            if (isMermaid) {
+              try {
+                const bytes = new TextEncoder().encode(codeString);
+                let binary = '';
+                const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                  binary += String.fromCharCode(bytes[i]);
+                }
+                const base64 = window.btoa(binary);
+                const diagramUrl = `https://mermaid.ink/svg/${base64}`;
+                return (
+                  <Box marginY={8} width="full" display="flex" justifyContent="center">
+                    <img
+                      src={diagramUrl}
+                      alt="Workflow Diagram"
+                      className="rounded-lg shadow-sm max-w-full max-h-[400px] object-contain"
+                      loading="lazy"
+                    />
+                  </Box>
+                );
+              } catch (e) {
+                console.error('Failed to render mermaid diagram', e);
+              }
             }
+
+            const isBlock = codeString.includes('\n') || !!language;
 
             if (isBlock) {
               return (
