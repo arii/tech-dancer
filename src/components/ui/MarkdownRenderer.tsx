@@ -166,28 +166,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             const codeString = String(children).replace(/\n$/, '');
 
             if (isMermaid) {
-              try {
-                const bytes = new TextEncoder().encode(codeString);
-                let binary = '';
-                const len = bytes.byteLength;
-                for (let i = 0; i < len; i++) {
-                  binary += String.fromCharCode(bytes[i]);
-                }
-                const base64 = window.btoa(binary);
-                const diagramUrl = `https://mermaid.ink/svg/${base64}`;
-                return (
-                  <Box marginY={8} width="full" display="flex" justifyContent="center">
-                    <img
-                      src={diagramUrl}
-                      alt="Workflow Diagram"
-                      className="rounded-lg shadow-sm max-w-full max-h-[400px] object-contain"
-                      loading="lazy"
-                    />
-                  </Box>
-                );
-              } catch (e) {
-                console.error('Failed to render mermaid diagram', e);
-              }
+              return <MermaidDiagram code={codeString} />;
             }
 
             const isBlock = codeString.includes('\n') || !!language;

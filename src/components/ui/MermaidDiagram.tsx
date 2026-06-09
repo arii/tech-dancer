@@ -36,9 +36,10 @@ let diagramCounter = 0;
 
 interface MermaidDiagramProps {
   code: string;
+  alt?: string;
 }
 
-export function MermaidDiagram({ code }: MermaidDiagramProps) {
+export function MermaidDiagram({ code, alt = 'Mermaid Diagram' }: MermaidDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const idRef = useRef(`mermaid-${++diagramCounter}`);
@@ -58,11 +59,13 @@ export function MermaidDiagram({ code }: MermaidDiagramProps) {
 
         containerRef.current.innerHTML = svg;
 
-        // Make SVG responsive
+        // Make SVG responsive and accessible
         const svgEl = containerRef.current.querySelector('svg');
         if (svgEl) {
           svgEl.setAttribute('width', '100%');
           svgEl.style.maxWidth = '100%';
+          svgEl.setAttribute('role', 'img');
+          svgEl.setAttribute('aria-label', alt);
         }
       } catch (e) {
         if (!cancelled) {
