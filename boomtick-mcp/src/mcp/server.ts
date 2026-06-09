@@ -11,9 +11,16 @@ import {
 import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { healthHandler } from "./tools.js";
-import { searchOpenPrsHandler } from "../tools/github.search_open_prs.js";
 import { findSimilarPrsHandler, FindSimilarPrsInputSchema } from "../tools/github.find_similar_prs.js";
 import { triagePrHandler, TriagePrInputSchema } from "../tools/github.triage_pr.js";
+import { repairPrepareHandler, RepairPrepareInputSchema } from "../tools/github.repair_prepare.js";
+import { repairFinalizeHandler, RepairFinalizeInputSchema } from "../tools/github.repair_finalize.js";
+import { getContextHandler, GetContextInputSchema } from "../tools/repo.get_context.js";
+import { verifyRepairHandler, VerifyRepairInputSchema } from "../tools/repo.verify_repair.js";
+import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
+import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
+import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
+import { searchOpenPrsHandler } from "../tools/github.search_open_prs.js";
 import { getPrDiffHandler } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
@@ -22,9 +29,6 @@ import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
 import { getRouteMapHandler } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
-import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
-import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
-import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
 import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
 import { openReplacementPrHandler } from "../tools/github.open_replacement_pr.js";
 import { commentTriageSummaryHandler } from "../tools/github.comment_triage_summary.js";
@@ -265,15 +269,32 @@ export class BoomtickMCPServer {
             },
           },
           {
-            name: "github.checkout_branch",
-            description: "Checkout branch/worktree.",
+            name: "github.repair_prepare",
+            description: "Aggregate PR context and create repair branch.",
             inputSchema: {
               type: "object",
               properties: {
-                branch: { type: "string" },
-                worktreePath: { type: "string" },
+                prNumber: { type: "number" },
+                repairBranchName: { type: "string" },
+                writeMode: { type: "boolean" },
               },
-              required: ["branch"],
+              required: ["prNumber"],
+            },
+          },
+          {
+            name: "github.repair_finalize",
+            description: "Commit repair, verify, and open replacement PR.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prNumber: { type: "number" },
+                repairBranch: { type: "string" },
+                message: { type: "string" },
+                allowedFiles: { type: "array", items: { type: "string" } },
+                worktreePath: { type: "string" },
+                pushMode: { type: "boolean" },
+              },
+              required: ["prNumber", "repairBranch", "message", "allowedFiles"],
             },
           },
           {
@@ -289,48 +310,20 @@ export class BoomtickMCPServer {
             },
           },
           {
-            name: "repo.get_changed_files",
-            description: "List changed files between refs.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                base: { type: "string" },
-                head: { type: "string" },
-              },
-            },
-          },
-          {
-            name: "repo.get_package_scripts",
-            description: "List package.json scripts.",
+            name: "repo.get_context",
+            description: "Retrieve root package, routes, and design tokens.",
             inputSchema: { type: "object", properties: {} },
           },
           {
-            name: "repo.get_route_map",
-            description: "Map routes to content files.",
-            inputSchema: { type: "object", properties: {} },
-          },
-          {
-            name: "repo.read_ci_logs",
-            description: "Read CI logs for a PR.",
+            name: "repo.verify_repair",
+            description: "Sequentially run lint, tests, and optional E2E/Lighthouse.",
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number" },
+                worktreePath: { type: "string" },
+                runE2E: { type: "boolean" },
+                runLighthouse: { type: "boolean" },
               },
-              required: ["prNumber"],
-            },
-          },
-          {
-            name: "repo.create_repair_branch",
-            description: "Create repair branch from PR.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prNumber: { type: "number" },
-                repairBranchName: { type: "string" },
-                writeMode: { type: "boolean" },
-              },
-              required: ["prNumber"],
             },
           },
           {
@@ -345,47 +338,11 @@ export class BoomtickMCPServer {
               },
             },
           },
-          {
-            name: "repo.run_lighthouse",
-            description: "Run Lighthouse CI audits.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                route: { type: "string" },
-                worktreePath: { type: "string" },
-              },
-            },
-          },
-          {
-            name: "repo.run_playwright",
-            description: "Run Playwright E2E tests.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                grep: { type: "string" },
-                worktreePath: { type: "string" },
-              },
-            },
-          },
-          {
-            name: "repo.commit_patch",
-            description: "Commit verified repair changes.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                worktreePath: { type: "string" },
-                message: { type: "string" },
-                allowedFiles: { type: "array", items: { type: "string" } },
-                writeMode: { type: "boolean" },
-              },
-              required: ["worktreePath", "message", "allowedFiles"],
-            },
-          },
         ],
       };
     });
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
       try {
         switch (request.params.name) {
           case "boomtick.health":
@@ -394,6 +351,14 @@ export class BoomtickMCPServer {
             return createSuccessResult(await findSimilarPrsHandler(FindSimilarPrsInputSchema.parse(request.params.arguments || {})));
           case "github.triage_pr":
             return createSuccessResult(await triagePrHandler(TriagePrInputSchema.parse(request.params.arguments)));
+          case "github.repair_prepare":
+            return createSuccessResult(await repairPrepareHandler(RepairPrepareInputSchema.parse(request.params.arguments)));
+          case "github.repair_finalize":
+            return createSuccessResult(await repairFinalizeHandler(RepairFinalizeInputSchema.parse(request.params.arguments)));
+          case "repo.get_context":
+            return createSuccessResult(await getContextHandler());
+          case "repo.verify_repair":
+            return createSuccessResult(await verifyRepairHandler(VerifyRepairInputSchema.parse(request.params.arguments || {})));
           case "github.get_merge_conflict_files":
             return createSuccessResult(await getMergeConflictFilesHandler(GetMergeConflictFilesInputSchema.parse(request.params.arguments)));
           case "github.checkout_branch":

@@ -5,16 +5,19 @@ A Model Context Protocol (MCP) server designed to empower AI agents with structu
 ## Features
 
 ### 🛠 Tools
-- **GitHub Ops**: Search PRs, get diffs, detect merge conflicts, open replacement PRs, and triage comments.
+- **Advanced Analysis**: Server-side PR similarity analysis and deterministic triage workflows.
+- **GitHub Ops**: Checkout branches and detect merge conflicts (use official GitHub MCP for search/diff/comment).
 - **Repo Ops**: Inspect changed files, extract package scripts, map application routes, and read CI logs.
 - **Validation**: Isolated repair branch creation, and running verification suites (Tests, Lighthouse, Playwright).
 
 ### 📄 Resources
-- `repo://package-json`: Access root package manifest.
-- `repo://routes`: Access application route-to-content mapping.
-- `repo://design-tokens`: Access UI design tokens.
-- `repo://diff/{prNumber}`: Access full PR diff text.
-- `repo://ci/{prNumber}`: Access detailed CI check results and logs.
+- `repo://package-json`: Root package manifest.
+- `repo://routes`: Application route-to-content mapping.
+- `repo://design-tokens`: UI design tokens.
+- `repo://diff/{prNumber}`: PR diff text.
+- `repo://pr-similarity`: Analysis of file overlaps between open PRs.
+- `repo://pr-files/{number}`: List of changed files for a specific PR.
+- `repo://ci/{prNumber}`: CI check results and logs.
 
 ### 🧠 Prompts
 - `prompt://conflict-scout`: Scout for PRs needing rescue.

@@ -8,7 +8,7 @@ Run the unit test suite to verify core tool handlers and utilities.
 cd boomtick-mcp
 pnpm test
 ```
-**Expected Result**: All tests in `src/lib/shell.test.ts`, `src/tools/github.search_open_prs.test.ts`, and `src/tools/repo.get_package_scripts.test.ts` should pass.
+**Expected Result**: All tests in `src/lib/shell.test.ts`, `src/tools/github.search_open_prs.test.ts`, and `src/tools/github.find_similar_prs.test.ts` should pass.
 
 ## 2. Build Verification
 Ensure the TypeScript source compiles correctly to ESM.
@@ -37,7 +37,7 @@ Verify that the server correctly registers and exposes its capabilities via the 
 ```bash
 echo '{ "jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {} }' | node dist/index.js
 ```
-**Expected Result**: A JSON response containing 15 tools.
+**Expected Result**: A JSON response containing 9 unique Boomtick tools.
 
 ### List Resources
 ```bash
