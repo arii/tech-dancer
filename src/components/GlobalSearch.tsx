@@ -116,7 +116,6 @@ export function GlobalSearch() {
           data-testid="search-dialog"
           aria-modal="true"
           aria-label="Search BoomTick"
-          width="full"
           maxWidth="3xl"
           height="fit"
           maxHeight="85vh"

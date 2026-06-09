@@ -62,7 +62,7 @@ export function NewsletterBanner() {
         left={0} 
         width="1px" 
         height="full" 
-        className="bg-accent shadow-glow"
+        className="bg-accent"
       />
 
       {/* Persistent Dismissal */}
