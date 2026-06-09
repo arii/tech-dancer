@@ -85,12 +85,14 @@ class JulesClient:
                 return s.get("name", "").replace("sources/", "")
         return None
 
-    def create_session_from_source(self, source_id: str, branch: str, prompt: str, title: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    def create_session_from_source(self, source_id: str, branch: str, prompt: str, title: Optional[str] = None, source_override: Optional[str] = None) -> Optional[Dict[str, Any]]:
         clean_source_id = source_id.replace("sources/", "")
+        source_target = source_override if source_override else f"sources/{clean_source_id}"
+
         payload = {
             "prompt": prompt,
             "sourceContext": {
-                "source": f"sources/{clean_source_id}",
+                "source": source_target,
                 "githubRepoContext": { "startingBranch": branch }
             },
             "automationMode": "AUTO_CREATE_PR"

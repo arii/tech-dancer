@@ -862,7 +862,8 @@ class Auditor:
         return found
 
 class CodebaseAuditor:
-    def __init__(self, name: str):
+    def __init__(self, name: str, repo_dir=None):
+        self.repo_dir = repo_dir
         self.name = name
         self.findings = []
 
