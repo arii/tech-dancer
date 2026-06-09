@@ -26,7 +26,7 @@ export async function runLighthouseHandler(args: z.infer<typeof RunLighthouseInp
          seo: 0
        };
     }
-  } catch {
+  } catch (e) {
     failures.push("Failed to parse Lighthouse report");
   }
 
