@@ -19,6 +19,7 @@ const WSDCReminders = lazy(() => import('@/features/lab/wsdc-reminders/WSDCRemin
 const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
 const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
 const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m => ({ default: m.BlastRadiusTool })));
+const EcommerceAutomationTool = lazy(() => import('./components/EcommerceAutomationTool').then(m => ({ default: m.EcommerceAutomationTool })));
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
@@ -26,6 +27,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'wsdc-event-reminders': WSDCReminders,
   'gitops-pr-reviewer': GitOpsReviewerTool,
   'scope-blast-radius': BlastRadiusTool,
+  'ecommerce-automation': EcommerceAutomationTool,
 };
 
 export default function ResearchDetail() {
