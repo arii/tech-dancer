@@ -27,5 +27,7 @@ runs:
       shell: bash
 
     - name: Activate pinned pnpm
-      run: corepack prepare pnpm@${{ inputs.pnpm-version }} --activate
+      env:
+        PNPM_VERSION: ${{ inputs.pnpm-version }}
+      run: corepack prepare pnpm@"$PNPM_VERSION" --activate
       shell: bash

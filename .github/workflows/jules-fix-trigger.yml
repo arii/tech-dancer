@@ -58,8 +58,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           JULES_SOURCE_ID: ${{ vars.JULES_SOURCE_ID }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
         run: |
           # Export PYTHONPATH to ensure modules can find each other
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           # Capture both stdout and stderr for better diagnostic visibility
-          python3 dev-tools/td_cli.py jules fix-ci --pr-number ${{ inputs.issue_number }} --execute 2>&1
+          python3 dev-tools/td_cli.py jules fix-ci --pr-number "$ISSUE_NUMBER" --execute 2>&1
