@@ -5,6 +5,9 @@ inputs:
     description: "Path to .node-version file"
     required: false
     default: ".node-version"
+  node-version:
+    description: "Explicit Node.js version to use, overrides node-version-file if set"
+    required: false
   pnpm-version:
     description: "Version of pnpm to activate"
     required: false
@@ -21,6 +24,7 @@ runs:
       with:
         cache: 'pnpm'
         node-version-file: ${{ inputs.node-version-file }}
+        node-version: ${{ inputs.node-version }}
 
     - name: Enable Corepack
       run: corepack enable
