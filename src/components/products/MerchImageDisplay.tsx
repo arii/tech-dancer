@@ -30,7 +30,7 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
-        className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+        className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
       />
     </Box>
   );

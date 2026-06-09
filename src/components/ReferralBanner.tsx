@@ -11,6 +11,8 @@ interface ReferralBannerProps {
 }
 
 export function ReferralBanner({ layout = 'expanded', className }: ReferralBannerProps) {
+  // Ensure the banner itself does not blow out its container by adding min-w-0
+  className = cn("min-w-0", className);
   const isCompact = layout === 'compact';
 
   const config = isCompact ? {

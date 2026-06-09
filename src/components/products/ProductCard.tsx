@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
@@ -12,16 +13,15 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
     : 'VIEW ON PRINTFUL';
 
   return (
-    <Stack
-      as="article"
+    <BaseCard
       gap={isFeatured ? 5 : 4}
       height="full"
-      padding={isFeatured ? { base: 5, md: 6 } : { base: 0 }}
-      radius={isFeatured ? "lg" : undefined}
-      border={isFeatured ? true : undefined}
+      padding={isFeatured ? { base: 5, md: 6 } : { base: 4, md: 5 }}
+      radius="lg"
+      border
       maxWidth="full"
       className={cn(
-        "group/card transition-transform duration-300 hover:-translate-y-0.5",
+        "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
         isFeatured && "border-accent/20 bg-accent/5"
       )}
       data-testid="product-card"
@@ -32,7 +32,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         imageUrl={item.imageUrl}
         images={item.images}
         imageDisplayMode={item.imageDisplayMode}
-        isFeatured={isFeatured}
+
       />
 
       <Stack gap={isFeatured ? 4 : 3}>
@@ -79,7 +79,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         )}
       </Stack>
 
-      <Stack marginTop="auto" paddingTop={isFeatured ? 4 : 2} gap={isFeatured ? 4 : 3}>
+      <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
           {item.tags.slice(0, 3).map((tag) => (
             <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
@@ -103,6 +103,6 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           <ArrowRight className={cn('w-3.5 h-3.5 text-current', stroke.thick)} aria-hidden="true" />
         </Button>
       </Stack>
-    </Stack>
+    </BaseCard>
   );
 }
