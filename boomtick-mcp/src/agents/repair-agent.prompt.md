@@ -30,23 +30,23 @@ GRANTED:
 - PR Title:  {PR_TITLE}
 - Conflicting files: {CONFLICT_FILES}
 
-## Tools (call as mcp_boomtick_<name> — no parameters)
-All tools derive their context from the MCP server environment automatically.
+## Tools (call as mcp_boomtick_<name> with required parameters)
+Pass the current PR context (PR_NUMBER, branch names, etc.) to each tool as defined in their schemas.
 
 | Tool | Step Used |
 |------|-----------|
 | mcp_boomtick_repo.create_repair_branch      | Step 1 |
 | mcp_boomtick_github.checkout_branch         | Step 2 |
-| mcp_boomtick_github.get_pr_diff             | Step 3 |
+| github.get_pull_request_diff (Official)     | Step 3 |
 | mcp_boomtick_repo.read_ci_logs             | Step 4 |
 | mcp_boomtick_repo.get_changed_files         | Step 5 |
 | mcp_boomtick_repo.get_package_scripts       | Step 6 |
-| mcp_boomtick_github.get_merge_conflict_files| Step 7 (confirm before editing) |
+| mcp_boomtick_github.get_merge_conflict_files| Step 7 |
 | mcp_boomtick_repo.run_tests                | Step 11 |
 | mcp_boomtick_repo.run_playwright           | Step 12 |
 | mcp_boomtick_repo.commit_patch             | Step 15 |
-| mcp_boomtick_github.open_replacement_pr    | Step 16 |
-| mcp_boomtick_github.comment_triage_summary | Step 17 |
+| github.create_pull_request (Official)      | Step 16 |
+| github.add_pull_request_comment (Official) | Step 17 |
 
 ## Project Rules (apply to every file touched)
 - Stack: Next.js + TypeScript + Material-UI (MUI). No raw Tailwind in app/feature layers.
@@ -74,7 +74,7 @@ All tools derive their context from the MCP server environment automatically.
    (The MCP server uses REPAIR_BRANCH from Step 1 automatically.)
 
 ### Step 3 — Read PR Diff
-→ CALL mcp_boomtick_github.get_pr_diff
+→ CALL github.get_pull_request_diff
    Record the diff for reference during conflict resolution in Steps 8–9.
 
 ### Step 4 — Read CI Logs
@@ -145,7 +145,7 @@ If any file in the resolved set is inside src/layouts/:
    Commit message: fix(merge): resolve conflicts in PR #{PR_NUMBER} - {PR_TITLE}
 
 ### Step 16 — Open Replacement PR
-→ CALL mcp_boomtick_github.open_replacement_pr
+→ CALL github.create_pull_request
    Title: fix: [Conflict Repair] {PR_TITLE}
    Body (fill in actual values):
    ---
@@ -171,7 +171,7 @@ If any file in the resolved set is inside src/layouts/:
    Record the returned replacement PR number as REPLACEMENT_PR.
 
 ### Step 17 — Triage Comment on Original PR
-→ CALL mcp_boomtick_github.comment_triage_summary
+→ CALL github.add_pull_request_comment
    Post on PR #{PR_NUMBER}:
    ---
    🔧 **Conflict Repair Complete**

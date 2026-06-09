@@ -11,23 +11,23 @@ import {
 import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { healthHandler } from "./tools.js";
-import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
+import { searchOpenPrsHandler } from "../tools/github.search_open_prs.js";
 import { findSimilarPrsHandler, FindSimilarPrsInputSchema } from "../tools/github.find_similar_prs.js";
 import { triagePrHandler, TriagePrInputSchema } from "../tools/github.triage_pr.js";
-import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
+import { getPrDiffHandler } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
 import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
-import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
-import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
+import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
+import { getRouteMapHandler } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
 import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
 import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
 import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
 import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
-import { openReplacementPrHandler, OpenReplacementPrInputSchema } from "../tools/github.open_replacement_pr.js";
-import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "../tools/github.comment_triage_summary.js";
+import { openReplacementPrHandler } from "../tools/github.open_replacement_pr.js";
+import { commentTriageSummaryHandler } from "../tools/github.comment_triage_summary.js";
 import fs from "fs/promises";
 import path from "path";
 
@@ -241,32 +241,6 @@ export class BoomtickMCPServer {
             inputSchema: { type: "object", properties: {} },
           },
           {
-            name: "github.search_open_prs",
-            description: "Search open PRs.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                state: { type: "string", enum: ["open", "closed", "all"] },
-                includeDrafts: { type: "boolean" },
-                includeFiles: { type: "boolean" },
-                maxResults: { type: "number" },
-                labels: { type: "array", items: { type: "string" } },
-              },
-            },
-          },
-          {
-            name: "github.triage_pr",
-            description: "Deterministic PR triage (fetch, analyze, comment).",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prNumber: { type: "number" },
-                detailed: { type: "boolean" },
-              },
-              required: ["prNumber"],
-            },
-          },
-          {
             name: "github.find_similar_prs",
             description: "Find PRs touching the same files.",
             inputSchema: {
@@ -279,13 +253,13 @@ export class BoomtickMCPServer {
             },
           },
           {
-            name: "github.get_pr_diff",
-            description: "Get PR diff and file list.",
+            name: "github.triage_pr",
+            description: "Deterministic PR triage (fetch, analyze, comment).",
             inputSchema: {
               type: "object",
               properties: {
                 prNumber: { type: "number" },
-                includeDiff: { type: "boolean" },
+                detailed: { type: "boolean" },
               },
               required: ["prNumber"],
             },
@@ -407,36 +381,6 @@ export class BoomtickMCPServer {
               required: ["worktreePath", "message", "allowedFiles"],
             },
           },
-          {
-            name: "github.open_replacement_pr",
-            description: "Open repair/replacement PR.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                originalPrNumber: { type: "number" },
-                repairBranch: { type: "string" },
-                baseBranch: { type: "string" },
-                title: { type: "string" },
-                body: { type: "string" },
-                draft: { type: "boolean" },
-                worktreePath: { type: "string" },
-                pushMode: { type: "boolean" },
-              },
-              required: ["originalPrNumber", "repairBranch", "baseBranch", "title", "body"],
-            },
-          },
-          {
-            name: "github.comment_triage_summary",
-            description: "Comment triage diagnosis on PR.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prNumber: { type: "number" },
-                body: { type: "string" },
-              },
-              required: ["prNumber", "body"],
-            },
-          },
         ],
       };
     });
@@ -446,14 +390,10 @@ export class BoomtickMCPServer {
         switch (request.params.name) {
           case "boomtick.health":
             return createSuccessResult(await healthHandler());
-          case "github.search_open_prs":
-            return createSuccessResult(await searchOpenPrsHandler(SearchOpenPrsInputSchema.parse(request.params.arguments || {})));
           case "github.find_similar_prs":
             return createSuccessResult(await findSimilarPrsHandler(FindSimilarPrsInputSchema.parse(request.params.arguments || {})));
           case "github.triage_pr":
             return createSuccessResult(await triagePrHandler(TriagePrInputSchema.parse(request.params.arguments)));
-          case "github.get_pr_diff":
-            return createSuccessResult(await getPrDiffHandler(GetPrDiffInputSchema.parse(request.params.arguments)));
           case "github.get_merge_conflict_files":
             return createSuccessResult(await getMergeConflictFilesHandler(GetMergeConflictFilesInputSchema.parse(request.params.arguments)));
           case "github.checkout_branch":
@@ -476,10 +416,6 @@ export class BoomtickMCPServer {
             return createSuccessResult(await runPlaywrightHandler(RunPlaywrightInputSchema.parse(request.params.arguments || {})));
           case "repo.commit_patch":
             return createSuccessResult(await commitPatchHandler(CommitPatchInputSchema.parse(request.params.arguments)));
-          case "github.open_replacement_pr":
-            return createSuccessResult(await openReplacementPrHandler(OpenReplacementPrInputSchema.parse(request.params.arguments)));
-          case "github.comment_triage_summary":
-            return createSuccessResult(await commentTriageSummaryHandler(CommentTriageSummaryInputSchema.parse(request.params.arguments)));
           default:
             return createErrorResult(`Tool not found: ${request.params.name}`);
         }
