@@ -9,7 +9,6 @@ interface MerchImageDisplayProps {
   imageUrl: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
-  isFeatured?: boolean;
 }
 
 function resolveImageSrc(src: string) {
@@ -27,7 +26,6 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         alt={image.alt}
         width="full"
         height="full"
-        padding={{ base: 4, md: 6 }}
         loading={loading ?? 'lazy'}
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
@@ -81,7 +79,7 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   );
 }
 
-export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
+export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
   const primary = resolved.primary;
   if (!primary) return null;
@@ -94,22 +92,21 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
+      aspect="3/4"
+      maxHeight={{ base: 80, lg: 96 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      <Stack align="center" justify="center" height="full" width="full">
-        <Box flex width="full" height="full" minHeight="0">
-          {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-            <EqualImages images={resolved.equal} />
-          ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
-            <ProminentImages primary={primary} secondary={resolved.secondary} />
-          ) : (
-            <SingleImage image={primary} />
-          )}
-        </Box>
-      </Stack>
+      <Box width="full" height="full" minHeight="0">
+        {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+          <EqualImages images={resolved.equal} />
+        ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
+          <ProminentImages primary={primary} secondary={resolved.secondary} />
+        ) : (
+          <SingleImage image={primary} />
+        )}
+      </Box>
     </Box>
   );
 }
