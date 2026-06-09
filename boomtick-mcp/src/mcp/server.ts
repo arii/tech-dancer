@@ -13,6 +13,7 @@ import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { healthHandler } from "./tools.js";
 import { findSimilarPrsHandler, FindSimilarPrsInputSchema } from "../tools/github.find_similar_prs.js";
 import { triagePrHandler, TriagePrInputSchema } from "../tools/github.triage_pr.js";
+import { autoRepairHandler, AutoRepairInputSchema } from "../tools/github.auto_repair.js";
 import { repairPrepareHandler, RepairPrepareInputSchema } from "../tools/github.repair_prepare.js";
 import { repairFinalizeHandler, RepairFinalizeInputSchema } from "../tools/github.repair_finalize.js";
 import { getContextHandler, GetContextInputSchema } from "../tools/repo.get_context.js";
@@ -269,6 +270,18 @@ export class BoomtickMCPServer {
             },
           },
           {
+            name: "github.auto_repair",
+            description: "Fully automated PR repair (prepare, resolve, finalize).",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prNumber: { type: "number" },
+                baseBranch: { type: "string" },
+              },
+              required: ["prNumber"],
+            },
+          },
+          {
             name: "github.repair_prepare",
             description: "Aggregate PR context and create repair branch.",
             inputSchema: {
@@ -351,6 +364,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await findSimilarPrsHandler(FindSimilarPrsInputSchema.parse(request.params.arguments || {})));
           case "github.triage_pr":
             return createSuccessResult(await triagePrHandler(TriagePrInputSchema.parse(request.params.arguments)));
+          case "github.auto_repair":
+            return createSuccessResult(await autoRepairHandler(AutoRepairInputSchema.parse(request.params.arguments)));
           case "github.repair_prepare":
             return createSuccessResult(await repairPrepareHandler(RepairPrepareInputSchema.parse(request.params.arguments)));
           case "github.repair_finalize":
