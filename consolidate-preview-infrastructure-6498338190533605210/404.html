@@ -10,14 +10,25 @@
       // It probes the path hierarchy to find the deepest index.html.
       (function () {
         var l = window.location;
+        
+        // Prevent infinite redirect loops
+        if (l.search.includes('?/')) {
+          return;
+        }
+        
         var pathParts = l.pathname.split('/').filter(function (p) { return p !== ''; });
 
         function redirect(baseDepth) {
-          var basePath = '/' + pathParts.slice(0, baseDepth).join('/') + '/';
-          var routePath = encodeURIComponent(pathParts.slice(baseDepth).join('/'));
+          var basePath = baseDepth > 0 ? '/' + pathParts.slice(0, baseDepth).join('/') + '/' : '/';
+          var routePath = pathParts.slice(baseDepth).join('/');
+          
+          try {
+            sessionStorage.setItem('ghpages_redirect', '/' + routePath);
+          } catch (e) {}
+
           l.replace(
             l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            basePath + '?/' + routePath +
+            basePath + '?/' + encodeURIComponent(routePath) +
             (l.search ? '&' + encodeURIComponent(l.search.slice(1)) : '') +
             l.hash
           );
@@ -43,8 +54,9 @@
           if (best > 0) {
             redirect(best);
           } else {
-            // Fallback to the known repo base if all probes fail
-            redirect(1);
+            // Fallback: if path starts with tech-dancer, use depth 1. Otherwise, root (depth 0)
+            var hasTechDancer = pathParts[0] === 'tech-dancer';
+            redirect(hasTechDancer ? 1 : 0);
           }
         });
       })();
