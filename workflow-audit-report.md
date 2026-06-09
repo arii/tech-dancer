@@ -202,3 +202,28 @@ Create a central `issue-comment-dispatcher.yml` that triggers on `issue_comment`
 ---
 
 **Note**: The recommendation to add `cache: pip` was originally proposed but removed from implementation. GitHub Action's `setup-python` requires a dependency file (like `requirements.txt`) to generate a cache key. Since workflows like `ci.yml` run inline installations (e.g. `pip install PyGithub click`), adding the cache flag would cause fatal errors. Thus, this optimization cannot be safely applied without modifying how dependencies are managed in those workflows.
+
+
+## Finding: Missing pnpm dependency caching
+
+**Severity:** low
+**Priority:** P3
+**Workflow:** Multiple (`auto-conflict-resolver.yml`, `conflict-check.yml`, `mass-audit-prs.yml`, `mergellama.yml`, `ollama-chatops.yml`)
+**File:** `.github/workflows/*.yml`
+**Jobs affected:** Jobs utilizing setup-node
+**Evidence:**
+- File reference: `uses: actions/setup-node@v4` lacks `cache: 'pnpm'` despite running `pnpm install`.
+
+### Problem
+Jobs that rely on Node.js and pnpm dependencies were not configured to cache the pnpm store via `actions/setup-node`. This caused a full dependency download on every run instead of using GitHub's built-in caching.
+
+### Impact
+- Slower workflow execution times.
+- Unnecessary network usage.
+
+### Recommended fix
+Add `cache: 'pnpm'` to `actions/setup-node@v4` steps across all workflows that install Node dependencies.
+
+### Acceptance criteria
+- [x] Runtime is reduced or justified
+- [x] Required checks still pass

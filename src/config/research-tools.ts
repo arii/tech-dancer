@@ -11,6 +11,7 @@ export interface ResearchTool {
   externalLinkDisplayLabel?: string;
   sourceUrl?: string;
   isFlagship?: boolean;
+  excludeFromEngineeringTools?: boolean;
   image?: string;
 }
 
@@ -101,5 +102,15 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['Automation', 'Calendar', 'WCS'],
     canonicalPath: '/research/wsdc-event-reminders'
+  },
+  {
+    id: 'ecommerce-automation',
+    title: 'Ecommerce Automation Experiments',
+    subtitle: 'Printful & Merch Pipeline',
+    description: 'Automated merch operations including programmatic design generation, Printful API storefront sync, and incoming Amazon affiliate integration workflows.',
+    category: 'Business Automation',
+    status: 'In Progress',
+    tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
+    canonicalPath: '/research/ecommerce-automation'
   }
 ];

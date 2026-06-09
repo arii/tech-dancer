@@ -21,7 +21,7 @@ File: `.github/workflows/ci.yml`
 
 - [x] Workflow file inspected
 - [x] Recent runs inspected
-- [ ] Failed runs inspected where available
+- [x] Failed runs inspected where available
 - [x] Successful runs inspected where available
 - [x] Slowest jobs identified
 - [x] Artifacts inspected where available
@@ -53,7 +53,7 @@ File: `.github/workflows/ci.yml`
 
 ### Finding 2: Missing concurrency cancellation for pull_request workflows
 
-- **Workflow:** `conflict-check.yml`, `codeql.yml`, `security.yml`, `update-snapshots.yml`
+- **Workflow:** `conflict-check.yml`, `codeql.yml`, `security.yml`, `update-snapshots.yml`, `mergellama.yml`, `workflow-validation.yml`
 - **Jobs affected:** PR checks
 - **Evidence:** Workflows lack `concurrency` block with `cancel-in-progress: true`.
 - **Severity:** Low

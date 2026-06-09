@@ -36,8 +36,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.node-version'
           cache: 'pnpm'
+          node-version-file: '.node-version'
 
       - name: Enable Corepack
         run: corepack enable
@@ -104,10 +104,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     concurrency:
-      # Use a global concurrency group for all gh-pages writes to prevent conflicts
-      # and ensure sequential deployment across all branches.
-      group: gh-pages-deploy
-      cancel-in-progress: false
+      # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v4
