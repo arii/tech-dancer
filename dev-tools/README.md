@@ -77,13 +77,19 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Pre-submit quality gate before push/merge:
   - `python3 dev-tools/td_cli.py gh pre-submit`
 
-#### 2) Antigravity / Jules Workflows
+#### 2) Antigravity / Agents Workflows
 - Required secret: `ANTIGRAVITY_API_KEY` or `JULES_API_KEY`.
 - Optional context env vars:
   - `ANTIGRAVITY_SOURCE_ID` or `JULES_SOURCE_ID` (if your environment already knows the source mapping)
 - Typical commands:
   - `python3 dev-tools/td_cli.py antigravity repair`
   - `python3 dev-tools/td_cli.py antigravity repair --worktree`
+
+> [!NOTE]
+> Jules operates on a **distinct architectural paradigm** from standard stateless LLM tools (like Copilot or Gemini). Jules is a **stateful, macro-agent** that autonomously executes complex, multi-file engineering tasks, self-corrects based on CI feedback, and **always submits its own Pull Request** upon completion. Because of its autonomy, it requires highly precise, deterministic instructions passed to the session.
+
+> [!NOTE]
+> Jules operates on a **distinct architectural paradigm** from standard stateless LLM tools (like Copilot or Gemini). Jules is a **stateful, macro-agent** that autonomously executes complex, multi-file engineering tasks, self-corrects based on CI feedback, and **always submits its own Pull Request** upon completion. Because of its autonomy, it requires highly precise, deterministic instructions passed to the session.
 
 #### 3) Ollama Local Review Workflows
 - Optional local runtime vars:
