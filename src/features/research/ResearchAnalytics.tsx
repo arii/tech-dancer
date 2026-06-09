@@ -45,15 +45,15 @@ export default function ResearchAnalytics() {
   return (
     <Box as="section">
       <SEO
-        title="DevAI Systems Portfolio"
-        description="DevAI systems portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
+        title="DevAI Portfolio"
+        description="DevAI portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
       <Stack gap={4}>
         <Stack gap={2}>
           <PageHeader
             label="HIRE_ME"
-            title="DevAI Systems Portfolio"
+            title="DevAI Portfolio"
             as="h1"
             paddingBottom={0}
             border="none"
@@ -248,25 +248,25 @@ export default function ResearchAnalytics() {
                   </Box>
                   <Stack gap={3}>
                     <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
-                            {tool.category}
-                        </Text>
-                        <Text variant="display" size="xl" weight="font-black">
-                            {tool.title}
-                        </Text>
+                      <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
+                        {tool.category}
+                      </Text>
+                      <Text variant="display" size="xl" weight="font-black">
+                        {tool.title}
+                      </Text>
                     </Stack>
                     <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
-                        {tool.subtitle}
+                      {tool.subtitle}
                     </Text>
                     <Text size="sm" color="dim">
                       {tool.description}
                     </Text>
                     <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                        {tool.tags.map(tag => (
-                            <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                                {tag}
-                            </Text>
-                        ))}
+                      {tool.tags.map(tag => (
+                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
+                          {tag}
+                        </Text>
+                      ))}
                     </Box>
                   </Stack>
                 </Stack>
