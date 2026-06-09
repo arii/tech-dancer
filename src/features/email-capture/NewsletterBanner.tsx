@@ -50,7 +50,7 @@ export function NewsletterBanner() {
       zIndex={50}
       surface="alt"
       border="t"
-      className="border-accent/40 shadow-glow"
+      className="border-accent/40"
       paddingX={{ base: 6, md: 12 }}
       paddingY={{ base: 6, lg: 16 }}
       radius="none"
