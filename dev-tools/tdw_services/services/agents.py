@@ -3,14 +3,14 @@ import time
 import requests
 from typing import Optional, List, Dict, Any
 
-class JulesClient:
+class AgentClient:
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.environ.get("ANTIGRAVITY_API_KEY") or os.environ.get("JULES_API_KEY")
+        self.api_key = api_key or os.environ.get("ANTIGRAVITY_API_KEY")
         if not self.api_key:
-            raise ValueError("ANTIGRAVITY_API_KEY or JULES_API_KEY is not set or empty")
+            raise ValueError("ANTIGRAVITY_API_KEY is not set or empty")
 
-        self.base_url = "https://jules.googleapis.com/v1alpha"
-        self.legacy_url = "https://api.jules.ai/v1/sessions"
+        self.base_url = "https://antigravity.googleapis.com/v1alpha"
+        self.legacy_url = "https://api.antigravity.ai/v1/sessions"
         self.session = requests.Session()
         self.session.headers.update({
             "Content-Type": "application/json",
@@ -18,7 +18,7 @@ class JulesClient:
         })
 
     def _request(self, method: str, endpoint: str, data: Optional[Dict] = None, params: Optional[Dict] = None) -> Optional[Dict[str, Any]]:
-        """Make a request to the Jules API with consistent error handling."""
+        """Make a request to the Antigravity API with consistent error handling."""
         # Use full URL if provided, otherwise append to base_url
         if endpoint.startswith("http"):
             url = endpoint
@@ -34,7 +34,7 @@ class JulesClient:
 
             return response.json()
         except requests.exceptions.RequestException as e:
-            print(f"⚠️  Jules API request failed for {endpoint}: {e}")
+            print(f"⚠️  Antigravity API request failed for {endpoint}: {e}")
             if hasattr(e, 'response') and e.response is not None:
                 print(f"DEBUG: Response Body: {e.response.text}")
             return None
@@ -103,7 +103,7 @@ class JulesClient:
         return self._request("POST", "sessions", data=payload)
 
     def create_session(self, prompt: str, source: str, branch: Optional[str] = None, title: Optional[str] = None) -> Optional[str]:
-        """Create a new Jules session."""
+        """Create a new Agent session."""
         if source.startswith("sources/"):
             source_id = source
         else:

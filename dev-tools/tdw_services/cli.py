@@ -457,7 +457,7 @@ def sync(ctx):
 def fix_ci(ctx, pr_number, branch, api_key, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.fix_ci(pr_number=pr_number, branch=branch, api_key=api_key, dry_run=dry_run)
-    agent_name = res.get('agent_name', 'Jules')
+    agent_name = res.get('agent_name', 'Antigravity')
     out(ctx, f"🚀 Initialized {agent_name} session for branch `{res['branch']}`", data=res)
 
 @agent_group.command()

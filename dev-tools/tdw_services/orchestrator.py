@@ -10,7 +10,7 @@ from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
-from tdw_services.services.agents import JulesClient
+from tdw_services.services.agents import AgentClient
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -33,7 +33,7 @@ class Orchestrator:
     def __init__(self):
         self._github = None
         self._ai = None
-        self._jules = None
+        self._agents = None
 
     @property
     def github(self) -> GitHubClient:
@@ -48,10 +48,10 @@ class Orchestrator:
         return self._ai
 
     @property
-    def jules(self) -> JulesClient:
-        if self._jules is None:
-            self._jules = JulesClient()
-        return self._jules
+    def agents(self) -> AgentClient:
+        if getattr(self, '_agents', None) is None:
+            self._agents = AgentClient()
+        return self._agents
 
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
@@ -130,12 +130,12 @@ class Orchestrator:
         except Exception: pass
         return []
 
-    def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
+    def dispatch_agent_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
         """
-        Automates the creation of Jules sessions.
+        Automates the creation of Agent sessions.
         """
         source_id = self.agents.discover_source_id(self.github.repo)
-        if not source_id: raise ValueError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
+        if not source_id: raise ValueError(f"Could not find an Agent source mapping for repository: {self.github.repo}")
         session = self.agents.create_session_from_source(source_id, branch, prompt)
         return session
 
@@ -630,9 +630,9 @@ class Orchestrator:
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
-        agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
-        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.agents.discover_source_id(repo_name)
-        if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
+        agent_name = "Antigravity"
+        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.agents.discover_source_id(repo_name)
+        if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
             res = self.agents.create_session_from_source(source_id, branch, prompt)
