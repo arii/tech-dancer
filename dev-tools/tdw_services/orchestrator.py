@@ -49,7 +49,7 @@ class Orchestrator:
 
     @property
     def agents(self) -> AgentClient:
-        if getattr(self, '_agents', None) is None:
+        if self._agents is None:
             self._agents = AgentClient()
         return self._agents
 
@@ -135,7 +135,7 @@ class Orchestrator:
         Automates the creation of Agent sessions.
         """
         source_id = self.agents.discover_source_id(self.github.repo)
-        if not source_id: raise ValueError(f"Could not find an Agent source mapping for repository: {self.github.repo}")
+        if not source_id: raise ValueError(f"Could not find a Agent source mapping for repository: {self.github.repo}")
         session = self.agents.create_session_from_source(source_id, branch, prompt)
         return session
 
@@ -623,9 +623,44 @@ class Orchestrator:
                 for f in findings:
                     structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
 
-        prompt = "Analyze the failing CI logs and fix the errors."
+        prompt = """# Agent Prompt: Self-Review, Fix, and Publish PR
+
+You are a senior engineering agent reviewing your own branch before publishing.
+
+Compare the current branch against `main`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
+
+## Rules
+
+- Do not ask for confirmation before making fixes.
+- Do not ask the user to run commands.
+- Do not stop until you have opened or updated a PR.
+- Do not make unrelated refactors.
+- Do not publish with known failing checks unless the failure is clearly unrelated and documented.
+- If local setup prevents a check from running, document the attempted command, the setup gap, and the follow-up needed.
+
+## Steps
+
+1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin main`.
+2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, and `git diff --cached`.
+3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
+4. Fix the issues directly.
+5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
+6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
+7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
+8. Commit, push, and create or update the PR with a clear summary and validation notes.
+
+## Final response
+
+Respond only after the PR is created or updated:
+
+- PR link
+- Changes made
+- Self-review fixes
+- Validation results
+- Notes or documented limitations"""
+
         if structured_failures:
-            prompt += "\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
+            prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
 
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
@@ -831,94 +866,3 @@ class Orchestrator:
             "pr_url": pr_url,
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
-
-# ==========================================
-# AUDITOR FRAMEWORK
-# ==========================================
-class Auditor:
-    def __init__(self, name: str, client=None, repo_dir=None):
-        self.name = name
-        self.client = client
-        self.repo_dir = repo_dir or os.getcwd()
-
-    def audit(self):
-        raise NotImplementedError
-
-    def _check_file_exists(self, filepath: str) -> bool:
-        return os.path.exists(os.path.join(self.repo_dir, filepath))
-
-    def _grep_file(self, filepath: str, pattern: str) -> List[str]:
-        if not self._check_file_exists(filepath):
-            return []
-        found = []
-        try:
-            with open(os.path.join(self.repo_dir, filepath), 'r', encoding='utf-8') as f:
-                for i, line in enumerate(f, 1):
-                    import re
-                    if re.search(pattern, line):
-                        found.append(f"{filepath}:{i}: {line.strip()}")
-        except Exception as e:
-            print(f"Error reading {filepath}: {e}")
-        return found
-
-class CodebaseAuditor:
-    def __init__(self, name: str, repo_dir=None):
-        self.repo_dir = repo_dir
-        self.name = name
-        self.findings = []
-
-    def audit(self, filepath: str, content: str):
-        raise NotImplementedError
-
-    def add_finding(self, filepath: str, message: str, line_num: int = 0):
-        self.findings.append({
-            "auditor": self.name,
-            "file": filepath,
-            "line": line_num,
-            "message": message
-        })
-
-class StructureAnalyzer:
-    def __init__(self, rules: List[Dict[str, Any]]):
-        self.rules = rules
-
-    def walk_files(self, base):
-        for root, _, files in os.walk(base):
-            for f in files:
-                yield os.path.join(root, f)
-
-    def check_rule(self, rule):
-        import re
-        base = rule["path"]
-        if not os.path.exists(base):
-            return (rule["name"], False, f"Missing path: {base}")
-
-        matched = False
-        pattern = rule.get("pattern", "")
-        # A simple heuristic: if it looks like a regex or has spaces, treat as content search
-        is_filename_pattern = not ("*" in pattern or " " in pattern or "\\" in pattern or "|" in pattern or "^" in pattern)
-
-        for fp in self.walk_files(base):
-            if is_filename_pattern and fp.endswith(pattern):
-                matched = True
-                break
-            elif not is_filename_pattern:
-                try:
-                    with open(fp, "r", encoding="utf-8", errors="ignore") as fh:
-                        if re.search(pattern, fh.read()):
-                            matched = True
-                            break
-                except Exception:
-                    continue
-
-        return (rule["name"], matched, rule["desc"])
-
-    def run(self):
-        results = []
-        failures = []
-        for r in self.rules:
-            name, ok, info = self.check_rule(r)
-            results.append({"name": name, "ok": ok, "info": info})
-            if not ok and r.get("required", False):
-                failures.append(name)
-        return {"results": results, "failures": failures}
