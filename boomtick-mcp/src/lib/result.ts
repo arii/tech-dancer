@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
 export interface ToolResult extends CallToolResult {

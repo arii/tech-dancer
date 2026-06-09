@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import { config } from "../config.js";
+import path from "path";
 
 export const ALLOWED_COMMANDS = {
   git: "git",

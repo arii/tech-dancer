@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
 

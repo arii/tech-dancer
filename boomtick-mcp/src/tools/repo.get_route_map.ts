@@ -1,15 +1,17 @@
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
+import { config } from "../config.js";
 import path from "path";
 
 export const GetRouteMapInputSchema = z.object({});
 
 export async function getRouteMapHandler() {
   // Logic based on tech-dancer repo structure: src/config/routes.ts and content/
+  const routesPath = path.join(config.repoPath, "src/config/routes.ts");
 
   // For simplicity in MVP, we'll try to find routes by listing content files
   // and reading the main routes file if it exists.
-  const routeMap: Record<string, string> = {};
+  let routeMap: Record<string, string> = {};
 
   try {
     const gitFiles = await runCommand("git", ["ls-files", "content/"]);
@@ -25,7 +27,7 @@ export async function getRouteMapHandler() {
         }
       }
     }
-  } catch {
+  } catch (error) {
     // If no content files, that's fine
   }
 
