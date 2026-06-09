@@ -65,7 +65,7 @@ export GEMINI_API_KEY="<key>"
 - `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
 
 
-### Non-Traditional Workflows (Deploy, Antigravity, Jules, Ollama)
+### Non-Traditional Workflows (Deploy, Antigravity, Agent Sessions, Local LLMs)
 
 After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
@@ -110,7 +110,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
 
 
-### Codex / Jules GitHub Command Pattern
+### Codex / Agent Sessions GitHub Command Pattern
 
 Prefer repository CLI commands over raw `gh`:
 
