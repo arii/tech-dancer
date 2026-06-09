@@ -22,9 +22,6 @@ test.describe('Merch Page', () => {
 
   test('should display product cards', async ({ page }) => {
     const productCards = page.getByTestId('product-card');
-    // Note: The count is 16 because there are 11 unique products.
-    // Some products appear in multiple collections when the "All" filter is active,
-    // summing to a total of 16 card components rendered across the page.
     await expect(productCards).toHaveCount(16);
   });
 
