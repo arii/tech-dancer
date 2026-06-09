@@ -59,7 +59,7 @@ def generate_report():
             violations = res['accessibility']['violations']
             for v in violations:
                 finding = {
-                    "title": f"Accessibility Violation: {v['id']} on `{route}` ({vp})",
+                    "title": f"Accessibility Violation: {v['id']} on `{route}` ({vp}) makes it difficult for users with disabilities to navigate or interact with the page effectively.",
                     "route": route,
                     "viewport": vp,
                     "category": "Accessibility",
@@ -79,13 +79,13 @@ def generate_report():
         # 2. Layout Overflow
         if res.get('overflow'):
             finding = {
-                "title": f"Horizontal Overflow on `{route}` ({vp})",
+                "title": f"Horizontal Overflow on `{route}` ({vp}) causes janky scrolling and potential content cut-off.",
                 "route": route,
                 "viewport": vp,
                 "category": "Layout",
                 "severity": "High",
                 "evidence": f"Detected {len(res['overflow'])} elements overflowing viewport.",
-                "recommendation": "Ensure all elements use responsive widths and handle long content with word-wrap or overflow-x: auto.",
+                "recommendation": "Replace raw HTML structural elements with our primitive `Stack` or `Grid` layouts. Make sure widths are token-driven (e.g., `maxWidth={{ base: \"full\", md: \"2xl\" }}`) and avoid fixed pixel widths. For long content blocks, apply `overflow=\"x-auto\"` to the wrapping primitive to contain scrolling locally.",
                 "screenshot": screenshot,
                 "user_impact": "Causes janky scrolling and potential content cut-off.",
                 "acceptance_criteria": [
@@ -98,13 +98,13 @@ def generate_report():
         # 3. Small Tap Targets
         if res.get('tapTargets'):
             finding = {
-                "title": f"Small Tap Targets on `{route}` ({vp})",
+                "title": f"Small Tap Targets on `{route}` ({vp}) makes interactive elements difficult to tap on a phone, leading to user frustration.",
                 "route": route,
                 "viewport": vp,
                 "category": "Mobile UX",
                 "severity": "Medium",
                 "evidence": f"Found {len(res['tapTargets'])} interactive elements smaller than 44x44px.",
-                "recommendation": "Increase padding or dimensions of interactive elements to at least 44x44px for better mobile usability.",
+                "recommendation": "Ensure all interactive elements (buttons, links) are either utilizing our primary `ActionButton` variants or are wrapped in primitive layout components with explicit `padding={{ base: 4, md: 2 }}` spacing tokens to ensure a minimum touch area of 44x44px on mobile.",
                 "screenshot": screenshot,
                 "user_impact": "Makes interactive elements difficult to tap on a phone, leading to user frustration.",
                 "acceptance_criteria": [
@@ -118,13 +118,13 @@ def generate_report():
         oversized_images = [img for img in res.get('images', []) if img['naturalWidth'] > img['renderedWidth'] * 2 and img['naturalWidth'] > 1000]
         if oversized_images:
             finding = {
-                "title": f"Oversized Images on `{route}` ({vp})",
+                "title": f"Oversized Images on `{route}` ({vp}) increases page load time and consumes excessive bandwidth.",
                 "route": route,
                 "viewport": vp,
                 "category": "Performance",
                 "severity": "Medium",
                 "evidence": f"Found {len(oversized_images)} images where natural size is significantly larger than rendered size.",
-                "recommendation": "Use responsive image sets (srcset) or serve optimized crops for smaller viewports.",
+                "recommendation": "Refactor raw `<img>` tags to utilize responsive sizing. Alternatively, ensure the image asset is pre-optimized (WebP) and wrap it within an `AspectRatio` or `Box` primitive to enforce strict width constraints rather than relying on natural dimensions.",
                 "screenshot": screenshot,
                 "user_impact": "Increases page load time and consumes excessive bandwidth.",
                 "acceptance_criteria": [
@@ -139,7 +139,7 @@ def generate_report():
         if atf:
             if atf.get('heroViewportPercentage', 0) > 80 and not atf.get('hasPrimaryCTA'):
                 finding = {
-                    "title": f"Poor Above-the-Fold Visibility on `{route}` ({vp})",
+                    "title": f"Poor Above-the-Fold Visibility on `{route}` ({vp}) means the primary page purpose and next steps are unclear upon initial load.",
                     "route": route,
                     "viewport": vp,
                     "category": "UX",
@@ -179,7 +179,6 @@ def generate_report():
                 issue_file.write(f"## Problem\n{f['title']}\n\n")
                 issue_file.write(f"## Route / viewport\n- Route: {f['route']}\n- Viewport: {f['viewport']}\n\n")
                 issue_file.write(f"## Evidence\n- {f['evidence']}\n- Screenshot: `{f['screenshot']}`\n\n")
-                issue_file.write(f"## User impact\n{f.get('user_impact', 'N/A')}\n\n")
                 issue_file.write(f"## Recommended fix\n{f['recommendation']}\n\n")
                 issue_file.write("## Acceptance criteria\n")
                 for ac in f.get('acceptance_criteria', []):

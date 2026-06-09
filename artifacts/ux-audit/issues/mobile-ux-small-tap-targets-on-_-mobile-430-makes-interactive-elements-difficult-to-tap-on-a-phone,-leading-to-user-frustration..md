@@ -1,5 +1,5 @@
 ## Problem
-Small Tap Targets on `/` (mobile-430)
+Small Tap Targets on `/` (mobile-430) makes interactive elements difficult to tap on a phone, leading to user frustration.
 
 ## Route / viewport
 - Route: /
@@ -9,11 +9,8 @@ Small Tap Targets on `/` (mobile-430)
 - Found 26 interactive elements smaller than 44x44px.
 - Screenshot: `/app/artifacts/ux-audit/screenshots/home-mobile-430.png`
 
-## User impact
-Makes interactive elements difficult to tap on a phone, leading to user frustration.
-
 ## Recommended fix
-Increase padding or dimensions of interactive elements to at least 44x44px for better mobile usability.
+Ensure all interactive elements (buttons, links) are either utilizing our primary `ActionButton` variants or are wrapped in primitive layout components with explicit `padding={{ base: 4, md: 2 }}` spacing tokens to ensure a minimum touch area of 44x44px on mobile.
 
 ## Acceptance criteria
 - [ ] All interactive elements meet the 44x44px minimum target size
