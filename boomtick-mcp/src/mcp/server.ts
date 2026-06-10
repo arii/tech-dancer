@@ -30,6 +30,8 @@ import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "..
 
 import { createJulesSessionHandler, CreateJulesSessionInputSchema } from "../tools/jules/create-session.js";
 import { getJulesSessionHandler, GetJulesSessionInputSchema } from "../tools/jules/get-session.js";
+import { sendJulesMessageHandler, SendJulesMessageInputSchema } from "../tools/jules/send-message.js";
+import { getJulesMessagesHandler, GetJulesMessagesInputSchema } from "../tools/jules/get-messages.js";
 import { listJulesSessionsHandler, ListJulesSessionsInputSchema } from "../tools/jules/list-sessions.js";
 import { cancelJulesSessionHandler, CancelJulesSessionInputSchema } from "../tools/jules/cancel-session.js";
 import { getJulesPullRequestHandler, GetJulesPullRequestInputSchema } from "../tools/jules/get-pr.js";
@@ -401,21 +403,6 @@ export class BoomtickMCPServer {
               required: ["prNumber", "body"],
             },
           },
-
-              },
-              required: ["prompt"],
-            },
-          },
-
-              },
-              required: ["prompt"],
-            },
-          },
-
-              },
-              required: ["prompt"],
-            },
-          },
           {
             name: "jules.create_session",
             description: "Create a Jules session that performs work externally and may generate a GitHub pull request.",
@@ -429,11 +416,34 @@ export class BoomtickMCPServer {
           },
           {
             name: "jules.get_session",
-            description: "Get a Jules session status by ID.",
+            description: "Get the status and details of a Jules session.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: { type: "string" }
+              },
+              required: ["id"],
+            },
+          },
+          {
+            name: "jules.send_message",
+            description: "Send a message to an active Jules session.",
             inputSchema: {
               type: "object",
               properties: {
                 id: { type: "string" },
+                message: { type: "string" }
+              },
+              required: ["id", "message"],
+            },
+          },
+          {
+            name: "jules.get_messages",
+            description: "Get the message history of a Jules session.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: { type: "string" }
               },
               required: ["id"],
             },
@@ -514,6 +524,10 @@ export class BoomtickMCPServer {
             return createSuccessResult(await createJulesSessionHandler(CreateJulesSessionInputSchema.parse(request.params.arguments)));
           case "jules.get_session":
             return createSuccessResult(await getJulesSessionHandler(GetJulesSessionInputSchema.parse(request.params.arguments)));
+          case "jules.send_message":
+            return createSuccessResult(await sendJulesMessageHandler(SendJulesMessageInputSchema.parse(request.params.arguments)));
+          case "jules.get_messages":
+            return createSuccessResult(await getJulesMessagesHandler(GetJulesMessagesInputSchema.parse(request.params.arguments)));
           case "jules.list_sessions":
             return createSuccessResult(await listJulesSessionsHandler(ListJulesSessionsInputSchema.parse(request.params.arguments || {})));
           case "jules.cancel_session":
