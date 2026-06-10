@@ -20,23 +20,15 @@ tags:
 
 Dedicated dance shoes are often expensive and lack the ergonomic support of modern athletic footwear. My preferred solution is to "upgrade" high-comfort sneakers or flats using industrial-strength adhesive suede.
 
-![Suede Stick-on Sheets](/images/gear/amazon/suede-stick-on-sheets.jpg)
+![Finished shoe](/images/gear/diy/step5-finished.svg)
 
-Predictable traction is the foundation of safe social dancing. The goal is not maximum grip, but a controlled balance between friction and glide. This modification allows for fluid rotation, protecting your joints from the high-torque demands of spins and turns.
+Predictable traction is the foundation of safe social dancing. The goal is not maximum grip, but a controlled balance between friction and glide. If you're dancing indoors, you need a shoe that allows controlled rotation. Too much grip can be just as dangerous as too little, especially during spins and turns.
 
 ## The Problem With Ballroom Floors
 
 ### Inconsistent Traction Is Hard on Your Joints
 
-Hotel ballrooms and convention centers rarely offer a consistent dancing surface. Floors range from "slip-and-slides" to surfaces that feel like flypaper. When floor conditions change unexpectedly, your knees and ankles absorb the impact. Inconsistent traction is a primary driver of minor joint strain in the social dance community.
-
-## Why Suede Works: The Physics of Traction
-
-Social dance footwear has utilized suede for decades because of its unique friction profile.
-
-- **Rubber creates excessive torque:** Most athletic shoes are designed for maximum grip, which can be dangerous during rapid pivots.
-- **Suede provides controlled slip:** It allows for a predictable release during rotations while maintaining enough resistance for explosive movement.
-- **Atmospheric stability:** Suede is significantly less sensitive to humidity and dust than raw rubber.
+Hotel ballroom floors, convention centers, and social dance venues rarely offer a consistent dancing surface. Floors range from slippery "slip-and-slides" to sticky surfaces that feel like flypaper. When the floor conditions change unexpectedly, your knees and ankles absorb the cost.
 
 <Notice type="info">
 **Technical Takeaway:**
@@ -45,11 +37,19 @@ Social dance footwear has utilized suede for decades because of its unique frict
 - **Glide-to-Grip Ratio:** Optimized for the low-friction transitions required in West Coast Swing and Ballroom.
 </Notice>
 
+## Why Suede Works: The Physics of Traction
+
+Ballroom and social dance shoes have used suede soles for decades because they provide a consistent balance between grip and glide.
+
+- **Rubber grips too aggressively:** Most athletic shoes are designed for maximum traction, which can create excessive torque during pivots.
+- **Suede creates controlled slip:** It allows for predictable movement and easier spins.
+- **Reduced knee torque:** More predictable movement means less strain on your joints.
+
 ## Why I Don't Use Spot Stickers
 
-### The Risk of Localized Traction
+### The Problem With Ball-Only Traction Patches
 
-While "ball-of-foot" stickers are popular, I advise against them for high-intensity social dancing. Inconsistent friction zones—where the ball glides but the rubber heel catches—create a "tripping" hazard during rolling footwork. Furthermore, localized patches are prone to peeling under the high shear forces of a 4:00 AM social set.
+While "ball-of-foot" stickers or Bloch-style stickers are popular, I advise against them for high-intensity social dancing. Inconsistent friction profiles—where the ball glides but the rubber heel catches—create a "tripping" hazard during rolling footwork. Furthermore, localized patches are prone to peeling under the high shear forces of torque during a long weekend.
 
 ## My Preferred Solution: Full-Sole Suede Coverage
 
@@ -61,61 +61,61 @@ Choosing the right pattern is critical for your safety and long-term movement qu
 
 | Option | Pros | Cons |
 | :--- | :--- | :--- |
-| **Ball Only** | Maximum spin speed; minimal material. | Limited braking control; unstable on sticky floors. |
-| **Split Coverage** | Balanced stopping power; rotational assistance. | Edge catching during rolling steps; inconsistent feel. |
-| **Full Coverage** | Uniform friction; maximum durability; safest profile. | Requires precision trimming and slightly more material. |
+| **Ball Only** | Maximum spin speed; minimal material. | Limited braking control; unstable on sticky floors; peeling under torque. |
+| **Split Coverage** | Better stopping power; some rotational assistance. | Can catch during rolling footwork; creates multiple friction zones. |
+| **Full Coverage (Recommended)** | Uniform traction profile; predictable movement; best long-term durability; most comfortable. | Requires precision trimming and slightly more material. |
 
-Full-sole coverage has proven the most reliable for surviving 8+ hour social sets at major conventions.
+Full coverage has proven the most reliable option during long convention weekends and all-night social dances.
 
 ## Required Gear
 
 | Item | Purpose |
 | :--- | :--- |
-| **Adhesive suede sheets** | Primary traction surface |
-| **Isopropyl alcohol** | Chemical surface preparation |
-| **Precision knife or Scissors** | Material trimming |
-| **Silver Sharpie or Marker** | Outline tracing |
-| **Suede brush** | Nap maintenance |
+| **[Adhesive suede sheets](/gear/2026-04-12-suede-shoe-diy)** | Creates dance sole |
+| **Isopropyl alcohol** | Surface preparation |
+| **Scissors or X-Acto knife** | Cutting |
+| **Marker or pen** | Tracing |
+| **Optional suede brush** | Maintenance |
 
 ## Step-by-Step Tutorial
 
-### 1. Surface Preparation
-Clean the rubber sole thoroughly with isopropyl alcohol. This removes manufacturing oils and road grime that would otherwise compromise the adhesive bond. Ensure the surface is completely dry before application.
+### 1. Clean the Sole
+Remove dirt and oils from the rubber sole. Use isopropyl alcohol and let it dry completely. Chemical preparation is essential for a long-lasting bond.
 
 ![Cleaning shoe sole](/images/gear/diy/step1-clean.svg)
 
-### 2. Tracing the Pattern
-Place the shoe sole-down on the backing paper of the suede sheet. Trace the outline carefully. Using a silver marker on dark backing paper makes for a clearer cut line.
+### 2. Trace the Shoe
+Place the shoe sole-down on the backing paper of the suede sheet. Trace the outline carefully.
 
 ![Tracing suede outline](/images/gear/diy/step2-trace.svg)
 
-### 3. Precision Cutting
-Cut the suede sheet. **Important:** Aim for a "reveal" of approximately 1–2 mm inside your traced line.
+### 3. Cut Inside the Line
+Cut the suede sheet. **Important:** Cut approximately 1–2 mm inside the traced outline.
 
 <Notice type="warning">
-**Technical Note:** Trimming the suede slightly smaller than the sole prevents the edges from catching on the floor—the #1 cause of adhesive failure and peeling.
+**Technical Note:** Trimming the suede slightly smaller than the sole prevents the exposed edges from catching on the floor—the primary cause of peeling and adhesive failure.
 </Notice>
 
 ![Cutting suede sheet](/images/gear/diy/step3-cut.svg)
 
-### 4. Application
-Peel the backing gradually, starting from the toe. Apply the suede with firm, even pressure toward the heel to eliminate air pockets.
+### 4. Apply the Suede
+Peel the backing paper gradually. Apply from toe to heel, pushing out air bubbles and pressing firmly as you go.
 
 ![Applying suede](/images/gear/diy/step4-apply.svg)
 
-### 5. Curing Phase
-Allow the adhesive to cure for a full 24 hours before use. Testing the shoes early can lead to premature edge lifting.
+### 5. Let It Cure
+Wait 24 hours for the adhesive to fully bond. Avoid testing the shoes early, as this can weaken the initial cure.
 
 ![Finished shoe](/images/gear/diy/step5-finished.svg)
 
 ## Maintenance and Repairs
 
-### Restoring the Nap
-Over time, suede can become "slicked" as dust fills the fibers. Use a suede brush to raise the nap and restore the original glide characteristics.
+### Restoring Traction
+Over time, dust and floor wax can compress the suede fibers. Use a suede brush to raise the nap and refresh the glide characteristics after long weekends or heavy use.
 
-### Edge Repair
-If an edge begins to lift, apply a drop of Shoe Goo or industrial superglue and clamp the area until cured. There is rarely a need to replace the entire sheet for minor edge wear.
+### Repairing Minor Peeling
+Instead of replacing the entire sheet, apply a drop of Shoe Goo or superglue to any lifted edges and clamp until cured.
 
 ## Final Verdict
 
-For dancers who prioritize comfort and joint health, adding adhesive suede to a favorite pair of sneakers is a superior alternative to most dedicated dance shoes. It is an inexpensive, durable modification that provides a professional-grade friction profile on any ballroom floor.
+If you already own a comfortable pair of sneakers or flats, adding adhesive suede is often a better solution than purchasing dedicated dance shoes. The modification is inexpensive, durable, and provides a predictable friction profile across a wide range of ballroom and social dance floors.
