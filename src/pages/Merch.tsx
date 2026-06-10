@@ -65,12 +65,12 @@ export default function Merch() {
         jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap={{ base: 7, md: 9 }} width="full" maxWidth="screen-xl">
+      <Stack gap={{ base: 5, md: 6 }} width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
-          paddingBottom={6}
+          paddingBottom={4}
           cta={
             <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
               <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
@@ -84,11 +84,11 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={4}>
+        <Stack gap={3}>
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
-          <Box border="b" paddingBottom={4} overflowX="auto">
+          <Box border="b" paddingBottom={2} overflowX="auto">
             <Stack direction="row" gap={2} padding={1} minWidth="max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton
@@ -104,9 +104,9 @@ export default function Merch() {
 
         {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (
-          <Stack gap={12}>
+          <Stack gap={8}>
             {sections.map((section) => (
-              <Stack key={section.id} gap={6}>
+              <Stack key={section.id} gap={5}>
                 <Stack gap={1}>
                   <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
                     {section.title}
@@ -116,12 +116,12 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, md: 4 }} gap={{ base: 6, md: 8 }}>
-                    <Box span={{ base: 1, md: 2 }}>
+                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
+                    <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
                       <ProductCard item={section.products[0]} isFeatured />
                     </Box>
                     {section.products.slice(1, 3).map((product) => (
-                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, md: 1 }}>
+                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full">
                         <ProductCard
                           item={product}
                         />
@@ -129,7 +129,7 @@ export default function Merch() {
                     ))}
                   </Grid>
                 ) : (
-                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
+                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
                     {section.products.map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
@@ -142,7 +142,7 @@ export default function Merch() {
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }}>
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}
@@ -150,7 +150,7 @@ export default function Merch() {
         )}
 
         {/* Footer Callouts */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8}>
+        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8} width="full" minWidth="0">
           {/* Design Suggestions */}
           <Box padding={8} radius="lg" border surface="card">
             <Stack gap={6}>

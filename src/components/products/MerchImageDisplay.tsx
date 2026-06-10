@@ -94,22 +94,21 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
+      width="full"
       height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      <Stack align="center" justify="center" height="full" width="full">
-        <Box flex width="full" height="full" minHeight="0">
-          {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-            <EqualImages images={resolved.equal} />
-          ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
-            <ProminentImages primary={primary} secondary={resolved.secondary} />
-          ) : (
-            <SingleImage image={primary} />
-          )}
-        </Box>
-      </Stack>
+      <Box width="full" height="full" minHeight="0">
+        {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+          <EqualImages images={resolved.equal} />
+        ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
+          <ProminentImages primary={primary} secondary={resolved.secondary} />
+        ) : (
+          <SingleImage image={primary} />
+        )}
+      </Box>
     </Box>
   );
 }
