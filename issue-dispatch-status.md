@@ -4,12 +4,12 @@
 
 - Open issues checked: 27
 - Existing duplicates found: 0
-- New agent policy issues created: 6
+- New agent policy issues created: 1 (Consolidated)
 - New desktop UX issues created: 0 (Skipped due to duplicates)
 - New mobile UX issues created: 0 (Skipped due to duplicates)
 - New AI slop content issues created: 2
 - Candidates skipped: 1 (Plus multiple UX issues tracked by existing issues)
-- Candidates grouped: 0
+- Candidates grouped: 6
 
 ## AI Slop Content Review
 
@@ -25,6 +25,7 @@
 **Outcome:** Created
 **Issue:** #2005
 **Reason:** Post is a placeholder "coming soon" announcement lacking substantive value.
+
 ### File: `content/posts/2026-04-18-financial-literacy-dancers.md`
 
 - [x] Content reviewed
@@ -40,7 +41,7 @@
 
 ## Agent Policy Violations
 
-### Candidate: `src/pages/Home.tsx`
+### Candidates: `Home.tsx`, `Equalizer.tsx`, `EditorialHero.tsx`, `EditorialHeader.tsx`, `AuthorAvatar.tsx`, `ProductCard.tsx`
 
 - [x] Checked against `AGENTS.md`
 - [x] Checked for existing issues
@@ -48,64 +49,10 @@
 - [x] Issue created or skipped
 - [x] Status recorded
 
-**Outcome:** Created
-**Issue:** #2007
-**Reason:** Contains raw Tailwind utility classes violating the design system primitives rule.
-### Candidate: `src/components/Equalizer.tsx`
+**Outcome:** Grouped and Created
+**Issue:** #2016
+**Reason:** Consolidated 6 individual structural violations into a single actionable epic detailing raw Tailwind utility usage violating primitive rules.
 
-- [x] Checked against `AGENTS.md`
-- [x] Checked for existing issues
-- [x] Evidence collected
-- [x] Issue created or skipped
-- [x] Status recorded
-
-**Outcome:** Created
-**Issue:** #2008
-**Reason:** Uses raw `div`s and arbitrary tailwind values (`pb-[18px]`, `opacity-[.22]`).
-### Candidate: `src/components/editorial/EditorialHero.tsx`
-
-- [x] Checked against `AGENTS.md`
-- [x] Checked for existing issues
-- [x] Evidence collected
-- [x] Issue created or skipped
-- [x] Status recorded
-
-**Outcome:** Created
-**Issue:** #2009
-**Reason:** Passes raw Tailwind classes to a child component instead of using primitive properties.
-### Candidate: `src/components/editorial/EditorialHeader.tsx`
-
-- [x] Checked against `AGENTS.md`
-- [x] Checked for existing issues
-- [x] Evidence collected
-- [x] Issue created or skipped
-- [x] Status recorded
-
-**Outcome:** Created
-**Issue:** #2010
-**Reason:** Component uses arbitrary Tailwind opacity and raw typography classes in the `className` prop.
-### Candidate: `src/components/editorial/AuthorAvatar.tsx`
-
-- [x] Checked against `AGENTS.md`
-- [x] Checked for existing issues
-- [x] Evidence collected
-- [x] Issue created or skipped
-- [x] Status recorded
-
-**Outcome:** Created
-**Issue:** #2011
-**Reason:** Component uses raw Tailwind border, shadow, and opacity classes.
-### Candidate: `src/components/products/ProductCard.tsx`
-
-- [x] Checked against `AGENTS.md`
-- [x] Checked for existing issues
-- [x] Evidence collected
-- [x] Issue created or skipped
-- [x] Status recorded
-
-**Outcome:** Created
-**Issue:** #2012
-**Reason:** Component uses raw Tailwind interaction, border, and color classes instead of variants or `Button` primitive.
 ## Desktop UX Review
 
 ### Route: `/`
