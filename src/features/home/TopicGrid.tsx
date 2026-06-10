@@ -2,6 +2,7 @@
 import { Calendar, ShoppingBag, BookOpen } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 
 const TOPICS = [
   {
@@ -34,7 +35,7 @@ export function TopicGrid() {
         Explore by topic
       </Text>
       <Grid cols={{ base: 1, md: 3 }} gap={3}>
-        {TOPICS.map(({ icon: Icon, label, description, cta, href }) => (
+        {TOPICS.map(({ icon: IconItem, label, description, cta, href }) => (
           <Stack
             key={label}
             as={NavLink}
@@ -52,7 +53,7 @@ export function TopicGrid() {
           >
             {/* Icon — exactly 32px container */}
             <Box width={8} height={8} display="flex" align="center" justify="center" radius="md" className="bg-accent/10">
-              <Icon size="sm" color="accent" />
+              <Icon icon={IconItem} size="sm" color="accent" />
             </Box>
             <Stack gap={1}>
               <Text variant="body" size="base" weight="font-bold" className="transition-colors group-hover:text-accent">

@@ -2,6 +2,7 @@
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
@@ -99,7 +100,7 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <Box as={ArrowRight} marginTop={1} shrink={0} width={4} height={4} color="accent" opacity={0.4} className="transition-opacity group-hover:opacity-100" />
+            <Icon icon={ArrowRight} marginTop={1} shrink={0} size="sm" color="accent" className="opacity-40 transition-opacity group-hover:opacity-100" />
           </Box>
         ))}
       </Stack>

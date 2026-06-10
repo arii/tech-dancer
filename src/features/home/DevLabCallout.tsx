@@ -2,6 +2,7 @@
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 
 export function DevLabCallout() {
   return (
@@ -9,7 +10,7 @@ export function DevLabCallout() {
       {/* Header row */}
       <Stack direction="row" align="center" gap={3}>
         <Box shrink={0} radius="md" padding={2} className="bg-accent/10">
-          <Box as={Terminal} width={4} height={4} className="text-accent" />
+          <Icon icon={Terminal} size="sm" color="accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
           DevAI Portfolio

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { Logo } from '@/components/ui/Logo';
+import { Icon } from '@/components/ui/Icon';
 import { TOP_NAV_ROUTES } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -66,7 +67,7 @@ export default function Navigation() {
 
           <Stack direction="row" align="center" gap={{ base: 2, lg: 6 }}>
             <Box as="button" type="button" onClick={handleSearchClick} padding={2} display={{ base: 'none', lg: 'flex' }} align="center" gap={2} color="dim" className="group transition-colors hover:text-accent" aria-label="Open search">
-              <Box as={Search} width={4} height={4} aria-hidden="true" />
+              <Icon icon={Search} size="xs" aria-hidden="true" />
               <Text variant="mono" size="xs" color="dim" display={{ base: 'none', xl: 'block' }}>CMD+K</Text>
             </Box>
 
@@ -98,7 +99,7 @@ export default function Navigation() {
               aria-expanded={isOpen}
               whileTap={{ scale: 0.95 }}
             >
-              {isOpen ? <Box as={X} width={6} height={6} aria-hidden="true" /> : <Box as={Menu} width={6} height={6} aria-hidden="true" />}
+              {isOpen ? <Icon icon={X} size="md" aria-hidden="true" /> : <Icon icon={Menu} size="md" aria-hidden="true" />}
             </Box>
           </Stack>
         </Box>

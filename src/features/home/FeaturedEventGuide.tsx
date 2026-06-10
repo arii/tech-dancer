@@ -133,7 +133,7 @@ export function FeaturedEventGuide() {
         <Stack gap={3} padding={6} minWidth={0} justify="between" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="start" gap={2}>
-              <Box as={MapPin} marginTop={0.5} shrink={0} width={3.5} height={3.5} color="accent" />
+              <Icon icon={MapPin} marginTop={0.5} shrink={0} size="xs" color="accent" />
               <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase width="full" maxWidth="full" display="block" leading="normal">
                 {event.location}
               </Text>
