@@ -29,10 +29,11 @@ export default function Home() {
         <FeaturedGuidePanel />
       </Box>
 
-      {/* Remaining sections — tighter vertical rhythm on mobile */}
-      <Stack gap={{ base: 10, lg: 14 }} className="mt-12 w-full max-w-full min-w-0 lg:mt-16">
-        <TopicGrid />
-
+      <Stack
+        gap={{ base: 10, lg: 14 }}
+        marginTop={{ base: 4, lg: 16 }}
+        className="w-full max-w-full min-w-0"
+      >
         <Box
           display="grid"
           className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
@@ -41,6 +42,7 @@ export default function Home() {
           <GearShelf />
         </Box>
 
+
         <Box
           display="grid"
           className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
@@ -48,6 +50,7 @@ export default function Home() {
           <LatestPosts />
           <DevLabCallout />
         </Box>
+        <TopicGrid />
       </Stack>
     </Box>
   );
