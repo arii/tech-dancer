@@ -71,7 +71,7 @@ export function GearShelf() {
               size="sm"
               weight="font-bold"
               marginTop={2}
-              className="transition-colors group-hover:text-accent"
+              hoverColor="accent"
             >
               {label}
             </Text>

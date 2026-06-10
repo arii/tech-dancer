@@ -47,6 +47,7 @@
   --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
   --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
   --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
+    --spacing-wordmark-offset: -3px;
   --spacing-hero: var(--raw-spacing-hero);
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
@@ -176,7 +177,11 @@
     @apply font-extrabold text-white flex items-center tracking-[0.05em];
   }
   .wordmark-hero {
-    @apply font-display mt-3 opacity-0 ml-0 md:-ml-3;
+    @apply font-display mt-3 opacity-0;
+    margin-left: 0;
+    @media (min-width: 768px) {
+      margin-left: var(--spacing-wordmark-offset);
+    }
     transform: translateY(10px);
     font-size: clamp(18px, 4vw, 28px);
     animation: fadeUp 0.7s ease forwards 0.4s;
