@@ -295,7 +295,7 @@
   .hero-logo-anim {
     height: clamp(60px, 10vw, 120px);
     animation: fadeUp 0.6s ease forwards 0.05s;
-    margin-left: -12px;
+    @apply ml-0 md:-ml-3;
   }
   .hero-headline-anim {
     animation: fadeUp 0.6s ease forwards 0.2s;

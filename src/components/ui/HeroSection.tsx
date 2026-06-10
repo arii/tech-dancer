@@ -58,6 +58,8 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
+          width="full"
+          maxWidth="full"
           className="opacity-0 pointer-events-auto hero-headline-anim"
         >
           <Text
@@ -65,6 +67,7 @@ export function HeroSection() {
             variant="hero"
             color="white"
             size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            className="break-words"
           >
             Built for dancers.
           </Text>
@@ -72,6 +75,7 @@ export function HeroSection() {
             as="span"
             variant="hero"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            className="break-words"
           >
             <span className="hero-accent-color">Train smarter.</span>
           </Text>
@@ -80,6 +84,7 @@ export function HeroSection() {
             variant="hero"
             color="white"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            className="break-words"
           >
             Travel better.
           </Text>
@@ -166,6 +171,8 @@ export function HeroSection() {
           gap={1}
           marginY={4}
           height={12}
+          width="full"
+          maxWidth="full"
           overflow="hidden"
           className="opacity-0 pointer-events-none hero-waveform-anim"
           aria-hidden="true"
