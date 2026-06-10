@@ -47,7 +47,7 @@ export default defineConfig({
     command: 'pnpm run preview',
     url: `http://localhost:${PORT}${BASE_PATH}`,
     reuseExistingServer: !process.env.CI,
-    stdout: 'ignore',
+    stdout: 'pipe',
     stderr: 'pipe',
     timeout: 120 * 1000,
     env: { VITE_BASE_PATH: String(BASE_PATH || '/') }, // impeccable-ignore
