@@ -3,14 +3,14 @@ import fetch from "node-fetch";
 
 const JULES_API_URL = "https://jules.googleapis.com/v1alpha/sessions";
 
-export const GetJulesPullRequestInputSchema = z.object({
+export const GetJulesMessagesInputSchema = z.object({
   id: z.string(),
   apiKey: z.string(),
 });
 
-export async function getJulesPullRequestHandler(input: z.infer<typeof GetJulesPullRequestInputSchema>) {
+export async function getJulesMessagesHandler(input: z.infer<typeof GetJulesMessagesInputSchema>) {
   const cleanId = input.id.replace("sessions/", "");
-  const response = await fetch(`${JULES_API_URL}/${cleanId}`, {
+  const response = await fetch(`${JULES_API_URL}/${cleanId}/messages`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -19,12 +19,12 @@ export async function getJulesPullRequestHandler(input: z.infer<typeof GetJulesP
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to get Jules PR: ${response.statusText}`);
+    throw new Error(`Failed to get Jules messages: ${response.statusText}`);
   }
 
   const data: any = await response.json();
   return {
-    id: data.name || input.id,
-    pullRequestUrl: data.pullRequestUrl || "No PR generated yet",
+    id: input.id,
+    messages: data.messages || [],
   };
 }

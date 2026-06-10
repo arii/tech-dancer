@@ -1,10 +1,9 @@
-export type LocalAgentProvider = "copilot" | "agy" | "ollama";
-
 export type JulesStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 
 export interface JulesSession {
   id: string;
   status: JulesStatus;
-  createdAt: Date;
+  createdAt: string;
   pullRequestUrl?: string;
+  recentMessage?: string;
 }
