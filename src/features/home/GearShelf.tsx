@@ -28,7 +28,8 @@ export function GearShelf() {
           paddingX={2}
           paddingY={4}
           marginRight={-2}
-          className="shrink-0 hover:underline"
+          shrink={0}
+          className="hover:underline"
         >
           See all picks →
         </Text>
@@ -48,14 +49,19 @@ export function GearShelf() {
               display="flex"
               align="center"
               justify="center"
-              className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40"
+              aspect="square"
+              surface="alt"
+              className="transition-all group-hover:border-accent/40"
             >
               {image ? (
-                <img
+                  <Box
+                    as="img"
                   src={`${ASSET_PREFIX}${image}`}
                   alt=""
                   aria-hidden="true"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    height="full"
+                    width="full"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : imageText ? (
                 <Text variant="body" size="sm" weight="font-bold">
@@ -98,13 +104,18 @@ export function GearShelf() {
               minWidth={0}
               className="group"
             >
-              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
+              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" aspect="square" surface="alt" className="transition-all group-hover:border-accent/40">
                 {image ? (
-                  <img
+                  <Box
+                    as="img"
                     src={`${ASSET_PREFIX}${image}`}
                     alt=""
                     aria-hidden="true"
-                    className="block h-full w-full max-w-full object-cover"
+                    display="block"
+                    height="full"
+                    width="full"
+                    maxWidth="full"
+                    className="object-cover"
                   />
                 ) : imageText ? (
                   <Text variant="body" size="xs" weight="font-bold" className="text-center">

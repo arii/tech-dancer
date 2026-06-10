@@ -22,7 +22,8 @@ export function HeroSection() {
       align="center"
       justify="center"
       overflow="hidden"
-      className="relative hero-section"
+      position="relative"
+      className="hero-section"
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -50,7 +51,7 @@ export function HeroSection() {
       >
 
 
-        <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" />
+        <Wordmark variant="hero" opacity={0} className="pointer-events-none hero-logo-anim" />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
@@ -58,7 +59,8 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 pointer-events-auto hero-headline-anim"
+          opacity={0}
+          className="pointer-events-auto hero-headline-anim"
         >
           <Text
             as="span"
@@ -91,7 +93,8 @@ export function HeroSection() {
           height={1.5}
           marginTop={6}
           radius="full"
-          className="opacity-0 pointer-events-none hero-line-anim"
+          opacity={0}
+          className="pointer-events-none hero-line-anim"
         />
 
         {/* Tagline with Vertical Accent Bar */}
@@ -101,11 +104,13 @@ export function HeroSection() {
           gap={5}
           marginTop={{ base: 6, lg: 8 }}
           maxWidth="2xl"
-          className="opacity-0 hero-tagline-anim"
+          opacity={0}
+          className="hero-tagline-anim"
         >
           <Box
             width={0.5}
-            className="bg-white/20 shrink-0"
+            shrink={0}
+            className="bg-white/20"
             aria-hidden="true"
           />
           <Text
@@ -128,7 +133,8 @@ export function HeroSection() {
           gap={3}
           width="full"
           maxWidth={{ base: "full", md: "2xl" }}
-          className="opacity-0 hero-cta-anim"
+          opacity={0}
+          className="hero-cta-anim"
         >
           <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
             <ActionButton
@@ -183,7 +189,8 @@ export function HeroSection() {
           marginY={4}
           height={12}
           overflow="hidden"
-          className="opacity-0 pointer-events-none hero-waveform-anim"
+          opacity={0}
+          className="pointer-events-none hero-waveform-anim"
           aria-hidden="true"
         >
           {BARS.map((bar, i) => (

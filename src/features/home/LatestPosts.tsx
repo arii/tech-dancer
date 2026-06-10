@@ -26,14 +26,15 @@ export function LatestPosts() {
           marginRight={-2}
           uppercase
           tracking="widest"
-          className="shrink-0 transition-colors hover:text-accent"
+          shrink={0}
+          className="transition-colors hover:text-accent"
         >
           View all →
         </Text>
       </Box>
 
       {/* Compact editorial post rows — no card wrapper, border-bottom only */}
-      <Stack gap={0} border="t" className="border-line">
+      <Stack gap={0} border="t" borderColor="line">
         {posts.map((post) => (
           <Box
             key={post.slug}
@@ -43,7 +44,12 @@ export function LatestPosts() {
             align="start"
             gap={4}
             paddingY={{ base: 5, md: 3.5 }}
-            className="group w-full max-w-full min-w-0 border-b border-line transition-colors hover:bg-surface/50"
+            width="full"
+            maxWidth="full"
+            minWidth={0}
+            border="b"
+            borderColor="line"
+            className="group transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
@@ -54,13 +60,21 @@ export function LatestPosts() {
               width={72}
               shrink={0}
               surface="alt"
+                display="flex"
+                align="center"
+                justify="center"
             >
               {post.image ? (
-                <img
+                <Box
+                  as="img"
                   src={post.image}
                   alt=""
                   aria-hidden="true"
-                  className="block h-full w-full max-w-full object-cover"
+                  display="block"
+                  height="full"
+                  width="full"
+                  maxWidth="full"
+                  className="object-cover"
                 />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />
@@ -77,15 +91,15 @@ export function LatestPosts() {
                   {post.date}
                 </Text>
               </Box>
-              <Text variant="body" size="sm" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
+              <Text variant="body" size="sm" weight="font-bold" clamp={2} className="transition-colors group-hover:text-accent">
                 {post.title}
               </Text>
-              <Text variant="body" size="xs" color="dim" className="line-clamp-1">
+              <Text variant="body" size="xs" color="dim" clamp={1}>
                 {post.excerpt}
               </Text>
             </Stack>
 
-            <ArrowRight marginTop={1} className="h-4 w-4 shrink-0 text-accent opacity-40 transition-opacity group-hover:opacity-100" />
+            <Box as={ArrowRight} marginTop={1} shrink={0} width={4} height={4} color="accent" opacity={0.4} className="transition-opacity group-hover:opacity-100" />
           </Box>
         ))}
       </Stack>

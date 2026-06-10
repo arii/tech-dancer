@@ -1,7 +1,7 @@
 import { useId } from 'react';
-import { cn } from '@/lib/utils';
+import { Box, BoxProps } from '@/layouts/Primitives';
 
-interface LogoProps {
+interface LogoProps extends BoxProps {
   className?: string;
 }
 
@@ -9,17 +9,23 @@ interface LogoProps {
  * High-fidelity SVG Logo for BoomTick.
  * Consists of the 'boomtick.blog' wordmark.
  */
-export function Logo({ className }: LogoProps) {
+export function Logo({ className, ...props }: LogoProps) {
   const titleId = useId();
 
   return (
-    <svg
+    <Box
+      as="svg"
       viewBox="0 0 325 100"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-full w-auto overflow-visible", className)}
+      width="auto"
+      height="full"
+      overflow="visible"
       aria-labelledby={titleId}
       fill="none"
+      // @ts-expect-error - SVG specific prop
       preserveAspectRatio="xMidYMid meet"
+      className={className}
+      {...props}
     >
       <title id={titleId}>BoomTick Logo</title>
 
@@ -31,6 +37,6 @@ export function Logo({ className }: LogoProps) {
       >
         boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
       </text>
-    </svg>
+    </Box>
   );
 }

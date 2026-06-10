@@ -26,13 +26,18 @@ export function FeaturedGuidePanel() {
       className="group self-stretch"
     >
       {/* Background image — fills the column height naturally */}
-      <img
+      <Box
+        as="img"
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         alt={FEATURED.title}
-        width={420}
-        height={600}
+        width="full"
+        height="full"
+        position="absolute"
+        inset={true}
+        opacity={0.6}
+        className="object-cover object-center transition-opacity duration-500 group-hover:opacity-70"
+        // @ts-expect-error - high fetch priority is supported but not in standard types
         fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-60 transition-opacity duration-500 group-hover:opacity-70"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility */}

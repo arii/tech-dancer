@@ -29,7 +29,7 @@ const TOPICS = [
 
 export function TopicGrid() {
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={3}>
         Explore by topic
       </Text>
@@ -52,7 +52,7 @@ export function TopicGrid() {
           >
             {/* Icon — exactly 32px container */}
             <Box width={8} height={8} display="flex" align="center" justify="center" radius="md" className="bg-accent/10">
-              <Icon className="h-4.5 w-4.5 text-accent" />
+              <Icon size="sm" color="accent" />
             </Box>
             <Stack gap={1}>
               <Text variant="body" size="base" weight="font-bold" className="transition-colors group-hover:text-accent">

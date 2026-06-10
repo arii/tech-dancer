@@ -41,7 +41,7 @@ export default function Navigation() {
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} padding={2} marginLeft={-2} className="group">
-              <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-80" />
+              <Logo height={{ base: 8, md: 9 }} width="auto" color="white" className="transition-opacity group-hover:opacity-80" />
             </Box>
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
               {topRoutes.map((item) => (
@@ -50,7 +50,12 @@ export default function Navigation() {
                     as={NavLink}
                     to={item.path}
                     paddingY={1}
-                    className={({ isActive }: { isActive: boolean }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-text-dim')}
+                    position="relative"
+                    size="xs"
+                    weight="font-semibold"
+                    uppercase
+                    tracking="wide"
+                    className={({ isActive }: { isActive: boolean }) => cn('transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-text-dim')}
                   >
                     {item.label}
                   </Box>
@@ -60,13 +65,22 @@ export default function Navigation() {
           </Stack>
 
           <Stack direction="row" align="center" gap={{ base: 2, lg: 6 }}>
-            <Box as="button" type="button" onClick={handleSearchClick} padding={2} display={{ base: 'none', lg: 'flex' }} align="center" gap={2} className="group text-text-dim transition-colors hover:text-accent" aria-label="Open search">
-              <Search className="h-4 w-4" aria-hidden="true" />
+            <Box as="button" type="button" onClick={handleSearchClick} padding={2} display={{ base: 'none', lg: 'flex' }} align="center" gap={2} color="dim" className="group transition-colors hover:text-accent" aria-label="Open search">
+              <Box as={Search} width={4} height={4} aria-hidden="true" />
               <Text variant="mono" size="xs" color="dim" display={{ base: 'none', xl: 'block' }}>CMD+K</Text>
             </Box>
 
             <Box display={{ base: 'none', lg: 'flex' }}>
-              <ActionButton as={NavLink} to="/contact?intent=subscribe" variant="primary" paddingX={4} paddingY={2} className="text-xs uppercase tracking-widest">
+              <ActionButton
+                as={NavLink}
+                to="/contact?intent=subscribe"
+                variant="primary"
+                paddingX={4}
+                paddingY={2}
+                size="xs"
+                uppercase
+                tracking="widest"
+              >
                 Subscribe
               </ActionButton>
             </Box>
@@ -84,7 +98,7 @@ export default function Navigation() {
               aria-expanded={isOpen}
               whileTap={{ scale: 0.95 }}
             >
-              {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+              {isOpen ? <Box as={X} width={6} height={6} aria-hidden="true" /> : <Box as={Menu} width={6} height={6} aria-hidden="true" />}
             </Box>
           </Stack>
         </Box>

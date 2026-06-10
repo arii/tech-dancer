@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 import { getEvents } from '@/lib/content';
 
 const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
@@ -132,8 +133,8 @@ export function FeaturedEventGuide() {
         <Stack gap={3} padding={6} minWidth={0} justify="between" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="start" gap={2}>
-              <MapPin marginTop={0.5} className="h-3.5 w-3.5 shrink-0 text-accent" />
-              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full leading-normal">
+              <Box as={MapPin} marginTop={0.5} shrink={0} width={3.5} height={3.5} color="accent" />
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase width="full" maxWidth="full" display="block" leading="normal">
                 {event.location}
               </Text>
             </Box>
@@ -168,11 +169,13 @@ export function FeaturedEventGuide() {
                   padding={{ base: 4, md: 1.5 }}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  cursor="pointer"
+                  opacity={index === 0 ? 0.3 : 1}
+                  className="transition-colors hover:border-accent/50"
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+          <Icon icon={ChevronLeft} size="sm" />
                 </Box>
                 <Box
                   as="button"
@@ -180,11 +183,13 @@ export function FeaturedEventGuide() {
                   padding={{ base: 4, md: 1.5 }}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  cursor="pointer"
+                  opacity={index === featured.length - 1 ? 0.3 : 1}
+                  className="transition-colors hover:border-accent/50"
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >
-                  <ChevronRight className="h-4 w-4" />
+          <Icon icon={ChevronRight} size="sm" />
                 </Box>
               </Box>
             )}

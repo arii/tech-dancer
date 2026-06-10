@@ -9,7 +9,7 @@ export function DevLabCallout() {
       {/* Header row */}
       <Stack direction="row" align="center" gap={3}>
         <Box shrink={0} radius="md" padding={2} className="bg-accent/10">
-          <Terminal className="h-4 w-4 text-accent" />
+          <Box as={Terminal} width={4} height={4} className="text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
           DevAI Portfolio
