@@ -27,6 +27,7 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         alt={image.alt}
         width="full"
         height="full"
+        padding={{ base: 4, md: 6 }}
         loading={loading ?? 'lazy'}
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
