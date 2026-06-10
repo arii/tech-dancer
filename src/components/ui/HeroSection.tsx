@@ -142,7 +142,9 @@ export function HeroSection() {
               to="/events"
               variant="primary"
               paddingX={6}
+              paddingY={2}
               radius="lg"
+              height={12}
               minHeight={12}
               justify={{ base: 'center', md: 'start' }}
               flex={1}
@@ -155,7 +157,9 @@ export function HeroSection() {
               to="/gear"
               variant="secondary"
               paddingX={6}
+              paddingY={2}
               radius="lg"
+              height={12}
               minHeight={12}
               justify={{ base: 'center', md: 'start' }}
               flex={1}
@@ -165,7 +169,7 @@ export function HeroSection() {
             </ActionButton>
           </Stack>
 
-          <Box marginLeft={-2}>
+          <Box marginLeft={-2} display="flex" align="center">
             <Text
               as={NavLink}
               to="/blog"
@@ -173,8 +177,10 @@ export function HeroSection() {
               size="xs"
               color="dim"
               paddingX={2}
-              paddingY={{ base: 6, md: 2 }}
-              display="inline-block"
+              paddingY={2}
+              minHeight={11}
+              display="flex"
+              align="center"
               className="underline underline-offset-4 transition-colors hover:text-accent normal-case"
             >
               Start with practical notes →

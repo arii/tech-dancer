@@ -90,12 +90,7 @@ export function FeaturedEventGuide() {
         maxWidth="full"
         minWidth={0}
         surface="default"
-        className="touch-pan-y overscroll-x-contain select-none"
-        style={{ // impeccable-ignore - Grid configuration with arbitrary values for bespoke editorial layout.
-          display: 'grid',
-          gridTemplateColumns: window.innerWidth >= 768 ? '16.25rem 1fr' : '1fr',
-          minHeight: window.innerWidth >= 768 ? '12.5rem' : 'auto'
-        } as React.CSSProperties}
+        className="touch-pan-y overscroll-x-contain select-none grid-cols-1 md:grid-cols-[16.25rem_1fr] min-h-auto md:min-h-[12.5rem]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         data-gesture-handled="true"
@@ -154,7 +149,10 @@ export function FeaturedEventGuide() {
               size="xs"
               color="accent"
               weight="font-bold"
-              paddingY={{ base: 4, md: 2 }}
+              paddingY={2}
+              minHeight={11}
+              display="flex"
+              align="center"
               paddingRight={4}
               marginLeft={-1}
               className="hover:underline"
@@ -166,7 +164,12 @@ export function FeaturedEventGuide() {
                 <Box
                   as="button"
                   onClick={goPrev}
-                  padding={{ base: 4, md: 1.5 }}
+                  paddingX={4}
+                  paddingY={2}
+                  minHeight={11}
+                  display="flex"
+                  align="center"
+                  justify="center"
                   border
                   radius="sm"
                   cursor="pointer"
@@ -175,12 +178,17 @@ export function FeaturedEventGuide() {
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
-          <Icon icon={ChevronLeft} size="sm" />
+                  <Icon icon={ChevronLeft} size="sm" />
                 </Box>
                 <Box
                   as="button"
                   onClick={goNext}
-                  padding={{ base: 4, md: 1.5 }}
+                  paddingX={4}
+                  paddingY={2}
+                  minHeight={11}
+                  display="flex"
+                  align="center"
+                  justify="center"
                   border
                   radius="sm"
                   cursor="pointer"
@@ -189,7 +197,7 @@ export function FeaturedEventGuide() {
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >
-          <Icon icon={ChevronRight} size="sm" />
+                  <Icon icon={ChevronRight} size="sm" />
                 </Box>
               </Box>
             )}

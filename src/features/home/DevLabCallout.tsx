@@ -27,14 +27,16 @@ export function DevLabCallout() {
       <Text
         as={NavLink}
         to="/research"
-        display="block"
+        display="flex"
+        align="center"
         marginTop={3}
         variant="mono"
         size="xs"
         color="accent"
         weight="font-bold"
         paddingX={2}
-        paddingY={4}
+        paddingY={2}
+        minHeight={11}
         marginLeft={-2}
         className="hover:underline"
       >

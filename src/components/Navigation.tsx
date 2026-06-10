@@ -41,7 +41,18 @@ export default function Navigation() {
       >
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
-            <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} padding={2} marginLeft={-2} className="group">
+            <Box
+              as={NavLink}
+              to="/"
+              onClick={() => setIsOpen(false)}
+              paddingX={2}
+              paddingY={2}
+              minHeight={11}
+              display="flex"
+              align="center"
+              marginLeft={-2}
+              className="group"
+            >
               <Logo height={{ base: 8, md: 9 }} width="auto" color="white" className="transition-opacity group-hover:opacity-80" />
             </Box>
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
@@ -90,7 +101,9 @@ export default function Navigation() {
               as={motion.create('button')}
               display={{ base: 'flex', lg: 'none' }}
               onClick={() => setIsOpen(!isOpen)}
-              padding={{ base: 3, lg: 2 }}
+              paddingX={3}
+              paddingY={2}
+              minHeight={11}
               align="center"
               justify="center"
               radius="full"

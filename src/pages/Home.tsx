@@ -19,7 +19,7 @@ export default function Home() {
       width="full"
       maxWidth={1240}
       minWidth={0}
-      overflow="x-hidden"
+      overflowX="hidden"
       paddingX={{ base: 4, sm: 6, lg: 8 }}
       paddingBottom="safe-bottom"
     >
@@ -38,9 +38,7 @@ export default function Home() {
         minWidth={0}
         align="center"
         gap={10}
-        style={{ // impeccable-ignore - Grid configuration with arbitrary values for bespoke editorial layout.
-          gridTemplateColumns: window.innerWidth >= 1024 ? 'minmax(0, 1fr) 26.25rem' : '1fr'
-        } as React.CSSProperties}
+        className="grid-cols-1 lg:grid-cols-[minmax(0,1fr)_26.25rem]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
@@ -62,9 +60,7 @@ export default function Home() {
           maxWidth="full"
           minWidth={0}
           gap={8}
-          style={{ // impeccable-ignore - Complex grid configuration for bespoke editorial layout.
-            gridTemplateColumns: window.innerWidth >= 1024 ? 'minmax(0, 1.6fr) minmax(18.75rem, 0.8fr)' : '1fr'
-          } as React.CSSProperties}
+          className="grid-cols-1 lg:grid-cols-[minmax(0,1.6fr)_minmax(18.75rem,0.8fr)]"
         >
           <FeaturedEventGuide />
           <GearShelf />
@@ -76,9 +72,7 @@ export default function Home() {
           maxWidth="full"
           minWidth={0}
           gap={8}
-          style={{ // impeccable-ignore - Complex grid configuration for bespoke editorial layout.
-            gridTemplateColumns: window.innerWidth >= 1024 ? 'minmax(0, 1.6fr) minmax(18.75rem, 0.8fr)' : '1fr'
-          } as React.CSSProperties}
+          className="grid-cols-1 lg:grid-cols-[minmax(0,1.6fr)_minmax(18.75rem,0.8fr)]"
         >
           <LatestPosts />
           <DevLabCallout />

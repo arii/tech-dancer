@@ -66,12 +66,14 @@ export function NewsletterBanner() {
       />
 
       {/* Persistent Dismissal */}
-      <Box position="absolute" className="top-4 right-4" zIndex="docked">
+      <Box position="absolute" className="top-2 right-2" zIndex="docked">
         <ActionButton
           variant="ghost"
           onClick={hideBar}
           aria-label="Dismiss newsletter signup"
           padding={2}
+          minHeight={11}
+          minWidth={11}
           className="group/close"
         >
           <Stack direction="row" align="center" gap={3}>

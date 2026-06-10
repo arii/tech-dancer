@@ -23,7 +23,10 @@ export function LatestPosts() {
           color="dim"
           weight="font-bold"
           paddingX={2}
-          paddingY={4}
+          paddingY={2}
+          minHeight={11}
+          display="flex"
+          align="center"
           marginRight={-2}
           uppercase
           tracking="widest"

@@ -37,14 +37,19 @@ export function Footer() {
           <Text size="micro" color="dim" opacity={0.8} className="hover:opacity-100 transition-opacity whitespace-nowrap">
             <span className="font-mono tracking-wider uppercase">
               {isDev ? 'dev' : `v${appVersion}`} (
-              <a
+              <Box
+                as="a"
                 href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                display="inline-flex"
+                align="center"
+                paddingX={4}
+                minHeight={11}
                 className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
               >
                 {commitSha.substring(0, 7)}
-              </a>
+              </Box>
               )
             </span>
             {lastUpdated && ` · Last updated ${lastUpdated}`}
