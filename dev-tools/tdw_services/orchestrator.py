@@ -10,7 +10,7 @@ from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.gemini import LocalAIClient
-from tdw_services.services.agents import JulesClient
+from tdw_services.services.jules import JulesClient
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -134,9 +134,9 @@ class Orchestrator:
         """
         Automates the creation of Jules sessions.
         """
-        source_id = self.agents.discover_source_id(self.github.repo)
+        source_id = self.jules.discover_source_id(self.github.repo)
         if not source_id: raise ValueError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
-        session = self.agents.create_session_from_source(source_id, branch, prompt)
+        session = self.jules.create_session_from_source(source_id, branch, prompt)
         return session
 
     # --- Helper methods ported from td_cli ---
@@ -608,7 +608,7 @@ class Orchestrator:
         if not pr:
             raise CLIError(f"Could not find PR for branch {branch}")
 
-        if api_key: self.agents.api_key = api_key
+        if api_key: self.jules.api_key = api_key
 
         # Analyze failing check runs
         check_runs = self.github.fetch_check_runs(pr.head.sha)
@@ -631,11 +631,11 @@ class Orchestrator:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
         agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
-        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.agents.discover_source_id(repo_name)
+        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
         if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
-            res = self.agents.create_session_from_source(source_id, branch, prompt)
+            res = self.jules.create_session_from_source(source_id, branch, prompt)
             if res: session_name = res.get("name")
             else: raise CLIError(f"{agent_name} API session creation failed")
         feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
@@ -831,94 +831,3 @@ class Orchestrator:
             "pr_url": pr_url,
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
-
-# ==========================================
-# AUDITOR FRAMEWORK
-# ==========================================
-class Auditor:
-    def __init__(self, name: str, client=None, repo_dir=None):
-        self.name = name
-        self.client = client
-        self.repo_dir = repo_dir or os.getcwd()
-
-    def audit(self):
-        raise NotImplementedError
-
-    def _check_file_exists(self, filepath: str) -> bool:
-        return os.path.exists(os.path.join(self.repo_dir, filepath))
-
-    def _grep_file(self, filepath: str, pattern: str) -> List[str]:
-        if not self._check_file_exists(filepath):
-            return []
-        found = []
-        try:
-            with open(os.path.join(self.repo_dir, filepath), 'r', encoding='utf-8') as f:
-                for i, line in enumerate(f, 1):
-                    import re
-                    if re.search(pattern, line):
-                        found.append(f"{filepath}:{i}: {line.strip()}")
-        except Exception as e:
-            print(f"Error reading {filepath}: {e}")
-        return found
-
-class CodebaseAuditor:
-    def __init__(self, name: str, repo_dir=None):
-        self.repo_dir = repo_dir
-        self.name = name
-        self.findings = []
-
-    def audit(self, filepath: str, content: str):
-        raise NotImplementedError
-
-    def add_finding(self, filepath: str, message: str, line_num: int = 0):
-        self.findings.append({
-            "auditor": self.name,
-            "file": filepath,
-            "line": line_num,
-            "message": message
-        })
-
-class StructureAnalyzer:
-    def __init__(self, rules: List[Dict[str, Any]]):
-        self.rules = rules
-
-    def walk_files(self, base):
-        for root, _, files in os.walk(base):
-            for f in files:
-                yield os.path.join(root, f)
-
-    def check_rule(self, rule):
-        import re
-        base = rule["path"]
-        if not os.path.exists(base):
-            return (rule["name"], False, f"Missing path: {base}")
-
-        matched = False
-        pattern = rule.get("pattern", "")
-        # A simple heuristic: if it looks like a regex or has spaces, treat as content search
-        is_filename_pattern = not ("*" in pattern or " " in pattern or "\\" in pattern or "|" in pattern or "^" in pattern)
-
-        for fp in self.walk_files(base):
-            if is_filename_pattern and fp.endswith(pattern):
-                matched = True
-                break
-            elif not is_filename_pattern:
-                try:
-                    with open(fp, "r", encoding="utf-8", errors="ignore") as fh:
-                        if re.search(pattern, fh.read()):
-                            matched = True
-                            break
-                except Exception:
-                    continue
-
-        return (rule["name"], matched, rule["desc"])
-
-    def run(self):
-        results = []
-        failures = []
-        for r in self.rules:
-            name, ok, info = self.check_rule(r)
-            results.append({"name": name, "ok": ok, "info": info})
-            if not ok and r.get("required", False):
-                failures.append(name)
-        return {"results": results, "failures": failures}

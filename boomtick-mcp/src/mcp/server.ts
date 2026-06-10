@@ -26,6 +26,17 @@ import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.ru
 import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
 import { openReplacementPrHandler, OpenReplacementPrInputSchema } from "../tools/github.open_replacement_pr.js";
 import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "../tools/github.comment_triage_summary.js";
+
+import { runAgentCopilotHandler, RunAgentCopilotInputSchema } from "../tools/agents/copilot.js";
+import { runAgentAgyHandler, RunAgentAgyInputSchema } from "../tools/agents/agy.js";
+import { runAgentOllamaHandler, RunAgentOllamaInputSchema } from "../tools/agents/ollama.js";
+
+import { createJulesSessionHandler, CreateJulesSessionInputSchema } from "../tools/jules/create-session.js";
+import { getJulesSessionHandler, GetJulesSessionInputSchema } from "../tools/jules/get-session.js";
+import { listJulesSessionsHandler, ListJulesSessionsInputSchema } from "../tools/jules/list-sessions.js";
+import { cancelJulesSessionHandler, CancelJulesSessionInputSchema } from "../tools/jules/cancel-session.js";
+import { getJulesPullRequestHandler, GetJulesPullRequestInputSchema } from "../tools/jules/get-pr.js";
+
 import fs from "fs/promises";
 import path from "path";
 
@@ -393,6 +404,91 @@ export class BoomtickMCPServer {
               required: ["prNumber", "body"],
             },
           },
+          {
+            name: "agents.run_copilot",
+            description: "Run the Copilot local agent interactively.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prompt: { type: "string" },
+              },
+              required: ["prompt"],
+            },
+          },
+          {
+            name: "agents.run_agy",
+            description: "Run the AGY local agent interactively.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prompt: { type: "string" },
+              },
+              required: ["prompt"],
+            },
+          },
+          {
+            name: "agents.run_ollama",
+            description: "Run the Ollama local agent interactively.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prompt: { type: "string" },
+              },
+              required: ["prompt"],
+            },
+          },
+          {
+            name: "jules.create_session",
+            description: "Create a Jules session that performs work externally and may generate a GitHub pull request.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                task: { type: "string" },
+              },
+              required: ["task"],
+            },
+          },
+          {
+            name: "jules.get_session",
+            description: "Get a Jules session status by ID.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: { type: "string" },
+              },
+              required: ["id"],
+            },
+          },
+          {
+            name: "jules.list_sessions",
+            description: "List all Jules sessions.",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
+          },
+          {
+            name: "jules.cancel_session",
+            description: "Cancel an ongoing Jules session.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: { type: "string" },
+              },
+              required: ["id"],
+            },
+          },
+          {
+            name: "jules.get_pr",
+            description: "Get the generated pull request for a Jules session.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: { type: "string" },
+              },
+              required: ["id"],
+            },
+          },
         ],
       };
     });
@@ -432,6 +528,22 @@ export class BoomtickMCPServer {
             return createSuccessResult(await openReplacementPrHandler(OpenReplacementPrInputSchema.parse(request.params.arguments)));
           case "github.comment_triage_summary":
             return createSuccessResult(await commentTriageSummaryHandler(CommentTriageSummaryInputSchema.parse(request.params.arguments)));
+          case "agents.run_copilot":
+            return createSuccessResult(await runAgentCopilotHandler(RunAgentCopilotInputSchema.parse(request.params.arguments)));
+          case "agents.run_agy":
+            return createSuccessResult(await runAgentAgyHandler(RunAgentAgyInputSchema.parse(request.params.arguments)));
+          case "agents.run_ollama":
+            return createSuccessResult(await runAgentOllamaHandler(RunAgentOllamaInputSchema.parse(request.params.arguments)));
+          case "jules.create_session":
+            return createSuccessResult(await createJulesSessionHandler(CreateJulesSessionInputSchema.parse(request.params.arguments)));
+          case "jules.get_session":
+            return createSuccessResult(await getJulesSessionHandler(GetJulesSessionInputSchema.parse(request.params.arguments)));
+          case "jules.list_sessions":
+            return createSuccessResult(await listJulesSessionsHandler(ListJulesSessionsInputSchema.parse(request.params.arguments || {})));
+          case "jules.cancel_session":
+            return createSuccessResult(await cancelJulesSessionHandler(CancelJulesSessionInputSchema.parse(request.params.arguments)));
+          case "jules.get_pr":
+            return createSuccessResult(await getJulesPullRequestHandler(GetJulesPullRequestInputSchema.parse(request.params.arguments)));
           default:
             return createErrorResult(`Tool not found: ${request.params.name}`);
         }
