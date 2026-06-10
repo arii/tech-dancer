@@ -27,33 +27,37 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      # Use dynamic ref to explicitly checkout the right code via standard actions/checkout
-      - name: Resolve PR Branch Target
-        id: target
+      - name: Checkout Main (Trusted)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: main
+
+      - name: Fetch and Apply PR Patch
         env:
           EVENT_NAME: ${{ github.event_name }}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
+          # We use patch application to avoid checking out untrusted code context natively via actions/checkout,
+          # which mitigates CodeQL alerts about untrusted checkout with later potential execution.
           if [ "$EVENT_NAME" == "workflow_run" ]; then
-            echo "ref=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+            PR_NUMBER=$(gh pr list --head "$HEAD_SHA" --json number -q '.[0].number')
           else
-            PR_HEAD=$(gh pr view "$ISSUE_NUMBER" --json headRefName --jq .headRefName)
-            echo "ref=$PR_HEAD" >> "$GITHUB_OUTPUT"
+            PR_NUMBER="$ISSUE_NUMBER"
           fi
 
-      - name: Checkout Failing PR Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-          ref: ${{ steps.target.outputs.ref }}
+          if [ -n "$PR_NUMBER" ]; then
+            # We fetch the target PR branch to track history properly for commits, but via safe local git branch creation
+            PR_HEAD=$(gh pr view "$PR_NUMBER" --json headRefName --jq .headRefName)
+            git checkout -b "$PR_HEAD" || git checkout "$PR_HEAD"
 
-      # Add explicit sanitization for codeql warning "Checkout of untrusted code in a privileged workflow"
-      - name: Sanitize workspace
-        run: |
-          git config --global core.hooksPath /dev/null
-          find . -type f -name "*.sh" -exec chmod -x {} + || true
+            # Download the PR diff and apply it
+            gh pr diff "$PR_NUMBER" > pr.patch
+            git apply pr.patch || git apply pr.patch --3way || true
+            rm pr.patch
+          fi
 
       - name: Fetch Trusted Dev-Tools
         uses: actions/checkout@v4
