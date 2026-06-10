@@ -204,11 +204,10 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
-          pnpm run test:e2e
+          VITE_BASE_PATH=/ pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
-          PLAYWRIGHT_TEST_BASE_PATH: '1'
 
       - name: Run Lighthouse CI
         run: |
