@@ -19,6 +19,23 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   return Search;
 }
 
+function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
+  if (!tool.image) return null;
+
+  const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
+  const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
+
+  return (
+    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
+      />
+    </Box>
+  );
+}
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
@@ -105,15 +122,7 @@ export default function ResearchAnalytics() {
                 className="border-accent/10 h-full overflow-hidden"
               >
                 <Stack gap={0} height="full">
-                  {tool.image && (
-                    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
-                      <img
-                        src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
-                        alt={tool.title}
-                        className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
-                      />
-                    </Box>
-                  )}
+                  <ToolImage tool={tool} baseUrl={baseUrl} />
                   <Stack gap={6} padding={8} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
                       <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">

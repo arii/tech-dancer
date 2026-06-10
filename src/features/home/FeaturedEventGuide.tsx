@@ -100,7 +100,7 @@ export function FeaturedEventGuide() {
         <Box position="relative" className="h-44 min-w-0 md:h-full">
           <img
             src={event.heroImage}
-            alt={event.title}
+            alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover object-top"

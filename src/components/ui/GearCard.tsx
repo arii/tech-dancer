@@ -30,6 +30,7 @@ interface GearCardProps extends BaseProps {
   rating?: number;
   verdict?: string;
   image?: string;
+  imageAlt?: string;
   affiliateIds?: string[];
   [key: string]: unknown;
 }
@@ -49,6 +50,7 @@ export function GearCard(props: GearCardProps) {
     rating: _rating,
     verdict,
     image: propsImage,
+    imageAlt: propsImageAlt,
     affiliateIds,
   } = props;
 
@@ -74,6 +76,8 @@ export function GearCard(props: GearCardProps) {
   const image = (rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL))
     ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${rawImage}`
     : rawImage;
+
+  const alt = propsImageAlt || (title ? `Screenshot of the ${title} gear item` : "Gear item preview");
 
   return (
     <Stack
@@ -102,7 +106,7 @@ export function GearCard(props: GearCardProps) {
           className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {image ? (
-            <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
+            <img src={image} alt={alt} width={640} height={360} className={CARD_STYLES.image} />
           ) : (
             <CategoryPlaceholder category={category} />
           )}
@@ -140,7 +144,7 @@ export function GearCard(props: GearCardProps) {
           className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {image ? (
-            <img src={image} alt={title} width={640} height={360} className={CARD_STYLES.image} />
+            <img src={image} alt={alt} width={640} height={360} className={CARD_STYLES.image} />
           ) : (
             <CategoryPlaceholder category={category} />
           )}
