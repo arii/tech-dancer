@@ -74,7 +74,7 @@ test.describe('Automated UX/Console Error Crawler', () => {
       }
 
       // Verify main content is visible
-      await expect(page.locator('main'), `Page ${normalizedUrl} does not have a <main> element`).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('main#main-content'), `Page ${normalizedUrl} does not have a <main> element`).toBeVisible({ timeout: 5000 });
 
       // Collect links for further crawling
       const links = await page.$$eval('a[href]', (anchors) =>
