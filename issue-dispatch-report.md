@@ -12,7 +12,12 @@
 
 - **#2005**: Move generic 'Coming Soon' scraper post back to draft (`ai-slop-content-review`)
 - **#2006**: Move generic 'Financial Strategy Guide' placeholder post back to draft (`ai-slop-content-review`)
-- **#2016**: Consolidated: Remove raw Tailwind classes and enforce component primitives across feature/app layers (`agent-policy-violation`)
+- **#2007**: Replace hardcoded layout classes in Home page with design tokens/primitives (`agent-policy-violation`)
+- **#2008**: Replace raw Tailwind and non-primitive div usage in Equalizer component (`agent-policy-violation`)
+- **#2009**: Remove raw Tailwind classes in EditorialHero component (`agent-policy-violation`)
+- **#2010**: Remove arbitrary opacity and raw typography classes in EditorialHeader (`agent-policy-violation`)
+- **#2011**: Remove raw Tailwind border, shadow, and opacity classes in AuthorAvatar (`agent-policy-violation`)
+- **#2012**: Remove raw Tailwind interaction, border, and color classes in ProductCard (`agent-policy-violation`)
 
 ## 3. Existing Issues Updated Instead of Duplicated
 
@@ -51,8 +56,9 @@ The most common violation across the codebase is the use of **raw Tailwind class
 ## 9. Recommended Fix Order
 
 1. **P0 (Immediate):** Fix AI Slop Content (#2005, #2006) by moving placeholders to draft. This ensures the live site provides immediate value.
-2. **P1 (High):** Fix core primitive violations in highly visible layout components (Tracked in #2016).
-3. **P2 (Medium):** Address the persisting Desktop and Mobile UX issues (Tracked in existing #1965, #1970, etc.).
+2. **P1 (High):** Fix core primitive violations in highly visible layout components (`Home.tsx` - #2007, `EditorialHeader` - #2010).
+3. **P2 (Medium):** Fix remaining component violations (`ProductCard` - #2012, `EditorialHero` - #2009, `AuthorAvatar` - #2011).
+4. **P3 (Backlog):** Clean up specialized decorative components (`Equalizer` - #2008).
 
 ## 10. Recommended Labels or Milestones
 
