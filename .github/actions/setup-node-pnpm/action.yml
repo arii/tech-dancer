@@ -1,0 +1,18 @@
+name: 'Setup Node and pnpm'
+description: 'Centralized setup for Node.js, pnpm, and Corepack'
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        cache: 'pnpm'
+        node-version-file: '.node-version'
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+    - name: Activate pinned pnpm
+      shell: bash
+      run: corepack prepare pnpm@10.28.2 --activate
