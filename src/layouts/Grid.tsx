@@ -12,7 +12,7 @@ interface GridProps extends BoxProps {
 }
 
 export const Grid = forwardRef<HTMLDivElement, GridProps>(
-  ({ className, cols = 12, rows, ...props }, ref) => {
+  ({ className, cols = 12, rows, display = "grid", ...props }, ref) => {
     const colMapper = (v: string | number | boolean | undefined | null) => {
       const token = COLS_MAP[v as keyof typeof COLS_MAP];
       if (token) return token;
@@ -28,8 +28,8 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
     return (
       <Box
         ref={ref}
+        display={display}
         className={composeStyles(
-          "grid",
           getResponsiveClasses(cols, "", colMapper),
           getResponsiveClasses(rows, "", rowMapper),
           className
