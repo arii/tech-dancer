@@ -32,10 +32,11 @@ export function DevLabCallout() {
         size="xs"
         color="accent"
         weight="font-bold"
+        paddingX={2}
         paddingY={4}
         className="hover:underline -ml-2"
       >
-        <span className="px-2">View Portfolio →</span>
+        View Portfolio →
       </Text>
     </Box>
   );
