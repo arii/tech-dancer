@@ -81,7 +81,9 @@ const redirect = sessionStorage.getItem('ghpages_redirect');
 if (redirect) {
   sessionStorage.removeItem('ghpages_redirect');
   // Replace the current history entry with the real path
-  window.history.replaceState(null, '', '/tech-dancer' + redirect);
+  const restoreBase = window.__ROUTER_BASENAME__ || import.meta.env.BASE_URL || '/';
+  const normalizedBase = restoreBase.endsWith('/') ? restoreBase.slice(0, -1) : restoreBase;
+  window.history.replaceState(null, '', `${normalizedBase}${redirect}`);
 }
 
 // Clean trailing slashes from basename (except for root '/')
