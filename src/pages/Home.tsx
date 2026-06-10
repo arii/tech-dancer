@@ -22,7 +22,7 @@ export default function Home() {
       {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
       <Grid
         as="section"
-        cols={{ base: 1, lg: 2 }}
+        cols={{ base: 1, lg: "[minmax(0,1fr)_420px]" }}
         gap={10}
         align="center"
         className="w-full max-w-full min-w-0"
@@ -36,7 +36,7 @@ export default function Home() {
         <TopicGrid />
 
         <Grid
-          cols={{ base: 1, lg: 2 }}
+          cols={{ base: 1, lg: "[minmax(0,1.6fr)_minmax(300px,0.8fr)]" }}
           gap={8}
           className="w-full max-w-full min-w-0"
         >
@@ -45,7 +45,7 @@ export default function Home() {
         </Grid>
 
         <Grid
-          cols={{ base: 1, lg: 2 }}
+          cols={{ base: 1, lg: "[minmax(0,1.6fr)_minmax(300px,0.8fr)]" }}
           gap={8}
           className="w-full max-w-full min-w-0"
         >
