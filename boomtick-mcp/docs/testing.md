@@ -37,7 +37,7 @@ Verify that the server correctly registers and exposes its capabilities via the 
 ```bash
 echo '{ "jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {} }' | node dist/index.js
 ```
-**Expected Result**: A JSON response containing 15 tools.
+**Expected Result**: A JSON response containing the registered tools including `jules.create_session`, `jules.get_session`, etc.
 
 ### List Resources
 ```bash
