@@ -20,7 +20,7 @@ tags:
 
 Dedicated dance shoes can be expensive, and many lack the comfort and support of everyday footwear. My preferred approach is to "upgrade" high-comfort sneakers or flats using adhesive suede.
 
-![Finished shoe with suede applied](...)
+![Suede Stick-on Sheets](/images/gear/amazon/suede-stick-on-sheets.jpg)
 
 Consistent traction matters more than branding. The goal is predictable friction, not maximum grip. If you're dancing indoors, you need a shoe that allows controlled rotation. Too much grip can be just as dangerous as too little, especially during spins and turns.
 
@@ -56,6 +56,8 @@ Selecting the right coverage pattern is key to long-term comfort and safety.
 
 ### Coverage Option Comparison
 
+![Suede Coverage Comparison](/images/gear/diy/suede-coverage-comparison.svg)
+
 | Option | Pros | Cons |
 | :--- | :--- | :--- |
 | **Ball Only** | Maximum spin speed, minimal material. | Limited braking control, unstable on sticky floors. |
@@ -79,27 +81,27 @@ Full coverage has proven the most reliable option during long convention weekend
 ### 1. Clean the Sole
 Remove all dirt and oils from the rubber sole using isopropyl alcohol. This step is critical; any residue will cause the adhesive to fail during heavy use. Let the sole dry completely before proceeding.
 
-![Cleaning shoe sole](...)
+![Cleaning shoe sole](/images/gear/diy/step1-clean.svg)
 
 ### 2. Trace the Shoe
 Place your shoe on the backing paper of the suede sheet. Trace the outline of the sole carefully with a marker.
 
-![Tracing suede outline](...)
+![Tracing suede outline](/images/gear/diy/step2-trace.svg)
 
 ### 3. Cut Inside the Line
 **Important note:** Cut approximately 1–2 mm inside the traced outline. This prevents the edges of the suede from hanging over the side of the shoe, which reduces the chance of them catching on the floor and peeling.
 
-![Cutting suede sheet](...)
+![Cutting suede sheet](/images/gear/diy/step3-cut.svg)
 
 ### 4. Apply the Suede
 Peel the backing gradually. Apply the suede from the toe to the heel, pushing out any air bubbles as you go. Press firmly across the entire surface once applied.
 
-![Applying suede](...)
+![Applying suede](/images/gear/diy/step4-apply.svg)
 
 ### 5. Let It Cure
 Wait at least 24 hours before dancing on the shoes. Avoid testing the traction early, as the adhesive needs time to reach its full bond strength.
 
-![Finished shoe](...)
+![Finished shoe](/images/gear/diy/step5-finished.svg)
 
 ## Maintenance and Repairs
 
