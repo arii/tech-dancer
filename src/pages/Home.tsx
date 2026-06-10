@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { SEO } from '@/components/SEO';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
@@ -12,7 +12,17 @@ import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Box
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth={1240}
+      minWidth={0}
+      overflow="x-hidden"
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      paddingBottom="safe-bottom"
+    >
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -23,19 +33,38 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+        align="center"
+        gap={10}
+        style={{ // impeccable-ignore - Grid configuration with arbitrary values for bespoke editorial layout.
+          gridTemplateColumns: window.innerWidth >= 1024 ? 'minmax(0, 1fr) 26.25rem' : '1fr'
+        } as React.CSSProperties}
       >
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
 
       {/* Remaining sections — tighter vertical rhythm on mobile */}
-      <Stack gap={{ base: 10, lg: 14 }} className="mt-12 w-full max-w-full min-w-0 lg:mt-16">
+      <Stack
+        gap={{ base: 10, lg: 14 }}
+        marginTop={{ base: 12, lg: 16 }}
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+      >
         <TopicGrid />
 
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          width="full"
+          maxWidth="full"
+          minWidth={0}
+          gap={8}
+          style={{ // impeccable-ignore - Complex grid configuration for bespoke editorial layout.
+            gridTemplateColumns: window.innerWidth >= 1024 ? 'minmax(0, 1.6fr) minmax(18.75rem, 0.8fr)' : '1fr'
+          } as React.CSSProperties}
         >
           <FeaturedEventGuide />
           <GearShelf />
@@ -43,7 +72,13 @@ export default function Home() {
 
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          width="full"
+          maxWidth="full"
+          minWidth={0}
+          gap={8}
+          style={{ // impeccable-ignore - Complex grid configuration for bespoke editorial layout.
+            gridTemplateColumns: window.innerWidth >= 1024 ? 'minmax(0, 1.6fr) minmax(18.75rem, 0.8fr)' : '1fr'
+          } as React.CSSProperties}
         >
           <LatestPosts />
           <DevLabCallout />

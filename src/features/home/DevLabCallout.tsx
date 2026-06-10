@@ -1,14 +1,14 @@
-// impeccable-ignore-file
+
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
 export function DevLabCallout() {
   return (
-    <Box border radius="lg" padding={5} className="w-full max-w-full min-w-0">
+    <Box border radius="lg" padding={5} width="full" maxWidth="full" minWidth={0}>
       {/* Header row */}
       <Stack direction="row" align="center" gap={3}>
-        <Box className="shrink-0 rounded-md bg-accent/10 p-2">
+        <Box shrink={0} radius="md" padding={2} className="bg-accent/10">
           <Terminal className="h-4 w-4 text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
@@ -34,7 +34,8 @@ export function DevLabCallout() {
         weight="font-bold"
         paddingX={2}
         paddingY={4}
-        className="hover:underline -ml-2"
+        marginLeft={-2}
+        className="hover:underline"
       >
         View Portfolio →
       </Text>

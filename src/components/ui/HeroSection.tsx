@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
@@ -104,7 +104,7 @@ export function HeroSection() {
           className="opacity-0 hero-tagline-anim"
         >
           <Box
-            width="2px"
+            width={0.5}
             className="bg-white/20 shrink-0"
             aria-hidden="true"
           />
@@ -137,7 +137,10 @@ export function HeroSection() {
               variant="primary"
               paddingX={6}
               radius="lg"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+              minHeight={12}
+              justify={{ base: 'center', md: 'start' }}
+              flex={1}
+              className="normal-case"
             >
               Explore Event Guides
             </ActionButton>
@@ -147,13 +150,16 @@ export function HeroSection() {
               variant="secondary"
               paddingX={6}
               radius="lg"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+              minHeight={12}
+              justify={{ base: 'center', md: 'start' }}
+              flex={1}
+              className="normal-case"
             >
               Browse Gear Reviews
             </ActionButton>
           </Stack>
 
-          <Box className="-ml-2">
+          <Box marginLeft={-2}>
             <Text
               as={NavLink}
               to="/blog"

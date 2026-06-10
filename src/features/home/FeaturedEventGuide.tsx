@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -71,7 +71,7 @@ export function FeaturedEventGuide() {
   if (!event) return null;
 
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={4}>
         Featured Event Guide
       </Text>
@@ -82,7 +82,19 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
+        position="relative"
+        zIndex={10}
+        display="grid"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+        surface="default"
+        className="touch-pan-y overscroll-x-contain select-none"
+        style={{ // impeccable-ignore - Grid configuration with arbitrary values for bespoke editorial layout.
+          display: 'grid',
+          gridTemplateColumns: window.innerWidth >= 768 ? '16.25rem 1fr' : '1fr',
+          minHeight: window.innerWidth >= 768 ? '12.5rem' : 'auto'
+        } as React.CSSProperties}
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         data-gesture-handled="true"
@@ -97,7 +109,7 @@ export function FeaturedEventGuide() {
         tabIndex={0}
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="h-44 min-w-0 md:h-full">
+        <Box position="relative" height={{ base: 44, md: 'full' }} minWidth={0}>
           <img
             src={event.heroImage}
             alt={event.title}
@@ -106,14 +118,21 @@ export function FeaturedEventGuide() {
             className="h-full w-full object-cover object-top"
           />
           {/* Subtle gradient at bottom to soften any embedded text */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />
+          <Box
+            position="absolute"
+            inset="x"
+            bottom={0}
+            height={16}
+            className="bg-gradient-to-t from-black/40 to-transparent"
+            aria-hidden="true"
+          />
         </Box>
 
         {/* Content */}
-        <Stack gap={3} padding={6} className="min-w-0 justify-between" aria-live="polite">
+        <Stack gap={3} padding={6} minWidth={0} justify="between" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="start" gap={2}>
-              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+              <MapPin marginTop={0.5} className="h-3.5 w-3.5 shrink-0 text-accent" />
               <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full leading-normal">
                 {event.location}
               </Text>
@@ -136,7 +155,8 @@ export function FeaturedEventGuide() {
               weight="font-bold"
               paddingY={{ base: 4, md: 2 }}
               paddingRight={4}
-              className="hover:underline -ml-1"
+              marginLeft={-1}
+              className="hover:underline"
             >
               Read the guide →
             </Text>

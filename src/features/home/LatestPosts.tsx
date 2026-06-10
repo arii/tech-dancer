@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -9,7 +9,7 @@ export function LatestPosts() {
   const posts = getPosts().slice(0, 3);
 
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
           Latest from BoomTick
@@ -23,7 +23,10 @@ export function LatestPosts() {
           weight="font-bold"
           paddingX={2}
           paddingY={4}
-          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent -mr-2"
+          marginRight={-2}
+          uppercase
+          tracking="widest"
+          className="shrink-0 transition-colors hover:text-accent"
         >
           View all →
         </Text>
@@ -46,7 +49,11 @@ export function LatestPosts() {
             <Box
               radius="md"
               overflow="hidden"
-              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
+              marginTop={0.5}
+              height={14}
+              width={72}
+              shrink={0}
+              surface="alt"
             >
               {post.image ? (
                 <img
@@ -61,7 +68,7 @@ export function LatestPosts() {
             </Box>
 
             {/* Text content */}
-            <Stack gap={1} className="min-w-0 flex-1">
+            <Stack gap={1} minWidth={0} flex={1}>
               <Box display="flex" align="center" gap={3}>
                 <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
                   {post.category}
@@ -78,7 +85,7 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-40 transition-opacity group-hover:opacity-100" />
+            <ArrowRight marginTop={1} className="h-4 w-4 shrink-0 text-accent opacity-40 transition-opacity group-hover:opacity-100" />
           </Box>
         ))}
       </Stack>

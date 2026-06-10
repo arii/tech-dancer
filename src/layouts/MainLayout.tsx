@@ -21,7 +21,10 @@ export function MainLayout({ children }: { children: ReactNode }) {
       overflowX="hidden"
       width="full"
       minHeight="screen"
-      className="touch-pan-y max-w-full min-w-0 overflow-x-clip"
+      maxWidth="full"
+      minWidth="0"
+      overflow="x-hidden"
+      className="touch-pan-y"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -45,7 +48,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Stack minHeight="screen" width="full" className="w-full max-w-full min-w-0 overflow-x-clip">
+      <Stack minHeight="screen" width="full" maxWidth="full" minWidth={0} overflow="x-hidden">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -60,7 +63,10 @@ export function MainLayout({ children }: { children: ReactNode }) {
           width="full"
           surface="bg"
           direction="col"
-          className="w-full max-w-full min-w-0 overflow-x-clip"
+          width="full"
+          maxWidth="full"
+          minWidth={0}
+          overflow="x-hidden"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 10 }}
@@ -71,7 +77,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
             marginX="auto"
             maxWidth="7xl"
             width="full"
-            className="min-w-0 max-w-full overflow-x-clip"
+            minWidth={0}
+            overflow="x-hidden"
           >
             {children}
             <Footer />

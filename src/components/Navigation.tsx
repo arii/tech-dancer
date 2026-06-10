@@ -26,7 +26,18 @@ export default function Navigation() {
   return (
     <>
       <MobileBottomNav />
-      <Box as="nav" aria-label="Main Navigation" className="fixed inset-x-0 top-0 z-50 h-16 w-full max-w-full border-b border-line bg-bg/95 backdrop-blur-xl">
+      <Box
+        as="nav"
+        aria-label="Main Navigation"
+        position="fixed"
+        inset="top"
+        zIndex={50}
+        height={16}
+        width="full"
+        maxWidth="full"
+        border="b"
+        className="bg-bg/95 backdrop-blur-xl"
+      >
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} padding={2} marginLeft={-2} className="group">
@@ -35,12 +46,14 @@ export default function Navigation() {
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
               {topRoutes.map((item) => (
                 <Box as="li" key={item.path}>
-                  <NavLink
+                  <Box
+                    as={NavLink}
                     to={item.path}
-                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
+                    paddingY={1}
+                    className={({ isActive }: { isActive: boolean }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent', isActive ? 'text-accent' : 'text-text-dim')}
                   >
                     {item.label}
-                  </NavLink>
+                  </Box>
                 </Box>
               ))}
             </Box>

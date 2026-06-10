@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
@@ -58,7 +58,8 @@ export function FeaturedGuidePanel() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="mt-1 group-hover:underline"
+          marginTop={1}
+          className="group-hover:underline"
         >
           Read the guide →
         </Text>
