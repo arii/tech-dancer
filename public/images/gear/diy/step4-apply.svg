@@ -1,17 +1,19 @@
 <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#f8fafc" rx="8" />
   <style>
-    .shoe { fill: #f0f0f0; stroke: #333; stroke-width: 2; }
-    .suede { fill: #888; stroke: #555; stroke-width: 1; }
-    .hand { fill: #ffe0bd; stroke: #8d5524; stroke-width: 1; }
+    .shoe { fill: #f1f5f9; stroke: #334155; stroke-width: 2.5; }
+    .suede { fill: #94a3b8; stroke: #475569; stroke-width: 2; }
+    .hand { fill: #ffe0bd; stroke: #8d5524; stroke-width: 1.5; }
+    .text { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; text-anchor: middle; fill: #1e293b; }
+    .label { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 600; fill: #0891b2; }
+    .arrow { fill: #22d3ee; }
   </style>
-  <rect width="400" height="300" fill="#fafafa" />
-  <g transform="translate(100, 50)">
-    <!-- Shoe Sole Up -->
+  <g transform="translate(100, 40)">
     <path class="shoe" d="M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z" />
-    <!-- Applying Suede (partially applied) -->
-    <path class="suede" d="M30,20 Q80,0 120,20 Q150,50 140,150 L10,150 Q0,50 30,20 Z" />
-    <!-- Hand pressing -->
-    <circle class="hand" cx="75" cy="100" r="25" />
+    <path class="suede" d="M33,25 Q80,5 117,25 Q145,55 135,150 L15,150 Q5,55 33,25 Z" />
+    <path class="arrow" d="M75,170 L75,220 L65,220 L75,235 L85,220 L75,220" />
+    <circle class="hand" cx="75" cy="120" r="28" />
+    <text x="75" y="155" class="label">Press firmly</text>
   </g>
-  <text x="200" y="280" font-family="sans-serif" font-size="14" text-anchor="middle" fill="#333">4. Apply suede from toe to heel</text>
+  <text x="200" y="275" class="text">4. Apply from toe to heel</text>
 </svg>
