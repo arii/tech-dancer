@@ -26,9 +26,9 @@ export const variants = {
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
-    outline: "border border-line bg-transparent",
+    outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 transition-colors active:scale-[0.98]",
     ghost: "bg-transparent hover:bg-line/10",
-    primary: "bg-accent text-bg font-mono tracking-widest text-xs px-8 hover:bg-accent/90 active:translate-y-[0px] hover:translate-y-[-2px] hover:shadow-[0_4px_12px_var(--color-accent-shadow)] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:bg-bg/50 after:transition-all after:duration-500",
+    primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-[0.98] shadow-sm",
     professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
     fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
   },
@@ -41,7 +41,7 @@ export const variants = {
 };
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+  "inline-flex items-center justify-center font-sans tracking-normal transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       variant: variants.emphasis,
