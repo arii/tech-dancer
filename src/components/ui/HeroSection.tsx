@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
@@ -50,7 +50,12 @@ export function HeroSection() {
       >
 
 
-        <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" />
+        <Wordmark
+          variant="hero"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-logo-anim"
+        />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
@@ -58,7 +63,11 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 pointer-events-auto hero-headline-anim"
+          width="full"
+          maxWidth="full"
+          opacity={0}
+          pointerEvents="auto"
+          className="hero-headline-anim"
         >
           <Text
             as="span"
@@ -91,7 +100,9 @@ export function HeroSection() {
           height={1.5}
           marginTop={6}
           radius="full"
-          className="opacity-0 pointer-events-none hero-line-anim"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-line-anim"
         />
 
         {/* Tagline with Vertical Accent Bar */}
@@ -101,10 +112,11 @@ export function HeroSection() {
           gap={5}
           marginTop={{ base: 6, lg: 8 }}
           maxWidth="2xl"
-          className="opacity-0 hero-tagline-anim"
+          opacity={0}
+          className="hero-tagline-anim"
         >
           <Box
-            width="2px"
+            width="0.5"
             className="bg-white/20 shrink-0"
             aria-hidden="true"
           />
@@ -128,7 +140,8 @@ export function HeroSection() {
           gap={3}
           width="full"
           maxWidth={{ base: "full", md: "2xl" }}
-          className="opacity-0 hero-cta-anim"
+          opacity={0}
+          className="hero-cta-anim"
         >
           <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
             <ActionButton
@@ -137,7 +150,9 @@ export function HeroSection() {
               variant="primary"
               paddingX={6}
               radius="lg"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+              justify={{ base: "center", md: "start" }}
+              flex
+              className="min-h-12 normal-case"
             >
               Explore Event Guides
             </ActionButton>
@@ -147,7 +162,9 @@ export function HeroSection() {
               variant="secondary"
               paddingX={6}
               radius="lg"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
+              justify={{ base: "center", md: "start" }}
+              flex
+              className="min-h-12 normal-case"
             >
               Browse Gear Reviews
             </ActionButton>
@@ -166,8 +183,12 @@ export function HeroSection() {
           gap={1}
           marginY={4}
           height={12}
+          width="full"
+          maxWidth="full"
           overflow="hidden"
-          className="opacity-0 pointer-events-none hero-waveform-anim"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-waveform-anim"
           aria-hidden="true"
         >
           {BARS.map((bar, i) => (

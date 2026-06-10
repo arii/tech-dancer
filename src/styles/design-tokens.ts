@@ -94,8 +94,8 @@ export const typography = {
   h3: "font-display font-semibold tracking-tight leading-snug",
   headline: "font-display font-bold tracking-tighter leading-[0.9]",
   display: "font-display font-bold tracking-tight leading-none",
-  hero: "font-serif font-black tracking-tight leading-[1.2]",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
+  hero: "font-serif font-black tracking-tight leading-[1.2] break-words",
+  body: "font-sans leading-relaxed text-text-body max-w-[65ch] break-words",
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
 };
