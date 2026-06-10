@@ -88,3 +88,11 @@ File: `.github/workflows/ci.yml`
 - **Status:** Fixed.
 
 - **Note**: The pip cache implementation was reverted because inline pip installs cannot be cached natively without a `requirements.txt` equivalent by `setup-python`.
+
+### Action: Setup Node pnpm
+- Created `.github/actions/setup-node-pnpm/action.yml`
+- Refactored 10 workflows to use the new composite action.
+
+### Action: Issue Comment Dispatcher
+- Created `.github/workflows/issue-comment-dispatcher.yml`
+- Refactored `auto-conflict-resolver.yml`, `update-snapshots.yml`, `ollama-chatops.yml`, and `jules-fix-trigger.yml` to trigger on `workflow_dispatch` instead of `issue_comment`.
