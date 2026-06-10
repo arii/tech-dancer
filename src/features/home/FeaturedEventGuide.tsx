@@ -146,7 +146,7 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
@@ -158,7 +158,7 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >

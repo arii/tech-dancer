@@ -58,7 +58,7 @@ export default function NotFound() {
           />
         </Box>
 
-        <Box opacity={0.3} marginTop={8} paddingX={{ base: 4, md: 16, lg: 20 }}>
+        <Box opacityVariant="medium" marginTop={8} paddingX={{ base: 4, md: 16, lg: 20 }}>
           <Box border="t" height={40} width="full" className="border-dashed" />
         </Box>
       </Stack>

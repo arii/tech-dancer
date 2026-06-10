@@ -52,7 +52,7 @@ export function ListRow(props: ListRowProps) {
       display="flex" align="center" border="b"
       className="group hover:bg-surface/50 transition-colors"
     >
-      <Box width={1} shrink={0} self="stretch" opacity={0} className="bg-accent group-hover:opacity-100 transition-opacity" />
+      <Box width={1} shrink={0} self="stretch" opacityVariant="none" className="bg-accent group-hover:opacity-full transition-opacity" />
       <Box
         width={16}
         height={16}
@@ -87,7 +87,7 @@ export function ListRow(props: ListRowProps) {
       </Stack>
       <Box display="flex" align="center" gap={3} padding={4} shrink={0}>
         <Text variant="mono" size="micro" color="dim">{rt} min</Text>
-        <ChevronRight className="w-3.5 h-3.5 opacity-30 group-hover:opacity-100 transition-opacity text-text-dim" />
+        <ChevronRight className="w-3.5 h-3.5 opacity-medium group-hover:opacity-full transition-opacity text-text-dim" />
       </Box>
     </Box>
   );

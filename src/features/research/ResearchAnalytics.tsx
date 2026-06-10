@@ -110,7 +110,7 @@ export default function ResearchAnalytics() {
                       <img
                         src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
                         alt={tool.title}
-                        className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
+                        className="w-full h-full object-cover object-top opacity-heavy hover:opacity-100 transition-opacity duration-500"
                       />
                     </Box>
                   )}
@@ -291,7 +291,7 @@ export default function ResearchAnalytics() {
                     interactive: study.status === 'published',
                     surface: study.status === 'published' ? 'surface' : 'muted'
                   })}
-                  opacity={study.status === 'published' ? 1 : 0.7}
+                  opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                 >
                   <Stack gap={4}>

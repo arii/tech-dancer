@@ -39,7 +39,7 @@ export function AuthorAvatar({ src, name, size = 10 }: AuthorAvatarProps) {
       justify="center"
       className="border border-line/20 shadow-sm"
     >
-      <Text variant="mono" size="micro" weight="font-bold" color="dim" className="opacity-70">
+      <Text variant="mono" size="micro" weight="font-bold" color="dim" opacityVariant="high">
         {initials}
       </Text>
     </Box>

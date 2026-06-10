@@ -101,9 +101,17 @@ export const typography = {
 };
 
 export const opacity = {
+  none: 0,
+  ghost: 0.1,
+  low: 0.2,
+  medium: 0.3,
   subtle: 0.4,
-  dim: 0.6,
   muted: 0.5,
+  dim: 0.6,
+  high: 0.7,
+  heavy: 0.8,
+  solid: 0.9,
+  full: 1,
 };
 
 export const typeSizes = {

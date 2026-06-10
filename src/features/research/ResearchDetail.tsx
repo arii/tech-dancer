@@ -127,7 +127,7 @@ export default function ResearchDetail() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Search size={48} className="opacity-20" />
+          <Search size={48} className="opacity-low" />
           <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Portfolio</Text>
@@ -208,7 +208,7 @@ export default function ResearchDetail() {
                 {tool.status === 'Coming Soon' && (
                   <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
-                      <Search className="w-8 h-8 text-accent opacity-50" />
+                      <Search className="w-8 h-8 text-accent opacity-muted" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">
