@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear } from './types/content';
+import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
 
-export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear };
+export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -48,6 +48,27 @@ const contentModules = {
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
 
+/**
+ * Validates and normalizes content status.
+ */
+function normalizeStatus(val: unknown): ContentStatus | undefined {
+  if (typeof val !== 'string') return undefined;
+  const status = val.toLowerCase() as ContentStatus;
+  return ['published', 'draft', 'planned'].includes(status) ? status : undefined;
+}
+
+/**
+ * Normalizes reading time to a numeric value.
+ */
+function normalizeReadTime(val: unknown): number | undefined {
+  if (typeof val === 'number') return val;
+  if (typeof val === 'string') {
+    const parsed = parseInt(val.replace(/[^\d]/g, ''), 10);
+    return isNaN(parsed) ? undefined : parsed;
+  }
+  return undefined;
+}
+
 export function normalizeAsset(val: unknown) {
   if (val === "" || val === undefined || val === null) return undefined;
   if (typeof val !== "string") return val;
@@ -59,6 +80,7 @@ export function normalizeAsset(val: unknown) {
 
 function transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
+  defaultType?: string
 ): T[] {
   const asArray = (val: unknown) => (Array.isArray(val) ? (val as string[]) : []);
 
@@ -66,6 +88,15 @@ function transform<T extends { date?: string; draft?: boolean }>(
     .map(([path, raw]) => {
       const contentStr = typeof raw === "string" ? raw : raw.default;
       const { data, content } = parseFrontmatter(contentStr);
+
+      const type = (data.type || defaultType) as string;
+
+      const normalizeAsset = (val: unknown) => {
+        if (val === "") return undefined;
+        return typeof val === "string" && val.startsWith("/")
+          ? `${ASSET_PREFIX}${val}`
+          : val;
+      };
 
       data.image = normalizeAsset(data.image);
       data.imageBack = normalizeAsset(data.imageBack);
@@ -75,6 +106,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       const result: Record<string, unknown> = {
         ...data,
+        type,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
         region: (data.region && VALID_REGIONS.includes(String(data.region))) ? String(data.region) : undefined,
@@ -116,6 +148,9 @@ function transform<T extends { date?: string; draft?: boolean }>(
         eventUseCase: data.eventUseCase ? String(data.eventUseCase) : undefined,
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
+
+        status: normalizeStatus(data.status),
+        readTime: normalizeReadTime(data.readTime),
 
         content: content || "",
         slug: slugFrom(path),
@@ -208,7 +243,14 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       return result as unknown as T;
     })
-    .filter((item) => !item.draft)
+    .filter((item) => {
+      // Allow draft studies so they can be shown as "Planned" or "Coming Soon" cards
+      // on the Research page without being indexed as full articles.
+      if (item.draft) {
+        return item.type === 'study' && (item.status === 'planned' || item.status === 'draft');
+      }
+      return true;
+    })
     .sort((a, b) => {
       const timeA = a.date ? new Date(a.date).getTime() : 0;
       const timeB = b.date ? new Date(b.date).getTime() : 0;
@@ -221,10 +263,10 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>),
-  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>),
-  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>)
+  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
+  studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
+  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>, 'event')
 };
 
 const maps = {
