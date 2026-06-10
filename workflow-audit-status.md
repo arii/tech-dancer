@@ -21,7 +21,7 @@ File: `.github/workflows/ci.yml`
 
 - [x] Workflow file inspected
 - [x] Recent runs inspected
-- [ ] Failed runs inspected where available
+- [x] Failed runs inspected where available
 - [x] Successful runs inspected where available
 - [x] Slowest jobs identified
 - [x] Artifacts inspected where available
@@ -53,7 +53,7 @@ File: `.github/workflows/ci.yml`
 
 ### Finding 2: Missing concurrency cancellation for pull_request workflows
 
-- **Workflow:** `conflict-check.yml`, `codeql.yml`, `security.yml`, `update-snapshots.yml`
+- **Workflow:** `conflict-check.yml`, `codeql.yml`, `security.yml`, `update-snapshots.yml`, `mergellama.yml`, `workflow-validation.yml`
 - **Jobs affected:** PR checks
 - **Evidence:** Workflows lack `concurrency` block with `cancel-in-progress: true`.
 - **Severity:** Low
@@ -88,3 +88,11 @@ File: `.github/workflows/ci.yml`
 - **Status:** Fixed.
 
 - **Note**: The pip cache implementation was reverted because inline pip installs cannot be cached natively without a `requirements.txt` equivalent by `setup-python`.
+
+### Action: Setup Node pnpm
+- Created `.github/actions/setup-node-pnpm/action.yml`
+- Refactored 10 workflows to use the new composite action.
+
+### Action: Issue Comment Dispatcher
+- Created `.github/workflows/issue-comment-dispatcher.yml`
+- Refactored `auto-conflict-resolver.yml`, `update-snapshots.yml`, `ollama-chatops.yml`, and `jules-fix-trigger.yml` to trigger on `workflow_dispatch` instead of `issue_comment`.

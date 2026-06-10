@@ -169,7 +169,7 @@ The repository uses custom Node version logic and pnpm activation logic (`corepa
 Abstract the repeated setup steps into a composite GitHub Action within the repository to DRY (Don't Repeat Yourself) the workflow files.
 
 ### Acceptance criteria
-- [ ] Workflows are refactored to use the composite action
+- [x] Workflows are refactored to use the composite action
 - [ ] Required checks still pass
 - [ ] No security regression
 
@@ -195,10 +195,35 @@ Workflows use `on: issue_comment` unconditionally, and then use `if: github.even
 Create a central `issue-comment-dispatcher.yml` that triggers on `issue_comment`, checks the comment body for keywords, and uses the GitHub API (`gh workflow run`) or `repository_dispatch` to trigger the specific workflow (like `ollama-chatops` or `update-snapshots`).
 
 ### Acceptance criteria
-- [ ] Run history is no longer flooded with skipped jobs on every comment.
-- [ ] Tools continue to trigger properly when their keyword is invoked.
+- [x] Run history is no longer flooded with skipped jobs on every comment.
+- [x] Tools continue to trigger properly when their keyword is invoked.
 
 
 ---
 
 **Note**: The recommendation to add `cache: pip` was originally proposed but removed from implementation. GitHub Action's `setup-python` requires a dependency file (like `requirements.txt`) to generate a cache key. Since workflows like `ci.yml` run inline installations (e.g. `pip install PyGithub click`), adding the cache flag would cause fatal errors. Thus, this optimization cannot be safely applied without modifying how dependencies are managed in those workflows.
+
+
+## Finding: Missing pnpm dependency caching
+
+**Severity:** low
+**Priority:** P3
+**Workflow:** Multiple (`auto-conflict-resolver.yml`, `conflict-check.yml`, `mass-audit-prs.yml`, `mergellama.yml`, `ollama-chatops.yml`)
+**File:** `.github/workflows/*.yml`
+**Jobs affected:** Jobs utilizing setup-node
+**Evidence:**
+- File reference: `uses: actions/setup-node@v4` lacks `cache: 'pnpm'` despite running `pnpm install`.
+
+### Problem
+Jobs that rely on Node.js and pnpm dependencies were not configured to cache the pnpm store via `actions/setup-node`. This caused a full dependency download on every run instead of using GitHub's built-in caching.
+
+### Impact
+- Slower workflow execution times.
+- Unnecessary network usage.
+
+### Recommended fix
+Add `cache: 'pnpm'` to `actions/setup-node@v4` steps across all workflows that install Node dependencies.
+
+### Acceptance criteria
+- [x] Runtime is reduced or justified
+- [x] Required checks still pass

@@ -30,22 +30,10 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.node-version'
-          cache: 'pnpm'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-
-      - name: Validate Runtime
+      - name: Check active runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
@@ -104,10 +92,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     concurrency:
-      # Use a global concurrency group for all gh-pages writes to prevent conflicts
-      # and ensure sequential deployment across all branches.
-      group: gh-pages-deploy
-      cancel-in-progress: false
+      # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v4

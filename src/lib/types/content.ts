@@ -19,6 +19,7 @@ export interface Post {
   updated?: string;
   tags?: string[];
   affiliateIds?: string[];
+  imageFit?: 'cover' | 'contain';
 }
 
 export interface Resource {
@@ -72,6 +73,8 @@ export interface Resource {
   eventUseCase?: string;
 }
 
+export type ContentStatus = 'published' | 'draft' | 'planned';
+
 export interface Study {
   type: 'study';
   draft?: boolean;
@@ -83,6 +86,8 @@ export interface Study {
   content: string;
   tags?: string[];
   author: string;
+  status?: ContentStatus;
+  readTime?: number;
 }
 
 export interface EventTheme {

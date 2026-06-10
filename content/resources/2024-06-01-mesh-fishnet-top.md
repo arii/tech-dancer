@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Fashion"
 excerpt: "Sheer mesh fishnet top for layering and statement styling on the dance floor."
-image: "/images/gear/sketches/mesh-fishnet-top.png"
+image: "/images/gear/sketches/mesh-fishnet-top.webp"
 affiliateIds: ["mesh-fishnet-top"]
 tags: ["fashion", "style", "layering"]
 verdict: "Best for layering"

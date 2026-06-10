@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "The ultimate 'Dress to Impress' base for Galactic-themed events."
-image: "/images/gear/sketches/green-bodysuit.png"
+image: "/images/gear/sketches/green-bodysuit.webp"
 affiliateIds: ["green-bodysuit"]
 tags: ["costume", "galactic", "theme"]
 verdict: "Galactic Essential"

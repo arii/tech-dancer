@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Fashion"
 excerpt: "Six-pack of fishnet lace tights for elegant leg coverage and style."
-image: "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.png"
+image: "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.webp"
 affiliateIds: ["fishnet-tights"]
 tags: ["fashion", "footwear", "elegance"]
 verdict: "Best for elegance"
