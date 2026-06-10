@@ -19,7 +19,9 @@ export function useEmailForm() {
 
       // Use the centralized dismissal logic from the store
       // Auto hide the bar after success delay
-      setTimeout(() => hideBar(), 2000);
+      setTimeout(() => {
+        hideBar();
+      }, 2000);
     }, 800);
   };
 

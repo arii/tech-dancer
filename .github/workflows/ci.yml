@@ -204,12 +204,10 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
-          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
-          pnpm run test:e2e
+          VITE_BASE_PATH=/ pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
 
       - name: Run Lighthouse CI
         run: |
