@@ -531,7 +531,7 @@ export class BoomtickMCPServer {
           case "jules.get_session":
             return createSuccessResult(await getJulesSessionHandler(GetJulesSessionInputSchema.parse(request.params.arguments)));
           case "jules.list_sessions":
-            return createSuccessResult(await listJulesSessionsHandler(ListJulesSessionsInputSchema.parse(request.params.arguments)));
+            return createSuccessResult(await listJulesSessionsHandler(ListJulesSessionsInputSchema.parse(request.params.arguments || {})));
           case "jules.cancel_session":
             return createSuccessResult(await cancelJulesSessionHandler(CancelJulesSessionInputSchema.parse(request.params.arguments)));
           case "jules.get_pr":

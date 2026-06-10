@@ -1,3 +1,5 @@
+export type LocalAgentProvider = "copilot" | "agy" | "ollama";
+
 export type JulesStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 
 export interface JulesSession {
