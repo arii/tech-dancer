@@ -11,6 +11,9 @@ export function getBasePath() {
     return ("/" + process.env.VITE_BASE_PATH + "/").replace(/\/+/g, "/");
   }
 
+  // Playwright tests should always use root base path (preview server runs at http://localhost:4173/)
+  if (process.env.PLAYWRIGHT_TEST_BASE_PATH === '1') return '/';
+
   // GitHub Actions (GitHub Pages deploy)
   if (process.env.GITHUB_ACTIONS === 'true') return '/tech-dancer/';
   // Local dev

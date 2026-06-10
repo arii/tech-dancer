@@ -208,6 +208,7 @@ jobs:
         env:
           CI: true
           NODE_ENV: production
+          PLAYWRIGHT_TEST_BASE_PATH: '1'
 
       - name: Run Lighthouse CI
         run: |
