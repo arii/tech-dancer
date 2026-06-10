@@ -94,10 +94,24 @@ export const typography = {
   h3: "font-display font-semibold tracking-tight leading-snug",
   headline: "font-display font-bold tracking-tighter leading-[0.9]",
   display: "font-display font-bold tracking-tight leading-none",
-  hero: "font-serif font-black tracking-tight leading-[1.2]",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch]",
+  hero: "font-serif font-black tracking-tight leading-[1.2] break-words",
+  body: "font-sans leading-relaxed text-text-body max-w-[65ch] break-words",
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
+};
+
+export const opacity = {
+  none: 0,
+  ghost: 0.1,
+  low: 0.2,
+  medium: 0.3,
+  subtle: 0.4,
+  muted: 0.5,
+  dim: 0.6,
+  high: 0.7,
+  heavy: 0.8,
+  solid: 0.9,
+  full: 1,
 };
 
 export const typeSizes = {

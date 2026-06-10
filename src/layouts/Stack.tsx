@@ -11,7 +11,7 @@ interface StackProps extends Omit<BoxProps, "align" | "justify"> {
 }
 
 export const Stack = forwardRef<HTMLDivElement, StackProps>(
-  ({ className, direction = "col", gap = 4, align, justify, ...props }, ref) => {
+  ({ className, direction = "col", gap = 4, align, justify, display = "flex", ...props }, ref) => {
     const directionMapper = (d: string) => d === "col" ? "flex-col" : "flex-row"
     const alignMapper = (a: string) => {
       const map: Record<string, string> = {
@@ -38,8 +38,8 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
     return (
       <Box
         ref={ref}
+        display={display}
         className={composeStyles(
-          "flex",
           getResponsiveClasses(direction, "", directionMapper),
           getResponsiveClasses(align, "", alignMapper),
           getResponsiveClasses(justify, "", justifyMapper),

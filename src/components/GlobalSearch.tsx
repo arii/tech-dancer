@@ -218,15 +218,15 @@ export function GlobalSearch() {
                               <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold" tracking="widest">{res.type}</Text>
                            </Box>
                         </Box>
-                        <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate opacity-80">{highlight(res.excerpt)}</Text>
+                        <Text variant="body" size="xs" color="dim" opacityVariant="heavy" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                      </Stack>
-                     <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-60 transition-opacity" />
+                     <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-dim transition-opacity" />
                   </Box>
                 ))}
               </Stack>
             ) : (
               <Box padding={20} display="flex" align="center" justify="center">
-                <Stack align="center" gap={4} className="opacity-60">
+                <Stack align="center" gap={4} opacityVariant="dim">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
                      {query ? "No results found" : "Search gear, guides, and posts"}
@@ -242,13 +242,13 @@ export function GlobalSearch() {
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                 </Box>
-                <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
+                <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
                 </Box>
-                <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
+                <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">SELECT</Text>
               </Box>
             </Box>
             <Text
@@ -257,7 +257,8 @@ export function GlobalSearch() {
               color="dim"
               weight="font-bold"
               tracking="widest"
-              className="opacity-70 whitespace-nowrap"
+              opacityVariant="high"
+              className="whitespace-nowrap"
               data-testid="search-results-count"
             >
               {results.length} RESULTS FOUND

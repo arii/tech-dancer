@@ -28,7 +28,7 @@ function getIconForPath(path: string): LucideIcon {
 export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" opacity={0.5}>
+      <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" opacityVariant="muted">
         Core Architectural Assets
       </Text>
       <Stack gap={2}>
@@ -43,7 +43,7 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                 <Stack gap={2} width="full">
                   <Box display="flex" align="center" justify="between" width="full">
                     <Text variant="mono" size="xs">{asset.path}</Text>
-                    <Text variant="mono" size="micro" color="dim" opacity={0.6}>{asset.label}</Text>
+                    <Text variant="mono" size="micro" color="dim" opacityVariant="dim">{asset.label}</Text>
                   </Box>
                   {asset.description && (
                     <Text variant="body" size="micro" color="dim">

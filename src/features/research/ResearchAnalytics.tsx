@@ -19,6 +19,23 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   return Search;
 }
 
+function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
+  if (!tool.image) return null;
+
+  const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
+  const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
+
+  return (
+    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-cover object-top opacity-heavy hover:opacity-100 transition-opacity duration-500"
+      />
+    </Box>
+  );
+}
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
@@ -93,7 +110,7 @@ export default function ResearchAnalytics() {
         <Stack gap={6} id="flagship" marginTop={2}>
           <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={6}>
             {flagshipTools.map((tool) => (
@@ -105,15 +122,7 @@ export default function ResearchAnalytics() {
                 className="border-accent/10 h-full overflow-hidden"
               >
                 <Stack gap={0} height="full">
-                  {tool.image && (
-                    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
-                      <img
-                        src={tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image}
-                        alt={tool.title}
-                        className="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity duration-500"
-                      />
-                    </Box>
-                  )}
+                  <ToolImage tool={tool} baseUrl={baseUrl} />
                   <Stack gap={6} padding={8} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
                       <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
@@ -210,7 +219,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
             {engineeringTools.map((tool) => (
@@ -237,7 +246,7 @@ export default function ResearchAnalytics() {
                   </Box>
                   <Stack gap={3}>
                     <Stack gap={1}>
-                      <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
+                      <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">
                         {tool.category}
                       </Text>
                       <Text variant="display" size="xl" weight="font-black">
@@ -272,7 +281,7 @@ export default function ResearchAnalytics() {
           <Stack gap={8} id="articles">
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
               <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
             <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={12}>
@@ -291,7 +300,7 @@ export default function ResearchAnalytics() {
                     interactive: study.status === 'published',
                     surface: study.status === 'published' ? 'surface' : 'muted'
                   })}
-                  opacity={study.status === 'published' ? 1 : 0.7}
+                  opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                 >
                   <Stack gap={4}>
@@ -305,9 +314,9 @@ export default function ResearchAnalytics() {
                         {study.title}
                       </Text>
                       <Box display="flex" align="center" gap={4}>
-                        <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
+                      <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
                         {study.readTime && (
-                          <Box display="flex" align="center" gap={1} opacity={0.5}>
+                        <Box display="flex" align="center" gap={1} opacityVariant="muted">
                             <Clock size={12} className="text-dim" />
                             <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
                           </Box>

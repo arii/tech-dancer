@@ -77,7 +77,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
               </Box>
             ))}
             {affiliateLink && (
@@ -95,7 +95,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
               </Box>
             )}
           </Grid>

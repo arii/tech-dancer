@@ -74,7 +74,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       <Stack gap={3}>
         {Object.entries(specs).map(([key, value]) => (
           <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" uppercase className="opacity-50">{key}</Text>
+            <Text variant="mono" size="tiny" color="dim" uppercase opacityVariant="muted">{key}</Text>
             <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
           </Stack>
         ))}

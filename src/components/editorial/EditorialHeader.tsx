@@ -35,7 +35,7 @@ export function EditorialHeader({
     <Stack gap={12}>
       <Stack gap={6}>
         <Text variant="mono" size="xs" color="dim" weight="font-black" uppercase tracking="widest">
-          <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" className="opacity-40">•</Text> {date} <Text as="span" marginX={2} color="line" className="opacity-40">•</Text> {readTime}
+          <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
         <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="text-pretty break-words">
@@ -43,7 +43,7 @@ export function EditorialHeader({
         </Text>
 
         {dek && (
-          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" className="text-pretty font-medium opacity-90">
+          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" opacityVariant="solid" className="text-pretty font-medium">
             {dek}
           </Text>
         )}
@@ -55,7 +55,7 @@ export function EditorialHeader({
         </Box>
       )}
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-30">
+      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1}>
