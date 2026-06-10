@@ -11,23 +11,21 @@ import {
 import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { healthHandler } from "./tools.js";
-import { findSimilarPrsHandler, FindSimilarPrsInputSchema } from "../tools/github.find_similar_prs.js";
-import { triagePrHandler, TriagePrInputSchema } from "../tools/github.triage_pr.js";
-import { autoRepairHandler, AutoRepairInputSchema } from "../tools/github.auto_repair.js";
-import { repairPrepareHandler, RepairPrepareInputSchema } from "../tools/github.repair_prepare.js";
-import { repairFinalizeHandler, RepairFinalizeInputSchema } from "../tools/github.repair_finalize.js";
-import { getContextHandler, GetContextInputSchema } from "../tools/repo.get_context.js";
-import { verifyRepairHandler, VerifyRepairInputSchema } from "../tools/repo.verify_repair.js";
+import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
+import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
 import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
+import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
+import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
 import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
 import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
 import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
 import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
-import { getPrDiff } from "../lib/gh.js";
+import { openReplacementPrHandler, OpenReplacementPrInputSchema } from "../tools/github.open_replacement_pr.js";
+import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "../tools/github.comment_triage_summary.js";
 import fs from "fs/promises";
 import path from "path";
 
@@ -82,7 +80,7 @@ export class BoomtickMCPServer {
       };
     });
 
-    this.server.setRequestHandler(GetPromptRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
       const name = request.params.name;
 
       const agentsDir = path.resolve(config.repoPath, "boomtick-mcp/src/agents");
@@ -149,23 +147,11 @@ export class BoomtickMCPServer {
             mimeType: "application/json",
             description: "Playwright test report for a specific branch.",
           },
-          {
-            uri: "repo://pr-similarity",
-            name: "PR Similarity Report",
-            mimeType: "application/json",
-            description: "Analysis of file overlaps between open pull requests.",
-          },
-          {
-            uri: "repo://pr-files/{number}",
-            name: "PR Changed Files",
-            mimeType: "application/json",
-            description: "The list of changed files for a specific pull request.",
-          },
         ],
       };
     });
 
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
       const uri = request.params.uri;
       if (uri === "repo://package-json") {
         const content = await fs.readFile(path.join(config.repoPath, "package.json"), "utf-8");
@@ -174,9 +160,9 @@ export class BoomtickMCPServer {
         };
       }
       if (uri === "repo://routes") {
-        const result = await getContextHandler();
+        const routeMap = await getRouteMapHandler();
         return {
-          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result.routeMap, null, 2) }],
+          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(routeMap, null, 2) }],
         };
       }
       if (uri === "repo://design-tokens") {
@@ -188,22 +174,9 @@ export class BoomtickMCPServer {
       }
       if (uri.startsWith("repo://diff/")) {
         const prNumber = parseInt(uri.split("/").pop() || "");
-        const diff = await getPrDiff({ prNumber });
+        const diff = await getPrDiffHandler({ prNumber });
         return {
-          contents: [{ uri, mimeType: "text/plain", text: diff.diffText || "" }],
-        };
-      }
-      if (uri.startsWith("repo://pr-files/")) {
-        const prNumber = parseInt(uri.split("/").pop() || "");
-        const result = await getPrDiff({ prNumber, includeDiff: false });
-        return {
-          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result.files, null, 2) }],
-        };
-      }
-      if (uri === "repo://pr-similarity") {
-        const result = await findSimilarPrsHandler({});
-        return {
-          contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }],
+          contents: [{ uri, mimeType: "text/plain", text: diff.diffText }],
         };
       }
       if (uri.startsWith("repo://ci/")) {
@@ -237,36 +210,51 @@ export class BoomtickMCPServer {
         tools: [
           {
             name: "boomtick.health",
-            description: "MCP server health check.",
-            inputSchema: { type: "object", properties: {} },
+            description: "Check the health and configuration of the MCP server.",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
           },
           {
-            name: "github.find_similar_prs",
-            description: "Find PRs touching the same files.",
+            name: "github.search_open_prs",
+            description: "Search for open pull requests in the repository.",
             inputSchema: {
               type: "object",
               properties: {
                 state: { type: "string", enum: ["open", "closed", "all"] },
+                includeDrafts: { type: "boolean" },
                 maxResults: { type: "number" },
-                minSharedFiles: { type: "number" },
+                labels: { type: "array", items: { type: "string" } },
               },
             },
           },
           {
-            name: "github.triage_pr",
-            description: "Deterministic PR triage (fetch, analyze, comment).",
+            name: "github.get_pr_diff",
+            description: "Get the diff and changed files for a pull request.",
             inputSchema: {
               type: "object",
               properties: {
                 prNumber: { type: "number" },
-                detailed: { type: "boolean" },
               },
               required: ["prNumber"],
             },
           },
           {
-            name: "github.auto_repair",
-            description: "Fully automated PR repair (prepare, resolve, finalize).",
+            name: "github.checkout_branch",
+            description: "Checkout a specific branch in the repository or worktree.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                branch: { type: "string" },
+                worktreePath: { type: "string" },
+              },
+              required: ["branch"],
+            },
+          },
+          {
+            name: "github.get_merge_conflict_files",
+            description: "Detect files that conflict when a PR is merged with the base branch.",
             inputSchema: {
               type: "object",
               properties: {
@@ -277,8 +265,46 @@ export class BoomtickMCPServer {
             },
           },
           {
-            name: "github.repair_prepare",
-            description: "Aggregate PR context and create repair branch.",
+            name: "repo.get_changed_files",
+            description: "Get the list of changed files between two refs.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                base: { type: "string" },
+                head: { type: "string" },
+              },
+            },
+          },
+          {
+            name: "repo.get_package_scripts",
+            description: "Get the scripts defined in package.json.",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
+          },
+          {
+            name: "repo.get_route_map",
+            description: "Get the mapping of routes to content files.",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
+          },
+          {
+            name: "repo.read_ci_logs",
+            description: "Read CI logs for a given pull request.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prNumber: { type: "number" },
+              },
+              required: ["prNumber"],
+            },
+          },
+          {
+            name: "repo.create_repair_branch",
+            description: "Create a new repair branch from a PR branch.",
             inputSchema: {
               type: "object",
               properties: {
@@ -290,53 +316,8 @@ export class BoomtickMCPServer {
             },
           },
           {
-            name: "github.repair_finalize",
-            description: "Commit repair, verify, and open replacement PR.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prNumber: { type: "number" },
-                repairBranch: { type: "string" },
-                message: { type: "string" },
-                allowedFiles: { type: "array", items: { type: "string" } },
-                worktreePath: { type: "string" },
-                pushMode: { type: "boolean" },
-              },
-              required: ["prNumber", "repairBranch", "message", "allowedFiles"],
-            },
-          },
-          {
-            name: "github.get_merge_conflict_files",
-            description: "List merge conflict files for a PR.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prNumber: { type: "number" },
-                baseBranch: { type: "string" },
-              },
-              required: ["prNumber"],
-            },
-          },
-          {
-            name: "repo.get_context",
-            description: "Retrieve root package, routes, and design tokens.",
-            inputSchema: { type: "object", properties: {} },
-          },
-          {
-            name: "repo.verify_repair",
-            description: "Sequentially run lint, tests, and optional E2E/Lighthouse.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                worktreePath: { type: "string" },
-                runE2E: { type: "boolean" },
-                runLighthouse: { type: "boolean" },
-              },
-            },
-          },
-          {
             name: "repo.run_tests",
-            description: "Run repo tests/checks.",
+            description: "Run repository tests and checks.",
             inputSchema: {
               type: "object",
               properties: {
@@ -346,35 +327,95 @@ export class BoomtickMCPServer {
               },
             },
           },
+          {
+            name: "repo.run_lighthouse",
+            description: "Run Lighthouse CI audits.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                route: { type: "string" },
+                worktreePath: { type: "string" },
+              },
+            },
+          },
+          {
+            name: "repo.run_playwright",
+            description: "Run Playwright E2E tests.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                grep: { type: "string" },
+                worktreePath: { type: "string" },
+              },
+            },
+          },
+          {
+            name: "repo.commit_patch",
+            description: "Commit verified repair changes.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                worktreePath: { type: "string" },
+                message: { type: "string" },
+                allowedFiles: { type: "array", items: { type: "string" } },
+                writeMode: { type: "boolean" },
+              },
+              required: ["worktreePath", "message", "allowedFiles"],
+            },
+          },
+          {
+            name: "github.open_replacement_pr",
+            description: "Open a new PR that replaces or repairs the original PR.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                originalPrNumber: { type: "number" },
+                repairBranch: { type: "string" },
+                baseBranch: { type: "string" },
+                title: { type: "string" },
+                body: { type: "string" },
+                draft: { type: "boolean" },
+                worktreePath: { type: "string" },
+                pushMode: { type: "boolean" },
+              },
+              required: ["originalPrNumber", "repairBranch", "baseBranch", "title", "body"],
+            },
+          },
+          {
+            name: "github.comment_triage_summary",
+            description: "Comment on the original PR with a diagnosis and replacement link.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prNumber: { type: "number" },
+                body: { type: "string" },
+              },
+              required: ["prNumber", "body"],
+            },
+          },
         ],
       };
     });
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       try {
         switch (request.params.name) {
           case "boomtick.health":
             return createSuccessResult(await healthHandler());
-          case "github.find_similar_prs":
-            return createSuccessResult(await findSimilarPrsHandler(FindSimilarPrsInputSchema.parse(request.params.arguments || {})));
-          case "github.triage_pr":
-            return createSuccessResult(await triagePrHandler(TriagePrInputSchema.parse(request.params.arguments)));
-          case "github.auto_repair":
-            return createSuccessResult(await autoRepairHandler(AutoRepairInputSchema.parse(request.params.arguments)));
-          case "github.repair_prepare":
-            return createSuccessResult(await repairPrepareHandler(RepairPrepareInputSchema.parse(request.params.arguments)));
-          case "github.repair_finalize":
-            return createSuccessResult(await repairFinalizeHandler(RepairFinalizeInputSchema.parse(request.params.arguments)));
-          case "repo.get_context":
-            return createSuccessResult(await getContextHandler());
-          case "repo.verify_repair":
-            return createSuccessResult(await verifyRepairHandler(VerifyRepairInputSchema.parse(request.params.arguments || {})));
+          case "github.search_open_prs":
+            return createSuccessResult(await searchOpenPrsHandler(SearchOpenPrsInputSchema.parse(request.params.arguments || {})));
+          case "github.get_pr_diff":
+            return createSuccessResult(await getPrDiffHandler(GetPrDiffInputSchema.parse(request.params.arguments)));
           case "github.get_merge_conflict_files":
             return createSuccessResult(await getMergeConflictFilesHandler(GetMergeConflictFilesInputSchema.parse(request.params.arguments)));
           case "github.checkout_branch":
             return createSuccessResult(await checkoutBranchHandler(CheckoutBranchInputSchema.parse(request.params.arguments)));
           case "repo.get_changed_files":
             return createSuccessResult(await getChangedFilesHandler(GetChangedFilesInputSchema.parse(request.params.arguments || {})));
+          case "repo.get_package_scripts":
+            return createSuccessResult(await getPackageScriptsHandler());
+          case "repo.get_route_map":
+            return createSuccessResult(await getRouteMapHandler());
           case "repo.read_ci_logs":
             return createSuccessResult(await readCiLogsHandler(ReadCiLogsInputSchema.parse(request.params.arguments)));
           case "repo.create_repair_branch":
@@ -387,6 +428,10 @@ export class BoomtickMCPServer {
             return createSuccessResult(await runPlaywrightHandler(RunPlaywrightInputSchema.parse(request.params.arguments || {})));
           case "repo.commit_patch":
             return createSuccessResult(await commitPatchHandler(CommitPatchInputSchema.parse(request.params.arguments)));
+          case "github.open_replacement_pr":
+            return createSuccessResult(await openReplacementPrHandler(OpenReplacementPrInputSchema.parse(request.params.arguments)));
+          case "github.comment_triage_summary":
+            return createSuccessResult(await commentTriageSummaryHandler(CommentTriageSummaryInputSchema.parse(request.params.arguments)));
           default:
             return createErrorResult(`Tool not found: ${request.params.name}`);
         }

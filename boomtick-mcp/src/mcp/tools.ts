@@ -6,6 +6,12 @@ export const HealthInputSchema = z.object({});
 export async function healthHandler() {
   return {
     status: "ok",
-    readOnly: !config.githubToken,
+    config: {
+      githubOwner: config.githubOwner,
+      githubRepo: config.githubRepo,
+      repoPath: config.repoPath,
+      readOnly: !config.githubToken,
+      ghPath: config.ghPath
+    },
   };
 }
