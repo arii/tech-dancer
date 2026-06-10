@@ -65,5 +65,3 @@ Orchestrate the autonomous repair of all open PRs with merge conflicts in the te
 ## Artifact Index
 - ./.agents/orchestrator/ORIGINAL_REQUEST.md — Verbatim user request
 - ./.agents/orchestrator/plan.md — Orchestrator project plan
-- ./.agents/orchestrator/progress.md — Heartbeat and task progress
-- ./.agents/orchestrator/context.md — Context and status records

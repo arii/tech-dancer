@@ -34,6 +34,4 @@ Initialize and execute discovery by calling boomtick.health and retrieving all o
 ## Artifact Index
 - ./.agents/explorer_1/ORIGINAL_REQUEST.md — Verbatim user request
 - ./.agents/explorer_1/BRIEFING.md — My agent briefing
-- ./.agents/explorer_1/progress.md — My progress heartbeat
 - ./.agents/explorer_1/discovery_results.json — Output results of health check and PR list
-- ./.agents/explorer_1/handoff.md — Handoff report
