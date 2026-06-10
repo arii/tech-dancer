@@ -1,181 +1,601 @@
 {
   "arii/add-jules-tools": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "arii/merch": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "boomtick-mcp-tooling-improvements-10213598746600398904": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/agent-files": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/contact": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/events": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/gear": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/previews": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/subscribe": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "chore/cleanup-agent-files-1515458817068054732/ux-auditor": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "enhance-tool-image-alt-text-724144155787405319": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "feat-merch-display-ux-updates-17311375078220146862": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "feat/issue-boomtick-mcp-optimization-1638553477138586290": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "feat/issue-rag-pr-pipeline-1900371987344539683": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "feat/merch-display-ux-updates-17311375078220146862": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "feat/merch-lighthouse-improvements": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "feat/research-storyboard-6471691838171008186": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "fix-home-mobile-overflow-5984066594555511971": {
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/about": {
     "commitTimestamp": ,
     "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "enhance-tool-image-alt-text-724144155787405319": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-18-competition-metrics": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat-merch-display-ux-updates-17311375078220146862": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-18-financial-literacy-dancers": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/issue-boomtick-mcp-optimization-1638553477138586290": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-18-github-actions": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/issue-rag-pr-pipeline-1900371987344539683": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/merch-display-ux-updates-17311375078220146862": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/merch-lighthouse-improvements": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/research-storyboard-6471691838171008186": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-04-19-gear-essentials": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "fix-home-mobile-overflow-5984066594555511971": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+  "fix-merch-page-overlap-11372093616814384838/blog/2026-05-06-boomtick-and-b-the-rhythmic-architecture-of-west-coast-swing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/contact": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/boogie-by-the-bay": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/jack-and-jill-orama": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/mission-city-swing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/phoenix-4th-of-july": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/soswing": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/swingtacular-the-galactic-open": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/weekly": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/events/wild-wild-westie": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2023-10-01-loop-earplugs": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2023-11-01-travel-steamer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-01-01-portable-speaker": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-alien-mask": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-charging-cables": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-compression-cubes": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-crop-tops": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-fishnet-tights": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-foam-roller": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-green-bodysuit": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-light-up-suspenders": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-love-neon-follow-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-love-neon-lead-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-love-neon-switch-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-love-unisex-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-mesh-fishnet-top": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-nerd-set": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-norcal-bear-tank": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-norcal-bestcal-tshirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-norcal-crop-top": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-norcal-gate-crop-hoodie": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-norcal-pride-bear-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-norcal-pride-gate-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-pumpkin-headbands": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-rave-fan": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-reflective-crop-tops": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-running-belt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-shoe-dryer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-sunscreen": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-travel-bottles": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-tripod": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-visor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2024-06-01-war-eagle-shirt": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear/2026-04-12-suede-shoe-diy": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/gear": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/previews": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/blog-drafter": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/gitops-pr-reviewer": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/hrm-flagship": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/repo-auditor-ai": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/scope-blast-radius": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/wcs-scraper-initial-sync": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/wcs-scraper": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/research/wsdc-event-reminders": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/subscribe": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
+    "sha": "unknown"
+  }
+,
+  "fix-merch-page-overlap-11372093616814384838/ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "fix-mobile-tap-targets-home-430-4323352935883439782": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "fix/abstract-hardcoded-opacity-1747398100541446117": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "fix/draft-placeholder-posts-8016685277270424454": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "fix/dry-grid-layout-18427082986878128734": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "fix/hide-placeholder-post-11262284826273695201": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 ,
   "jules-issue-dispatch-audit-11870663646233279217": {
-    "commitTimestamp": 1781097409,
-    "deployTimestamp": 1781097409,
+    "commitTimestamp": 1781103135,
+    "deployTimestamp": 1781103135,
     "sha": "unknown"
   }
 }
