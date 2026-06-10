@@ -156,12 +156,12 @@ export function HeroSection() {
           <Box className="-ml-2">
             <Text
               as={NavLink}
-              to="/blog/why-finals-are-hard"
+              to="/blog"
               variant="mono"
               size="xs"
               color="dim"
               paddingX={2}
-              paddingY={{ base: 4, md: 2 }}
+              paddingY={{ base: 6, md: 2 }}
               display="inline-block"
               className="underline underline-offset-4 transition-colors hover:text-accent normal-case"
             >
