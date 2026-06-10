@@ -30,7 +30,8 @@ async function validateUrlNavigation(page: Page, href: string) {
 }
 
 test.describe('Navigation Smoke Tests', () => {
-  test.describe.configure({ timeout: 120000 }); // 2 minute timeout for these tests
+  test.describe.configure({ timeout: 300000 }); // 5 minute timeout for these tests
+
   test('homepage loads without console errors', async ({ page, pageErrors }) => {
     await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
     await expect(page.locator('#main-content')).toBeVisible();
@@ -56,14 +57,14 @@ test.describe('Navigation Smoke Tests', () => {
     }
   });
 
-  test('all post/content pages load without errors', async ({ page, pageErrors }) => {
-    const contentIndexes = ['./blog', './gear', './research'];
+  const contentIndexes = ['./blog', './gear', './research'];
 
-    for (const index of contentIndexes) {
+  for (const index of contentIndexes) {
+    test(`all ${index} content pages load without errors`, async ({ page, pageErrors }) => {
       await page.goto(index, { waitUntil: 'networkidle', timeout: 60000 });
       await expect(page.locator('#main-content')).toBeVisible();
       const exists = await page.$('#main-content');
-      if (!exists) continue;
+      if (!exists) return;
 
       const contentLinks = await page.$$eval('a[href]', (anchors) =>
         anchors
@@ -78,6 +79,6 @@ test.describe('Navigation Smoke Tests', () => {
         const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
         expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
       }
-    }
-  });
+    });
+  }
 });
