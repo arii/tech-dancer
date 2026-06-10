@@ -7,9 +7,6 @@ export const CONTENT_METADATA_KEYS = [
   'theme', 'gear', 'themeName', 'themeLabel', 'themeDescription', 'themeColors',
   'themeOutfitIds', 'themeAccessoryIds', 'gearOutfitIds', 'gearAccessoryIds',
   'gearShoeIds', 'gearEssentialIds', 'gearTravelIds', 'relatedEvents',
-<<<<<<< HEAD
-  'basePath', 'readingTime', 'status', 'readTime'
-=======
   'basePath', 'readingTime',
   
   // Additional post and resource keys to prevent DOM property pollution
@@ -21,5 +18,4 @@ export const CONTENT_METADATA_KEYS = [
   'recommendedFor', 'eventUseCase', 'region', 'gearOutfitDescription',
   'gearAccessoryDescription', 'gearShoeDescription', 'gearEssentialDescription',
   'gearTravelDescription'
->>>>>>> 411f392bc (updated)
 ] as const;
