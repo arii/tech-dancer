@@ -1,7 +1,7 @@
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
-import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
+import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 import { SPACING_MAP, RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
@@ -50,7 +50,8 @@ export interface BaseProps {
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
   zIndex?: number | string
-  opacity?: number | string
+  opacity?: number | string | keyof typeof opacityTokens
+  opacityVariant?: keyof typeof opacityTokens
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
   aspect?: ResponsiveProp<"square" | "video" | "auto" | string>
   shrink?: number | boolean
@@ -87,7 +88,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     gap, gapX, gapY, border, borderColor, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
-    overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
+    overflow, overflowX, overflowY, zIndex, opacity, opacityVariant, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
     // Motion props filtering
@@ -219,7 +220,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
-          opacity && getVal(opacity, "opacity"),
+          (opacityVariant || opacity) && getVal((opacityVariant ? opacityTokens[opacityVariant] : (opacity! in opacityTokens ? opacityTokens[opacity as keyof typeof opacityTokens] : opacity)), "opacity"),
           getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
           getResponsiveClasses(aspect, "aspect-", (v) => {
             if (v === "square" || v === "video") return v;

@@ -100,6 +100,12 @@ export const typography = {
   sans: "font-sans",
 };
 
+export const opacity = {
+  subtle: 0.4,
+  dim: 0.6,
+  muted: 0.5,
+};
+
 export const typeSizes = {
   micro: "text-micro",
   tiny: "text-tiny",

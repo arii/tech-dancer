@@ -2,7 +2,7 @@
 import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { composeStyles } from "@/lib/utils"
-import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
+import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
@@ -24,6 +24,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   truncate?: ResponsiveProp<boolean>
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
   italic?: boolean
+  opacityVariant?: keyof typeof opacityTokens
   [key: string]: unknown
 }
 
@@ -33,6 +34,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
     clamp, truncate, leading, italic,
+    opacityVariant,
     ...props 
   }, ref) => {
     // Standard JIT fallback for arbitrary values
@@ -79,6 +81,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           italic && "italic",
+          opacityVariant && `opacity-[${opacityTokens[opacityVariant]}]`,
           className
         )}
         {...props}

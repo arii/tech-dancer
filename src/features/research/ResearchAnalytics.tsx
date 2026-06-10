@@ -93,7 +93,7 @@ export default function ResearchAnalytics() {
         <Stack gap={6} id="flagship" marginTop={2}>
           <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>CASE STUDIES</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={6}>
             {flagshipTools.map((tool) => (
@@ -210,7 +210,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{engineeringTools.length} TOOLS</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
           </Box>
           <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
             {engineeringTools.map((tool) => (
@@ -237,7 +237,7 @@ export default function ResearchAnalytics() {
                   </Box>
                   <Stack gap={3}>
                     <Stack gap={1}>
-                      <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacity={0.4}>
+                      <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">
                         {tool.category}
                       </Text>
                       <Text variant="display" size="xl" weight="font-black">
@@ -272,7 +272,7 @@ export default function ResearchAnalytics() {
           <Stack gap={8} id="articles">
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
               <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacity={0.4}>{studies.length} POSTS</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
             <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={12}>
@@ -305,9 +305,9 @@ export default function ResearchAnalytics() {
                         {study.title}
                       </Text>
                       <Box display="flex" align="center" gap={4}>
-                        <Text variant="mono" size="micro" color="dim" opacity={0.5}>{study.date}</Text>
+                      <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
                         {study.readTime && (
-                          <Box display="flex" align="center" gap={1} opacity={0.5}>
+                        <Box display="flex" align="center" gap={1} opacityVariant="muted">
                             <Clock size={12} className="text-dim" />
                             <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
                           </Box>
