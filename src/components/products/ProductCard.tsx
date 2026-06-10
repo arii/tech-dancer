@@ -32,7 +32,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         imageUrl={item.imageUrl}
         images={item.images}
         imageDisplayMode={item.imageDisplayMode}
-
+        isFeatured={isFeatured}
       />
 
       <Stack gap={isFeatured ? 4 : 3}>
