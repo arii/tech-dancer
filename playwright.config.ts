@@ -49,7 +49,8 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
-    timeout: 120 * 1000,
+    timeout: 60 * 1000,
     env: { VITE_BASE_PATH: String(BASE_PATH || '/') }, // impeccable-ignore
   },
+  timeout: 30 * 1000,
 });
