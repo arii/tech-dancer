@@ -1,4 +1,7 @@
 #!/bin/bash
+# Exit immediately on any error (intentional): a partial preview-management run
+# risks leaving the gh-pages branch in a corrupt/inconsistent state, so we
+# prefer a clean abort over silent failure.
 set -e
 
 # Configuration

@@ -56,8 +56,9 @@ export default function Contact() {
   const onSubmit = async (data: ContactFormData) => {
     try {
       const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+      const isTestOrDev = import.meta.env.DEV || import.meta.env.MODE === 'test' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-      if (endpoint) {
+      if (endpoint && !isTestOrDev) {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -66,8 +67,8 @@ export default function Contact() {
 
         if (!response.ok) throw new Error('Submission failed');
       } else {
-        // Simulate form submission if no endpoint is configured
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Simulate form submission if no endpoint is configured or in dev/test/local envs
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
       setSubmitted(true);

@@ -1,18 +1,25 @@
 import { create } from 'zustand';
 
+const STORAGE_KEY = 'td-newsletter-dismissed';
+
 interface EmailState {
   showEmailBar: boolean;
   setShowEmailBar: (show: boolean) => void;
   hideBar: () => void;
 }
 
-export const STORAGE_KEY = 'td-newsletter-dismissed';
+const getInitialShowState = () => {
+  if (typeof window === 'undefined') return false;
+  return sessionStorage.getItem(STORAGE_KEY) !== 'true';
+};
 
 export const useEmailStore = create<EmailState>((set) => ({
-  showEmailBar: typeof window !== 'undefined' ? sessionStorage.getItem(STORAGE_KEY) !== 'true' : false,
+  showEmailBar: getInitialShowState(),
   setShowEmailBar: (show: boolean) => set({ showEmailBar: show }),
   hideBar: () => {
     set({ showEmailBar: false });
-    sessionStorage.setItem(STORAGE_KEY, 'true');
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(STORAGE_KEY, 'true');
+    }
   },
 }));
