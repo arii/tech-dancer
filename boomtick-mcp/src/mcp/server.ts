@@ -27,9 +27,6 @@ import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit
 import { openReplacementPrHandler, OpenReplacementPrInputSchema } from "../tools/github.open_replacement_pr.js";
 import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "../tools/github.comment_triage_summary.js";
 
-import { runAgentCopilotHandler, RunAgentCopilotInputSchema } from "../tools/agents/copilot.js";
-import { runAgentAgyHandler, RunAgentAgyInputSchema } from "../tools/agents/agy.js";
-import { runAgentOllamaHandler, RunAgentOllamaInputSchema } from "../tools/agents/ollama.js";
 
 import { createJulesSessionHandler, CreateJulesSessionInputSchema } from "../tools/jules/create-session.js";
 import { getJulesSessionHandler, GetJulesSessionInputSchema } from "../tools/jules/get-session.js";
@@ -404,35 +401,17 @@ export class BoomtickMCPServer {
               required: ["prNumber", "body"],
             },
           },
-          {
-            name: "agents.run_copilot",
-            description: "Run the Copilot local agent interactively.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prompt: { type: "string" },
+
               },
               required: ["prompt"],
             },
           },
-          {
-            name: "agents.run_agy",
-            description: "Run the AGY local agent interactively.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prompt: { type: "string" },
+
               },
               required: ["prompt"],
             },
           },
-          {
-            name: "agents.run_ollama",
-            description: "Run the Ollama local agent interactively.",
-            inputSchema: {
-              type: "object",
-              properties: {
-                prompt: { type: "string" },
+
               },
               required: ["prompt"],
             },
@@ -528,12 +507,9 @@ export class BoomtickMCPServer {
             return createSuccessResult(await openReplacementPrHandler(OpenReplacementPrInputSchema.parse(request.params.arguments)));
           case "github.comment_triage_summary":
             return createSuccessResult(await commentTriageSummaryHandler(CommentTriageSummaryInputSchema.parse(request.params.arguments)));
-          case "agents.run_copilot":
-            return createSuccessResult(await runAgentCopilotHandler(RunAgentCopilotInputSchema.parse(request.params.arguments)));
-          case "agents.run_agy":
-            return createSuccessResult(await runAgentAgyHandler(RunAgentAgyInputSchema.parse(request.params.arguments)));
-          case "agents.run_ollama":
-            return createSuccessResult(await runAgentOllamaHandler(RunAgentOllamaInputSchema.parse(request.params.arguments)));
+
+
+
           case "jules.create_session":
             return createSuccessResult(await createJulesSessionHandler(CreateJulesSessionInputSchema.parse(request.params.arguments)));
           case "jules.get_session":
