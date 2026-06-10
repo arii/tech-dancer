@@ -176,7 +176,7 @@
     @apply font-extrabold text-white flex items-center tracking-[0.05em];
   }
   .wordmark-hero {
-    @apply font-display mt-3 opacity-0;
+    @apply font-display mt-3 opacity-0 ml-0 md:-ml-3;
     transform: translateY(10px);
     font-size: clamp(18px, 4vw, 28px);
     animation: fadeUp 0.7s ease forwards 0.4s;
@@ -295,7 +295,6 @@
   .hero-logo-anim {
     height: clamp(60px, 10vw, 120px);
     animation: fadeUp 0.6s ease forwards 0.05s;
-    @apply ml-0 md:-ml-3;
   }
   .hero-headline-anim {
     animation: fadeUp 0.6s ease forwards 0.2s;

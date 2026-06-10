@@ -75,8 +75,16 @@ export function GearShelf() {
       </Box>
 
       {/* Mobile: horizontal scroll of compact tiles */}
-      <Box className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-3 lg:hidden no-scrollbar">
-        <Box display="flex" gap={3} width="fit" className="flex-nowrap pr-4">
+      <Box
+        display={{ base: "block", lg: "none" }}
+        width="full"
+        maxWidth="full"
+        overflowX="auto"
+        overscroll="x-contain"
+        paddingBottom={3}
+        noScrollbar
+      >
+        <Box display="flex" gap={3} width="fit" paddingRight={4}>
           {PICKS.map(({ label, image, imageText, href }) => (
             <Box
               key={`mobile-${label}`}

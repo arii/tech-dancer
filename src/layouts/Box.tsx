@@ -49,6 +49,9 @@ export interface BaseProps {
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
+  overscroll?: "auto" | "contain" | "none" | "x-contain" | "y-contain"
+  noScrollbar?: boolean
+  pointerEvents?: "auto" | "none" | "inherit" | "initial" | "revert" | "unset"
   zIndex?: number | string
   opacity?: number | string
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
@@ -108,21 +111,26 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
 
     // Define getVal before it's used
     const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
-      if (!val) return ""
+      if (val === undefined || val === null || val === "") return ""
+
+      const isNegative = (typeof val === "number" && val < 0) || (typeof val === "string" && val.startsWith("-") && val !== "-")
+      const absVal = typeof val === "number" ? Math.abs(val) : (isNegative ? val.substring(1) : val)
+
       const pfx = prefix ? `${prefix}-` : ""
+      const negPrefix = isNegative ? "-" : ""
 
       // Standard Tailwind tokens (numbers or specific strings without CSS units)
       const isToken = typeof val === "number" ||
-        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
+        (typeof absVal === "string" && /^[a-z0-9-]+$/.test(absVal) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absVal))
 
-      if (isToken) return `${pfx}${val}`
+      if (isToken) return `${negPrefix}${pfx}${absVal}`
 
       // Arbitrary values
       const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
         ? val
         : `[${val}]`
 
-      return `${pfx}${value}`
+      return `${negPrefix}${pfx}${value}`
     }
 
     const motionProps: Record<string, unknown> = {}
@@ -163,8 +171,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     } = props;
 
     const s = (prefix: string) => (v: string | number | boolean | undefined | null) => {
-      const token = SPACING_MAP[v as keyof typeof SPACING_MAP];
-      if (token) return `${prefix}-${token}`;
+      const isNegative = (typeof v === "number" && v < 0) || (typeof v === "string" && v.startsWith("-") && v !== "-")
+      const absV = typeof v === "number" ? Math.abs(v) : (isNegative ? v.substring(1) : v)
+
+      const token = SPACING_MAP[absV as keyof typeof SPACING_MAP];
+      const negPrefix = isNegative ? "-" : ""
+
+      if (token) return `${negPrefix}${prefix}-${token}`;
       return getVal(v, prefix);
     }
 
@@ -218,8 +231,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           overflow && (overflow === "y-auto" ? "overflow-y-auto" : overflow === "x-auto" ? "overflow-x-auto" : overflow === "y-hidden" ? "overflow-y-hidden" : `overflow-${overflow}`),
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
+          overscroll && (overscroll === "x-contain" ? "overscroll-x-contain" : overscroll === "y-contain" ? "overscroll-y-contain" : `overscroll-${overscroll}`),
+          noScrollbar && "no-scrollbar",
+          pointerEvents && `pointer-events-${pointerEvents}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
-          opacity && getVal(opacity, "opacity"),
+          opacity !== undefined && getVal(opacity, "opacity"),
           getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
           getResponsiveClasses(aspect, "aspect-", (v) => {
             if (v === "square" || v === "video") return v;
