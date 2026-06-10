@@ -66,7 +66,7 @@ test.describe('Automated UX/Console Error Crawler', () => {
       // Clear errors from previous navigation before going to next page
       pageErrors.clearErrors();
 
-      const response = await page.goto(normalizedUrl, { waitUntil: 'domcontentloaded' });
+      const response = await page.goto(normalizedUrl, { waitUntil: 'networkidle' });
 
       // Verify status code
       if (response) {

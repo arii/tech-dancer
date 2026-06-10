@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Merch Page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('./merch');
+    await page.goto('./merch'); await page.waitForLoadState('networkidle');
   });
 
   test('should load the merch page with correct title', async ({ page }) => {

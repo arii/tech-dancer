@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('./contact');
+    await page.goto('./contact'); await page.waitForLoadState('networkidle');
 
     // Dismiss newsletter banner if present as it intercepts clicks due to fixed positioning
     const banner = page.locator('#newsletter-banner');

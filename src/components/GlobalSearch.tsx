@@ -124,7 +124,7 @@ export function GlobalSearch() {
           radius="lg"
           border
           shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 mx-4 pointer-events-auto outline-none"
+          className="bg-surface/90 backdrop-blur-2xl border-accent/20   pointer-events-auto outline-none"
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {

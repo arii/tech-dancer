@@ -16,7 +16,7 @@ const routes = [
 test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
-      await page.goto(route.path);
+      await page.goto(route.path, { waitUntil: 'networkidle' });
 
       // Wait for the main content to be visible as a base stability measure
       await expect(page.locator('main')).toBeVisible({ timeout: 30000 });

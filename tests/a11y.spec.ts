@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 test.describe('accessibility', () => {
   test.beforeEach(async ({ page }) => {
-     await page.goto('./');
+     await page.goto('./'); await page.waitForLoadState('networkidle');
      await expect(page.locator('main')).toBeVisible();
 
      // Dismiss newsletter banner if present to avoid overlay issues during scan
