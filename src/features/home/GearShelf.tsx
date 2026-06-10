@@ -25,7 +25,9 @@ export function GearShelf() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="shrink-0 hover:underline"
+          paddingX={2}
+          paddingY={4}
+          className="shrink-0 hover:underline -mr-2"
         >
           See all picks →
         </Text>
@@ -82,6 +84,7 @@ export function GearShelf() {
               key={`mobile-${label}`}
               as={NavLink}
               to={href}
+              paddingY={2}
               className="group w-28 min-w-0"
             >
               <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">

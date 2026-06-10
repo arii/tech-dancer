@@ -27,14 +27,15 @@ export function DevLabCallout() {
         as={NavLink}
         to="/research"
         display="block"
-        marginTop={4}
+        marginTop={3}
         variant="mono"
         size="xs"
         color="accent"
         weight="font-bold"
-        className="hover:underline"
+        paddingY={4}
+        className="hover:underline -ml-2"
       >
-        View Portfolio →
+        <span className="px-2">View Portfolio →</span>
       </Text>
     </Box>
   );

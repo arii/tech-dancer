@@ -29,7 +29,7 @@ export default function Navigation() {
       <Box as="nav" aria-label="Main Navigation" className="fixed inset-x-0 top-0 z-50 h-16 w-full max-w-full border-b border-line bg-bg/95 backdrop-blur-xl">
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
-            <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} className="group">
+            <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} padding={2} marginLeft={-2} className="group">
               <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-80" />
             </Box>
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
@@ -62,7 +62,7 @@ export default function Navigation() {
               as={motion.create('button')}
               display={{ base: 'flex', lg: 'none' }}
               onClick={() => setIsOpen(!isOpen)}
-              padding={2}
+              padding={{ base: 3, lg: 2 }}
               align="center"
               justify="center"
               radius="full"

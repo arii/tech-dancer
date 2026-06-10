@@ -153,8 +153,18 @@ export function HeroSection() {
             </ActionButton>
           </Stack>
 
-          <Box>
-            <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent normal-case">
+          <Box className="-ml-2">
+            <Text
+              as={NavLink}
+              to="/blog/why-finals-are-hard"
+              variant="mono"
+              size="xs"
+              color="dim"
+              paddingX={2}
+              paddingY={{ base: 4, md: 2 }}
+              display="inline-block"
+              className="underline underline-offset-4 transition-colors hover:text-accent normal-case"
+            >
               Start with practical notes →
             </Text>
           </Box>

@@ -33,7 +33,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         left={4}
         zIndex="skipLink"
         paddingX={6}
-        paddingY={3}
+        paddingY={{ base: 5, md: 3 }}
         radius="sm"
         className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none whitespace-nowrap"
       >

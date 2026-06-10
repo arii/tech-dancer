@@ -21,7 +21,9 @@ export function LatestPosts() {
           size="xs"
           color="dim"
           weight="font-bold"
-          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent"
+          paddingX={2}
+          paddingY={4}
+          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent -mr-2"
         >
           View all →
         </Text>
@@ -37,7 +39,8 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            paddingY={{ base: 5, md: 3.5 }}
+            className="group w-full max-w-full min-w-0 border-b border-line transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box

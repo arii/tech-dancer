@@ -65,7 +65,7 @@ export function Footer() {
               to={link.to}
               variant="ghost"
               paddingX={3}
-              paddingY={1.5}
+              paddingY={{ base: 4, md: 1.5 }}
               className="active:scale-95"
             >
               <Text

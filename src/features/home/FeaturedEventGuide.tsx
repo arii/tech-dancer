@@ -134,7 +134,9 @@ export function FeaturedEventGuide() {
               size="xs"
               color="accent"
               weight="font-bold"
-              className="hover:underline"
+              paddingY={{ base: 4, md: 2 }}
+              paddingRight={4}
+              className="hover:underline -ml-1"
             >
               Read the guide →
             </Text>
@@ -143,7 +145,7 @@ export function FeaturedEventGuide() {
                 <Box
                   as="button"
                   onClick={goPrev}
-                  padding={1.5}
+                  padding={{ base: 4, md: 1.5 }}
                   border
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
@@ -155,7 +157,7 @@ export function FeaturedEventGuide() {
                 <Box
                   as="button"
                   onClick={goNext}
-                  padding={1.5}
+                  padding={{ base: 4, md: 1.5 }}
                   border
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
