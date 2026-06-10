@@ -2,7 +2,7 @@
 import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { composeStyles } from "@/lib/utils"
-import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
+import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
@@ -26,6 +26,7 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
   italic?: boolean
   hoverColor?: "accent" | "main" | "body" | "dim"
+  opacityVariant?: keyof typeof opacityTokens
   [key: string]: unknown
 }
 
@@ -36,6 +37,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     uppercase, lowercase, capitalize,
     clamp, truncate, leading, italic,
     hoverColor,
+    opacityVariant,
     ...props 
   }, ref) => {
 
@@ -69,6 +71,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           hoverColor === "main" && "transition-colors group-hover:text-text-main",
           hoverColor === "body" && "transition-colors group-hover:text-text-body",
           hoverColor === "dim" && "transition-colors group-hover:text-text-dim",
+          opacityVariant && resolveJIT(opacityTokens[opacityVariant], "opacity"),
           className
         )}
         {...props}

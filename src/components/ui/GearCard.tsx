@@ -38,7 +38,7 @@ interface GearCardProps extends BaseProps {
 const CARD_STYLES = {
   image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
-  verdict: "uppercase tracking-widest opacity-90"
+  verdict: "uppercase tracking-widest opacity-solid"
 };
 
 export function GearCard(props: GearCardProps) {
@@ -125,7 +125,7 @@ export function GearCard(props: GearCardProps) {
             paddingX={2}
             paddingY={1}
             radius="full"
-            opacity={80}
+            opacityVariant="heavy"
             className="bg-accent text-bg backdrop-blur-md shadow-sm"
           >
             <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
@@ -163,7 +163,7 @@ export function GearCard(props: GearCardProps) {
             paddingX={2}
             paddingY={1}
             radius="full"
-            opacity={80}
+            opacityVariant="heavy"
             className="bg-accent text-bg backdrop-blur-md shadow-sm"
           >
             <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">

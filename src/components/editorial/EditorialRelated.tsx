@@ -17,7 +17,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
   if (items.length === 0) return null;
 
   return (
-    <Box paddingY={12} border="t" borderColor="line" className="border-opacity-30">
+    <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
       <Stack gap={6}>
         <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
           {title}

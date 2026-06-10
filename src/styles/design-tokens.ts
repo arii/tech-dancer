@@ -100,6 +100,20 @@ export const typography = {
   sans: "font-sans",
 };
 
+export const opacity = {
+  none: 0,
+  ghost: 0.1,
+  low: 0.2,
+  medium: 0.3,
+  subtle: 0.4,
+  muted: 0.5,
+  dim: 0.6,
+  high: 0.7,
+  heavy: 0.8,
+  solid: 0.9,
+  full: 1,
+};
+
 export const typeSizes = {
   micro: "text-micro",
   tiny: "text-tiny",

@@ -33,7 +33,7 @@ export function FeaturedGuidePanel() {
         width={420}
         height={600}
         fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-60 transition-opacity duration-500 group-hover:opacity-70"
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility */}
