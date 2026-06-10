@@ -138,4 +138,5 @@ export const tailwindSafelist = [
   'lg:hidden',
   'md:hidden',
   'sm:hidden',
+  'lg:gap-4',
 ];
