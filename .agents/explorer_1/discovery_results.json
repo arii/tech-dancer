@@ -1,0 +1,2280 @@
+{
+  "health": {
+    "status": "ok",
+    "config": {
+      "githubOwner": "arii",
+      "githubRepo": "tech-dancer",
+      "repoPath": "/home/ari/tech-dancer",
+      "readOnly": false,
+      "ghPath": "gh"
+    }
+  },
+  "prs": {
+    "prs": [
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "feat-boomtick-mcp-multi-agent-conflict-repair-13692389159609037760",
+        "isDraft": true,
+        "mergeStateStatus": "BLOCKED",
+        "number": 1917,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:32:16Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165053725/job/80189934120",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T20:30:13Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:10Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165048991/job/80189920165",
+            "name": "build",
+            "startedAt": "2026-06-08T20:30:09Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165048991/job/80190128333",
+            "name": "deploy",
+            "startedAt": "2026-06-08T20:31:11Z",
+            "status": "PENDING",
+            "workflowName": "Deploy to GitHub Pages"
+          }
+        ],
+        "title": "feat: Multi-Agent Merge Conflict Resolution Prompts",
+        "updatedAt": "2026-06-08T20:30:06Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1917"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "chore/workflow-audit-fixes-15706173324691287662",
+        "isDraft": true,
+        "mergeStateStatus": "BLOCKED",
+        "number": 1900,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164956122/job/80189608804",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:28:25Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:42Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957747/job/80189613671",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T20:28:27Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:29:43Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957704/job/80189613425",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:28:26Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:29:47Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164956174/job/80189608646",
+            "name": "build",
+            "startedAt": "2026-06-08T20:28:25Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:29:17Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957677/job/80189613441",
+            "name": "conflict-check",
+            "startedAt": "2026-06-08T20:28:27Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:29:28Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957717/job/80189613532",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-08T20:28:27Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:28:33Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957680/job/80189613385",
+            "name": "Validate all workflow files",
+            "startedAt": "2026-06-08T20:28:26Z",
+            "status": "COMPLETED",
+            "workflowName": "Workflow Validation"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164956174/job/80189862779",
+            "name": "deploy",
+            "startedAt": "2026-06-08T20:29:50Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:28:53Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957704/job/80189613353",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:28:26Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:28:56Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164956122/job/80189608860",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:28:25Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:29:03Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957717/job/80189613571",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-08T20:28:27Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957704/job/80189851697",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:29:46Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:28:55Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27164957717/job/80189613574",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-08T20:28:26Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          }
+        ],
+        "title": "chore: audit and optimize github actions workflows",
+        "updatedAt": "2026-06-08T20:28:20Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1900"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "agent/repair-pr-1860---harden-github-pages-preview-",
+        "isDraft": true,
+        "mergeStateStatus": "DIRTY",
+        "number": 1885,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-06T19:17:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27071426894/job/79901274340",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-06T19:15:37Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-06T19:16:21Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27071426512/job/79901273314",
+            "name": "build",
+            "startedAt": "2026-06-06T19:15:36Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-06T19:16:25Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27071426893/job/79901274397",
+            "name": "conflict-check",
+            "startedAt": "2026-06-06T19:15:37Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-06T19:15:46Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27071426898/job/79901274352",
+            "name": "Validate all workflow files",
+            "startedAt": "2026-06-06T19:15:37Z",
+            "status": "COMPLETED",
+            "workflowName": "Workflow Validation"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-06T19:22:36Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27071426512/job/79901319845",
+            "name": "deploy",
+            "startedAt": "2026-06-06T19:16:25Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          }
+        ],
+        "title": "chore: clarify set -e intent in manage-previews.sh (repairs #1860)",
+        "updatedAt": "2026-06-08T04:57:54Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1885"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "boomtick-mcp-tooling-improvements-10213598746600398904",
+        "isDraft": true,
+        "mergeStateStatus": "BLOCKED",
+        "number": 1883,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:58Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165008638/job/80189783918",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T20:29:22Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:40Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165007308/job/80189780335",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:29:21Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165007253/job/80189780340",
+            "name": "build",
+            "startedAt": "2026-06-08T20:29:21Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165008610/job/80189784100",
+            "name": "conflict-check",
+            "startedAt": "2026-06-08T20:29:22Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:14Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165007253/job/80189926574",
+            "name": "deploy",
+            "startedAt": "2026-06-08T20:30:08Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:29:51Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165007308/job/80189780349",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:29:21Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165007308/job/80190034739",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:30:43Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          }
+        ],
+        "title": "Boomtick MCP: Integration, Schema Compliance, and Tool Dispatch Improvements",
+        "updatedAt": "2026-06-08T20:29:16Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1883"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "jules-13235027411902765088-d366c328",
+        "isDraft": false,
+        "mergeStateStatus": "DIRTY",
+        "number": 1880,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:21:05Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035211349/job/79797350627",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-05T19:18:36Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:19:52Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035209801/job/79797345825",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-05T19:18:36Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:19:19Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035209813/job/79797345739",
+            "name": "build",
+            "startedAt": "2026-06-05T19:18:34Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:19:01Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035209801/job/79797345814",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-05T19:18:34Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:25:38Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035209813/job/79797477288",
+            "name": "deploy",
+            "startedAt": "2026-06-05T19:19:22Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:24:22Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035209801/job/79797565663",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-05T19:19:56Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          }
+        ],
+        "title": "chore: PR prep and fixes for previews management",
+        "updatedAt": "2026-06-08T04:57:55Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1880"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "arii/merch",
+        "headRefName": "jules-15117192057168911858-6864d5fc",
+        "isDraft": true,
+        "mergeStateStatus": "UNSTABLE",
+        "number": 1879,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:34Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165020912/job/80189824456",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T20:29:36Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:57Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165020922/job/80189824611",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:29:36Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:53Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165018044/job/80189814828",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:29:33Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:13Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165018185/job/80189815337",
+            "name": "build",
+            "startedAt": "2026-06-08T20:29:33Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:08Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165018185/job/80189945695",
+            "name": "deploy",
+            "startedAt": "2026-06-08T20:30:13Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:02Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165020922/job/80189824650",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:29:37Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:08Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165018044/job/80189814837",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:29:33Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165020922/job/80190088327",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:31:01Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165018044/job/80190075005",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:30:56Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          }
+        ],
+        "title": "Responsive design improvements for Research Analytics page",
+        "updatedAt": "2026-06-08T20:29:29Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1879"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "fix-previews-dashboard-404-8427030039588025641",
+        "isDraft": false,
+        "mergeStateStatus": "DIRTY",
+        "number": 1870,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:58Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023359/job/80165848182",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T18:20:17Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:22:40Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023338/job/80165848883",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T18:20:18Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:34Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158020931/job/80165840912",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T18:20:15Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:03Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023410/job/80165848680",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-08T18:20:16Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:02Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158020600/job/80165839886",
+            "name": "build",
+            "startedAt": "2026-06-08T18:20:14Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:23:35Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023361/job/80165848453",
+            "name": "conflict-check",
+            "startedAt": "2026-06-08T18:20:17Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:17Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023332/job/80165848494",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-08T18:20:17Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:20:25Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023316/job/80165847972",
+            "name": "Validate all workflow files",
+            "startedAt": "2026-06-08T18:20:17Z",
+            "status": "COMPLETED",
+            "workflowName": "Workflow Validation"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:22Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023410/job/80165848741",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-08T18:20:16Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:20:51Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023338/job/80165848733",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T18:20:18Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:21:02Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158020931/job/80165840956",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T18:20:15Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:27:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158020600/job/80166000652",
+            "name": "deploy",
+            "startedAt": "2026-06-08T18:21:06Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:20:53Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023332/job/80165848526",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-08T18:20:17Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:27:17Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023338/job/80166300352",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T18:22:43Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:26:04Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158020931/job/80166097136",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T18:21:38Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:20:45Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27158023332/job/80165848614",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-08T18:20:17Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T18:20:57Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/80165979489",
+            "name": "CodeQL",
+            "startedAt": "2026-06-08T18:20:55Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          }
+        ],
+        "title": "fix: resolve previews dashboard 404 and redirect loops",
+        "updatedAt": "2026-06-08T18:27:03Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1870"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "rename-research-taxonomy-17668013291636144797",
+        "headRefName": "jules-309846870226172161-1075e62b",
+        "isDraft": true,
+        "mergeStateStatus": "CLEAN",
+        "number": 1854,
+        "reviewDecision": "",
+        "statusCheckRollup": [],
+        "title": "Fix build failures and revert incomplete refactor",
+        "updatedAt": "2026-06-08T05:02:12Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1854"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "feat/issue-rag-pr-pipeline-1900371987344539683",
+        "isDraft": true,
+        "mergeStateStatus": "BLOCKED",
+        "number": 1848,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062247/job/80189961777",
+            "name": "conflict-check",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:32:45Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062273/job/80189961702",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:41Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062263/job/80189961867",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:49Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062063/job/80189960780",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062144/job/80189961455",
+            "name": "build",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:31:11Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062144/job/80190118469",
+            "name": "deploy",
+            "startedAt": "2026-06-08T20:31:08Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:46Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062263/job/80189961688",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:30:53Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062063/job/80189960819",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:30:21Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062263/job/80190217237",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:31:44Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "0001-01-01T00:00:00Z",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27165062063/job/80190242279",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:31:52Z",
+            "status": "IN_PROGRESS",
+            "workflowName": "CI"
+          }
+        ],
+        "title": "Lightweight CPU RAG Multi-Agent PR Review Pipeline",
+        "updatedAt": "2026-06-08T20:30:15Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1848"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "consolidate/ux-audit-dev-tools-11925934652974214259",
+        "isDraft": true,
+        "mergeStateStatus": "DIRTY",
+        "number": 1839,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:50Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539054/job/79631186130",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-04T22:56:32Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:50Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539047/job/79631186202",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:56:33Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:49Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984537244/job/79631181376",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:56:28Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:12Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984537257/job/79631181287",
+            "name": "build",
+            "startedAt": "2026-06-04T22:56:28Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:30Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539026/job/79631186159",
+            "name": "conflict-check",
+            "startedAt": "2026-06-04T22:56:47Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:57Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539029/job/79631186099",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-04T22:56:31Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:52Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539060/job/79631186161",
+            "name": "Validate all workflow files",
+            "startedAt": "2026-06-04T22:56:42Z",
+            "status": "COMPLETED",
+            "workflowName": "Workflow Validation"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:11Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984537257/job/79631276562",
+            "name": "deploy",
+            "startedAt": "2026-06-04T22:57:12Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:56Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539047/job/79631186185",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:56:30Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:58Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984537244/job/79631181346",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:56:29Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:03Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539029/job/79631186098",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-04T22:56:30Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:02:01Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539047/job/79631354061",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T22:57:52Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:02:02Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984537244/job/79631352461",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T22:57:52Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:58Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984539029/job/79631186115",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-04T22:56:30Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "StatusContext",
+            "context": "lhci/url/tech-dancer/",
+            "startedAt": "2026-06-04T23:02:00Z",
+            "state": "SUCCESS",
+            "targetUrl": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1780614119655-74473.report.html"
+          }
+        ],
+        "title": "Consolidate UX audit tooling in dev-tools",
+        "updatedAt": "2026-06-08T05:04:12Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1839"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "update-pumpkin-post-stickers-diy-8079874099144162646",
+        "isDraft": true,
+        "mergeStateStatus": "CLEAN",
+        "number": 1800,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:12:21Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940919/job/80186174639",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:59Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940973/job/80186172811",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:11:02Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163938484/job/80186165211",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-08T20:09:38Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:31Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940986/job/80186172892",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:31Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163938404/job/80186165137",
+            "name": "build",
+            "startedAt": "2026-06-08T20:09:39Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:23Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940976/job/80186172948",
+            "name": "conflict-check",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:03Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940950/job/80186172665",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:48Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940986/job/80186172943",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940973/job/80186172890",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:05Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163938484/job/80186165235",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-08T20:09:38Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:20:14Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163938404/job/80186337390",
+            "name": "deploy",
+            "startedAt": "2026-06-08T20:14:11Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:11:34Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940950/job/80186172753",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-08T20:09:43Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:15:20Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940973/job/80186422190",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:11:01Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:15:31Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163938484/job/80186433107",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-08T20:11:06Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:14Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27163940950/job/80186172623",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-08T20:09:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-08T20:10:23Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/80186308230",
+            "name": "CodeQL",
+            "startedAt": "2026-06-08T20:10:22Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          },
+          {
+            "__typename": "StatusContext",
+            "context": "lhci/url/tech-dancer/",
+            "startedAt": "2026-06-08T20:15:26Z",
+            "state": "SUCCESS",
+            "targetUrl": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1780949725574-96904.report.html"
+          }
+        ],
+        "title": "Simplify pumpkin costume tutorial to sticker-based assembly",
+        "updatedAt": "2026-06-08T20:20:12Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1800"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "arii/merch",
+        "isDraft": false,
+        "mergeStateStatus": "DIRTY",
+        "number": 1791,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:00:32Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630722/job/79631460403",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-04T22:59:00Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:01:10Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630709/job/79631460361",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:59:52Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:00:01Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984628324/job/79631453662",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:58:42Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:52Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630710/job/79631460398",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-04T22:59:07Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:22Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984628318/job/79631453220",
+            "name": "build",
+            "startedAt": "2026-06-04T22:58:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:50Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630679/job/79631460320",
+            "name": "conflict-check",
+            "startedAt": "2026-06-04T22:59:08Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:22Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630736/job/79631460488",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-04T22:58:49Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:00:57Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630710/job/79631460404",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-04T22:58:45Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:00:51Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984628318/job/79631539515",
+            "name": "deploy",
+            "startedAt": "2026-06-04T22:59:22Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:10Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630709/job/79631460383",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:58:47Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:05Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984628324/job/79631453672",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:58:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:01:27Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630736/job/79631460510",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-04T22:59:55Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:43Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630736/job/79631460487",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-04T22:59:07Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:05:25Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984630709/job/79631766300",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T23:01:13Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:04:59Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984628324/job/79631615835",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T23:00:35Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:59:46Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/79631583682",
+            "name": "CodeQL",
+            "startedAt": "2026-06-04T22:59:44Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          },
+          {
+            "__typename": "StatusContext",
+            "context": "lhci/url/tech-dancer/",
+            "startedAt": "2026-06-04T23:04:55Z",
+            "state": "SUCCESS",
+            "targetUrl": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1780614295195-91694.report.html"
+          }
+        ],
+        "title": "feat(merch): overhaul merch page and address E2E test issues",
+        "updatedAt": "2026-06-08T05:06:30Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1791"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "rename-research-taxonomy-17668013291636144797",
+        "isDraft": true,
+        "mergeStateStatus": "DIRTY",
+        "number": 1759,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:11:39Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611608/job/79434947192",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T02:10:50Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:07:44Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609800/job/79434941983",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T02:06:56Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:10:24Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609797/job/79434941951",
+            "name": "build",
+            "startedAt": "2026-06-04T02:09:56Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:13:11Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611647/job/79434947911",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-04T02:12:44Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:12:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611637/job/79434947037",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-04T02:10:27Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:08:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611652/job/79434947096",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-04T02:07:47Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:09:56Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611639/job/79434947065",
+            "name": "conflict-check",
+            "startedAt": "2026-06-04T02:09:10Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:10:20Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611652/job/79434947120",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-04T02:08:58Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:10:24Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609797/job/79435370926",
+            "name": "deploy",
+            "startedAt": "2026-06-04T02:10:25Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:13:05Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611608/job/79434947228",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T02:12:39Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:08:44Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609800/job/79434942020",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T02:08:11Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:13:28Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611647/job/79434947870",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-04T02:12:47Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:11:39Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611608/job/79435494230",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T02:11:40Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:07:45Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609800/job/79435095828",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T02:07:45Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:12:44Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925611647/job/79434947862",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-04T02:12:15Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:08:30Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/79435168979",
+            "name": "CodeQL",
+            "startedAt": "2026-06-04T02:08:28Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          }
+        ],
+        "title": "Rename and clarify project taxonomy on DevAI Portfolio page",
+        "updatedAt": "2026-06-08T05:08:12Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1759"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "research-ecommerce-automation-9923460712959602965",
+        "isDraft": false,
+        "mergeStateStatus": "DIRTY",
+        "number": 1756,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:15Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481117/job/79631014174",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-04T22:55:24Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:45Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481118/job/79631014221",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:55:28Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:24Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984478655/job/79631007712",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:55:03Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:50Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481161/job/79631014296",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-04T22:55:06Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:02Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984478641/job/79631007700",
+            "name": "build",
+            "startedAt": "2026-06-04T22:55:03Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:50Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481153/job/79631014253",
+            "name": "conflict-check",
+            "startedAt": "2026-06-04T22:55:06Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:32Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481121/job/79631014029",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-04T22:55:06Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:22Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481161/job/79631014304",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-04T22:55:07Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:24Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984478641/job/79631136641",
+            "name": "deploy",
+            "startedAt": "2026-06-04T22:56:02Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:41Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481118/job/79631014219",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:55:10Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984478655/job/79631007707",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:55:04Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:41Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481121/job/79631014057",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-04T22:55:06Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:01:42Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481118/job/79631221848",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T22:56:55Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:01:22Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984478655/job/79631178669",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T22:56:27Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:41Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984481121/job/79631014058",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-04T22:55:07Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:55:45Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/79631097648",
+            "name": "CodeQL",
+            "startedAt": "2026-06-04T22:55:42Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          },
+          {
+            "__typename": "StatusContext",
+            "context": "lhci/url/tech-dancer/",
+            "startedAt": "2026-06-04T23:01:19Z",
+            "state": "SUCCESS",
+            "targetUrl": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1780614078923-27569.report.html"
+          }
+        ],
+        "title": "Add Ecommerce Automation section to Research portfolio",
+        "updatedAt": "2026-06-08T05:09:50Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1756"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "feat/research-devai-articles-9321642612728069924",
+        "isDraft": false,
+        "mergeStateStatus": "DIRTY",
+        "number": 1755,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:37Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678112/job/79798939085",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-05T19:28:40Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:09Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678121/job/79798938633",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-05T19:28:40Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:31:21Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678104/job/79798938727",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-05T19:28:39Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:25Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678116/job/79798939092",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-05T19:28:39Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:35Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035677582/job/79798937530",
+            "name": "build",
+            "startedAt": "2026-06-05T19:28:39Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:21Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678090/job/79798938883",
+            "name": "conflict-check",
+            "startedAt": "2026-06-05T19:28:39Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:54Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678116/job/79798939060",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-05T19:28:40Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:15Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678112/job/79798939079",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-05T19:28:40Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:30:47Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035677582/job/79799085445",
+            "name": "deploy",
+            "startedAt": "2026-06-05T19:29:55Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:22Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678121/job/79798938621",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-05T19:28:40Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:13Z",
+            "conclusion": "FAILURE",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678121/job/79798938689",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-05T19:28:39Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:37Z",
+            "conclusion": "SKIPPED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/27035678112/job/79799090454",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-05T19:29:37Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-05T19:29:18Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/79799038419",
+            "name": "CodeQL",
+            "startedAt": "2026-06-05T19:29:17Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          }
+        ],
+        "title": "Add SEO-focused DevAI implementation articles to Research Portfolio",
+        "updatedAt": "2026-06-08T05:11:08Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1755"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "feat/research-storyboard-6471691838171008186",
+        "isDraft": true,
+        "mergeStateStatus": "DIRTY",
+        "number": 1754,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:09:30Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609843/job/79434942204",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-04T02:07:22Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:08:04Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609857/job/79434942216",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T02:06:49Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:07:36Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925607668/job/79434935895",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T02:06:16Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:07:00Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925607704/job/79434935995",
+            "name": "build",
+            "startedAt": "2026-06-04T02:06:16Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:08:29Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609848/job/79434942128",
+            "name": "conflict-check",
+            "startedAt": "2026-06-04T02:07:44Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:11:28Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609817/job/79434942111",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-04T02:11:07Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:07:03Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925607704/job/79435020413",
+            "name": "deploy",
+            "startedAt": "2026-06-04T02:07:01Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:11:41Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609857/job/79434942168",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T02:11:12Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:06:50Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925607668/job/79434935885",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T02:06:16Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:07:45Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609817/job/79434942055",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-04T02:07:05Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:17:27Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609857/job/79435129070",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T02:13:14Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:12:16Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925607668/job/79435080653",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T02:08:01Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T02:11:04Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26925609817/job/79434942059",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-04T02:10:33Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "StatusContext",
+            "context": "lhci/url/tech-dancer/",
+            "startedAt": "2026-06-04T02:12:13Z",
+            "state": "SUCCESS",
+            "targetUrl": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1780539133203-41715.report.html"
+          }
+        ],
+        "title": "Add UX storyboard and visual redesign plan for /research",
+        "updatedAt": "2026-06-08T05:12:40Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1754"
+      },
+      {
+        "author": {
+          "id": "MDQ6VXNlcjM0MjQzOA==",
+          "is_bot": false,
+          "login": "arii",
+          "name": "Ariel Anders"
+        },
+        "baseRefName": "main",
+        "headRefName": "feature/research-flagship-projects-11797848939457752088",
+        "isDraft": true,
+        "mergeStateStatus": "DIRTY",
+        "number": 1753,
+        "reviewDecision": "",
+        "statusCheckRollup": [
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:47Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508258/job/79631096202",
+            "name": "resolve-conflicts",
+            "startedAt": "2026-06-04T22:55:44Z",
+            "status": "COMPLETED",
+            "workflowName": "Auto-Resolve Merge Conflicts"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:09Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508270/job/79631096332",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:55:44Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:57Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984506169/job/79631090066",
+            "name": "Lint & Type Check",
+            "startedAt": "2026-06-04T22:55:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:31Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508273/job/79631096252",
+            "name": "Analyze (actions)",
+            "startedAt": "2026-06-04T22:55:44Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:24Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984506162/job/79631089996",
+            "name": "build",
+            "startedAt": "2026-06-04T22:55:41Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:28Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508267/job/79631096185",
+            "name": "conflict-check",
+            "startedAt": "2026-06-04T22:55:44Z",
+            "status": "COMPLETED",
+            "workflowName": "Merge Conflict Check"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:13Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508426/job/79631096713",
+            "name": "Oxlint Scan",
+            "startedAt": "2026-06-04T22:55:53Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:53Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508273/job/79631096196",
+            "name": "Analyze (javascript-typescript)",
+            "startedAt": "2026-06-04T22:55:44Z",
+            "status": "COMPLETED",
+            "workflowName": "CodeQL Advanced"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:57:12Z",
+            "conclusion": "CANCELLED",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984506162/job/79631178403",
+            "name": "deploy",
+            "startedAt": "2026-06-04T22:56:24Z",
+            "status": "COMPLETED",
+            "workflowName": "Deploy to GitHub Pages"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:13Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508270/job/79631096313",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:55:50Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:07Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984506169/job/79631090040",
+            "name": "Anti-Pattern Audit",
+            "startedAt": "2026-06-04T22:55:41Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:39Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508426/job/79631096679",
+            "name": "Gitleaks Secret Detection",
+            "startedAt": "2026-06-04T22:56:04Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:01:37Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508270/job/79631272011",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T22:57:14Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T23:01:23Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984506169/job/79631247509",
+            "name": "Build & E2E",
+            "startedAt": "2026-06-04T22:57:02Z",
+            "status": "COMPLETED",
+            "workflowName": "CI"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:21Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/actions/runs/26984508426/job/79631096689",
+            "name": "Semgrep Static Analysis",
+            "startedAt": "2026-06-04T22:55:45Z",
+            "status": "COMPLETED",
+            "workflowName": "Security & Quality Scan"
+          },
+          {
+            "__typename": "CheckRun",
+            "completedAt": "2026-06-04T22:56:24Z",
+            "conclusion": "SUCCESS",
+            "detailsUrl": "https://github.com/arii/tech-dancer/runs/79631175532",
+            "name": "CodeQL",
+            "startedAt": "2026-06-04T22:56:23Z",
+            "status": "COMPLETED",
+            "workflowName": ""
+          },
+          {
+            "__typename": "StatusContext",
+            "context": "lhci/url/tech-dancer/",
+            "startedAt": "2026-06-04T23:01:18Z",
+            "state": "SUCCESS",
+            "targetUrl": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1780614078297-86327.report.html"
+          }
+        ],
+        "title": "Feature BoomTick.blog and RepoAuditor AI as flagship research outputs",
+        "updatedAt": "2026-06-08T05:13:58Z",
+        "url": "https://github.com/arii/tech-dancer/pull/1753"
+      }
+    ]
+  }
+}
