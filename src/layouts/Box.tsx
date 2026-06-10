@@ -3,7 +3,7 @@ import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
+import { ResponsiveProp, getResponsiveClasses, getVal } from "./system-utils"
 import { SPACING_MAP, RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
 
 export interface BaseProps {
@@ -105,25 +105,6 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       'viewport', 'layout', 'layoutId', 'onAnimationStart',
       'onAnimationComplete', 'onUpdate', 'custom'
     ];
-
-    // Define getVal before it's used
-    const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
-      if (!val) return ""
-      const pfx = prefix ? `${prefix}-` : ""
-
-      // Standard Tailwind tokens (numbers or specific strings without CSS units)
-      const isToken = typeof val === "number" ||
-        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
-
-      if (isToken) return `${pfx}${val}`
-
-      // Arbitrary values
-      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
-        ? val
-        : `[${val}]`
-
-      return `${pfx}${value}`
-    }
 
     const motionProps: Record<string, unknown> = {}
     if (isMotion) {

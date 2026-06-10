@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { SEO } from '@/components/SEO';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { TopicGrid } from '@/features/home/TopicGrid';
@@ -20,34 +20,38 @@ export default function Home() {
       />
 
       {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
-      <Box
+      <Grid
         as="section"
-        display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+        cols={{ base: 1, lg: 2 }}
+        gap={10}
+        align="center"
+        className="w-full max-w-full min-w-0"
       >
         <HeroSection />
         <FeaturedGuidePanel />
-      </Box>
+      </Grid>
 
       {/* Remaining sections — tighter vertical rhythm on mobile */}
       <Stack gap={{ base: 10, lg: 14 }} className="mt-12 w-full max-w-full min-w-0 lg:mt-16">
         <TopicGrid />
 
-        <Box
-          display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+        <Grid
+          cols={{ base: 1, lg: 2 }}
+          gap={8}
+          className="w-full max-w-full min-w-0"
         >
           <FeaturedEventGuide />
           <GearShelf />
-        </Box>
+        </Grid>
 
-        <Box
-          display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+        <Grid
+          cols={{ base: 1, lg: 2 }}
+          gap={8}
+          className="w-full max-w-full min-w-0"
         >
           <LatestPosts />
           <DevLabCallout />
-        </Box>
+        </Grid>
       </Stack>
     </Box>
   );

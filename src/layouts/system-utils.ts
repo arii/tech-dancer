@@ -24,3 +24,21 @@ export function getResponsiveClasses(
     xxl && `2xl:${classPrefix}${mapper ? mapper(xxl) : xxl}`
   )
 }
+
+export function getVal(val: string | number | boolean | undefined | null, prefix: string) {
+  if (!val) return ""
+  const pfx = prefix ? `${prefix}-` : ""
+
+  // Standard Tailwind tokens (numbers or specific strings without CSS units)
+  const isToken = typeof val === "number" ||
+    (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
+
+  if (isToken) return `${pfx}${val}`
+
+  // Arbitrary values
+  const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
+    ? val
+    : `[${val}]`
+
+  return `${pfx}${value}`
+}

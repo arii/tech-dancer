@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 
 const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
@@ -77,12 +77,13 @@ export function FeaturedEventGuide() {
       </Text>
 
       {/* Editorial card: image-led grid */}
-      <Box
+      <Grid
         as="article"
         border
         radius="xl"
         overflow="hidden"
-        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
+        cols={{ base: 1, md: "[260px_1fr]" }}
+        className="relative z-10 w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:min-h-[200px]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         data-gesture-handled="true"
@@ -168,7 +169,7 @@ export function FeaturedEventGuide() {
             )}
           </Box>
         </Stack>
-      </Box>
+      </Grid>
     </Box>
   );
 }
