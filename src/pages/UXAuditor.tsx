@@ -91,6 +91,11 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
 function ViewportFrame({ url, width, height }: { url: string; width: number; height: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [url]);
 
   useEffect(() => {
     const updateScale = () => {
@@ -120,10 +125,19 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       position="relative"
       className="bg-surface rounded-xl shadow-2xl border border-line"
     >
+      {isLoading && (
+        <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
+          <Stack align="center" gap={3}>
+             <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
+             <Text variant="sans" size="xs" color="dim" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
+          </Stack>
+        </Box>
+      )}
       <Box
         as="iframe"
         src={url}
         title="Viewport Preview"
+        onLoad={() => setIsLoading(false)}
         width={width}
         height={height}
         className="border-none bg-white origin-center"
@@ -135,6 +149,19 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
           minHeight: `${height}px`,
         }}
       />
+      <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
+         <Box
+           paddingX={2}
+           paddingY={1}
+           radius="sm"
+           border={true}
+           className="bg-bg/80 backdrop-blur-sm"
+         >
+           <Text variant="sans" size="xs" color="dim">
+             ⚠️ Some sites block embedding via CORS.
+           </Text>
+         </Box>
+      </Box>
     </Box>
   );
 }
