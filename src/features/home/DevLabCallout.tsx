@@ -28,6 +28,8 @@ export function DevLabCallout() {
         to="/research"
         display="block"
         marginTop={4}
+        paddingY={{ base: 4, sm: 0 }}
+        paddingX={{ base: 4, sm: 0 }}
         variant="mono"
         size="xs"
         color="accent"

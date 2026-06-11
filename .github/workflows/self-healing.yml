@@ -24,7 +24,6 @@ jobs:
       OLLAMA_MODEL: qwen2.5-coder:1.5b
       OLLAMA_SYNTHESIS_MODEL: qwen2.5-coder:1.5b
       OLLAMA_BASE_URL: http://localhost:11434
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout Main (Trusted)
@@ -90,22 +89,10 @@ jobs:
           if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
 
       - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh | sh
-          ollama serve > /tmp/ollama.log 2>&1 &
-          echo "Waiting for Ollama to be ready..."
-          for i in {1..15}; do
-            if curl -sf http://localhost:11434/api/tags > /dev/null; then
-              echo "Ollama is ready!"
-              ollama list
-              exit 0
-            fi
-            echo "Waiting... ($i/15)"
-            sleep 2
-          done
-          echo "Ollama failed to start"
-          cat /tmp/ollama.log
-          exit 1
+        id: setup-ollama
+        uses: ./.github/actions/setup-ollama
+        with:
+          model: 'qwen2.5-coder:1.5b'
 
       - name: Validate CLI
         run: |
@@ -126,6 +113,7 @@ jobs:
           echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
 
       - name: Execute Review
+        if: steps.setup-ollama.outputs.ready == 'true'
         run: |
           if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
             ./dev-tools/low-compute-review.sh "$PR_NUMBER" --no-cache
@@ -133,11 +121,18 @@ jobs:
             echo "No PR found for this run. Skipping AI review."
           fi
 
+      - name: Diagnostic Mode
+        if: steps.setup-ollama.outputs.ready != 'true'
+        run: |
+          echo "⚠️ Ollama is unavailable. AI review skipped."
+          echo "Ollama Logs:"
+          cat /tmp/ollama.log || echo "No logs found."
+
       - name: Verify Fixes
         id: verify
         run: |
           echo "Verifying repairs..."
-          if pnpm run lint:ox && pnpm run type-check; then
+          if pnpm run lint:ox && pnpm run lint:types; then
             echo "Repair verified successfully!"
             echo "success=true" >> "$GITHUB_OUTPUT"
           else
