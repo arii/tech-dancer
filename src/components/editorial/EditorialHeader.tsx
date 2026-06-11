@@ -31,7 +31,7 @@ export function EditorialHeader({
   hero,
 }: EditorialHeaderProps) {
   return (
-    <Stack gap={12}>
+    <Stack gap="section-spacing">
       <Stack gap={6}>
         <Text variant="mono" size="xs" color="dim" weight="font-black" uppercase tracking="widest">
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
@@ -49,7 +49,7 @@ export function EditorialHeader({
       </Stack>
 
       {hero && (
-        <Box width="full" paddingBottom={4}>
+        <Box width="full">
           {hero}
         </Box>
       )}
