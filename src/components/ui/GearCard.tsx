@@ -86,7 +86,7 @@ export function GearCard(props: GearCardProps) {
   const position = propsImagePosition || affiliate?.imagePosition || (mode === 'cover' ? 'center 20%' : 'center');
 
   const imageProps = {
-    objectFit: (mode === 'contain' || mode === 'apparel') ? 'contain' : 'cover' as any,
+    objectFit: ((mode === 'contain' || mode === 'apparel') ? 'contain' : 'cover') as 'contain' | 'cover',
     objectPosition: position,
   };
 
