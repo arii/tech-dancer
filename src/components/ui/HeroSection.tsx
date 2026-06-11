@@ -20,7 +20,12 @@ export function HeroSection() {
       align="center"
       justify="center"
       overflow="hidden"
-      className="w-full max-w-full min-w-0 items-center gap-0 lg:grid-cols-[minmax(0,1fr)_420px]"
+      position="relative"
+      width="full"
+      maxWidth="full"
+      minWidth={0}
+      gap={0}
+      className="hero-section"
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
