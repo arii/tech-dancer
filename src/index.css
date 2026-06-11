@@ -3,7 +3,19 @@
 @plugin "@tailwindcss/typography";
 /* impeccable-ignore-file */
 
+@layer base {
+  :root {
+    --sticky-header-height: 120px;
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --sticky-header-height: 80px;
+    }
+  }
+}
+
 @theme {
+  --spacing-section-offset: var(--sticky-header-height);
   /* Colors */
   --color-bg: var(--raw-color-bg);
   --color-surface: var(--raw-color-surface);

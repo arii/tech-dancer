@@ -31,9 +31,8 @@ export function ThemeSpotlight({
   return (
     <Box
       id={id}
-      data-testid="theme"
+      data-testid="theme" scrollMarginTop="section-offset"
       border
-      scrollMarginTop={32}
       radius="xl"
       overflow="hidden"
       surface="surface"

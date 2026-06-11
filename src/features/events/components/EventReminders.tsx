@@ -64,10 +64,9 @@ export function EventReminders({ event, id }: EventRemindersProps) {
         id={id}
         as="section"
         padding={10}
-        scrollMarginTop={32}
         radius="2xl"
         surface="warning"
-        textAlign="center"
+        textAlign="center" scrollMarginTop="section-offset"
         border
       >
         <Stack gap={6} align="center">
@@ -99,8 +98,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
     <Box
       id={id}
       as="section"
-      data-testid="reminders"
-      scrollMarginTop={32}
+      data-testid="reminders" scrollMarginTop="section-offset"
       position="relative"
       padding={8}
       radius="2xl"

@@ -10,7 +10,7 @@ export function EventTravel({ id, notes }: EventTravelProps) {
   if (!notes) return null;
 
   return (
-    <Box id={id} as="section" data-testid="travel" scrollMarginTop={32}>
+    <Box id={id} as="section" data-testid="travel" scrollMarginTop="section-offset">
       <Stack gap={8}>
         <Stack gap={2}>
           <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase tracking="widest">

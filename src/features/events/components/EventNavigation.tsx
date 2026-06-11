@@ -40,7 +40,7 @@ export function EventNavigation() {
       top={{ base: 16, lg: 0 }}
       zIndex="sticky"
       width="full"
-      className="bg-bg border-b border-line/10"
+      className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
 
