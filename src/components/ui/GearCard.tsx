@@ -114,12 +114,13 @@ export function GearCard(props: GearCardProps) {
         to: resolvedHref
       })}
       position="relative"
-      aspect="video"
+      aspect={variant === 'featured' ? 'video' : 'auto'}
       overflow="hidden"
       radius="md"
       bg="surface-alt"
+      opacity="low"
       display="block"
-      className="outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className="outline-none focus-visible:ring-2 focus-visible:ring-accent-brand/40"
     >
       {image ? (
         <Box
@@ -139,8 +140,8 @@ export function GearCard(props: GearCardProps) {
       <Box
         position="absolute"
         inset
-          bg="neutral"
-          pointerEvents="none"
+        bg="neutral"
+        pointerEvents="none"
         opacityVariant="ghost"
         aria-hidden="true"
       />
@@ -152,17 +153,18 @@ export function GearCard(props: GearCardProps) {
         paddingX={2}
         paddingY={1}
         radius="full"
-          shadow="sm"
-        opacityVariant="heavy"
-          className="bg-accent text-bg backdrop-blur-md"
+        shadow="sm"
+        bg="accent"
+        className="backdrop-blur-md"
       >
-          <Text
-            variant="mono"
-            size="micro"
-            weight="font-bold"
-            uppercase
-            tracking="wide"
-          >
+        <Text
+          variant="mono"
+          size="micro"
+          weight="font-bold"
+          uppercase
+          tracking="wide"
+          color="bg"
+        >
           {category}
         </Text>
       </Box>
@@ -179,7 +181,8 @@ export function GearCard(props: GearCardProps) {
       padding={6}
       radius="lg"
       border
-      className="group relative bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40"
+      surface="default"
+      className="group relative transition-all duration-200 hover:border-accent/40"
     >
       {/* Image zone */}
       {imageFrame}
@@ -201,16 +204,14 @@ export function GearCard(props: GearCardProps) {
         )}
         {/* Title with link for external affiliates */}
         {isExternal ? (
-          <Box
-            as="h3"
-            className="group-hover:text-accent transition-colors"
-          >
+          <Box as="h3">
             <Box
               as="a"
               href={resolvedHref}
               target="_blank"
               rel="noopener noreferrer sponsored"
-              className="outline-none focus-visible:ring-2 focus-visible:ring-accent hover:underline"
+              display="block"
+              className="outline-none focus-visible:ring-2 focus-visible:ring-accent-brand/40 hover:underline"
             >
               <Text
                 variant="body"
@@ -218,7 +219,8 @@ export function GearCard(props: GearCardProps) {
                 weight="font-bold"
                 color="main"
                 leading="tight"
-                className="group-hover:text-accent transition-colors line-clamp-2"
+                hoverColor="accent"
+                clamp={2}
               >
                 {title}
               </Text>
@@ -232,7 +234,8 @@ export function GearCard(props: GearCardProps) {
             weight="font-bold"
             color="main"
             leading="tight"
-            className="group-hover:text-accent transition-colors line-clamp-2"
+            hoverColor="accent"
+            clamp={2}
           >
             {title}
           </Text>
@@ -243,7 +246,15 @@ export function GearCard(props: GearCardProps) {
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={3} border="t" className="border-line/30">
+      <Box
+        display="flex"
+        align="center"
+        justify="between"
+        marginTop="auto"
+        paddingTop={3}
+        border="t"
+        className="border-line/30"
+      >
         {/* View Deal / Read Review button */}
         {isExternal ? (
           <Box
@@ -254,9 +265,17 @@ export function GearCard(props: GearCardProps) {
             display="flex"
             align="center"
             gap={1.5}
-            className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            height={{ base: 12, md: "auto" }}
+            className="group-hover:translate-x-1 transition-all outline-none focus-visible:ring-2 focus-visible:ring-accent-brand/40"
           >
-            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+            <Text
+              variant="mono"
+              size="sm"
+              weight="font-bold"
+              color="accent"
+              tracking="wide"
+              uppercase
+            >
               View deal
             </Text>
             <ExternalLink className="w-4 h-4 text-accent" aria-hidden="true" />
@@ -268,9 +287,17 @@ export function GearCard(props: GearCardProps) {
             display="flex"
             align="center"
             gap={1.5}
-            className="group-hover:translate-x-1 transition-transform outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            height={{ base: 12, md: "auto" }}
+            className="group-hover:translate-x-1 transition-all outline-none focus-visible:ring-2 focus-visible:ring-accent-brand/40"
           >
-            <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide" className="uppercase">
+            <Text
+              variant="mono"
+              size="sm"
+              weight="font-bold"
+              color="accent"
+              tracking="wide"
+              uppercase
+            >
               Read review
             </Text>
             <ArrowRight className="w-4 h-4 text-accent" aria-hidden="true" />

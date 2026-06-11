@@ -30,10 +30,10 @@ test.describe('GearCard Image Audit', () => {
         expect(width).toBe('16');
         expect(height).toBe('9');
 
-        // The container should have aspect-video for consistency
+        // Standard variant SHOULD NOT have forced aspect-video (it uses aspect-auto)
         const container = card.locator('a, [role="link"]').first();
         const className = await container.getAttribute('class');
-        expect(className).toContain('aspect-video');
+        expect(className).not.toContain('aspect-video');
       }
     }
   });
