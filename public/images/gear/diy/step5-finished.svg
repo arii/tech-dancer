@@ -1,17 +1,21 @@
 <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="#f8fafc" rx="8" />
+  <rect class="bg" width="400" height="300" rx="8" />
   <style>
-    .shoe { fill: #f1f5f9; stroke: #334155; stroke-width: 2.5; }
-    .suede { fill: #94a3b8; stroke: #475569; stroke-width: 2; }
-    .check { fill: none; stroke: #06b6d4; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
-    .text { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; text-anchor: middle; fill: #1e293b; }
-    .label { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 600; fill: #0891b2; }
-  </style>
-  <g transform="translate(100, 40)">
+    .bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 15px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+  <g transform="translate(125, 40) scale(0.8)">
     <path class="shoe" d="M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z" />
-    <path class="suede" d="M33,25 Q80,5 117,25 Q145,55 135,150 Q125,245 107,295 Q88,335 75,335 Q62,335 43,295 Q25,245 15,150 Q5,55 33,25 Z" />
-    <path class="check" d="M120,80 L160,120 L240,40" transform="translate(-20, 20)" />
-    <text x="180" y="160" class="label">Ready for social sets</text>
+    <path class="suede" d="M35,25 Q80,5 115,25 Q145,55 135,155 Q125,255 105,305 Q85,345 75,345 Q65,345 45,305 Q25,255 15,155 Q5,55 35,25 Z" />
+    <path class="checkmark" d="M40,150 L70,180 L110,120" transform="translate(120, -100) scale(0.5)" />
   </g>
-  <text x="200" y="275" class="text">5. Wait 24 hours to cure</text>
+
+  <text x="200" y="270" class="text">Ready to Dance</text>
 </svg>

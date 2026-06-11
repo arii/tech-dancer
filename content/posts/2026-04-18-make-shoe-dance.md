@@ -106,7 +106,15 @@ Peel the backing paper gradually. Apply from toe to heel, pushing out air bubble
 ### 5. Let It Cure
 Wait 24 hours for the adhesive to fully bond. Avoid testing the shoes early, as this can weaken the initial cure.
 
-![Finished shoe](/images/gear/diy/step5-finished.svg)
+![Curing process](/images/gear/diy/step5-cure.svg)
+
+## Long-Term Performance: Real-World Results
+
+This DIY modification has been tested extensively in high-demand environments. In my experience:
+- **Survived Major Conventions:** Successfully navigated 4-day events with continuous dancing.
+- **8+ Hour Socials:** Maintained consistent traction without edge lifting during all-night sets.
+- **Multiple Years of Use:** With occasional maintenance, a single application can last through several seasons of regular dancing.
+- **Consistent Traction:** Provides a predictable movement profile across various floor conditions, from hotel ballrooms to studio wood.
 
 ## Maintenance and Repairs
 

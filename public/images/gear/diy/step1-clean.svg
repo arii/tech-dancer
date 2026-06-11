@@ -1,19 +1,23 @@
 <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="#f8fafc" rx="8" />
+  <rect class="bg" width="400" height="300" rx="8" />
   <style>
-    .shoe { fill: #f1f5f9; stroke: #334155; stroke-width: 2.5; }
-    .hand { fill: #ffe0bd; stroke: #8d5524; stroke-width: 1.5; }
-    .cloth { fill: #fff; stroke: #cbd5e1; stroke-width: 2; }
-    .text { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; text-anchor: middle; fill: #1e293b; }
-    .label { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 600; fill: #0891b2; }
-    .accent { stroke: #22d3ee; stroke-width: 2; fill: none; stroke-dasharray: 4,4; }
-  </style>
-  <g transform="translate(100, 40)">
-    <path class="shoe" d="M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z" transform="rotate(10, 75, 170)" />
-    <path class="accent" d="M40,50 Q80,30 120,50 Q130,150 110,250" />
-    <circle class="hand" cx="160" cy="120" r="30" />
-    <rect class="cloth" x="130" y="100" width="40" height="40" rx="4" transform="rotate(-20, 150, 120)" />
-    <text x="140" y="160" class="label">Remove oils & dirt</text>
+    .bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 15px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+  <g transform="translate(125, 40) scale(0.8)">
+    <path class="shoe" d="M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z" />
+    <g transform="translate(130, 80)">
+       <rect fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" x="0" y="0" width="30" height="30" rx="4" transform="rotate(-20)" />
+       <text x="15" y="50" class="label">Alcohol Wipe</text>
+    </g>
   </g>
-  <text x="200" y="275" class="text">1. Clean the sole with isopropyl alcohol</text>
+
+  <text x="200" y="270" class="text">1. Clean the sole with isopropyl alcohol</text>
 </svg>
