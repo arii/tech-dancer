@@ -78,6 +78,7 @@ export default function Toolbox() {
           {allFilteredItems.map((item) => (
             <GearCard
               key={item.slug}
+              variant="standard"
               {...item}
               basePath="/gear"
             />

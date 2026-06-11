@@ -226,7 +226,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           ),
           getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
           getResponsiveClasses(aspect, "aspect-", (v) => {
-            if (v === "square" || v === "video") return v;
+            if (v === "square" || v === "video" || v === "auto") return v;
             return v ? `[${v}]` : "";
           }),
           objectFit && `object-${objectFit}`,

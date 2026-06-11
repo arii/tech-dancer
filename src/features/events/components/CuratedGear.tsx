@@ -35,6 +35,7 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
               {section.items.map((item) => (
                 <GearCard
                   key={item.id}
+                  variant="featured"
                   affiliateIds={[item.id]}
                   title={item.name}
                   category={item.category}

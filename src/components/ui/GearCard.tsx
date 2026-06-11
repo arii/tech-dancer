@@ -34,6 +34,7 @@ interface GearCardProps extends BaseProps {
   imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack' | 'cover';
   imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right' | string;
   affiliateIds?: string[];
+  variant?: 'standard' | 'featured';
   [key: string]: unknown;
 }
 
@@ -50,6 +51,7 @@ export function GearCard(props: GearCardProps) {
     imageMode: propsImageMode,
     imagePosition: propsImagePosition,
     affiliateIds,
+    variant = 'standard',
   } = props;
 
   const rest = pickRest(props, [
@@ -112,7 +114,7 @@ export function GearCard(props: GearCardProps) {
         to: resolvedHref
       })}
       position="relative"
-      aspect="video"
+      aspect={variant === 'featured' ? "video" : "auto"}
       overflow="hidden"
       radius="md"
         bg="surface-alt"
@@ -125,10 +127,10 @@ export function GearCard(props: GearCardProps) {
           as="img"
           src={image}
           alt={alt}
-            width={16}
-            height={9}
+          width={variant === 'featured' ? 16 : undefined}
+          height={variant === 'featured' ? 9 : undefined}
           transition="transform"
-            className="w-full h-full duration-500 group-hover:scale-105"
+          className="w-full h-full duration-500 group-hover:scale-105"
           {...imageProps}
         />
       ) : (
