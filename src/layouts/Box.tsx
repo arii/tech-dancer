@@ -58,6 +58,8 @@ export interface BaseProps {
   opacityVariant?: keyof typeof opacityTokens
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
   aspect?: ResponsiveProp<"square" | "video" | "auto" | string>
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"
+  objectPosition?: "bottom" | "center" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top" | "top" | string
   shrink?: number | boolean
   self?: "start" | "center" | "end" | "stretch" | "auto"
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly"
@@ -93,7 +95,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, overscroll, noScrollbar, pointerEvents,
-    zIndex, opacity, opacityVariant, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
+    zIndex, opacity, opacityVariant, display, aspect, objectFit, objectPosition, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
     // Motion props filtering
@@ -218,6 +220,8 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
             if (v === "square" || v === "video") return v;
             return v ? `[${v}]` : "";
           }),
+          objectFit && `object-${objectFit}`,
+          objectPosition && (objectPosition.includes("-") || ["bottom", "center", "left", "right", "top"].includes(objectPosition) ? `object-${objectPosition}` : resolveJIT(objectPosition, "object")),
           shrink === true && "shrink",
           shrink === false && "shrink-0",
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,

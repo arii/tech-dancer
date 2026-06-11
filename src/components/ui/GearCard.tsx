@@ -31,13 +31,13 @@ interface GearCardProps extends BaseProps {
   verdict?: string;
   image?: string;
   imageAlt?: string;
+  imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack';
+  imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right';
   affiliateIds?: string[];
   [key: string]: unknown;
 }
 
 const CARD_STYLES = {
-  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
-  badge: "bg-accent text-white backdrop-blur-md shadow-sm",
   verdict: "uppercase tracking-widest opacity-solid"
 };
 
@@ -51,6 +51,8 @@ export function GearCard(props: GearCardProps) {
     verdict,
     image: propsImage,
     imageAlt: propsImageAlt,
+    imageMode: propsImageMode,
+    imagePosition: propsImagePosition,
     affiliateIds,
   } = props;
 
@@ -79,6 +81,72 @@ export function GearCard(props: GearCardProps) {
 
   const alt = propsImageAlt || (title ? `Screenshot of the ${title} gear item` : "Gear item preview");
 
+  // Resolve image mode and position
+  const mode = propsImageMode || affiliate?.imageMode || 'cover';
+  const position = propsImagePosition || affiliate?.imagePosition || (mode === 'cover' ? 'center 20%' : 'center');
+
+  const imageProps = {
+    objectFit: (mode === 'contain' || mode === 'apparel') ? 'contain' : 'cover' as any,
+    objectPosition: position,
+  };
+
+  const imageFrame = (
+    <Box
+      as={isExternal ? "a" : NavLink}
+      {...(isExternal ? {
+        href: resolvedHref,
+        target: "_blank",
+        rel: "noopener noreferrer sponsored",
+        "aria-label": `View ${title} on Amazon`
+      } : {
+        to: resolvedHref
+      })}
+      position="relative"
+      aspect="video"
+      overflow="hidden"
+      radius="md"
+      className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
+      {image ? (
+        <Box
+          as="img"
+          src={image}
+          alt={alt}
+          width="full"
+          height="full"
+          transition="transform"
+          className="duration-500 group-hover:scale-105"
+          {...imageProps}
+        />
+      ) : (
+        <CategoryPlaceholder category={category} />
+      )}
+      {/* Dark overlay for consistent look */}
+      <Box
+        position="absolute"
+        inset
+        opacityVariant="ghost"
+        className="bg-black pointer-events-none"
+        aria-hidden="true"
+      />
+      {/* Category badge */}
+      <Box
+        position="absolute"
+        top={3}
+        right={3}
+        paddingX={2}
+        paddingY={1}
+        radius="full"
+        opacityVariant="heavy"
+        className="bg-accent text-bg backdrop-blur-md shadow-sm"
+      >
+        <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+          {category}
+        </Text>
+      </Box>
+    </Box>
+  );
+
   return (
     <Stack
       as="article"
@@ -91,87 +159,8 @@ export function GearCard(props: GearCardProps) {
       border
       className="group relative bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40"
     >
-      {/* Image zone - with explicit link for external affiliates */}
-      {isExternal ? (
-        <Box
-          as="a"
-          href={resolvedHref}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
-          aria-label={`View ${title} on Amazon`}
-          position="relative"
-          aspect="video"
-          overflow="hidden"
-          radius="md"
-          className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          {image ? (
-            <img src={image} alt={alt} width={640} height={360} className={CARD_STYLES.image} />
-          ) : (
-            <CategoryPlaceholder category={category} />
-          )}
-          {/* Dark overlay */}
-          <Box
-            position="absolute"
-            inset
-            className="bg-black/15 pointer-events-none"
-            aria-hidden="true"
-          />
-          {/* Category badge */}
-          <Box
-            position="absolute"
-            top={3}
-            right={3}
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacityVariant="heavy"
-            className="bg-accent text-bg backdrop-blur-md shadow-sm"
-          >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-              {category}
-            </Text>
-          </Box>
-        </Box>
-      ) : (
-        <Box
-          as={NavLink}
-          to={resolvedHref}
-          position="relative"
-          aspect="video"
-          overflow="hidden"
-          radius="md"
-          className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          {image ? (
-            <img src={image} alt={alt} width={640} height={360} className={CARD_STYLES.image} />
-          ) : (
-            <CategoryPlaceholder category={category} />
-          )}
-          {/* Dark overlay */}
-          <Box
-            position="absolute"
-            inset
-            className="bg-black/15 pointer-events-none"
-            aria-hidden="true"
-          />
-          {/* Category badge */}
-          <Box
-            position="absolute"
-            top={3}
-            right={3}
-            paddingX={2}
-            paddingY={1}
-            radius="full"
-            opacityVariant="heavy"
-            className="bg-accent text-bg backdrop-blur-md shadow-sm"
-          >
-            <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
-              {category}
-            </Text>
-          </Box>
-        </Box>
-      )}
+      {/* Image zone */}
+      {imageFrame}
 
       <Stack gap={2}>
         {verdict && (
