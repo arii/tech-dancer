@@ -62,7 +62,7 @@ export default function Navigation() {
               as="button"
               display={{ base: 'flex', lg: 'none' }}
               onClick={() => setIsOpen(!isOpen)}
-              padding={2}
+              padding={3}
               align="center"
               justify="center"
               radius="full"

@@ -36,29 +36,31 @@ jobs:
           pnpm run doctor
 
       - name: Setup Ollama
+        id: setup-ollama
+        uses: ./.github/actions/setup-ollama
+        with:
+          model: 'qwen2.5-coder:7b'
+
+      - name: Install Dependencies
         run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
-
-      - name: Install Click
-        run: pip install click
-
-      - name: Start Ollama Server
-        run: |
-          ollama serve > ollama_output.log 2>&1 &
-          sleep 5
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
-
-      - name: Pull Model
-        run: ollama pull qwen2.5-coder:7b
+          if ! python3 -c "import click, github, requests" 2>/dev/null; then
+            pip install click PyGithub requests
+          fi
 
       - name: Find and Resolve Conflicts
+        if: steps.setup-ollama.outputs.ready == 'true'
         run: |
           # Use our unified CLI for resolution
           # Setting PYTHONPATH ensures modules can find each other without sys.path hacks
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           python3 dev-tools/td_cli.py gh resolve
+
+      - name: Diagnostic Mode
+        if: steps.setup-ollama.outputs.ready != 'true'
+        run: |
+          echo "⚠️ Ollama is unavailable. Conflict resolution skipped."
+          echo "Ollama Logs:"
+          cat /tmp/ollama.log || echo "No logs found."
 
       - name: Validate Resolution
         run: |
