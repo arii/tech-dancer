@@ -154,10 +154,11 @@ export default function EventGuide() {
                 </Box>
 
                 {relatedEvents.length > 0 && (
-                  <RelatedEvents
-                    id="related"
-                    events={relatedEvents}
-                  />
+                  <Box id="related" layout="eventSection">
+                    <RelatedEvents
+                      events={relatedEvents}
+                    />
+                  </Box>
                 )}
               </Stack>
             </Stack>
