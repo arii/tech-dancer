@@ -39,7 +39,7 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
   const id = name.startsWith("sessions/") ? name.substring(9) : name;
 
   let status: JulesStatus = "PENDING";
-  if (data.state === "SUCCEEDED") status = "COMPLETED";
+  if (data.state === "SUCCEEDED" || data.state === "COMPLETED") status = "COMPLETED";
   else if (data.state === "FAILED" || data.state === "CANCELLED" || data.state === "TERMINATED") status = "FAILED";
   else if (data.state === "IN_PROGRESS") status = "IN_PROGRESS";
 
