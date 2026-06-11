@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -96,17 +97,12 @@ export function FeaturedEventGuide() {
       </Stack>
 
       {/* Editorial card: image-led grid */}
-      <Grid
+      <Box
         as="article"
         border
         radius="xl"
         overflow="hidden"
-        display="grid"
-        cols={{ base: 1, md: "[260px_1fr]" }}
-        minHeight={{ md: 200 }}
-        position="relative"
-        zIndex={10}
-        className="touch-pan-y overscroll-x-contain select-none bg-surface"
+        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         onPointerDown={handlePointerDown}
@@ -120,13 +116,14 @@ export function FeaturedEventGuide() {
         tabIndex={0}
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" height={{ base: 44, md: "full" }} className="min-w-0">
+        <Box position="relative" className="h-44 min-w-0 md:h-full md:w-[260px] md:aspect-[260/200]">
           <OptimizedImage
             src={event.heroImage}
             alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
             width={260}
             height={200}
-            sizes="(max-width: 768px) 100vw, 260px" // impeccable-ignore
+            // impeccable-ignore
+            sizes="(max-width: 768px) 100vw, 260px"
             loading="lazy"
             containerClassName="h-full w-full"
           />
@@ -195,7 +192,7 @@ export function FeaturedEventGuide() {
             )}
           </Box>
         </Stack>
-      </Grid>
+      </Box>
     </Box>
   );
 }

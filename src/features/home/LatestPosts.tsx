@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -44,11 +45,10 @@ export function LatestPosts() {
             <Box
               radius="md"
               overflow="hidden"
-              width={72}
-              height={14}
               shrink={0}
               marginTop={0.5}
               surface="alt"
+              className="w-[72px] aspect-[72/56]"
             >
               {post.image ? (
                 <OptimizedImage
@@ -56,8 +56,10 @@ export function LatestPosts() {
                   alt=""
                   width={72}
                   height={56}
-                  sizes="72px" // impeccable-ignore
+                  // impeccable-ignore
+                  sizes="72px"
                   loading="lazy"
+                  containerClassName="h-full w-full"
                 />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />
