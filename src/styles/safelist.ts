@@ -140,4 +140,6 @@ export const tailwindSafelist = [
   'sm:hidden',
   'lg:gap-4',
   'z-40',
+  'scroll-mt-40',
+  'lg:scroll-mt-16',
 ];

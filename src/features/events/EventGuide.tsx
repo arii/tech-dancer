@@ -120,30 +120,38 @@ export default function EventGuide() {
               <AffiliateDisclosure />
               <Stack gap={SECTION_SPACING}>
                 {event.theme && (
-                  <ThemeSpotlight
-                    id="theme"
-                    title={event.theme.name}
-                    label={event.theme.label}
-                    description={event.theme.description || ''}
-                    colors={event.theme.colors}
-                    outfits={themeOutfits}
-                    accessories={themeAccessories}
-                  />
+                  <Box id="theme" scrollMarginTop={{ base: 40, lg: 16 }}>
+                    <ThemeSpotlight
+                      title={event.theme.name}
+                      label={event.theme.label}
+                      description={event.theme.description || ''}
+                      colors={event.theme.colors}
+                      outfits={themeOutfits}
+                      accessories={themeAccessories}
+                    />
+                  </Box>
                 )}
 
                 {gearSections.length > 0 && (
-                  <CuratedGear
-                    id="gear"
-                    title={`Gear for ${event.title}`}
-                    sections={gearSections}
-                  />
+                  <Box id="gear" scrollMarginTop={{ base: 40, lg: 16 }}>
+                    <CuratedGear
+                      title={`Gear for ${event.title}`}
+                      sections={gearSections}
+                    />
+                  </Box>
                 )}
 
-                <EventReminders id="reminders" event={event} />
+                <Box id="reminders" scrollMarginTop={{ base: 40, lg: 16 }}>
+                  <EventReminders event={event} />
+                </Box>
 
-                <EventTravel id="travel" notes={event.description} />
+                <Box id="travel" scrollMarginTop={{ base: 40, lg: 16 }}>
+                  <EventTravel notes={event.description} />
+                </Box>
 
-                <EventNotes id="notes" content={event.content} />
+                <Box id="notes" scrollMarginTop={{ base: 40, lg: 16 }}>
+                  <EventNotes content={event.content} />
+                </Box>
 
                 {relatedEvents.length > 0 && (
                   <RelatedEvents
