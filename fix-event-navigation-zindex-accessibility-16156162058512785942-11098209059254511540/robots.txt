@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/fix-event-navigation-zindex-accessibility-16156162058512785942-11098209059254511540/sitemap.xml
