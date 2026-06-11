@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { IMAGE_DIMENSIONS } from '@/config/image-dimensions';
 
 export function LatestPosts() {
   const posts = getPosts().slice(0, 3);
@@ -48,13 +49,19 @@ export function LatestPosts() {
               {post.image ? (
                 <img
                   src={post.image}
+                  {...(post.image.includes('.webp') ? {
+                    srcSet: `
+                      ${post.image.replace('.webp', '-200w.webp')} 200w,
+                      ${post.image.replace('.webp', '-400w.webp')} 400w
+                    `,
+                    sizes: "72px"
+                  } : {})}
                   alt=""
-                  width={72}
-                  height={56}
                   loading="lazy"
                   decoding="async"
                   aria-hidden="true"
                   className="block h-full w-full max-w-full object-cover"
+                  style={{ aspectRatio: IMAGE_DIMENSIONS.HOME.LATEST_POSTS.ASPECT_RATIO }} // impeccable-ignore
                 />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />

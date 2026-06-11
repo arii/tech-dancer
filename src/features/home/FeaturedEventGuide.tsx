@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
+import { IMAGE_DIMENSIONS } from '@/config/image-dimensions';
 
 const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
 const SWIPE_NAV_THRESHOLD = 48;
@@ -116,15 +117,21 @@ export function FeaturedEventGuide() {
         tabIndex={0}
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="h-44 min-w-0 md:h-full">
+        <Box position="relative" className="h-44 min-w-0 md:h-full" aspect={{ base: 'video', md: 'auto' }}>
           <img
             src={event.heroImage}
+            {...(event.heroImage.includes('.webp') ? {
+              srcSet: `
+                ${event.heroImage.replace('.webp', '-400w.webp')} 400w,
+                ${event.heroImage.replace('.webp', '-800w.webp')} 800w
+              `,
+              sizes: "(min-width: 768px) 260px, 100vw"
+            } : {})}
             alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
-            width={358}
-            height={176}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover object-top"
+            style={{ aspectRatio: IMAGE_DIMENSIONS.HOME.EVENT_GUIDE.ASPECT_RATIO }} // impeccable-ignore
           />
           {/* Subtle gradient at bottom to soften any embedded text */}
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />

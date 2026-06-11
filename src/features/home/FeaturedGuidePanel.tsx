@@ -2,6 +2,7 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
+import { IMAGE_DIMENSIONS } from '@/config/image-dimensions';
 
 const FEATURED = {
   eyebrow: 'FEATURED GUIDE',
@@ -29,12 +30,17 @@ export function FeaturedGuidePanel() {
       {/* Background image — fills the column height naturally */}
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
+        srcSet={`
+          ${ASSET_PREFIX}${FEATURED.image.replace('.webp', '-400w.webp')} 400w,
+          ${ASSET_PREFIX}${FEATURED.image.replace('.webp', '-800w.webp')} 800w,
+          ${ASSET_PREFIX}${FEATURED.image.replace('.webp', '-1200w.webp')} 1200w
+        `}
+        sizes="(min-width: 1024px) 420px, 100vw"
         alt={FEATURED.imageAlt}
-        width={420}
-        height={600}
         fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
         aria-hidden="true"
+        style={{ aspectRatio: IMAGE_DIMENSIONS.HOME.HERO_GUIDE.ASPECT_RATIO }} // impeccable-ignore
       />
       {/* Gradient overlay for text legibility */}
       <Box

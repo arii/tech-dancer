@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
+import { IMAGE_DIMENSIONS } from '@/config/image-dimensions';
 
 const PICKS = [
   { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.webp', href: '/gear/2023-10-01-loop-earplugs' },
@@ -54,13 +55,17 @@ export function GearShelf() {
               {image ? (
                 <img
                   src={`${ASSET_PREFIX}${image}`}
+                  srcSet={`
+                    ${ASSET_PREFIX}${image.replace('.webp', '-400w.webp')} 400w,
+                    ${ASSET_PREFIX}${image.replace('.webp', '-800w.webp')} 800w
+                  `}
+                  sizes="(min-width: 1024px) 300px, 112px" // impeccable-ignore
                   alt=""
-                  width={400}
-                  height={400}
                   loading="lazy"
                   decoding="async"
                   aria-hidden="true"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  style={{ aspectRatio: IMAGE_DIMENSIONS.HOME.GEAR_SHELF.ASPECT_RATIO }} // impeccable-ignore
                 />
               ) : imageText ? (
                 <Text variant="body" size="sm" weight="font-bold">
@@ -105,13 +110,17 @@ export function GearShelf() {
                 {image ? (
                   <img
                     src={`${ASSET_PREFIX}${image}`}
+                    srcSet={`
+                      ${ASSET_PREFIX}${image.replace('.webp', '-200w.webp')} 200w,
+                      ${ASSET_PREFIX}${image.replace('.webp', '-400w.webp')} 400w
+                    `}
+                    sizes="112px" // impeccable-ignore
                     alt=""
-                    width={112}
-                    height={112}
                     loading="lazy"
                     decoding="async"
                     aria-hidden="true"
                     className="block h-full w-full max-w-full object-cover"
+                    style={{ aspectRatio: IMAGE_DIMENSIONS.HOME.GEAR_SHELF.ASPECT_RATIO }} // impeccable-ignore
                   />
                 ) : imageText ? (
                   <Text variant="body" size="xs" weight="font-bold" className="text-center">
