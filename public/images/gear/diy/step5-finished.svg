@@ -1,0 +1,21 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect class="bg" width="400" height="400" rx="8" />
+  <style>
+    .bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 12px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+
+  <g transform="translate(125, 40) scale(0.75)">
+    <path class="shoe" d="M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z" />
+    <path class="suede" d="M35,25 Q80,5 115,25 Q145,55 135,155 Q125,255 105,305 Q85,345 75,345 Q65,345 45,305 Q25,255 15,155 Q5,55 35,25 Z" />
+    <path class="checkmark" d="M40,150 L70,180 L110,120" transform="translate(130, -80) scale(0.6)" />
+  </g>
+
+  <text x="200" y="350" class="text">Ready to Dance</text>
+</svg>
