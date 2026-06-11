@@ -92,13 +92,13 @@ export function GearShelf() {
         paddingBottom={3}
         noScrollbar
       >
-        <Box display="flex" gap={3} paddingX={4}>
+        <Stack direction="row" gap={3} paddingX={4}>
           {PICKS.map(({ label, image, imageText, href }) => (
             <Box
               key={`mobile-${label}`}
               as={NavLink}
               to={href}
-              width={28}
+              width="7rem"
               minWidth={0}
               className="group"
             >

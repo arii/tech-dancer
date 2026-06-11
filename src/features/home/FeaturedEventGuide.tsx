@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 
 const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
@@ -96,20 +96,21 @@ export function FeaturedEventGuide() {
       </Stack>
 
       {/* Editorial card: image-led grid */}
-      <Box
+      <Grid
         as="article"
         border
         radius="xl"
         overflow="hidden"
         position="relative"
         zIndex="base"
-        display="grid"
         width="full"
         maxWidth="full"
         minWidth={0}
         surface="default"
         overscroll="x-contain"
-        className="touch-pan-y select-none md:grid-cols-[minmax(200px,260px)_1fr] md:min-h-[200px]"
+        cols={{ base: 1, md: "[minmax(12.5rem,16.25rem)_1fr]" }}
+        minHeight={{ md: "12.5rem" }}
+        className="touch-pan-y select-none"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         data-gesture-handled="true"
@@ -146,7 +147,9 @@ export function FeaturedEventGuide() {
         <Stack gap={3} padding={6} minWidth={0} justify="between" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="start" gap={2}>
-              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+              <Box marginTop={0.5} shrink={0}>
+                <MapPin className="h-3.5 w-3.5 text-accent" />
+              </Box>
               <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase leading="normal" display="block" maxWidth="full">
                 {event.location}
               </Text>
