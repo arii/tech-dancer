@@ -1,9 +1,7 @@
-// impeccable-ignore-file
+
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-import { NavLink } from 'react-router-dom';
-import { ActionButton } from './ActionButton';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
@@ -22,7 +20,12 @@ export function HeroSection() {
       align="center"
       justify="center"
       overflow="hidden"
-      className="relative hero-section"
+      position="relative"
+      width="full"
+      maxWidth="full"
+      minWidth={0}
+      gap={0}
+      className="hero-section"
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -31,7 +34,7 @@ export function HeroSection() {
       <Box
         position="absolute"
         inset="bottom"
-        height={48}
+        height={0}
         zIndex={5}
         className="hero-bottom-gradient"
         aria-hidden="true"
@@ -44,13 +47,19 @@ export function HeroSection() {
         align="start"
         gap={0}
         paddingX={{ base: 4, md: 8, lg: 12 }}
-        paddingY={{ base: 2, lg: 2 }}
+        paddingTop={{ base: 4, lg: 8 }}
+        paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
         marginX="auto"
       >
 
 
-        <Wordmark variant="hero" className="opacity-0 pointer-events-none hero-logo-anim" />
+        <Wordmark
+          variant="hero"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-logo-anim"
+        />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
@@ -58,7 +67,11 @@ export function HeroSection() {
           marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
-          className="opacity-0 pointer-events-auto hero-headline-anim"
+          width="full"
+          maxWidth="full"
+          opacity={0}
+          pointerEvents="auto"
+          className="hero-headline-anim"
         >
           <Text
             as="span"
@@ -89,9 +102,11 @@ export function HeroSection() {
         <Box
           width={24}
           height={1.5}
-          marginTop={6}
+          marginTop={2}
           radius="full"
-          className="opacity-0 pointer-events-none hero-line-anim"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-line-anim"
         />
 
         {/* Tagline with Vertical Accent Bar */}
@@ -99,12 +114,13 @@ export function HeroSection() {
           direction="row"
           align="stretch"
           gap={5}
-          marginTop={{ base: 6, lg: 8 }}
+          marginTop={{ base: 2, lg: 4 }}
           maxWidth="2xl"
-          className="opacity-0 hero-tagline-anim"
+          opacity={0}
+          className="hero-tagline-anim"
         >
           <Box
-            width="2px"
+            width="0.5"
             className="bg-white/20 shrink-0"
             aria-hidden="true"
           />
@@ -123,42 +139,7 @@ export function HeroSection() {
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
 
 
-        <Stack
-          marginTop={8}
-          gap={3}
-          width="full"
-          maxWidth={{ base: "full", md: "2xl" }}
-          className="opacity-0 hero-cta-anim"
-        >
-          <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
-            <ActionButton
-              as={NavLink}
-              to="/events"
-              variant="primary"
-              paddingX={6}
-              radius="lg"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
-            >
-              Explore Event Guides
-            </ActionButton>
-            <ActionButton
-              as={NavLink}
-              to="/gear"
-              variant="secondary"
-              paddingX={6}
-              radius="lg"
-              className="min-h-12 justify-center md:justify-start flex-1 normal-case"
-            >
-              Browse Gear Reviews
-            </ActionButton>
-          </Stack>
 
-          <Box>
-            <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent normal-case">
-              Start with practical notes →
-            </Text>
-          </Box>
-        </Stack>
 
         <Stack
           direction="row"
@@ -166,8 +147,12 @@ export function HeroSection() {
           gap={1}
           marginY={4}
           height={12}
+          width="full"
+          maxWidth="full"
           overflow="hidden"
-          className="opacity-0 pointer-events-none hero-waveform-anim"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-waveform-anim"
           aria-hidden="true"
         >
           {BARS.map((bar, i) => (

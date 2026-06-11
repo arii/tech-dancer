@@ -91,10 +91,15 @@ export function HeroParticleCanvas({
         if (p.y > canvas.height) p.y = 0;
       }
     };
-    rafId = requestAnimationFrame(draw);
+    
+    // Delay start of animation loop to give main-thread breathing room during bootup
+    const timeoutId = setTimeout(() => {
+      rafId = requestAnimationFrame(draw);
+    }, 150);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      clearTimeout(timeoutId);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [width, height, particleCount, radiusMin, radiusMax, velocityFactor, alphaMin, alphaMax, hues, seeds]);
 

@@ -193,7 +193,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
                   className={cn(
                     "transition-all text-left relative",
                     !selectedChannels.includes(channel.id) && !isSoon && "hover:border-line-hover",
-                    isSoon && "opacity-60 cursor-not-allowed"
+                    isSoon && "opacity-dim cursor-not-allowed"
                   )}
                 >
                   <Icon className={cn("w-4 h-4", selectedChannels.includes(channel.id) ? "text-accent-purple" : "text-dim")} />

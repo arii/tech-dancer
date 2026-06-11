@@ -75,7 +75,7 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-40 transition-opacity group-hover:opacity-100" />
+            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
           </Box>
         ))}
       </Stack>

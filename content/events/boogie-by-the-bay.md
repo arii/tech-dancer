@@ -12,6 +12,7 @@ region: NorCal
 schedule: October 8 - 11, 2026
 url: https://boogiebythebay.com/
 heroImage: '/assets/events/boogie-by-the-bay-hero.svg'
+imageAlt: 'Logo for Boogie by the Bay featuring a stylized San Francisco skyline and Golden Gate Bridge motif'
 description: Boogie by the Bay is the premier West Coast Swing event in Northern California. Hosted by the The Next Generation Swing Dance Club, it features top-tier competitions, workshops, and social dancing in a beautiful waterfront setting near SFO.
 whyAttending: >
   The highlight of the NorCal WCS calendar. The level of competition is exceptionally high, and the Sunday night show is always a must-watch.

@@ -3,10 +3,13 @@ import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback, useEffect, ChangeEvent, MouseEvent } from "react";
+import { useRef, useMemo, useCallback, useEffect, ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useHotkeys, useCommandKey } from '@/hooks/useHotkeys';
-
+import { useHotkeys } from '@/hooks/useHotkeys';
+import Fuse from 'fuse.js';
+import { useQueries } from '@tanstack/react-query';
+import { getPosts, getResources, getStudies } from '@/lib/content';
+import { withSimulationDelay } from '@/lib/utils';
 
 interface SearchResult {
   type: 'post' | 'resource' | 'study';
@@ -16,12 +19,48 @@ interface SearchResult {
 }
 
 export function GlobalSearch() {
-  const { query, setQuery, results, isOpen, open, close } = useGlobalSearch();
+  const { query, setQuery, isOpen, close } = useGlobalSearch();
+  
+  const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
+    queries: [
+      { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts), enabled: isOpen },
+      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources), enabled: isOpen },
+      { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies), enabled: isOpen },
+    ],
+  });
+
+  const allContent = useMemo(() => {
+    return [
+      ...(postsQuery.data || []).map(p => ({ ...p, type: 'post' as const })),
+      ...(resourcesQuery.data || []).map(r => ({ ...r, type: 'resource' as const })),
+      ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
+    ];
+  }, [postsQuery.data, resourcesQuery.data, studiesQuery.data]);
+
+  const fuse = useMemo(() => {
+    return new Fuse(allContent, {
+      keys: [
+        { name: 'title', weight: 0.7 },
+        { name: 'tags', weight: 0.5 },
+        { name: 'excerpt', weight: 0.3 },
+        { name: 'content', weight: 0.1 }
+      ],
+      threshold: 0.2,
+      ignoreLocation: true
+    });
+  }, [allContent]);
+
+  const results = useMemo(() => {
+    if (!query.trim()) return [];
+    return fuse.search(query).map(result => result.item);
+  }, [fuse, query]);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   // Debounced URL sync to avoid excessive navigation and re-renders
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
 
   const debouncedSetQuery = useMemo(
     () => (q: string) => {
@@ -68,11 +107,6 @@ export function GlobalSearch() {
   useHotkeys('Escape', () => {
     if (isOpen) close();
   }, [isOpen, close]);
-
-  useCommandKey('k', (e) => {
-    e.preventDefault();
-    open();
-  }, [open]);
 
   const handleSelect = (result: SearchResult) => {
     close();
@@ -218,15 +252,15 @@ export function GlobalSearch() {
                               <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold" tracking="widest">{res.type}</Text>
                            </Box>
                         </Box>
-                        <Text variant="body" size="xs" color="dim" className="line-clamp-1 truncate opacity-80">{highlight(res.excerpt)}</Text>
+                        <Text variant="body" size="xs" color="dim" opacityVariant="heavy" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                      </Stack>
-                     <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-60 transition-opacity" />
+                     <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-dim transition-opacity" />
                   </Box>
                 ))}
               </Stack>
             ) : (
               <Box padding={20} display="flex" align="center" justify="center">
-                <Stack align="center" gap={4} className="opacity-60">
+                <Stack align="center" gap={4} opacityVariant="dim">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
                      {query ? "No results found" : "Search gear, guides, and posts"}
@@ -242,13 +276,13 @@ export function GlobalSearch() {
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                 </Box>
-                <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">CLOSE</Text>
+                <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
                 </Box>
-                <Text variant="mono" size="micro" color="dim" className="leading-none opacity-70">SELECT</Text>
+                <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">SELECT</Text>
               </Box>
             </Box>
             <Text
@@ -257,7 +291,8 @@ export function GlobalSearch() {
               color="dim"
               weight="font-bold"
               tracking="widest"
-              className="opacity-70 whitespace-nowrap"
+              opacityVariant="high"
+              className="whitespace-nowrap"
               data-testid="search-results-count"
             >
               {results.length} RESULTS FOUND

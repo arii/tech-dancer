@@ -117,7 +117,7 @@ export function EcommerceAutomationTool() {
                 <Stack gap={2}>
                   {safetyRules.map((rule, index) => (
                     <Box key={index} display="flex" align="center" gap={2}>
-                      <Icon icon={AlertTriangle} size="xs" color="accent" opacity={0.5} />
+                      <Icon icon={AlertTriangle} size="xs" color="accent" opacityVariant="muted" />
                       <Text size="xs" color="dim">{rule}</Text>
                     </Box>
                   ))}
@@ -177,7 +177,7 @@ export function EcommerceAutomationTool() {
                     </Box>
                   ))}
                 </Box>
-                <Text size="micro" color="dim" uppercase weight="font-black" tracking="widest" opacity={0.6}>
+        <Text size="micro" color="dim" uppercase weight="font-black" tracking="widest" opacityVariant="dim">
                   MULTI-PLATFORM SYNC PIPELINE
                 </Text>
               </Stack>
