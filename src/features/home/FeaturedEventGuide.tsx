@@ -89,6 +89,8 @@ export function FeaturedEventGuide() {
           size="xs"
           color="accent"
           weight="font-bold"
+          paddingY={{ base: 4, sm: 0 }}
+          paddingX={{ base: 4, sm: 0 }}
           className="shrink-0 hover:underline"
         >
           See all events →
@@ -153,6 +155,8 @@ export function FeaturedEventGuide() {
               size="xs"
               color="accent"
               weight="font-bold"
+              paddingY={{ base: 4, md: 0 }}
+              paddingX={{ base: 4, md: 0 }}
               className="hover:underline"
             >
               Read the guide →
@@ -162,26 +166,26 @@ export function FeaturedEventGuide() {
                 <Box
                   as="button"
                   onClick={goPrev}
-                  padding={1.5}
+                  padding={{ base: 4, md: 1.5 }}
                   border
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-5 w-5 md:h-4 md:w-4" />
                 </Box>
                 <Box
                   as="button"
                   onClick={goNext}
-                  padding={1.5}
+                  padding={{ base: 4, md: 1.5 }}
                   border
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-5 w-5 md:h-4 md:w-4" />
                 </Box>
               </Box>
             )}
