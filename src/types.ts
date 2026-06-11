@@ -12,6 +12,6 @@ export interface AffiliateLink {
   draft?: boolean;
   gearSlug?: string;
   image?: string;
-  imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack';
-  imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right';
+  imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack' | 'cover';
+  imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right' | string;
 }

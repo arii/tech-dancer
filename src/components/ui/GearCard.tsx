@@ -31,8 +31,8 @@ interface GearCardProps extends BaseProps {
   verdict?: string;
   image?: string;
   imageAlt?: string;
-  imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack';
-  imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right';
+  imageMode?: 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack' | 'cover';
+  imagePosition?: 'center' | 'top' | 'bottom' | 'left' | 'right' | string;
   affiliateIds?: string[];
   [key: string]: unknown;
 }
@@ -81,8 +81,10 @@ export function GearCard(props: GearCardProps) {
 
   const alt = propsImageAlt || (title ? `Screenshot of the ${title} gear item` : "Gear item preview");
 
-  // Resolve image mode and position
-  const mode = propsImageMode || affiliate?.imageMode || 'cover';
+  // Resolve image mode and position.
+  // We use 'center 20%' as default for cover mode to prioritize the top-middle area
+  // of Amazon product photos, which often puts the item in a better visual frame.
+  const mode = (propsImageMode || affiliate?.imageMode || 'cover') as 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack' | 'cover';
   const position = propsImagePosition || affiliate?.imagePosition || (mode === 'cover' ? 'center 20%' : 'center');
 
   const imageProps = {
