@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
@@ -17,14 +16,15 @@ export function FeaturedGuidePanel() {
     <Box
       as={NavLink}
       to={FEATURED.href}
-      display={{ base: 'none', lg: 'flex' }}
+      display="flex"
       direction="col"
-      justify="end"
+      justify="start"
       position="relative"
       overflow="hidden"
       border
       radius="lg"
-      className="group self-stretch"
+      self="stretch"
+      className="group"
     >
       {/* Background image — fills the column height naturally */}
       <img
@@ -40,7 +40,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-b from-bg via-bg/70 to-transparent"
+        bgGradient="bg-gradient-to-b from-bg via-bg/70 to-transparent"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
@@ -59,7 +59,9 @@ export function FeaturedGuidePanel() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="mt-1 group-hover:underline"
+          marginTop={1}
+          uppercase
+          className="group-hover:underline"
         >
           Read the guide →
         </Text>

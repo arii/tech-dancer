@@ -12,7 +12,7 @@ const PICKS = [
 
 export function GearShelf() {
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       {/* Header — no card wrapper, just section heading */}
       <Box display="flex" align="center" justify="between" marginBottom={3}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
@@ -25,7 +25,8 @@ export function GearShelf() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="shrink-0 hover:underline"
+          shrink={false}
+          className="hover:underline"
         >
           See all picks →
         </Text>
@@ -43,13 +44,15 @@ export function GearShelf() {
         {PICKS.map(({ label, image, imageText, href }) => (
           <Box key={label} as={NavLink} to={href} className="group">
             <Box
-              radius="lg"
+              radius="full"
               overflow="hidden"
               border
               display="flex"
               align="center"
               justify="center"
-              className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40"
+              aspect="square"
+              surface="alt"
+              className="transition-all group-hover:border-accent/40"
             >
               {image ? (
                 <img
@@ -89,15 +92,27 @@ export function GearShelf() {
         paddingBottom={3}
         noScrollbar
       >
-        <Box display="flex" gap={3} paddingRight={4}>
+        <Box display="flex" gap={3} paddingX={4}>
           {PICKS.map(({ label, image, imageText, href }) => (
             <Box
               key={`mobile-${label}`}
               as={NavLink}
               to={href}
-              className="group w-28 min-w-0"
+              width={28}
+              minWidth={0}
+              className="group"
             >
-              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
+              <Box
+                radius="full"
+                overflow="hidden"
+                border
+                display="flex"
+                align="center"
+                justify="center"
+                aspect="square"
+                surface="alt"
+                className="transition-all group-hover:border-accent/40"
+              >
                 {image ? (
                   <img
                     src={`${ASSET_PREFIX}${image}`}

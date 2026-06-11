@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -71,7 +70,7 @@ export function FeaturedEventGuide() {
   if (!event) return null;
 
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       <Stack
         direction={{ base: 'col', sm: 'row' }}
         align={{ base: 'start', sm: 'baseline' }}
@@ -89,7 +88,8 @@ export function FeaturedEventGuide() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="shrink-0 hover:underline"
+          shrink={false}
+          className="hover:underline"
         >
           See all events →
         </Text>
@@ -101,7 +101,15 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[minmax(200px,260px)_1fr] md:min-h-[200px]"
+        position="relative"
+        zIndex="base"
+        display="grid"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+        surface="default"
+        overscroll="x-contain"
+        className="touch-pan-y select-none md:grid-cols-[minmax(200px,260px)_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         data-gesture-handled="true"
@@ -116,7 +124,7 @@ export function FeaturedEventGuide() {
         tabIndex={0}
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="h-44 min-w-0 md:h-full">
+        <Box position="relative" height={{ base: 44, md: "full" }} minWidth={0}>
           <img
             src={event.heroImage}
             alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
@@ -125,22 +133,28 @@ export function FeaturedEventGuide() {
             className="h-full w-full object-cover object-top"
           />
           {/* Subtle gradient at bottom to soften any embedded text */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />
+          <Box
+            position="absolute"
+            inset="bottom"
+            height={16}
+            bgGradient="bg-gradient-to-t from-black/40 to-transparent"
+            aria-hidden="true"
+          />
         </Box>
 
         {/* Content */}
-        <Stack gap={3} padding={6} className="min-w-0 justify-between" aria-live="polite">
+        <Stack gap={3} padding={6} minWidth={0} justify="between" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="start" gap={2}>
               <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
-              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full leading-normal">
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase leading="normal" display="block" maxWidth="full">
                 {event.location}
               </Text>
             </Box>
             <Text variant="headline" size="xl" weight="font-black" leading="tight">
               {event.title}
             </Text>
-            <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-2">
+            <Text variant="body" size="sm" color="dim" leading="relaxed" clamp={2}>
               {event.excerpt}
             </Text>
           </Stack>
@@ -165,7 +179,8 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
+                  cursor="pointer"
+                  className="transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
@@ -177,7 +192,8 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
+                  cursor="pointer"
+                  className="transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >

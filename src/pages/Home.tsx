@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
@@ -12,7 +11,18 @@ import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Stack
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth="1240px"
+      minWidth={0}
+      overflowX="hidden"
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      paddingBottom="safe-bottom"
+      gap={{ base: 12, lg: 8 }}
+    >
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -26,43 +36,40 @@ export default function Home() {
         width="full"
         maxWidth="full"
         minWidth={0}
-        className="items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.8fr)]"
+        gap={{ base: 12, lg: 6 }}
+        align="center"
+        className="lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.8fr)]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
 
-      <Stack
-        gap={{ base: 2, lg: 8 }}
-        marginTop={{ base: 0, lg: 8 }}
+      <Box
+        display="grid"
         width="full"
         maxWidth="full"
         minWidth={0}
+        gap={{ base: 12, lg: 8 }}
+        className="grid-cols-1 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
       >
-        <Box
-          display="grid"
-          width="full"
-          maxWidth="full"
-          minWidth={0}
-          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
-        >
-          <FeaturedEventGuide />
-          <GearShelf />
-        </Box>
+        <FeaturedEventGuide />
+        <GearShelf />
+      </Box>
 
 
-        <Box
-          display="grid"
-          width="full"
-          maxWidth="full"
-          minWidth={0}
-          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
-        >
-          <LatestPosts />
-          <DevLabCallout />
-        </Box>
-        <TopicGrid />
-      </Stack>
-    </Box>
+      <Box
+        display="grid"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+        gap={{ base: 12, lg: 8 }}
+        className="grid-cols-1 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+      >
+        <LatestPosts />
+        <DevLabCallout />
+      </Box>
+
+      <TopicGrid />
+    </Stack>
   );
 }
