@@ -47,12 +47,12 @@ export function EventNavigation() {
 
         <Box
           position="absolute"
-          top={0}
-          bottom={0}
-          right={0}
+          inset="right"
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-gradient-to-l from-bg via-bg to-transparent pointer-events-none z-10"
+          zIndex={10}
+          pointerEvents="none"
+          className="bg-gradient-to-l from-bg via-bg to-transparent"
           aria-hidden="true"
         />
 
@@ -76,9 +76,11 @@ export function EventNavigation() {
                 {...(isExternal ? { to: tab.path } : { href: `#${tab.id}` })}
                 aria-label={`Navigate to ${tab.label}`}
                 aria-current={isActive ? 'page' : undefined}
-                paddingY={3}
+                paddingY={{ base: 5, md: 3 }}
                 shrink={false}
-                className="group relative cursor-pointer"
+                position="relative"
+                cursor="pointer"
+                className="group"
               >
                 <Box
                   display="flex"
