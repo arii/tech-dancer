@@ -26,6 +26,8 @@ export function GearShelf() {
           color="accent"
           weight="font-bold"
           shrink={false}
+          paddingY={4}
+          display="block"
           className="hover:underline"
         >
           See all picks →

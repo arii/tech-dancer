@@ -60,6 +60,8 @@ export function FeaturedGuidePanel() {
           color="accent"
           weight="font-bold"
           marginTop={1}
+          paddingY={4}
+          display="block"
           className="group-hover:underline"
         >
           Read the guide →
