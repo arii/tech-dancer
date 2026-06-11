@@ -91,6 +91,8 @@ jobs:
       - name: Setup Ollama
         id: setup-ollama
         uses: ./.github/actions/setup-ollama
+        with:
+          model: 'qwen2.5-coder:1.5b'
 
       - name: Validate CLI
         run: |

@@ -38,16 +38,14 @@ jobs:
       - name: Setup Ollama
         id: setup-ollama
         uses: ./.github/actions/setup-ollama
+        with:
+          model: 'qwen2.5-coder:7b'
 
       - name: Install Dependencies
         run: |
           if ! python3 -c "import click, github, requests" 2>/dev/null; then
             pip install click PyGithub requests
           fi
-
-      - name: Pull Model
-        if: steps.setup-ollama.outputs.ready == 'true'
-        run: ollama pull qwen2.5-coder:7b
 
       - name: Find and Resolve Conflicts
         if: steps.setup-ollama.outputs.ready == 'true'

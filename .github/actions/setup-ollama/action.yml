@@ -1,5 +1,10 @@
 name: 'Setup Ollama'
 description: 'Installs Ollama, starts server, and checks readiness'
+inputs:
+  model:
+    description: 'Optional model to pull after startup'
+    required: false
+    default: ''
 outputs:
   ready:
     description: 'true if Ollama is ready, false otherwise'
@@ -20,6 +25,10 @@ runs:
         for i in {1..15}; do
           if curl -sf http://localhost:11434/api/tags > /dev/null; then
             echo "Ollama is ready!"
+            if [ -n "${{ inputs.model }}" ]; then
+              echo "Pulling model ${{ inputs.model }}..."
+              ollama pull "${{ inputs.model }}"
+            fi
             ollama list
             echo "ready=true" >> "$GITHUB_OUTPUT"
             exit 0
