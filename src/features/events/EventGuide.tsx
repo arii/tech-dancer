@@ -81,6 +81,7 @@ export default function EventGuide() {
 
       <EventNavigation />
 
+      <Stack gap={6}>
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 6, md: 12, lg: 24 }} paddingY={SECTION_SPACING}>
         {event.whyAttending && (
           <Box
@@ -159,6 +160,7 @@ export default function EventGuide() {
           </Box>
         </Grid>
       </Box>
+      </Stack>
     </Box>
   );
 }
