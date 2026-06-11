@@ -210,15 +210,15 @@ export function EventReminders({ event, id }: EventRemindersProps) {
             })}
           </Grid>
 
-          <ActionButton
+          <Button
+            variant="reminder"
             onClick={handleSync}
-            className="w-full h-14 !bg-accent-purple hover:!bg-accent-purple/90 text-bg shadow-lg" // impeccable-ignore
           >
             <Stack direction="row" align="center" gap={2}>
               <Bell className="w-5 h-5 text-bg" />
               <Text size="md" color="bg">Set Event Reminders</Text>
             </Stack>
-          </ActionButton>
+          </Button>
         </Stack>
       </Stack>
     </Box>

@@ -58,7 +58,7 @@ export function EventNavigation() {
           gap={{ base: 6, md: 8 }}
           overflowX="auto"
           scrollBehavior="smooth"
-          className="no-scrollbar"
+          noScrollbar
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
         >
