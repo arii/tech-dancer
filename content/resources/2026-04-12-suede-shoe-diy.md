@@ -6,8 +6,7 @@ author: Ariel Anders, PhD
 category: Dance Gear
 excerpt: The DIY hack for perfect traction on any ballroom floor.
 image: /images/gear/amazon/suede-stick-on-sheets.jpg
-affiliateIds:
-- suede-sheets
+affiliateIds: ["suede-sheets"]
 tags:
 - diy
 - footwear
