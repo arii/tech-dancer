@@ -82,13 +82,25 @@ export function GearCard(props: GearCardProps) {
   const alt = propsImageAlt || (title ? `Screenshot of the ${title} gear item` : "Gear item preview");
 
   // Resolve image mode and position.
+  const mode = (propsImageMode || affiliate?.imageMode || 'cover') as GearCardProps['imageMode'] & string;
+
   // We use 'center 20%' as default for cover mode to prioritize the top-middle area
-  // of Amazon product photos, which often puts the item in a better visual frame.
-  const mode = (propsImageMode || affiliate?.imageMode || 'cover') as 'wide' | 'contain' | 'apparel' | 'square' | 'frontBack' | 'cover';
+  // of Amazon product photos, which often puts the item (like shoes or shirts)
+  // in a better visual frame than a strict center crop.
   const position = propsImagePosition || affiliate?.imagePosition || (mode === 'cover' ? 'center 20%' : 'center');
 
+  // Explicitly map image modes to their corresponding object-fit behavior.
+  const OBJECT_FIT_MAP: Record<string, "contain" | "cover"> = {
+    contain: 'contain',
+    apparel: 'contain',
+    wide: 'cover',
+    square: 'cover',
+    cover: 'cover',
+    frontBack: 'contain'
+  };
+
   const imageProps = {
-    objectFit: ((mode === 'contain' || mode === 'apparel') ? 'contain' : 'cover') as 'contain' | 'cover',
+    objectFit: OBJECT_FIT_MAP[mode] || 'cover',
     objectPosition: position,
   };
 
