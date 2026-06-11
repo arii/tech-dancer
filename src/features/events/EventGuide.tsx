@@ -116,41 +116,42 @@ export default function EventGuide() {
         )}
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
           <Box className="lg:col-span-2">
-            <Stack gap={SECTION_SPACING}>
+            <Stack gap={6}>
               <AffiliateDisclosure />
+              <Stack gap={SECTION_SPACING}>
+                {event.theme && (
+                  <ThemeSpotlight
+                    id="theme"
+                    title={event.theme.name}
+                    label={event.theme.label}
+                    description={event.theme.description || ''}
+                    colors={event.theme.colors}
+                    outfits={themeOutfits}
+                    accessories={themeAccessories}
+                  />
+                )}
 
-              {event.theme && (
-                <ThemeSpotlight
-                  id="theme"
-                  title={event.theme.name}
-                  label={event.theme.label}
-                  description={event.theme.description || ''}
-                  colors={event.theme.colors}
-                  outfits={themeOutfits}
-                  accessories={themeAccessories}
-                />
-              )}
+                {gearSections.length > 0 && (
+                  <CuratedGear
+                    id="gear"
+                    title={`Gear for ${event.title}`}
+                    sections={gearSections}
+                  />
+                )}
 
-              {gearSections.length > 0 && (
-                <CuratedGear
-                  id="gear"
-                  title={`Gear for ${event.title}`}
-                  sections={gearSections}
-                />
-              )}
+                <EventReminders id="reminders" event={event} />
 
-              <EventReminders id="reminders" event={event} />
+                <EventTravel id="travel" notes={event.description} />
 
-              <EventTravel id="travel" notes={event.description} />
+                <EventNotes id="notes" content={event.content} />
 
-              <EventNotes id="notes" content={event.content} />
-
-              {relatedEvents.length > 0 && (
-                <RelatedEvents
-                  id="related"
-                  events={relatedEvents}
-                />
-              )}
+                {relatedEvents.length > 0 && (
+                  <RelatedEvents
+                    id="related"
+                    events={relatedEvents}
+                  />
+                )}
+              </Stack>
             </Stack>
           </Box>
           <Box display={{ base: 'none', lg: 'block' }}>
