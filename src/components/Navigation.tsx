@@ -1,7 +1,7 @@
 import { Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { Logo } from '@/components/ui/Logo';
@@ -59,7 +59,7 @@ export default function Navigation() {
             </Box>
 
             <Box
-              as={motion.create('button')}
+              as="button"
               display={{ base: 'flex', lg: 'none' }}
               onClick={() => setIsOpen(!isOpen)}
               padding={2}
