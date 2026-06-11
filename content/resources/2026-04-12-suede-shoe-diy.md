@@ -24,7 +24,7 @@ There is nothing worse than arriving at a major WSDC convention only to find tha
 
 ## The Solution: How to Suede Your Shoes
 
-Instead of paying for expensive professional shoes, I use a DIY approach to convert my favorite comfortable sneakers into dance shoes.
+Instead of paying for expensive professional shoes, I use a DIY approach to convert my favorite comfortable sneakers into dance shoes. For a complete step-by-step walkthrough and a comparison of placement strategies, see our full [DIY Suede Tutorial](/blog/2026-04-18-make-shoe-dance).
 
 ### Required Gear
 

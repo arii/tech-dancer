@@ -1,0 +1,7 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#0f172a" />
+  <g transform="translate(125, 40) scale(0.75)">
+    <path d="M150,20 C100,20 80,60 80,120 C80,180 100,220 120,260 C130,280 130,320 130,350 C130,380 140,400 150,400 C160,400 170,380 170,350 C170,320 170,280 180,260 C200,220 220,180 220,120 C220,60 200,20 150,20 Z" fill="#22d3ee" stroke="#f1f5f9" stroke-width="8" />
+  </g>
+  <text x="200" y="350" fill="#f1f5f9" font-family="Albert Sans, sans-serif" font-size="28" text-anchor="middle" font-weight="bold">Full Coverage</text>
+</svg>
