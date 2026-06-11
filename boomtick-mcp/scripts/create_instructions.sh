@@ -1,4 +1,10 @@
-cat << 'MARKDOWN' > pr_consolidation_instructions.md
+#!/usr/bin/env bash
+set -euo pipefail
+
+OUTPUT_FILE="${1:-src/agents/pr-consolidation.prompt.md}"
+mkdir -p "$(dirname "$OUTPUT_FILE")"
+
+cat << 'MARKDOWN' > "$OUTPUT_FILE"
 # PR Consolidation Guidelines
 
 ## Objective
@@ -32,3 +38,5 @@ Present the findings in the following format:
 - **Recommendation:** [Merge/Coordinate/Separate]
 - **Rationale:** [Brief explanation referencing issues fixed]
 MARKDOWN
+
+echo "Successfully created instructions at $OUTPUT_FILE"
