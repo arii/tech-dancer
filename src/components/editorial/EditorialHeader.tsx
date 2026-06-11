@@ -1,7 +1,6 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text, Icon } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
 interface EditorialHeaderProps {
@@ -61,9 +60,9 @@ export function EditorialHeader({
            <Stack gap={1}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
-               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
-                 <Icon icon={Share2} size="xs" />
-                 <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
+               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className="group cursor-pointer">
+                 <Icon icon={Share2} size="xs" color="dim" hoverColor="accent" />
+                 <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "dim"} hoverColor="accent">
                    {isShared ? "COPIED!" : "SHARE"}
                  </Text>
                </Stack>
@@ -75,7 +74,16 @@ export function EditorialHeader({
           <Stack direction="row" align="center" gap={2} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-bold">TAGS:</Text>
             {tags.map(tag => (
-              <Box key={tag} paddingX={2} paddingY={0.5} border radius="sm" className={journalVariants.tag()}>
+              <Box
+                key={tag}
+                paddingX={2}
+                paddingY={0.5}
+                border
+                borderColor="line"
+                borderOpacityVariant="muted"
+                radius="sm"
+                className="hover:border-accent transition-colors cursor-default"
+              >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>
             ))}
