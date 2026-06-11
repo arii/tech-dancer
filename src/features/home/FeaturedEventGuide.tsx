@@ -100,7 +100,7 @@ export function FeaturedEventGuide() {
         <Box position="relative" className="h-44 min-w-0 md:h-full">
           <img
             src={event.heroImage}
-            alt={event.title}
+            alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover object-top"
@@ -146,7 +146,7 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
@@ -158,7 +158,7 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >

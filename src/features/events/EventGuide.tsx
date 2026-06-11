@@ -108,7 +108,7 @@ export default function EventGuide() {
                   Why I&apos;m Attending
                 </Text>
               </Box>
-              <Text variant="body" size="lg" leading="relaxed" color="white" className="relative z-10 italic font-medium opacity-90">
+              <Text variant="body" size="lg" leading="relaxed" color="white" opacityVariant="solid" className="relative z-10 italic font-medium">
                 &ldquo;{event.whyAttending}&rdquo;
               </Text>
             </Stack>

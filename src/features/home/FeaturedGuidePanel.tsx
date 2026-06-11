@@ -8,6 +8,7 @@ const FEATURED = {
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/home/wcs-travel-pack.webp',
+  imageAlt: 'Overhead view of a West Coast Swing travel pack containing dance shoes, earplugs, and travel essentials',
   href: '/blog/2026-04-19-gear-essentials',
 };
 
@@ -28,11 +29,11 @@ export function FeaturedGuidePanel() {
       {/* Background image — fills the column height naturally */}
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
-        alt={FEATURED.title}
+        alt={FEATURED.imageAlt}
         width={420}
         height={600}
         fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-60 transition-opacity duration-500 group-hover:opacity-70"
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility */}

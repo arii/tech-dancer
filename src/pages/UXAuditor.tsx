@@ -160,7 +160,7 @@ export default function UXAuditor() {
               display="flex"
               align="center"
               gap={2}
-              className="bg-accent hover:opacity-90 text-bg font-bold transition-all disabled:opacity-50"
+              className="bg-accent hover:opacity-solid text-bg font-bold transition-all disabled:opacity-muted"
               paddingX={6}
               paddingY={2}
               radius="md"

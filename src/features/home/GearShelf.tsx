@@ -1,6 +1,6 @@
-// impeccable-ignore-file
+
 import { NavLink } from 'react-router-dom';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
@@ -35,7 +35,11 @@ export function GearShelf() {
       </Text>
 
       {/* Desktop: square image tile grid — visual shelf, not list cards */}
-      <Box className="hidden lg:grid lg:grid-cols-3 lg:gap-4">
+      <Grid
+        display={{ base: "none", lg: "grid" }}
+        cols={{ lg: 3 }}
+        gap={{ lg: 4 }}
+      >
         {PICKS.map(({ label, image, imageText, href }) => (
           <Box key={label} as={NavLink} to={href} className="group">
             <Box
@@ -66,17 +70,26 @@ export function GearShelf() {
               variant="body"
               size="sm"
               weight="font-bold"
-              className="mt-2 transition-colors group-hover:text-accent"
+              marginTop={2}
+              hoverColor="accent"
             >
               {label}
             </Text>
           </Box>
         ))}
-      </Box>
+      </Grid>
 
       {/* Mobile: horizontal scroll of compact tiles */}
-      <Box className="w-full max-w-full overflow-x-auto overscroll-x-contain pb-3 lg:hidden">
-        <Box display="flex" gap={3} className="flex-nowrap pr-4">
+      <Box
+        display={{ base: "block", lg: "none" }}
+        width="full"
+        maxWidth="full"
+        overflowX="auto"
+        overscroll="x-contain"
+        paddingBottom={3}
+        noScrollbar
+      >
+        <Box display="flex" gap={3} width="fit" paddingRight={4}>
           {PICKS.map(({ label, image, imageText, href }) => (
             <Box
               key={`mobile-${label}`}
@@ -100,7 +113,13 @@ export function GearShelf() {
                   <CategoryPlaceholder category="gear" size="sm" />
                 )}
               </Box>
-              <Text variant="body" size="xs" weight="font-bold" className="mt-1.5 text-center">
+              <Text
+                variant="body"
+                size="xs"
+                weight="font-bold"
+                marginTop={1.5}
+                textAlign="center"
+              >
                 {label}
               </Text>
             </Box>

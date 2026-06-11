@@ -1,5 +1,6 @@
 ---
 type: post
+draft: true
 title: "Comprehensive Financial Strategy Guide for Dancers"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

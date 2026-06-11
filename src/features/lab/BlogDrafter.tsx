@@ -147,7 +147,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                display="flex"
                align="center"
                gap={2}
-               className="text-accent hover:opacity-70 transition-all cursor-pointer"
+               className="text-accent hover:opacity-high transition-all cursor-pointer"
              >
                 <Save className="w-3 h-3" />
                 <Text variant="mono" size="micro" weight="font-bold">Save Snapshot</Text>
@@ -518,7 +518,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                  align="center"
                  gap={1}
                  paddingLeft={4}
-                 className="text-accent hover:opacity-70 transition-all cursor-pointer"
+                 className="text-accent hover:opacity-high transition-all cursor-pointer"
                >
                  <Eye className="w-3 h-3" />
                  <Text variant="mono" size="micro" weight="font-bold">FULL_PREVIEW</Text>
@@ -576,7 +576,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             >
               <Github className="w-5 h-5" />
               <Text variant="display" size="base" weight="font-bold" color="bg">SUBMIT DRAFT</Text>
-              <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+              <ExternalLink className="w-4 h-4 opacity-muted group-hover:opacity-full transition-opacity" />
             </Box>
           </Grid>
         </Stack>
