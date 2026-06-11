@@ -89,13 +89,13 @@ export const tracking = {
 };
 
 export const typography = {
-  h1: "font-display font-black tracking-tighter leading-[0.95] text-pretty break-words",
-  h2: "font-display font-bold tracking-tight leading-tight text-pretty break-words",
-  h3: "font-display font-semibold tracking-tight leading-snug text-pretty break-words",
-  headline: "font-display font-bold tracking-tighter leading-[0.9] text-pretty break-words",
-  display: "font-display font-bold tracking-tight leading-none text-pretty break-words",
-  hero: "font-serif font-black tracking-tight leading-[1.2] text-pretty break-words",
-  body: "font-sans leading-relaxed text-text-body text-pretty break-words",
+  h1: "font-display font-black tracking-tighter leading-[0.95]",
+  h2: "font-display font-bold tracking-tight leading-tight",
+  h3: "font-display font-semibold tracking-tight leading-snug",
+  headline: "font-display font-bold tracking-tighter leading-[0.9]",
+  display: "font-display font-bold tracking-tight leading-none",
+  hero: "font-serif font-black tracking-tight leading-[1.2]",
+  body: "font-sans leading-relaxed text-text-body",
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
 };
