@@ -196,6 +196,7 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add .
             if git commit -m "deploy: $GITHUB_SHA [skip ci]"; then
+              git pull origin gh-pages --rebase || (git rebase --abort && git pull origin gh-pages)
               if git push origin gh-pages; then
                 echo "Push successful! Waiting for GitHub Pages to publish..."
                 echo "PUSH_COMPLETE=true" >> "$GITHUB_ENV"
