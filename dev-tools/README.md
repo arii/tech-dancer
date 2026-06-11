@@ -195,6 +195,13 @@ Detects potential merge conflicts across all open PRs.
   - `--pr <PR_NUMBER>`: Check a specific PR against all other open PRs.
 - **Usage**: `python3 dev-tools/td_cli.py gh conflicts`
 
+#### `gh overlaps`
+Identify and propose consolidation of PRs with high functional or structural overlap.
+- **Flags**:
+  - `--limit <NUMBER>`: Limit the number of open PRs to process (default: 50).
+  - `--no-cache`: Bust the cache and force fetching data from GitHub.
+- **Usage**: `python3 dev-tools/td_cli.py gh overlaps --limit 20`
+
 #### `jules repair-context`
 Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
 - **Flags**:

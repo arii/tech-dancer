@@ -94,3 +94,4 @@ dev-tools/logs/reviews/*.md
 .agent/workflows/ai-slop-audit-*.md
 .venv
 dev-tools/logs/audits/
+.pr_cache.pkl
