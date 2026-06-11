@@ -30,7 +30,7 @@ export default function Navigation() {
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} className="group">
-              <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-80" />
+              <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-heavy" />
             </Box>
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
               {topRoutes.map((item) => (

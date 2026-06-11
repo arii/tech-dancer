@@ -49,7 +49,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                 <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
                   {card.title}
                 </Text>
-                <Text variant="body" size="base" color="dim" className="leading-relaxed opacity-90 text-left">
+                <Text variant="body" size="base" color="dim" opacityVariant="solid" className="leading-relaxed text-left">
                   {card.content}
                 </Text>
               </Stack>

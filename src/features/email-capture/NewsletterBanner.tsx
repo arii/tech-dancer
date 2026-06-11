@@ -50,7 +50,7 @@ export function NewsletterBanner() {
       zIndex={50}
       surface="alt"
       border="t"
-      className="border-accent/40 shadow-glow"
+      className="border-accent/40"
       paddingX={{ base: 6, md: 12 }}
       paddingY={{ base: 6, lg: 16 }}
       radius="none"
@@ -62,7 +62,7 @@ export function NewsletterBanner() {
         left={0} 
         width="1px" 
         height="full" 
-        className="bg-accent shadow-glow"
+        className="bg-accent"
       />
 
       {/* Persistent Dismissal */}
@@ -78,7 +78,7 @@ export function NewsletterBanner() {
             <Text 
               variant="mono" 
               size="micro" 
-              className="opacity-0 group-hover/close:opacity-100 transition-opacity"
+              className="opacity-none group-hover/close:opacity-full transition-opacity"
             >
               DISMISS
             </Text>
@@ -98,7 +98,7 @@ export function NewsletterBanner() {
         paddingRight={{ base: 12, lg: 0 }}
       >
         <Stack direction={{ base: 'col', sm: 'row' }} align={{ base: 'start', sm: 'center' }} gap={8} flex={1}>
-          <Box padding={4} surface="accent" opacity={0.1} display={{ base: 'none', md: 'block' }} radius="none">
+          <Box padding={4} surface="accent" opacityVariant="ghost" display={{ base: 'none', md: 'block' }} radius="none">
             <Mail className="w-6 h-6 text-accent" />
           </Box>
           <Stack gap={4}>

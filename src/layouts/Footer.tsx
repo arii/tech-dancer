@@ -26,7 +26,7 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacity={80}>
+      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={3} wrap>
@@ -34,7 +34,7 @@ export function Footer() {
             © 2026 BOOMTICK.BLOG
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10" />
-          <Text size="micro" color="dim" className="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">
+          <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap">
             <span className="font-mono tracking-wider uppercase">
               {isDev ? 'dev' : `v${appVersion}`} (
               <a
@@ -52,7 +52,7 @@ export function Footer() {
         </Stack>
 
         <Box>
-          <Text variant="body" size="xs" color="dim" weight="font-medium" className="not-italic opacity-80">
+          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" className="not-italic">
             {DISCLOSURE_TEXT}
           </Text>
         </Box>

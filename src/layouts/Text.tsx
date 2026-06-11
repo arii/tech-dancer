@@ -2,10 +2,11 @@
 import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { composeStyles } from "@/lib/utils"
-import { typography, typeSizes, tracking as trackingTokens } from "@/styles/design-tokens"
+import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
 import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
+import { resolveJIT } from "@/lib/style-utils"
 
 export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes<HTMLElement>, "color"> {
   as?: ElementType
@@ -23,6 +24,9 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   clamp?: ResponsiveProp<number | boolean>
   truncate?: ResponsiveProp<boolean>
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
+  italic?: boolean
+  hoverColor?: "accent" | "main" | "body" | "dim"
+  opacityVariant?: keyof typeof opacityTokens
   [key: string]: unknown
 }
 
@@ -31,26 +35,11 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
-    clamp, truncate, leading,
+    clamp, truncate, leading, italic,
+    hoverColor,
+    opacityVariant,
     ...props 
   }, ref) => {
-    // Standard JIT fallback for arbitrary values
-    const resolveJIT = (val: string | number, prefix: string) => {
-      if (!val) return ""
-      const pfx = prefix ? `${prefix}-` : ""
-
-      // Standard Tailwind tokens (numbers or specific strings without CSS units)
-      const isToken = typeof val === "number" ||
-        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
-
-      if (isToken) return `${pfx}${val}`
-
-      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
-        ? val
-        : `[${val}]`
-
-      return `${pfx}${value}`
-    }
 
     return (
       <Box
@@ -77,6 +66,12 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
+          italic && "italic",
+          hoverColor === "accent" && "transition-colors group-hover:text-accent",
+          hoverColor === "main" && "transition-colors group-hover:text-text-main",
+          hoverColor === "body" && "transition-colors group-hover:text-text-body",
+          hoverColor === "dim" && "transition-colors group-hover:text-text-dim",
+          opacityVariant && resolveJIT(opacityTokens[opacityVariant], "opacity"),
           className
         )}
         {...props}

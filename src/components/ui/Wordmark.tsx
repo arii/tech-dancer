@@ -45,11 +45,14 @@ export function Wordmark({
     >
       boom
       <span className="text-accent">tick</span>
-      <span
-        className="text-text-body font-light opacity-80"
+      <Text
+        as="span"
+        color="body"
+        weight="font-light"
+        opacityVariant="heavy"
       >
         .blog
-      </span>
+      </Text>
     </Text>
   );
 }

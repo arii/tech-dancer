@@ -79,7 +79,7 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
                     weight="font-black"
                     uppercase
                     tracking="widest"
-                    className={record.Promoted ? 'text-accent-navy' : 'text-text-dim opacity-50'}
+                    className={record.Promoted ? 'text-accent-navy' : 'text-text-dim opacity-muted'}
                   >
                     {record.Promoted ? 'Promoted' : 'Held'}
                   </Text>
@@ -236,7 +236,7 @@ export function WCSScraperTool() {
     return (
       <Box border surface="muted" padding="card" className="border-accent/20">
         <Stack align="center" gap={4} paddingY={10}>
-          <AlertCircle className="w-12 h-12 text-accent opacity-50" />
+          <AlertCircle className="w-12 h-12 text-accent opacity-muted" />
           <Stack align="center" gap={1}>
             <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
             <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>

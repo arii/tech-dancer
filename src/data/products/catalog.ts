@@ -1,6 +1,11 @@
 export type ProductSource = 'affiliate' | 'owned-merch';
 
-export type MerchImageDisplayMode = 'single' | 'both-equal' | 'front-prominent' | 'back-prominent';
+export type MerchImageDisplayMode =
+  | 'front-only'
+  | 'back-only'
+  | 'both-equal'
+  | 'front-prominent'
+  | 'back-prominent';
 
 export type MerchImageSide = 'front' | 'back';
 

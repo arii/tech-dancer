@@ -134,7 +134,7 @@ export default function WSDCReminders() {
       ) : (
         <Box border radius="xl" padding={12} className="border-dashed" surface="muted">
           <Stack align="center" gap={4} textAlign="center">
-            <AlertCircle className="w-12 h-12 text-dim opacity-20" />
+            <AlertCircle className="w-12 h-12 text-dim opacity-low" />
             <Stack gap={2}>
               <Text variant="display" size="xl">Ready to Calculate</Text>
               <Text color="dim" maxWidth="md">

@@ -1,5 +1,5 @@
 import { ExternalLink } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
 import { ResourceGrid } from '../ResourceGrid';
@@ -60,7 +60,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
           <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
             Where to Buy
           </Text>
-          <Box display="grid" gap={3} gridCols={1}>
+          <Grid cols={1} gap={3}>
             {affiliateLinks.map(link => (
               <Box
                 key={link.id}
@@ -77,7 +77,7 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
               </Box>
             ))}
             {affiliateLink && (
@@ -95,10 +95,10 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 className="hover:border-accent group transition-all"
               >
                 <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-30 group-hover:opacity-100" />
+                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
               </Box>
             )}
-          </Box>
+          </Grid>
           <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight not-italic">
             {DISCLOSURE_TEXT}
           </Text>

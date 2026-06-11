@@ -23,16 +23,17 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+        className="w-full max-w-full min-w-0 items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
 
-      {/* Remaining sections — tighter vertical rhythm on mobile */}
-      <Stack gap={{ base: 10, lg: 14 }} className="mt-12 w-full max-w-full min-w-0 lg:mt-16">
-        <TopicGrid />
-
+      <Stack
+        gap={{ base: 2, lg: 8 }}
+        marginTop={{ base: 0, lg: 8 }}
+        className="w-full max-w-full min-w-0"
+      >
         <Box
           display="grid"
           className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
@@ -41,6 +42,7 @@ export default function Home() {
           <GearShelf />
         </Box>
 
+
         <Box
           display="grid"
           className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
@@ -48,6 +50,7 @@ export default function Home() {
           <LatestPosts />
           <DevLabCallout />
         </Box>
+        <TopicGrid />
       </Stack>
     </Box>
   );

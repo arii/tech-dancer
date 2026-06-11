@@ -1,8 +1,16 @@
 name: Update Playwright Snapshots
 
 on:
-  issue_comment:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number'
+        required: true
+        type: string
+      comment_body:
+        description: 'Comment body'
+        required: true
+        type: string
 
 env:
   NODE_ENV: production
@@ -12,7 +20,7 @@ env:
 
 jobs:
   update-snapshots:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '@update-snapshots')
+
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
@@ -28,7 +36,7 @@ jobs:
         id: initial-comment
         uses: peter-evans/create-or-update-comment@v5
         with:
-          issue-number: ${{ github.event.issue.number }}
+          issue-number: ${{ inputs.issue_number }}
           body: |
             ⏳ Updating Playwright snapshots...
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -53,20 +61,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.node-version'
-          cache: pnpm
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |

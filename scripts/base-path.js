@@ -6,7 +6,7 @@ export function getBasePath() {
   // Vercel: always root
   if (process.env.VERCEL === '1' || process.env.VERCEL) return '/';
 
-  // Explicit base path override from environment (e.g. branch previews)
+  // Explicit base path override from environment (e.g. branch previews, Playwright tests)
   if (process.env.VITE_BASE_PATH) {
     return ("/" + process.env.VITE_BASE_PATH + "/").replace(/\/+/g, "/");
   }
