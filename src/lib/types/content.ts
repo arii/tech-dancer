@@ -132,6 +132,7 @@ export interface Event {
   content: string;
   url?: string;
   heroImage?: string;
+  imageAlt?: string;
   whyAttending?: string;
   // Reminder tool anchors
   startDate?: string;

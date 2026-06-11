@@ -99,7 +99,7 @@ export function EventHero({
         width={{ base: "full", md: "1/2" }}
         height="full"
         pointerEvents="none"
-        opacity={20}
+        opacityVariant="low"
         style={accentGradient}
       />
 

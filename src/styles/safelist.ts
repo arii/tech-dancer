@@ -128,4 +128,15 @@ export const tailwindSafelist = [
   'sm:col-span-1',
   'lg:col-span-2',
   'lg:col-span-1',
+  // Display utilities (dynamic layouts)
+  'hidden',
+  'block',
+  'flex',
+  'grid',
+  'lg:grid',
+  'lg:flex',
+  'lg:hidden',
+  'md:hidden',
+  'sm:hidden',
+  'lg:gap-4',
 ];

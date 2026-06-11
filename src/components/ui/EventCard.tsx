@@ -54,7 +54,7 @@ export function EventCard(props: EventCardProps) {
           color="dim"
           uppercase
           tracking="tighter"
-          className="opacity-60"
+          opacityVariant="dim"
         >
           Resource Guide
         </Text>

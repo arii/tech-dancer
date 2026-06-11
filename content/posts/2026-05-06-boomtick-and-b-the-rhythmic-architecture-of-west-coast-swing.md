@@ -1,5 +1,6 @@
 ---
 type: post
+draft: true
 title: "BoomTick and B\\: Rhythmic Architecture of WCS"
 date: "2026-05-06"
 author: "Ariel Anders, PhD"

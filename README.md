@@ -43,6 +43,19 @@ pnpm build
 pnpm preview
 ```
 
+## UI System
+
+This project uses a primitive-first layout system located in `src/layouts/`. Components should be built using `Box`, `Stack`, `Grid`, and `Text` to ensure token compliance.
+
+### Primitive Props
+
+Common layout props supported by `Box`, `Stack`, and `Grid`:
+- **Spacing**: `padding`, `margin`, `gap` (supports tokens, arbitrary values, and responsive objects).
+- **Overflow**: `overflow`, `overflowX`, `overflowY`.
+- **Overscroll**: `overscroll` (e.g., `x-contain`, `none`).
+- **Scrollbars**: `noScrollbar` (boolean to hide native scrollbars).
+- **Interactivity**: `pointerEvents` (e.g., `none`, `auto`).
+
 ## Firebase Security Rules
 
 To deploy the Firestore security rules for the UX Auditor, use the Firebase CLI:
