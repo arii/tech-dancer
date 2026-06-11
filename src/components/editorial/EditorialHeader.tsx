@@ -1,7 +1,6 @@
 import { Share2 } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Icon } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
 interface EditorialHeaderProps {
@@ -38,12 +37,12 @@ export function EditorialHeader({
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
-        <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="text-pretty break-words">
+        <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" pretty breakWords>
           {title}
         </Text>
 
         {dek && (
-          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" opacityVariant="solid" className="text-pretty font-medium">
+          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" opacityVariant="solid" weight="font-medium" pretty breakWords>
             {dek}
           </Text>
         )}
@@ -55,15 +54,15 @@ export function EditorialHeader({
         </Box>
       )}
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
+      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} borderOpacityVariant="medium">
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
-               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
-                 <Share2 className="w-3.5 h-3.5" />
-                 <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
+               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className="group cursor-pointer">
+                 <Icon icon={Share2} size="xs" color="dim" hoverColor="accent" />
+                 <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "dim"} hoverColor="accent">
                    {isShared ? "COPIED!" : "SHARE"}
                  </Text>
                </Stack>
@@ -75,7 +74,16 @@ export function EditorialHeader({
           <Stack direction="row" align="center" gap={2} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-bold">TAGS:</Text>
             {tags.map(tag => (
-              <Box key={tag} paddingX={2} paddingY={0.5} border radius="sm" className={journalVariants.tag()}>
+              <Box
+                key={tag}
+                paddingX={2}
+                paddingY={0.5}
+                border
+                borderColor="line"
+                borderOpacityVariant="muted"
+                radius="sm"
+                className="hover:border-accent transition-colors cursor-default"
+              >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>
             ))}

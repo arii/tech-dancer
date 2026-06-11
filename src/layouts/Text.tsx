@@ -23,6 +23,8 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   capitalize?: ResponsiveProp<boolean>
   clamp?: ResponsiveProp<number | boolean>
   truncate?: ResponsiveProp<boolean>
+  pretty?: ResponsiveProp<boolean>
+  breakWords?: ResponsiveProp<boolean>
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
   italic?: boolean
   hoverColor?: "accent" | "main" | "body" | "dim"
@@ -35,7 +37,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
-    clamp, truncate, leading, italic,
+    clamp, truncate, pretty, breakWords, leading, italic,
     hoverColor,
     opacityVariant,
     ...props 
@@ -65,6 +67,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
+          getResponsiveClasses(pretty, "", (v) => v ? "text-pretty" : ""),
+          getResponsiveClasses(breakWords, "", (v) => v ? "break-words" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           italic && "italic",
           hoverColor === "accent" && "transition-colors group-hover:text-accent",

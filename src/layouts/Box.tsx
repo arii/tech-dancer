@@ -27,6 +27,7 @@ export interface BaseProps {
   gapY?: ResponsiveProp<number | string>
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
   borderColor?: string
+  borderOpacityVariant?: keyof typeof opacityTokens
   smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
@@ -90,7 +91,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     margin,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
-    gap, gapX, gapY, border, borderColor, smBorder, mdBorder, lgBorder, xlBorder,
+    gap, gapX, gapY, border, borderColor, borderOpacityVariant, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, overscroll, isolation, noScrollbar, pointerEvents,
@@ -139,6 +140,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
       borderColor && resolveJIT(borderColor, "border"),
+      borderOpacityVariant && resolveJIT(opacityTokens[borderOpacityVariant], "border-opacity"),
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),

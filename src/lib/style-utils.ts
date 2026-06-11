@@ -14,8 +14,8 @@ export function resolveJIT(val: string | number | boolean | undefined | null, pr
   const negPrefix = isNegative ? "-" : ""
 
   // Standard Tailwind tokens (numbers or specific strings without CSS units)
-  // Logic: Must be a number or a simple alphanumeric string that doesn't end in a CSS unit
-  const isToken = typeof val === "number" ||
+  // Logic: Must be an integer, a .5 increment (standard spacing), or a simple alphanumeric string
+  const isToken = (typeof val === "number" && (val * 2) % 1 === 0) ||
     (typeof absVal === "string" && /^[a-z0-9-]+$/.test(absVal) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absVal))
 
   if (isToken) return `${negPrefix}${pfx}${absVal}`
