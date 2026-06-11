@@ -5,17 +5,17 @@ date: "2026-10-29"
 startDate: "2026-10-29"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
-excerpt: "A premier Halloween-themed West Coast Swing festival in the Los Angeles area (Burbank, CA) featuring social dancing, a massive costume contest, and a carnival atmosphere."
+excerpt: "Experience the community's most iconic costume contest and carnival-themed social dancing at this premier WSDC event in Burbank."
 location: "Burbank, CA"
 city: "Burbank"
 region: "SoCal"
 schedule: "October 29 - November 1, 2026"
 url: "https://halloweenswingthing.com"
 heroImage: "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.webp"
-description: "Halloween Swing Thing blends high-level West Coast Swing with a festive carnival environment. Dancers enjoy a weekend of social dancing, themed performances, and one of the community's most iconic costume contests."
+description: "A comprehensive guide to Halloween Swing Thing, featuring tips for costume planning, event highlights, and essential gear for this West Coast Swing festival."
 
 whyAttending: >
-  Halloween Swing Thing is where great dancing and playful creativity come together. It's a uniquely festive experience featuring incredible costumes, carnival activities, and high-energy social dancing. It's a weekend of pure fun for the swing dance community.
+  Attend for the unique blend of high-level competition and festive carnival atmosphere that transforms the traditional ballroom experience.
 
 theme:
   name: "Halloween Carnival"
@@ -59,9 +59,9 @@ relatedEvents:
 
 ## 🎃 What Is Halloween Swing Thing?
 
-Halloween Swing Thing stands out as a premier destination on the West Coast Swing calendar, merging a high-energy dance convention with the immersive feel of a Halloween festival. While the event maintains the technical standards of a WSDC registry event, its identity is defined by a culture of creativity, inclusivity, and pure entertainment.
+Halloween Swing Thing has grown into a cornerstone of the West Coast Swing circuit by embracing a "festival" identity. It moves beyond the standard convention format to create an immersive, themed environment where the community's creativity is on full display.
 
-The weekend is characterized by its transformation of a traditional ballroom into a carnival-like space. Attendees from around the globe gather not just for the competition, but to participate in a shared experience where elaborate costumes and themed social dancing are the norm rather than the exception.
+The weekend is characterized by its transformation of a traditional ballroom into a carnival-like space. Dancers gather not just for the WSDC points, but to participate in a shared experience where elaborate costumes and themed social dancing are the core of the event's culture.
 
 ---
 
@@ -128,27 +128,19 @@ The event strikes a balance between a dance convention and a Halloween celebrati
 
 ## 👟 What to Bring
 
-### Dance Essentials
+Beyond the **Recommended Gear** listed above, consider these event-specific packing tips to ensure you're prepared for the unique demands of a costume-heavy weekend.
 
-Preparation is key for a high-intensity weekend. Refer to our **Recommended Gear** section above for specific product links tailored for this event.
+### Costume Logistics
 
-* **Appropriate dance footwear:** Bring reliable shoes with proper soles for social dancing and versatile options for the costume contest.
-* **Hydration and recovery supplies:** Essential for maintaining energy through late-night social sets.
-* **Breathable attire:** Pack multiple changes of dance-friendly clothing.
-* **Small accessories:** Towels and cooling fans are highly recommended.
+* **Emergency repair kit:** Pack safety pins, fashion tape, and basic sewing supplies for quick on-site fixes.
+* **Dance-friendly backup:** Always have a simplified version of your costume (or a themed t-shirt) ready for high-intensity social dancing.
+* **Storage bags:** Use dedicated bags to keep delicate costume pieces or props organized and protected during travel.
+* **Layered clothing:** The transition between a warm ballroom and hotel common areas can be stark; bring a light jacket or sweater.
 
-### Costume Essentials
+### Event Essentials
 
-* **Primary costume:** Ensure it is packed securely.
-* **Emergency repair kit:** Safety pins, tape, and sewing supplies for quick fixes.
-* **Dance-friendly backup:** A simplified version of your costume that allows for full movement.
-* **Storage bags:** To keep delicate costume pieces organized and protected.
-
-### Convenience Items
-
-* **Portable power solutions:** Keep your devices charged during long event days.
-* **Personal care items:** Snacks, pain relievers, and a reusable water bottle.
-* **Layered clothing:** A light jacket or sweater for transitions between the ballroom and other hotel areas.
+* **Personal care:** Pack snacks and a reusable water bottle to maintain energy between carnival activities.
+* **Device management:** While we recommend a portable charger in our gear list, remember to bring extra cables for all your themed accessories.
 
 ---
 
@@ -255,4 +247,4 @@ The more you engage, the more memorable the weekend becomes.
 
 ## Final Thought
 
-Halloween Swing Thing represents a unique intersection of technical dance excellence and festive community spirit. By balancing the rigor of a WSDC event with the playfulness of a Halloween carnival, it offers an experience that is both competitive and celebratory. Success at the event comes from preparation—not just in your dancing, but in your costumes and gear—ensuring you can fully immerse yourself in the creative atmosphere that makes this weekend a staple of the swing dance year.
+Ultimately, this event proves that technical excellence and playful creativity are not mutually exclusive. Whether you are there for the competition or the carnival games, the weekend offers a memorable shift from the typical dance calendar. Success comes from preparation—ensuring your gear and costumes allow you to fully immerse yourself in the creative atmosphere.
