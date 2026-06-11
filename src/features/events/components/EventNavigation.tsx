@@ -37,8 +37,8 @@ export function EventNavigation() {
       as="nav"
       aria-label="Event navigation"
       position="sticky"
-      top={{ base: 16, lg: 0 }}
-      zIndex="sticky"
+      top={16}
+      zIndex="overlay"
       width="full"
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
