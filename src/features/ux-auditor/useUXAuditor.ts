@@ -267,7 +267,7 @@ export function useUXAuditor() {
         throw new Error("API Key missing");
       }
 
-      const parts: any[] = [{ text: userQuery }];
+      const parts: Array<{ text?: string; inline_data?: { mime_type: string; data: string } }> = [{ text: userQuery }];
       if (base64DataUri) {
         // Extract data and mimeType from data URI: data:image/png;base64,xxxx
         const match = base64DataUri.match(/^data:(image\/[a-z]+);base64,(.+)$/);
@@ -322,7 +322,8 @@ export function useUXAuditor() {
       }
 
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch (err: any) {
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("Gemini API Error:", err);
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
@@ -330,11 +331,11 @@ export function useUXAuditor() {
         : `[Please attach the image from scripts/ux-capture.js here]`;
 
       return {
-        summary: `Analysis failed: ${err.message}. Manual analysis required. Copy the prompt below.`,
+        summary: `Analysis failed: ${errorMessage}. Manual analysis required. Copy the prompt below.`,
         improvements: [
           {
             element: "Manual Audit Required",
-            issue: `The Gemini API returned an error: ${err.message}`,
+            issue: `The Gemini API returned an error: ${errorMessage}`,
             suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
             severity: 5
           }
