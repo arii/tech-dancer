@@ -34,9 +34,11 @@ export function EventNavigation() {
 
   return (
     <Box
+      as="nav"
+      aria-label="Event navigation"
       position="sticky"
       top={{ base: 16, lg: 0 }}
-      zIndex={40}
+      zIndex="sticky"
       width="full"
       className="bg-bg/80 backdrop-blur-md border-b border-line/10"
     >
@@ -71,6 +73,8 @@ export function EventNavigation() {
                 key={tab.id}
                 as={isExternal ? Link : "a"}
                 {...(isExternal ? { to: tab.path } : { href: `#${tab.id}` })}
+                aria-label={`Navigate to ${tab.label}`}
+                aria-current={isActive ? 'page' : undefined}
                 paddingY={3}
                 shrink={false}
                 className="group relative cursor-pointer"
