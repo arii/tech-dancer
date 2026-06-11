@@ -14,7 +14,6 @@ export interface ResearchTool {
   excludeFromEngineeringTools?: boolean;
   image?: string;
   imageAlt?: string;
-  metrics?: string[];
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
@@ -25,12 +24,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'The original product built using AI-assisted engineering. It integrates Web Bluetooth heart-rate telemetry with Spotify API context, demonstrating full-stack Dev AI orchestration for complex browser-based applications.',
     category: 'Product Development',
     status: 'Active',
-    tags: ['Proves: React', 'Proves: Web Bluetooth', 'Proves: Spotify API', 'Proves: Product'],
-    metrics: [
-      "Problem: Needed real-time biometric tracking during dance training without manual intervention.",
-      "Solution: Built Web Bluetooth PWA with Spotify sync and telemetry.",
-      "Outcome: 100% automated logging enabling high-fidelity workout analysis."
-    ],
+    tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     externalUrl: 'https://arii.github.io/hrm/',
     externalLinkDisplayLabel: 'View HRM',
     isFlagship: true,
@@ -44,12 +38,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     description: 'A purpose-built AI orchestration console for GitHub. It leverages custom prompt engineering to audit pull requests, analyze workflow health, and generate structured issues for Jules coding agents, unblocking rapid multi-repo development.',
     category: 'DevAI Tooling',
     status: 'Active',
-    tags: ['Proves: DevAI', 'Proves: GitHub API', 'Proves: Multi-Agent', 'Proves: Workflow'],
-    metrics: [
-      "Problem: Slow manual PR audits and inconsistent workflow issue generation.",
-      "Solution: Developed a custom AI orchestration console for automated auditing.",
-      "Outcome: Unblocked rapid multi-repo development and streamlined agent tasking."
-    ],
+    tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
     externalUrl: 'https://repo-auditor-ai.vercel.app/',
     externalLinkDisplayLabel: 'Open RepoAuditor AI',
     sourceUrl: 'https://github.com/arii/hrm-project-management',
