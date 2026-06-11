@@ -10,6 +10,7 @@ export const SPACING_MAP: Record<string | number, string> = {
   6: '6',
   8: '8',
   10: '10',
+  11: '11',
   12: '12',
   16: '16',
   20: '20',
