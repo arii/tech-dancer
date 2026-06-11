@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { describe, it, expect } from 'vitest';
 import { resolveJIT } from '../style-utils';
 

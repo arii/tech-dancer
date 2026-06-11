@@ -1,5 +1,5 @@
 import { Share2 } from 'lucide-react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Icon } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
 import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
@@ -62,7 +62,7 @@ export function EditorialHeader({
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
                <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
-                 <Share2 className="w-3.5 h-3.5" />
+                 <Icon icon={Share2} size="xs" />
                  <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                    {isShared ? "COPIED!" : "SHARE"}
                  </Text>
