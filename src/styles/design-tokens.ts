@@ -95,7 +95,7 @@ export const typography = {
   headline: "font-display font-bold tracking-tighter leading-[0.9] text-pretty break-words",
   display: "font-display font-bold tracking-tight leading-none text-pretty break-words",
   hero: "font-serif font-black tracking-tight leading-[1.2] text-pretty break-words",
-  body: "font-sans leading-relaxed text-text-body max-w-[65ch] text-pretty break-words",
+  body: "font-sans leading-relaxed text-text-body text-pretty break-words",
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
 };

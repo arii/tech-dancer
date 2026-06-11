@@ -32,8 +32,8 @@ export function EditorialHeader({
   hero,
 }: EditorialHeaderProps) {
   return (
-    <Stack gap={12}>
-      <Stack gap={6}>
+    <Stack gap={16}>
+      <Stack gap={8}>
         <Text variant="mono" size="xs" color="dim" weight="font-black" uppercase tracking="widest">
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
@@ -55,7 +55,7 @@ export function EditorialHeader({
         </Box>
       )}
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} borderOpacityVariant="medium">
+      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={8} border="y" borderColor="line" paddingY={10} borderOpacityVariant="medium">
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1}>
