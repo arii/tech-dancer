@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { cva } from "class-variance-authority";
 
 /**
@@ -26,15 +25,15 @@ export const variants = {
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
-    outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 transition-colors active:scale-[0.98]",
+    outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 transition-colors active:scale-95",
     ghost: "bg-transparent hover:bg-line/10",
-    primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-[0.98] shadow-sm",
-    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
+    primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-95 shadow-sm",
+    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-95 normal-case tracking-normal",
     fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
   },
   radius: {
     none: "rounded-none",
-    industrial: "rounded-[2px]",
+    industrial: "rounded-[2px]", // impeccable-ignore
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
@@ -52,11 +51,11 @@ export const buttonVariants = cva(
         warning: "text-accent",
       },
       size: {
-        default: "h-[40px] px-6 text-xs",
+        default: "h-10 px-6 text-xs",
         sm: "h-8 px-4 text-xs",
-        md: "h-[40px] px-6 text-xs",
+        md: "h-10 px-6 text-xs",
         lg: "h-12 px-8 text-sm",
-        icon: "h-[40px] w-[40px]",
+        icon: "h-10 w-10",
       },
       fullWidth: {
         true: "w-full",
