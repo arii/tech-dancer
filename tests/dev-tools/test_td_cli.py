@@ -12,6 +12,25 @@ from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
+    @patch.dict(os.environ, {"ANTIGRAVITY_API_KEY": "fake_key"})
+    def test_jules_client_init(self):
+        from tdw_services.services.jules import JulesClient
+        client = JulesClient()
+        self.assertEqual(client.api_key, "fake_key")
+
+    @patch.dict(os.environ, clear=True)
+    def test_jules_client_missing_key(self):
+        from tdw_services.services.jules import JulesClient
+        # Only remove specific keys to avoid breaking pytest
+        if "ANTIGRAVITY_API_KEY" in os.environ:
+            del os.environ["ANTIGRAVITY_API_KEY"]
+        if "JULES_API_KEY" in os.environ:
+            del os.environ["JULES_API_KEY"]
+
+        with self.assertRaises(ValueError):
+            JulesClient()
+
+
     @patch('tdw_services.orchestrator.get_github_token')
     @patch('tdw_services.orchestrator.get_github_client')
     @patch('tdw_services.orchestrator.get_repo_name')
