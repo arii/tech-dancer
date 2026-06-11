@@ -41,6 +41,7 @@ export function EventNavigation() {
       layout="eventNav"
       surface="bg"
       top={16}
+      zIndex={99998}
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
 

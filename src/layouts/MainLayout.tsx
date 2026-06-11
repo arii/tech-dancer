@@ -68,6 +68,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           ref={scrollRef}
           flex={1}
           position="relative"
+          zIndex={0}
           paddingTop={{ base: 16, lg: 16 }}
           maxWidth="full"
           width="full"
