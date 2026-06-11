@@ -120,7 +120,7 @@ export default function EventGuide() {
               <AffiliateDisclosure />
               <Stack gap={SECTION_SPACING}>
                 {event.theme && (
-                  <Box id="theme" scrollMarginTop={{ base: 40, lg: 16 }}>
+                  <Box id="theme" layout="eventSection">
                     <ThemeSpotlight
                       title={event.theme.name}
                       label={event.theme.label}
@@ -133,7 +133,7 @@ export default function EventGuide() {
                 )}
 
                 {gearSections.length > 0 && (
-                  <Box id="gear" scrollMarginTop={{ base: 40, lg: 16 }}>
+                  <Box id="gear" layout="eventSection">
                     <CuratedGear
                       title={`Gear for ${event.title}`}
                       sections={gearSections}
@@ -141,15 +141,15 @@ export default function EventGuide() {
                   </Box>
                 )}
 
-                <Box id="reminders" scrollMarginTop={{ base: 40, lg: 16 }}>
+                <Box id="reminders" layout="eventSection">
                   <EventReminders event={event} />
                 </Box>
 
-                <Box id="travel" scrollMarginTop={{ base: 40, lg: 16 }}>
+                <Box id="travel" layout="eventSection">
                   <EventTravel notes={event.description} />
                 </Box>
 
-                <Box id="notes" scrollMarginTop={{ base: 40, lg: 16 }}>
+                <Box id="notes" layout="eventSection">
                   <EventNotes content={event.content} />
                 </Box>
 

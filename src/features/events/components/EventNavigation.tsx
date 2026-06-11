@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
+import { journalVariants } from '@/lib/variants';
+import { cn } from '@/lib/utils';
 import { EVENT_TABS } from '../constants';
 
 export function EventNavigation() {
@@ -36,13 +38,7 @@ export function EventNavigation() {
     <Box
       as="nav"
       aria-label="Event navigation"
-      position="sticky"
-      top={{ base: 16, lg: 0 }}
-      zIndex="sticky"
-      width="full"
-      surface="bg"
-      border="b"
-      borderColor="line/10"
+      layout="eventNav"
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
 
@@ -85,7 +81,10 @@ export function EventNavigation() {
                   display="flex"
                   align="center"
                   gap={2}
-                  className={`${isActive ? 'text-accent' : 'text-dim'} group-hover:text-accent transition-colors whitespace-nowrap`}
+                  className={cn(
+                    journalVariants.navLink({ active: isActive }),
+                    "whitespace-nowrap"
+                  )}
                 >
                   <tab.icon size={16} />
                   <Text
