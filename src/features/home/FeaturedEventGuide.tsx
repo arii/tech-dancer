@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
 import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
