@@ -1,7 +1,7 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 const FEATURED = {
   eyebrow: 'FEATURED GUIDE',
@@ -27,17 +27,18 @@ export function FeaturedGuidePanel() {
       className="group self-stretch"
     >
       {/* Background image — fills the column height naturally */}
-      <Box position="absolute" inset aspect="[420/600]" overflow="hidden" aria-hidden="true">
-        <img
-          src={`${ASSET_PREFIX}${FEATURED.image}`}
-          alt={FEATURED.imageAlt}
-          width={420}
-          height={600}
-          decoding="async"
-          fetchPriority="high"
-          className="h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
-        />
-      </Box>
+      <OptimizedImage
+        src={`${ASSET_PREFIX}${FEATURED.image}`}
+        alt={FEATURED.imageAlt}
+        width={420}
+        height={600}
+        sizes="(max-width: 1024px) 100vw, 420px" // impeccable-ignore
+        fetchPriority="high"
+        loading="eager"
+        position="absolute"
+        inset
+        className="opacity-dim transition-opacity duration-500 group-hover:opacity-high"
+      />
       {/* Gradient overlay for text legibility */}
       <Box
         position="absolute"
@@ -56,15 +57,17 @@ export function FeaturedGuidePanel() {
         <Text variant="body" size="sm" color="dim">
           {FEATURED.subtitle}
         </Text>
-        <Text
-          variant="mono"
-          size="xs"
-          color="accent"
-          weight="font-bold"
-          className="mt-1 group-hover:underline"
-        >
-          Read the guide →
-        </Text>
+        <Box marginTop={1}>
+          <Text
+            variant="mono"
+            size="xs"
+            color="accent"
+            weight="font-bold"
+            className="group-hover:underline"
+          >
+            Read the guide →
+          </Text>
+        </Box>
       </Stack>
     </Box>
   );

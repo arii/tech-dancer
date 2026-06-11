@@ -1,9 +1,9 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 export function LatestPosts() {
   const posts = getPosts().slice(0, 3);
@@ -37,24 +37,27 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            paddingY={3.5}
+            className="group w-full max-w-full min-w-0 border-b border-line transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
               radius="md"
               overflow="hidden"
-              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
+              width={72}
+              height={14}
+              shrink={0}
+              marginTop={0.5}
+              surface="alt"
             >
               {post.image ? (
-                <img
+                <OptimizedImage
                   src={post.image}
                   alt=""
                   width={72}
                   height={56}
+                  sizes="72px" // impeccable-ignore
                   loading="lazy"
-                  decoding="async"
-                  aria-hidden="true"
-                  className="block h-full w-full max-w-full object-cover"
                 />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />
@@ -62,7 +65,7 @@ export function LatestPosts() {
             </Box>
 
             {/* Text content */}
-            <Stack gap={1} className="min-w-0 flex-1">
+            <Stack gap={1} flex="1" className="min-w-0">
               <Box display="flex" align="center" gap={3}>
                 <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
                   {post.category}
@@ -79,7 +82,9 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
+            <Box marginTop={1} shrink={0}>
+              <ArrowRight className="h-4 w-4 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
+            </Box>
           </Box>
         ))}
       </Stack>

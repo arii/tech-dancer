@@ -1,9 +1,9 @@
-// impeccable-ignore-file
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { getEvents } from '@/lib/content';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 const SWIPE_CLICK_CANCEL_THRESHOLD = 5;
 const SWIPE_NAV_THRESHOLD = 48;
@@ -96,15 +96,19 @@ export function FeaturedEventGuide() {
       </Stack>
 
       {/* Editorial card: image-led grid */}
-      <Box
+      <Grid
         as="article"
         border
         radius="xl"
         overflow="hidden"
-        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
+        display="grid"
+        cols={{ base: 1, md: "[260px_1fr]" }}
+        minHeight={{ md: 200 }}
+        position="relative"
+        zIndex={10}
+        className="touch-pan-y overscroll-x-contain select-none bg-surface"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
-        data-gesture-handled="true"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -116,25 +120,27 @@ export function FeaturedEventGuide() {
         tabIndex={0}
       >
         {/* Image column — full height, strong crop */}
-        <Box position="relative" className="h-44 min-w-0 md:h-full">
-          <img
+        <Box position="relative" height={{ base: 44, md: "full" }} className="min-w-0">
+          <OptimizedImage
             src={event.heroImage}
             alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
             width={260}
             height={200}
+            sizes="(max-width: 768px) 100vw, 260px" // impeccable-ignore
             loading="lazy"
-            decoding="async"
-            className="h-full w-full object-cover object-top"
+            containerClassName="h-full w-full"
           />
           {/* Subtle gradient at bottom to soften any embedded text */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />
+          <Box position="absolute" inset="bottom" height={16} className="bg-gradient-to-t from-black/40 to-transparent" aria-hidden="true" />
         </Box>
 
         {/* Content */}
-        <Stack gap={3} padding={6} className="min-w-0 justify-between" aria-live="polite">
+        <Stack gap={3} padding={6} justify="between" className="min-w-0" aria-live="polite">
           <Stack gap={1.5}>
             <Box display="flex" align="start" gap={2}>
-              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+              <Box marginTop={0.5} shrink={0}>
+                <MapPin className="h-3.5 w-3.5 text-accent" />
+              </Box>
               <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full leading-normal">
                 {event.location}
               </Text>
@@ -189,7 +195,7 @@ export function FeaturedEventGuide() {
             )}
           </Box>
         </Stack>
-      </Box>
+      </Grid>
     </Box>
   );
 }

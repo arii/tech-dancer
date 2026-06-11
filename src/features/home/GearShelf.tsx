@@ -1,8 +1,8 @@
-
 import { NavLink } from 'react-router-dom';
 import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 const PICKS = [
   { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.webp', href: '/gear/2023-10-01-loop-earplugs' },
@@ -53,15 +53,14 @@ export function GearShelf() {
               className="bg-surface-alt transition-all group-hover:border-accent/40"
             >
               {image ? (
-                <img
+                <OptimizedImage
                   src={`${ASSET_PREFIX}${image}`}
                   alt=""
                   width={400}
                   height={400}
+                  sizes="(max-width: 1280px) 33vw, 400px" // impeccable-ignore
                   loading="lazy"
-                  decoding="async"
-                  aria-hidden="true"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="transition-transform duration-300 group-hover:scale-105"
                 />
               ) : imageText ? (
                 <Text variant="body" size="sm" weight="font-bold">
@@ -104,15 +103,13 @@ export function GearShelf() {
             >
               <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" aspect="square" className="bg-surface-alt transition-all group-hover:border-accent/40">
                 {image ? (
-                  <img
+                  <OptimizedImage
                     src={`${ASSET_PREFIX}${image}`}
                     alt=""
                     width={112}
                     height={112}
+                    sizes="112px" // impeccable-ignore
                     loading="lazy"
-                    decoding="async"
-                    aria-hidden="true"
-                    className="block h-full w-full max-w-full object-cover"
                   />
                 ) : imageText ? (
                   <Text variant="body" size="xs" weight="font-bold" className="text-center">
