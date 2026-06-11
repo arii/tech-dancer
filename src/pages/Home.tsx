@@ -31,7 +31,7 @@ export default function Home() {
 
       <Stack
         gap={{ base: 2, lg: 8 }}
-        marginTop={{ base: 0, lg: 8 }}
+        marginTop={{ base: 8, lg: 'section-spacing' }}
         className="w-full max-w-full min-w-0"
       >
         <Box
