@@ -44,7 +44,7 @@ export function GearShelf() {
         {PICKS.map(({ label, image, imageText, href }) => (
           <Box key={label} as={NavLink} to={href} className="group">
             <Box
-              radius="full"
+              radius="lg"
               overflow="hidden"
               border
               display="flex"
@@ -103,7 +103,7 @@ export function GearShelf() {
               className="group"
             >
               <Box
-                radius="full"
+                radius="lg"
                 overflow="hidden"
                 border
                 display="flex"

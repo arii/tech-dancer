@@ -57,9 +57,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
         position="fixed"
         top={4}
         left={4}
-        width={1}
-        height={1}
-        overflow="hidden"
         aria-live="polite"
         aria-atomic="true"
         className="sr-only"
