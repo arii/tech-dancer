@@ -56,10 +56,10 @@ jobs:
       - name: Resolve PR details
         if: env.PR_NUMBER && env.PR_NUMBER != '0'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          PR_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }}")
+          PR_INFO=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }}")
 
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 
@@ -178,7 +178,7 @@ jobs:
       - name: Commit and create PR
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files == ''
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add .
           git commit -m "Auto-resolve merge conflicts by merging $TARGET"
