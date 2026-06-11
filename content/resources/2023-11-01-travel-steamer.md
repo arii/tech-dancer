@@ -5,7 +5,7 @@ date: "2023-11-01"
 author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Compact, efficient, and dual-voltage. Keep your competition shirts and skirts wrinkle-free on the road."
-image: "/images/gear/sketches/travel-steamer.webp"
+image: "/images/gear/amazon/oghom-portable-garment-steamer.jpg"
 affiliateIds: ["portable-steamer"]
 tags: ["travel", "clothing", "competition"]
 verdict: "Essential for Competitors"

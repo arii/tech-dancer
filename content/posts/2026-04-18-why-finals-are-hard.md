@@ -10,6 +10,7 @@ tags:
   - research
   - wcs
   - competition
+draft: true
 ---
 
 ## The Reality of WCS Finals

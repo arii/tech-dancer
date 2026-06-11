@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
 excerpt: "A high-density solid foam roller that is excellent for post-dance muscle recovery at home or local socials."
-image: "/images/gear/sketches/foam-roller.webp"
+image: "/images/gear/amazon/hyperice-vyper-foam-roller.jpg"
 affiliateIds: ["foam-roller"]
 tags: ["recovery", "health", "fitness"]
 verdict: "Essential for recovery"

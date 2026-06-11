@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Fashion"
 excerpt: "Adhesive felt pumpkin stickers for easy costume assembly."
-image: "/images/gear/sketches/pumpkin-stickers.webp"
+image: "/images/gear/amazon/pumpkin-stickers.webp"
 affiliateIds: ["pumpkin-stickers"]
 tags: ["fashion", "halloween", "diy"]
 verdict: "Best for easy DIY"

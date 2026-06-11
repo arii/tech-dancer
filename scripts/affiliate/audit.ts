@@ -86,6 +86,20 @@ async function main() {
           console.error(`  [ERROR] Image is 0 bytes: ${item.image}`);
           errors++;
         }
+
+        // Localization candidate check
+        if (item.image.includes('/sketches/')) {
+            const sketchBase = path.basename(item.image, path.extname(item.image));
+            const amazonDir = path.join(process.cwd(), 'public/images/gear/amazon');
+            if (fs.existsSync(amazonDir)) {
+                const amazonFiles = fs.readdirSync(amazonDir);
+                const match = amazonFiles.find(f => f.includes(sketchBase) && f.endsWith('.jpg'));
+                if (match) {
+                    console.warn(`  [WARN] Sketch used but localized Amazon image available: /images/gear/amazon/${match}`);
+                    warnings++;
+                }
+            }
+        }
       }
     } else if (!item.draft) {
       console.warn(`  [WARN] Missing image for non-draft item`);

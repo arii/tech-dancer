@@ -5,7 +5,7 @@ date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Travel Gear"
 excerpt: "Maximize luggage space and keep your dance outfits organized and wrinkle-free."
-image: "/images/gear/sketches/compression-cubes.webp"
+image: "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg"
 affiliateIds: ["compression-cubes"]
 tags: ["travel", "organization", "packing"]
 verdict: "Essential for air travel"

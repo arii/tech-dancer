@@ -11,6 +11,7 @@ tags: ["safety", "outdoor", "pool"]
 verdict: "Summer Essential"
 bestFor: ["Pool Parties", "Outdoor Events"]
 affiliateProvider: "amazon"
+draft: true
 ---
 
 ## Sun Protection
