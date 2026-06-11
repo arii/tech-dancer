@@ -5,7 +5,7 @@ import json
 import sys
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, urlparse, urlunparse
 from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
@@ -28,6 +28,8 @@ from scope_check import verify_pr_scope, get_project_config
 
 PROJECT_CONFIG = get_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
+CONFLICTS_REMOTE_FIX_URL = "https://github.com/arii/tech-dancer.git"
+CONFLICTS_TOKEN_ENV_VARS = ("CODEX_GH_TOKEN", "GITHUB_TOKEN")
 
 class Orchestrator:
     def __init__(self):
@@ -234,11 +236,28 @@ class Orchestrator:
         return formatted
 
     def _get_conflicts_github_token(self) -> Tuple[Optional[str], Optional[str]]:
-        if os.environ.get("CODEX_GH_TOKEN"):
-            return os.environ["CODEX_GH_TOKEN"], "CODEX_GH_TOKEN"
-        if os.environ.get("GITHUB_TOKEN"):
-            return os.environ["GITHUB_TOKEN"], "GITHUB_TOKEN"
+        for env_var in CONFLICTS_TOKEN_ENV_VARS:
+            token = os.environ.get(env_var)
+            if token:
+                return token, env_var
         return None, None
+
+    def _sanitize_remote_url_for_message(self, remote_url: str) -> str:
+        try:
+            parsed = urlparse(remote_url)
+        except ValueError:
+            return remote_url
+
+        if parsed.scheme in {"http", "https"} and parsed.netloc and "@" in parsed.netloc:
+            sanitized_netloc = f"<credentials>@{parsed.hostname or 'unknown-host'}"
+            try:
+                parsed_port = parsed.port
+            except ValueError:
+                parsed_port = None
+            if parsed_port:
+                sanitized_netloc = f"{sanitized_netloc}:{parsed_port}"
+            return urlunparse(parsed._replace(netloc=sanitized_netloc))
+        return remote_url
 
     def _validate_github_token_for_conflicts(self, repo_slug: str) -> Optional[Dict[str, str]]:
         token, token_source = self._get_conflicts_github_token()
@@ -255,7 +274,14 @@ class Orchestrator:
             }
 
         token_url = f"https://x-access-token:{quote(token, safe='')}@github.com/{repo_slug}.git"
-        parsed = urlparse(token_url)
+        try:
+            parsed = urlparse(token_url)
+        except ValueError:
+            return {
+                "status": "environment_error",
+                "message": f"Invalid GitHub token-derived URL from {token_source}. Set CODEX_GH_TOKEN or GITHUB_TOKEN to a valid GitHub token.",
+            }
+
         if parsed.scheme != "https" or parsed.hostname != "github.com" or not parsed.username or not parsed.password:
             return {
                 "status": "environment_error",
@@ -265,18 +291,20 @@ class Orchestrator:
 
     def _validate_origin_remote_for_conflicts(self) -> Tuple[Optional[str], Optional[Dict[str, str]]]:
         res = run_command(["git", "remote", "get-url", "origin"], check=False, log_on_error=False)
+        remote_fix = f"git remote set-url origin {CONFLICTS_REMOTE_FIX_URL}"
         if res.returncode != 0 or not res.stdout.strip():
             return None, {
                 "status": "environment_error",
-                "message": "Missing GitHub origin remote. Fix with: git remote add origin https://github.com/arii/tech-dancer.git",
+                "message": f"Missing GitHub origin remote. Fix with: git remote add origin {CONFLICTS_REMOTE_FIX_URL}",
             }
 
         remote_url = res.stdout.strip()
         match = re.match(r"^(?:https://(?:[^/@]+(?::[^/@]*)?@)?github\.com/|git@github\.com:)([^/\s]+/[^/\s]+?)(?:\.git)?/?$", remote_url)
         if not match or any(char in remote_url for char in "[]{}<>|\\^`") or any(char.isspace() for char in remote_url):
+            safe_remote_url = self._sanitize_remote_url_for_message(remote_url)
             return None, {
                 "status": "environment_error",
-                "message": f"Malformed GitHub origin remote: {remote_url}. Fix with: git remote set-url origin https://github.com/arii/tech-dancer.git",
+                "message": f"Malformed GitHub origin remote: {safe_remote_url}. Fix with: {remote_fix}",
             }
 
         repo_slug = match.group(1)

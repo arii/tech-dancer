@@ -63,6 +63,30 @@ class TestConflictsEnvironmentValidation(unittest.TestCase):
         self.assertIn('Invalid GitHub token from CODEX_GH_TOKEN', result['message'])
         self.assertIn('token-derived URL would be malformed', result['message'])
 
+    @patch.dict(os.environ, {'GITHUB_TOKEN': 'github-token'}, clear=True)
+    def test_github_token_used_when_codex_token_missing(self):
+        self.assertEqual(self.orch._get_conflicts_github_token(), ('github-token', 'GITHUB_TOKEN'))
+
+    @patch.dict(os.environ, {'CODEX_GH_TOKEN': 'codex-token', 'GITHUB_TOKEN': 'github-token'}, clear=True)
+    def test_codex_token_preferred_over_github_token(self):
+        self.assertEqual(self.orch._get_conflicts_github_token(), ('codex-token', 'CODEX_GH_TOKEN'))
+
+    @patch.dict(os.environ, {'CODEX_GH_TOKEN': 'valid-token'}, clear=True)
+    @patch('tdw_services.orchestrator.run_command')
+    def test_malformed_remote_message_sanitizes_embedded_credentials(self, mock_run):
+        mock_run.return_value = MagicMock(
+            returncode=0,
+            stdout='https://x-access-token:secret with space@github.com/arii/tech-dancer.git\n',
+            stderr='',
+        )
+
+        result = self.orch.handle_conflicts()
+
+        self.assertEqual(result['status'], 'environment_error')
+        self.assertIn('Malformed GitHub origin remote', result['message'])
+        self.assertIn('<credentials>@github.com', result['message'])
+        self.assertNotIn('secret with space', result['message'])
+
 
 if __name__ == '__main__':
     unittest.main()

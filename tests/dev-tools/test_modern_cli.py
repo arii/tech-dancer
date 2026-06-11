@@ -40,5 +40,19 @@ class TestModernCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_analyze.assert_called_once_with('README.md')
 
+    @patch('tdw_services.orchestrator.Orchestrator.handle_conflicts')
+    def test_conflicts_environment_error_reports_setup_without_registration_failure(self, mock_conflicts):
+        mock_conflicts.return_value = {
+            "status": "environment_error",
+            "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN",
+        }
+
+        result = self.runner.invoke(cli, ['gh', 'conflicts'])
+
+        self.assertEqual(result.exit_code, 1)
+        self.assertIn('Missing GitHub token', result.output)
+        self.assertNotIn('No such command', result.output)
+        mock_conflicts.assert_called_once_with(base_branch='main')
+
 if __name__ == '__main__':
     unittest.main()
