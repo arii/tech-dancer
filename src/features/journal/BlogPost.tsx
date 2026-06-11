@@ -48,8 +48,8 @@ export default function BlogPost() {
 
   if (!post) {
     return (
-      <Box padding="panel" textAlign="center">
-        <Stack gap={8} align="center">
+      <Box padding="panel" textAlign="left">
+        <Stack gap={8} align="start">
           <Text variant="display" size="2xl">Post Not Found</Text>
           <Box as="button" onClick={() => navigate('/blog')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Journal</Text>

@@ -22,17 +22,17 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
         <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
           {title}
         </Text>
-        <Stack gap={4}>
+        <Stack gap={0}>
           {items.map((item) => (
             <Link key={item.href} to={item.href} className="group">
-              <Box padding={4} border radius="md" className={journalVariants.card({ interactive: true })}>
-                <Stack gap={1}>
+              <Box paddingY={6} border="b" borderColor="line" className="border-opacity-medium group-last:border-none">
+                <Stack gap={2}>
                   {item.category && (
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold">
+                    <Text variant="mono" size="micro" color="accent" weight="font-black" tracking="widest">
                       {item.category.toUpperCase()}
                     </Text>
                   )}
-                  <Text variant="body" size="lg" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
+                  <Text variant="body" size="xl" weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
                     {item.title}
                   </Text>
                 </Stack>

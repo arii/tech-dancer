@@ -31,7 +31,7 @@ export default function EventGuide() {
 
   if (isLoading) {
     return (
-      <Box padding="panel" textAlign="center">
+      <Box padding="panel" textAlign="left">
         <Text variant="mono" size="xs">Loading Guide...</Text>
       </Box>
     );
@@ -39,8 +39,8 @@ export default function EventGuide() {
 
   if (isError || !event) {
     return (
-      <Box padding="panel" textAlign="center">
-        <Stack gap={8} align="center">
+      <Box padding="panel" textAlign="left">
+        <Stack gap={8} align="start">
           <Text variant="display" size="2xl">
             {isError ? "Error Loading Event" : "Event Not Found"}
           </Text>

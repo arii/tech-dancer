@@ -118,7 +118,7 @@ export function GearShelf() {
                 size="xs"
                 weight="font-bold"
                 marginTop={1.5}
-                textAlign="center"
+                textAlign="left"
               >
                 {label}
               </Text>

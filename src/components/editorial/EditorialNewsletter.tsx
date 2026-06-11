@@ -8,12 +8,10 @@ import { EmailForm } from '@/features/email-capture/EmailForm';
 export function EditorialNewsletter() {
   return (
     <Box
-      padding={{ base: 6, md: 10 }}
-      border
-      radius="2xl"
-      className={journalVariants.card({ variant: 'newsletter' })}
+      padding={{ base: 6, md: 12 }}
+      surface="alt"
     >
-      <Grid cols={{ base: 1, md: 2 }} gap={8} align="center">
+      <Grid cols={{ base: 1, md: 2 }} gap={12} align="center">
         <Stack gap={6}>
           <Stack gap={2}>
             <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">

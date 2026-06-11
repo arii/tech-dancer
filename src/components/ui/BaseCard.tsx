@@ -33,7 +33,7 @@ export function BaseCard({
   // Standardized hover and transition classes
   const cardClasses = cn(
     "group relative bg-surface transition-all duration-200",
-    isLink && "hover:-translate-y-0.5 hover:border-accent/40",
+    isLink && "hover:bg-surface-alt",
     className
   );
 
@@ -43,7 +43,6 @@ export function BaseCard({
     <Stack
       as="article"
       radius="lg"
-      border
       className={cardClasses}
       {...props}
     >

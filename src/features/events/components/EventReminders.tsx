@@ -66,10 +66,10 @@ export function EventReminders({ event, id }: EventRemindersProps) {
         padding={10}
         radius="2xl"
         surface="warning"
-        textAlign="center"
+        textAlign="left"
         border
       >
-        <Stack gap={6} align="center">
+        <Stack gap={6} align="start">
           <Box
             width={16}
             height={16}

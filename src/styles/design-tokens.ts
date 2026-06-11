@@ -33,7 +33,7 @@ export const layout = {
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans text-slate-100 placeholder:text-slate-400 placeholder:opacity-100 focus:outline-none focus:border-accent transition-all duration-150",
-  label: "text-tiny font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
+  label: "text-xs font-mono font-black uppercase tracking-[0.15em] text-text-dim block mb-3",
   select: "bg-bg border border-line px-3 py-1 text-tiny font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
   error: "border-error focus:border-error focus:ring-error/20",
 };

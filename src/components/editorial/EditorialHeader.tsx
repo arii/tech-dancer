@@ -1,6 +1,7 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
@@ -61,8 +62,18 @@ export function EditorialHeader({
            <Stack gap={1}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
-               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
-                 <Share2 className="w-3.5 h-3.5" />
+               <Stack
+                 as="button"
+                 direction="row"
+                 align="center"
+                 gap={2}
+                 paddingY={2.5}
+                 paddingX={1}
+                 minHeight={11}
+                 onClick={onShare}
+                 className={cn(journalVariants.shareAction(), "tap-target")}
+               >
+                 <Share2 className="w-4 h-4" />
                  <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                    {isShared ? "COPIED!" : "SHARE"}
                  </Text>
@@ -72,10 +83,20 @@ export function EditorialHeader({
         </Stack>
 
         {tags && tags.length > 0 && (
-          <Stack direction="row" align="center" gap={2} wrap>
+          <Stack direction="row" align="center" gap={3} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-bold">TAGS:</Text>
             {tags.map(tag => (
-              <Box key={tag} paddingX={2} paddingY={0.5} border radius="sm" className={journalVariants.tag()}>
+              <Box
+                key={tag}
+                paddingX={4}
+                paddingY={2}
+                minHeight={10}
+                display="flex"
+                align="center"
+                border
+                radius="sm"
+                className={cn(journalVariants.tag(), "tap-target")}
+              >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>
             ))}

@@ -21,7 +21,7 @@ export function EmailForm() {
 
   return (
     <Box as="form" onSubmit={handleSubmit} noValidate width={{ base: "full", md: "auto" }} maxWidth="md">
-      <Stack direction="row" gap={0} position="relative" width="full">
+      <Stack direction={{ base: "column", sm: "row" }} gap={{ base: 3, sm: 0 }} position="relative" width="full">
         <Box
           as="input"
           name="email"
@@ -36,12 +36,12 @@ export function EmailForm() {
         <ActionButton
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          minHeight={11}
-          width="auto"
-          minWidth={{ base: 36, sm: 44 }}
+          minHeight={12}
+          width={{ base: "full", sm: "auto" }}
+          minWidth={{ base: "full", sm: 44 }}
           paddingX={6}
-          radius="none"
-          className="border-l border-accent/20"
+          radius={{ base: "md", sm: "none" }}
+          className="sm:border-l border-accent/20"
         >
           <AnimatePresence mode="wait">
             <Stack
