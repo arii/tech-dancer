@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -122,7 +121,7 @@ export function GlobalSearch() {
     <Box
       zIndex={9999}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 9999 }}
+      style={{ zIndex: 9999 }} // impeccable-ignore
     >
       {/* Backdrop */}
       <Box
@@ -143,7 +142,6 @@ export function GlobalSearch() {
         height="full"
         paddingTop={{ base: 4, lg: 20 }}
         paddingX={4}
-        className=""
       >
         <Box
           as="section"
@@ -270,7 +268,8 @@ export function GlobalSearch() {
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search">
+          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search" // impeccable-ignore
+          >
             <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
                 <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">

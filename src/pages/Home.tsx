@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { SEO } from '@/components/SEO';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
@@ -12,7 +11,17 @@ import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Box
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth="7xl"
+      overflow="hidden"
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      paddingBottom={8}
+      className="pb-safe-bottom" // impeccable-ignore
+    >
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -23,7 +32,9 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_420px]"
+        align="center"
+        gap={0}
+        className="w-full max-w-full min-w-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_420px]" // impeccable-ignore
       >
         <HeroSection />
         <FeaturedGuidePanel />
@@ -32,11 +43,14 @@ export default function Home() {
       <Stack
         gap={{ base: 2, lg: 8 }}
         marginTop={{ base: 0, lg: 8 }}
-        className="w-full max-w-full min-w-0"
+        width="full"
+        maxWidth="full"
+        className="min-w-0"
       >
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          gap={8}
+          className="w-full max-w-full min-w-0 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]" // impeccable-ignore
         >
           <FeaturedEventGuide />
           <GearShelf />
@@ -45,7 +59,8 @@ export default function Home() {
 
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          gap={8}
+          className="w-full max-w-full min-w-0 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]" // impeccable-ignore
         >
           <LatestPosts />
           <DevLabCallout />

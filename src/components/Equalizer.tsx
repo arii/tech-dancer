@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Box } from '@/layouts/Box';
 import { Stack } from '@/layouts/Stack';
+import { gradients, effects } from '@/styles/design-tokens';
 
 const NUM_BARS = 28;
 
@@ -35,7 +36,7 @@ export const Equalizer = () => {
       width="full"
       overflow="hidden"
       paddingX={4}
-      paddingBottom={5}
+      paddingBottom={4.5}
     >
       <Box
         as={motion.div}
@@ -43,8 +44,8 @@ export const Equalizer = () => {
         position="absolute"
         inset="bottom"
         height={24}
-        bgGradient="bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent"
-        className="blur-2xl"
+        bgGradient={gradients.equalizer}
+        className={effects.blur.equalizer}
         opacityVariant="low"
       />
       {bars.map((bar, i) => (

@@ -33,7 +33,7 @@ export const variants = {
   },
   radius: {
     none: "rounded-none",
-    industrial: "rounded-[2px]", // impeccable-ignore
+    industrial: "rounded-industrial",
     lg: "rounded-lg",
     xl: "rounded-xl",
   }

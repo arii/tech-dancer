@@ -136,3 +136,18 @@ export const typeSizes = {
   "fluid-8": "text-6xl sm:text-7xl md:text-8xl",
   "fluid-9": "text-7xl sm:text-8xl md:text-9xl",
 };
+
+export const radius = {
+  none: "none",
+  industrial: "industrial",
+};
+
+export const gradients = {
+  equalizer: "bg-gradient-to-t from-primary/15 via-secondary/8 to-transparent",
+};
+
+export const effects = {
+  blur: {
+    equalizer: "blur-2xl",
+  }
+};

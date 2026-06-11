@@ -37,6 +37,7 @@
   --radius-lg: var(--raw-radius-lg);
   --radius-xl: var(--raw-radius-xl);
   --radius-full: var(--raw-radius-full);
+  --radius-industrial: 2px;
 
   /* Spacing */
   --spacing-container-sm: var(--raw-spacing-container-sm);
@@ -51,6 +52,7 @@
   --spacing-hero: var(--raw-spacing-hero);
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
+  --spacing-4\.5: 1.125rem;
 
   /* Z-Index */
   --z-hide: var(--raw-z-hide);
