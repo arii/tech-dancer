@@ -41,11 +41,11 @@ export default function Home() {
       </Box>
 
       <Stack
-        gap={{ base: 2, lg: 8 }}
-        marginTop={{ base: 0, lg: 8 }}
         width="full"
         maxWidth="full"
         className="min-w-0"
+        gap={{ base: 8, lg: 'section-spacing' }}
+        marginTop={{ base: 8, lg: 'section-spacing' }}
       >
         <Box
           display="grid"
