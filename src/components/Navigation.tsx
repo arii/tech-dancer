@@ -26,8 +26,28 @@ export default function Navigation() {
   return (
     <>
       <MobileBottomNav />
-      <Box as="nav" aria-label="Main Navigation" className="fixed inset-x-0 top-0 z-50 h-16 w-full max-w-full border-b border-line bg-bg/95 backdrop-blur-xl">
-        <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
+      <Box
+        as="nav"
+        aria-label="Main Navigation"
+        position="fixed"
+        inset="top"
+        zIndex="sticky"
+        height={16}
+        width="full"
+        border="b"
+        className="bg-bg/95 backdrop-blur-xl" // impeccable-ignore
+      >
+        <Box
+          display="flex"
+          align="center"
+          justify="between"
+          paddingX={{ base: 4, lg: 10 }}
+          width="full"
+          maxWidth="7xl"
+          marginX="auto"
+          minWidth={0}
+          height="full"
+        >
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} className="group">
               <Logo className="h-8 md:h-9 w-auto text-white transition-opacity group-hover:opacity-heavy" />
@@ -35,12 +55,20 @@ export default function Navigation() {
             <Box as="ul" display={{ base: 'none', lg: 'flex' }} align="center" gap={6}>
               {topRoutes.map((item) => (
                 <Box as="li" key={item.path}>
-                  <NavLink
+                  <Text
+                    as={NavLink}
                     to={item.path}
-                    className={({ isActive }) => cn('relative text-xs font-semibold uppercase tracking-wide transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim')}
+                    variant="mono"
+                    size="tiny"
+                    weight="font-bold"
+                    tracking="wider"
+                    className={({ isActive }) => cn( // impeccable-ignore
+                      'relative transition-colors hover:text-accent py-1',
+                      isActive ? 'text-accent' : 'text-text-dim'
+                    )}
                   >
                     {item.label}
-                  </NavLink>
+                  </Text>
                 </Box>
               ))}
             </Box>
@@ -49,7 +77,7 @@ export default function Navigation() {
           <Stack direction="row" align="center" gap={{ base: 2, lg: 6 }}>
             <Box as="button" type="button" onClick={handleSearchClick} padding={2} display={{ base: 'none', lg: 'flex' }} align="center" gap={2} className="group text-text-dim transition-colors hover:text-accent" aria-label="Open search">
               <Search className="h-4 w-4" aria-hidden="true" />
-              <Text variant="mono" size="xs" color="dim" display={{ base: 'none', xl: 'block' }}>CMD+K</Text>
+              <Text variant="mono" size="micro" weight="font-bold" color="dim" opacityVariant="muted" display={{ base: 'none', xl: 'block' }}>CMD+K</Text>
             </Box>
 
             <Box display={{ base: 'none', lg: 'flex' }}>

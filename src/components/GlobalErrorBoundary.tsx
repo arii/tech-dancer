@@ -32,7 +32,7 @@ export function GlobalErrorBoundary() {
       padding={6}
       surface="main"
     >
-      <Stack gap={8} align="center" maxWidth="2xl" className="text-center">
+      <Stack gap={8} align="center" maxWidth="2xl" textAlign="center">
         <Box
           padding={4}
           radius="full"

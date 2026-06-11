@@ -119,8 +119,10 @@ export function GlobalSearch() {
 
   return (
     <Box
+      position="fixed"
+      inset={true}
       zIndex={9999}
-      className="fixed inset-0 pointer-events-none"
+      pointerEvents="none"
       style={{ zIndex: 9999 }} // impeccable-ignore
     >
       {/* Backdrop */}
@@ -128,8 +130,9 @@ export function GlobalSearch() {
         position="absolute"
         inset={true}
         data-testid="search-backdrop"
-        className="bg-bg/80 backdrop-blur-md pointer-events-auto"
+        pointerEvents="auto"
         onClick={close}
+        className="bg-bg/80 backdrop-blur-md" // impeccable-ignore
       />
 
       {/* Modal Container */}
@@ -157,7 +160,8 @@ export function GlobalSearch() {
           radius="lg"
           border
           shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
+          pointerEvents="auto"
+          className="bg-surface/90 backdrop-blur-2xl border-accent/20 outline-none" // impeccable-ignore
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
@@ -190,7 +194,15 @@ export function GlobalSearch() {
             }
           }}
         >
-          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
+          <Box
+            border="b"
+            padding={5}
+            display="flex"
+            align="center"
+            gap={4}
+            position="relative"
+            className="focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all" // impeccable-ignore
+          >
             <Search className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
             <Text
               as="input"
@@ -268,17 +280,45 @@ export function GlobalSearch() {
             )}
           </Box>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search" // impeccable-ignore
+          <Box
+            border="t"
+            paddingX={5}
+            paddingY={3}
+            surface="alt"
+            display="flex"
+            justify="between"
+            align="center"
+            className="pb-safe-area-search" // impeccable-ignore
           >
             <Box display="flex" align="center" gap={6}>
               <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                <Box
+                  border
+                  paddingX={1.5}
+                  paddingY={0.5}
+                  radius="industrial"
+                  surface="default"
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  className="border-line"
+                >
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
                 </Box>
                 <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">CLOSE</Text>
               </Box>
               <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                <Box
+                  border
+                  paddingX={1.5}
+                  paddingY={0.5}
+                  radius="industrial"
+                  surface="default"
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  className="border-line"
+                >
                   <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
                 </Box>
                 <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">SELECT</Text>
