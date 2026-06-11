@@ -5,9 +5,9 @@ date: "2026-10-29"
 startDate: "2026-10-29"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
-excerpt: "A premier Halloween-themed West Coast Swing festival in Los Angeles featuring social dancing, a massive costume contest, and a carnival atmosphere."
-location: "Los Angeles, CA"
-city: "Los Angeles"
+excerpt: "A premier Halloween-themed West Coast Swing festival in the Los Angeles area (Burbank, CA) featuring social dancing, a massive costume contest, and a carnival atmosphere."
+location: "Burbank, CA"
+city: "Burbank"
 region: "SoCal"
 schedule: "October 29 - November 1, 2026"
 url: "https://halloweenswingthing.com"
@@ -53,7 +53,6 @@ packingReminderDate: "2026-10-20"
 
 relatedEvents:
 - jack-and-jill-orama
-- wild-wild-westie
 ---
 
 # Halloween Swing Thing Event Resource Guide
@@ -121,7 +120,7 @@ Common attractions often include:
 * Themed decorations
 * Photo opportunities
 * Specialty treats
-* Community activities
+* Community activities and hotel room trick-or-treating
 
 The event strikes a balance between a dance convention and a Halloween celebration.
 
@@ -159,9 +158,9 @@ Preparation is key for a high-intensity weekend. Refer to our **Recommended Gear
 
 Before finalizing a costume, test:
 
-* Lindy circles
-* Swing outs
-* Charleston kicks
+* Jumping and leaping
+* Bending and squatting
+* Deep stretches
 * Spins and turns
 
 A costume that looks amazing but restricts movement can become difficult to wear for an entire evening.
@@ -181,7 +180,7 @@ Be cautious with:
 Many experienced attendees bring:
 
 1. A full costume for contests and photos
-2. A simplified dance version for social dancing
+2. A simplified dance version for social dancing (such as a DIY pumpkin outfit using orange clothing and adhesive felt stickers)
 
 ---
 
