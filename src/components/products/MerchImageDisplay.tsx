@@ -20,7 +20,7 @@ function resolveImageSrc(src: string) {
 
 function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
   const imgWell = (
-    <Box position="relative" display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
+    <Box position="relative" display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" aspect="square" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
@@ -29,6 +29,7 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
         height="full"
         padding={{ base: 4, md: 6 }}
         loading={loading ?? 'lazy'}
+        decoding="async"
         onError={(e) => {
           e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}

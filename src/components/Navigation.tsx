@@ -59,7 +59,7 @@ export default function Navigation() {
             </Box>
 
             <Box
-              as={motion.create('button')}
+              as="button"
               display={{ base: 'flex', lg: 'none' }}
               onClick={() => setIsOpen(!isOpen)}
               padding={2}

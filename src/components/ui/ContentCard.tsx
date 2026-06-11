@@ -15,6 +15,8 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   [key: string]: unknown;
 }
 
+const MotionArticle = motion.article;
+
 export function ContentCard(props: ContentCardProps) {
   const {
     slug,
@@ -42,7 +44,7 @@ export function ContentCard(props: ContentCardProps) {
 
   return (
     <BaseCard
-      as={motion.create("article")}
+      as={MotionArticle}
       direction="col"
       gap={4}
       height="full"
