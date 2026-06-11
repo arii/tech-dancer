@@ -96,6 +96,7 @@ export const tailwindSafelist = [
   'right-8',
   'top-0',
   'top-4',
+  'top-16',
   'h-72',
   'md:h-80',
   'max-w-sm',
@@ -140,6 +141,8 @@ export const tailwindSafelist = [
   'sm:hidden',
   'lg:gap-4',
   'z-40',
+  'z-sticky',
   'scroll-mt-40',
   'lg:scroll-mt-16',
+  'gap-section-spacing',
 ];
