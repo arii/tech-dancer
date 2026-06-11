@@ -13,7 +13,7 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
   if (!sections || sections.length === 0) return null;
 
   return (
-    <Box id={id} as="section" data-testid="gear">
+    <Box id={id} as="section" data-testid="gear" scrollMarginTop={32}>
       <Stack gap={12}>
         <SectionHeader eyebrow="TOOLS" title={title} />
 

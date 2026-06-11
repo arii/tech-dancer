@@ -18,7 +18,7 @@ export function RelatedEvents({ id, title, events }: RelatedEventsProps) {
   const dynamicTitle = title || (firstRegion ? `More ${firstRegion} Guides` : "More Guides");
 
   return (
-    <Box id={id} as="section" data-testid="related">
+    <Box id={id} as="section" data-testid="related" scrollMarginTop={32}>
       <Stack gap={8}>
         <SectionHeader eyebrow="EXPLORE" title={dynamicTitle} />
         <Grid

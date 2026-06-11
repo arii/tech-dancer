@@ -33,6 +33,7 @@ export function ThemeSpotlight({
       id={id}
       data-testid="theme"
       border
+      scrollMarginTop={32}
       radius="xl"
       overflow="hidden"
       surface="surface"

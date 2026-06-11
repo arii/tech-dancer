@@ -64,6 +64,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
         id={id}
         as="section"
         padding={10}
+        scrollMarginTop={32}
         radius="2xl"
         surface="warning"
         textAlign="center"
@@ -99,6 +100,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       id={id}
       as="section"
       data-testid="reminders"
+      scrollMarginTop={32}
       position="relative"
       padding={8}
       radius="2xl"
