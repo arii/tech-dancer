@@ -94,10 +94,6 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-  }, [url]);
-
-  useEffect(() => {
     const updateScale = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
@@ -439,6 +435,7 @@ export default function UXAuditor() {
                         <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
                           {activeReport.url ? (
                             <ViewportFrame
+                              key={`${vp.name}-${activeReport.url}`}
                               url={activeReport.url}
                               width={vp.width}
                               height={vp.height}
