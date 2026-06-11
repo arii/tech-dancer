@@ -1,5 +1,4 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { journalVariants } from '@/lib/variants';
 import { EmailForm } from '@/features/email-capture/EmailForm';
 
 /**

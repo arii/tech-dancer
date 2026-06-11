@@ -1,6 +1,5 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
-import { journalVariants } from '@/lib/variants';
 
 interface RelatedItem {
   title: string;
