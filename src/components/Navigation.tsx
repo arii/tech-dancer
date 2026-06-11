@@ -31,7 +31,7 @@ export default function Navigation() {
         aria-label="Main Navigation"
         position="fixed"
         inset="top"
-        zIndex="sticky"
+        zIndex="top"
         height={16}
         width="full"
         border="b"
