@@ -23,7 +23,10 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_420px]"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+        className="items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.8fr)]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
@@ -32,11 +35,16 @@ export default function Home() {
       <Stack
         gap={{ base: 2, lg: 8 }}
         marginTop={{ base: 0, lg: 8 }}
-        className="w-full max-w-full min-w-0"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
       >
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          width="full"
+          maxWidth="full"
+          minWidth={0}
+          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <FeaturedEventGuide />
           <GearShelf />
@@ -45,7 +53,10 @@ export default function Home() {
 
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          width="full"
+          maxWidth="full"
+          minWidth={0}
+          className="gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <LatestPosts />
           <DevLabCallout />

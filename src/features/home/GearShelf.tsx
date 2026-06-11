@@ -89,7 +89,7 @@ export function GearShelf() {
         paddingBottom={3}
         noScrollbar
       >
-        <Box display="flex" gap={3} width="fit" paddingRight={4}>
+        <Box display="flex" gap={3} paddingRight={4}>
           {PICKS.map(({ label, image, imageText, href }) => (
             <Box
               key={`mobile-${label}`}

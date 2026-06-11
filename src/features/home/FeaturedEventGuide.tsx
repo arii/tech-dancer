@@ -101,7 +101,7 @@ export function FeaturedEventGuide() {
         border
         radius="xl"
         overflow="hidden"
-        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
+        className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[minmax(200px,260px)_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
         aria-label="Featured event guides"
         data-gesture-handled="true"
