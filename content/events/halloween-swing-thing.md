@@ -5,17 +5,17 @@ date: "2026-10-29"
 startDate: "2026-10-29"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
-excerpt: "The ultimate Halloween-themed West Coast Swing festival featuring social dancing, costumes, and a carnival atmosphere."
+excerpt: "A premier Halloween-themed West Coast Swing festival in Los Angeles featuring social dancing, a massive costume contest, and a carnival atmosphere."
 location: "Los Angeles, CA"
 city: "Los Angeles"
 region: "SoCal"
 schedule: "October 29 - November 1, 2026"
 url: "https://halloweenswingthing.com"
-heroImage: ""
-description: "Halloween Swing Thing is one of the most anticipated swing dance events of the year—a weekend packed with social dancing, costumes, live music, performances, and a carnival atmosphere."
+heroImage: "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.webp"
+description: "Halloween Swing Thing blends high-level West Coast Swing with a festive carnival environment. Dancers enjoy a weekend of social dancing, themed performances, and one of the community's most iconic costume contests."
 
 whyAttending: >
-  Halloween Swing Thing is where great dancing and playful creativity come together. It's a uniquely festive experience featuring incredible costumes, carnival activities, and high-energy social dancing. Whether you're in a DIY pumpkin outfit or just enjoying the cotton candy, it's a weekend of pure fun.
+  Halloween Swing Thing is where great dancing and playful creativity come together. It's a uniquely festive experience featuring incredible costumes, carnival activities, and high-energy social dancing. It's a weekend of pure fun for the swing dance community.
 
 theme:
   name: "Halloween Carnival"
@@ -23,11 +23,6 @@ theme:
   description: >
     Embrace the spooky and playful spirit with creative costumes and themed outfits.
     Prioritize movement and safety while letting your creativity run wild.
-  outfitIds:
-    - pumpkin-headbands
-    - pumpkin-stickers
-  accessoryIds:
-    - rave-fan
 
 gear:
   outfitIds:
@@ -65,9 +60,9 @@ relatedEvents:
 
 ## 🎃 What Is Halloween Swing Thing?
 
-Halloween Swing Thing is one of the most anticipated swing dance events of the year—a weekend packed with social dancing, costumes, live music, performances, and a carnival atmosphere that makes it feel more like a festival than a traditional dance event.
+Halloween Swing Thing stands out as a premier destination on the West Coast Swing calendar, merging a high-energy dance convention with the immersive feel of a Halloween festival. While the event maintains the technical standards of a WSDC registry event, its identity is defined by a culture of creativity, inclusivity, and pure entertainment.
 
-What makes the event special is that it embraces both excellent dancing and pure fun. Whether you're attending your first year or you're a returning veteran, you'll find dancers going all-out with costumes, themed performances, and creative group activities.
+The weekend is characterized by its transformation of a traditional ballroom into a carnival-like space. Attendees from around the globe gather not just for the competition, but to participate in a shared experience where elaborate costumes and themed social dancing are the norm rather than the exception.
 
 ---
 
@@ -132,46 +127,29 @@ The event strikes a balance between a dance convention and a Halloween celebrati
 
 ---
 
-## 🎃 Personal Favorite Moments
-
-Some of the most memorable experiences come from the unexpected fun between dances.
-
-Highlights from a previous year included:
-
-* Dancing in a DIY pumpkin outfit (orange clothes + felt stickers)
-* Fresh cotton candy from the carnival area
-* Watching creative costume reveals throughout the night
-* Seeing entire groups perform coordinated themed dances
-* Hotel room trick-or-treating (it's incredible!)
-
-These moments often become the stories people talk about long after the event ends.
-
----
-
 ## 👟 What to Bring
 
 ### Dance Essentials
 
-* Comfortable dance shoes
-* Backup shoes
-* Water bottle
-* Extra socks
-* Small towel
+Preparation is key for a high-intensity weekend. Refer to our **Recommended Gear** section above for specific product links tailored for this event.
+
+* **Appropriate dance footwear:** Bring reliable shoes with proper soles for social dancing and versatile options for the costume contest.
+* **Hydration and recovery supplies:** Essential for maintaining energy through late-night social sets.
+* **Breathable attire:** Pack multiple changes of dance-friendly clothing.
+* **Small accessories:** Towels and cooling fans are highly recommended.
 
 ### Costume Essentials
 
-* Main costume
-* Emergency repair kit (safety pins, tape, etc.)
-* Comfortable dance-friendly alternative outfit
-* Storage bag for costume pieces
+* **Primary costume:** Ensure it is packed securely.
+* **Emergency repair kit:** Safety pins, tape, and sewing supplies for quick fixes.
+* **Dance-friendly backup:** A simplified version of your costume that allows for full movement.
+* **Storage bags:** To keep delicate costume pieces organized and protected.
 
 ### Convenience Items
 
-* Portable phone charger
-* Snacks
-* Pain relievers
-* Reusable water bottle
-* Light jacket or sweater
+* **Portable power solutions:** Keep your devices charged during long event days.
+* **Personal care items:** Snacks, pain relievers, and a reusable water bottle.
+* **Layered clothing:** A light jacket or sweater for transitions between the ballroom and other hotel areas.
 
 ---
 
@@ -250,32 +228,32 @@ The more you engage, the more memorable the weekend becomes.
 
 ### Before the Event
 
-* [ ] Register
-* [ ] Plan costume
-* [ ] Coordinate group theme
-* [ ] Pack dance shoes
-* [ ] Arrange lodging and transportation
+* [ ] Register and book travel
+* [ ] Finalize costume concepts
+* [ ] Coordinate with group themes
+* [ ] Check dance footwear
+* [ ] Confirm lodging and transportation
 
 ### During the Event
 
-* [ ] Watch the costume contest
+* [ ] Attend the costume contest
 * [ ] Explore carnival activities
-* [ ] Try the treats
-* [ ] Take photos
-* [ ] Dance with new people
-* [ ] Stay hydrated
+* [ ] Engage with themed workshops
+* [ ] Capture event photos
+* [ ] Meet and dance with new people
+* [ ] Maintain hydration
 
 ### Don't Miss
 
-* 🎃 Dancing in a pumpkin outfit
-* 🍭 Fresh cotton candy
-* 🏆 Costume contest
-* 👯 Group-themed performances
-* 🎶 Late-night social dancing
-* 🎡 The carnival atmosphere
+* 🎃 Themed social dancing
+* 🍭 Seasonal carnival treats
+* 🏆 Main costume contest
+* 👯 Group choreographed performances
+* 🎶 Late-night social dance sets
+* 🎡 Immersive carnival environment
 
 ---
 
 ## Final Thought
 
-Halloween Swing Thing is one of those rare events where great dancing and playful creativity come together. The costumes, carnival activities, group performances, and social dancing create an experience that feels uniquely festive. Whether you're competing in the costume contest, coordinating a themed group outfit, dancing in a DIY pumpkin outfit, or simply enjoying fresh cotton candy between songs, it's an event that tends to leave attendees with stories they'll be telling for years. 🎃💃🍭
+Halloween Swing Thing represents a unique intersection of technical dance excellence and festive community spirit. By balancing the rigor of a WSDC event with the playfulness of a Halloween carnival, it offers an experience that is both competitive and celebratory. Success at the event comes from preparation—not just in your dancing, but in your costumes and gear—ensuring you can fully immerse yourself in the creative atmosphere that makes this weekend a staple of the swing dance year.
