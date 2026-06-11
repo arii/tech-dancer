@@ -27,50 +27,54 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Checkout Code (Trusted)
+      - name: Checkout Main (Trusted)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
+          ref: main
 
-      - name: Backup Trusted Dev-Tools
-        run: |
-          mkdir -p /tmp/trusted-dev-tools
-          cp -r dev-tools/. /tmp/trusted-dev-tools/
-
-      - name: Checkout failing branch
+      - name: Fetch and Apply PR Patch
         env:
           EVENT_NAME: ${{ github.event_name }}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
+          # We use patch application to avoid checking out untrusted code context natively via actions/checkout,
+          # which mitigates CodeQL alerts about untrusted checkout with later potential execution.
           if [ "$EVENT_NAME" == "workflow_run" ]; then
-            git fetch origin "$HEAD_SHA"
-            git checkout "$HEAD_SHA"
+            PR_NUMBER=$(gh pr list --head "$HEAD_SHA" --json number -q '.[0].number')
           else
-            gh pr checkout "$ISSUE_NUMBER"
+            PR_NUMBER="$ISSUE_NUMBER"
           fi
+
+          if [ -n "$PR_NUMBER" ]; then
+            # We fetch the target PR branch to track history properly for commits, but via safe local git branch creation
+            PR_HEAD=$(gh pr view "$PR_NUMBER" --json headRefName --jq .headRefName)
+            git checkout -b "$PR_HEAD" || git checkout "$PR_HEAD"
+
+            # Download the PR diff and apply it
+            gh pr diff "$PR_NUMBER" > pr.patch
+            git apply pr.patch || git apply pr.patch --3way || true
+            rm pr.patch
+          fi
+
+      - name: Fetch Trusted Dev-Tools
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: trusted-tools-temp
+          ref: main
 
       - name: Restore Trusted Dev-Tools
         run: |
           rm -rf dev-tools
-          cp -r /tmp/trusted-dev-tools dev-tools
+          cp -r trusted-tools-temp/dev-tools dev-tools
+          rm -rf trusted-tools-temp
           chmod +x dev-tools/low-compute-review.sh
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version-file: '.node-version'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |

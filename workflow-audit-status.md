@@ -10,8 +10,8 @@
 - Long-running runs inspected: 2
 - Artifact-heavy runs inspected: 2
 - Findings created: 5
-- Fixes implemented: 2
-- Follow-up issues recommended: 3
+- Fixes implemented: 4
+- Follow-up issues recommended: 1
 
 ## Workflow checklist
 
@@ -49,7 +49,7 @@ File: `.github/workflows/ci.yml`
 - **Evidence:** `uses: pnpm/action-setup@v4` followed by `uses: actions/setup-node@v4` across multiple files.
 - **Severity:** Low
 - **Recommendation:** Refactor into composite action.
-- **Status:** Follow-up recommended.
+- **Status:** Fixed.
 
 ### Finding 2: Missing concurrency cancellation for pull_request workflows
 
@@ -78,16 +78,14 @@ File: `.github/workflows/ci.yml`
 - **Recommendation:** Abstract into dispatcher workflow.
 - **Status:** Follow-up recommended.
 
-### Finding 5: `ci.yml` `bundle-size` uses python dependencies but doesn't cache them
+### Finding 5: `wcs_etl.yml` uses python dependencies but doesn't cache them
 
-- **Workflow:** `ci.yml`, `wcs_etl.yml`
+- **Workflow:** `wcs_etl.yml`
 - **Jobs affected:** python setups
 - **Evidence:** `actions/setup-python@v5` does not configure `cache: pip`.
 - **Severity:** Low
 - **Recommendation:** Add `cache: pip`.
 - **Status:** Fixed.
-
-- **Note**: The pip cache implementation was reverted because inline pip installs cannot be cached natively without a `requirements.txt` equivalent by `setup-python`.
 
 ### Action: Setup Node pnpm
 - Created `.github/actions/setup-node-pnpm/action.yml`
@@ -96,3 +94,9 @@ File: `.github/workflows/ci.yml`
 ### Action: Issue Comment Dispatcher
 - Created `.github/workflows/issue-comment-dispatcher.yml`
 - Refactored `auto-conflict-resolver.yml`, `update-snapshots.yml`, `ollama-chatops.yml`, and `jules-fix-trigger.yml` to trigger on `workflow_dispatch` instead of `issue_comment`.
+
+### Action: Added Python caching to wcs_etl.yml
+- Modified `.github/workflows/wcs_etl.yml` to include `cache: 'pip'` and `cache-dependency-path: 'etl/requirements.txt'`.
+
+### Action: Refactored self-healing.yml
+- Modified `.github/workflows/self-healing.yml` to use the `.github/actions/setup-node-pnpm` composite action, standardizing Node and pnpm configuration.

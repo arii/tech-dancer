@@ -140,7 +140,7 @@ def conflicts(ctx, base):
     if res['status'] == 'success':
         out(ctx, res['message'], data=res)
     elif res['status'] == 'environment_error':
-        err(ctx, res['message'], code=2, data=res)
+        err(ctx, res['message'], code=1, data=res)
     else:
         err(ctx, res['message'], data=res)
 
