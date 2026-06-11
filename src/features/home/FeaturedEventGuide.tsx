@@ -206,7 +206,7 @@ export function FeaturedEventGuide() {
             )}
           </Box>
         </Stack>
-      </Box>
+      </Grid>
     </Box>
   );
 }

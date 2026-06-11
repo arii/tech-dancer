@@ -1,5 +1,5 @@
 import { SEO } from '@/components/SEO';
-import { Box, Stack, Grid } from '@/layouts/Primitives';
+import { Stack, Grid } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { TopicGrid } from '@/features/home/TopicGrid';
