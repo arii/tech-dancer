@@ -48,18 +48,20 @@ const getBasename = (): string => {
   const segments = fullPath.split('/').filter(Boolean);
   const baseSegments = buildBaseClean.split('/').filter(Boolean);
 
-  // 2. Heuristic: If we are in a subdirectory deeper than buildBase,
+  // 2. Heuristic: If we are on GitHub Pages (e.g. *.github.io) and in a subdirectory deeper than buildBase,
   // find the last segment that is NOT a known route. This allows for
   // multi-segment branch names (e.g. fix/ux-nav-errors).
-  if (segments.length > baseSegments.length) {
+  const isGithubPages = window.location.hostname.endsWith('.github.io');
+  if (isGithubPages && segments.length > baseSegments.length) {
     let lastBaseSegmentIndex = baseSegments.length - 1;
 
     for (let i = baseSegments.length; i < segments.length; i++) {
       const segment = segments[i];
       const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(segment);
       const isIndexHtml = segment === 'index.html';
+      const isStaticPath = ['previews', 'assets', 'public', 'dist'].includes(segment);
 
-      if (isStandardRoute || isIndexHtml) {
+      if (isStandardRoute || isIndexHtml || isStaticPath) {
         break;
       }
       lastBaseSegmentIndex = i;
@@ -74,8 +76,27 @@ const getBasename = (): string => {
   return buildBase;
 };
 
+// Restore GitHub Pages SPA redirect
+const redirect = sessionStorage.getItem('ghpages_redirect');
+if (redirect) {
+  sessionStorage.removeItem('ghpages_redirect');
+  // Replace the current history entry with the real path
+  const restoreBase = window.__ROUTER_BASENAME__ || import.meta.env.BASE_URL || '/';
+  const normalizedBase = restoreBase.endsWith('/') ? restoreBase.slice(0, -1) : restoreBase;
+  window.history.replaceState(null, '', `${normalizedBase}${redirect}`);
+}
+
+// Clean trailing slashes from basename (except for root '/')
+const cleanBasename = (base: string): string => {
+  return base === '/' ? '/' : base.replace(/\/$/, '');
+};
+
 const router = createBrowserRouter(routes, {
-  basename: getBasename(),
+  basename: cleanBasename(getBasename()),
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
 });
 
 createRoot(document.getElementById('root')!).render(
@@ -85,8 +106,9 @@ createRoot(document.getElementById('root')!).render(
         <ThemeProvider>
           <RouterProvider
             router={router}
+            future={{ v7_startTransition: true }}
             fallbackElement={
-              <Box as="main" id="main-content" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
+              <Box id="loading-spinner" width="full" minHeight="screen" surface="bg" display="flex" align="center" justify="center">
                 <Box
                   width={8}
                   height={8}

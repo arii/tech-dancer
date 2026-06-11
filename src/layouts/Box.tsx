@@ -1,10 +1,11 @@
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
-import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens } from "@/styles/design-tokens"
+import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
-import { SPACING_MAP, RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
+import { RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
+import { resolveJIT, resolveSpacing } from "@/lib/style-utils"
 
 export interface BaseProps {
   padding?: ResponsiveProp<keyof typeof spacing | number | string>
@@ -22,7 +23,10 @@ export interface BaseProps {
   marginX?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   marginY?: ResponsiveProp<keyof typeof spacing | number | string | "auto">
   gap?: ResponsiveProp<number | string>
+  gapX?: ResponsiveProp<number | string>
+  gapY?: ResponsiveProp<number | string>
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y"
+  borderColor?: string
   smBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   mdBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
   lgBorder?: boolean | "t" | "b" | "l" | "r" | "x" | "y" | { t?: boolean, b?: boolean, l?: boolean, r?: boolean }
@@ -46,8 +50,12 @@ export interface BaseProps {
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
+  overscroll?: "auto" | "contain" | "none" | "x-contain" | "y-contain"
+  noScrollbar?: boolean
+  pointerEvents?: "auto" | "none" | "inherit" | "initial" | "revert" | "unset"
   zIndex?: number | string
-  opacity?: number | string
+  opacity?: number | string | keyof typeof opacityTokens
+  opacityVariant?: keyof typeof opacityTokens
   display?: ResponsiveProp<"none" | "block" | "flex" | "grid" | "inline" | "inline-block">
   aspect?: ResponsiveProp<"square" | "video" | "auto" | string>
   shrink?: number | boolean
@@ -81,10 +89,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
     margin,
     marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
-    gap, border, smBorder, mdBorder, lgBorder, xlBorder,
+    gap, gapX, gapY, border, borderColor, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
-    overflow, overflowX, overflowY, zIndex, opacity, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
+    overflow, overflowX, overflowY, overscroll, noScrollbar, pointerEvents,
+    zIndex, opacity, opacityVariant, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
     // Motion props filtering
@@ -102,6 +111,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       'viewport', 'layout', 'layoutId', 'onAnimationStart',
       'onAnimationComplete', 'onUpdate', 'custom'
     ];
+
 
     const motionProps: Record<string, unknown> = {}
     if (isMotion) {
@@ -127,6 +137,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "r" && "border-r border-line",
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
+      borderColor && resolveJIT(borderColor, "border"),
       getResponsiveClasses(smBorder, "sm:border-"),
       getResponsiveClasses(mdBorder, "md:border-"),
       getResponsiveClasses(lgBorder, "lg:border-"),
@@ -139,29 +150,6 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       ...domProps 
     } = props;
 
-    const getVal = (val: string | number | boolean | undefined | null, prefix: string) => {
-      if (!val) return ""
-      const pfx = prefix ? `${prefix}-` : ""
-
-      // Standard Tailwind tokens (numbers or specific strings without CSS units)
-      const isToken = typeof val === "number" ||
-        (typeof val === "string" && /^[a-z0-9-]+$/.test(val) && !/[0-9](px|vh|vw|%|rem|em)$/.test(val))
-
-      if (isToken) return `${pfx}${val}`
-
-      // Arbitrary values
-      const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
-        ? val
-        : `[${val}]`
-
-      return `${pfx}${value}`
-    }
-
-    const s = (prefix: string) => (v: string | number | boolean | undefined | null) => {
-      const token = SPACING_MAP[v as keyof typeof SPACING_MAP];
-      if (token) return `${prefix}-${token}`;
-      return getVal(v, prefix);
-    }
 
     return (
       <Component
@@ -175,22 +163,24 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           emphasis && variants.emphasis[emphasis],
           radiusProp && RADIUS_MAP[radiusProp],
           borderClasses,
-          getResponsiveClasses(gap, "", s("gap")),
-          getResponsiveClasses(padding, "", s("p")),
+          getResponsiveClasses(gap, "", resolveSpacing("gap")),
+          getResponsiveClasses(gapX, "", resolveSpacing("gap-x")),
+          getResponsiveClasses(gapY, "", resolveSpacing("gap-y")),
+          getResponsiveClasses(padding, "", resolveSpacing("p")),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
-          getResponsiveClasses(paddingTop, "", s("pt")),
-          getResponsiveClasses(paddingBottom, "", s("pb")),
-          getResponsiveClasses(paddingLeft, "", s("pl")),
-          getResponsiveClasses(paddingRight, "", s("pr")),
-          getResponsiveClasses(paddingX, "", s("px")),
-          getResponsiveClasses(paddingY, "", s("py")),
-          getResponsiveClasses(margin, "", s("m")),
-          getResponsiveClasses(marginTop, "", s("mt")),
-          getResponsiveClasses(marginBottom, "", s("mb")),
-          getResponsiveClasses(marginLeft, "", s("ml")),
-          getResponsiveClasses(marginRight, "", s("mr")),
-          getResponsiveClasses(marginX, "", s("mx")),
-          getResponsiveClasses(marginY, "", s("my")),
+          getResponsiveClasses(paddingTop, "", resolveSpacing("pt")),
+          getResponsiveClasses(paddingBottom, "", resolveSpacing("pb")),
+          getResponsiveClasses(paddingLeft, "", resolveSpacing("pl")),
+          getResponsiveClasses(paddingRight, "", resolveSpacing("pr")),
+          getResponsiveClasses(paddingX, "", resolveSpacing("px")),
+          getResponsiveClasses(paddingY, "", resolveSpacing("py")),
+          getResponsiveClasses(margin, "", resolveSpacing("m")),
+          getResponsiveClasses(marginTop, "", resolveSpacing("mt")),
+          getResponsiveClasses(marginBottom, "", resolveSpacing("mb")),
+          getResponsiveClasses(marginLeft, "", resolveSpacing("ml")),
+          getResponsiveClasses(marginRight, "", resolveSpacing("mr")),
+          getResponsiveClasses(marginX, "", resolveSpacing("mx")),
+          getResponsiveClasses(marginY, "", resolveSpacing("my")),
           flex === true && "flex-1",
           flex !== undefined && typeof flex !== "boolean" && (typeof flex === "number" ? `flex-${flex}` : flex),
           (wrap || flexWrap) && "flex-wrap",
@@ -202,17 +192,27 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           inset === "right" && "top-0 bottom-0 right-0",
           inset === "x" && "left-0 right-0",
           inset === "y" && "top-0 bottom-0",
-          getResponsiveClasses(height, "h-", (v) => getVal(v, "")),
-          getResponsiveClasses(width, "w-", (v) => getVal(v, "")),
-          getResponsiveClasses(maxWidth, "max-w-", (v) => getVal(v, "")),
-          getResponsiveClasses(minHeight, "min-h-", (v) => getVal(v, "")),
-          getResponsiveClasses(maxHeight, "max-h-", (v) => getVal(v, "")),
-          getResponsiveClasses(minWidth, "min-w-", (v) => getVal(v, "")),
+          getResponsiveClasses(height, "h-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(width, "w-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(maxWidth, "max-w-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(minHeight, "min-h-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(maxHeight, "max-h-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(minWidth, "min-w-", (v) => resolveJIT(v, "")),
           overflow && (overflow === "y-auto" ? "overflow-y-auto" : overflow === "x-auto" ? "overflow-x-auto" : overflow === "y-hidden" ? "overflow-y-hidden" : `overflow-${overflow}`),
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
-          zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? getVal(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : getVal(zIndex, "z")),
-          opacity && getVal(opacity, "opacity"),
+          overscroll && (overscroll === "x-contain" ? "overscroll-x-contain" : overscroll === "y-contain" ? "overscroll-y-contain" : `overscroll-${overscroll}`),
+          noScrollbar && "no-scrollbar",
+          pointerEvents && `pointer-events-${pointerEvents}`,
+          zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? resolveJIT(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : resolveJIT(zIndex, "z")),
+          (opacityVariant || opacity !== undefined) && resolveJIT(
+            opacityVariant
+              ? opacityTokens[opacityVariant]
+              : (typeof opacity === "string" && opacity in opacityTokens
+                  ? opacityTokens[opacity as keyof typeof opacityTokens]
+                  : opacity),
+            "opacity"
+          ),
           getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
           getResponsiveClasses(aspect, "aspect-", (v) => {
             if (v === "square" || v === "video") return v;
@@ -227,11 +227,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(textAlign, "text-"),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
-          getResponsiveClasses(top, "", s("top")),
-          getResponsiveClasses(right, "", s("right")),
-          getResponsiveClasses(bottom, "", s("bottom")),
-          getResponsiveClasses(left, "", s("left")),
-          getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => getVal(v, "")),
+          getResponsiveClasses(top, "", resolveSpacing("top")),
+          getResponsiveClasses(right, "", resolveSpacing("right")),
+          getResponsiveClasses(bottom, "", resolveSpacing("bottom")),
+          getResponsiveClasses(left, "", resolveSpacing("left")),
+          getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => resolveJIT(v, "")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
           className
         )}

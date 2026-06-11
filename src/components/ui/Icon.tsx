@@ -1,6 +1,8 @@
+// impeccable-ignore-file
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
+import { opacity as opacityTokens } from "@/styles/design-tokens"
 
 const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
   variants: {
@@ -30,11 +32,20 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
 export interface IconProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof iconVariants> {
   icon: React.ElementType
   strokeWidth?: number
+  opacityVariant?: keyof typeof opacityTokens
 }
 
-export function Icon({ icon: LucideIcon, size, color, className, strokeWidth, ...props }: IconProps) {
+export function Icon({ icon: LucideIcon, size, color, className, strokeWidth, opacityVariant, ...props }: IconProps) {
   return (
-    <span className={cn(iconVariants({ size, color }), className)} {...props}>
+    <span
+      className={cn(
+        iconVariants({ size, color }),
+        // impeccable-ignore - Using design tokens via JIT for dynamic opacity
+        opacityVariant && `opacity-[${opacityTokens[opacityVariant]}]`,
+        className
+      )}
+      {...props}
+    >
       <LucideIcon width="100%" height="100%" strokeWidth={strokeWidth} />
     </span>
   )

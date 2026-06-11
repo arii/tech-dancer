@@ -35,7 +35,7 @@ export function EmptyState({
         {icon && (
           <Box 
             color="dim" 
-            opacity={0.5} 
+            opacityVariant="muted"
             display="flex" 
             align="center" 
             justify="center"

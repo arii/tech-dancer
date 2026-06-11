@@ -19,7 +19,7 @@
   },
   "loop-experience": {
     "id": "loop-experience",
-    "name": "Loop Experience Ear Plugs",
+    "name": "Loop Experience 2 Ear Plugs",
     "url": "https://www.amazon.com/dp/B0D4DZDHZ1?tag=onasafari04-20",
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
@@ -42,7 +42,7 @@
     "url": "https://www.amazon.com/dp/B07XLFXJ7D?tag=onasafari04-20",
     "category": "travel",
     "description": "Save space and keep outfits organized.",
-    "image": "/images/gear/amazon/bagail-4-set-6-set-compression-packing-cubes-travel-expandable-packing.jpg",
+    "image": "/images/gear/sketches/compression-cubes.webp",
     "imageMode": "wide"
   },
   "travel-bottles": {
@@ -120,12 +120,11 @@
   },
   "foam-roller": {
     "id": "foam-roller",
-    "name": "Foam Roller / Hypervolt",
-    "url": "https://amazon.com/?tag=onasafari04-20",
+    "name": "Foam Roller",
+    "url": "https://a.co/d/060ddIVz",
     "category": "recovery",
-    "description": "Good for sore legs, tight hips, and post-event recovery.",
-    "draft": true,
-    "image": "/images/gear/amazon/hyperice-vyper-foam-roller.jpg",
+    "description": "Solid-core foam roller great for post-dance deep tissue recovery, though less travel-friendly than hollow models.",
+    "image": "/images/gear/sketches/foam-roller.webp",
     "imageMode": "contain"
   },
   "sequin-bomber-jacket": {
@@ -211,16 +210,6 @@
     "category": "recovery",
     "description": "Stay hydrated and maintain electrolyte balance during intense weekends.",
     "image": "https://m.media-amazon.com/images/I/41kfwQ6qx9L._AC_.jpg"
-  },
-  "shoe-brush": {
-    "id": "shoe-brush",
-    "name": "Suede Shoe Brush",
-    "url": "https://amazon.com/?tag=onasafari04-20",
-    "category": "gear",
-    "description": "Keep your suede soles clean and grippy.",
-    "draft": true,
-    "image": "/images/gear/amazon/dance-shoe-suede-brush.jpg",
-    "imageMode": "contain"
   },
   "mints": {
     "id": "mints",
@@ -434,16 +423,26 @@
     "category": "fashion",
     "description": "Reflective casual crop tops for visibility and style on and off the dance floor.",
     "gearSlug": "2024-06-01-reflective-crop-tops",
-    "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.png"
+    "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.webp"
   },
   "pumpkin-headbands": {
     "id": "pumpkin-headbands",
     "name": "Halloween Pumpkin Headbands",
-    "url": "https://www.amazon.com/dp/B07TCYV8VN?tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B07DYMH79K?tag=onasafari04-20",
     "category": "fashion",
     "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
     "gearSlug": "2024-06-01-pumpkin-headbands",
-    "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.png"
+    "image": "/images/gear/sketches/pumpkin-headbands.webp"
+  },
+  "pumpkin-stickers": {
+    "id": "pumpkin-stickers",
+    "name": "Halloween Adhesive Felt Stickers",
+    "url": "https://www.amazon.com/dp/B0B17JS8LC?tag=onasafari04-20",
+    "category": "fashion",
+    "description": "Adhesive felt pumpkin stickers for easy costume assembly.",
+    "gearSlug": "2024-06-01-pumpkin-stickers",
+    "image": "/images/gear/amazon/pumpkin-stickers.webp",
+    "imageMode": "contain"
   },
   "sports-crop-tops": {
     "id": "sports-crop-tops",
@@ -452,7 +451,7 @@
     "category": "fashion",
     "description": "Comfortable and stylish crop tops for dancing.",
     "gearSlug": "2024-06-01-crop-tops",
-    "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.jpg"
+    "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.webp"
   },
   "mesh-fishnet-top": {
     "id": "mesh-fishnet-top",
@@ -461,12 +460,22 @@
     "category": "fashion",
     "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
     "gearSlug": "2024-06-01-mesh-fishnet-top",
-    "image": "/images/gear/sketches/mesh-fishnet-top.png"
+    "image": "/images/gear/sketches/mesh-fishnet-top.webp"
   },
   "portable-speaker": {
     "id": "portable-speaker",
     "name": "Portable Bluetooth Speaker (UE Wonderboom 4)",
     "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20",
+    "category": "gear",
+    "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
+    "gearSlug": "2024-01-01-portable-speaker",
+    "image": "/images/gear/amazon/portable-speaker.jpg",
+    "imageMode": "contain"
+  },
+  "jbl-flip-6": {
+    "id": "jbl-flip-6",
+    "name": "JBL Flip 6",
+    "url": "https://www.amazon.com/dp/B09GK544PP?tag=onasafari04-20",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
     "gearSlug": "2024-01-01-portable-speaker",
@@ -490,7 +499,7 @@
     "description": "Fast-charging USB cables for keeping your devices powered during multi-day conventions.",
     "gearSlug": "2024-06-01-charging-cables",
     "draft": true,
-    "image": "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpeg"
+    "image": "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.webp"
   },
   "fishnet-tights": {
     "id": "fishnet-tights",
@@ -500,7 +509,7 @@
     "description": "Six-pack of fishnet lace tights for elegant leg coverage and style.",
     "gearSlug": "2024-06-01-fishnet-tights",
     "draft": true,
-    "image": "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.png"
+    "image": "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.webp"
   },
   "running-belt": {
     "id": "running-belt",
@@ -509,7 +518,7 @@
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
     "gearSlug": "2024-06-01-running-belt",
-    "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpeg"
+    "image": "/images/gear/sketches/fanny-pack.webp"
   },
   "shoe-dryer": {
     "id": "shoe-dryer",
@@ -519,7 +528,7 @@
     "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
     "gearSlug": "2024-06-01-shoe-dryer",
     "draft": true,
-    "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpeg"
+    "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
   },
   "piercing-aftercare-swabs": {
     "id": "piercing-aftercare-swabs",
@@ -561,5 +570,66 @@
     "description": "A fun and flowy rainbow bustle skirt for themed nights.",
     "image": "/images/gear/amazon/nhsunray-women-girls-dancing-tutu-skirt-layered-organza-lace-rainbow-b.jpg",
     "imageMode": "apparel"
+  },
+  "tripod": {
+    "id": "tripod",
+    "name": "Compact Travel Tripod",
+    "url": "https://www.amazon.com/dp/B08BZDKDBP?tag=onasafari04-20",
+    "category": "gear",
+    "description": "Perfect for filming your competition heats and practice sessions.",
+    "draft": true,
+    "image": ""
+  },
+  "alien-mask": {
+    "id": "alien-mask",
+    "name": "Alien Latex Mask",
+    "url": "https://a.co/d/0jg488qU",
+    "category": "gear",
+    "description": "Commit to the Galactic theme with a high-quality alien mask.",
+    "image": "/images/gear/sketches/alien-mask.webp",
+    "imageMode": "contain"
+  },
+  "green-bodysuit": {
+    "id": "green-bodysuit",
+    "name": "Green Alien Bodysuit",
+    "url": "https://www.amazon.com/dp/B00TGBQ0YY?tag=onasafari04-20",
+    "category": "gear",
+    "description": "The perfect base for a Galactic theme outfit.",
+    "image": "/images/gear/sketches/green-bodysuit.webp"
+  },
+  "nerd-set": {
+    "id": "nerd-set",
+    "name": "Nerd Hat, Socks, Bowtie & Suspenders Set",
+    "url": "https://a.co/d/0hvRgmAd",
+    "category": "gear",
+    "description": "Quick and easy costume for Nerd Night.",
+    "image": "/images/gear/sketches/suspenders.webp",
+    "imageMode": "contain"
+  },
+  "sunscreen": {
+    "id": "sunscreen",
+    "name": "Sunscreen",
+    "url": "https://www.amazon.com/dp/B001P97U6C?tag=onasafari04-20",
+    "category": "travel",
+    "description": "Essential for pool parties.",
+    "draft": true,
+    "image": ""
+  },
+  "visor": {
+    "id": "visor",
+    "name": "Sun Visor",
+    "url": "https://a.co/d/0iUAm96D",
+    "category": "gear",
+    "description": "Sun protection for the hot tub.",
+    "image": "/images/gear/sketches/visor.webp"
+  },
+  "light-up-suspenders": {
+    "id": "light-up-suspenders",
+    "name": "Light Up Suspenders",
+    "url": "https://a.co/d/04mny83c",
+    "category": "gear",
+    "description": "Stand out on the dance floor with these battery-operated LED light up suspenders.",
+    "image": "/images/gear/sketches/glow_suspenders.webp",
+    "imageMode": "contain"
   }
 }

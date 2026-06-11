@@ -158,6 +158,8 @@ When multiple agents work simultaneously:
 
 ### PR Review Lifecycle
 
+Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
+
 1. **Fetch context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch`
 2. **Perform audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit`
 3. **Submit review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup`
@@ -171,6 +173,11 @@ When multiple agents work simultaneously:
   ```
 - **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
 - **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
+- **Split Content PRs**: Do not mix content domains. Create separate PRs for:
+  - **Event Facts**: Factual corrections (venue, city, dates, URL). Must include source URL.
+  - **Gear Assets**: Broken image/path fixes. Mark missing assets as `draft: true`.
+  - **Merch Catalog**: Copy or layout updates. List product removals explicitly.
+  - **Articles**: Editorial updates. Provide rationale for date changes. **NEVER** change the filename/date-prefix of a published post (e.g., `2026-04-18-post-title.md`) as this alters the URL, breaks SEO, and causes 404 errors.
 - **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
 
 ### Baseline Maintenance

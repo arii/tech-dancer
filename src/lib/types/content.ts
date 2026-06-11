@@ -15,8 +15,11 @@ export interface Post {
   excerpt: string;
   content: string;
   image?: string;
+  imageAlt?: string;
+  updated?: string;
   tags?: string[];
   affiliateIds?: string[];
+  imageFit?: 'cover' | 'contain';
 }
 
 export interface Resource {
@@ -70,6 +73,8 @@ export interface Resource {
   eventUseCase?: string;
 }
 
+export type ContentStatus = 'published' | 'draft' | 'planned';
+
 export interface Study {
   type: 'study';
   draft?: boolean;
@@ -81,6 +86,8 @@ export interface Study {
   content: string;
   tags?: string[];
   author: string;
+  status?: ContentStatus;
+  readTime?: number;
 }
 
 export interface EventTheme {
@@ -125,6 +132,7 @@ export interface Event {
   content: string;
   url?: string;
   heroImage?: string;
+  imageAlt?: string;
   whyAttending?: string;
   // Reminder tool anchors
   startDate?: string;

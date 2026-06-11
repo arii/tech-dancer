@@ -57,20 +57,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.node-version'
-          cache: pnpm
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Validate Runtime
         run: |
@@ -119,36 +107,11 @@ jobs:
     name: Anti-Pattern Audit
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.node-version'
-          cache: pnpm
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-
-      - name: Validate Runtime
-        run: |
-          pnpm run check:runtime-files
-          pnpm run doctor
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      # Setup dependencies once and use caching for speedup.
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -185,37 +148,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y lsof gh
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.node-version'
-          cache: pnpm
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pinned pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-
-      - name: Validate Runtime
-        run: |
-          pnpm run check:runtime-files
-          pnpm run doctor
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
-
-      - name: Install Playwright Browsers
-        run: pnpm run setup:playwright
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      # Setup dependencies once and use caching for speedup.
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -224,7 +161,17 @@ jobs:
           NODE_ENV: production
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
-          # Use consistent base path for CI tests to match visual snapshots
+          # Build with root base path for Playwright preview tests.
+          # Playwright runs with VITE_BASE_PATH=/, so dist must use root-relative assets.
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+
+      - name: Build App for Bundle Size (Pages base path)
+        env:
+          NODE_ENV: production
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          # Bundle size check should match GitHub Pages deployment base path.
           VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
           pnpm run build
 
@@ -237,14 +184,19 @@ jobs:
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
 
+      - name: Rebuild App for Playwright (root base path)
+        env:
+          NODE_ENV: production
+        run: |
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+
       - name: Run Playwright Smoke Test
         run: |
-          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
-          pnpm run test:e2e
+          VITE_BASE_PATH=/ pnpm run test:e2e
         env:
           CI: true
           NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
 
       - name: Run Lighthouse CI
         run: |
@@ -255,6 +207,7 @@ jobs:
           export CHROME_PATH
           echo "VITE_BASE_PATH=$VITE_BASE_PATH"
           echo "CHROME_PATH=$CHROME_PATH"
+          pnpm run build
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

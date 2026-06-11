@@ -9,6 +9,7 @@ interface MerchImageDisplayProps {
   imageUrl: string;
   images?: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
+  isFeatured?: boolean;
 }
 
 function resolveImageSrc(src: string) {
@@ -17,53 +18,42 @@ function resolveImageSrc(src: string) {
   return `${ASSET_PREFIX}/${src}`;
 }
 
-function sideLabel(side: MerchProductImage['side']) {
-  return side === 'front' ? 'Front' : 'Back';
-}
-
-function ImageLabel({ side }: { side: MerchProductImage['side'] }) {
-  return (
-    <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="wide" align="center">
-      {sideLabel(side)}
-    </Text>
-  );
-}
-
-function ImageWell({ image, loading }: { image: MerchProductImage; loading?: 'eager' | 'lazy' }) {
-  return (
-    <Box display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
+function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
+  const imgWell = (
+    <Box position="relative" display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
         alt={image.alt}
         width="full"
         height="full"
-        padding={3}
+        padding={{ base: 4, md: 6 }}
         loading={loading ?? 'lazy'}
-        onError={(event) => {
-          event.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
+        onError={(e) => {
+          e.currentTarget.src = `${ASSET_PREFIX}/icon.svg`;
         }}
-        className="object-contain transition-transform duration-300 group-hover:scale-105"
+        className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
       />
     </Box>
   );
-}
 
-function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
-  if (!label) return <ImageWell image={image} loading={loading} />;
+  if (!label) return imgWell;
 
   return (
     <Stack height="full" gap={1}>
       <Box flex height="full" minHeight="0">
-        <ImageWell image={image} loading={loading} />
+        {imgWell}
       </Box>
-      <ImageLabel side={image.side} />
+      <Text variant="mono" size="micro" weight="font-bold" color="dim" uppercase tracking="wide" align="center">
+        {image.side === 'front' ? 'Front' : 'Back'}
+      </Text>
     </Stack>
   );
 }
 
 function SingleImage({ image }: { image: MerchProductImage }) {
-  return <MerchImage image={image} label={image.side === 'back'} loading="eager" />;
+  // Show labels only when two images are visible (handled in EqualImages and ProminentImages)
+  return <MerchImage image={image} label={false} loading="eager" />;
 }
 
 function EqualImages({ images }: { images: MerchProductImage[] }) {
@@ -91,7 +81,7 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   );
 }
 
-export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode }: MerchImageDisplayProps) {
+export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
   const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
   const primary = resolved.primary;
   if (!primary) return null;
@@ -104,18 +94,21 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       rel="sponsored noopener noreferrer"
       aria-label={`View ${title} on Printful`}
       display="block"
-      height={{ base: 80, md: 96 }}
+      width="full"
+      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
-        <EqualImages images={resolved.equal} />
-      ) : resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent' ? (
-        <ProminentImages primary={primary} secondary={resolved.secondary} />
-      ) : (
-        <SingleImage image={primary} />
-      )}
+      <Box width="full" height="full" minHeight="0">
+        {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
+          <EqualImages images={resolved.equal} />
+        ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
+          <ProminentImages primary={primary} secondary={resolved.secondary} />
+        ) : (
+          <SingleImage image={primary} />
+        )}
+      </Box>
     </Box>
   );
 }

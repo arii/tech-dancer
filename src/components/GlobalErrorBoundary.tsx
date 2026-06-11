@@ -66,7 +66,7 @@ export function GlobalErrorBoundary() {
             <Text
               as="pre"
               size="xs"
-              className="opacity-70 font-mono whitespace-pre-wrap"
+              className="opacity-high font-mono whitespace-pre-wrap"
             >
               {errorDetail}
             </Text>

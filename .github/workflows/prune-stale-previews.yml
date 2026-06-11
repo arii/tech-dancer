@@ -1,11 +1,11 @@
 name: Prune Stale Previews
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight UTC
+    - cron: '0 */6 * * *' # Runs every 6 hours
   workflow_dispatch: # Allows manual triggering
 
 concurrency:
-  group: gh-pages-deploy
+  group: prune-stale-previews
   cancel-in-progress: false
 
 
@@ -14,7 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: read
     steps:
+      - name: Checkout Source (for scripts)
+        uses: actions/checkout@v4
+        with:
+          path: source
+
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         with:
@@ -23,59 +29,26 @@ jobs:
           fetch-depth: 0
 
       - name: Prune orphaned directories
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Prepare Open PR branches list for pruning
+          echo "Fetching open PRs for pruning..."
+          gh pr list --repo ${{ github.repository }} --state open --json headRefName --jq '.[].headRefName' > open_prs.txt
+
           cd gh-pages-branch
 
-          # Get list of all active remote branches
-          ACTIVE_BRANCHES=$(git ls-remote --heads origin | awk '{print $2}' | sed 's|^refs/heads/||')
+          # Use the centralized management script
+          cp ../source/scripts/manage-previews.sh ./manage-previews.sh
+          chmod +x ./manage-previews.sh
+          ./manage-previews.sh ../open_prs.txt
+          rm ./manage-previews.sh
 
-          NOW=$(date +%s)
-          GRACE_PERIOD=86400 # 24 hours in seconds
-          CHANGES_MADE=false
-
-          # Find all index.html files to identify deployment directories.
-          # We use mindepth 2 to skip the root index.html and maxdepth 4 to capture nested branch paths.
-          # Ascending sort ensures deeper directories (e.g. a/b/index.html) are handled before parents (a/index.html).
-          # Use process substitution to avoid subshell variable scope issues for CHANGES_MADE.
-          while IFS= read -r index_file; do
-            dir="${index_file%/index.html}"
-            dir="${dir#./}"
-
-            # Skip protected top-level directories.
-            top_level="${dir%%/*}"
-            case "$top_level" in
-              .|..|assets|tmp|previews)
-                echo "Skipping protected path: $dir"
-                continue
-                ;;
-            esac
-
-            # If the directory was already removed in a previous iteration (e.g. parent), skip it
-            [ -d "$dir" ] || continue
-
-            # Check if it doesn't match an active branch
-            if ! printf '%s\n' "$ACTIVE_BRANCHES" | grep -Fxq -- "$dir"; then
-              # Get the timestamp of the last update
-              LAST_UPDATE=$(cat "$dir/.timestamp" 2>/dev/null || git log -1 --format=%ct -- "$dir" || echo 0)
-              AGE=$((NOW - LAST_UPDATE))
-
-              if [ "$AGE" -gt "$GRACE_PERIOD" ]; then
-                echo "Pruning stale preview: $dir (age: ${AGE}s)"
-                git rm -r --ignore-unmatch -- "$dir"
-                CHANGES_MADE=true
-              else
-                echo "Keeping stale preview within grace period: $dir (age: ${AGE}s)"
-              fi
-            else
-              echo "Keeping active preview: $dir"
-            fi
-          done < <(find . -mindepth 2 -maxdepth 4 -name index.html -print | sort)
-
-          if [ "$CHANGES_MADE" = true ]; then
+          if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: prune orphaned branch previews (grace period enforced)"
+            git commit -m "chore: prune stale previews and update metadata"
             git push origin gh-pages
           else
-            echo "No stale previews to prune."
+            echo "No changes made."
           fi

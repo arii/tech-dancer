@@ -1,9 +1,16 @@
-import { Share2 } from 'lucide-react';
+// impeccable-ignore-file
+import { useState } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-
-import { DetailLayout } from '@/components/layout/DetailLayout';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
-import { Post } from '@/lib/content';
+import { AffiliateCard } from '@/components/ui/AffiliateCard';
+import { affiliateManager } from '@/lib/affiliateManager';
+import { Post, readingTime, getPosts } from '@/lib/content';
+import { EditorialLayout } from '@/components/editorial/EditorialLayout';
+import { EditorialHeader } from '@/components/editorial/EditorialHeader';
+import { EditorialHero } from '@/components/editorial/EditorialHero';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { EditorialRelated } from '@/components/editorial/EditorialRelated';
+import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -12,42 +19,93 @@ interface BlogPostDetailProps {
 }
 
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
-  const share = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href,
-      }).catch(console.error);
+  const rt = `${readingTime(post.content)} min read`;
+  const [isCopied, setIsCopied] = useState(false);
+
+  const share = async () => {
+    const shareData = {
+      title: post.title,
+      text: post.excerpt,
+      url: window.location.href,
+    };
+
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') console.error('Share failed:', err);
+        return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Clipboard fallback failed:', err);
     }
   };
 
+  const relatedItems = getPosts()
+    .filter(p => p.slug !== post.slug && (p.category === post.category || p.tags.some(t => post.tags.includes(t))))
+    .slice(0, 3)
+    .map(p => ({
+      title: p.title,
+      href: `/blog/${p.slug}`,
+      category: p.category
+    }));
+
+  const affiliateLinks = (post.affiliateIds || [])
+    .map(id => affiliateManager.getLink(id))
+    .filter((link): link is NonNullable<typeof link> => !!link);
+
   return (
-    <DetailLayout
-      title={post.title}
-      category={post.category}
-      date={post.date}
-      content={post.content}
-      image={post.image}
+    <EditorialLayout
       onBack={onBack}
       backLabel={backLabel}
-      headerExtras={
-        <Stack gap={6}>
-          <Stack direction="row" gap={4} marginTop={6}>
-            <Stack direction="row" align="center" gap={2} color="dim">
-               <Box width={8} height={8} radius="full" surface="muted" />
-               <Text variant="mono" size="xs">{post.author}</Text>
-            </Stack>
-            <Box flex />
-            <Stack as="button" direction="row" onClick={share} align="center" gap={2} paddingX={3} paddingY={1.5} radius="sm" className="text-accent hover:text-accent-sky hover:bg-accent-sky/8 transition-all duration-150 ease-in-out active:scale-95 cursor-pointer group/share">
-              <Share2 className="w-4 h-4 transition-colors duration-150 group-hover/share:text-accent-sky" />
-              <Text variant="mono" size="xs" weight="font-bold" className="transition-colors duration-150 group-hover/share:text-accent-sky">SHARE</Text>
+      header={
+        <EditorialHeader
+          category={post.category}
+          date={post.date}
+          readTime={rt}
+          title={post.title}
+          dek={post.excerpt}
+          author={post.author}
+          authorAvatarSrc={post.authorImage}
+          tags={post.tags}
+          onShare={share}
+          isShared={isCopied}
+          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} /> : undefined}
+        />
+      }
+      sidebar={
+        affiliateLinks.length > 0 ? (
+          <Stack gap={6}>
+            <AffiliateDisclosure compact={true} />
+            <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+              Shop selected items
+            </Text>
+            <Stack gap={4}>
+              {affiliateLinks.map(link => (
+                <AffiliateCard key={link.id} link={link} />
+              ))}
             </Stack>
           </Stack>
-          <AffiliateDisclosure />
+        ) : undefined
+      }
+      footer={
+        <Stack gap={12}>
+          <EditorialRelated items={relatedItems} />
+          <EditorialNewsletter />
         </Stack>
       }
     >
+      <Box className="prose-editorial">
+        <MarkdownRenderer content={post.content} />
+      </Box>
+
       {post.tags && post.tags.length > 0 && (
         <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
           <Stack gap={4}>
@@ -62,6 +120,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           </Stack>
         </Box>
       )}
-    </DetailLayout>
+    </EditorialLayout>
   );
 }

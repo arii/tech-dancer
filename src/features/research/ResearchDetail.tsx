@@ -1,6 +1,6 @@
 import { useMemo, lazy, Suspense } from 'react';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { Database, Activity, ArrowLeft, Search } from 'lucide-react';
+import { Database, Activity, Search, ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
@@ -8,8 +8,10 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-
-import { DetailLayout } from '@/components/layout/DetailLayout';
+import { EditorialLayout } from '@/components/editorial/EditorialLayout';
+import { EditorialHeader } from '@/components/editorial/EditorialHeader';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { readingTime } from '@/lib/content';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -17,6 +19,7 @@ const WSDCReminders = lazy(() => import('@/features/lab/wsdc-reminders/WSDCRemin
 const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
 const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
 const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m => ({ default: m.BlastRadiusTool })));
+const EcommerceAutomationTool = lazy(() => import('./components/EcommerceAutomationTool').then(m => ({ default: m.EcommerceAutomationTool })));
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
@@ -24,6 +27,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'wsdc-event-reminders': WSDCReminders,
   'gitops-pr-reviewer': GitOpsReviewerTool,
   'scope-blast-radius': BlastRadiusTool,
+  'ecommerce-automation': EcommerceAutomationTool,
 };
 
 export default function ResearchDetail() {
@@ -36,12 +40,10 @@ export default function ResearchDetail() {
   const id = useMemo(() => {
     if (paramId) return paramId;
     const segments = pathname.split('/').filter(Boolean);
-    // Find the segment after 'research' to identify the tool
     const resIndex = segments.indexOf('research');
     if (resIndex !== -1 && segments[resIndex + 1]) {
       return segments[resIndex + 1];
     }
-    // Fallback to the last segment if we are in this component
     return segments[segments.length - 1] || null;
   }, [paramId, pathname]);
 
@@ -79,8 +81,6 @@ export default function ResearchDetail() {
     return null;
   }, [tool, study]);
 
-  // Redirect non-canonical routes (e.g. /research/ux-auditor -> /ux-auditor)
-  // pathname is relative to basename in React Router 6/7.
   const isResearchPath = useMemo(() => {
     const segments = pathname.split('/').filter(Boolean);
     return segments.includes('research');
@@ -91,6 +91,7 @@ export default function ResearchDetail() {
   }
 
   if (study) {
+    const rt = `${readingTime(study.content)} min read`;
     return (
       <>
         <SEO
@@ -99,14 +100,25 @@ export default function ResearchDetail() {
           type="article"
           schema={structuredData}
         />
-        <DetailLayout
-          title={study.title}
-          category={study.category}
-          date={study.date}
-          content={study.content}
+        <EditorialLayout
           onBack={() => navigate('/research')}
           backLabel="Back to Portfolio"
-        />
+          header={
+            <EditorialHeader
+              category={study.category}
+              date={study.date}
+              readTime={rt}
+              title={study.title}
+              dek={study.excerpt}
+              author={study.author}
+              authorAvatarSrc={study.authorImage}
+            />
+          }
+        >
+          <Box className="prose-editorial">
+            <MarkdownRenderer content={study.content} />
+          </Box>
+        </EditorialLayout>
       </>
     );
   }
@@ -115,7 +127,7 @@ export default function ResearchDetail() {
     return (
       <Box padding="panel" textAlign="center">
         <Stack gap={8} align="center">
-          <Search size={48} className="opacity-20" />
+          <Search size={48} className="opacity-low" />
           <Text variant="display" size="2xl">Content Not Found</Text>
           <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Portfolio</Text>
@@ -196,7 +208,7 @@ export default function ResearchDetail() {
                 {tool.status === 'Coming Soon' && (
                   <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
-                      <Search className="w-8 h-8 text-accent opacity-50" />
+                      <Search className="w-8 h-8 text-accent opacity-muted" />
                       <Stack gap={2}>
                         <Text variant="display" size="xl">Work in Progress</Text>
                         <Text variant="body" size="sm" color="dim" maxWidth="md">

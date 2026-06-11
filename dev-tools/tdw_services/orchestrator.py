@@ -623,9 +623,44 @@ class Orchestrator:
                 for f in findings:
                     structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
 
-        prompt = "Analyze the failing CI logs and fix the errors."
+        prompt = """# Agent Prompt: Self-Review, Fix, and Publish PR
+
+You are a senior engineering agent reviewing your own branch before publishing.
+
+Compare the current branch against `main`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
+
+## Rules
+
+- Do not ask for confirmation before making fixes.
+- Do not ask the user to run commands.
+- Do not stop until you have opened or updated a PR.
+- Do not make unrelated refactors.
+- Do not publish with known failing checks unless the failure is clearly unrelated and documented.
+- If local setup prevents a check from running, document the attempted command, the setup gap, and the follow-up needed.
+
+## Steps
+
+1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin main`.
+2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, and `git diff --cached`.
+3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
+4. Fix the issues directly.
+5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
+6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
+7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
+8. Commit, push, and create or update the PR with a clear summary and validation notes.
+
+## Final response
+
+Respond only after the PR is created or updated:
+
+- PR link
+- Changes made
+- Self-review fixes
+- Validation results
+- Notes or documented limitations"""
+
         if structured_failures:
-            prompt += "\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
+            prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
 
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
@@ -702,6 +737,66 @@ class Orchestrator:
                         p = pipeline.generate_prompt(line)
                         if p: prompts.append(p)
         return prompts
+
+    def run_ux_audit(self, route=None, all_routes=False, desktop=False, mobile=False, screenshots_only=False, images_only=False, contrast_only=False, overflow_only=False):
+        """
+        Runs the UX audit suite using Playwright.
+        """
+        # Ensure routes are discovered
+        run_command(["pnpm", "exec", "tsx", "scripts/ux-discover-routes.ts"])
+
+        routes = ["/"]
+        if all_routes:
+            with open("artifacts/ux-audit/routes.json", "r") as f:
+                routes = json.load(f)["routes"]
+        elif route:
+            routes = [route]
+
+        viewports = []
+        if desktop: viewports = ["desktop-1280", "desktop-1440"]
+        elif mobile: viewports = ["mobile-375", "mobile-390", "mobile-430"]
+
+        flags = []
+        if images_only: flags.append("--images-only")
+        if overflow_only: flags.append("--overflow-only")
+        if contrast_only: flags.append("--contrast-only")
+
+        results = []
+        for r in routes:
+            cmd = ["pnpm", "exec", "tsx", "scripts/ux-audit-runner.ts", r]
+            if viewports:
+                for vp in viewports:
+                    res = run_command(cmd + [vp] + flags, check=False)
+                    results.append({"route": r, "viewport": vp, "status": "success" if res.returncode == 0 else "error"})
+            else:
+                res = run_command(cmd + flags, check=False)
+                results.append({"route": r, "status": "success" if res.returncode == 0 else "error"})
+
+        return {"status": "success", "results": results}
+
+    def run_lighthouse(self, route=None):
+        """
+        Runs Lighthouse audits.
+        """
+        # Ensure routes are discovered
+        run_command(["pnpm", "exec", "tsx", "scripts/ux-discover-routes.ts"])
+
+        cmd = ["pnpm", "exec", "tsx", "scripts/ux-lighthouse-runner.ts"]
+        if route:
+            # Note: Lighthouse runner might need updates to handle single route arg if desired,
+            # but for now it uses routes.json.
+            pass
+
+        res = run_command(cmd, check=False)
+        return {"status": "success" if res.returncode == 0 else "error", "output": res.stdout}
+
+    def generate_ux_report(self):
+        """
+        Aggregates results into a Markdown report.
+        """
+        from tdw_services.ux_report import generate_report
+        generate_report()
+        return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
 
     def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
         """

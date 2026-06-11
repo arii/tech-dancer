@@ -58,7 +58,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
-    label: 'DevAI Lab',
+    label: 'DevAI Portfolio',
     icon: Database,
     skeleton: 'grid',
     isMobileVisible: true,
@@ -108,6 +108,17 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',
     sitemap: false
+  },
+  {
+    path: '/previews',
+    Component: () => {
+      const base = import.meta.env.BASE_URL || '/';
+      const cleanBase = base.endsWith('/') ? base : base + '/';
+      window.location.replace(cleanBase + 'previews/index.html');
+      return null;
+    },
+    sitemap: false,
+    stub: false
   },
   {
     path: '*',

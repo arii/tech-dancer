@@ -12,14 +12,14 @@ export function DevLabCallout() {
           <Terminal className="h-4 w-4 text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-          DevAI Lab
+          DevAI Portfolio
         </Text>
       </Stack>
 
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed">
-        Welcome to my active research sandbox. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+        Welcome to my DevAI Portfolio. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
       </Text>
 
       {/* CTA */}
@@ -34,7 +34,7 @@ export function DevLabCallout() {
         weight="font-bold"
         className="hover:underline"
       >
-        Explore the DevAI Lab →
+        View Portfolio →
       </Text>
     </Box>
   );

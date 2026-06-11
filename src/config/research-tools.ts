@@ -11,7 +11,9 @@ export interface ResearchTool {
   externalLinkDisplayLabel?: string;
   sourceUrl?: string;
   isFlagship?: boolean;
+  excludeFromEngineeringTools?: boolean;
   image?: string;
+  imageAlt?: string;
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
@@ -26,7 +28,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     externalUrl: 'https://arii.github.io/hrm/',
     externalLinkDisplayLabel: 'View HRM',
     isFlagship: true,
-    image: '/assets/research/hrm-flagship.png'
+    image: '/assets/research/hrm-flagship.png',
+    imageAlt: 'Screenshot of the HRM heart rate monitor training dashboard with real-time biometric telemetry and Spotify integration'
   },
   {
     id: 'repo-auditor-ai',
@@ -40,7 +43,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     externalLinkDisplayLabel: 'Open RepoAuditor AI',
     sourceUrl: 'https://github.com/arii/hrm-project-management',
     isFlagship: true,
-    image: '/assets/research/repo-auditor-ai.png'
+    image: '/assets/research/repo-auditor-ai.png',
+    imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
   },
   {
     id: 'gitops-pr-reviewer',
@@ -101,5 +105,15 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['Automation', 'Calendar', 'WCS'],
     canonicalPath: '/research/wsdc-event-reminders'
+  },
+  {
+    id: 'ecommerce-automation',
+    title: 'Ecommerce Automation Experiments',
+    subtitle: 'Printful & Merch Pipeline',
+    description: 'Automated merch operations including programmatic design generation, Printful API storefront sync, and incoming Amazon affiliate integration workflows.',
+    category: 'Business Automation',
+    status: 'In Progress',
+    tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
+    canonicalPath: '/research/ecommerce-automation'
   }
 ];

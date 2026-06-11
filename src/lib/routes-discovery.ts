@@ -80,7 +80,8 @@ export function getAllRoutes() {
       return {
         path: resolveCanonical(r.path, r),
         lastmod,
-        sitemap: r.sitemap !== false
+        sitemap: r.sitemap !== false,
+        stub: (r as { stub?: boolean }).stub !== false
       };
     });
 
@@ -92,16 +93,20 @@ export function getAllRoutes() {
     sitemap: true
   }));
 
-  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: true }));
+  const contentRoutesMapped = contentRoutes.map(r => ({ ...r, sitemap: true, stub: true }));
+  const toolRoutesMapped = toolRoutes.map(r => ({ ...r, stub: true }));
 
-  const allRoutesRaw = [...allStaticRoutes, ...toolRoutes, ...contentRoutesMapped];
+  const allRoutesRaw = [...allStaticRoutes, ...toolRoutesMapped, ...contentRoutesMapped];
 
   // Deduplicate routes to ensure each path is only listed once, prioritizing the one with the most recent lastmod if duplicates exist
-  const uniqueRoutesMap = new Map<string, { lastmod: string, sitemap: boolean }>();
+  // The `stub` property indicates whether a dummy `index.html` file (a SPA stub) should be generated for this route
+  // during the build process to support direct navigation without 404ing on static hosts like GitHub pages.
+  // It defaults to true for most paths, but can be disabled.
+  const uniqueRoutesMap = new Map<string, { lastmod: string, sitemap: boolean, stub?: boolean }>();
   allRoutesRaw.forEach(r => {
     const existing = uniqueRoutesMap.get(r.path);
     if (!existing || r.lastmod > existing.lastmod) {
-      uniqueRoutesMap.set(r.path, { lastmod: r.lastmod, sitemap: r.sitemap });
+      uniqueRoutesMap.set(r.path, { lastmod: r.lastmod, sitemap: r.sitemap, stub: (r as { stub?: boolean }).stub !== false });
     }
   });
 
@@ -116,7 +121,7 @@ export function getAllRoutes() {
     static: allStaticRoutes.filter(r => r.sitemap).map(r => r.path),
     tools: toolRoutes.map(r => r.path),
     content: contentRoutes.map(r => r.path),
-    stubs: uniqueRoutes.map(r => r.path),
+    stubs: uniqueRoutes.filter(r => r.stub).map(r => r.path),
     sitemap: sitemapRoutes.map(r => r.path),
     all: sitemapRoutes.map(r => r.path),
     detailed: sitemapRoutes

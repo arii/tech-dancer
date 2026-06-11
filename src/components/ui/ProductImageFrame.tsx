@@ -1,11 +1,13 @@
 import { Box } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
+import { ResponsiveProp } from '@/layouts/system-utils';
+
 interface ProductImageFrameProps {
   src: string;
   alt: string;
   objectFit?: 'cover' | 'contain';
-  aspect?: 'video' | 'square' | 'auto' | string;
+  aspect?: ResponsiveProp<'video' | 'square' | 'auto' | string>;
   className?: string;
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y";
   radius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';

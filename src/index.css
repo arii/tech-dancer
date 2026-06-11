@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
+@plugin "@tailwindcss/typography";
 /* impeccable-ignore-file */
 
 @theme {
@@ -46,6 +47,7 @@
   --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
   --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
   --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
+    --spacing-wordmark-offset: -3px;
   --spacing-hero: var(--raw-spacing-hero);
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
@@ -142,12 +144,22 @@
     background-size: 20px 20px;
   }
 
-  /* Markdown Counters */
+  /* Editorial Counters */
   .prose-counters { counter-reset: section; }
   .prose-section { counter-increment: section; }
   .prose-section-number::before {
+    content: "STEP " counter(section, decimal-leading-zero) " ——";
+    letter-spacing: 0.15em;
+    font-size: 0.65rem;
+    opacity: 0.5;
+  }
+  .editorial-section-number::before {
     content: counter(section, decimal-leading-zero);
-    margin-right: 0.5rem;
+    @apply text-accent font-black text-xs tracking-tight;
+  }
+  .editorial-section-number::after {
+    content: " / SECTION";
+    @apply opacity-40 ml-2 text-micro font-bold tracking-[0.2em];
   }
 
   /* Brand SVG Utilities */
@@ -166,6 +178,10 @@
   }
   .wordmark-hero {
     @apply font-display mt-3 opacity-0;
+    margin-left: 0;
+    @media (min-width: 768px) {
+      margin-left: var(--spacing-wordmark-offset);
+    }
     transform: translateY(10px);
     font-size: clamp(18px, 4vw, 28px);
     animation: fadeUp 0.7s ease forwards 0.4s;
@@ -218,9 +234,10 @@
   }
   html, body, #root {
     height: 100%;
+    overflow-x: clip;
   }
   body {
-    @apply bg-bg text-text-body font-sans antialiased overflow-x-hidden w-full;
+    @apply bg-bg text-text-body font-sans antialiased w-full;
     line-height: 1.6;
   }
   p {
@@ -237,6 +254,24 @@
   }
   .prose a {
     @apply text-accent decoration-accent/30 underline decoration-1 underline-offset-4 transition-all hover:decoration-accent hover:text-accent/80;
+  }
+
+  .prose-editorial {
+    @apply prose prose-slate prose-invert max-w-none;
+    @apply prose-p:font-sans prose-p:text-text-body prose-p:leading-[1.85] prose-p:text-lg prose-p:mb-8 prose-p:text-pretty;
+    @apply prose-headings:font-display prose-headings:text-text-main prose-headings:tracking-tighter prose-headings:font-black;
+    @apply prose-strong:text-text-main prose-strong:font-black;
+    @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
+    @apply prose-li:text-text-body prose-li:text-lg prose-li:leading-relaxed;
+    @apply prose-img:rounded-2xl prose-img:border prose-img:border-line/30;
+  }
+
+  .prose-editorial li:has(input[type="checkbox"]:checked) {
+    @apply opacity-50 line-through;
+  }
+
+  .prose-editorial input[type="checkbox"] {
+    @apply mr-2 accent-accent cursor-pointer w-4 h-4;
   }
 }
 
@@ -257,7 +292,10 @@
 @layer utilities {
   .hero-section {
     background: var(--hero-bg);
-    min-height: 34vh;
+    min-height: auto;
+    @media (min-width: 768px) {
+      min-height: 34vh;
+    }
   }
   .hero-bottom-gradient {
     background-image: linear-gradient(to top, var(--raw-color-bg), transparent);
@@ -265,7 +303,6 @@
   .hero-logo-anim {
     height: clamp(60px, 10vw, 120px);
     animation: fadeUp 0.6s ease forwards 0.05s;
-    margin-left: -12px;
   }
   .hero-headline-anim {
     animation: fadeUp 0.6s ease forwards 0.2s;

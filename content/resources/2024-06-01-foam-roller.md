@@ -1,17 +1,19 @@
 ---
 type: resource
-draft: true
-title: "Foam Roller / Hypervolt"
+title: "High-Density Foam Roller"
 date: "2024-06-01"
 author: "Ariel Anders, PhD"
 category: "Dance Gear"
-excerpt: "Good for sore legs, tight hips, and post-event recovery."
+excerpt: "A high-density solid foam roller that is excellent for post-dance muscle recovery at home or local socials."
+image: "/images/gear/sketches/foam-roller.webp"
 affiliateIds: ["foam-roller"]
-tags: ["recovery", "health"]
-verdict: "Best for post-event"
+tags: ["recovery", "health", "fitness"]
+verdict: "Essential for recovery"
 updatedDate: "Jun 2024"
 affiliateProvider: "amazon"
-affiliateDisclosure: "As an Amazon Associate, BoomTick may earn from qualifying purchases."
+bestFor: ["Post-event", "Home Recovery"]
 ---
 
-Recovery is key to surviving a weekend event.
+## Deep Tissue Recovery
+
+Don't let muscle tightness ruin your weekly routine. While this solid-core foam roller is not hollow and is less convenient for packing in flight luggage, it is a high-density recovery essential to use at home or after your local weekly social dances to relieve sore calves, quads, and back muscles.

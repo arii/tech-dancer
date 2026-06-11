@@ -72,9 +72,28 @@ export function FeaturedEventGuide() {
 
   return (
     <Box as="section" className="w-full max-w-full min-w-0">
-      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={4}>
-        Featured Event Guide
-      </Text>
+      <Stack
+        direction={{ base: 'col', sm: 'row' }}
+        align={{ base: 'start', sm: 'baseline' }}
+        justify="between"
+        gap={2}
+        marginBottom={4}
+      >
+        <Text as="h2" variant="headline" size="2xl" weight="font-black">
+          Featured Event Guide
+        </Text>
+        <Text
+          as={NavLink}
+          to="/events"
+          variant="mono"
+          size="xs"
+          color="accent"
+          weight="font-bold"
+          className="shrink-0 hover:underline"
+        >
+          See all events →
+        </Text>
+      </Stack>
 
       {/* Editorial card: image-led grid */}
       <Box
@@ -100,7 +119,7 @@ export function FeaturedEventGuide() {
         <Box position="relative" className="h-44 min-w-0 md:h-full">
           <img
             src={event.heroImage}
-            alt={event.title}
+            alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover object-top"
@@ -112,9 +131,9 @@ export function FeaturedEventGuide() {
         {/* Content */}
         <Stack gap={3} padding={6} className="min-w-0 justify-between" aria-live="polite">
           <Stack gap={1.5}>
-            <Box display="flex" align="center" gap={2}>
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-accent" />
-              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full truncate">
+            <Box display="flex" align="start" gap={2}>
+              <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+              <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="block max-w-full leading-normal">
                 {event.location}
               </Text>
             </Box>
@@ -146,7 +165,7 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === 0}
                   aria-label="Previous featured event guide"
                 >
@@ -158,7 +177,7 @@ export function FeaturedEventGuide() {
                   padding={1.5}
                   border
                   radius="sm"
-                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-30"
+                  className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === featured.length - 1}
                   aria-label="Next featured event guide"
                 >

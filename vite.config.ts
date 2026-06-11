@@ -73,6 +73,9 @@ export default defineConfig(({mode}) => {
         'dev'
       ),
       'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
+      'import.meta.env.VITE_IS_VERCEL': JSON.stringify(
+        process.env.VERCEL === '1' ? 'true' : 'false'
+      ),
     },
     plugins: [
       react(),
@@ -116,6 +119,43 @@ export default defineConfig(({mode}) => {
         gzipSize: true,
       }),
       inspect && !isProd && Inspect(),
+      // Fix Vite preview SPA routing for sub-path deployments (e.g. /tech-dancer/).
+      // When the browser reloads a URL like /tech-dancer?modal=true&q=swing (no
+      // trailing slash) Vite rejects the request with a confusing "did you mean"
+      // error instead of serving index.html, breaking the Playwright reload test.
+      {
+        name: 'spa-preview-fallback',
+        configurePreviewServer(server: { middlewares: { use: (fn: (req: import('http').IncomingMessage & { url?: string }, res: import('http').ServerResponse, next: () => void) => void) => void } }) {
+          const baseWithSlash = base.endsWith('/') ? base : `${base}/`;
+          const baseNoSlash = baseWithSlash.slice(0, -1);
+
+          server.middlewares.use((req, res, next) => {
+            const url = req.url ?? '/';
+            const [pathname, rest] = url.split('?') as [string, string | undefined];
+            const query = rest ? `?${rest}` : '';
+
+            // 1. Redirect bare base (no trailing slash) → canonical base with slash.
+            if (baseNoSlash && pathname === baseNoSlash) {
+              res.writeHead(301, { Location: `${baseWithSlash}${query}` });
+              res.end();
+              return;
+            }
+
+            // 2. SPA fallback: serve index.html for any non-asset path under base.
+            // Exclude paths that already end with a file extension (including .html)
+            // so that static files like previews/index.html are served directly.
+            if (
+              pathname.startsWith(baseWithSlash) &&
+              !pathname.startsWith(`${baseWithSlash}assets/`) &&
+              !pathname.match(/\.(html|js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?|ttf|eot|map|json|txt|xml)$/)
+            ) {
+              req.url = `${baseWithSlash}index.html`;
+            }
+
+            next();
+          });
+        },
+      },
     ].filter(Boolean),
     resolve: {
       alias: {
