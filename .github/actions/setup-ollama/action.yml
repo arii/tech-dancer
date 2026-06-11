@@ -1,0 +1,37 @@
+name: 'Setup Ollama'
+description: 'Installs and starts the Ollama server with a readiness check'
+outputs:
+  ready:
+    description: 'Whether Ollama was successfully started'
+    value: ${{ steps.check.outputs.ready }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Ollama
+      shell: bash
+      run: |
+        if ! curl -fsSL https://ollama.com/install.sh | sh; then
+          echo "Failed to install Ollama"
+          exit 0
+        fi
+
+    - name: Start and Check Ollama
+      id: check
+      shell: bash
+      run: |
+        ollama serve > /tmp/ollama.log 2>&1 &
+        echo "Waiting for Ollama to be ready..."
+        for i in {1..15}; do
+          if curl -sf http://localhost:11434/api/tags > /dev/null; then
+            echo "Ollama is ready!"
+            ollama list
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Waiting... ($i/15)"
+          sleep 2
+        done
+        echo "Ollama failed to start"
+        cat /tmp/ollama.log
+        echo "ready=false" >> "$GITHUB_OUTPUT"
