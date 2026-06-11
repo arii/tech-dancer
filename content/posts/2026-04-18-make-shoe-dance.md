@@ -6,6 +6,8 @@ author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Suede your dance shoes with a $15 DIY hack. A comparison of sticker coverage and traction response."
 image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
+affiliateIds:
+  - "suede-sheets"
 tags:
   - diy
   - shoes
