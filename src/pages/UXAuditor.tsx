@@ -391,7 +391,6 @@ export default function UXAuditor() {
               <Stack gap={8}>
                 {VIEWPORTS.map(vp => {
                   const data = activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis;
-                  const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
 
                   return (
                     <Box key={vp.name} className={cardVariants({ overflow: "hidden" })}>
