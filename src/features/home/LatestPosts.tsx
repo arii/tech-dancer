@@ -22,6 +22,8 @@ export function LatestPosts() {
           size="xs"
           color="dim"
           weight="font-bold"
+          paddingY={{ base: 4, sm: 0 }}
+          paddingX={{ base: 4, sm: 0 }}
           className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent"
         >
           View all →

@@ -265,6 +265,26 @@ def pre_submit(ctx):
     res = orch.pre_submit_checks()
     out(ctx, "Pre-submit checks complete.", data={"results": res})
 
+@gh.command()
+@click.option('--limit', type=int, default=50, help='Limit the number of open PRs to process')
+@click.option('--no-cache', is_flag=True, default=False, help='Bust the cache and force fetching data from GitHub')
+@click.pass_context
+def overlaps(ctx, limit, no_cache):
+    """Identify and propose consolidation of PRs with high functional or structural overlap."""
+    import subprocess
+    import sys
+    import os
+
+    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'pr_overlap.py')
+    cmd = [sys.executable, script_path, '--limit', str(limit)]
+    if no_cache:
+        cmd.append('--no-cache')
+
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        err(ctx, f"pr_overlap.py failed with exit code {e.returncode}")
+
 # ==========================================
 # UX COMMAND GROUP
 # ==========================================

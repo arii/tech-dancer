@@ -25,6 +25,8 @@ export function GearShelf() {
           size="xs"
           color="accent"
           weight="font-bold"
+          paddingY={{ base: 4, sm: 0 }}
+          paddingX={{ base: 4, sm: 0 }}
           className="shrink-0 hover:underline"
         >
           See all picks →
