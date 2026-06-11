@@ -30,20 +30,15 @@ export function BaseCard({
 }: BaseCardProps) {
   const isLink = !!(to || href);
 
-  // Standardized hover and transition classes
-  const cardClasses = cn(
-    "group relative bg-surface transition-all duration-200",
-    isLink && "hover:bg-surface-alt",
-    className
-  );
-
   const linkClasses = "absolute inset-0 z-10 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
   return (
     <Stack
       as="article"
       radius="lg"
-      className={cardClasses}
+      surface="bg"
+      hoverSurface={isLink ? "alt" : undefined}
+      className={cn("group relative transition-all duration-200", className)}
       {...props}
     >
       {to && (

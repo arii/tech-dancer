@@ -39,12 +39,29 @@ export function EditorialHeader({
           <Text as="span" color="accent">{category}</Text> <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {date} <Text as="span" marginX={2} color="line" opacityVariant="subtle">•</Text> {readTime}
         </Text>
 
-        <Text as="h1" variant="h1" size={{ base: "4xl", md: "6xl" }} weight="font-black" leading="none" tracking="tighter" className="text-pretty break-words">
+        <Text
+          as="h1"
+          variant="h1"
+          size={{ base: "4xl", md: "6xl" }}
+          weight="font-black"
+          leading="none"
+          tracking="tighter"
+          pretty
+          breakWords
+        >
           {title}
         </Text>
 
         {dek && (
-          <Text variant="body" size={{ base: "xl", md: "2xl" }} color="dim" leading="relaxed" opacityVariant="solid" className="text-pretty font-medium">
+          <Text
+            variant="body"
+            size={{ base: "xl", md: "2xl" }}
+            color="dim"
+            leading="relaxed"
+            opacityVariant="solid"
+            weight="font-medium"
+            pretty
+          >
             {dek}
           </Text>
         )}
@@ -67,11 +84,11 @@ export function EditorialHeader({
                  direction="row"
                  align="center"
                  gap={2}
-                 paddingY={2.5}
+                 paddingY={{ base: 4, md: 1.5 }}
                  paddingX={1}
-                 minHeight={11}
+                 minHeight={12}
                  onClick={onShare}
-                 className={cn(journalVariants.shareAction(), "tap-target")}
+                 className={journalVariants.shareAction()}
                >
                  <Share2 className="w-4 h-4" />
                  <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
@@ -89,13 +106,13 @@ export function EditorialHeader({
               <Box
                 key={tag}
                 paddingX={4}
-                paddingY={2}
-                minHeight={10}
+                paddingY={{ base: 3, md: 2 }}
+                minHeight={12}
                 display="flex"
                 align="center"
                 border
                 radius="sm"
-                className={cn(journalVariants.tag(), "tap-target")}
+                className={journalVariants.tag()}
               >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>

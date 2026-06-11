@@ -74,6 +74,10 @@ export interface BaseProps {
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
   bgGradient?: string
+  pretty?: ResponsiveProp<boolean>
+  breakWords?: ResponsiveProp<boolean>
+  borderOpacityVariant?: keyof typeof opacityTokens
+  hoverSurface?: keyof typeof variants.surface | boolean
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -95,7 +99,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     overflow, overflowX, overflowY, overscroll, noScrollbar, pointerEvents,
     zIndex, opacity, opacityVariant, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
-    top, right, bottom, left, bgGradient,
+    top, right, bottom, left, bgGradient, pretty, breakWords, borderOpacityVariant, hoverSurface,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -225,6 +229,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           getResponsiveClasses(textAlign, "text-"),
+          getResponsiveClasses(pretty, "", (v) => v ? "text-pretty" : ""),
+          getResponsiveClasses(breakWords, "", (v) => v ? "break-words" : ""),
+          borderOpacityVariant && resolveJIT(opacityTokens[borderOpacityVariant], "border-opacity"),
+          typeof hoverSurface === "string" ? `group-hover:${variants.surface[hoverSurface]}` : (hoverSurface && "group-hover:bg-surface"),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
           getResponsiveClasses(top, "", resolveSpacing("top")),

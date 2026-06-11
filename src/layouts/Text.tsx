@@ -38,6 +38,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     clamp, truncate, leading, italic,
     hoverColor,
     opacityVariant,
+    pretty,
+    breakWords,
     ...props 
   }, ref) => {
 
@@ -74,6 +76,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           opacityVariant && resolveJIT(opacityTokens[opacityVariant], "opacity"),
           className
         )}
+        pretty={pretty}
+        breakWords={breakWords}
         {...props}
       />
     )

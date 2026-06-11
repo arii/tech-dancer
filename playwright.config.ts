@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import { getBasePath } from './scripts/base-path.js';
 
-const PORT = process.env.PORT || 4173;
+const PORT = process.env.PORT || 3333;
 const BASE_PATH = getBasePath();
 
 export default defineConfig({
