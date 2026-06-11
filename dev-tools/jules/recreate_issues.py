@@ -32,21 +32,21 @@ def has_linked_pr(issue_number, repo_path):
     logging.info(f"Checking for linked PRs on issue #{issue_number}...")
     command = ["gh", "issue", "view", str(issue_number), "--json", "timelineItems"]
     timeline = run_command(command, repo_path)
-    
+
     if timeline and "timelineItems" in timeline:
         for item in timeline["timelineItems"]:
             if item.get("__typename") == "CrossReferenceEvent" and "source" in item:
                 if item["source"].get("type") == "PULL_REQUEST":
                     logging.info(f"  - Found linked PR for issue #{issue_number}")
                     return True
-    
+
     logging.info(f"  - No linked PR found for issue #{issue_number}")
     return False
 
 def close_and_reopen_issue(issue_number, repo_path):
     """Closes and then reopens an issue."""
     logging.info(f"Recreating issue #{issue_number}...")
-    
+
     # Close the issue
     close_command = ["gh", "issue", "close", str(issue_number)]
     close_result = subprocess.run(close_command, capture_output=True, text=True, cwd=repo_path)
@@ -60,21 +60,21 @@ def close_and_reopen_issue(issue_number, repo_path):
     if reopen_result.returncode != 0:
         logging.error(f"  - Failed to reopen issue #{issue_number}: {reopen_result.stderr}")
         return
-        
+
     logging.info(f"  - Successfully recreated issue #{issue_number}")
 
 def main():
     repo_path = "hrm"  # Target the hrm repository in the current workspace
-    
+
     issues = get_open_issues(repo_path)
     if not issues:
         logging.info("No open issues found.")
         return
-        
+
     for issue in issues:
         issue_number = issue["number"]
         if not has_linked_pr(issue_number, repo_path):
             close_and_reopen_issue(issue_number, repo_path)
-            
+
 if __name__ == "__main__":
     main()

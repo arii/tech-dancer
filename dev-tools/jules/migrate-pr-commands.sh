@@ -26,7 +26,7 @@ for PR in "${PR_NUMBERS[@]}"; do
     # Switch to PR branch
     git fetch origin "$BRANCH"
     git checkout "$BRANCH"
-    
+
     # Initialize submodule
     git submodule update --init --recursive
 
@@ -88,7 +88,7 @@ All functionality should remain identical."
     else
         echo "ℹ️  PR #$PR: No npm commands found to update"
     fi
-    
+
     # Navigate back to the workspace root
     cd ..
 

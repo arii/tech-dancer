@@ -25,17 +25,17 @@ git for-each-ref --format='%(committerdate:unix) %(refname:short)' refs/remotes/
 
     # Check if branch is older than the cutoff
     if [ "$time" -lt "$CUTOFF" ]; then
-        
+
         # Check for open Pull Requests using GitHub CLI
         PR_COUNT=$(gh pr list --head "$branch_name" --state open --json number --jq 'length' 2>/dev/null)
-        
+
         # If PR_COUNT is 0 (or command fails, assuming no PR), proceed with deletion
         if [ "$PR_COUNT" -eq 0 ] || [ -z "$PR_COUNT" ]; then
             echo "Deleting stale branch: $branch_name"
-            
+
             # Delete from remote
             git push $REMOTE --delete "$branch_name"
-            
+
             # Delete local branch if it exists
             if git show-ref --verify --quiet "refs/heads/$branch_name"; then
                 git branch -D "$branch_name"
@@ -45,4 +45,3 @@ git for-each-ref --format='%(committerdate:unix) %(refname:short)' refs/remotes/
         fi
     fi
 done
-

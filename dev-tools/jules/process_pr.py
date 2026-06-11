@@ -148,7 +148,7 @@ def create_commit_status(pr_info, status, description, context="verification"):
     owner = "arii"
     repo = "hrm"
     sha = pr_info["headRefOid"]
-    
+
     print(f"[INFO] Setting commit status for {sha} to {status}: {description}")
 
     try:
@@ -188,7 +188,7 @@ def setup_worktree(branch_name):
     print(f"[INFO] Creating worktree for branch: {branch_name}")
     # Fetch latest to ensure we know about the branch
     run(["git", "fetch", "origin"], cwd=REPO_DIR)
-    
+
     # Force fetch the branch to get latest
     run(["git", "fetch", "origin", f"{branch_name}:{branch_name}"], cwd=REPO_DIR, check=False)
 
@@ -414,7 +414,7 @@ def post_pr_comment(pr_number, results, failure_details, session_url=None, analy
     # Summary header
     summary_status = "PASS" if not failure_details else "FAIL"
     body = f"### Automated Verification Results — {summary_status}\n\n"
-    
+
     # Add Jules mention on failure if requested
     if failure_details and COMMENT_JULES:
         body += "@jules\n\n"
@@ -576,7 +576,7 @@ def main():
                             conflict_files.append(os.path.relpath(filepath, worktree_path))
                 except Exception:
                     continue
-    
+
     if conflict_files:
         print(f"[WARN] Branch already contains unresolved conflicts in {len(conflict_files)} file(s):")
         for cf in conflict_files[:5]:  # Show first 5
@@ -588,13 +588,13 @@ def main():
 
     # 3. Rebase & Force Push (Early Fail Check or fix existing conflicts)
     print("\n[STEP] Attempting to sync with leader (Rebase/Merge)...")
-    
+
     # If existing conflicts, reset to the commit before the conflict merge
     if has_existing_conflicts:
         print("[INFO] Resetting to clean state before attempting fresh rebase/merge...")
         # Get the parent of HEAD (before the bad merge)
         run(["git", "reset", "--hard", "HEAD~1"], cwd=worktree_path, check=False)
-    
+
     is_git_clean = True # Assume clean if skipping rebase
 
     if SKIP_REBASE:
@@ -602,13 +602,13 @@ def main():
     else:
         # 3. Rebase & Force Push (Early Fail Check or fix existing conflicts)
         print("\n[STEP] Attempting to sync with leader (Rebase/Merge)...")
-        
+
         # If existing conflicts, reset to the commit before the conflict merge
         if has_existing_conflicts:
             print("[INFO] Resetting to clean state before attempting fresh rebase/merge...")
             # Get the parent of HEAD (before the bad merge)
             run(["git", "reset", "--hard", "HEAD~1"], cwd=worktree_path, check=False)
-        
+
         is_git_clean = rebase_and_push(worktree_path, branch_name)
 
         # After a push, the head SHA might change, so we get it again.

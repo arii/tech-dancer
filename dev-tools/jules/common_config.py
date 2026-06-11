@@ -66,7 +66,7 @@ def setup_python_path():
         str(WORKSPACE_ROOT / "session-ops"),
         str(SCRIPTS_DIR),
     ]
-    
+
     for path in paths_to_add:
         if path not in sys.path:
             sys.path.insert(0, path)
