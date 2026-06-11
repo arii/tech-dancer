@@ -14,20 +14,16 @@ test.describe('Affiliate Disclosure Spacing', () => {
     const gap = await page.evaluate(() => {
       // Find the disclosure box itself. It has the .inline-block class.
       const disclosureBox = [...document.querySelectorAll('div.inline-block')].find(el => el.textContent?.includes('As an Amazon Associate'));
-      if (!disclosureBox) return { error: 'Disclosure box not found' };
+      if (!disclosureBox) return -1;
 
       const nextElement = disclosureBox.nextElementSibling;
-      if (!nextElement) return { error: 'Next element not found' };
+      if (!nextElement) return -2;
 
       const rect1 = disclosureBox.getBoundingClientRect();
       const rect2 = nextElement.getBoundingClientRect();
 
       return rect2.top - rect1.bottom;
     });
-
-    if (typeof gap === 'object' && gap !== null && 'error' in gap) {
-      throw new Error(gap.error);
-    }
 
     expect(gap).toBe(24); // gap={6} is 24px (6 * 4px)
   });
@@ -40,20 +36,16 @@ test.describe('Affiliate Disclosure Spacing', () => {
 
     const gap = await page.evaluate(() => {
       const disclosureBox = [...document.querySelectorAll('div.inline-block')].find(el => el.textContent?.includes('As an Amazon Associate'));
-      if (!disclosureBox) return { error: 'Disclosure box not found' };
+      if (!disclosureBox) return -1;
 
       const nextElement = disclosureBox.nextElementSibling;
-      if (!nextElement) return { error: 'Next element not found' };
+      if (!nextElement) return -2;
 
       const rect1 = disclosureBox.getBoundingClientRect();
       const rect2 = nextElement.getBoundingClientRect();
 
       return rect2.top - rect1.bottom;
     });
-
-    if (typeof gap === 'object' && gap !== null && 'error' in gap) {
-      throw new Error(gap.error);
-    }
 
     expect(gap).toBe(24);
   });
