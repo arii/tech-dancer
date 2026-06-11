@@ -3,6 +3,7 @@ node_modules/
 .pnpm-store/
 
 # Build and Analysis
+artifacts/
 dist/
 dist-ssr/
 build/
