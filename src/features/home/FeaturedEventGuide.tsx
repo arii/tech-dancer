@@ -72,9 +72,28 @@ export function FeaturedEventGuide() {
 
   return (
     <Box as="section" className="w-full max-w-full min-w-0">
-      <Text as="h2" variant="headline" size="2xl" weight="font-black" marginBottom={4}>
-        Featured Event Guide
-      </Text>
+      <Stack
+        direction={{ base: 'col', sm: 'row' }}
+        align={{ base: 'start', sm: 'baseline' }}
+        justify="between"
+        gap={2}
+        marginBottom={4}
+      >
+        <Text as="h2" variant="headline" size="2xl" weight="font-black">
+          Featured Event Guide
+        </Text>
+        <Text
+          as={NavLink}
+          to="/events"
+          variant="mono"
+          size="xs"
+          color="accent"
+          weight="font-bold"
+          className="shrink-0 hover:underline"
+        >
+          See all events →
+        </Text>
+      </Stack>
 
       {/* Editorial card: image-led grid */}
       <Box
