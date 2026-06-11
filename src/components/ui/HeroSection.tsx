@@ -20,7 +20,7 @@ export function HeroSection() {
       align="center"
       justify="center"
       overflow="hidden"
-      className="relative hero-section"
+      className="w-full max-w-full min-w-0 items-center gap-0 lg:grid-cols-[minmax(0,1fr)_420px]"
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -29,7 +29,7 @@ export function HeroSection() {
       <Box
         position="absolute"
         inset="bottom"
-        height={48}
+        height={0}
         zIndex={5}
         className="hero-bottom-gradient"
         aria-hidden="true"
@@ -42,8 +42,8 @@ export function HeroSection() {
         align="start"
         gap={0}
         paddingX={{ base: 4, md: 8, lg: 12 }}
-        paddingTop={{ base: 8, lg: 12 }}
-        paddingBottom={{ base: 4, lg: 8 }}
+        paddingTop={{ base: 4, lg: 8 }}
+        paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
         marginX="auto"
       >
@@ -97,7 +97,7 @@ export function HeroSection() {
         <Box
           width={24}
           height={1.5}
-          marginTop={6}
+          marginTop={2}
           radius="full"
           opacity={0}
           pointerEvents="none"
@@ -109,7 +109,7 @@ export function HeroSection() {
           direction="row"
           align="stretch"
           gap={5}
-          marginTop={{ base: 6, lg: 8 }}
+          marginTop={{ base: 2, lg: 4 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"

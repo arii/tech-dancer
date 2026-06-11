@@ -23,15 +23,15 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_420px]"
+        className="w-full max-w-full min-w-0 items-center gap-0 lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
 
       <Stack
-        gap={{ base: 10, lg: 14 }}
-        marginTop={{ base: 4, lg: 16 }}
+        gap={{ base: 2, lg: 4 }}
+        marginTop={{ base: 0, lg: 0 }}
         className="w-full max-w-full min-w-0"
       >
         <Box
