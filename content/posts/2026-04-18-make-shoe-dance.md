@@ -5,7 +5,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Turn your favorite sneakers or flats into dance shoes with adhesive suede. A DIY modification that improves spins, reduces joint strain, and survives long social dance weekends."
-image: ""
+image: "/images/gear/diy/hero.png"
 affiliateIds:
   - suede-sheets
 tags:

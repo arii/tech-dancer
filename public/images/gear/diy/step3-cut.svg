@@ -1,24 +1,24 @@
-<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <rect class="bg" width="400" height="300" rx="8" />
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect class="bg" width="400" height="400" rx="8" />
   <style>
     .bg { fill: #0f172a; }
     .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
     .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
     .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
-    .text { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 15px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
-    .label { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .text { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: 'Albert Sans', system-ui, sans-serif; font-size: 12px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
     .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
     .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 
-  <g transform="translate(125, 40) scale(0.8)">
+  <g transform="translate(125, 40) scale(0.75)">
     <path class="suede" d="M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z" />
     <path class="accent-line" d="M35,25 Q80,5 115,25 Q145,55 135,155 Q125,255 105,305 Q85,345 75,345 Q65,345 45,305 Q25,255 15,155 Q5,55 35,25 Z" />
-    <g transform="translate(140, 180)">
+    <g transform="translate(150, 180)">
        <path class="tool" d="M0,0 L20,0 M0,10 L20,10 M0,0 C-10,0 -10,10 0,10 M20,0 L30,-10 M20,10 L30,20" fill="none" stroke="#f1f5f9" stroke-width="2" />
        <text y="40" class="label">Cut 2mm inside line</text>
     </g>
   </g>
 
-  <text x="200" y="270" class="text">3. Cut inside the line for a recessed edge</text>
+  <text x="200" y="350" class="text">3. Cut inside the line for a recessed edge</text>
 </svg>
