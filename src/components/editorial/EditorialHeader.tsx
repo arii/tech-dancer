@@ -1,7 +1,6 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { cn } from '@/lib/utils';
 import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
