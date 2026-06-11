@@ -27,15 +27,17 @@ export function FeaturedGuidePanel() {
       className="group self-stretch"
     >
       {/* Background image — fills the column height naturally */}
-      <img
-        src={`${ASSET_PREFIX}${FEATURED.image}`}
-        alt={FEATURED.imageAlt}
-        width={420}
-        height={600}
-        fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
-        aria-hidden="true"
-      />
+      <Box position="absolute" inset aspect="[420/600]" overflow="hidden" aria-hidden="true">
+        <img
+          src={`${ASSET_PREFIX}${FEATURED.image}`}
+          alt={FEATURED.imageAlt}
+          width={420}
+          height={600}
+          decoding="async"
+          fetchPriority="high"
+          className="h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
+        />
+      </Box>
       {/* Gradient overlay for text legibility */}
       <Box
         position="absolute"

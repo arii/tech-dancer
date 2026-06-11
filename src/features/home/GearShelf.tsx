@@ -49,12 +49,17 @@ export function GearShelf() {
               display="flex"
               align="center"
               justify="center"
-              className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40"
+              aspect="square"
+              className="bg-surface-alt transition-all group-hover:border-accent/40"
             >
               {image ? (
                 <img
                   src={`${ASSET_PREFIX}${image}`}
                   alt=""
+                  width={400}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
                   aria-hidden="true"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
@@ -97,11 +102,15 @@ export function GearShelf() {
               to={href}
               className="group w-28 min-w-0"
             >
-              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" className="aspect-square bg-surface-alt transition-all group-hover:border-accent/40">
+              <Box radius="lg" overflow="hidden" border display="flex" align="center" justify="center" aspect="square" className="bg-surface-alt transition-all group-hover:border-accent/40">
                 {image ? (
                   <img
                     src={`${ASSET_PREFIX}${image}`}
                     alt=""
+                    width={112}
+                    height={112}
+                    loading="lazy"
+                    decoding="async"
                     aria-hidden="true"
                     className="block h-full w-full max-w-full object-cover"
                   />
