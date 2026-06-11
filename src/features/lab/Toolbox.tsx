@@ -37,17 +37,19 @@ export default function Toolbox() {
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
 
-        <AffiliateDisclosure />
+        <Stack gap={6}>
+          <AffiliateDisclosure />
 
-        {/* Modern Search Bar & Toggle */}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} wrap data-testid="toolbox-search-bar">
-          <SearchBox
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search gear..."
-          />
-          <ViewToggle view={view} onChange={setView} />
-        </Box>
+          {/* Modern Search Bar & Toggle */}
+          <Box display="flex" align="center" justify="between" gap={4} marginTop={0} wrap data-testid="toolbox-search-bar">
+            <SearchBox
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search gear..."
+            />
+            <ViewToggle view={view} onChange={setView} />
+          </Box>
+        </Stack>
 
         <Box display="flex" justify="center" marginTop={8} marginBottom={8} className="overflow-x-auto">
           <Box display="flex" gap="1" padding="1" radius="2xl" border className="border-line bg-surface-alt min-w-max" data-testid="toolbox-filters">

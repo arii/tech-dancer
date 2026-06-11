@@ -15,7 +15,6 @@ export function AffiliateDisclosure({ compact = false }: AffiliateDisclosureProp
     <Box
       paddingX={4}
       paddingY={2}
-      marginY={6}
       surface="muted"
       radius="sm"
       border
