@@ -30,8 +30,8 @@ export default function Home() {
       </Box>
 
       <Stack
-        gap={{ base: 2, lg: 8 }}
-        marginTop={{ base: 8, lg: 'section-spacing' }}
+        gap="section-spacing"
+        marginTop="section-spacing"
         className="w-full max-w-full min-w-0"
       >
         <Box

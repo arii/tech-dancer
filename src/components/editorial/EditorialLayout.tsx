@@ -29,7 +29,7 @@ export function EditorialLayout({
       paddingX={{ base: 5, md: 10, lg: 12 }}
       paddingY={{ base: 8, md: 16 }}
     >
-      <Stack gap={10}>
+      <Stack gap="section-spacing">
         {/* Navigation */}
         <Box>
           <Stack
