@@ -15,7 +15,7 @@ heroImage: ""
 description: "Halloween Swing Thing is one of the most anticipated swing dance events of the year—a weekend packed with social dancing, costumes, live music, performances, and a carnival atmosphere."
 
 whyAttending: >
-  Halloween Swing Thing is where great dancing and playful creativity come together. It's a uniquely festive experience featuring incredible costumes, carnival activities, and high-energy social dancing. Whether you're in a giant pumpkin or just enjoying the cotton candy, it's a weekend of pure fun.
+  Halloween Swing Thing is where great dancing and playful creativity come together. It's a uniquely festive experience featuring incredible costumes, carnival activities, and high-energy social dancing. Whether you're in a DIY pumpkin outfit or just enjoying the cotton candy, it's a weekend of pure fun.
 
 theme:
   name: "Halloween Carnival"
@@ -138,7 +138,7 @@ Some of the most memorable experiences come from the unexpected fun between danc
 
 Highlights from a previous year included:
 
-* Dancing while wearing a giant pumpkin costume
+* Dancing in a DIY pumpkin outfit (orange clothes + felt stickers)
 * Fresh cotton candy from the carnival area
 * Watching creative costume reveals throughout the night
 * Seeing entire groups perform coordinated themed dances
@@ -267,7 +267,7 @@ The more you engage, the more memorable the weekend becomes.
 
 ### Don't Miss
 
-* 🎃 Dancing in costume
+* 🎃 Dancing in a pumpkin outfit
 * 🍭 Fresh cotton candy
 * 🏆 Costume contest
 * 👯 Group-themed performances
@@ -278,4 +278,4 @@ The more you engage, the more memorable the weekend becomes.
 
 ## Final Thought
 
-Halloween Swing Thing is one of those rare events where great dancing and playful creativity come together. The costumes, carnival activities, group performances, and social dancing create an experience that feels uniquely festive. Whether you're competing in the costume contest, coordinating a themed group outfit, dancing in a giant pumpkin, or simply enjoying fresh cotton candy between songs, it's an event that tends to leave attendees with stories they'll be telling for years. 🎃💃🍭
+Halloween Swing Thing is one of those rare events where great dancing and playful creativity come together. The costumes, carnival activities, group performances, and social dancing create an experience that feels uniquely festive. Whether you're competing in the costume contest, coordinating a themed group outfit, dancing in a DIY pumpkin outfit, or simply enjoying fresh cotton candy between songs, it's an event that tends to leave attendees with stories they'll be telling for years. 🎃💃🍭
