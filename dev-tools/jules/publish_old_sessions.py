@@ -27,7 +27,7 @@ JULES_OPS_SCRIPT = "jules_ops.py"
 def run_jules_ops_export():
     """Run jules_ops.py export to regenerate CSV files."""
     logger.info("Regenerating CSV data from Jules and GitHub...")
-    
+
     jules_ops_path = WORKSPACE_ROOT / JULES_OPS_SCRIPT
     command = [
         "python3",
@@ -36,7 +36,7 @@ def run_jules_ops_export():
         "--format",
         "csv"
     ]
-    
+
     try:
         result = subprocess.run(
             command,
@@ -45,12 +45,12 @@ def run_jules_ops_export():
             text=True,
             check=False
         )
-        
+
         if result.returncode == 0:
             logger.info("✅ CSV data regenerated successfully.")
         else:
             logger.error(f"❌ Failed to regenerate CSV data. Exit code: {result.returncode}")
-            
+
         if result.stdout:
             logger.info(result.stdout)
         if result.stderr:
@@ -68,7 +68,7 @@ def get_unpublished_sessions():
     """
     data_dir = get_data_dir()
     csv_path = data_dir / CONSOLIDATED_WORKSTREAMS_CSV
-    
+
     sessions_to_publish = []
     try:
         with open(csv_path, mode="r", newline="", encoding="utf-8") as file:
@@ -98,7 +98,7 @@ def publish_session_with_timeout(session_id, timeout_seconds=60):
     Attempt to publish a single Jules session with a specified timeout.
     """
     logger.info(f"Publishing session: {session_id} (timeout: {timeout_seconds}s)...")
-    
+
     jules_ops_path = WORKSPACE_ROOT / JULES_OPS_SCRIPT
     command = [
         "timeout",
@@ -117,7 +117,7 @@ def publish_session_with_timeout(session_id, timeout_seconds=60):
             text=True,
             check=False,
         )
-        
+
         logger.info(f"--- Output for session {session_id} ---")
         if result.stdout:
             logger.info(result.stdout)

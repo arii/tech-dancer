@@ -47,12 +47,12 @@ if [ "${#PR_ARGS[@]}" -gt 0 ]; then
 else
   echo "[INFO] No PR numbers provided, fetching open PRs..."
   mapfile -t PR_NUMBERS < <(gh pr list --repo arii/hrm --state open --json number --jq '.[].number')
-  
+
   if [ "${#PR_NUMBERS[@]}" -eq 0 ]; then
     echo "[INFO] No open PRs found."
     exit 0
   fi
-  
+
   echo "[INFO] Found ${#PR_NUMBERS[@]} open PR(s): ${PR_NUMBERS[*]}"
 fi
 
@@ -62,7 +62,7 @@ for PR_NUMBER in "${PR_NUMBERS[@]}"; do
   echo "=========================================="
   echo "[INFO] Processing PR #${PR_NUMBER}..."
   echo "=========================================="
-  
+
   # Build python command
   CMD_ARGS=()
   if [ "$SKIP_TESTING" = true ]; then
@@ -88,14 +88,14 @@ for PR_NUMBER in "${PR_NUMBERS[@]}"; do
       ENV_VARS="SKIP_REBASE_INTEGRATION=1"
     fi
   fi
-  
+
   # Run with environment variables
   if [ -n "$ENV_VARS" ]; then
     env $ENV_VARS python github-ops/process_pr.py "${PR_NUMBER}" "${CMD_ARGS[@]}"
   else
     python github-ops/process_pr.py "${PR_NUMBER}" "${CMD_ARGS[@]}"
   fi
-  
+
   echo "[DONE] PR #${PR_NUMBER} processing complete."
 done
 

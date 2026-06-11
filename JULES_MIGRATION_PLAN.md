@@ -352,7 +352,7 @@ class GitHubClient:
     def __init__(self, repo_path: Union[str, Path] = None):
         """
         Initialize GitHub client.
-        
+
         Args:
             repo_path: Path to repository. Defaults to current working directory.
         """
@@ -467,4 +467,3 @@ dev-tools/
 3. **Backward Compatibility**: Any external scripts depend on `dev-tools.julius.*`?
 4. **Performance**: Any performance-critical code in jules that needs special handling?
 5. **Secrets**: Should `secrets_ops.py` be migrated (adds GitHub secret management)?
-
