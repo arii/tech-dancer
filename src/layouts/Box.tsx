@@ -76,6 +76,7 @@ export interface BaseProps {
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
   bgGradient?: string
+  bg?: string
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -97,7 +98,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     overflow, overflowX, overflowY, overscroll, noScrollbar, pointerEvents,
     zIndex, opacity, opacityVariant, display, aspect, objectFit, objectPosition, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
-    top, right, bottom, left, bgGradient,
+    top, right, bottom, left, bgGradient, bg,
     // Motion props filtering
     initial, animate, exit, transition, variants: variantsProp,
     whileHover, whileTap, whileFocus, whileDrag, whileInView, viewport,
@@ -152,16 +153,24 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       ...domProps 
     } = props;
 
+    // Pass through width and height as attributes for images to mitigate CLS
+    const imgAttributes = Component === 'img' ? {
+      width: typeof width === 'number' ? width : undefined,
+      height: typeof height === 'number' ? height : undefined,
+    } : {};
+
 
     return (
       <Component
         ref={ref}
+        {...imgAttributes}
         className={composeStyles(
           panel && layoutTokens.panel,
           layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
           shadow && SHADOW_MAP[shadow],
           typeof surface === "string" ? variants.surface[surface] : (surface && "bg-surface"),
           bgGradient,
+          bg && resolveJIT(bg, "bg"),
           emphasis && variants.emphasis[emphasis],
           radiusProp && RADIUS_MAP[radiusProp],
           borderClasses,

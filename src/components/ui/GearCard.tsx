@@ -37,10 +37,6 @@ interface GearCardProps extends BaseProps {
   [key: string]: unknown;
 }
 
-const CARD_STYLES = {
-  verdict: "uppercase tracking-widest opacity-solid"
-};
-
 export function GearCard(props: GearCardProps) {
   const {
     slug,
@@ -119,17 +115,20 @@ export function GearCard(props: GearCardProps) {
       aspect="video"
       overflow="hidden"
       radius="md"
-      className="bg-surface-alt/20 block outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        bg="surface-alt"
+        opacity={20}
+        display="block"
+        className="outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       {image ? (
         <Box
           as="img"
           src={image}
           alt={alt}
-          width="full"
-          height="full"
+            width={16}
+            height={9}
           transition="transform"
-          className="duration-500 group-hover:scale-105"
+            className="w-full h-full duration-500 group-hover:scale-105"
           {...imageProps}
         />
       ) : (
@@ -139,8 +138,9 @@ export function GearCard(props: GearCardProps) {
       <Box
         position="absolute"
         inset
+          bg="neutral"
+          pointerEvents="none"
         opacityVariant="ghost"
-        className="bg-black pointer-events-none"
         aria-hidden="true"
       />
       {/* Category badge */}
@@ -151,10 +151,17 @@ export function GearCard(props: GearCardProps) {
         paddingX={2}
         paddingY={1}
         radius="full"
+          shadow="sm"
         opacityVariant="heavy"
-        className="bg-accent text-bg backdrop-blur-md shadow-sm"
+          className="bg-accent text-bg backdrop-blur-md"
       >
-        <Text variant="mono" size="micro" weight="font-bold" className="uppercase tracking-wide">
+          <Text
+            variant="mono"
+            size="micro"
+            weight="font-bold"
+            uppercase
+            tracking="wide"
+          >
           {category}
         </Text>
       </Box>
@@ -179,7 +186,14 @@ export function GearCard(props: GearCardProps) {
       <Stack gap={2}>
         {verdict && (
           <Box marginBottom={2}>
-            <Text variant="mono" size="xs" weight="font-bold" color="main" className={CARD_STYLES.verdict}>
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-bold"
+              color="main"
+              uppercase
+              tracking="widest"
+            >
               Best for: {verdict}
             </Text>
           </Box>
