@@ -24,17 +24,16 @@ test.describe('GearCard Image Audit', () => {
       expect(hasImg || hasPlaceholder).toBeTruthy();
 
       if (hasImg) {
-        // Standard variant should NOT have fixed aspect ratio attributes on the img element
-        // (They are now set to undefined for standard variant in GearCard.tsx)
+        // Both variants should have fixed aspect ratio attributes on the img element
         const width = await img.getAttribute('width');
         const height = await img.getAttribute('height');
-        expect(width).toBeNull();
-        expect(height).toBeNull();
+        expect(width).toBe('16');
+        expect(height).toBe('9');
 
-        // The container should have aspect-auto (or no aspect-video class)
+        // The container should have aspect-video for consistency
         const container = card.locator('a, [role="link"]').first();
         const className = await container.getAttribute('class');
-        expect(className).not.toContain('aspect-video');
+        expect(className).toContain('aspect-video');
       }
     }
   });

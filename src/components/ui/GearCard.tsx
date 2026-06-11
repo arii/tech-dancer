@@ -114,21 +114,20 @@ export function GearCard(props: GearCardProps) {
         to: resolvedHref
       })}
       position="relative"
-      aspect={variant === 'featured' ? "video" : "auto"}
+      aspect="video"
       overflow="hidden"
       radius="md"
-        bg="surface-alt"
-        opacity={20}
-        display="block"
-        className="outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      bg="surface-alt"
+      display="block"
+      className="outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       {image ? (
         <Box
           as="img"
           src={image}
           alt={alt}
-          width={variant === 'featured' ? 16 : undefined}
-          height={variant === 'featured' ? 9 : undefined}
+          width={16}
+          height={9}
           transition="transform"
           className="w-full h-full duration-500 group-hover:scale-105"
           {...imageProps}
