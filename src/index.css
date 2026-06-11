@@ -79,7 +79,7 @@
   --gap-cards: 2rem;
   --spacing-6: 1.5rem;
   --spacing-12: 3rem;
-  --section-spacing: clamp(3rem, 10vw, 6rem);
+  --section-spacing: clamp(3rem, 10vw, 8rem);
 
   /* Font Sizes */
   --text-micro: 9px;
