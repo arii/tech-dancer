@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
@@ -88,6 +88,57 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   );
 }
 
+function ViewportFrame({ url, width, height }: { url: string; width: number; height: number }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const containerHeight = containerRef.current.offsetHeight;
+        const scaleX = containerWidth / width;
+        const scaleY = containerHeight / height;
+        setScale(Math.min(scaleX, scaleY, 1));
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, [width, height]);
+
+  return (
+    <Box
+      ref={containerRef}
+      width="full"
+      height="full"
+      display="flex"
+      align="center"
+      justify="center"
+      overflow="hidden"
+      position="relative"
+      className="bg-surface rounded-xl shadow-2xl border border-line"
+    >
+      <Box
+        as="iframe"
+        src={url}
+        title="Viewport Preview"
+        width={width}
+        height={height}
+        className="border-none bg-white origin-center"
+        style={{ // impeccable-ignore - Dynamic scaling for iframe preview
+          transform: `scale(${scale})`,
+          width: `${width}px`,
+          height: `${height}px`,
+          minWidth: `${width}px`,
+          minHeight: `${height}px`,
+        }}
+      />
+    </Box>
+  );
+}
+
 export default function UXAuditor() {
   const toolConfig = RESEARCH_TOOLS.find(t => t.id === 'ux-auditor');
 
@@ -145,7 +196,8 @@ export default function UXAuditor() {
               value={url}
               title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+              onFocus={(e) => e.target.select()}
+              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
               width={{ base: "full", sm: 64, md: 80 }}
               paddingX={4}
               paddingY={2}
@@ -359,14 +411,11 @@ export default function UXAuditor() {
 
                       <Stack direction={{ base: 'col', md: 'row' }} width="full">
                         <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
-                          {imgUrl ? (
-                            <img
-                              src={imgUrl}
-                              alt={`${vp.name} snapshot`}
-                              loading="lazy"
-                              data-testid="ux-analysis-snapshot"
-                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
-                              onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
+                          {activeReport.url ? (
+                            <ViewportFrame
+                              url={activeReport.url}
+                              width={vp.width}
+                              height={vp.height}
                             />
                           ) : (
                             <Stack align="center" justify="center" color="dim" className="text-center">

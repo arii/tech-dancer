@@ -258,8 +258,8 @@ export function useUXAuditor() {
   }, [auditMutation]);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
-    const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Output JSON.`;
-    const userQuery = `Analyze ${targetUrl} on ${viewport.name}.`;
+    const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations. Output JSON.`;
+    const userQuery = `Analyze the provided snapshot of ${targetUrl} for ${viewport.name} viewport issues.`;
 
     try {
       const effectiveApiKey = customApiKey || apiKey;
@@ -267,11 +267,25 @@ export function useUXAuditor() {
         throw new Error("API Key missing");
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${effectiveApiKey}`, {
+      const parts: any[] = [{ text: userQuery }];
+      if (base64DataUri) {
+        // Extract data and mimeType from data URI: data:image/png;base64,xxxx
+        const match = base64DataUri.match(/^data:(image\/[a-z]+);base64,(.+)$/);
+        if (match) {
+          parts.push({
+            inline_data: {
+              mime_type: match[1],
+              data: match[2]
+            }
+          });
+        }
+      }
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${effectiveApiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: userQuery }] }],
+          contents: [{ parts }],
           systemInstruction: { parts: [{ text: systemPrompt }] },
           generationConfig: {
             responseMimeType: "application/json",
@@ -296,20 +310,31 @@ export function useUXAuditor() {
           }
         })
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+      }
+
       const result = await response.json();
+      if (!result.candidates?.[0]?.content?.parts?.[0]?.text) {
+        throw new Error("Invalid API response structure");
+      }
+
       return JSON.parse(result.candidates[0].content.parts[0].text) as ViewportAnalysis;
-    } catch {
+    } catch (err: any) {
+      console.error("Gemini API Error:", err);
       // Provide a populated prompt if API fails, as requested
       const imgContext = base64DataUri
         ? `Here is the base64 encoded snapshot:\n${base64DataUri}`
         : `[Please attach the image from scripts/ux-capture.js here]`;
 
       return {
-        summary: "API Key missing or fetch failed. Manual analysis required. Copy the prompt below.",
+        summary: `Analysis failed: ${err.message}. Manual analysis required. Copy the prompt below.`,
         improvements: [
           {
             element: "Manual Audit Required",
-            issue: "No automated analysis generated. To use Playwright snapshots locally, run: npx tsx scripts/ux-capture.ts <URL>",
+            issue: `The Gemini API returned an error: ${err.message}`,
             suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),
             severity: 5
           }
