@@ -55,6 +55,10 @@ export function GearShelf() {
                 <img
                   src={`${ASSET_PREFIX}${image}`}
                   alt=""
+                  width={400}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
                   aria-hidden="true"
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
@@ -102,6 +106,10 @@ export function GearShelf() {
                   <img
                     src={`${ASSET_PREFIX}${image}`}
                     alt=""
+                    width={112}
+                    height={112}
+                    loading="lazy"
+                    decoding="async"
                     aria-hidden="true"
                     className="block h-full w-full max-w-full object-cover"
                   />

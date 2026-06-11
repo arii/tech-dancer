@@ -120,6 +120,8 @@ export function FeaturedEventGuide() {
           <img
             src={event.heroImage}
             alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
+            width={358}
+            height={176}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover object-top"

@@ -49,6 +49,10 @@ export function LatestPosts() {
                 <img
                   src={post.image}
                   alt=""
+                  width={72}
+                  height={56}
+                  loading="lazy"
+                  decoding="async"
                   aria-hidden="true"
                   className="block h-full w-full max-w-full object-cover"
                 />
