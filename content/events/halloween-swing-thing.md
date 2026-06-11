@@ -142,6 +142,7 @@ Highlights from a previous year included:
 * Fresh cotton candy from the carnival area
 * Watching creative costume reveals throughout the night
 * Seeing entire groups perform coordinated themed dances
+* Hotel room trick-or-treating (it's incredible!)
 
 These moments often become the stories people talk about long after the event ends.
 
