@@ -2,8 +2,6 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-import { NavLink } from 'react-router-dom';
-import { ActionButton } from './ActionButton';
 import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
@@ -22,7 +20,12 @@ export function HeroSection() {
       align="center"
       justify="center"
       overflow="hidden"
-      className="relative hero-section"
+      position="relative"
+      width="full"
+      maxWidth="full"
+      minWidth={0}
+      gap={0}
+      className="hero-section"
       aria-label="Site hero"
     >
       <HeroParticleCanvas />
@@ -31,7 +34,7 @@ export function HeroSection() {
       <Box
         position="absolute"
         inset="bottom"
-        height={48}
+        height={0}
         zIndex={5}
         className="hero-bottom-gradient"
         aria-hidden="true"
@@ -44,7 +47,8 @@ export function HeroSection() {
         align="start"
         gap={0}
         paddingX={{ base: 4, md: 8, lg: 12 }}
-        paddingY={{ base: 2, lg: 2 }}
+        paddingTop={{ base: 4, lg: 8 }}
+        paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
         marginX="auto"
       >
@@ -98,7 +102,7 @@ export function HeroSection() {
         <Box
           width={24}
           height={1.5}
-          marginTop={6}
+          marginTop={2}
           radius="full"
           opacity={0}
           pointerEvents="none"
@@ -110,7 +114,7 @@ export function HeroSection() {
           direction="row"
           align="stretch"
           gap={5}
-          marginTop={{ base: 6, lg: 8 }}
+          marginTop={{ base: 2, lg: 4 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"
@@ -135,47 +139,7 @@ export function HeroSection() {
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
 
 
-        <Stack
-          marginTop={8}
-          gap={3}
-          width="full"
-          maxWidth={{ base: "full", md: "2xl" }}
-          opacity={0}
-          className="hero-cta-anim"
-        >
-          <Stack direction={{ base: "col", md: "row" }} gap={3} width="full">
-            <ActionButton
-              as={NavLink}
-              to="/events"
-              variant="primary"
-              paddingX={6}
-              radius="lg"
-              justify={{ base: "center", md: "start" }}
-              flex
-              className="min-h-12 normal-case"
-            >
-              Explore Event Guides
-            </ActionButton>
-            <ActionButton
-              as={NavLink}
-              to="/gear"
-              variant="secondary"
-              paddingX={6}
-              radius="lg"
-              justify={{ base: "center", md: "start" }}
-              flex
-              className="min-h-12 normal-case"
-            >
-              Browse Gear Reviews
-            </ActionButton>
-          </Stack>
 
-          <Box>
-            <Text as={NavLink} to="/blog/why-finals-are-hard" variant="mono" size="xs" color="dim" className="underline underline-offset-4 transition-colors hover:text-accent normal-case">
-              Start with practical notes →
-            </Text>
-          </Box>
-        </Stack>
 
         <Stack
           direction="row"
