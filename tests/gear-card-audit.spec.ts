@@ -6,7 +6,6 @@ test.describe('GearCard Image Audit', () => {
     await page.goto('/gear');
 
     // Wait for the grid to be visible
-    const grid = page.locator('main [data-testid="toolbox-search-bar"]').locator('..').locator('..');
     await expect(page.locator('.grid')).toBeVisible();
 
     // Audit standard cards
