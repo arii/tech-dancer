@@ -19,10 +19,14 @@ A Model Context Protocol (MCP) server designed to empower AI agents with structu
 
 ### 🧠 Prompts
 - `prompt://conflict-scout`: Scout for PRs needing rescue.
+- `prompt://pr-consolidation`: Guidelines for analyzing and proposing consolidation of overlapping PRs.
 - `prompt://repo-context`: Gather context before repair.
 - `prompt://repair-agent`: Apply minimal safe fixes.
 - `prompt://verifier-agent`: Prove the repair works.
 - `prompt://pr-writer`: Write professional replacement PR summaries.
+
+### 📝 Scripts
+- `scripts/create_instructions.sh`: Generates the `pr-consolidation.prompt.md` instructions file based on PR overlaps.
 
 ## Safety First
 - **Isolated Worktrees**: All repair and merge operations happen in temporary git worktrees to prevent mutating your local working directory.
