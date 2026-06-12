@@ -191,8 +191,8 @@ export default function UXAuditor() {
         canonical={`${BASE_URL}${toolConfig?.canonicalPath || '/ux-auditor'}`}
       />
       <Stack
-        direction={{ base: 'col', md: 'row' }}
-        align={{ base: 'start', md: 'center' }}
+          direction={{ base: 'col', xl: 'row' }}
+          align={{ base: 'stretch', xl: 'center' }}
         justify="between"
         gap={6}
         border="b" paddingBottom={6}
@@ -205,7 +205,7 @@ export default function UXAuditor() {
           />
         </Box>
 
-        <Stack gap={4}>
+        <Stack gap={4} as="form" autoComplete="off" onSubmit={(e) => { e.preventDefault(); runUXAudit(url); }}>
           <Stack
             direction="row"
             align="center"
@@ -215,6 +215,8 @@ export default function UXAuditor() {
           >
             <Box
               as="input"
+              id="audit-url"
+              name="audit-url"
               type="url"
               autoComplete="off"
               value={url}
@@ -222,7 +224,8 @@ export default function UXAuditor() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
               onFocus={(e) => e.target.select()}
               className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
-              width={{ base: "full", sm: 64, md: 80 }}
+                flex={1}
+                minWidth={0}
               paddingX={4}
               paddingY={2}
               radius="lg"
@@ -256,7 +259,10 @@ export default function UXAuditor() {
               <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
               <Box
                 as="input"
+              id="audit-api-key"
+              name="audit-api-key"
                 type="password"
+              autoComplete="new-password"
                 value={customApiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
                 onFocus={(e) => e.target.select()}
@@ -299,6 +305,8 @@ export default function UXAuditor() {
               <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
               <Box
                 as="input"
+                id="audit-snapshot-url"
+                name="audit-snapshot-url"
                 type="url"
                 autoComplete="off"
                 value={snapshotService}

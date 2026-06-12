@@ -36,7 +36,7 @@ interface GearCardProps extends BaseProps {
 }
 
 const CARD_STYLES = {
-  image: "w-full max-w-full h-auto object-contain object-center transition-transform duration-500 group-hover:scale-105 aspect-video",
+  image: "w-full h-full object-cover object-center-20 transition-transform duration-500 group-hover:scale-105 aspect-video",
   badge: "bg-accent text-white backdrop-blur-md shadow-sm",
   verdict: "uppercase tracking-widest opacity-solid"
 };
