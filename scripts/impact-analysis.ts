@@ -187,10 +187,23 @@ async function main() {
   const allAffected = findAffectedFiles(srcChanges, reverseMap);
 
   // Find affected pages
-  const affectedPages = allAffected.filter(f => f.startsWith(PAGES_DIR));
+  let affectedPages = allAffected.filter(f => f.startsWith(PAGES_DIR));
 
-  // Map pages to URLs
-  const pageUrls = affectedPages.map(mapPageToUrl);
+  // Global impact check
+  const globalTriggers = ['src/App.tsx', 'src/config/routes.ts', 'src/layouts/MainLayout.tsx', 'src/index.css'];
+  const hasGlobalImpact = allAffected.some(f => globalTriggers.includes(f));
+
+  let pageUrls: string[] = [];
+
+  if (hasGlobalImpact) {
+    console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
+    // If global impact, we should ideally list all top-level routes
+    // For now, we'll add a placeholder or all known static pages
+    pageUrls = ['/', '/blog', '/gear', '/events', '/research', '/merch', '/about', '/contact'];
+  } else {
+    // Map pages to URLs
+    pageUrls = affectedPages.map(mapPageToUrl);
+  }
 
   // Content URLs
   const contentUrls = getContentAffectedUrls(changedFiles);
