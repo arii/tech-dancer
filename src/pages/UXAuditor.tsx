@@ -74,7 +74,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       radius="md"
       surface="default"
       border={true}
-      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
+      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs tap-target"
     >
       {isCopying ? (
         <Icon icon={RefreshCw} size="xs" className="animate-spin" />
@@ -215,7 +215,9 @@ export default function UXAuditor() {
                 title={url}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
                 onFocus={(e) => e.target.select()}
-                className="bg-bg border border-line focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
+                surface="bg"
+                border={true}
+                className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                 width="full"
                 paddingX={4}
                 paddingY={3}
@@ -238,9 +240,12 @@ export default function UXAuditor() {
                   type="password"
                   value={customApiKey}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
-                  className="bg-bg border border-line focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all pr-10" // impeccable-ignore
+                  surface="bg"
+                  border={true}
+                  className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                   width="full"
                   paddingX={4}
+                  paddingRight={10}
                   paddingY={3}
                   radius="md"
                   placeholder="sk-..."
@@ -251,10 +256,12 @@ export default function UXAuditor() {
                     as="button"
                     onClick={() => setCustomApiKey("")}
                     position="absolute"
-                    right={2}
+                    right={1}
                     top="1/2"
-                    className="-translate-y-1/2 hover:text-error text-dim transition-colors"
-                    padding={1}
+                    className="-translate-y-1/2 hover:text-error text-dim transition-colors tap-target"
+                    display="flex"
+                    align="center"
+                    justify="center"
                     radius="md"
                     title="Clear API Key"
                   >
@@ -276,7 +283,9 @@ export default function UXAuditor() {
                 type="text"
                 value={snapshotService}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
-                className="bg-bg border border-line focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
+                surface="bg"
+                border={true}
+                className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                 width="full"
                 paddingX={4}
                 paddingY={3}
@@ -381,7 +390,7 @@ export default function UXAuditor() {
                     surface="muted"
                     size="sm"
                     radius="md"
-                    className="gap-2" // impeccable-ignore
+                    gap={2}
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -392,7 +401,7 @@ export default function UXAuditor() {
                     variant="primary"
                     size="sm"
                     radius="md"
-                    className="gap-2" // impeccable-ignore
+                    gap={2}
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
