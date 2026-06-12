@@ -19,6 +19,6 @@ export default {
       conditionNames: ["import", "require", "node", "default"],
       extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     }
-    includeOnly: '^src'
+,    includeOnly: '^src'
   }
 };
