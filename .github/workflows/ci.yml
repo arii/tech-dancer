@@ -248,10 +248,10 @@ jobs:
         if: always()
         run: |
           if [ -f artifacts/impact-analysis/impact.md ]; then
-            cat artifacts/impact-analysis/impact.md >> $GITHUB_STEP_SUMMARY
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "## Deployment Impact Analysis" >> $GITHUB_STEP_SUMMARY
-            echo "No impact report found." >> $GITHUB_STEP_SUMMARY
+            echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
+            echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
           fi
       - name: Upload Impact Report
         uses: actions/upload-artifact@v4
