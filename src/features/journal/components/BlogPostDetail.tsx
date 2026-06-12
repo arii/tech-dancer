@@ -7,7 +7,7 @@ import { affiliateManager } from '@/lib/affiliateManager';
 import { Post, readingTime, getPosts } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
-import { EditorialHero } from '@/components/editorial/EditorialHero';
+import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
@@ -77,7 +77,15 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           onShare={share}
           isShared={isCopied}
-          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} /> : undefined}
+          hero={post.image ? (
+            <ProductImageFrame
+              src={post.image}
+              alt={post.title}
+              aspect="video"
+              radius="lg"
+              className="shadow-2xl"
+            />
+          ) : undefined}
         />
       }
       sidebar={

@@ -1,7 +1,7 @@
 import { Resource, readingTime } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
-import { EditorialHero } from '@/components/editorial/EditorialHero';
+import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
 import { VerdictCallout } from '@/components/layout/DetailElements';
@@ -37,15 +37,15 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
                   <Grid cols={{ base: 1, md: 2 }} gap={4}>
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
-                      <EditorialHero src={post.image} alt={`${post.title} - front`} />
+                      <ProductImageFrame src={post.image} alt={`${post.title} - front`} aspect="video" radius="lg" />
                     </Stack>
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
-                      <EditorialHero src={post.imageBack} alt={`${post.title} - back`} />
+                      <ProductImageFrame src={post.imageBack} alt={`${post.title} - back`} aspect="video" radius="lg" />
                     </Stack>
                   </Grid>
                 ) : (
-                  <EditorialHero src={post.image} alt={post.title} />
+                  <ProductImageFrame src={post.image} alt={post.title} aspect="video" radius="lg" />
                 )}
                 {post.image?.includes('/sketches/') && (
                   <Text variant="mono" size="xs" color="dim" className="italic">
