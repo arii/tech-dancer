@@ -117,10 +117,13 @@ def index(repo_path: str = ".", recursive: bool = False):
     store = VectorStore()
     chunker = MarkdownChunker()
 
-    if recursive:
-        docs = list(Path(repo_path).rglob("*.md"))
+    path = Path(repo_path)
+    if path.is_file() and not recursive:
+        docs = [path]
+    elif recursive:
+        docs = list(path.rglob("*.md"))
     else:
-        docs = [Path(repo_path) / d for d in ["CODEX.md", "README.md", "CONTRIBUTING.md", ".github/pull_request_template.md"]]
+        docs = [path / d for d in ["CODEX.md", "README.md", "CONTRIBUTING.md", ".github/pull_request_template.md"]]
 
     for doc_path in docs:
         if doc_path.exists() and doc_path.is_file():
