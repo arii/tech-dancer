@@ -68,6 +68,8 @@ relatedEvents:
 
 ## Ashland travel notes
 
+Ashland is beautiful, small, and surprisingly walkable from the hotel. The Ashland Hills Hotel & Suites has a retro-chic vibe that fits the community feel perfectly. Book early; the room block is limited and often sells out months in advance.
+
 This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring Southern Oregon, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear.
 
 ### Venue & Travel

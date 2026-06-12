@@ -12,7 +12,7 @@ region: South
 schedule: July 2 - 5, 2026
 url: https://wildwildwestie.com/
 heroImage: '/assets/events/wild-wild-westie-hero.svg'
-description: Held at the iconic Hyatt Regency Dallas, Wild Wild Westie (WWW) is a cornerstone of the circuit, known for its intense "Texas attitude" competition and legendary late-night social dancing.
+description: Held at the Hyatt Regency DFW, Wild Wild Westie (WWW) is a cornerstone of the West Coast Swing community, known for its intense "Texas attitude" competition and legendary late-night social dancing.
 whyAttending: >
   If you love competition, WWW is the place to be. The energy in the ballroom is electric, and the level of talent in the Jack & Jills is incredible.
 theme:

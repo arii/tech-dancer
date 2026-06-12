@@ -13,7 +13,7 @@ schedule: October 8 - 11, 2026
 url: https://boogiebythebay.com/
 heroImage: '/assets/events/boogie-by-the-bay-hero.svg'
 imageAlt: 'Logo for Boogie by the Bay featuring a stylized San Francisco skyline and Golden Gate Bridge motif'
-description: Hosted by The Next Generation Swing Dance Club, Boogie by the Bay is a cornerstone of the circuit, known for its high-level "California style" competition and stunning 10-story atrium social hub.
+description: Hosted by The Next Generation Swing Dance Club, Boogie by the Bay is a cornerstone of the West Coast Swing community, known for its high-level "California style" competition and stunning 10-story atrium social hub.
 whyAttending: >
   The highlight of the NorCal WCS calendar. The level of competition is exceptionally high, and the Sunday night show is always a must-watch.
 theme:
@@ -80,7 +80,12 @@ The hotel is located right next to San Francisco International Airport (SFO), ma
 - **Packing:** Because most attendees fly in, we highly recommend using compression packing cubes to fit your dance wardrobe into a carry-on.
 
 ### Hotel Layout
-The Hyatt is massive. The ballroom is located on the ground floor, while the atrium (and its famous glass elevators) serves as the social hub. Pro tip: Rooms facing the atrium can be loud during social dancing hours—request an exterior-facing room if you're a light sleeper.
+The Hyatt is massive. The ballroom is located on the ground floor, while the atrium (and its famous glass elevators) serves as the social hub. Boogie shares this venue with [Swingtacular](/events/swingtacular-the-galactic-open), so if you've attended one, you'll know the layout. Pro tip: Rooms facing the atrium can be loud during social dancing hours—request an exterior-facing room if you're a light sleeper.
+
+### Hyatt Rewards Strategy
+If you plan on attending multiple Hyatt-based events (like Boogie or Swingtacular), consider getting the Hyatt credit card. You can often use the annual free nights for these weekends.
+- **Award Nights:** Search for award night availability separately from the room block.
+- **Booking:** Make a separate reservation for your award nights. Typically, you can ask the front desk at check-in to consolidate these into a single stay so you don't have to move rooms.
 
 ### Weather
 October in the Bay Area is usually mild, but Burlingame can be foggy and chilly in the evenings due to its proximity to the water. Bring a light jacket for walks to nearby restaurants.

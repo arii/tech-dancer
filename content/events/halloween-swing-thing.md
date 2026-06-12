@@ -12,7 +12,7 @@ region: "SoCal"
 schedule: "October 22 - 25, 2026"
 url: "https://halloweenswingthing.com"
 heroImage: "/assets/events/halloween-hero.svg"
-description: "Discover how Halloween Swing Thing blends technical excellence with festive creativity. This guide covers essential costume preparation, event highlights, and gear tips for the circuit's premier themed weekend."
+description: "Discover how Halloween Swing Thing blends technical excellence with festive creativity. This guide covers essential costume preparation, event highlights, and gear tips for the West Coast Swing community's premier themed weekend."
 
 whyAttending: >
   Attend for the unique blend of high-level competition and festive carnival atmosphere that transforms the traditional ballroom experience.

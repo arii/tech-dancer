@@ -13,7 +13,7 @@ schedule: "June 4 - 8, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
 description: >
-  Organized by Ben Morris, Jack & Jill O'Rama is a high-energy highlight of the circuit, famous for its innovative competition formats and proximity to the Disney parks.
+  Organized by Ben Morris, Jack & Jill O'Rama is a high-energy highlight of the West Coast Swing community, famous for its innovative competition formats and proximity to the Disney parks.
 whyAttending: >
   I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set.
 theme:
