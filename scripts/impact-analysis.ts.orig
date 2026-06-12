@@ -36,6 +36,8 @@ function determineImpactLevel(changedFiles: string[]): 'High' | 'Medium' | 'Low'
     } else if (file.startsWith('src/pages/') && level === 'Low') {
       level = 'Low';
     } else {
+      // For config or other core changes, we might want to default to High, but following specs:
+      if (level === 'Low') level = 'Low';
     }
   }
 

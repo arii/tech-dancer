@@ -1,52 +1,38 @@
 import fs from 'fs';
 import path from 'path';
-import ts from 'typescript';
 
 export function getRouteMap(): Record<string, string> {
   const routesPath = path.resolve(process.cwd(), 'src/config/routes.ts');
   const fileContent = fs.readFileSync(routesPath, 'utf8');
 
-  const sourceFile = ts.createSourceFile('routes.ts', fileContent, ts.ScriptTarget.Latest, true);
+  // Simple parser to extract path and lazy loading component
   const routeMap: Record<string, string> = {};
 
-  function visit(node: ts.Node) {
-    if (ts.isObjectLiteralExpression(node)) {
-      let routePath = '';
-      let componentPath = '';
+  // Matches blocks like:
+  // path: '/blog/:slug',
+  // lazy: () => import('@/pages/BlogPost').then(...)
+  const routeRegex = /path:\s*['"]([^'"]+)['"][\s\S]*?(?:lazy:\s*\(\)\s*=>\s*import\(['"]@\/([^'"]+)['"]\)|Component:\s*\(\)\s*=>)/g;
 
-      for (const prop of node.properties) {
-        if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
-          if (prop.name.text === 'path' && ts.isStringLiteral(prop.initializer)) {
-            routePath = prop.initializer.text;
-          }
-          if (prop.name.text === 'lazy') {
-            const findImport = (n: ts.Node) => {
-              if (ts.isCallExpression(n) && n.expression.kind === ts.SyntaxKind.ImportKeyword) {
-                if (n.arguments.length > 0 && ts.isStringLiteral(n.arguments[0])) {
-                  const importPath = n.arguments[0].text;
-                  if (importPath.startsWith('@/')) {
-                    componentPath = `src/${importPath.slice(2)}.tsx`;
-                  }
-                }
-              }
-              ts.forEachChild(n, findImport);
-            };
-            findImport(prop.initializer);
-          }
-        }
-      }
+  let match;
+  while ((match = routeRegex.exec(fileContent)) !== null) {
+    const routePath = match[1];
+    const componentPathStr = match[2];
 
-      if (routePath && componentPath) {
-        routeMap[componentPath] = routePath;
-      }
+    if (componentPathStr) {
+      // e.g. 'pages/Home' -> 'src/pages/Home.tsx'
+      // We will assume .tsx for all of them based on typical React setup
+      const fullPath = `src/${componentPathStr}.tsx`;
+      routeMap[fullPath] = routePath;
     }
-    ts.forEachChild(node, visit);
   }
 
-  visit(sourceFile);
+  // Handle specific edge case, if Component is defined directly, it might not be captured with the componentPath
+  // But based on our src/config/routes.ts, most use `lazy: () => import('@/pages/Home').then(m => ({ Component: m.default }))`
+
   return routeMap;
 }
 
+// Test execution when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(getRouteMap());
 }
