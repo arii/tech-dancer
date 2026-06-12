@@ -143,6 +143,7 @@ export const tailwindSafelist = [
   'z-0',
   'z-99998',
   'z-99999',
+  'z-999999',
   'z-40',
   'z-sticky',
   'isolate',
