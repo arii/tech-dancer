@@ -36,7 +36,7 @@ export function ResearchToolShell({
       <Box border radius="lg" padding={8} surface="default">
         <Stack gap={8}>
           <Stack gap={4}>
-            <Text variant="headline" size="xl" weight="font-black">{title}</Text>
+            <Text variant="headline" size="xl" weight="font-black" as="h1">{title}</Text>
             <Text variant="body" color="dim">
               {description}
             </Text>
@@ -47,7 +47,7 @@ export function ResearchToolShell({
               <Stack key={idx} gap={4} padding={6} border radius="md" surface="surface">
                 <Box display="flex" align="center" gap={3}>
                   <feature.icon className="text-accent w-6 h-6" />
-                  <Text variant="display" size="lg" weight="font-bold">{feature.title}</Text>
+                  <Text variant="display" size="lg" weight="font-bold" as="h2">{feature.title}</Text>
                 </Box>
                 <Text variant="body" size="sm" color="dim">
                   {feature.description}
