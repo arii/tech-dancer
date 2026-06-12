@@ -1,15 +1,16 @@
 name: Mass Audit PRs
 
-# on:
-#   workflow_dispatch:
-#   schedule:
-#     - cron: '0 0 * * *' # Run daily at midnight
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   audit:
+    if: github.repository == 'disabled'
     runs-on: ubuntu-latest
     permissions:
       contents: write
