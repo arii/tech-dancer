@@ -1,13 +1,13 @@
-import { useMemo, ReactNode } from 'react';
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
-import { BASE_URL } from '@/config/constants';
 
 interface ContentPostRouteProps<T> {
   queryKeyPrefix: string;
   fetchFn: (slug: string) => T | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schemaBuilder: (data: T) => any;
   backPath: string;
   backLabel: string;
@@ -21,6 +21,7 @@ interface ContentPostRouteProps<T> {
   DetailComponent: React.ComponentType<{ post: T; onBack: () => void; backLabel: string }>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ContentPostRoute<T extends Record<string, any>>({
   queryKeyPrefix,
   fetchFn,
