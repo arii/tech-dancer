@@ -5,12 +5,10 @@ import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { Post, readingTime, getPosts } from '@/lib/content';
-import { EditorialLayout } from '@/components/editorial/EditorialLayout';
-import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
+import { EditorialContentRenderer } from '@/components/editorial/EditorialContentRenderer';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -62,24 +60,21 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     .filter((link): link is NonNullable<typeof link> => !!link);
 
   return (
-    <EditorialLayout
+    <EditorialContentRenderer
+      category={post.category}
+      date={post.date}
+      readTime={rt}
+      title={post.title}
+      dek={post.excerpt}
+      author={post.author}
+      authorAvatarSrc={post.authorImage}
+      tags={post.tags}
+      onShare={share}
+      isShared={isCopied}
+      hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} /> : undefined}
       onBack={onBack}
       backLabel={backLabel}
-      header={
-        <EditorialHeader
-          category={post.category}
-          date={post.date}
-          readTime={rt}
-          title={post.title}
-          dek={post.excerpt}
-          author={post.author}
-          authorAvatarSrc={post.authorImage}
-          tags={post.tags}
-          onShare={share}
-          isShared={isCopied}
-          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} /> : undefined}
-        />
-      }
+      content={post.content}
       sidebar={
         affiliateLinks.length > 0 ? (
           <Stack gap={6}>
@@ -101,25 +96,22 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           <EditorialNewsletter />
         </Stack>
       }
-    >
-      <Box className="prose-editorial">
-        <MarkdownRenderer content={post.content} />
-      </Box>
-
-      {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
-          <Stack gap={4}>
-            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
-            <Stack direction="row" wrap gap={2}>
-              {post.tags.map(tag => (
-                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
-                  <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
-                </Box>
-              ))}
+      contentBottom={
+        post.tags && post.tags.length > 0 && (
+          <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+            <Stack gap={4}>
+              <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
+              <Stack direction="row" wrap gap={2}>
+                {post.tags.map(tag => (
+                  <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                    <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
+                  </Box>
+                ))}
+              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-      )}
-    </EditorialLayout>
+          </Box>
+        )
+      }
+    />
   );
 }

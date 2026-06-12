@@ -8,10 +8,8 @@ import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
-import { EditorialLayout } from '@/components/editorial/EditorialLayout';
-import { EditorialHeader } from '@/components/editorial/EditorialHeader';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { EditorialContentRenderer } from '@/components/editorial/EditorialContentRenderer';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -100,25 +98,18 @@ export default function ResearchDetail() {
           type="article"
           schema={structuredData}
         />
-        <EditorialLayout
+        <EditorialContentRenderer
           onBack={() => navigate('/research')}
           backLabel="Back to Portfolio"
-          header={
-            <EditorialHeader
-              category={study.category}
-              date={study.date}
-              readTime={rt}
-              title={study.title}
-              dek={study.excerpt}
-              author={study.author}
-              authorAvatarSrc={study.authorImage}
-            />
-          }
-        >
-          <Box className="prose-editorial">
-            <MarkdownRenderer content={study.content} />
-          </Box>
-        </EditorialLayout>
+          category={study.category}
+          date={study.date}
+          readTime={rt}
+          title={study.title}
+          dek={study.excerpt}
+          author={study.author}
+          authorAvatarSrc={study.authorImage}
+          content={study.content}
+        />
       </>
     );
   }
