@@ -33,7 +33,7 @@ function exec(command: string): string {
 /**
  * Helper to split string into lines and filter empty values.
  */
-const splitAndFilter = (output: string) => output ? output.split('\n').filter(Boolean) : [];
+const splitAndFilter = (output: string): string[] => (output ? output.split('\n').filter(Boolean) : []);
 
 /**
  * Gets the list of changed files between current HEAD and origin/main.
@@ -177,8 +177,8 @@ async function main() {
     // Find affected pages
     const affectedPages = allAffected.filter(f => f.startsWith(IMPACT_CONFIG.PAGES_DIR));
 
-    // Global impact check
-    const hasGlobalImpact = allAffected.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
+    // Global impact check - only if the CHANGED files themselves are global triggers
+    const hasGlobalImpact = changedFiles.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
 
     let pageUrls: string[];
 
@@ -236,7 +236,18 @@ async function main() {
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
     const visualReviewList = allUrls.length > 0 ? allUrls.map(url => `- ${url}`).join('\n') : 'None detected.';
 
-    const markdown = `# Deployment Impact Analysis\n\n### Impact Level: ${severity}\n\n### Changed Files\n\n${changedFilesList}\n\n### Visual Review Required\n\n${visualReviewList}\n`;
+    const markdown = `# Deployment Impact Analysis
+
+### Impact Level: ${severity}
+
+### Changed Files
+
+${changedFilesList}
+
+### Visual Review Required
+
+${visualReviewList}
+`;
 
     fs.writeFileSync(path.join(outputDir, 'report.md'), markdown);
     console.log(`\n✅ Reports generated in ${outputDir}`);

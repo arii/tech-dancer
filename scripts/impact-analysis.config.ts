@@ -30,7 +30,7 @@ export const IMPACT_CONFIG = {
     '/contact'
   ],
 
-  // Route Mapping Overrides (PascalCase to URL slug)
+  // Route Mapping Overrides (PascalCase component name to URL slug)
   PAGE_ROUTE_OVERRIDES: {
     'Home': '/',
     'UXAuditor': '/ux-auditor',
