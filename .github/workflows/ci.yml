@@ -151,7 +151,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
       env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Install system utilities
@@ -244,6 +244,15 @@ jobs:
       - run: pnpm install --frozen-lockfile --prefer-offline
       - name: Run Impact Analysis
         run: pnpm run impact:analysis
+      - name: Report Summary
+        if: always()
+        run: |
+          if [ -f artifacts/impact-analysis/impact.md ]; then
+            cat artifacts/impact-analysis/impact.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Deployment Impact Analysis" >> $GITHUB_STEP_SUMMARY
+            echo "No impact report found." >> $GITHUB_STEP_SUMMARY
+          fi
       - name: Upload Impact Report
         uses: actions/upload-artifact@v4
         with:
