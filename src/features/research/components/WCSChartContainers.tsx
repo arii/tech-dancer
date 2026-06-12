@@ -12,7 +12,7 @@ import {
   Line,
   Brush
 } from 'recharts';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import WCSChartCard from '@/components/analytics/WCSChartCard';
 
 interface ScoreData {

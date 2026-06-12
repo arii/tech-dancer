@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Search, AlertCircle } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
-import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
 import { useExport } from '../hooks/useExport';
@@ -100,23 +99,6 @@ export function WCSScraperTool() {
     window.gtag?.('event', 'filter_change', { filter_type: 'promotion', value: filter, tool: 'wcs_scraper' });
   }, [setFilterPromoted]);
 
-  if (error) {
-    return (
-      <Box border surface="muted" padding="card" className="border-accent/20">
-        <Stack align="center" gap={4} paddingY={10}>
-          <AlertCircle className="w-12 h-12 text-accent opacity-muted" />
-          <Stack align="center" gap={1}>
-            <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
-            <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
-          </Stack>
-          <Box paddingTop={4}>
-            <ActionButton variant="secondary" paddingX={6} paddingY={3} onClick={() => window.location.reload()}>Retry Connection</ActionButton>
-          </Box>
-        </Stack>
-      </Box>
-    );
-  }
-
   const stats = [
     { label: 'Status', value: 'OPERATIONAL' },
     { label: 'Latency', value: latency ? `${(latency / 1000).toFixed(2)}s` : '---' },
@@ -145,6 +127,23 @@ export function WCSScraperTool() {
     { label: 'EXPORT_CSV', description: 'Raw machine-readable data', icon: 'csv' as const, onClick: handleExportCSV },
     { label: 'EXPORT_PDF_REPORT', description: 'Formatted analytical brief', icon: 'pdf' as const, onClick: handleExportPDF }
   ];
+
+  if (error) {
+    return (
+      <Box border surface="muted" padding="card" className="border-accent/20">
+        <Stack align="center" gap={4} paddingY={10}>
+          <AlertCircle className="w-12 h-12 text-accent opacity-muted" />
+          <Stack align="center" gap={1}>
+            <Text variant="mono" size="sm" weight="font-bold" uppercase>Data Synchronisation Failed</Text>
+            <Text variant="body" size="xs" color="dim" textAlign="center">{error}</Text>
+          </Stack>
+          <Box paddingTop={4}>
+            <ActionButton variant="secondary" paddingX={6} paddingY={3} onClick={() => window.location.reload()}>Retry Connection</ActionButton>
+          </Box>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <ResearchToolShell

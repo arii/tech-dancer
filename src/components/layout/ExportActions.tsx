@@ -1,5 +1,5 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Download, FileJson, FileText } from 'lucide-react';
+import { FileJson, FileText } from 'lucide-react';
 import { ActionButton } from '@/components/ui/ActionButton';
 
 export interface ExportAction {

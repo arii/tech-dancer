@@ -34,7 +34,7 @@ const WCSChartCard: React.FC<WCSChartCardProps> = ({
   <Box border surface="default" padding="card" height="[400px]">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
-        {icon && icon}
+        {icon}
         <Text variant="mono" size="micro" weight="font-bold" uppercase>
           {title}
         </Text>

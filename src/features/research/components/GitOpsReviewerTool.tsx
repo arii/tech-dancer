@@ -1,4 +1,4 @@
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Text, Grid } from '@/layouts/Primitives';
 import { Cpu, ShieldAlert } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
