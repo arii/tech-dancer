@@ -29,7 +29,7 @@ class OllamaClient:
             if format == "json":
                 return json.loads(response_text)
             return {"response": response_text}
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             # Fallback for when Ollama is not running
             return self._mock_response(prompt, system)
 

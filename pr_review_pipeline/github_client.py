@@ -1,29 +1,55 @@
-import subprocess
-import json
 import os
+import requests
 from typing import Dict, Any, List, Optional
+from github import Github, Auth
+from pr_review_pipeline.config import settings
 
 class GitHubClient:
     def __init__(self, repo: Optional[str] = None):
-        self.repo = repo or os.environ.get("GITHUB_REPO") or "owner/repo"
+        self.repo_name = repo or settings.github_repo
 
-    def _run_gh(self, args: List[str]) -> str:
-        try:
-            result = subprocess.run(["gh"] + args, capture_output=True, text=True, check=True)
-            return result.stdout
-        except subprocess.CalledProcessError as e:
-            print(f"GH Error: {e.stderr}")
-            raise
+        # Determine authentication token
+        token = os.environ.get("GH_TOKEN")
+        if not token:
+            try:
+                import subprocess
+                token = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=True).stdout.strip()
+            except Exception:
+                pass
+
+        if token:
+            self.gh = Github(auth=Auth.Token(token))
+            self.token = token
+        else:
+            self.gh = Github()
+            self.token = None
+
+        self.repo = self.gh.get_repo(self.repo_name)
 
     def get_pr_details(self, pr_number: int) -> Dict[str, Any]:
-        output = self._run_gh(["pr", "view", str(pr_number), "--json", "title,body,number,baseRefName,headRefName"])
-        return json.loads(output)
+        pr = self.repo.get_pull(pr_number)
+        return {
+            "title": pr.title,
+            "body": pr.body,
+            "number": pr.number,
+            "baseRefName": pr.base.ref,
+            "headRefName": pr.head.ref
+        }
 
     def get_pr_diff(self, pr_number: int) -> str:
-        return self._run_gh(["pr", "diff", str(pr_number)])
+        url = f"https://api.github.com/repos/{self.repo_name}/pulls/{pr_number}"
+        headers = {"Accept": "application/vnd.github.v3.diff"}
+        if self.token:
+            headers["Authorization"] = f"Bearer {self.token}"
+
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        return response.text
 
     def create_issue(self, title: str, body: str, labels: List[str] = []) -> str:
-        args = ["issue", "create", "--title", title, "--body", body]
-        for label in labels:
-            args.extend(["--label", label])
-        return self._run_gh(args).strip()
+        issue = self.repo.create_issue(
+            title=title,
+            body=body,
+            labels=labels
+        )
+        return issue.html_url
