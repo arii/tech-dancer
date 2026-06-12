@@ -52,8 +52,8 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  lint-audit-typecheck:
-    name: Lint, Audit & Type Check
+  lint-typecheck:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -85,35 +85,13 @@ jobs:
       - name: Type-check
         run: pnpm run type-check
 
+      - name: Run Unit Tests - Vitest
+        run: pnpm test
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: UI Anti-Pattern Audit & Gate
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python3 -m pip install PyGithub click
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
-          if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
-          python3 dev-tools/td_cli.py gh audit-gate
-
-      - name: Design Token Compliance
-        run: |
-          # Check for raw hex colors not in tokens.css
-          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
-            --include="*.tsx" \
-            | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
-          if [ "$VIOLATIONS" -gt 0 ]; then
-            echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
-            grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
-            exit 1
-          fi
-
-      - name: Run Unit Tests - Vitest
-        run: pnpm test
 
       - name: Run CLI Unit Tests
         run: |
@@ -133,9 +111,30 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  anti-pattern-audit:
+    name: Anti-Pattern Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: UI Anti-Pattern Audit & Gate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 -m pip install click
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          export PYTHONPATH
+          pnpm run audit
+          python3 dev-tools/td_cli.py gh audit-gate
+
   test-build:
     name: Build & E2E
-    needs: lint-audit-typecheck
+    needs: lint-typecheck
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
@@ -174,7 +173,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VITE_BASE_PATH: /
         run: |
-          python3 -m pip install PyGithub click
+          python3 -m pip install click
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size

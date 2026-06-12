@@ -12,8 +12,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Keep CI failures fast and deterministic */
   retries: 0,
-  /* Opt out of parallel tests on CI to avoid heavy CPU thread thrashing if necessary */
-  workers: process.env.CI ? 1 : undefined,
+  /* Use multiple workers in CI for faster execution */
+  workers: process.env.CI ? 2 : undefined,
   /* Stop immediately on CI failure */
   maxFailures: process.env.CI ? 1 : 0,
   /* Reporter to use. Keep CI output streaming while preserving HTML artifacts. */
