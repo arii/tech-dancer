@@ -12,6 +12,7 @@ region: Southwest
 schedule: July 2 - 5, 2026
 url: https://phx4th.com/
 heroImage: '/assets/events/phoenix-4th-of-july-hero.svg'
+imageAlt: 'Phoenix 4th of July logo with patriotic colors and resort theme'
 description: A summer community highlight, Phoenix 4th of July is famous for its immersive resort experience and high-energy ballroom competition at the JW Marriott Scottsdale Camelback Inn.
 whyAttending: >
   The combination of a world-class resort and world-class dancing is unbeatable. The pool parties are a unique WCS experience that you have to see to believe.

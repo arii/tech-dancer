@@ -1,4 +1,5 @@
 ---
+deprecated: true
 type: event
 title: Wild Wild Westie
 date: '2026-07-02'
@@ -40,7 +41,7 @@ gear:
   shoeIds:
     - bloch-grecian
     - suede-sheets
-  shoeDescription: "The Dallas Hyatt ballroom floor is fantastic but can be fast."
+  shoeDescription: "The Hyatt Regency DFW ballroom floor is fantastic but can be fast."
   essentialIds:
     - liquid-iv
     - loop-experience
@@ -62,8 +63,6 @@ relatedEvents:
 - swingtacular-the-galactic-open
 - jack-and-jill-orama
 ---
-
-Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the Hyatt Regency DFW, it's a weekend of intense dancing, serious competition, and southern hospitality.
 
 ## Western theme notes
 

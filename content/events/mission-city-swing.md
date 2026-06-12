@@ -15,7 +15,7 @@ heroImage: ""
 description: "A cornerstone of the NorCal dance community, offering top-tier instruction and a welcoming social environment every Wednesday."
 
 whyAttending: >
-  Mission City Swing is the heartbeat of the South Bay WCS community. Whether you're a beginner or a seasoned pro, the welcoming atmosphere and consistent quality of instruction make it a weekly must-visit.
+  Mission City Swing is the heartbeat of the South Bay West Coast Swing community. Whether you're a beginner or a seasoned pro, the welcoming atmosphere and consistent quality of instruction make it a weekly must-visit.
 theme:
   name: "Community Social"
   label: "Weekly Style"

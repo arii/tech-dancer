@@ -12,6 +12,7 @@ region: Pacific Northwest
 schedule: May 14 - 17, 2026
 url: https://soswing.com
 heroImage: '/assets/events/soswing-hero.svg'
+imageAlt: 'SOSwing logo featuring Ashland scenery and retro-chic styling'
 bestFor: ["Intimate settings", "First-time competitors", "Road-trip vibe"]
 description: Known for its warm "Westie" hospitality, SOswing provides an intimate PNW setting for leveled workshops and social dancing at the retro-chic Ashland Hills Hotel.
 whyAttending: >

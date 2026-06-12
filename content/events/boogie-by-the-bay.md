@@ -6,7 +6,7 @@ startDate: '2026-10-08'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
 excerpt: Experience the premier West Coast Swing competition and social weekend at San Francisco's waterfront Hyatt Regency SFO.
-location: Hyatt Regency San Francisco Airport
+location: Hyatt Regency SFO
 city: Burlingame, CA
 region: NorCal
 schedule: October 8 - 11, 2026

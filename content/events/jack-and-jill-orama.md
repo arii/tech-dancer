@@ -12,6 +12,7 @@ region: "SoCal"
 schedule: "June 4 - 8, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
+imageAlt: "Jack & Jill O'Rama logo with rainbow pride arc and sparkles"
 description: >
   Organized by Ben Morris, Jack & Jill O'Rama is a high-energy highlight of the West Coast Swing community, famous for its innovative competition formats and proximity to the Disney parks.
 whyAttending: >
