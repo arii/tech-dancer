@@ -1,12 +1,12 @@
 name: 'Self-Healing CI'
 
-on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-  issue_comment:
-    types: [created]
+# on:
+#   workflow_run:
+#     workflows: ["CI"]
+#     types:
+#       - completed
+#   issue_comment:
+#     types: [created]
 
 permissions:
   contents: write
