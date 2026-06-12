@@ -97,6 +97,8 @@ jobs:
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
+        env:
+          CI: true
         run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
@@ -178,14 +180,6 @@ jobs:
           VITE_BASE_PATH=/; export VITE_BASE_PATH
           pnpm run build
 
-      - name: Build App for Bundle Size (Pages base path)
-        env:
-          NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
-        run: |
-          # Bundle size check should match GitHub Pages deployment base path.
-          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
-          pnpm run build
 
       - name: Bundle Size Check
         env:
@@ -195,13 +189,6 @@ jobs:
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
-
-      - name: Rebuild App for Playwright (root base path)
-        env:
-          NODE_ENV: production
-        run: |
-          VITE_BASE_PATH=/; export VITE_BASE_PATH
-          pnpm run build
 
       - name: Run Playwright Smoke Test
         run: |
@@ -213,13 +200,11 @@ jobs:
       - name: Run Lighthouse CI
         run: |
           set -eu
-          VITE_BASE_PATH="/${REPO_NAME}/"
+          VITE_BASE_PATH="/"
           CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
           export VITE_BASE_PATH
           export CHROME_PATH
-          echo "VITE_BASE_PATH=$VITE_BASE_PATH"
           echo "CHROME_PATH=$CHROME_PATH"
-          pnpm run build
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

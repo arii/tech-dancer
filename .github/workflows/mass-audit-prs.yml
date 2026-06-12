@@ -10,6 +10,7 @@ env:
 
 jobs:
   audit:
+    if: github.repository == 'disabled'
     runs-on: ubuntu-latest
     permissions:
       contents: write
