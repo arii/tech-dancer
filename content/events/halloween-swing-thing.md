@@ -11,7 +11,7 @@ city: "Costa Mesa"
 region: "SoCal"
 schedule: "October 22 - 25, 2026"
 url: "https://halloweenswingthing.com"
-heroImage: "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.webp"
+heroImage: ""
 description: "A comprehensive guide to Halloween Swing Thing, featuring tips for costume planning, event highlights, and essential gear for this West Coast Swing festival."
 
 whyAttending: >
@@ -61,7 +61,7 @@ relatedEvents:
 
 Halloween Swing Thing has grown into a cornerstone of the West Coast Swing circuit by embracing a "festival" identity. It moves beyond the standard convention format to create an immersive, themed environment where the community's creativity is on full display.
 
-The weekend is characterized by its transformation of a traditional ballroom into a carnival-like space. Dancers gather not just for the WSDC points, but to participate in a shared experience where elaborate costumes and themed social dancing are the core of the event's culture.
+The event transforms a traditional ballroom into a carnival-like space. Dancers gather not just for the WSDC points, but to participate in a shared experience where elaborate costumes and themed social dancing are the core of the event's culture.
 
 ---
 
@@ -112,7 +112,7 @@ Many dancers bring multiple outfits so they can comfortably dance while still pa
 
 ## 🍭 Carnival Atmosphere
 
-One of the things that makes Halloween Swing Thing memorable is the carnival-style environment.
+The carnival-style environment makes Halloween Swing Thing memorable.
 
 Common attractions often include:
 
@@ -126,34 +126,16 @@ The event strikes a balance between a dance convention and a Halloween celebrati
 
 ---
 
-## 👟 What to Bring
-
-Beyond the **Recommended Gear** listed above, consider these event-specific packing tips to ensure you're prepared for the unique demands of a costume-heavy weekend.
-
-### Costume Logistics
-
-* **Emergency repair kit:** Pack safety pins, fashion tape, and basic sewing supplies for quick on-site fixes.
-* **Dance-friendly backup:** Always have a simplified version of your costume (or a themed t-shirt) ready for high-intensity social dancing.
-* **Storage bags:** Use dedicated bags to keep delicate costume pieces or props organized and protected during travel.
-* **Layered clothing:** The transition between a warm ballroom and hotel common areas can be stark; bring a light jacket or sweater.
-
-### Event Essentials
-
-* **Personal care:** Pack snacks and a reusable water bottle to maintain energy between carnival activities.
-* **Device management:** While we recommend a portable charger in our gear list, remember to bring extra cables for all your themed accessories.
-
----
-
 ## 🧵 Costume Planning Tips
 
 ### Prioritize Movement
 
 Before finalizing a costume, test:
 
-* Jumping and leaping
-* Bending and squatting
-* Deep stretches
-* Spins and turns
+* Jumping around
+* Bending, squatting, and sitting
+* Lifting arms
+* Doing a duck
 
 A costume that looks amazing but restricts movement can become difficult to wear for an entire evening.
 
@@ -236,15 +218,12 @@ The more you engage, the more memorable the weekend becomes.
 
 ### Don't Miss
 
-* 🎃 Themed social dancing
-* 🍭 Seasonal carnival treats
-* 🏆 Main costume contest
-* 👯 Group choreographed performances
-* 🎶 Late-night social dance sets
-* 🎡 Immersive carnival environment
+* Themed social dancing
+* Seasonal carnival treats
+* Main costume contest
+* Group choreographed performances
+* Late-night social dance sets
+* Immersive carnival environment
 
 ---
 
-## Final Thought
-
-Ultimately, this event proves that technical excellence and playful creativity are not mutually exclusive. Whether you are there for the competition or the carnival games, the weekend offers a memorable shift from the typical dance calendar. Success comes from preparation—ensuring your gear and costumes allow you to fully immerse yourself in the creative atmosphere.
