@@ -147,11 +147,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             const normalizedSrc = normalizeAsset(src || '');
             return (
               <Box marginY={8} width="full" display="flex" justify="center">
-                <img
+                <Box
+                  as="img"
                   src={normalizedSrc}
-                  className="rounded-lg shadow-sm"
+                  radius="lg"
+                  shadow="sm"
                   loading="lazy"
                   alt={alt || "Article illustration"}
+                  maxWidth="full"
+                  height="auto"
                   {...props}
                 />
               </Box>
