@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { getPostBySlug, Post } from '@/lib/content';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { BlogPostDetail } from './components/BlogPostDetail';
