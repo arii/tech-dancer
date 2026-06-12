@@ -1,6 +1,6 @@
 import { Plane, Trophy, Hotel, CheckCircle2, ShieldCheck, Briefcase } from 'lucide-react';
 import { EventAnchors, TimelineItem } from '../types';
-import { parseDate, addDays } from '@/lib/utils';
+import { parseDate, addDays } from '@/lib/date-time';
 
 export interface TimelineOptions {
   filterIds?: string[];

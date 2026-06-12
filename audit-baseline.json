@@ -1,9 +1,10 @@
 {
-  "count": 28,
+  "count": 30,
   "inventory": {
     "src/components/Equalizer.tsx": 1,
     "src/components/GlobalErrorBoundary.tsx": 1,
     "src/components/GlobalSearch.tsx": 1,
+    "src/components/analytics/AnalyticsChartCard.tsx": 1,
     "src/components/ui/GearCard.tsx": 1,
     "src/components/ui/Icon.tsx": 1,
     "src/components/ui/ListRow.tsx": 1,
@@ -22,6 +23,7 @@
     "src/features/lab/BlogDrafter.tsx": 1,
     "src/features/lab/wsdc-reminders/WSDCReminders.tsx": 1,
     "src/features/research/components/WCSChartContainers.tsx": 1,
+    "src/features/research/components/WCSScraperTool.tsx": 1,
     "src/index.css": 1,
     "src/layouts/Text.tsx": 1,
     "src/lib/__tests__/generate-assets.test.ts": 1,
@@ -30,5 +32,5 @@
     "src/styles/design-tokens.ts": 1,
     "src/styles/tokens.css": 1
   },
-  "updatedAt": "2026-06-12T02:55:36.950Z"
+  "updatedAt": "2026-06-12T07:28:23.635Z"
 }
