@@ -1,10 +1,9 @@
-// WCSScraperTool – refactored to use ResearchToolShell and DataPanel
+// Cleaned imports
 import React, { useCallback, useEffect } from 'react';
-import { Search, Download, FileJson, FileText, AlertCircle, Zap, ShieldCheck } from 'lucide-react';
+import { Search, Download, FileJson, FileText, AlertCircle } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
@@ -91,7 +90,7 @@ function WCSExportTools({ data }: { data: WCSRecord[] }) {
   return (
     <Box border surface="default" padding="card">
       <Stack gap={6}>
-        <Box display="flex" align="center" gap={3}"><Download className="w-5 h-5 text-accent" /><Text variant="mono" size="xs" weight="font-bold" uppercase>Export Data</Text></Box>
+        <Box display="flex" align="center" gap={3}> <Download className="w-5 h-5 text-accent" /> <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Data</Text></Box>
         <Stack gap={3}>
           <ActionButton variant="secondary" width="full" padding={3} onClick={handleExportCSV}>
             <Box display="flex" align="center" gap={3} width="full" textAlign="left"><FileJson className="w-4 h-4 shrink-0" /><Stack gap={0}><Text variant="mono" size="micro" weight="font-bold">EXPORT_CSV</Text><Text variant="body" size="micro" color="dim">Raw machine-readable data</Text></Stack></Box>
@@ -145,8 +144,7 @@ export function WCSScraperTool() {
     setFilterPromoted,
     scoreDistribution,
     trendData,
-    totalEvents,
-    lastSync
+    totalEvents
   } = useWCSData();
 
   useEffect(() => {
