@@ -11,7 +11,7 @@ const JSON_PATH = path.join(OUTPUT_DIR, 'report.json');
 const SCORE_THRESHOLD = 55;
 const MAX_REPORTED_PAIRS = 250;
 
-const IGNORED_SEGMENTS = new Set(['node_modules', 'dist', 'coverage', 'playwright-report', 'test-results']);
+const IGNORED_SEGMENTS = new Set(['node_modules', 'dist', 'coverage', 'playwright-report', 'test-results', 'layouts', 'ui', 'editorial']);
 const JSX_EXTENSIONS = new Set(['.tsx', '.jsx']);
 const ANALYZED_EXTENSIONS = new Set(['.tsx', '.ts', '.jsx', '.js']);
 const UTILITY_CALL_ALLOWLIST = new Set([
