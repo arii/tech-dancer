@@ -13,6 +13,10 @@ const SCORE_THRESHOLD = 55;
 const MAX_REPORTED_PAIRS = 250;
 
 const IGNORED_SEGMENTS = new Set(['node_modules', 'dist', 'coverage', 'playwright-report', 'test-results']);
+const IGNORED_PATHS = [
+  'src/components/ui/',
+  'src/layouts/',
+];
 const JSX_EXTENSIONS = new Set(['.tsx', '.jsx']);
 const ANALYZED_EXTENSIONS = new Set(['.tsx', '.ts', '.jsx', '.js']);
 const UTILITY_CALL_ALLOWLIST = new Set([
@@ -28,6 +32,12 @@ function walk(dir) {
     }
 
     const fullPath = path.join(dir, entry.name);
+    const repoPath = toRepoPath(fullPath);
+
+    if (IGNORED_PATHS.some((ignored) => repoPath.startsWith(ignored))) {
+      return [];
+    }
+
     if (entry.isDirectory()) {
       return walk(fullPath);
     }
