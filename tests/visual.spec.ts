@@ -62,7 +62,7 @@ test.describe('Visual Regression Tests', () => {
           let lastHeight = -1;
           let unchangedCount = 0;
 
-          while (unchangedCount < 3) {
+          while (unchangedCount < 2) {
             scrollable.scrollTo(0, scrollable.scrollHeight);
             const currentHeight = scrollable.scrollHeight;
 
@@ -73,8 +73,7 @@ test.describe('Visual Regression Tests', () => {
               lastHeight = currentHeight;
             }
 
-            // Minimal task yield to allow for layout/lazy-loading triggers
-            await new Promise(requestAnimationFrame);
+            await new Promise(r => setTimeout(r, 50));
           }
         };
 
