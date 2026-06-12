@@ -1,0 +1,1 @@
+import{j as a,B as e,T as s}from"./index-BSPBKQUi.js";const r=({label:t})=>t?a.jsx(e,{surface:"accent",paddingX:2,paddingY:.5,className:"bg-accent/10",children:a.jsx(s,{variant:"mono",size:"xs",color:"accent",weight:"font-bold",children:t.toUpperCase()})}):null;export{r as S};
