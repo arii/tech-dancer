@@ -1,9 +1,9 @@
-import { ExternalLink } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { SpecsTable } from '@/components/layout/DetailElements';
 import { ResourceGrid } from '../ResourceGrid';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
+import { InfoRow } from '@/components/ui/InfoList';
 
 interface ResourceHeaderExtrasProps {
   author: string;
@@ -60,45 +60,22 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
           <Text variant="mono" size="tiny" weight="font-bold" color="dim" uppercase className="tracking-widest border-b border-line" paddingBottom={2}>
             Where to Buy
           </Text>
-          <Grid cols={1} gap={3}>
+          <Stack gap={3}>
             {affiliateLinks.map(link => (
-              <Box
+              <InfoRow
                 key={link.id}
-                as="a"
+                label={link.name || link.label || link.url}
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                display="flex"
-                align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all"
-              >
-                <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
-              </Box>
+              />
             ))}
             {affiliateLink && (
-              <Box
-                as="a"
+              <InfoRow
+                key="manual"
+                label="Buy on Amazon"
                 href={affiliateLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                display="flex"
-                align="center"
-                justify="between"
-                padding={4}
-                surface="default"
-                border
-                className="hover:border-accent group transition-all"
-              >
-                <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
-              </Box>
+              />
             )}
-          </Grid>
+          </Stack>
           <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight not-italic">
             {DISCLOSURE_TEXT}
           </Text>

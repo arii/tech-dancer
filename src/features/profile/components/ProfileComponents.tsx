@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
+import { InfoCard, InfoFeature, InfoPill } from '@/components/ui/InfoList';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
 /**
@@ -26,37 +27,15 @@ export const IconMap: Record<string, React.ElementType> = {
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   return (
     <Stack gap={6} marginTop={4}>
-      {cards.map((card, index) => {
-        const Icon = card.icon ? IconMap[card.icon] : null;
-        return (
-          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
-            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
-              {Icon && (
-                <Box 
-                  width={12} 
-                  height={12} 
-                  radius="lg" 
-                  border 
-                  display="flex" 
-                  align="center" 
-                  justify="center" 
-                  className="bg-accent/5 border-accent/20 shrink-0 shadow-sm group-hover:shadow-accent/5"
-                >
-                  <Icon className="w-6 h-6 text-accent" />
-                </Box>
-              )}
-              <Stack gap={2} flex={1} align="start">
-                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
-                  {card.title}
-                </Text>
-                <Text variant="body" size="base" color="dim" opacityVariant="solid" className="leading-relaxed text-left">
-                  {card.content}
-                </Text>
-              </Stack>
-            </Stack>
-          </Box>
-        );
-      })}
+      {cards.map((card, index) => (
+        <InfoFeature
+          key={card.id ?? index}
+          icon={card.icon ? IconMap[card.icon] : undefined}
+          title={card.title}
+          description={card.content}
+          href={card.href}
+        />
+      ))}
     </Stack>
   );
 }
@@ -67,24 +46,14 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
 export function ProfileItems({ items }: { items: ProfileItem[] }) {
   return (
     <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={2}>
-      {items.map((item, index) => {
-        const Icon = item.icon ? IconMap[item.icon] : null;
-        return (
-          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-line/5">
-            <Stack gap={3}>
-              {Icon && <Icon className="w-4 h-4 text-accent" />}
-              {item.title && (
-                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="uppercase tracking-widest">
-                  {item.title}
-                </Text>
-              )}
-              <Text variant="body" size="xs" color="dim" className="leading-normal">
-                {item.description}
-              </Text>
-            </Stack>
-          </Box>
-        );
-      })}
+      {items.map((item, index) => (
+        <InfoCard
+          key={item.id ?? index}
+          icon={item.icon ? IconMap[item.icon] : undefined}
+          title={item.title}
+          description={item.description}
+        />
+      ))}
     </Grid>
   );
 }
@@ -151,26 +120,12 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
 export function ProfileLinks({ links }: { links: ProfileLink[] }) {
   return (
     <Box display="flex" gap={3} wrap marginTop={4}>
-      {links.map((link) => (
-        <Box
-          key={link.label}
-          as="a"
+      {links.map((link, index) => (
+        <InfoPill
+          key={index}
+          label={link.label}
           href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          display="inline-flex"
-          align="center"
-          paddingX={4}
-          paddingY={3}
-          minHeight={11}
-          border
-          radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
-        >
-          <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
-            {link.label}
-          </Text>
-        </Box>
+        />
       ))}
     </Box>
   );
