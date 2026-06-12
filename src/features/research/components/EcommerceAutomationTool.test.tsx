@@ -21,7 +21,7 @@ describe('EcommerceAutomationTool', () => {
     expect(mainHeading).toBeTruthy();
 
     // Check for major section headings (H2)
-
+    expect(screen.getByRole('heading', { level: 2, name: /Active Experiments/i })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 2, name: /SEO & Policy Safety/i })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 2, name: /Pipeline Architecture/i })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 2, name: /Visual Image QA Examples/i })).toBeTruthy();

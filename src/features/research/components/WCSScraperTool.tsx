@@ -1,7 +1,7 @@
-// impeccable-ignore-file
 import React, { useCallback, useEffect } from 'react';
 import {
   Search,
+  Download,
   FileJson,
   FileText,
   AlertCircle
@@ -16,9 +16,7 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Zap, ShieldCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { DataPanel } from "@/components/analytics/DataPanel";
-import { ExportActions, ExportActionItem } from "@/components/analytics/ExportActions";
-import { StatsCard, StatItem } from "@/components/analytics/StatsCard";
+import { cn } from '@/lib/utils';
 import { useExport } from '../hooks/useExport';
 import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
@@ -26,12 +24,14 @@ import { FilterButton } from '@/components/ui/FilterButton';
 import { ActionButton } from '@/components/ui/ActionButton';
 
 function WCSDataTable({ data }: { data: WCSRecord[] }) {
-  const subtitle = `${data.length} RECORDS FOUND`;
-  const footer = data.length > 20 ? <Text variant="mono" size="micro" color="dim">AND {data.length - 20} MORE RECORDS...</Text> : undefined;
-
   return (
-    <DataPanel title="Scoring Results" subtitle={subtitle} footer={footer}>
-      <table className="w-full border-collapse">
+    <Box border surface="default">
+      <Box padding="compact" borderBottom display="flex" justify="between" align="center">
+        <Text variant="mono" size="xs" weight="font-bold" uppercase>Scoring Results</Text>
+        <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
+      </Box>
+      <Box className="overflow-x-auto">
+        <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-line">
               <Text as="th" padding={4} textAlign="left" size="xs" variant="mono" color="dim" uppercase weight="font-normal">Date</Text>
@@ -97,7 +97,13 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
             )}
           </tbody>
         </table>
-    </DataPanel>
+      </Box>
+      {data.length > 20 && (
+        <Box padding="compact" textAlign="center" borderTop>
+          <Text variant="mono" size="micro" color="dim">AND {data.length - 20} MORE RECORDS...</Text>
+        </Box>
+      )}
+    </Box>
   );
 }
 
@@ -125,35 +131,76 @@ function WCSExportTools({ data }: { data: WCSRecord[] }) {
     exportCSV(data);
   }, [data, exportCSV]);
 
-  const actions: ExportActionItem[] = [
-    {
-      id: 'csv',
-      label: 'EXPORT_CSV',
-      description: 'Raw machine-readable data',
-      icon: FileJson,
-      onClick: handleExportCSV
-    },
-    {
-      id: 'pdf',
-      label: 'EXPORT_PDF_REPORT',
-      description: 'Formatted analytical brief',
-      icon: FileText,
-      onClick: handleExportPDF
-    }
-  ];
-
-  return <ExportActions actions={actions} />;
+  return (
+    <Box border surface="default" padding="card">
+      <Stack gap={6}>
+        <Box display="flex" align="center" gap={3}>
+          <Download className="w-5 h-5 text-accent" />
+          <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Data</Text>
+        </Box>
+        <Stack gap={3}>
+          <ActionButton
+            variant="secondary"
+            width="full"
+            padding={3}
+            onClick={handleExportCSV}
+          >
+            <Box display="flex" align="center" gap={3} width="full" textAlign="left">
+              <FileJson className="w-4 h-4 shrink-0" />
+              <Stack gap={0}>
+                <Text variant="mono" size="micro" weight="font-bold">EXPORT_CSV</Text>
+                <Text variant="body" size="micro" color="dim">Raw machine-readable data</Text>
+              </Stack>
+            </Box>
+          </ActionButton>
+          <ActionButton
+            variant="secondary"
+            width="full"
+            padding={3}
+            onClick={handleExportPDF}
+          >
+            <Box display="flex" align="center" gap={3} width="full" textAlign="left">
+              <FileText className="w-4 h-4 shrink-0" />
+              <Stack gap={0}>
+                <Text variant="mono" size="micro" weight="font-bold">EXPORT_PDF_REPORT</Text>
+                <Text variant="body" size="micro" color="dim">Formatted analytical brief</Text>
+              </Stack>
+            </Box>
+          </ActionButton>
+        </Stack>
+      </Stack>
+    </Box>
+  );
 }
 
 function WCSScraperStats({ latency, totalEvents }: { latency: number | null, totalEvents: number | null }) {
-  const stats: StatItem[] = [
-    { label: "Status", value: "OPERATIONAL" },
-    { label: "Latency", value: latency ? `${(latency / 1000).toFixed(2)}s` : '---' },
-    { label: "Events Processed", value: totalEvents || '---' },
-    { label: "Safe Access", value: <StatusBadge label="ACTIVE" /> }
-  ];
-
-  return <StatsCard stats={stats} />;
+  return (
+    <Box paddingX={4} paddingY={6}>
+      <Stack gap={4}>
+        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">Stats</Text>
+        <Stack gap={4}>
+          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+            <Text variant="body" size="xs" color="dim">Status</Text>
+            <Text variant="mono" size="xs" color="brand" weight="font-bold">OPERATIONAL</Text>
+          </Box>
+          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+            <Text variant="body" size="xs" color="dim">Latency</Text>
+            <Text variant="mono" size="xs" color="brand" weight="font-bold">
+              {latency ? `${(latency / 1000).toFixed(2)}s` : '---'}
+            </Text>
+          </Box>
+          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
+            <Text variant="body" size="xs" color="dim">Events Processed</Text>
+            <Text variant="mono" size="xs" color="brand" weight="font-bold">{totalEvents || '---'}</Text>
+          </Box>
+          <Box display="flex" justify="between" align="center">
+            <Text variant="body" size="xs" color="dim">Safe Access</Text>
+            <StatusBadge label="ACTIVE" />
+          </Box>
+        </Stack>
+      </Stack>
+    </Box>
+  );
 }
 
 export function WCSScraperTool() {

@@ -2,7 +2,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { NavLink } from 'react-router-dom';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
-import { formatRelativeTime } from '@/lib/date-time';
+import { formatRelativeTime } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 export function Footer() {

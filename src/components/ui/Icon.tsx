@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
@@ -41,7 +41,7 @@ export function Icon({ icon: LucideIcon, size, color, className, strokeWidth, op
       className={cn(
         iconVariants({ size, color }),
         // impeccable-ignore - Using design tokens via JIT for dynamic opacity
-        opacityVariant && `opacity-[${opacityTokens[opacityVariant]}]`,
+        opacityVariant && `opacity-[${opacityTokens[opacityVariant]}]`, // impeccable-ignore
         className
       )}
       {...props}

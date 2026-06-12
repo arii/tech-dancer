@@ -52,12 +52,32 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
   );
 }
 
+function SingleImage({ image }: { image: MerchProductImage }) {
+  // Show labels only when two images are visible (handled in EqualImages and ProminentImages)
+  return <MerchImage image={image} label={false} loading="eager" />;
+}
+
 function EqualImages({ images }: { images: MerchProductImage[] }) {
   return (
     <Grid cols={2} gap={2} height="full">
       {images.map((image, index) => (
         <MerchImage key={`${image.side}-${image.src}`} image={image} label loading={index === 0 ? 'eager' : 'lazy'} />
       ))}
+    </Grid>
+  );
+}
+
+function ProminentImages({ primary, secondary }: { primary: MerchProductImage; secondary?: MerchProductImage }) {
+  if (!secondary) return <MerchImage image={primary} loading="eager" />;
+
+  return (
+    <Grid cols={5} gap={2} height="full">
+      <Box span={3} height="full">
+        <MerchImage image={primary} loading="eager" label />
+      </Box>
+      <Box span={2} height="full">
+        <MerchImage image={secondary} label />
+      </Box>
     </Grid>
   );
 }
@@ -85,16 +105,9 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
         {resolved.mode === 'both-equal' && resolved.equal.length > 1 ? (
           <EqualImages images={resolved.equal} />
         ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
-          <Grid cols={5} gap={2} height="full">
-            <Box span={3} height="full">
-              <MerchImage image={primary} loading="eager" label />
-            </Box>
-            <Box span={2} height="full">
-              <MerchImage image={resolved.secondary} label />
-            </Box>
-          </Grid>
+          <ProminentImages primary={primary} secondary={resolved.secondary} />
         ) : (
-          <MerchImage image={primary} loading="eager" label={false} />
+          <SingleImage image={primary} />
         )}
       </Box>
     </Box>

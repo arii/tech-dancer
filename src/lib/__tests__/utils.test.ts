@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { cn, safeSearch, escapeRegExp, getHighlightedParts } from '../utils';
-import { formatRelativeTime } from '../date-time';
+import { cn, safeSearch, escapeRegExp, getHighlightedParts, formatRelativeTime } from '../utils';
 
 describe('utils', () => {
   describe('cn', () => {

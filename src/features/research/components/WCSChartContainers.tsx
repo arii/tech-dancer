@@ -12,7 +12,7 @@ import {
   Line,
   Brush
 } from 'recharts';
-import { AnalyticsChartCard } from '@/components/analytics/AnalyticsChartCard';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 
 interface ScoreData {
   score: number;
@@ -33,82 +33,100 @@ const customTooltipStyle = {
 };
 
 export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
-  <AnalyticsChartCard
-    title="Score Distribution"
-    icon={BarChart2}
-    hasData={data.length > 0}
-    emptyStateMessage="NO_DISTRIBUTION_DATA"
-  >
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data} margin={{ bottom: 20 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-        <XAxis
-          dataKey="score"
-          fontSize={10}
-          tickLine={false}
-          axisLine={false}
-          tick={{ fill: 'rgba(255,255,255,0.5)' }}
-        />
-        <YAxis
-          fontSize={10}
-          tickLine={false}
-          axisLine={false}
-          tick={{ fill: 'rgba(255,255,255,0.5)' }}
-        />
-        <Tooltip contentStyle={customTooltipStyle} />
-        <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
-        <Brush
-          dataKey="score"
-          height={20}
-          stroke="var(--raw-color-accent-brand)"
-          fill="var(--raw-color-surface-muted)"
-          travellerWidth={10}
-        />
-      </BarChart>
-    </ResponsiveContainer>
-  </AnalyticsChartCard>
+  <Box border surface="default" padding="card" height="[400px]">
+    <Stack gap={4} height="full">
+      <Box display="flex" align="center" gap={3}>
+        <BarChart2 className="w-4 h-4 text-accent" />
+        <Text variant="mono" size="micro" weight="font-bold" uppercase>Score Distribution</Text>
+      </Box>
+      <Box flex={1} minHeight={0}>
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+              <XAxis
+                dataKey="score"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <YAxis
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <Tooltip contentStyle={customTooltipStyle} />
+              <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
+              <Brush
+                dataKey="score"
+                height={20}
+                stroke="var(--raw-color-accent-brand)"
+                fill="var(--raw-color-surface-muted)"
+                travellerWidth={10}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <Box display="flex" align="center" justify="center" height="full">
+            <Text variant="mono" size="xs" color="dim">NO_DISTRIBUTION_DATA</Text>
+          </Box>
+        )}
+      </Box>
+    </Stack>
+  </Box>
 );
 
 export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
-  <AnalyticsChartCard
-    title="Avg Score Trend"
-    icon={TrendingUp}
-    hasData={data.length > 0}
-    emptyStateMessage="NO_TREND_DATA"
-  >
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={data} margin={{ bottom: 20 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-        <XAxis
-          dataKey="date"
-          fontSize={10}
-          tickLine={false}
-          axisLine={false}
-          tick={{ fill: 'rgba(255,255,255,0.5)' }}
-        />
-        <YAxis
-          fontSize={10}
-          tickLine={false}
-          axisLine={false}
-          tick={{ fill: 'rgba(255,255,255,0.5)' }}
-        />
-        <Tooltip contentStyle={customTooltipStyle} />
-        <Line
-          type="monotone"
-          dataKey="avg"
-          stroke="var(--raw-color-accent-brand)"
-          strokeWidth={2}
-          dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
-          activeDot={{ r: 6 }}
-        />
-        <Brush
-          dataKey="date"
-          height={20}
-          stroke="var(--raw-color-accent-brand)"
-          fill="var(--raw-color-surface-muted)"
-          travellerWidth={10}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  </AnalyticsChartCard>
+  <Box border surface="default" padding="card" height="[400px]">
+    <Stack gap={4} height="full">
+      <Box display="flex" align="center" gap={3}>
+        <TrendingUp className="w-4 h-4 text-accent" />
+        <Text variant="mono" size="micro" weight="font-bold" uppercase>Avg Score Trend</Text>
+      </Box>
+      <Box flex={1} minHeight={0}>
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{ bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+              <XAxis
+                dataKey="date"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <YAxis
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.5)' }}
+              />
+              <Tooltip contentStyle={customTooltipStyle} />
+              <Line
+                type="monotone"
+                dataKey="avg"
+                stroke="var(--raw-color-accent-brand)"
+                strokeWidth={2}
+                dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
+                activeDot={{ r: 6 }}
+              />
+              <Brush
+                dataKey="date"
+                height={20}
+                stroke="var(--raw-color-accent-brand)"
+                fill="var(--raw-color-surface-muted)"
+                travellerWidth={10}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <Box display="flex" align="center" justify="center" height="full">
+            <Text variant="mono" size="xs" color="dim">NO_TREND_DATA</Text>
+          </Box>
+        )}
+      </Box>
+    </Stack>
+  </Box>
 );
