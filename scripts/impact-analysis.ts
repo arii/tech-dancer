@@ -187,13 +187,13 @@ async function main() {
   const allAffected = findAffectedFiles(srcChanges, reverseMap);
 
   // Find affected pages
-  let affectedPages = allAffected.filter(f => f.startsWith(PAGES_DIR));
+  const affectedPages = allAffected.filter(f => f.startsWith(PAGES_DIR));
 
   // Global impact check
   const globalTriggers = ['src/App.tsx', 'src/config/routes.ts', 'src/layouts/MainLayout.tsx', 'src/index.css'];
   const hasGlobalImpact = allAffected.some(f => globalTriggers.includes(f));
 
-  let pageUrls: string[] = [];
+  let pageUrls: string[];
 
   if (hasGlobalImpact) {
     console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
