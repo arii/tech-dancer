@@ -200,7 +200,7 @@ jobs:
       - name: Run Lighthouse CI
         run: |
           set -eu
-          VITE_BASE_PATH="/${REPO_NAME}/"
+          VITE_BASE_PATH="/"
           CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
           export VITE_BASE_PATH
           export CHROME_PATH
