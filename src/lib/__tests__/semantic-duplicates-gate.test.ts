@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
@@ -30,11 +30,12 @@ describe('Semantic Duplicate Gate Integration', () => {
     fs.writeFileSync(ORIGINAL_BASELINE, JSON.stringify({ baseline: 100 }));
 
     try {
-      const output = execSync(`node ${DETECTOR_SCRIPT} --gate`, { encoding: 'utf8' });
+      const output = execFileSync('node', [DETECTOR_SCRIPT, '--gate'], { encoding: 'utf8' });
       expect(output).toContain('✅ Semantic Duplicate Gate Passed.');
-    } catch (error) {
+    } catch (err) {
+      const error = err as { stdout: string };
       console.error(error.stdout);
-      throw error;
+      throw err;
     }
   });
 
@@ -43,7 +44,7 @@ describe('Semantic Duplicate Gate Integration', () => {
     fs.writeFileSync(ORIGINAL_BASELINE, JSON.stringify({ baseline: -1 }));
 
     try {
-      execSync(`node ${DETECTOR_SCRIPT} --gate`, { encoding: 'utf8', stdio: 'pipe' });
+      execFileSync('node', [DETECTOR_SCRIPT, '--gate'], { encoding: 'utf8', stdio: 'pipe' });
       throw new Error('Should have failed');
     } catch (err) {
       const error = err as { status: number; stderr: string };
