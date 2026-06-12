@@ -1,4 +1,4 @@
-// impeccable-ignore-file
+
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -38,7 +38,23 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         components={{
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
-              return <input type="checkbox" defaultChecked={checked} className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer mt-1" {...props} />;
+              return (
+                <Box
+                  as="span"
+                  display="inline-flex"
+                  align="center"
+                  justify="center"
+                  minWidth={12}
+                  minHeight={12}
+                >
+                  <input
+                    type="checkbox"
+                    defaultChecked={checked}
+                    className="w-4 h-4 rounded border-line text-accent focus:ring-accent accent-accent cursor-pointer"
+                    {...props}
+                  />
+                </Box>
+              );
             }
             return <input type={type} defaultChecked={checked} disabled={disabled} {...props} />;
           },
@@ -142,7 +158,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, ...props}) => (
-            <p className="text-text-dim leading-relaxed my-4 text-base" {...props} />
+            <Text as="p" color="dim" leading="relaxed" marginY={4} size="base" {...props} />
           ),
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
@@ -174,10 +190,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
                   <Box marginY={8} width="full" display="flex" justify="center">
-                    <img
+                    <Box
+                      as="img"
                       src={diagramUrl}
                       alt="Workflow Diagram"
-                      className="rounded-lg shadow-sm max-w-full max-h-[400px] object-contain"
+                      radius="lg"
+                      shadow="sm"
+                      maxWidth="full"
+                      maxHeight={96}
+                      className="object-contain"
                       loading="lazy"
                     />
                   </Box>
@@ -193,16 +214,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               return (
                 <Box marginY={6} radius="lg" border className="overflow-hidden">
                   {language && (
-                    <Box
+                    <Stack
+                      direction="row"
+                      align="center"
+                      gap={2}
                       padding={2}
                       paddingX={4}
                       surface="surface"
-                      className="border-b border-line flex items-center gap-2"
+                      border="b"
+                      borderColor="line"
                     >
                       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
                         {language}
                       </Text>
-                    </Box>
+                    </Stack>
                   )}
                   <SyntaxHighlighter
                     style={vscDarkPlus}
@@ -211,7 +236,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                     customStyle={{
                       margin: 0,
                       borderRadius: 0,
-                      background: 'var(--color-surface, #0f172a)',
+                      background: 'var(--color-surface)',
                       fontSize: '0.8rem',
                       lineHeight: '1.6',
                     }}
@@ -225,12 +250,22 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             // Inline code
             return (
-              <code
-                className="px-1.5 py-0.5 rounded text-[0.8em] font-mono bg-surface border border-line text-accent"
+              <Text
+                as="code"
+                variant="mono"
+                size="xs"
+                paddingX={1.5}
+                paddingY={0.5}
+                radius="sm"
+                surface="surface"
+                border
+                borderColor="line"
+                color="accent"
+                className="normal-case"
                 {...props}
               >
                 {children}
-              </code>
+              </Text>
             );
           },
           notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
