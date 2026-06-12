@@ -1,0 +1,519 @@
+
+
+import { HeroParticleCanvas } from './HeroParticleCanvas';
+import { Stack, Text, Box } from '@/layouts/Primitives';
+import { Wordmark } from './Wordmark';
+import { HERO_CONFIG } from '@/config/hero';
+
+// Generate deterministic bar data based on index to prevent visual regression flakiness
+const BARS = Array.from({ length: HERO_CONFIG.BAR_COUNT }, (_, i) => ({
+  height: 20 + ((i * HERO_CONFIG.SEEDS.BAR_HEIGHT) % 36),
+  dur: (0.4 + ((i * HERO_CONFIG.SEEDS.BAR_DUR) % 0.8)).toFixed(2) + 's',
+  delay: ((i * HERO_CONFIG.SEEDS.BAR_DELAY) % 0.8).toFixed(2) + 's',
+})) as const;
+
+export function HeroSection() {
+
+  return (
+    <Stack
+      as="section"
+      align="center"
+      justify="center"
+      overflow="hidden"
+      position="relative"
+      width="full"
+      maxWidth="full"
+      minWidth={0}
+      gap={0}
+      className="hero-section"
+      aria-label="Site hero"
+    >
+      <HeroParticleCanvas />
+
+      {/* Bottom Fade Gradient for better contrast with the site background */}
+      <Box
+        position="absolute"
+        inset="bottom"
+        height={0}
+        zIndex={5}
+        className="hero-bottom-gradient"
+        aria-hidden="true"
+      />
+
+      {/* All content sits above the canvas via z-index. Set pointer-events-none on decorative branding to prevent interception of Global Search clicks in tests. */}
+      <Stack
+        position="relative"
+        zIndex={10}
+        align="start"
+        gap={0}
+        paddingX={{ base: 4, md: 8, lg: 12 }}
+        paddingTop={{ base: 4, lg: 8 }}
+        paddingBottom={{ base: 0, lg: 0 }}
+        maxWidth="screen-xl"
+        marginX="auto"
+      >
+
+
+        <Wordmark
+          variant="hero"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-logo-anim"
+        />
+
+        {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
+        <Stack
+          as="h1"
+          marginTop={{ base: 5, lg: 6 }}
+          align="start"
+          gap={0}
+          width="full"
+          maxWidth="full"
+          opacity={0}
+          pointerEvents="auto"
+          className="hero-headline-anim"
+        >
+          <Text
+            as="span"
+            variant="hero"
+            color="white"
+            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+          >
+            Built for dancers.
+          </Text>
+          <Text
+            as="span"
+            variant="hero"
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+          >
+            <span className="hero-accent-color">Train smarter.</span>
+          </Text>
+          <Text
+            as="span"
+            variant="hero"
+            color="white"
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+          >
+            Travel better.
+          </Text>
+        </Stack>
+
+        {/* Gradient Accent Line below headline */}
+        <Box
+          width={24}
+          height={1.5}
+          marginTop={2}
+          radius="full"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-line-anim"
+        />
+
+        {/* Tagline with Vertical Accent Bar */}
+        <Stack
+          direction="row"
+          align="stretch"
+          gap={5}
+          marginTop={{ base: 2, lg: 4 }}
+          maxWidth="2xl"
+          opacity={0}
+          className="hero-tagline-anim"
+        >
+          <Box
+            width="0.5"
+            className="bg-white/20 shrink-0"
+            aria-hidden="true"
+          />
+          <Text
+            as="p"
+            variant="body"
+            weight="font-normal"
+            align="left"
+            size={{ base: "base", md: "lg", lg: "xl" }}
+            className="hero-tagline-text"
+          >
+            Training notes, event guides, gear reviews, and practical tools for better West Coast Swing weekends.
+          </Text>
+        </Stack>
+
+        {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
+
+
+
+
+        <Stack
+          direction="row"
+          align="end"
+          gap={1}
+          marginY={4}
+          height={12}
+          width="full"
+          maxWidth="full"
+          overflow="hidden"
+          opacity={0}
+          pointerEvents="none"
+          className="hero-waveform-anim"
+          aria-hidden="true"
+        >
+          {BARS.map((bar, i) => (
+            <Box
+              key={i}
+              radius="none"
+              className="hero-bar"
+              style={ {
+                '--hero-bar-height': `${bar.height}px`,
+                '--hero-bar-dur': bar.dur,
+                '--hero-bar-delay': bar.delay,
+              } as React.CSSProperties }
+            />
+          ))}
+        </Stack>
+      </Stack>
+
+    </Stack>
+  );
+}
+import { Box } from '@/layouts/Primitives';
+import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
+import { journalVariants } from '@/lib/variants';
+
+interface EditorialHeroProps {
+  src: string;
+  alt: string;
+  aspectRatio?: "video" | "square" | string | { base?: string, md?: string, lg?: string };
+  objectFit?: 'cover' | 'contain';
+}
+
+/**
+ * Featured hero image for blog posts with mandatory alt text for accessibility.
+ */
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover' }: EditorialHeroProps) {
+  return (
+    <Box
+      width="full"
+      radius="lg"
+      overflow="hidden"
+      border
+      className={journalVariants.card({ variant: 'hero' })}
+      aspect={aspectRatio}
+      maxHeight={{ lg: 96 }}
+    >
+      <ProductImageFrame
+        src={src}
+        alt={alt}
+        objectFit={objectFit}
+        border={false}
+        radius="none"
+        aspect="auto"
+        className="w-full h-full lg:max-h-96"
+      />
+    </Box>
+  );
+}
+import { useEffect, useRef } from 'react';
+import { HERO_CONFIG } from '@/config/hero';
+import { useResizeObserver } from '@/hooks/useResizeObserver';
+
+interface Particle {
+  x: number; y: number; r: number;
+  vx: number; vy: number;
+  alpha: number; hue: number;
+  fillStyle: string;
+}
+
+interface HeroParticleCanvasProps {
+  particleCount?: number;
+  radiusMin?: number;
+  radiusMax?: number;
+  velocityFactor?: number;
+  alphaMin?: number;
+  alphaMax?: number;
+  hues?: number[];
+  seeds?: typeof HERO_CONFIG.SEEDS;
+}
+
+export function HeroParticleCanvas({
+  particleCount = HERO_CONFIG.PARTICLE_COUNT,
+  radiusMin = HERO_CONFIG.PARTICLE_RADIUS_MIN,
+  radiusMax = HERO_CONFIG.PARTICLE_RADIUS_MAX,
+  velocityFactor = HERO_CONFIG.PARTICLE_VELOCITY_FACTOR,
+  alphaMin = HERO_CONFIG.PARTICLE_ALPHA_MIN,
+  alphaMax = HERO_CONFIG.PARTICLE_ALPHA_MAX,
+  hues = HERO_CONFIG.PARTICLE_HUES,
+  seeds = HERO_CONFIG.SEEDS,
+}: HeroParticleCanvasProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>(HERO_CONFIG.RESIZE_DEBOUNCE_MS);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas || width === 0 || height === 0) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Sync canvas resolution with container size
+    canvas.width = width;
+    canvas.height = height;
+
+    // Build particles deterministically for visual regression testing
+    const particles: Particle[] = Array.from({ length: particleCount }, (_, i) => {
+      const alpha = ((i * seeds.PARTICLE_ALPHA) % 1) * (alphaMax - alphaMin) + alphaMin;
+      const hue = i % 2 === 0 ? hues[0] : hues[1];
+      return {
+        x: ((i * seeds.PARTICLE_X) % 1) * width,
+        y: ((i * seeds.PARTICLE_Y) % 1) * height,
+        r: ((i * seeds.PARTICLE_R) % 1) * (radiusMax - radiusMin) + radiusMin,
+        vx: (((i * seeds.PARTICLE_VX) % 1) - 0.5) * velocityFactor,
+        vy: (((i * seeds.PARTICLE_VY) % 1) - 0.5) * velocityFactor,
+        alpha,
+        hue,
+        fillStyle: `hsla(${hue}, 100%, 70%, ${alpha})`,
+      };
+    });
+
+    let rafId: number;
+    let lastFrameTime = 0; // Set to 0 to ensure the first frame is rendered immediately
+    const frameInterval = 1000 / HERO_CONFIG.TARGET_FPS;
+
+    const draw = (currentTime: number) => {
+      rafId = requestAnimationFrame(draw);
+
+      // Calculate delta since last frame
+      const deltaTime = currentTime - lastFrameTime;
+
+      // Throttle to target FPS, using a small buffer to handle slight timing jitter
+      if (lastFrameTime !== 0 && deltaTime < frameInterval - HERO_CONFIG.FRAME_JITTER) return;
+
+      lastFrameTime = currentTime - (lastFrameTime === 0 ? 0 : deltaTime % frameInterval);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.fillStyle;
+        ctx.fill();
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+      }
+    };
+
+    // Delay start of animation loop to give main-thread breathing room during bootup
+    const timeoutId = setTimeout(() => {
+      rafId = requestAnimationFrame(draw);
+    }, 150);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [width, height, particleCount, radiusMin, radiusMax, velocityFactor, alphaMin, alphaMax, hues, seeds]);
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 z-0">
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="block pointer-events-none"
+      />
+    </div>
+  );
+}
+import { useMemo, ComponentType } from 'react';
+import { motion } from 'motion/react';
+import { MapPin, Calendar, Palette, Building2, Target, Bell, Package } from 'lucide-react';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { motionTokens } from '@/styles/motion';
+import { HeroParticleCanvas } from '@/components/ui/HeroParticleCanvas';
+
+interface EventHeroProps {
+  title: string;
+  location: string;
+  date: string;
+  image?: string;
+  eyebrow?: string;
+  theme?: string;
+  venue?: string;
+  bestFor?: string;
+  deadline?: string;
+  packingCue?: string;
+  id?: string;
+}
+
+function MetadataPill({ icon: Icon, label, value }: { icon: ComponentType<{ className?: string }>, label: string, value: string }) {
+  return (
+    <Box
+      display="flex"
+      align="baseline"
+      gap={2}
+      paddingX={3}
+      paddingY={1.5}
+      radius="full"
+      className="bg-white/5 border border-white/10 whitespace-nowrap shrink-0"
+    >
+      <Icon className="w-3 h-3 text-accent/80 self-center" />
+      <Stack gap={0}>
+        <Text variant="mono" size="micro" color="dim" uppercase tracking="tighter">
+          {label}
+        </Text>
+        <Text variant="body" size="xs" weight="font-medium">
+          {value}
+        </Text>
+      </Stack>
+    </Box>
+  );
+}
+
+export function EventHero({
+  title,
+  location,
+  date,
+  image,
+  eyebrow = "Event Resource Guide",
+  theme,
+  venue,
+  bestFor,
+  deadline,
+  packingCue,
+  id
+}: EventHeroProps) {
+  const accentGradient = useMemo(() => ({
+    background: 'radial-gradient(circle at top right, var(--hero-accent), transparent 70%)',
+  }), []);
+
+  return (
+    <Stack
+      id={id}
+      data-testid="hero"
+      position="relative"
+      width="full"
+      minHeight={{ base: "20vh", md: "25vh" }}
+      direction="col"
+      gap={0}
+      overflow="hidden"
+      surface="bg"
+    >
+
+      {image ? (
+        <Box position="absolute" inset zIndex={0}>
+          <img
+            src={image}
+            alt=""
+            className="w-full h-full object-cover opacity-40"
+            aria-hidden="true"
+          />
+          <Box
+            position="absolute"
+            inset
+            className="event-hero-overlay"
+          />
+        </Box>
+      ) : (
+        <HeroParticleCanvas />
+      )}
+
+
+      <Box
+        position="absolute"
+        top={0}
+        right={0}
+        width={{ base: "full", md: "1/2" }}
+        height="full"
+        pointerEvents="none"
+        opacityVariant="low"
+        style={accentGradient}
+      />
+
+      <Stack
+        relative
+        zIndex={10}
+        gap={{ base: 4, md: 6 }}
+        paddingX={{ base: 6, md: 12, lg: 24 }}
+        paddingTop={{ base: 6, md: 10 }}
+        paddingBottom={{ base: 4, md: 6 }}
+        maxWidth="screen-xl"
+        marginX="auto"
+        width="full"
+        flex="1 1 auto"
+        as={motion.div}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={motionTokens.page.transition}
+      >
+        <Stack gap={4}>
+          <Stack gap={1}>
+            <Text
+              variant="mono"
+              size="xs"
+              weight="font-bold"
+              color="accent"
+              uppercase
+              tracking="widest"
+            >
+              {eyebrow}
+            </Text>
+            <Text
+              as="h1"
+              variant="headline"
+              size={{ base: "fluid-4", md: "fluid-6" }}
+              weight="font-black"
+              color="white"
+              leading="tight"
+              tracking="tight"
+            >
+              {title}
+            </Text>
+          </Stack>
+
+          <Box display="flex" wrap gap={{ base: 3, md: 5 }} align="center">
+            <Box display="flex" align="center" gap={2}>
+              <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent" />
+              <Text variant="body" size={{ base: "xs", md: "sm" }} weight="font-medium">
+                {date}
+              </Text>
+            </Box>
+            <Box display="flex" align="center" gap={2}>
+              <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent" />
+              <Text variant="body" size={{ base: "xs", md: "sm" }} weight="font-medium">
+                {location}
+              </Text>
+            </Box>
+          </Box>
+
+
+          <Box
+            display="flex"
+            gap={3}
+            overflowX="auto"
+            className="no-scrollbar"
+            marginX={{ base: -6, md: 0 }}
+            paddingX={{ base: 6, md: 0 }}
+            paddingY={2}
+          >
+            {theme && (
+              <MetadataPill icon={Palette} label="Theme" value={theme} />
+            )}
+            {venue && (
+              <MetadataPill icon={Building2} label="Venue" value={venue} />
+            )}
+            {bestFor && (
+              <MetadataPill icon={Target} label="Best for" value={bestFor} />
+            )}
+            {deadline && (
+              <MetadataPill icon={Bell} label="Deadline" value={deadline} />
+            )}
+            {packingCue && (
+              <MetadataPill icon={Package} label="Packing" value={packingCue} />
+            )}
+          </Box>
+        </Stack>
+      </Stack>
+    </Stack>
+  );
+}
