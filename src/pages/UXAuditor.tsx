@@ -119,7 +119,10 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       justify="center"
       overflow="hidden"
       position="relative"
-      className="bg-surface rounded-xl shadow-2xl border border-line"
+      surface="default"
+      radius="xl"
+      shadow="standard"
+      border={true}
     >
       {isLoading && (
         <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
@@ -136,13 +139,16 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
         onLoad={() => setIsLoading(false)}
         width={width}
         height={height}
-        className="border-none bg-white origin-center"
+        border={false}
+        surface="default"
+        className="origin-center"
         style={{ // impeccable-ignore - Dynamic scaling for iframe preview
           transform: `scale(${scale})`,
           width: `${width}px`,
           height: `${height}px`,
           minWidth: `${width}px`,
           minHeight: `${height}px`,
+          backgroundColor: '#fff' // impeccable-ignore
         }}
       />
       <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
@@ -151,7 +157,9 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
            paddingY={1}
            radius="sm"
            border={true}
-           className="bg-bg/80 backdrop-blur-sm"
+           surface="bg"
+           opacity={0.8}
+           className="backdrop-blur-sm"
          >
            <Text variant="sans" size="xs" color="dim">
              ⚠️ Some sites block embedding via CORS.
@@ -210,7 +218,8 @@ export default function UXAuditor() {
               </Stack>
               <Box
                 as="input"
-                type="text"
+                type="url"
+                autoComplete="off"
                 value={url}
                 title={url}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
@@ -238,6 +247,7 @@ export default function UXAuditor() {
                 <Box
                   as="input"
                   type="password"
+                  autoComplete="new-password"
                   value={customApiKey}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
                   surface="bg"
@@ -245,7 +255,7 @@ export default function UXAuditor() {
                   className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                   width="full"
                   paddingX={4}
-                  paddingRight={10}
+                  paddingRight={12}
                   paddingY={3}
                   radius="md"
                   placeholder="sk-..."
@@ -256,14 +266,14 @@ export default function UXAuditor() {
                     as="button"
                     onClick={() => setCustomApiKey("")}
                     position="absolute"
-                    right={1}
+                    right={0}
                     top="1/2"
-                    className="-translate-y-1/2 hover:text-error text-dim transition-colors tap-target"
                     display="flex"
                     align="center"
                     justify="center"
                     radius="md"
                     title="Clear API Key"
+                    className="-translate-y-1/2 hover:text-error text-dim transition-colors tap-target"
                   >
                     <Icon icon={Trash2} size="xs" />
                   </Box>
@@ -280,7 +290,8 @@ export default function UXAuditor() {
               </Stack>
               <Box
                 as="input"
-                type="text"
+                type="url"
+                autoComplete="off"
                 value={snapshotService}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
                 surface="bg"
@@ -352,10 +363,10 @@ export default function UXAuditor() {
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
                 <Box flex={1} minWidth="0" textAlign="left">
-                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
+                  <Text variant="sans" size="sm" weight="font-bold" display="block" truncate={true}>
                     {report.url.replace('https://', '')}
                   </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase={true}>
                     {new Date(report.timestamp).toLocaleTimeString()}
                   </Text>
                 </Box>
@@ -375,11 +386,11 @@ export default function UXAuditor() {
                 justify="between" align={{ base: "start", md: "center" }} 
                 gap={6} direction={{ base: "col", md: "row" }}
               >
-                <Stack gap={1} minWidth="0" flex={1}>
-                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase tracking="widest" display="block">
+                <Stack gap={1} minWidth="0" flex={1} textAlign="left">
+                  <Text variant="sans" size="xs" weight="font-bold" color="accent" uppercase={true} tracking="widest" display="block">
                     Current Session
                   </Text>
-                  <Text variant="sans" size="xl" weight="font-black" className="truncate block" title={activeReport.url}>
+                  <Text variant="sans" size="xl" weight="font-black" display="block" truncate={true} title={activeReport.url}>
                     {activeReport.url}
                   </Text>
                 </Stack>
@@ -417,11 +428,11 @@ export default function UXAuditor() {
                     <Box key={vp.name} className={cardVariants({ overflow: "hidden" })}>
                       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
                         <Stack direction="row" align="center" gap={3}>
-                          <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
+                          <Box width={9} height={9} surface="default" radius="lg" shadow="standard" color="accent" display="flex" align="center" justify="center" shrink={0} aria-hidden="true">
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
-                          <Text variant="sans" size="base" weight="font-bold">
-                            {vp.name} Analysis
+                          <Text variant="sans" size="base" weight="font-bold" textAlign="left">
+                            {vp.name} Viewport Analysis
                           </Text>
                         </Stack>
                         <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
@@ -455,11 +466,11 @@ export default function UXAuditor() {
                             <>
                               <Box surface="alt" padding={5} className="border border-line rounded-lg">
                                 <Box marginBottom={3}>
-                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest" textAlign="left">
+                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase={true} display="block" tracking="widest" textAlign="left">
                                     Analysis Summary
                                   </Text>
                                 </Box>
-                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block" textAlign="left">
+                                <Text variant="sans" size="sm" weight="font-medium" leading="relaxed" display="block" breakWords={true} textAlign="left">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -468,24 +479,30 @@ export default function UXAuditor() {
                                   <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
-                                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
+                                        <Box
+                                          width={2}
+                                          height={2}
+                                          radius="full"
+                                          shadow="standard"
+                                          surface={imp.severity > 7 ? 'error' : 'warning'}
+                                        />
                                         <Text variant="sans" size="sm" weight="font-black" textAlign="left">
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={3} paddingY={1} radius="full" surface="muted" color="dim" uppercase textAlign="right" minWidth={16} title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={3} paddingY={1} radius="full" surface="muted" color="dim" uppercase={true} textAlign="right" minWidth={16} title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
                                     </Box>
-                                    <Text variant="sans" size="xs" color="dim" marginBottom={3} textAlign="left">
+                                    <Text variant="sans" size="xs" color="dim" marginBottom={3} textAlign="left" display="block">
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                             <Box surface="muted" padding={3} radius="lg" border={true}>
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                                        <Box flex={1} minWidth="0">
-                                          <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
+                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase={true} tracking="widest" shrink={0}>FIX</Text>
+                                        <Box flex={1} minWidth="0" textAlign="left">
+                                          <Text variant="sans" size="xs" weight="font-bold" display="block" breakWords={true} className="whitespace-pre-wrap line-clamp-4">
                                             {imp.suggestion}
                                           </Text>
                                           {imp.element === "Manual Audit Required" && (
