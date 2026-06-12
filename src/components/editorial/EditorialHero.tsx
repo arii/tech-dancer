@@ -30,7 +30,9 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
         border={false}
         radius="none"
         aspect="auto"
-        className="w-full h-full lg:max-h-96"
+        width="full"
+        height="full"
+        maxHeight={{ lg: 96 }}
       />
     </Box>
   );
