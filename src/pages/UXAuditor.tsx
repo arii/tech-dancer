@@ -13,7 +13,7 @@ import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
+import { cardVariants, listRowVariants } from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -381,7 +381,7 @@ export default function UXAuditor() {
                     surface="muted"
                     size="sm"
                     radius="md"
-                className="gap-2" // impeccable-ignore
+                    className="gap-2" // impeccable-ignore
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -392,7 +392,7 @@ export default function UXAuditor() {
                     variant="primary"
                     size="sm"
                     radius="md"
-                className="gap-2" // impeccable-ignore
+                    className="gap-2" // impeccable-ignore
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
