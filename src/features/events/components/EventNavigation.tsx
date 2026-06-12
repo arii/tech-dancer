@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
+import { journalVariants } from '@/lib/variants';
+import { cn } from '@/lib/utils';
 import { EVENT_TABS } from '../constants';
 
 export function EventNavigation() {
@@ -36,22 +38,21 @@ export function EventNavigation() {
     <Box
       as="nav"
       aria-label="Event navigation"
-      position="sticky"
-      top={{ base: 16, lg: 0 }}
-      zIndex="sticky"
-      width="full"
-      className="bg-bg/80 backdrop-blur-md border-b border-line/10"
+      layout="eventNav"
+      surface="bg"
+      top={16}
+      zIndex={99998}
     >
       <Box maxWidth="screen-xl" marginX="auto" paddingX={{ base: 0, md: 12, lg: 24 }} position="relative">
 
         <Box
           position="absolute"
-          top={0}
-          bottom={0}
-          right={0}
+          inset="right"
           width={12}
           display={{ base: "block", md: "none" }}
-          className="bg-gradient-to-l from-bg via-bg/80 to-transparent pointer-events-none z-10"
+          zIndex={10}
+          pointerEvents="none"
+          className="bg-gradient-to-l from-bg via-bg to-transparent"
           aria-hidden="true"
         />
 
@@ -60,7 +61,7 @@ export function EventNavigation() {
           gap={{ base: 6, md: 8 }}
           overflowX="auto"
           scrollBehavior="smooth"
-          className="no-scrollbar"
+          noScrollbar
           paddingX={{ base: 6, md: 0 }}
           paddingRight={{ base: 12, md: 0 }}
         >
@@ -75,15 +76,20 @@ export function EventNavigation() {
                 {...(isExternal ? { to: tab.path } : { href: `#${tab.id}` })}
                 aria-label={`Navigate to ${tab.label}`}
                 aria-current={isActive ? 'page' : undefined}
-                paddingY={3}
+                paddingY={{ base: 5, md: 3 }}
                 shrink={false}
-                className="group relative cursor-pointer"
+                position="relative"
+                cursor="pointer"
+                className="group"
               >
                 <Box
                   display="flex"
                   align="center"
                   gap={2}
-                  className={`${isActive ? 'text-accent' : 'text-dim'} group-hover:text-accent transition-colors whitespace-nowrap`}
+                  className={cn(
+                    journalVariants.navLink({ active: isActive }),
+                    "whitespace-nowrap"
+                  )}
                 >
                   <tab.icon size={16} />
                   <Text

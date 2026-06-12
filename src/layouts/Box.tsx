@@ -51,6 +51,7 @@ export interface BaseProps {
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
   overscroll?: "auto" | "contain" | "none" | "x-contain" | "y-contain"
+  isolation?: "isolate" | "auto"
   noScrollbar?: boolean
   pointerEvents?: "auto" | "none" | "inherit" | "initial" | "revert" | "unset"
   zIndex?: number | string
@@ -92,7 +93,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     gap, gapX, gapY, border, borderColor, smBorder, mdBorder, lgBorder, xlBorder,
     surface, emphasis, radius: radiusProp, panel, flex, wrap, shadow,
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
-    overflow, overflowX, overflowY, overscroll, noScrollbar, pointerEvents,
+    overflow, overflowX, overflowY, overscroll, isolation, noScrollbar, pointerEvents,
     zIndex, opacity, opacityVariant, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
@@ -202,6 +203,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
           overscroll && (overscroll === "x-contain" ? "overscroll-x-contain" : overscroll === "y-contain" ? "overscroll-y-contain" : `overscroll-${overscroll}`),
+          isolation,
           noScrollbar && "no-scrollbar",
           pointerEvents && `pointer-events-${pointerEvents}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? resolveJIT(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : resolveJIT(zIndex, "z")),
