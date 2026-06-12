@@ -16,6 +16,12 @@ const IGNORED_SEGMENTS = new Set(['node_modules', 'dist', 'coverage', 'playwrigh
 const IGNORED_PATHS = [
   'src/components/ui/',
   'src/layouts/',
+  'tests/',
+  'src/lib/__tests__/',
+];
+const IGNORED_PATTERNS = [
+  /\.spec\.tsx?$/,
+  /\.test\.tsx?$/,
 ];
 const JSX_EXTENSIONS = new Set(['.tsx', '.jsx']);
 const ANALYZED_EXTENSIONS = new Set(['.tsx', '.ts', '.jsx', '.js']);
@@ -35,6 +41,10 @@ function walk(dir) {
     const repoPath = toRepoPath(fullPath);
 
     if (IGNORED_PATHS.some((ignored) => repoPath.startsWith(ignored))) {
+      return [];
+    }
+
+    if (IGNORED_PATTERNS.some((pattern) => pattern.test(repoPath))) {
       return [];
     }
 
@@ -460,7 +470,19 @@ function similarity(left, right) {
   const hooks = jaccard(left.hooks, right.hooks);
   const utilities = jaccard(left.utilities, right.utilities);
 
-  const score = (structure * 40) + (hierarchy * 20) + (classes * 15) + (imports * 10) + (hooks * 10) + (utilities * 5);
+  let score;
+  if (process.argv.includes('--business-logic-only')) {
+    // When focusing on business logic, we ignore JSX structure and classes
+    // and re-weight hooks, utilities and imports.
+    // Total weight: 10 + 10 + 5 = 25. Normalizing to 100.
+    const hookWeight = 40;
+    const utilityWeight = 40;
+    const importWeight = 20;
+    score = (hooks * hookWeight) + (utilities * utilityWeight) + (imports * importWeight);
+  } else {
+    score = (structure * 40) + (hierarchy * 20) + (classes * 15) + (imports * 10) + (hooks * 10) + (utilities * 5);
+  }
+
   return {
     score: Math.round(score),
     metrics: {

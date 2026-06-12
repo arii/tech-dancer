@@ -33,4 +33,13 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'off',
     },
   },
+  {
+    // Disable duplicate code detection specifically for pure UI presentation files
+    // to prevent over-abstraction as recommended in the Canvas strategy.
+    files: ['src/components/ui/**/*.tsx', 'src/layouts/**/*.tsx'],
+    rules: {
+      'sonarjs/no-duplicate-string': 'off',
+      'sonarjs/no-identical-functions': 'off',
+    },
+  },
 );
