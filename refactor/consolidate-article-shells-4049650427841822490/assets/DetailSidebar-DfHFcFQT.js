@@ -1,1 +1,0 @@
-import{j as s,B as c,S as n}from"./index-DZzmyyBa.js";function p({headerExtras:a,bodyExtras:t,stats:e,links:i,disclosure:r,children:o}){return s.jsx(c,{as:"aside",children:s.jsxs(n,{gap:8,className:"sticky top-24",children:[a,t,e,o,i,r]})})}export{p as D};
