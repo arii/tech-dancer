@@ -215,7 +215,8 @@ export default function UXAuditor() {
           >
             <Box
               as="input"
-              type="text"
+              type="url"
+              autoComplete="off"
               value={url}
               title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
@@ -258,6 +259,7 @@ export default function UXAuditor() {
                 type="password"
                 value={customApiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
+                onFocus={(e) => e.target.select()}
                 className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
                 flex={1}
                 paddingX={4}
@@ -286,27 +288,34 @@ export default function UXAuditor() {
               ⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices.
             </Text>
           </Stack>
-          <Stack
-            direction="row"
-            align="center"
-            gap={3}
-            padding={2}
-            className={cardVariants()}
-          >
-            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
-            <Box
-              as="input"
-              type="text"
-              value={snapshotService}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-              flex={1}
-              paddingX={4}
-              paddingY={2}
-              radius="lg"
-              placeholder="Custom service URL with {url}, {width}, {height} (optional)"
-              aria-label="Snapshot Service URL"
-            />
+          <Stack gap={1}>
+            <Stack
+              direction="row"
+              align="center"
+              gap={3}
+              padding={2}
+              className={cardVariants()}
+            >
+              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
+              <Box
+                as="input"
+                type="url"
+                autoComplete="off"
+                value={snapshotService}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
+                onFocus={(e) => e.target.select()}
+                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                flex={1}
+                paddingX={4}
+                paddingY={2}
+                radius="lg"
+                placeholder="Custom service URL with {url}, {width}, {height} (optional)"
+                aria-label="Snapshot Service URL"
+              />
+            </Stack>
+            <Text variant="sans" size="xs" color="dim" paddingX={2} marginTop={1}>
+              Use {"{url}"}, {"{width}"}, and {"{height}"} as placeholders. Example: https://api.service.com?url={"{url}"}&size={"{width}"}x{"{height}"}
+            </Text>
           </Stack>
         </Stack>
       </Stack>
@@ -359,7 +368,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth={0}>
+        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full" style={{ gridColumn: 'span 3 / span 3' }}>
           {activeReport ? (
             <>
               <Stack
