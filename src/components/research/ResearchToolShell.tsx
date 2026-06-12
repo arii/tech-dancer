@@ -39,11 +39,11 @@ export const ResearchToolShell: React.FC<ResearchToolShellProps> = ({
     <Stack gap={8}>
       {/* Header */}
       <Stack gap={4}>
-        <Text variant="headline" size="xl" weight="font-black">
+        <Text variant="headline" size="xl" weight="font-black" as="h1">
           {title}
         </Text>
         {description && (
-          <Text variant="body" color="dim">
+          <Text variant="body" color="dim" as="div">
             {description}
           </Text>
         )}
