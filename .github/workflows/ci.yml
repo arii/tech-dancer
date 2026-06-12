@@ -232,3 +232,20 @@ jobs:
           name: playwright-report-${{ github.run_id }}
           path: playwright-report/
           retention-days: 7
+
+  impact-analysis:
+    name: Deployment Impact Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Run Impact Analysis
+        run: pnpm run impact:analysis
+      - name: Upload Impact Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-impact-report
+          path: artifacts/impact-analysis/

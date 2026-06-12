@@ -231,7 +231,7 @@ async function main() {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    fs.writeFileSync(path.join(outputDir, 'report.json'), JSON.stringify(report, null, 2));
+    fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
 
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
     const visualReviewList = allUrls.length > 0 ? allUrls.map(url => `- ${url}`).join('\n') : 'None detected.';
@@ -249,7 +249,7 @@ ${changedFilesList}
 ${visualReviewList}
 `;
 
-    fs.writeFileSync(path.join(outputDir, 'report.md'), markdown);
+    fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
     console.log(`\n✅ Reports generated in ${outputDir}`);
   } catch (error: unknown) {
     const err = error as Error;
