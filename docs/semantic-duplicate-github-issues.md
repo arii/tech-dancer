@@ -1,6 +1,6 @@
 # Semantic Duplicate GitHub Issue Dispatch Plan
 
-Generated from the expanded semantic duplicate audit (`pnpm run audit:semantic`) on 2026-06-11. The audit now reports 1,293 candidate duplicate pairs, 22 semantic role groups, 11 exact structure groups, 18 repeated JSX subtree patterns, 18 repeated class patterns, and 2 duplicate date/formatting logic groups.
+Generated from the expanded semantic duplicate audit (`pnpm run audit:semantic`) on 2026-06-11. The audit now reports 494 candidate duplicate pairs, 14 semantic role groups, 7 exact structure groups, 14 repeated JSX subtree patterns, 12 repeated class patterns, and 2 duplicate date/formatting logic groups.
 
 Use these as dispatch-ready GitHub issues. Keep each PR focused and avoid mixing unrelated content domains.
 
