@@ -18,6 +18,7 @@ permissions:
 
 jobs:
   handle-command:
+    if: github.repository == 'disabled'
 
     runs-on: ubuntu-latest
     env:
