@@ -81,7 +81,7 @@ jobs:
         run: pnpm run lint
 
       - name: Type-check
-        run: pnpm run lint:types
+        run: pnpm run type-check
 
       - name: Run Unit Tests - Vitest
         run: pnpm test
@@ -105,7 +105,7 @@ jobs:
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh ratchet-any
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
@@ -123,7 +123,7 @@ jobs:
 
       - name: UI Anti-Pattern Audit - Gate
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 -m pip install PyGithub click
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
@@ -189,7 +189,7 @@ jobs:
 
       - name: Bundle Size Check
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 -m pip install PyGithub click
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
