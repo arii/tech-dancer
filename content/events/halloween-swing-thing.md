@@ -1,15 +1,15 @@
 ---
 type: event
 title: "Halloween Swing Thing"
-date: "2026-10-22"
-startDate: "2026-10-22"
+date: "2026-10-29"
+startDate: "2026-10-29"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
 excerpt: "Join the West Coast Swing community's most creative festival in Costa Mesa for a unique blend of WSDC competition and immersive carnival-themed social dancing."
 location: "Costa Mesa, CA"
 city: "Costa Mesa"
 region: "SoCal"
-schedule: "October 22 - 25, 2026"
+schedule: "October 29 - November 1, 2026"
 url: "https://halloweenswingthing.com"
 heroImage: "/assets/events/halloween-hero.svg"
 description: "Discover how Halloween Swing Thing blends technical excellence with festive creativity. This guide covers essential costume preparation, event highlights, and gear tips for the West Coast Swing community's premier themed weekend."
@@ -236,7 +236,3 @@ The more you engage, the more memorable the weekend becomes.
 * 🎡 Immersive carnival environment
 
 ---
-
-## Final Thought
-
-Success at Halloween Swing Thing comes from balancing athletic focus with creative immersion. By ensuring your gear and costumes are dance-ready, you can fully embrace the community's most festive weekend without compromising your performance on the floor.

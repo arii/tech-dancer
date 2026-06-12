@@ -5,14 +5,14 @@ date: '2026-07-02'
 startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: Join the high-energy, world-class competition field in the heart of Texas for this legendary 4th of July weekend tradition.
-location: Hyatt Regency DFW International Airport, 2334 North International Parkway
+excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
+location: Hyatt Regency DFW
 city: Dallas, TX
 region: South
 schedule: July 2 - 5, 2026
 url: https://wildwildwestie.com/
 heroImage: '/assets/events/wild-wild-westie-hero.svg'
-description: Held at the Hyatt Regency DFW, Wild Wild Westie (WWW) is a cornerstone of the West Coast Swing community, known for its intense "Texas attitude" competition and legendary late-night social dancing.
+description: Wild Wild Westie (WWW) is one of the most competitive and high-energy events in the West Coast Swing community. Held over the 4th of July weekend, it attracts top dancers from across the globe for intense competitions and legendary late-night social dancing.
 whyAttending: >
   If you love competition, WWW is the place to be. The energy in the ballroom is electric, and the level of talent in the Jack & Jills is incredible.
 theme:
@@ -63,6 +63,8 @@ relatedEvents:
 - jack-and-jill-orama
 ---
 
+Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the Hyatt Regency DFW, it's a weekend of intense dancing, serious competition, and southern hospitality.
+
 ## Western theme notes
 
 While our current product selection doesn't include specialized Western dance apparel, this is the perfect weekend to break out your own Western-inspired pieces like denim, bandanas, or boots for hallway photos. For the social floor, stick to breathable pieces that handle the high-energy Texas vibe. Keep Western boots for photos and use proper dance shoes for social dancing to ensure safety and floor compliance.
@@ -73,7 +75,7 @@ While our current product selection doesn't include specialized Western dance ap
 - **Transport:** Both airports are easily accessible via Uber/Lyft. DART (light rail) also runs from DFW directly to the hotel (Union Station stop).
 
 ### Hotel-Room-Block Urgency
-The WWW room block at the Hyatt Regency Dallas is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
+The WWW room block at the Hyatt Regency DFW is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
 
 ### Summer Heat Notes
 Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-controlled. You can easily spend the entire weekend without leaving the AC. If you do go outside, be prepared for intense humidity. Even though you're indoors, the Dallas summer heat and intense dancing mean it is useful to pack hydration support and portable fans.

@@ -61,7 +61,6 @@ hotelCutoffDate: "2026-06-01"
 packingReminderDate: "2026-06-28"
 
 relatedEvents:
-- wild-wild-westie
 - jack-and-jill-orama
 ---
 

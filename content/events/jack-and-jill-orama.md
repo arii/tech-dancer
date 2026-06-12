@@ -74,7 +74,6 @@ hotelCutoffDate: "2026-05-15"
 packingReminderDate: "2026-05-25"
 
 relatedEvents:
-- wild-wild-westie
 - swingtacular-the-galactic-open
 - boogie-by-the-bay
 ---
