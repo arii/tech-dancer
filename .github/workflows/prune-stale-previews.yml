@@ -30,7 +30,7 @@ jobs:
 
       - name: Prune orphaned directories
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."

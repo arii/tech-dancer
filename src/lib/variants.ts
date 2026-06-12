@@ -31,6 +31,7 @@ export const variants = {
     primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-[0.98] shadow-sm",
     professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
     fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
+    reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
     none: "rounded-none",
@@ -139,7 +140,17 @@ export const journalVariants = {
   }),
   shareAction: cva("text-text-dim hover:text-accent transition-colors group"),
   tag: cva("border-line/50 hover:border-accent transition-colors cursor-default"),
-  navLink: cva("text-text-dim hover:text-accent transition-colors group cursor-pointer")
+  navLink: cva("transition-colors group cursor-pointer", {
+    variants: {
+      active: {
+        true: "text-accent",
+        false: "text-text-dim hover:text-accent"
+      }
+    },
+    defaultVariants: {
+      active: false
+    }
+  })
 };
 
 /**
