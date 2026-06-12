@@ -3,7 +3,7 @@ import { GitBranch, Layers, Activity } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
 import { TOOL_ID_SCOPE_BLAST_RADIUS } from '@/config/devai-tool-ids';
-import { ResearchToolShell } from '@/components/research/ResearchToolShell';
+import ResearchToolShell from '@/components/research/ResearchToolShell';
 
 export function BlastRadiusTool() {
   const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_SCOPE_BLAST_RADIUS);

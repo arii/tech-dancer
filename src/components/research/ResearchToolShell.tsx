@@ -27,7 +27,7 @@ export interface ResearchToolShellProps {
  * output region. The component follows the project's design‑system using the
  * Box/Stack primitives which internally map to MUI components.
  */
-const ResearchToolShell: React.FC<ResearchToolShellProps> = ({
+export const ResearchToolShell: React.FC<ResearchToolShellProps> = ({
   title,
   description,
   controls,
@@ -73,3 +73,4 @@ const ResearchToolShell: React.FC<ResearchToolShellProps> = ({
 );
 
 export default ResearchToolShell;
+
