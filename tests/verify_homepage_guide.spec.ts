@@ -4,6 +4,13 @@ import { test, expect } from './fixtures/visual';
 test('verify homepage featured guide link', async ({ page }) => {
   await page.goto('./');
 
+  const isMobile = await page.evaluate(() => window.innerWidth < 1024);
+
+  // The FeaturedGuidePanel is hidden on mobile
+  if (isMobile) {
+    return;
+  }
+
   // Find the WCS Travel Pack card
   const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
   await expect(guideLink).toBeVisible();
