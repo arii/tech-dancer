@@ -6,7 +6,7 @@ export interface DependencyNode {
   source: string;
   dependencies: {
     resolved: string;
-    [key: string]: any;
+    [key: string]: unknown;
   }[];
 }
 

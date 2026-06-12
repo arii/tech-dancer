@@ -40,7 +40,6 @@
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
-    "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
     "impact:analysis": "tsx scripts/impact-analysis.ts"
   },
   "dependencies": {
