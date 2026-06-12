@@ -7,7 +7,7 @@ import { SEO } from '@/components/SEO';
 interface ContentPostRouteShellProps<T> {
   queryKeyPrefix: string;
   queryFn: (slug: string) => Promise<T | undefined> | T | undefined;
-  buildSchema: (data: T) => any;
+  buildSchema: (data: T) => Record<string, unknown>;
   notFoundTitle: string;
   notFoundLabel: string;
   notFoundPath: string;
@@ -32,7 +32,7 @@ export function ContentPostRouteShell<T>({
     queryKey: [queryKeyPrefix, slug],
     queryFn: () => slug ? queryFn(slug) : undefined,
     enabled: !!slug,
-    initialData: () => slug ? queryFn(slug) as any : undefined,
+    initialData: () => slug ? queryFn(slug) as T : undefined,
   });
 
   const structuredData = useMemo(() => {
