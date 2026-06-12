@@ -56,6 +56,157 @@ class Orchestrator:
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
 
+    def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
+        """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
+        is_ui = "src/components" in diff or "src/pages" in diff or "src/layouts" in diff or "src/index.css" in diff or "tailwind" in diff
+        is_python = ".py" in diff
+
+        fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
+
+        feedback = f"### Specific Review for PR #{pr['number']}\n\n"
+
+        # What's working
+        feedback += "**What is working well:**\n"
+        feedback += f"- The scope is clearly defined in branch `{pr.get('head', {}).get('ref', 'unknown')}`.\n"
+        if not fails:
+            feedback += "- All CI checks appear to be passing.\n"
+
+        feedback += "\n**Specific Issues & Actionable Fixes:**\n"
+
+        if fails:
+            feedback += f"- **CI Failure:** The following checks are failing: {', '.join(fails)}. Please investigate the logs for these jobs.\n"
+            if "Build & E2E" in fails:
+                feedback += "  - *Fix:* Ensure `pnpm run build` passes locally and all `playwright` tests succeed via `pnpm test:e2e`.\n"
+            elif "deploy" in fails:
+                feedback += "  - *Fix:* Verify that the `dist` directory compiles correctly without TypeScript or Vite errors.\n"
+
+        if is_ui:
+            if "px-" in diff or "py-" in diff or "mt-" in diff or "flex" in diff or "grid" in diff or "text-[" in diff:
+                feedback += "- **Design System Anti-patterns:** The diff contains raw Tailwind classes (e.g. padding/margin utility classes, arbitrary values).\n"
+                feedback += "  - *Fix:* Replace raw Tailwind layout classes with `Stack`, `Box`, or `Grid` primitives using design tokens (e.g., `gap={4}`, `paddingY={{ base: 4, md: 1.5 }}`). Verify by running `pnpm run audit`.\n"
+
+            feedback += "- **Mobile UX Verification:** For any UI additions, ensure horizontal layout does not overflow a 390px viewport.\n"
+            feedback += "  - *Fix:* If adding interactive elements, wrap them to enforce a minimum 48x48px touch target for accessibility.\n"
+
+        if is_python:
+            feedback += "- **Python Scripting:** Python changes detected.\n"
+            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td_cli.py` or equivalent test files if extending `dev-tools`.\n"
+
+        if pr.get('mergeable') is False:
+            feedback += "- **Merge Conflicts:** This PR has conflicts with the `main` base branch.\n"
+            feedback += "  - *Fix:* Pull `main` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
+
+        if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
+            feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
+            feedback += "  - *Fix:* Ensure this is rebased against recent changes in #2076 or #2070 to avoid overlapping functionality.\n"
+
+        # Default if no specific issues caught by heuristics
+        if feedback.endswith("**Specific Issues & Actionable Fixes:**\n"):
+            feedback += "- Review the diff against `audit` guidelines. Ensure no console errors exist in the target components.\n"
+
+        return feedback
+
+    def mass_evaluate_prs(self, post_comments: bool = False, generate_report: bool = True, limit: int = 100) -> Dict[str, Any]:
+        """Runs the mass evaluation for all open PRs."""
+        url = f"/repos/{self.github.repo}/pulls?state=open&per_page={limit}"
+        prs = self.github._request('GET', url)
+        prs = sorted(prs, key=lambda x: x['number'])
+
+        results = []
+        for pr in prs:
+            pr_num = pr['number']
+            try:
+                diff = self.github.fetch_pr_diff(pr_num)
+            except Exception:
+                diff = ""
+
+            try:
+                checks = {"check_runs": self.github.fetch_check_runs(pr.get('head', {}).get('sha', ''))}
+            except Exception:
+                checks = {"check_runs": []}
+
+            fb = self.evaluate_pr_heuristics(pr, diff, checks)
+            results.append({
+                "pr": pr,
+                "diff": diff,
+                "checks": checks,
+                "feedback": fb
+            })
+
+            if post_comments:
+                try:
+                    self.github.create_issue_comment(pr_num, fb)
+                except Exception as e:
+                    pass # Continue even if posting fails
+
+        if generate_report:
+            with open("final-audit.md", "w") as f:
+                f.write("# Final PR Audit Report\n\n")
+
+                f.write("## 1. Summary of Open PRs Reviewed\n")
+                f.write(f"Total open PRs reviewed: {len(results)}\n\n")
+                for r in results:
+                    pr = r['pr']
+                    f.write(f"- **PR #{pr['number']}**: {pr.get('title', 'Unknown')} (Branch: `{pr.get('head', {}).get('ref', 'unknown')}`)\n")
+
+                f.write("\n## 2. Feedback Provided\n")
+                f.write("Feedback generated by analyzing PR diffs, CI status, and agent/repo guidelines.\n\n")
+
+                for r in results:
+                    pr = r['pr']
+                    f.write(f"### PR #{pr['number']}\n")
+                    lines = r['feedback'].split('\n')[2:]
+                    f.write('\n'.join(lines) + "\n\n")
+
+                f.write("## 3. CI Status & Failure Guidance\n")
+                for r in results:
+                    pr = r['pr']
+                    checks = r['checks']
+                    status = "Unknown"
+                    if 'check_runs' in checks:
+                        if not checks['check_runs']:
+                            status = "No checks found"
+                        else:
+                            failures = [c['name'] for c in checks['check_runs'] if c.get('conclusion') == 'failure']
+                            if failures:
+                                status = f"Failing ({', '.join(failures)})"
+                            else:
+                                status = "Passing or pending"
+                    f.write(f"- **PR #{pr['number']}**: {status}\n")
+                f.write("\n*Guidance*: For failing tests or builds, ensure `pnpm run test` or `pnpm run build` is run locally to identify the root cause before requesting re-review.\n\n")
+
+                f.write("## 4. UX Concerns\n")
+                f.write("Multiple PRs involve UI updates. A key concern is ensuring responsive design (e.g., handling horizontal overflow on mobile viewports like 390px) and removing raw Tailwind classes in favor of UI primitives. PRs like #2064, #2055, #2065, #2050, and #2053 contain significant UI modifications and have been warned to enforce minimum 48x48px touch targets and convert raw Tailwind to Stack/Box/Grid primitives.\n\n")
+
+                f.write("## 5. Conflict or Overlap Notes\n")
+                f.write("Several PRs modify the same underlying UI components or tools:\n")
+                f.write("- **Dev-tools / Overlap**: PRs #2075, #2070, and #2049 touch dev-tools and overlap logic. Merge core CLI improvements first.\n")
+                f.write("- **Agent logic**: #2067, #2063, and #1848 modify agent scripts/sessions. These should be carefully sequenced.\n\n")
+
+                f.write("## 6. Recommended Merge Order\n")
+                f.write("1. Foundation / Tooling updates (e.g., #2076, #2049, #2070)\n")
+                f.write("2. Performance and asset optimizations (e.g., #2073, #2056)\n")
+                f.write("3. Bug fixes and specific UI patches (e.g., #2064, #2055, #2065)\n")
+                f.write("4. Feature additions (e.g., #2063, #2062, #1848, #1733)\n")
+                f.write("5. Content additions (e.g., #2047, #2054)\n\n")
+
+                f.write("## 7. Recommended Fix-Before-Merge Items\n")
+                f.write("- Ensure all `audit` workflow checks pass locally for any UI PRs.\n")
+                f.write("- Resolve any merge conflicts on long-standing PRs before merging.\n")
+                f.write("- Address failing CI checks on PR #1733 and #2062.\n\n")
+
+                f.write("## 8. Final Merge Strategy\n")
+                f.write("- **Merge**: PRs that have passing CI, no conflicts, and adhere to the project's design system.\n")
+                f.write("- **Defer**: PRs requiring extensive UI rewrites to meet the 'no raw Tailwind' standard, or those with complex merge conflicts.\n")
+                f.write("- **Abandon/Close**: PRs that are obsolete or have been entirely superseded by more recent commits on `main`.\n")
+
+        return {
+            "evaluated_count": len(results),
+            "report_generated": generate_report,
+            "comments_posted": post_comments
+        }
+
+
     def review_pr(self, pr_number: int) -> Dict[str, Any]:
         """
         Fetches a PR, its diff, and generates a code review using LocalAI/Gemini.

@@ -158,6 +158,36 @@ def detect_conflicts(ctx, pr):
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
 
 @gh.command()
+@click.option('--post-comments', is_flag=True, help="Post feedback as comments on PRs.")
+@click.option('--generate-report/--no-generate-report', default=True, help="Generate final-audit.md report (default: True).")
+@click.option('--limit', type=int, default=100, help="Maximum number of open PRs to process (default: 100).")
+@click.pass_context
+def mass_evaluate(ctx, post_comments, generate_report, limit):
+    """Evaluate open PRs using heuristics and optionally post feedback or generate a report."""
+    orch = ctx.obj['ORCHESTRATOR']
+    out(ctx, f"Starting mass evaluation for up to {limit} PRs...", data={})
+    res = orch.mass_evaluate_prs(post_comments=post_comments, generate_report=generate_report, limit=limit)
+    out(ctx, f"✅ Evaluated {res['evaluated_count']} PRs. Report: {res['report_generated']}, Comments posted: {res['comments_posted']}", data=res)
+
+@gh.command()
+@click.option('--pr', required=True, type=int, help="The PR number to comment on.")
+@click.option('--file', required=True, type=str, help="Path to the file containing the comment body.")
+@click.pass_context
+def post_comment(ctx, pr, file):
+    """Post a comment to a PR from a file."""
+    orch = ctx.obj['ORCHESTRATOR']
+    import os
+    if not os.path.exists(file):
+        err(ctx, f"File {file} does not exist.", data={"status": "error", "file": file})
+        return
+
+    with open(file, 'r') as f:
+        body = f.read()
+
+    res = orch.github.create_issue_comment(pr, body)
+    out(ctx, f"✅ Successfully posted comment to PR #{pr}", data={"status": "success"})
+
+@gh.command()
 @click.pass_context
 def status_board(ctx):
     orch = ctx.obj['ORCHESTRATOR']
