@@ -1,0 +1,12 @@
+{
+  "threshold": 5,
+  "minLines": 15,
+  "minTokens": 120,
+  "ignore": [
+    "src/components/ui/**",
+    "src/layouts/**",
+    "**/*.spec.ts",
+    "**/*.test.tsx"
+  ],
+  "reporters": ["console", "html"]
+}

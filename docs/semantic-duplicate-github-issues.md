@@ -4,6 +4,13 @@ Generated from the expanded semantic duplicate audit (`pnpm run audit:semantic`)
 
 Use these as dispatch-ready GitHub issues. Keep each PR focused and avoid mixing unrelated content domains.
 
+### Tool Configuration Updates
+
+- Added a `.jscpd.json` to ignore UI/layout wrappers and increase token threshold.
+- Updated `eslint.config.mjs` to disable SonarJS duplicate detection for `src/components/ui/**/*.tsx` and `src/layouts/**/*.tsx`.
+
+These settings reduce false positives from structural layout components during duplicate detection.
+
 ## Issue 1 — Consolidate hero and masthead components
 
 **Labels:** `refactor`, `design-system`, `semantic-duplicate`
