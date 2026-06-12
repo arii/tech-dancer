@@ -65,6 +65,7 @@ jobs:
           fi
 
       - name: Setup Ollama
+
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
           ollama serve > /tmp/ollama.log 2>&1 &
@@ -102,6 +103,7 @@ jobs:
         run: |
           chmod +x dev-tools/low-compute-review.sh
           ./dev-tools/low-compute-review.sh "$ISSUE_NUMBER" --no-cache
+
 
       - name: Commit Fixes
         if: contains(inputs.comment_body, '/ollama-fix')

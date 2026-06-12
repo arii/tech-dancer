@@ -90,6 +90,7 @@ jobs:
           if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
 
       - name: Setup Ollama
+
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
           ollama serve > /tmp/ollama.log 2>&1 &
@@ -132,6 +133,7 @@ jobs:
           else
             echo "No PR found for this run. Skipping AI review."
           fi
+
 
       - name: Verify Fixes
         id: verify

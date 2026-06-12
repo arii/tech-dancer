@@ -36,6 +36,7 @@ jobs:
           pnpm run doctor
 
       - name: Setup Ollama
+
         run: |
           curl -fsSL https://ollama.com/install.sh > install_ollama.sh
           sh install_ollama.sh
@@ -53,12 +54,14 @@ jobs:
       - name: Pull Model
         run: ollama pull qwen2.5-coder:7b
 
+
       - name: Find and Resolve Conflicts
         run: |
           # Use our unified CLI for resolution
           # Setting PYTHONPATH ensures modules can find each other without sys.path hacks
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           python3 dev-tools/td_cli.py gh resolve
+
 
       - name: Validate Resolution
         run: |
