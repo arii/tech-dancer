@@ -3,10 +3,10 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
-  ChevronRight, Github, Trash2
+  ChevronRight, Github, Trash2, Globe, Key, Settings
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
-import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
+import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
@@ -190,126 +190,125 @@ export default function UXAuditor() {
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
         canonical={`${BASE_URL}${toolConfig?.canonicalPath || '/ux-auditor'}`}
       />
-      <Stack
-        direction={{ base: 'col', md: 'row' }}
-        align={{ base: 'start', md: 'center' }}
-        justify="between"
-        gap={6}
-        border="b" paddingBottom={6}
-      >
-        <Box>
-          <PageHeader
-            label="Visual UX Auditor"
-            title="Multimodal AI Analysis"
-            description="Automated visual regression and UX improvement suggestions across viewports."
-          />
-        </Box>
+      <Box border="b" paddingBottom={8}>
+        <PageHeader
+          label="Visual UX Auditor"
+          title="Multimodal AI Analysis"
+          description="Automated visual regression and UX improvement suggestions across viewports."
+          paddingBottom={8}
+          border={false}
+        />
 
-        <Stack gap={4}>
-          <Stack
-            direction="row"
-            align="center"
-            gap={3}
-            padding={2}
-            className={cardVariants()}
-          >
-            <Box
-              as="input"
-              type="text"
-              value={url}
-              title={url}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-              onFocus={(e) => e.target.select()}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
-              width={{ base: "full", sm: 64, md: 80 }}
-              paddingX={4}
-              paddingY={2}
-              radius="lg"
-              placeholder="https://..."
-              aria-label="URL to audit"
-            />
-            <Box
-              as="button"
-              onClick={() => runUXAudit(url)}
-              disabled={isAnalyzing}
-              display="flex"
-              align="center"
-              gap={2}
-              className="bg-accent hover:opacity-solid text-bg font-bold transition-all disabled:opacity-muted"
-              paddingX={6}
-              paddingY={2}
-              radius="md"
-            >
-              {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
-              {isAnalyzing ? 'Auditing...' : 'Start Audit'}
-            </Box>
-          </Stack>
-          <Stack gap={2}>
-            <Stack
-              direction="row"
-              align="center"
-              gap={3}
-              padding={2}
-              className={cardVariants()}
-            >
-              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
+        <Box padding={6} radius="lg" surface="card" border={true}>
+          <Grid cols={{ base: 1, lg: 12 }} gap={6} align="end">
+            <Stack gap={2} span={{ lg: 4 }}>
+              <Stack direction="row" align="center" gap={2} paddingLeft={1}>
+                <Icon icon={Globe} size="xs" color="accent" />
+                <Text variant="sans" size="xs" weight="font-black" color="dim" uppercase tracking="widest">
+                  URL
+                </Text>
+              </Stack>
               <Box
                 as="input"
-                type="password"
-                value={customApiKey}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
-                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-                flex={1}
+                type="text"
+                value={url}
+                title={url}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+                onFocus={(e) => e.target.select()}
+                className="bg-bg border border-line focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
+                width="full"
                 paddingX={4}
-                paddingY={2}
-                radius="lg"
-                placeholder="OpenAI or Gemini API Key (optional override)"
-                aria-label="API Key"
+                paddingY={3}
+                radius="md"
+                placeholder="https://example.com"
+                aria-label="URL to audit"
               />
-              {customApiKey && (
-                <Box
-                  as="button"
-                  onClick={() => setCustomApiKey("")}
-                  display="flex"
-                  align="center"
-                  justify="center"
-                  padding={2}
-                  radius="md"
-                  className="hover:bg-surface-alt text-dim hover:text-error transition-colors"
-                  title="Clear API Key"
-                >
-                  <Icon icon={Trash2} size="sm" />
-                </Box>
-              )}
             </Stack>
-            <Text variant="sans" size="xs" color="warning" paddingX={2} weight="font-medium">
-              ⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices.
-            </Text>
-          </Stack>
-          <Stack
-            direction="row"
-            align="center"
-            gap={3}
-            padding={2}
-            className={cardVariants()}
-          >
-            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
-            <Box
-              as="input"
-              type="text"
-              value={snapshotService}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-              flex={1}
-              paddingX={4}
-              paddingY={2}
-              radius="lg"
-              placeholder="Custom service URL with {url}, {width}, {height} (optional)"
-              aria-label="Snapshot Service URL"
-            />
-          </Stack>
-        </Stack>
-      </Stack>
+
+            <Stack gap={2} span={{ lg: 3 }}>
+              <Stack direction="row" align="center" gap={2} paddingLeft={1}>
+                <Icon icon={Key} size="xs" color="dim" />
+                <Text variant="sans" size="xs" weight="font-black" color="dim" uppercase tracking="widest">
+                  API Key
+                </Text>
+              </Stack>
+              <Box position="relative">
+                <Box
+                  as="input"
+                  type="password"
+                  value={customApiKey}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
+                  className="bg-bg border border-line focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all pr-10" // impeccable-ignore
+                  width="full"
+                  paddingX={4}
+                  paddingY={3}
+                  radius="md"
+                  placeholder="sk-..."
+                  aria-label="API Key"
+                />
+                {customApiKey && (
+                  <Box
+                    as="button"
+                    onClick={() => setCustomApiKey("")}
+                    position="absolute"
+                    right={2}
+                    top="1/2"
+                    className="-translate-y-1/2 hover:text-error text-dim transition-colors"
+                    padding={1}
+                    radius="md"
+                    title="Clear API Key"
+                  >
+                    <Icon icon={Trash2} size="xs" />
+                  </Box>
+                )}
+              </Box>
+            </Stack>
+
+            <Stack gap={2} span={{ lg: 3 }}>
+              <Stack direction="row" align="center" gap={2} paddingLeft={1}>
+                <Icon icon={Settings} size="xs" color="dim" />
+                <Text variant="sans" size="xs" weight="font-black" color="dim" uppercase tracking="widest">
+                  Snapshot Service
+                </Text>
+              </Stack>
+              <Box
+                as="input"
+                type="text"
+                value={snapshotService}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
+                className="bg-bg border border-line focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
+                width="full"
+                paddingX={4}
+                paddingY={3}
+                radius="md"
+                placeholder="Service URL..."
+                aria-label="Snapshot Service URL"
+              />
+            </Stack>
+
+            <Box span={{ lg: 2 }}>
+              <Button
+                onClick={() => runUXAudit(url)}
+                disabled={isAnalyzing || !url}
+                variant="primary"
+                fullWidth
+                size="lg"
+              >
+                {isAnalyzing ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Camera} size="sm" />}
+                {isAnalyzing ? 'Auditing...' : 'Start Audit'}
+              </Button>
+            </Box>
+          </Grid>
+
+          {customApiKey && (
+            <Box marginTop={4} paddingX={1}>
+              <Text variant="sans" size="xs" color="warning" weight="font-medium">
+                ⚠️ API keys are stored in session storage and cleared on tab close. Use only on trusted devices.
+              </Text>
+            </Box>
+          )}
+        </Box>
+      </Box>
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
@@ -331,20 +330,19 @@ export default function UXAuditor() {
                 as="button"
                 direction="row"
                 onClick={() => setActiveReport(report)}
-                width="full" align="center" gap={3} padding={4} 
+                width="full" align="center" gap={4} padding={4}
                 className={listRowVariants({ active: activeReport?.id === report.id })}
               >
                 <Box
-                  width={9}
-                  height={9}
-                  radius="full"
+                  radius="md"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
                   className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
                   shrink={0}
+                  padding={2}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
-                <Box flex={1} minWidth="0">
+                <Box flex={1} minWidth="0" textAlign="left">
                   <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
                     {report.url.replace('https://', '')}
                   </Text>
@@ -377,37 +375,28 @@ export default function UXAuditor() {
                   </Text>
                 </Stack>
                 <Stack direction="row" gap={3} shrink={0}>
-                  <Box
-                    as="button"
+                  <Button
                     onClick={copyMarkdown}
-                    display="flex"
-                    align="center"
-                    gap={2}
-                    className={actionButtonVariants({ variant: "default" })}
-                    surface="muted" 
-                    color="dim"
-                    paddingX={4}
-                    paddingY={2}
-                    radius="xl"
+                    variant="professional"
+                    surface="muted"
+                    size="sm"
+                    radius="md"
+                className="gap-2" // impeccable-ignore
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
-                  </Box>
-                  <Box
-                    as="button"
+                  </Button>
+                  <Button
                     onClick={exportToGithub}
                     disabled={activeReport.status !== 'completed' || isExportingToGithub}
-                    display="flex"
-                    align="center"
-                    gap={2}
-                    className={actionButtonVariants({ variant: "primary" })}
-                    paddingX={6}
-                    paddingY={2}
-                    radius="xl"
+                    variant="primary"
+                    size="sm"
+                    radius="md"
+                className="gap-2" // impeccable-ignore
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
-                  </Box>
+                  </Button>
                 </Stack>
               </Stack>
 
@@ -457,11 +446,11 @@ export default function UXAuditor() {
                             <>
                               <Box surface="alt" padding={5} className="border border-line rounded-lg">
                                 <Box marginBottom={3}>
-                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
+                                  <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest" textAlign="left">
                                     Analysis Summary
                                   </Text>
                                 </Box>
-                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block">
+                                <Text variant="sans" size="sm" weight="font-medium" className="leading-relaxed break-words block" textAlign="left">
                                   "{data.summary}"
                                 </Text>
                               </Box>
@@ -471,15 +460,15 @@ export default function UXAuditor() {
                                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                                       <Stack direction="row" align="center" gap={2}>
                                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
-                                        <Text variant="sans" size="sm" weight="font-black">
+                                        <Text variant="sans" size="sm" weight="font-black" textAlign="left">
                                           {imp.element}
                                         </Text>
                                       </Stack>
-                                      <Text variant="mono" size="xs" weight="font-black" paddingX={2} paddingY={0.5} radius="full" surface="muted" color="dim" uppercase title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
+                                      <Text variant="mono" size="xs" weight="font-black" paddingX={3} paddingY={1} radius="full" surface="muted" color="dim" uppercase textAlign="right" minWidth={16} title={`Severity level: ${imp.severity} out of 10 (1-10 scale)`}>
                                         SEV {imp.severity}
                                       </Text>
                                     </Box>
-                                    <Text variant="sans" size="xs" color="dim" marginBottom={3}>
+                                    <Text variant="sans" size="xs" color="dim" marginBottom={3} textAlign="left">
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
