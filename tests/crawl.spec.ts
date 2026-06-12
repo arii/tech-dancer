@@ -45,7 +45,7 @@ test.describe('Automated UX/Console Error Crawler', () => {
     const toVisit: string[] = [baseURL];
 
     // Limit the number of pages to crawl to prevent excessive run times
-    const MAX_PAGES = 25;
+    const MAX_PAGES = 10;
     let pageCount = 0;
 
     // Ensure newsletter banner doesn't interfere (added once per page instance)

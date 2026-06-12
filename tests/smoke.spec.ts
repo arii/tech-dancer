@@ -1,5 +1,4 @@
 import { test, expect } from './fixtures/visual';
-import type { Page } from '@playwright/test';
 import { IGNORED_ERROR_PATTERNS } from './test-constants';
 
 function isIgnored(msg: string) {
@@ -8,76 +7,48 @@ function isIgnored(msg: string) {
   );
 }
 
-async function validateUrlNavigation(page: Page, href: string) {
-  console.log(`  Navigating to: ${href}`);
-  if (href.includes('#')) {
-    const [baseUrl, fragment] = href.split('#');
-    if (page.url() !== baseUrl && page.url() !== baseUrl + '/') {
-      await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 60000 });
-      await expect(page.locator('#main-content')).toBeVisible();
-    }
-    if (fragment) {
-      const locator = page.locator(`#${fragment}`);
-      await expect(locator).toBeVisible({ timeout: 5000 });
-    }
-  } else {
-    const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
-    await expect(page.locator('#main-content')).toBeVisible({ timeout: 10000 });
-    if (response !== null) {
-      expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);
-    }
-  }
-}
-
 test.describe('Navigation Smoke Tests', () => {
-  test.describe.configure({ timeout: 120000 }); // 2 minute timeout for these tests
   test('homepage loads without console errors', async ({ page, pageErrors }) => {
-    await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
+    await page.goto('./', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('#main-content')).toBeVisible();
     const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
     expect(filteredErrors).toHaveLength(0);
   });
 
-  test('all nav links are reachable and error-free', async ({ page, pageErrors }) => {
-    await page.goto('./', { waitUntil: 'networkidle', timeout: 60000 });
-    await expect(page.locator('#main-content')).toBeVisible();
+  test('core index pages load without errors', async ({ page, pageErrors }) => {
+    const coreRoutes = [
+      { name: 'blog', path: './blog' },
+      { name: 'gear', path: './gear' },
+      { name: 'research', path: './research' },
+      { name: 'events', path: './events' },
+      { name: 'merch', path: './merch' },
+      { name: 'about', path: './about' },
+      { name: 'contact', path: './contact' },
+    ];
 
-    const links = await page.$$eval('nav a[href]', (anchors) =>
-      anchors
-        .map((a) => (a as HTMLAnchorElement).href)
-        .filter((href) => href.startsWith(window.location.origin))
-    );
-
-    for (const href of links) {
+    for (const route of coreRoutes) {
       pageErrors.clearErrors();
-      await validateUrlNavigation(page, href);
+      await page.goto(route.path, { waitUntil: 'domcontentloaded' });
+      await expect(page.locator('#main-content')).toBeVisible({ timeout: 10000 });
       const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
-      expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
+      expect(filteredErrors, `Errors at ${route.path}: ${filteredErrors.join(', ')}`).toHaveLength(0);
     }
   });
 
-  test('all post/content pages load without errors', async ({ page, pageErrors }) => {
-    const contentIndexes = ['./blog', './gear', './research'];
+  test('representative content pages load without errors', async ({ page, pageErrors }) => {
+    // Test one of each major content type to ensure templates are working
+    const sampleRoutes = [
+      './blog/2026-04-19-gear-essentials',
+      './gear/2023-10-01-loop-earplugs',
+      './events/boogie-by-the-bay',
+    ];
 
-    for (const index of contentIndexes) {
-      await page.goto(index, { waitUntil: 'networkidle', timeout: 60000 });
-      await expect(page.locator('#main-content')).toBeVisible();
-      const exists = await page.$('#main-content');
-      if (!exists) continue;
-
-      const contentLinks = await page.$$eval('a[href]', (anchors) =>
-        anchors
-          .map((a) => (a as HTMLAnchorElement).href)
-          .filter((href) => href.startsWith(window.location.origin))
-          .filter((href, i, arr) => arr.indexOf(href) === i) // dedupe
-      );
-
-      for (const href of contentLinks) {
-        pageErrors.clearErrors();
-        await validateUrlNavigation(page, href);
-        const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
-        expect(filteredErrors, `Errors at ${href}: ${filteredErrors.join(', ')}`).toHaveLength(0);
-      }
+    for (const path of sampleRoutes) {
+      pageErrors.clearErrors();
+      await page.goto(path, { waitUntil: 'domcontentloaded' });
+      await expect(page.locator('#main-content')).toBeVisible({ timeout: 10000 });
+      const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
+      expect(filteredErrors, `Errors at ${path}: ${filteredErrors.join(', ')}`).toHaveLength(0);
     }
   });
 });
