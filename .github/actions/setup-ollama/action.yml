@@ -14,6 +14,8 @@ runs:
   steps:
     - id: setup
       shell: bash
+      env:
+        OLLAMA_MODEL: ${{ inputs.model }}
       run: |
         if ! curl -fsSL https://ollama.com/install.sh | sh; then
           echo "ready=false" >> "$GITHUB_OUTPUT"
@@ -25,9 +27,9 @@ runs:
         for i in {1..15}; do
           if curl -sf http://localhost:11434/api/tags > /dev/null; then
             echo "Ollama is ready!"
-            if [ -n "${{ inputs.model }}" ]; then
-              echo "Pulling model ${{ inputs.model }}..."
-              ollama pull "${{ inputs.model }}"
+            if [ -n "$OLLAMA_MODEL" ]; then
+              echo "Pulling model $OLLAMA_MODEL..."
+              ollama pull "$OLLAMA_MODEL"
             fi
             ollama list
             echo "ready=true" >> "$GITHUB_OUTPUT"
