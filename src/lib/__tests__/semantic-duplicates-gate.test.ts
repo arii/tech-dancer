@@ -45,7 +45,8 @@ describe('Semantic Duplicate Gate Integration', () => {
     try {
       execSync(`node ${DETECTOR_SCRIPT} --gate`, { encoding: 'utf8', stdio: 'pipe' });
       throw new Error('Should have failed');
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as { status: number; stderr: string };
       expect(error.status).toBe(1);
       expect(error.stderr).toContain('❌ Semantic Duplicate Gate Failed');
     }
