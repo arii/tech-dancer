@@ -61,20 +61,16 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   };
 
   return (
-    <Box
-      as="button"
+    <Button
       onClick={handleCopy}
       disabled={isCopying}
+      variant="professional"
+      size="sm"
       marginTop={2}
-      display="flex"
-      align="center"
-      gap={1}
-      paddingX={3}
-      paddingY={1}
       radius="md"
       surface="default"
       border={true}
-      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs tap-target"
+      className="tap-target"
     >
       {isCopying ? (
         <Icon icon={RefreshCw} size="xs" className="animate-spin" />
@@ -83,8 +79,10 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       ) : (
         <Icon icon={Copy} size="xs" />
       )}
-      <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
-    </Box>
+      <Text variant="sans" size="xs" weight="font-bold">
+        {isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}
+      </Text>
+    </Button>
   );
 }
 
@@ -151,17 +149,17 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
           backgroundColor: '#fff' // impeccable-ignore
         }}
       />
-      <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
+      <Box position="absolute" bottom={4} right={4} maxWidth="[12rem]" pointerEvents="none">
          <Box
            paddingX={2}
            paddingY={1}
            radius="sm"
            border={true}
            surface="bg"
-           opacity={0.8}
+           opacity="heavy"
            className="backdrop-blur-sm"
          >
-           <Text variant="sans" size="xs" color="dim">
+           <Text variant="sans" size="xs" color="dim" textAlign="left">
              ⚠️ Some sites block embedding via CORS.
            </Text>
          </Box>
@@ -226,13 +224,13 @@ export default function UXAuditor() {
                 onFocus={(e) => e.target.select()}
                 surface="bg"
                 border={true}
-                className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                 width="full"
                 paddingX={4}
                 paddingY={3}
                 radius="md"
                 placeholder="https://example.com"
                 aria-label="URL to audit"
+                className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
               />
             </Stack>
 
@@ -252,7 +250,6 @@ export default function UXAuditor() {
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
                   surface="bg"
                   border={true}
-                  className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                   width="full"
                   paddingX={4}
                   paddingRight={12}
@@ -260,6 +257,7 @@ export default function UXAuditor() {
                   radius="md"
                   placeholder="sk-..."
                   aria-label="API Key"
+                  className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                 />
                 {customApiKey && (
                   <Box
@@ -273,7 +271,8 @@ export default function UXAuditor() {
                     justify="center"
                     radius="md"
                     title="Clear API Key"
-                    className="-translate-y-1/2 hover:text-error text-dim transition-colors tap-target"
+                    className="-translate-y-1/2 hover:text-error text-text-dim transition-colors tap-target"
+                    paddingX={3}
                   >
                     <Icon icon={Trash2} size="xs" />
                   </Box>
@@ -296,13 +295,13 @@ export default function UXAuditor() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
                 surface="bg"
                 border={true}
-                className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
                 width="full"
                 paddingX={4}
                 paddingY={3}
                 radius="md"
                 placeholder="Service URL..."
                 aria-label="Snapshot Service URL"
+                className="focus:border-accent focus:ring-1 focus:ring-accent outline-none font-mono text-text-main text-sm transition-all"
               />
             </Stack>
 
@@ -350,19 +349,26 @@ export default function UXAuditor() {
                 as="button"
                 direction="row"
                 onClick={() => setActiveReport(report)}
-                width="full" align="center" gap={4} padding={4}
+                width="full"
+                align="center"
+                gap={4}
+                padding={4}
                 className={listRowVariants({ active: activeReport?.id === report.id })}
               >
                 <Box
                   radius="md"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+                  opacity={report.status !== 'completed' ? 'subtle' : 'full'}
+                  display="flex"
+                  align="center"
+                  justify="center"
                   shrink={0}
                   padding={2}
+                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
                 </Box>
-                <Box flex={1} minWidth="0" textAlign="left">
+                <Box flex={1} minWidth={0} textAlign="left">
                   <Text variant="sans" size="sm" weight="font-bold" display="block" truncate={true}>
                     {report.url.replace('https://', '')}
                   </Text>
@@ -415,7 +421,9 @@ export default function UXAuditor() {
                     gap={2}
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
-                    <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
+                    <Text variant="sans" size="sm" weight="font-bold" whiteSpace="nowrap">
+                      {isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}
+                    </Text>
                   </Button>
                 </Stack>
               </Stack>
@@ -441,7 +449,7 @@ export default function UXAuditor() {
                       </Stack>
 
                       <Stack direction={{ base: 'col', md: 'row' }} width="full">
-                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+                        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '[41.666%]' }}>
                           {activeReport.url ? (
                             <ViewportFrame
                               key={`${vp.name}-${activeReport.url}`}
@@ -450,11 +458,11 @@ export default function UXAuditor() {
                               height={vp.height}
                             />
                           ) : (
-                            <Stack align="center" justify="center" color="dim" className="text-center">
+                            <Stack align="center" justify="center" textAlign="center">
                               <Box marginBottom={2}>
-                                <Icon icon={ImageIcon} size="2xl" color="muted" />
+                                <Icon icon={ImageIcon} size="xl" color="muted" />
                               </Box>
-                              <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="wider">
+                              <Text variant="sans" size="xs" weight="font-bold" color="dim" uppercase tracking="wider">
                                 Awaiting Frame...
                               </Text>
                             </Stack>
@@ -498,19 +506,19 @@ export default function UXAuditor() {
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
-                            <Box surface="muted" padding={3} radius="lg" border={true}>
-                              <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
-                                <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase={true} tracking="widest" shrink={0}>FIX</Text>
-                                        <Box flex={1} minWidth="0" textAlign="left">
-                                          <Text variant="sans" size="xs" weight="font-bold" display="block" breakWords={true} className="whitespace-pre-wrap line-clamp-4">
-                                            {imp.suggestion}
-                                          </Text>
-                                          {imp.element === "Manual Audit Required" && (
-                                            <CopyPromptButton suggestion={imp.suggestion} />
-                                          )}
-                                        </Box>
-                              </Stack>
-                            </Box>
+                                      <Box surface="muted" padding={3} radius="lg" border={true}>
+                                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
+                                          <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase={true} tracking="widest" shrink={0}>FIX</Text>
+                                          <Box flex={1} minWidth={0} textAlign="left">
+                                            <Text variant="sans" size="xs" weight="font-bold" display="block" breakWords={true} whiteSpace="pre-wrap" clamp={4}>
+                                              {imp.suggestion}
+                                            </Text>
+                                            {imp.element === "Manual Audit Required" && (
+                                              <CopyPromptButton suggestion={imp.suggestion} />
+                                            )}
+                                          </Box>
+                                        </Stack>
+                                      </Box>
                                     )}
                                   </Box>
                                 ))}
