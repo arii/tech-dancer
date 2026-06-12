@@ -10,7 +10,7 @@ import { ComponentType } from 'react';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { EditorialContentRenderer } from '@/components/editorial/EditorialContentRenderer';
 import { readingTime } from '@/lib/content';
 
 // Lazy load tool components to help with bundle size
@@ -115,9 +115,7 @@ export default function ResearchDetail() {
             />
           }
         >
-          <Box className="prose-editorial">
-            <MarkdownRenderer content={study.content} />
-          </Box>
+          <EditorialContentRenderer content={study.content} />
         </EditorialLayout>
       </>
     );

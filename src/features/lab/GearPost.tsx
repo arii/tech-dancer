@@ -1,27 +1,13 @@
-import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { getResourceBySlug } from '@/lib/content';
-import { SEO } from '@/components/SEO';
+import { useCallback } from 'react';
+import { getResourceBySlug, Resource } from '@/lib/content';
 import { BASE_URL } from '@/config/constants';
 import { GearPostDetail } from './components/GearPostDetail';
 import type { SchemaProduct } from '@/utils/schema';
 import { AMAZON_AFFILIATE_DISCLOSURE } from '@/utils/schema';
+import { ContentPostRoute } from '@/components/editorial/ContentPostRoute';
 
 export default function GearPost() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-  const { data: resource } = useQuery({
-    queryKey: ['resources', slug],
-    queryFn: () => slug ? getResourceBySlug(slug) : undefined,
-    enabled: !!slug,
-    initialData: () => slug ? getResourceBySlug(slug) : undefined,
-  });
-
-  const structuredData = useMemo(() => {
-    if (!resource) return null;
-
+  const schemaBuilder = useCallback((resource: Resource) => {
     const isMerch = !!resource.shopUrl;
     const isAmazon = resource.affiliateProvider === 'amazon' || (resource.affiliateIds && resource.affiliateIds.length > 0);
 
@@ -64,35 +50,22 @@ export default function GearPost() {
     };
 
     return schema;
-  }, [resource]);
-
-  if (!resource) {
-    return (
-      <Box padding="panel" textAlign="center">
-        <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">Review Not Found</Text>
-          <Box as="button" onClick={() => navigate('/gear')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Toolbox</Text>
-          </Box>
-        </Stack>
-      </Box>
-    );
-  }
+  }, []);
 
   return (
-    <>
-      <SEO
-        title={resource.seoTitle || resource.title}
-        description={resource.seoDescription || resource.excerpt}
-        type="article"
-        image={resource.image}
-        schema={structuredData}
-      />
-      <GearPostDetail
-        post={resource}
-        onBack={() => navigate('/gear')}
-        backLabel="Back to Toolbox"
-      />
-    </>
+    <ContentPostRoute<Resource>
+      queryKeyPrefix="resources"
+      fetchFn={getResourceBySlug}
+      schemaBuilder={schemaBuilder}
+      backPath="/gear"
+      backLabel="Back to Toolbox"
+      notFoundTitle="Review Not Found"
+      titleKey="title"
+      descriptionKey="excerpt"
+      imageKey="image"
+      seoTitleKey="seoTitle"
+      seoDescriptionKey="seoDescription"
+      DetailComponent={GearPostDetail}
+    />
   );
 }

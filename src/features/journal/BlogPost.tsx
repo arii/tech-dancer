@@ -1,24 +1,11 @@
-import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getPostBySlug } from '@/lib/content';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { SEO } from '@/components/SEO';
+import { useCallback } from 'react';
+import { getPostBySlug, Post } from '@/lib/content';
 import { BASE_URL, SITE_NAME } from '@/config/constants';
 import { BlogPostDetail } from './components/BlogPostDetail';
+import { ContentPostRoute } from '@/components/editorial/ContentPostRoute';
 
 export default function BlogPost() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-  const { data: post } = useQuery({
-    queryKey: ['posts', slug],
-    queryFn: () => slug ? getPostBySlug(slug) : undefined,
-    enabled: !!slug,
-    initialData: () => slug ? getPostBySlug(slug) : undefined,
-  });
-
-  const structuredData = useMemo(() => {
-    if (!post) return null;
+  const schemaBuilder = useCallback((post: Post) => {
     return {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -44,35 +31,20 @@ export default function BlogPost() {
         "@id": `${BASE_URL}/blog/${post.slug}`
       }
     };
-  }, [post]);
-
-  if (!post) {
-    return (
-      <Box padding="panel" textAlign="center">
-        <Stack gap={8} align="center">
-          <Text variant="display" size="2xl">Post Not Found</Text>
-          <Box as="button" onClick={() => navigate('/blog')} className="hover:text-accent transition-colors">
-            <Text variant="mono" size="xs">Back to Journal</Text>
-          </Box>
-        </Stack>
-      </Box>
-    );
-  }
+  }, []);
 
   return (
-    <>
-      <SEO
-        title={post.title}
-        description={post.excerpt}
-        type="article"
-        image={post.image}
-        schema={structuredData}
-      />
-      <BlogPostDetail
-        post={post}
-        onBack={() => navigate('/blog')}
-        backLabel="Back to Folio"
-      />
-    </>
+    <ContentPostRoute<Post>
+      queryKeyPrefix="posts"
+      fetchFn={getPostBySlug}
+      schemaBuilder={schemaBuilder}
+      backPath="/blog"
+      backLabel="Back to Folio"
+      notFoundTitle="Post Not Found"
+      titleKey="title"
+      descriptionKey="excerpt"
+      imageKey="image"
+      DetailComponent={BlogPostDetail}
+    />
   );
 }

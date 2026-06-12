@@ -1,7 +1,6 @@
-import { Box } from '@/layouts/Primitives';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { EditorialContentRenderer } from '@/components/editorial/EditorialContentRenderer';
 import { Resource, readingTime } from '@/lib/content';
 
 interface FullPreviewProps {
@@ -28,9 +27,7 @@ export function FullPreview({ post, onBack }: FullPreviewProps) {
         />
       }
     >
-      <Box className="prose-editorial">
-        <MarkdownRenderer content={post.content} />
-      </Box>
+      <EditorialContentRenderer content={post.content} />
     </EditorialLayout>
   );
 }

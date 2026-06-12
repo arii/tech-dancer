@@ -8,7 +8,7 @@ import { Post, readingTime, getPosts } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { EditorialContentRenderer } from '@/components/editorial/EditorialContentRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
 
@@ -102,24 +102,22 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         </Stack>
       }
     >
-      <Box className="prose-editorial">
-        <MarkdownRenderer content={post.content} />
-      </Box>
-
-      {post.tags && post.tags.length > 0 && (
-        <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
-          <Stack gap={4}>
-            <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
-            <Stack direction="row" wrap gap={2}>
-              {post.tags.map(tag => (
-                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
-                  <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
-                </Box>
-              ))}
+      <EditorialContentRenderer content={post.content}>
+        {post.tags && post.tags.length > 0 && (
+          <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
+            <Stack gap={4}>
+              <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
+              <Stack direction="row" wrap gap={2}>
+                {post.tags.map(tag => (
+                  <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                    <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
+                  </Box>
+                ))}
+              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-      )}
+          </Box>
+        )}
+      </EditorialContentRenderer>
     </EditorialLayout>
   );
 }

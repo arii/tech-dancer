@@ -2,10 +2,9 @@ import { Resource, readingTime } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { EditorialContentRenderer } from '@/components/editorial/EditorialContentRenderer';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
-import { VerdictCallout } from '@/components/layout/DetailElements';
-import { Stack, Grid, Text, Box } from '@/layouts/Primitives';
+import { Stack, Grid, Text } from '@/layouts/Primitives';
 
 interface GearPostDetailProps {
   post: Resource;
@@ -61,10 +60,7 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
         <ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />
       }
     >
-      <Box className="prose-editorial">
-        {post.verdict && <VerdictCallout verdict={post.verdict} />}
-        <MarkdownRenderer content={post.content} />
-      </Box>
+      <EditorialContentRenderer content={post.content} verdict={post.verdict} />
     </EditorialLayout>
   );
 }
