@@ -234,7 +234,6 @@ async function main() {
     fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
 
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
-    const visualReviewList = allUrls.length > 0 ? allUrls.map(url => `- ${url}`).join('\n') : 'None detected.';
 
     const severityEmoji = severity === 'HIGH' ? '🔴' : severity === 'MEDIUM' ? '🟡' : '🟢';
 
