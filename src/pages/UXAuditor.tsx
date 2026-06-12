@@ -64,12 +64,10 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
     <Button
       onClick={handleCopy}
       disabled={isCopying}
-      variant="professional"
+      variant="outline"
       size="sm"
       marginTop={2}
       radius="md"
-      surface="default"
-      border={true}
       className="tap-target"
     >
       {isCopying ? (
@@ -149,13 +147,13 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
           backgroundColor: '#fff' // impeccable-ignore
         }}
       />
-      <Box position="absolute" bottom={4} right={4} maxWidth="[12rem]" pointerEvents="none">
+      <Box position="absolute" top={4} right={4} maxWidth="[12rem]" pointerEvents="none">
          <Box
            paddingX={2}
            paddingY={1}
            radius="sm"
            border={true}
-           surface="bg"
+           surface="card"
            opacity="heavy"
            className="backdrop-blur-sm"
          >
@@ -403,8 +401,7 @@ export default function UXAuditor() {
                 <Stack direction="row" gap={3} shrink={0}>
                   <Button
                     onClick={copyMarkdown}
-                    variant="professional"
-                    surface="muted"
+                    variant="outline"
                     size="sm"
                     radius="md"
                     gap={2}
