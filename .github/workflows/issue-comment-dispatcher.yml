@@ -44,7 +44,7 @@ jobs:
       - name: Resolve Branch Details
         if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ollama_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_JSON=$(gh pr view ${{ github.event.issue.number }} --json headRefName,baseRefName || echo '{}')
           HEAD_REF=$(echo "$PR_JSON" | jq -r '.headRefName // empty')
@@ -55,7 +55,7 @@ jobs:
       - name: Trigger Conflict Resolver
         if: steps.check.outputs.conflict_resolve == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
@@ -64,7 +64,7 @@ jobs:
       - name: Trigger Update Snapshots
         if: steps.check.outputs.update_snapshots == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
@@ -73,7 +73,7 @@ jobs:
       - name: Trigger Ollama ChatOps
         if: steps.check.outputs.ollama_chatops == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
@@ -82,7 +82,7 @@ jobs:
       - name: Trigger Jules Fix CI
         if: steps.check.outputs.jules_fix_ci == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
