@@ -8,6 +8,7 @@ const SRC_DIR = path.join(ROOT, 'src');
 const OUTPUT_DIR = path.join(ROOT, 'artifacts', 'semantic-duplicates');
 const REPORT_PATH = path.join(OUTPUT_DIR, 'report.md');
 const JSON_PATH = path.join(OUTPUT_DIR, 'report.json');
+const BASELINE_PATH = path.join(ROOT, 'src/config/semantic-duplicates-baseline.json');
 const SCORE_THRESHOLD = 55;
 const MAX_REPORTED_PAIRS = 250;
 
@@ -758,3 +759,25 @@ console.log(`Exact structure groups: ${structuralGroups.length}`);
 console.log(`Repeated JSX subtree patterns: ${subtreePatterns.length}`);
 console.log(`Repeated class patterns: ${classPatterns.length}`);
 console.log(`Duplicate function signal groups: ${functionGroups.length}`);
+
+if (process.argv.includes('--gate')) {
+  const definiteDuplicates = pairs.filter((p) => p.score >= 90).length;
+  let baseline = 0;
+  if (fs.existsSync(BASELINE_PATH)) {
+    try {
+      const baselineData = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8'));
+      baseline = baselineData.baseline ?? 0;
+    } catch (error) {
+      console.error(`Failed to read baseline file: ${error.message}`);
+    }
+  }
+
+  console.log(`\nGate Check: Definite duplicates = ${definiteDuplicates}, Baseline = ${baseline}`);
+  if (definiteDuplicates > baseline) {
+    console.error(`❌ Semantic Duplicate Gate Failed: ${definiteDuplicates} definite duplicates found, which exceeds the baseline of ${baseline}.`);
+    console.error(`Please refactor the duplicates or update the baseline in ${toRepoPath(BASELINE_PATH)} if this increase is intentional.`);
+    process.exit(1);
+  } else {
+    console.log('✅ Semantic Duplicate Gate Passed.');
+  }
+}

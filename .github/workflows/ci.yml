@@ -144,6 +144,24 @@ jobs:
           fi
           echo "✅ Design token compliance passed."
 
+  semantic-duplicate-check:
+    name: Semantic Duplicate Check
+    runs-on: ubuntu-latest
+    needs: audit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Run Semantic Duplicate Detection
+        run: node scripts/detect-semantic-duplicates.mjs --gate
+      - name: Upload Duplicate Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-duplicate-report
+          path: artifacts/semantic-duplicates/
+          retention-days: 7
+
   test-build:
     name: Build & E2E
     needs: lint-typecheck

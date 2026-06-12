@@ -40,7 +40,8 @@
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
-    "audit:semantic": "node scripts/detect-semantic-duplicates.mjs"
+    "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
+    "audit:semantic:gate": "node scripts/detect-semantic-duplicates.mjs --gate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

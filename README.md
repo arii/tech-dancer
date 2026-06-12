@@ -43,6 +43,17 @@ pnpm build
 pnpm preview
 ```
 
+### Audit & Quality
+
+The project includes several automated checks to maintain code quality:
+
+- **UI Anti-Pattern Audit**: `pnpm run audit` checks for layout primitives and token usage.
+- **Semantic Duplicate Check**: `pnpm run audit:semantic` detects duplicate components using AST analysis. In CI, this check is gated against a baseline in `src/config/semantic-duplicates-baseline.json`.
+
+To update the semantic duplicate baseline:
+1. Run `pnpm run audit:semantic`.
+2. Update the `baseline` value in `src/config/semantic-duplicates-baseline.json` to match the current count of definite duplicates.
+
 ## UI System
 
 This project uses a primitive-first layout system located in `src/layouts/`. Components should be built using `Box`, `Stack`, `Grid`, and `Text` to ensure token compliance.
