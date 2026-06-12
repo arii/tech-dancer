@@ -67,8 +67,6 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
       variant="outline"
       size="sm"
       marginTop={2}
-      radius="md"
-      className="tap-target"
     >
       {isCopying ? (
         <Icon icon={RefreshCw} size="xs" className="animate-spin" />
@@ -147,21 +145,6 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
           backgroundColor: '#fff' // impeccable-ignore
         }}
       />
-      <Box position="absolute" top={4} right={4} maxWidth="[12rem]" pointerEvents="none">
-         <Box
-           paddingX={2}
-           paddingY={1}
-           radius="sm"
-           border={true}
-           surface="card"
-           opacity="heavy"
-           className="backdrop-blur-sm"
-         >
-           <Text variant="sans" size="xs" color="dim" textAlign="left">
-             ⚠️ Some sites block embedding via CORS.
-           </Text>
-         </Box>
-      </Box>
     </Box>
   );
 }
@@ -403,7 +386,6 @@ export default function UXAuditor() {
                     onClick={copyMarkdown}
                     variant="outline"
                     size="sm"
-                    radius="md"
                     gap={2}
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
@@ -431,18 +413,32 @@ export default function UXAuditor() {
 
                   return (
                     <Box key={vp.name} className={cardVariants({ overflow: "hidden" })}>
-                      <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
+                      <Stack padding={4} border="b" direction={{ base: "col", sm: "row" }} align={{ base: "start", sm: "center" }} justify="between" gap={4} surface="muted">
                         <Stack direction="row" align="center" gap={3}>
                           <Box width={9} height={9} surface="default" radius="lg" shadow="standard" color="accent" display="flex" align="center" justify="center" shrink={0} aria-hidden="true">
                             {viewportIcons[vp.name as keyof typeof viewportIcons]}
                           </Box>
-                          <Text variant="sans" size="base" weight="font-bold" textAlign="left">
-                            {vp.name} Viewport Analysis
-                          </Text>
+                          <Stack gap={0.5}>
+                            <Text variant="sans" size="base" weight="font-bold" textAlign="left">
+                              {vp.name} Viewport Analysis
+                            </Text>
+                            <Text variant="sans" size="micro" color="dim" weight="font-medium" uppercase tracking="wider">
+                              {vp.width}w × {vp.height}h
+                            </Text>
+                          </Stack>
                         </Stack>
-                        <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-                          {vp.width}w × {vp.height}h
-                        </Text>
+                        <Box
+                          paddingX={3}
+                          paddingY={1.5}
+                          radius="md"
+                          border={true}
+                          surface="card"
+                          opacity="heavy"
+                        >
+                          <Text variant="sans" size="xs" color="warning" textAlign="left" weight="font-bold">
+                            ⚠️ Note: External sites may block embedding via CORS.
+                          </Text>
+                        </Box>
                       </Stack>
 
                       <Stack direction={{ base: 'col', md: 'row' }} width="full">
@@ -469,7 +465,7 @@ export default function UXAuditor() {
                         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
                           {data ? (
                             <>
-                              <Box surface="alt" padding={5} className="border border-line rounded-lg">
+                              <Box surface="alt" padding={5} border={true} radius="lg">
                                 <Box marginBottom={3}>
                                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase={true} display="block" tracking="widest" textAlign="left">
                                     Analysis Summary
