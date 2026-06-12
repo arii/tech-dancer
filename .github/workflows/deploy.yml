@@ -196,6 +196,11 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add .
             if git commit -m "deploy: $GITHUB_SHA [skip ci]"; then
+              # Make sure we fetch the latest gh-pages branch before attempting to push
+              # to avoid rejected non-fast-forward pushes when multiple CI instances
+              # run concurrently.
+              git fetch origin gh-pages || true
+              git rebase origin/gh-pages || git rebase --abort || true
               if git push origin gh-pages; then
                 echo "Push successful! Waiting for GitHub Pages to publish..."
                 echo "PUSH_COMPLETE=true" >> "$GITHUB_ENV"
@@ -227,6 +232,9 @@ jobs:
                 echo "Verification timed out. Pushed but not yet verified."
                 echo "VERIFIED=false" >> "$GITHUB_ENV"
                 exit 0
+              else
+                # Clean up if push fails, then it'll fall through to retry
+                git reset --soft HEAD~1
               fi
             else
               echo "No changes to commit."
