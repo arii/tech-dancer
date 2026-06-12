@@ -285,8 +285,9 @@ function getChangedFiles(): string[] {
       const untracked = execSync('git ls-files --others --exclude-standard', { encoding: 'utf-8', stdio: 'pipe' });
       const untrackedFiles = untracked.split('\n').filter(Boolean).map(f => path.normalize(f).replace(/\\/g, '/'));
       return untrackedFiles;
-
-    } catch {}
+    } catch {
+      // ignore
+    }
   }
   return [];
 }
@@ -303,9 +304,6 @@ function determineImpactLevel(changedFiles: string[]): 'High' | 'Medium' | 'Low'
       level = 'Medium';
     } else if (file.startsWith('src/pages/') && level === 'Low') {
       level = 'Low';
-    } else {
-      // For config or other core changes, we might want to default to High, but following specs:
-      if (level === 'Low') level = 'Low';
     }
   }
 
@@ -322,8 +320,8 @@ export function analyzeImpact(changedFilesInput?: string[]) {
 
   const srcChangedFiles = changedFiles.filter(f => f.startsWith('src/'));
 
-  let affectedPages = new Set<string>();
-  let impactLevel = determineImpactLevel(changedFiles);
+  const affectedPages = new Set<string>();
+  const impactLevel = determineImpactLevel(changedFiles);
 
   if (srcChangedFiles.length > 0) {
     const routeMap = getRouteMap();
