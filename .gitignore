@@ -96,3 +96,4 @@ dev-tools/logs/reviews/*.md
 .venv
 dev-tools/logs/audits/
 .pr_cache.pkl
+gh_2.40.1_linux_amd64/
