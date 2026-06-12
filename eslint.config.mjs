@@ -34,7 +34,11 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/components/ui/**/*.tsx', 'src/layouts/**/*.tsx'],
+    files: [
+      'src/layouts/**/*.tsx',
+      'src/components/ui/**/*.tsx',
+      'src/components/editorial/**/*.tsx'
+    ],
     rules: {
       'sonarjs/no-duplicate-string': 'off',
       'sonarjs/no-identical-functions': 'off',

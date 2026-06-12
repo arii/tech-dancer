@@ -6,8 +6,9 @@ Use these as dispatch-ready GitHub issues. Keep each PR focused and avoid mixing
 
 ### Tool Configuration Updates
 
-- Added a `.jscpd.json` to ignore UI/layout wrappers and increase token threshold.
-- Updated `eslint.config.mjs` to disable SonarJS duplicate detection for `src/components/ui/**/*.tsx` and `src/layouts/**/*.tsx`.
+- Added a `.jscpd.json` to ignore UI, layouts, editorial, navigation, and providers wrappers and set the minTokens threshold to 100.
+- Updated `eslint.config.mjs` to disable SonarJS duplicate detection (`sonarjs/no-duplicate-string`, `sonarjs/no-identical-functions`) for `src/layouts/**/*.tsx`, `src/components/ui/**/*.tsx`, and `src/components/editorial/**/*.tsx`.
+- Tuned `scripts/detect-semantic-duplicates.mjs` to ignore layout, UI, and editorial directories during static analysis walk.
 
 These settings reduce false positives from structural layout components during duplicate detection.
 
