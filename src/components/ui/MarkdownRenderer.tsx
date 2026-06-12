@@ -130,7 +130,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justifyContent="center">
+              <Box marginY={8} width="full" display="flex" justify="center">
                 <img
                   src={normalizedSrc}
                   className="rounded-lg shadow-sm"
@@ -173,7 +173,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justifyContent="center">
+                  <Box marginY={8} width="full" display="flex" justify="center">
                     <img
                       src={diagramUrl}
                       alt="Workflow Diagram"
