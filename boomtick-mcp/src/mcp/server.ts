@@ -71,6 +71,10 @@ export class BoomtickMCPServer {
             description: "Find PRs worth rescuing.",
           },
           {
+            name: "pr-consolidation",
+            description: "Guidelines for analyzing and proposing consolidation of overlapping PRs.",
+          },
+          {
             name: "repo-context",
             description: "Gather repository context for a PR.",
           },

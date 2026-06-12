@@ -1,5 +1,7 @@
 ---
 type: post
+draft: true
+status: draft
 title: "Why Most Above-Average Dancers Don't Make Finals"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"

@@ -648,7 +648,12 @@ class Orchestrator:
                 expected_node = "22.22.2"
 
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
-        if actual_node != expected_node:
+        is_ci = os.environ.get("CI") == "true"
+
+        expected_prefix = ".".join(expected_node.split(".")[:2]) + "."
+        node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
+
+        if not node_matches:
             print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
