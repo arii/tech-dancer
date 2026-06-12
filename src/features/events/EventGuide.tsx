@@ -89,7 +89,10 @@ export default function EventGuide() {
             marginBottom={16}
             padding={{ base: 6, md: 8 }}
             radius="2xl"
-            className="bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group"
+            position="relative"
+            overflow="hidden"
+            border
+            className="bg-white/5 border-white/10 backdrop-blur-sm group"
           >
 
             <Box
@@ -98,7 +101,8 @@ export default function EventGuide() {
               right={-20}
               width={40}
               height={40}
-              className="bg-accent/10 blur-3xl rounded-full"
+              radius="full"
+              className="bg-accent/10 blur-3xl"
             />
 
             <Stack gap={4}>
@@ -108,48 +112,57 @@ export default function EventGuide() {
                   Why I&apos;m Attending
                 </Text>
               </Box>
-              <Text variant="body" size="lg" leading="relaxed" color="white" opacityVariant="solid" className="relative z-10 italic font-medium">
+              <Text variant="body" size="lg" leading="relaxed" color="white" opacityVariant="solid" zIndex={10} className="italic font-medium">
                 &ldquo;{event.whyAttending}&rdquo;
               </Text>
             </Stack>
           </Box>
         )}
         <Grid cols={{ base: 1, lg: 3 }} gap={{ base: 8, lg: 16 }}>
-          <Box className="lg:col-span-2">
+          <Box span={{ lg: 2 }}>
             <Stack gap={6}>
               <AffiliateDisclosure />
               <Stack gap={SECTION_SPACING}>
                 {event.theme && (
-                  <ThemeSpotlight
-                    id="theme"
-                    title={event.theme.name}
-                    label={event.theme.label}
-                    description={event.theme.description || ''}
-                    colors={event.theme.colors}
-                    outfits={themeOutfits}
-                    accessories={themeAccessories}
-                  />
+                  <Box id="theme" layout="eventSection">
+                    <ThemeSpotlight
+                      title={event.theme.name}
+                      label={event.theme.label}
+                      description={event.theme.description || ''}
+                      colors={event.theme.colors}
+                      outfits={themeOutfits}
+                      accessories={themeAccessories}
+                    />
+                  </Box>
                 )}
 
                 {gearSections.length > 0 && (
-                  <CuratedGear
-                    id="gear"
-                    title={`Gear for ${event.title}`}
-                    sections={gearSections}
-                  />
+                  <Box id="gear" layout="eventSection">
+                    <CuratedGear
+                      title={`Gear for ${event.title}`}
+                      sections={gearSections}
+                    />
+                  </Box>
                 )}
 
-                <EventReminders id="reminders" event={event} />
+                <Box id="reminders" layout="eventSection">
+                  <EventReminders event={event} />
+                </Box>
 
-                <EventTravel id="travel" notes={event.description} />
+                <Box id="travel" layout="eventSection">
+                  <EventTravel notes={event.description} />
+                </Box>
 
-                <EventNotes id="notes" content={event.content} />
+                <Box id="notes" layout="eventSection">
+                  <EventNotes content={event.content} />
+                </Box>
 
                 {relatedEvents.length > 0 && (
-                  <RelatedEvents
-                    id="related"
-                    events={relatedEvents}
-                  />
+                  <Box id="related" layout="eventSection">
+                    <RelatedEvents
+                      events={relatedEvents}
+                    />
+                  </Box>
                 )}
               </Stack>
             </Stack>
