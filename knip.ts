@@ -7,6 +7,7 @@ const config: KnipConfig = {
     'src/components/Equalizer.tsx'
   ],
   ignoreDependencies: [
+    'dependency-cruiser',
     'tw-animate-css',
     'vite-plugin-pwa',
     'workbox-window',
