@@ -15,7 +15,7 @@ heroImage: '/assets/events/soswing-hero.svg'
 bestFor: ["Intimate settings", "First-time competitors", "Road-trip vibe"]
 description: Known for its warm "Westie" hospitality, SOswing provides an intimate PNW setting for leveled workshops and social dancing at the retro-chic Ashland Hills Hotel.
 whyAttending: >
-  SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge field.
+  SOswing has the most welcoming, community-first atmosphere in the Pacific Northwest. It's a perfect event to focus on dancing without the pressure of a huge field.
 theme:
   name: "PNW Community Weekend"
   label: "Ashland / Road Trip Theme"
@@ -47,7 +47,7 @@ gear:
     - loop-experience
     - mints
     - hand-sanitizer
-  essentialDescription: "Standard recovery and hygiene for the relaxed PNW circuit pace."
+  essentialDescription: "Standard recovery and hygiene for the relaxed PNW pace."
   travelIds:
     - compression-cubes
     - travel-pillow

@@ -52,8 +52,6 @@ relatedEvents:
 - swingtacular-the-galactic-open
 ---
 
-Weekly social dance in San Jose.
-
 ## Attendance Frequency
 Wednesdays: I drop in for the points class and stay for the social dance.
 

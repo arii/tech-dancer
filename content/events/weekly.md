@@ -12,7 +12,7 @@ region: "Global"
 schedule: "Weekly / Leveled Series"
 url: ""
 heroImage: ""
-description: "Taking regular lessons and hitting the floor for social dancing are absolutely key to building your skills."
+description: "Build consistency and rhythm by finding local weekly classes, socials, and practice spaces in your area."
 
 whyAttending: >
   Weekly classes are the foundation of any dancer's growth, offering a consistent environment to hone your skills, learn new concepts, and connect with your local community.
@@ -47,9 +47,7 @@ relatedEvents:
 - mission-city-swing
 ---
 
-The best way to learn West Coast Swing is to do it consistently. Taking regular lessons and hitting the floor for social dancing are absolutely key to building your skills and finding your rhythm. While this list is incomplete, it serves as a great starting point for tracking down local communities, practices, and events across different regions.
-
-Here are some of the best regional West Coast Swing event lists and calendars to help you get out on the floor:
+While this list is incomplete, it serves as a great starting point for tracking down local communities, practices, and events across different regions. Here are some of the best regional West Coast Swing event lists and calendars to help you get out on the floor:
 
 ## Pacific Northwest (PNW)
 *   **[Seattle West Coast Swing Calendar](https://seattleswingdanceclub.com/seattlewcscalendar):** Run by the Seattle Swing Dance Club, this tracks major weekenders and local dances across Washington, Oregon, and Idaho.
