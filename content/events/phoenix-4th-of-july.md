@@ -5,14 +5,14 @@ date: '2026-07-02'
 startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: Heat, pool parties, and high-energy WCS in the Arizona desert.
+excerpt: Experience a high-energy summer tradition in Scottsdale, featuring legendary resort pool parties and top-tier West Coast Swing.
 location: JW Marriott Scottsdale Camelback Inn Resort & Spa
 city: Scottsdale, AZ
 region: Southwest
 schedule: July 2 - 5, 2026
 url: https://phx4th.com/
 heroImage: '/assets/events/phoenix-4th-of-july-hero.svg'
-description: Phoenix 4th of July is a legendary West Coast Swing event known for its incredible resort venue, massive pool parties, and competitive energy. It's one of the largest events in the Southwest and a highlight of the summer circuit.
+description: A summer circuit highlight, Phoenix 4th of July is famous for its immersive resort experience and high-energy ballroom competition at the JW Marriott Scottsdale Camelback Inn.
 whyAttending: >
   The combination of a world-class resort and world-class dancing is unbeatable. The pool parties are a unique WCS experience that you have to see to believe.
 theme:
@@ -64,8 +64,6 @@ relatedEvents:
 - wild-wild-westie
 - jack-and-jill-orama
 ---
-
-The JW Marriott Desert Ridge is one of the most beautiful venues on the circuit. While the Arizona heat is intense outside, the ballroom is kept cool, and the resort’s lazy river is the perfect place to recover between workshops.
 
 ## Heat and resort logistics
 

@@ -11,7 +11,7 @@ city: "Costa Mesa"
 region: "SoCal"
 schedule: "October 22 - 25, 2026"
 url: "https://halloweenswingthing.com"
-heroImage: "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.webp"
+heroImage: "/assets/events/halloween-hero.svg"
 description: "Discover how Halloween Swing Thing blends technical excellence with festive creativity. This guide covers essential costume preparation, event highlights, and gear tips for the circuit's premier themed weekend."
 
 whyAttending: >
@@ -126,21 +126,13 @@ The event strikes a balance between a dance convention and a Halloween celebrati
 
 ---
 
-## 👟 What to Bring
+## 👟 Packing Strategy
 
-Beyond the **Recommended Gear** listed above, consider these event-specific packing tips to ensure you're prepared for the unique demands of a costume-heavy weekend.
+Beyond the **Recommended Gear** listed above, consider these event-specific tips for a costume-heavy weekend:
 
-### Costume Logistics
-
-* **Emergency repair kit:** Pack safety pins, fashion tape, and basic sewing supplies for quick on-site fixes.
-* **Dance-friendly backup:** Always have a simplified version of your costume (or a themed t-shirt) ready for high-intensity social dancing.
-* **Storage bags:** Use dedicated bags to keep delicate costume pieces or props organized and protected during travel.
-* **Layered clothing:** The transition between a warm ballroom and hotel common areas can be stark; bring a light jacket or sweater.
-
-### Event Essentials
-
-* **Personal care:** Pack snacks and a reusable water bottle to maintain energy between carnival activities.
-* **Device management:** While we recommend a portable charger in our gear list, remember to bring extra cables for all your themed accessories.
+* **Costume Maintenance:** Pack an emergency repair kit (safety pins, fashion tape) and use dedicated storage bags for delicate props.
+* **Danceability:** Always have a simplified, breathable version of your costume ready for high-intensity social sets.
+* **Layering:** Ballrooms can get hot while common areas remain chilled; bring a light jacket for transitions.
 
 ---
 
@@ -247,4 +239,4 @@ The more you engage, the more memorable the weekend becomes.
 
 ## Final Thought
 
-Halloween Swing Thing serves as a reminder that the West Coast Swing community thrives when it balances athletic competition with genuine playfulness. By preparing your gear and costumes ahead of time, you free yourself to fully engage with the weekend's unique creative energy. Whether you're aiming for a podium finish or simply looking to enjoy the carnival atmosphere, the key is to lean into the event's immersive spirit and share in the collective creativity of your fellow dancers.
+Success at Halloween Swing Thing comes from balancing athletic focus with creative immersion. By ensuring your gear and costumes are dance-ready, you can fully embrace the community's most festive weekend without compromising your performance on the floor.

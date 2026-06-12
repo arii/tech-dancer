@@ -5,14 +5,14 @@ date: '2026-08-06'
 startDate: '2026-08-06'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: A sci-fi themed WCS adventure in the San Francisco Bay Area.
+excerpt: Embark on a sci-fi themed West Coast Swing adventure in the San Francisco Bay Area, featuring high production values and immersive storytelling.
 location: Hyatt Regency San Francisco Airport
 city: Burlingame, CA
 region: NorCal
 schedule: August 6 - 9, 2026
 url: https://swingtacular.com/
 heroImage: '/assets/events/swingtacular-hero.svg'
-description: Swingtacular is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
+description: Known for its "Galactic" theme and world-class production, Swingtacular blends top-tier WSDC competition with a unique, story-driven atmosphere at the Hyatt Regency SFO.
 whyAttending: >
   There is no other event like Swingtacular. The sci-fi theme is fully embraced, and the energy in the ballroom is truly "out of this world." The event is known for leaning hard into production, lighting, and theme.
 theme:
@@ -64,8 +64,6 @@ relatedEvents:
 - jack-and-jill-orama
 - phoenix-4th-of-july
 ---
-
-Swingtacular is where WCS meets a full galactic theme weekend. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
 
 ## Galactic & Nerd Theme notes
 

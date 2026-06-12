@@ -5,14 +5,14 @@ date: '2026-07-02'
 startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
+excerpt: Join the high-energy, world-class competition field in the heart of Texas for this legendary 4th of July weekend tradition.
 location: Hyatt Regency DFW International Airport, 2334 North International Parkway
 city: Dallas, TX
 region: South
 schedule: July 2 - 5, 2026
 url: https://wildwildwestie.com/
 heroImage: '/assets/events/wild-wild-westie-hero.svg'
-description: Wild Wild Westie (WWW) is one of the most competitive and high-energy events on the WCS circuit. Held over the 4th of July weekend, it attracts top dancers from across the globe for intense competitions and legendary late-night social dancing.
+description: Held at the iconic Hyatt Regency Dallas, Wild Wild Westie (WWW) is a cornerstone of the circuit, known for its intense "Texas attitude" competition and legendary late-night social dancing.
 whyAttending: >
   If you love competition, WWW is the place to be. The energy in the ballroom is electric, and the level of talent in the Jack & Jills is incredible.
 theme:
@@ -62,8 +62,6 @@ relatedEvents:
 - swingtacular-the-galactic-open
 - jack-and-jill-orama
 ---
-
-Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the iconic Hyatt Regency Dallas (the one with the glowing ball on top), it's a weekend of intense dancing, serious competition, and southern hospitality.
 
 ## Western theme notes
 
