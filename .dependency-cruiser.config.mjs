@@ -3,6 +3,10 @@ export default {
   forbidden: [
   ],
   options: {
+    tsPreCompilationDeps: true,
+    tsConfig: {
+      fileName: 'tsconfig.app.json'
+    },
     doNotFollow: {
       path: 'node_modules'
     },
@@ -15,5 +19,6 @@ export default {
       conditionNames: ["import", "require", "node", "default"],
       extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     }
+    includeOnly: '^src'
   }
 };
