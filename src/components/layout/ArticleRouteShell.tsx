@@ -14,7 +14,7 @@ interface ArticleRouteShellProps<T> {
     title: string;
     description: string;
     image?: string;
-    schema?: any;
+    schema?: Record<string, unknown> | Record<string, unknown>[];
     type?: 'website' | 'article' | 'profile';
   };
   renderDetail: (data: T, onBack: () => void) => ReactNode;
