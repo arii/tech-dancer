@@ -1,6 +1,6 @@
 // Cleaned imports
 import React, { useCallback, useEffect } from 'react';
-import { Search, Download, FileJson, FileText, AlertCircle } from 'lucide-react';
+import { Search, AlertCircle } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -10,17 +10,20 @@ import { useWCSData, WCSRecord } from '../hooks/useWCSData';
 import { ScoreDistributionChart, AvgScoreTrendChart } from './WCSChartContainers';
 import { FilterButton } from '@/components/ui/FilterButton';
 import { ActionButton } from '@/components/ui/ActionButton';
-import ResearchToolShell from '@/components/research/ResearchToolShell';
+import { ResearchToolShell } from '@/components/research/ResearchToolShell';
 import DataPanel from '@/components/layout/DataPanel';
+import { StatsList } from '@/components/layout/StatsList';
+import { ExportActions } from '@/components/layout/ExportActions';
 
 function WCSDataTable({ data }: { data: WCSRecord[] }) {
   return (
-    <Box border surface="default">
-      <Box padding="compact" borderBottom display="flex" justify="between" align="center">
-        <Text variant="mono" size="xs" weight="font-bold" uppercase>Scoring Results</Text>
+    <DataPanel
+      title="Scoring Results"
+      actions={
         <Text variant="mono" size="micro" color="dim" data-testid="search-results-count">{data.length} RECORDS FOUND</Text>
-      </Box>
-      <Box className="overflow-x-auto">
+      }
+    >
+      <Box className="overflow-x-auto" marginX="-card">
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-line">
@@ -63,72 +66,9 @@ function WCSDataTable({ data }: { data: WCSRecord[] }) {
         </table>
       </Box>
       {data.length > 20 && (
-        <Box padding="compact" textAlign="center" borderTop><Text variant="mono" size="micro" color="dim">AND {data.length - 20} MORE RECORDS...</Text></Box>
+        <Box padding="compact" textAlign="center" borderTop className="border-line/20"><Text variant="mono" size="micro" color="dim">AND {data.length - 20} MORE RECORDS...</Text></Box>
       )}
-    </Box>
-  );
-}
-
-function WCSExportTools({ data }: { data: WCSRecord[] }) {
-  const { exportCSV, exportPDF } = useExport();
-
-  const handleExportPDF = useCallback(() => {
-    window.gtag?.('event', 'data_export', { format: 'pdf', tool: 'wcs_scraper' });
-    exportPDF({
-      title: 'WCS Prelim Scoring Analysis',
-      filename: 'wcs_prelims',
-      headers: [['Date', 'Competitor', 'Event', 'Score', 'Promoted']],
-      data: data.map(r => [r.event_date, r.competitor_name, r.event_title, r.Registry_Points_Sum.toFixed(1), r.Promoted ? 'YES' : 'NO'])
-    });
-  }, [data, exportPDF]);
-
-  const handleExportCSV = useCallback(() => {
-    window.gtag?.('event', 'data_export', { format: 'csv', tool: 'wcs_scraper' });
-    exportCSV(data);
-  }, [data, exportCSV]);
-
-  return (
-    <Box border surface="default" padding="card">
-      <Stack gap={6}>
-        <Box display="flex" align="center" gap={3}> <Download className="w-5 h-5 text-accent" /> <Text variant="mono" size="xs" weight="font-bold" uppercase>Export Data</Text></Box>
-        <Stack gap={3}>
-          <ActionButton variant="secondary" width="full" padding={3} onClick={handleExportCSV}>
-            <Box display="flex" align="center" gap={3} width="full" textAlign="left"><FileJson className="w-4 h-4 shrink-0" /><Stack gap={0}><Text variant="mono" size="micro" weight="font-bold">EXPORT_CSV</Text><Text variant="body" size="micro" color="dim">Raw machine-readable data</Text></Stack></Box>
-          </ActionButton>
-          <ActionButton variant="secondary" width="full" padding={3} onClick={handleExportPDF}>
-            <Box display="flex" align="center" gap={3} width="full" textAlign="left"><FileText className="w-4 h-4 shrink-0" /><Stack gap={0}><Text variant="mono" size="micro" weight="font-bold">EXPORT_PDF_REPORT</Text><Text variant="body" size="micro" color="dim">Formatted analytical brief</Text></Stack></Box>
-          </ActionButton>
-        </Stack>
-      </Stack>
-    </Box>
-  );
-}
-
-function WCSScraperStats({ latency, totalEvents }: { latency: number | null, totalEvents: number | null }) {
-  return (
-    <Box paddingX={4} paddingY={6}>
-      <Stack gap={4}>
-        <Text variant="mono" size="micro" color="dim" uppercase weight="font-bold" tracking="widest">Stats</Text>
-        <Stack gap={4}>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
-            <Text variant="body" size="xs" color="dim">Status</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">OPERATIONAL</Text>
-          </Box>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
-            <Text variant="body" size="xs" color="dim">Latency</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">{latency ? `${(latency / 1000).toFixed(2)}s` : '---'}</Text>
-          </Box>
-          <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
-            <Text variant="body" size="xs" color="dim">Events Processed</Text>
-            <Text variant="mono" size="xs" color="brand" weight="font-bold">{totalEvents || '---'}</Text>
-          </Box>
-          <Box display="flex" justify="between" align="center">
-            <Text variant="body" size="xs" color="dim">Safe Access</Text>
-            <StatusBadge label="ACTIVE" />
-          </Box>
-        </Stack>
-      </Stack>
-    </Box>
+    </DataPanel>
   );
 }
 
@@ -176,6 +116,35 @@ export function WCSScraperTool() {
       </Box>
     );
   }
+
+  const stats = [
+    { label: 'Status', value: 'OPERATIONAL' },
+    { label: 'Latency', value: latency ? `${(latency / 1000).toFixed(2)}s` : '---' },
+    { label: 'Events Processed', value: totalEvents || '---' },
+    { label: 'Safe Access', value: 'ACTIVE', isStatusBadge: true }
+  ];
+
+  const { exportCSV, exportPDF } = useExport();
+
+  const handleExportPDF = useCallback(() => {
+    window.gtag?.('event', 'data_export', { format: 'pdf', tool: 'wcs_scraper' });
+    exportPDF({
+      title: 'WCS Prelim Scoring Analysis',
+      filename: 'wcs_prelims',
+      headers: [['Date', 'Competitor', 'Event', 'Score', 'Promoted']],
+      data: filteredData.map(r => [r.event_date, r.competitor_name, r.event_title, r.Registry_Points_Sum.toFixed(1), r.Promoted ? 'YES' : 'NO'])
+    });
+  }, [filteredData, exportPDF]);
+
+  const handleExportCSV = useCallback(() => {
+    window.gtag?.('event', 'data_export', { format: 'csv', tool: 'wcs_scraper' });
+    exportCSV(filteredData);
+  }, [filteredData, exportCSV]);
+
+  const exportActions = [
+    { label: 'EXPORT_CSV', description: 'Raw machine-readable data', icon: 'csv' as const, onClick: handleExportCSV },
+    { label: 'EXPORT_PDF_REPORT', description: 'Formatted analytical brief', icon: 'pdf' as const, onClick: handleExportPDF }
+  ];
 
   return (
     <ResearchToolShell
@@ -231,31 +200,13 @@ export function WCSScraperTool() {
         <>
           <DataPanel title="Verification">
             <Box paddingX={4} paddingY={6}>
-              <Stack gap={4}>
-                <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase>VERIFICATION</Text>
-                <Stack gap={4}>
-                  <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
-                    <Text variant="body" size="xs" color="dim">Status</Text>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold">OPERATIONAL</Text>
-                  </Box>
-                  <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
-                    <Text variant="body" size="xs" color="dim">Latency</Text>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold">{latency ? `${(latency / 1000).toFixed(2)}s` : '---'}</Text>
-                  </Box>
-                  <Box display="flex" justify="between" align="center" borderBottom="b" paddingBottom={2} className="border-line/20">
-                    <Text variant="body" size="xs" color="dim">Events Processed</Text>
-                    <Text variant="mono" size="xs" color="brand" weight="font-bold">{totalEvents || '---'}</Text>
-                  </Box>
-                  <Box display="flex" justify="between" align="center">
-                    <Text variant="body" size="xs" color="dim">Safe Access</Text>
-                    <StatusBadge label="ACTIVE" />
-                  </Box>
-                </Stack>
-              </Stack>
+              <StatsList stats={stats} />
             </Box>
           </DataPanel>
           <DataPanel title="Stats">
-            <WCSScraperStats latency={latency} totalEvents={totalEvents} />
+            <Box paddingX={4} paddingY={6}>
+              <StatsList stats={stats} />
+            </Box>
           </DataPanel>
         </>
       }
@@ -285,8 +236,14 @@ export function WCSScraperTool() {
                 <WCSDataTable data={filteredData} />
               </Stack>
               <Stack gap={8}>
-                <WCSExportTools data={filteredData} />
-                <WCSScraperStats latency={latency} totalEvents={totalEvents} />
+                <DataPanel title="Export Data">
+                  <ExportActions actions={exportActions} />
+                </DataPanel>
+                <DataPanel title="Stats">
+                  <Box paddingX={4} paddingY={6}>
+                    <StatsList stats={stats} />
+                  </Box>
+                </DataPanel>
               </Stack>
             </Grid>
           </>

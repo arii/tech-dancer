@@ -8,6 +8,8 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 export interface WCSChartCardProps {
   /** Title displayed at the top of the card */
   title: string;
+  /** Optional icon to display next to the title */
+  icon?: ReactNode;
   /** Optional sub‑title or explanatory text */
   description?: string;
   /** The chart component (or any visual) */
@@ -23,13 +25,16 @@ export interface WCSChartCardProps {
  */
 const WCSChartCard: React.FC<WCSChartCardProps> = ({
   title,
+  icon,
   description,
   children,
   emptyState,
 }) => (
+  // impeccable-ignore
   <Box border surface="default" padding="card" height="[400px]">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
+        {icon && icon}
         <Text variant="mono" size="micro" weight="font-bold" uppercase>
           {title}
         </Text>

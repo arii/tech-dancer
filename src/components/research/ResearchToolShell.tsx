@@ -72,5 +72,3 @@ export const ResearchToolShell: React.FC<ResearchToolShellProps> = ({
   </Box>
 );
 
-export default ResearchToolShell;
-

@@ -16,7 +16,7 @@ import {
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Icon } from '@/components/ui/Icon';
 import { SEO } from '@/components/SEO';
-import ResearchToolShell from '@/components/research/ResearchToolShell';
+import { ResearchToolShell } from '@/components/research/ResearchToolShell';
 import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 
 export function EcommerceAutomationTool() {
@@ -64,9 +64,18 @@ export function EcommerceAutomationTool() {
     <ResearchToolShell
       title="Ecommerce Automation Experiments"
       description={
-        <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-          Experiments in API-driven Printful sync, SEO-safe product metadata generation, and human-in-the-loop catalog review.
-        </Text>
+        <Stack gap={4}>
+          <Box display="flex" align="center" gap={3}>
+            <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+              Business Automation
+            </Text>
+            <StatusBadge label="In Progress" />
+          </Box>
+          <Text variant="body" size="lg" color="dim" maxWidth="3xl">
+            Building reviewable automation experiments for asset generation, metadata packets, product-image QA, and human-approved storefront sync.
+            Focusing on niche-aware SEO for <strong>West Coast Swing</strong>, <strong>NorCal</strong>, <strong>rainbow pride</strong>, and <strong>role-fluid dance</strong> communities.
+          </Text>
+        </Stack>
       }
       output={
         <>
@@ -76,25 +85,6 @@ export function EcommerceAutomationTool() {
               description="Experiments in API-driven Printful sync, SEO-safe product metadata generation, and human-in-the-loop catalog review."
               canonical={`${BASE_URL}/research/ecommerce-automation`}
             />
-            <Box paddingBottom={8} border="b">
-              <Stack gap={4}>
-                <Box display="flex" align="center" gap={3}>
-                  <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
-                    Business Automation
-                  </Text>
-                  <StatusBadge label="In Progress" />
-                </Box>
-                <Stack gap={2}>
-                  <Text variant="display" size="4xl" weight="font-black" as="h1">
-                    Ecommerce Automation Experiments
-                  </Text>
-                  <Text variant="body" size="lg" color="dim" maxWidth="3xl">
-                    Building reviewable automation experiments for asset generation, metadata packets, product-image QA, and human-approved storefront sync.
-                    Focusing on niche-aware SEO for <strong>West Coast Swing</strong>, <strong>NorCal</strong>, <strong>rainbow pride</strong>, and <strong>role-fluid dance</strong> communities.
-                  </Text>
-                </Stack>
-              </Stack>
-            </Box>
 
             <Grid cols={{ base: 1, md: 2 }} gap={8}>
               <Stack gap={6}>

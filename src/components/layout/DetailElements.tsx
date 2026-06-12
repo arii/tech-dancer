@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { LucideIcon, Shield } from 'lucide-react';
+import { StatsList } from '@/components/layout/StatsList';
 
 interface ScoreItemProps {
   label: string;
@@ -57,6 +58,11 @@ export function ScoreGrid({ children }: { children: ReactNode }) {
 export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
   if (!specs || Object.keys(specs).length === 0) return null;
 
+  const statItems = Object.entries(specs).map(([key, value]) => ({
+    label: key,
+    value: value
+  }));
+
   return (
     <Stack gap={4}>
       <Text
@@ -71,14 +77,7 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
       >
         Technical Specs
       </Text>
-      <Stack gap={3}>
-        {Object.entries(specs).map(([key, value]) => (
-          <Stack key={key} gap={1}>
-            <Text variant="mono" size="tiny" color="dim" uppercase opacityVariant="muted">{key}</Text>
-            <Text variant="mono" size="xs" weight="font-bold">{value}</Text>
-          </Stack>
-        ))}
-      </Stack>
+      <StatsList stats={statItems} />
     </Stack>
   );
 }

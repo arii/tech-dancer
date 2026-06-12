@@ -3,7 +3,8 @@ import { GitBranch, Layers, Activity } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
 import { TOOL_ID_SCOPE_BLAST_RADIUS } from '@/config/devai-tool-ids';
-import ResearchToolShell from '@/components/research/ResearchToolShell';
+import { ResearchToolShell } from '@/components/research/ResearchToolShell';
+import { ToolFeatureCard } from './ToolFeatureCard';
 
 export function BlastRadiusTool() {
   const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_SCOPE_BLAST_RADIUS);
@@ -19,24 +20,16 @@ export function BlastRadiusTool() {
       output={
         <>
           <Grid cols={{ base: 1, md: 2 }} gap={8}>
-            <Stack gap={4} padding={6} border radius="md" surface="surface">
-              <Box display="flex" align="center" gap={3}>
-                <GitBranch className="text-accent w-6 h-6" />
-                <Text variant="display" size="lg" weight="font-bold">Scope Isolation</Text>
-              </Box>
-              <Text variant="body" size="sm" color="dim">
-                Calculates the exact semantic scope of modifications, identifying which components, hooks, or utilities are directly or indirectly affected by a change.
-              </Text>
-            </Stack>
-            <Stack gap={4} padding={6} border radius="md" surface="surface">
-              <Box display="flex" align="center" gap={3}>
-                <Layers className="text-accent w-6 h-6" />
-                <Text variant="display" size="lg" weight="font-bold">AST Parsing</Text>
-              </Box>
-              <Text variant="body" size="sm" color="dim">
-                Leverages Abstract Syntax Tree (AST) analysis to understand deep code relationships that simple grep-based searches miss.
-              </Text>
-            </Stack>
+            <ToolFeatureCard
+              icon={GitBranch}
+              title="Scope Isolation"
+              description="Calculates the exact semantic scope of modifications, identifying which components, hooks, or utilities are directly or indirectly affected by a change."
+            />
+            <ToolFeatureCard
+              icon={Layers}
+              title="AST Parsing"
+              description="Leverages Abstract Syntax Tree (AST) analysis to understand deep code relationships that simple grep-based searches miss."
+            />
           </Grid>
 
           <Stack gap={4}>
