@@ -1,14 +1,12 @@
-import { Box } from '@/layouts/Primitives';
+import { Box, BoxProps } from '@/layouts/Box';
 import { cn } from '@/lib/utils';
-
 import { ResponsiveProp } from '@/layouts/system-utils';
 
-interface ProductImageFrameProps {
+interface ProductImageFrameProps extends BoxProps {
   src: string;
   alt: string;
   objectFit?: 'cover' | 'contain';
   aspect?: ResponsiveProp<'video' | 'square' | 'auto' | string>;
-  className?: string;
   border?: boolean | "t" | "b" | "l" | "r" | "x" | "y";
   radius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';
 }
@@ -18,9 +16,9 @@ export function ProductImageFrame({
   alt,
   objectFit = 'cover',
   aspect = 'video',
-  className,
   border = true,
-  radius = 'md'
+  radius = 'md',
+  ...props
 }: ProductImageFrameProps) {
   return (
     <Box
@@ -28,7 +26,8 @@ export function ProductImageFrame({
       overflow="hidden"
       border={border}
       radius={radius}
-      className={cn("bg-surface-alt", className)}
+      className="bg-surface-alt"
+      {...props}
     >
       <img
         src={src}
