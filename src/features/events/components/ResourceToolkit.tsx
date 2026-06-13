@@ -1,34 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
-import { ClipboardCheck, Zap, CalendarDays } from 'lucide-react';
 import { ActionButton } from '@/components/ui/ActionButton';
-
-const TOOLS = [
-  {
-    title: 'Packing Checklist',
-    description: 'Everything needed for a WCS weekend.',
-    icon: ClipboardCheck,
-    cta: 'Open Checklist',
-    href: '/gear/2024-06-01-compression-cubes',
-    label: 'Travel Resource'
-  },
-  {
-    title: 'Shoe Preparation',
-    description: 'Make Any Shoe a Dance Shoe',
-    icon: Zap,
-    cta: 'Read Guide',
-    href: '/blog/2026-04-18-make-shoe-dance',
-    label: 'Gear Resource'
-  },
-  {
-    title: 'Event Calendar',
-    description: 'Upcoming Events',
-    icon: CalendarDays,
-    cta: 'View Events',
-    href: '/events',
-    label: 'Planning Tool'
-  }
-];
+import { TOOLS } from '@/data/eventResources';
 
 export function ResourceToolkit() {
   return (

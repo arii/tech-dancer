@@ -6,6 +6,7 @@
 export interface Post {
   type: 'post';
   draft?: boolean;
+  featured?: boolean;
   slug: string;
   title: string;
   date: string;

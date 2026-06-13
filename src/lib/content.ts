@@ -151,6 +151,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
         status: normalizeStatus(data.status),
         readTime: normalizeReadTime(data.readTime),
+        featured: data.featured === true,
 
         content: content || "",
         slug: slugFrom(path),

@@ -2,13 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { useMemo } from 'react';
 import { Post } from '@/lib/content';
-
-const TOPIC_CONFIG = [
-  { id: 'Gear', label: 'GEAR', color: 'text-accent' },
-  { id: 'Event', label: 'EVENTS', color: 'text-accent-purple' },
-  { id: 'WCS', label: 'WCS', color: 'text-accent' },
-  { id: 'Tech', label: 'DEVAI', color: 'text-accent-magenta' },
-];
+import { TOPIC_CONFIG } from '@/data/blogTopics';
 
 interface BlogTopicGridProps {
   posts: Post[];

@@ -1,6 +1,7 @@
 ---
 type: post
 title: "Make Any Shoe a Dance Shoe"
+featured: true
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Gear"

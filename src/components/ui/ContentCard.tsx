@@ -12,6 +12,8 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   basePath: string;
   date?: string;
   readingTime?: string;
+  image?: string;
+  imageAlt?: string;
   [key: string]: unknown;
 }
 
@@ -26,6 +28,8 @@ export function ContentCard(props: ContentCardProps) {
     basePath,
     date,
     readingTime,
+    image,
+    imageAlt,
   } = props;
 
   const motionProps = pickRest(props, [
@@ -46,57 +50,70 @@ export function ContentCard(props: ContentCardProps) {
     <BaseCard
       as={MotionArticle}
       direction="col"
-      gap={4}
+      gap={0}
       height="full"
-      padding={6}
+      padding={0}
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
+      overflow="hidden"
       {...motionProps}
     >
-      <Box
-        paddingX={2}
-        paddingY={1}
-        radius="full"
-        border
-        className="border-line w-fit"
-      >
-        <Text
-          variant="mono"
-          size="xs"
-          weight="font-black"
-          tracking="wide"
-          className={getTagColorClass(category)}
-        >
-          {category}
-        </Text>
-      </Box>
+      {image && (
+        <Box height={48} width="full" position="relative" overflow="hidden">
+          <img
+            src={image}
+            alt={imageAlt || title}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Box>
+      )}
 
-      <Stack gap={2}>
-        <Text
-          as="h3"
-          variant="body"
-          size="lg"
-          weight="font-bold"
+      <Stack gap={4} padding={6} flex={1}>
+        <Box
+          paddingX={2}
+          paddingY={1}
+          radius="full"
+          border
+          className="border-line w-fit"
+        >
+          <Text
+            variant="mono"
+            size="xs"
+            weight="font-black"
+            tracking="wide"
+            className={getTagColorClass(category)}
+          >
+            {category}
+          </Text>
+        </Box>
+
+        <Stack gap={2}>
+          <Text
+            as="h3"
+            variant="body"
+            size="lg"
+            weight="font-bold"
             color="main"
             leading="tight"
             className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
+          >
+            {title}
+          </Text>
 
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
-           {excerpt}
-        </Text>
+          <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
+            {excerpt}
+          </Text>
+        </Stack>
+
+        <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={4}>
+          <Text variant="mono" size="xs" color="dim" data-testid="content-date">
+            {[date, readingTime].filter(Boolean).join(' • ') || category}
+          </Text>
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+            Read article
+          </Text>
+        </Box>
       </Stack>
-
-      <Box display="flex" align="center" justify="between" marginTop="auto">
-        <Text variant="mono" size="xs" color="dim" data-testid="content-date">
-          {[date, readingTime].filter(Boolean).join(' • ') || category}
-        </Text>
-        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-          Read article
-        </Text>
-      </Box>
     </BaseCard>
   );
 }
