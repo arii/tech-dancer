@@ -5,34 +5,36 @@ date: "2026-10-29"
 startDate: "2026-10-29"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
-excerpt: "A costume-heavy, carnival-themed WSDC weekend in Costa Mesa with late-night socials and top-tier competitions."
-location: "Costa Mesa, CA"
+excerpt: "Experience the West Coast Swing community's most creative festival in Costa Mesa, blending WSDC competition with immersive Halloween carnival themes."
+location: "Hilton Orange County/Costa Mesa"
 city: "Costa Mesa"
 region: "SoCal"
 schedule: "October 29 - November 1, 2026"
 url: "https://halloweenswingthing.com"
 heroImage: "/assets/events/halloween-hero.svg"
-imageAlt: "Halloween Swing Thing logo with jack-o'-lantern and cosmic nebula background"
-description: "Halloween Swing Thing merges WSDC competition with a full Halloween carnival. Expect hotel-wide trick-or-treating, elaborate group themes, and a ballroom reimagined as a spooky playground."
+imageAlt: "Halloween-themed graphic with cosmic nebula background and jack-o'-lantern silhouette for Halloween Swing Thing"
+description: "Halloween Swing Thing reimagines the WSDC weekend as a Halloween carnival. Hosted in Costa Mesa, it's known for merging high-level Jack & Jill rounds with elaborate group costumes, trick-or-treating, and immersive themed socials."
 whyAttending: >
-  I attend for the blend of serious WSDC competition and festival-level silliness. Nowhere else do you see Champions in full costume running J&Js, then social dancing until 4am in face paint.
+  I come back for the creativity. No other WSDC event lets you hit a high-level semi-final and then immediately join a hotel-wide trick-or-treat route with the same crowd. The ballroom feels like a festival, not just a comp floor.
+
 theme:
   name: "Halloween Carnival"
   label: "Halloween Theme"
   description: >
-    The ballroom runs on costumes, but movement and safety still come first. Plan a full version for photos/contests and a simplified, breathable version for socials.
+    The ballroom runs as a spooky carnival all weekend. Plan costumes that prioritize movement and partner safety, but expect everything from DIY to pro-level cosplay on the floor.
+
 gear:
   outfitIds:
     - pumpkin-headbands
     - pumpkin-stickers
-  outfitDescription: "Festive accessories that won't snag partners."
+  outfitDescription: "Low-profile themed accessories that survive social dancing."
   accessoryIds:
     - rave-fan
-  accessoryDescription: "Ballrooms run hot when everyone is in costume."
+  accessoryDescription: "Essential for staying cool in layered costumes."
   shoeIds:
     - bloch-grecian
     - suede-sheets
-  shoeDescription: "Reliable shoes for costume contests and 3am socials."
+  shoeDescription: "Reliable social shoes, plus backups if costume pieces interfere."
   essentialIds:
     - liquid-iv
     - loop-experience
@@ -41,75 +43,76 @@ gear:
   travelIds:
     - compression-cubes
     - portable-charger
-  travelDescription: "Costumes take space. Cubes keep props from crushing."
+  travelDescription: "Compression for costume volume, power for late-night photos."
+
 earlyBirdDate: "2026-08-01"
 registrationDeadline: "2026-10-25"
 hotelCutoffDate: "2026-10-01"
 packingReminderDate: "2026-10-20"
+
 relatedEvents:
 - jack-and-jill-orama
 ---
 
-Halloween Swing Thing sets itself apart by treating the whole weekend like a festival. The WSDC points are real, but so is the hotel-wide trick-or-treating, the carnival games in the lobby, and the group themes that take months to plan.
-
 ## Event highlights
 
-### Costume contest
-The Saturday night contest is the main event for many. Expect individual, couple, and large group entries. Swing-inspired Halloween mashups score well, and handmade work gets huge respect.
+### Costume Contest
+The Saturday night costume contest drives most of the weekend energy. Expect individual entries, couple concepts, and huge friend-group themes that have been planned for months. Past years have included swing-inspired mashups of movie characters, superheroes, and original concepts built for movement.
 
-If you're not competing, still watch. The energy in the room is unmatched.
+Many dancers bring two versions: a full contest build for photos and a simplified dance version for social sets. If you only watch, the contest is still one of the best spectator events on the West Coast Swing community.
 
-### Group themes & performances
-This is the event where dance teams coordinate months in advance. Past years have seen full casts of movie characters, superhero teams, and original concepts with choreography.
+### Group Themes & Performances
+A core part of the culture is groups coordinating matching costumes and short choreographed pieces. If you're attending with friends, lock your theme early — the hotel lobby turns into an impromptu photo studio all weekend.
 
-If you're going with friends, pick a theme early. It changes the whole weekend.
-
-### Social dancing in costume
-At its core, this is still a WCS weekend. DJs run late, the level is high, and yes, people really do dance all night in costume.
-
-Pro tip: Bring a simplified version of your costume. Face paint that won't run, no capes that trip partners, and shoes you can actually spin in.
+### Social Dancing
+The floor runs late and the DJ sets lean festive. Because people rotate costumes, you'll see everything from formalwear to full cosplay in the same late-night social. Bring multiple outfits so you can jump into themed sets without overheating or risking fragile pieces.
 
 ## Carnival atmosphere
 
-The venue leans hard into the theme: photo ops, specialty treats, carnival games, and room-to-room trick-or-treating. It feels less like a convention and more like Halloween camp for dancers.
+The venue is fully dressed for Halloween. Common fixtures include carnival games, photo backdrops, specialty treats, and community-run hotel room trick-or-treating. The event strikes a balance between WSDC registry weekend and Halloween festival.
 
 ## Costume strategy
 
-### Prioritize movement
-Test your costume before you pack:
-- Can you bend, squat, and stretch?
-- Will it survive spins?
-- Can you dance a full song without adjusting it?
+This is the event where wardrobe planning matters more than any other on the calendar. Boogie is about polished NorCal comp prep; Halloween is about creative logistics.
 
-If not, simplify. A costume you can't dance in becomes a costume you resent by Saturday.
+**Movement test before you pack:**
+- Jump, squat, and spin in full costume
+- Check for capes, wings, or props that catch partners
+- Test sitting in elevators and ballroom chairs
 
-### Avoid dance hazards
-Leave the long capes, sharp edges, masks with no peripheral vision, and fragile props at home. If it can catch, poke, or break on a partner, rethink it.
+**Danceability tiers:**
+1. **Contest/Photo version**: Full build, may be fragile or warm
+2. **Social version**: Breathable base layers, adhesive details like felt stickers, nothing that drags
 
-### Bring two versions
-Most experienced attendees pack:
-1. **Contest version**: Full makeup, props, layers — for photos and the contest.
-2. **Social version**: The same concept stripped down. Think "orange shirt + felt stickers" instead of "giant inflatable pumpkin."
+**Costume maintenance:** Pack fashion tape, safety pins, and dedicated storage bags for delicate props. Ballrooms run hot while hallways stay cold, so bring a light layer for transitions.
 
-## Photo timing
-Get group and solo photos early in the evening. Costumes get sweaty, makeup smudges, and props break by 1am. The lobby decorations are best right after dinner before the crowd hits.
+## Photo opportunities
 
-## Community notes
-This event pulls from everywhere. It's a good weekend to meet new dancers, but also easy to get overwhelmed.
+Halloween Swing Thing is one of the most photographed WCS weekends. Plan for group photos with your costume crew, shots at carnival setups, and action on the social floor. Take photos early in the evening before costumes get rumpled from dancing.
 
-Engage even if you're not in costume: cheer at the contest, hit the carnival games, join group photos. The community vibe is the point.
+## Community tips
+
+The event pulls dancers from across regions, so it's a strong weekend to meet new people. Even if you skip the contest, watch it, cheer, and join themed activities. The more you engage with the carnival side, the more the weekend stands out from a standard registry event.
 
 ## Quick checklist
 
 ### Before the event
-- [ ] Register + book hotel before Oct 1 cutoff
-- [ ] Test costume for range of motion
+- [ ] Register and book travel before hotel cutoff
+- [ ] Lock costume concepts and test movement
 - [ ] Coordinate group themes
-- [ ] Pack repair kit: safety pins, fashion tape, glue dots
-- [ ] Plan simplified social version of costume
+- [ ] Pack dance-version backup outfits
+- [ ] Confirm lodging — the block sells out
+
+### During the event
+- [ ] Attend the Saturday costume contest
+- [ ] Explore carnival activities and trick-or-treating
+- [ ] Capture early-evening photos
+- [ ] Stay hydrated through costume changes
+- [ ] Dance with new people between themed sets
 
 ### Don't miss
-- Saturday costume contest
+- Saturday night costume contest
 - Hotel-wide trick-or-treating
-- Carnival games in the lobby
-- Late-night socials — people go all night in costume
+- Group choreographed pieces
+- Late-night themed socials
+- Lobby photo meetups

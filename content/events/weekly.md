@@ -1,6 +1,7 @@
 ---
 type: event
 title: "Weekly Classes & Local Dances"
+imageAlt: "Stylized map and calendar icons representing local West Coast Swing dance communities"
 date: "2024-01-01"
 startDate: "2024-01-01"
 author: "Ariel Anders, PhD"

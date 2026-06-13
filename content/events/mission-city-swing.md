@@ -1,6 +1,7 @@
 ---
 type: event
 title: "Mission City Swing"
+imageAlt: "Mission City Swing logo featuring San Jose city silhouette and community focus"
 date: "2026-05-01"
 startDate: "2026-05-01"
 author: "Ariel Anders, PhD"

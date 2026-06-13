@@ -6,7 +6,7 @@ date: '2026-07-02'
 startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
+excerpt: "Experience the West Coast Swing community's most competitive 4th of July weekend at the Hyatt Regency DFW, featuring legendary late-night socials."
 location: Hyatt Regency DFW
 city: Dallas, TX
 region: South
@@ -62,6 +62,7 @@ relatedEvents:
 - phoenix-4th-of-july
 - swingtacular-the-galactic-open
 - jack-and-jill-orama
+banner: "This event is not running in 2026. See related events below."
 ---
 
 ## Western theme notes
