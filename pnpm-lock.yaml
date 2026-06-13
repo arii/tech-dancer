@@ -3452,8 +3452,8 @@ packages:
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
-  enhanced-resolve@5.20.1:
-    resolution: {integrity: sha512-Qohcme7V1inbAfvjItgw0EaxVX5q2rdVEZHRBrEQdRZTssLDGsL8Lwrznl8oQ/6kuTJONLaDcGjkNP247XEhcA==}
+  enhanced-resolve@5.22.1:
+    resolution: {integrity: sha512-6QEuw3zoX1SJQc7b87aBXke/no+mG2bTBgw29gWMQonLmpEkWoCAVkl+M49e48AZlWzxiDzDZzYdp6kobcyLww==}
     engines: {node: '>=10.13.0'}
 
   enhanced-resolve@5.22.1:
@@ -5744,8 +5744,8 @@ packages:
   tailwindcss@4.2.2:
     resolution: {integrity: sha512-KWBIxs1Xb6NoLdMVqhbhgwZf2PGBpPEiwOqgI4pFIYbNTfBXiKYyWoTsXgBQ9WFg/OlhnvHaY+AEpW7wSmFo2Q==}
 
-  tapable@2.3.2:
-    resolution: {integrity: sha512-1MOpMXuhGzGL5TTCZFItxCc0AARf1EZFQkGqMm7ERKj8+Hgr5oLvJOVFcC+lRmR8hCe2S3jC4T5D7Vg/d7/fhA==}
+  tapable@2.3.3:
+    resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
   tapable@2.3.3:
@@ -8222,7 +8222,7 @@ snapshots:
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.5.0
-      semver: 7.7.4
+      semver: 7.8.1
       tar-fs: 3.1.2
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -8456,7 +8456,7 @@ snapshots:
   '@tailwindcss/node@4.2.2':
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      enhanced-resolve: 5.20.1
+      enhanced-resolve: 5.22.1
       jiti: 2.6.1
       lightningcss: 1.32.0
       magic-string: 0.30.21
@@ -8742,7 +8742,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.59.0
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.7.4
+      semver: 7.8.1
       tinyglobby: 0.2.16
       ts-api-utils: 2.5.0(typescript@5.8.3)
       typescript: 5.8.3
@@ -9513,10 +9513,10 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  enhanced-resolve@5.20.1:
+  enhanced-resolve@5.22.1:
     dependencies:
       graceful-fs: 4.2.11
-      tapable: 2.3.2
+      tapable: 2.3.3
 
   enhanced-resolve@5.22.1:
     dependencies:
@@ -12479,7 +12479,7 @@ snapshots:
 
   tailwindcss@4.2.2: {}
 
-  tapable@2.3.2: {}
+  tapable@2.3.3: {}
 
   tapable@2.3.3: {}
 
@@ -12615,7 +12615,11 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.22.1
+<<<<<<< HEAD
       tapable: 2.3.2
+=======
+      tapable: 2.3.3
+>>>>>>> a06bf116ea (feat: add deployment impact analysis tool)
       tsconfig-paths: 4.2.0
 
   tsconfig-paths@4.2.0:
