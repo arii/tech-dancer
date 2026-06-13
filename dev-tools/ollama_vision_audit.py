@@ -106,7 +106,9 @@ def main():
 
     # Check if model is available
     print(f"🤖 Ensuring vision model '{VISION_MODEL}' is available...")
-    run_command(["ollama", "pull", VISION_MODEL], check=False)
+    res = run_command(["ollama", "pull", VISION_MODEL], check=False)
+    if res.returncode != 0:
+        print(f"⚠️ Warning: Failed to pull vision model '{VISION_MODEL}'. Audit may fail if not already present.")
 
     audit_results = {}
     for s in summaries:

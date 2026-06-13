@@ -128,6 +128,18 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
+    const visualArtifacts = [
+      `- Before screenshot: ${visual?.beforePath ?? 'Not captured'}`,
+      `- After screenshot: ${visual?.afterPath ?? 'Not captured'}`,
+      `- Visual diff: ${visual?.diffPath ?? 'Not captured'}`
+    ];
+
+    if (visual?.beforeCroppedPath) visualArtifacts.push(`- Before (cropped): ${visual.beforeCroppedPath}`);
+    if (visual?.afterCroppedPath) visualArtifacts.push(`- After (cropped): ${visual.afterCroppedPath}`);
+    if (visual?.diffCroppedPath) visualArtifacts.push(`- Visual diff (cropped): ${visual.diffCroppedPath}`);
+
+    visualArtifacts.push(`- DOM diff: ${domSummary.diffPath}`);
+
     return `### ${domSummary.route}
 
 Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
@@ -140,10 +152,7 @@ Severity: ${severity}
 Review Required: ${reviewRequired ? 'Yes' : 'No'}
 
 Artifacts:
-- Before screenshot: ${visual?.beforePath ?? 'Not captured'}
-- After screenshot: ${visual?.afterPath ?? 'Not captured'}
-- Visual diff: ${visual?.diffPath ?? 'Not captured'}
-${visual?.beforeCroppedPath ? `- Before (cropped): ${visual.beforeCroppedPath}\n` : ''}${visual?.afterCroppedPath ? `- After (cropped): ${visual.afterCroppedPath}\n` : ''}${visual?.diffCroppedPath ? `- Visual diff (cropped): ${visual.diffCroppedPath}\n` : ''}- DOM diff: ${domSummary.diffPath}
+${visualArtifacts.join('\n')}
 `;
   });
 

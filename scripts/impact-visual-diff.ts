@@ -24,6 +24,7 @@ const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
 const baseUrl = process.env.IMPACT_BASE_URL ?? `http://127.0.0.1:${basePort}`;
 const headUrl = process.env.IMPACT_HEAD_URL ?? `http://127.0.0.1:${headPort}`;
 const baseWorktree = process.env.IMPACT_BASE_WORKTREE ?? path.join(process.cwd(), '.tmp-main');
+const DEFAULT_CROP_PADDING = 20;
 
 function whiteCanvas(width: number, height: number): PNG {
   const image = new PNG({ width, height });
@@ -83,7 +84,7 @@ function calculateBoundingBox(before: PNG, after: PNG): BoundingBox | null {
   return found ? { minX, minY, maxX, maxY } : null;
 }
 
-async function cropImage(imagePath: string, outputPath: string, box: BoundingBox, padding = 20): Promise<void> {
+async function cropImage(imagePath: string, outputPath: string, box: BoundingBox, padding = DEFAULT_CROP_PADDING): Promise<void> {
   const metadata = await sharp(imagePath).metadata();
   const width = metadata.width ?? 0;
   const height = metadata.height ?? 0;
