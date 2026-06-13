@@ -13,7 +13,7 @@ const config: KnipConfig = {
     'workbox-window',
     'dependency-cruiser'
   ],
-  ignoreBinaries: ['python3'],
+  ignoreBinaries: ['python3', 'gh'],
   ignoreExportsUsedInFile: true,
 };
 

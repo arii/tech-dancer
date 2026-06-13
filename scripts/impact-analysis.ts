@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-<<<<<<< HEAD
+import { getRouteMap } from './route-map';
 import { IMPACT_CONFIG } from './impact-analysis.config';
 
 // Types for dependency-cruiser output
@@ -18,13 +18,19 @@ interface DependencyGraph {
   modules: Module[];
 }
 
+interface ImpactReport {
+  changedFiles: string[];
+  visualReviewRequired: string[];
+  impactLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+}
+
 /**
  * Executes a shell command and returns the output.
  * Throws an error if the command fails.
  */
 function exec(command: string): string {
   try {
-    return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+    return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1024 * 1024 * 10 }).trim();
   } catch (error: unknown) {
     const err = error as { stderr?: string; message?: string };
     throw new Error(`Command failed: ${command}\n${err.stderr || err.message}`, { cause: error });
@@ -37,10 +43,14 @@ function exec(command: string): string {
 const splitAndFilter = (output: string): string[] => (output ? output.split('\n').filter(Boolean) : []);
 
 /**
- * Gets the list of changed files between current HEAD and origin/main.
- * Falls back to HEAD~1 if origin/main is not available.
+ * Gets the list of changed files. Prioritizes CLI arguments, then falls back to git diff.
  */
 function getChangedFiles(): string[] {
+  const args = process.argv.slice(2);
+  if (args.length > 0) {
+    return args;
+  }
+
   // Check for staged and unstaged changes first
   const staged = exec('git diff --name-only --cached');
   const unstaged = exec('git diff --name-only');
@@ -68,17 +78,17 @@ function getChangedFiles(): string[] {
 /**
  * Builds a reverse dependency map (child -> [parents]).
  */
-function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
-  const reverseMap: Record<string, string[]> = {};
+function buildReverseMap(graph: DependencyGraph): Map<string, string[]> {
+  const reverseMap = new Map<string, string[]>();
 
   graph.modules.forEach(module => {
     module.dependencies.forEach(dep => {
       const child = dep.resolved;
-      if (!reverseMap[child]) {
-        reverseMap[child] = [];
+      if (!reverseMap.has(child)) {
+        reverseMap.set(child, []);
       }
-      if (!reverseMap[child].includes(module.source)) {
-        reverseMap[child].push(module.source);
+      if (!reverseMap.get(child)!.includes(module.source)) {
+        reverseMap.get(child)!.push(module.source);
       }
     });
   });
@@ -87,37 +97,37 @@ function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
 }
 
 /**
- * Recursively finds all affected files starting from the changed files.
+ * Recursively finds all affected routes starting from the changed files,
+ * using the routeMap for mapping page components to URLs.
  */
-function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, string[]>): string[] {
-  const affected = new Set<string>();
+function findAffectedRoutes(changedFiles: string[], reverseMap: Map<string, string[]>, routeMap: Record<string, string[]>): Set<string> {
+  const affectedRoutes = new Set<string>();
+  const visited = new Set<string>();
   const queue = [...changedFiles];
 
   while (queue.length > 0) {
     const file = queue.shift()!;
-    if (affected.has(file)) continue;
-    affected.add(file);
+    if (visited.has(file)) continue;
+    visited.add(file);
 
-    const parents = reverseMap[file] || [];
+    // If this file is a route component, add its URLs
+    if (routeMap[file]) {
+      routeMap[file].forEach(url => affectedRoutes.add(url));
+    }
+
+    // Convert PascalCase to kebab-case as a fallback based on page overrides
+    const fileName = path.basename(file, path.extname(file));
+    if (file.startsWith(IMPACT_CONFIG.PAGES_DIR)) {
+      if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
+        affectedRoutes.add(IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]);
+      }
+    }
+
+    const parents = reverseMap.get(file) || [];
     queue.push(...parents);
   }
 
-  return Array.from(affected);
-}
-
-/**
- * Maps page component files to public URLs.
- */
-function mapPageToUrl(filePath: string): string {
-  const fileName = path.basename(filePath, path.extname(filePath));
-
-  if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
-    return IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
-  }
-
-  // Convert PascalCase to kebab-case
-  const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  return `/${route}`;
+  return affectedRoutes;
 }
 
 /**
@@ -171,12 +181,7 @@ async function main() {
     const graph: DependencyGraph = JSON.parse(graphJson);
     const reverseMap = buildReverseMap(graph);
 
-    // Find affected files in src/
-    const srcChanges = changedFiles.filter(f => f.startsWith('src/'));
-    const allAffected = findAffectedFiles(srcChanges, reverseMap);
-
-    // Find affected pages
-    const affectedPages = allAffected.filter(f => f.startsWith(IMPACT_CONFIG.PAGES_DIR));
+    const routeMap = getRouteMap();
 
     // Global impact check - only if the CHANGED files themselves are global triggers
     const hasGlobalImpact = changedFiles.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
@@ -187,7 +192,9 @@ async function main() {
       console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
       pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
     } else {
-      pageUrls = affectedPages.map(mapPageToUrl);
+      const srcChanges = changedFiles.filter(f => f.startsWith('src/'));
+      const affectedRoutesSet = findAffectedRoutes(srcChanges, reverseMap, routeMap);
+      pageUrls = Array.from(affectedRoutesSet);
     }
 
     // Content URLs
@@ -200,9 +207,8 @@ async function main() {
     const severity = getSeverity(changedFiles);
 
     // Generate Report
-    const report = {
+    const report: ImpactReport = {
       changedFiles,
-      affectedPages,
       visualReviewRequired: allUrls,
       impactLevel: severity
     };
@@ -265,143 +271,3 @@ ${changedFilesList}
 }
 
 main().catch(console.error);
-=======
-import { getRouteMap } from './route-map.js';
-
-interface DepNode {
-  source: string;
-  dependencies: { resolved: string }[];
-}
-
-interface DepGraph {
-  modules: DepNode[];
-}
-
-interface ImpactReport {
-  changedFiles: string[];
-  affectedRoutes: string[];
-  impactLevel: 'Critical' | 'Moderate' | 'Low' | 'None';
-}
-
-function runDependencyCruiser(): DepGraph {
-  console.log('Generating dependency graph...');
-  const output = execSync('npx depcruise src --config .dependency-cruiser.config.mjs --output-type json', { maxBuffer: 1024 * 1024 * 10 });
-  return JSON.parse(output.toString());
-}
-
-function buildReverseGraph(graph: DepGraph): Map<string, string[]> {
-  const reverseMap = new Map<string, string[]>();
-  graph.modules.forEach(node => {
-    node.dependencies.forEach(dep => {
-      const dependents = reverseMap.get(dep.resolved) || [];
-      dependents.push(node.source);
-      reverseMap.set(dep.resolved, dependents);
-    });
-  });
-  return reverseMap;
-}
-
-function findAffectedRoutes(changedFiles: string[], reverseGraph: Map<string, string[]>, routeMap: Record<string, string[]>): Set<string> {
-  const affectedRoutes = new Set<string>();
-  const visited = new Set<string>();
-
-  function traverse(file: string) {
-    if (visited.has(file)) return;
-    visited.add(file);
-
-    // If this file is a route component, add its URLs
-    if (routeMap[file]) {
-      routeMap[file].forEach(url => affectedRoutes.add(url));
-    }
-
-    // Traverse upwards to files that import this file
-    const dependents = reverseGraph.get(file) || [];
-    dependents.forEach(dep => traverse(dep));
-  }
-
-  changedFiles.forEach(traverse);
-  return affectedRoutes;
-}
-
-function determineImpactLevel(changedFiles: string[], affectedRoutes: Set<string>): ImpactReport['impactLevel'] {
-  if (affectedRoutes.size === 0) return 'None';
-
-  // Example categorization
-  const isCritical = changedFiles.some(file =>
-    file.startsWith('src/layouts/') ||
-    file.startsWith('src/styles/') ||
-    file.startsWith('src/components/ui/')
-  );
-
-  if (isCritical) return 'Critical';
-
-  if (affectedRoutes.size > 2) return 'Moderate';
-
-  return 'Low';
-}
-
-function main() {
-  // Determine changed files. For this script, we can read them from command args, or use git diff against main/HEAD~1
-  // Let's use `git diff --name-only HEAD~1` as a default if no args are passed
-  let changedFiles: string[] = process.argv.slice(2);
-  if (changedFiles.length === 0) {
-    console.log('No files provided, falling back to git diff HEAD~1...');
-    try {
-      const gitDiff = execSync('git diff --name-only HEAD~1').toString().trim();
-      if (gitDiff) {
-        changedFiles = gitDiff.split('\n').filter(f => f.startsWith('src/'));
-      }
-    } catch {
-      console.warn('Could not run git diff. Provide files as arguments.');
-    }
-  }
-
-  if (changedFiles.length === 0) {
-    console.log('No changed files detected in src/. Exiting.');
-    process.exit(0);
-  }
-
-  console.log(`Analyzing impact for ${changedFiles.length} changed files:`, changedFiles);
-
-  const routeMap = getRouteMap();
-  const graph = runDependencyCruiser();
-  const reverseGraph = buildReverseGraph(graph);
-
-  const affectedRoutes = findAffectedRoutes(changedFiles, reverseGraph, routeMap);
-  const impactLevel = determineImpactLevel(changedFiles, affectedRoutes);
-
-  const report: ImpactReport = {
-    changedFiles,
-    affectedRoutes: Array.from(affectedRoutes).sort(),
-    impactLevel
-  };
-
-  const outputDir = path.resolve(process.cwd(), 'artifacts/impact-analysis');
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
-
-  const mdReport = `## Deployment Impact Analysis
-
-### Changed Files
-${report.changedFiles.map(f => `- ${f}`).join('\n')}
-
-### Pages Requiring Review
-${report.affectedRoutes.length ? report.affectedRoutes.map(r => `- ${r}`).join('\n') : '- None'}
-
-### Impact Level
-${report.impactLevel}
-`;
-
-  fs.writeFileSync(path.join(outputDir, 'impact.md'), mdReport);
-
-  console.log(`\nAnalysis complete!`);
-  console.log(`Impact Level: ${impactLevel}`);
-  console.log(`Affected Pages: ${report.affectedRoutes.length}`);
-  console.log(`Report saved to artifacts/impact-analysis/impact.md`);
-}
-
-main();
->>>>>>> 897391083a (feat: implement deployment impact analysis tool)
