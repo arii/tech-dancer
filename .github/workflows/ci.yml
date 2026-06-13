@@ -236,10 +236,13 @@ jobs:
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
       - name: Build Main
+        env:
+          DISABLE_MINIFY: true
         run: pnpm run impact:build-main
       - name: Build PR
         env:
           VITE_BASE_PATH: /
+          DISABLE_MINIFY: true
         run: pnpm run build
       - name: Visual Diff
         run: pnpm run impact:visual-diff
