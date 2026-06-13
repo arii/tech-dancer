@@ -35,7 +35,7 @@ def main():
         print(f"Failed to fetch sessions: {e}")
         return
 
-    active_sessions = [s for s in sessions if s.get("state") not in ["COMPLETED", "FAILED", "CANCELED"]]
+    active_sessions = [s for s in sessions if s.get("state") not in ["FAILED", "CANCELED"]]
 
     for pr in prs:
         pr_number = pr.get("number")
@@ -46,7 +46,7 @@ def main():
 
         session = find_session_for_pr(pr, active_sessions)
         if not session:
-            print(f"  No active session found for PR #{pr_number}")
+            print(f"  No matching session found for PR #{pr_number}")
             continue
 
         session_id = session.get("name")
