@@ -77,14 +77,14 @@ export function HeroSection() {
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
             Built for dancers.
           </Text>
           <Text
             as="span"
             variant="hero"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "7xl", lg: "8xl" }}
           >
             <span className="hero-accent-color">Train smarter.</span>
           </Text>

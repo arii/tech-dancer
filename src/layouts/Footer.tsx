@@ -26,16 +26,16 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
+      <Box paddingY={16} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
 
-      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Stack direction="row" align="center" gap={3} wrap>
-          <Text variant="mono" size="tiny" color="dim" weight="font-semibold" className="tracking-widest shrink-0" data-testid="footer-copyright">
+      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={8}>
+        <Stack direction="row" align="center" gap={4} wrap>
+          <Text variant="sans" size="tiny" color="dim" weight="font-bold" className="tracking-widest shrink-0" data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10" />
-          <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap">
-            <span className="font-mono tracking-wider uppercase">
+          <Text variant="sans" size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap">
+            <span className="tracking-wider uppercase">
               {isDev ? 'dev' : `v${appVersion}`} (
               <Box
                 as="a"
@@ -54,13 +54,13 @@ export function Footer() {
           </Text>
         </Stack>
 
-        <Box>
-          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" className="not-italic">
+        <Box maxWidth="xl">
+          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" className="not-italic leading-relaxed">
             {DISCLOSURE_TEXT}
           </Text>
         </Box>
 
-        <Stack direction="row" gap={2} align="center">
+        <Stack direction="row" gap={3} align="center">
           {legalLinks.map((link) => (
             <ActionButton
               key={link.label}
@@ -72,7 +72,7 @@ export function Footer() {
               className="active:scale-95"
             >
               <Text
-                variant="mono"
+                variant="sans"
                 size="xs"
                 uppercase
                 weight="font-bold"

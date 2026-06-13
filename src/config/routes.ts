@@ -107,7 +107,12 @@ export const routes: RouteConfig[] = [
     path: '/preview',
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',
-    sitemap: false
+    sitemap: false,
+    // Gate preview route behind environment check
+    Component: import.meta.env.PROD ? () => {
+      window.location.replace('/');
+      return null;
+    } : undefined
   },
   {
     path: '/previews',
