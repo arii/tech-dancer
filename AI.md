@@ -65,3 +65,7 @@ Refer to `AGENTS.md` for the full TSX File System Checklist. Key rules include:
 - **Adding Content:** Create a new `.md` file in the appropriate `content/` subdirectory with mandatory frontmatter.
 - **Creating UI:** Start with `Box`, `Stack`, or `Grid` from `@/layouts/Primitives`.
 - **Refactoring:** Keep components under 300 lines. Extract logic into hooks or sub-components.
+
+## Business Rules
+
+- **Resource Ratings:** Resource Ratings (0-5) are editorial-only and currently hidden from public UI for compliance reasons.

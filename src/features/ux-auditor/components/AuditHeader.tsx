@@ -61,7 +61,7 @@ export function AuditHeader({
             onFocus={(e) => e.currentTarget.select()}
             className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
             flex={1}
-            minWidth={0}
+            minWidth={0} // Allows input to shrink below default minimum within flex container
             paddingX={4}
             paddingY={2}
             radius="lg"
