@@ -61,34 +61,6 @@ function ToolkitItem({ icon: Icon, title, description, to, onClick }: ToolkitIte
 }
 
 export function ResourceToolkit({ onGuidesClick }: { onGuidesClick?: () => void }) {
-      padding={6}
-      radius="xl"
-      border
-      display="flex"
-      direction="col"
-      gap={4}
-      className="border-line bg-surface/50 hover:border-accent hover:shadow-glow transition-all group"
-    >
-      <Box
-        padding={3}
-        radius="lg"
-        className="bg-accent/5 text-accent group-hover:bg-accent group-hover:text-bg transition-colors self-start"
-      >
-        <Icon className="w-5 h-5" />
-      </Box>
-      <Stack gap={1}>
-        <Text variant="body" weight="font-bold" color="main">
-          {title}
-        </Text>
-        <Text variant="body" size="xs" color="dim">
-          {description}
-        </Text>
-      </Stack>
-    </Box>
-  );
-}
-
-export function ResourceToolkit() {
   const tools = [
     {
       icon: ClipboardCheck,

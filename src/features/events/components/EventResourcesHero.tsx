@@ -59,30 +59,6 @@ function HeroCTA({ to, onClick, icon: Icon, label, description }: CTAProps) {
 }
 
 export function EventResourcesHero({ onExploreClick }: { onExploreClick?: () => void }) {
-      padding={6}
-      radius="xl"
-      border
-      display="flex"
-      direction="col"
-      gap={3}
-      className="bg-surface/50 border-line hover:border-accent hover:bg-surface transition-all group"
-    >
-      <Box color="accent" className="group-hover:scale-110 transition-transform">
-        <Icon className="w-6 h-6" />
-      </Box>
-      <Stack gap={1}>
-        <Text variant="body" weight="font-bold" color="main">
-          {label}
-        </Text>
-        <Text variant="body" size="xs" color="dim">
-          {description}
-        </Text>
-      </Stack>
-    </Box>
-  );
-}
-
-export function EventResourcesHero() {
   return (
     <Stack
       gap={12}

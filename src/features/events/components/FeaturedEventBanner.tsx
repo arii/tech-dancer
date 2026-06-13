@@ -28,7 +28,7 @@ export function FeaturedEventBanner({ event }: FeaturedEventBannerProps) {
         display="grid"
         gridCols={{ base: 1, lg: 2 }}
         gap={0}
-        minHeight={{ base: "auto", lg: "400px" }}
+        minHeight={{ base: "auto", lg: 96 }}
       >
         {/* Content Side */}
         <Stack
@@ -80,14 +80,14 @@ export function FeaturedEventBanner({ event }: FeaturedEventBannerProps) {
             display="flex"
             align="center"
             gap={2}
-            className="text-accent font-bold hover:gap-3 transition-all"
+            className="text-accent font-bold"
           >
-            Explore the Guide <ArrowRight className="w-5 h-5" />
+            <Text as="span">Explore the Guide</Text> <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Box>
         </Stack>
 
         {/* Image Side */}
-        <Box position="relative" height={{ base: "240px", lg: "auto" }} className="bg-surface-alt">
+        <Box position="relative" height={{ base: 60, lg: "auto" }} className="bg-surface-alt">
           {event.image ? (
             <img
               src={event.image}

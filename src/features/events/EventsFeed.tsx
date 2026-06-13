@@ -30,7 +30,7 @@ export default function EventsFeed() {
         description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
       />
 
-      <Stack gap={20} maxWidth="screen-2xl" marginX="auto" width="full" className="px-4 md:px-8">
+      <Stack gap={20} maxWidth="screen-2xl" marginX="auto" width="full" paddingX={{ base: 4, md: 8 }}>
         {/* 1. Hero Section */}
         <EventResourcesHero onExploreClick={scrollToFeed} />
 
