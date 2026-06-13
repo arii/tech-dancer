@@ -242,6 +242,7 @@ jobs:
       - name: Build PR
         env:
           VITE_BASE_PATH: /
+          DISABLE_MINIFY: true
         run: pnpm run build:review
       - name: Visual Diff
         run: pnpm run impact:visual-diff

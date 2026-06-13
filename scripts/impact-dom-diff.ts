@@ -33,46 +33,33 @@ function normalizeHtml(html: string): string {
       el.removeAttribute(attr);
     });
 
+    const cleanedAttrs: { name: string; value: string }[] = [];
     Array.from(el.attributes).forEach(attr => {
       if (attr.name.startsWith('data-v-')) {
         el.removeAttribute(attr.name);
+        return;
       }
 
+      let val = attr.value;
       if (attr.name === 'src' || attr.name === 'href') {
-        attr.value = attr.value.replace(/-[a-zA-Z0-9]{8,12}\.(js|css)/g, '.$1');
+        val = val.replace(/-[a-zA-Z0-9]{8,12}\.(js|css)/g, '.$1');
       }
+      cleanedAttrs.push({ name: attr.name, value: val });
+      el.removeAttribute(attr.name);
+    });
+
+    cleanedAttrs.sort((a, b) => a.name.localeCompare(b.name));
+    cleanedAttrs.forEach(attr => {
+      el.setAttribute(attr.name, attr.value);
     });
   });
 
-  const lines: string[] = [];
-  function formatNode(element: Element, depth: number) {
-    const indent = '  '.repeat(depth);
-    const tagName = element.tagName.toLowerCase();
-
-    const attrs = Array.from(element.attributes)
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map(attr => `${attr.name}="${attr.value}"`)
-      .join(' ');
-
-    const attrString = attrs ? ` ${attrs}` : '';
-    lines.push(`${indent}<${tagName}${attrString}>`);
-
-    if (element.children.length === 0 && element.textContent?.trim()) {
-      lines.push(`${indent}  ${element.textContent.trim()}`);
-    }
-
-    Array.from(element.children).forEach(child => {
-      formatNode(child, depth + 1);
-    });
-
-    lines.push(`${indent}</${tagName}>`);
-  }
-
-  if (document.body) {
-    formatNode(document.body, 0);
-  }
-
-  return lines.join('\n');
+  const rawHtml = document.body ? document.body.innerHTML : dom.serialize();
+  
+  return rawHtml
+    .replace(/\s+/g, ' ')       // Collapse duplicate spaces/newlines into single spaces
+    .replace(/>\s*</g, '>\n<')   // Insert a clean newline between every tag boundary
+    .trim();
 }
 
 function countElements(html: string, selector = '*'): number {
