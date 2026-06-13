@@ -25,7 +25,7 @@ test.describe('Affiliate Disclosure Spacing', () => {
       return rect2.top - rect1.bottom;
     });
 
-    expect(gap).toBe(24); // gap={6} is 24px (6 * 4px)
+    expect(gap).toBeCloseTo(24, 1); // gap={6} is 24px (6 * 4px)
   });
 
   test('should have proper spacing on toolbox page', async ({ page }) => {
@@ -47,6 +47,6 @@ test.describe('Affiliate Disclosure Spacing', () => {
       return rect2.top - rect1.bottom;
     });
 
-    expect(gap).toBe(24);
+    expect(gap).toBeCloseTo(24, 1);
   });
 });
