@@ -128,6 +128,21 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
+    const getBase64ImageTag = (filePath: string | undefined, alt: string): string => {
+      if (!filePath || !fs.existsSync(filePath)) return '';
+      try {
+        const base64 = fs.readFileSync(filePath, 'base64');
+        const ext = path.extname(filePath).slice(1) || 'png';
+        return `![${alt}](data:image/${ext};base64,${base64})`;
+      } catch {
+        return '';
+      }
+    };
+
+    const diffImg = getBase64ImageTag(visual?.diffPath, 'Visual Diff');
+    const beforeImg = getBase64ImageTag(visual?.beforePath, 'Before');
+    const afterImg = getBase64ImageTag(visual?.afterPath, 'After');
+
     const toRelative = (p: string | undefined) => p ? p.replace(/^artifacts\//, './') : undefined;
     const beforeRel = toRelative(visual?.beforePath);
     const afterRel = toRelative(visual?.afterPath);
@@ -151,9 +166,9 @@ Artifacts:
 - Visual diff: ${diffRel ? `[${visual?.diffPath}](${diffRel})` : 'Not captured'}
 - DOM diff: ${domDiffRel ? `[${domSummary.diffPath}](${domDiffRel})` : 'Not captured'}
 
-${diffRel ? `#### Visual Diff\n![Visual Diff](${diffRel})` : ''}
-${beforeRel ? `#### Before\n![Before](${beforeRel})` : ''}
-${afterRel ? `#### After\n![After](${afterRel})` : ''}
+${diffImg ? `#### Visual Diff\n${diffImg}` : ''}
+${beforeImg ? `#### Before\n${beforeImg}` : ''}
+${afterImg ? `#### After\n${afterImg}` : ''}
 `;
   });
 
