@@ -394,12 +394,13 @@ export default function UXAuditor() {
                     {activeReport.url}
                   </Text>
                 </Stack>
-                <Stack direction="row" gap={3} shrink={0}>
+                <Stack direction={{ base: 'col', sm: 'row' }} gap={3} shrink={0} width={{ base: 'full', sm: 'auto' }} align={{ base: 'stretch', sm: 'center' }}>
                   <Box
                     as="button"
                     onClick={copyMarkdown}
                     display="flex"
                     align="center"
+                    justify="center"
                     gap={2}
                     className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
@@ -407,6 +408,7 @@ export default function UXAuditor() {
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
+                    width={{ base: 'full', sm: 'auto' }}
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -417,11 +419,13 @@ export default function UXAuditor() {
                     disabled={activeReport.status !== 'completed' || isExportingToGithub}
                     display="flex"
                     align="center"
+                    justify="center"
                     gap={2}
                     className={actionButtonVariants({ variant: "primary" })}
                     paddingX={6}
                     paddingY={2}
                     radius="xl"
+                    width={{ base: 'full', sm: 'auto' }}
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
@@ -505,7 +509,7 @@ export default function UXAuditor() {
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                                 <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
-                                          <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
+                                          <Text variant="sans" size="xs" weight="font-bold" clamp={4} className="break-all whitespace-pre-wrap">
                                             {imp.suggestion}
                                           </Text>
                                           {imp.element === "Manual Audit Required" && (

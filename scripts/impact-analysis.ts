@@ -234,6 +234,7 @@ async function main() {
     const report = {
       changedFiles,
       affectedPages,
+      routes: allUrls,
       visualReviewRequired: allUrls,
       impactLevel: severity
     };
@@ -264,6 +265,7 @@ async function main() {
     }
 
     fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
+    fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(report, null, 2));
 
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
 
