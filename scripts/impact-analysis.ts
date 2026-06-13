@@ -188,6 +188,20 @@ async function main() {
     const changedFiles = getChangedFiles();
     if (changedFiles.length === 0) {
       console.log('✅ No changes detected.');
+      // Still write an empty artifact so subsequent steps (like visual-diff) don't fail
+      const emptyReport = {
+        changedFiles: [],
+        affectedPages: [],
+        routes: [],
+        visualReviewRequired: [],
+        impactLevel: 'LOW' as const
+      };
+      const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+      fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(emptyReport, null, 2));
+      fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(emptyReport, null, 2));
       return;
     }
 
@@ -293,8 +307,12 @@ ${changedFilesList}
   } catch (error: unknown) {
     const err = error as Error;
     console.error(`❌ Error during impact analysis: ${err.message}`);
+    if (err.stack) console.error(err.stack);
     process.exit(1);
   }
 }
 
-main().catch(console.error);
+main().catch(err => {
+  console.error('❌ Unhandled error in impact analysis:', err);
+  process.exit(1);
+});
