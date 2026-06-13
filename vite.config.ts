@@ -20,6 +20,7 @@ export default defineConfig(({mode}) => {
   const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
   const skipMinify = process.env.DISABLE_MINIFY === 'true' || mode === 'development';
+  const isDev = mode === 'development';
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
@@ -83,6 +84,7 @@ export default defineConfig(({mode}) => {
       'import.meta.env.VITE_IS_VERCEL': JSON.stringify(
         process.env.VERCEL === '1' ? 'true' : 'false'
       ),
+      'import.meta.env.DEV': JSON.stringify(isDev),
     },
     plugins: [
       react(),

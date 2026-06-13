@@ -66,7 +66,7 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "320px", md: "420px" }}
+      minHeight={{ base: "80", md: "105" }}
       direction="col"
       gap={0}
       overflow="hidden"

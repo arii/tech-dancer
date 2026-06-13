@@ -334,9 +334,9 @@ export default function UXAuditor() {
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
+          <Stack minWidth={0} className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`}>
             {reports.length === 0 && (
-              <Box padding={8} textAlign="center" className="bg-surface-alt/50">
+              <Box padding={8} textAlign="center" surface="alt" opacityVariant="medium">
                 <Stack gap={6} align="center">
                   <Box width={12} height={12} radius="full" border className="border-accent-teal/20 bg-accent-teal/5 flex items-center justify-center">
                     <Icon icon={RefreshCw} size="md" color="accent-teal" />

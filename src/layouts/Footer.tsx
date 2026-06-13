@@ -37,11 +37,11 @@ export function Footer() {
           </Text>
 
           <Stack direction="row" align="center" gap={3} wrap>
-            <Text size="xs" color="dim" className="whitespace-nowrap flex items-center gap-2">
+          <Text size="xs" color="dim" display="flex" align="center" gap={2} className="whitespace-nowrap">
               <span className="opacity-50">
                 {isDev ? 'Development' : `Version ${appVersion}`}
               </span>
-              <Box className="w-1 h-1 rounded-full bg-line" />
+            <Box width={1} height={1} radius="full" surface="line" />
               <Box
                 as="a"
                 href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
@@ -68,14 +68,16 @@ export function Footer() {
           </Text>
         </Box>
 
-        <Stack direction="row" gap={1} align="center" className="-ml-3">
+        <Stack direction="row" gap={1} align="center" marginX={-3}>
           {legalLinks.map((link) => (
             <ActionButton
               key={link.label}
               as={NavLink}
               to={link.to}
               variant="ghost"
-              className="active:scale-95 text-xs font-semibold px-3 py-2 text-text-dim hover:text-accent transition-colors"
+              paddingX={3}
+              paddingY={2}
+              className="active:scale-95 text-xs font-semibold text-text-dim hover:text-accent transition-colors"
             >
               {link.label}
             </ActionButton>

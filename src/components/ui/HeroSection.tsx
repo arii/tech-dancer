@@ -105,7 +105,8 @@ export function HeroSection() {
           <Box
             width="1.5"
             radius="full"
-            className="bg-accent-teal shrink-0 shadow-[0_0_12px_rgba(45,212,191,0.3)]"
+            surface="accent"
+            className="shrink-0"
             aria-hidden="true"
           />
           <Text

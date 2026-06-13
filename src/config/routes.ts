@@ -113,7 +113,7 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
     skeleton: 'simple'
   },
-  ...(import.meta.env.DEV || import.meta.env.VITE_IS_STAGING === 'true' ? [{
+  ...(typeof import.meta.env !== 'undefined' && (import.meta.env.DEV || import.meta.env.VITE_IS_STAGING === 'true') ? [{
     path: '/preview',
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',

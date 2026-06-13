@@ -4,7 +4,6 @@ import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { ResourceSidebar } from './sidebar/ResourceSidebar';
-import { VerdictCallout } from '@/components/layout/DetailElements';
 import { Stack, Grid, Text, Box } from '@/layouts/Primitives';
 
 interface GearPostDetailProps {

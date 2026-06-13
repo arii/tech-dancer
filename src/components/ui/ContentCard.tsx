@@ -1,5 +1,5 @@
 import { motion, HTMLMotionProps } from 'motion/react';
-import { Box, Stack, Text, BaseProps, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
