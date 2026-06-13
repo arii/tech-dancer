@@ -143,7 +143,7 @@ Artifacts:
 - Before screenshot: ${visual?.beforePath ?? 'Not captured'}
 - After screenshot: ${visual?.afterPath ?? 'Not captured'}
 - Visual diff: ${visual?.diffPath ?? 'Not captured'}
-- DOM diff: ${domSummary.diffPath}
+${visual?.beforeCroppedPath ? `- Before (cropped): ${visual.beforeCroppedPath}\n` : ''}${visual?.afterCroppedPath ? `- After (cropped): ${visual.afterCroppedPath}\n` : ''}${visual?.diffCroppedPath ? `- Visual diff (cropped): ${visual.diffCroppedPath}\n` : ''}- DOM diff: ${domSummary.diffPath}
 `;
   });
 
