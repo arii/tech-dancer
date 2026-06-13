@@ -2,7 +2,6 @@ import { Icon } from '@/components/ui/Icon';
 import { useState, useEffect, useRef } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
-  Smartphone, Monitor, Tablet,
   ChevronRight, ArrowLeft
 } from 'lucide-react';
 import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
