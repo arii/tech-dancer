@@ -10,7 +10,9 @@ const config: KnipConfig = {
     'tw-animate-css',
     'vite-plugin-pwa',
     'workbox-window',
-    'dependency-cruiser'
+    'dependency-cruiser',
+    '@types/diff',
+    '@types/pixelmatch'
   ],
   ignoreBinaries: ['python3'],
   ignoreExportsUsedInFile: true,
