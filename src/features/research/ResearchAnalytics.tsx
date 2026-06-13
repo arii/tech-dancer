@@ -26,7 +26,7 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
   const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
 
   return (
-    <Box width="full" height={48} overflow="hidden" border="b" className="border-accent/5">
+    <Box width="full" height={48} overflow="hidden" border="b" borderColor="accent/5">
       <img
         src={src}
         alt={alt}
@@ -57,7 +57,7 @@ function ToolSection({
 }) {
   return (
     <Stack gap={6}>
-      <Box border="l" paddingLeft={4} className="border-accent/30">
+      <Box border="l" paddingLeft={4} borderColor="accent/30">
         <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">{title}</Text>
         <Text size="sm" color="dim" marginTop={1}>{description}</Text>
       </Box>
@@ -89,7 +89,7 @@ function ToolCard({ tool, navigate, getToolIcon }: {
     >
       <Stack gap={4} width="full">
         <Box display="flex" justify="between" align="start" width="full">
-          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
+          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" borderColor="accent/10">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
@@ -181,12 +181,12 @@ export default function ResearchAnalytics() {
             paddingBottom={0}
             border="none"
           />
-          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" className="leading-relaxed text-pretty">
+          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed" className="text-pretty">
             I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
           </Text>
           <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
             {skills.map((skill) => (
-              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" className="border-accent/20 bg-accent/5">
+              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" surface="accent">
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <Icon icon={skill.icon} size="sm" color="accent" />
                 </Box>
@@ -197,14 +197,14 @@ export default function ResearchAnalytics() {
             ))}
           </Box>
 
-          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width="full" className="sm:w-auto">
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" className="w-full sm:w-auto">
+          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
+            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
               View Flagship Projects
             </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" className="w-full sm:w-auto">
+            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
               Read Implementation Articles
             </ActionButton>
-            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest" className="w-full sm:w-auto">
+            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
               <Icon icon={Send} size="sm" />
               Contact
             </ActionButton>
@@ -225,16 +225,18 @@ export default function ResearchAnalytics() {
                 padding={0}
                 gap={0}
                 surface="surface"
-                className="border-accent/10 h-full overflow-hidden"
+                borderColor="accent/10"
+                height="full"
+                overflow="hidden"
               >
                 <Stack gap={0} height="full">
                   <ToolImage tool={tool} baseUrl={baseUrl} />
                   <Stack gap={6} padding={8} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" className="border-accent/10">
+                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" borderColor="accent/10">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                       </Box>
-                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" className="bg-accent/10">
+                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" bgGradient="bg-accent/10">
                         Flagship
                       </Text>
                     </Box>
@@ -251,7 +253,7 @@ export default function ResearchAnalytics() {
                       <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
                         {tool.subtitle}
                       </Text>
-                      <Text variant="body" size="md" color="dim" className="leading-relaxed">
+                      <Text variant="body" size="md" color="dim" leading="relaxed">
                         {tool.description}
                       </Text>
                     </Stack>
@@ -274,7 +276,8 @@ export default function ResearchAnalytics() {
                           variant="primary"
                           paddingX={4}
                           paddingY={2}
-                          className="z-20 w-full sm:w-auto"
+                          zIndex={20}
+                          width={{ base: "full", sm: "auto" }}
                         >
                           <span className="font-bold text-xs uppercase tracking-widest">
                             {tool.externalLinkDisplayLabel || 'Open Link'}
@@ -291,7 +294,8 @@ export default function ResearchAnalytics() {
                           variant="secondary"
                           paddingX={4}
                           paddingY={2}
-                          className="z-20 w-full sm:w-auto"
+                          zIndex={20}
+                          width={{ base: "full", sm: "auto" }}
                         >
                           <span className="font-bold text-xs uppercase tracking-widest">Source Repo</span>
                           <Icon icon={Github} size="sm" />
@@ -306,17 +310,17 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
+          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
+            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
+            <Text variant="body" size="lg" color="body" leading="relaxed">
               HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
             </Text>
           </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
+          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
+            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
             <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
+            <Text variant="body" size="lg" color="body" leading="relaxed">
               Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
             </Text>
           </Stack>
@@ -396,9 +400,9 @@ export default function ResearchAnalytics() {
                     }
                   }}
                   height="full"
+                  surface={study.status === 'published' ? 'surface' : 'muted'}
                   className={cardVariants({
-                    interactive: study.status === 'published',
-                    surface: study.status === 'published' ? 'surface' : 'muted'
+                    interactive: study.status === 'published'
                   })}
                   opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
@@ -417,14 +421,14 @@ export default function ResearchAnalytics() {
                       <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
                         {study.readTime && (
                         <Box display="flex" align="center" gap={1} opacityVariant="muted">
-                            <Clock size={12} className="text-dim" />
+                            <Icon icon={Clock} size="xs" color="dim" />
                             <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
                           </Box>
                         )}
                       </Box>
                     </Stack>
 
-                    <Text variant="body" size="sm" color="dim" className="line-clamp-3">
+                    <Text variant="body" size="sm" color="dim" clamp={3}>
                       {study.excerpt}
                     </Text>
 
