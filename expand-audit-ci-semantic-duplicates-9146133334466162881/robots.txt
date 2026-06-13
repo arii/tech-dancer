@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/expand-audit-ci-semantic-duplicates-9146133334466162881/sitemap.xml

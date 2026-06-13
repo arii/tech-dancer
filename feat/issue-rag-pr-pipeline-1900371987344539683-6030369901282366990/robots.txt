@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feat/issue-rag-pr-pipeline-1900371987344539683-6030369901282366990/sitemap.xml
