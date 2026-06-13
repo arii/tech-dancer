@@ -251,6 +251,7 @@ async function main() {
     const report = {
       changedFiles,
       affectedPages,
+      routes: allUrls,
       visualReviewRequired: allUrls,
       impactLevel: severity,
     };
@@ -280,10 +281,14 @@ async function main() {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    fs.writeFileSync(
-      path.join(outputDir, "impact.json"),
-      JSON.stringify(report, null, 2),
-    );
+    fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
+    fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(report, null, 2));
+
+    const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
+
+    const severityEmoji = severity === 'HIGH' ? '🔴' : severity === 'MEDIUM' ? '🟡' : '🟢';
+
+    const markdown = `## ${severityEmoji} Deployment Impact Analysis
 
     const changedFilesList = changedFiles.map((f) => `- ${f}`).join("\n");
 
