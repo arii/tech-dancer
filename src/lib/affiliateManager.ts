@@ -37,6 +37,14 @@ export const affiliateManager = {
     return link;
   },
   
+  /**
+   * Resolves an affiliate ID to a fully qualified URL with tracking.
+   *
+   * WHY:
+   * We centralize URL resolution to ensure consistent UTM parameter injection
+   * and to handle vendor-specific logic (like skipping tracking for Printful
+   * which uses its own internal system) in one place.
+   */
   resolveUrl: (id: string, metadata?: Record<string, string>): string => {
     const link = AFFILIATE_DATABASE[id];
     if (!link) return '#';
@@ -60,6 +68,15 @@ export const affiliateManager = {
     return url.toString();
   },
 
+  /**
+   * Resolves the appropriate internal or external href for a resource.
+   *
+   * WHY:
+   * Content can link to gear either via a local slug (for internal reviews)
+   * or via an affiliate ID (for external products). This resolver prioritizes
+   * the best available user experience by checking for local reviews first
+   * before falling back to external affiliate links.
+   */
   resolveResourceHref: (config: { id?: string; gearSlug?: string }): string => {
     const { id, gearSlug } = config;
 

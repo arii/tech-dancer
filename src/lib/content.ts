@@ -11,7 +11,13 @@ import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, 
 export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
 
 /**
- * Lightweight browser-safe frontmatter parser using a vetted library.
+ * Lightweight browser-safe frontmatter parser.
+ *
+ * WHY:
+ * We need a consistent way to separate YAML metadata from Markdown body
+ * across both build-time scripts and client-side rendering. Using a
+ * custom regex before YAML parsing ensures we handle standard Jekyll-style
+ * delimiters correctly even if the body contains dashed lines.
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
@@ -78,6 +84,15 @@ export function normalizeAsset(val: unknown) {
   return val;
 }
 
+/**
+ * Transforms raw content modules into a structured, typed array.
+ *
+ * WHY:
+ * `import.meta.glob` returns a flat map of file paths to content.
+ * This function normalizes that data into the application's domain models
+ * (Post, Event, etc.), handles asset path resolution, and applies
+ * business-specific sorting and filtering (e.g., hiding future-dated posts).
+ */
 function transform<T extends { date?: string; draft?: boolean }>(
   modules: Record<string, string | ContentModule>,
   defaultType?: string
@@ -288,8 +303,12 @@ export const getEventBySlug = (slug: string) =>
 
 /**
  * Calculates estimated reading time in minutes.
- * Uses a standard 200 words per minute for full content,
- * or a simplified proxy for excerpts.
+ *
+ * WHY:
+ * Providing reading time helps user engagement by setting expectations.
+ * We use 200 WPM as a standard baseline. We provide a fallback proxy
+ * for excerpts so that list views can display estimated times without
+ * needing to load the full post content.
  */
 export const readingTime = (content?: string, excerpt?: string) => {
   if (content && content.trim().length > 0) {
