@@ -94,7 +94,7 @@ async function main(): Promise<void> {
   }
 
   if (!fs.existsSync(path.join(process.cwd(), 'dist'))) {
-    throw new Error('Missing PR dist. Run `pnpm build` before visual diff.');
+    throw new Error('Missing PR dist. Run `pnpm run build:review` before visual diff.');
   }
 
   const basePreview = startPreview(baseWorktree, basePort);
