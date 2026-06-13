@@ -103,7 +103,7 @@ jobs:
       - name: Check for dead code
         env:
           CI: true
-        run: pnpm run knip
+        run: CI=true pnpm run knip
 
       - name: TypeScript `any` Ratchet
         run: |

@@ -1,68 +1,77 @@
 # GitHub Actions Workflow Audit Report
 
-## 1. Audit Scope
-- Reviewed `.github/workflows/*.yml` directory (16 workflow files).
-- Reviewed scripts backing the actions like `scripts/detect-antipatterns.mjs`, `.github/actions/setup-node-pnpm`.
+## 1. Audit scope
+The goal of this audit is to review recent GitHub Actions workflow runs within `.github/workflows/` to identify correctness issues, performance bottlenecks, flakiness, developer usability problems, and permission misconfigurations. The ultimate objective is to recommend an actionable improvement plan and implement safe optimizations to make CI faster, more reliable, and cleaner.
 
-## 2. Workflow Files Reviewed
+## 2. Workflow files reviewed
+- `.github/workflows/auto-conflict-resolver.yml`
 - `.github/workflows/ci.yml`
+- `.github/workflows/codeql.yml`
+- `.github/workflows/conflict-check.yml`
+- `.github/workflows/deploy-pages.yml` (removed)
 - `.github/workflows/deploy.yml`
-- `.github/workflows/deploy-pages.yml`
-- `.github/workflows/workflow-validation.yml`
-- `.github/workflows/self-healing.yml`
+- `.github/workflows/issue-comment-dispatcher.yml`
+- `.github/workflows/issue_to_pr.yml`
+- `.github/workflows/jules-fix-trigger.yml`
+- `.github/workflows/mass-audit-prs.yml`
+- `.github/workflows/mergellama.yml`
+- `.github/workflows/ollama-chatops.yml`
+- `.github/workflows/prune-stale-previews.yml`
 - `.github/workflows/security.yml`
+- `.github/workflows/self-healing.yml`
+- `.github/workflows/update-snapshots.yml`
+- `.github/workflows/validate_issue.yml`
 - `.github/workflows/wcs_etl.yml`
+- `.github/workflows/workflow-validation.yml`
 
-## 3. Run Sampling Strategy
-The `gh run view` command was used to examine the most recent failures across pull requests and pushes to standard branches (including run `27430687395`, `27424753680`, `27422989543`).
+## 3. Run sampling strategy
+A diverse set of GitHub Action runs was sampled representing typical lifecycle events (PRs, push to main, cron schedules, issue comments). The CLI was leveraged to find:
+- At least 10 recent runs across all workflows.
+- Failing checks (`CI` and `Security & Quality Scan`).
+- Flaky tests/errors in tests (e.g., UI audits or Vitest components).
+- Workflow duplication errors (e.g., competing build jobs for `deploy-pages.yml` vs `deploy.yml`).
 
-## 4. Run Samples
-| Run ID | Workflow | Event | Branch/PR | Status | Duration | Why sampled |
-|---|---|---|---|---|---|---|
-| `27430687395` | `CI` | `pull_request` | `feat-ignore-layout-wrappers-15494938171399129763` | `failure` | `1m21s` | Unit test execution failing |
-| `27424753680` | `CI` | `push` | `feat/ignore-layout-wrappers-15494938171399129763` | `failure` | `1m27s` | Unit test execution failing push branch |
-| `27422989543` | `CI` | `pull_request` | `feat/deployment-impact-analysis-13598097771051381334` | `failure` | `1m28s` | CI fail regarding Check for dead code |
-| `27436680271` | `CI` | `pull_request` | `feat-ignore-layout-wrappers-15494938171399129763` | `success` | `7m21s` | Review slow E2E run completion times |
+## 4. Table of sampled runs
+| Run ID | Workflow | Event | Status | Duration | Note |
+|---|---|---|---|---|---|
+| 27476295555 | Security & Quality Scan | pull_request | failure | 55s |  |
+| 27463278246 | CI | pull_request | failure | 2m57s |  |
+| 27463277529 | CI | push | failure | 2m54s |  |
+| 27463106393 | Security & Quality Scan | pull_request | failure | 44s |  |
+| 27463106392 | CI | pull_request | failure | 2m53s | Flaky CI step 'Lint & Type Check' |
+| 27430687395 | CI | pull_request | failure | 1m21s | Unit test failing on E2E components |
+| 27424753680 | CI | push | failure | 1m27s | Same unit test fail on push |
+| 27422989543 | CI | pull_request | failure | 1m28s | Knip failure on vite.config.ts `PRODUCTION BUILD FAILURE` |
+| 27458891614 | Deploy to GitHub Pages | push | failure | 1m3s | Concurrent deploy requests |
+| 27475430861 | Prune Stale Previews | schedule | success | 1m1s | |
+| 27436680271 | CI | pull_request | success | 7m21s | Slow runtime due to multiple consecutive builds |
+| 27476295920 | Issue Comment Dispatcher | issue_comment | success | 14s | |
 
-## 5. Current Workflow Map
-`ci.yml` handles PR checks: lint, type-check, tests, bundle-size, E2E via Playwright, and Lighthouse scoring.
-`deploy.yml` / `deploy-pages.yml` handles publishing to GH pages post-merge or for previews.
-`self-healing.yml` runs automated AI repair attempts for failed runs using Ollama models locally.
+## 5. Current workflow map
+- The core validation loop lies inside `ci.yml`. It handles linting, testing, building, bundle size checks, and deployment impact analysis.
+- The `deploy.yml` and `deploy-pages.yml` scripts both attempt to manage `gh-pages` branch build and deploy behaviors.
+- Supplementary chatops workflows (`issue-comment-dispatcher.yml`, `ollama-chatops.yml`, `jules-fix-trigger.yml`, `mergellama.yml`, `self-healing.yml`, `update-snapshots.yml`, `auto-conflict-resolver.yml`, `conflict-check.yml`) provide developer automation.
 
-## 6. Slowest Jobs & Workflows
-The `test-build` job within `ci.yml` was the primary bottleneck due to multiple redundant builds of the entire UI to facilitate individual steps (Playwright, Bundle Size, Lighthouse).
+## 6. Slowest jobs and workflows
+- The **`test-build` job in `ci.yml`** takes 7+ minutes on successful runs.
 
-## 7. Most Common Failures
-Flaky test definitions relating to missing `heading` ARIA roles on standard design primitives that masquerade visually but fail A11y tests, alongside the brittle `knip` step choking on Vite version variables without explicit `CI=true` override.
+## 7. Most common failures
+- **Knip dead code checking** throws because the process tries to parse `vite.config.ts` without `CI=true` and `VITE_BASE_PATH`, triggering package runtime validations.
+- **Deployments overlap:** the duplicate `deploy-pages.yml` and `deploy.yml` fail sequentially on `main` push due to overlapping Pages deployment limits.
 
-## 8. Flaky or Likely Flaky Checks
-`vitest` failures on new pages checking for semantic layout roles.
+## 8. Artifact size and naming issues
+- `deployment-review` artifact size may be problematic over time, but retention limits are reasonably set to 7 or 1 day.
 
-## 9. Artifact Size & Naming Issues
-Test execution successfully uploads visual snapshots on failures (within playwright-report/ with retention limits of 7). Artifact naming follows standard parameters. No major bloat was visible since upload size thresholds are kept minimal by retention rules.
+## 9. Trigger and path filter findings
+- Pushes to `main` trigger double deployments.
 
-## 10. Cache & Dependency Install Findings
-Dependency installation leverages `corepack` wrapper inside `setup-node` Action utilizing cached module directories, keeping fresh node_modules provisioning relatively fast without repetitive fetching. Re-fetching of heavy browsers and python packages was effectively segmented into their separate tool flows via composite actions.
+## 10. Recommended quick wins
+- Pass `CI=true` to `pnpm run knip` inside `ci.yml`.
+- Remove `.github/workflows/deploy-pages.yml` since `deploy.yml` performs the identical and more robust pipeline.
 
-## 11. Trigger and path filter findings
-Trigger rules employ decent scopes across `push` and `pull_request`, mostly scanning source files and explicit `.github/` configs.
+## 11. Recommended larger refactors
+- **CI Build Simplification**: None identified.
 
-## 12. Security and permission findings
-`GITHUB_TOKEN` bounds remain standard for repository validations. Safe interpolation. Open Secrets mostly secured. Workflow validation tools use explicit SHA checks or pinned containers. `security.yml` scans correctly with restricted permissions.
-
-## 13. Recommended Quick Wins
-1. **Reduce Rebuilds:** The `test-build` job in `ci.yml` built the React application tree 4 sequential times. Consolidated this into a single `VITE_BASE_PATH=/` build for both standard Playwright checks and Lighthouse collection.
-2. **Fix Dead Code Step (`knip`):** Add `CI: true` environment variable to `Check for dead code` run step inside `ci.yml`. This suppresses the local deployment assertion in `vite.config.ts` requiring strict semantic versioning which isn't present during early testing runs.
-3. **Fix Text/Heading Semantic Rendering:** In `src/layouts/Text.tsx`, the custom `<Box as={Component}>` wrapper missed passing down standard `as` definitions correctly to React element mapping directly to `Box` correctly via manual cast. Fixed in `src/layouts/Text.tsx` so Vitest can target `heading` elements properly.
-
-## 14. Recommended Larger Refactors
-No massive refactors are requested yet; however, separating Lighthouse/Bundle CI checks out of Playwright's container matrix could reduce standard E2E test feedback latency further.
-
-## 15. Suggested workflow consolidation or split strategy
-We can easily split out E2E vs Lint checks directly to leverage full VM node parallelism.
-
-## 16. Proposed fix order
-Fix performance blocks -> fix runtime tests ARIA errors -> fix execution block definitions.
-
-## 17. Open questions
-None.
+## 12. Proposed fix order
+1. Fix duplicate deployment workflows (Remove `deploy-pages.yml`)
+2. Fix `knip` flake in `ci.yml`
