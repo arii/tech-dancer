@@ -145,6 +145,9 @@ export default function ResearchAnalytics() {
     t.category === 'Utility Tools' || t.category === 'Business Automation'
   );
 
+  const categorizedIds = new Set([...devAiTools, ...pipelineTools, ...utilityTools].map(t => t.id));
+  const otherTools = engineeringTools.filter(t => !categorizedIds.has(t.id));
+
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
@@ -358,6 +361,19 @@ export default function ResearchAnalytics() {
               navigate={navigate}
               getToolIcon={getToolIcon}
             />
+
+            {otherTools.length > 0 && (
+              <ToolSection
+                title="Experimental & Other Tools"
+                description="Additional research projects and experimental engineering prototypes."
+                tools={otherTools}
+                gridCols={{ base: 1, md: 2 }}
+                gridGapX={8}
+                gridGapY={10}
+                navigate={navigate}
+                getToolIcon={getToolIcon}
+              />
+            )}
           </Stack>
         </Stack>
 
