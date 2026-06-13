@@ -1,6 +1,7 @@
 ---
 type: event
 title: "Weekly Classes & Local Dances"
+imageAlt: "Stylized map and calendar icons representing local West Coast Swing dance communities"
 date: "2024-01-01"
 startDate: "2024-01-01"
 author: "Ariel Anders, PhD"
@@ -12,7 +13,7 @@ region: "Global"
 schedule: "Weekly / Leveled Series"
 url: ""
 heroImage: ""
-description: "Taking regular lessons and hitting the floor for social dancing are absolutely key to building your skills."
+description: "Build consistency and rhythm by finding local weekly classes, socials, and practice spaces in your area."
 
 whyAttending: >
   Weekly classes are the foundation of any dancer's growth, offering a consistent environment to hone your skills, learn new concepts, and connect with your local community.
@@ -47,21 +48,19 @@ relatedEvents:
 - mission-city-swing
 ---
 
-The best way to learn West Coast Swing is to do it consistently. Taking regular lessons and hitting the floor for social dancing are absolutely key to building your skills and finding your rhythm. While this list is incomplete, it serves as a great starting point for tracking down local communities, practices, and events across different regions.
-
-Here are some of the best regional West Coast Swing event lists and calendars to help you get out on the floor:
+While this list is incomplete, it serves as a great starting point for tracking down local communities, practices, and events across different regions. Here are some of the best regional West Coast Swing event lists and calendars to help you get out on the floor:
 
 ## Pacific Northwest (PNW)
 *   **[Seattle West Coast Swing Calendar](https://seattleswingdanceclub.com/seattlewcscalendar):** Run by the Seattle Swing Dance Club, this tracks major weekenders and local dances across Washington, Oregon, and Idaho.
-*   **Portland WCS Events:** Frequently updated community tracking for social dances in the Portland area.
+*   **Portland West Coast Swing Events:** Frequently updated community tracking for social dances in the Portland area.
 
 ## Northeast & Mid-Atlantic
-*   **[NYCWCS Comprehensive Calendar](https://www.nycwcs.com/):** An all-inclusive dashboard for local practices, pop-ups, and regional workshops in the New York City tri-state area.
+*   **[NYCWest Coast Swing Comprehensive Calendar](https://www.nycwcs.com/):** An all-inclusive dashboard for local practices, pop-ups, and regional workshops in the New York City tri-state area.
 *   **[Jersey Westies Calendar](https://jerseywesties.com/):** A dedicated calendar tracking weekly lessons, pop-up parties, and social events across New Jersey.
 *   **[UniversityCity Swing Local List](https://www.ucswing.com/philadelphia-west-coast-swing-events):** The go-to resource for Philadelphia and surrounding driving-distance weekenders.
 
 ## Midwest
-*   **[Madison WCS Club Directory](https://mwcsc.org/dance-events/dance-conventions/):** Centralizes convention tracking, weekenders, and local dances across Wisconsin, Minnesota, and Illinois.
+*   **[Madison West Coast Swing Club Directory](https://mwcsc.org/dance-events/dance-conventions/):** Centralizes convention tracking, weekenders, and local dances across Wisconsin, Minnesota, and Illinois.
 *   **[West Coast Swing Chicago](https://www.westcoastswingonline.com/west-coast-swing-chicago/):** The primary aggregator group used to track regional events, guest intensives, and weekly schedules across the Chicagoland area.
 
 ## Southern California (SoCal)

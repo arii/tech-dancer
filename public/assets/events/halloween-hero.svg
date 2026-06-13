@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <radialGradient id="space" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#2c1a4d"/>
+      <stop offset="50%" stop-color="#1a0b2e"/>
+      <stop offset="100%" stop-color="#05010a"/>
+    </radialGradient>
+    <radialGradient id="nebula1" cx="30%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula2" cx="70%" cy="40%" r="35%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="starGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="pumpkinGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#space)"/>
+  <rect width="800" height="450" fill="url(#nebula1)"/>
+  <rect width="800" height="450" fill="url(#nebula2)"/>
+
+  <!-- Stars/Sparkles -->
+  <g filter="url(#starGlow)">
+    <circle cx="45" cy="30" r="1.5" fill="#f97316" opacity="0.8"/>
+    <circle cx="195" cy="42" r="1.8" fill="white" opacity="0.9"/>
+    <circle cx="415" cy="22" r="2" fill="#7c3aed" opacity="0.8"/>
+    <circle cx="710" cy="25" r="1.8" fill="white" opacity="0.9"/>
+    <circle cx="165" cy="105" r="1.4" fill="#f97316" opacity="0.7"/>
+    <circle cx="570" cy="82" r="1.6" fill="#7c3aed" opacity="0.7"/>
+    <circle cx="680" cy="140" r="1.2" fill="white" opacity="0.6"/>
+  </g>
+
+  <!-- Improved Pumpkin: ridges + proper stem + subtle glow -->
+  <g transform="translate(680, 180)" filter="url(#pumpkinGlow)" opacity="0.55">
+    <!-- Main body with ridges -->
+    <path d="M0,-30
+             C-15,-32 -28,-20 -30,-5
+             C-32,10 -25,25 -15,30
+             C-5,35 5,35 15,30
+             C25,25 32,10 30,-5
+             C28,-20 15,-32 0,-30 Z"
+          fill="#ea580c"/>
+    <!-- Center ridge -->
+    <path d="M0,-30 C-3,-10 -3,10 0,30" stroke="#c2410c" stroke-width="2" fill="none"/>
+    <!-- Left ridge -->
+    <path d="M-15,-25 C-17,-5 -17,15 -15,25" stroke="#c2410c" stroke-width="1.5" fill="none" opacity="0.8"/>
+    <!-- Right ridge -->
+    <path d="M15,-25 C17,-5 17,15 15,25" stroke="#c2410c" stroke-width="1.5" fill="none" opacity="0.8"/>
+    <!-- Stem -->
+    <path d="M-3,-30 Q0,-38 4,-32 Q2,-28 -1,-30 Z" fill="#14532d"/>
+  </g>
+
+  <!-- Ground floor glow -->
+  <ellipse cx="400" cy="420" rx="320" ry="40" fill="#f97316" opacity="0.08"/>
+  <rect x="0" y="360" width="800" height="90" fill="#05010a" opacity="0.6"/>
+
+  <!-- Label -->
+  <text x="32" y="400" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#f97316" letter-spacing="2">HALLOWEEN SWING THING</text>
+  <text x="32" y="425" font-family="Georgia, serif" font-size="13" fill="#94a3b8" letter-spacing="1">Costa Mesa, CA  ·  October 29 – November 1, 2026</text>
+</svg>

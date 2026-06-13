@@ -2,11 +2,12 @@
 type: event
 draft: true
 title: Sample Event Guide
+imageAlt: "Sample event guide hero placeholder"
 date: '2026-10-01'
 startDate: '2026-10-01'
 author: Jules Agent
 category: Verification Event
-excerpt: A fully populated sample event for schema and rendering verification.
+excerpt: "Experience a fully populated sample event for schema and rendering verification."
 location: Test Arena
 city: San Francisco, CA
 region: NorCal
@@ -61,9 +62,7 @@ earlyBirdDate: '2026-08-15'
 registrationDeadline: '2026-09-20'
 hotelCutoffDate: '2026-09-10'
 packingReminderDate: '2026-09-25'
-relatedEvents:
-- jack-and-jill-orama
-- wild-wild-westie
+relatedEvents: []
 ---
 
 # Sample Event Notes
