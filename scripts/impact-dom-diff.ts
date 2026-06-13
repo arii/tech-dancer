@@ -128,6 +128,12 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
+    const toRelative = (p: string | undefined) => p ? p.replace(/^artifacts\//, './') : undefined;
+    const beforeRel = toRelative(visual?.beforePath);
+    const afterRel = toRelative(visual?.afterPath);
+    const diffRel = toRelative(visual?.diffPath);
+    const domDiffRel = toRelative(domSummary.diffPath);
+
     return `### ${domSummary.route}
 
 Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
@@ -140,10 +146,14 @@ Severity: ${severity}
 Review Required: ${reviewRequired ? 'Yes' : 'No'}
 
 Artifacts:
-- Before screenshot: ${visual?.beforePath ?? 'Not captured'}
-- After screenshot: ${visual?.afterPath ?? 'Not captured'}
-- Visual diff: ${visual?.diffPath ?? 'Not captured'}
-- DOM diff: ${domSummary.diffPath}
+- Before screenshot: ${beforeRel ? `[${visual?.beforePath}](${beforeRel})` : 'Not captured'}
+- After screenshot: ${afterRel ? `[${visual?.afterPath}](${afterRel})` : 'Not captured'}
+- Visual diff: ${diffRel ? `[${visual?.diffPath}](${diffRel})` : 'Not captured'}
+- DOM diff: ${domDiffRel ? `[${domSummary.diffPath}](${domDiffRel})` : 'Not captured'}
+
+${diffRel ? `#### Visual Diff\n![Visual Diff](${diffRel})` : ''}
+${beforeRel ? `#### Before\n![Before](${beforeRel})` : ''}
+${afterRel ? `#### After\n![After](${afterRel})` : ''}
 `;
   });
 
