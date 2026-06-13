@@ -2,19 +2,20 @@ from typing import List, Dict, Any, Optional
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.jules import JulesClient
 
-def find_session_for_pr(pr: Dict[str, Any], sessions: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    pr_title = pr.get("title", "")
-    pr_branch = pr.get("head", {}).get("ref", "")
-    pr_body = pr.get("body", "") or ""
+def find_pr_for_session(session: Dict[str, Any], prs: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    session_id = session.get("name", "").replace("sessions/", "")
+    source_ctx = session.get("sourceContext", {}).get("githubRepoContext", {})
+    session_branch = source_ctx.get("startingBranch", "")
 
-    for session in sessions:
-        session_id = session.get("name", "").replace("sessions/", "")
+    for pr in prs:
+        pr_branch = pr.get("head", {}).get("ref", "")
+        pr_body = pr.get("body", "") or ""
+
         if session_id in pr_body:
-            return session
+            return pr
 
-        source_ctx = session.get("sourceContext", {}).get("githubRepoContext", {})
-        if source_ctx.get("startingBranch") == pr_branch:
-            return session
+        if session_branch and session_branch == pr_branch:
+            return pr
 
     return None
 
@@ -35,22 +36,21 @@ def main():
         print(f"Failed to fetch sessions: {e}")
         return
 
-    active_sessions = [s for s in sessions if s.get("state") not in ["FAILED", "CANCELED"]]
+    active_sessions = sessions
 
-    for pr in prs:
+    for session in active_sessions:
+        session_id = session.get("name")
+        print(f"Checking Session {session_id}...")
+
+        pr = find_pr_for_session(session, prs)
+        if not pr:
+            print("  No active PR found for this session.")
+            continue
+
         pr_number = pr.get("number")
         pr_title = pr.get("title")
         head_sha = pr.get("head", {}).get("sha")
-
-        print(f"Checking PR #{pr_number}: {pr_title}")
-
-        session = find_session_for_pr(pr, active_sessions)
-        if not session:
-            print(f"  No matching session found for PR #{pr_number}")
-            continue
-
-        session_id = session.get("name")
-        print(f"  Matched with session: {session_id}")
+        print(f"  Matched with PR #{pr_number}: {pr_title}")
 
         messages = jules_client.get_messages(session_id)
         if not messages:
