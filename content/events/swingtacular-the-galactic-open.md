@@ -5,14 +5,15 @@ date: '2026-08-06'
 startDate: '2026-08-06'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: A sci-fi themed WCS adventure in the San Francisco Bay Area.
-location: Hyatt Regency San Francisco Airport
+excerpt: Experience the West Coast Swing community's premier sci-fi themed adventure in the San Francisco Bay Area, featuring high production values and immersive storytelling.
+location: Hyatt Regency SFO
 city: Burlingame, CA
 region: NorCal
 schedule: August 6 - 9, 2026
 url: https://swingtacular.com/
 heroImage: '/assets/events/swingtacular-hero.svg'
-description: Swingtacular is a one-of-a-kind West Coast Swing event with a deep commitment to high production values and its famous Galactic theme. It's a weekend of world-class competition, immersive storytelling, and top-tier social dancing.
+imageAlt: 'Swingtacular Galactic Open logo with space and sci-fi motifs'
+description: Known for its "Galactic" theme and world-class production, Swingtacular blends top-tier West Coast Swing competition with a unique, story-driven atmosphere at the Hyatt Regency SFO.
 whyAttending: >
   There is no other event like Swingtacular. The sci-fi theme is fully embraced, and the energy in the ballroom is truly "out of this world." The event is known for leaning hard into production, lighting, and theme.
 theme:
@@ -42,7 +43,7 @@ gear:
   accessoryDescription: "Alien masks for grand entrances and futuristic fans for cooling."
   shoeIds:
     - bloch-grecian
-  shoeDescription: "Reliable footwear for the fast SFO Hyatt ballroom floor."
+  shoeDescription: "Reliable footwear for the slick Hyatt Regency SFO ballroom floor."
   essentialIds:
     - loop-experience
     - mints
@@ -65,8 +66,6 @@ relatedEvents:
 - phoenix-4th-of-july
 ---
 
-Swingtacular is where WCS meets a full galactic theme weekend. Held at the Hyatt Regency SFO, the venue’s futuristic atrium provides the perfect backdrop for a weekend of sci-fi themed dancing and world-class competition.
-
 ## Galactic & Nerd Theme notes
 
 This is the event where metallics, neons, and futuristic accessories make sense.
@@ -75,7 +74,7 @@ This is the event where metallics, neons, and futuristic accessories make sense.
 
 Keep all costume pieces dance-safe: no sharp edges, no loose LED strands, and nothing that restricts connection or floorcraft.
 
-## What to pack for the SFO Hyatt
+## What to pack for the Hyatt Regency SFO
 
 Swingtacular is an airport-hotel event, so the useful gear is practical: a portable charger for long days, packing cubes to keep theme outfits organized, and a steamer for those metallic fabrics. High-quality earplugs are a must; the event is known for its high-production sound and lighting.
 

@@ -5,17 +5,18 @@ date: '2026-05-14'
 startDate: '2026-05-14'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: A charming WCS experience in beautiful Ashland, OR.
+excerpt: Experience the West Coast Swing community's most welcoming, community-first weekend in the heart of Southern Oregon's beautiful Ashland.
 location: Ashland Hills Hotel & Suites
 city: Ashland, OR
 region: Pacific Northwest
 schedule: May 14 - 17, 2026
 url: https://soswing.com
 heroImage: '/assets/events/soswing-hero.svg'
+imageAlt: 'SOSwing logo featuring Ashland scenery and retro-chic styling'
 bestFor: ["Intimate settings", "First-time competitors", "Road-trip vibe"]
-description: SOswing offers a unique, community-focused atmosphere in beautiful Ashland. Known for its 'Westie' hospitality, the event features WSDC Jack & Jill competitions, leveled workshops with top-tier pros, and late-night social dancing.
+description: Known for its warm "Westie" hospitality, SOswing provides an intimate Pacific Northwest setting for leveled workshops and social dancing at the retro-chic Ashland Hills Hotel.
 whyAttending: >
-  SOswing has the most welcoming, community-first atmosphere on the Pacific Northwest circuit. It's a perfect event to focus on dancing without the pressure of a huge field.
+  SOswing has the most welcoming, community-first atmosphere in the Pacific Northwest. It's a perfect event to focus on dancing without the pressure of a huge field.
 theme:
   name: "PNW Community Weekend"
   label: "Ashland / Road Trip Theme"
@@ -47,7 +48,7 @@ gear:
     - loop-experience
     - mints
     - hand-sanitizer
-  essentialDescription: "Standard recovery and hygiene for the relaxed PNW circuit pace."
+  essentialDescription: "Standard recovery and hygiene for the relaxed Pacific Northwest pace."
   travelIds:
     - compression-cubes
     - travel-pillow
@@ -66,9 +67,11 @@ relatedEvents:
 - boogie-by-the-bay
 ---
 
-Ashland is beautiful, small, and surprisingly walkable from the hotel. The Ashland Hills Hotel & Suites has a retro-chic vibe that fits the community feel perfectly. Book early; the room block is limited and often sells out months in advance.
+SOswing is Southern Oregon's boutique West Coast Swing weekend, built around community hospitality and a relaxed Pacific Northwest pace.
 
 ## Ashland travel notes
+
+Ashland is beautiful, small, and surprisingly walkable from the hotel. The Ashland Hills Hotel & Suites has a retro-chic vibe that fits the community feel perfectly. Book early; the room block is limited and often sells out months in advance.
 
 This is a regional trip guide, so prioritize practical travel: Medford (MFR) airport planning, rental cars for exploring Southern Oregon, and compact packing for a smaller venue. The event feels more intimate than the huge ballroom weekends, so the product picks focus on comfort and high-utility travel gear.
 

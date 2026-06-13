@@ -5,15 +5,16 @@ date: "2026-06-04"
 startDate: "2026-06-04"
 author: "Ariel Anders, PhD"
 category: "WSDC Registry Event"
-excerpt: "The ultimate West Coast Swing party and competition weekend in Southern California."
-location: "Hyatt Regency Orange County"
+excerpt: "Experience the West Coast Swing community's ultimate party weekend in Southern California, featuring creative competitions and Disneyland-area social magic."
+location: "Hyatt Regency OC"
 city: "Garden Grove, CA"
 region: "SoCal"
 schedule: "June 4 - 8, 2026"
 url: "https://jackandjillorama.com"
 heroImage: "/assets/events/jjo-hero.svg"
+imageAlt: "Jack & Jill O'Rama logo with rainbow pride arc and sparkles"
 description: >
-  Organized by Ben Morris, Jack & Jill O'Rama is one of the most popular events on the circuit. It is famous for its creative competition formats, high-energy social dancing, and prime location near Disneyland.
+  Organized by Ben Morris, Jack & Jill O'Rama is a high-energy highlight of the West Coast Swing community, famous for its innovative competition formats and proximity to the Disney parks.
 whyAttending: >
   I keep coming back to Jack & Jill O'Rama because it feels like a full-spectrum dance weekend: high-stakes rounds, late-night social magic, and that warm SoCal community buzz in every hallway. Every year Team NorCal BestCal brings a Rainbow theme for Pride Month, and honestly that playful, bold energy is exactly the vibe I want to bring to every finals watch party and every 2 a.m. social set.
 theme:
@@ -74,12 +75,9 @@ hotelCutoffDate: "2026-05-15"
 packingReminderDate: "2026-05-25"
 
 relatedEvents:
-- wild-wild-westie
 - swingtacular-the-galactic-open
 - boogie-by-the-bay
 ---
-
-Jack & Jill O'Rama is more than just a competition; it's a celebration of the WCS community. Hosted at the Hyatt Regency Orange County, it's just minutes from Disneyland and features some of the largest ballrooms on the circuit.
 
 ## NorCal Representation & Rainbow Packing
 
@@ -104,4 +102,4 @@ The JJO schedule is packed. Workshops run all day, and competitions often go lat
 
 ## NorCal BestCal Merch Picks
 
-Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
+Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for  off your order.

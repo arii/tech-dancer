@@ -1,18 +1,20 @@
 ---
+deprecated: true
 type: event
+imageAlt: "Wild Wild Westie logo featuring Texas-inspired graphics and high-energy competition theme"
 title: Wild Wild Westie
 date: '2026-07-02'
 startDate: '2026-07-02'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: A high-energy, competitive WCS weekend in the heart of Texas.
-location: Hyatt Regency DFW International Airport, 2334 North International Parkway
+excerpt: "Experience the West Coast Swing community's most competitive 4th of July weekend at the Hyatt Regency DFW, featuring legendary late-night socials."
+location: Hyatt Regency DFW
 city: Dallas, TX
 region: South
 schedule: July 2 - 5, 2026
 url: https://wildwildwestie.com/
 heroImage: '/assets/events/wild-wild-westie-hero.svg'
-description: Wild Wild Westie (WWW) is one of the most competitive and high-energy events on the WCS circuit. Held over the 4th of July weekend, it attracts top dancers from across the globe for intense competitions and legendary late-night social dancing.
+description: Wild Wild Westie (WWW) is one of the most competitive and high-energy events in the West Coast Swing community. Held over the 4th of July weekend, it attracts top dancers from across the globe for intense competitions and legendary late-night social dancing.
 whyAttending: >
   If you love competition, WWW is the place to be. The energy in the ballroom is electric, and the level of talent in the Jack & Jills is incredible.
 theme:
@@ -40,7 +42,7 @@ gear:
   shoeIds:
     - bloch-grecian
     - suede-sheets
-  shoeDescription: "The Dallas Hyatt ballroom floor is fantastic but can be fast."
+  shoeDescription: "The Hyatt Regency DFW ballroom floor is fantastic but can be fast."
   essentialIds:
     - liquid-iv
     - loop-experience
@@ -61,9 +63,8 @@ relatedEvents:
 - phoenix-4th-of-july
 - swingtacular-the-galactic-open
 - jack-and-jill-orama
+banner: "This event is not running in 2026. See related events below."
 ---
-
-Wild Wild Westie is famous for its \"go big or go home\" Texas attitude. Held at the iconic Hyatt Regency Dallas (the one with the glowing ball on top), it's a weekend of intense dancing, serious competition, and southern hospitality.
 
 ## Western theme notes
 
@@ -72,10 +73,10 @@ While our current product selection doesn't include specialized Western dance ap
 ### Dallas Airport Logistics
 - **DFW Airport:** About 25-30 minutes away. This is the primary hub for American Airlines and offers the most flight options.
 - **Dallas Love Field (DAL):** About 15 minutes away. This is the primary hub for Southwest Airlines.
-- **Transport:** Both airports are easily accessible via Uber/Lyft. DART (light rail) also runs from DFW directly to the hotel (Union Station stop).
+- **Transport:** Both airports are easily accessible via Uber/Lyft. DART Orange Line runs to DFW Airport Station; use hotel shuttle or rideshare from there.
 
 ### Hotel-Room-Block Urgency
-The WWW room block at the Hyatt Regency Dallas is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
+The WWW room block at the Hyatt Regency DFW is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.
 
 ### Summer Heat Notes
 Texas in July is brutally hot. Luckily, the Hyatt is large and fully climate-controlled. You can easily spend the entire weekend without leaving the AC. If you do go outside, be prepared for intense humidity. Even though you're indoors, the Dallas summer heat and intense dancing mean it is useful to pack hydration support and portable fans.
