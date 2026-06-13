@@ -22,7 +22,9 @@ def compile_interactive_audit_payload():
             diff_path = os.path.join(dom_review_dir, route_slug, 'diff.txt')
             if os.path.exists(diff_path):
                 with open(diff_path, 'r') as f:
-                    diff_snippet = f.read()[:1000] # Cap tokens aggressively
+                    # Increased limit to 5000 characters to provide more context for the LLM
+                    # while still staying well within most local and cloud model context windows.
+                    diff_snippet = f.read()[:5000]
                 break
 
     system_prompt = (

@@ -43,8 +43,7 @@ function readManifest(): InteractionManifest[] {
   try {
     return JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf-8'));
   } catch (e) {
-    console.warn(`⚠️ Failed to parse interaction manifest: ${e}`);
-    return [];
+    throw new Error(`❌ Failed to parse interaction manifest at ${MANIFEST_PATH}: ${e instanceof Error ? e.message : String(e)}`, { cause: e });
   }
 }
 
@@ -75,18 +74,24 @@ function copyImage(source: PNG, target: PNG): void {
   PNG.bitblt(source, target, 0, 0, source.width, source.height, 0, 0);
 }
 
-async function captureRoute(browser: Browser, base: string, route: string, imagePath: string, htmlPath: string): Promise<void> {
+async function setupPageForRoute(browser: Browser, url: string): Promise<Page> {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: 'domcontentloaded' });
+  await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
+    console.warn(`Network did not become idle for ${url}; continuing with captured DOM state.`);
+  });
+  return page;
+}
+
+async function captureRoute(browser: Browser, base: string, route: string, imagePath: string, htmlPath: string): Promise<void> {
+  const url = new URL(route, base).toString();
+  const page = await setupPageForRoute(browser, url);
   try {
-    const page = await context.newPage();
-    await page.goto(new URL(route, base).toString(), { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
-      console.warn(`Network did not become idle for ${route}; continuing with captured DOM state.`);
-    });
     await page.screenshot({ path: imagePath, fullPage: true });
     fs.writeFileSync(htmlPath, await page.content());
   } finally {
-    await context.close();
+    await page.context().close();
   }
 }
 
@@ -100,14 +105,9 @@ async function captureInteractiveRoute(
   afterHtmlPath: string,
   actions: InteractionAction[]
 ): Promise<void> {
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const url = new URL(route, base).toString();
+  const page = await setupPageForRoute(browser, url);
   try {
-    const page = await context.newPage();
-    const url = new URL(route, base).toString();
-
-    await page.goto(url, { waitUntil: 'domcontentloaded' });
-    await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {});
-
     // 1. Capture Before State (On-Load)
     await page.screenshot({ path: beforeImagePath, fullPage: true });
     fs.writeFileSync(beforeHtmlPath, await page.content());
@@ -122,7 +122,7 @@ async function captureInteractiveRoute(
     await page.screenshot({ path: afterImagePath, fullPage: true });
     fs.writeFileSync(afterHtmlPath, await page.content());
   } finally {
-    await context.close();
+    await page.context().close();
   }
 }
 
@@ -172,10 +172,11 @@ async function main(): Promise<void> {
   const basePreview = startPreview(baseWorktree, basePort);
   const headPreview = startPreview(process.cwd(), headPort);
 
-  const manifest = readManifest();
-  const browser = await chromium.launch();
-
+  let browser: Browser | undefined;
   try {
+    const manifest = readManifest();
+    browser = await chromium.launch();
+
     await Promise.all([waitForServer(baseUrl), waitForServer(headUrl)]);
 
     const summaries: VisualRouteSummary[] = [];
@@ -217,7 +218,7 @@ async function main(): Promise<void> {
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
     console.log(`✅ Visual diffs generated in ${VISUAL_REVIEW_DIR}`);
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
     stopPreview(basePreview);
     stopPreview(headPreview);
   }
