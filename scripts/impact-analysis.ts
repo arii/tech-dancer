@@ -152,6 +152,35 @@ function getContentAffectedUrls(changedFiles: string[]): string[] {
   return urls;
 }
 
+
+/**
+ * Find affected markdown files when public static files (e.g. images) are changed.
+ */
+function getAffectedUrlsByPublicFiles(changedFiles: string[]): string[] {
+  const urls: Set<string> = new Set();
+  const publicFiles = changedFiles.filter(f => f.startsWith('public/'));
+
+  if (publicFiles.length === 0) return [];
+
+  const searchStrings = publicFiles.map(f => f.replace(/^public/, ''));
+
+  for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
+    const mdFiles = exec(`find ${dir} -name "*.md"`).split('\n').filter(Boolean);
+
+    for (const mdFile of mdFiles) {
+      const content = fs.readFileSync(mdFile, 'utf-8');
+      for (const searchStr of searchStrings) {
+        if (content.includes(searchStr)) {
+          const slug = path.basename(mdFile, '.md');
+          urls.add(`${prefix}${slug}`);
+          urls.add(prefix.replace(/\/$/, '')); // Add index page
+        }
+      }
+    }
+  }
+  return Array.from(urls);
+}
+
 async function main() {
   console.log('🚀 Running Deployment Impact Analysis...');
 
@@ -192,8 +221,11 @@ async function main() {
     // Content URLs
     const contentUrls = getContentAffectedUrls(changedFiles);
 
+    // Public static files URLs (e.g., images referenced in markdown)
+    const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles);
+
     // Combine and deduplicate URLs
-    const allUrls = Array.from(new Set([...pageUrls, ...contentUrls])).sort();
+    const allUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
 
     // Severity
     const severity = getSeverity(changedFiles);
