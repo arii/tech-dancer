@@ -56,6 +56,17 @@ test.describe('Navigation Smoke Tests', () => {
     }
   });
 
+  test('specific complex markdown post loads without errors', async ({ page, pageErrors }) => {
+    // This post contains various markdown features including code blocks which use SyntaxHighlighter and Stack
+    await validateUrlNavigation(page, './research/ai-devops-pipeline');
+
+    // Give it a moment to render the markdown
+    await page.waitForTimeout(500);
+
+    const filteredErrors = [...pageErrors.consoleErrors, ...pageErrors.pageErrors].filter(e => !isIgnored(e));
+    expect(filteredErrors, `Errors at ./research/ai-devops-pipeline: ${filteredErrors.join(', ')}`).toHaveLength(0);
+  });
+
   test('all post/content pages load without errors', async ({ page, pageErrors }) => {
     const contentIndexes = ['./blog', './gear', './research'];
 
