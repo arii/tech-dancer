@@ -345,21 +345,21 @@ export default function UXAuditor() {
                     <Text weight="font-bold" size="sm">Audit Your First Site</Text>
                     <Text size="xs" color="dim">Enter a URL to start the AI-driven UX analysis system.</Text>
                   </Stack>
-                  <Stack gap={3} width="full" className="text-left">
+                  <Stack gap={3} width="full">
                     <Box display="flex" align="center" gap={3}>
-                       <Box width={6} height={6} radius="full" className="bg-bg border border-line flex items-center justify-center">
+                       <Box width={6} height={6} radius="full" surface="bg" border display="flex" align="center" justify="center">
                          <Text size="micro" weight="font-black">1</Text>
                        </Box>
                        <Text size="xs" color="dim">Enter URL</Text>
                     </Box>
                     <Box display="flex" align="center" gap={3}>
-                       <Box width={6} height={6} radius="full" className="bg-bg border border-line flex items-center justify-center">
+                       <Box width={6} height={6} radius="full" surface="bg" border display="flex" align="center" justify="center">
                          <Text size="micro" weight="font-black">2</Text>
                        </Box>
                        <Text size="xs" color="dim">Capture Viewports</Text>
                     </Box>
                     <Box display="flex" align="center" gap={3}>
-                       <Box width={6} height={6} radius="full" className="bg-bg border border-line flex items-center justify-center">
+                       <Box width={6} height={6} radius="full" surface="bg" border display="flex" align="center" justify="center">
                          <Text size="micro" weight="font-black">3</Text>
                        </Box>
                        <Text size="xs" color="dim">Analyze UX</Text>

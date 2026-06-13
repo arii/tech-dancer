@@ -202,7 +202,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Box padding={12} surface="muted" border radius="xl" marginTop={12} className="border-accent-amber/20 relative overflow-hidden">
-          <Box position="absolute" top={0} left={0} width={1.5} height="full" className="bg-accent-amber shadow-[0_0_15px_rgba(251,191,36,0.3)]" />
+          <Box position="absolute" top={0} left={0} width={1.5} height="full" surface="accent-amber" />
           <Text as="h2" variant="mono" size="xs" color="accent-amber" weight="font-black" uppercase tracking="widest" marginBottom={6}>The DevAI Philosophy</Text>
           <Text variant="display" size="2xl" color="white" className="italic font-medium leading-relaxed max-width-3xl">
             &ldquo;Shipping high-fidelity products requires practical AI orchestration, not just hype. My systems handle 10k+ telemetry points daily, ensuring that AI remains a production-grade multiplier rather than an experimental novelty. I build engineering systems that keep the developer in the loop while maintaining uncompromising standards.&rdquo;

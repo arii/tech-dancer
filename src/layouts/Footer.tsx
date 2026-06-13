@@ -12,6 +12,7 @@ export function Footer() {
     // Only set on client to avoid hydration mismatch
     const buildTime = import.meta.env.VITE_BUILD_TIME;
     if (buildTime) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLastUpdated(formatRelativeTime(new Date(buildTime)));
     }
   }, []);
