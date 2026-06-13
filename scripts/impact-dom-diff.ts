@@ -17,6 +17,7 @@ import {
 } from './impact-review-utils';
 
 const deploymentReviewPath = path.join(ARTIFACTS_DIR, 'deployment-review.md');
+const ARTIFACTS_BASE_PATH = 'artifacts/';
 
 function normalizeHtml(html: string): string {
   const dom = new JSDOM(html);
@@ -134,7 +135,8 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
         const base64 = fs.readFileSync(filePath, 'base64');
         const ext = path.extname(filePath).slice(1) || 'png';
         return `![${alt}](data:image/${ext};base64,${base64})`;
-      } catch {
+      } catch (error) {
+        console.error(`Failed to embed image '${filePath}':`, error);
         return '';
       }
     };
@@ -143,7 +145,7 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
     const beforeImg = getBase64ImageTag(visual?.beforePath, 'Before');
     const afterImg = getBase64ImageTag(visual?.afterPath, 'After');
 
-    const toRelative = (p: string | undefined) => p ? p.replace(/^artifacts\//, './') : undefined;
+    const toRelative = (p: string | undefined) => p ? p.replace(new RegExp(`^${ARTIFACTS_BASE_PATH}`), './') : undefined;
     const beforeRel = toRelative(visual?.beforePath);
     const afterRel = toRelative(visual?.afterPath);
     const diffRel = toRelative(visual?.diffPath);
