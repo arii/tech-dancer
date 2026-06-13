@@ -1,68 +1,45 @@
-<<<<<<< HEAD
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { IMPACT_CONFIG } from './impact-analysis.config';
+import fs from "fs";
+import path from "path";
+import { execSync } from "child_process";
+import { generateGraph, DependencyGraph } from "./dependency-graph.ts";
+import { IMPACT_CONFIG } from "./impact-analysis.config.ts";
 
-// Types for dependency-cruiser output
-interface Dependency {
-  resolved: string;
-}
-
-interface Module {
-  source: string;
-  dependencies: Dependency[];
-}
-
-interface DependencyGraph {
-  modules: Module[];
-}
-
-/**
- * Executes a shell command and returns the output.
- * Throws an error if the command fails.
- */
-function exec(command: string): string {
-  try {
-    return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-  } catch (error: unknown) {
-    const err = error as { stderr?: string; message?: string };
-    throw new Error(`Command failed: ${command}\n${err.stderr || err.message}`, { cause: error });
-  }
-}
-
-/**
- * Helper to split string into lines and filter empty values.
- */
-const splitAndFilter = (output: string): string[] => (output ? output.split('\n').filter(Boolean) : []);
-
-/**
- * Gets the list of changed files between current HEAD and origin/main.
- * Falls back to HEAD~1 if origin/main is not available.
- */
 function getChangedFiles(): string[] {
-  // Check for staged and unstaged changes first
-  const staged = exec('git diff --name-only --cached');
-  const unstaged = exec('git diff --name-only');
-  const workingChanges = new Set([...splitAndFilter(staged), ...splitAndFilter(unstaged)]);
-
-  let base = 'origin/main';
   try {
-    execSync(`git rev-parse ${base}`, { stdio: 'ignore' });
+    const output = execSync("git diff --name-only HEAD~1", {
+      encoding: "utf-8",
+      stdio: "pipe",
+    });
+    return output
+      .split("\n")
+      .filter(Boolean)
+      .map((f) => path.normalize(f).replace(/\\/g, "/"));
   } catch {
     try {
-      execSync('git rev-parse HEAD~1', { stdio: 'ignore' });
-      base = 'HEAD~1';
+      const output = execSync("git diff --name-only HEAD", {
+        encoding: "utf-8",
+        stdio: "pipe",
+      });
+      const files = output
+        .split("\n")
+        .filter(Boolean)
+        .map((f) => path.normalize(f).replace(/\\/g, "/"));
+      if (files.length > 0) return files;
+
+      const untracked = execSync("git ls-files --others --exclude-standard", {
+        encoding: "utf-8",
+        stdio: "pipe",
+      });
+      const untrackedFiles = untracked
+        .split("\n")
+        .filter(Boolean)
+        .map((f) => path.normalize(f).replace(/\\/g, "/"));
+      return untrackedFiles;
     } catch {
-      // Use empty tree hash if no previous commit exists
-      base = exec('git hash-object -t tree /dev/null');
+      // ignore
     }
   }
-
-  const committed = exec(`git diff --name-only ${base} HEAD`);
-  const allChanges = new Set([...workingChanges, ...splitAndFilter(committed)]);
-
-  return Array.from(allChanges).filter(Boolean);
+  return [];
 }
 
 /**
@@ -71,8 +48,8 @@ function getChangedFiles(): string[] {
 function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
   const reverseMap: Record<string, string[]> = {};
 
-  graph.modules.forEach(module => {
-    module.dependencies.forEach(dep => {
+  graph.modules.forEach((module) => {
+    module.dependencies.forEach((dep) => {
       const child = dep.resolved;
       if (!reverseMap[child]) {
         reverseMap[child] = [];
@@ -89,7 +66,10 @@ function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
 /**
  * Recursively finds all affected files starting from the changed files.
  */
-function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, string[]>): string[] {
+function findAffectedFiles(
+  changedFiles: string[],
+  reverseMap: Record<string, string[]>,
+): string[] {
   const affected = new Set<string>();
   const queue = [...changedFiles];
 
@@ -116,23 +96,25 @@ function mapPageToUrl(filePath: string): string {
   }
 
   // Convert PascalCase to kebab-case
-  const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+  const route = fileName.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
   return `/${route}`;
 }
 
 /**
  * Determines the severity of the change.
  */
-function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
+function getSeverity(changedFiles: string[]): "HIGH" | "MEDIUM" | "LOW" {
   for (const file of changedFiles) {
-    if (IMPACT_CONFIG.HIGH_IMPACT_PATHS.some(p => file.startsWith(p))) return 'HIGH';
+    if (IMPACT_CONFIG.HIGH_IMPACT_PATHS.some((p) => file.startsWith(p)))
+      return "HIGH";
   }
 
   for (const file of changedFiles) {
-    if (IMPACT_CONFIG.MEDIUM_IMPACT_PATHS.some(p => file.startsWith(p))) return 'MEDIUM';
+    if (IMPACT_CONFIG.MEDIUM_IMPACT_PATHS.some((p) => file.startsWith(p)))
+      return "MEDIUM";
   }
 
-  return 'LOW';
+  return "LOW";
 }
 
 /**
@@ -142,9 +124,69 @@ function getContentAffectedUrls(changedFiles: string[]): string[] {
   const urls: string[] = [];
 
   for (const file of changedFiles) {
+    // Check public images
+    if (file.startsWith("public/images/gear/")) {
+      urls.push("/gear");
+
+      let slug = file.split("public/images/gear/").pop();
+      if (slug) {
+        slug = slug.split("/")[0];
+        if (slug !== "sketches") {
+          slug = slug.split(".")[0];
+          urls.push(`/gear/${slug}`);
+        } else {
+          // Find matching gear post
+          const baseName = path.basename(file).split(".")[0];
+          const files = fs.readdirSync("content/resources");
+          const match = files.find((f) => f.endsWith(`${baseName}.md`));
+          if (match) {
+            const exactSlug = match.replace(".md", "");
+            urls.push(`/gear/${exactSlug}`);
+          }
+        }
+      }
+    } else if (file.startsWith("public/images/blog/")) {
+      urls.push("/blog");
+      let slug = file.split("public/images/blog/").pop();
+      if (slug) {
+        slug = slug.split("/")[0];
+        if (slug !== "sketches") {
+          slug = slug.split(".")[0];
+          urls.push(`/blog/${slug}`);
+        } else {
+          // Find matching blog post
+          const baseName = path.basename(file).split(".")[0];
+          const files = fs.readdirSync("content/posts");
+          const match = files.find((f) => f.endsWith(`${baseName}.md`));
+          if (match) {
+            const exactSlug = match.replace(".md", "");
+            urls.push(`/blog/${exactSlug}`);
+          }
+        }
+      }
+    } else if (file.startsWith("public/images/events/")) {
+      urls.push("/events");
+      let slug = file.split("public/images/events/").pop();
+      if (slug) {
+        slug = slug.split("/")[0];
+        if (slug !== "sketches") {
+          slug = slug.split(".")[0];
+          urls.push(`/events/${slug}`);
+        } else {
+          // Find matching event post
+          const baseName = path.basename(file).split(".")[0];
+          const files = fs.readdirSync("content/events");
+          const match = files.find((f) => f.endsWith(`${baseName}.md`));
+          if (match) {
+            const exactSlug = match.replace(".md", "");
+            urls.push(`/events/${exactSlug}`);
+          }
+        }
+      }
+    }
     for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
-      if (file.startsWith(dir) && file.endsWith('.md')) {
-        const slug = path.basename(file, '.md');
+      if (file.startsWith(dir) && file.endsWith(".md")) {
+        const slug = path.basename(file, ".md");
         urls.push(`${prefix}${slug}`);
       }
     }
@@ -154,37 +196,43 @@ function getContentAffectedUrls(changedFiles: string[]): string[] {
 }
 
 async function main() {
-  console.log('🚀 Running Deployment Impact Analysis...');
+  console.log("🚀 Running Deployment Impact Analysis...");
 
   try {
-    const changedFiles = getChangedFiles();
+    const changedFilesInput = process.argv.slice(2);
+    const changedFiles =
+      changedFilesInput.length > 0 ? changedFilesInput : getChangedFiles();
     if (changedFiles.length === 0) {
-      console.log('✅ No changes detected.');
+      console.log("✅ No changes detected.");
       return;
     }
 
     console.log(`\nFound ${changedFiles.length} changed files.`);
 
     // Generate dependency graph
-    console.log('📊 Generating dependency graph...');
-    const graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
-    const graph: DependencyGraph = JSON.parse(graphJson);
+    const graph = generateGraph();
     const reverseMap = buildReverseMap(graph);
 
     // Find affected files in src/
-    const srcChanges = changedFiles.filter(f => f.startsWith('src/'));
+    const srcChanges = changedFiles.filter((f) => f.startsWith("src/"));
     const allAffected = findAffectedFiles(srcChanges, reverseMap);
 
     // Find affected pages
-    const affectedPages = allAffected.filter(f => f.startsWith(IMPACT_CONFIG.PAGES_DIR));
+    const affectedPages = allAffected.filter((f) =>
+      f.startsWith(IMPACT_CONFIG.PAGES_DIR),
+    );
 
     // Global impact check - only if the CHANGED files themselves are global triggers
-    const hasGlobalImpact = changedFiles.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
+    const hasGlobalImpact = changedFiles.some((f) =>
+      IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f),
+    );
 
     let pageUrls: string[];
 
     if (hasGlobalImpact) {
-      console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
+      console.log(
+        "🌍 Global impact detected (App, Routes, or MainLayout affected).",
+      );
       pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
     } else {
       pageUrls = affectedPages.map(mapPageToUrl);
@@ -204,58 +252,47 @@ async function main() {
       changedFiles,
       affectedPages,
       visualReviewRequired: allUrls,
-      impactLevel: severity
+      impactLevel: severity,
     };
 
     // Human readable output
-    console.log('\n' + '='.repeat(40));
-    console.log('DEPLOYMENT IMPACT ANALYSIS');
-    console.log('='.repeat(40));
+    console.log("\n" + "=".repeat(40));
+    console.log("DEPLOYMENT IMPACT Analysis");
+    console.log("=".repeat(40));
 
     console.log(`\nIMPACT LEVEL: ${severity}`);
 
-    console.log('\nCHANGED FILES:');
-    changedFiles.forEach(f => console.log(`  - ${f}`));
+    console.log("\nCHANGED FILES:");
+    changedFiles.forEach((f) => console.log(`  - ${f}`));
 
-    console.log('\nVISUAL REVIEW REQUIRED:');
+    console.log("\nVISUAL REVIEW REQUIRED:");
     if (allUrls.length > 0) {
-      allUrls.forEach(url => console.log(`  - ${url}`));
+      allUrls.forEach((url) => console.log(`  - ${url}`));
     } else {
-      console.log('  None detected (code-only changes)');
+      console.log("  None detected (code-only changes)");
     }
 
-    console.log('\n' + '='.repeat(40));
+    console.log("\n" + "=".repeat(40));
 
     // Write to artifacts
-    const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
+    const outputDir = path.join(process.cwd(), "artifacts", "impact-analysis");
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
+    fs.writeFileSync(
+      path.join(outputDir, "impact.json"),
+      JSON.stringify(report, null, 2),
+    );
 
-    const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
+    const changedFilesList = changedFiles.map((f) => `- ${f}`).join("\n");
 
-    const severityEmoji = severity === 'HIGH' ? '🔴' : severity === 'MEDIUM' ? '🟡' : '🟢';
+    const severityEmoji =
+      severity === "HIGH" ? "🔴" : severity === "MEDIUM" ? "🟡" : "🟢";
 
-    const markdown = `## ${severityEmoji} Deployment Impact Analysis
+    const markdown = `## ${severityEmoji} Deployment Impact Analysis\n\n> **Impact Level:** ${severity}\n\n### 👁️ Visual Review Required\n${allUrls.length > 0 ? allUrls.map((url) => `- [${url}](https://boomtick.blog${url})`).join("\n") : "_None detected (code-only change)_"}\n\n<details>\n<summary><b>📝 Changed Files (${changedFiles.length})</b></summary>\n\n${changedFilesList}\n</details>\n\n---\n*Generated by Boomtick Impact Analyzer*\n`;
 
-> **Impact Level:** ${severity}
-
-### 👁️ Visual Review Required
-${allUrls.length > 0 ? allUrls.map(url => `- [${url}](https://boomtick.blog${url})`).join('\n') : '_None detected (code-only change)_'}
-
-<details>
-<summary><b>📝 Changed Files (${changedFiles.length})</b></summary>
-
-${changedFilesList}
-</details>
-
----
-*Generated by Boomtick Impact Analyzer*
-`;
-
-    fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
+    fs.writeFileSync(path.join(outputDir, "impact.md"), markdown);
     console.log(`\n✅ Reports generated in ${outputDir}`);
   } catch (error: unknown) {
     const err = error as Error;
@@ -264,132 +301,6 @@ ${changedFilesList}
   }
 }
 
-main().catch(console.error);
-=======
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import { getRouteMap } from './route-map.ts';
-import { generateGraph, findReverseDependencies } from './dependency-graph.ts';
-
-function getChangedFiles(): string[] {
-  try {
-    const output = execSync('git diff --name-only HEAD~1', { encoding: 'utf-8', stdio: 'pipe' });
-    return output.split('\n').filter(Boolean).map(f => path.normalize(f).replace(/\\/g, '/'));
-  } catch {
-    try {
-      const output = execSync('git diff --name-only HEAD', { encoding: 'utf-8', stdio: 'pipe' });
-      const files = output.split('\n').filter(Boolean).map(f => path.normalize(f).replace(/\\/g, '/'));
-      if (files.length > 0) return files;
-
-      const untracked = execSync('git ls-files --others --exclude-standard', { encoding: 'utf-8', stdio: 'pipe' });
-      const untrackedFiles = untracked.split('\n').filter(Boolean).map(f => path.normalize(f).replace(/\\/g, '/'));
-      return untrackedFiles;
-    } catch {
-      // ignore
-    }
-  }
-  return [];
-}
-
-function determineImpactLevel(changedFiles: string[]): 'High' | 'Medium' | 'Low' | 'None' {
-  if (changedFiles.length === 0) return 'None';
-
-  let level: 'Low' | 'Medium' | 'High' = 'Low';
-
-  for (const file of changedFiles) {
-    if (file.startsWith('src/layouts/') || file.startsWith('src/components/') || file.startsWith('src/styles/') || file.startsWith('src/index.css')) {
-      return 'High';
-    } else if (file.startsWith('src/features/')) {
-      level = 'Medium';
-    } else if (file.startsWith('src/pages/') && level === 'Low') {
-      level = 'Low';
-    }
-  }
-
-  return level;
-}
-
-export function analyzeImpact(changedFilesInput?: string[]) {
-  const changedFiles = changedFilesInput || getChangedFiles();
-
-  if (changedFiles.length === 0) {
-    console.log('No changed files detected.');
-    return { changedFiles: [], affectedPages: [], impactLevel: 'None' };
-  }
-
-  const srcChangedFiles = changedFiles.filter(f => f.startsWith('src/'));
-
-  const affectedPages = new Set<string>();
-  const impactLevel = determineImpactLevel(changedFiles);
-
-  if (srcChangedFiles.length > 0) {
-    const routeMap = getRouteMap();
-    const graph = generateGraph();
-    const affectedFiles = findReverseDependencies(graph, srcChangedFiles);
-
-    affectedFiles.forEach(file => {
-      if (routeMap[file]) {
-        affectedPages.add(routeMap[file]);
-      }
-    });
-  }
-
-  const result = {
-    changedFiles,
-    affectedPages: Array.from(affectedPages),
-    impactLevel
-  };
-
-  generateReports(result);
-
-  return result;
-}
-
-function generateReports(result: { changedFiles: string[], affectedPages: string[], impactLevel: string }) {
-  const artifactsDir = path.resolve(process.cwd(), 'artifacts/impact-analysis');
-  if (!fs.existsSync(artifactsDir)) {
-    fs.mkdirSync(artifactsDir, { recursive: true });
-  }
-
-  // JSON Report
-  fs.writeFileSync(
-    path.join(artifactsDir, 'deployment-impact.json'),
-    JSON.stringify(result, null, 2)
-  );
-
-  // Markdown Report
-  let mdContent = `## Deployment Impact Analysis\n\n`;
-  mdContent += `### Changed Files\n\n`;
-  if (result.changedFiles.length > 0) {
-    result.changedFiles.forEach(f => mdContent += `- ${f}\n`);
-  } else {
-    mdContent += `*None*\n`;
-  }
-
-  mdContent += `\n### Pages Requiring Review\n\n`;
-  if (result.affectedPages.length > 0) {
-    result.affectedPages.forEach(p => mdContent += `- ${p}\n`);
-  } else {
-    mdContent += `*None*\n`;
-  }
-
-  mdContent += `\n### Impact Level\n\n**${result.impactLevel}**\n`;
-
-  mdContent += `\n### Review Count\n${result.affectedPages.length} pages\n`;
-
-  fs.writeFileSync(
-    path.join(artifactsDir, 'deployment-impact.md'),
-    mdContent
-  );
-
-  console.log(`Reports generated in ${artifactsDir}`);
-}
-
-// CLI execution
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const result = analyzeImpact();
-  console.log('Impact Level:', result.impactLevel);
-  console.log('Affected Pages:', result.affectedPages);
+  main().catch(console.error);
 }
->>>>>>> a06bf116ea (feat: add deployment impact analysis tool)
