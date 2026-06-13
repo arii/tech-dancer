@@ -25,7 +25,7 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function startServer(cwd: string, port: number): Promise<any> {
+async function startServer(cwd: string, port: number): Promise<import('child_process').ChildProcess> {
   const { spawn } = await import('child_process');
 
   const server = spawn('npx', ['vite', 'preview', '--port', port.toString()], {
@@ -146,7 +146,7 @@ async function main() {
   }
 
   const visualReviewDir = path.join(artifactsDir, 'visual-review');
-  const finalReports: any[] = [];
+  const finalReports: Record<string, unknown>[] = [];
 
   for (const route of routes) {
     console.log(`🔍 Diffing DOM for ${route} ...`);
@@ -218,7 +218,9 @@ async function main() {
   try {
       exec('kill $(lsof -t -i :4173) 2>/dev/null || true');
       exec('kill $(lsof -t -i :4174) 2>/dev/null || true');
-  } catch(e) {}
+  } catch {
+      // ignore errors during cleanup
+  }
 
   // Generate markdown report
   let md = `# Deployment Review\n\n## Summary\n\nChanged Files\n\n`;
@@ -228,7 +230,18 @@ async function main() {
 
   md += `\n## Routes Reviewed\n\n`;
 
-  finalReports.forEach(r => {
+  finalReports.forEach(reportItem => {
+    const r = reportItem as {
+      route: string;
+      visualDifference: number;
+      nodesAdded: number;
+      nodesRemoved: number;
+      imagesAdded: number;
+      imagesRemoved: number;
+      linksAdded: number;
+      linksRemoved: number;
+      severity: string;
+    };
     md += `### ${r.route}\n\n`;
     md += `Visual Difference: ${r.visualDifference.toFixed(2)}%\n\n`;
     md += `DOM Changes:\n`;
@@ -260,6 +273,8 @@ main().catch((err) => {
   try {
       exec('kill $(lsof -t -i :4173) 2>/dev/null || true');
       exec('kill $(lsof -t -i :4174) 2>/dev/null || true');
-  } catch(e) {}
+  } catch {
+      // ignore errors during cleanup
+  }
   process.exit(1);
 });

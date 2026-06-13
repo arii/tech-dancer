@@ -15,7 +15,7 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function startServer(cwd: string, port: number): Promise<any> {
+async function startServer(cwd: string, port: number): Promise<import('child_process').ChildProcess> {
   const { spawn } = await import('child_process');
 
   const server = spawn('npx', ['vite', 'preview', '--port', port.toString()], {
@@ -48,7 +48,7 @@ async function captureScreenshot(
   console.log(`📸 Capturing ${url} ...`);
   try {
       await page.goto(url, { waitUntil: 'networkidle' });
-  } catch(e) {
+  } catch {
       console.warn(`Failed to go to ${url}. Trying again without waiting for networkidle.`);
       await page.goto(url);
   }
@@ -129,7 +129,7 @@ async function main() {
     // Handle height mismatches simply by comparing the overlapping region
     // Or pixelmatch can handle it if we pass the right dimensions.
     // For simplicity, we just use the beforePng dimensions, but let's be safer:
-    let diffPixels = 0;
+    let diffPixels;
 
     if (beforePng.width === afterPng.width && beforePng.height === afterPng.height) {
          diffPixels = pixelmatch(
@@ -174,7 +174,9 @@ async function main() {
   try {
       exec('kill $(lsof -t -i :4173) 2>/dev/null || true');
       exec('kill $(lsof -t -i :4174) 2>/dev/null || true');
-  } catch(e) {}
+  } catch {
+      // ignore
+  }
 
   console.log('✅ Visual diffing complete.');
 }
@@ -185,6 +187,8 @@ main().catch((err) => {
   try {
       exec('kill $(lsof -t -i :4173) 2>/dev/null || true');
       exec('kill $(lsof -t -i :4174) 2>/dev/null || true');
-  } catch(e) {}
+  } catch {
+      // ignore
+  }
   process.exit(1);
 });
