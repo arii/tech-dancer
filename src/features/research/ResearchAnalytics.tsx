@@ -2,7 +2,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid, type ResponsiveProp } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -33,6 +33,40 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
         className="w-full h-full object-cover object-top opacity-heavy hover:opacity-100 transition-opacity duration-500"
       />
     </Box>
+  );
+}
+
+function ToolSection({
+  title,
+  description,
+  tools,
+  gridCols,
+  gridGapX,
+  gridGapY,
+  navigate,
+  getToolIcon
+}: {
+  title: string;
+  description: string;
+  tools: ResearchTool[];
+  gridCols: ResponsiveProp<number | string>;
+  gridGapX: ResponsiveProp<number | string>;
+  gridGapY: ResponsiveProp<number | string>;
+  navigate: (path: string) => void;
+  getToolIcon: (tool: ResearchTool) => LucideIcon;
+}) {
+  return (
+    <Stack gap={6}>
+      <Box border="l" paddingLeft={4} className="border-accent/30">
+        <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">{title}</Text>
+        <Text size="sm" color="dim" marginTop={1}>{description}</Text>
+      </Box>
+      <Grid cols={gridCols} gapX={gridGapX} gapY={gridGapY}>
+        {tools.map((tool) => (
+          <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
+        ))}
+      </Grid>
+    </Stack>
   );
 }
 
@@ -292,44 +326,38 @@ export default function ResearchAnalytics() {
           </Box>
 
           <Stack gap={8}>
-            {/* DevAI & Engineering Systems */}
-            <Stack gap={6}>
-              <Box border="l" paddingLeft={4} className="border-accent/30">
-                <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">DevAI & Engineering Systems</Text>
-                <Text size="sm" color="dim" marginTop={1}>Core orchestration frameworks and diagnostic tooling for automated workflows.</Text>
-              </Box>
-              <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={10}>
-                {devAiTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
-                ))}
-              </Grid>
-            </Stack>
+            <ToolSection
+              title="DevAI & Engineering Systems"
+              description="Core orchestration frameworks and diagnostic tooling for automated workflows."
+              tools={devAiTools}
+              gridCols={{ base: 1, md: 2, lg: 3 }}
+              gridGapX={6}
+              gridGapY={10}
+              navigate={navigate}
+              getToolIcon={getToolIcon}
+            />
 
-            {/* Data & Content Pipelines */}
-            <Stack gap={6}>
-              <Box border="l" paddingLeft={4} className="border-accent/30">
-                <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">Data & Content Pipelines</Text>
-                <Text size="sm" color="dim" marginTop={1}>High-fidelity ETL systems and human-in-the-loop content generation engines.</Text>
-              </Box>
-              <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={10}>
-                {pipelineTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
-                ))}
-              </Grid>
-            </Stack>
+            <ToolSection
+              title="Data & Content Pipelines"
+              description="High-fidelity ETL systems and human-in-the-loop content generation engines."
+              tools={pipelineTools}
+              gridCols={{ base: 1, md: 2 }}
+              gridGapX={8}
+              gridGapY={10}
+              navigate={navigate}
+              getToolIcon={getToolIcon}
+            />
 
-            {/* Automation & Business Utilities */}
-            <Stack gap={6}>
-              <Box border="l" paddingLeft={4} className="border-accent/30">
-                <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">Automation & Business Utilities</Text>
-                <Text size="sm" color="dim" marginTop={1}>Applied automation for logistics, calendar sync, and ecommerce operations.</Text>
-              </Box>
-              <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={10}>
-                {utilityTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
-                ))}
-              </Grid>
-            </Stack>
+            <ToolSection
+              title="Automation & Business Utilities"
+              description="Applied automation for logistics, calendar sync, and ecommerce operations."
+              tools={utilityTools}
+              gridCols={{ base: 1, md: 2 }}
+              gridGapX={8}
+              gridGapY={10}
+              navigate={navigate}
+              getToolIcon={getToolIcon}
+            />
           </Stack>
         </Stack>
 
