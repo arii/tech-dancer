@@ -13,7 +13,8 @@ import {
   readImpactAnalysis,
   routeToSlug,
   type DomRouteSummary,
-  type VisualRouteSummary
+  type VisualRouteSummary,
+  DomRouteSummarySchema
 } from './impact-review-utils';
 
 const deploymentReviewPath = path.join(ARTIFACTS_DIR, 'deployment-review.md');
@@ -41,8 +42,8 @@ function normalizeHtml(html: string): string {
       }
 
       let val = attr.value;
-      if (attr.name === 'src' || attr.name === 'href') {
-        val = val.replace(/-[a-zA-Z0-9]{8,12}\.(js|css)/g, '.$1');
+      if (attr.name === 'src' || attr.name === 'href' || attr.name === 'srcset') {
+        val = val.replace(/-[a-zA-Z0-9]{8,12}\.(js|css|jpg|jpeg|png|svg|webp|avif)/g, '.$1');
       }
       cleanedAttrs.push({ name: attr.name, value: val });
       el.removeAttribute(attr.name);
@@ -76,12 +77,9 @@ function summarizeDom(beforeHtml: string, afterHtml: string): DomRouteSummary['m
   const afterLinks = countElements(afterHtml, 'a');
 
   return {
-    nodesAdded: Math.max(0, afterNodes - beforeNodes),
-    nodesRemoved: Math.max(0, beforeNodes - afterNodes),
-    imagesAdded: Math.max(0, afterImages - beforeImages),
-    imagesRemoved: Math.max(0, beforeImages - afterImages),
-    linksAdded: Math.max(0, afterLinks - beforeLinks),
-    linksRemoved: Math.max(0, beforeLinks - afterLinks)
+    nodes: [Math.max(0, afterNodes - beforeNodes), Math.max(0, beforeNodes - afterNodes)],
+    images: [Math.max(0, afterImages - beforeImages), Math.max(0, beforeImages - afterImages)],
+    links: [Math.max(0, afterLinks - beforeLinks), Math.max(0, beforeLinks - afterLinks)]
   };
 }
 
@@ -106,12 +104,12 @@ function readVisualSummaries(): VisualRouteSummary[] {
 
 function formatDomMetrics(metrics: DomRouteSummary['metrics']): string[] {
   const rows = [
-    ['Added nodes', metrics.nodesAdded],
-    ['Removed nodes', metrics.nodesRemoved],
-    ['Added images', metrics.imagesAdded],
-    ['Removed images', metrics.imagesRemoved],
-    ['Added links', metrics.linksAdded],
-    ['Removed links', metrics.linksRemoved]
+    ['Added nodes', metrics.nodes[0]],
+    ['Removed nodes', metrics.nodes[1]],
+    ['Added images', metrics.images[0]],
+    ['Removed images', metrics.images[1]],
+    ['Added links', metrics.links[0]],
+    ['Removed links', metrics.links[1]]
   ] as const;
 
   const changed = rows.filter(([, value]) => value > 0);
@@ -128,9 +126,13 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
+    const slug = routeToSlug(domSummary.route);
+    const visualDir = `artifacts/visual-review/${slug}`;
+    const domDir = `artifacts/dom-review/${slug}`;
+
     return `### ${domSummary.route}
 
-Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
+Visual Difference: ${(visual?.metrics?.differencePercent ?? 0).toFixed(2)}%
 
 DOM Changes:
 ${formatDomMetrics(domSummary.metrics).join('\n')}
@@ -140,10 +142,10 @@ Severity: ${severity}
 Review Required: ${reviewRequired ? 'Yes' : 'No'}
 
 Artifacts:
-- Before screenshot: ${visual?.beforePath ?? 'Not captured'}
-- After screenshot: ${visual?.afterPath ?? 'Not captured'}
-- Visual diff: ${visual?.diffPath ?? 'Not captured'}
-- DOM diff: ${domSummary.diffPath}
+- Before screenshot: ${visual ? `${visualDir}/before.png` : 'Not captured'}
+- After screenshot: ${visual ? `${visualDir}/after.png` : 'Not captured'}
+- Visual diff: ${visual ? `${visualDir}/diff.png` : 'Not captured'}
+- DOM diff: ${domDir}/diff.txt
 `;
   });
 
@@ -188,15 +190,13 @@ function main(): void {
     const metrics = summarizeDom(beforeHtml, afterHtml);
     writeTextDiff(beforeHtml, afterHtml, diffPath);
 
-    const summary: DomRouteSummary = {
+    const summaryObj = {
       route,
-      slug,
-      beforeHtmlPath: path.relative(process.cwd(), beforeHtmlPath),
-      afterHtmlPath: path.relative(process.cwd(), afterHtmlPath),
-      diffPath: path.relative(process.cwd(), diffPath),
       metrics,
-      severity: domSeverity(metrics.nodesAdded + metrics.nodesRemoved)
+      severity: domSeverity(metrics.nodes[0] + metrics.nodes[1])
     };
+
+    const summary = DomRouteSummarySchema.parse(summaryObj);
 
     fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
     summaries.push(summary);

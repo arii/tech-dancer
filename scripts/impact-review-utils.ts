@@ -1,6 +1,7 @@
 import { spawn, type ChildProcess } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { z } from 'zod';
 
 export interface ImpactAnalysisArtifact {
   routes?: string[];
@@ -10,34 +11,29 @@ export interface ImpactAnalysisArtifact {
   impactLevel?: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 
-export interface VisualRouteSummary {
-  route: string;
-  slug: string;
-  beforePath: string;
-  afterPath: string;
-  diffPath: string;
-  diffPixels: number;
-  totalPixels: number;
-  differencePercent: number;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH';
-}
+export const VisualRouteSummarySchema = z.object({
+  route: z.string(),
+  metrics: z.object({
+    diffPixels: z.number(),
+    totalPixels: z.number(),
+    differencePercent: z.number(),
+  }),
+  severity: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+});
 
-export interface DomRouteSummary {
-  route: string;
-  slug: string;
-  beforeHtmlPath: string;
-  afterHtmlPath: string;
-  diffPath: string;
-  metrics: {
-    nodesAdded: number;
-    nodesRemoved: number;
-    imagesAdded: number;
-    imagesRemoved: number;
-    linksAdded: number;
-    linksRemoved: number;
-  };
-  severity: 'LOW' | 'MEDIUM' | 'HIGH';
-}
+export type VisualRouteSummary = z.infer<typeof VisualRouteSummarySchema>;
+
+export const DomRouteSummarySchema = z.object({
+  route: z.string(),
+  metrics: z.object({
+    nodes: z.tuple([z.number(), z.number()]),
+    images: z.tuple([z.number(), z.number()]),
+    links: z.tuple([z.number(), z.number()]),
+  }),
+  severity: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+});
+
+export type DomRouteSummary = z.infer<typeof DomRouteSummarySchema>;
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
 export const VISUAL_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'visual-review');

@@ -15,7 +15,8 @@ import {
   stopPreview,
   visualSeverity,
   waitForServer,
-  type VisualRouteSummary
+  type VisualRouteSummary,
+  VisualRouteSummarySchema
 } from './impact-review-utils';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
@@ -54,7 +55,7 @@ async function captureRoute(base: string, route: string, imagePath: string, html
   }
 }
 
-function createVisualDiff(beforePath: string, afterPath: string, diffPath: string): Omit<VisualRouteSummary, 'route' | 'slug' | 'beforePath' | 'afterPath' | 'diffPath' | 'severity'> {
+function createVisualDiff(beforePath: string, afterPath: string, diffPath: string): { diffPixels: number; totalPixels: number; differencePercent: number } {
   const beforeRaw = PNG.sync.read(fs.readFileSync(beforePath));
   const afterRaw = PNG.sync.read(fs.readFileSync(afterPath));
   const width = Math.max(beforeRaw.width, afterRaw.width);
@@ -121,16 +122,15 @@ async function main(): Promise<void> {
       await captureRoute(baseUrl, route, beforePath, beforeHtmlPath);
       await captureRoute(headUrl, route, afterPath, afterHtmlPath);
 
-      const diff = createVisualDiff(beforePath, afterPath, diffPath);
-      summaries.push({
+      const metrics = createVisualDiff(beforePath, afterPath, diffPath);
+      const summaryObj = {
         route,
-        slug,
-        beforePath: path.relative(process.cwd(), beforePath),
-        afterPath: path.relative(process.cwd(), afterPath),
-        diffPath: path.relative(process.cwd(), diffPath),
-        ...diff,
-        severity: visualSeverity(diff.differencePercent)
-      });
+        metrics,
+        severity: visualSeverity(metrics.differencePercent)
+      };
+
+      const summary = VisualRouteSummarySchema.parse(summaryObj);
+      summaries.push(summary);
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
