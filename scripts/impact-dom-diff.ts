@@ -22,24 +22,57 @@ function normalizeHtml(html: string): string {
   const dom = new JSDOM(html);
   const document = dom.window.document;
 
-  document.querySelectorAll('script, style, noscript').forEach(element => element.remove());
-  document.querySelectorAll('*').forEach(element => {
-    for (const attribute of Array.from(element.attributes) as Attr[]) {
-      if (
-        attribute.name === 'data-reactroot' ||
-        attribute.name === 'data-testid' ||
-        attribute.name === 'nonce' ||
-        attribute.name.startsWith('data-vite') ||
-        attribute.name.startsWith('data-radix') ||
-        attribute.name.startsWith('aria-busy') ||
-        /timestamp|hydration|^data-.*id$|^id$/.test(attribute.name)
-      ) {
-        element.removeAttribute(attribute.name);
-      }
-    }
+  const technicalSelectors = ['script', 'style', 'link', 'meta', 'noscript', 'template'];
+  technicalSelectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => el.remove());
   });
 
-  return dom.serialize().replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim();
+  const allElements = document.querySelectorAll('*');
+  allElements.forEach(el => {
+    ['data-reactroot', 'data-testid', 'nonce', 'data-discover'].forEach(attr => {
+      el.removeAttribute(attr);
+    });
+
+    Array.from(el.attributes).forEach(attr => {
+      if (attr.name.startsWith('data-v-')) {
+        el.removeAttribute(attr.name);
+      }
+
+      if (attr.name === 'src' || attr.name === 'href') {
+        attr.value = attr.value.replace(/-[a-zA-Z0-9]{8,12}\.(js|css)/g, '.$1');
+      }
+    });
+  });
+
+  const lines: string[] = [];
+  function formatNode(element: Element, depth: number) {
+    const indent = '  '.repeat(depth);
+    const tagName = element.tagName.toLowerCase();
+
+    const attrs = Array.from(element.attributes)
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(attr => `${attr.name}="${attr.value}"`)
+      .join(' ');
+
+    const attrString = attrs ? ` ${attrs}` : '';
+    lines.push(`${indent}<${tagName}${attrString}>`);
+
+    if (element.children.length === 0 && element.textContent?.trim()) {
+      lines.push(`${indent}  ${element.textContent.trim()}`);
+    }
+
+    Array.from(element.children).forEach(child => {
+      formatNode(child, depth + 1);
+    });
+
+    lines.push(`${indent}</${tagName}>`);
+  }
+
+  if (document.body) {
+    formatNode(document.body, 0);
+  }
+
+  return lines.join('\n');
 }
 
 function countElements(html: string, selector = '*'): number {

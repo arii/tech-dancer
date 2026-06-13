@@ -11,7 +11,6 @@ const config: KnipConfig = {
     'vite-plugin-pwa',
     'workbox-window',
     'dependency-cruiser',
-    '@types/diff',
     '@types/pixelmatch'
   ],
   ignoreBinaries: ['python3'],
