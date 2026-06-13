@@ -17,6 +17,10 @@
       <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="pumpkinGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 
   <rect width="800" height="450" fill="url(#space)"/>
@@ -31,12 +35,27 @@
     <circle cx="710" cy="25" r="1.8" fill="white" opacity="0.9"/>
     <circle cx="165" cy="105" r="1.4" fill="#f97316" opacity="0.7"/>
     <circle cx="570" cy="82" r="1.6" fill="#7c3aed" opacity="0.7"/>
+    <circle cx="680" cy="140" r="1.2" fill="white" opacity="0.6"/>
   </g>
 
-  <!-- Stylized Pumpkin Silhouette -->
-  <g transform="translate(620, 130) scale(1.5)" opacity="0.4">
-    <path d="M-20,10 Q-30,-20 0,-20 Q30,-20 20,10 Q30,40 0,40 Q-30,40 -20,10" fill="#f97316"/>
-    <rect x="-2" y="-25" width="4" height="8" fill="#166534"/>
+  <!-- Improved Pumpkin: ridges + proper stem + subtle glow -->
+  <g transform="translate(680, 180)" filter="url(#pumpkinGlow)" opacity="0.55">
+    <!-- Main body with ridges -->
+    <path d="M0,-30
+             C-15,-32 -28,-20 -30,-5
+             C-32,10 -25,25 -15,30
+             C-5,35 5,35 15,30
+             C25,25 32,10 30,-5
+             C28,-20 15,-32 0,-30 Z"
+          fill="#ea580c"/>
+    <!-- Center ridge -->
+    <path d="M0,-30 C-3,-10 -3,10 0,30" stroke="#c2410c" stroke-width="2" fill="none"/>
+    <!-- Left ridge -->
+    <path d="M-15,-25 C-17,-5 -17,15 -15,25" stroke="#c2410c" stroke-width="1.5" fill="none" opacity="0.8"/>
+    <!-- Right ridge -->
+    <path d="M15,-25 C17,-5 17,15 15,25" stroke="#c2410c" stroke-width="1.5" fill="none" opacity="0.8"/>
+    <!-- Stem -->
+    <path d="M-3,-30 Q0,-38 4,-32 Q2,-28 -1,-30 Z" fill="#14532d"/>
   </g>
 
   <!-- Ground floor glow -->

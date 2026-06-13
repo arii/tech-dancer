@@ -52,15 +52,15 @@ While this list is incomplete, it serves as a great starting point for tracking 
 
 ## Pacific Northwest (PNW)
 *   **[Seattle West Coast Swing Calendar](https://seattleswingdanceclub.com/seattlewcscalendar):** Run by the Seattle Swing Dance Club, this tracks major weekenders and local dances across Washington, Oregon, and Idaho.
-*   **Portland WCS Events:** Frequently updated community tracking for social dances in the Portland area.
+*   **Portland West Coast Swing Events:** Frequently updated community tracking for social dances in the Portland area.
 
 ## Northeast & Mid-Atlantic
-*   **[NYCWCS Comprehensive Calendar](https://www.nycwcs.com/):** An all-inclusive dashboard for local practices, pop-ups, and regional workshops in the New York City tri-state area.
+*   **[NYCWest Coast Swing Comprehensive Calendar](https://www.nycwcs.com/):** An all-inclusive dashboard for local practices, pop-ups, and regional workshops in the New York City tri-state area.
 *   **[Jersey Westies Calendar](https://jerseywesties.com/):** A dedicated calendar tracking weekly lessons, pop-up parties, and social events across New Jersey.
 *   **[UniversityCity Swing Local List](https://www.ucswing.com/philadelphia-west-coast-swing-events):** The go-to resource for Philadelphia and surrounding driving-distance weekenders.
 
 ## Midwest
-*   **[Madison WCS Club Directory](https://mwcsc.org/dance-events/dance-conventions/):** Centralizes convention tracking, weekenders, and local dances across Wisconsin, Minnesota, and Illinois.
+*   **[Madison West Coast Swing Club Directory](https://mwcsc.org/dance-events/dance-conventions/):** Centralizes convention tracking, weekenders, and local dances across Wisconsin, Minnesota, and Illinois.
 *   **[West Coast Swing Chicago](https://www.westcoastswingonline.com/west-coast-swing-chicago/):** The primary aggregator group used to track regional events, guest intensives, and weekly schedules across the Chicagoland area.
 
 ## Southern California (SoCal)

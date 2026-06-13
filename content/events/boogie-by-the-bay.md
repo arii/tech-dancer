@@ -15,7 +15,7 @@ heroImage: '/assets/events/boogie-by-the-bay-hero.svg'
 imageAlt: 'Logo for Boogie by the Bay featuring a stylized San Francisco skyline and Golden Gate Bridge motif'
 description: Hosted by The Next Generation Swing Dance Club, Boogie by the Bay is a cornerstone of the West Coast Swing community, known for its high-level "California style" competition and stunning 10-story atrium social hub.
 whyAttending: >
-  The highlight of the NorCal WCS calendar. The level of competition is exceptionally high, and the Sunday night show is always a must-watch.
+  The highlight of the NorCal West Coast Swing calendar. The level of competition is exceptionally high, and the Sunday night show is always a must-watch.
 theme:
   name: "Classic San Francisco / Flagship Weekend"
   label: "Polished NorCal Theme"

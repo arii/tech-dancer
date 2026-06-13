@@ -15,7 +15,7 @@ heroImage: '/assets/events/phoenix-4th-of-july-hero.svg'
 imageAlt: 'Phoenix 4th of July logo with patriotic colors and resort theme'
 description: A summer highlight famous for legendary resort pool parties and top-tier West Coast Swing competition in Scottsdale.
 whyAttending: >
-  The combination of a world-class resort and world-class dancing is unbeatable. The pool parties are a unique WCS experience that you have to see to believe.
+  The combination of a world-class resort and world-class dancing is unbeatable. The pool parties are a unique West Coast Swing experience that you have to see to believe.
 theme:
   name: "Red, White & Blue / Resort Weekend"
   label: "Patriotic Pool + Ballroom Theme"

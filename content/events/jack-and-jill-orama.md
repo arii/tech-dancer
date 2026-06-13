@@ -102,4 +102,4 @@ The JJO schedule is packed. Workshops run all day, and competitions often go lat
 
 ## NorCal BestCal Merch Picks
 
-Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for $5 off your order.
+Browse the full collection at [https://boomtick.printful.me/](https://boomtick.printful.me/) for more styles. Bonus: use the [Printful referral link](https://www.printful.com/give-5-get-5/GZB6C4) for  off your order.

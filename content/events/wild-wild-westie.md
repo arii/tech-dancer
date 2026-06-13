@@ -1,6 +1,7 @@
 ---
 deprecated: true
 type: event
+imageAlt: "Wild Wild Westie logo featuring Texas-inspired graphics and high-energy competition theme"
 title: Wild Wild Westie
 date: '2026-07-02'
 startDate: '2026-07-02'
@@ -72,7 +73,7 @@ While our current product selection doesn't include specialized Western dance ap
 ### Dallas Airport Logistics
 - **DFW Airport:** About 25-30 minutes away. This is the primary hub for American Airlines and offers the most flight options.
 - **Dallas Love Field (DAL):** About 15 minutes away. This is the primary hub for Southwest Airlines.
-- **Transport:** Both airports are easily accessible via Uber/Lyft. DART (light rail) also runs from DFW directly to the hotel (Union Station stop).
+- **Transport:** Both airports are easily accessible via Uber/Lyft. DART Orange Line runs to DFW Airport Station; use hotel shuttle or rideshare from there.
 
 ### Hotel-Room-Block Urgency
 The WWW room block at the Hyatt Regency DFW is notorious for selling out within minutes of being released. Follow the event's social media closely and be ready to book the second the link goes live.

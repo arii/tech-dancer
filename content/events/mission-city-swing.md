@@ -1,12 +1,12 @@
 ---
 type: event
 title: "Mission City Swing"
-imageAlt: "Mission City Swing logo featuring San Jose city silhouette and community focus"
 date: "2026-05-01"
 startDate: "2026-05-01"
 author: "Ariel Anders, PhD"
 category: "Event"
-excerpt: "The premier weekly West Coast Swing social and workshop hub in the South Bay."
+excerpt: "Join the South Bay's weekly West Coast Swing hub for leveled classes and social dancing every Wednesday."
+imageAlt: "Mission City Swing logo featuring San Jose city silhouette and community focus"
 location: "San Jose, CA"
 city: "San Jose"
 region: "NorCal"

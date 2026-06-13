@@ -5,7 +5,7 @@ date: '2026-05-14'
 startDate: '2026-05-14'
 author: Ariel Anders, PhD
 category: WSDC Registry Event
-excerpt: Discover a charming, community-first West Coast Swing weekend in the heart of Southern Oregon's beautiful Ashland.
+excerpt: Experience the West Coast Swing community's most welcoming, community-first weekend in the heart of Southern Oregon's beautiful Ashland.
 location: Ashland Hills Hotel & Suites
 city: Ashland, OR
 region: Pacific Northwest
@@ -14,7 +14,7 @@ url: https://soswing.com
 heroImage: '/assets/events/soswing-hero.svg'
 imageAlt: 'SOSwing logo featuring Ashland scenery and retro-chic styling'
 bestFor: ["Intimate settings", "First-time competitors", "Road-trip vibe"]
-description: Known for its warm "Westie" hospitality, SOswing provides an intimate PNW setting for leveled workshops and social dancing at the retro-chic Ashland Hills Hotel.
+description: Known for its warm "Westie" hospitality, SOswing provides an intimate Pacific Northwest setting for leveled workshops and social dancing at the retro-chic Ashland Hills Hotel.
 whyAttending: >
   SOswing has the most welcoming, community-first atmosphere in the Pacific Northwest. It's a perfect event to focus on dancing without the pressure of a huge field.
 theme:
@@ -48,7 +48,7 @@ gear:
     - loop-experience
     - mints
     - hand-sanitizer
-  essentialDescription: "Standard recovery and hygiene for the relaxed PNW pace."
+  essentialDescription: "Standard recovery and hygiene for the relaxed Pacific Northwest pace."
   travelIds:
     - compression-cubes
     - travel-pillow
@@ -66,6 +66,8 @@ relatedEvents:
 - swingtacular-the-galactic-open
 - boogie-by-the-bay
 ---
+
+SOswing is Southern Oregon's boutique West Coast Swing weekend, built around community hospitality and a relaxed Pacific Northwest pace.
 
 ## Ashland travel notes
 
