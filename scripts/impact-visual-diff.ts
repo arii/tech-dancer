@@ -18,28 +18,14 @@ import {
   waitForServer,
   type VisualRouteSummary
 } from './impact-review-utils';
+import { whiteCanvas, copyImage } from './image-processing-utils';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
 const baseUrl = process.env.IMPACT_BASE_URL ?? `http://127.0.0.1:${basePort}`;
 const headUrl = process.env.IMPACT_HEAD_URL ?? `http://127.0.0.1:${headPort}`;
 const baseWorktree = process.env.IMPACT_BASE_WORKTREE ?? path.join(process.cwd(), '.tmp-main');
-const DEFAULT_CROP_PADDING = 20;
-
-function whiteCanvas(width: number, height: number): PNG {
-  const image = new PNG({ width, height });
-  for (let index = 0; index < image.data.length; index += 4) {
-    image.data[index] = 255;
-    image.data[index + 1] = 255;
-    image.data[index + 2] = 255;
-    image.data[index + 3] = 255;
-  }
-  return image;
-}
-
-function copyImage(source: PNG, target: PNG): void {
-  PNG.bitblt(source, target, 0, 0, source.width, source.height, 0, 0);
-}
+const DEFAULT_CROP_PADDING = Number(process.env.IMPACT_CROP_PADDING ?? 20);
 
 interface BoundingBox {
   minX: number;

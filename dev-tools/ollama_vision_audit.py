@@ -9,6 +9,7 @@ import json
 import base64
 import argparse
 from typing import Optional, List, Dict
+# Note: utils.py is expected to be in the same directory (dev-tools/)
 from utils import get_ollama_url, run_command
 
 # Default vision model
@@ -59,7 +60,16 @@ def call_ollama_vision(prompt: str, image_paths: List[str], model: str = VISION_
         print(f"❌ Ollama Vision call failed: {e}")
         return None
 
-def audit_route(summary: Dict) -> Optional[str]:
+def get_project_root() -> str:
+    """Robustly determines the project root by searching for a marker file."""
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    while current_dir != os.path.dirname(current_dir):
+        if any(os.path.exists(os.path.join(current_dir, marker)) for marker in ['package.json', '.git']):
+            return current_dir
+        current_dir = os.path.dirname(current_dir)
+    return os.getcwd()
+
+def audit_route(summary: Dict, project_root: str) -> Optional[str]:
     """Performs a vision audit for a single route summary."""
     route = summary.get('route')
     before = summary.get('beforeCroppedPath')
@@ -69,9 +79,8 @@ def audit_route(summary: Dict) -> Optional[str]:
         return None
 
     # Resolve paths relative to project root
-    root = os.getcwd()
-    before_path = os.path.join(root, before)
-    after_path = os.path.join(root, after)
+    before_path = os.path.join(project_root, before)
+    after_path = os.path.join(project_root, after)
 
     print(f"🔍 Auditing visual changes for {route}...")
 
@@ -90,13 +99,17 @@ def audit_route(summary: Dict) -> Optional[str]:
 def main():
     parser = argparse.ArgumentParser(description="Vision-based visual regression audit using Ollama")
     parser.add_argument("--summary", default="artifacts/visual-review/summary.json", help="Path to visual summary JSON")
+    parser.add_argument("--project-root", help="Explicit path to project root")
     args = parser.parse_args()
 
-    if not os.path.exists(args.summary):
-        print(f"❌ Summary file not found: {args.summary}")
+    project_root = args.project_root or get_project_root()
+    summary_path = os.path.join(project_root, args.summary) if not os.path.isabs(args.summary) else args.summary
+
+    if not os.path.exists(summary_path):
+        print(f"❌ Summary file not found: {summary_path}")
         sys.exit(1)
 
-    with open(args.summary, 'r') as f:
+    with open(summary_path, 'r') as f:
         data = json.load(f)
 
     summaries = data.get('routes', [])
@@ -113,7 +126,7 @@ def main():
     audit_results = {}
     for s in summaries:
         if s.get('beforeCroppedPath') and s.get('afterCroppedPath'):
-            result = audit_route(s)
+            result = audit_route(s, project_root)
             if result:
                 audit_results[s['route']] = result
                 print(f"\n--- Audit Result for {s['route']} ---\n{result}\n")
