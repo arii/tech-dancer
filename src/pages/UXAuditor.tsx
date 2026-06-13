@@ -338,7 +338,7 @@ export default function UXAuditor() {
             {reports.length === 0 && (
               <Box padding={8} textAlign="center" surface="alt" opacityVariant="medium">
                 <Stack gap={6} align="center">
-                  <Box width={12} height={12} radius="full" border className="border-accent-teal/20 bg-accent-teal/5 flex items-center justify-center">
+                  <Box width={12} height={12} radius="full" border display="flex" align="center" justify="center" className="border-accent-teal/20 bg-accent-teal/5">
                     <Icon icon={RefreshCw} size="md" color="accent-teal" />
                   </Box>
                   <Stack gap={2}>

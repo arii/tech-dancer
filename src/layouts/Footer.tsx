@@ -3,19 +3,13 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { NavLink } from 'react-router-dom';
 import { DISCLOSURE_TEXT } from '@/components/ui/AffiliateDisclosure';
 import { formatRelativeTime } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export function Footer() {
-  const [lastUpdated, setLastUpdated] = useState<string>('');
-
-  useEffect(() => {
-    // Only set on client to avoid hydration mismatch
+  const [lastUpdated] = useState(() => {
     const buildTime = import.meta.env.VITE_BUILD_TIME;
-    if (buildTime) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLastUpdated(formatRelativeTime(new Date(buildTime)));
-    }
-  }, []);
+    return buildTime ? formatRelativeTime(new Date(buildTime)) : '';
+  });
 
   const legalLinks = [
     { label: 'Contact', to: '/contact' },
