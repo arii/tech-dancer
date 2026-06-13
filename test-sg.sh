@@ -1,1 +1,1 @@
-semgrep --config=auto boomtick-mcp/src/
+pnpm run lint:semgrep
