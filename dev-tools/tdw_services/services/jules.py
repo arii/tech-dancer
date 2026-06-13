@@ -25,16 +25,24 @@ class JulesClient:
             print(f"⚠️  Jules API list_sources failed: {e}")
             return []
 
-    def list_sessions(self, pageSize: int = 10) -> List[Dict[str, Any]]:
+    def list_sessions(self, pageSize: int = 100) -> List[Dict[str, Any]]:
         url = f"{self.base_url}/sessions"
         params = {"pageSize": pageSize}
+        all_sessions = []
         try:
-            response = requests.get(url, headers=self.headers, params=params, timeout=10)
-            response.raise_for_status()
-            return response.json().get("sessions", [])
+            while True:
+                response = requests.get(url, headers=self.headers, params=params, timeout=10)
+                response.raise_for_status()
+                data = response.json()
+                all_sessions.extend(data.get("sessions", []))
+                next_token = data.get("nextPageToken")
+                if not next_token:
+                    break
+                params["pageToken"] = next_token
+            return all_sessions
         except Exception as e:
             print(f"⚠️  Jules API list_sessions failed: {e}")
-            return []
+            return all_sessions
 
     def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
         clean_id = session_id.replace("sessions/", "")

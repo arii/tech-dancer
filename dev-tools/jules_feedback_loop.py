@@ -31,12 +31,13 @@ def main():
         return
 
     try:
-        sessions = jules_client.list_sessions(pageSize=50)
+        sessions = jules_client.list_sessions()
     except Exception as e:
         print(f"Failed to fetch sessions: {e}")
         return
 
-    active_sessions = sessions
+    # Filter out FAILED and CANCELED so we include COMPLETED
+    active_sessions = [s for s in sessions if s.get("state") not in ["FAILED", "CANCELED"]]
 
     for session in active_sessions:
         session_id = session.get("name")
