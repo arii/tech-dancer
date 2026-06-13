@@ -1,4 +1,4 @@
-import { chromium } from '@playwright/test';
+import { chromium, type Page, type Browser } from 'playwright';
 import fs from 'fs';
 import path from 'path';
 import pixelmatch from 'pixelmatch';
@@ -23,6 +23,42 @@ const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
 const baseUrl = process.env.IMPACT_BASE_URL ?? `http://127.0.0.1:${basePort}`;
 const headUrl = process.env.IMPACT_HEAD_URL ?? `http://127.0.0.1:${headPort}`;
 const baseWorktree = process.env.IMPACT_BASE_WORKTREE ?? path.join(process.cwd(), '.tmp-main');
+const MANIFEST_PATH = path.join(process.cwd(), 'tests', 'interaction-manifest.json');
+
+interface InteractionAction {
+  step: 'fill' | 'click' | 'wait';
+  selector?: string;
+  value?: string;
+  duration?: number;
+}
+
+interface InteractionManifest {
+  route: string;
+  name: string;
+  actions: InteractionAction[];
+}
+
+function readManifest(): InteractionManifest[] {
+  if (!fs.existsSync(MANIFEST_PATH)) return [];
+  try {
+    return JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf-8'));
+  } catch (e) {
+    console.warn(`⚠️ Failed to parse interaction manifest: ${e}`);
+    return [];
+  }
+}
+
+async function runActions(page: Page, actions: InteractionAction[]) {
+  for (const action of actions) {
+    if (action.step === 'fill' && action.selector && action.value !== undefined) {
+      await page.fill(action.selector, action.value);
+    } else if (action.step === 'click' && action.selector) {
+      await page.click(action.selector);
+    } else if (action.step === 'wait' && action.duration) {
+      await page.waitForTimeout(action.duration);
+    }
+  }
+}
 
 function whiteCanvas(width: number, height: number): PNG {
   const image = new PNG({ width, height });
@@ -39,10 +75,10 @@ function copyImage(source: PNG, target: PNG): void {
   PNG.bitblt(source, target, 0, 0, source.width, source.height, 0, 0);
 }
 
-async function captureRoute(base: string, route: string, imagePath: string, htmlPath: string): Promise<void> {
-  const browser = await chromium.launch();
+async function captureRoute(browser: Browser, base: string, route: string, imagePath: string, htmlPath: string): Promise<void> {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   try {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
     await page.goto(new URL(route, base).toString(), { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
       console.warn(`Network did not become idle for ${route}; continuing with captured DOM state.`);
@@ -50,7 +86,43 @@ async function captureRoute(base: string, route: string, imagePath: string, html
     await page.screenshot({ path: imagePath, fullPage: true });
     fs.writeFileSync(htmlPath, await page.content());
   } finally {
-    await browser.close();
+    await context.close();
+  }
+}
+
+async function captureInteractiveRoute(
+  browser: Browser,
+  base: string,
+  route: string,
+  beforeImagePath: string,
+  beforeHtmlPath: string,
+  afterImagePath: string,
+  afterHtmlPath: string,
+  actions: InteractionAction[]
+): Promise<void> {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  try {
+    const page = await context.newPage();
+    const url = new URL(route, base).toString();
+
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {});
+
+    // 1. Capture Before State (On-Load)
+    await page.screenshot({ path: beforeImagePath, fullPage: true });
+    fs.writeFileSync(beforeHtmlPath, await page.content());
+
+    // 2. Perform Interactions
+    await runActions(page, actions);
+
+    // Wait for stability after actions
+    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+    // 3. Capture After State (Post-Interaction)
+    await page.screenshot({ path: afterImagePath, fullPage: true });
+    fs.writeFileSync(afterHtmlPath, await page.content());
+  } finally {
+    await context.close();
   }
 }
 
@@ -100,11 +172,15 @@ async function main(): Promise<void> {
   const basePreview = startPreview(baseWorktree, basePort);
   const headPreview = startPreview(process.cwd(), headPort);
 
+  const manifest = readManifest();
+  const browser = await chromium.launch();
+
   try {
     await Promise.all([waitForServer(baseUrl), waitForServer(headUrl)]);
 
     const summaries: VisualRouteSummary[] = [];
     for (const route of routes) {
+      const interaction = manifest.find(m => m.route === route);
       const slug = routeToSlug(route);
       const routeVisualDir = path.join(VISUAL_REVIEW_DIR, slug);
       const routeDomDir = path.join(DOM_REVIEW_DIR, slug);
@@ -117,9 +193,14 @@ async function main(): Promise<void> {
       const beforeHtmlPath = path.join(routeDomDir, 'before.html');
       const afterHtmlPath = path.join(routeDomDir, 'after.html');
 
-      console.log(`📸 Capturing ${route}`);
-      await captureRoute(baseUrl, route, beforePath, beforeHtmlPath);
-      await captureRoute(headUrl, route, afterPath, afterHtmlPath);
+      if (interaction) {
+        console.log(`⚡ Capturing interactive route ${route} (${interaction.name})`);
+        await captureInteractiveRoute(browser, headUrl, route, beforePath, beforeHtmlPath, afterPath, afterHtmlPath, interaction.actions);
+      } else {
+        console.log(`📸 Capturing ${route}`);
+        await captureRoute(browser, baseUrl, route, beforePath, beforeHtmlPath);
+        await captureRoute(browser, headUrl, route, afterPath, afterHtmlPath);
+      }
 
       const diff = createVisualDiff(beforePath, afterPath, diffPath);
       summaries.push({
@@ -136,6 +217,7 @@ async function main(): Promise<void> {
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
     console.log(`✅ Visual diffs generated in ${VISUAL_REVIEW_DIR}`);
   } finally {
+    await browser.close();
     stopPreview(basePreview);
     stopPreview(headPreview);
   }

@@ -1,0 +1,10 @@
+[
+  {
+    "route": "/blog",
+    "name": "blog-search-interaction",
+    "actions": [
+      { "step": "fill", "selector": "[data-testid='search-input']", "value": "West Coast" },
+      { "step": "wait", "duration": 500 }
+    ]
+  }
+]
