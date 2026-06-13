@@ -6,11 +6,22 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
+function formatRoles(roles: string[]) {
+  if (roles.length === 0) return '';
+  if (roles.length === 1) return roles[0].charAt(0).toUpperCase() + roles[0].slice(1);
+  if (roles.length === 2) {
+    return roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(' & ');
+  }
+  return roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(', ');
+}
+
 export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
     ? 'SEE OPTIONS'
     : 'VIEW ON PRINTFUL';
+
+  const roleSummary = item.roles ? formatRoles(item.roles) : '';
 
   return (
     <BaseCard
@@ -57,32 +68,58 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         </Text>
 
         {item.roles && (
-          <Stack direction="row" gap={1.5} wrap="wrap">
-            {item.roles.map((role) => (
-              <Box
-                key={role}
-                paddingX={2}
-                paddingY={0.5}
-                radius="md"
-                surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                className={cn(
-                  "border border-line/30",
-                  role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
-                )}
-              >
-                <Text size="micro" weight="font-bold" uppercase tracking="wider">
-                  {role}
-                </Text>
-              </Box>
-            ))}
-          </Stack>
+          <>
+            {/* Mobile: Summarized text line */}
+            <Text
+              variant="body"
+              size="xs"
+              color="dim"
+              weight="font-bold"
+              uppercase
+              tracking="wider"
+              display={{ base: 'block', md: 'none' }}
+              data-testid="product-role-summary"
+            >
+              {roleSummary}
+            </Text>
+
+            {/* Desktop: Pill list */}
+            <Stack direction="row" gap={1.5} wrap="wrap" display={{ base: 'none', md: 'flex' }}>
+              {item.roles.map((role) => (
+                <Box
+                  key={role}
+                  paddingX={2}
+                  paddingY={0.5}
+                  radius="md"
+                  surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
+                  className={cn(
+                    "border border-line/30",
+                    role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
+                  )}
+                >
+                  <Text size="micro" weight="font-bold" uppercase tracking="wider">
+                    {role}
+                  </Text>
+                </Box>
+              ))}
+            </Stack>
+          </>
         )}
       </Stack>
 
       <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
-          {item.tags.slice(0, 3).map((tag) => (
-            <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
+          {item.tags.slice(0, 3).map((tag, index) => (
+            <Box
+              key={tag}
+              paddingX={2}
+              paddingY={0.5}
+              radius="md"
+              surface="alt"
+              className="border border-line/20"
+              display={index > 0 ? { base: 'none', md: 'block' } : 'block'}
+              data-testid={index === 0 ? "product-tag-primary" : "product-tag-secondary"}
+            >
               <Text variant="mono" size="xs" color="dim" uppercase tracking="tighter">
                 {tag}
               </Text>
