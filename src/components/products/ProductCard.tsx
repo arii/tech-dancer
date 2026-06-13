@@ -11,6 +11,16 @@ function formatRoles(roles: string[]) {
   return roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(' · ');
 }
 
+const ROLE_COLORS: Record<string, { surface: "accent" | "warning" | "alt" | "default"; text: string }> = {
+  lead: { surface: 'accent', text: 'text-accent' },
+  follow: { surface: 'warning', text: 'text-warning' },
+  switch: { surface: 'alt', text: 'text-text-main' },
+};
+
+function getRoleColors(role: string) {
+  return ROLE_COLORS[role] || { surface: 'default', text: 'text-text-dim' };
+}
+
 export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
@@ -81,23 +91,23 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
 
             {/* Desktop: Pill list */}
             <Stack direction="row" gap={1.5} wrap="wrap" display={{ base: 'none', md: 'flex' }}>
-              {item.roles.map((role) => (
-                <Box
-                  key={role}
-                  paddingX={2}
-                  paddingY={0.5}
-                  radius="md"
-                  surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                  className={cn(
-                    "border border-line/30",
-                    role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
-                  )}
-                >
-                  <Text size="micro" weight="font-bold" uppercase tracking="wider">
-                    {role}
-                  </Text>
-                </Box>
-              ))}
+              {item.roles.map((role) => {
+                const colors = getRoleColors(role);
+                return (
+                  <Box
+                    key={role}
+                    paddingX={2}
+                    paddingY={0.5}
+                    radius="md"
+                    surface={colors.surface}
+                    className={cn("border border-line/30", colors.text)}
+                  >
+                    <Text size="micro" weight="font-bold" uppercase tracking="wider">
+                      {role}
+                    </Text>
+                  </Box>
+                );
+              })}
             </Stack>
           </>
         )}
