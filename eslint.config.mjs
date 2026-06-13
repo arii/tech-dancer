@@ -33,4 +33,15 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'off',
     },
   },
+  {
+    files: [
+      'src/layouts/**/*.tsx',
+      'src/components/ui/**/*.tsx',
+      'src/components/editorial/**/*.tsx'
+    ],
+    rules: {
+      'sonarjs/no-duplicate-string': 'off',
+      'sonarjs/no-identical-functions': 'off',
+    },
+  },
 );

@@ -5,7 +5,8 @@ date: "2026-05-01"
 startDate: "2026-05-01"
 author: "Ariel Anders, PhD"
 category: "Event"
-excerpt: "The premier weekly West Coast Swing social and workshop hub in the South Bay."
+excerpt: "Join the South Bay's weekly West Coast Swing hub for leveled classes and social dancing every Wednesday."
+imageAlt: "Mission City Swing logo featuring San Jose city silhouette and community focus"
 location: "San Jose, CA"
 city: "San Jose"
 region: "NorCal"
@@ -15,7 +16,7 @@ heroImage: ""
 description: "A cornerstone of the NorCal dance community, offering top-tier instruction and a welcoming social environment every Wednesday."
 
 whyAttending: >
-  Mission City Swing is the heartbeat of the South Bay WCS community. Whether you're a beginner or a seasoned pro, the welcoming atmosphere and consistent quality of instruction make it a weekly must-visit.
+  Mission City Swing is the heartbeat of the South Bay West Coast Swing community. Whether you're a beginner or a seasoned pro, the welcoming atmosphere and consistent quality of instruction make it a weekly must-visit.
 theme:
   name: "Community Social"
   label: "Weekly Style"
@@ -51,8 +52,6 @@ relatedEvents:
 - boogie-by-the-bay
 - swingtacular-the-galactic-open
 ---
-
-Weekly social dance in San Jose.
 
 ## Attendance Frequency
 Wednesdays: I drop in for the points class and stay for the social dance.
