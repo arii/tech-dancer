@@ -52,9 +52,9 @@ export function TopicNavigation() {
             radius="lg"
             align="start"
             textAlign="left"
-            className="group transition-all duration-200 hover:border-accent/40 hover:bg-surface/60 active:scale-[0.98]"
+            className="group transition-all duration-200 hover:border-accent/40 hover:bg-surface/60 active:scale-95"
           >
-            <Box className="w-10 h-10 flex items-center justify-center rounded-md bg-accent/10">
+            <Box width={10} height={10} display="flex" align="center" justify="center" radius="md" className="bg-accent/10">
               <Icon className="h-5 w-5 text-accent" />
             </Box>
             <Stack gap={1}>
