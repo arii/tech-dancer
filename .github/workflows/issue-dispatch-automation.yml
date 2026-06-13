@@ -1,0 +1,29 @@
+name: Dispatch GitHub Issues
+
+on:
+  push:
+    branches:
+      - 'issue-dispatch-audit' # Matches the branch we create
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  dispatch_issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Issue Dispatch Script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -d "dispatched-issues" ]; then
+            chmod +x scripts/dispatch-issues.sh
+            ./scripts/dispatch-issues.sh
+          else
+            echo "No dispatched issues directory found."
+          fi
