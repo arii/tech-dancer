@@ -1,1 +1,1 @@
-pnpm run lint:semgrep
+pnpm run semgrep:scan
