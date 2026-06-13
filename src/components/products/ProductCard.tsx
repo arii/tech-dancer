@@ -8,11 +8,7 @@ import { stroke } from '@/styles/design-tokens';
 
 function formatRoles(roles: string[]) {
   if (roles.length === 0) return '';
-  if (roles.length === 1) return roles[0].charAt(0).toUpperCase() + roles[0].slice(1);
-  if (roles.length === 2) {
-    return roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(' & ');
-  }
-  return roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(', ');
+  return roles.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(' · ');
 }
 
 export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
@@ -25,9 +21,9 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
 
   return (
     <BaseCard
-      gap={isFeatured ? 5 : 4}
+      gap={{ base: 3, md: isFeatured ? 5 : 4 }}
       height="full"
-      padding={isFeatured ? { base: 5, md: 6 } : { base: 4, md: 5 }}
+      padding={isFeatured ? { base: 4, md: 6 } : { base: 3, md: 5 }}
       radius="lg"
       border
       maxWidth="full"
@@ -71,8 +67,8 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           <>
             {/* Mobile: Summarized text line */}
             <Text
-              variant="body"
-              size="xs"
+              variant="mono"
+              size="micro"
               color="dim"
               weight="font-bold"
               uppercase
@@ -107,7 +103,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         )}
       </Stack>
 
-      <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
+      <Stack marginTop="auto" paddingTop={{ base: 2, md: isFeatured ? 5 : 3 }} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
           {item.tags.slice(0, 3).map((tag, index) => (
             <Box
@@ -117,8 +113,8 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
               radius="md"
               surface="alt"
               className="border border-line/20"
-              display={index > 0 ? { base: 'none', md: 'block' } : 'block'}
-              data-testid={index === 0 ? "product-tag-primary" : "product-tag-secondary"}
+              display={index > 1 ? { base: 'none', md: 'block' } : 'block'}
+              data-testid={index < 2 ? "product-tag-primary" : "product-tag-secondary"}
             >
               <Text variant="mono" size="xs" color="dim" uppercase tracking="tighter">
                 {tag}

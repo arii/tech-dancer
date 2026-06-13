@@ -1,36 +1,54 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('ProductCard Mobile Badge Reduction', () => {
-  test.use({ viewport: { width: 375, height: 667 } });
+  test.describe('Mobile Viewport', () => {
+    test.use({ viewport: { width: 375, height: 667 } });
 
-  test.beforeEach(async ({ page }) => {
-    // We need to be on a page that renders ProductCard.
-    // /merch is the primary route for this.
-    await page.goto('./merch');
+    test.beforeEach(async ({ page }) => {
+      await page.goto('./merch');
+    });
+
+    test('should show summarized roles and limited tags on mobile', async ({ page }) => {
+      // Find a product card that has roles
+      const roleSummary = page.getByTestId('product-role-summary').first();
+      await expect(roleSummary).toBeVisible();
+
+      // Desktop pill list should be hidden (md:flex)
+      // We can check if it's hidden. Note: locator might need to be specific to the first card
+      const firstCard = page.getByTestId('product-card').first();
+      const desktopRoleStack = firstCard.locator('div.flex-row.hidden.md\\:flex');
+      await expect(desktopRoleStack).toBeHidden();
+
+      // Check tags
+      const primaryTags = firstCard.getByTestId('product-tag-primary');
+      const secondaryTag = firstCard.getByTestId('product-tag-secondary');
+
+      await expect(primaryTags).toHaveCount(2); // Based on the first product in catalog
+      await expect(secondaryTag).toBeHidden();
+    });
   });
 
-  test('should show summarized roles on mobile', async ({ page }) => {
-    // Find a product card that has roles
-    const roleSummary = page.getByTestId('product-role-summary').first();
+  test.describe('Desktop Viewport', () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
 
-    await expect(roleSummary).toBeVisible();
+    test.beforeEach(async ({ page }) => {
+      await page.goto('./merch');
+    });
 
-    // Check if the desktop pill list is hidden
-    // The desktop stack has display={{ base: 'none', md: 'flex' }}
-    // In Playwright, we can check visibility.
-    // Since it's 'none' at base, it should not be visible.
-    const desktopRoleStack = page.locator('div.flex-row.hidden.md\\:flex').first();
-    await expect(desktopRoleStack).toBeHidden();
-  });
+    test('should show individual pills and more tags on desktop', async ({ page }) => {
+      const firstCard = page.getByTestId('product-card').first();
 
-  test('should show only one tag on mobile', async ({ page }) => {
-    const primaryTag = page.getByTestId('product-tag-primary').first();
-    const secondaryTag = page.getByTestId('product-tag-secondary').first();
+      // Role summary should be hidden on desktop (md:none)
+      const roleSummary = firstCard.getByTestId('product-role-summary');
+      await expect(roleSummary).toBeHidden();
 
-    await expect(primaryTag).toBeVisible();
+      // Desktop pill list should be visible (md:flex)
+      const desktopRoleStack = firstCard.locator('div.flex-row.md\\:flex');
+      await expect(desktopRoleStack.first()).toBeVisible();
 
-    // Secondary tags should be hidden on mobile
-    // display={index > 0 ? { base: 'none', md: 'block' } : 'block'}
-    await expect(secondaryTag).toBeHidden();
+      // Check tags - should show the third tag if it exists
+      const secondaryTag = firstCard.getByTestId('product-tag-secondary');
+      await expect(secondaryTag.first()).toBeVisible();
+    });
   });
 });
