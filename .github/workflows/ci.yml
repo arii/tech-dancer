@@ -9,9 +9,11 @@ on:
       - 'etl/**'
       - 'dev-tools/**'
       - 'tests/**'
+      - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/ci.yml'
+      - '.github/actions/**'
       - 'AGENTS.md'
       - 'USAGE_NOTES.md'
       - 'WORKFLOW.md'
@@ -25,9 +27,11 @@ on:
       - 'etl/**'
       - 'dev-tools/**'
       - 'tests/**'
+      - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/ci.yml'
+      - '.github/actions/**'
       - 'AGENTS.md'
       - 'USAGE_NOTES.md'
       - 'WORKFLOW.md'
@@ -57,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -114,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
@@ -163,7 +167,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
       - uses: actions/setup-python@v5
@@ -222,24 +226,38 @@ jobs:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Run Impact Analysis
+      - name: Install Playwright browser
+        run: pnpm run setup:playwright
+      - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
+      - name: Build Main
+        run: pnpm run impact:build-main
+      - name: Build PR
+        env:
+          VITE_BASE_PATH: /
+        run: pnpm run build
+      - name: Visual Diff
+        run: pnpm run impact:visual-diff
+      - name: DOM Diff
+        run: pnpm run impact:dom-diff
       - name: Report Summary
         if: always()
         run: |
-          if [ -f artifacts/impact-analysis/impact.md ]; then
+          if [ -f artifacts/deployment-review.md ]; then
+            cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+          elif [ -f artifacts/impact-analysis/impact.md ]; then
             cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
           else
             echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
             echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
           fi
-      - name: Upload Impact Report
+      - name: Upload Deployment Review Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: deployment-impact-report
-          path: artifacts/impact-analysis/
+          name: deployment-review
+          path: artifacts/
