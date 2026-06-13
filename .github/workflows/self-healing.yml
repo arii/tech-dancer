@@ -15,9 +15,7 @@ permissions:
 
 jobs:
   repair:
-    if: >
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure') ||
-      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@jules-fix-local'))
+    if: github.repository == 'disabled'
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: dev-tools
