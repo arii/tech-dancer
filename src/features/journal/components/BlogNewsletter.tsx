@@ -10,13 +10,15 @@ export function BlogNewsletter() {
       surface="alt"
       border
       radius="xl"
-      className="relative overflow-hidden border-accent/20"
+      position="relative"
+      overflow="hidden"
+      className="border-accent/20"
     >
       <Box
         position="absolute"
         top={0}
         left={0}
-        width="1px"
+        width="0.5"
         height="full"
         className="bg-accent"
       />

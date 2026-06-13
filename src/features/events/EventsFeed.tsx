@@ -16,7 +16,15 @@ export default function EventsFeed() {
   const { events, view, setView, searchTerm, setSearchTerm } = useEvents();
 
   return (
-    <Box as="section" className="mx-auto w-full max-w-[1600px] min-w-0 px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Box
+      as="section"
+      marginX="auto"
+      width="full"
+      maxWidth="screen-2xl"
+      minWidth={0}
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      paddingBottom={12}
+    >
       <SEO
         title="Event Resource Guides"
         description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
@@ -59,7 +67,6 @@ export default function EventsFeed() {
           <Grid
             cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }}
             gap={4}
-            className="grid-cols-[repeat(auto-fit,minmax(360px,1fr))]"
           >
             {events.map((event) => (
               <Box

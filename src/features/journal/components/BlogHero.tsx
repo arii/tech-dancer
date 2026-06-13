@@ -37,8 +37,7 @@ export function BlogHero() {
           variant="primary"
           paddingX={6}
           paddingY={3}
-          minWidth="44px"
-          minHeight="44px"
+          className="tap-target"
         >
           Start Here
         </ActionButton>
@@ -48,8 +47,7 @@ export function BlogHero() {
           variant="secondary"
           paddingX={6}
           paddingY={3}
-          minWidth="44px"
-          minHeight="44px"
+          className="tap-target"
         >
           Browse Categories
         </ActionButton>

@@ -80,8 +80,7 @@ export function ResourceToolkit() {
                 variant="secondary"
                 paddingY={3}
                 width="full"
-                minWidth="44px"
-                minHeight="44px"
+                className="tap-target"
               >
                 {tool.cta}
               </ActionButton>

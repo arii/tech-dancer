@@ -45,8 +45,7 @@ export function EventHero() {
           variant="primary"
           paddingX={6}
           paddingY={3}
-          minWidth="44px"
-          minHeight="44px"
+          className="tap-target"
         >
           View Packing Guides
         </ActionButton>
@@ -56,8 +55,7 @@ export function EventHero() {
           variant="secondary"
           paddingX={6}
           paddingY={3}
-          minWidth="44px"
-          minHeight="44px"
+          className="tap-target"
         >
           Browse Events
         </ActionButton>

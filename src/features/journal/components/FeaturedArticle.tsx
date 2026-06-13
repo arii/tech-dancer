@@ -23,7 +23,7 @@ export function FeaturedArticle({ post }: FeaturedArticleProps) {
         surface="default"
         className="group relative transition-all hover:border-accent/30"
       >
-        <Grid cols={{ base: 1, lg: 10 }} gap={0} minHeight={{ lg: "400px" }}>
+        <Grid cols={{ base: 1, lg: 10 }} gap={0} minHeight={{ base: "auto", lg: 96 }}>
           {/* Image Area - 60% */}
           <Box className="lg:col-span-6 relative overflow-hidden h-64 lg:h-auto">
             <img
@@ -57,8 +57,7 @@ export function FeaturedArticle({ post }: FeaturedArticleProps) {
               paddingX={8}
               paddingY={3}
               width="fit"
-              minWidth="44px"
-              minHeight="44px"
+              className="tap-target"
             >
               Read Guide
             </ActionButton>

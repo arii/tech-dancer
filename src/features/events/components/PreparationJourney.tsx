@@ -64,7 +64,8 @@ export function PreparationJourney() {
                       variant="body"
                       size="base"
                       color="dim"
-                      className="group-hover:text-accent transition-colors border-b border-transparent group-hover:border-accent/20 pb-0.5"
+                      paddingBottom={0.5}
+                      className="group-hover:text-accent transition-colors border-b border-transparent group-hover:border-accent/20"
                     >
                       {item.label}
                     </Text>

@@ -46,7 +46,7 @@ export function CommunityStories() {
               </Text>
 
               <Box display="flex" align="center" gap={3}>
-                <Box width={4} height="1px" className="bg-accent" />
+                <Box width={4} height={0.5} className="bg-accent" />
                 <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest">
                   {story.context}
                 </Text>
