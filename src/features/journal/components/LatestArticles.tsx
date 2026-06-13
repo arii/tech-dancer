@@ -1,4 +1,4 @@
-import { Box, Grid, Text } from '@/layouts/Primitives';
+import { Box, Grid } from '@/layouts/Primitives';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { Post } from '@/lib/types/content';
 import { EmptyState } from '@/components/ui/EmptyState';

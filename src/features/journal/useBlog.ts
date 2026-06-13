@@ -48,19 +48,19 @@ export function useBlog() {
   }, [posts]);
 
   const popularPosts = useMemo(() => {
-    // Logic: Posts with 'popular' tag, or the next 3 after featured
-    const popular = posts.filter(p => p.tags?.includes('popular') && p.slug !== featuredPost?.slug);
+    const featuredSlug = featuredPost?.slug;
+    const popular = posts.filter(p => p.tags?.includes('popular') && p.slug !== featuredSlug);
     if (popular.length > 0) return popular.slice(0, 3);
-    return posts.filter(p => p.slug !== featuredPost?.slug).slice(0, 3);
-  }, [posts, featuredPost]);
+    return posts.filter(p => p.slug !== featuredSlug).slice(0, 3);
+  }, [posts, featuredPost?.slug]);
 
   const latestPosts = useMemo(() => {
-    // If we are in "All" view, latest articles are everything EXCEPT the featured post
+    const featuredSlug = featuredPost?.slug;
     if (activeCategory === 'All' && !searchTerm) {
-      return filteredPosts.filter(p => p.slug !== featuredPost?.slug);
+      return filteredPosts.filter(p => p.slug !== featuredSlug);
     }
     return filteredPosts;
-  }, [filteredPosts, featuredPost, activeCategory, searchTerm]);
+  }, [filteredPosts, featuredPost?.slug, activeCategory, searchTerm]);
 
   return {
     posts: filteredPosts,

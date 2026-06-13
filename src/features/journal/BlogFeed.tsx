@@ -74,11 +74,11 @@ export default function BlogFeed() {
         </Box>
 
         <Grid cols={{ base: 1, lg: 12 }} gap={12}>
-          <Box gridColumn={{ lg: "span 8" }}>
+          <Box span={{ base: 12, lg: 8 }}>
             <LatestArticles posts={latestPosts} />
           </Box>
 
-          <Box gridColumn={{ lg: "span 4" }} display={{ base: 'none', lg: 'block' }}>
+          <Box span={{ base: 12, lg: 4 }} display={{ base: 'none', lg: 'block' }}>
             <Stack gap={12} position="sticky" top={24}>
               <PopularResources posts={popularPosts} />
               <EditorialNewsletter />
