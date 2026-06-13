@@ -213,9 +213,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               <Box border padding={4} surface="muted" radius="md">
                 <Stack gap={4}>
                    <Text variant="mono" size="micro" color="brand" weight="font-bold">Resource Metadata</Text>
-                   <Grid cols={3} gap={4}>
-                      {/* Internal Note: Ratings are editorial-only and currently hidden from public UI per compliance */}
-                      <Field label="RATING (0-5)" type="number" step="0.1" value={data.rating} onChange={(v: string) => updateField('rating', parseFloat(v))} />
+                   <Grid cols={2} gap={4}>
                       <Field label="DURABILITY" type="number" step="0.1" value={data.durability} onChange={(v: string) => updateField('durability', parseFloat(v))} />
                       <Field label="VALUE" type="number" step="0.1" value={data.value} onChange={(v: string) => updateField('value', parseFloat(v))} />
                    </Grid>
