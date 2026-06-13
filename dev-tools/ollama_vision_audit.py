@@ -44,10 +44,10 @@ def get_project_root() -> str:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--summary", default="artifacts/visual-review/summary.json")
-    parser.add_argument("--root")
+    parser.add_argument("--project-root")
     args = parser.parse_args()
 
-    root = args.root or get_project_root()
+    root = args.project_root or get_project_root()
     sum_path = os.path.join(root, args.summary) if not os.path.isabs(args.summary) else args.summary
 
     if not os.path.exists(sum_path):
