@@ -36,12 +36,81 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
   );
 }
 
+function ToolCard({ tool, navigate, getToolIcon }: {
+  tool: ResearchTool;
+  navigate: (path: string) => void;
+  getToolIcon: (tool: ResearchTool) => LucideIcon;
+}) {
+  return (
+    <Stack
+      as="button"
+      onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
+      padding={6}
+      paddingBottom={10}
+      gap={4}
+      height="full"
+      align="start"
+      textAlign="left"
+      className={cardVariants({ interactive: true })}
+    >
+      <Stack gap={4} width="full">
+        <Box display="flex" justify="between" align="start" width="full">
+          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
+            <Icon icon={getToolIcon(tool)} size="md" color="dim" />
+          </Box>
+          <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
+            {tool.status}
+          </Text>
+        </Box>
+        <Stack gap={3}>
+          <Stack gap={1}>
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">
+              {tool.category}
+            </Text>
+            <Text variant="display" size="xl" weight="font-black">
+              {tool.title}
+            </Text>
+          </Stack>
+          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
+            {tool.subtitle}
+          </Text>
+          <Text size="sm" color="dim">
+            {tool.description}
+          </Text>
+          <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
+            {tool.tags.map(tag => (
+              <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
+                {tag}
+              </Text>
+            ))}
+          </Box>
+        </Stack>
+      </Stack>
+      <Box display="flex" align="center" gap={2} marginTop="auto">
+        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
+        <Icon icon={ArrowRight} size="md" color="accent" />
+      </Box>
+    </Stack>
+  );
+}
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
+
+  const devAiTools = engineeringTools.filter(t =>
+    t.category === 'DevAI System' || t.category === 'Perception Debugging'
+  );
+  const pipelineTools = engineeringTools.filter(t =>
+    t.category === 'Data Engineering' || t.category === 'Content Tools'
+  );
+  const utilityTools = engineeringTools.filter(t =>
+    t.category === 'Utility Tools' || t.category === 'Business Automation'
+  );
+
   const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
@@ -66,7 +135,7 @@ export default function ResearchAnalytics() {
         description="DevAI portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
-      <Stack gap={4}>
+      <Stack gap={16}>
         <Stack gap={2}>
           <PageHeader
             label="HIRE_ME"
@@ -107,7 +176,7 @@ export default function ResearchAnalytics() {
 
 
 
-        <Stack gap={6} id="flagship" marginTop={2}>
+        <Stack gap={8} id="flagship" marginTop={2}>
           <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
@@ -216,69 +285,56 @@ export default function ResearchAnalytics() {
           </Stack>
         </Grid>
 
-        <Stack gap={8}>
+        <Stack gap={12}>
           <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
-            {engineeringTools.map((tool) => (
-              <Stack
-                key={tool.id}
-                as="button"
-                onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
-                padding={6}
-                paddingBottom={10}
-                gap={4}
-                height="full"
-                align="start"
-                textAlign="left"
-                className={cardVariants({ interactive: true })}
-              >
-                <Stack gap={4} width="full">
-                  <Box display="flex" justify="between" align="start" width="full">
-                    <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
-                      <Icon icon={getToolIcon(tool)} size="md" color="dim" />
-                    </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
-                      {tool.status}
-                    </Text>
-                  </Box>
-                  <Stack gap={3}>
-                    <Stack gap={1}>
-                      <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">
-                        {tool.category}
-                      </Text>
-                      <Text variant="display" size="xl" weight="font-black">
-                        {tool.title}
-                      </Text>
-                    </Stack>
-                    <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
-                      {tool.subtitle}
-                    </Text>
-                    <Text size="sm" color="dim">
-                      {tool.description}
-                    </Text>
-                    <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-                      {tool.tags.map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                          {tag}
-                        </Text>
-                      ))}
-                    </Box>
-                  </Stack>
-                </Stack>
-                <Box display="flex" align="center" gap={2} marginTop="auto">
-                  <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
-                  <Icon icon={ArrowRight} size="md" color="accent" />
-                </Box>
-              </Stack>
-            ))}
-          </Grid>
+
+          <Stack gap={8}>
+            {/* DevAI & Engineering Systems */}
+            <Stack gap={6}>
+              <Box border="l" paddingLeft={4} className="border-accent/30">
+                <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">DevAI & Engineering Systems</Text>
+                <Text size="sm" color="dim" marginTop={1}>Core orchestration frameworks and diagnostic tooling for automated workflows.</Text>
+              </Box>
+              <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={10}>
+                {devAiTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
+                ))}
+              </Grid>
+            </Stack>
+
+            {/* Data & Content Pipelines */}
+            <Stack gap={6}>
+              <Box border="l" paddingLeft={4} className="border-accent/30">
+                <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">Data & Content Pipelines</Text>
+                <Text size="sm" color="dim" marginTop={1}>High-fidelity ETL systems and human-in-the-loop content generation engines.</Text>
+              </Box>
+              <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={10}>
+                {pipelineTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
+                ))}
+              </Grid>
+            </Stack>
+
+            {/* Automation & Business Utilities */}
+            <Stack gap={6}>
+              <Box border="l" paddingLeft={4} className="border-accent/30">
+                <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">Automation & Business Utilities</Text>
+                <Text size="sm" color="dim" marginTop={1}>Applied automation for logistics, calendar sync, and ecommerce operations.</Text>
+              </Box>
+              <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={10}>
+                {utilityTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
+                ))}
+              </Grid>
+            </Stack>
+          </Stack>
         </Stack>
 
         {studies.length > 0 && (
-          <Stack gap={8} id="articles">
+          <Stack gap={12} id="articles">
             <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
               <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
