@@ -11,7 +11,6 @@ test.describe('ProductCard Mobile Badge Reduction', () => {
 
   test('should show summarized roles on mobile', async ({ page }) => {
     // Find a product card that has roles
-    const cards = page.getByTestId('product-card');
     const roleSummary = page.getByTestId('product-role-summary').first();
 
     await expect(roleSummary).toBeVisible();
