@@ -19,6 +19,7 @@ export default defineConfig(({mode}) => {
   const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
   const analyze = env.ANALYZE === 'true' || process.env.ANALYZE === 'true';
   const inspect = env.VITE_INSPECT === 'true' || process.env.VITE_INSPECT === 'true';
+  const skipMinify = process.env.DISABLE_MINIFY === 'true' || mode === 'development';
 
   const resolveHostname = () => {
     if (env.VITE_APP_URL) return env.VITE_APP_URL;
@@ -62,6 +63,12 @@ export default defineConfig(({mode}) => {
       // Ensure assets are also handled correctly
       assetsDir: 'assets',
       chunkSizeWarningLimit: 400,
+      minify: skipMinify ? false : 'esbuild',
+      rollupOptions: {
+        output: {
+          compact: !skipMinify,
+        }
+      }
     },
     define: {
       'process.env.APP_URL': JSON.stringify(fullAppUrl),
