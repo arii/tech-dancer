@@ -3,11 +3,11 @@
 ## 1. Summary of all open issues reviewed
 
 - Total open issues reviewed: 39 / 39
-- Issues recommended to keep open: 26
+- Issues recommended to keep open: 32
 - Issues recommended for clarification: 0
 - Issues recommended to merge: 4
-- Issues recommended to close: 0
-- Issues blocked by PRs or other work: 9
+- Issues recommended to close: 2
+- Issues blocked by PRs or other work: 1
 
 ## 2. Recommended Actions Overview
 
@@ -16,12 +16,12 @@ The issues have been categorized below based on their required next steps.
 ## 3. Issues that should remain open
 
 - Issue #2193 — Fix trigger condition in issue_to_pr.yml workflow to support bracketed post tags
+- Issue #2192 — UX Redesign: Story-Driven Event Resources Landing Experience
 - Issue #2190 — Draft [POST]: Moving Beyond AI Assisted Engineering
 - Issue #2180 — ux storyboard
 - Issue #2178 — visual diff with crop
+- Issue #2175 — impact analysis for dynamic features
 - Issue #2172 — ux improvements
-- Issue #2171 — ux storyboard
-- Issue #2170 — ux storyboard
 - Issue #2168 — AI-First Repository Optimization Guide
 - Issue #2167 — Automated Impact Review System: Repository Grooming & AI Context Engineering Guide
 - Issue #2165 — Add LangChain and multi agents to deployment impact review system
@@ -31,10 +31,16 @@ The issues have been categorized below based on their required next steps.
 - Issue #2031 — Add Halloween Swing Thing Event Resource Guide
 - Issue #2022 — ux-auditor snapshot updates
 - Issue #1916 — mcp issues
+- Issue #1912 — update setup and package.json
 - Issue #1908 — update setup_agent
+- Issue #1903 — Reduce mobile badge wrapping on ProductCard
 - Issue #1882 — [Jules] Boomtick MCP: Integration, Schema Compliance, and Tool Dispatch Improvements
+- Issue #1864 — Reduce desktop list fatigue in /research tools grid
 - Issue #1863 — Improve Desktop rhythm on /merch by constraining footer callouts
+- Issue #1841 — # Lightweight CPU RAG Multi-Agent PR Review Pipeline
+- Issue #1816 — Update AGENTS.md with affiliate, SEO, and URL stability requirements
 - Issue #1767 — Verify MerchImageDisplay Height Responsiveness
+- Issue #1749 — Research page: add UX storyboard and visual redesign plan
 - Issue #1748 — Research page: add SEO-focused DevAI implementation articles
 - Issue #1747 — Research page: feature BoomTick.blog and RepoAuditor AI as flagship outputs
 - Issue #1746 — Research page: rename and clarify project taxonomy
@@ -55,7 +61,8 @@ The issues have been categorized below based on their required next steps.
 
 ## 6. Issues that should be closed as duplicates
 
-- None
+- Issue #2171 — ux storyboard
+- Issue #2170 — ux storyboard
 
 ## 7. Issues that should be closed as completed
 
@@ -67,15 +74,7 @@ The issues have been categorized below based on their required next steps.
 
 ## 9. Blocked Issues (by PRs or other work)
 
-- Issue #2192 — UX Redesign: Story-Driven Event Resources Landing Experience
 - Issue #2191 — UX Redesign: Story-Driven Blog Landing Experience
-- Issue #2175 — impact analysis for dynamic features
-- Issue #1912 — update setup and package.json
-- Issue #1903 — Reduce mobile badge wrapping on ProductCard
-- Issue #1864 — Reduce desktop list fatigue in /research tools grid
-- Issue #1841 — # Lightweight CPU RAG Multi-Agent PR Review Pipeline
-- Issue #1816 — Update AGENTS.md with affiliate, SEO, and URL stability requirements
-- Issue #1749 — Research page: add UX storyboard and visual redesign plan
 
 ## 10. Label, milestone, or priority cleanup recommendations
 
@@ -91,6 +90,7 @@ The issues have been categorized below based on their required next steps.
 ## 12. Recommended order for addressing remaining issues
 
 1. Address issues needing clarification by asking the authors for details.
-2. Break down Epics and Consolidated issues into smaller, manageable chunks.
-3. Review PRs that are blocking issues to merge or update them.
-4. Tackle remaining 'Keep open' issues, prioritizing by severity (bugs first) and business value.
+2. Close the duplicate issues in section 6.
+3. Break down Epics and Consolidated issues into smaller, manageable chunks.
+4. Review PRs that are blocking issues to merge or update them.
+5. Tackle remaining 'Keep open' issues, prioritizing by severity (bugs first) and business value.
