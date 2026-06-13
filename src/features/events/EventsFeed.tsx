@@ -1,4 +1,4 @@
-import { Box, Grid, Text, Stack } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { useEvents } from './useEvents';
 import { SEO } from '@/components/SEO';
 import { EventCard } from '@/components/ui/EventCard';
