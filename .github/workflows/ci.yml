@@ -9,9 +9,11 @@ on:
       - 'etl/**'
       - 'dev-tools/**'
       - 'tests/**'
+      - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/ci.yml'
+      - '.github/actions/**'
       - 'AGENTS.md'
       - 'USAGE_NOTES.md'
       - 'WORKFLOW.md'
@@ -25,9 +27,11 @@ on:
       - 'etl/**'
       - 'dev-tools/**'
       - 'tests/**'
+      - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/ci.yml'
+      - '.github/actions/**'
       - 'AGENTS.md'
       - 'USAGE_NOTES.md'
       - 'WORKFLOW.md'
@@ -57,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -97,6 +101,8 @@ jobs:
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
+        env:
+          CI: true
         run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
@@ -112,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
@@ -151,7 +157,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
       env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Install system utilities
@@ -161,7 +167,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
       - uses: actions/setup-python@v5
@@ -178,14 +184,6 @@ jobs:
           VITE_BASE_PATH=/; export VITE_BASE_PATH
           pnpm run build
 
-      - name: Build App for Bundle Size (Pages base path)
-        env:
-          NODE_ENV: production
-          REPO_NAME: ${{ github.event.repository.name }}
-        run: |
-          # Bundle size check should match GitHub Pages deployment base path.
-          VITE_BASE_PATH=/$REPO_NAME/; export VITE_BASE_PATH
-          pnpm run build
 
       - name: Bundle Size Check
         env:
@@ -195,13 +193,6 @@ jobs:
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
-
-      - name: Rebuild App for Playwright (root base path)
-        env:
-          NODE_ENV: production
-        run: |
-          VITE_BASE_PATH=/; export VITE_BASE_PATH
-          pnpm run build
 
       - name: Run Playwright Smoke Test
         run: |
@@ -213,13 +204,11 @@ jobs:
       - name: Run Lighthouse CI
         run: |
           set -eu
-          VITE_BASE_PATH="/${REPO_NAME}/"
+          VITE_BASE_PATH="/"
           CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
           export VITE_BASE_PATH
           export CHROME_PATH
-          echo "VITE_BASE_PATH=$VITE_BASE_PATH"
           echo "CHROME_PATH=$CHROME_PATH"
-          pnpm run build
           pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -232,3 +221,46 @@ jobs:
           name: playwright-report-${{ github.run_id }}
           path: playwright-report/
           retention-days: 7
+
+  impact-analysis:
+    name: Deployment Impact Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Install Playwright browser
+        run: pnpm run setup:playwright
+      - name: Deployment Impact Analysis
+        run: pnpm run impact:analysis
+      - name: Build Main
+        env:
+          DISABLE_MINIFY: true
+        run: pnpm run impact:build-main
+      - name: Build PR
+        env:
+          VITE_BASE_PATH: /
+          DISABLE_MINIFY: true
+        run: pnpm run build:review
+      - name: Visual Diff
+        run: pnpm run impact:visual-diff
+      - name: DOM Diff
+        run: pnpm run impact:dom-diff
+      - name: Report Summary
+        if: always()
+        run: |
+          if [ -f artifacts/deployment-review.md ]; then
+            cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+          elif [ -f artifacts/impact-analysis/impact.md ]; then
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
+            echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload Deployment Review Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-review
+          path: artifacts/
