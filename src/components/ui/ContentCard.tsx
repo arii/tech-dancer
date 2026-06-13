@@ -1,5 +1,5 @@
 import { motion, HTMLMotionProps } from 'motion/react';
-import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { Box, Stack, Text, BaseProps, Grid } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
@@ -26,6 +26,7 @@ export function ContentCard(props: ContentCardProps) {
     basePath,
     date,
     readingTime,
+    image,
   } = props;
 
   const motionProps = pickRest(props, [
@@ -38,7 +39,7 @@ export function ContentCard(props: ContentCardProps) {
     const c = cat.toLowerCase();
     if (c.includes('travel')) return 'text-accent-purple';
     if (c.includes('tech')) return 'text-accent';
-    if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
+    if (c.includes('data') || c.includes('research')) return 'text-accent-teal';
     return 'text-accent';
   };
 
@@ -46,13 +47,34 @@ export function ContentCard(props: ContentCardProps) {
     <BaseCard
       as={MotionArticle}
       direction="col"
-      gap={4}
+      gap={0}
       height="full"
-      padding={6}
+      padding={0}
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
       {...motionProps}
     >
+      {image ? (
+        <Box
+          aspect="video"
+          width="full"
+          overflow="hidden"
+          className="bg-surface-alt"
+        >
+          <Box
+            as="img"
+            src={image}
+            alt=""
+            width="full"
+            height="full"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Box>
+      ) : (
+        <Box aspect="video" width="full" className="bg-gradient-to-br from-surface-alt to-bg" />
+      )}
+
+      <Stack gap={4} padding={6} flex={1}>
       <Box
         paddingX={2}
         paddingY={1}
@@ -94,9 +116,10 @@ export function ContentCard(props: ContentCardProps) {
           {[date, readingTime].filter(Boolean).join(' • ') || category}
         </Text>
         <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-          Read article
+          Read →
         </Text>
       </Box>
+      </Stack>
     </BaseCard>
   );
 }

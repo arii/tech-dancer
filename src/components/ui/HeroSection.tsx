@@ -1,8 +1,10 @@
 
 
+import { NavLink } from 'react-router-dom';
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
+import { ActionButton } from './ActionButton';
 import { HERO_CONFIG } from '@/config/hero';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
@@ -64,7 +66,7 @@ export function HeroSection() {
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 5, lg: 6 }}
+          marginTop={{ base: 5, lg: 8 }}
           align="start"
           gap={0}
           width="full"
@@ -76,15 +78,7 @@ export function HeroSection() {
           <Text
             as="span"
             variant="hero"
-            color="white"
-            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
-          >
-            Built for dancers.
-          </Text>
-          <Text
-            as="span"
-            variant="hero"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "7xl", lg: "8xl" }}
           >
             <span className="hero-accent-color">Train smarter.</span>
           </Text>
@@ -98,42 +92,42 @@ export function HeroSection() {
           </Text>
         </Stack>
 
-        {/* Gradient Accent Line below headline */}
-        <Box
-          width={24}
-          height={1.5}
-          marginTop={2}
-          radius="full"
-          opacity={0}
-          pointerEvents="none"
-          className="hero-line-anim"
-        />
-
         {/* Tagline with Vertical Accent Bar */}
         <Stack
           direction="row"
           align="stretch"
-          gap={5}
-          marginTop={{ base: 2, lg: 4 }}
+          gap={6}
+          marginTop={{ base: 6, lg: 8 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"
         >
           <Box
-            width="0.5"
-            className="bg-white/20 shrink-0"
+            width="1.5"
+            radius="full"
+            className="bg-accent-teal shrink-0 shadow-[0_0_12px_rgba(45,212,191,0.3)]"
             aria-hidden="true"
           />
           <Text
             as="p"
             variant="body"
-            weight="font-normal"
+            weight="font-medium"
             align="left"
-            size={{ base: "base", md: "lg", lg: "xl" }}
-            className="hero-tagline-text"
+            size={{ base: "lg", md: "xl", lg: "2xl" }}
+            color="white"
+            className="hero-tagline-text leading-tight tracking-tight"
           >
-            Training notes, event guides, gear reviews, and practical tools for better West Coast Swing weekends.
+            The modern resource for the West Coast Swing community.
           </Text>
+        </Stack>
+
+        <Stack direction="row" gap={4} marginTop={10} opacity={0} className="hero-cta-anim">
+          <ActionButton as={NavLink} to="/blog" variant="primary" paddingX={8} paddingY={4} className="text-sm font-bold uppercase tracking-widest">
+            Explore Blog
+          </ActionButton>
+          <ActionButton as={NavLink} to="/events" variant="ghost" paddingX={8} paddingY={4} className="text-sm font-bold uppercase tracking-widest border-white/10 hover:bg-white/5">
+            Event Guides
+          </ActionButton>
         </Stack>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}

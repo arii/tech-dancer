@@ -92,6 +92,16 @@ export const routes: RouteConfig[] = [
     isTopNav: true
   },
   {
+    path: '/privacy',
+    lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
+  },
+  {
+    path: '/terms',
+    lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
+  },
+  {
     path: '/contact',
     lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
     label: 'Contact',
@@ -103,12 +113,12 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
     skeleton: 'simple'
   },
-  {
+  ...(import.meta.env.DEV || import.meta.env.VITE_IS_STAGING === 'true' ? [{
     path: '/preview',
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',
     sitemap: false
-  },
+  }] : []),
   {
     path: '/previews',
     Component: () => {

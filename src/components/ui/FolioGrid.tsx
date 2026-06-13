@@ -82,11 +82,10 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
+          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={6}>
             {filteredItems.map((item) => (
               <Box
                 key={item.slug}
-                padding={4}
                 height="full"
                 className="bg-transparent"
               >

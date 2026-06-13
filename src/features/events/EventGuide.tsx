@@ -125,6 +125,11 @@ export default function EventGuide() {
               <Stack gap={SECTION_SPACING}>
                 {event.theme && (
                   <Box id="theme" layout="eventSection">
+                    <Box marginBottom={6}>
+                       <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+                         Visual Identity
+                       </Text>
+                    </Box>
                     <ThemeSpotlight
                       title={event.theme.name}
                       label={event.theme.label}
@@ -138,6 +143,11 @@ export default function EventGuide() {
 
                 {gearSections.length > 0 && (
                   <Box id="gear" layout="eventSection">
+                    <Box marginBottom={6}>
+                       <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+                         Packing List
+                       </Text>
+                    </Box>
                     <CuratedGear
                       title={`Gear for ${event.title}`}
                       sections={gearSections}
@@ -150,10 +160,20 @@ export default function EventGuide() {
                 </Box>
 
                 <Box id="travel" layout="eventSection">
+                  <Box marginBottom={6}>
+                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+                      Logistics
+                    </Text>
+                  </Box>
                   <EventTravel notes={event.description} />
                 </Box>
 
                 <Box id="notes" layout="eventSection">
+                  <Box marginBottom={6}>
+                    <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">
+                      Pro Tips
+                    </Text>
+                  </Box>
                   <EventNotes content={event.content} />
                 </Box>
 

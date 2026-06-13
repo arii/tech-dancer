@@ -57,13 +57,20 @@ export function GearPostDetail({ post, onBack, backLabel }: GearPostDetailProps)
           }
         />
       }
-      sidebar={
-        <ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />
-      }
     >
       <Box className="prose-editorial">
-        {post.verdict && <VerdictCallout verdict={post.verdict} />}
+        {post.verdict && (
+          <Box marginBottom={12} padding={8} radius="xl" border className="bg-accent-teal/5 border-accent-teal/20 relative overflow-hidden">
+            <Box position="absolute" top={0} left={0} width={1.5} height="full" className="bg-accent-teal" />
+            <Text variant="display" size="xl" color="white" className="italic font-medium leading-relaxed">
+              &ldquo;{post.verdict}&rdquo;
+            </Text>
+          </Box>
+        )}
         <MarkdownRenderer content={post.content} />
+      </Box>
+      <Box marginTop={16} paddingTop={12} border="t" className="border-line/30">
+        <ResourceSidebar affiliateIds={post.affiliateIds} specs={post.specs} />
       </Box>
     </EditorialLayout>
   );

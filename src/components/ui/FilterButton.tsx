@@ -16,8 +16,8 @@ const variantStyles = {
 };
 
 const activeStyles = {
-  default: "border-accent text-accent bg-accent/5 ring-2 ring-accent",
-  compact: "border-accent text-accent bg-accent/5 ring-2 ring-accent",
+  default: "border-accent text-bg bg-accent ring-2 ring-accent shadow-[0_0_12px_rgba(34,211,238,0.4)]",
+  compact: "border-accent text-bg bg-accent ring-2 ring-accent shadow-[0_0_12px_rgba(34,211,238,0.4)]",
   quiet: "bg-surface border-line text-text-main",
 };
 

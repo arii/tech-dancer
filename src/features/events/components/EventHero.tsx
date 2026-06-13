@@ -66,7 +66,7 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "20vh", md: "25vh" }}
+      minHeight={{ base: "320px", md: "420px" }}
       direction="col"
       gap={0}
       overflow="hidden"
@@ -78,13 +78,13 @@ export function EventHero({
           <img
             src={image}
             alt=""
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover opacity-60"
             aria-hidden="true"
           />
           <Box
             position="absolute"
             inset
-            className="event-hero-overlay"
+            className="bg-gradient-to-b from-bg/20 via-bg/40 to-bg"
           />
         </Box>
       ) : (

@@ -202,7 +202,8 @@ ${data.excerpt || ''}
     }
 
     if (data.type === 'resource') {
-      return `type: resource
+      return `---
+type: resource
 title: "${data.title || ''}"
 date: "${data.date}"
 author: "${data.author}"
@@ -214,7 +215,9 @@ rating: ${data.rating ?? 0}
 verdict: "${data.verdict || ''}"
 priceCategory: "${data.priceCategory || ''}"
 updatedDate: "${data.updatedDate || ''}"
-${data.heading || ''}
+---
+# ${data.heading || data.title || ''}
+
 ${data.content || ''}
 `;
     }

@@ -43,13 +43,8 @@ export default function Home() {
         </Box>
 
 
-        <Box
-          display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
-        >
-          <LatestPosts />
-          <DevLabCallout />
-        </Box>
+        <DevLabCallout />
+        <LatestPosts />
         <TopicGrid />
       </Stack>
     </Box>

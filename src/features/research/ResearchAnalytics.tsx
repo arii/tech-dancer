@@ -80,11 +80,11 @@ export default function ResearchAnalytics() {
           </Text>
           <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
             {skills.map((skill) => (
-              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" className="border-accent/20 bg-accent/5">
+              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="sm" className="border-accent/10 bg-surface-alt">
                 <Box display={{ base: 'none', md: 'flex' }}>
-                  <Icon icon={skill.icon} size="sm" color="accent" />
+                  <Icon icon={skill.icon} size="sm" color="accent-teal" />
                 </Box>
-                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">
+                <Text variant="mono" size="micro" weight="font-bold" color="accent-teal" uppercase tracking="widest">
                   {skill.name}
                 </Text>
               </Box>
@@ -107,10 +107,12 @@ export default function ResearchAnalytics() {
 
 
 
-        <Stack gap={6} id="flagship" marginTop={2}>
-          <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
+        <Stack gap={6} id="flagship" marginTop={8}>
+          <Box position="sticky" top={16} zIndex="docked" className="bg-bg/90 backdrop-blur-md py-4 border-b">
+            <Box display="flex" justify="between" align="end">
+              <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
+            </Box>
           </Box>
           <Grid cols={{ base: 1, md: 2 }} gap={6}>
             {flagshipTools.map((tool) => (
@@ -199,25 +201,16 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
-            </Text>
-          </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" className="border-accent/10 relative overflow-hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" className="leading-relaxed">
-              Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
-            </Text>
-          </Stack>
-        </Grid>
+        <Box padding={12} surface="muted" border radius="xl" className="border-accent-amber/20 relative overflow-hidden mt-12">
+          <Box position="absolute" top={0} left={0} width={1.5} height="full" className="bg-accent-amber shadow-[0_0_15px_rgba(251,191,36,0.3)]" />
+          <Text as="h2" variant="mono" size="xs" color="accent-amber" weight="font-black" uppercase tracking="widest" marginBottom={6}>The DevAI Philosophy</Text>
+          <Text variant="display" size="2xl" color="white" className="italic font-medium leading-relaxed max-width-3xl">
+            &ldquo;Shipping high-fidelity products requires practical AI orchestration, not just hype. My systems handle 10k+ telemetry points daily, ensuring that AI remains a production-grade multiplier rather than an experimental novelty. I build engineering systems that keep the developer in the loop while maintaining uncompromising standards.&rdquo;
+          </Text>
+        </Box>
 
         <Stack gap={8}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+          <Box id="systems" paddingBottom={4} display="flex" justify="between" align="end" border="b" marginTop={16}>
             <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
           </Box>
@@ -240,9 +233,12 @@ export default function ResearchAnalytics() {
                     <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" className="border-accent/10">
                       <Icon icon={getToolIcon(tool)} size="md" color="dim" />
                     </Box>
-                    <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
-                      {tool.status}
-                    </Text>
+                    <Box display="flex" align="center" gap={2}>
+                       <Box width={2} height={2} radius="full" className={tool.status === 'ACTIVE' ? 'bg-accent-teal' : 'bg-accent-amber'} />
+                       <Text size="micro" weight="font-bold" uppercase tracking="widest" color={tool.status === 'ACTIVE' ? 'accent-teal' : 'accent-amber'}>
+                         {tool.status}
+                       </Text>
+                    </Box>
                   </Box>
                   <Stack gap={3}>
                     <Stack gap={1}>

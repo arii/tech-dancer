@@ -103,7 +103,7 @@ export function EventReminders({ event, id }: EventRemindersProps) {
       radius="2xl"
       border
       surface="surface"
-      className="overflow-hidden"
+      className="overflow-hidden bg-accent-teal/5 border-accent-teal/20"
     >
       <Box
         position="absolute"
@@ -122,6 +122,9 @@ export function EventReminders({ event, id }: EventRemindersProps) {
           </Text>
           <Text variant="headline" size="3xl" weight="font-black">
             Stay on Top of What Matters
+          </Text>
+          <Text variant="body" color="dim" size="lg">
+            Key dates and deadlines to ensure a smooth trip.
           </Text>
         </Stack>
 

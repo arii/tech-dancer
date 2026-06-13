@@ -75,16 +75,16 @@ export function ThemeSpotlight({
           </Stack>
 
           {colors.length > 0 && (
-            <Stack direction="row" gap={3} align="center">
+            <Stack direction="row" gap={4} align="center">
               {colors.map((color, i) => (
                 <Box
                   key={`${color}-${i}`}
-                  width={6}
-                  height={6}
-                  radius="full"
+                  width={16}
+                  height={16}
+                  radius="lg"
                   border
                   style={{ backgroundColor: color }} // impeccable-ignore - Dynamic color swatches require inline styles for arbitrary data-driven colors.
-                  className="hover:scale-110 transition-transform cursor-help shadow-sm"
+                  className="hover:scale-110 transition-transform cursor-help shadow-inner border-white/10"
                   title={color}
                 />
               ))}

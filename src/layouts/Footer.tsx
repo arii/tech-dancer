@@ -10,8 +10,10 @@ export function Footer() {
 
   useEffect(() => {
     // Only set on client to avoid hydration mismatch
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLastUpdated(formatRelativeTime(import.meta.env.VITE_BUILD_TIME));
+    const buildTime = import.meta.env.VITE_BUILD_TIME;
+    if (buildTime) {
+      setLastUpdated(formatRelativeTime(new Date(buildTime)));
+    }
   }, []);
 
   const legalLinks = [
@@ -26,60 +28,56 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
+      <Box paddingY={16} paddingX={6} surface="bg" border="t" className="border-line/30">
 
-      <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
-        <Stack direction="row" align="center" gap={3} wrap>
-          <Text variant="mono" size="tiny" color="dim" weight="font-semibold" className="tracking-widest shrink-0" data-testid="footer-copyright">
-            © 2026 BOOMTICK.BLOG
+      <Stack direction={{ base: 'col', lg: 'row' }} justify="between" align={{ base: 'start', lg: 'center' }} gap={8}>
+        <Stack direction="col" align="start" gap={4}>
+          <Text size="sm" weight="font-bold" className="tracking-tight shrink-0" data-testid="footer-copyright">
+            © 2026 BOOMTICK
           </Text>
-          <Box className="hidden md:block w-px h-3 bg-white/10" />
-          <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap">
-            <span className="font-mono tracking-wider uppercase">
-              {isDev ? 'dev' : `v${appVersion}`} (
+
+          <Stack direction="row" align="center" gap={3} wrap>
+            <Text size="xs" color="dim" className="whitespace-nowrap flex items-center gap-2">
+              <span className="opacity-50">
+                {isDev ? 'Development' : `Version ${appVersion}`}
+              </span>
+              <Box className="w-1 h-1 rounded-full bg-line" />
               <Box
                 as="a"
                 href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 display="inline-block"
-                paddingY={{ base: 3.5, sm: 0 }}
-                className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
+                className="hover:text-accent transition-colors underline decoration-white/10 underline-offset-4 font-mono opacity-50 hover:opacity-100"
               >
                 {commitSha.substring(0, 7)}
               </Box>
-              )
-            </span>
-            {lastUpdated && ` · Last updated ${lastUpdated}`}
-          </Text>
+              {lastUpdated && (
+                <>
+                  <Box className="w-1 h-1 rounded-full bg-line" />
+                  <span className="opacity-50">Built {lastUpdated}</span>
+                </>
+              )}
+            </Text>
+          </Stack>
         </Stack>
 
-        <Box>
-          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" className="not-italic">
+        <Box maxWidth="xl" className="lg:text-center">
+          <Text variant="sans" size="tiny" color="dim" className="leading-relaxed opacity-40">
             {DISCLOSURE_TEXT}
           </Text>
         </Box>
 
-        <Stack direction="row" gap={2} align="center">
+        <Stack direction="row" gap={1} align="center" className="-ml-3">
           {legalLinks.map((link) => (
             <ActionButton
               key={link.label}
               as={NavLink}
               to={link.to}
               variant="ghost"
-              paddingX={{ base: 4, md: 3 }}
-              paddingY={{ base: 4, md: 1.5 }}
-              className="active:scale-95"
+              className="active:scale-95 text-xs font-semibold px-3 py-2 text-text-dim hover:text-accent transition-colors"
             >
-              <Text
-                variant="mono"
-                size="xs"
-                uppercase
-                weight="font-bold"
-                className="tracking-widest"
-              >
-                {link.label}
-              </Text>
+              {link.label}
             </ActionButton>
           ))}
         </Stack>

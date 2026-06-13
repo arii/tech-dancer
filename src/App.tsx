@@ -24,7 +24,7 @@ export function HydrateFallback() {
         width={8}
         height={8}
         radius="full"
-        className="border-4 border-accent border-t-transparent animate-spin"
+        className="border-4 border-accent-teal border-t-accent-amber animate-spin"
       />
     </Box>
   );

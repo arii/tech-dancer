@@ -534,12 +534,20 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             flex
             border
             surface="muted"
-            padding={6}
+            padding={0}
             overflow="y-auto"
             maxHeight="600px"
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
-            <MarkdownRenderer content={markdownPreview} />
+            <Box padding={6} surface="alt" border="b" className="border-line/30 mb-6">
+               <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" marginBottom={2}>Frontmatter</Text>
+               <Box as="pre" className="text-accent-teal text-xs overflow-x-auto whitespace-pre-wrap font-mono">
+                 {markdownPreview.split('---')[1] ? `---${markdownPreview.split('---')[1]}---` : 'No Frontmatter'}
+               </Box>
+            </Box>
+            <Box paddingX={6} paddingBottom={6}>
+               <MarkdownRenderer content={markdownPreview.split('---').slice(2).join('---').trim() || markdownPreview} />
+            </Box>
           </Box>
 
           <Grid cols={2} gap={4}>

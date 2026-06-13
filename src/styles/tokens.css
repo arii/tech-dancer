@@ -8,7 +8,8 @@
   --raw-color-accent: #22d3ee; /* Cyan 400 for WCAG AA contrast on dark surfaces */
   --raw-color-accent-sky: #38bdf8;
   --raw-color-accent-purple: #a78bfa;
-  --raw-color-accent-magenta: #e879f9;
+  --raw-color-accent-teal: #2dd4bf;
+  --raw-color-accent-amber: #fbbf24;
   --raw-color-accent-shadow: rgba(8, 145, 178, 0.3);
   --raw-color-accent-navy: #f1f5f9;
   --raw-color-accent-brand: #22d3ee;
@@ -96,7 +97,7 @@
   --hero-accent-shadow: color-mix(in srgb, var(--raw-color-accent-brand) 20%, transparent);
   --logo-muted-text: color-mix(in srgb, var(--raw-color-text-main) 60%, transparent);
   --brand-gradient-main: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
-  --brand-gradient-alt: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-magenta) 100%);
+  --brand-gradient-alt: linear-gradient(180deg, var(--raw-color-accent-teal) 0%, var(--raw-color-accent-amber) 100%);
 }
 
 /* Keyframes used by HeroSection.tsx */
