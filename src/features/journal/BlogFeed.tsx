@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
+import { Box, Grid, Stack, Text, Button } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
 import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
@@ -8,14 +8,20 @@ import { TopicNavigation } from './components/TopicNavigation';
 import { LatestArticles } from './components/LatestArticles';
 import { PopularResources } from './components/PopularResources';
 import { SearchBox } from '@/components/ui/SearchBox';
+import { useSearchParam } from '@/hooks/useSearchParam';
 
 export default function BlogFeed() {
-  const { posts, activeCategory, searchTerm, setSearchTerm } = useBlog();
+  const {
+    activeCategory,
+    searchTerm,
+    setSearchTerm,
+    featuredPost,
+    popularPosts,
+    latestPosts
+  } = useBlog();
+  const [, setCategory] = useSearchParam('category', 'All');
 
-  // Featured article: most popular or most recent guide
-  const featuredPost = posts[0];
-  const remainingPosts = posts.slice(1);
-  const popularPosts = posts.slice(1, 4);
+  const isFiltered = activeCategory !== 'All' || !!searchTerm;
 
   return (
     <Box as="section">
@@ -24,7 +30,7 @@ export default function BlogFeed() {
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
       />
 
-      {activeCategory === 'All' && !searchTerm && (
+      {!isFiltered && (
         <>
           <BlogHero />
 
@@ -40,9 +46,26 @@ export default function BlogFeed() {
 
       <Stack gap={8} paddingY={12}>
         <Box display="flex" align="center" justify="between" gap={4} flexWrap="wrap">
-          <Text variant="headline" size="lg" weight="font-black" uppercase tracking="widest">
-            {searchTerm ? `Results for "${searchTerm}"` : (activeCategory === 'All' ? 'Latest Articles' : activeCategory)}
-          </Text>
+          <Stack direction="row" align="center" gap={4}>
+            <Text variant="headline" size="lg" weight="font-black" uppercase tracking="widest">
+              {searchTerm ? `Results for "${searchTerm}"` : (activeCategory === 'All' ? 'Latest Articles' : activeCategory)}
+            </Text>
+            {isFiltered && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setCategory('All');
+                  setSearchTerm('');
+                }}
+                padding={0}
+                height="auto"
+                className="text-accent hover:underline"
+              >
+                Clear all
+              </Button>
+            )}
+          </Stack>
           <SearchBox
             value={searchTerm || ''}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -52,7 +75,7 @@ export default function BlogFeed() {
 
         <Grid cols={{ base: 1, lg: 12 }} gap={12}>
           <Box gridColumn={{ lg: "span 8" }}>
-            <LatestArticles posts={activeCategory === 'All' && !searchTerm ? remainingPosts : posts} />
+            <LatestArticles posts={latestPosts} />
           </Box>
 
           <Box gridColumn={{ lg: "span 4" }} display={{ base: 'none', lg: 'block' }}>

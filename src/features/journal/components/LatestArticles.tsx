@@ -1,8 +1,9 @@
-import { Box, Grid } from '@/layouts/Primitives';
+import { Box, Grid, Text } from '@/layouts/Primitives';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { Post } from '@/lib/types/content';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Search } from 'lucide-react';
+import { LATEST_ARTICLES_SECTION_ID } from '@/config/blog-content';
 
 interface LatestArticlesProps {
   posts: Post[];
@@ -20,7 +21,7 @@ export function LatestArticles({ posts }: LatestArticlesProps) {
   }
 
   return (
-    <Box id="latest-articles" as="section" width="full">
+    <Box id={LATEST_ARTICLES_SECTION_ID} as="section" width="full">
       <Grid cols={{ base: 1, md: 2 }} gap={6}>
         {posts.map((post) => (
           <ContentCard

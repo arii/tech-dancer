@@ -1,8 +1,9 @@
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Post } from '@/lib/types/content';
 import { ASSET_PREFIX } from '@/config/constants';
 import { NavLink } from 'react-router-dom';
 import { journalVariants } from '@/lib/variants';
+import { BLOG_CONTENT } from '@/config/blog-content';
 
 interface FeaturedArticleProps {
   post: Post;
@@ -19,7 +20,7 @@ export function FeaturedArticle({ post }: FeaturedArticleProps) {
       overflow="hidden"
       className={journalVariants.card({ variant: 'hero', interactive: true })}
     >
-      <Grid cols={{ base: 1, lg: 10 }} gap={0}>
+      <Box display="grid" gridTemplateColumns={{ base: "1fr", lg: "repeat(10, 1fr)" }} gap={0}>
         <Box gridColumn={{ lg: "span 6" }} height={{ base: "64", lg: "96" }} position="relative">
           <img
             src={post.image?.startsWith('/') ? `${ASSET_PREFIX}${post.image}` : post.image}
@@ -30,7 +31,7 @@ export function FeaturedArticle({ post }: FeaturedArticleProps) {
         <Box gridColumn={{ lg: "span 4" }} padding={{ base: 6, md: 10 }} display="flex" direction="col" justify="center">
           <Stack gap={4}>
             <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
-              FEATURED ARTICLE
+              {BLOG_CONTENT.sections.featured}
             </Text>
             <Text as="h2" variant="h1" size={{ base: "2xl", md: "3xl" }} weight="font-black" leading="tight">
               {post.title}
@@ -45,7 +46,7 @@ export function FeaturedArticle({ post }: FeaturedArticleProps) {
             </Box>
           </Stack>
         </Box>
-      </Grid>
+      </Box>
     </Box>
   );
 }

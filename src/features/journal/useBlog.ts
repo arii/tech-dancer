@@ -42,6 +42,26 @@ export function useBlog() {
     return result;
   }, [posts, activeCategory, searchTerm]);
 
+  const featuredPost = useMemo(() => {
+    // Logic: First post marked as featured, or just the first post
+    return posts.find(p => p.tags?.includes('featured')) || posts[0];
+  }, [posts]);
+
+  const popularPosts = useMemo(() => {
+    // Logic: Posts with 'popular' tag, or the next 3 after featured
+    const popular = posts.filter(p => p.tags?.includes('popular') && p.slug !== featuredPost?.slug);
+    if (popular.length > 0) return popular.slice(0, 3);
+    return posts.filter(p => p.slug !== featuredPost?.slug).slice(0, 3);
+  }, [posts, featuredPost]);
+
+  const latestPosts = useMemo(() => {
+    // If we are in "All" view, latest articles are everything EXCEPT the featured post
+    if (activeCategory === 'All' && !searchTerm) {
+      return filteredPosts.filter(p => p.slug !== featuredPost?.slug);
+    }
+    return filteredPosts;
+  }, [filteredPosts, featuredPost, activeCategory, searchTerm]);
+
   return {
     posts: filteredPosts,
     categories,
@@ -49,6 +69,9 @@ export function useBlog() {
     view,
     setView,
     searchTerm,
-    setSearchTerm
+    setSearchTerm,
+    featuredPost,
+    popularPosts,
+    latestPosts
   };
 }

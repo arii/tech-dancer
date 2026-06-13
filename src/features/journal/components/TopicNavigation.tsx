@@ -1,6 +1,7 @@
 import { Calendar, ShoppingBag, BookOpen, Cpu } from 'lucide-react';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { useSearchParam } from '@/hooks/useSearchParam';
+import { BLOG_CONTENT, CATEGORY_SECTION_ID, LATEST_ARTICLES_SECTION_ID } from '@/config/blog-content';
 
 const TOPICS = [
   {
@@ -33,9 +34,9 @@ export function TopicNavigation() {
   const [, setCategory] = useSearchParam('category', 'All');
 
   return (
-    <Box id="categories" as="section" paddingY={12}>
+    <Box id={CATEGORY_SECTION_ID} as="section" paddingY={12}>
       <Text as="h2" variant="headline" size="lg" weight="font-black" marginBottom={6} uppercase tracking="widest">
-        Browse by Topic
+        {BLOG_CONTENT.sections.topics}
       </Text>
       <Grid cols={{ base: 2, md: 4 }} gap={4}>
         {TOPICS.map(({ icon: Icon, label, description, category }) => (
@@ -44,7 +45,7 @@ export function TopicNavigation() {
             as="button"
             onClick={() => {
               setCategory(category);
-              document.getElementById('latest-articles')?.scrollIntoView({ behavior: 'smooth' });
+              document.getElementById(LATEST_ARTICLES_SECTION_ID)?.scrollIntoView({ behavior: 'smooth' });
             }}
             gap={3}
             padding={6}
