@@ -203,7 +203,8 @@ async function main() {
       changedFiles,
       affectedPages,
       visualReviewRequired: allUrls,
-      impactLevel: severity
+      impactLevel: severity,
+      routes: allUrls // Adding routes as expected by the new pipeline
     };
 
     // Human readable output
@@ -226,11 +227,17 @@ async function main() {
     console.log('\n' + '='.repeat(40));
 
     // Write to artifacts
-    const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
+    const artifactsDir = path.join(process.cwd(), 'artifacts');
+    if (!fs.existsSync(artifactsDir)) {
+      fs.mkdirSync(artifactsDir, { recursive: true });
+    }
+
+    fs.writeFileSync(path.join(artifactsDir, 'impact-analysis.json'), JSON.stringify(report, null, 2));
+
+    const outputDir = path.join(artifactsDir, 'impact-analysis');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
-
     fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
 
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
