@@ -95,7 +95,7 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
-          python3 -m pip install pytest
+          python3 -m pip install pytest requests click PyGithub
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
@@ -126,7 +126,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 -m pip install click
+          python3 -m pip install click requests PyGithub
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           pnpm run audit
@@ -173,7 +173,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VITE_BASE_PATH: /
         run: |
-          python3 -m pip install click
+          python3 -m pip install click requests PyGithub
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
