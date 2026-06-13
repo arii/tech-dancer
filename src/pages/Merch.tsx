@@ -16,15 +16,11 @@ import { PRINTFUL_REFERRAL } from '@/config/constants';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState("all");
-
-
   const allProducts = getAllMerchProducts();
   const filteredProducts = getMerchByCollection(activeCollection);
 
-  // Group products for editorial sections when "all" is active
   const sections = useMemo(() => {
     if (activeCollection !== 'all') return null;
-
     return [
       {
         id: 'featured',
@@ -34,168 +30,83 @@ export default function Merch() {
           allProducts.find(p => p.id === 'lead-follow-switch-love-neon'),
           allProducts.find(p => p.id === 'war-eagle-oversized'),
           allProducts.find(p => p.id === 'norcal-bestcal-golden-gate-pride'),
-        ].filter((p): p is NonNullable<typeof p> => !!p),
+        ].filter((p): p is any => !!p),
       },
       {
         id: 'lead-follow-switch',
-        title: 'Lead, Follow, and Switch Dance Shirts',
-        description: 'Role-specific and gender-neutral designs for West Coast Swing dancers who lead, follow, switch, or just love the social floor.',
+        title: 'Roles & Rhythm',
+        description: 'Role-specific and gender-neutral designs for Leads, Follows, and Switches.',
         products: allProducts.filter(p => p.collections.includes('lead-follow-switch')),
       },
       {
         id: 'norcal-bestcal',
-        title: 'NorCal BestCal Pride Apparel',
+        title: 'NorCal BestCal',
         description: 'Bay Area, California, Golden Gate, and bear designs representing our Northern California roots.',
         products: allProducts.filter(p => p.collections.includes('norcal-bestcal')),
-      },
-      {
-        id: 'rainbow-pride',
-        title: 'Rainbow Pride Dance Apparel',
-        description: 'Pride-focused designs celebrating an inclusive dance floor and social dance identity.',
-        products: allProducts.filter(p => p.collections.includes('rainbow-pride')),
       }
     ];
   }, [activeCollection, allProducts]);
 
   return (
-    <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center">
-      <SEO
-        title="West Coast Swing Dance Merch"
-        description="Shop official BoomTick apparel for West Coast Swing dancers, social dancers, and NorCal locals. Curated collections for leads, follows, and switch dancers."
-        jsonLd={generateMerchSchema(allProducts)}
-      />
+    <Box as="section">
+      <SEO title="West Coast Swing Merch" description="Shop official BoomTick apparel." />
 
-      <Stack gap={{ base: 5, md: 6 }} width="full" maxWidth="screen-xl">
-        <PageHeader
-          label="STOREFRONT"
-          title="West Coast Swing Dance Merch"
-          description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
-          paddingBottom={4}
-          cta={
-            <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
-              <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
-                 Shop Printful Store
-              </Button>
-              <Button as="a" href={PRINTFUL_REFERRAL.URL} target="_blank" rel="sponsored noopener noreferrer" variant="outline" width={{ base: 'full', sm: 'auto' }}>
-                 Claim $5 Discount
-              </Button>
-            </Stack>
-          }
-        />
+      <Stack gap={12} width="full" maxWidth="screen-xl" marginX="auto">
+        <Box borderBottom paddingBottom={8}>
+          <PageHeader
+            label="STOREFRONT"
+            title="Dance gear that says something."
+            description="High-fidelity apparel for the social dance floor. Curated for Leads, Follows, and Northern California locals."
+            border="none" paddingBottom={0}
+            cta={
+              <Stack direction="row" gap={4} marginTop={4}>
+                <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener" variant="primary" paddingX={8}>
+                   Shop Collection
+                </Button>
+              </Stack>
+            }
+          />
+        </Box>
 
-        {/* Collection Filters */}
-        <Stack gap={3}>
-          <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
-            Shop by Style
-          </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto">
-            <Stack direction="row" gap={2} padding={1} minWidth="max">
-              {COLLECTIONS.map((collection) => (
-                <FilterButton
-                  key={collection.id}
-                  label={collection.label}
-                  isActive={activeCollection === collection.id}
-                  onClick={() => setActiveCollection(collection.id)}
-                />
-              ))}
-            </Stack>
+        <Stack gap={4}>
+          <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">Collections</Text>
+          <Box display="flex" gap={2} wrap>
+            {COLLECTIONS.map((c) => (
+              <FilterButton key={c.id} label={c.label} isActive={activeCollection === c.id} onClick={() => setActiveCollection(c.id)} />
+            ))}
           </Box>
         </Stack>
 
-        {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (
-          <Stack gap={8}>
-            {sections.map((section) => (
-              <Stack key={section.id} gap={5}>
+          <Stack gap={16}>
+            {sections.map((s) => (
+              <Stack key={s.id} gap={8}>
                 <Stack gap={1}>
-                  <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
-                    {section.title}
-                  </Text>
-                  <Text variant="body" color="dim">
-                    {section.description}
-                  </Text>
+                  <Text variant="display" size="3xl" weight="font-black">{s.title}</Text>
+                  <Text variant="body" color="dim" className="border-l border-accent/20" paddingLeft={4}>{s.description}</Text>
                 </Stack>
-                {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
-                    <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
-                      <ProductCard item={section.products[0]} isFeatured />
-                    </Box>
-                    {section.products.slice(1, 3).map((product) => (
-                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full">
-                        <ProductCard
-                          item={product}
-                        />
-                      </Box>
-                    ))}
-                  </Grid>
-                ) : (
-                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
-                    {section.products.map((product) => (
-                      <ProductCard
-                        key={`${section.id}-${product.id}`}
-                        item={product}
-                      />
-                    ))}
-                  </Grid>
-                )}
+                <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>
+                  {s.products.map((p: any) => <ProductCard key={p.id} item={p} />)}
+                </Grid>
               </Stack>
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} item={product} />
-            ))}
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>
+            {filteredProducts.map((p) => <ProductCard key={p.id} item={p} />)}
           </Grid>
         )}
 
-        {/* Footer Callouts */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8} width="full" minWidth="0">
-          {/* Design Suggestions */}
-          <Box padding={8} radius="lg" border surface="card">
-            <Stack gap={6}>
-              <Box
-                padding={3}
-                radius="full"
-                width="fit"
-                className="bg-accent/10 text-accent"
-              >
-                <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
-              </Box>
-              <Stack gap={2}>
-                <Text
-                  variant="headline"
-                  size="xl"
-                  weight="font-bold"
-                  uppercase
-                  tracking="tight"
-                >
-                  Have a Design Idea?
-                </Text>
-                <Text variant="body" size="sm" color="dim" leading="relaxed">
-                  We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
-                </Text>
-              </Stack>
-              <Button
-                as={NavLink}
-                to="/contact"
-                variant="outline"
-                className="w-fit"
-              >
-                Submit Suggestion
-              </Button>
+        <Box padding={12} radius="xl" border surface="alt" className="border-accent/10 relative overflow-hidden">
+          <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+          <Grid cols={{ base: 1, lg: 2 }} gap={12} align="center">
+            <Stack gap={4}>
+              <Text variant="display" size="2xl" weight="font-black">Referral Program</Text>
+              <Text variant="body" color="dim">Love the gear? Invite your friends and get  off your next order.</Text>
             </Stack>
-          </Box>
-
-          <Box padding={8} radius="lg" border surface="card">
-             <Stack gap={6}>
-                <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
-                  Referral Discount
-                </Text>
-                <ReferralBanner layout="expanded" />
-             </Stack>
-          </Box>
-        </Grid>
+            <ReferralBanner layout="expanded" />
+          </Grid>
+        </Box>
       </Stack>
     </Box>
   );

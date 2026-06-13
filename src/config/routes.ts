@@ -1,4 +1,5 @@
 import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, Tag } from 'lucide-react';
+import { redirect } from 'react-router-dom';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -92,6 +93,16 @@ export const routes: RouteConfig[] = [
     isTopNav: true
   },
   {
+    path: '/privacy',
+    lazy: () => import('@/pages/Privacy').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
+  },
+  {
+    path: '/terms',
+    lazy: () => import('@/pages/Terms').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
+  },
+  {
     path: '/contact',
     lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
     label: 'Contact',
@@ -108,16 +119,20 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
     skeleton: 'grid',
     sitemap: false,
-    // Gate preview route behind environment check
-    Component: import.meta.env.PROD ? () => {
-      window.location.replace('/');
+    stub: true,
+    loader: () => {
+      // Safe environment check that works in Node and Browser
+      const isProd = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.PROD : process.env.NODE_ENV === 'production';
+      if (isProd) {
+        throw redirect('/');
+      }
       return null;
-    } : undefined
+    }
   },
   {
     path: '/previews',
     Component: () => {
-      const base = import.meta.env.BASE_URL || '/';
+      const base = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.BASE_URL : '/') || '/';
       const cleanBase = base.endsWith('/') ? base : base + '/';
       window.location.replace(cleanBase + 'previews/index.html');
       return null;

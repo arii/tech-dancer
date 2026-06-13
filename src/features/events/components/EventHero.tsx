@@ -66,7 +66,7 @@ export function EventHero({
       data-testid="hero"
       position="relative"
       width="full"
-      minHeight={{ base: "20vh", md: "25vh" }}
+      minHeight={{ base: "33vh", md: "45vh" }}
       direction="col"
       gap={0}
       overflow="hidden"
@@ -134,11 +134,11 @@ export function EventHero({
             <Text
               as="h1"
               variant="headline"
-              size={{ base: "fluid-4", md: "fluid-6" }}
+              size={{ base: "fluid-5", md: "fluid-8" }}
               weight="font-black"
               color="white"
-              leading="tight"
-              tracking="tight"
+              leading="none"
+              tracking="tighter"
             >
               {title}
             </Text>

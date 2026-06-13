@@ -71,13 +71,16 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 display="flex"
                 align="center"
                 justify="between"
-                padding={4}
-                surface="default"
+                padding={5}
+                surface="alt"
                 border
-                className="hover:border-accent group transition-all"
+                radius="lg"
+                className="hover:border-accent group transition-all bg-accent/5 border-accent/20 shadow-glow"
               >
-                <Text variant="mono" size="xs" weight="font-bold">{link.name || link.label || link.url}</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
+                <Text variant="mono" size="sm" weight="font-black" color="accent">
+                  {link.id.includes('amazon') ? 'VIEW ON AMAZON' : (link.name || link.label || 'OPEN LINK').toUpperCase()}
+                </Text>
+                <ExternalLink className="w-5 h-5 text-accent" />
               </Box>
             ))}
             {affiliateLink && (
@@ -89,17 +92,18 @@ export function ResourceSidebar({ affiliateIds, affiliateLink, specs }: Resource
                 display="flex"
                 align="center"
                 justify="between"
-                padding={4}
-                surface="default"
+                padding={5}
+                surface="alt"
                 border
-                className="hover:border-accent group transition-all"
+                radius="lg"
+                className="hover:border-accent group transition-all bg-accent/5 border-accent/20 shadow-glow"
               >
-                <Text variant="mono" size="xs" weight="font-bold">Buy on Amazon</Text>
-                <ExternalLink className="w-4 h-4 text-accent opacity-medium group-hover:opacity-full" />
+                <Text variant="mono" size="sm" weight="font-black" color="accent">VIEW ON AMAZON</Text>
+                <ExternalLink className="w-5 h-5 text-accent" />
               </Box>
             )}
           </Grid>
-          <Text variant="mono" size="micro" color="dim" emphasis="low" className="leading-tight not-italic">
+          <Text variant="sans" size="micro" color="dim" className="leading-relaxed not-italic" marginTop={2}>
             {DISCLOSURE_TEXT}
           </Text>
         </Stack>

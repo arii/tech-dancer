@@ -126,17 +126,21 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           </Stack>
         </Stack>
 
-        <Stack id="newsletter-section" gap={8} paddingTop={12} border="t" borderColor="line/50">
-          <Stack gap={2}>
-            <Text variant="headline" size="2xl" weight="font-black">Newsletter</Text>
-            <Text variant="body" size="base" color="main">
-              Prefer to just stay updated? Join the mailing list for monthly deep-dives into dance research, gear, and travel tips.
-            </Text>
+        <Box width="full" surface="alt" paddingY={16} paddingX={{ base: 4, md: 10 }} border radius="xl" className="border-accent/10 relative overflow-hidden">
+          <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+          <Stack id="newsletter-section" direction={{ base: 'col', lg: 'row' }} align="center" gap={12}>
+            <Stack gap={4} flex={1}>
+              <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">SUBSCRIBE</Text>
+              <Text variant="display" size="3xl" weight="font-black">Join the Community</Text>
+              <Text variant="body" size="base" color="dim" className="leading-relaxed">
+                Join the mailing list for monthly deep-dives into dance research, gear, and travel tips.
+              </Text>
+            </Stack>
+            <Box maxWidth="md" width="full" className="shrink-0">
+              <EmailForm />
+            </Box>
           </Stack>
-          <Box maxWidth="md">
-            <EmailForm />
-          </Box>
-        </Stack>
+        </Box>
       </Stack>
     </Box>
   );

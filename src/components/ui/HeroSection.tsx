@@ -85,17 +85,27 @@ export function HeroSection() {
             as="span"
             variant="hero"
             size={{ base: "5xl", md: "7xl", lg: "8xl" }}
+            className="text-accent"
           >
-            <span className="hero-accent-color">Train smarter.</span>
+            Train smarter.
           </Text>
           <Text
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "7xl", lg: "8xl" }}
           >
             Travel better.
           </Text>
+        </Stack>
+
+        <Stack direction="row" gap={4} marginTop={8} opacity={0} className="hero-cta-anim">
+          <ActionButton as={NavLink} to="/events" variant="primary" paddingX={8} paddingY={4} className="text-sm uppercase tracking-widest">
+            Explore Guides
+          </ActionButton>
+          <ActionButton as={NavLink} to="/gear" variant="secondary" paddingX={8} paddingY={4} className="text-sm uppercase tracking-widest">
+            Gear Reviews
+          </ActionButton>
         </Stack>
 
         {/* Gradient Accent Line below headline */}

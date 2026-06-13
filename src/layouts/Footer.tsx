@@ -11,18 +11,21 @@ export function Footer() {
   useEffect(() => {
     // Only set on client to avoid hydration mismatch
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLastUpdated(formatRelativeTime(import.meta.env.VITE_BUILD_TIME));
+    const buildTime = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_BUILD_TIME : '';
+    if (buildTime) {
+      setLastUpdated(formatRelativeTime(buildTime));
+    }
   }, []);
 
   const legalLinks = [
     { label: 'Contact', to: '/contact' },
-    { label: 'Privacy', to: '/about#privacy' },
-    { label: 'Terms', to: '/about#terms' },
+    { label: 'Privacy', to: '/privacy' },
+    { label: 'Terms', to: '/terms' },
   ];
 
-  const appVersion = import.meta.env.VITE_APP_VERSION || '0.0.0';
-  const commitSha = import.meta.env.VITE_COMMIT_SHA || 'dev';
-  const isDev = import.meta.env.DEV;
+  const appVersion = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_APP_VERSION : '0.0.0') || '0.0.0';
+  const commitSha = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_COMMIT_SHA : 'dev') || 'dev';
+  const isDev = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.DEV : process.env.NODE_ENV !== 'production';
 
   return (
     <Box as="footer" marginTop="auto" width="full">
@@ -30,13 +33,15 @@ export function Footer() {
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={8}>
         <Stack direction="row" align="center" gap={4} wrap>
-          <Text variant="sans" size="tiny" color="dim" weight="font-bold" className="tracking-widest shrink-0" data-testid="footer-copyright">
+          <Text variant="sans" size="tiny" color="dim" weight="font-bold" uppercase tracking="widest" className="shrink-0" data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
           </Text>
           <Box className="hidden md:block w-px h-3 bg-white/10" />
           <Text variant="sans" size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap">
             <span className="tracking-wider uppercase">
-              {isDev ? 'dev' : `v${appVersion}`} (
+              <Text as="span" variant="sans" weight="font-bold" uppercase>
+                {isDev ? 'dev' : `v${appVersion}`}
+              </Text> (
               <Box
                 as="a"
                 href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
@@ -60,7 +65,7 @@ export function Footer() {
           </Text>
         </Box>
 
-        <Stack direction="row" gap={3} align="center">
+        <Stack direction="row" gap={4} align="center">
           {legalLinks.map((link) => (
             <ActionButton
               key={link.label}

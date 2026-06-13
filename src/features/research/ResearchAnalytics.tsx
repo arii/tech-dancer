@@ -60,13 +60,38 @@ export default function ResearchAnalytics() {
   ];
 
   return (
-    <Box as="section">
+    <Box as="section" position="relative">
       <SEO
         title="DevAI Portfolio"
         description="DevAI portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
-      <Stack gap={4}>
+
+      {/* Sticky Section Nav */}
+      <Box
+        position="sticky"
+        top={16}
+        zIndex={40}
+        width="full"
+        surface="bg"
+        border="b"
+        className="bg-bg/80 backdrop-blur-md hidden lg:block"
+      >
+        <Stack direction="row" justify="center" gap={8} paddingY={4}>
+          {['Flagship', 'Systems', 'Articles'].map(section => (
+            <Box
+              as="a"
+              key={section}
+              href={`#${section.toLowerCase()}`}
+              className="text-xs font-bold uppercase tracking-widest text-text-dim hover:text-accent transition-colors"
+            >
+              {section}
+            </Box>
+          ))}
+        </Stack>
+      </Box>
+
+      <Stack gap={12} marginTop={8}>
         <Stack gap={2}>
           <PageHeader
             label="HIRE_ME"
@@ -133,19 +158,24 @@ export default function ResearchAnalytics() {
                       </Text>
                     </Box>
 
-                    <Stack gap={3}>
-                      <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
+                    <Stack gap={6}>
+                      <Stack gap={2}>
+                        <Text variant="mono" size="micro" color="accent" weight="font-black" uppercase tracking="widest">
                           {tool.category}
                         </Text>
-                        <Text variant="display" size="2xl" weight="font-black">
+                        <Text variant="display" size="3xl" weight="font-black" leading="none">
                           {tool.title}
                         </Text>
                       </Stack>
-                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
-                        {tool.subtitle}
-                      </Text>
-                      <Text variant="body" size="md" color="dim" className="leading-relaxed">
+
+                      {/* Impact Statement */}
+                      <Box padding={4} radius="md" surface="alt" border className="border-accent/20 bg-accent/5">
+                        <Text variant="body" size="sm" weight="font-bold" color="accent" className="italic">
+                          Impact: {tool.subtitle}
+                        </Text>
+                      </Box>
+
+                      <Text variant="body" size="md" color="dim" className="leading-relaxed line-clamp-4">
                         {tool.description}
                       </Text>
                     </Stack>

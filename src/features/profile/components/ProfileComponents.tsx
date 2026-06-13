@@ -66,21 +66,24 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
  */
 export function ProfileItems({ items }: { items: ProfileItem[] }) {
   return (
-    <Grid cols={{ base: 1, md: 3 }} gap={4} marginTop={2}>
+    <Grid cols={{ base: 1, md: 3 }} gap={6} marginTop={4}>
       {items.map((item, index) => {
         const Icon = item.icon ? IconMap[item.icon] : null;
         return (
-          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-line/5">
-            <Stack gap={3}>
-              {Icon && <Icon className="w-4 h-4 text-accent" />}
-              {item.title && (
-                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="uppercase tracking-widest">
-                  {item.title}
+          <Box key={index} padding={8} border radius="xl" surface="alt" className="border-line/30 relative overflow-hidden group hover:border-accent/30 transition-all">
+            <Box position="absolute" top={0} left={0} width="full" height={0.5} className="bg-accent/10" />
+            <Stack gap={4}>
+              {Icon && <Icon className="w-8 h-8 text-accent opacity-dim group-hover:opacity-solid transition-opacity" />}
+              <Stack gap={2}>
+                {item.title && (
+                  <Text as="h3" variant="display" size="lg" weight="font-black" uppercase tracking="widest">
+                    {item.title}
+                  </Text>
+                )}
+                <Text variant="body" size="sm" color="dim" className="leading-relaxed">
+                  {item.description}
                 </Text>
-              )}
-              <Text variant="body" size="xs" color="dim" className="leading-normal">
-                {item.description}
-              </Text>
+              </Stack>
             </Stack>
           </Box>
         );

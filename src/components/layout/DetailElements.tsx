@@ -86,13 +86,14 @@ export function SpecsTable({ specs }: { specs?: Record<string, string> }) {
 
 export function VerdictCallout({ verdict }: { verdict: string }) {
   return (
-    <Box border padding={8} surface="accent" marginBottom={12} radius="lg" className="border-accent/30">
-       <Stack gap={3}>
+    <Box border radius="xl" padding={10} surface="alt" marginBottom={16} className="border-accent/30 relative overflow-hidden">
+       <Box position="absolute" top={0} left={0} width={1.5} height="full" className="bg-amber-500" />
+       <Stack gap={4}>
           <Stack direction="row" align="center" gap={3}>
              <Icon icon={Shield} size="lg" color="accent" />
-             <Text variant="display" size="2xl" weight="font-black" color="accent" uppercase>THE VERDICT</Text>
+             <Text variant="display" size="3xl" weight="font-black" color="accent" uppercase tracking="widest">THE VERDICT</Text>
           </Stack>
-          <Text variant="body" size="lg" italic leading="relaxed" weight="font-medium" color="main">
+          <Text variant="body" size="2xl" italic leading="relaxed" weight="font-medium" color="main" className="text-pretty">
             "{verdict}"
           </Text>
        </Stack>

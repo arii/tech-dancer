@@ -112,7 +112,13 @@ export const routes = [
     element: <RootLayout />,
     HydrateFallback: HydrateFallback,
     errorElement: <GlobalErrorBoundary />,
-    children: routeConfig.map((route) => ({
+    children: routeConfig
+      .filter(route => {
+        // Safe check for production environment that works during both build and runtime
+        const isProd = typeof import.meta !== "undefined" && import.meta.env ? import.meta.env.PROD : process.env.NODE_ENV === "production";
+        return !(route.path === '/preview' && isProd);
+      })
+      .map((route) => ({
       ...route,
       // React Router children paths should be relative to parent if they don't start with /
       // or absolute if they do. Since our parent is '/', absolute paths work fine too,

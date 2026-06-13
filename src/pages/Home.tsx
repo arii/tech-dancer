@@ -43,12 +43,30 @@ export default function Home() {
         </Box>
 
 
+        <Box width="full" surface="alt" paddingY={12} paddingX={{ base: 4, md: 12 }} border radius="xl" className="border-accent/10 relative overflow-hidden">
+           <Box position="absolute" top={0} left={0} width="full" height={1} className="bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+           <Stack direction={{ base: 'col', lg: 'row' }} align="center" gap={12}>
+              <Stack gap={4} flex={1}>
+                <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Built with AI</Text>
+                <Text variant="display" size="3xl" weight="font-black">The DevAI Portfolio</Text>
+                <Text variant="body" size="lg" color="dim" className="leading-relaxed text-pretty">
+                  A live production testbed where every feature and data pipeline is audited and optimized by autonomous developer agents.
+                </Text>
+              </Stack>
+              <Box className="shrink-0">
+                <ActionButton as={NavLink} to="/research" variant="primary" paddingX={10} paddingY={4} className="text-sm uppercase tracking-widest">
+                  View Systems →
+                </ActionButton>
+              </Box>
+           </Stack>
+        </Box>
+
         <Box
           display="grid"
           className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <LatestPosts />
-          <DevLabCallout />
+          <GearShelf />
         </Box>
         <TopicGrid />
       </Stack>

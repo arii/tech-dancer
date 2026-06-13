@@ -43,8 +43,8 @@ export const Equalizer = () => {
           className="w-full max-w-[4px] rounded-full"
           style={{
             backgroundColor: 'transparent',
-            background: `linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))`,
-            boxShadow: `0 0 14px var(--hero-accent-shadow)`,
+            background: `linear-gradient(180deg, var(--raw-color-accent), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))`,
+            boxShadow: `0 0 14px var(--raw-color-accent-shadow)`,
             opacity: bar.opacity,
           }}
         />
