@@ -13,7 +13,7 @@ const config: KnipConfig = {
     'dependency-cruiser',
     '@types/pixelmatch'
   ],
-  ignoreBinaries: ['python3', 'semgrep'],
+  ignoreBinaries: ['python3'],
   ignoreExportsUsedInFile: true,
 };
 

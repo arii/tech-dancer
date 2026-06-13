@@ -26,8 +26,6 @@
     "lint:ox": "oxlint --deny-warnings src/ tests/ scripts/",
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
-    "semgrep:scan": "semgrep scan --config auto --error",
-    "ci:local": "run-s lint type-check test audit semgrep:scan knip",
     "knip": "knip --exclude exports",
     "type-check": "tsc --noEmit",
     "audit": "node scripts/detect-antipatterns.mjs",

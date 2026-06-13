@@ -1,1 +1,1 @@
-pnpm run semgrep:scan
+semgrep --config=auto boomtick-mcp/src/

@@ -16,8 +16,7 @@ dependencies = [
     "python-dotenv",
     "pydantic",
     "click",
-    "PyGithub",
-    "semgrep"
+    "PyGithub"
 ]
 
 [project.scripts]
