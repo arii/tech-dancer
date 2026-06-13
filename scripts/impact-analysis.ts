@@ -152,10 +152,39 @@ function getContentAffectedUrls(changedFiles: string[]): string[] {
   const urls: string[] = [];
 
   for (const file of changedFiles) {
+    // Handle Markdown content files
     for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
       if (file.startsWith(dir) && file.endsWith('.md')) {
         const slug = path.basename(file, '.md');
         urls.push(`${prefix}${slug}`);
+      }
+    }
+
+    // Handle image assets (e.g., gear sketches affecting /gear and /gear/slug)
+    if (file.startsWith('public/images/gear/') && file.match(/\.(png|jpe?g|webp|svg)$/)) {
+      urls.push('/gear'); // The main list view
+      // Try to extract a slug from the filename.
+      // Often, the file name contains the slug (e.g., public/images/gear/sketches/compression-cubes.webp)
+      // but without the date. We might not have the exact date-prefixed URL slug here,
+      // but if the slug matches partially or fully, we can at least suggest the pattern.
+      // E.g., /gear/compression-cubes
+      const basename = path.basename(file, path.extname(file));
+      // For images, we can't reliably know the full slug if it includes a date in the markdown,
+      // but we can list the generic path or find the markdown that references it.
+      // To be safe and alert the developer, we'll list a parameterized route or a wildcard-like suggestion
+      // However, if we just push a dynamic route like /gear/<associated-slug>, the tester knows.
+      // A better approach: find the markdown file that references this image.
+      const searchPattern = path.basename(file);
+      try {
+        const grepOutput = exec(`grep -rl "${searchPattern}" content/resources/ || true`);
+        const matchingMarkdown = splitAndFilter(grepOutput);
+        for (const mdFile of matchingMarkdown) {
+          const slug = path.basename(mdFile, '.md');
+          urls.push(`/gear/${slug}`);
+        }
+      } catch {
+        // Fallback if grep fails
+        urls.push(`/gear/${basename}`);
       }
     }
   }
