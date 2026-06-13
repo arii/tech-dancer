@@ -1,6 +1,4 @@
-import { MessageCircle } from 'lucide-react';
 import { useState, useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
@@ -8,11 +6,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
-import { generateMerchSchema } from '@/utils/schema';
-import { cn } from '@/lib/utils';
-import { stroke } from '@/styles/design-tokens';
 import { FilterButton } from '@/components/ui/FilterButton';
-import { PRINTFUL_REFERRAL } from '@/config/constants';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState("all");
@@ -92,7 +86,7 @@ export default function Merch() {
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={8}>
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={8}>
             {filteredProducts.map((p) => <ProductCard key={p.id} item={p} />)}
           </Grid>
         )}

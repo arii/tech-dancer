@@ -9,16 +9,10 @@ import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
-import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { NavLink } from 'react-router-dom';
 import { cardVariants, listRowVariants } from '@/lib/variants';
 
-const viewportIcons = {
-  Mobile: <Icon icon={Smartphone} size="md" />,
-  Tablet: <Icon icon={Tablet} size="md" />,
-  Desktop: <Icon icon={Monitor} size="md" />
-};
 
 function ViewportFrame({ url, width, height }: { url: string; width: number; height: number }) {
   const containerRef = useRef<HTMLDivElement>(null);

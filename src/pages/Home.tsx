@@ -7,7 +7,6 @@ import { TopicGrid } from '@/features/home/TopicGrid';
 import { FeaturedEventGuide } from '@/features/home/FeaturedEventGuide';
 import { GearShelf } from '@/features/home/GearShelf';
 import { LatestPosts } from '@/features/home/LatestPosts';
-import { DevLabCallout } from '@/features/home/DevLabCallout';
 import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
