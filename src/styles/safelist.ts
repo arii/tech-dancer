@@ -101,6 +101,7 @@ export const tailwindSafelist = [
   'md:h-80',
   'max-w-sm',
   'max-w-3xl',
+  'max-w-screen-2xl',
   'grid-cols-1',
   'grid-cols-2',
   'grid-cols-3',
