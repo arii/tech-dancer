@@ -88,13 +88,15 @@ export function MainLayout({ children }: { children: ReactNode }) {
             flex={1}
             direction="col"
             marginX="auto"
-            maxWidth="7xl"
+            maxWidth="full"
             width="full"
             minWidth={0}
             overflowX="hidden"
             className="overflow-x-clip"
           >
-            {children}
+            <Box width="full" flex={1}>
+              {children}
+            </Box>
             <Footer />
           </Stack>
         </Stack>
