@@ -12,6 +12,46 @@ import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 
+const SKILLS = [
+  { name: 'React', icon: Layout },
+  { name: 'Vite', icon: Zap },
+  { name: 'TypeScript', icon: Code },
+  { name: 'GitHub Actions', icon: Workflow },
+  { name: 'Vercel', icon: Rocket },
+  { name: 'Playwright', icon: Microscope },
+  { name: 'Python', icon: Terminal },
+  { name: 'LLM workflows', icon: SearchCode },
+  { name: 'SEO-safe automation', icon: Search },
+  { name: 'ecommerce automation', icon: Database },
+];
+
+const ENGINEERING_SECTIONS = [
+  {
+    id: 'devai',
+    title: 'DevAI & Engineering Systems',
+    description: 'Core orchestration frameworks and diagnostic tooling for automated workflows.',
+    categories: ['DevAI System', 'Perception Debugging'],
+    cols: { base: 1, md: 2, lg: 3 },
+    gap: 6
+  },
+  {
+    id: 'pipelines',
+    title: 'Data & Content Pipelines',
+    description: 'High-fidelity ETL systems and human-in-the-loop content generation engines.',
+    categories: ['Data Engineering', 'Content Tools'],
+    cols: { base: 1, md: 2 },
+    gap: 8
+  },
+  {
+    id: 'utilities',
+    title: 'Automation & Business Utilities',
+    description: 'Applied automation for logistics, calendar sync, and ecommerce operations.',
+    categories: ['Utility Tools', 'Business Automation'],
+    cols: { base: 1, md: 2 },
+    gap: 8
+  }
+];
+
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
   if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
@@ -36,24 +76,13 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
   );
 }
 
-function ToolSection({
-  title,
-  description,
-  tools,
-  gridCols,
-  gridGapX,
-  gridGapY,
-  navigate,
-  getToolIcon
-}: {
+function ToolSection({ title, description, tools, gridCols, gridGapX, navigate }: {
   title: string;
   description: string;
   tools: ResearchTool[];
   gridCols: ResponsiveProp<number | string>;
   gridGapX: ResponsiveProp<number | string>;
-  gridGapY: ResponsiveProp<number | string>;
   navigate: (path: string) => void;
-  getToolIcon: (tool: ResearchTool) => LucideIcon;
 }) {
   return (
     <Stack gap={6}>
@@ -61,30 +90,24 @@ function ToolSection({
         <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">{title}</Text>
         <Text size="sm" color="dim" marginTop={1}>{description}</Text>
       </Box>
-      <Grid cols={gridCols} gapX={gridGapX} gapY={gridGapY}>
+      <Grid cols={gridCols} gapX={gridGapX} gapY={10}>
         {tools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} navigate={navigate} getToolIcon={getToolIcon} />
+          <ToolCard key={tool.id} tool={tool} navigate={navigate} />
         ))}
       </Grid>
     </Stack>
   );
 }
 
-function ToolCard({ tool, navigate, getToolIcon }: {
+function ToolCard({ tool, navigate }: {
   tool: ResearchTool;
   navigate: (path: string) => void;
-  getToolIcon: (tool: ResearchTool) => LucideIcon;
 }) {
   return (
     <Stack
       as="button"
       onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
-      padding={6}
-      paddingBottom={10}
-      gap={4}
-      height="full"
-      align="start"
-      textAlign="left"
+      padding={6} paddingBottom={10} gap={4} height="full" align="start" textAlign="left"
       className={cardVariants({ interactive: true })}
     >
       <Stack gap={4} width="full">
@@ -92,30 +115,18 @@ function ToolCard({ tool, navigate, getToolIcon }: {
           <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" borderColor="accent/10">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
-          <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">
-            {tool.status}
-          </Text>
+          <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">{tool.status}</Text>
         </Box>
         <Stack gap={3}>
           <Stack gap={1}>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">
-              {tool.category}
-            </Text>
-            <Text variant="display" size="xl" weight="font-black">
-              {tool.title}
-            </Text>
+            <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">{tool.category}</Text>
+            <Text variant="display" size="xl" weight="font-black">{tool.title}</Text>
           </Stack>
-          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">
-            {tool.subtitle}
-          </Text>
-          <Text size="sm" color="dim">
-            {tool.description}
-          </Text>
+          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">{tool.subtitle}</Text>
+          <Text size="sm" color="dim">{tool.description}</Text>
           <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
             {tool.tags.map(tag => (
-              <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                {tag}
-              </Text>
+              <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">{tag}</Text>
             ))}
           </Box>
         </Stack>
@@ -131,39 +142,19 @@ function ToolCard({ tool, navigate, getToolIcon }: {
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
+  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
 
-  const devAiTools = engineeringTools.filter(t =>
-    t.category === 'DevAI System' || t.category === 'Perception Debugging'
-  );
-  const pipelineTools = engineeringTools.filter(t =>
-    t.category === 'Data Engineering' || t.category === 'Content Tools'
-  );
-  const utilityTools = engineeringTools.filter(t =>
-    t.category === 'Utility Tools' || t.category === 'Business Automation'
-  );
+  const sectionsWithTools = ENGINEERING_SECTIONS.map(section => ({
+    ...section,
+    tools: engineeringTools.filter(t => section.categories.includes(t.category))
+  }));
 
-  const categorizedIds = new Set([...devAiTools, ...pipelineTools, ...utilityTools].map(t => t.id));
+  const categorizedIds = new Set(sectionsWithTools.flatMap(s => s.tools.map(t => t.id)));
   const otherTools = engineeringTools.filter(t => !categorizedIds.has(t.id));
-
-  const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
-
-  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-
-  const skills = [
-    { name: 'React', icon: Layout },
-    { name: 'Vite', icon: Zap },
-    { name: 'TypeScript', icon: Code },
-    { name: 'GitHub Actions', icon: Workflow },
-    { name: 'Vercel', icon: Rocket },
-    { name: 'Playwright', icon: Microscope },
-    { name: 'Python', icon: Terminal },
-    { name: 'LLM workflows', icon: SearchCode },
-    { name: 'SEO-safe automation', icon: Search },
-    { name: 'ecommerce automation', icon: Database },
-  ];
 
   return (
     <Box as="section">
@@ -185,14 +176,12 @@ export default function ResearchAnalytics() {
             I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
           </Text>
           <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
-            {skills.map((skill) => (
+            {SKILLS.map((skill) => (
               <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" surface="accent">
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <Icon icon={skill.icon} size="sm" color="accent" />
                 </Box>
-                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">
-                  {skill.name}
-                </Text>
+                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">{skill.name}</Text>
               </Box>
             ))}
           </Box>
@@ -333,38 +322,17 @@ export default function ResearchAnalytics() {
           </Box>
 
           <Stack gap={8}>
-            <ToolSection
-              title="DevAI & Engineering Systems"
-              description="Core orchestration frameworks and diagnostic tooling for automated workflows."
-              tools={devAiTools}
-              gridCols={{ base: 1, md: 2, lg: 3 }}
-              gridGapX={6}
-              gridGapY={10}
-              navigate={navigate}
-              getToolIcon={getToolIcon}
-            />
-
-            <ToolSection
-              title="Data & Content Pipelines"
-              description="High-fidelity ETL systems and human-in-the-loop content generation engines."
-              tools={pipelineTools}
-              gridCols={{ base: 1, md: 2 }}
-              gridGapX={8}
-              gridGapY={10}
-              navigate={navigate}
-              getToolIcon={getToolIcon}
-            />
-
-            <ToolSection
-              title="Automation & Business Utilities"
-              description="Applied automation for logistics, calendar sync, and ecommerce operations."
-              tools={utilityTools}
-              gridCols={{ base: 1, md: 2 }}
-              gridGapX={8}
-              gridGapY={10}
-              navigate={navigate}
-              getToolIcon={getToolIcon}
-            />
+            {sectionsWithTools.map(s => s.tools.length > 0 && (
+              <ToolSection
+                key={s.id}
+                title={s.title}
+                description={s.description}
+                tools={s.tools}
+                gridCols={s.cols}
+                gridGapX={s.gap}
+                navigate={navigate}
+              />
+            ))}
 
             {otherTools.length > 0 && (
               <ToolSection
@@ -373,9 +341,7 @@ export default function ResearchAnalytics() {
                 tools={otherTools}
                 gridCols={{ base: 1, md: 2 }}
                 gridGapX={8}
-                gridGapY={10}
                 navigate={navigate}
-                getToolIcon={getToolIcon}
               />
             )}
           </Stack>
