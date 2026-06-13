@@ -2,7 +2,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
-import { Box, Stack, Text, Grid, type ResponsiveProp } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -25,32 +25,6 @@ const SKILLS = [
   { name: 'ecommerce automation', icon: Database },
 ];
 
-const ENGINEERING_SECTIONS = [
-  {
-    id: 'devai',
-    title: 'DevAI & Engineering Systems',
-    description: 'Core orchestration frameworks and diagnostic tooling for automated workflows.',
-    categories: ['DevAI System', 'Perception Debugging'],
-    cols: { base: 1, md: 2, lg: 3 },
-    gap: 6
-  },
-  {
-    id: 'pipelines',
-    title: 'Data & Content Pipelines',
-    description: 'High-fidelity ETL systems and human-in-the-loop content generation engines.',
-    categories: ['Data Engineering', 'Content Tools'],
-    cols: { base: 1, md: 2 },
-    gap: 8
-  },
-  {
-    id: 'utilities',
-    title: 'Automation & Business Utilities',
-    description: 'Applied automation for logistics, calendar sync, and ecommerce operations.',
-    categories: ['Utility Tools', 'Business Automation'],
-    cols: { base: 1, md: 2 },
-    gap: 8
-  }
-];
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -76,28 +50,6 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
   );
 }
 
-function ToolSection({ title, description, tools, gridCols, gridGapX, navigate }: {
-  title: string;
-  description: string;
-  tools: ResearchTool[];
-  gridCols: ResponsiveProp<number | string>;
-  gridGapX: ResponsiveProp<number | string>;
-  navigate: (path: string) => void;
-}) {
-  return (
-    <Stack gap={6}>
-      <Box border="l" paddingLeft={4} borderColor="accent/30">
-        <Text variant="headline" size="lg" weight="font-black" uppercase tracking="wider">{title}</Text>
-        <Text size="sm" color="dim" marginTop={1}>{description}</Text>
-      </Box>
-      <Grid cols={gridCols} gapX={gridGapX} gapY={10}>
-        {tools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-        ))}
-      </Grid>
-    </Stack>
-  );
-}
 
 function ToolCard({ tool, navigate }: {
   tool: ResearchTool;
@@ -147,14 +99,6 @@ export default function ResearchAnalytics() {
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
-
-  const sectionsWithTools = ENGINEERING_SECTIONS.map(section => ({
-    ...section,
-    tools: engineeringTools.filter(t => section.categories.includes(t.category))
-  }));
-
-  const categorizedIds = new Set(sectionsWithTools.flatMap(s => s.tools.map(t => t.id)));
-  const otherTools = engineeringTools.filter(t => !categorizedIds.has(t.id));
 
   return (
     <Box as="section">
@@ -321,30 +265,11 @@ export default function ResearchAnalytics() {
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
           </Box>
 
-          <Stack gap={8}>
-            {sectionsWithTools.map(s => s.tools.length > 0 && (
-              <ToolSection
-                key={s.id}
-                title={s.title}
-                description={s.description}
-                tools={s.tools}
-                gridCols={s.cols}
-                gridGapX={s.gap}
-                navigate={navigate}
-              />
+          <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+            {engineeringTools.map((tool) => (
+              <ToolCard key={tool.id} tool={tool} navigate={navigate} />
             ))}
-
-            {otherTools.length > 0 && (
-              <ToolSection
-                title="Experimental & Other Tools"
-                description="Additional research projects and experimental engineering prototypes."
-                tools={otherTools}
-                gridCols={{ base: 1, md: 2 }}
-                gridGapX={8}
-                navigate={navigate}
-              />
-            )}
-          </Stack>
+          </Grid>
         </Stack>
 
         {studies.length > 0 && (
