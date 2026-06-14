@@ -5,13 +5,7 @@ const config: KnipConfig = {
   project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
   ignore: [
     'src/components/Equalizer.tsx',
-    'src/components/layout/DetailElements.tsx',
-    'src/components/ui/EventCard.tsx',
-    'src/components/ui/EventSidebar.tsx',
-    'src/components/ui/GearCard.tsx',
-    'src/components/ui/SectionHeader.tsx',
-    'src/features/lab/useBlogDrafter.ts',
-    'src/features/lab/config.ts'
+    'src/components/ui/EventSidebar.tsx'
   ],
   ignoreDependencies: [
     'tw-animate-css',
