@@ -28,12 +28,6 @@ Located in `.agent/scripts/`:
 
 ## Quick Start
 
-Before starting any work, ensure the agent environment is fully bootstrapped:
-
-```bash
-./setup-agent.sh
-```
-
 ### Run Automated Audit
 
 ```bash

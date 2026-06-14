@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
+import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -35,7 +36,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       maxWidth="full"
       minWidth={0}
       minHeight="screen"
-      className="touch-pan-y"
+      className="touch-pan-y overflow-x-clip"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -49,7 +50,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         paddingX={6}
         paddingY={3}
         radius="sm"
-        className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none"
+        className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none whitespace-nowrap"
       >
         Skip to Content
       </Box>
@@ -59,7 +60,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Stack minHeight="screen" width="full" maxWidth="full" minWidth={0} overflowX="clip">
+      <Stack minHeight="screen" width="full" maxWidth="full" minWidth={0} overflowX="hidden" className="overflow-x-clip">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -77,7 +78,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
           minWidth={0}
           surface="bg"
           direction="col"
-          overflowX="clip"
+          overflowX="hidden"
+          className="overflow-x-clip"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 10 }}
@@ -89,7 +91,8 @@ export function MainLayout({ children }: { children: ReactNode }) {
             maxWidth="7xl"
             width="full"
             minWidth={0}
-            overflowX="clip"
+            overflowX="hidden"
+            className="overflow-x-clip"
           >
             {children}
             <Footer />
@@ -97,6 +100,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         </Stack>
       </Stack>
 
+      <NewsletterBanner />
       {isSearchOpen && (
         <Suspense fallback={null}>
           <GlobalSearch />

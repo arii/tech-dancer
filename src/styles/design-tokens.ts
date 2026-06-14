@@ -71,8 +71,6 @@ export const zIndex = {
   skipLink: "skip-link",
   toast: "toast",
   top: "top",
-  nav: "nav",
-  mobileMenu: "mobile-menu",
   search: "search",
 };
 

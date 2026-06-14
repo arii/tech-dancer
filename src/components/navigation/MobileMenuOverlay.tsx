@@ -1,7 +1,7 @@
 
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Box, Text, Stack } from '@/layouts/Primitives';
+import { Box, Text } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
 import { TOP_NAV_ROUTES } from '@/config/routes';
 import { useEffect, useRef } from 'react';
@@ -64,19 +64,15 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
       animate={{ x: 0 }}
       exit={{ x: '-100%' }}
       position="fixed"
-      inset="bottom"
-      top={16}
       width="full"
-      zIndex="mobileMenu"
-      surface="bg"
-      display={{ base: 'block', lg: 'none' }}
+      className="top-16 left-0 right-0 bottom-0 z-top bg-bg lg:hidden"
       padding={8}
       overflow="y-auto"
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
     >
-      <Stack as="ul" gap={6}>
+      <Box as="ul" className="space-y-6">
         <Box as="li" position="relative" className="group">
           <Box
             as="button"
@@ -91,7 +87,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             width="full"
             position="relative"
             radius="md"
-            className="transition-all duration-200 hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
+            className="transition-all duration-200 hover:translate-x-1 z-10 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
           >
             <Box shrink={false}>
               <Search className={`w-6 h-6 ${stroke.thick}`} />
@@ -111,7 +107,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             isMobile
           />
         ))}
-      </Stack>
+      </Box>
     </Box>
   );
 }

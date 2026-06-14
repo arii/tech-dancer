@@ -125,6 +125,7 @@ export const journalVariants = {
     variants: {
       variant: {
         default: "bg-surface/30 border-line/30",
+        newsletter: "bg-gradient-to-br from-surface-alt/50 to-surface/50 border-line/30",
         hero: "bg-surface-alt border-line/30",
       },
       interactive: {

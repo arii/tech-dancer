@@ -26,7 +26,7 @@ export default function RemovedPage() {
   const navigate = useNavigate();
 
   return (
-    <Box as="main" id="main-content">
+    <Box>
       <SEO
         title="Page Removed"
         description="This page has been decommissioned. Please return to the home page or browse our blog insights."

@@ -1,5 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { useState, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
@@ -157,7 +158,7 @@ export default function Merch() {
                 padding={3}
                 radius="full"
                 width="fit"
-                surface="accent"
+                className="bg-accent/10 text-accent"
               >
                 <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
               </Box>
@@ -175,6 +176,14 @@ export default function Merch() {
                   We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
                 </Text>
               </Stack>
+              <Button
+                as={NavLink}
+                to="/contact"
+                variant="outline"
+                className="w-fit"
+              >
+                Submit Suggestion
+              </Button>
             </Stack>
           </Box>
 

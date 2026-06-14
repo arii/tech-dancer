@@ -10,6 +10,7 @@ import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
+import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -97,6 +98,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       footer={
         <Stack gap={12}>
           <EditorialRelated items={relatedItems} />
+          <EditorialNewsletter />
         </Stack>
       }
     >

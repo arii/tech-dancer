@@ -355,7 +355,7 @@ class Orchestrator:
             for comp, path in config.get('existingComponents', {}).items():
                 if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
                     warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
-            if re.match(r'^Draft.*:', title) and '```markdown' in body:
+            if title.startswith('Draft:') and '```markdown' in body:
                 md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
                 if md_match:
                     for field in config.get('requiredContentFields', []):

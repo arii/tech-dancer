@@ -1,6 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { routes } from '@/config/routes';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Send, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -94,6 +95,7 @@ export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
@@ -114,7 +116,7 @@ export default function ResearchAnalytics() {
             paddingBottom={0}
             border="none"
           />
-          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
+          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed" className="text-pretty">
             I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
           </Text>
           <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
@@ -134,6 +136,10 @@ export default function ResearchAnalytics() {
             </ActionButton>
             <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
               Read Implementation Articles
+            </ActionButton>
+            <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
+              <Icon icon={Send} size="sm" />
+              Contact
             </ActionButton>
           </Stack>
         </Stack>
@@ -193,7 +199,7 @@ export default function ResearchAnalytics() {
                       ))}
                     </Box>
 
-                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width={{ base: "full", sm: "auto" }}>
+                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width="full" className="sm:w-auto">
                       {tool.externalUrl && (
                         <ActionButton
                           as="a"
@@ -206,9 +212,9 @@ export default function ResearchAnalytics() {
                           zIndex={20}
                           width={{ base: "full", sm: "auto" }}
                         >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
+                          <span className="font-bold text-xs uppercase tracking-widest">
                             {tool.externalLinkDisplayLabel || 'Open Link'}
-                          </Text>
+                          </span>
                           <Icon icon={ExternalLink} size="sm" />
                         </ActionButton>
                       )}
@@ -224,7 +230,7 @@ export default function ResearchAnalytics() {
                           zIndex={20}
                           width={{ base: "full", sm: "auto" }}
                         >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
+                          <span className="font-bold text-xs uppercase tracking-widest">Source Repo</span>
                           <Icon icon={Github} size="sm" />
                         </ActionButton>
                       )}

@@ -18,7 +18,7 @@ async function main() {
   console.log('Starting link validation...');
 
   // 1. Extract valid routes and slugs
-  const validRoutes = new Set<string>(['/', '/about', '/ux-auditor']);
+  const validRoutes = new Set<string>(['/', '/about', '/contact', '/ux-auditor']);
 
   Object.entries(CONTENT_DIR_MAP).forEach(([prefix, dir]) => {
     const slugs = getContentSlugs(dir, prefix);

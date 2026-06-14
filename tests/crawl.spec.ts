@@ -48,6 +48,11 @@ test.describe('Automated UX/Console Error Crawler', () => {
     const MAX_PAGES = 25;
     let pageCount = 0;
 
+    // Ensure newsletter banner doesn't interfere (added once per page instance)
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
+    });
+
     while (toVisit.length > 0 && pageCount < MAX_PAGES) {
       const currentUrl = toVisit.shift()!;
       const normalizedUrl = cleanUrl(currentUrl);
