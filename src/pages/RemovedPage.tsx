@@ -44,7 +44,7 @@ export default function RemovedPage() {
   }
 
   return (
-    <Box as="main" id="main-content">
+    <Box as="div">
       <SEO
         title={title}
         description={description}
