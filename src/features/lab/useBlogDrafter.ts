@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 import { SITE_METADATA } from '@/config/content';
 
-export type ContentType = 'post' | 'resource';
+export type ContentType = 'post' | 'blog' | 'resource';
 
 export interface BaseDraftData {
   title: string;
@@ -26,7 +26,7 @@ export interface BaseDraftData {
 }
 
 export interface PostDraftData extends BaseDraftData {
-  type: 'post';
+  type: 'post' | 'blog';
   affiliateLink: string;
   commentary: string;
 }
@@ -191,7 +191,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   const githubIssueUrl = useMemo(() => {
     const repoOwner = SITE_METADATA.repo.owner; 
     const repoName = SITE_METADATA.repo.name;
-    const typeLabel = data.type.toUpperCase();
+    const typeLabel = data.type === 'blog' ? 'BLOG' : data.type.toUpperCase();
     const issueTitle = `Draft [${typeLabel}]: ${data.title || 'New Item'}`;
     const issueBody = `### New ${data.type} Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownPreview}\n\`\`\``;
     
@@ -262,7 +262,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
 
       return {
         ...base,
-        type: 'post',
+        type: type === 'blog' ? 'blog' : 'post',
         affiliateLink: base.affiliateLink,
         commentary: base.commentary
       } as PostDraftData;

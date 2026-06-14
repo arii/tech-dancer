@@ -3,6 +3,7 @@ import { ContentType } from './useBlogDrafter';
 
 export const types = [
   { id: 'post' as ContentType, label: 'BLOG POST', icon: PenTool },
+  { id: 'blog' as ContentType, label: 'FEATURED BLOG', icon: FileText },
   { id: 'resource' as ContentType, label: 'RESOURCE CARD', icon: Package },
 ] as const;
 

@@ -41,6 +41,7 @@ export const IMPACT_CONFIG = {
   // Content folder to URL prefix mapping
   CONTENT_MAP: {
     'content/posts/': '/blog/',
+    'content/blog/': '/blog/',
     'content/resources/': '/gear/',
     'content/studies/': '/research/'
   } as Record<string, string>

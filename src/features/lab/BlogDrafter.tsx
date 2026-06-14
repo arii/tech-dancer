@@ -174,10 +174,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Box
                   as="select"
                   value={data.type}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource')}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'blog' | 'resource')}
                   className={cn(inputs.base, "appearance-none")}
                 >
-                  <option value="post">Blog Post</option>
+                  <option value="post">Editorial Post</option>
+                  <option value="blog">Featured Blog</option>
                   <option value="resource">Resource Card</option>
                 </Box>
               </Stack>
@@ -236,7 +237,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Stack>
 
             {/* Type Specific Fields */}
-            {data.type === 'post' && (
+            {(data.type === 'post' || data.type === 'blog') && (
               <>
                 <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
 

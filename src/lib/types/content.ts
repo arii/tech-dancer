@@ -4,7 +4,7 @@
  */
 
 export interface Post {
-  type: 'post';
+  type: 'post' | 'blog';
   draft?: boolean;
   slug: string;
   title: string;

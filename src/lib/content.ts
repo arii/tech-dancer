@@ -41,6 +41,7 @@ interface ContentModule {
 
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
+  blog: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
 };
@@ -159,7 +160,10 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+  posts: [
+    ...transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+    ...transform<Post>(contentModules.blog as Record<string, string | ContentModule>, 'post')
+  ],
   resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
 };
@@ -170,7 +174,11 @@ const maps = {
   studies: new Map(items.studies.map(i => [i.slug, i])),
 };
 
-export const getPosts = () => items.posts;
+export const getPosts = () => items.posts.sort((a, b) => {
+  const timeA = a.date ? new Date(a.date).getTime() : 0;
+  const timeB = b.date ? new Date(b.date).getTime() : 0;
+  return timeB - timeA;
+});
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
 
