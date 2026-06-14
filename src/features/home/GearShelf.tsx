@@ -1,4 +1,3 @@
-
 import { NavLink } from 'react-router-dom';
 import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
@@ -12,7 +11,7 @@ const PICKS = [
 
 export function GearShelf() {
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       {/* Header — no card wrapper, just section heading */}
       <Box display="flex" align="center" justify="between" marginBottom={3}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
@@ -42,7 +41,7 @@ export function GearShelf() {
         cols={{ lg: 3 }}
         gap={{ lg: 4 }}
       >
-        {PICKS.map(({ label, image, imageText, href }) => (
+        {PICKS.map(({ label, image, imageText, href }: any) => (
           <Box key={label} as={NavLink} to={href} className="group">
             <Box
               radius="lg"
@@ -92,7 +91,7 @@ export function GearShelf() {
         noScrollbar
       >
         <Box display="flex" gap={3} width="fit" paddingRight={4}>
-          {PICKS.map(({ label, image, imageText, href }) => (
+          {PICKS.map(({ label, image, imageText, href }: any) => (
             <Box
               key={`mobile-${label}`}
               as={NavLink}

@@ -7,8 +7,8 @@ test('verify homepage and guide visual consistency', async ({ page }) => {
   const homeUrl = page.url();
   await page.waitForLoadState('networkidle');
 
-  // Scroll to Featured Event Guide
-  const eventGuide = page.getByText(/Featured Event Guide/i);
+  // Scroll to Featured Insight
+  const eventGuide = page.getByRole('heading', { name: 'Featured Insight' });
   await eventGuide.scrollIntoViewIfNeeded();
   await expect(eventGuide).toBeVisible();
 
