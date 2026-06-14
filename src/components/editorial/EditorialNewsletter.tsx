@@ -24,7 +24,7 @@ export function EditorialNewsletter() {
             </Text>
           </Stack>
           <Text variant="body" size="sm" color="dim" leading="relaxed" maxWidth="md">
-            Weekly editorial updates on West Coast Swing, gear guides, and event resources.
+            Weekly editorial updates on West Coast Swing and gear guides.
             No spam, ever.
           </Text>
         </Stack>
