@@ -6,171 +6,52 @@ This directory contains repository automation scripts and quality gate configura
 > The Repository CLI requires the `PyGithub` Python library. Install it with: `pip install PyGithub`.
 > It also requires the `gh` CLI to be authenticated for many operations.
 
-
-## 🧰 One-Step Agent Environment Bootstrap
-
-Use `dev-tools/setup-agent.sh` to fully bootstrap a fresh agent/devcontainer environment in one command.
-
-```bash
-./dev-tools/setup-agent.sh
-```
-
-This script installs and configures:
-- System tools needed by dev-tools (`git`, `curl`, `jq`, `gh`, Python toolchain, Node prerequisites).
-- `pnpm` via Corepack (or fallback global install), then project dependencies via `pnpm install --frozen-lockfile`.
-- Python dependencies for `dev-tools` (`pip install -e ./dev-tools`) and ETL (`etl/requirements.txt` when present).
-- Playwright CLI browser/runtime dependencies (`npx playwright install --with-deps chromium`).
-- Git remote origin (if missing) using `GITHUB_REPOSITORY` or a best-effort repo slug guess.
-
-> [!NOTE]
-> For deterministic remote configuration, set `GITHUB_REPOSITORY=<owner>/<repo>` before running the script in brand-new clones.
-
-> [!TIP]
-> In CI or secure agent environments, prefer injecting secrets as environment variables rather than hardcoding them.
-
-### Required / Recommended Environment Variables & Secrets
-
-| Variable | Required? | Purpose |
-|---|---|---|
-| `CODEX_GH_TOKEN` (string) | **Recommended (preferred)** | Primary secret for Codex/Jules/Antigravity agent runs; setup maps it to `GH_TOKEN` for `gh` + dev-tools commands. |
-| `GH_TOKEN` (string) | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
-| `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
-| `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
-| `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
-| `OLLAMA_URL` | Optional | Override local Ollama endpoint (default shown by `snapshot.sh`). |
-| `OLLAMA_MODEL` | Optional | Override local Ollama model selection. |
-
-**Secret handling guidance**
-- GitHub Actions / agent runners: store `CODEX_GH_TOKEN` (preferred), plus `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
-- Dev containers/local shells: export secrets before running setup/CLI, for example:
-
-```bash
-export CODEX_GH_TOKEN="<token>"
-export GITHUB_REPOSITORY="owner/repo"
-# optional
-export ANTIGRAVITY_API_KEY="<key>"
-export GEMINI_API_KEY="<key>"
-```
-
-
-### Setup Script Toggles
-
-`dev-tools/setup-agent.sh` supports optional environment toggles:
-
-- `SKIP_APT=1` — skip OS package installation.
-- `SKIP_PLAYWRIGHT=1` — skip Playwright browser installation.
-- `SKIP_VALIDATION=1` — skip post-install validation checks.
-- `SKIP_REMOTE_CONFIG=1` — skip `origin` remote auto-configuration.
-- `PNPM_VERSION` — override pnpm version (default `10.28.2`).
-- `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
-
-
-### Non-Traditional Workflows (Deploy, Antigravity, Jules, Ollama)
-
-After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
-
-#### 1) Deploy / GitHub Automation Workflows
-- Ensure GitHub auth is present in env: `GITHUB_TOKEN` or `GH_TOKEN`.
-- Verify CLI auth and repo context:
-  - `gh auth status`
-  - `gh repo view`
-- Pre-submit quality gate before push/merge:
-  - `python3 dev-tools/td_cli.py gh pre-submit`
-
-#### 2) Antigravity / Jules Workflows
-- Required secret: `ANTIGRAVITY_API_KEY` or `JULES_API_KEY`.
-- Optional context env vars:
-  - `ANTIGRAVITY_SOURCE_ID` or `JULES_SOURCE_ID` (if your environment already knows the source mapping)
-- Typical commands:
-  - `python3 dev-tools/td_cli.py antigravity repair`
-  - `python3 dev-tools/td_cli.py antigravity repair --worktree`
-
-#### 3) Ollama Local Review Workflows
-- Optional local runtime vars:
-  - `OLLAMA_URL` (default used by tooling: `http://localhost:11434/api/generate`)
-  - `OLLAMA_MODEL` (example: `qwen2.5-coder:7b`)
-- Verify local service before running Ollama-backed flows:
-  - `curl -fsS "$OLLAMA_URL" || true` (endpoint behavior varies by Ollama version)
-- Typical command:
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit`
-
-#### 4) Headless / Bot Auditing
-- For batch auditing open PRs:
-  - `bash dev-tools/audit_headless.sh`
-- Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
-
-
-### Codex / Jules GitHub Command Pattern
-
-Prefer repository CLI commands over raw `gh`:
-
-```bash
-source ./.agent-env.sh 2>/dev/null || true
-python3 dev-tools/td_cli.py gh --help
-python3 dev-tools/td_cli.py gh <repo-command>
-```
-
-Use raw `gh` only when `td_cli.py` does not expose the needed operation.
-
-If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `CODEX_GH_TOKEN`.
-
-
-### Verification Commands (Post-Setup)
-
-Run these commands after setup to verify GitHub/dev-tools workflows:
-
-```bash
-source ./.agent-env.sh 2>/dev/null || true
-python3 dev-tools/td_cli.py gh --help
-python3 dev-tools/td_cli.py gh status-board
-python3 dev-tools/td_cli.py gh conflicts
-```
-
-For PR review flow (example PR number):
-
-```bash
-source ./.agent-env.sh 2>/dev/null || true
-python3 dev-tools/td_cli.py gh audit-pr 123 --fetch --audit
-```
-
-For issue workflow checks:
-
-```bash
-source ./.agent-env.sh 2>/dev/null || true
-python3 dev-tools/td_cli.py gh validate-issue --issue-number 123
-```
-
-If you need to create an issue and the repo CLI does not expose that operation directly, use raw `gh` as fallback:
-
-```bash
-gh issue create --title "<title>" --body "<details>"
-```
-
-If auth fails, report this exact issue (do not run interactive auth):
-
-> GitHub CLI is not authenticated. Please add a Codex environment secret named `CODEX_GH_TOKEN` with a repo-scoped GitHub token.
-
 ## 🚀 Repository CLI (`td_cli.py`)
 
 The unified entry point for all repository automation. It supports both human-readable terminal output and structured JSON for tool integration.
 
+### Usage and Context
+- **CLI Entry Point**: `dev-tools/td_cli.py`
+- **Read Context**: `dev-tools/logs/reviews/pr-context-{PR}.md` (Diffs, stats, and valid line ranges).
+- **Write Review**: `dev-tools/logs/reviews/pr-review-{PR}.md` (Checklist and JSON output block).
+
+### Core Commands
+
+#### 1. Single PR Audit
+The recommended way to review a single PR:
+```bash
+# Step 1: Fetch metadata and generate context
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch
+
+# Step 2: Run automated audit and (optionally) AI review
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
+
+# Step 3: Submit the review to GitHub and clean up logs
+python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup --execute
+```
+
+#### 2. Local AI Code Reviewer (Ollama)
+The CLI includes a local AI reviewer that reviews PR files using Ollama. For setup and detailed usage, see [docs/agent/ollama-reviewer.md](../docs/agent/ollama-reviewer.md).
+
+#### 3. Pre-Submission Quality Gate
+Before pushing code or opening a PR, run the full suite of local checks:
+```bash
+python3 dev-tools/td_cli.py pre-submit
+```
+This includes:
+- UI Anti-pattern audit
+- TypeScript type-checking
+- ESLint linting
+- PR Scope validation
+- Conflict detection (requires `GITHUB_TOKEN`)
+
 ### Global Options
 - `--json`: Output results in structured JSON format.
 
-### Standard Error Format (with `--json`)
-```json
-{
-  "status": "error",
-  "message": "Description of the error",
-  "code": 401,
-  "data": null
-}
-```
-
-### Commands
+### Commands Details
 
 #### `gh pre-submit`
-Runs the full local quality suite: Anti-pattern audit, TypeScript check, Lint, PR Scope check, and Conflict check.
+Runs the full local quality suite.
 - **Usage**: `python3 dev-tools/td_cli.py gh pre-submit`
 
 #### `gh audit-pr <PR_NUMBER>`
@@ -197,43 +78,57 @@ Detects potential merge conflicts across all open PRs.
 
 #### `gh overlaps`
 Identify and propose consolidation of PRs with high functional or structural overlap.
-- **Flags**:
-  - `--limit <NUMBER>`: Limit the number of open PRs to process (default: 50).
-  - `--no-cache`: Bust the cache and force fetching data from GitHub.
 - **Usage**: `python3 dev-tools/td_cli.py gh overlaps --limit 20`
 
 #### `jules repair-context`
-Generates a high-precision prompt for fixing a specific CI error. It maps the error signature to a strategy and provides deterministic code context (±15 lines).
-- **Flags**:
-  - `--log <LOG_LINE>`: Process a single raw log line.
-  - `--file <FILE_PATH>`: Process all errors in a log file.
-- **Usage**:
-  - `pnpm repair-context --log "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]"`
-  - `python3 dev-tools/td_cli.py jules repair-context --file logs/ci_failure.log`
+Generates a high-precision prompt for fixing a specific CI error.
+- **Usage**: `python3 dev-tools/td_cli.py jules repair-context --file logs/ci_failure.log`
 
 #### `gh ratchet-any` / `gh bundle-size`
-CI gates for tracking technical debt. These commands compare current metrics against baselines stored in GitHub Actions Variables (`ANY_COUNT_BASELINE`, `BUNDLE_BASELINE_KB`).
-- **Usage**: `python3 dev-tools/td_cli.py gh bundle-size`
+CI gates for tracking technical debt.
 
 #### `ux` command group
 Dedicated commands for performing UX/UI audits.
-- **Prerequisite**: Requires the local development server to be running (e.g. `pnpm run dev` at `http://localhost:3000`) and Playwright browsers to be installed (`pnpm run setup:playwright` or `npx playwright install`).
-- **Commands**:
-  - `ux audit`: Runs Playwright UX audits (accessibility, layout overflow, images, above-the-fold) across discovered routes.
-    - *Usage*: `python3 dev-tools/td_cli.py ux audit` (supports `--route <path>`, `--all-routes`, `--desktop`, `--mobile`).
-  - `ux report`: Compiles the generated JSON findings into a unified Markdown report at `artifacts/ux-audit/ux-audit-report.md` and generates issue drafts.
-    - *Usage*: `python3 dev-tools/td_cli.py ux report`
-  - `ux lighthouse`: Runs Lighthouse audits against the discovered routes.
-    - *Usage*: `python3 dev-tools/td_cli.py ux lighthouse`
 
 ---
 
-## 🧪 Quality Gates
+## 🧰 One-Step Agent Environment Bootstrap
 
-- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs` (includes inverse-surface contrast checks for `Text` near `industrial-gradient` treatments).
-- **Type Safety**: TypeScript `any` usage ratchet (enforced in CI).
-- **Bundle Size**: Automated size regression tracking (enforced in CI).
+Use `dev-tools/setup-agent.sh` to fully bootstrap a fresh agent environment.
+```bash
+./dev-tools/setup-agent.sh
+```
 
-## 🧱 Design System Enforcement
+### Required / Recommended Environment Variables & Secrets
+| Variable | Purpose |
+|---|---|
+| `CODEX_GH_TOKEN` | Primary secret for agent runs. |
+| `GH_TOKEN` | Auth for `gh` and `td_cli.py gh ...` commands. |
 
-All code must adhere to the rules in `AGENTS.md`. Layout primitives in `src/layouts/` must be used for all UI composition.
+### Environment Setup Prerequisites
+The project requires **Node >=22.0.0** (as specified in `.nvmrc` and `package.json` engines).
+
+---
+
+## 📊 CI Gate Baselines
+
+Technical debt is tracked using **GitHub Actions Variables** instead of local files.
+
+### Tracked Metrics
+- `BUNDLE_BASELINE_KB`: Max allowed size of the production JS bundle (in KB).
+- `ANY_COUNT_BASELINE`: Max allowed number of TypeScript `any` usages.
+
+### How to Update
+When a PR intentionally increases one of these metrics, an admin must update the baseline in GitHub after merge:
+```bash
+gh variable set BUNDLE_BASELINE_KB --body 3080
+gh variable set ANY_COUNT_BASELINE --body 50
+```
+
+---
+
+## 🧱 Design System and Quality Gates
+- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs`.
+- **Design System Enforcement**: All code must adhere to `AGENTS.md`. Layout primitives in `src/layouts/` must be used.
+- **Failure Prevention**: The system provides explicit ranges in context files to prevent GitHub API 422 errors.
+- **Dry Run Default**: Most mutating CLI commands require `--execute`.
