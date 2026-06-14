@@ -14,7 +14,6 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
-import { cn } from '@/lib/utils';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -396,21 +395,33 @@ export default function UXAuditor() {
                   </Text>
                 </Stack>
                 <Stack direction={{ base: 'col', sm: 'row' }} gap={3} shrink={0} width={{ base: 'full', sm: 'auto' }} align={{ base: 'stretch', sm: 'center' }}>
-                  <button
+                  <Box
+                    as="button"
                     onClick={copyMarkdown}
-                    className={cn(actionButtonVariants({ variant: "default" }), "flex items-center justify-center gap-2 bg-surface-muted text-text-dim px-4 py-2 rounded-xl w-full sm:w-auto")}
+                    className={`${actionButtonVariants({ variant: "default" })} flex items-center justify-center gap-2`}
+                    surface="muted"
+                    color="dim"
+                    paddingX={4}
+                    paddingY={2}
+                    radius="xl"
+                    width={{ base: 'full', sm: 'auto' }}
                   >
-                    {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
+                    <Icon icon={isCopiedMarkdown ? CheckCircle : Copy} size="sm" />
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
-                  </button>
-                  <button
+                  </Box>
+                  <Box
+                    as="button"
                     onClick={exportToGithub}
                     disabled={activeReport.status !== 'completed' || isExportingToGithub}
-                    className={cn(actionButtonVariants({ variant: "primary" }), "flex items-center justify-center gap-2 px-6 py-2 rounded-xl w-full sm:w-auto")}
+                    className={`${actionButtonVariants({ variant: "primary" })} flex items-center justify-center gap-2`}
+                    paddingX={6}
+                    paddingY={2}
+                    radius="xl"
+                    width={{ base: 'full', sm: 'auto' }}
                   >
-                    {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
+                    <Icon icon={isExportingToGithub ? RefreshCw : Github} size="sm" className={isExportingToGithub ? "animate-spin" : ""} />
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
-                  </button>
+                  </Box>
                 </Stack>
               </Stack>
 
