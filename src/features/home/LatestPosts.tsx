@@ -53,7 +53,7 @@ export function LatestPosts() {
               overflow="hidden"
               marginTop={0.5}
               height={14}
-              width={72}
+              width={18}
               shrink={0}
               surface="alt"
             >

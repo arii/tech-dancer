@@ -61,7 +61,7 @@ export default function Home() {
         >
           <LatestPosts />
           <DevLabCallout />
-        </Box>
+        </Grid>
         <TopicGrid />
       </Stack>
     </Box>

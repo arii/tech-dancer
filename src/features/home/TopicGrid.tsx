@@ -46,7 +46,7 @@ export function TopicGrid() {
             width="full"
             maxWidth="full"
             minWidth={0}
-            minHeight={{ base: 145, md: 150 }}
+            minHeight={{ base: 36, md: 38 }}
             className="group transition-all duration-200 hover:border-accent/40 hover:bg-surface/60"
           >
             {/* Icon — exactly 32px container */}
