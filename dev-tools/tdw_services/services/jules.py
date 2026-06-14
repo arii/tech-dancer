@@ -112,3 +112,57 @@ class JulesClient:
             if e.response is not None:
                 error_msg += f"\nResponse: {e.response.text}"
             raise RuntimeError(error_msg)
+
+    def get_messages(self, session_id: str) -> List[Dict[str, Any]]:
+        clean_id = session_id.replace("sessions/", "")
+        url = f"{self.base_url}/sessions/{clean_id}/activities"
+        try:
+            response = requests.get(url, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            activities = data.get("activities", [])
+            messages = []
+            for act in activities:
+                role = "user" if act.get("originator") == "user" else "jules"
+                content = ""
+                if act.get("userMessaged"):
+                    um = act["userMessaged"]
+                    if isinstance(um, str):
+                        content = um
+                    elif isinstance(um, dict):
+                        user_msg = um.get("userMessage", "")
+                        if isinstance(user_msg, dict):
+                            content = user_msg.get("body", "") or ""
+                        elif isinstance(user_msg, str):
+                            content = user_msg
+                elif act.get("progressUpdated") and isinstance(act.get("progressUpdated"), dict):
+                    content = act["progressUpdated"].get("description", "")
+                elif act.get("planGenerated") and isinstance(act.get("planGenerated"), dict):
+                    plan = act["planGenerated"].get("plan") or {}
+                    steps = plan.get("steps", []) if isinstance(plan, dict) else []
+                    content = "Generated plan:\n" + "\n".join(f"- {s.get('description', '')}" for s in steps if isinstance(s, dict))
+                elif act.get("sessionCompleted"):
+                    content = "Session completed successfully."
+                
+                if content:
+                    messages.append({
+                        "role": role,
+                        "content": content,
+                        "time": act.get("createTime")
+                    })
+            return messages
+        except Exception as e:
+            print(f"⚠️  Jules API get_messages failed: {e}")
+            return []
+
+    def send_message(self, session_id: str, message: str) -> Dict[str, Any]:
+        clean_id = session_id.replace("sessions/", "")
+        url = f"{self.base_url}/sessions/{clean_id}:sendMessage"
+        payload = {"prompt": message}
+        try:
+            response = requests.post(url, headers=self.headers, json=payload, timeout=10)
+            response.raise_for_status()
+            return {"status": "success", "message": "Message sent successfully"}
+        except Exception as e:
+            print(f"⚠️  Jules API send_message failed: {e}")
+            return {"status": "error", "message": str(e)}
