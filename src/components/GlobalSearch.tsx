@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from '@/hooks/useHotkeys';
 import Fuse from 'fuse.js';
 import { useQueries } from '@tanstack/react-query';
-import { getPosts, getResources, getStudies } from '@/lib/content';
+import { getPosts, getStudies } from '@/lib/content';
 import { withSimulationDelay } from '@/lib/utils';
 
 interface SearchResult {
