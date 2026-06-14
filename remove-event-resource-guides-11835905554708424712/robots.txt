@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/remove-event-resource-guides-11835905554708424712/sitemap.xml
