@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { IMPACT_CONFIG } from './impact-analysis.config';
+import { getAllRoutes } from '../../src/lib/routes-discovery';
 
 // Types for dependency-cruiser output
 interface Dependency {
@@ -105,18 +106,30 @@ function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, st
 }
 
 /**
- * Maps page component files to public URLs.
+ * Maps page component files to public URLs by matching against the sitemap.
  */
-function mapPageToUrl(filePath: string): string {
+function mapPageToUrl(filePath: string, sitemap: string[]): string | null {
   const fileName = path.basename(filePath, path.extname(filePath));
 
+  let slug: string;
   if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
-    return IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
+    slug = IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
+  } else {
+    // Convert PascalCase to kebab-case
+    const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    slug = `/${route}`;
   }
 
-  // Convert PascalCase to kebab-case
-  const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  return `/${route}`;
+  // Find exact match or parameter match (e.g., /blog/:slug)
+  if (sitemap.includes(slug)) {
+    return slug;
+  }
+
+  // Find a matching static route in sitemap for parameterized overrides, if applicable.
+  // Wait, things like '/blog/:slug' are templates, not actual sitemap URLs.
+  // If it is a template, we just fall back and return null because parameter
+  // resolution must be handled at the content/data layer, not by this static mapper.
+  return sitemap.includes(slug) ? slug : null;
 }
 
 /**
@@ -137,14 +150,17 @@ function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
 /**
  * Handles content changes and maps them to URLs.
  */
-function getContentAffectedUrls(changedFiles: string[]): string[] {
+function getContentAffectedUrls(changedFiles: string[], sitemap: string[]): string[] {
   const urls: string[] = [];
 
   for (const file of changedFiles) {
     for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
       if (file.startsWith(dir) && file.endsWith('.md')) {
         const slug = path.basename(file, '.md');
-        urls.push(`${prefix}${slug}`);
+        const candidateUrl = `${prefix}${slug}`;
+        if (sitemap.includes(candidateUrl)) {
+          urls.push(candidateUrl);
+        }
       }
     }
   }
@@ -156,7 +172,7 @@ function getContentAffectedUrls(changedFiles: string[]): string[] {
 /**
  * Find affected markdown files when public static files (e.g. images) are changed.
  */
-function getAffectedUrlsByPublicFiles(changedFiles: string[]): string[] {
+function getAffectedUrlsByPublicFiles(changedFiles: string[], sitemap: string[]): string[] {
   const urls: Set<string> = new Set();
   const publicFiles = changedFiles.filter(f => f.startsWith('public/'));
 
@@ -172,8 +188,15 @@ function getAffectedUrlsByPublicFiles(changedFiles: string[]): string[] {
       for (const searchStr of searchStrings) {
         if (content.includes(searchStr)) {
           const slug = path.basename(mdFile, '.md');
-          urls.add(`${prefix}${slug}`);
-          urls.add(prefix.replace(/\/$/, '')); // Add index page
+          const itemUrl = `${prefix}${slug}`;
+          const indexUrl = prefix.replace(/\/$/, ''); // Add index page
+
+          if (sitemap.includes(itemUrl)) {
+            urls.add(itemUrl);
+          }
+          if (sitemap.includes(indexUrl)) {
+            urls.add(indexUrl);
+          }
         }
       }
     }
@@ -206,6 +229,10 @@ async function main() {
     // Find affected pages
     const affectedPages = allAffected.filter(f => f.startsWith(IMPACT_CONFIG.PAGES_DIR));
 
+    // Extract the sitemap list
+    console.log('🗺️  Extracting sitemap urls...');
+    const sitemap = getAllRoutes().sitemap;
+
     // Global impact check - only if the CHANGED files themselves are global triggers
     const hasGlobalImpact = changedFiles.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
 
@@ -215,14 +242,14 @@ async function main() {
       console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
       pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
     } else {
-      pageUrls = affectedPages.map(mapPageToUrl);
+      pageUrls = affectedPages.map(f => mapPageToUrl(f, sitemap)).filter(Boolean) as string[];
     }
 
     // Content URLs
-    const contentUrls = getContentAffectedUrls(changedFiles);
+    const contentUrls = getContentAffectedUrls(changedFiles, sitemap);
 
     // Public static files URLs (e.g., images referenced in markdown)
-    const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles);
+    const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles, sitemap);
 
     // Combine and deduplicate URLs
     const allUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
@@ -259,13 +286,12 @@ async function main() {
     console.log('\n' + '='.repeat(40));
 
     // Write to artifacts
-    const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
+    const outputDir = path.join(process.cwd(), 'reports');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
-    fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(report, null, 2));
+    fs.writeFileSync(path.join(outputDir, 'deployment-impact.json'), JSON.stringify(report, null, 2));
 
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
 
@@ -288,7 +314,7 @@ ${changedFilesList}
 *Generated by Boomtick Impact Analyzer*
 `;
 
-    fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
+    fs.writeFileSync(path.join(outputDir, 'deployment-impact.md'), markdown);
     console.log(`\n✅ Reports generated in ${outputDir}`);
   } catch (error: unknown) {
     const err = error as Error;

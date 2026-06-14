@@ -43,9 +43,10 @@ export interface DomRouteSummary {
 }
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
+export const REPORTS_DIR = path.join(process.cwd(), 'reports');
 export const VISUAL_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'visual-review');
 export const DOM_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'dom-review');
-export const IMPACT_ANALYSIS_PATH = path.join(ARTIFACTS_DIR, 'impact-analysis.json');
+export const IMPACT_ANALYSIS_PATH = path.join(REPORTS_DIR, 'deployment-impact.json');
 export const VISUAL_SUMMARY_PATH = path.join(VISUAL_REVIEW_DIR, 'summary.json');
 export const DOM_SUMMARY_PATH = path.join(DOM_REVIEW_DIR, 'summary.json');
 
@@ -70,6 +71,7 @@ export function routeToSlug(route: string): string {
 export function readImpactAnalysis(): Required<Pick<ImpactAnalysisArtifact, 'routes'>> & ImpactAnalysisArtifact {
   const candidates = [
     IMPACT_ANALYSIS_PATH,
+    path.join(ARTIFACTS_DIR, 'impact-analysis.json'),
     path.join(ARTIFACTS_DIR, 'impact-analysis', 'impact.json')
   ];
 

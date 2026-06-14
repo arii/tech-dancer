@@ -18,7 +18,7 @@ import {
   waitForServer,
   type VisualRouteSummary
 } from './impact-review-utils';
-import { whiteCanvas, copyImage } from './image-processing-utils';
+import { whiteCanvas, copyImage } from '../image-processing-utils';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);

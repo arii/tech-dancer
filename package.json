@@ -46,10 +46,10 @@
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",
     "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
-    "impact:analysis": "tsx scripts/impact-analysis.ts",
-    "impact:build-main": "tsx scripts/impact-build-main.ts",
-    "impact:visual-diff": "tsx scripts/impact-visual-diff.ts",
-    "impact:dom-diff": "tsx scripts/impact-dom-diff.ts"
+    "impact:analysis": "tsx scripts/impact/impact-analysis.ts",
+    "impact:build-main": "tsx scripts/impact/impact-build-main.ts",
+    "impact:visual-diff": "tsx scripts/impact/impact-visual-diff.ts",
+    "impact:dom-diff": "tsx scripts/impact/impact-dom-diff.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
