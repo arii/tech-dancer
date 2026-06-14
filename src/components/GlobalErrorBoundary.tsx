@@ -25,7 +25,7 @@ export function GlobalErrorBoundary() {
   return (
     <Stack
       as="main"
-      id="main-content"
+
       display="flex"
       align="center"
       justify="center"
