@@ -67,7 +67,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
       inset="bottom"
       top={16}
       width="full"
-      zIndex="top"
+      zIndex="mobileMenu"
       surface="bg"
       display={{ base: 'block', lg: 'none' }}
       padding={8}
@@ -91,7 +91,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             width="full"
             position="relative"
             radius="md"
-            className="transition-all duration-200 hover:translate-x-1 z-10 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
+            className="transition-all duration-200 hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
           >
             <Box shrink={false}>
               <Search className={`w-6 h-6 ${stroke.thick}`} />
