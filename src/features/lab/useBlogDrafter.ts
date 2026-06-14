@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 import { SITE_METADATA } from '@/config/content';
 
-export type ContentType = 'post';
+
 
 export interface DraftData {
   type: 'post';
