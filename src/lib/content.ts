@@ -78,7 +78,7 @@ export function normalizeAsset(val: unknown) {
   return val;
 }
 
-function transform<T extends { date?: string; draft?: boolean }>(
+function transform<T extends { date?: string; draft?: boolean; type?: string; status?: ContentStatus }>(
   modules: Record<string, string | ContentModule>,
   defaultType?: string
 ): T[] {
@@ -243,7 +243,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       return result as unknown as T;
     })
-    .filter((item: any) => {
+    .filter((item) => {
       // Allow draft studies so they can be shown as "Planned" or "Coming Soon" cards
       // on the Research page without being indexed as full articles.
       if (item.draft) {

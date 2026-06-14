@@ -12,6 +12,9 @@ interface ButtonProps
   as?: ElementType
   href?: string
   loading?: boolean
+  target?: string
+  rel?: string
+  to?: string
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

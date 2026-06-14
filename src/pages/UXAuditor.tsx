@@ -221,7 +221,7 @@ export default function UXAuditor() {
               autoComplete="off"
               value={url}
               title={url}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
               onFocus={(e) => e.target.select()}
               className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
                 flex={1}
@@ -342,7 +342,7 @@ export default function UXAuditor() {
                 icon={<Icon icon={RefreshCw} size="sm" color="muted" />}
               />
             )}
-            {reports.map((report) => (
+            {reports.map((report: any) => (
               <Stack
                 key={report.id}
                 as="button"
