@@ -1,4 +1,4 @@
-import{A as Qe}from"./index-CC8fVr2j.js";const mn=`---
+import{A as Qe}from"./index-C8F3bSM7.js";const mn=`---
 type: post
 draft: true
 status: draft
