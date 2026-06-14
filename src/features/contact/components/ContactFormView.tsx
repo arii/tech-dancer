@@ -78,7 +78,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
               >
                 <option value="General Feedback">General Feedback</option>
                 <option value="Content Request">Content Request</option>
-                <option value="Gear Review Request">Gear Review Request</option>
+                <option value="Practical Tool Request">Practical Tool Request</option>
                 <option value="Dance Statistics">Dance Statistics</option>
               </Box>
             </FormField>

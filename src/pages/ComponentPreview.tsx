@@ -11,7 +11,7 @@ export default function ComponentPreview() {
       <SEO
         title="Component Preview"
         description="Development environment for testing UI components in isolation."
-        noindex={true}
+        noIndex={true}
       />
       <Stack gap={12}>
         <Text variant="headline" size="4xl">Component Preview</Text>
@@ -35,7 +35,7 @@ export default function ComponentPreview() {
 
         <Box border padding={6} radius="lg">
           <Text variant="mono" size="sm" marginBottom={4}>CuratedGear</Text>
-          <CuratedGear items={[]} />
+          <CuratedGear sections={[]} />
         </Box>
 
         <Box border padding={6} radius="lg">

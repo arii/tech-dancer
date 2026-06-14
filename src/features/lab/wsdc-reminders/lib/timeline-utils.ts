@@ -96,7 +96,7 @@ export const calculateTimeline = (event: EventAnchors, options: TimelineOptions 
 const JOURNEY_IDS = ['early-bird', 'registration-deadline', 'hotel-block', 'packing-reminder'];
 
 /**
- * Specifically calculates milestones required for the Event Guide journey.
+ * Specifically calculates milestones required for the Training Note journey.
  * Decouples the display set from the UI component.
  */
 export const calculateJourneyTimeline = (event: EventAnchors): TimelineItem[] => {

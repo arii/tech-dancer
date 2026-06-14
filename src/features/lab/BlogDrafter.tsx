@@ -178,7 +178,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
                   className={cn(inputs.base, "appearance-none")}
                 >
-                  <option value="post">Blog Post</option>
+                  <option value="post">Blog Insight</option>
                   <option value="resource">Resource Card</option>
                   <option value="event">Event Card</option>
                 </Box>
