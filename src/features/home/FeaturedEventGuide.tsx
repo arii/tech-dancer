@@ -108,7 +108,7 @@ export function FeaturedEventGuide() {
         maxWidth="full"
         minWidth={0}
         cols={{ base: 1, md: 12 }}
-        className="bg-surface touch-pan-y overscroll-x-contain select-none md:min-h-64"
+        className="bg-surface touch-pan-y overscroll-x-contain select-none md:min-h-52"
         aria-roledescription="carousel"
         aria-label="Featured insights"
         data-gesture-handled="true"
@@ -122,7 +122,7 @@ export function FeaturedEventGuide() {
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >
-        {/* Image column — fluid 12-column grid system */}
+        {/* Image column — fluid 12-column grid system (3/12 = 25%) */}
         <Box
           position="relative"
           height={{ base: 44, md: "full" }}
@@ -132,7 +132,7 @@ export function FeaturedEventGuide() {
           <img
             src={event.heroImage}
             alt={event.imageAlt || `Screenshot of the ${event.title} insight`}
-            loading="lazy"
+            fetchPriority="high"
             decoding="async"
             className="h-full w-full object-cover object-top"
           />
