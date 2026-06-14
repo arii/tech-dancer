@@ -533,6 +533,37 @@ def repair(ctx, logs, stdin, worktree):
     else:
         err(ctx, res['message'], data=res)
 
+@agent_group.command()
+@click.argument('session_id')
+@click.pass_context
+def messages(ctx, session_id):
+    """Get message history for a Jules session."""
+    orch = ctx.obj['ORCHESTRATOR']
+    msgs = orch.jules.get_messages(session_id)
+    if not ctx.obj['JSON']:
+        if not msgs:
+            click.echo(f"No messages found for session {session_id}")
+        else:
+            for m in msgs:
+                role = m['role'].upper()
+                click.echo(f"[{m['time']}] {role}:")
+                click.echo(m['content'])
+                click.echo("-" * 40)
+    out(ctx, f"Messages retrieved for {session_id}", data={"messages": msgs})
+
+@agent_group.command()
+@click.argument('session_id')
+@click.argument('message')
+@click.pass_context
+def send(ctx, session_id, message):
+    """Send a message to an active Jules session."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.jules.send_message(session_id, message)
+    if res.get('status') == 'success':
+        out(ctx, f"✅ Message sent to session {session_id}", data=res)
+    else:
+        err(ctx, f"Failed to send message: {res.get('message')}", data=res)
+
 # Register aliases for backwards compatibility
 @cli.group(name='jules')
 def jules_group():
@@ -550,6 +581,8 @@ for group in [jules_group, antigravity_group]:
     group.add_command(fix_ci)
     group.add_command(repair_context)
     group.add_command(repair)
+    group.add_command(messages)
+    group.add_command(send)
 
 if __name__ == "__main__":
     cli(obj={})
