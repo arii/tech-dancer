@@ -243,7 +243,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       return result as unknown as T;
     })
-    .filter((item) => {
+    .filter((item: any) => {
       // Allow draft studies so they can be shown as "Planned" or "Coming Soon" cards
       // on the Research page without being indexed as full articles.
       if (item.draft) {

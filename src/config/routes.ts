@@ -16,7 +16,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/blog',
     lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
-    label: 'Blog Posts',
+    label: 'Blog Insights',
     icon: BookOpen,
     skeleton: 'grid',
     isMobileVisible: true,
@@ -30,7 +30,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/gear',
     lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
-    label: 'Gear Reviews',
+    label: 'Practical Tools',
     icon: ShoppingBag,
     skeleton: 'grid',
     isMobileVisible: true,
@@ -44,7 +44,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/events',
     lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Event Guides',
+    label: 'Training Notes',
     icon: Calendar,
     skeleton: 'grid',
     isMobileVisible: true,
