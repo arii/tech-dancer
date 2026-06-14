@@ -159,7 +159,7 @@ export function FeaturedEventGuide() {
               paddingX={{ base: 4, md: 0 }}
               className="hover:underline"
             >
-              Read the guide →
+              Read the insight →
             </Text>
             {featured.length > 1 && (
               <Box display="flex" gap={2}>
