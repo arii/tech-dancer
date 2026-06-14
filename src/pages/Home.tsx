@@ -12,7 +12,16 @@ import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Box
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth="[1240px]"
+      minWidth={0}
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      className="overflow-x-clip pb-safe-bottom"
+    >
       <SEO
         title="Home"
         description="BoomTick: Training notes, blog insights, and practical tools for better West Coast Swing weekends."
@@ -50,7 +59,6 @@ export default function Home() {
           <FeaturedEventGuide />
           <GearShelf />
         </Grid>
-
 
         <Grid
           width="full"
