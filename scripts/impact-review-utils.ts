@@ -16,6 +16,9 @@ export interface VisualRouteSummary {
   beforePath: string;
   afterPath: string;
   diffPath: string;
+  beforeCroppedPath?: string;
+  afterCroppedPath?: string;
+  diffCroppedPath?: string;
   diffPixels: number;
   totalPixels: number;
   differencePercent: number;
