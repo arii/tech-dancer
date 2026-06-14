@@ -32,6 +32,8 @@ excerpt: "string"
 
 ## Development
 
+For a comprehensive guide on setting up the agent environment, see [docs/agent/environment-setup.md](docs/agent/environment-setup.md).
+
 ```bash
 pnpm dev
 ```

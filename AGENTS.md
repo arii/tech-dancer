@@ -199,7 +199,7 @@ To prepare the base environment (Node.js/pnpm):
 
 # Codex / Agent Runtime Rules
 
-This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md) and [docs/runtime-consistency.md](./docs/runtime-consistency.md).
+This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md).
 
 Before installing, testing, building, or editing dependencies, run:
 
