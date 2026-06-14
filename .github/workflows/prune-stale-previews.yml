@@ -1,4 +1,6 @@
 name: Prune Stale Previews
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 on:
   schedule:
     - cron: '0 */6 * * *' # Runs every 6 hours
