@@ -13,7 +13,6 @@ affiliateIds:
   - "norcal-pride-gate-shirt"
   - "love-neon-switch-shirt"
 ---
-
 Every great project has a "Day Zero"—a moment where a specific problem needs a creative solution. For the BoomTick Merch page, that moment was **Jack & Jill Orama**.
 
 ## The Origin Story: Jack & Jill Orama

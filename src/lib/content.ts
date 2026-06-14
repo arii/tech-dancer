@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Blog, Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
+import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/content';
 
-export type { Blog, Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
+export type { Post, Resource, Study, ContentItem, ContentStatus };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -44,7 +44,6 @@ const contentModules = {
   blog: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
-  events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
 };
 
 const slugFrom = (path: string) => path.split('/').pop()?.replace('.md', '') || '';
@@ -101,32 +100,15 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
       data.image = normalizeAsset(data.image);
       data.imageBack = normalizeAsset(data.imageBack);
-      data.heroImage = normalizeAsset(data.heroImage);
-
-      const VALID_REGIONS = ['NorCal', 'SoCal', 'Southwest', 'Pacific Northwest', 'South', 'International', 'Other'];
 
       const result: Record<string, unknown> = {
         ...data,
         type,
         title: String(data.title || "Untitled"),
         category: String(data.category || "General"),
-        region: (data.region && VALID_REGIONS.includes(String(data.region))) ? String(data.region) : undefined,
         excerpt: String(data.excerpt || ""),
         date: String(data.date || ""),
         author: String(data.author || ""),
-        startDate: data.startDate ? String(data.startDate) : undefined,
-        earlyBirdDate: data.earlyBirdDate
-          ? String(data.earlyBirdDate)
-          : undefined,
-        registrationDeadline: data.registrationDeadline
-          ? String(data.registrationDeadline)
-          : undefined,
-        hotelCutoffDate: data.hotelCutoffDate
-          ? String(data.hotelCutoffDate)
-          : undefined,
-        packingReminderDate: data.packingReminderDate
-          ? String(data.packingReminderDate)
-          : undefined,
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
         internalSku: data.internalSku ? String(data.internalSku) : (data.sku ? String(data.sku) : undefined),
@@ -146,7 +128,6 @@ function transform<T extends { date?: string; draft?: boolean }>(
         priceDisplayPolicy: data.priceDisplayPolicy ? String(data.priceDisplayPolicy) : undefined,
         availabilityDisplayPolicy: data.availabilityDisplayPolicy ? String(data.availabilityDisplayPolicy) : undefined,
         recommendedFor: asArray(data.recommendedFor),
-        eventUseCase: data.eventUseCase ? String(data.eventUseCase) : undefined,
         printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
         printfulVariantIds: asArray(data.printfulVariantIds),
 
@@ -156,91 +137,6 @@ function transform<T extends { date?: string; draft?: boolean }>(
         content: content || "",
         slug: slugFrom(path),
       };
-
-      if (data.type === "event") {
-        // Promote flat gear/theme fields into structured objects
-        const hasFlatTheme =
-          data.themeName ||
-          data.themeLabel ||
-          data.themeDescription ||
-          data.themeColors ||
-          data.themeOutfitIds ||
-          data.themeAccessoryIds;
-
-        const flatTheme: EventTheme | undefined = hasFlatTheme
-          ? {
-              name: String(data.themeName || ""),
-              label: data.themeLabel ? String(data.themeLabel) : undefined,
-              description: data.themeDescription
-                ? String(data.themeDescription)
-                : undefined,
-              colors: asArray(data.themeColors),
-              outfitIds: asArray(data.themeOutfitIds),
-              accessoryIds: asArray(data.themeAccessoryIds),
-            }
-          : undefined;
-
-        const hasFlatGear =
-          data.gearOutfitIds ||
-          data.gearOutfitDescription ||
-          data.gearAccessoryIds ||
-          data.gearAccessoryDescription ||
-          data.gearShoeIds ||
-          data.gearShoeDescription ||
-          data.gearEssentialIds ||
-          data.gearEssentialDescription ||
-          data.gearTravelIds ||
-          data.gearTravelDescription;
-
-        const flatGear: EventGear | undefined = hasFlatGear
-          ? {
-              outfitIds: asArray(data.gearOutfitIds),
-              outfitDescription: data.gearOutfitDescription ? String(data.gearOutfitDescription) : undefined,
-              accessoryIds: asArray(data.gearAccessoryIds),
-              accessoryDescription: data.gearAccessoryDescription ? String(data.gearAccessoryDescription) : undefined,
-              shoeIds: asArray(data.gearShoeIds),
-              shoeDescription: data.gearShoeDescription ? String(data.gearShoeDescription) : undefined,
-              essentialIds: asArray(data.gearEssentialIds),
-              essentialDescription: data.gearEssentialDescription ? String(data.gearEssentialDescription) : undefined,
-              travelIds: asArray(data.gearTravelIds),
-              travelDescription: data.gearTravelDescription ? String(data.gearTravelDescription) : undefined,
-            }
-          : undefined;
-
-        // Normalize nested theme if present
-        const nestedTheme = data.theme as Record<string, unknown> | undefined;
-        const normalizedNestedTheme: EventTheme | undefined = nestedTheme
-          ? {
-              name: String(nestedTheme.name || ""),
-              label: nestedTheme.label ? String(nestedTheme.label) : undefined,
-              description: nestedTheme.description ? String(nestedTheme.description) : undefined,
-              colors: asArray(nestedTheme.colors),
-              outfitIds: asArray(nestedTheme.outfitIds),
-              accessoryIds: asArray(nestedTheme.accessoryIds),
-            }
-          : undefined;
-
-        // Normalize nested gear if present
-        const nestedGear = data.gear as Record<string, unknown> | undefined;
-        const normalizedNestedGear: EventGear | undefined = nestedGear
-          ? {
-              outfitIds: asArray(nestedGear.outfitIds),
-              outfitDescription: nestedGear.outfitDescription ? String(nestedGear.outfitDescription) : undefined,
-              accessoryIds: asArray(nestedGear.accessoryIds),
-              accessoryDescription: nestedGear.accessoryDescription ? String(nestedGear.accessoryDescription) : undefined,
-              shoeIds: asArray(nestedGear.shoeIds),
-              shoeDescription: nestedGear.shoeDescription ? String(nestedGear.shoeDescription) : undefined,
-              essentialIds: asArray(nestedGear.essentialIds),
-              essentialDescription: nestedGear.essentialDescription ? String(nestedGear.essentialDescription) : undefined,
-              travelIds: asArray(nestedGear.travelIds),
-              travelDescription: nestedGear.travelDescription ? String(nestedGear.travelDescription) : undefined,
-            }
-          : undefined;
-
-        result.theme = normalizedNestedTheme ?? flatTheme;
-        result.gear = normalizedNestedGear ?? flatGear;
-        result.relatedEvents = asArray(data.relatedEvents);
-      }
 
       return result as unknown as T;
     })
@@ -264,34 +160,30 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
-  blog: transform<Blog>(contentModules.blog as Record<string, string | ContentModule>, 'blog'),
+  posts: [
+    ...transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+    ...transform<Post>(contentModules.blog as Record<string, string | ContentModule>, 'blog')
+  ],
   resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
-  events: transform<Event>(contentModules.events as Record<string, string | ContentModule>, 'event')
 };
 
 const maps = {
   posts: new Map(items.posts.map(i => [i.slug, i])),
-  blog: new Map(items.blog.map(i => [i.slug, i])),
   resources: new Map(items.resources.map(i => [i.slug, i])),
   studies: new Map(items.studies.map(i => [i.slug, i])),
-  events: new Map(items.events.map(i => [i.slug, i]))
 };
 
-export const getPosts = () => [...items.blog, ...items.posts].sort((a, b) => {
+export const getPosts = () => items.posts.sort((a, b) => {
   const timeA = a.date ? new Date(a.date).getTime() : 0;
   const timeB = b.date ? new Date(b.date).getTime() : 0;
   return timeB - timeA;
 });
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
-export const getEvents = () => items.events;
 
-export const getPostBySlug = (slug: string) => maps.blog.get(slug) || maps.posts.get(slug);
+export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
-export const getEventBySlug = (slug: string) =>
-  maps.events.get(slug);
 
 /**
  * Calculates estimated reading time in minutes.

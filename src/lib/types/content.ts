@@ -3,27 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface Blog {
-  type: 'blog';
-  draft?: boolean;
-  slug: string;
-  title: string;
-  date: string;
-  author: string;
-  authorAvatar?: string;
-  category: string;
-  excerpt: string;
-  content: string;
-  image?: string;
-  imageAlt?: string;
-  updated?: string;
-  tags?: string[];
-  affiliateIds?: string[];
-  imageFit?: 'cover' | 'contain';
-}
-
 export interface Post {
-  type: 'post';
+  type: 'post' | 'blog';
   draft?: boolean;
   slug: string;
   title: string;
@@ -89,7 +70,6 @@ export interface Resource {
   priceDisplayPolicy?: "do-not-display-static-price" | "manually-reviewed";
   availabilityDisplayPolicy?: "do-not-display-static-availability" | "manually-reviewed";
   recommendedFor?: string[];
-  eventUseCase?: string;
 }
 
 export type ContentStatus = 'published' | 'draft' | 'planned';
@@ -109,77 +89,4 @@ export interface Study {
   readTime?: number;
 }
 
-export interface EventTheme {
-  name: string;
-  label?: string;
-  description?: string;
-  colors?: string[];
-  outfitIds?: string[];
-  accessoryIds?: string[];
-}
-
-export interface EventGear {
-  outfitIds?: string[];
-  outfitDescription?: string;
-  accessoryIds?: string[];
-  accessoryDescription?: string;
-  shoeIds?: string[];
-  shoeDescription?: string;
-  essentialIds?: string[];
-  essentialDescription?: string;
-  travelIds?: string[];
-  travelDescription?: string;
-}
-
-export type EventRegion = 'NorCal' | 'SoCal' | 'Southwest' | 'Pacific Northwest' | 'South' | 'International' | 'Other';
-
-export interface Event {
-  type: "event";
-  draft?: boolean;
-  slug: string;
-  title: string;
-  date: string;
-  author: string;
-  category: string;
-  excerpt: string;
-  location: string;
-  city: string;
-  region?: EventRegion;
-  schedule: string;
-  description: string;
-  link?: string;
-  content: string;
-  url?: string;
-  heroImage?: string;
-  imageAlt?: string;
-  whyAttending?: string;
-  // Reminder tool anchors
-  startDate?: string;
-  earlyBirdDate?: string;
-  registrationDeadline?: string;
-  hotelCutoffDate?: string;
-  packingReminderDate?: string;
-  // Gear and theme (resolved from affiliate IDs at render time)
-  theme?: EventTheme;
-  gear?: EventGear;
-  // Flat alternatives for YAML parsers that don't handle nesting
-  themeName?: string;
-  themeLabel?: string;
-  themeDescription?: string;
-  themeColors?: string[];
-  themeOutfitIds?: string[];
-  themeAccessoryIds?: string[];
-  gearOutfitIds?: string[];
-  gearOutfitDescription?: string;
-  gearAccessoryIds?: string[];
-  gearAccessoryDescription?: string;
-  gearShoeIds?: string[];
-  gearShoeDescription?: string;
-  gearEssentialIds?: string[];
-  gearEssentialDescription?: string;
-  gearTravelIds?: string[];
-  gearTravelDescription?: string;
-  relatedEvents?: string[];
-}
-
-export type ContentItem = Blog | Post | Resource | Study | Event;
+export type ContentItem = Post | Resource | Study;

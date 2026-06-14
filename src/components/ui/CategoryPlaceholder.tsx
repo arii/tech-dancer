@@ -19,7 +19,7 @@ export function getCategoryIcon(category: string): LucideIcon {
   const norm = (category || '').toLowerCase();
   if (norm.includes('tech')) return Cpu;
   if (norm.includes('travel')) return Globe;
-  if (norm.includes('wcs') || norm.includes('event') || norm.includes('registry')) return Calendar;
+  if (norm.includes('wcs') || norm.includes('registry')) return Calendar;
   if (norm.includes('shoe')) return Footprints;
   if (norm.includes('outfit')) return Shirt;
   if (norm.includes('accessory')) return Sparkles;
