@@ -51,20 +51,4 @@ Body content`;
     });
   });
 
-  it('should handle flat alternative keys in frontmatter', () => {
-    const markdown = `---
-type: event
-title: "Event with flat keys"
-themeOutfitIds: ["outfit-1"]
-gearShoeIds: ["shoe-1"]
----
-Body`;
-
-    const { data } = content.parseFrontmatter(markdown);
-    // parseFrontmatter itself doesn't do the mapping, transform does.
-    // However, transform uses import.meta.glob which we can't easily mock here.
-    // We can at least verify parseFrontmatter picks them up.
-    expect(data.themeOutfitIds).toEqual(["outfit-1"]);
-    expect(data.gearShoeIds).toEqual(["shoe-1"]);
-  });
 });

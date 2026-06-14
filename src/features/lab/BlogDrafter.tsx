@@ -10,6 +10,7 @@ import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
+import { types, EVENT_TYPES } from './config';
 
 const Field = ({ label, value, onChange, placeholder, type = "text", ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string }) => {
   return (
@@ -56,7 +57,10 @@ export function BlogDrafter() {
   };
 
   const handleCopyPrompt = () => {
-    const typeSpecificPrompt = `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
+    const typeSpecificPrompt =
+      data.type === 'event' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, location, city, schedule, description.` :
+      data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
+      `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
 
     const prompt = `Objective: Expand the following ${data.type} draft JSON for Tech-Dancer.
 Requirements:
@@ -74,8 +78,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   if (previewMode === 'full') {
     return (
       <FullPreview
-        post={data as unknown as Post}
-        onBack={() => setPreviewMode('compact')}
+        {...data}
+        onClose={() => setPreviewMode('compact')}
       />
     );
   }
@@ -102,6 +106,35 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             <Text variant="mono" size="micro" weight="font-bold">CLEAR FORM</Text>
           </Box>
         </Box>
+
+        {/* Type Selector */}
+        <Grid cols={{ base: 1, sm: 3 }} gap={2} surface="alt" padding={1} radius="sm" border className="border-line">
+          {types.map((type) => {
+            const Icon = type.icon;
+            const isActive = data.type === type.id;
+            return (
+              <Box
+                key={type.id}
+                as="button"
+                onClick={() => updateField('type', type.id)}
+                display="flex"
+                align="center"
+                justify="center"
+                gap={2}
+                paddingY={2}
+                className={cn(
+                  "transition-all cursor-pointer",
+                  isActive
+                    ? "bg-accent text-bg shadow-sm"
+                    : "text-text-dim hover:text-text-main hover:bg-white/5"
+                )}
+              >
+                <Icon className="w-3 h-3" />
+                <Text variant="mono" size="micro" weight="font-bold">{type.label}</Text>
+              </Box>
+            );
+          })}
+        </Grid>
 
         <Box border padding="compact" className="bg-accent/5 border-accent/20">
            <Stack gap={2} display="flex" align="baseline" direction="row">
@@ -142,10 +175,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Box
                   as="select"
                   value={data.type}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
                   className={cn(inputs.base, "appearance-none")}
-                  disabled
                 >
                   <option value="post">Blog Post</option>
+                  <option value="resource">Resource Card</option>
+                  <option value="event">Event Card</option>
                 </Box>
               </Stack>
               <Stack gap={2}>
@@ -156,7 +191,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
                   className={cn(inputs.base, "appearance-none")}
                 >
-                  {CONTENT_CATEGORIES.map(cat => (
+                  {data.type === 'event' ? (
+                    EVENT_TYPES.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))
+                  ) : CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
                   ))}
                 </Box>
@@ -170,6 +209,39 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               <Field label="Author" value={data.author} onChange={(v: string) => updateField('author', v)} />
             </Grid>
 
+            {data.type === 'resource' && (
+              <Box border padding={4} surface="muted" radius="md">
+                <Stack gap={4}>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Resource Metadata</Text>
+                   <Grid cols={2} gap={4}>
+                      <Field label="DURABILITY" type="number" step="0.1" value={data.durability} onChange={(v: string) => updateField('durability', parseFloat(v))} />
+                      <Field label="VALUE" type="number" step="0.1" value={data.value} onChange={(v: string) => updateField('value', parseFloat(v))} />
+                   </Grid>
+                   <Grid cols={2} gap={4}>
+                     <Field label="Price Category" value={data.priceCategory} onChange={(v: string) => updateField('priceCategory', v)} placeholder="e.g. $$$" />
+                     <Field label="Updated Date" value={data.updatedDate} onChange={(v: string) => updateField('updatedDate', v)} placeholder="Oct 2026" />
+                   </Grid>
+                   <Field label="VERDICT" value={data.verdict} onChange={(v: string) => updateField('verdict', v)} placeholder="Final summary..." />
+                   <Field label="AFFILIATE_IDS (COMMA SEPARATED)" value={(data.affiliateIds ?? []).join(', ')} onChange={(v: string) => updateField('affiliateIds', v)} placeholder="amazon, etc" />
+                   <Field label="TAGS (COMMA SEPARATED)" value={(data.tags ?? []).join(', ')} onChange={(v: string) => updateField('tags', v)} placeholder="practice, travel" />
+                </Stack>
+              </Box>
+            )}
+
+            {data.type === 'event' && (
+              <Box border padding={4} surface="muted" radius="md">
+                <Stack gap={4}>
+                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Event Logistics</Text>
+                   <Field label="EVENT_START_DATE" value={data.startDate} onChange={(v: string) => updateField('startDate', v)} type="date" />
+                   <Grid cols={2} gap={4}>
+                      <Field label="EARLY_BIRD_DEADLINE" value={data.earlyBirdDate} onChange={(v: string) => updateField('earlyBirdDate', v)} type="date" />
+                      <Field label="HOTEL_CUTOFF" value={data.hotelCutoffDate} onChange={(v: string) => updateField('hotelCutoffDate', v)} type="date" />
+                   </Grid>
+                   <Field label="OFFICIAL_URL" value={data.url} onChange={(v: string) => updateField('url', v)} type="url" placeholder="https://..." />
+                </Stack>
+              </Box>
+            )}
+
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Excerpt</Text>
               <Box
@@ -182,9 +254,35 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               />
             </Stack>
 
-            <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
+            {/* Type Specific Fields */}
+            {data.type === 'post' && (
+              <>
+                <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
 
-            <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" placeholder="Write your main content here..." />
+                <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" placeholder="Write your main content here..." />
+
+              </>
+            )}
+
+            {data.type === 'resource' && (
+              <>
+                <Field label="RESOURCE_HEADING" value={data.heading} onChange={(v: string) => updateField('heading', v)} placeholder="Practice Anywhere" />
+
+                <Field label="RESOURCE_CONTENT" value={data.content} onChange={(v: string) => updateField('content', v)} type="textarea" placeholder="Write the resource review content here..." />
+              </>
+            )}
+
+            {data.type === 'event' && (
+              <>
+                <Grid cols={2} gap={4}>
+                  <Field label="LOCATION" value={data.location} onChange={(v: string) => updateField('location', v)} placeholder="Hyatt Regency..." />
+                  <Field label="CITY" value={data.city} onChange={(v: string) => updateField('city', v)} placeholder="San Francisco, CA" />
+                </Grid>
+                <Field label="SCHEDULE" value={data.schedule} onChange={(v: string) => updateField('schedule', v)} placeholder="October 8 - 11, 2026" />
+                <Field label="DESCRIPTION" value={data.description} onChange={(v: string) => updateField('description', v)} type="textarea" placeholder="Detailed event description..." />
+
+              </>
+            )}
 
           </Stack>
 
