@@ -41,7 +41,6 @@ interface ContentModule {
 
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
-  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
   events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
 };
@@ -264,14 +263,12 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
 const items = {
   posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
   events: transform<Event>(contentModules.events as Record<string, string | ContentModule>, 'event')
 };
 
 const maps = {
   posts: new Map(items.posts.map(i => [i.slug, i])),
-  resources: new Map(items.resources.map(i => [i.slug, i])),
   studies: new Map(items.studies.map(i => [i.slug, i])),
   events: new Map(items.events.map(i => [i.slug, i]))
 };
@@ -282,7 +279,7 @@ export const getStudies = () => items.studies;
 export const getEvents = () => items.events;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
-export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
+export const getResourceBySlug = (_slug: string) => undefined;
 export const getEventBySlug = (slug: string) =>
   maps.events.get(slug);
 

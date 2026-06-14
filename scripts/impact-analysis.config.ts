@@ -22,7 +22,6 @@ export const IMPACT_CONFIG = {
   DEFAULT_STATIC_PAGES: [
     '/',
     '/blog',
-    '/gear',
     '/events',
     '/research',
     '/merch',
@@ -35,7 +34,6 @@ export const IMPACT_CONFIG = {
     'Home': '/',
     'UXAuditor': '/ux-auditor',
     'BlogPost': '/blog/:slug',
-    'GearPost': '/gear/:slug',
     'EventGuide': '/events/:slug',
     'ResearchDetail': '/research/:id'
   } as Record<string, string>,
@@ -43,7 +41,6 @@ export const IMPACT_CONFIG = {
   // Content folder to URL prefix mapping
   CONTENT_MAP: {
     'content/posts/': '/blog/',
-    'content/resources/': '/gear/',
     'content/events/': '/events/',
     'content/studies/': '/research/'
   } as Record<string, string>

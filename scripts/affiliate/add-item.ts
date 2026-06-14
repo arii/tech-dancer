@@ -194,10 +194,8 @@ function updateContentFile(filePath: string, affiliateId: string, dryRun: boolea
   const fullPath = path.resolve(repoRoot, filePath);
   const allowedRoots = [
     path.join(repoRoot, 'content/posts'),
-    path.join(repoRoot, 'content/resources'),
     path.join(repoRoot, 'content/events'),
     path.join(repoRoot, 'src/content/posts'),
-    path.join(repoRoot, 'src/content/resources'),
     path.join(repoRoot, 'src/content/events'),
   ];
 

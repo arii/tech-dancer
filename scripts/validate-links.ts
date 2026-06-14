@@ -28,31 +28,8 @@ async function main() {
 
   validRoutes.add('/research');
   validRoutes.add('/blog');
-  validRoutes.add('/gear');
 
   console.log(`Discovered ${validRoutes.size} valid internal routes.`);
-
-  // Validate gearSlug mapping in affiliates.json
-  console.log('Validating affiliates.json gearSlug mappings...');
-  const affiliates = JSON.parse(fs.readFileSync('src/data/affiliates.json', 'utf-8')) as Record<string, { gearSlug?: string }>;
-  const brokenSlugs: string[] = [];
-
-  Object.entries(affiliates).forEach(([id, data]) => {
-     if (data.gearSlug) {
-      const fullPath = `/gear/${data.gearSlug}`;
-      if (!validRoutes.has(fullPath)) {
-        brokenSlugs.push(`${id}: ${fullPath}`);
-      }
-    }
-  });
-
-  if (brokenSlugs.length > 0) {
-    console.error(`Found ${brokenSlugs.length} broken gearSlug mappings in affiliates.json:`);
-    brokenSlugs.forEach(s => console.error(`- ${s}`));
-    process.exit(1);
-  } else {
-    console.log('All gearSlug mappings are valid.');
-  }
 
   // 2. Scan markdown files for links and images using unified/remark AST
   const markdownFiles = globSync('content/**/*.md');
