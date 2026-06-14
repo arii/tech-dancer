@@ -121,7 +121,8 @@ export function HeroSection() {
         >
           <Box
             width="0.5"
-            className="bg-white/20 shrink-0"
+            shrink={false}
+            className="bg-white/20"
             aria-hidden="true"
           />
           <Text
@@ -159,6 +160,7 @@ export function HeroSection() {
             <Box
               key={i}
               radius="none"
+              display="block"
               className="hero-bar"
               style={ {
                 '--hero-bar-height': `${bar.height}px`,
