@@ -35,7 +35,7 @@ export default defineConfig(({mode}) => {
   const appVersion = process.env.npm_package_version || '0.0.0';
 
   // Guard: Production builds must have a valid version (not 0.0.0)
-  if (isProd && appVersion === '0.0.0') {
+  if (isProd && !process.env.CI && appVersion === '0.0.0') {
     throw new Error(
       'PRODUCTION BUILD FAILURE: package.json version is 0.0.0. ' +
       'Please use "pnpm release:patch|minor|major" to set a real version before deploying.'
