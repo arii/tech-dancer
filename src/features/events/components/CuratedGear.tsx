@@ -39,7 +39,6 @@ export function CuratedGear({ id, title = "Recommended Gear", sections }: Curate
                   title={item.name}
                   category={item.category}
                   excerpt={item.description}
-                  basePath="/gear"
                 />
               ))}
             </Grid>
