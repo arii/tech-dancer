@@ -80,7 +80,7 @@ export function FeaturedEventGuide() {
         marginBottom={4}
       >
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
-          Featured Event Guide
+          Featured Insights
         </Text>
         <Text
           as={NavLink}
@@ -93,7 +93,7 @@ export function FeaturedEventGuide() {
           paddingX={{ base: 4, sm: 0 }}
           className="shrink-0 hover:underline"
         >
-          See all events →
+          See all insights →
         </Text>
       </Stack>
 
@@ -105,7 +105,7 @@ export function FeaturedEventGuide() {
         overflow="hidden"
         className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
-        aria-label="Featured event guides"
+        aria-label="Featured insights"
         data-gesture-handled="true"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

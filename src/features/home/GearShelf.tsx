@@ -16,7 +16,7 @@ export function GearShelf() {
       {/* Header — no card wrapper, just section heading */}
       <Box display="flex" align="center" justify="between" marginBottom={3}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
-          Gear for the Weekend
+          Tools for the Weekend
         </Text>
         <Text
           as={NavLink}
@@ -29,7 +29,7 @@ export function GearShelf() {
           paddingX={{ base: 4, sm: 0 }}
           className="shrink-0 hover:underline"
         >
-          See all picks →
+          See all tools →
         </Text>
       </Box>
       <Text variant="body" size="sm" color="dim" marginBottom={5}>
