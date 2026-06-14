@@ -21,10 +21,9 @@ interface SearchResult {
 export function GlobalSearch() {
   const { query, setQuery, isOpen, close } = useGlobalSearch();
   
-  const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
+  const [postsQuery, studiesQuery] = useQueries({
     queries: [
       { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts), enabled: isOpen },
-      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources), enabled: isOpen },
       { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies), enabled: isOpen },
     ],
   });
@@ -32,10 +31,9 @@ export function GlobalSearch() {
   const allContent = useMemo(() => {
     return [
       ...(postsQuery.data || []).map(p => ({ ...p, type: 'post' as const })),
-      ...(resourcesQuery.data || []).map(r => ({ ...r, type: 'resource' as const })),
       ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
     ];
-  }, [postsQuery.data, resourcesQuery.data, studiesQuery.data]);
+  }, [postsQuery.data, studiesQuery.data]);
 
   const fuse = useMemo(() => {
     return new Fuse(allContent, {
@@ -112,7 +110,6 @@ export function GlobalSearch() {
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
-    else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
@@ -198,7 +195,7 @@ export function GlobalSearch() {
               as="input"
               ref={inputRef}
               type="text"
-              placeholder="Search BoomTick guides, gear, and posts"
+              placeholder="Search BoomTick guides and posts"
               aria-label="Search BoomTick"
               defaultValue={query}
               onChange={handleInputChange}
@@ -263,7 +260,7 @@ export function GlobalSearch() {
                 <Stack align="center" gap={4} opacityVariant="dim">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                     {query ? "No results found" : "Search gear, guides, and posts"}
+                     {query ? "No results found" : "Search guides and posts"}
                   </Text>
                 </Stack>
               </Box>

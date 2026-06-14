@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { Calendar, ShoppingBag, BookOpen } from 'lucide-react';
+import { Calendar, BookOpen } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
@@ -10,13 +10,6 @@ const TOPICS = [
     description: 'What to expect, what to pack, and how to get the most out of a WCS weekend.',
     cta: 'Explore guides →',
     href: '/events',
-  },
-  {
-    icon: ShoppingBag,
-    label: 'Gear Reviews',
-    description: 'Practical gear for dancers: earplugs, steamers, shoes, bags, fans, and more.',
-    cta: 'See reviews →',
-    href: '/gear',
   },
   {
     icon: BookOpen,

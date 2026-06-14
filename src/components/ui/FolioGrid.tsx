@@ -40,7 +40,7 @@ export default function FolioGrid({
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
-  const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');
+  const searchPlaceholder = propsSearchPlaceholder || 'Search posts…';
 
   const filteredItems = items.filter(item => {
     const tags = 'tags' in item ? item.tags : [];
