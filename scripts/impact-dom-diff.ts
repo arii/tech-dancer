@@ -17,7 +17,6 @@ import {
 } from './impact-review-utils';
 
 const deploymentReviewPath = path.join(ARTIFACTS_DIR, 'deployment-review.md');
-const ARTIFACTS_BASE_PATH = 'artifacts/';
 
 function normalizeHtml(html: string): string {
   const dom = new JSDOM(html);
@@ -129,28 +128,6 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
-    const getBase64ImageTag = (filePath: string | undefined, alt: string): string => {
-      if (!filePath || !fs.existsSync(filePath)) return '';
-      try {
-        const base64 = fs.readFileSync(filePath, 'base64');
-        const ext = path.extname(filePath).slice(1) || 'png';
-        return `![${alt}](data:image/${ext};base64,${base64})`;
-      } catch (error) {
-        console.error(`Failed to embed image '${filePath}':`, error);
-        return '';
-      }
-    };
-
-    const diffImg = getBase64ImageTag(visual?.diffPath, 'Visual Diff');
-    const beforeImg = getBase64ImageTag(visual?.beforePath, 'Before');
-    const afterImg = getBase64ImageTag(visual?.afterPath, 'After');
-
-    const toRelative = (p: string | undefined) => p ? p.replace(new RegExp(`^${ARTIFACTS_BASE_PATH}`), './') : undefined;
-    const beforeRel = toRelative(visual?.beforePath);
-    const afterRel = toRelative(visual?.afterPath);
-    const diffRel = toRelative(visual?.diffPath);
-    const domDiffRel = toRelative(domSummary.diffPath);
-
     return `### ${domSummary.route}
 
 Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
@@ -163,14 +140,10 @@ Severity: ${severity}
 Review Required: ${reviewRequired ? 'Yes' : 'No'}
 
 Artifacts:
-- Before screenshot: ${beforeRel ? `[${visual?.beforePath}](${beforeRel})` : 'Not captured'}
-- After screenshot: ${afterRel ? `[${visual?.afterPath}](${afterRel})` : 'Not captured'}
-- Visual diff: ${diffRel ? `[${visual?.diffPath}](${diffRel})` : 'Not captured'}
-- DOM diff: ${domDiffRel ? `[${domSummary.diffPath}](${domDiffRel})` : 'Not captured'}
-
-${diffImg ? `#### Visual Diff\n${diffImg}` : ''}
-${beforeImg ? `#### Before\n${beforeImg}` : ''}
-${afterImg ? `#### After\n${afterImg}` : ''}
+- Before screenshot: ${visual?.beforePath ?? 'Not captured'}
+- After screenshot: ${visual?.afterPath ?? 'Not captured'}
+- Visual diff: ${visual?.diffPath ?? 'Not captured'}
+- DOM diff: ${domSummary.diffPath}
 `;
   });
 
