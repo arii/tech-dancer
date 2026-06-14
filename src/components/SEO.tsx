@@ -13,6 +13,7 @@ interface SEOProps {
   schema?: Record<string, unknown> | Record<string, unknown>[];
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   googleVerification?: string;
+  noindex?: boolean;
 }
 
 export function SEO({
@@ -24,7 +25,8 @@ export function SEO({
   canonical,
   schema,
   jsonLd,
-  googleVerification = GOOGLE_SITE_VERIFICATION
+  googleVerification = GOOGLE_SITE_VERIFICATION,
+  noindex
 }: SEOProps) {
   const { pathname } = useLocation();
 
@@ -67,6 +69,7 @@ export function SEO({
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={url} />
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />

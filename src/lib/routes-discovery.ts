@@ -41,7 +41,7 @@ export function getAllRoutes() {
       path: item.slug,
       lastmod: item.lastmod
     }))
-  );
+  ).filter(route => !route.path.startsWith('/gear/') && !route.path.startsWith('/events/'));
 
   // Group content by directory to find the latest modification for listing pages
   const contentLastModMap: Record<string, string> = {};
