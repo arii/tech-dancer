@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateMerchSchema, getImageUrl } from '../../utils/schema';
+import { generateMerchSchema, getImageUrl } from "../../utils/schema";
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 

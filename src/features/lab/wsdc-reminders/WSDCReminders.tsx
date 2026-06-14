@@ -1,10 +1,8 @@
 // impeccable-ignore-file
 import { useState, useMemo } from 'react';
 import { Download, Globe, AlertCircle } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
-import { getEvents } from '@/lib/content';
 import { calculateTimeline } from './lib/timeline-utils';
 import { generateICS, downloadICS } from './lib/ics-generator';
 import { EventAnchors, TimelineItem } from './types';
@@ -13,11 +11,7 @@ import { EventSelector } from './EventSelector';
 import { CustomEventForm } from './CustomEventForm';
 
 export default function WSDCReminders() {
-  const { data: events = [] } = useQuery({
-    queryKey: ['events', 'reminders'],
-    queryFn: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
-    initialData: () => getEvents().filter(e => e.startDate && e.earlyBirdDate && e.hotelCutoffDate),
-  });
+  const events = [] as any[];
 
   const [selectedEventId, setSelectedEventId] = useState<string>('custom');
   const [customEvent, setCustomEvent] = useState<EventAnchors>({

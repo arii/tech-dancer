@@ -2,10 +2,9 @@ import { Search } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { FilterButton } from '@/components/ui/FilterButton';
 import { cn } from '@/lib/utils';
-import type { Event } from '@/lib/content';
 
 interface EventSelectorProps {
-  events: Event[];
+  events: any[];
   selectedEventId: string;
   onSelect: (id: string) => void;
 }

@@ -1,5 +1,4 @@
 import type { ProductCatalogItem } from '@/data/products/catalog';
-import type { Resource } from '@/lib/types/content';
 import { ASSET_PREFIX, BASE_URL } from '@/config/constants';
 
 /**

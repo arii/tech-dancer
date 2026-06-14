@@ -1,4 +1,4 @@
-import { PenTool, Calendar, Package } from 'lucide-react';
+import { PenTool } from "lucide-react";
 import { ContentType } from './useBlogDrafter';
 
 export const types = [
