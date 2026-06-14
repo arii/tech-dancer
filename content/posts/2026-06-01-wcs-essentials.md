@@ -17,6 +17,8 @@ tags:
 
 Whether you're heading to a local social or traveling across the country for a convention, these two items are high-priority essentials for any West Coast Swing dancer.
 
+![Gear Essentials Layout](/images/gear/amazon/loop-experience-ear-plugs.jpg)
+
 ### Stay Cool on the Floor
 Crowded dance floors can get incredibly hot. A large folding fan is the most effective way to cool yourself down (and your partners!) between songs.
 
