@@ -62,10 +62,20 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   };
 
   return (
-    <button
+    <Box
+      as="button"
       onClick={handleCopy}
       disabled={isCopying}
-      className="mt-2 flex items-center gap-1 px-3 py-1 rounded-md bg-surface border border-line hover:border-accent transition-colors hover:text-accent font-bold text-xs"
+      marginTop={2}
+      display="flex"
+      align="center"
+      gap={1}
+      paddingX={3}
+      paddingY={1}
+      radius="md"
+      surface="default"
+      border={true}
+      className="hover:border-accent transition-colors hover:text-accent font-bold text-xs"
     >
       {isCopying ? (
         <Icon icon={RefreshCw} size="xs" className="animate-spin" />
@@ -75,7 +85,7 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
         <Icon icon={Copy} size="xs" />
       )}
       <span>{isCopying ? 'Copying...' : copied ? 'Copied!' : 'Copy Prompt'}</span>
-    </button>
+    </Box>
   );
 }
 
@@ -476,7 +486,8 @@ export default function UXAuditor() {
                                       {imp.issue}
                                     </Text>
                                     {imp.suggestion && imp.suggestion.trim() !== '' && (
-                            <div className="bg-surface-muted p-3 rounded-lg border border-line flex flex-col sm:flex-row items-start gap-2">
+                            <Box surface="muted" padding={3} radius="lg" border={true}>
+                              <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                                 <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
                                           <Text variant="sans" size="xs" weight="font-bold" clamp={4} className="break-all whitespace-pre-wrap">
@@ -486,7 +497,8 @@ export default function UXAuditor() {
                                             <CopyPromptButton suggestion={imp.suggestion} />
                                           )}
                                         </Box>
-                            </div>
+                              </Stack>
+                            </Box>
                                     )}
                                   </Box>
                                 ))}
