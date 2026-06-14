@@ -27,14 +27,14 @@ export default function Toolbox() {
     <Box as="section" paddingY={4}>
       <SEO
         title="Toolbox"
-        description="Dance gear notes and product resources for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
+        description="Dance gear notes and practical tools for West Coast Swing weekends, practice, travel, recovery, and social dance comfort."
         jsonLd={generateGearCatalogSchema(allFilteredItems)}
       />
       <Box as="header" marginBottom={8}>
         <PageHeader
           label="THE TOOLBOX"
-          title="Gear Reviews"
-          description="Rigorous testing and honest takes on the gear that keeps you moving."
+          title="Practical Tools"
+          description="Rigorous testing and honest takes on the tools that keep you moving."
         />
 
         <Stack gap={6}>
