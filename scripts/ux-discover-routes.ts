@@ -12,9 +12,7 @@ const STATIC_ROUTES = [
   '/events',
   '/research',
   '/merch',
-  '/about',
-  '/contact',
-  '/subscribe'
+  '/about'
 ];
 
 const CONTENT_DIRS = {
