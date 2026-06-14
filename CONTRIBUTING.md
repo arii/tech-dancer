@@ -1,6 +1,6 @@
 # BoomTick.blog — Content Contributor Guide
 
-This guide explains how to add new content to the site using GitHub Issues and the automated PR workflow.
+This guide explains how to add new content to the site using GitHub Issues and the automated PR workflow. For instructions on setting up the developer/agent environment, see [docs/agent/environment-setup.md](docs/agent/environment-setup.md).
 
 ## How It Works
 

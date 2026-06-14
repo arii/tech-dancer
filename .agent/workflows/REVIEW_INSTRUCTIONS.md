@@ -8,12 +8,18 @@ You will record your findings in the writeable `pr-review-<PR_NUMBER>.md` file.
 
 - **Target File**: You MUST modify the existing `pr-review-{PR}.md` file.
 - **NO New Files**: DO NOT create temporary files or new JSON files. The submission scripts ONLY read from the specified `pr-review-{PR}.md` file.
-- **Checklist**: You MUST mark every item in the Audit Checklist as `[x]`.
+- **Checklist Completion**: Every item in the Audit Checklist MUST be marked to indicate it was verified.
 - **JSON Block**: You MUST fill the JSON block at the bottom of the file with your findings.
 
 ## 2. Audit Checklist Verification
 
-You MUST systematically verify each item against the diff context and check it off (- [x]). The **Anti-AI-Slop checklist** is mandatory for all reviews.
+You MUST systematically verify each item against the diff context.
+
+### Marking Convention:
+- **`[x]`**: Verified and **passed** (no issues found).
+- **`[ ]`**: Verified and **failed** (issue found). You MUST provide detailed feedback for these items in the `FINDINGS` section and/or as inline comments in the JSON block.
+
+The **Anti-AI-Slop checklist** is mandatory for all reviews.
 
 - **Dead abstractions**: Did they introduce a new class, context, or hook that a simpler primitive could handle?
 - **Unnecessary indirection**: Does this add a layer of wrapping where a direct function call would suffice?
