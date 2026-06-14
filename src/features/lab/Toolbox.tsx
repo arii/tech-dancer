@@ -45,7 +45,7 @@ export default function Toolbox() {
             <SearchBox
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search gear..."
+              placeholder="Search tools..."
             />
             <ViewToggle view={view} onChange={setView} />
           </Box>
