@@ -60,7 +60,7 @@ export default function EventGuide() {
   return (
     <Box>
       <SEO
-        title={`${event.title} | Event Resource Guide`}
+        title={`${event.title} | Event Insight`}
         description={event.excerpt}
         jsonLd={getEventSchema(event)}
       />

@@ -48,7 +48,7 @@ export function EventHero({
   location,
   date,
   image,
-  eyebrow = "Event Resource Guide",
+  eyebrow = "Event Insight",
   theme,
   venue,
   bestFor,

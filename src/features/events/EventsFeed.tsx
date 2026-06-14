@@ -12,12 +12,12 @@ export default function EventsFeed() {
   return (
     <Box as="section">
       <SEO
-        title="Event Resource Guides"
+        title="Event Insights"
         description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."
       />
       <FolioGrid
         items={events}
-        categoryTitle="Upcoming Event Resource Guides"
+        categoryTitle="Upcoming Event Insights"
         as="h1"
         label="PLAN"
         description="A comprehensive planning hub for upcoming West Coast Swing events. Competition schedules, location details, and technical gear recommendations for every stop."

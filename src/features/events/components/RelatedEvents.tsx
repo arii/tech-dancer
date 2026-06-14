@@ -15,7 +15,7 @@ export function RelatedEvents({ id, title, events }: RelatedEventsProps) {
   if (!events || events.length === 0) return null;
 
   const firstRegion = events[0]?.region;
-  const dynamicTitle = title || (firstRegion ? `More ${firstRegion} Guides` : "More Guides");
+  const dynamicTitle = title || (firstRegion ? `More ${firstRegion} Insights` : "More Insights");
 
   return (
     <Box id={id} as="section" data-testid="related">

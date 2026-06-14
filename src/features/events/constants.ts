@@ -6,7 +6,7 @@ export const EVENT_TABS = [
   { id: 'reminders', label: 'Reminders', icon: Bell },
   { id: 'travel', label: 'Travel', icon: Plane },
   { id: 'notes', label: 'Notes', icon: FileText },
-  { id: 'related', label: 'More Guides', icon: Briefcase, path: '/events' },
+  { id: 'related', label: 'More Insights', icon: Briefcase, path: '/events' },
 ] as const;
 
 export const SECTION_SPACING = "section-spacing";

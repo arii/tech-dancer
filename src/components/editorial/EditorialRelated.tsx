@@ -13,7 +13,7 @@ interface EditorialRelatedProps {
   items: RelatedItem[];
 }
 
-export function EditorialRelated({ title = "Related Guides", items }: EditorialRelatedProps) {
+export function EditorialRelated({ title = "Related Insights", items }: EditorialRelatedProps) {
   if (items.length === 0) return null;
 
   return (
