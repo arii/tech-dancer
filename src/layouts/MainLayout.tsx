@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
-import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
+// import { NewsletterBanner } from '@/features/email-capture/NewsletterBanner';
 import { ScrollToTopButton } from '@/components/ui/ScrollToTopButton';
 import { useScrollManagement } from '@/hooks/useScrollManagement';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -100,7 +100,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         </Stack>
       </Stack>
 
-      <NewsletterBanner />
+      {/* <NewsletterBanner /> */}
       {isSearchOpen && (
         <Suspense fallback={null}>
           <GlobalSearch />

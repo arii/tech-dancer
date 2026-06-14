@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { ActionButton } from '@/components/ui/ActionButton';
+// import { ActionButton } from '@/components/ui/ActionButton';
 import { Logo } from '@/components/ui/Logo';
 import { TOP_NAV_ROUTES } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
@@ -52,11 +52,11 @@ export default function Navigation() {
               <Text variant="mono" size="xs" color="dim" display={{ base: 'none', xl: 'block' }}>CMD+K</Text>
             </Box>
 
-            <Box display={{ base: 'none', lg: 'flex' }}>
+            {/* <Box display={{ base: 'none', lg: 'flex' }}>
               <ActionButton as={NavLink} to="/contact?intent=subscribe" variant="primary" paddingX={4} paddingY={2} className="text-xs uppercase tracking-widest">
                 Subscribe
               </ActionButton>
-            </Box>
+            </Box> */}
 
             <Box
               as="button"

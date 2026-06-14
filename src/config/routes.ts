@@ -1,4 +1,4 @@
-import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, Tag } from 'lucide-react';
+import { Home, BookOpen, ShoppingBag, Database, User, Calendar, Tag } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -91,18 +91,18 @@ export const routes: RouteConfig[] = [
     skeleton: 'simple',
     isTopNav: true
   },
-  {
-    path: '/contact',
-    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
-    label: 'Contact',
-    icon: Send,
-    skeleton: 'simple'
-  },
-  {
-    path: '/subscribe',
-    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
-    skeleton: 'simple'
-  },
+  // {
+  //   path: '/contact',
+  //   lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+  //   label: 'Contact',
+  //   icon: Send,
+  //   skeleton: 'simple'
+  // },
+  // {
+  //   path: '/subscribe',
+  //   lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+  //   skeleton: 'simple'
+  // },
   {
     path: '/preview',
     lazy: () => import('@/pages/ComponentPreview').then(m => ({ Component: m.default })),
