@@ -2,13 +2,8 @@
 set -Eeuo pipefail
 
 # Agent setup script for the BoomTick / Tech Dancer repo.
-# Safe to run in Codex, Jules, from the repo root, from ./scripts, or as a pasted setup script.
 
 # -------- repo root detection --------
-# Codex may copy the setup script to /tmp before running it. Jules usually runs
-# setup commands with the cloned repo as the working directory. Prefer the
-# current working directory's git root, then fall back to the script location,
-# then search upward for common repo markers.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd -P || pwd)"
 START_DIR="$(pwd -P)"
 
@@ -44,7 +39,6 @@ export CI="${CI:-1}"
 export DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-noninteractive}"
 export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-}"
 
-# Put npm global installs in user space when running without sudo/root.
 if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
   export NPM_CONFIG_PREFIX="${NPM_CONFIG_PREFIX:-$HOME/.npm-global}"
   export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
@@ -75,20 +69,6 @@ pip_install() {
     return 0
   fi
   python3 -m pip install --disable-pip-version-check --break-system-packages "$@"
-}
-
-execute_playwright_command() {
-  local cmd="$1"
-  shift
-  if [ "$cmd" = "install-deps" ]; then
-    run_sudo env "PATH=$PATH" pnpm exec playwright "$cmd" "$@" || \
-      run_sudo env "PATH=$PATH" npx --yes playwright "$cmd" "$@" || \
-      warn "Playwright $cmd failed; continuing."
-  else
-    pnpm exec playwright "$cmd" "$@" || \
-      npx --yes playwright "$cmd" "$@" || \
-      warn "Playwright $cmd failed; continuing."
-  fi
 }
 
 # -------- install steps --------
@@ -230,10 +210,14 @@ install_playwright() {
   fi
 
   log "Installing Playwright system dependencies..."
-  execute_playwright_command install-deps
+  run_sudo env "PATH=$PATH" pnpm exec playwright install-deps || \
+    run_sudo env "PATH=$PATH" npx --yes playwright install-deps || \
+    warn "Playwright install-deps failed; continuing."
 
   log "Installing Playwright browsers (all)..."
-  execute_playwright_command install
+  pnpm exec playwright install || \
+    npx --yes playwright install || \
+    warn "Playwright install failed; continuing."
 }
 
 configure_remote_origin() {
