@@ -162,7 +162,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 const items = {
   posts: [
     ...transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
-    ...transform<Post>(contentModules.blog as Record<string, string | ContentModule>, 'post')
+    ...transform<Post>(contentModules.blog as Record<string, string | ContentModule>, 'blog')
   ],
   resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),

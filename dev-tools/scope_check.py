@@ -15,6 +15,8 @@ def get_project_config():
             "base_branch": "origin/main",
             "content_scopes": {
                 "resources": "content/resources/",
+                "posts": "content/posts/",
+                "blog": "content/blog/",
                 "studies": "content/studies/"
             }
         }
@@ -53,6 +55,7 @@ def verify_pr_scope(file_list=None):
     content_scopes = config.get("content_scopes", {
         "resources": "content/resources/",
         "posts": "content/posts/",
+        "blog": "content/blog/",
         "studies": "content/studies/"
     })
 
