@@ -15,7 +15,6 @@ export function Footer() {
   }, []);
 
   const legalLinks = [
-    // { label: 'Contact', to: '/contact' },
     { label: 'Privacy', to: '/about#privacy' },
     { label: 'Terms', to: '/about#terms' },
   ];

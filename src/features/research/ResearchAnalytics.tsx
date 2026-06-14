@@ -1,6 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-// import { routes } from '@/config/routes';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -95,7 +94,6 @@ export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-  // const contactPath = routes.find(r => r.path === '/contact')?.path || '/contact';
 
   const flagshipTools = tools.filter(t => t.isFlagship);
   const engineeringTools = tools.filter(t => !t.isFlagship);
@@ -137,10 +135,6 @@ export default function ResearchAnalytics() {
             <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
               Read Implementation Articles
             </ActionButton>
-            {/* <ActionButton as={NavLink} to={contactPath} variant="accent" paddingX={6} paddingY={3} gap={2} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
-              <Icon icon={Send} size="sm" />
-              Contact
-            </ActionButton> */}
           </Stack>
         </Stack>
 
