@@ -9,24 +9,13 @@ This directory contains repository automation scripts and quality gate configura
 
 ## 🧰 One-Step Agent Environment Bootstrap
 
-Use `dev-tools/setup-agent.sh` to fully bootstrap a fresh agent/devcontainer environment in one command.
+Use the root-level `./setup-agent.sh` to fully bootstrap a fresh environment in one command.
 
 ```bash
-./dev-tools/setup-agent.sh
+./setup-agent.sh
 ```
 
-This script installs and configures:
-- System tools needed by dev-tools (`git`, `curl`, `jq`, `gh`, Python toolchain, Node prerequisites).
-- `pnpm` via Corepack (or fallback global install), then project dependencies via `pnpm install --frozen-lockfile`.
-- Python dependencies for `dev-tools` (`pip install -e ./dev-tools`) and ETL (`etl/requirements.txt` when present).
-- Playwright CLI browser/runtime dependencies (`npx playwright install --with-deps chromium`).
-- Git remote origin (if missing) using `GITHUB_REPOSITORY` or a best-effort repo slug guess.
-
-> [!NOTE]
-> For deterministic remote configuration, set `GITHUB_REPOSITORY=<owner>/<repo>` before running the script in brand-new clones.
-
-> [!TIP]
-> In CI or secure agent environments, prefer injecting secrets as environment variables rather than hardcoding them.
+This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools, Node/pnpm activation, Python dependencies, Playwright provisioning, and runtime verification (`pnpm run doctor`).
 
 ### Required / Recommended Environment Variables & Secrets
 

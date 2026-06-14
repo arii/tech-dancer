@@ -21,16 +21,15 @@ The following files define and enforce the contract:
 - `.devcontainer/Dockerfile`: Uses `node:22.22.2-bookworm` as the base image.
 - `.github/workflows/*.yml`: All workflows use `actions/setup-node` with `node-version-file: '.node-version'`.
 
-## Enforcement Commands
+## Enforcement & Activation
 
-- `pnpm run check:runtime-files`: Validates that configuration files match the contract.
-- `pnpm run doctor`: Validates that the current active environment matches the contract.
-
-## Activation Protocol
-
-If you encounter a version mismatch, run the following to activate the correct pnpm version:
+To ensure compliance with the runtime contract, use the consolidated setup script which performs both activation and verification:
 
 ```bash
-corepack enable
-corepack prepare pnpm@10.28.2 --activate
+./setup-agent.sh
 ```
+
+This script automates:
+1. **Activation**: `corepack` activation of pnpm `10.28.2`.
+2. **Verification**: Running `pnpm run doctor` and `pnpm run check:runtime-files`.
+3. **Provisioning**: Installing Node, Python, and Playwright dependencies.

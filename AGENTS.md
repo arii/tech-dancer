@@ -191,46 +191,20 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
 
 ## 22) Setup (Jules Environment)
 
-To prepare the base environment (Node.js/pnpm):
+To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright), run the consolidated setup script:
 
 ```bash
-./dev-tools/snapshot.sh
+./setup-agent.sh
 ```
 
-# Codex / Agent Runtime Rules
+This script enforces the runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md) and [docs/runtime-consistency.md](./docs/runtime-consistency.md).
 
-This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md) and [docs/runtime-consistency.md](./docs/runtime-consistency.md).
-
-Before installing, testing, building, or editing dependencies, run:
+Before performing any tasks, ensure you have run the setup script. Use:
 
 ```bash
-corepack enable
-corepack prepare pnpm@10.28.2 --activate
-pnpm run check:runtime-files
-pnpm run doctor
-```
-
-Use:
-
-```bash
-pnpm install --frozen-lockfile
 pnpm run lint
 pnpm run build
 ```
-
-Do not run:
-
-```bash
-npm install
-npm install -g pnpm
-pnpm env use
-nvm install
-nvm use
-volta pin
-asdf local nodejs
-```
-
-If Node or pnpm mismatches, stop and report the mismatch. Do not change runtime versions unless the user explicitly asks to update the runtime contract.
 
 ## GitHub Actions runtime policy
 

@@ -12,7 +12,11 @@ The PR review system is centralized in the unified Tech-Dancer CLI.
 
 ### Environment Setup
 
-The project requires **Node >=22.0.0** (as specified in `.nvmrc` and `package.json` engines). Ensure you have the correct Node version installed before running local quality gates, or you will encounter dependency errors.
+Use the consolidated setup script to prepare and verify the environment:
+
+```bash
+./setup-agent.sh
+```
 
 ### 1. Single PR Audit
 
