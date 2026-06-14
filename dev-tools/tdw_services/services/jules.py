@@ -113,6 +113,7 @@ class JulesClient:
                 error_msg += f"\nResponse: {e.response.text}"
             raise RuntimeError(error_msg)
 
+    # Added get_messages and send_message support for feedback loop
     def get_messages(self, session_id: str) -> List[Dict[str, Any]]:
         clean_id = session_id.replace("sessions/", "")
         url = f"{self.base_url}/sessions/{clean_id}/activities"
