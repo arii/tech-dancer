@@ -25,8 +25,7 @@ export const IMPACT_CONFIG = {
     '/gear',
     '/research',
     '/merch',
-    '/about',
-    '/contact'
+    '/about'
   ],
 
   // Route Mapping Overrides (PascalCase component name to URL slug)
