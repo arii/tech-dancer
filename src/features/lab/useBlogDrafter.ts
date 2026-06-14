@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 import { SITE_METADATA } from '@/config/content';
 
-export type ContentType = 'post' | 'event' | 'resource';
+export type ContentType = 'post' | 'resource';
 
 export interface BaseDraftData {
   title: string;
@@ -13,7 +13,7 @@ export interface BaseDraftData {
   // Common fields that were moved to Base in some versions
   affiliateLink?: string;
   commentary?: string;
-  // Extended fields for Resource and Event support across types
+  // Extended fields for Resource support across types
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
@@ -21,14 +21,6 @@ export interface BaseDraftData {
   tags?: string[];
   heading?: string;
   content?: string;
-  location?: string;
-  city?: string;
-  schedule?: string;
-  description?: string;
-  startDate?: string;
-  earlyBirdDate?: string;
-  hotelCutoffDate?: string;
-  url?: string;
   durability?: number;
   value?: number;
 }
@@ -53,19 +45,7 @@ export interface ResourceDraftData extends BaseDraftData {
   content: string;
 }
 
-export interface EventDraftData extends BaseDraftData {
-  type: 'event';
-  location: string;
-  city: string;
-  schedule: string;
-  description: string;
-  startDate?: string;
-  earlyBirdDate?: string;
-  hotelCutoffDate?: string;
-  url?: string;
-}
-
-export type DraftData = PostDraftData | ResourceDraftData | EventDraftData;
+export type DraftData = PostDraftData | ResourceDraftData;
 
 export interface HistoryEntry {
   id: string;
@@ -94,10 +74,6 @@ const DEFAULT_DATA: DraftData = {
   date: new Date().toISOString().split('T')[0],
   affiliateLink: '',
   commentary: '',
-  location: '',
-  city: '',
-  schedule: '',
-  description: '',
   affiliateIds: [],
   tags: [],
   verdict: '',
@@ -180,24 +156,6 @@ export function useBlogDrafter() {
   };
 
   const markdownPreview = useMemo(() => {
-    if (data.type === 'event') {
-      return `---
-type: event
-title: "${data.title || 'Untitled Event'}"
-date: "${data.date}"
-author: "${data.author}"
-category: "${data.category}"
-excerpt: "${data.excerpt || ''}"
-location: "${data.location || ''}"
-city: "${data.city || ''}"
-schedule: "${data.schedule || ''}"
-description: "${data.description || ''}"
----
-# ${data.title || ''}
-${data.excerpt || ''}
-`;
-    }
-
     if (data.type === 'resource') {
       return `type: resource
 title: "${data.title || ''}"
@@ -300,22 +258,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
           heading: parsed.heading || pResource.heading || '',
           content: parsed.content || pResource.content || '',
         } as ResourceDraftData;
-      }
-
-      if (type === 'event') {
-        const pEvent = prev.type === 'event' ? prev : {} as Partial<EventDraftData>;
-        return {
-          ...base,
-          type: 'event',
-          location: (normalize(parsed.location) as string) || pEvent.location || '',
-          startDate: parsed.startDate || pEvent.startDate || '',
-          earlyBirdDate: parsed.earlyBirdDate || pEvent.earlyBirdDate || '',
-          hotelCutoffDate: parsed.hotelCutoffDate || pEvent.hotelCutoffDate || '',
-          url: parsed.url || pEvent.url || '',
-          city: parsed.city || pEvent.city || '',
-          schedule: parsed.schedule || pEvent.schedule || '',
-          description: parsed.description || pEvent.description || '',
-        } as EventDraftData;
       }
 
       return {

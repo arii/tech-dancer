@@ -10,7 +10,7 @@ import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
-import { types, EVENT_TYPES } from './config';
+import { types } from './config';
 
 const Field = ({ label, value, onChange, placeholder, type = "text", ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string }) => {
   return (
@@ -58,7 +58,6 @@ export function BlogDrafter() {
 
   const handleCopyPrompt = () => {
     const typeSpecificPrompt =
-      data.type === 'event' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, location, city, schedule, description.` :
       data.type === 'resource' ? `Ensure the JSON strictly matches the keys: title, author, category, date, excerpt, affiliateIds (array), tags (array), rating (number), verdict, priceCategory, updatedDate, heading, content.` :
       `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
 
@@ -175,12 +174,11 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 <Box
                   as="select"
                   value={data.type}
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource' | 'event')}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('type', e.target.value as 'post' | 'resource')}
                   className={cn(inputs.base, "appearance-none")}
                 >
                   <option value="post">Blog Post</option>
                   <option value="resource">Resource Card</option>
-                  <option value="event">Event Card</option>
                 </Box>
               </Stack>
               <Stack gap={2}>
@@ -191,11 +189,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
                   className={cn(inputs.base, "appearance-none")}
                 >
-                  {data.type === 'event' ? (
-                    EVENT_TYPES.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))
-                  ) : CONTENT_CATEGORIES.map(cat => (
+                  {CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
                   ))}
                 </Box>
@@ -228,19 +222,6 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               </Box>
             )}
 
-            {data.type === 'event' && (
-              <Box border padding={4} surface="muted" radius="md">
-                <Stack gap={4}>
-                   <Text variant="mono" size="micro" color="brand" weight="font-bold">Event Logistics</Text>
-                   <Field label="EVENT_START_DATE" value={data.startDate} onChange={(v: string) => updateField('startDate', v)} type="date" />
-                   <Grid cols={2} gap={4}>
-                      <Field label="EARLY_BIRD_DEADLINE" value={data.earlyBirdDate} onChange={(v: string) => updateField('earlyBirdDate', v)} type="date" />
-                      <Field label="HOTEL_CUTOFF" value={data.hotelCutoffDate} onChange={(v: string) => updateField('hotelCutoffDate', v)} type="date" />
-                   </Grid>
-                   <Field label="OFFICIAL_URL" value={data.url} onChange={(v: string) => updateField('url', v)} type="url" placeholder="https://..." />
-                </Stack>
-              </Box>
-            )}
 
             <Stack gap={2}>
               <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Excerpt</Text>
@@ -272,17 +253,6 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               </>
             )}
 
-            {data.type === 'event' && (
-              <>
-                <Grid cols={2} gap={4}>
-                  <Field label="LOCATION" value={data.location} onChange={(v: string) => updateField('location', v)} placeholder="Hyatt Regency..." />
-                  <Field label="CITY" value={data.city} onChange={(v: string) => updateField('city', v)} placeholder="San Francisco, CA" />
-                </Grid>
-                <Field label="SCHEDULE" value={data.schedule} onChange={(v: string) => updateField('schedule', v)} placeholder="October 8 - 11, 2026" />
-                <Field label="DESCRIPTION" value={data.description} onChange={(v: string) => updateField('description', v)} type="textarea" placeholder="Detailed event description..." />
-
-              </>
-            )}
 
           </Stack>
 
