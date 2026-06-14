@@ -11,7 +11,7 @@ import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { Search } from 'lucide-react';
 
-interface FolioGridProps {
+interface ContentFeedSectionProps {
   items: ContentItem[];
   categoryTitle: string;
   basePath: string;
@@ -25,7 +25,7 @@ interface FolioGridProps {
   searchPlaceholder?: string;
 }
 
-export default function FolioGrid({
+export function ContentFeedSection({
   items,
   categoryTitle,
   basePath,
@@ -37,7 +37,7 @@ export default function FolioGrid({
   as,
   renderItem,
   searchPlaceholder: propsSearchPlaceholder
-}: FolioGridProps) {
+}: ContentFeedSectionProps) {
   const [search, setSearch] = useSearchParam('search');
 
   const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');

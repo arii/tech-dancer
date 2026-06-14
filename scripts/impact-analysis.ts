@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { IMPACT_CONFIG } from './impact-analysis.config';
+import { getAllRoutes } from '../src/lib/routes-discovery';
 
 // Types for dependency-cruiser output
 interface Dependency {
@@ -105,21 +106,6 @@ function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, st
 }
 
 /**
- * Maps page component files to public URLs.
- */
-function mapPageToUrl(filePath: string): string {
-  const fileName = path.basename(filePath, path.extname(filePath));
-
-  if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
-    return IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
-  }
-
-  // Convert PascalCase to kebab-case
-  const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  return `/${route}`;
-}
-
-/**
  * Determines the severity of the change.
  */
 function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
@@ -132,53 +118,6 @@ function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
   }
 
   return 'LOW';
-}
-
-/**
- * Handles content changes and maps them to URLs.
- */
-function getContentAffectedUrls(changedFiles: string[]): string[] {
-  const urls: string[] = [];
-
-  for (const file of changedFiles) {
-    for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
-      if (file.startsWith(dir) && file.endsWith('.md')) {
-        const slug = path.basename(file, '.md');
-        urls.push(`${prefix}${slug}`);
-      }
-    }
-  }
-
-  return urls;
-}
-
-
-/**
- * Find affected markdown files when public static files (e.g. images) are changed.
- */
-function getAffectedUrlsByPublicFiles(changedFiles: string[]): string[] {
-  const urls: Set<string> = new Set();
-  const publicFiles = changedFiles.filter(f => f.startsWith('public/'));
-
-  if (publicFiles.length === 0) return [];
-
-  const searchStrings = publicFiles.map(f => f.replace(/^public/, ''));
-
-  for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
-    const mdFiles = exec(`find ${dir} -name "*.md"`).split('\n').filter(Boolean);
-
-    for (const mdFile of mdFiles) {
-      const content = fs.readFileSync(mdFile, 'utf-8');
-      for (const searchStr of searchStrings) {
-        if (content.includes(searchStr)) {
-          const slug = path.basename(mdFile, '.md');
-          urls.add(`${prefix}${slug}`);
-          urls.add(prefix.replace(/\/$/, '')); // Add index page
-        }
-      }
-    }
-  }
-  return Array.from(urls);
 }
 
 async function main() {
@@ -209,23 +148,70 @@ async function main() {
     // Global impact check - only if the CHANGED files themselves are global triggers
     const hasGlobalImpact = changedFiles.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
 
-    let pageUrls: string[];
+    const { sitemap } = getAllRoutes();
+    let allUrls: string[] = [];
 
     if (hasGlobalImpact) {
       console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
-      pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
+      allUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
     } else {
-      pageUrls = affectedPages.map(mapPageToUrl);
+      // Map components/content/public files directly against the generated sitemap
+      const mappedUrls = new Set<string>();
+
+      // 1. Map affected React pages
+      affectedPages.forEach(filePath => {
+        const fileName = path.basename(filePath, path.extname(filePath));
+
+        if (fileName === 'Home' || fileName === 'index') {
+          sitemap.forEach(sitemapUrl => {
+            if (sitemapUrl === '/') mappedUrls.add(sitemapUrl);
+          });
+          return;
+        }
+
+        const routePart = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+
+        sitemap.forEach(sitemapUrl => {
+          if (sitemapUrl === `/${routePart}` || sitemapUrl.startsWith(`/${routePart}/`)) {
+            mappedUrls.add(sitemapUrl);
+          }
+        });
+      });
+
+      // 2. Map Markdown content changes
+      const mdFiles = changedFiles.filter(f => f.endsWith('.md') && f.startsWith('content/'));
+      mdFiles.forEach(file => {
+        const slug = path.basename(file, '.md');
+        sitemap.forEach(sitemapUrl => {
+          if (sitemapUrl.endsWith(`/${slug}`)) {
+            mappedUrls.add(sitemapUrl);
+          }
+        });
+      });
+
+      // 3. Map Public Assets changes to referencing markdown, then to sitemap
+      const publicFiles = changedFiles.filter(f => f.startsWith('public/'));
+      if (publicFiles.length > 0) {
+        const searchStrings = publicFiles.map(f => f.replace(/^public/, ''));
+        const allMdFiles = exec('find content -name "*.md"').split('\n').filter(Boolean);
+
+        for (const mdFile of allMdFiles) {
+          const content = fs.readFileSync(mdFile, 'utf-8');
+          for (const searchStr of searchStrings) {
+            if (content.includes(searchStr)) {
+              const slug = path.basename(mdFile, '.md');
+              sitemap.forEach(sitemapUrl => {
+                if (sitemapUrl.endsWith(`/${slug}`)) {
+                  mappedUrls.add(sitemapUrl);
+                }
+              });
+            }
+          }
+        }
+      }
+
+      allUrls = Array.from(mappedUrls).sort();
     }
-
-    // Content URLs
-    const contentUrls = getContentAffectedUrls(changedFiles);
-
-    // Public static files URLs (e.g., images referenced in markdown)
-    const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles);
-
-    // Combine and deduplicate URLs
-    const allUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
 
     // Severity
     const severity = getSeverity(changedFiles);

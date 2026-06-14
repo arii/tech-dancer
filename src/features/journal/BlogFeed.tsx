@@ -1,7 +1,7 @@
 import { Box } from '@/layouts/Primitives';
 import { useBlog } from './useBlog';
 import { SEO } from '@/components/SEO';
-import FolioGrid from '@/components/ui/FolioGrid';
+import { ContentFeedSection } from '@/components/ui/ContentFeedSection';
 import { FilterBar } from '@/components/ui/FilterBar';
 
 export default function BlogFeed() {
@@ -13,7 +13,7 @@ export default function BlogFeed() {
         title="Blog"
         description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
       />
-      <FolioGrid
+      <ContentFeedSection
         items={posts}
         categoryTitle="Blog Posts"
         as="h1"
@@ -29,7 +29,7 @@ export default function BlogFeed() {
             categories={categories}
           />
         </Box>
-      </FolioGrid>
+      </ContentFeedSection>
     </>
   );
 }
