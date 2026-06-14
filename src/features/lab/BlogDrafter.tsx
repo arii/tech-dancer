@@ -74,7 +74,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   if (previewMode === 'full') {
     return (
       <FullPreview
-        post={data as any}
+        post={data as unknown as Post}
         onBack={() => setPreviewMode('compact')}
       />
     );
