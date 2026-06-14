@@ -4,7 +4,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
-import { Post, readingTime, getPosts } from '@/lib/content';
+import { Blog, Post, readingTime, getPosts } from '@/lib/content';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
@@ -13,7 +13,7 @@ import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
 
 interface BlogPostDetailProps {
-  post: Post;
+  post: Blog | Post;
   onBack: () => void;
   backLabel: string;
 }
