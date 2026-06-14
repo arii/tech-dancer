@@ -5,9 +5,9 @@ import {
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
   ChevronRight, Github, Trash2
 } from 'lucide-react';
-import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { useUXAuditor, VIEWPORTS, ViewportAnalysis, UXReport } from "@/features/ux-auditor/useUXAuditor";
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
@@ -342,7 +342,7 @@ export default function UXAuditor() {
                 icon={<Icon icon={RefreshCw} size="sm" color="muted" />}
               />
             )}
-            {reports.map((report: any) => (
+            {reports.map((report: UXReport) => (
               <Stack
                 key={report.id}
                 as="button"
