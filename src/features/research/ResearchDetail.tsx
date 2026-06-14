@@ -15,6 +15,7 @@ import { readingTime } from '@/lib/content';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
+const WSDCReminders = lazy(() => import('@/features/lab/wsdc-reminders/WSDCReminders'));
 const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
 const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
 const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m => ({ default: m.BlastRadiusTool })));
@@ -23,6 +24,7 @@ const EcommerceAutomationTool = lazy(() => import('./components/EcommerceAutomat
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
+  'wsdc-event-reminders': WSDCReminders,
   'gitops-pr-reviewer': GitOpsReviewerTool,
   'scope-blast-radius': BlastRadiusTool,
   'ecommerce-automation': EcommerceAutomationTool,
