@@ -78,8 +78,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   if (previewMode === 'full') {
     return (
       <FullPreview
-        {...data}
-        onClose={() => setPreviewMode('compact')}
+        post={data}
+        onBack={() => setPreviewMode('compact')}
       />
     );
   }
