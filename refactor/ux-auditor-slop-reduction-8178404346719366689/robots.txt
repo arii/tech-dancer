@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/refactor/ux-auditor-slop-reduction-8178404346719366689/sitemap.xml
