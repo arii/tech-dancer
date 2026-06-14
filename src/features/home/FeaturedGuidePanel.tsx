@@ -24,7 +24,8 @@ export function FeaturedGuidePanel() {
       overflow="hidden"
       border
       radius="lg"
-      className="group self-stretch"
+      self="stretch"
+      className="group"
     >
       {/* Background image — fills the column height naturally */}
       <img
@@ -40,7 +41,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-b from-bg via-bg/70 to-transparent"
+        bgGradient="bg-gradient-to-b from-bg via-bg/70 to-transparent"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
