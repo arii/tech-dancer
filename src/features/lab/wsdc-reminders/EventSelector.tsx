@@ -2,6 +2,7 @@ import { Search } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { FilterButton } from '@/components/ui/FilterButton';
 import { cn } from '@/lib/utils';
+import { EventAnchors } from './types';
 
 interface EventSelectorProps {
   events: (EventAnchors & { slug: string })[];
