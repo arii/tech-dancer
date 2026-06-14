@@ -2,7 +2,7 @@ import { useEffect, MutableRefObject, useRef } from 'react';
 import { useLocation, useNavigationType, useNavigate } from 'react-router-dom';
 
 const SWIPE_THRESHOLD = 50;
-const MAIN_ROUTES = ['/', '/blog', '/gear', '/events', '/research', '/merch'];
+const MAIN_ROUTES = ['/', '/blog', '/research', '/merch'];
 
 export function useScrollManagement(
   scrollRef: MutableRefObject<HTMLElement | null>,

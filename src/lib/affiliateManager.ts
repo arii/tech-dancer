@@ -60,23 +60,10 @@ export const affiliateManager = {
     return url.toString();
   },
 
-  resolveResourceHref: (config: { id?: string; gearSlug?: string }): string => {
-    const { id, gearSlug } = config;
+  resolveResourceHref: (config: { id?: string }): string => {
+    const { id } = config;
 
-    // 1. Explicit gear slug (likely from content markdown)
-    if (gearSlug) {
-      return `/gear/${gearSlug}`;
-    }
-
-    // 2. Check affiliate database for canonical gearSlug mapping
-    if (id) {
-      const link = AFFILIATE_DATABASE[id];
-      if (link?.gearSlug) {
-        return `/gear/${link.gearSlug}`;
-      }
-    }
-
-    // 3. Fallback to external URL if id exists
+    // Fallback to external URL if id exists
     if (id) {
       return affiliateManager.resolveUrl(id);
     }

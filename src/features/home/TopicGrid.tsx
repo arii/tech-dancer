@@ -1,29 +1,29 @@
 // impeccable-ignore-file
-import { Calendar, ShoppingBag, BookOpen } from 'lucide-react';
+import { BookOpen, Database, Tag } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
 const TOPICS = [
-  {
-    icon: Calendar,
-    label: 'Event Guides',
-    description: 'What to expect, what to pack, and how to get the most out of a WCS weekend.',
-    cta: 'Explore guides →',
-    href: '/events',
-  },
-  {
-    icon: ShoppingBag,
-    label: 'Gear Reviews',
-    description: 'Practical gear for dancers: earplugs, steamers, shoes, bags, fans, and more.',
-    cta: 'See reviews →',
-    href: '/gear',
-  },
   {
     icon: BookOpen,
     label: 'Blog Posts',
     description: 'Dance concepts, practice systems, and competition prep without the jargon.',
     cta: 'Read posts →',
     href: '/blog',
+  },
+  {
+    icon: Database,
+    label: 'DevAI Portfolio',
+    description: 'A collection of AI experiments, research studies, and developer tools for social dancers.',
+    cta: 'View portfolio →',
+    href: '/research',
+  },
+  {
+    icon: Tag,
+    label: 'Merch',
+    description: 'Official BoomTick apparel: lead, follow, and switch shirts plus NorCal pride gear.',
+    cta: 'Shop merch →',
+    href: '/merch',
   },
 ];
 

@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateMerchSchema, generateGearCatalogSchema, getImageUrl } from '../../utils/schema';
+import { generateMerchSchema, getImageUrl } from '../../utils/schema';
 import type { ProductCatalogItem } from '@/data/products/catalog';
-import type { Resource } from '@/lib/types/content';
 import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 
 describe('Schema generation', () => {
@@ -41,40 +40,6 @@ describe('Schema generation', () => {
     });
   });
 
-  describe('generateGearCatalogSchema', () => {
-    it('should not include ratings, reviews, or risky offer claims for gear', () => {
-      const mockResources: Resource[] = [
-        {
-          type: 'resource',
-          slug: 'test-gear',
-          title: 'Test Gear',
-          date: '2023-01-01',
-          author: 'Test Author',
-          category: 'Gear',
-          excerpt: 'Test Excerpt',
-          content: 'Test Content',
-          rating: 4.5,
-          verdict: 'Excellent gear',
-          shopUrl: 'https://example.com/test',
-          provider: 'printful'
-        }
-      ];
-
-      const schema = generateGearCatalogSchema(mockResources);
-      const product = schema.itemListElement[0].item;
-      const json = JSON.stringify(product);
-
-      expect(product.name).toBe('Test Gear');
-      expect(json).not.toContain('aggregateRating');
-      expect(json).not.toContain('review');
-      expect(json).not.toContain('price');
-      expect(json).not.toContain('availability');
-      expect(json).not.toContain('shippingDetails');
-      expect(json).not.toContain('hasMerchantReturnPolicy');
-
-      expect(product.offers.url).toBe('https://example.com/test');
-    });
-  });
 
   describe('getImageUrl', () => {
     it('should handle various URL formats without duplication', () => {

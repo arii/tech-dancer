@@ -23,7 +23,6 @@
     "url": "https://www.amazon.com/dp/B0D4DZDHZ1?tag=onasafari04-20",
     "category": "gear",
     "description": "Helps soften loud ballroom sound while still letting you hear the music.",
-    "gearSlug": "2023-10-01-loop-earplugs",
     "image": "/images/gear/amazon/loop-experience-ear-plugs.jpg",
     "imageMode": "contain"
   },
@@ -105,7 +104,6 @@
     "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Keep your outfits wrinkle-free while traveling.",
-    "gearSlug": "2023-11-01-travel-steamer",
     "image": "/images/gear/amazon/oghom-portable-garment-steamer.jpg",
     "imageMode": "contain",
     "draft": true
@@ -245,7 +243,6 @@
     "category": "fashion",
     "description": "Express your style and your role on the floor with this neon-inspired follow shirt.",
     "image": "/assets/gear/love-neon-tshirt-ask-me-to-follow-front.webp",
-    "gearSlug": "2024-06-01-love-neon-follow-shirt"
   },
   "love-neon-lead-shirt": {
     "id": "love-neon-lead-shirt",
@@ -254,7 +251,6 @@
     "category": "fashion",
     "description": "Express your style and your role on the floor with this neon-inspired lead shirt.",
     "image": "/assets/gear/love-neon-tshirt-ask-me-to-lead-front.webp",
-    "gearSlug": "2024-06-01-love-neon-lead-shirt"
   },
   "norcal-pride-gate-shirt": {
     "id": "norcal-pride-gate-shirt",
@@ -263,7 +259,6 @@
     "category": "fashion",
     "description": "Classic Golden Gate bridge design with a vibrant rainbow twist for NorCal dancers.",
     "image": "/assets/gear/norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp",
-    "gearSlug": "2024-06-01-norcal-pride-gate-shirt"
   },
   "norcal-pride-bear-shirt": {
     "id": "norcal-pride-bear-shirt",
@@ -272,7 +267,6 @@
     "category": "fashion",
     "description": "The iconic California bear, redesigned with Pride colors for the West Coast Swing community.",
     "image": "/assets/gear/norcal-best-cal-pride-california-bear-apparel-front.webp",
-    "gearSlug": "2024-06-01-norcal-pride-bear-shirt"
   },
   "war-eagle-shirt": {
     "id": "war-eagle-shirt",
@@ -281,7 +275,6 @@
     "category": "fashion",
     "description": "Oversized high-neck t-shirt featuring the War Eagle design.",
     "image": "/assets/gear/war-eagle-oversized-high-neck-t-shirt-front.webp",
-    "gearSlug": "2024-06-01-war-eagle-shirt"
   },
   "love-neon-switch-shirt": {
     "id": "love-neon-switch-shirt",
@@ -290,7 +283,6 @@
     "category": "fashion",
     "description": "Show your versatility on the dance floor with this neon 'Lead, Follow, or Switch' LOVE shirt.",
     "image": "/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp",
-    "gearSlug": "2024-06-01-love-neon-switch-shirt"
   },
   "norcal-bear-tank": {
     "id": "norcal-bear-tank",
@@ -299,7 +291,6 @@
     "category": "fashion",
     "description": "Comfortable men's tank top with the NorCal Best Cal bear design.",
     "image": "/assets/gear/norcal-bear-tank-front.webp",
-    "gearSlug": "2024-06-01-norcal-bear-tank"
   },
   "norcal-crop-top": {
     "id": "norcal-crop-top",
@@ -308,7 +299,6 @@
     "category": "fashion",
     "description": "Stylish cropped top for NorCal dancers.",
     "image": "/assets/gear/norcal-crop-top-front.webp",
-    "gearSlug": "2024-06-01-norcal-crop-top"
   },
   "norcal-gate-crop-hoodie": {
     "id": "norcal-gate-crop-hoodie",
@@ -317,7 +307,6 @@
     "category": "fashion",
     "description": "Cozy crop hoodie with the Golden Gate bridge design.",
     "image": "/assets/gear/norcal-gate-crop-hoodie.webp",
-    "gearSlug": "2024-06-01-norcal-gate-crop-hoodie"
   },
   "love-unisex-shirt": {
     "id": "love-unisex-shirt",
@@ -326,7 +315,6 @@
     "category": "fashion",
     "description": "Unisex 'Lead, Follow, or Switch' LOVE shirt.",
     "image": "/assets/gear/unisex-t-shirt-front.webp",
-    "gearSlug": "2024-06-01-love-unisex-shirt"
   },
   "norcal-bestcal-tshirt": {
     "id": "norcal-bestcal-tshirt",
@@ -335,7 +323,6 @@
     "category": "fashion",
     "description": "The original NorCal BestCal t-shirt.",
     "image": "/assets/gear/norcal-bestcal-front.webp",
-    "gearSlug": "2024-06-01-norcal-bestcal-tshirt"
   },
   "dance-bag": {
     "id": "dance-bag",
@@ -422,7 +409,6 @@
     "url": "https://www.amazon.com/dp/B0953CF3DH?tag=onasafari04-20",
     "category": "fashion",
     "description": "Reflective casual crop tops for visibility and style on and off the dance floor.",
-    "gearSlug": "2024-06-01-reflective-crop-tops",
     "image": "/images/gear/sketches/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.webp"
   },
   "pumpkin-headbands": {
@@ -431,7 +417,6 @@
     "url": "https://www.amazon.com/dp/B07DYMH79K?tag=onasafari04-20",
     "category": "fashion",
     "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
-    "gearSlug": "2024-06-01-pumpkin-headbands",
     "image": "/images/gear/sketches/pumpkin-headbands.webp"
   },
   "pumpkin-stickers": {
@@ -440,7 +425,6 @@
     "url": "https://www.amazon.com/dp/B0B17JS8LC?tag=onasafari04-20",
     "category": "fashion",
     "description": "Adhesive felt pumpkin stickers for easy costume assembly.",
-    "gearSlug": "2024-06-01-pumpkin-stickers",
     "image": "/images/gear/amazon/pumpkin-stickers.webp",
     "imageMode": "contain"
   },
@@ -450,7 +434,6 @@
     "url": "https://www.amazon.com/dp/B08X6RM32P?tag=onasafari04-20",
     "category": "fashion",
     "description": "Comfortable and stylish crop tops for dancing.",
-    "gearSlug": "2024-06-01-crop-tops",
     "image": "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.webp"
   },
   "mesh-fishnet-top": {
@@ -459,7 +442,6 @@
     "url": "https://www.amazon.com/dp/B0CT5H2YZM?tag=onasafari04-20",
     "category": "fashion",
     "description": "Sheer mesh fishnet top for layering and statement styling on the dance floor.",
-    "gearSlug": "2024-06-01-mesh-fishnet-top",
     "image": "/images/gear/sketches/mesh-fishnet-top.webp"
   },
   "portable-speaker": {
@@ -468,7 +450,6 @@
     "url": "https://www.amazon.com/dp/B0BRXJVG1S?tag=onasafari04-20",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
-    "gearSlug": "2024-01-01-portable-speaker",
     "image": "/images/gear/amazon/portable-speaker.jpg",
     "imageMode": "contain"
   },
@@ -478,7 +459,6 @@
     "url": "https://www.amazon.com/dp/B09GK544PP?tag=onasafari04-20",
     "category": "gear",
     "description": "Rugged, waterproof, and surprisingly loud. Perfect for hotel practice sessions or outdoor social gatherings.",
-    "gearSlug": "2024-01-01-portable-speaker",
     "image": "/images/gear/amazon/portable-speaker.jpg",
     "imageMode": "contain"
   },
@@ -497,7 +477,6 @@
     "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Fast-charging USB cables for keeping your devices powered during multi-day conventions.",
-    "gearSlug": "2024-06-01-charging-cables",
     "draft": true,
     "image": "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.webp"
   },
@@ -507,7 +486,6 @@
     "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "fashion",
     "description": "Six-pack of fishnet lace tights for elegant leg coverage and style.",
-    "gearSlug": "2024-06-01-fishnet-tights",
     "draft": true,
     "image": "/images/gear/sketches/isadora-paccini-women-s-6-pack-fishnet-lace-pantyhose-tights-queen-bla.webp"
   },
@@ -517,7 +495,6 @@
     "url": "https://www.amazon.com/dp/B073XSHTWR?tag=onasafari04-20",
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
-    "gearSlug": "2024-06-01-running-belt",
     "image": "/images/gear/sketches/fanny-pack.webp"
   },
   "shoe-dryer": {
@@ -526,7 +503,6 @@
     "url": "https://amazon.com/?tag=onasafari04-20",
     "category": "travel",
     "description": "Fast boot dryer with timer to keep dance shoes fresh and ready for the next event.",
-    "gearSlug": "2024-06-01-shoe-dryer",
     "draft": true,
     "image": "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
   },

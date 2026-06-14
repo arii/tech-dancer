@@ -3,31 +3,14 @@ import { affiliateManager } from '../affiliateManager';
 
 describe('affiliateManager', () => {
   describe('resolveResourceHref', () => {
-    it('resolves explicit gearSlug', () => {
-      expect(affiliateManager.resolveResourceHref({ gearSlug: 'test-slug' }))
-        .toBe('/gear/test-slug');
-    });
-
-    it('resolves gearSlug from database if id is provided', () => {
-      // Loop experience has gearSlug in database
-      expect(affiliateManager.resolveResourceHref({ id: 'loop-experience' }))
-        .toBe('/gear/2023-10-01-loop-earplugs');
-    });
-
-    it('resolves external URL if no gearSlug is found', () => {
-      // compression-cubes has no gearSlug
+    it('resolves external URL if id is provided', () => {
       expect(affiliateManager.resolveResourceHref({ id: 'compression-cubes' }))
         .toContain('amazon.com');
     });
 
-    it('returns # if no id or gearSlug is provided', () => {
+    it('returns # if no id is provided', () => {
       expect(affiliateManager.resolveResourceHref({}))
         .toBe('#');
-    });
-
-    it('prioritizes explicit gearSlug over database gearSlug', () => {
-       expect(affiliateManager.resolveResourceHref({ id: 'loop-experience', gearSlug: 'explicit-slug' }))
-        .toBe('/gear/explicit-slug');
     });
   });
 

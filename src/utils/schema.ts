@@ -122,34 +122,3 @@ export function generateMerchSchema(products: ProductCatalogItem[]): SchemaItemL
   };
 }
 
-export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "itemListElement": resources.map((resource, index) => {
-      const isAmazon = resource.affiliateProvider === 'amazon';
-
-      const productSchema: SchemaProduct = {
-        "@type": "Product",
-        "name": resource.title,
-        "description": isAmazon ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
-        "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
-        "brand": {
-          "@type": "Brand",
-          "name": "BoomTick"
-        },
-        "sku": resource.internalSku || resource.slug,
-        "offers": {
-          "@type": "Offer",
-          "url": resource.shopUrl || `${BASE_URL}/gear/${resource.slug}`,
-        }
-      };
-
-      return {
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": productSchema
-      };
-    })
-  };
-}
