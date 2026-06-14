@@ -4,8 +4,7 @@ import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { TopicGrid } from '@/features/home/TopicGrid';
-import { FeaturedEventGuide } from '@/features/home/FeaturedEventGuide';
-import { GearShelf } from '@/features/home/GearShelf';
+
 import { LatestPosts } from '@/features/home/LatestPosts';
 import { DevLabCallout } from '@/features/home/DevLabCallout';
 import { HeroSection } from '@/components/ui/HeroSection';
@@ -38,8 +37,7 @@ export default function Home() {
           display="grid"
           className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
-          <FeaturedEventGuide />
-          <GearShelf />
+          <FeaturedGuidePanel />
         </Box>
 
 

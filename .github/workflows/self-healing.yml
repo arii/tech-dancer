@@ -13,6 +13,9 @@ permissions:
   pull-requests: write
   actions: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   repair:
     if: github.repository == 'disabled'
