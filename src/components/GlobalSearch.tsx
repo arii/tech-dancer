@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from '@/hooks/useHotkeys';
 import Fuse from 'fuse.js';
 import { useQueries } from '@tanstack/react-query';
-import { getPosts, getResources, getStudies } from '@/lib/content';
+import { getPosts, getStudies } from '@/lib/content';
 import { withSimulationDelay } from '@/lib/utils';
 
 interface SearchResult {
@@ -21,10 +21,9 @@ interface SearchResult {
 export function GlobalSearch() {
   const { query, setQuery, isOpen, close } = useGlobalSearch();
   
-  const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
+  const [postsQuery, studiesQuery] = useQueries({
     queries: [
       { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts), enabled: isOpen },
-      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources), enabled: isOpen },
       { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies), enabled: isOpen },
     ],
   });
@@ -32,10 +31,9 @@ export function GlobalSearch() {
   const allContent = useMemo(() => {
     return [
       ...(postsQuery.data || []).map(p => ({ ...p, type: 'post' as const })),
-      ...(resourcesQuery.data || []).map(r => ({ ...r, type: 'resource' as const })),
       ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
     ];
-  }, [postsQuery.data, resourcesQuery.data, studiesQuery.data]);
+  }, [postsQuery.data, studiesQuery.data]);
 
   const fuse = useMemo(() => {
     return new Fuse(allContent, {
@@ -112,7 +110,6 @@ export function GlobalSearch() {
     close();
     setQuery('');
     if (result.type === 'post') navigate(`/blog/${result.slug}`);
-    else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 

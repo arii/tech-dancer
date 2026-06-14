@@ -114,7 +114,7 @@ export function NewsletterBanner() {
             </Text>
             {/* Pill badges for topics - Sharp edges as requested */}
             <Box display="flex" gap={2} wrap role="list" aria-label="Newsletter topics">
-              {['Dance Research', 'Gear Reviews', 'Community Updates'].map(tag => (
+              {['Dance Research', 'Community Updates'].map(tag => (
                 <Box
                   key={tag}
                   as="span"

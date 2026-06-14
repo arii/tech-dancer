@@ -10,6 +10,7 @@ describe('Content loading', () => {
   it('should return arrays for content types', () => {
     expect(Array.isArray(content.getPosts())).toBe(true);
     expect(Array.isArray(content.getResources())).toBe(true);
+    expect(content.getResources().length).toBe(0);
     expect(Array.isArray(content.getStudies())).toBe(true);
     expect(Array.isArray(content.getEvents())).toBe(true);
   });

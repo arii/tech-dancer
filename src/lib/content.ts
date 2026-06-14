@@ -277,7 +277,7 @@ const maps = {
 };
 
 export const getPosts = () => items.posts;
-export const getResources = () => items.resources;
+export const getResources = () => [] as Resource[];
 export const getStudies = () => items.studies;
 export const getEvents = () => items.events;
 
