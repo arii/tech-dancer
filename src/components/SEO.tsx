@@ -13,6 +13,7 @@ interface SEOProps {
   schema?: Record<string, unknown> | Record<string, unknown>[];
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   googleVerification?: string;
+  noindex?: boolean;
 }
 
 export function SEO({
@@ -24,7 +25,8 @@ export function SEO({
   canonical,
   schema,
   jsonLd,
-  googleVerification = GOOGLE_SITE_VERIFICATION
+  googleVerification = GOOGLE_SITE_VERIFICATION,
+  noindex = false
 }: SEOProps) {
   const { pathname } = useLocation();
 
@@ -62,6 +64,7 @@ export function SEO({
   return (
     <Helmet>
       {/* Standard metadata */}
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
       {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
       <title>{displayTitle}</title>
       <meta name="description" content={description} />

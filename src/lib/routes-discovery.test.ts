@@ -39,4 +39,15 @@ describe('getAllRoutes', () => {
     expect(detailed[0]).toHaveProperty('lastmod');
     expect(new Date(detailed[0].lastmod).getTime()).not.toBeNaN();
   });
+
+  it('should exclude /gear and /events from discovery', () => {
+    const { all, sitemap, content, static: staticRoutes } = getAllRoutes();
+
+    const isDecommissioned = (path: string) => path.startsWith('/gear') || path.startsWith('/events');
+
+    expect(all.some(isDecommissioned)).toBe(false);
+    expect(sitemap.some(isDecommissioned)).toBe(false);
+    expect(content.some(isDecommissioned)).toBe(false);
+    expect(staticRoutes.some(isDecommissioned)).toBe(false);
+  });
 });

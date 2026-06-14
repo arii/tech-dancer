@@ -29,17 +29,29 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/gear',
-    lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
     label: 'Gear Reviews',
     icon: ShoppingBag,
     skeleton: 'grid',
-    isMobileVisible: true,
-    isTopNav: true
+    sitemap: false
   },
   {
     path: '/gear/:slug',
-    lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
-    skeleton: 'post'
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'post',
+    sitemap: false
+  },
+  {
+    path: '/events',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'grid',
+    sitemap: false
+  },
+  {
+    path: '/events/:slug',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'post',
+    sitemap: false
   },
   {
     path: '/research',
