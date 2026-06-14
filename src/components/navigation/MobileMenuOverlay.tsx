@@ -1,7 +1,7 @@
 
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Text, Stack } from '@/layouts/Primitives';
 import { stroke } from '@/styles/design-tokens';
 import { TOP_NAV_ROUTES } from '@/config/routes';
 import { useEffect, useRef } from 'react';

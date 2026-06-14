@@ -43,7 +43,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 display="inline-block"
                 paddingY={{ base: 4, sm: 0 }}
-                className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
+                className="hover:text-accent transition-colors underline decoration-line/40"
               >
                 {commitSha.substring(0, 7)}
               </Box>
