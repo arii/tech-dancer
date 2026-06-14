@@ -42,20 +42,6 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
-    path: '/events',
-    lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
-    label: 'Event Guides',
-    icon: Calendar,
-    skeleton: 'grid',
-    isMobileVisible: true,
-    isTopNav: true
-  },
-  {
-    path: '/events/:slug',
-    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
-    skeleton: 'post'
-  },
-  {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'DevAI Portfolio',
