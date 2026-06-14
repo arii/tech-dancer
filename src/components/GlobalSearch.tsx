@@ -12,7 +12,7 @@ import { getPosts, getResources, getStudies } from '@/lib/content';
 import { withSimulationDelay } from '@/lib/utils';
 
 interface SearchResult {
-  type: 'post' | 'resource' | 'study';
+  type: 'post' | 'blog' | 'resource' | 'study';
   slug: string;
   title: string;
   excerpt: string;
@@ -31,7 +31,7 @@ export function GlobalSearch() {
 
   const allContent = useMemo(() => {
     return [
-      ...(postsQuery.data || []).map(p => ({ ...p, type: 'post' as const })),
+      ...(postsQuery.data || []),
       ...(resourcesQuery.data || []).map(r => ({ ...r, type: 'resource' as const })),
       ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
     ];
@@ -111,7 +111,7 @@ export function GlobalSearch() {
   const handleSelect = (result: SearchResult) => {
     close();
     setQuery('');
-    if (result.type === 'post') navigate(`/blog/${result.slug}`);
+    if (result.type === 'post' || result.type === 'blog') navigate(`/blog/${result.slug}`);
     else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
