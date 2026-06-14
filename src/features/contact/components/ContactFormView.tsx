@@ -31,7 +31,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
         <PageHeader
           label="CONTACT"
           title="Get in Touch"
-          description="Questions about West Coast Swing training, insights, tools, or data? Send a note and I'll reply soon."
+          description="Questions about West Coast Swing training, travel, gear, or data? Send a note and I'll reply soon."
           border="b"
         />
 
@@ -39,7 +39,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           <Stack gap={2}>
             <Text variant="headline" size="2xl" weight="font-black">Inquiries</Text>
             <Text variant="body" size="base" color="main">
-              Send blog ideas, training insights, tool suggestions, or anything you want featured on boomtick.blog.
+              Send blog ideas, event notes, gear suggestions, or anything you want featured on boomtick.blog.
             </Text>
           </Stack>
 
@@ -78,7 +78,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
               >
                 <option value="General Feedback">General Feedback</option>
                 <option value="Content Request">Content Request</option>
-                <option value="Tool Suggestion">Tool Suggestion</option>
+                <option value="Gear Review Request">Gear Review Request</option>
                 <option value="Dance Statistics">Dance Statistics</option>
               </Box>
             </FormField>
@@ -130,7 +130,7 @@ export function ContactFormView({ register, errors, isSubmitting, onSubmit }: Co
           <Stack gap={2}>
             <Text variant="headline" size="2xl" weight="font-black">Newsletter</Text>
             <Text variant="body" size="base" color="main">
-              Prefer to just stay updated? Join the mailing list for monthly deep-dives into dance research, tools, and training insights.
+              Prefer to just stay updated? Join the mailing list for monthly deep-dives into dance research, gear, and travel tips.
             </Text>
           </Stack>
           <Box maxWidth="md">

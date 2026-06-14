@@ -132,7 +132,7 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training notes, blog insights, and practical tools for better West Coast Swing dancers.
+            Training notes, blog insights, and practical tools for better West Coast Swing weekends.
           </Text>
         </Stack>
 

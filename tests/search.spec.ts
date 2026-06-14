@@ -9,41 +9,41 @@ test.describe('Global Search Modal', () => {
   test('should open and close search modal via button', async ({ page }) => {
     const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
     await searchButton.click();
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     const closeButton = page.getByLabel('Close search');
     await closeButton.click();
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).not.toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
   test('should close search modal when pressing Escape', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     await page.keyboard.press('Escape');
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).not.toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
   test('should close search modal on route change', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     await page.goto('./gear');
 
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).not.toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
     await expect(page).toHaveURL(/.*gear/);
   });
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    const searchInput = page.getByPlaceholder('Search BoomTick insights, tools, and posts');
+    const searchInput = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await searchInput.fill('ai');
 
     const resultButton = page.getByTestId('search-result').first();
     await expect(resultButton).toBeVisible();
 
     await resultButton.click();
-    await expect(page.getByPlaceholder('Search BoomTick insights, tools, and posts')).not.toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 });
 
@@ -107,14 +107,14 @@ test.describe('Search and Filter URL Persistence', () => {
   test('Gear search term should persist after reload', async ({ page }) => {
     await page.goto('./gear');
 
-    const searchInput = page.getByPlaceholder(/Search tools/i);
+    const searchInput = page.getByPlaceholder(/Search gear/i);
     await expect(searchInput).toBeVisible();
     await searchInput.fill('shoes');
     await expect(page).toHaveURL(/search=shoes/i);
 
     await page.reload();
 
-    const searchInputReload = page.getByPlaceholder(/Search tools/i);
+    const searchInputReload = page.getByPlaceholder(/Search gear/i);
     await expect(searchInputReload).toHaveValue('shoes');
   });
 });

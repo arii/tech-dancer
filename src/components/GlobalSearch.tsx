@@ -198,7 +198,7 @@ export function GlobalSearch() {
               as="input"
               ref={inputRef}
               type="text"
-              placeholder="Search BoomTick insights, tools, and posts"
+              placeholder="Search BoomTick guides, gear, and posts"
               aria-label="Search BoomTick"
               defaultValue={query}
               onChange={handleInputChange}
@@ -263,7 +263,7 @@ export function GlobalSearch() {
                 <Stack align="center" gap={4} opacityVariant="dim">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
-                     {query ? "No results found" : "Search tools, insights, and posts"}
+                     {query ? "No results found" : "Search gear, guides, and posts"}
                   </Text>
                 </Stack>
               </Box>
