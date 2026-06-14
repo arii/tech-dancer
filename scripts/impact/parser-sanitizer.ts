@@ -1,14 +1,7 @@
 import { JSDOM } from 'jsdom';
 
 /**
- * @summary Programmatically normalizes layout-tree HTML to ensure deterministic textual diffing.
- * @purpose Strips baseline-volatile asset identifiers, browser instrumentation data, and build parameters
- * to prevent false-positive visual regression locks in production CI lines.
- * @logic-gate Handles Vite custom file asset hash strings via matching regex arrays. Drops nodes matching
- * layout-silent blocks (style, script, template).
- * @token-contract [AI Note] Unless refactoring the sanitization engine logic directly, this logic can be safely
- * treated as a black-box container. Do not modify property selectors without consulting the
- * corresponding `tests/build.test.js` file.
+ * Normalizes layout-tree HTML for deterministic textual diffing by stripping volatile identifiers and browser instrumentation.
  */
 export function normalizeHtmlForDiffing(htmlString: string): string {
   const dom = new JSDOM(htmlString);

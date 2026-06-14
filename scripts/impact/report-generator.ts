@@ -34,11 +34,6 @@ export function generateDeploymentReport(domSummaries: DomRouteSummary[], visual
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
-    // Since diffPath etc is no longer in the metric payload, we assume the naming convention or omit them if not specified.
-    // However, the visual review does supply diff paths. DOM diffs are still generated in the main loop so we can rebuild the path.
-    const routeSlug = domSummary.route === '/' ? 'home' : domSummary.route.split('?')[0].replace(/^\/+|\/+$/g, '').replace(/[^a-zA-Z0-9-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'home';
-    const domDiffPath = `dom-review/${routeSlug}/diff.txt`;
-
     const visualArtifacts = [
       `- Before screenshot: ${visual?.beforePath ?? 'Not captured'}`,
       `- After screenshot: ${visual?.afterPath ?? 'Not captured'}`,
@@ -49,7 +44,7 @@ export function generateDeploymentReport(domSummaries: DomRouteSummary[], visual
     if (visual?.afterCroppedPath) visualArtifacts.push(`- After (cropped): ${visual.afterCroppedPath}`);
     if (visual?.diffCroppedPath) visualArtifacts.push(`- Visual diff (cropped): ${visual.diffCroppedPath}`);
 
-    visualArtifacts.push(`- DOM diff: ${domSummary.diffPath ?? domDiffPath}`);
+    visualArtifacts.push(`- DOM diff: ${domSummary.diffPath}`);
 
     return `### ${domSummary.route}
 
