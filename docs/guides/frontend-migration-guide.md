@@ -2,7 +2,7 @@
 
 ## Event Resource Guide Landing Pages
 
-> **Prerequisites:** Complete the data format update described in `event-resource-guide-format.md` before starting this migration. This guide assumes your event `.md` files already contain the new frontmatter fields.
+> **Prerequisites:** Complete the data format update described in `docs/guides/event-resource-guide-format.md` before starting this migration. This guide assumes your event `.md` files already contain the new frontmatter fields.
 
 ---
 
