@@ -15,7 +15,6 @@ export interface Post {
   excerpt: string;
   content: string;
   image?: string;
-  imageBack?: string;
   imageAlt?: string;
   updated?: string;
   tags?: string[];

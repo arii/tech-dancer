@@ -6,7 +6,9 @@ import path from 'path';
  */
 export const CONTENT_DIR_MAP = {
   '/blog': 'content/posts',
+  '/gear': 'content/resources',
   '/research': 'content/studies',
+  '/events': 'content/events',
 } as const;
 
 export interface ContentItem {
