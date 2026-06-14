@@ -12,6 +12,19 @@ import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 import { types, EVENT_TYPES } from './config';
 
+const Field = ({ label, value, onChange, placeholder, type = "text", ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string }) => {
+  return (
+    <Stack gap={2}>
+      <Text variant="mono" size="micro" color="dim" className="tracking-wider uppercase font-bold" marginBottom={0}>{label}</Text>
+      {type === 'textarea' ? (
+        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={40} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none" {...props} />
+      ) : (
+        <Box as="input" type={type} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder={placeholder} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed" {...props} />
+      )}
+    </Stack>
+  );
+};
+
 export function BlogDrafter() {
   const {
     data,
@@ -189,82 +202,28 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               </Stack>
             </Grid>
 
-            <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Title</Text>
-              <Box
-                as="input"
-                type="text"
-                value={data.title}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('title', e.target.value)}
-                placeholder="The Future of WCS..."
-                className={inputs.base}
-              />
-            </Stack>
+            <Field label="Title" value={data.title} onChange={(v: string) => updateField('title', v)} placeholder="The Future of WCS..." />
 
             <Grid cols={2} gap={4}>
-              <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Publish Date</Text>
-                <Box
-                  as="input"
-                  type="date"
-                  value={data.date}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('date', e.target.value)}
-                  className={inputs.base}
-                />
-              </Stack>
-              <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Author</Text>
-                <Box
-                  as="input"
-                  type="text"
-                  value={data.author}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('author', e.target.value)}
-                  className={inputs.base}
-                />
-              </Stack>
+              <Field label="Publish Date" value={data.date} onChange={(v: string) => updateField('date', v)} type="date" />
+              <Field label="Author" value={data.author} onChange={(v: string) => updateField('author', v)} />
             </Grid>
 
             {data.type === 'resource' && (
               <Box border padding={4} surface="muted" radius="md">
                 <Stack gap={4}>
                    <Text variant="mono" size="micro" color="brand" weight="font-bold">Resource Metadata</Text>
-                   <Grid cols={3} gap={4}>
-                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">RATING (0-5)</Text>
-                        {/* Internal Note: Ratings are editorial-only and currently hidden from public UI per compliance */}
-                        <Box as="input" type="number" step="0.1" value={data.rating} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('rating', parseFloat(e.target.value))} className={inputs.base} />
-                      </Stack>
-                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">DURABILITY</Text>
-                        <Box as="input" type="number" step="0.1" value={data.durability} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('durability', parseFloat(e.target.value))} className={inputs.base} />
-                      </Stack>
-                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">VALUE</Text>
-                        <Box as="input" type="number" step="0.1" value={data.value} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('value', parseFloat(e.target.value))} className={inputs.base} />
-                      </Stack>
+                   <Grid cols={2} gap={4}>
+                      <Field label="DURABILITY" type="number" step="0.1" value={data.durability} onChange={(v: string) => updateField('durability', parseFloat(v))} />
+                      <Field label="VALUE" type="number" step="0.1" value={data.value} onChange={(v: string) => updateField('value', parseFloat(v))} />
                    </Grid>
                    <Grid cols={2} gap={4}>
-                     <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">Price Category</Text>
-                        <Box as="input" type="text" value={data.priceCategory} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('priceCategory', e.target.value)} placeholder="e.g. $$$" className={inputs.base} />
-                     </Stack>
-                     <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">Updated Date</Text>
-                        <Box as="input" type="text" value={data.updatedDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('updatedDate', e.target.value)} placeholder="Oct 2026" className={inputs.base} />
-                     </Stack>
+                     <Field label="Price Category" value={data.priceCategory} onChange={(v: string) => updateField('priceCategory', v)} placeholder="e.g. $$$" />
+                     <Field label="Updated Date" value={data.updatedDate} onChange={(v: string) => updateField('updatedDate', v)} placeholder="Oct 2026" />
                    </Grid>
-                   <Stack gap={2}>
-                      <Text variant="mono" size="micro" color="dim">VERDICT</Text>
-                      <Box as="input" type="text" value={data.verdict} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('verdict', e.target.value)} placeholder="Final summary..." className={inputs.base} />
-                   </Stack>
-                   <Stack gap={2}>
-                      <Text variant="mono" size="micro" color="dim">AFFILIATE_IDS (COMMA SEPARATED)</Text>
-                      <Box as="input" type="text" value={(data.affiliateIds ?? []).join(', ')} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateIds', e.target.value.split(',').map(s => s.trim()).filter(Boolean))} placeholder="amazon, etc" className={inputs.base} />
-                   </Stack>
-                   <Stack gap={2}>
-                      <Text variant="mono" size="micro" color="dim">TAGS (COMMA SEPARATED)</Text>
-                      <Box as="input" type="text" value={(data.tags ?? []).join(', ')} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('tags', e.target.value.split(',').map(s => s.trim()).filter(Boolean))} placeholder="practice, travel" className={inputs.base} />
-                   </Stack>
+                   <Field label="VERDICT" value={data.verdict} onChange={(v: string) => updateField('verdict', v)} placeholder="Final summary..." />
+                   <Field label="AFFILIATE_IDS (COMMA SEPARATED)" value={(data.affiliateIds ?? []).join(', ')} onChange={(v: string) => updateField('affiliateIds', v)} placeholder="amazon, etc" />
+                   <Field label="TAGS (COMMA SEPARATED)" value={(data.tags ?? []).join(', ')} onChange={(v: string) => updateField('tags', v)} placeholder="practice, travel" />
                 </Stack>
               </Box>
             )}
@@ -273,24 +232,12 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               <Box border padding={4} surface="muted" radius="md">
                 <Stack gap={4}>
                    <Text variant="mono" size="micro" color="brand" weight="font-bold">Event Logistics</Text>
-                   <Stack gap={2}>
-                      <Text variant="mono" size="micro" color="dim">EVENT_START_DATE</Text>
-                      <Box as="input" type="date" value={data.startDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('startDate', e.target.value)} className={inputs.base} />
-                   </Stack>
+                   <Field label="EVENT_START_DATE" value={data.startDate} onChange={(v: string) => updateField('startDate', v)} type="date" />
                    <Grid cols={2} gap={4}>
-                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">EARLY_BIRD_DEADLINE</Text>
-                        <Box as="input" type="date" value={data.earlyBirdDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('earlyBirdDate', e.target.value)} className={inputs.base} />
-                      </Stack>
-                      <Stack gap={2}>
-                        <Text variant="mono" size="micro" color="dim">HOTEL_CUTOFF</Text>
-                        <Box as="input" type="date" value={data.hotelCutoffDate} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('hotelCutoffDate', e.target.value)} className={inputs.base} />
-                      </Stack>
+                      <Field label="EARLY_BIRD_DEADLINE" value={data.earlyBirdDate} onChange={(v: string) => updateField('earlyBirdDate', v)} type="date" />
+                      <Field label="HOTEL_CUTOFF" value={data.hotelCutoffDate} onChange={(v: string) => updateField('hotelCutoffDate', v)} type="date" />
                    </Grid>
-                   <Stack gap={2}>
-                      <Text variant="mono" size="micro" color="dim">OFFICIAL_URL</Text>
-                      <Box as="input" type="url" value={data.url} onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('url', e.target.value)} placeholder="https://..." className={inputs.base} />
-                   </Stack>
+                   <Field label="OFFICIAL_URL" value={data.url} onChange={(v: string) => updateField('url', v)} type="url" placeholder="https://..." />
                 </Stack>
               </Box>
             )}
@@ -310,109 +257,29 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             {/* Type Specific Fields */}
             {data.type === 'post' && (
               <>
-                <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Amazon Link (Optional)</Text>
-                  <Box
-                    as="input"
-                    type="url"
-                    value={data.affiliateLink}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('affiliateLink', e.target.value)}
-                    placeholder="https://amazon.com/..."
-                    className={inputs.base}
-                  />
-                </Stack>
+                <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
 
-                <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Content</Text>
-                  <Box
-                    as="textarea"
-                    value={data.commentary}
-                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('commentary', e.target.value)}
-                    placeholder="Write your main content here..."
-                    height={40}
-                    className={cn(inputs.base, "resize-none")}
-                  />
-                </Stack>
+                <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" placeholder="Write your main content here..." />
 
               </>
             )}
 
             {data.type === 'resource' && (
               <>
-                <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>RESOURCE_HEADING</Text>
-                  <Box
-                    as="input"
-                    type="text"
-                    value={data.heading}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('heading', e.target.value)}
-                    placeholder="Practice Anywhere"
-                    className={inputs.base}
-                  />
-                </Stack>
+                <Field label="RESOURCE_HEADING" value={data.heading} onChange={(v: string) => updateField('heading', v)} placeholder="Practice Anywhere" />
 
-                <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>RESOURCE_CONTENT</Text>
-                  <Box
-                    as="textarea"
-                    value={data.content}
-                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('content', e.target.value)}
-                    placeholder="Write the resource review content here..."
-                    height={40}
-                    className={cn(inputs.base, "resize-none")}
-                  />
-                </Stack>
+                <Field label="RESOURCE_CONTENT" value={data.content} onChange={(v: string) => updateField('content', v)} type="textarea" placeholder="Write the resource review content here..." />
               </>
             )}
 
             {data.type === 'event' && (
               <>
                 <Grid cols={2} gap={4}>
-                  <Stack gap={2}>
-                    <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>LOCATION</Text>
-                    <Box
-                      as="input"
-                      type="text"
-                      value={data.location}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('location', e.target.value)}
-                      placeholder="Hyatt Regency..."
-                      className={inputs.base}
-                    />
-                  </Stack>
-                  <Stack gap={2}>
-                    <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>CITY</Text>
-                    <Box
-                      as="input"
-                      type="text"
-                      value={data.city}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('city', e.target.value)}
-                      placeholder="San Francisco, CA"
-                      className={inputs.base}
-                    />
-                  </Stack>
+                  <Field label="LOCATION" value={data.location} onChange={(v: string) => updateField('location', v)} placeholder="Hyatt Regency..." />
+                  <Field label="CITY" value={data.city} onChange={(v: string) => updateField('city', v)} placeholder="San Francisco, CA" />
                 </Grid>
-                <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>SCHEDULE</Text>
-                  <Box
-                    as="input"
-                    type="text"
-                    value={data.schedule}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateField('schedule', e.target.value)}
-                    placeholder="October 8 - 11, 2026"
-                    className={inputs.base}
-                  />
-                </Stack>
-                <Stack gap={2}>
-                  <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>DESCRIPTION</Text>
-                  <Box
-                    as="textarea"
-                    value={data.description}
-                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('description', e.target.value)}
-                    placeholder="Detailed event description..."
-                    height={40}
-                    className={cn(inputs.base, "resize-none")}
-                  />
-                </Stack>
+                <Field label="SCHEDULE" value={data.schedule} onChange={(v: string) => updateField('schedule', v)} placeholder="October 8 - 11, 2026" />
+                <Field label="DESCRIPTION" value={data.description} onChange={(v: string) => updateField('description', v)} type="textarea" placeholder="Detailed event description..." />
 
               </>
             )}

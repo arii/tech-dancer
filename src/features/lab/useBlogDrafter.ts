@@ -14,7 +14,6 @@ export interface BaseDraftData {
   affiliateLink?: string;
   commentary?: string;
   // Extended fields for Resource and Event support across types
-  rating?: number;
   verdict?: string;
   priceCategory?: string;
   updatedDate?: string;
@@ -42,7 +41,6 @@ export interface PostDraftData extends BaseDraftData {
 
 export interface ResourceDraftData extends BaseDraftData {
   type: 'resource';
-  rating: number;
   durability?: number;
   value?: number;
   priceCategory: string;
@@ -102,7 +100,6 @@ const DEFAULT_DATA: DraftData = {
   description: '',
   affiliateIds: [],
   tags: [],
-  rating: 5,
   verdict: '',
   priceCategory: '',
   updatedDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
@@ -210,7 +207,6 @@ category: "${data.category}"
 excerpt: "${data.excerpt || ''}"
 affiliateIds: ${JSON.stringify(data.affiliateIds ?? [])}
 tags: ${JSON.stringify(data.tags ?? [])}
-rating: ${data.rating ?? 0}
 verdict: "${data.verdict || ''}"
 priceCategory: "${data.priceCategory || ''}"
 updatedDate: "${data.updatedDate || ''}"
@@ -293,7 +289,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
         return {
           ...base,
           type: 'resource',
-          rating: parsed.rating ?? pResource.rating ?? 0,
           durability: parsed.durability ?? pResource.durability ?? 0,
           value: parsed.value ?? pResource.value ?? 0,
           priceCategory: parsed.priceCategory || pResource.priceCategory || '$$',
