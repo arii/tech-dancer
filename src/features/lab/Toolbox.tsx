@@ -33,7 +33,7 @@ export default function Toolbox() {
       <Box as="header" marginBottom={8}>
         <PageHeader
           label="THE TOOLBOX"
-          title="Gear Reviews"
+          title="Tools"
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
 

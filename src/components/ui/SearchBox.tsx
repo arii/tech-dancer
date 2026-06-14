@@ -13,7 +13,7 @@ interface SearchBoxProps {
 export function SearchBox({
   value,
   onChange,
-  placeholder = "Search articles, guides, or gear...",
+  placeholder = "Search articles, insights, or tools...",
   maxWidth = "2xl"
 }: SearchBoxProps) {
   return (

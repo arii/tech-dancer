@@ -80,7 +80,7 @@ export function FeaturedEventGuide() {
         marginBottom={4}
       >
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
-          Featured Event Guide
+          Featured Insight
         </Text>
         <Text
           as={NavLink}
@@ -105,7 +105,7 @@ export function FeaturedEventGuide() {
         overflow="hidden"
         className="relative z-10 grid w-full max-w-full min-w-0 bg-surface touch-pan-y overscroll-x-contain select-none md:grid-cols-[260px_1fr] md:min-h-[200px]"
         aria-roledescription="carousel"
-        aria-label="Featured event guides"
+        aria-label="Featured insights"
         data-gesture-handled="true"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -121,7 +121,7 @@ export function FeaturedEventGuide() {
         <Box position="relative" className="h-44 min-w-0 md:h-full">
           <img
             src={event.heroImage}
-            alt={event.imageAlt || `Screenshot of the ${event.title} event guide`}
+            alt={event.imageAlt || `Screenshot of the ${event.title} insight`}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover object-top"
@@ -159,7 +159,7 @@ export function FeaturedEventGuide() {
               paddingX={{ base: 4, md: 0 }}
               className="hover:underline"
             >
-              Read the guide →
+              Read the insight →
             </Text>
             {featured.length > 1 && (
               <Box display="flex" gap={2}>
@@ -171,7 +171,7 @@ export function FeaturedEventGuide() {
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === 0}
-                  aria-label="Previous featured event guide"
+                  aria-label="Previous featured insight"
                 >
                   <ChevronLeft className="h-5 w-5 md:h-4 md:w-4" />
                 </Box>
@@ -183,7 +183,7 @@ export function FeaturedEventGuide() {
                   radius="sm"
                   className="cursor-pointer transition-colors hover:border-accent/50 disabled:opacity-medium"
                   disabled={index === featured.length - 1}
-                  aria-label="Next featured event guide"
+                  aria-label="Next featured insight"
                 >
                   <ChevronRight className="h-5 w-5 md:h-4 md:w-4" />
                 </Box>
