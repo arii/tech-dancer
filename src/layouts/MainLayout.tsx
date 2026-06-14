@@ -59,7 +59,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         aria-atomic="true"
         className="sr-only"
       />
-      <Stack minHeight="screen" width="full" maxWidth="full" minWidth={0} overflowX="hidden" className="overflow-x-clip">
+      <Stack minHeight="screen" width="full" maxWidth="full" minWidth={0} overflowX="clip">
         <Navigation />
         <ScrollToTopButton scrollRef={scrollRef} />
         <Stack
@@ -77,8 +77,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           minWidth={0}
           surface="bg"
           direction="col"
-          overflowX="hidden"
-          className="overflow-x-clip"
+          overflowX="clip"
         >
           <Stack
             paddingX={{ base: 4, md: 6, lg: 10 }}
@@ -90,8 +89,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             maxWidth="7xl"
             width="full"
             minWidth={0}
-            overflowX="hidden"
-            className="overflow-x-clip"
+            overflowX="clip"
           >
             {children}
             <Footer />
