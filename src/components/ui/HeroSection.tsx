@@ -160,7 +160,6 @@ export function HeroSection() {
             <Box
               key={i}
               radius="none"
-              display="block"
               className="hero-bar"
               style={ {
                 '--hero-bar-height': `${bar.height}px`,

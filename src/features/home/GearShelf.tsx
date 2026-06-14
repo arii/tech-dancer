@@ -3,7 +3,14 @@ import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
-const PICKS = [
+interface PickItem {
+  label: string;
+  image?: string;
+  imageText?: string;
+  href: string;
+}
+
+const PICKS: PickItem[] = [
   { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.webp', href: '/gear/2023-10-01-loop-earplugs' },
   { label: 'Steamer', image: '/images/gear/sketches/travel-steamer.webp', href: '/gear/2023-11-01-travel-steamer' },
   { label: 'Portable Speaker', image: '/images/gear/sketches/ue-wonderboom.webp', href: '/gear/2024-01-01-portable-speaker' },
@@ -41,7 +48,7 @@ export function GearShelf() {
         cols={{ lg: 3 }}
         gap={{ lg: 4 }}
       >
-        {PICKS.map(({ label, image, imageText, href }: any) => (
+        {PICKS.map(({ label, image, imageText, href }) => (
           <Box key={label} as={NavLink} to={href} className="group">
             <Box
               radius="lg"
@@ -91,7 +98,7 @@ export function GearShelf() {
         noScrollbar
       >
         <Box display="flex" gap={3} width="fit" paddingRight={4}>
-          {PICKS.map(({ label, image, imageText, href }: any) => (
+          {PICKS.map(({ label, image, imageText, href }) => (
             <Box
               key={`mobile-${label}`}
               as={NavLink}
