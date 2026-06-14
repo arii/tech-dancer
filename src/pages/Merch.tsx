@@ -73,10 +73,10 @@ export default function Merch() {
           paddingBottom={4}
           cta={
             <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
-              <Button as="a" href="https://boomtick.printful.me/" variant="primary" width={{ base: 'full', sm: 'auto' }}>
+              <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
                  Shop Printful Store
               </Button>
-              <Button as="a" href={PRINTFUL_REFERRAL.URL} variant="outline" width={{ base: 'full', sm: 'auto' }}>
+              <Button as="a" href={PRINTFUL_REFERRAL.URL} target="_blank" rel="sponsored noopener noreferrer" variant="outline" width={{ base: 'full', sm: 'auto' }}>
                  Claim $5 Discount
               </Button>
             </Stack>
