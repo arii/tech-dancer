@@ -114,7 +114,7 @@ export default function ResearchAnalytics() {
             paddingBottom={0}
             border="none"
           />
-          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed" className="text-pretty">
+          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
             I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
           </Text>
           <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
@@ -193,7 +193,7 @@ export default function ResearchAnalytics() {
                       ))}
                     </Box>
 
-                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width="full" className="sm:w-auto">
+                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width={{ base: "full", sm: "auto" }}>
                       {tool.externalUrl && (
                         <ActionButton
                           as="a"
@@ -206,9 +206,9 @@ export default function ResearchAnalytics() {
                           zIndex={20}
                           width={{ base: "full", sm: "auto" }}
                         >
-                          <span className="font-bold text-xs uppercase tracking-widest">
+                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
                             {tool.externalLinkDisplayLabel || 'Open Link'}
-                          </span>
+                          </Text>
                           <Icon icon={ExternalLink} size="sm" />
                         </ActionButton>
                       )}
@@ -224,7 +224,7 @@ export default function ResearchAnalytics() {
                           zIndex={20}
                           width={{ base: "full", sm: "auto" }}
                         >
-                          <span className="font-bold text-xs uppercase tracking-widest">Source Repo</span>
+                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
                           <Icon icon={Github} size="sm" />
                         </ActionButton>
                       )}

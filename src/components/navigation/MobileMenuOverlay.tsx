@@ -64,15 +64,19 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
       animate={{ x: 0 }}
       exit={{ x: '-100%' }}
       position="fixed"
+      inset="bottom"
+      top={16}
       width="full"
-      className="top-16 left-0 right-0 bottom-0 z-top bg-bg lg:hidden"
+      zIndex="top"
+      surface="bg"
+      display={{ base: 'block', lg: 'none' }}
       padding={8}
       overflow="y-auto"
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
     >
-      <Box as="ul" className="space-y-6">
+      <Stack as="ul" gap={6}>
         <Box as="li" position="relative" className="group">
           <Box
             as="button"
@@ -107,7 +111,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             isMobile
           />
         ))}
-      </Box>
+      </Stack>
     </Box>
   );
 }

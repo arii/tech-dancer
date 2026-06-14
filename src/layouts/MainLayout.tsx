@@ -35,7 +35,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       maxWidth="full"
       minWidth={0}
       minHeight="screen"
-      className="touch-pan-y overflow-x-clip"
+      className="touch-pan-y"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -49,7 +49,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         paddingX={6}
         paddingY={3}
         radius="sm"
-        className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none whitespace-nowrap"
+        className="sr-only focus:not-sr-only focus:fixed focus:bg-accent focus:text-bg focus:font-bold focus:shadow-glow outline-none"
       >
         Skip to Content
       </Box>

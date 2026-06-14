@@ -157,7 +157,7 @@ export default function Merch() {
                 padding={3}
                 radius="full"
                 width="fit"
-                className="bg-accent/10 text-accent"
+                surface="accent"
               >
                 <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
               </Box>
