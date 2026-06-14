@@ -25,7 +25,7 @@ export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <Box as="main" id="main-content">
+    <Box>
       <Stack gap={12} paddingBottom={20}>
         <Box paddingX={{ base: 4, md: 16, lg: 20 }}>
           <PageHeader
