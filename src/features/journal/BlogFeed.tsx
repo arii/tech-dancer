@@ -11,14 +11,14 @@ export default function BlogFeed() {
     <>
       <SEO
         title="Blog"
-        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
+        description="A searchable, categorized folio of posts covering travel, lifestyle, practical tools, technical portfolio pieces, and everything about West Coast Swing."
       />
       <FolioGrid
         items={posts}
         categoryTitle="Blog Insights"
         as="h1"
         label="INSIGHTS"
-        description="A searchable, categorized folio of posts covering travel, lifestyle, gear reviews, technical portfolio pieces, and everything about West Coast Swing."
+        description="A searchable, categorized folio of posts covering travel, lifestyle, practical tools, technical portfolio pieces, and everything about West Coast Swing."
         basePath="/blog"
         searchPlaceholder="Search posts..."
         view={view}

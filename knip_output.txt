@@ -1,3 +1,0 @@
-
-> react-example@0.1.0 knip /app
-> knip --exclude exports --exclude exports

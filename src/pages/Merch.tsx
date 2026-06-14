@@ -158,7 +158,8 @@ export default function Merch() {
                 padding={3}
                 radius="full"
                 width="fit"
-                className="bg-accent/10 text-accent"
+                emphasis="low"
+                color="accent"
               >
                 <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
               </Box>
@@ -180,7 +181,7 @@ export default function Merch() {
                 as={NavLink}
                 to="/contact"
                 variant="outline"
-                className="w-fit"
+                width="fit"
               >
                 Submit Suggestion
               </Button>

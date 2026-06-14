@@ -10,7 +10,17 @@ import { HeroSection } from '@/components/ui/HeroSection';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Box
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth={1240}
+      minWidth={0}
+      overflowX="clip"
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+      paddingBottom="safe-bottom"
+    >
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -21,7 +31,12 @@ export default function Home() {
       <Box
         as="section"
         display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_420px]"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
+        align="center"
+        gap={{ base: 0, lg: 6 }}
+        className="lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
@@ -30,11 +45,17 @@ export default function Home() {
       <Stack
         gap={{ base: 8, lg: 'section-spacing' }}
         marginTop={{ base: 8, lg: 'section-spacing' }}
-        className="w-full max-w-full min-w-0"
+        width="full"
+        maxWidth="full"
+        minWidth={0}
       >
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          width="full"
+          maxWidth="full"
+          minWidth={0}
+          gap={8}
+          className="lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <LatestPosts />
           <DevLabCallout />
