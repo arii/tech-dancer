@@ -9,7 +9,9 @@ const config: KnipConfig = {
     'src/components/ui/EventCard.tsx',
     'src/components/ui/EventSidebar.tsx',
     'src/components/ui/GearCard.tsx',
-    'src/components/ui/SectionHeader.tsx'
+    'src/components/ui/SectionHeader.tsx',
+    'src/features/lab/useBlogDrafter.ts',
+    'src/features/lab/config.ts'
   ],
   ignoreDependencies: [
     'tw-animate-css',
