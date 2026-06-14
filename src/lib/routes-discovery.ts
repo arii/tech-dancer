@@ -36,12 +36,13 @@ function getFileLastMod(filePath: string): string {
  */
 export function getAllRoutes() {
   // 3. Dynamic content routes discovered from file system
-  const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
-    getContentSlugs(dir, prefix).map(item => ({
+  const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) => {
+    const actualPrefix = prefix === '/blog-internal' ? '/blog' : prefix;
+    return getContentSlugs(dir, actualPrefix).map(item => ({
       path: item.slug,
       lastmod: item.lastmod
-    }))
-  );
+    }));
+  });
 
   // Group content by directory to find the latest modification for listing pages
   const contentLastModMap: Record<string, string> = {};

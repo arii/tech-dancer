@@ -197,14 +197,42 @@ To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright
 ./setup-agent.sh
 ```
 
-This script enforces the runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md) and [docs/runtime-consistency.md](./docs/runtime-consistency.md).
+This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md).
 
-Before performing any tasks, ensure you have run the setup script. Use:
+# Codex / Agent Runtime Rules
+
+This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md).
+
+Before installing, testing, building, or editing dependencies, run:
 
 ```bash
+corepack enable
+corepack prepare pnpm@10.28.2 --activate
+pnpm run check:runtime-files
+pnpm run doctor
+```
+
+Use:
+
+```bash
+pnpm install --frozen-lockfile
 pnpm run lint
 pnpm run build
 ```
+
+Do not run:
+
+```bash
+npm install
+npm install -g pnpm
+pnpm env use
+nvm install
+nvm use
+volta pin
+asdf local nodejs
+```
+
+If Node or pnpm mismatches, stop and report the mismatch. Do not change runtime versions unless the user explicitly asks to update the runtime contract.
 
 ## GitHub Actions runtime policy
 

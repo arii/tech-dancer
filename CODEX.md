@@ -7,6 +7,20 @@ This repository uses a strictly pinned runtime environment to prevent build inco
 - **Node.js**: `22.22.2`
 - **pnpm**: `10.28.2`
 
+## Implementation Files
+
+The following files define and enforce the contract:
+
+- `.node-version`: Primary source for Node.js version.
+- `.nvmrc`: Compatibility file for NVM users.
+- `package.json`:
+    - `engines.node`: Set to `22.x` for Vercel compatibility.
+    - `engines.pnpm`: Set to `10.28.2`.
+    - `packageManager`: Set to `pnpm@10.28.2`.
+- `vercel.json`: Ensures Corepack and the pinned pnpm version are used during deployment.
+- `.devcontainer/Dockerfile`: Uses `node:22.22.2-bookworm` as the base image.
+- `.github/workflows/*.yml`: All workflows use `actions/setup-node` with `node-version-file: '.node-version'`.
+
 ## Mandatory Protocol for Agents
 
 Before performing any tasks involving dependencies, builds, or tests, you **must** ensure the environment is correctly configured using the consolidated setup script:
