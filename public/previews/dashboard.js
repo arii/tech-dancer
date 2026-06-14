@@ -16,7 +16,7 @@ const BASE_URL = IS_GITHUB_PROJECT_SITE
 const GITHUB_REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const TRACKING_URL = `${BASE_URL}/REVIEW_TRACKING.md`;
 const EXCLUDED = ['assets', 'previews', 'css', 'js', 'img', 'images', 'public'];
-const TOP_LEVEL_ROUTES = ['about', 'blog', 'gear', 'events', 'research', 'ux-auditor', 'preview', 'contact'];
+const TOP_LEVEL_ROUTES = ['about', 'blog', 'gear', 'events', 'research', 'ux-auditor', 'preview'];
 
 /**
  * @typedef {Object} Deployment
