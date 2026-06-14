@@ -97,16 +97,6 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     canonicalPath: '/research/blog-drafter'
   },
   {
-    id: 'wsdc-event-reminders',
-    title: 'Event Reminders',
-    subtitle: 'WCS Calendar Integration',
-    description: 'A utility tool showcasing AI-assisted automation of calendar synchronization. It extracts logistics from fragmented data sources to maintain high-precision schedule telemetry.',
-    category: 'Utility Tools',
-    status: 'Active',
-    tags: ['Automation', 'Calendar', 'WCS'],
-    canonicalPath: '/research/wsdc-event-reminders'
-  },
-  {
     id: 'ecommerce-automation',
     title: 'Ecommerce Automation Experiments',
     subtitle: 'Printful & Merch Pipeline',

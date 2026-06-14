@@ -9,7 +9,6 @@ const STATIC_ROUTES = [
   '/',
   '/blog',
   '/gear',
-  '/events',
   '/research',
   '/merch',
   '/about',
@@ -18,9 +17,8 @@ const STATIC_ROUTES = [
 ];
 
 const CONTENT_DIRS = {
-  '/blog/:slug': 'content/posts',
+  '/blog/:slug': ['content/posts', 'content/blog'],
   '/gear/:slug': 'content/resources', // In this project, gear is mapped to resources
-  '/events/:slug': 'content/events',
   '/research/:id': 'content/studies'
 };
 
@@ -34,11 +32,14 @@ function getSlugs(dir: string): string[] {
 async function discoverRoutes() {
   const routes = [...STATIC_ROUTES];
 
-  for (const [pattern, dir] of Object.entries(CONTENT_DIRS)) {
-    const slugs = getSlugs(dir);
-    slugs.forEach(slug => {
-      routes.push(pattern.replace(':slug', slug).replace(':id', slug));
-    });
+  for (const [pattern, dirOrDirs] of Object.entries(CONTENT_DIRS)) {
+    const dirs = Array.isArray(dirOrDirs) ? dirOrDirs : [dirOrDirs];
+    for (const dir of dirs) {
+      const slugs = getSlugs(dir);
+      slugs.forEach(slug => {
+        routes.push(pattern.replace(':slug', slug).replace(':id', slug));
+      });
+    }
   }
 
   const outputDir = path.join(process.cwd(), 'artifacts', 'ux-audit');

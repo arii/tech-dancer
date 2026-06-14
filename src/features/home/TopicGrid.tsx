@@ -1,17 +1,11 @@
 // impeccable-ignore-file
-import { Calendar, ShoppingBag, BookOpen } from 'lucide-react';
+import { ShoppingBag, BookOpen } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
 const TOPICS = [
   {
-    icon: Calendar,
-    label: 'Training Notes',
-    description: 'What to expect, what to pack, and how to get the most out of a WCS weekend.',
-    cta: 'Explore guides →',
-    href: '/events',
-  },
-  {
+
     icon: ShoppingBag,
     label: 'Practical Tools',
     description: 'Practical gear for dancers: earplugs, steamers, shoes, bags, fans, and more.',
@@ -33,7 +27,7 @@ export function TopicGrid() {
       <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={3}>
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, md: 3 }} gap={3}>
+      <Grid cols={{ base: 1, md: 2 }} gap={3}>
         {TOPICS.map(({ icon: Icon, label, description, cta, href }) => (
           <Stack
             key={label}
