@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/fix/research-grid-ux-desktop-17339793229069859379-17926045249084227384/sitemap.xml
