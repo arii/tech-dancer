@@ -18,6 +18,8 @@ tags:
 
 Travel conventions can be stressful, but being organized makes a world of difference. These packing essentials help you fit more in your bag and keep your dance clothes looking their best.
 
+![Event Travel & Packing](/images/gear/sketches/compression-cubes.webp)
+
 ### Space-Saving Organization
 Compression packing cubes are a must for fitting multiple outfits into a carry-on. They keep your workshops clothes separate from your social wear and save a significant amount of space.
 
