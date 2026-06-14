@@ -30,10 +30,12 @@ export default function WSDCReminders() {
 
   // Sync initial selection when events load
   const [hasInitialized, setHasInitialized] = useState(false);
-  if (!hasInitialized && events.length > 0 && selectedEventId === 'custom' && !customEvent.title) {
-    setSelectedEventId(events[0].slug);
-    setHasInitialized(true);
-  }
+  useEffect(() => {
+    if (!hasInitialized && events.length > 0 && selectedEventId === 'custom' && !customEvent.title) {
+      setSelectedEventId(events[0].slug);
+      setHasInitialized(true);
+    }
+  }, [hasInitialized, events, selectedEventId, customEvent.title]);
 
   const activeEvent = useMemo(() => {
     if (selectedEventId === 'custom') return customEvent;
