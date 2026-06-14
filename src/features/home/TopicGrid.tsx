@@ -6,16 +6,16 @@ import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 const TOPICS = [
   {
     icon: Calendar,
-    label: 'Event Guides',
+    label: 'Event Insights',
     description: 'What to expect, what to pack, and how to get the most out of a WCS weekend.',
-    cta: 'Explore guides →',
+    cta: 'Read insights →',
     href: '/events',
   },
   {
     icon: ShoppingBag,
-    label: 'Gear Reviews',
-    description: 'Practical gear for dancers: earplugs, steamers, shoes, bags, fans, and more.',
-    cta: 'See reviews →',
+    label: 'Practical Tools',
+    description: 'Specialized tools and gear for dancers: earplugs, steamers, shoes, and more.',
+    cta: 'Open toolbox →',
     href: '/gear',
   },
   {
