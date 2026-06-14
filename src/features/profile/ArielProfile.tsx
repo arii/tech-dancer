@@ -70,7 +70,7 @@ function ArielProfile() {
                 <Stack gap={4}>
                   <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
-                    We value your privacy. This site does not track personal data beyond what is necessary for functional performance. Any email addresses collected for the newsletter are kept confidential and never sold to third parties.
+                    We value your privacy. This site does not track personal data beyond what is necessary for functional performance.
                   </Text>
                 </Stack>
                 <Stack gap={4}>

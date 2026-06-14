@@ -117,9 +117,8 @@ export function GlobalSearch() {
 
   return (
     <Box
-      zIndex={999999}
+      zIndex="search"
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 999999 }}
     >
       {/* Backdrop */}
       <Box

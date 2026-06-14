@@ -11,9 +11,7 @@ const STATIC_ROUTES = [
   '/gear',
   '/research',
   '/merch',
-  '/about',
-  '/contact',
-  '/subscribe'
+  '/about'
 ];
 
 const CONTENT_DIRS = {
