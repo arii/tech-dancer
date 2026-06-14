@@ -29,8 +29,6 @@ export const layout = {
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
   mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
-  eventNav: "sticky top-16 z-sticky w-full border-b border-line/10",
-  eventSection: "scroll-mt-40 lg:scroll-mt-16",
 };
 
 export const inputs = {

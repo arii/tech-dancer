@@ -23,7 +23,6 @@ export const IMPACT_CONFIG = {
     '/',
     '/blog',
     '/gear',
-    '/events',
     '/research',
     '/merch',
     '/about'
@@ -35,15 +34,14 @@ export const IMPACT_CONFIG = {
     'UXAuditor': '/ux-auditor',
     'BlogPost': '/blog/:slug',
     'GearPost': '/gear/:slug',
-    'EventGuide': '/events/:slug',
     'ResearchDetail': '/research/:id'
   } as Record<string, string>,
 
   // Content folder to URL prefix mapping
   CONTENT_MAP: {
     'content/posts/': '/blog/',
+    'content/blog/': '/blog/',
     'content/resources/': '/gear/',
-    'content/events/': '/events/',
     'content/studies/': '/research/'
   } as Record<string, string>
 };

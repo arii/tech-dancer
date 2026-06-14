@@ -114,20 +114,6 @@
     @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
-  .event-hero-overlay {
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--raw-color-bg) 80%, transparent),
-      color-mix(in srgb, var(--raw-color-bg) 40%, transparent),
-      var(--raw-color-bg)
-    );
-  }
-  .theme-spotlight-image-overlay {
-    background: linear-gradient(to right, var(--raw-color-surface), transparent);
-  }
-  .theme-spotlight-image-bg {
-    background: color-mix(in srgb, var(--raw-color-surface-alt) 50%, transparent);
-  }
   .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
