@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from '@/hooks/useHotkeys';
 import Fuse from 'fuse.js';
 import { useQueries } from '@tanstack/react-query';
-import { getPosts, getStudies } from '@/lib/content';
+import { getPosts, getResources, getStudies } from '@/lib/content';
 import { withSimulationDelay } from '@/lib/utils';
 
 interface SearchResult {
-  type: 'post' | 'study';
+  type: 'post' | 'blog' | 'resource' | 'study';
   slug: string;
   title: string;
   excerpt: string;
@@ -21,19 +21,21 @@ interface SearchResult {
 export function GlobalSearch() {
   const { query, setQuery, isOpen, close } = useGlobalSearch();
   
-  const [postsQuery, studiesQuery] = useQueries({
+  const [postsQuery, resourcesQuery, studiesQuery] = useQueries({
     queries: [
       { queryKey: ['posts'], queryFn: withSimulationDelay(getPosts), enabled: isOpen },
+      { queryKey: ['resources'], queryFn: withSimulationDelay(getResources), enabled: isOpen },
       { queryKey: ['studies'], queryFn: withSimulationDelay(getStudies), enabled: isOpen },
     ],
   });
 
   const allContent = useMemo(() => {
     return [
-      ...(postsQuery.data || []).map(p => ({ ...p, type: 'post' as const })),
+      ...(postsQuery.data || []),
+      ...(resourcesQuery.data || []).map(r => ({ ...r, type: 'resource' as const })),
       ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
     ];
-  }, [postsQuery.data, studiesQuery.data]);
+  }, [postsQuery.data, resourcesQuery.data, studiesQuery.data]);
 
   const fuse = useMemo(() => {
     return new Fuse(allContent, {
@@ -109,7 +111,8 @@ export function GlobalSearch() {
   const handleSelect = (result: SearchResult) => {
     close();
     setQuery('');
-    if (result.type === 'post') navigate(`/blog/${result.slug}`);
+    if (result.type === 'post' || result.type === 'blog') navigate(`/blog/${result.slug}`);
+    else if (result.type === 'resource') navigate(`/gear/${result.slug}`);
     else if (result.type === 'study') navigate(`/research/${result.slug}`);
   };
 
