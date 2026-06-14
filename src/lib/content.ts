@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
+import type { Blog, Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
 
-export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
+export type { Blog, Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -40,7 +40,8 @@ interface ContentModule {
 }
 
 const contentModules = {
-  posts: import.meta.glob(['/content/posts/*.md', '/content/blog/*.md'], { eager: true, query: '?raw' }),
+  posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
+  blog: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
   resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
   events: import.meta.glob('/content/events/*.md', { eager: true, query: '?raw' })
@@ -264,6 +265,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 
 const items = {
   posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+  blog: transform<Blog>(contentModules.blog as Record<string, string | ContentModule>, 'blog'),
   resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
   events: transform<Event>(contentModules.events as Record<string, string | ContentModule>, 'event')
@@ -271,17 +273,22 @@ const items = {
 
 const maps = {
   posts: new Map(items.posts.map(i => [i.slug, i])),
+  blog: new Map(items.blog.map(i => [i.slug, i])),
   resources: new Map(items.resources.map(i => [i.slug, i])),
   studies: new Map(items.studies.map(i => [i.slug, i])),
   events: new Map(items.events.map(i => [i.slug, i]))
 };
 
-export const getPosts = () => items.posts;
+export const getPosts = () => [...items.blog, ...items.posts].sort((a, b) => {
+  const timeA = a.date ? new Date(a.date).getTime() : 0;
+  const timeB = b.date ? new Date(b.date).getTime() : 0;
+  return timeB - timeA;
+});
 export const getResources = () => items.resources;
 export const getStudies = () => items.studies;
 export const getEvents = () => items.events;
 
-export const getPostBySlug = (slug: string) => maps.posts.get(slug);
+export const getPostBySlug = (slug: string) => maps.blog.get(slug) || maps.posts.get(slug);
 export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
 export const getEventBySlug = (slug: string) =>
   maps.events.get(slug);

@@ -1,5 +1,5 @@
 ---
-type: post
+type: blog
 title: "The Story Behind the Merch: From Jack & Jill Orama to NorCal Pride"
 date: "2026-06-14"
 author: "Ariel Anders, PhD"

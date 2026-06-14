@@ -3,6 +3,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export interface Blog {
+  type: 'blog';
+  draft?: boolean;
+  slug: string;
+  title: string;
+  date: string;
+  author: string;
+  authorAvatar?: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  image?: string;
+  imageAlt?: string;
+  updated?: string;
+  tags?: string[];
+  affiliateIds?: string[];
+  imageFit?: 'cover' | 'contain';
+}
+
 export interface Post {
   type: 'post';
   draft?: boolean;
@@ -163,4 +182,4 @@ export interface Event {
   relatedEvents?: string[];
 }
 
-export type ContentItem = Post | Resource | Study | Event;
+export type ContentItem = Blog | Post | Resource | Study | Event;
