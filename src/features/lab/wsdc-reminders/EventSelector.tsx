@@ -4,7 +4,7 @@ import { FilterButton } from '@/components/ui/FilterButton';
 import { cn } from '@/lib/utils';
 
 interface EventSelectorProps {
-  events: any[];
+  events: (EventAnchors & { slug: string })[];
   selectedEventId: string;
   onSelect: (id: string) => void;
 }

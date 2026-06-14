@@ -11,7 +11,7 @@ import { EventSelector } from './EventSelector';
 import { CustomEventForm } from './CustomEventForm';
 
 export default function WSDCReminders() {
-  const events = [] as any[];
+  const events = [] as (EventAnchors & { slug: string })[];
 
   const [selectedEventId, setSelectedEventId] = useState<string>('custom');
   const [customEvent, setCustomEvent] = useState<EventAnchors>({
