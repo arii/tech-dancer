@@ -182,7 +182,7 @@ install_python_deps() {
   if [ -f "dev-tools/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .)
   else
-    pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
+    pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub semgrep
   fi
 
   if [ -f "etl/requirements.txt" ]; then
