@@ -44,14 +44,13 @@ export function generateDeploymentReport(domSummaries: DomRouteSummary[], visual
     if (visual?.afterCroppedPath) visualArtifacts.push(`- After (cropped): ${visual.afterCroppedPath}`);
     if (visual?.diffCroppedPath) visualArtifacts.push(`- Visual diff (cropped): ${visual.diffCroppedPath}`);
 
-    visualArtifacts.push(`- DOM diff: ${domSummary.diffPath}`);
-
     return `### ${domSummary.route}
 
 Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
 
 DOM Changes:
 ${formatDomMetrics(domSummary.metrics).join('\n')}
+- Diff path: ${domSummary.diffPath}
 
 Severity: ${severity}
 
