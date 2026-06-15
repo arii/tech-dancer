@@ -41,6 +41,7 @@ interface ContentModule {
 
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
+  blogs: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
 };
 
@@ -144,7 +145,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
+  posts: transform<Post>({ ...contentModules.posts, ...contentModules.blogs } as Record<string, string | ContentModule>, 'post'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
 };
 
