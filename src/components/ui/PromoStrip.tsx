@@ -52,7 +52,7 @@ export function PromoStrip({
           paddingY={0.5}
           radius="full"
           surface="accent"
-          className="bg-accent shadow-sm z-10"
+          className="shadow-sm z-10"
         >
           <Text
             variant="mono"
@@ -80,7 +80,7 @@ export function PromoStrip({
         >
           <img
             src={imageSrc}
-            alt=""
+            alt={title}
             className="w-full h-full object-cover"
             loading="lazy"
           />
