@@ -14,7 +14,7 @@ test.skip('verify homepage featured guide link', async ({ page }) => {
 
   // Verify it lands on the correct page
   // The gear page was decommissioned; the guide now lives under "practical-tools-essentials".
-  await expect(page).toHaveURL(/\/blog\/(2026-04-19-gear-essentials|2026-04-19-practical-tools-essentials)/);
+  await expect(page).toHaveURL(/\/blog\/(2026-04-19-practical-tools-essentials|2026-04-19-practical-tools-essentials)/);
 // The WCS Travel Pack heading check removed – page content updated
 
   // Verify checklist landmarks or sections

@@ -158,6 +158,8 @@ export const getStudies = () => items.studies;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
 
+export const getResources = () => [] as Resource[];
+
 /**
  * Calculates estimated reading time in minutes.
  * Uses a standard 200 words per minute for full content,
