@@ -26,10 +26,10 @@ async function validateUrlNavigation(page: Page, href: string) {
     }
   } else {
     const response = await page.goto(href, { waitUntil: 'networkidle', timeout: 60000 });
-    const mainLocator2 = page.locator('#main-content');
-    const count2 = await mainLocator2.count();
-    if (count2 > 0) {
-      await expect(mainLocator2.first()).toBeVisible({ timeout: 10000 });
+    const mainLocator = page.locator('#main-content');
+    const count = await mainLocator.count();
+    if (count > 0) {
+      await expect(mainLocator.first()).toBeVisible({ timeout: 5000 });
     }
     if (response !== null) {
       expect(response.status(), `Bad status at ${href}`).toBeLessThan(400);

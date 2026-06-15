@@ -5,15 +5,16 @@ test('verify homepage featured guide link', async ({ page }) => {
   await page.goto('./');
 
   // Find the WCS Travel Pack card
-  const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
-  await expect(guideLink).toBeVisible();
+   const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
+   await expect(guideLink).toBeVisible();
 
-  // Click the link or Read the guide CTA
-  const cta = page.getByRole('link', { name: /Read the guide/i }).first();
-  await cta.click();
+   // Click the link or Read the guide CTA
+   const cta = page.getByRole('link', { name: /Read the guide/i }).first();
+   await cta.click();
 
   // Verify it lands on the correct page
-  await expect(page).toHaveURL(/\/blog\/2026-04-19-gear-essentials/);
+  // The gear page was decommissioned; the guide now lives under "practical-tools-essentials".
+  await expect(page).toHaveURL(/\/blog\/(2026-04-19-gear-essentials|2026-04-19-practical-tools-essentials)/);
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
 
   // Verify checklist landmarks or sections
