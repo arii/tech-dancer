@@ -159,8 +159,8 @@ jobs:
     steps:
       - name: Install system utilities
         run: |
-          sudo apt-get update
-          sudo apt-get install -y lsof gh
+          apt-get update
+          apt-get install -y lsof gh
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
