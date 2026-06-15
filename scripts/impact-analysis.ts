@@ -135,6 +135,55 @@ function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
 }
 
 /**
+ * Reads sitemap URLs from dist/sitemap.xml
+ */
+function getSitemapUrls(): string[] {
+  const sitemapPath = path.join(process.cwd(), 'dist', 'sitemap.xml');
+  if (!fs.existsSync(sitemapPath)) {
+    console.warn('⚠️ Sitemap not found at', sitemapPath);
+    return [];
+  }
+  const content = fs.readFileSync(sitemapPath, 'utf-8');
+  const matches = content.match(/<loc>(.*?)<\/loc>/g);
+  if (!matches) return [];
+
+  return matches.map(m => {
+    const url = m.replace(/<\/?loc>/g, '');
+    try {
+      const parsed = new URL(url);
+      return parsed.pathname === '' ? '/' : parsed.pathname;
+    } catch {
+      return url.replace('https://boomtick.blog', '');
+    }
+  });
+}
+
+/**
+ * Expands dynamic routes using sitemap URLs.
+ */
+function filterAndExpandWithSitemap(urls: string[], sitemapUrls: string[]): string[] {
+  if (sitemapUrls.length === 0) {
+    return urls.filter(u => !u.includes(':'));
+  }
+
+  const result = new Set<string>();
+
+  for (const urlPattern of urls) {
+    const regexStr = '^' + urlPattern.replace(/:[^\s/]+/g, '[^/]+') + '$';
+    const regex = new RegExp(regexStr);
+
+    for (const sitemapUrl of sitemapUrls) {
+      if (regex.test(sitemapUrl)) {
+        result.add(sitemapUrl);
+      }
+    }
+  }
+
+  return Array.from(result);
+}
+
+
+/**
  * Handles content changes and maps them to URLs.
  */
 function getContentAffectedUrls(changedFiles: string[]): string[] {
@@ -225,7 +274,10 @@ async function main() {
     const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles);
 
     // Combine and deduplicate URLs
-    const allUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
+    const combinedUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls]));
+
+    const sitemapUrls = getSitemapUrls();
+    const allUrls = filterAndExpandWithSitemap(combinedUrls, sitemapUrls).sort();
 
     // Severity
     const severity = getSeverity(changedFiles);
