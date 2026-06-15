@@ -21,8 +21,10 @@ export function PromoStrip({
   href,
   isNew
 }: PromoStripProps) {
-  // Simplify asset resolution using one-liner
-  const fullImageSrc = imageSrc.startsWith('http') ? imageSrc : `${ASSET_PREFIX}${imageSrc.replace(/^\//, '')}`;
+  // Robust asset resolution: avoid double slashes that create protocol-relative URLs (e.g. //assets/...)
+  const fullImageSrc = imageSrc.startsWith('http')
+    ? imageSrc
+    : `${ASSET_PREFIX}${imageSrc.startsWith('/') ? '' : '/'}${imageSrc}`;
 
   return (
     <Box
@@ -34,25 +36,30 @@ export function PromoStrip({
       radius="md"
       border="line"
       bg="surface"
+      display="block"
       className="group transition-all hover:bg-white/5"
     >
       {isNew && (
-        <Box position="absolute" className="-top-2 right-4 z-10">
-          <Box
-            paddingX={2.5}
-            paddingY={1}
-            radius="full"
-            bg="accent"
+        <Box
+          position="absolute"
+          top={-2}
+          right={4}
+          zIndex={10}
+          bg="accent"
+          paddingX={2.5}
+          paddingY={1}
+          radius="full"
+          width="fit"
+          className="shadow-sm"
+        >
+          <Text
+            variant="mono"
+            size="micro"
+            weight="font-black"
+            className="text-bg leading-none block"
           >
-            <Text
-              variant="mono"
-              size="micro"
-              weight="font-black"
-              className="text-bg leading-none"
-            >
-              New
-            </Text>
-          </Box>
+            New
+          </Text>
         </Box>
       )}
 
@@ -69,22 +76,32 @@ export function PromoStrip({
             alt=""
             className="w-full h-full object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
+              // Hide image container on error to prevent broken icon
+              const img = e.currentTarget;
+              img.style.display = 'none';
+              if (img.parentElement) {
+                img.parentElement.style.display = 'none';
+              }
             }}
           />
         </Box>
 
         <Stack gap={0} grow={1} className="min-w-0">
-          <Text weight="font-bold" size="base">{title}</Text>
-          <Text size="sm" color="text-dim">{subtitle}</Text>
+          <Text weight="font-bold" size="base" className="leading-tight">{title}</Text>
+          <Text size="sm" color="text-dim" className="leading-snug">{subtitle}</Text>
         </Stack>
 
-        <Stack direction="row" align="center" gap={2} className="shrink-0">
+        <Stack
+          direction="row"
+          align="center"
+          gap={2}
+          className="shrink-0"
+        >
           <Text
             variant="mono"
             size="tiny"
             weight="font-bold"
-            className="text-accent group-hover:underline uppercase"
+            className="text-accent group-hover:underline underline-offset-4 uppercase transition-all"
           >
             {ctaLabel}
           </Text>
