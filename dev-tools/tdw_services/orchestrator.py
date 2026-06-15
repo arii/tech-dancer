@@ -768,7 +768,20 @@ class Orchestrator:
         if api_key: self.jules.api_key = api_key
 
         # Analyze failing check runs
-        check_runs = self.github.fetch_check_runs(pr.head.sha)
+        import time
+        check_runs = []
+        for attempt in range(30):
+            check_runs = self.github.fetch_check_runs(pr.head.sha)
+            active_checks = [
+                run for run in check_runs 
+                if run.get('status') != 'completed' 
+                and not any(x in run.get('name', '').lower() for x in ['jules fix ci', 'jules-fix-trigger', 'trigger-jules'])
+            ]
+            if not active_checks:
+                break
+            print(f"Waiting for check runs to complete... ({len(active_checks)} active check(s))")
+            time.sleep(10)
+
         failing_logs = []
         structured_failures = []
         for run in check_runs:
