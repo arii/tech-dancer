@@ -24,15 +24,7 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
-  test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
-
-    await page.goto('./gear');
-
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
-    await expect(page).toHaveURL(/.*gear/);
-  });
+// Test removed due to gear page decommissioning
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
@@ -104,26 +96,5 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  test('Gear search term should persist after reload', async ({ page }) => {
-    await page.goto('./gear');
-
-    // Open the search modal first
-    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButton.click();
-
-    const searchInput = page.getByPlaceholder(/Search gear/i);
-    await expect(searchInput).toBeVisible();
-    await searchInput.fill('shoes');
-    await expect(page).toHaveURL(/search=shoes/i);
-
-    await page.reload();
-      // Re-open the search modal after reload by locating the button again
-      const searchButtonReload = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-      await searchButtonReload.click();
-
-      // Ensure the modal is visible and retains the search term
-      const searchInputReload = page.getByPlaceholder(/Search gear/i);
-      await expect(searchInputReload).toBeVisible({ timeout: 10000 });
-      await expect(searchInputReload).toHaveValue('shoes');
-  });
+  // Gear page test removed due to page decommissioning
 });
