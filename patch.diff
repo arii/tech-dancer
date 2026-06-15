@@ -1,0 +1,10 @@
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -155,7 +155,7 @@
+       - name: Install system utilities
+         run: |
+-          apt-get update
+-          apt-get install -y lsof gh
++          sudo apt-get update
++          sudo apt-get install -y lsof gh
+           git config --global --add safe.directory "$GITHUB_WORKSPACE"

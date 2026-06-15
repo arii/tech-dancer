@@ -154,8 +154,8 @@ jobs:
     steps:
       - name: Install system utilities
         run: |
-          sudo apt-get update
-          sudo apt-get install -y lsof gh
+          apt-get update
+          apt-get install -y lsof gh
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
