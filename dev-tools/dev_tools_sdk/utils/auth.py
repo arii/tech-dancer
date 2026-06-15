@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import subprocess
 from typing import Sequence
+from dev_tools_sdk.utils.common import CLIError
 
 
 class AuthError(RuntimeError):
@@ -28,3 +29,13 @@ def run_authenticated_gh(args: Sequence[str]) -> subprocess.CompletedProcess[str
     token = get_github_token()
     env["GH_TOKEN"] = token
     return subprocess.run(["gh", *args], env=env, capture_output=True, text=True, check=False)
+
+def get_github_client():
+    from github import Github, Auth
+    try:
+        token = get_github_token()
+        if not token:
+            raise CLIError("GitHub token not found", code=401)
+        return Github(auth=Auth.Token(token))
+    except Exception as e:
+        raise CLIError(f"GitHub Auth Error: {e}", code=401)

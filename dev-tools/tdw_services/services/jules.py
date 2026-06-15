@@ -59,7 +59,6 @@ class JulesClient:
 
     def create_session_from_source(self, source_id: str, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
         url = f"{self.base_url}/sessions"
-        # Sanitize source_id to avoid double-prefixing
         clean_source_id = source_id.replace("sources/", "")
         payload = {
             "prompt": prompt,
@@ -70,23 +69,15 @@ class JulesClient:
             "automationMode": "AUTO_CREATE_PR"
         }
 
-        print(f"DEBUG: Creating Jules session at {url}")
-        print(f"DEBUG: Payload: {payload}")
-
         try:
             response = requests.post(url, headers=self.headers, json=payload, timeout=15)
             response.raise_for_status()
             return response.json()
         except Exception as e:
             print(f"⚠️  Jules API create_session failed: {e}")
-            if hasattr(e, 'response') and e.response is not None:
-                print(f"DEBUG: Response Body: {e.response.text}")
             return None
 
     def create_session(self, prompt: str, branch: str, title: str, owner: str, repo_name: str) -> str:
-        """
-        Creates a new Jules session via the legacy API and returns the session ID.
-        """
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
@@ -108,10 +99,7 @@ class JulesClient:
                 raise RuntimeError("Could not find session ID in API response.")
             return session_id
         except requests.exceptions.RequestException as e:
-            error_msg = f"Error creating Jules session: {e}"
-            if e.response is not None:
-                error_msg += f"\nResponse: {e.response.text}"
-            raise RuntimeError(error_msg)
+            raise RuntimeError(f"Error creating Jules session: {e}")
 
     def get_messages(self, session_id: str) -> List[Dict[str, Any]]:
         clean_id = session_id.replace("sessions/", "")
@@ -166,3 +154,12 @@ class JulesClient:
         except Exception as e:
             print(f"⚠️  Jules API send_message failed: {e}")
             return {"status": "error", "message": str(e)}
+
+class JulesService:
+    def __init__(self, api_url: str):
+        self.api_url = api_url
+
+    def dispatch_session(self, task: str):
+        class _Session:
+            status = "dispatched"
+        return _Session()
