@@ -154,7 +154,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.49.0-noble
       env:
-        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
+        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Install system utilities
