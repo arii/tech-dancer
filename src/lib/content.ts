@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/content';
+import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
 
-export type { Post, Resource, Study, ContentItem, ContentStatus };
+export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -41,8 +41,6 @@ interface ContentModule {
 
 const contentModules = {
   posts: import.meta.glob('/content/posts/*.md', { eager: true, query: '?raw' }),
-  blog: import.meta.glob('/content/blog/*.md', { eager: true, query: '?raw' }),
-  resources: import.meta.glob('/content/resources/*.md', { eager: true, query: '?raw' }),
   studies: import.meta.glob('/content/studies/*.md', { eager: true, query: '?raw' }),
 };
 
@@ -111,25 +109,11 @@ function transform<T extends { date?: string; draft?: boolean }>(
         author: String(data.author || ""),
         tags: asArray(data.tags),
         affiliateIds: asArray(data.affiliateIds),
-        internalSku: data.internalSku ? String(data.internalSku) : (data.sku ? String(data.sku) : undefined),
-        priceCategory: data.priceCategory ? String(data.priceCategory) : undefined,
 
         // New SEO & Policy Fields
         seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
         seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
         imageAlt: data.imageAlt ? String(data.imageAlt) : undefined,
-        productType: data.productType ? String(data.productType) : undefined,
-        fulfillmentType: data.fulfillmentType ? String(data.fulfillmentType) : undefined,
-        provider: data.provider ? String(data.provider) : undefined,
-        shippingPolicySummary: data.shippingPolicySummary ? String(data.shippingPolicySummary) : undefined,
-        returnPolicySummary: data.returnPolicySummary ? String(data.returnPolicySummary) : undefined,
-        affiliateProvider: data.affiliateProvider ? String(data.affiliateProvider) : undefined,
-        affiliateDisclosure: data.affiliateDisclosure ? String(data.affiliateDisclosure) : undefined,
-        priceDisplayPolicy: data.priceDisplayPolicy ? String(data.priceDisplayPolicy) : undefined,
-        availabilityDisplayPolicy: data.availabilityDisplayPolicy ? String(data.availabilityDisplayPolicy) : undefined,
-        recommendedFor: asArray(data.recommendedFor),
-        printfulProductId: data.printfulProductId ? String(data.printfulProductId) : undefined,
-        printfulVariantIds: asArray(data.printfulVariantIds),
 
         status: normalizeStatus(data.status),
         readTime: normalizeReadTime(data.readTime),
@@ -160,30 +144,19 @@ function transform<T extends { date?: string; draft?: boolean }>(
 }
 
 const items = {
-  posts: [
-    ...transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
-    ...transform<Post>(contentModules.blog as Record<string, string | ContentModule>, 'blog')
-  ],
-  resources: transform<Resource>(contentModules.resources as Record<string, string | ContentModule>, 'resource'),
+  posts: transform<Post>(contentModules.posts as Record<string, string | ContentModule>, 'post'),
   studies: transform<Study>(contentModules.studies as Record<string, string | ContentModule>, 'study'),
 };
 
 const maps = {
   posts: new Map(items.posts.map(i => [i.slug, i])),
-  resources: new Map(items.resources.map(i => [i.slug, i])),
   studies: new Map(items.studies.map(i => [i.slug, i])),
 };
 
-export const getPosts = () => items.posts.sort((a, b) => {
-  const timeA = a.date ? new Date(a.date).getTime() : 0;
-  const timeB = b.date ? new Date(b.date).getTime() : 0;
-  return timeB - timeA;
-});
-export const getResources = () => items.resources;
+export const getPosts = () => items.posts;
 export const getStudies = () => items.studies;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
-export const getResourceBySlug = (slug: string) => maps.resources.get(slug);
 
 /**
  * Calculates estimated reading time in minutes.

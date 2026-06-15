@@ -22,7 +22,7 @@ export const IMPACT_CONFIG = {
   DEFAULT_STATIC_PAGES: [
     '/',
     '/blog',
-    '/gear',
+
     '/research',
     '/merch',
     '/about'
@@ -33,7 +33,7 @@ export const IMPACT_CONFIG = {
     'Home': '/',
     'UXAuditor': '/ux-auditor',
     'BlogPost': '/blog/:slug',
-    'GearPost': '/gear/:slug',
+
     'ResearchDetail': '/research/:id'
   } as Record<string, string>,
 
@@ -41,7 +41,6 @@ export const IMPACT_CONFIG = {
   CONTENT_MAP: {
     'content/posts/': '/blog/',
     'content/blog/': '/blog/',
-    'content/resources/': '/gear/',
     'content/studies/': '/research/'
   } as Record<string, string>
 };

@@ -46,7 +46,7 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "why-built",
       title: "Why I Built This Site",
-      content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, gear that helps, event tips, and the small choices that make a big difference over a season of dancing.",
+      content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, practical tools, event notes, and the small choices that make a big difference over a season of dancing.",
       gallery: [
         { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
       ]
