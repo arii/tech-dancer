@@ -1,7 +1,8 @@
 
-import { TablerIcon } from '@/components/ui/TablerIcon';
+import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
+import { Icon } from '@/components/ui/Icon';
 
 interface PromoStripProps {
   imageSrc: string;
@@ -96,7 +97,7 @@ export function PromoStrip({
           >
             {ctaLabel}
           </Text>
-          <TablerIcon name="ti-arrow-right" size={16} className="text-accent" />
+          <Icon icon={ArrowRight} size="sm" color="accent" />
         </Stack>
       </Stack>
     </Box>
