@@ -20,7 +20,7 @@ export const PRINTFUL_REFERRAL = {
   FOOTER_DESCRIPTION: 'Supporting BoomTick helps us keep the servers running and the content flowing. Save $5 on your first Printful order and support the blog at the same time.'
 } as const;
 
-const DEFAULT_DESCRIPTION = "The West Coast Swing Lifestyle Blog by Tech Dancer. Training notes, blog insights, and practical tools for better West Coast Swing dance events, plus technical deep dives into building the platform with DevAI.";
+const DEFAULT_DESCRIPTION = "Training notes, blog insights, and practical tools for better West Coast Swing dance events.";
 
 export const STATIC_SCHEMAS = {
   HOME: {
