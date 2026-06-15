@@ -21,8 +21,8 @@ excerpt: "string"
 
 ## Features
 
-- **Folio Journal**: Deep dives into technique, engineering, and lifestyle.
-- **The Stacks**: A curated, searchable gear repository with affiliate integrations.
+- **Folio Journal**: Training notes and blog insights into technique, engineering, and lifestyle.
+- **The Stacks**: A curated, searchable tools repository with affiliate integrations.
 - **Data Lab**: Automated content pipelines and research summaries.
 - **Real-time Hub**: WebSocket-driven dashboard for live event monitoring.
 
