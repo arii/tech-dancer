@@ -12,7 +12,6 @@ on:
         required: true
         type: string
 
-env:
   NODE_ENV: production
   REPO_NAME: ${{ github.event.repository.name }}
   VITE_BASE_PATH: /${{ github.event.repository.name }}/

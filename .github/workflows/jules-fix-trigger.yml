@@ -18,7 +18,6 @@ permissions:
   issues: write
   actions: read
 
-
 jobs:
   trigger-jules:
 

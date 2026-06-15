@@ -47,7 +47,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
   ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
   BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
@@ -180,7 +179,6 @@ jobs:
           # Playwright runs with VITE_BASE_PATH=/, so dist must use root-relative assets.
           VITE_BASE_PATH=/; export VITE_BASE_PATH
           pnpm run build
-
 
       - name: Bundle Size Check
         env:

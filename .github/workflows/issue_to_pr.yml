@@ -9,7 +9,6 @@ permissions:
   pull-requests: write
   issues: read
 
-
 jobs:
   create-pr:
     if: startsWith(github.event.issue.title, 'Draft') && contains(github.event.issue.title, ':') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')

@@ -6,8 +6,6 @@ on:
       - '**'
   workflow_dispatch:
 
-env:
-
 permissions:
   contents: write
   pages: write

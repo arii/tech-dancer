@@ -1,7 +1,5 @@
 name: Security & Quality Scan
 
-env:
-
 on:
   push:
     branches: [main]

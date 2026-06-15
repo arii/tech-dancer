@@ -4,16 +4,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-env:
-
 permissions:
   contents: write
   pull-requests: write
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
-
 
 jobs:
   resolve-conflicts:
