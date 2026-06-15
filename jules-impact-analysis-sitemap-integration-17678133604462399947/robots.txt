@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/jules-impact-analysis-sitemap-integration-17678133604462399947/sitemap.xml
