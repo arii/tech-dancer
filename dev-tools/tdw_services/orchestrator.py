@@ -385,10 +385,9 @@ class Orchestrator:
         return formatted
 
     def _get_conflicts_github_token(self) -> Tuple[Optional[str], Optional[str]]:
-        if os.environ.get("CODEX_GH_TOKEN"):
-            return os.environ["CODEX_GH_TOKEN"], "CODEX_GH_TOKEN"
-        if os.environ.get("GITHUB_TOKEN"):
-            return os.environ["GITHUB_TOKEN"], "GITHUB_TOKEN"
+        for var in ("CODEX_GH_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "PAT_TOKEN"):
+            if os.environ.get(var):
+                return os.environ[var], var
         return None, None
 
     def _validate_github_token_for_conflicts(self, repo_slug: str) -> Optional[Dict[str, str]]:
@@ -396,7 +395,7 @@ class Orchestrator:
         if not token:
             return {
                 "status": "environment_error",
-                "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
+                "message": "Missing GitHub token. Set CODEX_GH_TOKEN, GITHUB_TOKEN, or PAT_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
             }
 
         if any(char.isspace() for char in token) or any(ord(char) < 32 for char in token):
