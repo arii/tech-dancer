@@ -151,9 +151,9 @@ function getSitemapUrls(): string[] {
     const url = m.replace(/<\/?loc>/g, '');
     try {
       const parsed = new URL(url);
-      return parsed.pathname === '' ? '/' : parsed.pathname;
+      return parsed.pathname || '/';
     } catch {
-      return url.replace('https://boomtick.blog', '');
+      return url.replace(/^https?:\/\/[^/]+/, '') || '/';
     }
   });
 }
