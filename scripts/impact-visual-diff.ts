@@ -12,11 +12,12 @@ import {
   ensureDirectory,
   readImpactAnalysis,
   routeToSlug,
+  startPreview,
+  stopPreview,
   visualSeverity,
+  waitForServer,
   type VisualRouteSummary
 } from './impact-review-utils';
-import { VisualRouteSummarySchema } from './impact-review-utils';
-import { startPreview, waitForServer, stopPreview } from './impact/preview-server';
 import { whiteCanvas, copyImage } from './image-processing-utils';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
@@ -198,7 +199,7 @@ async function main(): Promise<void> {
         diffCroppedPath = path.relative(process.cwd(), dcp);
       }
 
-      const summaryObj = {
+      summaries.push({
         route,
         slug,
         beforePath: path.relative(process.cwd(), beforePath),
@@ -209,10 +210,7 @@ async function main(): Promise<void> {
         diffCroppedPath,
         ...diffMetrics,
         severity: visualSeverity(diffMetrics.differencePercent)
-      };
-
-      const summary = VisualRouteSummarySchema.parse(summaryObj);
-      summaries.push(summary);
+      });
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));

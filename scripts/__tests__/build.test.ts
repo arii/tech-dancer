@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest';
-import { DomRouteSummarySchema } from '../impact-review-utils';
+import { z } from 'zod';
+const DomRouteSummarySchema = z.object({ route: z.string(), slug: z.string(), beforeHtmlPath: z.string(), afterHtmlPath: z.string(), diffPath: z.string(), severity: z.enum(['LOW', 'MEDIUM', 'HIGH']), metrics: z.object({ nodes: z.tuple([z.number(), z.number()]), images: z.tuple([z.number(), z.number()]), links: z.tuple([z.number(), z.number()]) }) });
 
 test('Pipeline telemetry payload complies exactly with the token schema contract', async () => {
   const samplePipelineOutput = {
