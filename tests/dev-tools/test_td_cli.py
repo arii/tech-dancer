@@ -12,24 +12,24 @@ from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
-    @patch('tdw_services.orchestrator.get_github_token')
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('tdw_services.orchestrator.get_repo_name')
-    @patch('td_cli.get_github_token')
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('td_cli.get_repo_name')
-    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token, mock_orch_repo, mock_orch_get_client, mock_orch_token):
+    @patch('dev_tools_sdk.utils.auth.get_github_token')
+    @patch('dev_tools_sdk.utils.auth.get_github_client')
+    @patch('dev_tools_sdk.utils.common.get_repo_name')
+    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token):
         """Test that validate-issue defaults to dry-run True"""
         mock_repo.return_value = "owner/repo"
-        mock_orch_repo.return_value = "owner/repo"
+        mock_token.return_value = "fake-token"
 
         mock_issue = MagicMock()
         mock_issue.number = 123
         mock_issue.title = "Test Issue"
         mock_issue.body = "Test Body"
 
-        mock_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
-        mock_orch_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
+        mock_repo_obj = MagicMock()
+        mock_github_obj = MagicMock()
+        mock_github_obj.get_repo.return_value = mock_repo_obj
+        mock_repo_obj.get_issue.return_value = mock_issue
+        mock_get_client.return_value = mock_github_obj
 
         args = MagicMock()
         args.issue_number = 123
@@ -38,15 +38,18 @@ class TestTDCLI(unittest.TestCase):
         args.dry_run = True  # Default
         args.json = False
 
-        td_cli.handle_validate_issue(args)
+        # Mocking the client used inside validate_issue/orchestrator
+        with patch('tdw_services.orchestrator.get_github_client', return_value=mock_github_obj), \
+             patch('tdw_services.orchestrator.get_repo_name', return_value="owner/repo"):
+            td_cli.handle_validate_issue(args)
 
         # Verify comment was NOT created
         mock_issue.create_comment.assert_not_called()
 
     @patch('tdw_services.services.github.GitHubClient.fetch_check_runs')
-    @patch('submit_review.get_github_token')
-    @patch('submit_review.get_repo_name')
-    @patch('submit_review.get_github_client')
+    @patch('dev_tools_sdk.utils.auth.get_github_token')
+    @patch('dev_tools_sdk.utils.common.get_repo_name')
+    @patch('dev_tools_sdk.utils.auth.get_github_client')
     @patch('os.path.exists')
     @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='# Review\n```json\n{"body": "Approved"}\n```')
     @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
@@ -57,17 +60,23 @@ class TestTDCLI(unittest.TestCase):
         mock_repo.return_value = "owner/repo"
 
         mock_pr = MagicMock()
-        mock_get_client.return_value.get_repo.return_value.get_pull.return_value = mock_pr
+        mock_repo_obj = MagicMock()
+        mock_github_obj = MagicMock()
+        mock_github_obj.get_repo.return_value = mock_repo_obj
+        mock_repo_obj.get_pull.return_value = mock_pr
+        mock_get_client.return_value = mock_github_obj
 
-        submit_review(123, "fake-path.md", dry_run=True)
+        with patch('submit_review.get_github_client', return_value=mock_github_obj), \
+             patch('submit_review.get_repo_name', return_value="owner/repo"):
+            submit_review(123, "fake-path.md", dry_run=True)
 
         # Verify review was NOT created
         mock_pr.create_review.assert_not_called()
 
     @patch('tdw_services.services.github.GitHubClient.fetch_check_runs')
-    @patch('submit_review.get_github_token')
-    @patch('submit_review.get_repo_name')
-    @patch('submit_review.get_github_client')
+    @patch('dev_tools_sdk.utils.auth.get_github_token')
+    @patch('dev_tools_sdk.utils.common.get_repo_name')
+    @patch('dev_tools_sdk.utils.auth.get_github_client')
     @patch('os.path.exists')
     @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='# Review\n```json\n{"body": "Approved"}\n```')
     @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
@@ -78,14 +87,20 @@ class TestTDCLI(unittest.TestCase):
         mock_repo.return_value = "owner/repo"
 
         mock_pr = MagicMock()
-        mock_get_client.return_value.get_repo.return_value.get_pull.return_value = mock_pr
+        mock_repo_obj = MagicMock()
+        mock_github_obj = MagicMock()
+        mock_github_obj.get_repo.return_value = mock_repo_obj
+        mock_repo_obj.get_pull.return_value = mock_pr
+        mock_get_client.return_value = mock_github_obj
 
-        submit_review(123, "fake-path.md", dry_run=False)
+        with patch('submit_review.get_github_client', return_value=mock_github_obj), \
+             patch('submit_review.get_repo_name', return_value="owner/repo"):
+            submit_review(123, "fake-path.md", dry_run=False)
 
         # Verify review WAS created
         mock_pr.create_review.assert_called_once()
 
-    @patch('td_cli.get_gha_variable')
+    @patch('dev_tools_sdk.utils.common.GHAConfigManager.get_variable')
     @patch('os.path.exists')
     @patch('os.environ.get')
     def test_resolve_baseline_fallback_to_gha(self, mock_env_get, mock_exists, mock_gha_get):
@@ -100,8 +115,8 @@ class TestTDCLI(unittest.TestCase):
         mock_gha_get.assert_called_with("FAKE_VAR")
 
 class TestTDCliCrash(unittest.TestCase):
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
+    @patch('dev_tools_sdk.utils.auth.get_github_client')
+    @patch('dev_tools_sdk.utils.common.get_repo_name')
     def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client):
         """Test handle_audit_pr raises CLIError for various invalid PR numbers"""
         cases = [
@@ -126,7 +141,7 @@ class TestTDCliCrash(unittest.TestCase):
 
 class TestOllamaSchemaConversion(unittest.TestCase):
     def test_to_standard_schema(self):
-        from utils import to_standard_schema
+        from dev_tools_sdk.utils.ollama import to_standard_schema
         gemini_schema = {
             "type": "OBJECT",
             "properties": {
@@ -155,4 +170,3 @@ class TestOllamaSchemaConversion(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

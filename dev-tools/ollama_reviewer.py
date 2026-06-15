@@ -6,7 +6,7 @@ ollama_reviewer.py - Standalone Ollama Code Reviewer CLI
 import os
 import sys
 import argparse
-from utils import call_ollama
+from dev_tools_sdk.utils.ollama import call_ollama
 
 MODEL = "code-reviewer"
 MAX_FILE_SIZE_KB = 50

@@ -4,7 +4,7 @@ import sys
 from typing import List, Optional, Set
 
 # Import run_command from utils
-from utils import run_command
+from dev_tools_sdk.utils.common import run_command
 
 def get_project_config():
     config_path = os.path.join(os.path.dirname(__file__), "project_config.json")

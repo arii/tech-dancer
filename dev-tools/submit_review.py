@@ -1,7 +1,8 @@
 import os
 import json
 import re
-from utils import get_github_token, get_github_client, get_repo_name, CLIError
+from dev_tools_sdk.utils.auth import get_github_token, get_github_client
+from dev_tools_sdk.utils.common import get_repo_name, CLIError
 
 def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_override=None, is_json=False):
     """

@@ -7,7 +7,7 @@ from typing import Optional, List, Tuple, Union
 from collections import defaultdict
 
 # Import run_command from utils
-from utils import run_command, CLIError
+from dev_tools_sdk.utils.common import run_command, CLIError
 
 # Use existing github_utils if possible, but we'll add common repo walking/matching logic here
 def walk_tsx(root_dir='src'):

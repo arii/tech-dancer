@@ -5,7 +5,7 @@ import json
 import re
 import requests
 from typing import Optional, Dict, Any, List
-from utils import (
+from dev_tools_sdk.utils.ollama import (
     call_ollama,
     is_ollama_available,
     clean_llm_output,

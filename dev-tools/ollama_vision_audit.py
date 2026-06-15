@@ -10,7 +10,8 @@ import argparse
 import urllib.request
 import urllib.parse
 from typing import Optional, List, Dict
-from utils import get_ollama_url, run_command # dev-tools/utils.py
+from dev_tools_sdk.utils.ollama import get_ollama_url
+from dev_tools_sdk.utils.common import run_command
 
 VISION_MODEL = os.environ.get("OLLAMA_VISION_MODEL", "moondream")
 

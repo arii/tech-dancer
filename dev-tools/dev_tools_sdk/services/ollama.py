@@ -1,5 +1,5 @@
 from __future__ import annotations
-from utils import call_ollama, is_ollama_available
+from ..utils.ollama import call_ollama, is_ollama_available
 
 class OllamaService:
     def __init__(self, model: str = "qwen2.5-coder:7b", base_url: str = None):

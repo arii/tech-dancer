@@ -9,7 +9,14 @@ from tdw_services.orchestrator import Orchestrator
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
 import os
-from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
+from dev_tools_sdk.utils.auth import get_github_client
+from dev_tools_sdk.utils.common import (
+    get_repo_name,
+    CLIError,
+    run_command,
+    set_gha_variable,
+    get_gha_variable
+)
 
 # CLI Group
 @click.group()

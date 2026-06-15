@@ -7,7 +7,7 @@ from typing import Optional, List, Dict, Any
 
 class GitHubClient:
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None):
-        from utils import get_github_token
+        from dev_tools_sdk.utils.auth import get_github_token
         self.token = token or get_github_token()
         if not self.token:
             raise ValueError("Missing GITHUB_TOKEN environment variable.")
