@@ -96,5 +96,8 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  // Gear page test removed due to page decommissioning
+  test('Gear search term should persist after reload', async () => {
+    // Gear page is decommissioned, skipping this test.
+    test.skip();
+  });
 });

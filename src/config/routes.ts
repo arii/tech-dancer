@@ -28,6 +28,30 @@ export const routes: RouteConfig[] = [
     skeleton: 'post'
   },
   {
+    path: '/gear',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'simple',
+    sitemap: false
+  },
+  {
+    path: '/gear/:slug',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'simple',
+    sitemap: false
+  },
+  {
+    path: '/events',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'simple',
+    sitemap: false
+  },
+  {
+    path: '/events/:slug',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    skeleton: 'simple',
+    sitemap: false
+  },
+  {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'DevAI Portfolio',
