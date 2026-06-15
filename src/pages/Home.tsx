@@ -28,14 +28,16 @@ export default function Home() {
         <FeaturedGuidePanel />
       </Box>
 
-      <PromoStrip
-        imageSrc="/assets/gear/norcal-bestcal-front.webp"
-        title="Shop NorCal pride merch"
-        subtitle="Tees, hoodies, and tanks for the dance floor"
-        ctaLabel="Shop now"
-        href="/merch"
-        isNew
-      />
+      <Box marginTop={8}>
+        <PromoStrip
+          imageSrc="/assets/gear/norcal-bestcal-front.webp"
+          title="Shop NorCal pride merch"
+          subtitle="Tees, hoodies, and tanks for the dance floor"
+          ctaLabel="Shop now"
+          href="/merch"
+          isNew
+        />
+      </Box>
 
       <Stack
         gap={{ base: 8, lg: 'section-spacing' }}

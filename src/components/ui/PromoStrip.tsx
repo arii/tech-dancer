@@ -1,16 +1,15 @@
-import { NavLink } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+
+import { TablerIcon } from '@/components/ui/TablerIcon';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { ASSET_PREFIX } from '@/config/constants';
 
 interface PromoStripProps {
   imageSrc: string;
-  title: string;
-  subtitle: string;
-  ctaLabel: string;
-  href: string;
-  isNew?: boolean;
+  title: string;       // e.g. "Shop NorCal pride merch"
+  subtitle: string;    // e.g. "Tees, hoodies, and tanks for the dance floor"
+  ctaLabel: string;    // e.g. "Shop now"
+  href: string;        // "/merch"
+  isNew?: boolean;     // shows "New" badge
 }
 
 export function PromoStrip({
@@ -21,86 +20,87 @@ export function PromoStrip({
   href,
   isNew
 }: PromoStripProps) {
+  // Resolve asset path using ASSET_PREFIX if it exists
+  const fullImageSrc = imageSrc.startsWith('http')
+    ? imageSrc
+    : `${ASSET_PREFIX}${imageSrc.startsWith('/') ? imageSrc.slice(1) : imageSrc}`;
+
   return (
     <Box
-      as={NavLink}
-      to={href}
-      display="block"
+      as="a"
+      href={href}
       position="relative"
-      border
-      radius="lg"
-      padding={3}
-      surface="surface"
-      className="group transition-all duration-200 hover:border-accent/40 hover:-translate-y-0.5"
+      width="full"
+      padding={4}
+      radius="md"
+      border="line"
+      bg="surface"
+      className="group transition-all hover:bg-white/5"
     >
       {isNew && (
         <Box
           position="absolute"
-          top={-2.5}
-          right={8}
-          zIndex={10}
-          surface="accent"
-          radius="full"
-          paddingX={2.5}
-          paddingY={0.5}
-          className="bg-accent shadow-sm"
+          zIndex={zIndex}
+          className="-top-2 right-4"
         >
-          <Text variant="mono" size="micro" color="white" weight="font-bold">NEW</Text>
+          <Stack
+            direction="row"
+            align="center"
+            justify="center"
+            paddingX={2.5}
+            paddingY={1}
+            radius="full"
+            bg="accent"
+          >
+            <Text
+              variant="mono"
+              size="micro"
+              weight="font-black"
+              className="text-bg leading-none"
+            >
+              New
+            </Text>
+          </Stack>
         </Box>
       )}
 
       <Stack direction="row" align="center" gap={4}>
-        {/* Thumbnail */}
         <Box
           width={12}
           height={12}
-          minWidth={12}
           radius="md"
           overflow="hidden"
-          border
-          borderColor="accent/10"
+          className="shrink-0 bg-white/10"
         >
           <img
-            src={imageSrc}
+            src={fullImageSrc}
             alt=""
-            className="h-full w-full object-cover"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
           />
         </Box>
 
-        {/* Content */}
-        <Stack gap={0} flex={1} minWidth={0}>
-          <Text
-            variant="headline"
-            size="sm"
-            weight="font-bold"
-            truncate
-          >
-            {title}
-          </Text>
-          <Text
-            variant="body"
-            size="xs"
-            color="dim"
-            truncate
-          >
-            {subtitle}
-          </Text>
+        <Stack gap={0} grow={1} className="min-w-0">
+          <Text weight="font-bold" size="base" className="truncate">{title}</Text>
+          <Text size="sm" color="text-dim" className="truncate">{subtitle}</Text>
         </Stack>
 
-        {/* CTA */}
-        <Stack direction="row" align="center" gap={1} shrink={0}>
+        <Stack direction="row" align="center" gap={2} className="shrink-0">
           <Text
             variant="mono"
-            size="xs"
+            size="tiny"
             weight="font-bold"
-            color="accent"
-            className="hidden sm:block"
+            className="text-accent group-hover:underline"
           >
             {ctaLabel}
           </Text>
-          <Icon icon={ArrowRight} size="sm" color="accent" />
+          <TablerIcon name="ti-arrow-right" size={16} className="text-accent" />
         </Stack>
       </Stack>
     </Box>
   );
 }
+
+const zIndex = 10;
