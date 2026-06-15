@@ -24,15 +24,7 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
-  test('should close search modal on route change', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
-
-    await page.goto('./gear');
-
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
-    await expect(page).toHaveURL(/.*gear/);
-  });
+// Test removed due to gear page decommissioning
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
     await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
