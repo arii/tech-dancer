@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import subprocess
 from typing import Sequence, Optional
+from dev_tools_sdk.utils.common import CLIError
 
 
 class AuthError(RuntimeError):
@@ -29,7 +30,7 @@ def get_github_client():
     from github import Github, Auth
     token = get_github_token()
     if not token:
-        raise AuthError("GitHub token not found")
+        raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
 
 

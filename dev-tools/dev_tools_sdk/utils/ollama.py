@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import time
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -38,10 +39,16 @@ def get_ollama_synthesis_model() -> str:
     except Exception:
         # Fallback to direct json reading if sdk not available
         try:
-            import json
-            config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev-tools", "project_config.json")
+            # __file__ is dev-tools/dev_tools_sdk/utils/ollama.py
+            # we want dev-tools/project_config.json
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            dev_tools_dir = os.path.abspath(os.path.join(current_dir, "..", "..", ".."))
+            config_path = os.path.join(dev_tools_dir, "project_config.json")
+
             if not os.path.exists(config_path):
-                config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
+                # Try one level up if nested differently
+                config_path = os.path.join(os.path.dirname(dev_tools_dir), "dev-tools", "project_config.json")
+
             with open(config_path, "r") as f:
                 raw = json.load(f)
                 return raw.get("ollama_synthesis_model", "llama3.2")

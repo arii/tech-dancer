@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
-from ..utils.auth import run_authenticated_gh
+from dev_tools_sdk.utils.auth import run_authenticated_gh
 
 
 @dataclass

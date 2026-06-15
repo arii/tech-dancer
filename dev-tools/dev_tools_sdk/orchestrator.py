@@ -3,12 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from .config import ProjectConfig
-from .services.gemini import GeminiService
-from .services.github import GitHubService
-from .services.jules import JulesService
-from .services.ollama import OllamaService
-from .services.review import ReviewService
+from dev_tools_sdk.config import ProjectConfig
+from dev_tools_sdk.services.gemini import GeminiService
+from dev_tools_sdk.services.github import GitHubService
+from dev_tools_sdk.services.jules import JulesService
+from dev_tools_sdk.services.ollama import OllamaService
+from dev_tools_sdk.services.review import ReviewService
 
 
 @dataclass

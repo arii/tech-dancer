@@ -38,7 +38,7 @@ class TestTDCLI(unittest.TestCase):
         args.dry_run = True  # Default
         args.json = False
 
-        # Mocking the client used inside validate_issue/orchestrator
+        # Re-patching because orchestrator imports these directly
         with patch('tdw_services.orchestrator.get_github_client', return_value=mock_github_obj), \
              patch('tdw_services.orchestrator.get_repo_name', return_value="owner/repo"):
             td_cli.handle_validate_issue(args)
