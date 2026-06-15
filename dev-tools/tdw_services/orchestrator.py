@@ -845,6 +845,16 @@ Respond only after the PR is created or updated:
 - Validation results
 - Notes or documented limitations"""
 
+        changed_files = []
+        try:
+            for f in pr.get_files():
+                changed_files.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
+        except Exception as e:
+            print(f"Error fetching changed files: {e}")
+
+        if changed_files:
+            prompt += "\n\n## Changed Files in PR\n\n" + "\n".join(changed_files)
+
         if structured_failures:
             prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
 
