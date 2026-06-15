@@ -23,25 +23,13 @@ The following files define and enforce the contract:
 
 ## Mandatory Protocol for Agents
 
-Before performing any tasks involving dependencies, builds, or tests, you **must** ensure the environment is correctly configured:
+Before performing any tasks involving dependencies, builds, or tests, you **must** ensure the environment is correctly configured using the consolidated setup script:
 
-1. **Activate Environment**:
-   ```bash
-   corepack enable
-   corepack prepare pnpm@10.28.2 --activate
-   ```
+```bash
+./setup-agent.sh
+```
 
-2. **Verify Environment**:
-   ```bash
-   pnpm run check:runtime-files
-   pnpm run doctor
-   ```
-
-3. **Install Dependencies**:
-   Always use the frozen lockfile.
-   ```bash
-   pnpm install --frozen-lockfile
-   ```
+This script handles environment activation, runtime verification, and dependency installation in a single step.
 
 ## Forbidden Actions
 

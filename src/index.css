@@ -64,6 +64,8 @@
   --z-skip-link: var(--raw-z-skip-link);
   --z-toast: var(--raw-z-toast);
   --z-top: var(--raw-z-top);
+  --z-nav: 99999;
+  --z-mobile-menu: 99998;
   --z-search: var(--raw-z-search);
 
   /* Shadows */
@@ -198,8 +200,8 @@
 }
 
 @utility tap-target {
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 48px;
+  min-width: 48px;
 }
 
 @utility nav-item-height {
@@ -320,4 +322,14 @@
   .hero-cta-anim {
     animation: fadeIn 0.8s ease forwards 1.0s;
   }
+}
+
+@utility z-nav {
+  z-index: 99999;
+}
+@utility z-mobile-menu {
+  z-index: 99998;
+}
+@utility z-search {
+  z-index: 999999;
 }
