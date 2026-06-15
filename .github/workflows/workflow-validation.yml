@@ -1,6 +1,5 @@
 name: Workflow Validation
 
-env:
 
 on:
   pull_request:
