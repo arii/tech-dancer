@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/triage-obsolete-issues-gear-event-decommission-3327475250569402681/sitemap.xml
