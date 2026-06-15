@@ -12,6 +12,8 @@ export interface MerchProduct {
   collections: string[];
   roles?: ('lead' | 'follow' | 'switch')[];
   tags: string[];
+  isBundle?: boolean;
+  bundleNote?: string;
 }
 
 export const COLLECTIONS = [
