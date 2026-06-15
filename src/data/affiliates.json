@@ -51,7 +51,7 @@
     "url": "https://www.amazon.com/dp/B0G1TSYYRW?tag=onasafari04-20",
     "category": "travel",
     "description": "Leak-proof refillable containers for TSA-approved liquids.",
-    "image": "/images/gear/amazon/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.jpg",
+    "image": "/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.webp",
     "imageMode": "contain"
   },
   "dance-socks": {
@@ -78,7 +78,7 @@
     "url": "https://www.amazon.com/dp/B07QXLKP1R?tag=onasafari04-20",
     "category": "gear",
     "description": "Stay cool while adding a touch of flair to your performance.",
-    "image": "/images/gear/amazon/a-alfeel-2-pack-large-folding-rave-fan-for-women-men-holographic-festi.jpg",
+    "image": "/images/gear/sketches/zolee-large-rave-folding-hand-fan-with-bamboo-ribs-for-men-women-chine.webp",
     "imageMode": "contain"
   },
   "neck-fan": {
@@ -386,7 +386,7 @@
     "url": "https://www.amazon.com/dp/B08J45WG5B?tag=onasafari04-20",
     "category": "travel",
     "description": "Keep your event outfits wrinkle-free with this compact steamer.",
-    "image": "/images/gear/amazon/oghom-portable-garment-steamer.jpg",
+    "image": "/images/gear/sketches/travel-steamer.webp",
     "imageMode": "contain"
   },
   "short-sleeve-romper": {
@@ -432,7 +432,7 @@
     "category": "fashion",
     "description": "Cute pumpkin headbands for themed social dancing without sacrificing movement.",
     "gearSlug": "2024-06-01-pumpkin-headbands",
-    "image": "/images/gear/sketches/pumpkin-headbands.webp"
+    "image": "/images/gear/sketches/halloween-headbands-2-pack-pumpkin-hat-headbands-for-halloween-costume.webp"
   },
   "pumpkin-stickers": {
     "id": "pumpkin-stickers",
@@ -518,7 +518,7 @@
     "category": "travel",
     "description": "Ultra-light bounce-free waist pouch for carrying essentials during events and travel.",
     "gearSlug": "2024-06-01-running-belt",
-    "image": "/images/gear/sketches/fanny-pack.webp"
+    "image": "/images/gear/sketches/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.webp"
   },
   "shoe-dryer": {
     "id": "shoe-dryer",

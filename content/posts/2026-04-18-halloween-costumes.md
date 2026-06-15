@@ -50,3 +50,5 @@ Disclosure: As an Amazon Associate, I may earn from qualifying purchases.
 
 [Check out the Gear specific review here](/gear)
 
+
+<notice type="affiliate" id="pumpkin-headbands" />

@@ -52,11 +52,6 @@ function MerchImage({ image, label, loading }: { image: MerchProductImage; label
   );
 }
 
-function SingleImage({ image }: { image: MerchProductImage }) {
-  // Show labels only when two images are visible (handled in EqualImages and ProminentImages)
-  return <MerchImage image={image} label={false} loading="eager" />;
-}
-
 function EqualImages({ images }: { images: MerchProductImage[] }) {
   return (
     <Grid cols={2} gap={2} height="full">
@@ -107,7 +102,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
         ) : (resolved.mode === 'front-prominent' || resolved.mode === 'back-prominent') && resolved.secondary ? (
           <ProminentImages primary={primary} secondary={resolved.secondary} />
         ) : (
-          <SingleImage image={primary} />
+          <MerchImage image={primary} label={false} loading="eager" />
         )}
       </Box>
     </Box>
