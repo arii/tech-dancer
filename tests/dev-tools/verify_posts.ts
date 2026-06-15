@@ -1,4 +1,4 @@
-import { chromium, devices } from 'playwright';
+import { chromium } from 'playwright';
 
 (async () => {
   const browser = await chromium.launch();
@@ -20,6 +20,7 @@ import { chromium, devices } from 'playwright';
       const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
       const page = await context.newPage();
       await page.goto(`http://localhost:3000/blog/${post}`);
+      await page.waitForTimeout(2000);
       // Wait for images to load
       await page.waitForLoadState('networkidle');
       await page.screenshot({ path: `tests/dev-tools/screenshots/${post}-${vp.name}.png`, fullPage: true });
