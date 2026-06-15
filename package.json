@@ -88,7 +88,8 @@
     "unist-util-visit": "^5.1.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
   },
   "engines": {
     "node": "22.x",

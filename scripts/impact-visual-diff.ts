@@ -1,3 +1,4 @@
+import { VisualRouteSummarySchema } from './impact-review-utils';
 import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -199,7 +200,7 @@ async function main(): Promise<void> {
         diffCroppedPath = path.relative(process.cwd(), dcp);
       }
 
-      summaries.push({
+      const summaryObj = {
         route,
         slug,
         beforePath: path.relative(process.cwd(), beforePath),
@@ -210,7 +211,11 @@ async function main(): Promise<void> {
         diffCroppedPath,
         ...diffMetrics,
         severity: visualSeverity(diffMetrics.differencePercent)
-      });
+      };
+
+      const summary = VisualRouteSummarySchema.parse(summaryObj);
+      summaries.push(summary);
+
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));

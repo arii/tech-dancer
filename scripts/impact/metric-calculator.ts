@@ -1,5 +1,4 @@
 import { JSDOM } from 'jsdom';
-
 import { type DomRouteSummary } from '../impact-review-utils';
 
 /**
@@ -24,8 +23,11 @@ export function summarizeDomCompact(beforeHtml: string, afterHtml: string): DomR
   const afterLinks = countElements(afterHtml, 'a');
 
   return {
-    nodes: computeCompactMetrics(beforeNodes, afterNodes),
-    images: computeCompactMetrics(beforeImages, afterImages),
-    links: computeCompactMetrics(beforeLinks, afterLinks)
+    nodesAdded: Math.max(0, afterNodes - beforeNodes),
+    nodesRemoved: Math.max(0, beforeNodes - afterNodes),
+    imagesAdded: Math.max(0, afterImages - beforeImages),
+    imagesRemoved: Math.max(0, beforeImages - afterImages),
+    linksAdded: Math.max(0, afterLinks - beforeLinks),
+    linksRemoved: Math.max(0, beforeLinks - afterLinks)
   };
 }
