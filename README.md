@@ -4,7 +4,7 @@ The West Coast Swing Lifestyle Blog by Tech Dancer.
 
 ## Overview
 
-A gear, tech, and travel guide for West Coast Swing dancers. Built with Vite + React to provide real-time comp data and travel logistics.
+Training notes, blog insights, and practical tools for West Coast Swing dancers. Built with Vite + React to provide real-time comp data and travel logistics.
 
 ## Content Structure
 
