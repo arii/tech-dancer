@@ -3,12 +3,11 @@ import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
-import { FilterButton } from '@/components/ui/FilterButton';
 import { PRINTFUL_REFERRAL } from '@/config/constants';
+import { MerchFilterBar } from '@/components/products/MerchFilterBar';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState("all");
@@ -80,23 +79,10 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={3}>
-          <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
-            Shop by Style
-          </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto">
-            <Stack direction="row" gap={2} padding={1} minWidth="max">
-              {COLLECTIONS.map((collection) => (
-                <FilterButton
-                  key={collection.id}
-                  label={collection.label}
-                  isActive={activeCollection === collection.id}
-                  onClick={() => setActiveCollection(collection.id)}
-                />
-              ))}
-            </Stack>
-          </Box>
-        </Stack>
+        <MerchFilterBar
+          activeCollection={activeCollection}
+          setActiveCollection={setActiveCollection}
+        />
 
         {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (

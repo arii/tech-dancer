@@ -44,6 +44,7 @@
   --spacing-card: var(--raw-spacing-card);
   --spacing-compact: var(--raw-spacing-compact);
   --spacing-nav: var(--raw-spacing-nav);
+  --header-height: var(--raw-header-height);
   --spacing-email-bar-y: var(--raw-spacing-email-bar-y);
   --spacing-email-bar-x-sm: var(--raw-spacing-email-bar-x-sm);
   --spacing-email-bar-x-md: var(--raw-spacing-email-bar-x-md);
