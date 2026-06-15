@@ -19,12 +19,16 @@ export default function RemovedPage() {
           We've shifted our focus to provide better training notes, blog insights, and practical tools.
         </Text>
         <Stack direction={{ base: 'column', sm: 'row' }} gap={4} marginTop={4}>
-          <Button as={Link} to="/" surface="primary" size="lg">
-            Return Home
-          </Button>
-          <Button as={Link} to="/blog" surface="secondary" size="lg">
-            View Blog
-          </Button>
+          <Box minWidth={12} minHeight={12} display="flex" alignItems="center" justifyContent="center">
+            <Button as={Link} to="/" surface="primary" size="lg">
+              Return Home
+            </Button>
+          </Box>
+          <Box minWidth={12} minHeight={12} display="flex" alignItems="center" justifyContent="center">
+            <Button as={Link} to="/blog" surface="secondary" size="lg">
+              View Blog
+            </Button>
+          </Box>
         </Stack>
       </Stack>
     </Box>
