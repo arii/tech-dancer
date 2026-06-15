@@ -20,6 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test --grep-invert 'visual comparison|Jack & Jill O.Rama'",
+    "test:e2e:targeted": "playwright test",
     "lighthouse": "lhci autorun",
     "clean": "rm -rf dist",
     "lint": "run-p lint:*",

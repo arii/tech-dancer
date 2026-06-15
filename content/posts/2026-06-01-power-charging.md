@@ -5,7 +5,7 @@ date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "On-the-go backup power sources for phones, speakers, and event accessories."
-image: "/images/gear/amazon/anker-20000mah-power-bank.jpg"
+image: "/images/gear/sketches/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.webp"
 affiliateIds:
   - "portable-charger"
   - "charging-cables"

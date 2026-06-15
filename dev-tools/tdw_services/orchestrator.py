@@ -18,7 +18,10 @@ from dev_tools_sdk.utils.common import (
     get_gha_variable,
     set_gha_variable,
     CLIError,
-    run_command
+    run_command,
+    is_ollama_available,
+    extract_failing_info,
+    clean_gha_logs
 )
 from dev_tools_sdk.utils.ollama import is_ollama_available
 from dev_tools_sdk.utils.logs import extract_failing_info
@@ -394,7 +397,7 @@ class Orchestrator:
         if not token:
             return {
                 "status": "environment_error",
-                "message": "Missing GitHub token. Set CODEX_GH_TOKEN, GITHUB_TOKEN, or PAT_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
+                "message": "Missing GitHub token. Set CODEX_GH_TOKEN or GITHUB_TOKEN before running `python3 dev-tools/td_cli.py gh conflicts`.",
             }
 
         if any(char.isspace() for char in token) or any(ord(char) < 32 for char in token):
@@ -555,8 +558,9 @@ class Orchestrator:
                                 detected_errors.append(error_msg)
 
                         # Extract a snippet of the logs (last 50 lines or search for 'error')
-                        log_lines = logs.splitlines()
-                        error_lines = [l for l in log_lines if 'error' in l.lower() or 'fail' in l.lower()]
+                        cleaned_logs = clean_gha_logs(logs)
+                        log_lines = cleaned_logs.splitlines()
+                        error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
                         snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
                         context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
             else:
@@ -771,7 +775,22 @@ class Orchestrator:
         for run in check_runs:
             if run.get('conclusion') == 'failure':
                 logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{logs[-2000:]}") # Last 2000 chars
+
+                # Clean logs and take a smart snippet
+                cleaned_logs = clean_gha_logs(logs)
+
+                # Prioritize lines with error signatures
+                important_lines = []
+                for line in cleaned_logs.splitlines():
+                    if any(x in line.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴']):
+                        important_lines.append(line)
+
+                if important_lines:
+                    snippet = "\n".join(important_lines[-30:]) # Keep last 30 important lines
+                else:
+                    snippet = cleaned_logs[-2000:] # Fallback to tail of cleaned logs
+
+                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{snippet}")
 
                 findings = extract_failing_info(logs)
                 for f in findings:
@@ -799,6 +818,7 @@ Compare the current branch against `main`, identify issues, fix them directly, v
 3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
 4. Fix the issues directly.
 5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
+   - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) and represent failures using the structured schema described in `docs/agent/ci-remediation.md`.
 6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
 7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
 8. Commit, push, and create or update the PR with a clear summary and validation notes.

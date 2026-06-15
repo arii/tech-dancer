@@ -6,9 +6,9 @@
 
 import { parse } from 'yaml';
 import { ASSET_PREFIX } from '@/config/constants';
-import type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus } from './types/content';
+import type { Post, Resource, Study, ContentItem, ContentStatus } from './types/content';
 
-export type { Post, Resource, Study, Event, ContentItem, EventTheme, EventGear, ContentStatus };
+export type { Post, Resource, Study, ContentItem, ContentStatus };
 
 /**
  * Lightweight browser-safe frontmatter parser using a vetted library.
@@ -157,6 +157,8 @@ export const getPosts = () => items.posts;
 export const getStudies = () => items.studies;
 
 export const getPostBySlug = (slug: string) => maps.posts.get(slug);
+
+export const getResources = () => [] as Resource[];
 
 /**
  * Calculates estimated reading time in minutes.
