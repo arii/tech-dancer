@@ -83,6 +83,10 @@
   /* Brand Logo */
   --brand-logo-size-text: 52px;
   --brand-logo-tracking: -1.5px;
+
+  /* Layout Constants */
+  --raw-width-sidebar: 300px;
+  --raw-width-home-max: 1240px;
 }
 /* ── Hero Section ────────────────────────────────────── */
 :root {
