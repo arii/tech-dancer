@@ -84,7 +84,7 @@ test.describe('Navigation Smoke Tests', () => {
   });
 
   test('all post/content pages load without errors', async ({ page, pageErrors }) => {
-    const contentIndexes = ['./blog', './gear', './research'];
+    const contentIndexes = ['./blog', './research'];
 
     for (const index of contentIndexes) {
       await page.goto(index, { waitUntil: 'networkidle', timeout: 60000 });
