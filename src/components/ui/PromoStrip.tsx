@@ -10,7 +10,6 @@ interface PromoStripProps {
   subtitle: string;    // e.g. "Tees, hoodies, and tanks for the dance floor"
   ctaLabel: string;    // e.g. "Shop now"
   href: string;        // "/merch"
-  isNew?: boolean;     // shows "New" badge
 }
 
 export function PromoStrip({
@@ -18,8 +17,7 @@ export function PromoStrip({
   title,
   subtitle,
   ctaLabel,
-  href,
-  isNew
+  href
 }: PromoStripProps) {
   // Robust asset resolution: avoid double slashes that create protocol-relative URLs (e.g. //assets/...)
   const fullImageSrc = imageSrc.startsWith('http')
@@ -39,29 +37,6 @@ export function PromoStrip({
       display="block"
       className="group transition-all hover:bg-white/5"
     >
-      {isNew && (
-        <Box
-          position="absolute"
-          top={-1.5}
-          right={{ base: 3, sm: 4 }}
-          zIndex={10}
-          bg="accent"
-          paddingX={2}
-          paddingY={0.5}
-          radius="full"
-          width="fit"
-          className="shadow-sm"
-        >
-          <Text
-            variant="mono"
-            size="micro"
-            weight="font-black"
-            className="text-bg leading-none block uppercase tracking-wider"
-          >
-            New
-          </Text>
-        </Box>
-      )}
 
       <Stack direction="row" align="center" gap={{ base: 3, sm: 4 }}>
         <Box
