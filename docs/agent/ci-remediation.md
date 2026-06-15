@@ -11,6 +11,8 @@ When a CI check fails, do not immediately run the full test suite. Instead:
     - **Playwright**: `\d+\) [<project>] › <file>:<line>:<col> › <test_name>`
     - **Vitest**: `FAIL  <file>` followed by `❯ <file>:<line>:<col>`
 
+   Agents should aim to represent failures in the [Structured CI Failure Format](ci-failure.schema.json) for consistent reasoning.
+
 2.  **Identify the scope**: Determine if the failure is in:
     - **Linting**: Run `pnpm run lint`.
     - **Type checking**: Run `pnpm run type-check`.

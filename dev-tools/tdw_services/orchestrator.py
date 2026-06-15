@@ -800,7 +800,7 @@ Compare the current branch against `main`, identify issues, fix them directly, v
 3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
 4. Fix the issues directly.
 5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
-   - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) to shorten feedback loops as described in `docs/agent/ci-remediation.md`.
+   - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) and represent failures using the structured schema described in `docs/agent/ci-remediation.md`.
 6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
 7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
 8. Commit, push, and create or update the PR with a clear summary and validation notes.
