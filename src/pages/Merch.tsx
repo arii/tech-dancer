@@ -3,6 +3,7 @@ import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { PromoStrip } from '@/components/ui/PromoStrip';
 import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
@@ -77,6 +78,17 @@ export default function Merch() {
               </Button>
             </Stack>
           }
+        />
+
+        <PromoStrip
+          imageSrc="/assets/gear/lead-follow-or-switch-love-shirt-in-neon-front.webp"
+          title="The Multi-Role Collection"
+          subtitle="One shirt for leads, follows, and switch dancers. Available in neon and classic editions."
+          ctaLabel="Shop Collection"
+          href="https://boomtick.printful.me/collection/lead-follow-switch"
+          isNew={true}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
         />
 
         {/* Collection Filters */}
