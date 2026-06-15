@@ -32,7 +32,7 @@ export function PromoStrip({
       href={href}
       position="relative"
       width="full"
-      padding={4}
+      padding={{ base: 3, sm: 4 }}
       radius="md"
       border="line"
       bg="surface"
@@ -42,12 +42,12 @@ export function PromoStrip({
       {isNew && (
         <Box
           position="absolute"
-          top={-2}
-          right={4}
+          top={-1.5}
+          right={{ base: 3, sm: 4 }}
           zIndex={10}
           bg="accent"
-          paddingX={2.5}
-          paddingY={1}
+          paddingX={2}
+          paddingY={0.5}
           radius="full"
           width="fit"
           className="shadow-sm"
@@ -56,17 +56,17 @@ export function PromoStrip({
             variant="mono"
             size="micro"
             weight="font-black"
-            className="text-bg leading-none block"
+            className="text-bg leading-none block uppercase tracking-wider"
           >
             New
           </Text>
         </Box>
       )}
 
-      <Stack direction="row" align="center" gap={4}>
+      <Stack direction="row" align="center" gap={{ base: 3, sm: 4 }}>
         <Box
-          width={12}
-          height={12}
+          width={{ base: 10, sm: 12 }}
+          height={{ base: 10, sm: 12 }}
           radius="md"
           overflow="hidden"
           className="shrink-0 bg-white/10"
@@ -87,25 +87,25 @@ export function PromoStrip({
         </Box>
 
         <Stack gap={0} grow={1} className="min-w-0">
-          <Text weight="font-bold" size="base" className="leading-tight">{title}</Text>
-          <Text size="sm" color="text-dim" className="leading-snug">{subtitle}</Text>
+          <Text weight="font-bold" size={{ base: 'sm', sm: 'base' }} className="leading-tight">{title}</Text>
+          <Text size={{ base: 'tiny', sm: 'sm' }} color="text-dim" className="leading-snug line-clamp-2">{subtitle}</Text>
         </Stack>
 
         <Stack
           direction="row"
           align="center"
-          gap={2}
+          gap={1.5}
           className="shrink-0"
         >
           <Text
             variant="mono"
-            size="tiny"
+            size={{ base: 'micro', sm: 'tiny' }}
             weight="font-bold"
             className="text-accent group-hover:underline underline-offset-4 uppercase transition-all"
           >
             {ctaLabel}
           </Text>
-          <Icon icon={ArrowRight} size="sm" color="accent" />
+          <Icon icon={ArrowRight} size="xs" className="sm:w-4 sm:h-4" color="accent" />
         </Stack>
       </Stack>
     </Box>
