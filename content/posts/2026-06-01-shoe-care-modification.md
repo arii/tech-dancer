@@ -5,7 +5,7 @@ date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Products focused on modifying, drying, and preserving dance footwear."
-image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
+image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
 affiliateIds:
   - "suede-sheets"
   - "shoe-dryer"
@@ -17,7 +17,7 @@ tags:
 
 Your shoes are your most important piece of equipment. Taking care of them (and modifying them to fit your needs) can save you money and improve your dancing.
 
-![Shoe Care & Modification](/images/gear/amazon/suede-stick-on-sheets.jpg)
+![Shoe Care & Modification](/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp)
 
 ### DIY Dance Shoes
 Not every comfortable shoe comes with a dance-ready sole. Adhesive suede sheets allow you to turn your favorite sneakers into high-performance dance shoes with just a pair of scissors.
