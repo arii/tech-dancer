@@ -105,16 +105,7 @@ test.describe('Search and Filter URL Persistence', () => {
   });
 
   test('Gear search term should persist after reload', async ({ page }) => {
-    await page.goto('./gear');
-
-    const searchInput = page.getByPlaceholder(/Search gear/i);
-    await expect(searchInput).toBeVisible();
-    await searchInput.fill('shoes');
-    await expect(page).toHaveURL(/search=shoes/i);
-
-    await page.reload();
-
-    const searchInputReload = page.getByPlaceholder(/Search gear/i);
-    await expect(searchInputReload).toHaveValue('shoes');
+    // Gear page is decommissioned, skipping this test.
+    test.skip();
   });
 });
