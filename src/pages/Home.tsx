@@ -7,6 +7,7 @@ import { TopicGrid } from '@/features/home/TopicGrid';
 import { LatestPosts } from '@/features/home/LatestPosts';
 import { DevLabCallout } from '@/features/home/DevLabCallout';
 import { HeroSection } from '@/components/ui/HeroSection';
+import { PromoStrip } from '@/components/ui/PromoStrip';
 
 export default function Home() {
   return (
@@ -26,6 +27,15 @@ export default function Home() {
         <HeroSection />
         <FeaturedGuidePanel />
       </Box>
+
+      <PromoStrip
+        imageSrc="/assets/gear/norcal-bestcal-front.webp"
+        title="Shop NorCal pride merch"
+        subtitle="Tees, hoodies, and tanks for the dance floor"
+        ctaLabel="Shop now"
+        href="/merch"
+        isNew
+      />
 
       <Stack
         gap={{ base: 8, lg: 'section-spacing' }}
