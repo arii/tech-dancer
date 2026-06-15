@@ -12,11 +12,7 @@ jobs:
       issues: write
       contents: read
     steps:
-<<<<<<< HEAD
-      - uses: actions/checkout@v6
-=======
       - uses: actions/checkout@v4
->>>>>>> 88a83c41ed (chore: Fix Node 20 Deprecation Warnings in GitHub Actions (#2279))
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
