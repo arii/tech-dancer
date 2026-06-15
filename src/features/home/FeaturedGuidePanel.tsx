@@ -4,7 +4,7 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 
 const FEATURED = {
-  eyebrow: 'FEATURED GUIDE',
+  eyebrow: 'FEATURED INSIGHT',
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/home/wcs-travel-pack.webp',

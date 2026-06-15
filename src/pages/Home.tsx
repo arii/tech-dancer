@@ -13,7 +13,7 @@ export default function Home() {
     <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
       <SEO
         title="Home"
-        description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
+        description="BoomTick: Training notes, blog insights, and practical tools for better West Coast Swing dance events."
         schema={STATIC_SCHEMAS.HOME}
       />
 
