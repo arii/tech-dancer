@@ -8,6 +8,8 @@ on:
   issue_comment:
     types: [created]
 
+env:
+
 permissions:
   contents: write
   pull-requests: write

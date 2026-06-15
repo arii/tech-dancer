@@ -12,6 +12,8 @@ on:
         required: true
         type: string
 
+env:
+
 permissions:
   contents: write
   pull-requests: write

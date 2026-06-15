@@ -4,6 +4,8 @@ on:
   issue_comment:
     types: [created]
 
+env:
+
 jobs:
   dispatch:
     if: github.event.issue.pull_request
