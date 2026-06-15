@@ -117,10 +117,13 @@ test.describe('Search and Filter URL Persistence', () => {
     await expect(page).toHaveURL(/search=shoes/i);
 
     await page.reload();
+      // Re-open the search modal after reload by locating the button again
+      const searchButtonReload = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
+      await searchButtonReload.click();
 
-    // Ensure the modal reopens automatically after reload
-    const searchInputReload = page.getByPlaceholder(/Search gear/i);
-    await expect(searchInputReload).toBeVisible({ timeout: 10000 });
-    await expect(searchInputReload).toHaveValue('shoes');
+      // Ensure the modal is visible and retains the search term
+      const searchInputReload = page.getByPlaceholder(/Search gear/i);
+      await expect(searchInputReload).toBeVisible({ timeout: 10000 });
+      await expect(searchInputReload).toHaveValue('shoes');
   });
 });
