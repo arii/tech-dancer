@@ -1,6 +1,5 @@
 name: Workflow Validation
 
-
 on:
   pull_request:
     paths:

@@ -1,5 +1,6 @@
 name: 'Auto Conflict Resolver'
 
+env:
   TARGET: ${{ inputs.target_branch || 'main' }}
   SOURCE: ${{ inputs.source_branch }}
   PR_NUMBER: ${{ inputs.pr_number || inputs.issue_number || '0' }}

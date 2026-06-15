@@ -9,7 +9,6 @@ concurrency:
   cancel-in-progress: false
 
 
-
 jobs:
   prune:
     runs-on: ubuntu-latest

@@ -5,7 +5,6 @@ on:
     types: [opened, edited]
 
 
-
 jobs:
   validate:
     runs-on: ubuntu-latest
