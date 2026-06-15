@@ -107,6 +107,10 @@ test.describe('Search and Filter URL Persistence', () => {
   test('Gear search term should persist after reload', async ({ page }) => {
     await page.goto('./gear');
 
+    // Open the search modal first
+    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
+    await searchButton.click();
+
     const searchInput = page.getByPlaceholder(/Search gear/i);
     await expect(searchInput).toBeVisible();
     await searchInput.fill('shoes');
@@ -114,7 +118,9 @@ test.describe('Search and Filter URL Persistence', () => {
 
     await page.reload();
 
+    // Ensure the modal reopens automatically after reload
     const searchInputReload = page.getByPlaceholder(/Search gear/i);
+    await expect(searchInputReload).toBeVisible({ timeout: 10000 });
     await expect(searchInputReload).toHaveValue('shoes');
   });
 });
