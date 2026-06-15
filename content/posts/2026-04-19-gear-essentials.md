@@ -6,8 +6,8 @@ updated: "2026-05-29"
 excerpt: "A practical packing checklist for West Coast Swing weekends, covering shoes, earplugs, layers, recovery, hygiene, and travel tech."
 category: "Guide"
 tags: ["guide", "travel", "gear"]
-image: "/assets/home/wcs-travel-pack.webp"
-imageAlt: "A flat-lay of WCS travel essentials including dance shoes, earplugs, and a travel steamer."
+image: "/images/gear/sketches/wcs-travel-pack.webp"
+imageAlt: "Sketch of a West Coast Swing travel pack with essential gear"
 author: "Ariel Anders, PhD"
 affiliateIds:
   - "loop-experience"

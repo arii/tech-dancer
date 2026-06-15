@@ -7,10 +7,10 @@ const FEATURED = {
   eyebrow: 'FEATURED GUIDE',
   title: 'The WCS Travel Pack',
   subtitle: 'Your checklist for a smoother, better dance weekend.',
-  image: '/assets/home/wcs-travel-pack.webp',
-  imageAlt: 'Overhead view of a West Coast Swing travel pack containing dance shoes, earplugs, and travel essentials',
+  image: "/images/gear/sketches/wcs-travel-pack.webp",
+  imageAlt: "Sketch of a West Coast Swing travel pack with essential gear",
   // Updated to the current WCS Essentials post (date‑prefixed slug)
-  href: '/blog/2026-04-19-practical-tools-essentials',
+  href: '/blog/2026-04-19-gear-essentials',
 };
 
 export function FeaturedGuidePanel() {
@@ -65,6 +65,7 @@ export function FeaturedGuidePanel() {
           Read the guide →
         </Text>
       </Stack>
+      <notice type="affiliate" id="portable-speaker" />
     </Box>
   );
 }
