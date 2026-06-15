@@ -134,6 +134,8 @@ function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
   return 'LOW';
 }
 
+const BASE_URL = process.env.PUBLIC_URL || 'https://boomtick.blog';
+
 /**
  * Reads sitemap URLs from dist/sitemap.xml
  */
@@ -148,14 +150,21 @@ function getSitemapUrls(): string[] {
   if (!matches) return [];
 
   return matches.map(m => {
-    const url = m.replace(/<\/?loc>/g, '');
+    const fullUrl = m.replace(/<\/?loc>/g, '');
     try {
-      const parsed = new URL(url);
-      return parsed.pathname || '/';
-    } catch {
-      return url.replace(/^https?:\/\/[^/]+/, '') || '/';
+      const parsed = new URL(fullUrl, BASE_URL);
+      return parsed.pathname === '' ? '/' : parsed.pathname;
+    } catch (e: any) {
+      console.warn(`Failed to parse sitemap URL: ${fullUrl}. Error: ${e.message}`);
+      if (fullUrl.startsWith(BASE_URL)) {
+        return fullUrl.replace(BASE_URL, '') || '/';
+      } else if (fullUrl.startsWith('/')) {
+        return fullUrl;
+      } else {
+        return `/${fullUrl}`;
+      }
     }
-  });
+  }).filter(Boolean) as string[];
 }
 
 /**

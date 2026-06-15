@@ -151,11 +151,6 @@ jobs:
     name: Build & E2E
     needs: lint-typecheck
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
-      env:
-        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Install system utilities
         run: |
