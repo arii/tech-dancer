@@ -5,7 +5,7 @@ date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Electronics and tools for listening to music, rehearsing, or recording practice runs."
-image: "/images/gear/amazon/portable-speaker.jpg"
+image: "/images/gear/sketches/ue-wonderboom.webp"
 affiliateIds:
   - "portable-speaker"
   - "tripod"
