@@ -5,7 +5,10 @@ on:
   schedule:
     - cron: '0 0 * * *' # Run daily at midnight
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 88a83c41ed (chore: Fix Node 20 Deprecation Warnings in GitHub Actions (#2279))
 jobs:
   audit:
     if: github.repository == 'disabled'
