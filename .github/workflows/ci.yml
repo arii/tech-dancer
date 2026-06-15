@@ -230,6 +230,56 @@ jobs:
       - run: pnpm install --frozen-lockfile --prefer-offline
       - name: Install Playwright browser
         run: pnpm run setup:playwright
+      - name: Update Impact Analysis Feedback (Initial)
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
+            if (branchName === 'main') return;
+
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open'
+            });
+            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
+
+            for (const pr of matchingPRs) {
+              const commentTag = `<!-- impact-analysis-comment-${branchName} -->`;
+              const body = [
+                `🚀 **Impact Analysis Details** (Last updated: ${pstTime} PST)`,
+                '',
+                `⏳ **Impact analysis running...**`,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                '',
+                commentTag
+              ].join('\n');
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: pr.number,
+              });
+
+              const existingComment = comments.find(c => c.body.includes(commentTag));
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
+              } else {
+                await github.rest.issues.createComment({ issue_number: pr.number, owner, repo, body });
+              }
+            }
+
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
       - name: Build Main
@@ -256,6 +306,73 @@ jobs:
             echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
             echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
           fi
+      - name: Update Impact Analysis Feedback (Final Result)
+        if: always()
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
+            if (branchName === 'main') return;
+
+            let impactBody = 'No impact report found.';
+            try {
+              if (fs.existsSync('artifacts/deployment-review.md')) {
+                impactBody = fs.readFileSync('artifacts/deployment-review.md', 'utf8');
+              } else if (fs.existsSync('artifacts/impact-analysis/impact.md')) {
+                impactBody = fs.readFileSync('artifacts/impact-analysis/impact.md', 'utf8');
+              }
+            } catch (err) {
+              console.error(err);
+            }
+
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open'
+            });
+            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
+
+            for (const pr of matchingPRs) {
+              const commentTag = `<!-- impact-analysis-comment-${branchName} -->`;
+              const statusLine = `✅ **Impact Analysis Complete**`;
+
+              const body = [
+                `🚀 **Impact Analysis Details** (Last updated: ${pstTime} PST)`,
+                '',
+                statusLine,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                '',
+                impactBody,
+                '',
+                commentTag
+              ].join('\n');
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: pr.number,
+              });
+
+              const existingComment = comments.find(c => c.body.includes(commentTag));
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
+              } else {
+                await github.rest.issues.createComment({ issue_number: pr.number, owner, repo, body });
+              }
+            }
+
       - name: Upload Deployment Review Artifacts
         uses: actions/upload-artifact@v7
         with:
