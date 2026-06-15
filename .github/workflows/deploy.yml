@@ -7,7 +7,6 @@ on:
   workflow_dispatch:
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: write
@@ -26,7 +25,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           lfs: true
 
@@ -82,7 +81,7 @@ jobs:
           jq -n --arg b "$REF_NAME" --arg s "$GITHUB_SHA" --argjson t "$(date +%s)" '{"branch":$b,"sha":$s,"deployedAt":$t}' > dist/.deploy.json
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-assets
           path: dist/
@@ -97,10 +96,10 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist-assets
           path: ../dist-assets
@@ -128,7 +127,7 @@ jobs:
             DEST_DIR="$REF_NAME"
           fi
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.git"
-          MAX_RETRIES=5
+          MAX_RETRIES=10
 
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
@@ -233,8 +232,8 @@ jobs:
               exit 0
             fi
 
-            echo "Attempt $i failed. Retrying in $((i * 5))s..."
-            sleep $((i * 5))
+            echo "Attempt $i failed. Retrying in $((i * 5 + RANDOM % 10))s..."
+            sleep $((i * 5 + RANDOM % 10))
             cd - || exit
           done
 
