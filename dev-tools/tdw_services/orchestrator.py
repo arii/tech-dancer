@@ -18,13 +18,10 @@ from dev_tools_sdk.utils.common import (
     get_gha_variable,
     set_gha_variable,
     CLIError,
-    run_command,
-    is_ollama_available,
-    extract_failing_info,
-    clean_gha_logs
+    run_command
 )
 from dev_tools_sdk.utils.ollama import is_ollama_available
-from dev_tools_sdk.utils.logs import extract_failing_info
+from dev_tools_sdk.utils.logs import extract_failing_info, clean_gha_logs
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope, get_project_config
 
