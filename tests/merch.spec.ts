@@ -50,4 +50,13 @@ test.describe('Merch Page', () => {
       await expect(link).toHaveAttribute('target', '_blank');
     }
   });
+
+  test('should display the promo strip with correct link', async ({ page }) => {
+    const promoStrip = page.locator('a[href*="collection/lead-follow-switch"]');
+    await expect(promoStrip).toBeVisible();
+    await expect(promoStrip).toHaveAttribute('rel', 'sponsored noopener noreferrer');
+    await expect(promoStrip).toHaveAttribute('target', '_blank');
+    await expect(promoStrip.getByText('The Multi-Role Collection')).toBeVisible();
+    await expect(promoStrip.getByText('Shop Collection')).toBeVisible();
+  });
 });

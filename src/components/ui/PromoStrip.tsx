@@ -30,8 +30,7 @@ export function PromoStrip({
       href={href}
       target={target}
       rel={rel}
-      display="flex"
-      align="center"
+      display="block"
       padding={3}
       radius="md"
       border
@@ -43,31 +42,7 @@ export function PromoStrip({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       )}
     >
-      {isNew && (
-        <Box
-          position="absolute"
-          top={-2}
-          right={3}
-          paddingX={2}
-          paddingY={0.5}
-          radius="full"
-          surface="accent"
-          className="shadow-sm z-10"
-        >
-          <Text
-            variant="mono"
-            size="micro"
-            weight="font-bold"
-            color="bg"
-            uppercase
-            tracking="wider"
-          >
-            New
-          </Text>
-        </Box>
-      )}
-
-      <Stack direction="row" align="center" gap={4} width="full">
+      <Stack direction="row" align="center" gap={4} width="full" minWidth={0}>
         {/* Thumbnail */}
         <Box
           width={12}
@@ -77,17 +52,20 @@ export function PromoStrip({
           shrink={0}
           border
           borderColor="line/20"
+          surface="surface-alt"
         >
           <img
             src={imageSrc}
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             loading="lazy"
+            width={48}
+            height={48}
           />
         </Box>
 
         {/* Content */}
-        <Stack gap={0.5} flex={true}>
+        <Stack gap={0.5} flex={true} minWidth={0}>
           <Text
             variant="body"
             size="sm"
@@ -123,6 +101,32 @@ export function PromoStrip({
           <ArrowRight className="w-4 h-4 text-accent transition-transform group-hover:translate-x-1" />
         </Stack>
       </Stack>
+
+      {/* New Badge */}
+      {isNew && (
+        <Box
+          position="absolute"
+          top={-1.5}
+          right={-1.5}
+          paddingX={2}
+          paddingY={0.5}
+          radius="full"
+          emphasis="primary"
+          shadow="sm"
+          className="pointer-events-none"
+          zIndex={10}
+        >
+          <Text
+            variant="mono"
+            size="micro"
+            weight="font-bold"
+            color="white"
+            uppercase
+          >
+            New
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 }
