@@ -21,10 +21,8 @@ export function PromoStrip({
   href,
   isNew
 }: PromoStripProps) {
-  // Resolve asset path using ASSET_PREFIX if it exists
-  const fullImageSrc = imageSrc.startsWith('http')
-    ? imageSrc
-    : `${ASSET_PREFIX}${imageSrc.startsWith('/') ? imageSrc.slice(1) : imageSrc}`;
+  // Simplify asset resolution using one-liner
+  const fullImageSrc = imageSrc.startsWith('http') ? imageSrc : `${ASSET_PREFIX}${imageSrc.replace(/^\//, '')}`;
 
   return (
     <Box
@@ -39,15 +37,8 @@ export function PromoStrip({
       className="group transition-all hover:bg-white/5"
     >
       {isNew && (
-        <Box
-          position="absolute"
-          zIndex={zIndex}
-          className="-top-2 right-4"
-        >
-          <Stack
-            direction="row"
-            align="center"
-            justify="center"
+        <Box position="absolute" className="-top-2 right-4 z-10">
+          <Box
             paddingX={2.5}
             paddingY={1}
             radius="full"
@@ -61,7 +52,7 @@ export function PromoStrip({
             >
               New
             </Text>
-          </Stack>
+          </Box>
         </Box>
       )}
 
@@ -84,8 +75,8 @@ export function PromoStrip({
         </Box>
 
         <Stack gap={0} grow={1} className="min-w-0">
-          <Text weight="font-bold" size="base" className="truncate">{title}</Text>
-          <Text size="sm" color="text-dim" className="truncate">{subtitle}</Text>
+          <Text weight="font-bold" size="base">{title}</Text>
+          <Text size="sm" color="text-dim">{subtitle}</Text>
         </Stack>
 
         <Stack direction="row" align="center" gap={2} className="shrink-0">
@@ -93,7 +84,7 @@ export function PromoStrip({
             variant="mono"
             size="tiny"
             weight="font-bold"
-            className="text-accent group-hover:underline"
+            className="text-accent group-hover:underline uppercase"
           >
             {ctaLabel}
           </Text>
@@ -103,5 +94,3 @@ export function PromoStrip({
     </Box>
   );
 }
-
-const zIndex = 10;
