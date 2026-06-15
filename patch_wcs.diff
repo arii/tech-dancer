@@ -1,0 +1,11 @@
+--- .github/workflows/wcs_etl.yml
++++ .github/workflows/wcs_etl.yml
+@@ -17,7 +17,7 @@
+     steps:
+       - name: Install system dependencies
+         run: |
+-          apt-get update && apt-get install -y git-lfs gh
++          sudo apt-get update && sudo apt-get install -y git-lfs gh
+           git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+       - uses: actions/checkout@v6

@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Install system dependencies - git-lfs, gh
         run: |
-          sudo apt-get update && sudo apt-get install -y git-lfs gh
+          apt-get update && apt-get install -y git-lfs gh
           git lfs install
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
@@ -50,13 +50,13 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
           # Run scraper in batches of 10 events
-          # The loop will stop when the script exits with code 100 (no new data) 
+          # The loop will stop when the script exits with code 100 (no new data)
           # or when it reaches a safety limit of 10 batches.
           for i in {1..10}; do
             echo "Starting Batch ${i}..."
             PYTHONPATH=. python etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
             EXIT_CODE=$?
-            
+
             if [ $EXIT_CODE -eq 100 ]; then
               echo "✅ No new events to process. Finishing."
               break
