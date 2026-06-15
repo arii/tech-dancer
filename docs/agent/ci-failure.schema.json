@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CIFailure",
+  "description": "Structured data representing a CI test or build failure.",
+  "type": "object",
+  "properties": {
+    "check_name": {
+      "type": "string",
+      "description": "The name of the CI check (e.g., 'Build & E2E', 'Lint', 'Type Check')."
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Path to the file where the error occurred."
+          },
+          "line": {
+            "type": "integer",
+            "description": "Line number of the error."
+          },
+          "column": {
+            "type": "integer",
+            "description": "Column number of the error."
+          },
+          "message": {
+            "type": "string",
+            "description": "The error message or failure description."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["typescript", "vitest", "playwright", "eslint", "oxlint", "build", "other"],
+            "description": "The category of the failure."
+          },
+          "context": {
+            "type": "string",
+            "description": "Additional context, such as the test name or a code snippet."
+          }
+        },
+        "required": ["file", "message", "type"]
+      }
+    },
+    "reproduction_command": {
+      "type": "string",
+      "description": "The command recommended to reproduce the failure locally."
+    }
+  },
+  "required": ["check_name", "failures"]
+}

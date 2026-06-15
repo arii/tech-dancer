@@ -357,6 +357,16 @@ def extract_failing_info(logs: str) -> List[dict]:
             "type": "vitest"
         })
 
+    # Playwright Errors
+    playwright_matches = re.finditer(r"\s*\d+\)\s+\[([^\]]+)\]\s+›\s+([^\s:]+):(\d+):(\d+)\s+›\s+(.*)", logs)
+    for m in playwright_matches:
+        findings.append({
+            "file": m.group(2),
+            "line": m.group(3),
+            "message": f"Playwright [{m.group(1)}] › {m.group(5)}",
+            "type": "playwright"
+        })
+
     return findings
 
 def clean_gha_logs(logs: str) -> str:

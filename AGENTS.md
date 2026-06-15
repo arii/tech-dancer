@@ -171,6 +171,7 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
   python3 dev-tools/td_cli.py ai repair
   python3 dev-tools/td_cli.py ai repair --worktree
   ```
+- **CI Remediation**: For failing CI checks, follow the [CI Failure Remediation Guide](docs/agent/ci-remediation.md) to use targeted testing (e.g., `pnpm run test:e2e:targeted`).
 - **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
 - **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
 - **Split Content PRs**: Do not mix content domains. Create separate PRs for:
