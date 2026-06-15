@@ -5,13 +5,6 @@ test.describe('accessibility', () => {
   test.beforeEach(async ({ page }) => {
      await page.goto('./');
      await expect(page.locator('main')).toBeVisible();
-
-     // Dismiss newsletter banner if present to avoid overlay issues during scan
-     const dismissButton = page.locator('button[aria-label="Dismiss newsletter signup"]');
-     if (await dismissButton.isVisible()) {
-       await dismissButton.click();
-       await expect(dismissButton).not.toBeVisible();
-     }
   });
 
   test('homepage should not have any automatically detectable accessibility issues', async ({ page }) => {

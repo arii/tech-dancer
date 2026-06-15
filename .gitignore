@@ -3,6 +3,7 @@ node_modules/
 .pnpm-store/
 
 # Build and Analysis
+artifacts/
 dist/
 dist-ssr/
 build/
@@ -94,3 +95,6 @@ dev-tools/logs/reviews/*.md
 .agent/workflows/ai-slop-audit-*.md
 .venv
 dev-tools/logs/audits/
+.pr_cache.pkl
+gh_2.54.0_linux_amd64/
+gh_2.54.0_linux_amd64.tar.gz

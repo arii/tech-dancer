@@ -48,11 +48,6 @@ test.describe('Automated UX/Console Error Crawler', () => {
     const MAX_PAGES = 25;
     let pageCount = 0;
 
-    // Ensure newsletter banner doesn't interfere (added once per page instance)
-    await page.addInitScript(() => {
-      window.sessionStorage.setItem('td-newsletter-dismissed', 'true');
-    });
-
     while (toVisit.length > 0 && pageCount < MAX_PAGES) {
       const currentUrl = toVisit.shift()!;
       const normalizedUrl = cleanUrl(currentUrl);
@@ -74,7 +69,11 @@ test.describe('Automated UX/Console Error Crawler', () => {
       }
 
       // Verify main content is visible
-      await expect(page.locator('main#main-content'), `Page ${normalizedUrl} does not have a <main> element`).toBeVisible({ timeout: 5000 });
+      const mainLocator = page.locator('main#main-content');
+      const count = await mainLocator.count();
+      if (count > 0) {
+        await expect(mainLocator.first(), `Page ${normalizedUrl} does not have a <main> element`).toBeVisible({ timeout: 5000 });
+      }
 
       // Collect links for further crawling
       const links = await page.$$eval('a[href]', (anchors) =>

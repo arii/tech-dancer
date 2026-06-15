@@ -9,9 +9,11 @@ const config: KnipConfig = {
   ignoreDependencies: [
     'tw-animate-css',
     'vite-plugin-pwa',
-    'workbox-window'
+    'workbox-window',
+    'dependency-cruiser',
+    '@types/pixelmatch'
   ],
-  ignoreBinaries: ['python3'],
+  ignoreBinaries: ['python3', 'semgrep'],
   ignoreExportsUsedInFile: true,
 };
 

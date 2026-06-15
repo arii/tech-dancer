@@ -12,14 +12,14 @@ permissions:
 
 jobs:
   create-pr:
-    if: contains(github.event.issue.title, 'Draft:') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
+    if: startsWith(github.event.issue.title, 'Draft') && contains(github.event.issue.title, ':') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 
@@ -34,7 +34,8 @@ jobs:
           import os
 
           body = os.environ['ISSUE_BODY']
-          title = os.environ['ISSUE_TITLE'].replace('Draft: ', '').strip()
+          title = os.environ['ISSUE_TITLE']
+          title = re.sub(r'^Draft[^:]*:\s*', '', title).strip()
 
           match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
           if not match:

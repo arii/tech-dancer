@@ -171,6 +171,7 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
   python3 dev-tools/td_cli.py ai repair
   python3 dev-tools/td_cli.py ai repair --worktree
   ```
+- **CI Remediation**: For failing CI checks, follow the [CI Failure Remediation Guide](docs/agent/ci-remediation.md) to use targeted testing (e.g., `pnpm run test:e2e:targeted`).
 - **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
 - **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
 - **Split Content PRs**: Do not mix content domains. Create separate PRs for:
@@ -191,15 +192,17 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
 
 ## 22) Setup (Jules Environment)
 
-To prepare the base environment (Node.js/pnpm):
+To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright), run the consolidated setup script:
 
 ```bash
-./dev-tools/snapshot.sh
+./setup-agent.sh
 ```
+
+This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md).
 
 # Codex / Agent Runtime Rules
 
-This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md) and [docs/runtime-consistency.md](./docs/runtime-consistency.md).
+This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md).
 
 Before installing, testing, building, or editing dependencies, run:
 

@@ -8,6 +8,7 @@ A Model Context Protocol (MCP) server designed to empower AI agents with structu
 - **GitHub Ops**: Search PRs, get diffs, detect merge conflicts, open replacement PRs, and triage comments.
 - **Repo Ops**: Inspect changed files, extract package scripts, map application routes, and read CI logs.
 - **Validation**: Isolated repair branch creation, and running verification suites (Tests, Lighthouse, Playwright).
+- **Jules Operations**: Create, monitor, and interact with macro-agent Jules sessions.
 
 ### 📄 Resources
 - `repo://package-json`: Access root package manifest.
@@ -18,10 +19,14 @@ A Model Context Protocol (MCP) server designed to empower AI agents with structu
 
 ### 🧠 Prompts
 - `prompt://conflict-scout`: Scout for PRs needing rescue.
+- `prompt://pr-consolidation`: Guidelines for analyzing and proposing consolidation of overlapping PRs.
 - `prompt://repo-context`: Gather context before repair.
 - `prompt://repair-agent`: Apply minimal safe fixes.
 - `prompt://verifier-agent`: Prove the repair works.
 - `prompt://pr-writer`: Write professional replacement PR summaries.
+
+### 📝 Scripts
+- `scripts/create_instructions.sh`: Generates the `pr-consolidation.prompt.md` instructions file based on PR overlaps.
 
 ## Safety First
 - **Isolated Worktrees**: All repair and merge operations happen in temporary git worktrees to prevent mutating your local working directory.

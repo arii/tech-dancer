@@ -12,6 +12,11 @@
         var l = window.location;
         
         // Prevent infinite redirect loops
+        // Do not redirect for .json files
+        if (l.pathname.endsWith(".json")) {
+          return;
+        }
+
         if (l.search.includes('?/')) {
           return;
         }

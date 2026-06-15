@@ -1,6 +1,4 @@
-import { MessageCircle } from 'lucide-react';
 import { useState, useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
@@ -9,8 +7,6 @@ import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
-import { cn } from '@/lib/utils';
-import { stroke } from '@/styles/design-tokens';
 import { FilterButton } from '@/components/ui/FilterButton';
 import { PRINTFUL_REFERRAL } from '@/config/constants';
 
@@ -150,52 +146,14 @@ export default function Merch() {
         )}
 
         {/* Footer Callouts */}
-        <Grid cols={{ base: 1, lg: 2 }} gap={8} marginTop={8} width="full" minWidth="0">
-          {/* Design Suggestions */}
-          <Box padding={8} radius="lg" border surface="card">
-            <Stack gap={6}>
-              <Box
-                padding={3}
-                radius="full"
-                width="fit"
-                className="bg-accent/10 text-accent"
-              >
-                <MessageCircle className={cn("w-6 h-6", stroke.thick)} />
-              </Box>
-              <Stack gap={2}>
-                <Text
-                  variant="headline"
-                  size="xl"
-                  weight="font-bold"
-                  uppercase
-                  tracking="tight"
-                >
-                  Have a Design Idea?
-                </Text>
-                <Text variant="body" size="sm" color="dim" leading="relaxed">
-                  We're always looking for new ways to represent the WCS community. If you have a concept for a shirt or accessory, let us know!
-                </Text>
-              </Stack>
-              <Button
-                as={NavLink}
-                to="/contact"
-                variant="outline"
-                className="w-fit"
-              >
-                Submit Suggestion
-              </Button>
-            </Stack>
-          </Box>
-
-          <Box padding={8} radius="lg" border surface="card">
-             <Stack gap={6}>
-                <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
-                  Referral Discount
-                </Text>
-                <ReferralBanner layout="expanded" />
-             </Stack>
-          </Box>
-        </Grid>
+        <Box padding={8} radius="lg" border surface="card" marginTop={8} width="full">
+           <Stack gap={6}>
+              <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
+                Referral Discount
+              </Text>
+              <ReferralBanner layout="expanded" />
+           </Stack>
+        </Box>
       </Stack>
     </Box>
   );

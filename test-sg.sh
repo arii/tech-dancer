@@ -1,1 +1,2 @@
-semgrep --config=auto boomtick-mcp/src/
+#!/bin/bash
+pnpm run audit:semgrep

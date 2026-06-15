@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { useState } from 'react';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -10,7 +10,6 @@ import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
-import { EditorialNewsletter } from '@/components/editorial/EditorialNewsletter';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -77,7 +76,31 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           tags={post.tags}
           onShare={share}
           isShared={isCopied}
-          hero={post.image ? <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} /> : undefined}
+          hero={
+            post.image ? (
+              <Stack gap={4}>
+                {post.imageBack ? (
+                  <Grid cols={{ base: 1, md: 2 }} gap={4}>
+                    <Stack gap={2}>
+                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
+                      <EditorialHero src={post.image} alt={`${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
+                    </Stack>
+                    <Stack gap={2}>
+                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
+                      <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
+                    </Stack>
+                  </Grid>
+                ) : (
+                  <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
+                )}
+                {post.image?.includes('/sketches/') && (
+                  <Text variant="mono" size="xs" color="dim" className="italic">
+                    Illustration
+                  </Text>
+                )}
+              </Stack>
+            ) : undefined
+          }
         />
       }
       sidebar={
@@ -98,7 +121,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       footer={
         <Stack gap={12}>
           <EditorialRelated items={relatedItems} />
-          <EditorialNewsletter />
         </Stack>
       }
     >

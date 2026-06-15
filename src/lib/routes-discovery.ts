@@ -36,12 +36,15 @@ function getFileLastMod(filePath: string): string {
  */
 export function getAllRoutes() {
   // 3. Dynamic content routes discovered from file system
-  const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) =>
-    getContentSlugs(dir, prefix).map(item => ({
-      path: item.slug,
-      lastmod: item.lastmod
-    }))
-  );
+  const contentRoutes = Object.entries(CONTENT_DIR_MAP).flatMap(([prefix, dir]) => {
+    const actualPrefix = prefix === '/blog-internal' ? '/blog' : prefix;
+    return getContentSlugs(dir, actualPrefix)
+      .filter(item => !item.slug.startsWith('/gear') && !item.slug.startsWith('/events'))
+      .map(item => ({
+        path: item.slug,
+        lastmod: item.lastmod
+      }));
+  });
 
   // Group content by directory to find the latest modification for listing pages
   const contentLastModMap: Record<string, string> = {};
@@ -56,7 +59,7 @@ export function getAllRoutes() {
   // 1. Static routes from configuration (excluding parameterized and catch-all)
   // Use canonicalPath if available
   const allStaticRoutes = routes
-    .filter(r => r.path !== '*' && !r.path.includes(':'))
+    .filter(r => r.path !== '*' && !r.path.includes(':') && !r.path.startsWith('/gear') && !r.path.startsWith('/events'))
     .map(r => {
       let lastmod;
       if (contentLastModMap[r.path]) {

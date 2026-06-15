@@ -2,10 +2,10 @@ import { Box } from '@/layouts/Primitives';
 import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import { Resource, readingTime } from '@/lib/content';
+import { Post, readingTime } from '@/lib/content';
 
 interface FullPreviewProps {
-  post: Resource;
+  post: Post;
   onBack: () => void;
 }
 

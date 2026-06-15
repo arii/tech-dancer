@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
   Camera, CheckCircle, RefreshCw,
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
@@ -88,6 +88,80 @@ function CopyPromptButton({ suggestion }: { suggestion: string }) {
   );
 }
 
+function ViewportFrame({ url, width, height }: { url: string; width: number; height: number }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const containerHeight = containerRef.current.offsetHeight;
+        const scaleX = containerWidth / width;
+        const scaleY = containerHeight / height;
+        setScale(Math.min(scaleX, scaleY, 1));
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, [width, height]);
+
+  return (
+    <Box
+      ref={containerRef}
+      width="full"
+      height="full"
+      display="flex"
+      align="center"
+      justify="center"
+      overflow="hidden"
+      position="relative"
+      className="bg-surface rounded-xl shadow-2xl border border-line"
+    >
+      {isLoading && (
+        <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
+          <Stack align="center" gap={3}>
+             <Icon icon={RefreshCw} size="md" className="animate-spin text-accent" />
+             <Text variant="sans" size="xs" color="dim" weight="font-bold" uppercase tracking="wider">Loading Preview...</Text>
+          </Stack>
+        </Box>
+      )}
+      <Box
+        as="iframe"
+        src={url}
+        title="Viewport Preview"
+        onLoad={() => setIsLoading(false)}
+        width={width}
+        height={height}
+        className="border-none bg-white origin-center"
+        style={{ // impeccable-ignore - Dynamic scaling for iframe preview
+          transform: `scale(${scale})`,
+          width: `${width}px`,
+          height: `${height}px`,
+          minWidth: `${width}px`,
+          minHeight: `${height}px`,
+        }}
+      />
+      <Box position="absolute" bottom={4} right={4} maxWidth={48} pointerEvents="none">
+         <Box
+           paddingX={2}
+           paddingY={1}
+           radius="sm"
+           border={true}
+           className="bg-bg/80 backdrop-blur-sm"
+         >
+           <Text variant="sans" size="xs" color="dim">
+             ⚠️ Some sites block embedding via CORS.
+           </Text>
+         </Box>
+      </Box>
+    </Box>
+  );
+}
+
 export default function UXAuditor() {
   const toolConfig = RESEARCH_TOOLS.find(t => t.id === 'ux-auditor');
 
@@ -117,8 +191,8 @@ export default function UXAuditor() {
         canonical={`${BASE_URL}${toolConfig?.canonicalPath || '/ux-auditor'}`}
       />
       <Stack
-        direction={{ base: 'col', md: 'row' }}
-        align={{ base: 'start', md: 'center' }}
+          direction={{ base: 'col', xl: 'row' }}
+          align={{ base: 'stretch', xl: 'center' }}
         justify="between"
         gap={6}
         border="b" paddingBottom={6}
@@ -131,7 +205,7 @@ export default function UXAuditor() {
           />
         </Box>
 
-        <Stack gap={4}>
+        <Stack gap={4} as="form" autoComplete="off" onSubmit={(e) => { e.preventDefault(); runUXAudit(url); }}>
           <Stack
             direction="row"
             align="center"
@@ -141,12 +215,17 @@ export default function UXAuditor() {
           >
             <Box
               as="input"
-              type="text"
+              id="audit-url"
+              name="audit-url"
+              type="url"
+              autoComplete="off"
               value={url}
               title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-              width={{ base: "full", sm: 64, md: 80 }}
+              onFocus={(e) => e.target.select()}
+              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+                flex={1}
+                minWidth={0}
               paddingX={4}
               paddingY={2}
               radius="lg"
@@ -180,9 +259,13 @@ export default function UXAuditor() {
               <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
               <Box
                 as="input"
+              id="audit-api-key"
+              name="audit-api-key"
                 type="password"
+              autoComplete="new-password"
                 value={customApiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
+                onFocus={(e) => e.target.select()}
                 className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
                 flex={1}
                 paddingX={4}
@@ -211,27 +294,36 @@ export default function UXAuditor() {
               ⚠️ API keys are stored in your browser's session storage. They are cleared when you close the tab. Plain-text storage is not fully secure; use only on trusted devices.
             </Text>
           </Stack>
-          <Stack
-            direction="row"
-            align="center"
-            gap={3}
-            padding={2}
-            className={cardVariants()}
-          >
-            <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
-            <Box
-              as="input"
-              type="text"
-              value={snapshotService}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
-              flex={1}
-              paddingX={4}
-              paddingY={2}
-              radius="lg"
-              placeholder="Custom service URL with {url}, {width}, {height} (optional)"
-              aria-label="Snapshot Service URL"
-            />
+          <Stack gap={1}>
+            <Stack
+              direction="row"
+              align="center"
+              gap={3}
+              padding={2}
+              className={cardVariants()}
+            >
+              <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">SNAPSHOT SERVICE</Text>
+              <Box
+                as="input"
+                id="audit-snapshot-url"
+                name="audit-snapshot-url"
+                type="url"
+                autoComplete="off"
+                value={snapshotService}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
+                onFocus={(e) => e.target.select()}
+                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                flex={1}
+                paddingX={4}
+                paddingY={2}
+                radius="lg"
+                placeholder="Custom service URL with {url}, {width}, {height} (optional)"
+                aria-label="Snapshot Service URL"
+              />
+            </Stack>
+            <Text variant="sans" size="xs" color="dim" paddingX={2} marginTop={1}>
+              Use {"{url}"}, {"{width}"}, and {"{height}"} as placeholders. Example: https://api.service.com?url={"{url}"}&size={"{width}"}x{"{height}"}
+            </Text>
           </Stack>
         </Stack>
       </Stack>
@@ -284,7 +376,8 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth={0}>
+        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full" style={{ gridColumn: 'span 3 / span 3' }} // impeccable-ignore - Override browser grid collapse issues identified in audit
+        >
           {activeReport ? (
             <>
               <Stack
@@ -301,12 +394,13 @@ export default function UXAuditor() {
                     {activeReport.url}
                   </Text>
                 </Stack>
-                <Stack direction="row" gap={3} shrink={0}>
+                <Stack direction={{ base: 'col', sm: 'row' }} gap={3} shrink={0} width={{ base: 'full', sm: 'auto' }} align={{ base: 'stretch', sm: 'center' }}>
                   <Box
                     as="button"
                     onClick={copyMarkdown}
                     display="flex"
                     align="center"
+                    justify="center"
                     gap={2}
                     className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
@@ -314,6 +408,7 @@ export default function UXAuditor() {
                     paddingX={4}
                     paddingY={2}
                     radius="xl"
+                    width={{ base: 'full', sm: 'auto' }}
                   >
                     {isCopiedMarkdown ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={Copy} size="sm" />}
                     {isCopiedMarkdown ? 'Copied' : 'Copy MD'}
@@ -324,11 +419,13 @@ export default function UXAuditor() {
                     disabled={activeReport.status !== 'completed' || isExportingToGithub}
                     display="flex"
                     align="center"
+                    justify="center"
                     gap={2}
                     className={actionButtonVariants({ variant: "primary" })}
                     paddingX={6}
                     paddingY={2}
                     radius="xl"
+                    width={{ base: 'full', sm: 'auto' }}
                   >
                     {isExportingToGithub ? <Icon icon={RefreshCw} size="sm" className="animate-spin" /> : <Icon icon={Github} size="sm" />}
                     <span className="whitespace-nowrap">{isExportingToGithub ? 'Exporting...' : 'Export to GitHub Issue'}</span>
@@ -339,7 +436,6 @@ export default function UXAuditor() {
               <Stack gap={8}>
                 {VIEWPORTS.map(vp => {
                   const data = activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis;
-                  const imgUrl = activeReport[`image_${vp.name.toLowerCase()}`];
 
                   return (
                     <Box key={vp.name} className={cardVariants({ overflow: "hidden" })}>
@@ -359,14 +455,12 @@ export default function UXAuditor() {
 
                       <Stack direction={{ base: 'col', md: 'row' }} width="full">
                         <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
-                          {imgUrl ? (
-                            <img
-                              src={imgUrl}
-                              alt={`${vp.name} snapshot`}
-                              loading="lazy"
-                              data-testid="ux-analysis-snapshot"
-                              className="w-full h-auto rounded-xl shadow-2xl border border-surface object-contain bg-surface max-h-96"
-                              onError={(e) => { (e.target as HTMLImageElement).src = `https://placehold.co/${vp.width}x${vp.height}/e2e8f0/64748b?text=Snapshot+Unavailable`; }}
+                          {activeReport.url ? (
+                            <ViewportFrame
+                              key={`${vp.name}-${activeReport.url}`}
+                              url={activeReport.url}
+                              width={vp.width}
+                              height={vp.height}
                             />
                           ) : (
                             <Stack align="center" justify="center" color="dim" className="text-center">
@@ -415,7 +509,7 @@ export default function UXAuditor() {
                               <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2}>
                                 <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                                         <Box flex={1} minWidth="0">
-                                          <Text variant="sans" size="xs" weight="font-bold" className="break-words whitespace-pre-wrap line-clamp-4">
+                                          <Text variant="sans" size="xs" weight="font-bold" clamp={4} className="break-all whitespace-pre-wrap">
                                             {imp.suggestion}
                                           </Text>
                                           {imp.element === "Manual Audit Required" && (

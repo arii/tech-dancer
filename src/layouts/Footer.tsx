@@ -15,7 +15,6 @@ export function Footer() {
   }, []);
 
   const legalLinks = [
-    { label: 'Contact', to: '/contact' },
     { label: 'Privacy', to: '/about#privacy' },
     { label: 'Terms', to: '/about#terms' },
   ];
@@ -30,29 +29,32 @@ export function Footer() {
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={3} wrap>
-          <Text variant="mono" size="tiny" color="dim" weight="font-semibold" className="tracking-widest shrink-0" data-testid="footer-copyright">
+          <Text variant="mono" size="tiny" color="dim" weight="font-semibold" tracking="widest" shrink={0} data-testid="footer-copyright">
             © 2026 BOOMTICK.BLOG
           </Text>
-          <Box className="hidden md:block w-px h-3 bg-white/10" />
+          <Box display={{ base: 'none', md: 'block' }} width="px" height={3} className="bg-white/10" />
           <Text size="micro" color="dim" opacityVariant="heavy" className="hover:opacity-100 transition-opacity whitespace-nowrap">
-            <span className="font-mono tracking-wider uppercase">
+            <Text variant="mono" tracking="wider" uppercase>
               {isDev ? 'dev' : `v${appVersion}`} (
-              <a
+              <Box
+                as="a"
                 href={`https://github.com/arii/tech-dancer/commit/${commitSha}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-accent transition-colors underline decoration-white/20 underline-offset-2"
+                display="inline-block"
+                paddingY={{ base: 4, sm: 0 }}
+                className="hover:text-accent transition-colors underline decoration-line/40"
               >
                 {commitSha.substring(0, 7)}
-              </a>
+              </Box>
               )
-            </span>
+            </Text>
             {lastUpdated && ` · Last updated ${lastUpdated}`}
           </Text>
         </Stack>
 
         <Box>
-          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" className="not-italic">
+          <Text variant="body" size="xs" color="dim" weight="font-medium" opacityVariant="heavy" italic={false}>
             {DISCLOSURE_TEXT}
           </Text>
         </Box>
@@ -64,16 +66,16 @@ export function Footer() {
               as={NavLink}
               to={link.to}
               variant="ghost"
-              paddingX={3}
-              paddingY={1.5}
-              className="active:scale-95"
+              paddingX={{ base: 4, md: 3 }}
+              paddingY={{ base: 5, md: 2 }}
+              whileTap={{ scale: 0.95 }}
             >
               <Text
                 variant="mono"
                 size="xs"
                 uppercase
                 weight="font-bold"
-                className="tracking-widest"
+                tracking="widest"
               >
                 {link.label}
               </Text>
