@@ -42,4 +42,6 @@ export interface ProductCatalogItem {
   eventTags?: string[];
   useCases?: ProductUseCase[];
   disclosure: 'affiliate' | 'owned-printful' | 'none';
+  isBundle?: boolean;
+  bundleNote?: string;
 }

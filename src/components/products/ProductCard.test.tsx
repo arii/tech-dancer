@@ -76,4 +76,26 @@ describe('ProductCard', () => {
     const title = screen.getByText(item.title);
     expect(title.classList.contains('text-xl')).toBe(true); // lg:text-2xl is handled by responsive tokens which might not show in vitest-dom as expected, but we check the base
   });
+
+  it('renders bundle badge when isBundle is true', () => {
+    const bundleItem = {
+      ...item,
+      isBundle: true,
+      bundleNote: 'Includes matching sticker'
+    };
+    render(<ProductCard item={bundleItem} />);
+
+    const badge = screen.getByText('Bundle');
+    expect(badge).toBeTruthy();
+
+    // Check if the parent Box (with the bundle-badge class) has the title attribute
+    const badgeContainer = badge.closest('.bundle-badge');
+    expect(badgeContainer).toBeTruthy();
+    expect(badgeContainer?.getAttribute('title')).toBe('Includes matching sticker');
+  });
+
+  it('does not render bundle badge when isBundle is false or missing', () => {
+    render(<ProductCard item={item} />);
+    expect(screen.queryByText('Bundle')).toBeNull();
+  });
 });

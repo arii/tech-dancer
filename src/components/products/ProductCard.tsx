@@ -36,6 +36,23 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
       />
 
       <Stack gap={isFeatured ? 4 : 3}>
+        {item.isBundle && (
+          <Box
+            className="bundle-badge"
+            title={item.bundleNote}
+            paddingX={2}
+            paddingY={0.5}
+            radius="md"
+            surface="accent"
+            width="fit"
+            border
+            borderColor="accent/20"
+          >
+            <Text size="micro" weight="font-bold" uppercase tracking="wider" color="inherit">
+              Bundle
+            </Text>
+          </Box>
+        )}
         <Text
           as="a"
           href={item.href}
