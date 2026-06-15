@@ -104,7 +104,7 @@ test.describe('Search and Filter URL Persistence', () => {
     }
   });
 
-  test('Gear search term should persist after reload', async ({ page }) => {
+  test('Gear search term should persist after reload', async () => {
     // Gear page is decommissioned, skipping this test.
     test.skip();
   });
