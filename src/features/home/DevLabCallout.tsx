@@ -19,7 +19,7 @@ export function DevLabCallout() {
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed">
-        Welcome to my DevAI Portfolio. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+        A live testbed for agentic dev workflows — multi-agent pipelines, CI auditing, and evals running on this site.
       </Text>
 
       {/* CTA */}
