@@ -8,6 +8,7 @@ on:
       - "docs/**"
   workflow_dispatch:
 
+
 permissions:
   contents: read
 

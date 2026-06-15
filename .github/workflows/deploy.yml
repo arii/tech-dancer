@@ -6,6 +6,7 @@ on:
       - '**'
   workflow_dispatch:
 
+
 permissions:
   contents: write
   pages: write
@@ -125,7 +126,7 @@ jobs:
             DEST_DIR="$REF_NAME"
           fi
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.git"
-          MAX_RETRIES=10
+          MAX_RETRIES=5
 
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
@@ -230,8 +231,8 @@ jobs:
               exit 0
             fi
 
-            echo "Attempt $i failed. Retrying in $((i * 5 + RANDOM % 10))s..."
-            sleep $((i * 5 + RANDOM % 10))
+            echo "Attempt $i failed. Retrying in $((i * 5))s..."
+            sleep $((i * 5))
             cd - || exit
           done
 
@@ -240,7 +241,7 @@ jobs:
 
       - name: Update Deployment Feedback (Initial Push)
         if: env.PUSH_COMPLETE == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -296,7 +297,7 @@ jobs:
             }
 
       - name: Update Deployment Feedback (Final Result)
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
