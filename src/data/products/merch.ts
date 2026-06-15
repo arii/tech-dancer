@@ -15,6 +15,4 @@ export const MERCH_CATALOG_PRODUCTS: ProductCatalogItem[] = MERCH_PRODUCTS.map((
   roles: item.roles,
   tags: item.tags,
   disclosure: 'owned-printful',
-  isBundle: item.isBundle,
-  bundleNote: item.bundleNote,
 }));
