@@ -1,4 +1,4 @@
-import { Home, BookOpen, Database, User, Tag } from 'lucide-react';
+import { Home, BookOpen, ShoppingBag, Database, User, Send, Calendar, Tag } from 'lucide-react';
 import { RouteConfig } from '@/lib/types/routes';
 
 import { LucideIcon } from 'lucide-react';
@@ -29,27 +29,31 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/gear',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
+    lazy: () => import('@/pages/Gear').then(m => ({ Component: m.default })),
+    label: 'Tools',
+    icon: ShoppingBag,
+    skeleton: 'grid',
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/gear/:slug',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
+    lazy: () => import('@/features/lab/GearPost').then(m => ({ Component: m.default })),
+    skeleton: 'post'
   },
   {
     path: '/events',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
+    lazy: () => import('@/features/events/EventsFeed').then(m => ({ Component: m.default })),
+    label: 'Insights',
+    icon: Calendar,
+    skeleton: 'grid',
+    isMobileVisible: true,
+    isTopNav: true
   },
   {
     path: '/events/:slug',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
+    lazy: () => import('@/features/events/EventGuide').then(m => ({ Component: m.default })),
+    skeleton: 'post'
   },
   {
     path: '/research',
@@ -86,6 +90,18 @@ export const routes: RouteConfig[] = [
     icon: User,
     skeleton: 'simple',
     isTopNav: true
+  },
+  {
+    path: '/contact',
+    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+    label: 'Contact',
+    icon: Send,
+    skeleton: 'simple'
+  },
+  {
+    path: '/subscribe',
+    lazy: () => import('@/pages/Contact').then(m => ({ Component: m.default })),
+    skeleton: 'simple'
   },
   {
     path: '/preview',

@@ -33,7 +33,7 @@ export default function Toolbox() {
       <Box as="header" marginBottom={8}>
         <PageHeader
           label="THE TOOLBOX"
-          title="Gear Reviews"
+          title="Tools"
           description="Rigorous testing and honest takes on the gear that keeps you moving."
         />
 
@@ -45,7 +45,7 @@ export default function Toolbox() {
             <SearchBox
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search gear..."
+              placeholder="Search tools..."
             />
             <ViewToggle view={view} onChange={setView} />
           </Box>
@@ -94,8 +94,8 @@ export default function Toolbox() {
       {allFilteredItems.length === 0 && (
         <EmptyState
           icon={<Search className="w-12 h-12" />}
-          title="No gear found"
-          description={`No gear found matching current filters.`}
+          title="No tools found"
+          description={`No tools found matching current filters.`}
         />
       )}
     </Box>

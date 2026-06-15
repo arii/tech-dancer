@@ -1,12 +1,20 @@
 export const CONTENT_METADATA_KEYS = [
   'type', 'slug', 'title', 'date', 'author', 'authorAvatar', 'category', 'excerpt',
   'content', 'image', 'tags', 'affiliateIds', 'rating', 'verdict', 'priceCategory',
-  'updatedDate', 'durability', 'value', 'specs', 'basePath', 'readingTime', 'status', 'readTime',
+  'updatedDate', 'durability', 'value', 'specs', 'location', 'city', 'schedule',
+  'description', 'link', 'url', 'heroImage', 'whyAttending', 'startDate',
+  'earlyBirdDate', 'registrationDeadline', 'hotelCutoffDate', 'packingReminderDate',
+  'theme', 'gear', 'themeName', 'themeLabel', 'themeDescription', 'themeColors',
+  'themeOutfitIds', 'themeAccessoryIds', 'gearOutfitIds', 'gearAccessoryIds',
+  'gearShoeIds', 'gearEssentialIds', 'gearTravelIds', 'relatedEvents',
+  'basePath', 'readingTime', 'status', 'readTime',
   // Additional post and resource keys to prevent DOM property pollution
   'draft', 'imageAlt', 'updated', 'imageBack', 'seoTitle', 'seoDescription',
   'shopUrl', 'internalSku', 'printfulProductId', 'printfulVariantIds',
   'displayMode', 'featuredSide', 'productType', 'fulfillmentType', 'provider',
   'shippingPolicySummary', 'returnPolicySummary', 'affiliateProvider',
   'affiliateDisclosure', 'priceDisplayPolicy', 'availabilityDisplayPolicy',
-  'recommendedFor', 'bestFor', 'imageFit'
+  'recommendedFor', 'eventUseCase', 'region', 'gearOutfitDescription',
+  'gearAccessoryDescription', 'gearShoeDescription', 'gearEssentialDescription',
+  'gearTravelDescription', 'bestFor', 'imageFit'
 ] as const;

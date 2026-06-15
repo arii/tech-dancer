@@ -1,10 +1,16 @@
-
 import { NavLink } from 'react-router-dom';
 import { Box, Text, Grid } from '@/layouts/Primitives';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { ASSET_PREFIX } from '@/config/constants';
 
-const PICKS = [
+interface PickItem {
+  label: string;
+  image?: string;
+  imageText?: string;
+  href: string;
+}
+
+const PICKS: PickItem[] = [
   { label: 'Earplugs', image: '/images/gear/sketches/loop-earplugs.webp', href: '/gear/2023-10-01-loop-earplugs' },
   { label: 'Steamer', image: '/images/gear/sketches/travel-steamer.webp', href: '/gear/2023-11-01-travel-steamer' },
   { label: 'Portable Speaker', image: '/images/gear/sketches/ue-wonderboom.webp', href: '/gear/2024-01-01-portable-speaker' },
@@ -12,11 +18,11 @@ const PICKS = [
 
 export function GearShelf() {
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
       {/* Header — no card wrapper, just section heading */}
       <Box display="flex" align="center" justify="between" marginBottom={3}>
         <Text as="h2" variant="headline" size="2xl" weight="font-black">
-          Gear for the Weekend
+          Tools for the Weekend
         </Text>
         <Text
           as={NavLink}
@@ -29,7 +35,7 @@ export function GearShelf() {
           paddingX={{ base: 4, sm: 0 }}
           className="shrink-0 hover:underline"
         >
-          See all picks →
+          See all tools →
         </Text>
       </Box>
       <Text variant="body" size="sm" color="dim" marginBottom={5}>
