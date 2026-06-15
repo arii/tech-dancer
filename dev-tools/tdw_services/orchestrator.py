@@ -21,7 +21,8 @@ from utils import (
     CLIError,
     run_command,
     is_ollama_available,
-    extract_failing_info
+    extract_failing_info,
+    clean_gha_logs
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope, get_project_config
@@ -556,8 +557,9 @@ class Orchestrator:
                                 detected_errors.append(error_msg)
 
                         # Extract a snippet of the logs (last 50 lines or search for 'error')
-                        log_lines = logs.splitlines()
-                        error_lines = [l for l in log_lines if 'error' in l.lower() or 'fail' in l.lower()]
+                        cleaned_logs = clean_gha_logs(logs)
+                        log_lines = cleaned_logs.splitlines()
+                        error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
                         snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
                         context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
             else:
@@ -772,7 +774,22 @@ class Orchestrator:
         for run in check_runs:
             if run.get('conclusion') == 'failure':
                 logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{logs[-2000:]}") # Last 2000 chars
+
+                # Clean logs and take a smart snippet
+                cleaned_logs = clean_gha_logs(logs)
+
+                # Prioritize lines with error signatures
+                important_lines = []
+                for line in cleaned_logs.splitlines():
+                    if any(x in line.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴']):
+                        important_lines.append(line)
+
+                if important_lines:
+                    snippet = "\n".join(important_lines[-30:]) # Keep last 30 important lines
+                else:
+                    snippet = cleaned_logs[-2000:] # Fallback to tail of cleaned logs
+
+                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{snippet}")
 
                 findings = extract_failing_info(logs)
                 for f in findings:
