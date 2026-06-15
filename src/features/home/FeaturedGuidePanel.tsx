@@ -9,7 +9,7 @@ const FEATURED = {
   subtitle: 'Your checklist for a smoother, better dance weekend.',
   image: '/assets/home/wcs-travel-pack.webp',
   imageAlt: 'Overhead view of a West Coast Swing travel pack containing dance shoes, earplugs, and travel essentials',
-  href: '/blog/2026-04-19-gear-essentials',
+  href: '/blog/2026-04-19-practical-tools-essentials',
 };
 
 export function FeaturedGuidePanel() {

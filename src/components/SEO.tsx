@@ -10,6 +10,7 @@ interface SEOProps {
   type?: 'website' | 'article' | 'profile';
   image?: string;
   canonical?: string;
+  noindex?: boolean;
   schema?: Record<string, unknown> | Record<string, unknown>[];
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   googleVerification?: string;
@@ -22,6 +23,7 @@ export function SEO({
   type = 'website',
   image,
   canonical,
+  noindex,
   schema,
   jsonLd,
   googleVerification = GOOGLE_SITE_VERIFICATION
@@ -63,6 +65,7 @@ export function SEO({
     <Helmet>
       {/* Standard metadata */}
       {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
       <title>{displayTitle}</title>
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}

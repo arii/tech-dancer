@@ -12,6 +12,11 @@ export default function ComponentPreview() {
       <Stack gap={12}>
         <Text variant="headline" size="4xl">Component Preview</Text>
 
+        <Box border padding={6} radius="lg">
+          <Text variant="body" size="sm">
+            Add components here to preview them during development.
+          </Text>
+        </Box>
       </Stack>
     </Box>
   );

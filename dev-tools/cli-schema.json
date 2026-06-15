@@ -1,0 +1,116 @@
+{
+  "tool_name": "td_cli.py",
+  "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
+  "base_command": "python3 dev-tools/td_cli.py",
+  "subcommands": {
+    "gh conflicts": {
+      "description": "Runs a global check across the repository to detect any active PR merge conflicts.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh conflicts",
+      "required_flags": [],
+      "expected_output": "A list of conflicting files and branches. Does not resolve conflicts."
+    },
+    "gh detect-conflicts": {
+      "description": "Detects conflicts for a single, specific Pull Request.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh detect-conflicts --pr <PR_NUMBER>",
+      "required_flags": [
+        {
+          "flag": "--pr",
+          "type": "integer",
+          "description": "The GitHub Pull Request ID (e.g., 2280)"
+        }
+      ]
+    },
+    "gh status-board": {
+      "description": "Retrieves the current high-level status board for open PRs and background tasks.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh status-board",
+      "required_flags": []
+    },
+    "gh overlaps": {
+      "description": "Identify and propose consolidation of PRs with high functional or structural overlap.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh overlaps --limit <LIMIT>",
+      "required_flags": [
+        {
+          "flag": "--limit",
+          "type": "integer",
+          "description": "Maximum number of open PRs to process (default: 50)."
+        }
+      ],
+      "optional_flags": [
+        {
+          "flag": "--no-cache",
+          "type": "boolean",
+          "description": "Bust the cache and force fetching data from GitHub."
+        }
+      ]
+    },
+    "gh audit-pr": {
+      "description": "Perform an automated audit on a specific Pull Request.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute",
+      "required_arguments": [
+        {
+          "name": "pr_number",
+          "type": "integer",
+          "description": "The GitHub Pull Request ID."
+        }
+      ],
+      "optional_flags": [
+        {
+          "flag": "--fetch",
+          "type": "boolean",
+          "description": "Fetch PR details and diffs."
+        },
+        {
+          "flag": "--audit",
+          "type": "boolean",
+          "description": "Run heuristic-based audit."
+        },
+        {
+          "flag": "--submit",
+          "type": "boolean",
+          "description": "Submit the audit results as a comment."
+        },
+        {
+          "flag": "--cleanup",
+          "type": "boolean",
+          "description": "Clean up temporary audit files."
+        },
+        {
+          "flag": "--execute",
+          "type": "boolean",
+          "description": "Run without dry-run mode (default is --dry-run)."
+        },
+        {
+          "flag": "--event",
+          "type": "string",
+          "description": "The type of GitHub event (e.g., COMMENT)."
+        }
+      ]
+    },
+    "gh manage-reviews": {
+      "description": "Check and manage responses to automated PR reviews.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh manage-reviews --check-responses --execute",
+      "optional_flags": [
+        {
+          "flag": "--check-responses",
+          "type": "boolean",
+          "description": "Verify if feedback responses have been addressed."
+        },
+        {
+          "flag": "--cleanup-comments",
+          "type": "boolean",
+          "description": "Remove stale audit comments."
+        },
+        {
+          "flag": "--execute",
+          "type": "boolean",
+          "description": "Run without dry-run mode (default is --dry-run)."
+        }
+      ]
+    },
+    "gh pre-submit": {
+      "description": "Run automated repository validation and quality gates prior to code submission.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh pre-submit",
+      "required_flags": []
+    }
+  }
+}
