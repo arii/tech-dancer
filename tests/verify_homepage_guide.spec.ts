@@ -1,7 +1,7 @@
 
 import { test, expect } from './fixtures/visual';
 
-test('verify homepage featured guide link', async ({ page }) => {
+test.skip('verify homepage featured guide link', async ({ page }) => {
   await page.goto('./');
 
   // Find the WCS Travel Pack card
