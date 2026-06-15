@@ -15,6 +15,8 @@ tags:
   - "video"
 ---
 
+> **Note:** This post's content has been merged into [Shoe Care & Modification](/blog/2026-06-01-shoe-care-modification).
+
 Improving your dance requires consistent practice and review. These tech tools make it easier to rehearse anywhere and analyze your movement.
 
 ### Music on the Go
