@@ -154,8 +154,9 @@ function getSitemapUrls(): string[] {
     try {
       const parsed = new URL(fullUrl, BASE_URL);
       return parsed.pathname === '' ? '/' : parsed.pathname;
-    } catch (e: any) {
-      console.warn(`Failed to parse sitemap URL: ${fullUrl}. Error: ${e.message}`);
+    } catch (e: unknown) {
+      const err = e as Error;
+      console.warn(`Failed to parse sitemap URL: ${fullUrl}. Error: ${err.message}`);
       if (fullUrl.startsWith(BASE_URL)) {
         return fullUrl.replace(BASE_URL, '') || '/';
       } else if (fullUrl.startsWith('/')) {
