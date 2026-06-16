@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -13,7 +13,6 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
-import { SOCIAL_LINKS } from '@/config/constants';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -23,20 +22,28 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUrl: string; onImageClick?: (src: string) => void }) {
-  if (tool.id === 'boomtick-blog') {
+  if (tool.customPreview) {
+    const { logo, headline, tagline } = tool.customPreview;
     return (
       <Box width="full" className="card-screenshot-wrapper boomtick-blog-preview border-b border-white/8">
         <Stack gap={1} className="preview-content">
           <Text className="preview-logo">
-            boom<span className="logo-accent">tick</span><span className="logo-dot font-light">.blog</span>
+            {logo.prefix}<span className="logo-accent">{logo.accent}</span><span className="logo-dot font-light">{logo.suffix}</span>
           </Text>
           <Text className="preview-headline">
-            Built for dancers.<br />
-            <span className="headline-accent">Train smarter.</span><br />
-            Travel better.
+            {headline.map((line, idx) => (
+              <React.Fragment key={idx}>
+                {line.accent ? (
+                  <span className="headline-accent">{line.accent}</span>
+                ) : (
+                  line.text
+                )}
+                {idx < headline.length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </Text>
           <Text className="preview-tagline">
-            Training notes, gear reviews, and WCS guides.
+            {tagline}
           </Text>
         </Stack>
       </Box>
@@ -132,7 +139,7 @@ function FlagshipCard({
 
           {tool.id === 'hrm-flagship' && (
             <div className="in-dev-banner">
-              <i className="ti ti-flask" aria-hidden="true"></i>
+              <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
               <p>
                 <strong>Intended to run locally on your own server.</strong> No live site available.
               </p>
@@ -141,7 +148,7 @@ function FlagshipCard({
 
           {tool.id === 'repo-auditor-ai' && (
             <div className="in-dev-banner">
-              <i className="ti ti-flask" aria-hidden="true"></i>
+              <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
               <p>
                 <strong>Available now for testing</strong> with your own repository.
               </p>
@@ -150,7 +157,7 @@ function FlagshipCard({
 
           {tool.id === 'boomtick-blog' && (
             <div className="in-dev-banner">
-              <i className="ti ti-flask" aria-hidden="true"></i>
+              <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
               <p>
                 <strong>RAG + LLM tooling in active development.</strong> This site is the production environment where those pipelines are being built and validated.
               </p>

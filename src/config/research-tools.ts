@@ -20,6 +20,11 @@ export interface ResearchTool {
   excludeFromEngineeringTools?: boolean;
   image?: string;
   imageAlt?: string;
+  customPreview?: {
+    logo: { prefix: string; accent: string; suffix: string };
+    headline: { text: string; accent?: string }[];
+    tagline: string;
+  };
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
@@ -64,6 +69,15 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     externalLinkDisplayLabel: 'Visit Site',
     sourceUrl: 'https://github.com/arii/tech-dancer',
     isFlagship: true,
+    customPreview: {
+      logo: { prefix: 'boom', accent: 'tick', suffix: '.blog' },
+      headline: [
+        { text: 'Built for dancers.' },
+        { text: 'Train smarter.', accent: 'Train smarter.' },
+        { text: 'Travel better.' }
+      ],
+      tagline: 'Training notes, gear reviews, and WCS guides.'
+    }
   },
   {
     id: 'gitops-pr-reviewer',

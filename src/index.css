@@ -393,7 +393,7 @@
   margin-bottom: 12px;
 }
 
-.in-dev-banner i {
+.in-dev-banner span {
   font-size: 15px;
   color: var(--color-text-tertiary);
   margin-top: 1px;
