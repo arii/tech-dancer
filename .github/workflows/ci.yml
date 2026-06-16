@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -88,7 +88,7 @@ jobs:
         run: pnpm test
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -115,12 +115,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -164,10 +164,10 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -223,7 +223,7 @@ jobs:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
