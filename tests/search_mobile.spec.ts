@@ -19,6 +19,6 @@ test.describe('Global Search Modal - Mobile', () => {
     await searchButton.click();
 
     // Modal should be visible
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick insights and posts')).toBeVisible();
   });
 });

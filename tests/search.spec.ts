@@ -4,38 +4,29 @@ test.describe('Global Search Modal', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
+    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    await expect(page.getByPlaceholder('Search BoomTick insights and posts')).toBeVisible();
   });
 
-  test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
-    await searchButton.click();
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
-
-    const closeButton = page.getByLabel('Close search');
-    await closeButton.click();
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
+  test('should close search modal via close button', async ({ page }) => {
+    await page.getByLabel('Close search').click();
+    await expect(page.getByPlaceholder('Search BoomTick insights and posts')).not.toBeVisible();
   });
 
   test('should close search modal when pressing Escape', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
-
     await page.keyboard.press('Escape');
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick insights and posts')).not.toBeVisible();
   });
 
-// Test removed due to gear page decommissioning
-
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
-    const searchInput = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
+    const searchInput = page.getByPlaceholder('Search BoomTick insights and posts');
     await searchInput.fill('ai');
 
     const resultButton = page.getByTestId('search-result').first();
     await expect(resultButton).toBeVisible();
 
     await resultButton.click();
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick insights and posts')).not.toBeVisible();
   });
 });
 
@@ -94,10 +85,5 @@ test.describe('Search and Filter URL Persistence', () => {
       const searchInputReload = page.getByPlaceholder(/Search posts/i);
       await expect(searchInputReload).toHaveValue('west');
     }
-  });
-
-  test('Gear search term should persist after reload', async () => {
-    // Gear page is decommissioned, skipping this test.
-    test.skip();
   });
 });
