@@ -204,9 +204,10 @@ jobs:
           REVIEW_COUNT=$(gh pr view "$PR_NUMBER" --json reviews --jq '.reviews | length' 2>/dev/null || echo 0)
           echo "REVIEW_COUNT=$REVIEW_COUNT" >> $GITHUB_ENV
 
-          echo "PR_DESCRIPTION<<EOF" >> $GITHUB_ENV
+          DELIMITER="EOF_$(openssl rand -hex 8)"
+          echo "PR_DESCRIPTION<<$DELIMITER" >> $GITHUB_ENV
           echo "$LATEST_BODY" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "$DELIMITER" >> $GITHUB_ENV
 
       - name: Run AI Slop Detector
         id: slop-detector
@@ -387,9 +388,10 @@ jobs:
           fi
 
           # Use heredoc syntax to safely set the multiline JSON as an environment variable
-          echo "FAILED_CHECKS_JSON<<EOF" >> $GITHUB_ENV
+          DELIMITER="EOF_$(openssl rand -hex 8)"
+          echo "FAILED_CHECKS_JSON<<$DELIMITER" >> $GITHUB_ENV
           echo "$FINAL_CHECKS_JSON" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "$DELIMITER" >> $GITHUB_ENV
 
       - name: Run Gemini Review
         env:
@@ -408,7 +410,7 @@ jobs:
 
       - name: Upload review result
         id: upload_artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: review-result
           path: review_result.json
@@ -476,7 +478,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download review result
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v4
         with:
           name: review-result
           path: .

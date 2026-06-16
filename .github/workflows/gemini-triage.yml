@@ -46,7 +46,7 @@ jobs:
           ref: ${{ (github.event.issue.pull_request || github.event.pull_request) && format('refs/pull/{0}/head', inputs.issue_number || github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number) || github.sha }}
       - uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -64,9 +64,10 @@ jobs:
           JSON=$(gh issue view "$ISSUE_NUMBER" --json title,body)
           echo "title=$(echo "$JSON" | jq -r .title)" >> $GITHUB_OUTPUT
           # Use a multi-line output for the body
-          echo "body<<EOF" >> $GITHUB_OUTPUT
+          DELIMITER="EOF_$(openssl rand -hex 8)"
+          echo "body<<$DELIMITER" >> $GITHUB_OUTPUT
           echo "$JSON" | jq -r .body >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "$DELIMITER" >> $GITHUB_OUTPUT
           echo "number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Build Triage Context

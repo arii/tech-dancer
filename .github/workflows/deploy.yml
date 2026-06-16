@@ -80,7 +80,7 @@ jobs:
           jq -n --arg b "$REF_NAME" --arg s "$GITHUB_SHA" --argjson t "$(date +%s)" '{"branch":$b,"sha":$s,"deployedAt":$t}' > dist/.deploy.json
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: dist-assets
           path: dist/
@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v4
         with:
           name: dist-assets
           path: ../dist-assets
