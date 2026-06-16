@@ -3,7 +3,7 @@ type: post
 title: "Event Travel & Packing"
 date: "2026-06-01"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Travel"
 excerpt: "Packing organizers and garment care items for out-of-town events."
 image: "/images/gear/sketches/compression-cubes.webp"
 affiliateIds:

@@ -98,3 +98,4 @@ dev-tools/logs/audits/
 .pr_cache.pkl
 gh_2.54.0_linux_amd64/
 gh_2.54.0_linux_amd64.tar.gz
+.tmp-main

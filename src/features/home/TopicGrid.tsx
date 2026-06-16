@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Backpack, Plane, Heart, Shirt } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
@@ -11,6 +11,34 @@ const TOPICS = [
     cta: 'Read posts →',
     href: '/blog',
   },
+  {
+    icon: Backpack,
+    label: 'Gear',
+    description: 'Equipment, shoes, and tech essentials for social dancing.',
+    cta: 'View gear →',
+    href: '/blog?category=Gear',
+  },
+  {
+    icon: Plane,
+    label: 'Travel',
+    description: 'Tips and tools for packing and surviving event weekends.',
+    cta: 'Travel tips →',
+    href: '/blog?category=Travel',
+  },
+  {
+    icon: Heart,
+    label: 'Health & Recovery',
+    description: 'Self-care routines and physical maintenance for dancers.',
+    cta: 'Read more →',
+    href: '/blog?category=Health',
+  },
+  {
+    icon: Shirt,
+    label: 'Costumes',
+    description: 'DIY and dance-friendly outfits for themed social nights.',
+    cta: 'View costumes →',
+    href: '/blog?category=Costumes',
+  },
 ];
 
 export function TopicGrid() {
@@ -19,7 +47,7 @@ export function TopicGrid() {
       <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={3}>
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, md: 1 }} gap={3}>
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={3}>
         {TOPICS.map(({ icon: Icon, label, description, cta, href }) => (
           <Stack
             key={label}
