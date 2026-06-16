@@ -57,7 +57,7 @@ function createModel(): ChatGoogleGenerativeAI {
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     apiKey,
     maxOutputTokens: 1024,
   });
@@ -122,6 +122,9 @@ function generateMarkdownReport(reviews: RouteReview[]): string {
   const medCount = reviews.filter(r => r.severity === 'MEDIUM').length;
   const lowCount = reviews.filter(r => r.severity === 'LOW').length;
 
+  const prNumber = process.env.PR_NUMBER;
+  const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
+
   const sections = reviews.map(r => `
 ### ${severityEmoji(r.severity)} \`${r.route}\`
 
@@ -135,6 +138,7 @@ ${r.feedback}
 > Powered by Gemini Vision + Blast-Radius Analyzer
 
 **Summary:** 🔴 ${highCount} high · 🟡 ${medCount} medium · 🟢 ${lowCount} low
+**Reviewing:** ${prLink}
 
 ${sections}
 
