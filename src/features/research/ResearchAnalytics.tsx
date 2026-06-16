@@ -268,48 +268,6 @@ function ToolCard({ tool, navigate }: {
   );
 }
 
-function TerminalPreview() {
-  return (
-    <Box
-      surface="muted"
-      radius="lg"
-      padding={4}
-      className="border border-white/10 shadow-2xl font-mono text-xs select-none overflow-hidden"
-      height={320}
-      display="flex"
-      direction="col"
-    >
-      {/* Terminal Header */}
-      <Box display="flex" align="center" gap={1.5} marginBottom={4} className="border-b border-white/5 pb-2">
-        <Box width={3} height={3} radius="full" className="bg-brand-terminal-red" />
-        <Box width={3} height={3} radius="full" className="bg-brand-terminal-yellow" />
-        <Box width={3} height={3} radius="full" className="bg-brand-terminal-green" />
-        <Text size="micro" color="dim" marginLeft={2} className="opacity-50">devai-agent.sh</Text>
-      </Box>
-      {/* Terminal Body */}
-      <Stack gap={2} className="text-white/80 leading-relaxed overflow-y-auto no-scrollbar">
-        <Text color="accent" size="xs">$ ./run-audit-pipeline.sh --repo=tech-dancer</Text>
-        <Text size="xs" color="dim">Initializing DevAI CI/CD environment...</Text>
-        <Text size="xs" color="dim">Running static analysis on changed files...</Text>
-        <Box display="flex" align="center" gap={2}>
-          <Text size="xs" color="success" className="text-emerald-400">✓</Text>
-          <Text size="xs" color="main">No anti-patterns detected in touched TSX files.</Text>
-        </Box>
-        <Text size="xs" color="dim">Launching visual regression testing (2 viewports)...</Text>
-        <Box display="flex" align="center" gap={2}>
-          <Text size="xs" color="accent" className="text-purple-400">ℹ</Text>
-          <Text size="xs" color="main">Capturing screenshots for /research on Desktop & Mobile...</Text>
-        </Box>
-        <Box display="flex" align="center" gap={2}>
-          <Text size="xs" color="success" className="text-emerald-400">✓</Text>
-          <Text size="xs" color="main">Pixel diff complete: 0.18% difference (LOW severity).</Text>
-        </Box>
-        <Text size="xs" color="accent">$ git push origin feat/issue-research-update</Text>
-        <Text size="xs" color="success" className="text-emerald-400">Branch pushed successfully! Pipeline green. 🚀</Text>
-      </Stack>
-    </Box>
-  );
-}
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
