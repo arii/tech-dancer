@@ -42,7 +42,17 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                 </Box>
                 <Stack gap={2} width="full">
                   <Box display="flex" align="center" justify="between" width="full">
-                    <Text variant="mono" size="xs">{asset.path}</Text>
+                    <Text
+                      as="a"
+                      href={`https://github.com/arii/tech-dancer/blob/main/${asset.path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="mono"
+                      size="xs"
+                      className="hover:text-accent transition-colors cursor-pointer"
+                    >
+                      {asset.path}
+                    </Text>
                     <Text variant="mono" size="micro" color="dim" opacityVariant="dim">{asset.label}</Text>
                   </Box>
                   {asset.description && (

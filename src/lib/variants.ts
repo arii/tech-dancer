@@ -93,7 +93,7 @@ export const actionButtonVariants = cva(
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = cva(
-  "bg-surface rounded-lg shadow-sm border border-line transition-all",
+  "bg-surface rounded-md shadow-sm card-border transition-all",
   {
     variants: {
       interactive: {
