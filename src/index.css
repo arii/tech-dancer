@@ -385,10 +385,10 @@
 .in-dev-banner {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   background: var(--color-background-secondary);
   border-radius: var(--border-radius-md);
-  padding: 10px 12px;
+  padding: 12px 16px;
   margin-top: 10px;
   margin-bottom: 12px;
 }

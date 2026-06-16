@@ -152,9 +152,7 @@ function FlagshipCard({
             <div className="in-dev-banner">
               <i className="ti ti-flask" aria-hidden="true"></i>
               <p>
-                <strong>RAG + LLM tooling in active development.</strong>
-                This site is the production environment where those pipelines
-                are being built and validated.
+                <strong>RAG + LLM tooling in active development.</strong> This site is the production environment where those pipelines are being built and validated.
               </p>
             </div>
           )}
@@ -167,7 +165,7 @@ function FlagshipCard({
             ))}
           </Box>
 
-          <Stack direction={{ base: "col", sm: "row" }} gap={2} marginTop="auto" width={{ base: "full", sm: "auto" }}>
+          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
             {tool.externalUrl && (
               <ActionButton
                 as="a"
@@ -253,6 +251,7 @@ function ToolCard({ tool, navigate }: {
         <Text
           size="sm"
           color="dim"
+          leading="relaxed"
           marginBottom={3}
           className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
         >
@@ -356,8 +355,8 @@ export default function ResearchAnalytics() {
             </Text>
             
             {/* Scrollable Focus Tags for Mobile */}
-            <Box display={{ base: "flex", lg: "none" }} align="center" gap={2} width="full" marginTop={2} marginBottom={2} className="py-1">
-              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" shrink={0} marginRight={1}>Focus</Text>
+            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} display={{ base: "flex", lg: "none" }} className="py-1">
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
               <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
                 {[
                   { tag: 'React', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
@@ -377,7 +376,7 @@ export default function ResearchAnalytics() {
                   <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
                 ))}
               </Box>
-            </Box>
+            </Stack>
 
             {/* Categorized Stack Grid for Desktop */}
             <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
@@ -543,7 +542,7 @@ export default function ResearchAnalytics() {
                     )}
                   </Box>
 
-                  <Text variant="body" size="sm" color="dim" clamp={3} marginBottom={3}>
+                  <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
                     {study.excerpt}
                   </Text>
 
