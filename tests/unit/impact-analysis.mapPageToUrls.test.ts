@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
 import { mapPageToUrls } from '../../scripts/impact-review-utils';
-import { IMPACT_CONFIG } from '../../scripts/impact-analysis.config';
 
 // Mock IMPACT_CONFIG
 vi.mock('../../scripts/impact-analysis.config', () => ({
