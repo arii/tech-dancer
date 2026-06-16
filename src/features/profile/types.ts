@@ -7,6 +7,7 @@ export interface ProfileSection {
   items?: ProfileItem[];
   gallery?: ProfileGalleryImage[];
   links?: ProfileLink[];
+  availability?: string;
 }
 
 export interface ProfileCard {

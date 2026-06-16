@@ -38,6 +38,14 @@ function ArielProfile() {
         )}
 
         {section.cards && <ExperienceCards cards={section.cards} />}
+
+        {section.availability && (
+          <Box padding={6} radius="lg" border className="bg-accent/5 border-accent/20">
+            <Text variant="body" size="base" color="main" weight="font-medium">
+              {section.availability}
+            </Text>
+          </Box>
+        )}
         {section.items && <ProfileItems items={section.items} />}
         {section.gallery && <ProfileGallery images={section.gallery} />}
         {section.links && <ProfileLinks links={section.links} />}
@@ -51,7 +59,7 @@ function ArielProfile() {
     <Box as="section" height="full">
       <SEO
         title="About"
-        description="Ariel Anders, PhD: MIT Roboticist, WCS Tech-Dancer, and Engineer. Exploring the intersection of technology and creative movement."
+        description="Ariel Anders, PhD: MIT Roboticist, DevAI Engineer, and West Coast Swing dancer. Expert in robotics software and agentic CI/CD pipelines."
       />
 
       <PageHeader
