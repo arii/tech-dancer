@@ -85,7 +85,7 @@ jobs:
           ISSUE_BODY: ${{ steps.issue_details.outputs.body }}
         run: |
           # Create a structured prompt demanding JSON output
-          cat <<EOF > task_input.txt
+          cat <<'INPUTEOF' > task_input.txt
           You are a Senior Technical Project Manager. Analyze the following GitHub Issue.
 
           ### Project Context
@@ -112,7 +112,7 @@ jobs:
             "suggested_body": "A professionally formatted issue body.",
             "completeness_score": 0-10
           }
-          EOF
+          INPUTEOF
 
       - name: Run Gemini Agent
         env:

@@ -179,7 +179,7 @@ export class GitHubClient implements IGitHubClient {
         return []
       }
       return validationResult.data
-    } catch {
+    } catch (e: unknown) {
       const errorMessage = e instanceof Error ? e.message : 'Unknown error'
       console.warn(
         `Warning: Failed to fetch or parse existing issues. Duplicate detection might fail.
@@ -296,7 +296,7 @@ export class GitHubClient implements IGitHubClient {
               config.description,
             ])
             console.log(`   - Created label: "${label}"`)
-          } catch {
+          } catch (e: unknown) {
             // Ignore errors if the label already exists (race condition)
             if (e instanceof Error && e.message.includes('already exists')) {
               console.log(
@@ -514,7 +514,7 @@ function verifyIsPreExisting(
       spawnSync('git', ['merge-base', '--is-ancestor', commitHash, baseSha])
         .status === 0
     return isAncestor
-  } catch {
+  } catch (e: unknown) {
     console.warn(
       `Warning: Git command failed to verify pre-existing status for ${issue.filePath}:${issue.lineNumber}: ${e instanceof Error ? e.message : e}`
     )
@@ -547,9 +547,9 @@ export async function run(
       )
     }
     result = validationResult.data
-  } catch {
+  } catch (e: unknown) {
     throw new Error(
-      `❌ Error reading or parsing ${reviewFilePath}: ${(e as Error).message}`
+      `❌ Error reading or parsing ${reviewFilePath}: ${(e instanceof Error ? e : new Error(String(e))).message}`, { cause: e }
     )
   }
 
@@ -595,8 +595,8 @@ export async function run(
       const pattern = `\\b(?:${escapedWords.join('|')})\\b`
       slopPattern = new RegExp(pattern, 'i')
     }
-  } catch {
-    console.warn('Could not read ai_slop_words.txt, skipping quality check.')
+  } catch (e: unknown) {
+    console.warn('Could not read ai_slop_words.txt, skipping quality check. ', e)
   }
 
   let createdCount = 0
