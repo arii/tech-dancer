@@ -102,8 +102,10 @@ def main():
         )
         if 'GITHUB_OUTPUT' in os.environ:
             with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                f.write(f"session_url={args.jules_api_url.replace('/api/sessions', '')}/sessions/{session_id}\n")
                 f.write(f"session_id={session_id}\n")
         else:
+            print(f"session_url={args.jules_api_url.replace('/api/sessions', '')}/sessions/{session_id}")
             print(f"session_id={session_id}")
 
     elif args.command == 'delete':

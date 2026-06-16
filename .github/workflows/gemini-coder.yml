@@ -157,7 +157,10 @@ jobs:
             echo "FILES=$TARGET_FILES_INPUT" >> $GITHUB_ENV
 
             TITLE_TEXT=$(echo "$TASK_DESC_INPUT" | head -c 50)
-            echo "TITLE=AI Task: $TITLE_TEXT" >> $GITHUB_ENV
+            DELIMITER="EOF_$(openssl rand -hex 8)"
+            echo "TITLE<<$DELIMITER" >> $GITHUB_ENV
+            echo "AI Task: $TITLE_TEXT" >> $GITHUB_ENV
+            echo "$DELIMITER" >> $GITHUB_ENV
 
             if [ -n "$BRANCH_NAME_INPUT" ]; then
               echo "BRANCH=$BRANCH_NAME_INPUT" >> $GITHUB_ENV
@@ -215,7 +218,7 @@ jobs:
           BRANCH: ${{ env.BRANCH }}
           TITLE: ${{ env.TITLE }}
           PROMPT: ${{ env.PROMPT }}
-          SESSION_URL: ${{ steps.jules_session.outputs.session_url }}
+          SESSION_URL: ${{ steps.jules_session.outputs.session_id }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
