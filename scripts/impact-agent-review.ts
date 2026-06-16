@@ -157,6 +157,46 @@ async function postPRComment(body: string): Promise<void> {
 
   const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
 
+  // Check for existing comments from this bot to avoid spamming the PR
+  const getCommentsResponse = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+    },
+  });
+
+  if (getCommentsResponse.ok) {
+    const comments = await getCommentsResponse.json() as Array<{
+      id: number;
+      body: string;
+      user: { type: string };
+    }>;
+    const existingComment = comments.find(c =>
+      c.user.type === 'Bot' && c.body.includes('## 👁️ Visual Review Agent')
+    );
+
+    if (existingComment) {
+      const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
+      const updateResponse = await fetch(updateUrl, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ body }),
+      });
+
+      if (!updateResponse.ok) {
+        const text = await updateResponse.text();
+        throw new Error(`GitHub API error ${updateResponse.status}: ${text}`);
+      }
+
+      console.log('✅ Updated existing PR comment');
+      return;
+    }
+  }
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
