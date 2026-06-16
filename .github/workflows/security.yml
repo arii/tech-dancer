@@ -67,8 +67,6 @@ jobs:
   semgrep:
     name: Semgrep Static Analysis
     runs-on: ubuntu-latest
-    container:
-      image: returntocorp/semgrep
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
