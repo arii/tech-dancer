@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
@@ -9,9 +9,10 @@ import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog'
 import { generateMerchSchema } from '@/utils/schema';
 import { FilterButton } from '@/components/ui/FilterButton';
 import { PRINTFUL_REFERRAL } from '@/config/constants';
+import { useSearchParam } from '@/hooks/useSearchParam';
 
 export default function Merch() {
-  const [activeCollection, setActiveCollection] = useState("all");
+  const [activeCollection, setActiveCollection] = useSearchParam("style", "all");
 
 
   const allProducts = getAllMerchProducts();

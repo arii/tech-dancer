@@ -5,6 +5,8 @@ import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { COLLECTIONS } from '@/data/merch';
+import { getCollectionUrl } from '@/lib/productCatalog';
 
 export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
@@ -56,27 +58,51 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           {item.description}
         </Text>
 
-        {item.roles && (
-          <Stack direction="row" gap={1.5} wrap="wrap">
-            {item.roles.map((role) => (
+        <Stack direction="row" gap={1.5} wrap="wrap">
+          {item.collections.map((collId) => {
+            const coll = COLLECTIONS.find(c => c.id === collId);
+            if (!coll) return null;
+            const href = getCollectionUrl(collId);
+            const isExternal = href.startsWith('http');
+
+            return (
               <Box
-                key={role}
+                key={collId}
+                as="a"
+                href={href}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "sponsored noopener noreferrer" : undefined}
                 paddingX={2}
                 paddingY={0.5}
                 radius="md"
-                surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-                className={cn(
-                  "border border-line/30",
-                  role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
-                )}
+                surface="alt"
+                className="border border-line/30 hover:border-accent/50 transition-colors"
               >
-                <Text size="micro" weight="font-bold" uppercase tracking="wider">
-                  {role}
+                <Text size="micro" weight="font-bold" uppercase tracking="wider" color="accent">
+                  {coll.label}
                 </Text>
               </Box>
-            ))}
-          </Stack>
-        )}
+            );
+          })}
+
+          {item.roles && item.roles.map((role) => (
+            <Box
+              key={role}
+              paddingX={2}
+              paddingY={0.5}
+              radius="md"
+              surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
+              className={cn(
+                "border border-line/30",
+                role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
+              )}
+            >
+              <Text size="micro" weight="font-bold" uppercase tracking="wider">
+                {role}
+              </Text>
+            </Box>
+          ))}
+        </Stack>
       </Stack>
 
       <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">

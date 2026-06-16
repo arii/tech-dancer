@@ -41,6 +41,19 @@ test.describe('Merch Page', () => {
     await expect(filteredCards).toHaveCount(19);
   });
 
+  test('should filter products by URL parameter', async ({ page }) => {
+    // Navigate with style parameter
+    await page.goto('./merch?style=norcal-bestcal');
+
+    // Check that we only see relevant products (should be 7 based on data)
+    const filteredCards = page.getByTestId('product-card');
+    await expect(filteredCards).toHaveCount(7);
+
+    // Verify correct collection label is highlighted
+    const activeFilter = page.locator('button[aria-pressed="true"]');
+    await expect(activeFilter).toHaveText(/NorCal BestCal/);
+  });
+
   test('should have correct attributes on Printful external links', async ({ page }) => {
     const printfulLinks = page.locator('a[href*="boomtick.printful.me"]');
     await expect(printfulLinks.first()).toBeVisible();

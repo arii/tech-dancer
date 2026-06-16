@@ -16,8 +16,8 @@ export interface MerchProduct {
 
 export const COLLECTIONS = [
   { id: 'all', label: 'All' },
-  { id: 'lead-follow-switch', label: 'Lead/Follow/Switch' },
-  { id: 'norcal-bestcal', label: 'NorCal BestCal' },
+  { id: 'lead-follow-switch', label: 'Lead/Follow/Switch', printfulUrl: 'https://boomtick.printful.me/collection/lead-follow-switch' },
+  { id: 'norcal-bestcal', label: 'NorCal BestCal', printfulUrl: 'https://boomtick.printful.me/collection/norcal-bestcal' },
   { id: 'rainbow-pride', label: 'Rainbow Pride' },
 ] as const;
 
