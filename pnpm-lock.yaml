@@ -4397,8 +4397,8 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  langsmith@0.7.10:
-    resolution: {integrity: sha512-3EjJx9zGMzqF60eT9JADHF+Hn/T5ayTgEVp4d3M5yvJIJi3q6seX0p5jT8ecBCWBi1kIvvssWrcDxfwgSier7Q==}
+  langsmith@0.7.8:
+    resolution: {integrity: sha512-4/UFcZB1JTsQoPrsOisOZRFdlvRjk1Wam9Hwz/ZchRDmnvojcNdefk5GAqjCz/lhaMSg8lWtKmJCFmcR/jBM6Q==}
     peerDependencies:
       '@opentelemetry/api': '*'
       '@opentelemetry/exporter-trace-otlp-proto': '*'
@@ -7984,7 +7984,7 @@ snapshots:
       '@cfworker/json-schema': 4.1.1
       '@standard-schema/spec': 1.1.0
       js-tiktoken: 1.0.21
-      langsmith: 0.7.10(ws@8.20.0)
+      langsmith: 0.7.8(ws@8.20.0)
       mustache: 4.2.0
       p-queue: 6.6.2
       zod: 4.3.6
@@ -10762,7 +10762,7 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
-  langsmith@0.7.10(ws@8.20.0):
+  langsmith@0.7.8(ws@8.20.0):
     dependencies:
       p-queue: 6.6.2
     optionalDependencies:

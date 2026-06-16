@@ -66,8 +66,10 @@ jobs:
           fi
 
       - name: Setup Ollama
+        uses: ./.github/actions/setup-ollama
+
+      - name: Start Ollama Server
         run: |
-          curl -fsSL https://ollama.com/install.sh | sh
           ollama serve > /tmp/ollama.log 2>&1 &
           echo "Waiting for Ollama to be ready..."
           for i in {1..15}; do

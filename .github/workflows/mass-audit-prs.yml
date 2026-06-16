@@ -39,10 +39,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
+        uses: ./.github/actions/setup-ollama
 
       - name: Start Ollama Server
         run: |
