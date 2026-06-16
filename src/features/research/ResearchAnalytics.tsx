@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, FlaskConical, GitPullRequest } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, FlaskConical } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -21,50 +21,32 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
-  if (tool.id === 'hrm-flagship') {
-    return (
-      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" surface="default">
-        <Box width={32} height={16} surface="contrast" radius="sm" display="flex" align="center" justify="center">
-          <Text color="accent" size="xl" weight="font-bold">♥ 74%</Text>
-        </Box>
-      </Box>
-    );
-  }
-
-  if (tool.id === 'repo-auditor-ai') {
-    return (
-      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" surface="bg">
-        <Stack align="center" gap={1} padding={4} surface="default" border radius="sm" borderColor="accent/10">
-          <Icon icon={GitPullRequest} size="lg" color="accent" />
-          <Text size="micro" color="dim" uppercase tracking="widest">PR audit</Text>
-        </Stack>
-      </Box>
-    );
-  }
-
-  if (tool.id === 'boomtick-blog') {
-    return (
-      <Box width="full" height={48} display="flex" direction="col" align="center" justify="center" border="b" borderColor="accent/5" surface="bg" gap={2}>
-        <Text variant="display" size="2xl" color="white" tracking="tight">
-          boom<Text color="warning">tick</Text>.blog
-        </Text>
-        <Text size="micro" color="dim" uppercase tracking="widest">Dance · Pride · Community</Text>
-      </Box>
-    );
-  }
-
   if (!tool.image) return null;
 
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
   const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
 
   return (
-    <Box width="full" height={48} overflow="hidden" border="b" borderColor="accent/5">
+    <Box width="full" height={40} overflow="hidden" radius="t-md" borderColor="white/8" position="relative" display="block">
       <img
         src={src}
         alt={alt}
         className="w-full h-full object-cover object-top opacity-heavy hover:opacity-100 transition-opacity duration-500"
       />
+      <Box position="absolute" top={2} right={2} zIndex={10}>
+        <Text
+          size="micro"
+          weight="font-bold"
+          uppercase
+          tracking="widest"
+          paddingX={3}
+          paddingY={1}
+          radius="full"
+          className={tool.id === 'boomtick-blog' ? "bg-brand-tag-infra-bg text-brand-tag-infra-text" : "bg-brand-tag-ai-bg text-brand-tag-ai-text"}
+        >
+          {tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'}
+        </Text>
+      </Box>
     </Box>
   );
 }
@@ -137,7 +119,7 @@ export default function ResearchAnalytics() {
             border="none"
           />
           <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-            Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+            MIT PhD and former Waymo senior engineer. I build AI-assisted infrastructure — agentic CI/CD, LLM workflows, and developer tooling — grounded in production robotics experience.
           </Text>
           <Stack gap={2} marginTop={4} marginBottom={4}>
             <Box display="flex" align="baseline" gap={2}>
@@ -157,14 +139,6 @@ export default function ResearchAnalytics() {
               </Box>
             </Box>
             <Box display="flex" align="baseline" gap={2}>
-              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>Robotics</Text>
-              <Box display="flex" wrap="wrap" gap={2}>
-                {['ROS1/2', 'C++', 'Navigation', 'Localization'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-tag-infra-bg text-brand-tag-infra-text">{tag}</Text>
-                ))}
-              </Box>
-            </Box>
-            <Box display="flex" align="baseline" gap={2}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>AI</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
@@ -175,7 +149,7 @@ export default function ResearchAnalytics() {
           </Stack>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
+            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }} bg="brand-primary-emerald">
               View Flagship Projects
             </ActionButton>
             <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
@@ -198,35 +172,25 @@ export default function ResearchAnalytics() {
                 padding={0}
                 gap={0}
                 surface="surface"
-                borderColor="accent/10"
+                radius="md"
+                borderColor="white/8"
+                border={0.5}
                 height="full"
                 overflow="hidden"
               >
                 <Stack gap={0} height="full">
                   <ToolImage tool={tool} baseUrl={baseUrl} />
-                  <Stack gap={6} padding={8} flex={1}>
+                  <Stack gap={3} paddingX={4} paddingTop={3.5} paddingBottom={4} flex={1}>
                     <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" borderColor="accent/10">
-                        <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+                      <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" borderColor="accent/10">
+                        <Icon icon={getToolIcon(tool)} size="md" color="accent" />
                       </Box>
-                      <Text
-                        size="micro"
-                        weight="font-bold"
-                        uppercase
-                        tracking="widest"
-                        paddingX={3}
-                        paddingY={1}
-                        radius="full"
-                        className={tool.id === 'boomtick-blog' ? "bg-brand-tag-infra-bg text-brand-tag-infra-text" : "bg-accent/10 text-accent"}
-                      >
-                        {tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'}
-                      </Text>
                     </Box>
 
-                    <Stack gap={3}>
+                    <Stack gap={2}>
                       <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                          {tool.category}
+                        <Text variant="mono" size="micro" color="brand-primary-emerald" weight="font-bold" uppercase tracking="widest">
+                          {tool.subtitle}
                         </Text>
                         <Text variant="display" size="2xl" weight="font-black">
                           {tool.title}
@@ -246,15 +210,15 @@ export default function ResearchAnalytics() {
                       )}
                     </Stack>
 
-                    <Box display="flex" wrap="wrap" gap={2}>
+                    <Box display="flex" wrap="wrap" gap={1.5}>
                       {tool.tags.map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
                           {tag}
                         </Text>
                       ))}
                     </Box>
 
-                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width={{ base: "full", sm: "auto" }}>
+                    <Stack direction={{ base: "col", sm: "row" }} gap={2} marginTop={3} width={{ base: "full", sm: "auto" }}>
                       {tool.externalUrl && (
                         <ActionButton
                           as="a"
@@ -297,24 +261,11 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Stack gap={6} padding={8} surface="muted" radius="xl" border borderColor="accent/10">
-          <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
-          <Text variant="body" size="lg" color="dim" leading="relaxed">
-            These are my own projects — built to solve real problems I care about. If you need a senior roboticist, DevAI engineering infrastructure, or someone who can do both, I'm available for project-based contracts and full-time roles.
+        <Stack gap={4} padding={6} surface="alt" radius="lg">
+          <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">Why this matters</Text>
+          <Text variant="body" size="md" color="dim" leading="relaxed">
+            Shipping high-fidelity products requires <Text as="span" weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
           </Text>
-          <Box display="flex" align="center" gap={4}>
-            <ActionButton as="a" href="mailto:ariel.anders@gmail.com" variant="ghost" padding={0}>
-              Email
-            </ActionButton>
-            <Text color="dim" opacityVariant="subtle">·</Text>
-            <ActionButton as="a" href="https://linkedin.com/in/ariel-anders" target="_blank" variant="ghost" padding={0}>
-              LinkedIn
-            </ActionButton>
-            <Text color="dim" opacityVariant="subtle">·</Text>
-            <ActionButton as="a" href="https://github.com/arii" target="_blank" variant="ghost" padding={0}>
-              GitHub
-            </ActionButton>
-          </Box>
         </Stack>
 
         {engineeringTools.length > 0 && (

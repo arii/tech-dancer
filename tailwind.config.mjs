@@ -43,6 +43,7 @@ export default {
         "brand-tag-infra-text": "#085041",
         "brand-tag-ai-bg": "#FAEEDA",
         "brand-tag-ai-text": "#633806",
+        "brand-primary-emerald": "#1D9E75",
         error: "var(--color-error)",
         "error-surface": "var(--color-error-surface)",
       },
