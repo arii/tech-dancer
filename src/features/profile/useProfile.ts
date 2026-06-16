@@ -28,7 +28,7 @@ const PROFILE_DATA: ProfileData = {
         {
           icon: 'globe',
           title: "DevAI for robotics",
-          content: "Most DevAI practitioners don't know ROS. Most roboticists aren't building agentic pipelines. I work at that intersection — and I'm available to help robotics teams adopt AI-assisted engineering practices: automated code review, agentic CI/CD, and LLM tooling built by someone who has shipped production robotics software."
+          content: "Most DevAI practitioners don't know ROS. Most roboticists aren't building agentic pipelines. I work at that intersection, helping robotics teams adopt AI-assisted engineering practices: automated code review, agentic CI/CD, and LLM tooling built by someone who has shipped production robotics software."
         }
       ],
       availability: "Open to Staff/Senior SWE roles, robotics contracts, and DevAI consulting — especially where robotics and AI-assisted engineering overlap."
