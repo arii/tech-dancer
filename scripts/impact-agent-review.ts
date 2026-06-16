@@ -33,6 +33,7 @@ interface RouteReview {
 
 const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
 const VISUAL_SUMMARY_PATH = path.join(ARTIFACTS_DIR, 'visual-review', 'summary.json');
+const DOM_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'dom-review');
 const AGENT_REPORT_PATH = path.join(ARTIFACTS_DIR, 'agent-review.md');
 
 const REVIEW_PROMPT = `You are a strict, senior frontend engineer reviewing a pull request for visual regressions.
@@ -41,16 +42,13 @@ You are given three full-page screenshots:
 2. AFTER — the page after this PR
 3. DIFF — a pixel diff highlighting changed regions in red
 
-Your job is to EVALUATE the changes, not just describe them.
-For each visual difference, determine if it is:
-- ✅ INTENTIONAL (e.g., deliberate copy edits, intentional styling updates)
-- ❌ A BUG/REGRESSION (e.g., layout shifts, broken spacing, bad contrast, truncated text, unintentional clipping)
+You are ALSO provided with the exact DOM Text Diff.
+YOUR RULES:
+- Use the DOM Text Diff as the ABSOLUTE GROUND TRUTH for any text changes. Do not guess or attempt to read blurry text from the screenshots.
+- Evaluate the changes (✅ INTENTIONAL or ❌ BUG/REGRESSION).
+- Focus on layout shifts, broken spacing, contrast issues, or clipping.
 
-Format your response as a concise, bulleted list.
-DO NOT just say "The text changed."
-DO say "✅ Text updated to X (looks intentional, layout remains intact)" OR "❌ Text updated to X, which caused the container below it to misalign."
-
-Be direct, actionable, and brief.`;
+Format your response as a concise, bulleted list. Be direct and actionable.`;
 
 // ── Gemini client ──────────────────────────────────────────────────────────
 
@@ -59,7 +57,7 @@ function createModel(): ChatGoogleGenerativeAI {
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3.5-flash',
     apiKey,
     maxOutputTokens: 1024,
   });
@@ -77,14 +75,26 @@ async function reviewRoute(
   model: ChatGoogleGenerativeAI,
   summary: VisualRouteSummary
 ): Promise<RouteReview> {
-  // Use the FULL images so the model can see the surrounding layout
   const beforePath = summary.beforePath;
   const afterPath = summary.afterPath;
   const diffPath = summary.diffPath;
 
+  // 1. Grab the DOM diff for ground truth
+  const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
+  let domDiffContext = 'No DOM diff available.';
+  if (fs.existsSync(domDiffPath)) {
+    const diffContent = fs.readFileSync(domDiffPath, 'utf8');
+    // Truncate to avoid exploding the context window on massive changes
+    domDiffContext = diffContent.length > 3000
+      ? diffContent.slice(0, 3000) + '\n...[TRUNCATED]'
+      : diffContent;
+  }
+
+  // 2. Build the payload
   const baseContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
     { type: 'text', text: REVIEW_PROMPT },
     { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
+    { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
     { type: 'text', text: 'BEFORE' },
     { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },
     { type: 'text', text: 'AFTER' },
@@ -93,7 +103,7 @@ async function reviewRoute(
 
   if (diffPath && fs.existsSync(diffPath)) {
     baseContent.push(
-      { type: 'text', text: 'DIFF' },
+      { type: 'text', text: 'VISUAL DIFF' },
       { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(diffPath)}` } }
     );
   }
