@@ -1,4 +1,7 @@
 name: Prune Stale Previews
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   schedule:
     - cron: '0 */6 * * *' # Runs every 6 hours
@@ -17,12 +20,12 @@ jobs:
       pull-requests: read
     steps:
       - name: Checkout Source (for scripts)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           path: source
 
       - name: Checkout gh-pages
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages-branch

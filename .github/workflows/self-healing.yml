@@ -1,5 +1,8 @@
 name: 'Self-Healing CI'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   workflow_run:
     workflows: ["CI"]
@@ -26,7 +29,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -58,7 +61,7 @@ jobs:
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
           path: trusted-tools-temp
