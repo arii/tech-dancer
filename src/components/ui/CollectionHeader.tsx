@@ -4,17 +4,22 @@ import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 
 interface CollectionHeaderProps {
+  /** The primary title of the collection or section */
   title: string;
+  /** Optional secondary description text */
   description?: string;
+  /** Optional destination for the "View all" link */
   href?: string;
+  /** Custom label for the CTA link (defaults to "View all") */
   ctaLabel?: string;
+  /** Semantic heading level for the title (defaults to h2) */
   headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 /**
  * Standardized header for content collections and editorial sections.
- * Features a title with font-size: 16px and font-weight: 500,
- * with an optional description and CTA link.
+ * Features a title with font-size: 16px and font-weight: 500 (matches storyboard 'th' sizing),
+ * with an optional description and CTA link styled with design system tokens.
  */
 export function CollectionHeader({
   title,
