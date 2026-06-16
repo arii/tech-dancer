@@ -1,50 +1,94 @@
-// impeccable-ignore-file
-import { BookOpen } from 'lucide-react';
+import { Shirt, Plane, VenetianMask as Mask, Heart, Bot as Robot } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
 const TOPICS = [
   {
-    icon: BookOpen,
-    label: 'Blog Posts',
-    description: 'Dance concepts, practice systems, and competition prep without the jargon.',
-    cta: 'Read posts →',
-    href: '/blog',
+    id: "gear",
+    label: "Gear & apparel",
+    icon: Shirt,
+    href: "/blog?category=Gear",
+    iconColorClass: "text-accent-sky",
+    iconBgClass: "bg-accent-sky/10",
+    iconHoverBgClass: "group-hover:bg-accent-sky/20",
+    iconAnimClass: "group-hover:scale-110",
+  },
+  {
+    id: "travel",
+    label: "Travel & packing",
+    icon: Plane,
+    href: "/blog?category=Travel",
+    iconColorClass: "text-accent",
+    iconBgClass: "bg-accent/10",
+    iconHoverBgClass: "group-hover:bg-accent/20",
+    iconAnimClass: "group-hover:translate-x-1 group-hover:-translate-y-1",
+  },
+  {
+    id: "costumes",
+    label: "Costumes & themes",
+    icon: Mask,
+    href: "/blog?category=Costumes",
+    iconColorClass: "text-accent-magenta",
+    iconBgClass: "bg-accent-magenta/10",
+    iconHoverBgClass: "group-hover:bg-accent-magenta/20",
+    iconAnimClass: "group-hover:rotate-12",
+  },
+  {
+    id: "health",
+    label: "Health & recovery",
+    icon: Heart,
+    href: "/blog?category=Health",
+    iconColorClass: "text-error",
+    iconBgClass: "bg-error/10",
+    iconHoverBgClass: "group-hover:bg-error/20",
+    iconAnimClass: "group-hover:scale-110",
+  },
+  {
+    id: "agents",
+    label: "Agents & CI/CD",
+    icon: Robot,
+    href: "/research",
+    iconColorClass: "text-accent-purple",
+    iconBgClass: "bg-accent-purple/10",
+    iconHoverBgClass: "group-hover:bg-accent-purple/20",
+    iconAnimClass: "group-hover:-translate-y-1",
   },
 ];
 
 export function TopicGrid() {
   return (
-    <Box as="section" className="w-full max-w-full min-w-0">
-      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={3}>
+    <Box as="section" width="full" maxWidth="full" minWidth={0}>
+      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} uppercase tracking="wider">
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, md: 1 }} gap={3}>
-        {TOPICS.map(({ icon: Icon, label, description, cta, href }) => (
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
+        {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconBgClass, iconHoverBgClass, iconAnimClass }) => (
           <Stack
             key={label}
             as={NavLink}
             to={href}
-            gap={2}
-            padding={6}
+            direction="row"
+            align="center"
+            gap={4}
+            padding={4}
+            radius="md"
             border
-            radius="lg"
-            className="group w-full max-w-full min-w-0 min-h-[145px] md:h-[150px] transition-all duration-200 hover:border-accent/40 hover:bg-surface/60"
+            className={`group cursor-pointer bg-surface/30 border-line/30 topic-card-${id}`}
           >
-            {/* Icon — exactly 32px container */}
-            <Box className="w-8 h-8 flex items-center justify-center rounded-md bg-accent/10">
-              <Icon className="h-4.5 w-4.5 text-accent" />
+            <Box
+              width={10}
+              height={10}
+              display="flex"
+              align="center"
+              justify="center"
+              radius="md"
+              shrink={0}
+              className={`${iconBgClass} ${iconHoverBgClass} transition-colors duration-300`}
+            >
+              <Icon className={`h-5 w-5 ${iconColorClass} ${iconAnimClass} transition-transform duration-300`} />
             </Box>
-            <Stack gap={1}>
-              <Text variant="body" size="base" weight="font-bold" className="transition-colors group-hover:text-accent">
-                {label}
-              </Text>
-              <Text variant="body" size="sm" color="dim" className="line-clamp-none md:line-clamp-2 leading-snug">
-                {description}
-              </Text>
-            </Stack>
-            <Text variant="mono" size="xs" color="accent" weight="font-bold" className="mt-auto hidden md:block">
-              {cta}
+            <Text variant="body" size="base" weight="font-bold" hoverColor="accent" className="transition-colors duration-300">
+              {label}
             </Text>
           </Stack>
         ))}

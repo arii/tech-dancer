@@ -609,18 +609,17 @@
   "sunscreen": {
     "id": "sunscreen",
     "name": "Sunscreen",
-    "url": "https://www.amazon.com/dp/B001P97U6C?tag=onasafari04-20",
+    "url": "https://a.co/d/0i0D8738",
     "category": "travel",
-    "description": "Essential for pool parties.",
-    "draft": true,
-    "image": ""
+    "description": "Essential for outdoor dancing and daytime festivals, with added glitter and sparkles!",
+    "image": "/images/gear/amazon/coppertone-glow-shimmer-sunscreen.webp"
   },
   "visor": {
     "id": "visor",
     "name": "Sun Visor",
     "url": "https://a.co/d/0iUAm96D",
     "category": "gear",
-    "description": "Sun protection for the hot tub.",
+    "description": "Sun protection for outdoor dance floors and events.",
     "image": "/images/gear/sketches/visor.webp"
   },
   "light-up-suspenders": {

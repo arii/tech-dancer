@@ -20,9 +20,11 @@ Long days at conventions mean your devices will likely run out of juice before t
 ### Never Run Out of Battery
 A high-capacity portable power bank from Anker is a lifesaver when you're away from a wall outlet for 12+ hours.
 
-<notice type="affiliate" id="portable-charger" />
 
 ### Fast and Flexible Charging
 Multi-charging cables allow you to charge multiple devices at once with high-speed 3A charging, reducing the number of cords you need to pack.
 
 <notice type="affiliate" id="charging-cables" />
+
+### Choosing the Right Capacity
+When selecting a power bank, a higher mAh capacity (e.g., 20,000mAh) is ideal for weekend-long events where wall outlets are scarce, providing multiple full charges for your phone and accessories.
