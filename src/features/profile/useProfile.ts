@@ -13,17 +13,17 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "professional",
       title: "Professional Summary",
-      content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I've shipped production robotics software across navigation, localization, motion planning, and behavior systems — and at startups, that means owning the full system from algorithm to deployment. Independently, I build agentic CI/CD pipelines and LLM-assisted developer tooling, and I'm looking to bring those practices to robotics teams.",
+      content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
       cards: [
         {
           icon: 'terminal',
           title: "Robotics & Engineering",
-          content: "Senior roboticist with production experience at Waymo and Robust.AI. I work across navigation, localization, motion planning, and behavior for autonomous systems. At startups, that means owning the full stack — from algorithm to Docker to deployment. Stack: ROS1/ROS2, C++, Python. Available for project-based robotics contracts and Staff/Senior SWE roles."
+          content: "Senior roboticist with production experience at Waymo and Robust.AI. I work across navigation, localization, motion planning, and behavior for autonomous systems. At startups, that means owning the full stack — from algorithm to Docker to deployment. Stack: ROS1/ROS2, C++, Python. Available for robotics contracts and Staff/Senior SWE roles."
         },
         {
           icon: 'zap',
           title: "DevAI tooling (independent projects)",
-          content: "I build agentic CI/CD pipelines, LLM-assisted code review, and developer tooling as self-directed projects — the tools I wish robotics teams had. Current work: RepoAuditor AI (Gemini-driven PR auditing with Jules autonomous coding agent) and BoomTick.blog (live RAG + LLM testbed in active development). Code at github.com/arii."
+          content: "I build agentic CI/CD pipelines, LLM-assisted code review, and developer tooling as self-directed projects — the tools I wish robotics teams had. Current work: RepoAuditor AI (Gemini-driven PR auditing) and BoomTick.blog (live RAG + LLM testbed in active development). Code at github.com/arii."
         },
         {
           icon: 'globe',
@@ -93,12 +93,12 @@ const PROFILE_DATA: ProfileData = {
     }
   ],
   details: [
-    { label: "LOCATION", value: "San Francisco, CA" },
-    { label: "OPEN TO", value: "Staff SWE · Robotics contracts · DevAI consulting" },
-    { label: "PORTFOLIO", value: "boomtick.blog/research" },
-    { label: "RESUME", value: "boomtick.blog/ariel-anders-resume.pdf" },
-    { label: "GITHUB", value: "github.com/arii" },
-    { label: "LINKEDIN", value: "linkedin.com/in/ariel-anders" }
+    { label: "Location", value: "San Francisco, CA" },
+    { label: "Open to", value: "Staff SWE · Robotics contracts · DevAI consulting" },
+    { label: "Portfolio", value: "boomtick.blog/research" },
+    { label: "Resume", value: "boomtick.blog/ariel-anders-resume.pdf" },
+    { label: "GitHub", value: "github.com/arii" },
+    { label: "LinkedIn", value: "linkedin.com/in/ariel-anders" }
   ]
 };
 
