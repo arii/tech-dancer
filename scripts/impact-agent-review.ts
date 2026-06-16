@@ -15,6 +15,7 @@ interface VisualRouteSummary {
   diffCroppedPath?: string;
   beforePath: string;
   afterPath: string;
+  diffPath?: string;
 }
 
 interface VisualSummary {
@@ -34,21 +35,22 @@ const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
 const VISUAL_SUMMARY_PATH = path.join(ARTIFACTS_DIR, 'visual-review', 'summary.json');
 const AGENT_REPORT_PATH = path.join(ARTIFACTS_DIR, 'agent-review.md');
 
-const REVIEW_PROMPT = `You are a senior frontend engineer reviewing a pull request.
-You are given three screenshots of a single page:
-1. BEFORE — the page before this PR
+const REVIEW_PROMPT = `You are a strict, senior frontend engineer reviewing a pull request for visual regressions.
+You are given three full-page screenshots:
+1. BEFORE — the page prior to this PR
 2. AFTER — the page after this PR
 3. DIFF — a pixel diff highlighting changed regions in red
 
-Your job is to give specific, actionable visual feedback. Focus on:
-- Layout shifts or broken spacing
-- Text changes (copy edits, missing text, truncation)
-- Color or contrast changes
-- Component regressions (missing elements, wrong states)
-- Anything that looks unintentional
+Your job is to EVALUATE the changes, not just describe them.
+For each visual difference, determine if it is:
+- ✅ INTENTIONAL (e.g., deliberate copy edits, intentional styling updates)
+- ❌ A BUG/REGRESSION (e.g., layout shifts, broken spacing, bad contrast, truncated text, unintentional clipping)
 
-Be concise. Use bullet points. If the change looks intentional and correct, say so briefly.
-Do not describe what pixelmatch does. Just review the visual output like a human engineer would.`;
+Format your response as a concise, bulleted list.
+DO NOT just say "The text changed."
+DO say "✅ Text updated to X (looks intentional, layout remains intact)" OR "❌ Text updated to X, which caused the container below it to misalign."
+
+Be direct, actionable, and brief.`;
 
 // ── Gemini client ──────────────────────────────────────────────────────────
 
@@ -75,10 +77,10 @@ async function reviewRoute(
   model: ChatGoogleGenerativeAI,
   summary: VisualRouteSummary
 ): Promise<RouteReview> {
-  // Prefer cropped images (tighter context for the model)
-  const beforePath = summary.beforeCroppedPath ?? summary.beforePath;
-  const afterPath = summary.afterCroppedPath ?? summary.afterPath;
-  const diffPath = summary.diffCroppedPath;
+  // Use the FULL images so the model can see the surrounding layout
+  const beforePath = summary.beforePath;
+  const afterPath = summary.afterPath;
+  const diffPath = summary.diffPath;
 
   const baseContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
     { type: 'text', text: REVIEW_PROMPT },
