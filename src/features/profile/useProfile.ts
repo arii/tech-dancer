@@ -13,7 +13,7 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "professional",
       title: "Professional Summary",
-      content: "MIT PhD and former Senior Algorithm Engineer at Civ Robotics, Waymo, and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
+      content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
       cards: [
         {
           icon: 'terminal',
