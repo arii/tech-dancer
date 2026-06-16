@@ -1,7 +1,7 @@
 ---
 type: post
 title: "Halloween costumes you can dance in"
-date: "2026-10-31"
+date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Easiest DIY pumpkin costume: orange outfit + pumpkin headband + stick-on jack-o’-lantern face. No sewing, no felt cutting, still cute enough for Halloween dancing."
@@ -50,3 +50,6 @@ Disclosure: As an Amazon Associate, I may earn from qualifying purchases.
 
 [Check out the Gear specific review here](/gear)
 
+
+### Mobility Test
+Before committing to your costume, perform a quick "Mobility Test." Practice a basic dance mechanic—like a whip or an anchor—to ensure the outfit doesn't restrict your movement or create hazards for your partner.

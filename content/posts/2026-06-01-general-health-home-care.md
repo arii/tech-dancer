@@ -19,4 +19,3 @@ Recovery is just as important as practice. After a long weekend of dancing, your
 ### Muscle Recovery
 A high-density foam roller is an essential tool for any dancer's home recovery kit. It helps roll out tight calves, quads, and back muscles, ensuring you're ready for your next session.
 
-<notice type="affiliate" id="foam-roller" />

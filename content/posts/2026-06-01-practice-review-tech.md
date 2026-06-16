@@ -12,7 +12,6 @@ affiliateIds:
 tags:
   - "tech"
   - "practice"
-  - "video"
 ---
 
 Improving your dance requires consistent practice and review. These tech tools make it easier to rehearse anywhere and analyze your movement.
@@ -20,9 +19,13 @@ Improving your dance requires consistent practice and review. These tech tools m
 ### Music on the Go
 A reliable, portable Bluetooth speaker is essential for hotel room practices or outdoor meetups. The UE Wonderboom 4 offers great sound in a compact, durable package.
 
-<notice type="affiliate" id="portable-speaker" />
+
+
 
 ### Record Your Progress
 You can't fix what you can't see. A compact travel tripod allows you to easily film your practice sessions or competition heats for later review.
 
 <notice type="affiliate" id="tripod" />
+
+### Recommended Setup
+For the best recording angle, place your tripod at chest height and position it near a corner of the floor. This minimizes obstruction while capturing the full scope of your movement.
