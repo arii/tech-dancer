@@ -127,3 +127,11 @@ Instead of replacing the entire sheet, apply a drop of Shoe Goo or superglue to 
 ## Final Verdict
 
 If you already own a comfortable pair of sneakers or flats, adding adhesive suede is often a better solution than purchasing dedicated dance shoes. The modification is inexpensive, durable, and provides a predictable friction profile across a wide range of ballroom and social dance floors.
+
+### FAQs
+
+**How durable are adhesive suede sheets?**
+Suede sheets typically last for several months of regular dancing, depending on the floor type. They perform best on smooth wooden or dedicated dance floors. **Never** wear suede on concrete, wet floors, or outside the ballroom. It is highly recommended to change out of your dance shoes before using the restroom or taking the elevator (you never know what is on the floor!).
+
+**How do I remove them?**
+If you need to replace the sheets or return the shoes to everyday use, peel them off slowly. Any residual adhesive can usually be removed with rubbing alcohol or an adhesive remover like Goo Gone.
