@@ -6,7 +6,7 @@
 export interface ResearchTool {
   id: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description: string;
   category: string;
   taxonomyBucket?: 'flagship' | 'engineering' | 'data-content' | 'e-commerce';
@@ -20,30 +20,44 @@ export interface ResearchTool {
   excludeFromEngineeringTools?: boolean;
   image?: string;
   imageAlt?: string;
+  inDevMessage?: {
+    highlight: string;
+    rest: string;
+  };
+  customPreview?: {
+    logo: { prefix: string; accent: string; suffix: string };
+    headline: { text: string; accent?: string }[];
+    tagline: string;
+  };
 }
 
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'hrm-flagship',
+    inDevMessage: {
+      highlight: 'Intended to run locally on your own server.',
+      rest: ' No live site available.'
+    },
     taxonomyBucket: 'flagship',
     title: 'HRM (Heart Rate Monitor)',
-    subtitle: 'Flagship Training Dashboard',
-    description: 'The original product built using AI-assisted engineering. It integrates Web Bluetooth heart-rate telemetry with Spotify API context, demonstrating full-stack Dev AI orchestration for complex browser-based applications.',
+    description: 'Web Bluetooth heart-rate telemetry synced across multiple clients via persistent WebSocket server, with Spotify API integration and a synchronized timer. Built end-to-end as a DevAI-assisted engineering project.',
     category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
-    externalUrl: 'https://arii.github.io/hrm/',
-    externalLinkDisplayLabel: 'View HRM',
+    sourceUrl: 'https://github.com/arii/hrm',
     isFlagship: true,
     image: '/assets/research/hrm-flagship.png',
     imageAlt: 'Screenshot of the HRM heart rate monitor training dashboard with real-time biometric telemetry and Spotify integration'
   },
   {
     id: 'repo-auditor-ai',
+    inDevMessage: {
+      highlight: 'Available now for testing',
+      rest: ' with your own repository.'
+    },
     taxonomyBucket: 'flagship',
     title: 'RepoAuditor AI',
-    subtitle: 'DevAI Workflow Console',
-    description: 'A purpose-built AI orchestration console for GitHub. It leverages custom prompt engineering to audit pull requests, analyze workflow health, and generate structured issues for Jules coding agents, unblocking rapid multi-repo development.',
+    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow — not prior paid work.',
     category: 'DevAI Tooling',
     status: 'Active',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
@@ -55,37 +69,67 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
   },
   {
+    id: 'boomtick-blog',
+    inDevMessage: {
+      highlight: 'RAG + LLM tooling in active development.',
+      rest: ' This site is the production environment where those pipelines are being built and validated.'
+    },
+    taxonomyBucket: 'flagship',
+    title: 'BoomTick.blog',
+    subtitle: 'LIVE DEVELOPMENT ENVIRONMENT',
+    description: 'West Coast Swing community platform and active testbed for RAG pipelines and LLM-assisted content workflows currently in development. Includes SEO-optimized publishing, analytics, and Printful API integration for automated merch listing generation.',
+    category: 'Product development',
+    status: 'Active dev',
+    tags: ['Next.js', 'LLM Workflows', 'SEO'],
+    externalUrl: 'https://boomtick.blog',
+    externalLinkDisplayLabel: 'Visit Site',
+    sourceUrl: 'https://github.com/arii/tech-dancer',
+    isFlagship: true,
+    customPreview: {
+      logo: { prefix: 'boom', accent: 'tick', suffix: '.blog' },
+      headline: [
+        { text: 'Built for dancers.' },
+        { text: 'Train smarter.', accent: 'Train smarter.' },
+        { text: 'Travel better.' }
+      ],
+      tagline: 'Training notes, gear reviews, and WCS guides.'
+    }
+  },
+  {
     id: 'gitops-pr-reviewer',
     taxonomyBucket: 'engineering',
     title: 'GitOps Code Review Agent',
     subtitle: 'Automated Local PR Auditing',
-    description: 'A model-agnostic ML engineering example using local LLMs to audit code style and pattern consistency. It serves as a GitOps-driven RAG prototype for private codebase documentation and policy enforcement.',
+    description: 'Local LLM-powered PR auditing using Ollama and GitHub Actions. Reviews code style and pattern consistency on every pull request without sending code to external APIs. The foundation for the RAG-grounded review pipeline being built into RepoAuditor AI.',
     category: 'DevAI System',
     status: 'Active',
-    tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
-    canonicalPath: '/research/gitops-pr-reviewer'
+    tags: ['Ollama', 'GitHub Actions', 'Local LLM', 'PR Automation'],
+    canonicalPath: '/research/gitops-pr-reviewer',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
     id: 'scope-blast-radius',
     taxonomyBucket: 'engineering',
     title: 'Blast-Radius Analyzer',
-    subtitle: 'Static Workspace Dependency Checker',
-    description: 'Demonstrates AI-assisted static analysis by calculating the semantic impact of code changes. Essential for AI orchestration to minimize token waste and provide agents with high-precision context.',
+    subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
+    description: 'CI pipeline that determines which pages are visually affected by a pull request. Uses dependency-cruiser to trace changed files through the import graph, then captures Playwright screenshots of affected routes, runs pixelmatch pixel diffs, crops changed regions, and generates a deployment review report with severity scores. Agent integration in progress.',
     category: 'DevAI System',
     status: 'Active',
-    tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
-    canonicalPath: '/research/scope-blast-radius'
+    tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
+    canonicalPath: '/research/scope-blast-radius',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
     id: 'ux-auditor',
     taxonomyBucket: 'engineering',
     title: 'Visual Regression & UX Auditor',
-    subtitle: 'Perception Telemetry System',
-    description: 'An AI-assisted perception pipeline that maps DOM shifts to visual regressions. It uses automated Playwright workflows to provide high-fidelity telemetry for AI-driven frontend optimization.',
+    subtitle: 'PLAYWRIGHT VISUAL REGRESSION',
+    description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots before and after a PR, computes pixel-level diffs, crops the bounding box of changed regions, and scores severity by percentage of changed pixels. Part of the Blast-Radius Analyzer pipeline.',
     category: 'Perception Debugging',
     status: 'Active',
-    tags: ['Automation', 'Visual Regression', 'Lighthouse', 'Playwright'],
-    canonicalPath: '/ux-auditor'
+    tags: ['Playwright', 'Pixelmatch', 'Screenshot Diff', 'CI/CD'],
+    canonicalPath: '/ux-auditor',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
     id: 'wcs-scraper',
