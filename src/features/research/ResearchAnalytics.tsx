@@ -411,30 +411,37 @@ export default function ResearchAnalytics() {
           </Stack>
         )}
 
-        <Stack gap={6} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me">
-          <Box paddingBottom={2} className="border-b border-line/10">
-            <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
-          </Box>
-          <Text variant="body" size="lg" color="dim" leading="relaxed">
-            These are my own projects — built to solve real problems I care about.
-            If you need a senior roboticist, DevAI engineering infrastructure,
-            or someone who can do both, I'm available for project-based contracts
-            and full-time roles.
-          </Text>
-          <Box display="flex" align="center" gap={4} wrap="wrap" marginTop={2}>
-            <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
-              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
+        <Grid cols={{ base: 1, md: 12 }} gap={8} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me">
+          {/* Contact Details Column */}
+          <Stack gap={4} span={{ base: 12, md: 5 }}>
+            <Box paddingBottom={2} className="border-b border-line/10">
+              <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
             </Box>
-            <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-            <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
+            <Box display="flex" align="center" gap={4} wrap="wrap" marginTop={2}>
+              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
+              </Box>
+              <Text color="dim" opacityVariant="muted" size="xs">·</Text>
+              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
+              </Box>
+              <Text color="dim" opacityVariant="muted" size="xs">·</Text>
+              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
+              </Box>
             </Box>
-            <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-            <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
-            </Box>
-          </Box>
-        </Stack>
+          </Stack>
+
+          {/* Description Column */}
+          <Stack gap={4} span={{ base: 12, md: 7 }} justify="center">
+            <Text variant="body" size="lg" color="dim" leading="relaxed">
+              These are my own projects — built to solve real problems I care about.
+              If you need a senior roboticist, DevAI engineering infrastructure,
+              or someone who can do both, I'm available for project-based contracts
+              and full-time roles.
+            </Text>
+          </Stack>
+        </Grid>
       </Stack>
     </Box>
   );
