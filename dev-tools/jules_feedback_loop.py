@@ -7,7 +7,7 @@ Coordinates active Jules agent sessions with their respective GitHub PRs and CI 
 import sys
 import requests
 from tdw_services.services.jules import JulesClient
-from dev_tools_sdk.utils.auth import get_github_client
+from dev_tools_sdk.utils.auth import get_github_client, get_github_token
 from dev_tools_sdk.utils.common import get_repo_name
 from dev_tools_sdk.utils.logs import extract_failing_info, clean_gha_logs
 
@@ -80,7 +80,7 @@ def run_feedback_loop():
                     any_failed = True
                     try:
                         # Attempt to download logs using GitHub API via requests
-                        token = gh._auth.token if hasattr(gh, '_auth') and hasattr(gh._auth, 'token') else None
+                        token = get_github_token()
                         headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"} if token else {}
                         res = requests.get(f"https://api.github.com/repos/{repo_name}/actions/jobs/{run.id}/logs", headers=headers, allow_redirects=True)
                         if res.status_code == 200:
