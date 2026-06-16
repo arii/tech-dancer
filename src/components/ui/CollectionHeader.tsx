@@ -8,6 +8,7 @@ interface CollectionHeaderProps {
   description?: string;
   href?: string;
   ctaLabel?: string;
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 /**
@@ -15,12 +16,18 @@ interface CollectionHeaderProps {
  * Features a title with font-size: 16px and font-weight: 500,
  * with an optional description and CTA link.
  */
-export function CollectionHeader({ title, description, href, ctaLabel }: CollectionHeaderProps) {
+export function CollectionHeader({
+  title,
+  description,
+  href,
+  ctaLabel,
+  headingLevel = 'h2'
+}: CollectionHeaderProps) {
   return (
     <Stack gap={1} width="full">
       <Box display="flex" align="center" justify="between" gap={4} width="full">
         <Text
-          as="h2"
+          as={headingLevel}
           size="base"
           weight="font-medium"
           color="main"

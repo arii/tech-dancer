@@ -1,6 +1,5 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
