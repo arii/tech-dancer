@@ -9,6 +9,10 @@ It maintains backward compatibility for existing scripts and CI workflows.
 import sys
 import os
 
+if "-h" in sys.argv or "--help" in sys.argv:
+    print("FATAL: --help is disabled for agent workflows. Read dev-tools/cli-schema.json for command syntax.")
+    sys.exit(1)
+
 # Add the dev-tools directory to sys.path so we can import tdw_services
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,7 +41,7 @@ try:
 
         # Support legacy test expectation for JULES_API_KEY / ANTIGRAVITY_API_KEY
         if not getattr(args, 'api_key', None) and not os.environ.get("ANTIGRAVITY_API_KEY") and not os.environ.get("JULES_API_KEY"):
-            raise CLIError("Missing AGENTS_API_KEY", code=401)
+            raise CLIError("Missing JULES_API_KEY", code=401)
 
         # Support legacy test expectation for repo name
         if not get_repo_name():

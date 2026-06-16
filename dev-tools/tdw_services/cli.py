@@ -140,7 +140,7 @@ def conflicts(ctx, base):
     if res['status'] == 'success':
         out(ctx, res['message'], data=res)
     elif res['status'] == 'environment_error':
-        err(ctx, res['message'], code=2, data=res)
+        err(ctx, res['message'], code=1, data=res)
     else:
         err(ctx, res['message'], data=res)
 
@@ -156,6 +156,36 @@ def detect_conflicts(ctx, pr):
             click.echo(f"⚠️  {' ↔ '.join(f'#{p}' for p in c['prs'])} share {len(c['files'])} file(s):")
             for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
+
+@gh.command()
+@click.option('--post-comments', is_flag=True, help="Post feedback as comments on PRs.")
+@click.option('--generate-report/--no-generate-report', default=True, help="Generate final-audit.md report (default: True).")
+@click.option('--limit', type=int, default=100, help="Maximum number of open PRs to process (default: 100).")
+@click.pass_context
+def mass_evaluate(ctx, post_comments, generate_report, limit):
+    """Evaluate open PRs using heuristics and optionally post feedback or generate a report."""
+    orch = ctx.obj['ORCHESTRATOR']
+    out(ctx, f"Starting mass evaluation for up to {limit} PRs...", data={})
+    res = orch.mass_evaluate_prs(post_comments=post_comments, generate_report=generate_report, limit=limit)
+    out(ctx, f"✅ Evaluated {res['evaluated_count']} PRs. Report: {res['report_generated']}, Comments posted: {res['comments_posted']}", data=res)
+
+@gh.command()
+@click.option('--pr', required=True, type=int, help="The PR number to comment on.")
+@click.option('--file', required=True, type=str, help="Path to the file containing the comment body.")
+@click.pass_context
+def post_comment(ctx, pr, file):
+    """Post a comment to a PR from a file."""
+    orch = ctx.obj['ORCHESTRATOR']
+    import os
+    if not os.path.exists(file):
+        err(ctx, f"File {file} does not exist.", data={"status": "error", "file": file})
+        return
+
+    with open(file, 'r') as f:
+        body = f.read()
+
+    res = orch.github.create_issue_comment(pr, body)
+    out(ctx, f"✅ Successfully posted comment to PR #{pr}", data={"status": "success"})
 
 @gh.command()
 @click.pass_context
@@ -264,6 +294,26 @@ def pre_submit(ctx):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.pre_submit_checks()
     out(ctx, "Pre-submit checks complete.", data={"results": res})
+
+@gh.command()
+@click.option('--limit', type=int, default=50, help='Limit the number of open PRs to process')
+@click.option('--no-cache', is_flag=True, default=False, help='Bust the cache and force fetching data from GitHub')
+@click.pass_context
+def overlaps(ctx, limit, no_cache):
+    """Identify and propose consolidation of PRs with high functional or structural overlap."""
+    import subprocess
+    import sys
+    import os
+
+    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'pr_overlap.py')
+    cmd = [sys.executable, script_path, '--limit', str(limit)]
+    if no_cache:
+        cmd.append('--no-cache')
+
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        err(ctx, f"pr_overlap.py failed with exit code {e.returncode}")
 
 # ==========================================
 # UX COMMAND GROUP
@@ -432,7 +482,7 @@ def dispatch(ctx, branch, task):
 def sync(ctx):
     """Sync active agent sessions."""
     orch = ctx.obj['ORCHESTRATOR']
-    sessions = orch.agents.list_sessions()
+    sessions = orch.jules.list_sessions()
 
     if not ctx.obj['JSON']:
         if not sessions:
@@ -483,15 +533,46 @@ def repair(ctx, logs, stdin, worktree):
     else:
         err(ctx, res['message'], data=res)
 
+@agent_group.command()
+@click.argument('session_id')
+@click.pass_context
+def messages(ctx, session_id):
+    """Get message history for a Jules session."""
+    orch = ctx.obj['ORCHESTRATOR']
+    msgs = orch.jules.get_messages(session_id)
+    if not ctx.obj['JSON']:
+        if not msgs:
+            click.echo(f"No messages found for session {session_id}")
+        else:
+            for m in msgs:
+                role = m['role'].upper()
+                click.echo(f"[{m['time']}] {role}:")
+                click.echo(m['content'])
+                click.echo("-" * 40)
+    out(ctx, f"Messages retrieved for {session_id}", data={"messages": msgs})
+
+@agent_group.command()
+@click.argument('session_id')
+@click.argument('message')
+@click.pass_context
+def send(ctx, session_id, message):
+    """Send a message to an active Jules session."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.jules.send_message(session_id, message)
+    if res.get('status') == 'success':
+        out(ctx, f"✅ Message sent to session {session_id}", data=res)
+    else:
+        err(ctx, f"Failed to send message: {res.get('message')}", data=res)
+
 # Register aliases for backwards compatibility
-@cli.group(name='agents')
+@cli.group(name='jules')
 def jules_group():
-    """Agent Operations"""
+    """Agent Operations (alias for agent)"""
     pass
 
 @cli.group(name='antigravity')
 def antigravity_group():
-    """Agent Operations"""
+    """Agent Operations (alias for agent)"""
     pass
 
 for group in [jules_group, antigravity_group]:
@@ -500,6 +581,8 @@ for group in [jules_group, antigravity_group]:
     group.add_command(fix_ci)
     group.add_command(repair_context)
     group.add_command(repair)
+    group.add_command(messages)
+    group.add_command(send)
 
 if __name__ == "__main__":
     cli(obj={})
