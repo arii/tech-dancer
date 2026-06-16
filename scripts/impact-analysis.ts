@@ -261,12 +261,25 @@ async function main() {
 
     const severityEmoji = severity === 'HIGH' ? '🔴' : severity === 'MEDIUM' ? '🟡' : '🟢';
 
+    // Extract base URL if running in a branch context, otherwise default to boomtick.blog
+    // We check the standard GITHUB variables, or process.env.VITE_APP_URL
+    let baseUrl = process.env.VITE_APP_URL || 'https://boomtick.blog';
+    if (process.env.GITHUB_PAGES_URL) {
+      baseUrl = process.env.GITHUB_PAGES_URL.replace(/\/$/, '');
+    } else if (process.env.GITHUB_REPOSITORY && process.env.GITHUB_REF_NAME) {
+      const repoName = process.env.GITHUB_REPOSITORY.split('/')[1];
+      const owner = process.env.GITHUB_REPOSITORY.split('/')[0];
+      // Note: This matches the typical github pages path, but standard PR builds might have different links.
+      // This ensures we're not hardcoding the production boomtick.blog domain.
+      baseUrl = `https://${owner}.github.io/${repoName}/${process.env.GITHUB_REF_NAME}`;
+    }
+
     const markdown = `## ${severityEmoji} Deployment Impact Analysis
 
 > **Impact Level:** ${severity}
 
 ### 👁️ Visual Review Required
-${allUrls.length > 0 ? allUrls.map(url => `- [${url}](https://boomtick.blog${url})`).join('\n') : '_None detected (code-only change)_'}
+${allUrls.length > 0 ? allUrls.map(url => `- [${url}](${baseUrl}${url})`).join('\n') : '_None detected (code-only change)_'}
 
 <details>
 <summary><b>📝 Changed Files (${changedFiles.length})</b></summary>
