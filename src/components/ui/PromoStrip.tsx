@@ -11,7 +11,6 @@ interface PromoStripProps {
   subtitle: string;    // e.g. "Tees, hoodies, and tanks for the dance floor"
   ctaLabel: string;    // e.g. "Shop now"
   href: string;        // "/merch"
-  isNew?: boolean;     // shows "New" badge
 }
 
 export function PromoStrip({
@@ -20,17 +19,22 @@ export function PromoStrip({
   subtitle,
   ctaLabel,
   href,
-  isNew
 }: PromoStripProps) {
-  // Use standard asset resolution pattern
+  // Use standard asset resolution pattern for images
   const fullImageSrc = imageSrc.startsWith('http')
     ? imageSrc
-    : `${ASSET_PREFIX}/${imageSrc.replace(/^\//, '')}`;
+    : (ASSET_PREFIX + '/' + imageSrc).replace(/\/+/g, '/');
+
+  // Ensure internal links preserve the base URL correctly
+  // Use a resolution pattern that avoids double slashes (which can be interpreted as protocol-relative)
+  const resolvedHref = href.startsWith('http')
+    ? href
+    : (ASSET_PREFIX + '/' + href).replace(/\/+/g, '/');
 
   return (
     <Box
       as={NavLink}
-      to={href}
+      to={resolvedHref}
       position="relative"
       width="full"
       padding={{ base: 3, sm: 4 }}
@@ -40,29 +44,6 @@ export function PromoStrip({
       display="block"
       className="group transition-all hover:bg-white/5"
     >
-      {isNew && (
-        <Box
-          position="absolute"
-          top={0}
-          right={0}
-          paddingX={2}
-          paddingY={0.5}
-          radius="none"
-          className="rounded-bl-md bg-accent"
-          zIndex={10}
-        >
-          <Text
-            variant="mono"
-            size="micro"
-            weight="font-black"
-            color="main"
-            uppercase
-          >
-            New
-          </Text>
-        </Box>
-      )}
-
       <Stack direction="row" align="center" gap={{ base: 3, sm: 4 }}>
         <Box
           width={{ base: 10, sm: 12 }}
@@ -101,7 +82,8 @@ export function PromoStrip({
             variant="mono"
             size={{ base: 'micro', sm: 'tiny' }}
             weight="font-bold"
-            className="text-accent group-hover:underline underline-offset-4 uppercase transition-all"
+            color="accent"
+            className="group-hover:underline underline-offset-4 uppercase transition-all"
           >
             {ctaLabel}
           </Text>
