@@ -6,7 +6,7 @@
 export interface ResearchTool {
   id: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description: string;
   category: string;
   taxonomyBucket?: 'flagship' | 'engineering' | 'data-content' | 'e-commerce';
@@ -27,8 +27,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     id: 'hrm-flagship',
     taxonomyBucket: 'flagship',
     title: 'HRM (Heart Rate Monitor)',
-    subtitle: 'Flagship Training Dashboard',
-    description: 'The original product built using AI-assisted engineering. It integrates Web Bluetooth heart-rate telemetry with Spotify API context, demonstrating full-stack Dev AI orchestration for complex browser-based applications.',
+    description: 'Web Bluetooth heart-rate telemetry synced across multiple clients via persistent WebSocket server, with Spotify API integration and a synchronized timer. Built end-to-end as a DevAI-assisted engineering project.',
     category: 'Product Development',
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
@@ -42,8 +41,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     id: 'repo-auditor-ai',
     taxonomyBucket: 'flagship',
     title: 'RepoAuditor AI',
-    subtitle: 'DevAI Workflow Console',
-    description: 'A purpose-built AI orchestration console for GitHub. It leverages custom prompt engineering to audit pull requests, analyze workflow health, and generate structured issues for Jules coding agents, unblocking rapid multi-repo development.',
+    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow — not prior paid work.',
     category: 'DevAI Tooling',
     status: 'Active',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
@@ -53,6 +51,17 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     isFlagship: true,
     image: '/assets/research/repo-auditor-ai.png',
     imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
+  },
+  {
+    id: 'boomtick-blog',
+    taxonomyBucket: 'flagship',
+    title: 'BoomTick.blog',
+    subtitle: 'LIVE DEVELOPMENT ENVIRONMENT',
+    description: 'West Coast Swing community platform and active testbed for RAG pipelines and LLM-assisted content workflows currently in development. Includes SEO-optimized publishing, analytics, and Printful API integration for automated merch listing generation.',
+    category: 'Product development',
+    status: 'Active dev',
+    tags: ['Next.js', 'LLM Workflows', 'SEO'],
+    isFlagship: true,
   },
   {
     id: 'gitops-pr-reviewer',

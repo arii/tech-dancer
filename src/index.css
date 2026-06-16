@@ -370,3 +370,77 @@
   transform: translateY(-2px);
 }
 
+.in-dev-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.in-dev-banner i {
+  font-size: 15px;
+  color: var(--color-text-tertiary);
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.in-dev-banner p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.in-dev-banner strong {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+/* Card Screenshot Wrapper to cap heights and crop bottom captions */
+.card-screenshot-wrapper {
+  height: 200px !important;
+  overflow: hidden !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.card-screenshot-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: top !important;
+  display: block !important;
+  transform: scale(1.1) !important;
+  transform-origin: top !important;
+}
+
+/* Lightened Why This Matters block styling */
+.why-this-matters {
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 32px 0 !important;
+}
+
+.why-this-matters .label {
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--color-text-tertiary) !important;
+  margin-bottom: 8px !important;
+  font-family: var(--font-mono) !important;
+  font-weight: bold !important;
+}
+
+.why-this-matters p {
+  font-size: 15px !important;
+  color: var(--color-text-secondary) !important;
+  line-height: 1.7 !important;
+  max-width: 640px !important;
+}
+
+

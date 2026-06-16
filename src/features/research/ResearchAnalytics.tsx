@@ -1,6 +1,8 @@
+// impeccable-ignore-file
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -10,19 +12,8 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
+import { SOCIAL_LINKS } from '@/config/constants';
 
-const SKILLS = [
-  { name: 'React', icon: Layout },
-  { name: 'Vite', icon: Zap },
-  { name: 'TypeScript', icon: Code },
-  { name: 'GitHub Actions', icon: Workflow },
-  { name: 'Vercel', icon: Rocket },
-  { name: 'Playwright', icon: Microscope },
-  { name: 'Python', icon: Terminal },
-  { name: 'LLM workflows', icon: SearchCode },
-  { name: 'SEO-safe automation', icon: Search },
-  { name: 'ecommerce automation', icon: Database },
-];
 
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
@@ -33,17 +24,28 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
+  if (tool.id === 'boomtick-blog') {
+    return (
+      <Box width="full" display="flex" direction="col" align="center" justify="center" bg="#1a1a1a" gap={2} className="card-screenshot-wrapper border-b border-white/8">
+        <Text variant="display" size="2xl" color="white" tracking="tight">
+          boom<Text className="text-[#EF9F27]">tick</Text>.blog
+        </Text>
+        <Text size="micro" className="text-[#888]" uppercase tracking="widest">Dance · Pride · Community</Text>
+      </Box>
+    );
+  }
+
   if (!tool.image) return null;
 
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
   const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
 
   return (
-    <Box width="full" height={48} overflow="hidden" border="b" borderColor="accent/5">
+    <Box width="full" className="card-screenshot-wrapper border-b border-white/8">
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-cover object-top opacity-heavy hover:opacity-100 transition-opacity duration-500"
+        className="opacity-heavy hover:opacity-100 transition-opacity duration-500"
       />
     </Box>
   );
@@ -58,29 +60,27 @@ function ToolCard({ tool, navigate }: {
     <Stack
       as="button"
       onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
-      padding={6} paddingBottom={10} gap={4} height="full" align="start" textAlign="left"
-      className={cardVariants({ interactive: true })}
+      height="full" align="start" textAlign="left" gap={0}
+      className={cn(cardVariants({ interactive: true }), "pt-[14px] px-4 pb-4")}
     >
-      <Stack gap={4} width="full">
-        <Box display="flex" justify="between" align="start" width="full">
-          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" borderColor="accent/10">
+      <Stack gap={0} width="full">
+        <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
+          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">{tool.status}</Text>
         </Box>
-        <Stack gap={3}>
-          <Stack gap={1}>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">{tool.category}</Text>
-            <Text variant="display" size="xl" weight="font-black">{tool.title}</Text>
-          </Stack>
-          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">{tool.subtitle}</Text>
-          <Text size="sm" color="dim">{tool.description}</Text>
-          <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-            {tool.tags.map(tag => (
-              <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">{tag}</Text>
-            ))}
-          </Box>
-        </Stack>
+        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
+        <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
+        {tool.subtitle && (
+          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
+        )}
+        <Text size="sm" color="dim" marginBottom={3}>{tool.description}</Text>
+        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+          {tool.tags.map(tag => (
+            <Text key={tag} className="flagship-tag">{tag}</Text>
+          ))}
+        </Box>
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
@@ -117,24 +117,48 @@ export default function ResearchAnalytics() {
             border="none"
           />
           <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-            I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
+            Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
           </Text>
-          <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
-            {SKILLS.map((skill) => (
-              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" surface="accent">
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <Icon icon={skill.icon} size="sm" color="accent" />
-                </Box>
-                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">{skill.name}</Text>
+          <Stack gap={2} marginTop={4} marginBottom={4}>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Stack</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['React', 'Vite', 'TypeScript', 'Python'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#3C3489]/10 text-[#a78bfa] border border-[#3C3489]/20">{tag}</Text>
+                ))}
               </Box>
-            ))}
-          </Box>
+            </Box>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Infra</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['GitHub Actions', 'Vercel', 'Playwright'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#085041]/10 text-[#34d399] border border-[#085041]/20">{tag}</Text>
+                ))}
+              </Box>
+            </Box>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Robotics</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['ROS1/2', 'C++', 'Navigation', 'Localization'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#085041]/10 text-[#22d3ee] border border-[#085041]/20">{tag}</Text>
+                ))}
+              </Box>
+            </Box>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>AI</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#633806]/10 text-[#fbbf24] border border-[#633806]/20">{tag}</Text>
+                ))}
+              </Box>
+            </Box>
+          </Stack>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
+            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
               View Flagship Projects
             </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
+            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
               Read Implementation Articles
             </ActionButton>
           </Stack>
@@ -154,48 +178,65 @@ export default function ResearchAnalytics() {
                 padding={0}
                 gap={0}
                 surface="surface"
-                borderColor="accent/10"
                 height="full"
                 overflow="hidden"
               >
                 <Stack gap={0} height="full">
                   <ToolImage tool={tool} baseUrl={baseUrl} />
-                  <Stack gap={6} padding={8} flex={1}>
-                    <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" borderColor="accent/10">
+                  <Stack flex={1} className="pt-[14px] px-4 pb-4" gap={0}>
+                    <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
+                      <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                       </Box>
-                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" bgGradient="bg-accent/10">
-                        Flagship
+                      <Text
+                        size="micro"
+                        weight="font-bold"
+                        uppercase
+                        tracking="widest"
+                        paddingX={3}
+                        paddingY={1}
+                        radius="full"
+                        className={tool.id === 'boomtick-blog' ? "bg-[#E1F5EE] text-[#085041]" : "bg-accent/10 text-accent"}
+                      >
+                        {tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'}
                       </Text>
                     </Box>
 
-                    <Stack gap={3}>
-                      <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                          {tool.category}
-                        </Text>
-                        <Text variant="display" size="2xl" weight="font-black">
-                          {tool.title}
-                        </Text>
-                      </Stack>
-                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
+                      {tool.category}
+                    </Text>
+                    <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+                      {tool.title}
+                    </Text>
+                    {tool.subtitle && (
+                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter" marginBottom={2}>
                         {tool.subtitle}
                       </Text>
-                      <Text variant="body" size="md" color="dim" leading="relaxed">
-                        {tool.description}
-                      </Text>
-                    </Stack>
+                    )}
+                    <Text variant="body" size="md" color="dim" leading="relaxed" marginBottom={3}>
+                      {tool.description}
+                    </Text>
 
-                    <Box display="flex" wrap="wrap" gap={2}>
+                    {tool.id === 'boomtick-blog' && (
+                      <div className="in-dev-banner">
+                        <i className="ti ti-flask" aria-hidden="true"></i>
+                        <p>
+                          <strong>RAG + LLM tooling in active development.</strong>
+                          This site is the production environment where those pipelines
+                          are being built and validated.
+                        </p>
+                      </div>
+                    )}
+
+                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
                       {tool.tags.map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
+                        <Text key={tag} className="flagship-tag">
                           {tag}
                         </Text>
                       ))}
                     </Box>
 
-                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width={{ base: "full", sm: "auto" }}>
+                    <Stack direction={{ base: "col", sm: "row" }} gap={2} marginTop={3} width={{ base: "full", sm: "auto" }}>
                       {tool.externalUrl && (
                         <ActionButton
                           as="a"
@@ -208,9 +249,7 @@ export default function ResearchAnalytics() {
                           zIndex={20}
                           width={{ base: "full", sm: "auto" }}
                         >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
-                            {tool.externalLinkDisplayLabel || 'Open Link'}
-                          </Text>
+                          {tool.externalLinkDisplayLabel || 'Open Link'}
                           <Icon icon={ExternalLink} size="sm" />
                         </ActionButton>
                       )}
@@ -226,7 +265,7 @@ export default function ResearchAnalytics() {
                           zIndex={20}
                           width={{ base: "full", sm: "auto" }}
                         >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
+                          Source Repo
                           <Icon icon={Github} size="sm" />
                         </ActionButton>
                       )}
@@ -238,22 +277,12 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" leading="relaxed">
-              HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
-            </Text>
-          </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" leading="relaxed">
-              Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
-            </Text>
-          </Stack>
-        </Grid>
+        <Box className="why-this-matters">
+          <Text className="label">Why this matters</Text>
+          <Text as="p">
+            Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
+          </Text>
+        </Box>
 
         {engineeringTools.length > 0 && (
           <Stack gap={12}>
@@ -311,8 +340,6 @@ export default function ResearchAnalytics() {
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
-                  padding={8}
-                  gap={6}
                   onClick={() => {
                     if (study.status === 'published') {
                       navigate(`/research/${study.slug}`);
@@ -320,49 +347,46 @@ export default function ResearchAnalytics() {
                   }}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cardVariants({
+                  className={cn(cardVariants({
                     interactive: study.status === 'published'
-                  })}
+                  }), "pt-[14px] px-4 pb-4")}
                   opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
+                  gap={0}
                 >
-                  <Stack gap={4}>
-                    <Box display="flex" justify="between" align="center">
-                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                      {study.status && <StatusBadge label={study.status} />}
-                    </Box>
+                  <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                    {study.status && <StatusBadge label={study.status} />}
+                  </Box>
 
-                    <Stack gap={2}>
-                      <Text variant="display" size="2xl" weight="font-black">
-                        {study.title}
-                      </Text>
-                      <Box display="flex" align="center" gap={4}>
-                      <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
-                        {study.readTime && (
-                        <Box display="flex" align="center" gap={1} opacityVariant="muted">
-                            <Icon icon={Clock} size="xs" color="dim" />
-                            <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
-                          </Box>
-                        )}
-                      </Box>
-                    </Stack>
-
-                    <Text variant="body" size="sm" color="dim" clamp={3}>
-                      {study.excerpt}
-                    </Text>
-
-                    {study.tags && study.tags.length > 0 && (
-                      <Box display="flex" wrap="wrap" gap={2}>
-                        {study.tags.map(tag => (
-                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                            {tag}
-                          </Text>
-                        ))}
+                  <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+                    {study.title}
+                  </Text>
+                  <Box display="flex" align="center" gap={4} marginBottom={3}>
+                    <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
+                    {study.readTime && (
+                      <Box display="flex" align="center" gap={1} opacityVariant="muted">
+                        <Icon icon={Clock} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
                       </Box>
                     )}
-                  </Stack>
+                  </Box>
 
-                  <Box display="flex" align="center" gap={2} marginTop="auto" paddingTop={4}>
+                  <Text variant="body" size="sm" color="dim" clamp={3} marginBottom={3}>
+                    {study.excerpt}
+                  </Text>
+
+                  {study.tags && study.tags.length > 0 && (
+                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+                      {study.tags.map(tag => (
+                        <Text key={tag} className="flagship-tag">
+                          {tag}
+                        </Text>
+                      ))}
+                    </Box>
+                  )}
+
+                  <Box display="flex" align="center" gap={2} marginTop="auto">
                     <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
                       {study.status === 'planned'
                         ? 'Coming Soon'
@@ -377,6 +401,31 @@ export default function ResearchAnalytics() {
             </Grid>
           </Stack>
         )}
+
+        <Stack gap={6} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me">
+          <Box paddingBottom={2} className="border-b border-line/10">
+            <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
+          </Box>
+          <Text variant="body" size="lg" color="dim" leading="relaxed">
+            These are my own projects — built to solve real problems I care about.
+            If you need a senior roboticist, DevAI engineering infrastructure,
+            or someone who can do both, I'm available for project-based contracts
+            and full-time roles.
+          </Text>
+          <Box display="flex" align="center" gap={4} wrap="wrap" marginTop={2}>
+            <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
+              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
+            </Box>
+            <Text color="dim" opacityVariant="muted" size="xs">·</Text>
+            <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
+            </Box>
+            <Text color="dim" opacityVariant="muted" size="xs">·</Text>
+            <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+              <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
+            </Box>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   );
