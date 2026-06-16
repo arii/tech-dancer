@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { getVisualTestMasks } from './utils/playwright-helpers';
 
 const tools = [
   { name: 'UX Auditor', path: 'ux-auditor' },
@@ -41,7 +42,11 @@ test.describe('Research Tools Mobile UX', () => {
       expect(overflowX).toBe(false);
 
       // Take a screenshot for visual verification
-      await page.screenshot({ path: `tests/visual.spec.ts-snapshots/mobile-${tool.path.replace(/\//g, '-')}.png`, fullPage: true });
+      await page.screenshot({
+        path: `tests/visual.spec.ts-snapshots/mobile-${tool.path.replace(/\//g, '-')}.png`,
+        fullPage: true,
+        mask: getVisualTestMasks(page)
+      });
     });
   }
 });
