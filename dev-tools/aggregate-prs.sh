@@ -9,27 +9,7 @@ for pr in "${PRs[@]}"; do
     REF=$(echo "$DATA" | jq -r '.headRefName') && TITLE=$(echo "$DATA" | jq -r '.title') && BODY=$(echo "$DATA" | jq -r '.body')
     gh pr checkout "$pr" 2>/dev/null && git checkout "$T_BR"
     if ! git merge "$REF" -m "Merging PR $pr: $TITLE" 2>/dev/null; then
-        echo "Conflict detected in PR #$pr. Attempting automatic resolution..."
-        CONFLICTED_FILES=$(git diff --name-only --diff-filter=U)
-        if [ -z "$CONFLICTED_FILES" ]; then
-            echo "CRITICAL: Merge failed but no conflicted files found. Aborting."
-            git merge --abort
-            exit 1
-        fi
-
-        # we can just use word splitting for the arguments
-        if ! python3 "$(dirname "${BASH_SOURCE[0]}")/mergellama.py" $CONFLICTED_FILES; then
-            echo "CRITICAL: Conflict resolution failed in PR #$pr"
-            git merge --abort
-            exit 1
-        fi
-
-        git add $CONFLICTED_FILES
-        if ! git commit --no-edit; then
-            echo "CRITICAL: Failed to commit resolved merge for PR #$pr"
-            git merge --abort
-            exit 1
-        fi
+        echo "CRITICAL: Conflict in PR #$pr"; git merge --abort; exit 1
     fi
     P_BODY="${P_BODY}Closes #$pr"$'\n\n'"### Description from PR #$pr ($TITLE):"$'\n'"$BODY"$'\n\n'"---"$'\n'
 done

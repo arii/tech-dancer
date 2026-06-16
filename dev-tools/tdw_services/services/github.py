@@ -129,3 +129,99 @@ class GitHubClient:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
         subprocess.run(["unzip", "-o", dest], check=True)
+
+    def current_branch(self) -> Optional[str]:
+        try:
+            proc = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, check=True)
+            return proc.stdout.strip()
+        except subprocess.CalledProcessError:
+            return None
+
+    def checkout(self, branch: str, create: bool = False, source: Optional[str] = None) -> bool:
+        """Checkout a branch, optionally creating it."""
+        cmd = ["git", "checkout"]
+        if create:
+            cmd.append("-b")
+        cmd.append(branch)
+        if create and source:
+            cmd.append(source)
+        try:
+            subprocess.run(cmd, check=True)
+            return True
+        except subprocess.CalledProcessError:
+            return False
+
+    def list_issues(self, state: str = "open", limit: int = 100) -> List[Dict[str, Any]]:
+        try:
+            output = self.run_authenticated_gh(
+                [
+                    "issue",
+                    "list",
+                    "--state",
+                    state,
+                    "--limit",
+                    str(limit),
+                    "--json",
+                    "number,title,assignees,updatedAt,url",
+                ]
+            )
+            return json.loads(output) if output else []
+        except Exception:
+            return []
+
+    def create_issue(self, title: str, body: str, labels: List[str] = None, assignees: List[str] = None) -> Optional[str]:
+        """Create a GitHub issue."""
+        cmd = ["issue", "create", "--title", title, "--body", body]
+        if labels:
+            for label in labels:
+                cmd.extend(["--label", label])
+        if assignees:
+            for assignee in assignees:
+                cmd.extend(["--assignee", assignee])
+        try:
+            output = self.run_authenticated_gh(cmd)
+            return output.strip() if output else None
+        except Exception:
+            return None
+
+    def list_prs(self, state: str = "open", limit: int = 100) -> List[Dict[str, Any]]:
+        try:
+            output = self.run_authenticated_gh(
+                [
+                    "pr",
+                    "list",
+                    "--state",
+                    state,
+                    "--limit",
+                    str(limit),
+                    "--json",
+                    "number,title,headRefName,baseRefName,headRefOid,state,url,reviewDecision,updatedAt",
+                ]
+            )
+            return json.loads(output) if output else []
+        except Exception:
+            return []
+
+    def post_pr_comment(self, pr_number: int, body: str) -> bool:
+        """Post a comment on a Pull Request."""
+        try:
+            self.run_authenticated_gh(["pr", "comment", str(pr_number), "--body", body])
+            return True
+        except Exception:
+            return False
+
+    def get_diff(self, base: str, head: str, filepath: str) -> Optional[str]:
+        """Fetch the diff for a file between two revisions."""
+        try:
+            proc = subprocess.run(["git", "diff", f"{base}...{head}", "--", filepath], capture_output=True, text=True, check=True)
+            return proc.stdout
+        except subprocess.CalledProcessError:
+            return None
+
+    def get_changed_files(self, base: str, head: str) -> List[str]:
+        """Get a list of changed files between two revisions."""
+        try:
+            proc = subprocess.run(["git", "diff", "--name-only", f"{base}...{head}"], capture_output=True, text=True, check=True)
+            return proc.stdout.splitlines() if proc.stdout else []
+        except subprocess.CalledProcessError:
+            return []

@@ -21,8 +21,7 @@ from utils import (
     CLIError,
     run_command,
     is_ollama_available,
-    extract_failing_info,
-    clean_gha_logs
+    extract_failing_info
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope, get_project_config
@@ -49,164 +48,17 @@ class Orchestrator:
         return self._ai
 
     @property
-    def jules(self) -> JulesClient:
+    def agents(self) -> JulesClient:
         if self._jules is None:
             self._jules = JulesClient()
         return self._jules
 
+    @property
+    def jules(self) -> JulesClient:
+        return self.agents
+
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
-
-    def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
-        """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
-        is_ui = "src/components" in diff or "src/pages" in diff or "src/layouts" in diff or "src/index.css" in diff or "tailwind" in diff
-        is_python = ".py" in diff
-
-        fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
-
-        feedback = f"### Specific Review for PR #{pr['number']}\n\n"
-
-        # What's working
-        feedback += "**What is working well:**\n"
-        feedback += f"- The scope is clearly defined in branch `{pr.get('head', {}).get('ref', 'unknown')}`.\n"
-        if not fails:
-            feedback += "- All CI checks appear to be passing.\n"
-
-        feedback += "\n**Specific Issues & Actionable Fixes:**\n"
-
-        if fails:
-            feedback += f"- **CI Failure:** The following checks are failing: {', '.join(fails)}. Please investigate the logs for these jobs.\n"
-            if "Build & E2E" in fails:
-                feedback += "  - *Fix:* Ensure `pnpm run build` passes locally and all `playwright` tests succeed via `pnpm test:e2e`.\n"
-            elif "deploy" in fails:
-                feedback += "  - *Fix:* Verify that the `dist` directory compiles correctly without TypeScript or Vite errors.\n"
-
-        if is_ui:
-            if "px-" in diff or "py-" in diff or "mt-" in diff or "flex" in diff or "grid" in diff or "text-[" in diff:
-                feedback += "- **Design System Anti-patterns:** The diff contains raw Tailwind classes (e.g. padding/margin utility classes, arbitrary values).\n"
-                feedback += "  - *Fix:* Replace raw Tailwind layout classes with `Stack`, `Box`, or `Grid` primitives using design tokens (e.g., `gap={4}`, `paddingY={{ base: 4, md: 1.5 }}`). Verify by running `pnpm run audit`.\n"
-
-            feedback += "- **Mobile UX Verification:** For any UI additions, ensure horizontal layout does not overflow a 390px viewport.\n"
-            feedback += "  - *Fix:* If adding interactive elements, wrap them to enforce a minimum 48x48px touch target for accessibility.\n"
-
-        if is_python:
-            feedback += "- **Python Scripting:** Python changes detected.\n"
-            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td_cli.py` or equivalent test files if extending `dev-tools`.\n"
-
-        if pr.get('mergeable') is False:
-            feedback += "- **Merge Conflicts:** This PR has conflicts with the `main` base branch.\n"
-            feedback += "  - *Fix:* Pull `main` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
-
-        if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
-            feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
-            feedback += "  - *Fix:* Ensure this is rebased against recent changes in #2076 or #2070 to avoid overlapping functionality.\n"
-
-        # Default if no specific issues caught by heuristics
-        if feedback.endswith("**Specific Issues & Actionable Fixes:**\n"):
-            feedback += "- Review the diff against `audit` guidelines. Ensure no console errors exist in the target components.\n"
-
-        return feedback
-
-    def mass_evaluate_prs(self, post_comments: bool = False, generate_report: bool = True, limit: int = 100) -> Dict[str, Any]:
-        """Runs the mass evaluation for all open PRs."""
-        url = f"/repos/{self.github.repo}/pulls?state=open&per_page={limit}"
-        prs = self.github._request('GET', url)
-        prs = sorted(prs, key=lambda x: x['number'])
-
-        results = []
-        for pr in prs:
-            pr_num = pr['number']
-            try:
-                diff = self.github.fetch_pr_diff(pr_num)
-            except Exception:
-                diff = ""
-
-            try:
-                checks = {"check_runs": self.github.fetch_check_runs(pr.get('head', {}).get('sha', ''))}
-            except Exception:
-                checks = {"check_runs": []}
-
-            fb = self.evaluate_pr_heuristics(pr, diff, checks)
-            results.append({
-                "pr": pr,
-                "diff": diff,
-                "checks": checks,
-                "feedback": fb
-            })
-
-            if post_comments:
-                try:
-                    self.github.create_issue_comment(pr_num, fb)
-                except Exception as e:
-                    pass # Continue even if posting fails
-
-        if generate_report:
-            with open("final-audit.md", "w") as f:
-                f.write("# Final PR Audit Report\n\n")
-
-                f.write("## 1. Summary of Open PRs Reviewed\n")
-                f.write(f"Total open PRs reviewed: {len(results)}\n\n")
-                for r in results:
-                    pr = r['pr']
-                    f.write(f"- **PR #{pr['number']}**: {pr.get('title', 'Unknown')} (Branch: `{pr.get('head', {}).get('ref', 'unknown')}`)\n")
-
-                f.write("\n## 2. Feedback Provided\n")
-                f.write("Feedback generated by analyzing PR diffs, CI status, and agent/repo guidelines.\n\n")
-
-                for r in results:
-                    pr = r['pr']
-                    f.write(f"### PR #{pr['number']}\n")
-                    lines = r['feedback'].split('\n')[2:]
-                    f.write('\n'.join(lines) + "\n\n")
-
-                f.write("## 3. CI Status & Failure Guidance\n")
-                for r in results:
-                    pr = r['pr']
-                    checks = r['checks']
-                    status = "Unknown"
-                    if 'check_runs' in checks:
-                        if not checks['check_runs']:
-                            status = "No checks found"
-                        else:
-                            failures = [c['name'] for c in checks['check_runs'] if c.get('conclusion') == 'failure']
-                            if failures:
-                                status = f"Failing ({', '.join(failures)})"
-                            else:
-                                status = "Passing or pending"
-                    f.write(f"- **PR #{pr['number']}**: {status}\n")
-                f.write("\n*Guidance*: For failing tests or builds, ensure `pnpm run test` or `pnpm run build` is run locally to identify the root cause before requesting re-review.\n\n")
-
-                f.write("## 4. UX Concerns\n")
-                f.write("Multiple PRs involve UI updates. A key concern is ensuring responsive design (e.g., handling horizontal overflow on mobile viewports like 390px) and removing raw Tailwind classes in favor of UI primitives. PRs like #2064, #2055, #2065, #2050, and #2053 contain significant UI modifications and have been warned to enforce minimum 48x48px touch targets and convert raw Tailwind to Stack/Box/Grid primitives.\n\n")
-
-                f.write("## 5. Conflict or Overlap Notes\n")
-                f.write("Several PRs modify the same underlying UI components or tools:\n")
-                f.write("- **Dev-tools / Overlap**: PRs #2075, #2070, and #2049 touch dev-tools and overlap logic. Merge core CLI improvements first.\n")
-                f.write("- **Agent logic**: #2067, #2063, and #1848 modify agent scripts/sessions. These should be carefully sequenced.\n\n")
-
-                f.write("## 6. Recommended Merge Order\n")
-                f.write("1. Foundation / Tooling updates (e.g., #2076, #2049, #2070)\n")
-                f.write("2. Performance and asset optimizations (e.g., #2073, #2056)\n")
-                f.write("3. Bug fixes and specific UI patches (e.g., #2064, #2055, #2065)\n")
-                f.write("4. Feature additions (e.g., #2063, #2062, #1848, #1733)\n")
-                f.write("5. Content additions (e.g., #2047, #2054)\n\n")
-
-                f.write("## 7. Recommended Fix-Before-Merge Items\n")
-                f.write("- Ensure all `audit` workflow checks pass locally for any UI PRs.\n")
-                f.write("- Resolve any merge conflicts on long-standing PRs before merging.\n")
-                f.write("- Address failing CI checks on PR #1733 and #2062.\n\n")
-
-                f.write("## 8. Final Merge Strategy\n")
-                f.write("- **Merge**: PRs that have passing CI, no conflicts, and adhere to the project's design system.\n")
-                f.write("- **Defer**: PRs requiring extensive UI rewrites to meet the 'no raw Tailwind' standard, or those with complex merge conflicts.\n")
-                f.write("- **Abandon/Close**: PRs that are obsolete or have been entirely superseded by more recent commits on `main`.\n")
-
-        return {
-            "evaluated_count": len(results),
-            "report_generated": generate_report,
-            "comments_posted": post_comments
-        }
-
 
     def review_pr(self, pr_number: int) -> Dict[str, Any]:
         """
@@ -286,9 +138,9 @@ class Orchestrator:
         """
         Automates the creation of Jules sessions.
         """
-        source_id = self.jules.discover_source_id(self.github.repo)
+        source_id = self.agents.discover_source_id(self.github.repo)
         if not source_id: raise ValueError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
-        session = self.jules.create_session_from_source(source_id, branch, prompt)
+        session = self.agents.create_session_from_source(source_id, branch, prompt)
         return session
 
     # --- Helper methods ported from td_cli ---
@@ -356,7 +208,7 @@ class Orchestrator:
             for comp, path in config.get('existingComponents', {}).items():
                 if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
                     warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
-            if re.match(r'^Draft.*:', title) and '```markdown' in body:
+            if title.startswith('Draft:') and '```markdown' in body:
                 md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
                 if md_match:
                     for field in config.get('requiredContentFields', []):
@@ -386,9 +238,10 @@ class Orchestrator:
         return formatted
 
     def _get_conflicts_github_token(self) -> Tuple[Optional[str], Optional[str]]:
-        for var in ("CODEX_GH_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "PAT_TOKEN"):
-            if os.environ.get(var):
-                return os.environ[var], var
+        if os.environ.get("CODEX_GH_TOKEN"):
+            return os.environ["CODEX_GH_TOKEN"], "CODEX_GH_TOKEN"
+        if os.environ.get("GITHUB_TOKEN"):
+            return os.environ["GITHUB_TOKEN"], "GITHUB_TOKEN"
         return None, None
 
     def _validate_github_token_for_conflicts(self, repo_slug: str) -> Optional[Dict[str, str]]:
@@ -557,9 +410,8 @@ class Orchestrator:
                                 detected_errors.append(error_msg)
 
                         # Extract a snippet of the logs (last 50 lines or search for 'error')
-                        cleaned_logs = clean_gha_logs(logs)
-                        log_lines = cleaned_logs.splitlines()
-                        error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
+                        log_lines = logs.splitlines()
+                        error_lines = [l for l in log_lines if 'error' in l.lower() or 'fail' in l.lower()]
                         snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
                         context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
             else:
@@ -649,12 +501,7 @@ class Orchestrator:
                 expected_node = "22.22.2"
 
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
-        is_ci = os.environ.get("CI") == "true"
-
-        expected_prefix = ".".join(expected_node.split(".")[:2]) + "."
-        node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
-
-        if not node_matches:
+        if actual_node != expected_node:
             print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
@@ -765,7 +612,7 @@ class Orchestrator:
         if not pr:
             raise CLIError(f"Could not find PR for branch {branch}")
 
-        if api_key: self.jules.api_key = api_key
+        if api_key: self.agents.api_key = api_key
 
         # Analyze failing check runs
         check_runs = self.github.fetch_check_runs(pr.head.sha)
@@ -774,76 +621,25 @@ class Orchestrator:
         for run in check_runs:
             if run.get('conclusion') == 'failure':
                 logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-
-                # Clean logs and take a smart snippet
-                cleaned_logs = clean_gha_logs(logs)
-
-                # Prioritize lines with error signatures
-                important_lines = []
-                for line in cleaned_logs.splitlines():
-                    if any(x in line.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴']):
-                        important_lines.append(line)
-
-                if important_lines:
-                    snippet = "\n".join(important_lines[-30:]) # Keep last 30 important lines
-                else:
-                    snippet = cleaned_logs[-2000:] # Fallback to tail of cleaned logs
-
-                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{snippet}")
+                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{logs[-2000:]}") # Last 2000 chars
 
                 findings = extract_failing_info(logs)
                 for f in findings:
                     structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
 
-        prompt = """# Agent Prompt: Self-Review, Fix, and Publish PR
-
-You are a senior engineering agent reviewing your own branch before publishing.
-
-Compare the current branch against `main`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
-
-## Rules
-
-- Do not ask for confirmation before making fixes.
-- Do not ask the user to run commands.
-- Do not stop until you have opened or updated a PR.
-- Do not make unrelated refactors.
-- Do not publish with known failing checks unless the failure is clearly unrelated and documented.
-- If local setup prevents a check from running, document the attempted command, the setup gap, and the follow-up needed.
-
-## Steps
-
-1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin main`.
-2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, and `git diff --cached`.
-3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
-4. Fix the issues directly.
-5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
-   - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) and represent failures using the structured schema described in `docs/agent/ci-remediation.md`.
-6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
-7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
-8. Commit, push, and create or update the PR with a clear summary and validation notes.
-
-## Final response
-
-Respond only after the PR is created or updated:
-
-- PR link
-- Changes made
-- Self-review fixes
-- Validation results
-- Notes or documented limitations"""
-
+        prompt = "Analyze the failing CI logs and fix the errors."
         if structured_failures:
-            prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
+            prompt += "\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
 
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
         agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
-        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.agents.discover_source_id(repo_name)
         if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
-            res = self.jules.create_session_from_source(source_id, branch, prompt)
+            res = self.agents.create_session_from_source(source_id, branch, prompt)
             if res: session_name = res.get("name")
             else: raise CLIError(f"{agent_name} API session creation failed")
         feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
@@ -1039,3 +835,94 @@ Respond only after the PR is created or updated:
             "pr_url": pr_url,
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
+
+# ==========================================
+# AUDITOR FRAMEWORK
+# ==========================================
+class Auditor:
+    def __init__(self, name: str, client=None, repo_dir=None):
+        self.name = name
+        self.client = client
+        self.repo_dir = repo_dir or os.getcwd()
+
+    def audit(self):
+        raise NotImplementedError
+
+    def _check_file_exists(self, filepath: str) -> bool:
+        return os.path.exists(os.path.join(self.repo_dir, filepath))
+
+    def _grep_file(self, filepath: str, pattern: str) -> List[str]:
+        if not self._check_file_exists(filepath):
+            return []
+        found = []
+        try:
+            with open(os.path.join(self.repo_dir, filepath), 'r', encoding='utf-8') as f:
+                for i, line in enumerate(f, 1):
+                    import re
+                    if re.search(pattern, line):
+                        found.append(f"{filepath}:{i}: {line.strip()}")
+        except Exception as e:
+            print(f"Error reading {filepath}: {e}")
+        return found
+
+class CodebaseAuditor:
+    def __init__(self, name: str, repo_dir=None):
+        self.repo_dir = repo_dir
+        self.name = name
+        self.findings = []
+
+    def audit(self, filepath: str, content: str):
+        raise NotImplementedError
+
+    def add_finding(self, filepath: str, message: str, line_num: int = 0):
+        self.findings.append({
+            "auditor": self.name,
+            "file": filepath,
+            "line": line_num,
+            "message": message
+        })
+
+class StructureAnalyzer:
+    def __init__(self, rules: List[Dict[str, Any]]):
+        self.rules = rules
+
+    def walk_files(self, base):
+        for root, _, files in os.walk(base):
+            for f in files:
+                yield os.path.join(root, f)
+
+    def check_rule(self, rule):
+        import re
+        base = rule["path"]
+        if not os.path.exists(base):
+            return (rule["name"], False, f"Missing path: {base}")
+
+        matched = False
+        pattern = rule.get("pattern", "")
+        # A simple heuristic: if it looks like a regex or has spaces, treat as content search
+        is_filename_pattern = not ("*" in pattern or " " in pattern or "\\" in pattern or "|" in pattern or "^" in pattern)
+
+        for fp in self.walk_files(base):
+            if is_filename_pattern and fp.endswith(pattern):
+                matched = True
+                break
+            elif not is_filename_pattern:
+                try:
+                    with open(fp, "r", encoding="utf-8", errors="ignore") as fh:
+                        if re.search(pattern, fh.read()):
+                            matched = True
+                            break
+                except Exception:
+                    continue
+
+        return (rule["name"], matched, rule["desc"])
+
+    def run(self):
+        results = []
+        failures = []
+        for r in self.rules:
+            name, ok, info = self.check_rule(r)
+            results.append({"name": name, "ok": ok, "info": info})
+            if not ok and r.get("required", False):
+                failures.append(name)
+        return {"results": results, "failures": failures}
