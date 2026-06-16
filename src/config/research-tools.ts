@@ -20,6 +20,10 @@ export interface ResearchTool {
   excludeFromEngineeringTools?: boolean;
   image?: string;
   imageAlt?: string;
+  inDevMessage?: {
+    highlight: string;
+    rest: string;
+  };
   customPreview?: {
     logo: { prefix: string; accent: string; suffix: string };
     headline: { text: string; accent?: string }[];
@@ -30,6 +34,10 @@ export interface ResearchTool {
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'hrm-flagship',
+    inDevMessage: {
+      highlight: 'Intended to run locally on your own server.',
+      rest: ' No live site available.'
+    },
     taxonomyBucket: 'flagship',
     title: 'HRM (Heart Rate Monitor)',
     description: 'Web Bluetooth heart-rate telemetry synced across multiple clients via persistent WebSocket server, with Spotify API integration and a synchronized timer. Built end-to-end as a DevAI-assisted engineering project.',
@@ -43,6 +51,10 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'repo-auditor-ai',
+    inDevMessage: {
+      highlight: 'Available now for testing',
+      rest: ' with your own repository.'
+    },
     taxonomyBucket: 'flagship',
     title: 'RepoAuditor AI',
     description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow — not prior paid work.',
@@ -58,6 +70,10 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'boomtick-blog',
+    inDevMessage: {
+      highlight: 'RAG + LLM tooling in active development.',
+      rest: ' This site is the production environment where those pipelines are being built and validated.'
+    },
     taxonomyBucket: 'flagship',
     title: 'BoomTick.blog',
     subtitle: 'LIVE DEVELOPMENT ENVIRONMENT',

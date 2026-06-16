@@ -138,29 +138,11 @@ function FlagshipCard({
             </Box>
           )}
 
-          {tool.id === 'hrm-flagship' && (
+          {tool.inDevMessage && (
             <div className="in-dev-banner">
               <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
               <p>
-                <strong>Intended to run locally on your own server.</strong> No live site available.
-              </p>
-            </div>
-          )}
-
-          {tool.id === 'repo-auditor-ai' && (
-            <div className="in-dev-banner">
-              <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
-              <p>
-                <strong>Available now for testing</strong> with your own repository.
-              </p>
-            </div>
-          )}
-
-          {tool.id === 'boomtick-blog' && (
-            <div className="in-dev-banner">
-              <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
-              <p>
-                <strong>RAG + LLM tooling in active development.</strong> This site is the production environment where those pipelines are being built and validated.
+                <strong>{tool.inDevMessage.highlight}</strong>{tool.inDevMessage.rest}
               </p>
             </div>
           )}
@@ -432,10 +414,6 @@ export default function ResearchAnalytics() {
             </Stack>
           </Stack>
 
-          {/* Right Column: Interactive Terminal Preview */}
-          <Box span={{ base: 1, lg: 5 }} display={{ base: "none", lg: "block" }} width="full">
-            <TerminalPreview />
-          </Box>
         </Grid>
 
         {/* Flagship Projects Section */}

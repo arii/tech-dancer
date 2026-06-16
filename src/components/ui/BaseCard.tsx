@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { Box, Stack, BaseProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 
-interface BaseCardProps extends BaseProps {
+interface BaseCardProps extends Omit<BaseProps, "border"> {
+  border?: boolean;
   children: ReactNode;
   to?: string;
   href?: string;
@@ -35,12 +36,6 @@ export function BaseCard({
   const cardClasses = cn(
     "group relative bg-surface transition-all duration-200",
     border === true && "card-border",
-    border === "t" && "card-border-t",
-    border === "b" && "card-border-b",
-    border === "l" && "card-border-l",
-    border === "r" && "card-border-r",
-    border === "x" && "card-border-x",
-    border === "y" && "card-border-y",
     isLink && "hover:-translate-y-0.5 hover:border-accent/40",
     className
   );
