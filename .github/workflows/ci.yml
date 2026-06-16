@@ -295,6 +295,13 @@ jobs:
         run: pnpm run impact:visual-diff
       - name: DOM Diff
         run: pnpm run impact:dom-diff
+      - name: Visual review agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:agent-review
       - name: Report Summary
         if: always()
         run: |
