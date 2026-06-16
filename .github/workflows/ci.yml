@@ -165,6 +165,8 @@ jobs:
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
+        with:
+          lfs: true
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
       - uses: actions/setup-python@v6
