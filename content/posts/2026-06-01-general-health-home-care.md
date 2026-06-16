@@ -3,7 +3,7 @@ type: post
 title: "General Health & Home Care for Dancers"
 date: "2026-06-01"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Health"
 excerpt: "Self-care and body maintenance items primarily used at home for recovery."
 image: "/images/gear/sketches/foam-roller.webp"
 affiliateIds:

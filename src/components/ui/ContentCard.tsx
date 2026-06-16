@@ -12,6 +12,8 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   basePath: string;
   date?: string;
   readingTime?: string;
+  image?: string;
+  imageAlt?: string;
   [key: string]: unknown;
 }
 
@@ -26,6 +28,8 @@ export function ContentCard(props: ContentCardProps) {
     basePath,
     date,
     readingTime,
+    image,
+    imageAlt,
   } = props;
 
   const motionProps = pickRest(props, [
@@ -46,20 +50,31 @@ export function ContentCard(props: ContentCardProps) {
     <BaseCard
       as={MotionArticle}
       direction="col"
-      gap={4}
       height="full"
-      padding={6}
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
+      className="overflow-hidden"
       {...motionProps}
     >
-      <Box
-        paddingX={2}
-        paddingY={1}
-        radius="full"
-        border
-        className="border-line w-fit"
-      >
+      {image && (
+        <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden">
+          <img
+            src={image}
+            alt={imageAlt || title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+        </Box>
+      )}
+
+      <Stack gap={4} padding={6} height="full">
+        <Box
+          paddingX={2}
+          paddingY={1}
+          radius="full"
+          border
+          className="border-line w-fit"
+        >
         <Text
           variant="mono"
           size="xs"
@@ -89,14 +104,15 @@ export function ContentCard(props: ContentCardProps) {
         </Text>
       </Stack>
 
-      <Box display="flex" align="center" justify="between" marginTop="auto">
-        <Text variant="mono" size="xs" color="dim" data-testid="content-date">
-          {[date, readingTime].filter(Boolean).join(' • ') || category}
-        </Text>
-        <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-          Read article
-        </Text>
-      </Box>
+        <Box display="flex" align="center" justify="between" marginTop="auto">
+          <Text variant="mono" size="xs" color="dim" data-testid="content-date">
+            {[date, readingTime].filter(Boolean).join(' • ') || category}
+          </Text>
+          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
+            Read article
+          </Text>
+        </Box>
+      </Stack>
     </BaseCard>
   );
 }
