@@ -35,9 +35,10 @@ export function generateDeploymentReport(domSummaries: DomRouteSummary[], visual
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
-
-
-
+    // Since diffPath etc is no longer in the metric payload, we assume the naming convention or omit them if not specified.
+    // However, the visual review does supply diff paths. DOM diffs are still generated in the main loop so we can rebuild the path.
+    const routeSlug = domSummary.route === '/' ? 'home' : domSummary.route.split('?')[0].replace(/^\/+|\/+$/g, '').replace(/[^a-zA-Z0-9-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'home';
+    const _domDiffPath = `dom-review/${routeSlug}/diff.txt`;
 
     return `### ${domSummary.route}
 
