@@ -1,9 +1,15 @@
+/**
+ * Represents a tool or project in the research portfolio.
+ * The `taxonomyBucket` field is strictly enforced by the layout engine
+ * in `ResearchAnalytics.tsx` to group and render items into respective sections.
+ */
 export interface ResearchTool {
   id: string;
   title: string;
   subtitle: string;
   description: string;
   category: string;
+  taxonomyBucket?: 'flagship' | 'engineering' | 'data-content' | 'e-commerce';
   status: string;
   tags: string[];
   canonicalPath?: string;
@@ -19,6 +25,7 @@ export interface ResearchTool {
 export const RESEARCH_TOOLS: ResearchTool[] = [
   {
     id: 'hrm-flagship',
+    taxonomyBucket: 'flagship',
     title: 'HRM (Heart Rate Monitor)',
     subtitle: 'Flagship Training Dashboard',
     description: 'The original product built using AI-assisted engineering. It integrates Web Bluetooth heart-rate telemetry with Spotify API context, demonstrating full-stack Dev AI orchestration for complex browser-based applications.',
@@ -33,6 +40,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'repo-auditor-ai',
+    taxonomyBucket: 'flagship',
     title: 'RepoAuditor AI',
     subtitle: 'DevAI Workflow Console',
     description: 'A purpose-built AI orchestration console for GitHub. It leverages custom prompt engineering to audit pull requests, analyze workflow health, and generate structured issues for Jules coding agents, unblocking rapid multi-repo development.',
@@ -48,6 +56,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'gitops-pr-reviewer',
+    taxonomyBucket: 'engineering',
     title: 'GitOps Code Review Agent',
     subtitle: 'Automated Local PR Auditing',
     description: 'A model-agnostic ML engineering example using local LLMs to audit code style and pattern consistency. It serves as a GitOps-driven RAG prototype for private codebase documentation and policy enforcement.',
@@ -58,6 +67,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'scope-blast-radius',
+    taxonomyBucket: 'engineering',
     title: 'Blast-Radius Analyzer',
     subtitle: 'Static Workspace Dependency Checker',
     description: 'Demonstrates AI-assisted static analysis by calculating the semantic impact of code changes. Essential for AI orchestration to minimize token waste and provide agents with high-precision context.',
@@ -68,6 +78,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'ux-auditor',
+    taxonomyBucket: 'engineering',
     title: 'Visual Regression & UX Auditor',
     subtitle: 'Perception Telemetry System',
     description: 'An AI-assisted perception pipeline that maps DOM shifts to visual regressions. It uses automated Playwright workflows to provide high-fidelity telemetry for AI-driven frontend optimization.',
@@ -78,6 +89,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'wcs-scraper',
+    taxonomyBucket: 'data-content',
     title: 'High-Scale Telemetry Ingestion ETL',
     subtitle: 'Scraper-to-Parquet Pipeline',
     description: 'A data engineering showcase for Dev AI systems, transforming raw competitive dance records into compressed Parquet formats. This enables efficient RAG indexing and complex analytical queries.',
@@ -88,6 +100,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'blog-drafter',
+    taxonomyBucket: 'data-content',
     title: 'AI Blog Drafter',
     subtitle: 'Human-in-the-Loop Content Engine',
     description: 'A prompt engineering platform designed for brand-consistent content generation. It combines RAG over existing blog posts with a human-in-the-loop workflow to maintain editorial quality.',
@@ -98,6 +111,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'ecommerce-automation',
+    taxonomyBucket: 'e-commerce',
     title: 'Ecommerce Automation Experiments',
     subtitle: 'Printful & Merch Pipeline',
     description: 'Automated merch operations including programmatic design generation, Printful API storefront sync, and incoming Amazon affiliate integration workflows.',
