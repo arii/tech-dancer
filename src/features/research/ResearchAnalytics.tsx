@@ -13,6 +13,7 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
+import { SOCIAL_LINKS } from '@/config/constants';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
