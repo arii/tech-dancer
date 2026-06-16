@@ -92,6 +92,10 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
@@ -150,6 +154,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
@@ -412,6 +420,10 @@ jobs:
         id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           name: review-result
           path: review_result.json
 
@@ -474,12 +486,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
       - name: Download review result
         uses: actions/download-artifact@v4
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           name: review-result
           path: .
         continue-on-error: true
@@ -499,8 +519,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Post Guidance Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           script: |
             const body = '### ℹ️ Gemini Review Disabled\n\n' +
               'Automatic review is currently disabled via `GEMINI_ENABLE_PR_REVIEW`. To run review manually:\n\n' +
@@ -529,16 +553,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create skip check
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const skipReason = '${{ needs.analyze-changes.outputs.skip-reason }}';
+            const skipReason = process.env.SKIP_REASON;
             await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: 'Gemini Code Review',
-              head_sha: '${{ inputs.head_sha || github.event.pull_request.head.sha }}',
+              head_sha: process.env.HEAD_SHA,
               status: 'completed',
               conclusion: 'skipped',
               output: {
@@ -548,16 +576,20 @@ jobs:
             });
 
       - name: Post Skip Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
+          env:
+            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           script: |
-            const skipReason = '${{ needs.analyze-changes.outputs.skip-reason }}';
-            const triggerEvent = '${{ inputs.trigger_event }}';
+            const skipReason = process.env.SKIP_REASON;
+            const triggerEvent = process.env.TRIGGER_EVENT;
 
             // Only post skip comment if it was a manual trigger or a significant reason
             // We want to avoid noise for every single automatic PR synchronize event with no changes
             const ignoreList = ['already reviewed', 'no significant code changes'];
-            const shouldIgnore = ignoreList.some(reason => skipReason.toLowerCase().includes(reason));
+            const shouldIgnore = skipReason ? ignoreList.some(reason => skipReason.toLowerCase().includes(reason)) : false;
 
             if (triggerEvent === 'comment' || !shouldIgnore) {
               const body = '### 🤖 Gemini Review Skipped\n\nReview was skipped for the following reason: `' + skipReason + '`' +
