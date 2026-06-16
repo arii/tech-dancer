@@ -13,12 +13,12 @@ const PROFILE_DATA: ProfileData = {
     {
       id: "professional",
       title: "Professional Summary",
-      content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
+      content: "MIT PhD and former Senior Algorithm Engineer at Civ Robotics, Waymo, and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
       cards: [
         {
           icon: 'terminal',
           title: "Robotics & Engineering",
-          content: "Senior roboticist with production experience at Waymo and Robust.AI. I work across navigation, localization, motion planning, and behavior for autonomous systems. At startups, that means owning the full stack — from algorithm to Docker to deployment. Stack: ROS1/ROS2, C++, Python. Available for robotics contracts and Staff/Senior SWE roles."
+          content: "Senior roboticist with production experience at Waymo and Robust.AI. I work across navigation, localization, motion planning, and behavior for autonomous systems. At startups, that means owning the full stack — from algorithm to Docker to deployment. Stack: ROS1/ROS2, C++, Python."
         },
         {
           icon: 'zap',
@@ -94,11 +94,8 @@ const PROFILE_DATA: ProfileData = {
   ],
   details: [
     { label: "Location", value: "San Francisco, CA" },
-    { label: "Open to", value: "Staff SWE · Robotics contracts · DevAI consulting" },
-    { label: "Portfolio", value: "boomtick.blog/research" },
-    { label: "Resume", value: "boomtick.blog/ariel-anders-resume.pdf" },
-    { label: "GitHub", value: "github.com/arii" },
-    { label: "LinkedIn", value: "linkedin.com/in/ariel-anders" }
+    { label: "Portfolio", value: "View Portfolio", url: "https://boomtick.blog/research" },
+    { label: "Resume", value: "View Resume", url: "https://boomtick.blog/ariel-anders-resume.pdf" }
   ]
 };
 

@@ -40,8 +40,8 @@ function ArielProfile() {
         {section.cards && <ExperienceCards cards={section.cards} />}
 
         {section.availability && (
-          <Box padding={6} radius="lg" border className="bg-accent/5 border-accent/20">
-            <Text variant="body" size="base" color="main" weight="font-medium">
+          <Box padding={6} radius="lg" border className="bg-accent/5 border-accent/30">
+            <Text variant="body" size="base" color="accent" weight="font-medium">
               {section.availability}
             </Text>
           </Box>
@@ -59,8 +59,7 @@ function ArielProfile() {
         <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
         <Stack gap={4}>
           {bio.details.map((detail: ProfileDetail) => {
-            const isLink = detail.value.includes('.') && !detail.value.includes(' ');
-            const href = isLink ? (detail.value.startsWith('http') ? detail.value : `https://${detail.value}`) : null;
+            const href = detail.url || (detail.value.includes('.') && !detail.value.includes(' ') ? (detail.value.startsWith('http') ? detail.value : `https://${detail.value}`) : null);
 
             return (
               <Stack key={detail.label} gap={1}>

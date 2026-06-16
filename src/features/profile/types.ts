@@ -30,6 +30,7 @@ export interface ProfileGalleryImage {
 export interface ProfileDetail {
   label: string;
   value: string;
+  url?: string;
 }
 
 export interface ProfileLink {
