@@ -3,7 +3,7 @@ type: post
 title: "Theme Wear, Costumes & Accessories"
 date: "2026-06-01"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Costumes"
 excerpt: "Accessories and props curated for themed social dance nights (e.g., Space/Alien, Glow, Nerd, Halloween)."
 image: "/images/gear/sketches/glow_suspenders.webp"
 affiliateIds:

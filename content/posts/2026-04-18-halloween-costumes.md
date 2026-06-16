@@ -3,7 +3,7 @@ type: post
 title: "Halloween costumes you can dance in"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Costumes"
 excerpt: "Easiest DIY pumpkin costume: orange outfit + pumpkin headband + stick-on jack-o’-lantern face. No sewing, no felt cutting, still cute enough for Halloween dancing."
 image: "/images/gear/sketches/assembly-guide.webp"
 tags:
@@ -47,6 +47,4 @@ Need a Halloween costume in two minutes that won't restrict your movement or mak
 * **Adhesive Pumpkin Face Stickers**: Large, pre-cut felt stickers that let you assemble a perfect jack-o’-lantern face in seconds.
 
 Disclosure: As an Amazon Associate, I may earn from qualifying purchases.
-
-[Check out the Gear specific review here](/gear)
 

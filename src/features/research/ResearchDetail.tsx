@@ -12,6 +12,8 @@ import { EditorialLayout } from '@/components/editorial/EditorialLayout';
 import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { readingTime } from '@/lib/content';
+import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
+import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 
 // Lazy load tool components to help with bundle size
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
@@ -33,7 +35,7 @@ export default function ResearchDetail() {
   const { id: paramId } = useParams();
   const { pathname } = useLocation();
 
-  const { getTool, getStudy } = useResearch();
+  const { getTool, getStudy, studies } = useResearch();
 
   const id = useMemo(() => {
     if (paramId) return paramId;
@@ -84,6 +86,12 @@ export default function ResearchDetail() {
     return segments.includes('research');
   }, [pathname]);
 
+  const { previous: studyPrevious, next: studyNext } = useArticleNavigation(
+    studies,
+    study?.slug || '',
+    '/research'
+  );
+
   if (tool?.canonicalPath && pathname !== tool.canonicalPath && isResearchPath) {
     return <Navigate to={tool.canonicalPath} replace />;
   }
@@ -111,6 +119,11 @@ export default function ResearchDetail() {
               author={study.author}
               authorAvatarSrc={study.authorImage}
             />
+          }
+          footer={
+            <Stack gap={12}>
+              <ArticleNavigation previous={studyPrevious} next={studyNext} />
+            </Stack>
           }
         >
           <Box className="prose-editorial">

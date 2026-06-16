@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { SEO } from '@/components/SEO';
-import { Box, Stack } from '@/layouts/Primitives';
+import { Box, Stack, Grid } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
 import { TopicGrid } from '@/features/home/TopicGrid';
 import { LatestPosts } from '@/features/home/LatestPosts';

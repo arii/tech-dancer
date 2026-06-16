@@ -95,8 +95,10 @@ export default function ResearchAnalytics() {
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
-  const flagshipTools = tools.filter(t => t.isFlagship);
-  const engineeringTools = tools.filter(t => !t.isFlagship);
+  const flagshipTools = tools.filter(t => t.taxonomyBucket === 'flagship' || t.isFlagship);
+  const engineeringTools = tools.filter(t => t.taxonomyBucket === 'engineering');
+  const dataContentTools = tools.filter(t => t.taxonomyBucket === 'data-content');
+  const e_commerceTools = tools.filter(t => t.taxonomyBucket === 'e-commerce');
 
   return (
     <Box as="section">
@@ -253,18 +255,50 @@ export default function ResearchAnalytics() {
           </Stack>
         </Grid>
 
-        <Stack gap={12}>
-          <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
-            <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
-          </Box>
+        {engineeringTools.length > 0 && (
+          <Stack gap={12}>
+            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+              <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
+            </Box>
 
-          <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
-            {engineeringTools.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-            ))}
-          </Grid>
-        </Stack>
+            <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+              {engineeringTools.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+              ))}
+            </Grid>
+          </Stack>
+        )}
+
+        {dataContentTools.length > 0 && (
+          <Stack gap={12}>
+            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+              <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
+            </Box>
+
+            <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+              {dataContentTools.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+              ))}
+            </Grid>
+          </Stack>
+        )}
+
+        {e_commerceTools.length > 0 && (
+          <Stack gap={12}>
+            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+              <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
+            </Box>
+
+            <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+              {e_commerceTools.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+              ))}
+            </Grid>
+          </Stack>
+        )}
 
         {studies.length > 0 && (
           <Stack gap={12} id="articles">
