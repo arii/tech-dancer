@@ -217,7 +217,7 @@ export default function ResearchAnalytics() {
                         paddingX={3}
                         paddingY={1}
                         radius="full"
-                        className={tool.id === 'boomtick-blog' ? "bg-[#E1F5EE] text-[#085041]" : "bg-accent/10 text-accent"}
+                        className={tool.id === 'boomtick-blog' ? "bg-brand-tag-infra-bg text-brand-tag-infra-text" : "bg-accent/10 text-accent"}
                       >
                         {tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'}
                       </Text>
