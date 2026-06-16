@@ -333,3 +333,40 @@
 @utility z-search {
   z-index: 999999;
 }
+
+/* Topic Grid Hover and Glow Effects */
+.topic-card-gear, .topic-card-travel, .topic-card-costumes, .topic-card-health, .topic-card-agents {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow, border-color;
+}
+
+.topic-card-gear:hover {
+  border-color: color-mix(in srgb, var(--color-accent-sky) 50%, transparent) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-sky) 20%, transparent);
+  transform: translateY(-2px);
+}
+
+.topic-card-travel:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  transform: translateY(-2px);
+}
+
+.topic-card-costumes:hover {
+  border-color: color-mix(in srgb, var(--color-accent-magenta) 50%, transparent) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-magenta) 20%, transparent);
+  transform: translateY(-2px);
+}
+
+.topic-card-health:hover {
+  border-color: color-mix(in srgb, var(--color-error) 50%, transparent) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-error) 20%, transparent);
+  transform: translateY(-2px);
+}
+
+.topic-card-agents:hover {
+  border-color: color-mix(in srgb, var(--color-accent-purple) 50%, transparent) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-purple) 20%, transparent);
+  transform: translateY(-2px);
+}
+
