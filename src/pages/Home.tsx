@@ -2,11 +2,10 @@
 import { SEO } from '@/components/SEO';
 import { Box, Stack } from '@/layouts/Primitives';
 import { STATIC_SCHEMAS } from '@/config/constants';
-import { FeaturedGuidePanel } from '@/features/home/FeaturedGuidePanel';
 import { TopicGrid } from '@/features/home/TopicGrid';
 import { LatestPosts } from '@/features/home/LatestPosts';
-import { DevLabCallout } from '@/features/home/DevLabCallout';
-import { HeroSection } from '@/components/ui/HeroSection';
+import { HeroBanner } from '@/features/home/HeroBanner';
+import { SplitHeroGrid } from '@/features/home/SplitHeroGrid';
 
 export default function Home() {
   return (
@@ -17,29 +16,18 @@ export default function Home() {
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
-      <Box
-        as="section"
-        display="grid"
-        className="w-full max-w-full min-w-0 items-center gap-0 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_420px]"
-      >
-        <HeroSection />
-        <FeaturedGuidePanel />
-      </Box>
+      <Stack gap={{ base: 8, lg: 12 }} className="w-full max-w-full min-w-0">
+        <HeroBanner />
 
-      <Stack
-        gap={{ base: 8, lg: 'section-spacing' }}
-        marginTop={{ base: 8, lg: 'section-spacing' }}
-        className="w-full max-w-full min-w-0"
-      >
+        <SplitHeroGrid />
+
         <Box
           display="grid"
-          className="w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
+          className="w-full max-w-full min-w-0 gap-12 lg:grid-cols-[minmax(0,1.8fr)_minmax(300px,1fr)]"
         >
           <LatestPosts />
-          <DevLabCallout />
+          <TopicGrid />
         </Box>
-        <TopicGrid />
       </Stack>
     </Box>
   );

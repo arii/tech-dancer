@@ -110,7 +110,7 @@ export function GlobalSearch() {
     close();
     setQuery('');
     if (result.type === 'post' || result.type === 'blog') navigate(`/blog/${result.slug}`);
-    else if (result.type === 'study') navigate(`/research/${result.slug}`);
+    else if (result.type === 'study') navigate(`/devai-portfolio/${result.slug}`);
   };
 
   if (!isOpen) return null;

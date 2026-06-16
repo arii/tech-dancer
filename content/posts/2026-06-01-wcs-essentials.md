@@ -5,7 +5,7 @@ date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "High-priority essentials to bring to any West Coast Swing event, whether local or out-of-town."
-image: "/images/gear/sketches/loop-earplugs.webp"
+image: "/images/gear/amazon/loop-experience-ear-plugs.jpg"
 affiliateIds:
   - "rave-fan"
   - "loop-experience"
@@ -16,8 +16,6 @@ tags:
 ---
 
 Whether you're heading to a local social or traveling across the country for a convention, these two items are high-priority essentials for any West Coast Swing dancer.
-
-![Gear Essentials Layout](/images/gear/sketches/loop-earplugs.webp)
 
 ### Stay Cool on the Floor
 Crowded dance floors can get incredibly hot. A large folding fan is the most effective way to cool yourself down (and your partners!) between songs.

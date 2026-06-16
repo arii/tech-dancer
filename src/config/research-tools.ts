@@ -28,7 +28,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     externalUrl: 'https://arii.github.io/hrm/',
     externalLinkDisplayLabel: 'View HRM',
     isFlagship: true,
-    image: '/assets/research/hrm-flagship.png',
+    image: '/assets/devai-portfolio/hrm-flagship.png',
     imageAlt: 'Screenshot of the HRM heart rate monitor training dashboard with real-time biometric telemetry and Spotify integration'
   },
   {
@@ -43,7 +43,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     externalLinkDisplayLabel: 'Open RepoAuditor AI',
     sourceUrl: 'https://github.com/arii/hrm-project-management',
     isFlagship: true,
-    image: '/assets/research/repo-auditor-ai.png',
+    image: '/assets/devai-portfolio/repo-auditor-ai.png',
     imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
   },
   {
@@ -54,7 +54,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'DevAI System',
     status: 'Active',
     tags: ['Multi-Agent Systems', 'GitOps', 'Static Analysis', 'Python'],
-    canonicalPath: '/research/gitops-pr-reviewer'
+    canonicalPath: '/devai-portfolio/gitops-pr-reviewer'
   },
   {
     id: 'scope-blast-radius',
@@ -64,7 +64,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'DevAI System',
     status: 'Active',
     tags: ['AST Parsing', 'Workspace Scope', 'Dependency Mapping'],
-    canonicalPath: '/research/scope-blast-radius'
+    canonicalPath: '/devai-portfolio/scope-blast-radius'
   },
   {
     id: 'ux-auditor',
@@ -84,7 +84,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Data Engineering',
     status: 'Active',
     tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
-    canonicalPath: '/research/wcs-scraper'
+    canonicalPath: '/devai-portfolio/wcs-scraper'
   },
   {
     id: 'blog-drafter',
@@ -94,7 +94,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Content Tools',
     status: 'Active',
     tags: ['LLM', 'Content Generation', 'Productivity'],
-    canonicalPath: '/research/blog-drafter'
+    canonicalPath: '/devai-portfolio/blog-drafter'
   },
   {
     id: 'ecommerce-automation',
@@ -104,6 +104,6 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     category: 'Business Automation',
     status: 'In Progress',
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
-    canonicalPath: '/research/ecommerce-automation'
+    canonicalPath: '/devai-portfolio/ecommerce-automation'
   }
 ];

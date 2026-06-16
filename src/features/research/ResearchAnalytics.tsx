@@ -57,7 +57,7 @@ function ToolCard({ tool, navigate }: {
   return (
     <Stack
       as="button"
-      onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
+      onClick={() => navigate(tool.canonicalPath || `/devai-portfolio/${tool.id}`)}
       padding={6} paddingBottom={10} gap={4} height="full" align="start" textAlign="left"
       className={cardVariants({ interactive: true })}
     >
@@ -281,7 +281,7 @@ export default function ResearchAnalytics() {
                   gap={6}
                   onClick={() => {
                     if (study.status === 'published') {
-                      navigate(`/research/${study.slug}`);
+                      navigate(`/devai-portfolio/${study.slug}`);
                     }
                   }}
                   height="full"

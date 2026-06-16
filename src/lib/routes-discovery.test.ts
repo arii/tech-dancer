@@ -23,12 +23,12 @@ describe('getAllRoutes', () => {
   it('should use canonical path for UX Auditor', () => {
     const { sitemap } = getAllRoutes();
     expect(sitemap).toContain('/ux-auditor');
-    expect(sitemap).not.toContain('/research/ux-auditor');
+    expect(sitemap).not.toContain('/devai-portfolio/ux-auditor');
   });
 
   it('should handle tool routes correctly', () => {
     const { tools } = getAllRoutes();
-    expect(tools).toContain('/research/wcs-scraper');
+    expect(tools).toContain('/devai-portfolio/wcs-scraper');
     expect(tools).toContain('/ux-auditor');
   });
 

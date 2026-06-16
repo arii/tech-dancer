@@ -333,3 +333,11 @@
 @utility z-search {
   z-index: 999999;
 }
+
+@utility brand-rainbow {
+  background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8B00FF);
+}
+
+@utility scale-95 {
+  transform: scale(0.95);
+}

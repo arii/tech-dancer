@@ -52,7 +52,7 @@ export const routes: RouteConfig[] = [
     sitemap: false
   },
   {
-    path: '/research',
+    path: '/devai-portfolio',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'DevAI Portfolio',
     icon: Database,
@@ -61,7 +61,7 @@ export const routes: RouteConfig[] = [
     isTopNav: true
   },
   {
-    path: '/research/:id',
+    path: '/devai-portfolio/:id',
     lazy: () => import('@/pages/ResearchDetail').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },

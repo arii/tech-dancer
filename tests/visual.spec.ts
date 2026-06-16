@@ -4,7 +4,7 @@ const routes = [
   { name: 'home', path: './' },
   { name: 'blog', path: './blog' },
   { name: 'gear', path: './gear' },
-  { name: 'research', path: './research' },
+  { name: 'research', path: './devai-portfolio' },
   { name: 'about', path: './about' },
   { name: 'ux-auditor', path: './ux-auditor' },
   { name: 'preview', path: './preview' },

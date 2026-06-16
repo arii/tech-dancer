@@ -4,7 +4,8 @@ const config: KnipConfig = {
   entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.{ts,mjs}'],
   project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
   ignore: [
-    'src/components/Equalizer.tsx'
+    'src/components/Equalizer.tsx',
+    'src/components/ui/Wordmark.tsx'
   ],
   ignoreDependencies: [
     'tw-animate-css',

@@ -99,7 +99,7 @@ export default function ResearchDetail() {
           schema={structuredData}
         />
         <EditorialLayout
-          onBack={() => navigate('/research')}
+          onBack={() => navigate('/devai-portfolio')}
           backLabel="Back to Portfolio"
           header={
             <EditorialHeader
@@ -127,7 +127,7 @@ export default function ResearchDetail() {
         <Stack gap={8} align="center">
           <Search size={48} className="opacity-low" />
           <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={() => navigate('/devai-portfolio')} className="hover:text-accent transition-colors">
             <Text variant="mono" size="xs">Back to Portfolio</Text>
           </Box>
         </Stack>
@@ -147,7 +147,7 @@ export default function ResearchDetail() {
       <Stack gap={12}>
         <Box 
           as="button" 
-          onClick={() => navigate('/research')}
+          onClick={() => navigate('/devai-portfolio')}
           display="flex" 
           align="center" 
           gap={2}

@@ -64,7 +64,7 @@ export function EcommerceAutomationTool() {
       <SEO
         title="Ecommerce Automation Experiments | DevAI Portfolio"
         description="Experiments in API-driven Printful sync, SEO-safe product metadata generation, and human-in-the-loop catalog review."
-        canonical={`${BASE_URL}/research/ecommerce-automation`}
+        canonical={`${BASE_URL}/devai-portfolio/ecommerce-automation`}
       />
       <Box paddingBottom={8} border="b">
         <Stack gap={4}>

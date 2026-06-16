@@ -22,9 +22,6 @@ Functional dance wear should be comfortable, breathable, and stylish. These non-
 ### Breathable Basics
 Crop tops are a favorite for a reason—they're lightweight and keep you cool during intense workshops.
 
-<notice type="affiliate" id="sports-crop-tops" />
-<notice type="affiliate" id="reflective-crop-tops" />
-
 ### Layering with Style
 Mesh and fishnet tops are great for adding texture to your outfit without adding heat, while fishnet tights provide a classic dance look.
 
