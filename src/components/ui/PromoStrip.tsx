@@ -2,7 +2,6 @@
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { ASSET_PREFIX } from '@/config/constants';
 import { Icon } from '@/components/ui/Icon';
 
 interface PromoStripProps {
@@ -20,16 +19,8 @@ export function PromoStrip({
   ctaLabel,
   href,
 }: PromoStripProps) {
-  // Use standard asset resolution pattern for images
-  const fullImageSrc = imageSrc.startsWith('http')
-    ? imageSrc
-    : (ASSET_PREFIX + '/' + imageSrc).replace(/\/+/g, '/');
-
-  // Ensure internal links preserve the base URL correctly
-  // Use a resolution pattern that avoids double slashes (which can be interpreted as protocol-relative)
-  const resolvedHref = href.startsWith('http')
-    ? href
-    : (ASSET_PREFIX + '/' + href).replace(/\/+/g, '/');
+  const fullImageSrc = imageSrc;
+  const resolvedHref = href;
 
   return (
     <Box
