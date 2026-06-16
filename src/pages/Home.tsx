@@ -35,6 +35,7 @@ export default function Home() {
           subtitle="Tees, hoodies, and tanks for the dance floor"
           ctaLabel="Shop now"
           href="/merch"
+          isNew
         />
       </Box>
 

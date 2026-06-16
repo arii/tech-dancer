@@ -1,4 +1,5 @@
 
+import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
@@ -10,6 +11,7 @@ interface PromoStripProps {
   subtitle: string;    // e.g. "Tees, hoodies, and tanks for the dance floor"
   ctaLabel: string;    // e.g. "Shop now"
   href: string;        // "/merch"
+  isNew?: boolean;     // shows "New" badge
 }
 
 export function PromoStrip({
@@ -17,17 +19,18 @@ export function PromoStrip({
   title,
   subtitle,
   ctaLabel,
-  href
+  href,
+  isNew
 }: PromoStripProps) {
-  // Robust asset resolution: avoid double slashes that create protocol-relative URLs (e.g. //assets/...)
+  // Use standard asset resolution pattern
   const fullImageSrc = imageSrc.startsWith('http')
     ? imageSrc
-    : `${ASSET_PREFIX}${imageSrc.startsWith('/') ? '' : '/'}${imageSrc}`;
+    : `${ASSET_PREFIX}/${imageSrc.replace(/^\//, '')}`;
 
   return (
     <Box
-      as="a"
-      href={href}
+      as={NavLink}
+      to={href}
       position="relative"
       width="full"
       padding={{ base: 3, sm: 4 }}
@@ -37,6 +40,28 @@ export function PromoStrip({
       display="block"
       className="group transition-all hover:bg-white/5"
     >
+      {isNew && (
+        <Box
+          position="absolute"
+          top={0}
+          right={0}
+          paddingX={2}
+          paddingY={0.5}
+          radius="none"
+          className="rounded-bl-md bg-accent"
+          zIndex={10}
+        >
+          <Text
+            variant="mono"
+            size="micro"
+            weight="font-black"
+            color="main"
+            uppercase
+          >
+            New
+          </Text>
+        </Box>
+      )}
 
       <Stack direction="row" align="center" gap={{ base: 3, sm: 4 }}>
         <Box
