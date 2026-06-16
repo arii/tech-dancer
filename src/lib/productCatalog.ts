@@ -4,7 +4,7 @@ import { COLLECTIONS } from '@/data/merch';
 
 export function getCollectionUrl(collectionId: string): string {
   const collection = COLLECTIONS.find((c) => c.id === collectionId);
-  if (collection && 'printfulUrl' in collection && collection.printfulUrl) {
+  if (collection?.printfulUrl) {
     return collection.printfulUrl;
   }
   return `/merch?style=${collectionId}`;

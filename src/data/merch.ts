@@ -14,12 +14,18 @@ export interface MerchProduct {
   tags: string[];
 }
 
-export const COLLECTIONS = [
+export interface MerchCollection {
+  id: string;
+  label: string;
+  printfulUrl?: string;
+}
+
+export const COLLECTIONS: readonly MerchCollection[] = [
   { id: 'all', label: 'All' },
   { id: 'lead-follow-switch', label: 'Lead/Follow/Switch', printfulUrl: 'https://boomtick.printful.me/collection/lead-follow-switch' },
   { id: 'norcal-bestcal', label: 'NorCal BestCal', printfulUrl: 'https://boomtick.printful.me/collection/norcal-bestcal' },
   { id: 'rainbow-pride', label: 'Rainbow Pride' },
-] as const;
+];
 
 const gearImage = (fileName: string) => `/assets/gear/${fileName}`;
 

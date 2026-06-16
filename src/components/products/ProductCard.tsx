@@ -59,6 +59,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         </Text>
 
         <Stack direction="row" gap={1.5} wrap="wrap">
+          {/* Collection Tags - Interactive links with subtle accent styling */}
           {item.collections.map((collId) => {
             const coll = COLLECTIONS.find(c => c.id === collId);
             if (!coll) return null;
@@ -76,7 +77,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
                 paddingY={0.5}
                 radius="md"
                 surface="alt"
-                className="border border-line/30 hover:border-accent/50 transition-colors"
+                className="border border-accent/30 hover:border-accent/60 transition-colors bg-accent/5"
               >
                 <Text size="micro" weight="font-bold" uppercase tracking="wider" color="accent">
                   {coll.label}
@@ -85,19 +86,25 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
             );
           })}
 
+          {/* Role Tags - Static metadata with muted styling */}
           {item.roles && item.roles.map((role) => (
             <Box
               key={role}
               paddingX={2}
               paddingY={0.5}
               radius="md"
-              surface={role === 'lead' ? 'accent' : role === 'follow' ? 'warning' : role === 'switch' ? 'alt' : 'default'}
-              className={cn(
-                "border border-line/30",
-                role === 'lead' ? "text-accent" : role === 'follow' ? "text-warning" : role === 'switch' ? "text-text-main" : "text-text-dim"
-              )}
+              surface="alt"
+              className="border border-line/20"
             >
-              <Text size="micro" weight="font-bold" uppercase tracking="wider">
+              <Text
+                size="micro"
+                weight="font-bold"
+                uppercase
+                tracking="wider"
+                className={cn(
+                  role === 'lead' ? "text-accent/60" : role === 'follow' ? "text-warning/60" : "text-text-dim"
+                )}
+              >
                 {role}
               </Text>
             </Box>
