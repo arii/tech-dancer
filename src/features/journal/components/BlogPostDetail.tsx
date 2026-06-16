@@ -10,6 +10,8 @@ import { EditorialHeader } from '@/components/editorial/EditorialHeader';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
+import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
+import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -59,6 +61,9 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const affiliateLinks = (post.affiliateIds || [])
     .map(id => affiliateManager.getLink(id))
     .filter((link): link is NonNullable<typeof link> => !!link);
+
+  const allPosts = getPosts();
+  const { previous, next } = useArticleNavigation(allPosts, post.slug, '/blog');
 
   return (
     <EditorialLayout
@@ -120,6 +125,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       }
       footer={
         <Stack gap={12}>
+          <ArticleNavigation previous={previous} next={next} />
           <EditorialRelated items={relatedItems} />
         </Stack>
       }
