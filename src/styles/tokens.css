@@ -122,3 +122,13 @@
   background-color: color-mix(in srgb, var(--raw-color-line) 30%, transparent);
   border: 1px solid color-mix(in srgb, var(--raw-color-accent) 10%, transparent);
 }
+
+  /* Portfolio Tag Categories */
+  :root {
+    --color-tag-stack-bg: #EEEDFE;
+    --color-tag-stack-text: #3C3489;
+    --color-tag-infra-bg: #E1F5EE;
+    --color-tag-infra-text: #085041;
+    --color-tag-ai-bg: #FAEEDA;
+    --color-tag-ai-text: #633806;
+  }

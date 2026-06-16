@@ -23,8 +23,8 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
   if (tool.id === 'hrm-flagship') {
     return (
-      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" bg="#16213e">
-        <Box width={32} height={16} bg="white" radius="sm" display="flex" align="center" justify="center">
+      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" surface="default">
+        <Box width={32} height={16} surface="contrast" radius="sm" display="flex" align="center" justify="center">
           <Text color="accent" size="xl" weight="font-bold">♥ 74%</Text>
         </Box>
       </Box>
@@ -33,8 +33,8 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
 
   if (tool.id === 'repo-auditor-ai') {
     return (
-      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" bg="#0d1117">
-        <Stack align="center" gap={1} padding={4} bg="#161b22" border radius="sm" borderColor="accent/10">
+      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" surface="bg">
+        <Stack align="center" gap={1} padding={4} surface="default" border radius="sm" borderColor="accent/10">
           <Icon icon={GitPullRequest} size="lg" color="accent" />
           <Text size="micro" color="dim" uppercase tracking="widest">PR audit</Text>
         </Stack>
@@ -44,11 +44,11 @@ function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
 
   if (tool.id === 'boomtick-blog') {
     return (
-      <Box width="full" height={48} display="flex" direction="col" align="center" justify="center" border="b" borderColor="accent/5" bg="#1a1a1a" gap={2}>
+      <Box width="full" height={48} display="flex" direction="col" align="center" justify="center" border="b" borderColor="accent/5" surface="bg" gap={2}>
         <Text variant="display" size="2xl" color="white" tracking="tight">
-          boom<Text className="text-[#EF9F27]">tick</Text>.blog
+          boom<Text color="warning">tick</Text>.blog
         </Text>
-        <Text size="micro" className="text-[#888]" uppercase tracking="widest">Dance · Pride · Community</Text>
+        <Text size="micro" color="dim" uppercase tracking="widest">Dance · Pride · Community</Text>
       </Box>
     );
   }
@@ -137,14 +137,14 @@ export default function ResearchAnalytics() {
             border="none"
           />
           <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-            MIT PhD and former Waymo senior engineer. I build AI-assisted infrastructure — agentic CI/CD, LLM workflows, and developer tooling — grounded in production robotics experience.
+            Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
           </Text>
           <Stack gap={2} marginTop={4} marginBottom={4}>
             <Box display="flex" align="baseline" gap={2}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>Stack</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['React', 'Vite', 'TypeScript', 'Python'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#EEEDFE] text-[#3C3489]">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-tag-stack-bg text-brand-tag-stack-text">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -152,7 +152,15 @@ export default function ResearchAnalytics() {
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>Infra</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['GitHub Actions', 'Vercel', 'Playwright'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#E1F5EE] text-[#085041]">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-tag-infra-bg text-brand-tag-infra-text">{tag}</Text>
+                ))}
+              </Box>
+            </Box>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>Robotics</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['ROS1/2', 'C++', 'Navigation', 'Localization'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-tag-infra-bg text-brand-tag-infra-text">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -160,7 +168,7 @@ export default function ResearchAnalytics() {
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>AI</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#FAEEDA] text-[#633806]">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-tag-ai-bg text-brand-tag-ai-text">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -224,16 +232,13 @@ export default function ResearchAnalytics() {
                           {tool.title}
                         </Text>
                       </Stack>
-                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
-                        {tool.subtitle}
-                      </Text>
                       <Text variant="body" size="md" color="dim" leading="relaxed">
                         {tool.description}
                       </Text>
 
                       {tool.id === 'boomtick-blog' && (
-                        <Box display="flex" align="start" gap={3} padding={3} surface="muted" radius="md" marginTop={2}>
-                          <Icon icon={FlaskConical} size="sm" color="dim" className="mt-1 shrink-0" />
+                        <Box display="flex" align="start" gap={3} padding={3} surface="alt" radius="md" marginTop={2}>
+                          <Icon icon={FlaskConical} size="sm" color="dim" className="shrink-0" />
                           <Text size="xs" color="dim" leading="relaxed">
                             <Text weight="font-bold" color="main">RAG + LLM tooling in active development.</Text> This site is the production environment where those pipelines are being built and validated.
                           </Text>
@@ -293,10 +298,23 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Stack gap={6} padding={8} surface="muted" radius="xl" border borderColor="accent/10">
-          <Text as="h2" variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">Why this matters</Text>
+          <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
           <Text variant="body" size="lg" color="dim" leading="relaxed">
-            Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
+            These are my own projects — built to solve real problems I care about. If you need a senior roboticist, DevAI engineering infrastructure, or someone who can do both, I'm available for project-based contracts and full-time roles.
           </Text>
+          <Box display="flex" align="center" gap={4}>
+            <ActionButton as="a" href="mailto:ariel.anders@gmail.com" variant="ghost" padding={0}>
+              Email
+            </ActionButton>
+            <Text color="dim" opacityVariant="subtle">·</Text>
+            <ActionButton as="a" href="https://linkedin.com/in/ariel-anders" target="_blank" variant="ghost" padding={0}>
+              LinkedIn
+            </ActionButton>
+            <Text color="dim" opacityVariant="subtle">·</Text>
+            <ActionButton as="a" href="https://github.com/arii" target="_blank" variant="ghost" padding={0}>
+              GitHub
+            </ActionButton>
+          </Box>
         </Stack>
 
         {engineeringTools.length > 0 && (
