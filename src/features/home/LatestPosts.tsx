@@ -4,29 +4,18 @@ import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { CollectionHeader } from '@/components/ui/CollectionHeader';
 
 export function LatestPosts() {
   const posts = getPosts().slice(0, 3);
 
   return (
     <Box as="section" className="w-full max-w-full min-w-0">
-      <Box display="flex" align="center" justify="between" gap={2} marginBottom={4}>
-        <Text as="h2" variant="headline" size="2xl" weight="font-black">
-          Latest from BoomTick
-        </Text>
-        <Text
-          as={NavLink}
-          to="/blog"
-          variant="mono"
-          size="xs"
-          color="dim"
-          weight="font-bold"
-          paddingY={{ base: 4, sm: 0 }}
-          paddingX={{ base: 4, sm: 0 }}
-          className="shrink-0 uppercase tracking-widest transition-colors hover:text-accent"
-        >
-          View all →
-        </Text>
+      <Box marginBottom={4}>
+        <CollectionHeader
+          title="Latest from BoomTick"
+          href="/blog"
+        />
       </Box>
 
       {/* Compact editorial post rows — no card wrapper, border-bottom only */}

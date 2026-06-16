@@ -3,6 +3,7 @@ import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CollectionHeader } from '@/components/ui/CollectionHeader';
 import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
@@ -103,14 +104,11 @@ export default function Merch() {
           <Stack gap={8}>
             {sections.map((section) => (
               <Stack key={section.id} gap={5}>
-                <Stack gap={1}>
-                  <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
-                    {section.title}
-                  </Text>
-                  <Text variant="body" color="dim">
-                    {section.description}
-                  </Text>
-                </Stack>
+                <CollectionHeader
+                  title={section.title}
+                  description={section.description}
+                  href={section.id !== 'featured' ? `/merch?collection=${section.id}` : undefined}
+                />
                 {section.id === 'featured' ? (
                   <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
                     <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
