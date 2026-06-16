@@ -133,7 +133,7 @@ export default function ResearchAnalytics() {
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Stack</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['React', 'Vite', 'TypeScript', 'Python'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#3C3489]/10 text-[#a78bfa] border border-[#3C3489]/20">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-blue-text/10 text-brand-blue-accent border border-brand-blue-text/20">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -141,7 +141,7 @@ export default function ResearchAnalytics() {
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Infra</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['GitHub Actions', 'Vercel', 'Playwright'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#085041]/10 text-[#34d399] border border-[#085041]/20">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-green-text/10 text-brand-green-icon border border-brand-green-text/20">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -149,7 +149,7 @@ export default function ResearchAnalytics() {
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Robotics</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['ROS1/2', 'C++', 'Navigation', 'Localization'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#085041]/10 text-[#22d3ee] border border-[#085041]/20">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-green-text/10 text-brand-blue-accent border border-brand-green-text/20">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -157,7 +157,7 @@ export default function ResearchAnalytics() {
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>AI</Text>
               <Box display="flex" wrap="wrap" gap={2}>
                 {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
-                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#633806]/10 text-[#fbbf24] border border-[#633806]/20">{tag}</Text>
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-amber-text/10 text-brand-amber-text border border-brand-amber-text/20">{tag}</Text>
                 ))}
               </Box>
             </Box>
@@ -205,7 +205,7 @@ export default function ResearchAnalytics() {
                         paddingX={3}
                         paddingY={1}
                         radius="full"
-                        className={tool.id === 'boomtick-blog' ? "bg-[#E1F5EE] text-[#085041]" : "bg-accent/10 text-accent"}
+                        className={tool.id === 'boomtick-blog' ? "bg-brand-green-bg text-brand-green-text" : "bg-accent/10 text-accent"}
                       >
                         {tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'}
                       </Text>
