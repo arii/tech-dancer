@@ -14,9 +14,6 @@ const PROFILE_DATA: ProfileData = {
       id: "professional",
       title: "Professional Summary",
       content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I've shipped production robotics software across navigation, localization, motion planning, and behavior systems — and at startups, that means owning the full system from algorithm to deployment. Independently, I build agentic CI/CD pipelines and LLM-assisted developer tooling, and I'm looking to bring those practices to robotics teams.",
-      gallery: [
-        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" }
-      ],
       cards: [
         {
           icon: 'terminal',
@@ -41,6 +38,7 @@ const PROFILE_DATA: ProfileData = {
       title: "My Dance Background",
       content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.",
       gallery: [
+        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" },
         { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" }
       ]
     },
@@ -85,23 +83,6 @@ const PROFILE_DATA: ProfileData = {
       ]
     },
     {
-      id: "education-focus",
-      items: [
-        {
-          title: "Education",
-          description: "PhD in Computer Science, MIT"
-        },
-        {
-          title: "Focus",
-          description: "Robotics // AI // Research"
-        },
-        {
-          title: "Dance Level",
-          description: "Competitive Intermediate Follow"
-        }
-      ]
-    },
-    {
       id: "connect",
       eyebrow: "Connect & Networking",
       links: [
@@ -114,10 +95,10 @@ const PROFILE_DATA: ProfileData = {
   details: [
     { label: "LOCATION", value: "San Francisco, CA" },
     { label: "OPEN TO", value: "Staff SWE · Robotics contracts · DevAI consulting" },
-    { label: "PORTFOLIO", value: "https://boomtick.blog/research" },
-    { label: "RESUME", value: "https://boomtick.blog/ariel-anders-resume.pdf" },
-    { label: "GITHUB", value: "https://github.com/arii" },
-    { label: "LINKEDIN", value: "https://linkedin.com/in/ariel-anders" }
+    { label: "PORTFOLIO", value: "boomtick.blog/research" },
+    { label: "RESUME", value: "boomtick.blog/ariel-anders-resume.pdf" },
+    { label: "GITHUB", value: "github.com/arii" },
+    { label: "LINKEDIN", value: "linkedin.com/in/ariel-anders" }
   ]
 };
 
