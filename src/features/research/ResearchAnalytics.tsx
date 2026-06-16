@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, FlaskConical, GitPullRequest } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -11,18 +11,6 @@ import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 
-const SKILLS = [
-  { name: 'React', icon: Layout },
-  { name: 'Vite', icon: Zap },
-  { name: 'TypeScript', icon: Code },
-  { name: 'GitHub Actions', icon: Workflow },
-  { name: 'Vercel', icon: Rocket },
-  { name: 'Playwright', icon: Microscope },
-  { name: 'Python', icon: Terminal },
-  { name: 'LLM workflows', icon: SearchCode },
-  { name: 'SEO-safe automation', icon: Search },
-  { name: 'ecommerce automation', icon: Database },
-];
 
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
@@ -33,6 +21,38 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 }
 
 function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
+  if (tool.id === 'hrm-flagship') {
+    return (
+      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" bg="#16213e">
+        <Box width={32} height={16} bg="white" radius="sm" display="flex" align="center" justify="center">
+          <Text color="accent" size="xl" weight="font-bold">♥ 74%</Text>
+        </Box>
+      </Box>
+    );
+  }
+
+  if (tool.id === 'repo-auditor-ai') {
+    return (
+      <Box width="full" height={48} display="flex" align="center" justify="center" border="b" borderColor="accent/5" bg="#0d1117">
+        <Stack align="center" gap={1} padding={4} bg="#161b22" border radius="sm" borderColor="accent/10">
+          <Icon icon={GitPullRequest} size="lg" color="accent" />
+          <Text size="micro" color="dim" uppercase tracking="widest">PR audit</Text>
+        </Stack>
+      </Box>
+    );
+  }
+
+  if (tool.id === 'boomtick-blog') {
+    return (
+      <Box width="full" height={48} display="flex" direction="col" align="center" justify="center" border="b" borderColor="accent/5" bg="#1a1a1a" gap={2}>
+        <Text variant="display" size="2xl" color="white" tracking="tight">
+          boom<Text className="text-[#EF9F27]">tick</Text>.blog
+        </Text>
+        <Text size="micro" className="text-[#888]" uppercase tracking="widest">Dance · Pride · Community</Text>
+      </Box>
+    );
+  }
+
   if (!tool.image) return null;
 
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
@@ -117,18 +137,34 @@ export default function ResearchAnalytics() {
             border="none"
           />
           <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-            I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
+            MIT PhD and former Waymo senior engineer. I build AI-assisted infrastructure — agentic CI/CD, LLM workflows, and developer tooling — grounded in production robotics experience.
           </Text>
-          <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
-            {SKILLS.map((skill) => (
-              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" surface="accent">
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <Icon icon={skill.icon} size="sm" color="accent" />
-                </Box>
-                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">{skill.name}</Text>
+          <Stack gap={2} marginTop={4} marginBottom={4}>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>Stack</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['React', 'Vite', 'TypeScript', 'Python'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#EEEDFE] text-[#3C3489]">{tag}</Text>
+                ))}
               </Box>
-            ))}
-          </Box>
+            </Box>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>Infra</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['GitHub Actions', 'Vercel', 'Playwright'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#E1F5EE] text-[#085041]">{tag}</Text>
+                ))}
+              </Box>
+            </Box>
+            <Box display="flex" align="baseline" gap={2}>
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={14} shrink={0}>AI</Text>
+              <Box display="flex" wrap="wrap" gap={2}>
+                {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
+                  <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-[#FAEEDA] text-[#633806]">{tag}</Text>
+                ))}
+              </Box>
+            </Box>
+          </Stack>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
             <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
@@ -165,8 +201,17 @@ export default function ResearchAnalytics() {
                       <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" borderColor="accent/10">
                         <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
                       </Box>
-                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" bgGradient="bg-accent/10">
-                        Flagship
+                      <Text
+                        size="micro"
+                        weight="font-bold"
+                        uppercase
+                        tracking="widest"
+                        paddingX={3}
+                        paddingY={1}
+                        radius="full"
+                        className={tool.id === 'boomtick-blog' ? "bg-[#E1F5EE] text-[#085041]" : "bg-accent/10 text-accent"}
+                      >
+                        {tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'}
                       </Text>
                     </Box>
 
@@ -185,6 +230,15 @@ export default function ResearchAnalytics() {
                       <Text variant="body" size="md" color="dim" leading="relaxed">
                         {tool.description}
                       </Text>
+
+                      {tool.id === 'boomtick-blog' && (
+                        <Box display="flex" align="start" gap={3} padding={3} surface="muted" radius="md" marginTop={2}>
+                          <Icon icon={FlaskConical} size="sm" color="dim" className="mt-1 shrink-0" />
+                          <Text size="xs" color="dim" leading="relaxed">
+                            <Text weight="font-bold" color="main">RAG + LLM tooling in active development.</Text> This site is the production environment where those pipelines are being built and validated.
+                          </Text>
+                        </Box>
+                      )}
                     </Stack>
 
                     <Box display="flex" wrap="wrap" gap={2}>
@@ -238,22 +292,12 @@ export default function ResearchAnalytics() {
           </Grid>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" leading="relaxed">
-              HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
-            </Text>
-          </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" leading="relaxed">
-              Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
-            </Text>
-          </Stack>
-        </Grid>
+        <Stack gap={6} padding={8} surface="muted" radius="xl" border borderColor="accent/10">
+          <Text as="h2" variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">Why this matters</Text>
+          <Text variant="body" size="lg" color="dim" leading="relaxed">
+            Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
+          </Text>
+        </Stack>
 
         {engineeringTools.length > 0 && (
           <Stack gap={12}>

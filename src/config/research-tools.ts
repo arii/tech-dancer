@@ -55,6 +55,17 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
   },
   {
+    id: 'boomtick-blog',
+    taxonomyBucket: 'flagship',
+    title: 'BoomTick.blog',
+    subtitle: 'Live development environment',
+    description: 'West Coast Swing community platform and the active testbed for RAG pipelines and LLM-assisted content workflows currently in development. SEO-optimized publishing, analytics, and Printful API integration.',
+    category: 'Product development',
+    status: 'Active dev',
+    tags: ['Next.js', 'RAG', 'LLM Workflows', 'SEO'],
+    isFlagship: true,
+  },
+  {
     id: 'gitops-pr-reviewer',
     taxonomyBucket: 'engineering',
     title: 'GitOps Code Review Agent',
