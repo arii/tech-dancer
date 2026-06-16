@@ -26,11 +26,20 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
 function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
   if (tool.id === 'boomtick-blog') {
     return (
-      <Box width="full" display="flex" direction="col" align="center" justify="center" bg="#1a1a1a" gap={2} className="card-screenshot-wrapper border-b border-white/8">
-        <Text variant="display" size="2xl" color="white" tracking="tight">
-          boom<Text className="text-[#EF9F27]">tick</Text>.blog
-        </Text>
-        <Text size="micro" className="text-[#888]" uppercase tracking="widest">Dance · Pride · Community</Text>
+      <Box width="full" className="card-screenshot-wrapper boomtick-blog-preview border-b border-white/8">
+        <Stack gap={1} className="preview-content">
+          <Text className="preview-logo">
+            boom<span className="logo-accent">tick</span><span className="logo-dot font-light">.blog</span>
+          </Text>
+          <Text className="preview-headline">
+            Built for dancers.<br />
+            <span className="headline-accent">Train smarter.</span><br />
+            Travel better.
+          </Text>
+          <Text className="preview-tagline">
+            Training notes, gear reviews, and WCS guides.
+          </Text>
+        </Stack>
       </Box>
     );
   }
