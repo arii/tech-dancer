@@ -5,7 +5,7 @@ status: draft
 title: "Comprehensive Financial Strategy Guide for Dancers"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
-category: "Miscellaneous"
+category: "Travel"
 excerpt: "A deep dive into financial literacy for dancers: maximizing travel perks while maintaining a responsible lifestyle."
 image: ""
 tags:
