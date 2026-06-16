@@ -257,6 +257,7 @@ async function main(): Promise<void> {
   for (const route of routesToReview) {
     console.log(`  → ${route.route} (${route.severity}, ${route.differencePercent.toFixed(2)}%)`);
     const review = await reviewRoute(model, route);
+    console.log(`    Feedback: ${review.feedback}`);
     reviews.push(review);
   }
 
