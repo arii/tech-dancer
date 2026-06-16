@@ -41,8 +41,14 @@ describe('ProductCard', () => {
     expect(card.tagName).toBe('ARTICLE');
 
     const links = within(card).getAllByRole('link');
-    expect(links).toHaveLength(3);
-    expect(links.map((link) => link.getAttribute('href'))).toEqual([item.href, item.href, item.href]);
+    // 4 links: Image link, Title link, Collection link, and Button link
+    expect(links).toHaveLength(4);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      item.href, // Image
+      item.href, // Title
+      'https://boomtick.printful.me/collection/lead-follow-switch', // Collection link
+      item.href  // Button
+    ]);
 
     // Check CTA text for multi-image item
     expect(screen.getByText('SEE OPTIONS')).toBeTruthy();
