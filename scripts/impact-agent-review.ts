@@ -23,7 +23,7 @@ interface VisualSummary {
 
 interface RouteReview {
   route: string;
-  severity: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH';
   differencePercent: number;
   feedback: string;
 }
@@ -69,18 +69,6 @@ function imageToBase64(filePath: string): string {
   return fs.readFileSync(filePath).toString('base64');
 }
 
-function imageContent(filePath: string, label: string) {
-  return [
-    {
-      type: 'image_url' as const,
-      image_url: {
-        url: `data:image/png;base64,${imageToBase64(filePath)}`,
-      },
-    },
-    { type: 'text' as const, text: label },
-  ];
-}
-
 // ── Per-route review ───────────────────────────────────────────────────────
 
 async function reviewRoute(
@@ -92,18 +80,23 @@ async function reviewRoute(
   const afterPath = summary.afterCroppedPath ?? summary.afterPath;
   const diffPath = summary.diffCroppedPath;
 
-  const content: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
+  const baseContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
     { type: 'text', text: REVIEW_PROMPT },
     { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
-    ...imageContent(beforePath, 'BEFORE'),
-    ...imageContent(afterPath, 'AFTER'),
+    { type: 'text', text: 'BEFORE' },
+    { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },
+    { type: 'text', text: 'AFTER' },
+    { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(afterPath)}` } },
   ];
 
   if (diffPath && fs.existsSync(diffPath)) {
-    content.push(...imageContent(diffPath, 'DIFF'));
+    baseContent.push(
+      { type: 'text', text: 'DIFF' },
+      { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(diffPath)}` } }
+    );
   }
 
-  const message = new HumanMessage({ content });
+  const message = new HumanMessage({ content: baseContent });
   const response = await model.invoke([message]);
 
   return {
@@ -118,7 +111,7 @@ async function reviewRoute(
 
 // ── Report generation ──────────────────────────────────────────────────────
 
-function severityEmoji(severity: string): string {
+function severityEmoji(severity: 'LOW' | 'MEDIUM' | 'HIGH'): string {
   if (severity === 'HIGH') return '🔴';
   if (severity === 'MEDIUM') return '🟡';
   return '🟢';
@@ -132,7 +125,7 @@ function generateMarkdownReport(reviews: RouteReview[]): string {
   const sections = reviews.map(r => `
 ### ${severityEmoji(r.severity)} \`${r.route}\`
 
-**Pixel diff:** ${r.differencePercent.toFixed(2)}% | **Severity:** ${r.severity}
+**Pixel diff:** ${r.differencePercent.toFixed(2)}%
 
 ${r.feedback}
 `).join('\n---\n');
