@@ -1,8 +1,11 @@
 # 1. Start with the official Playwright image (Includes Node.js and Browser binaries)
 FROM mcr.microsoft.com/playwright:v1.49.0-noble
+# Links the image to your repository
+LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
 
 # 2. Install basic utilities
-RUN apt-get update && apt-get install -y curl pnpm && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN npm install -g pnpm
 
 # 3. Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | bash
