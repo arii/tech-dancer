@@ -9,7 +9,7 @@ test('verify homepage and guide visual consistency', async ({ page }) => {
 
   // On mobile, the FeaturedGuidePanel is hidden (display: none for base)
   // Just wait for the hero section to be stable
-  await expect(page.getByRole('heading', { name: /Train smarter/i })).toBeVisible();
+  await expect(page.locator('h1')).toContainText(/Look good/i);
 
   await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//homepage_mobile_v2.png', fullPage: true });
 
