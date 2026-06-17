@@ -33,6 +33,8 @@ jobs:
     name: Oxlint Scan
     runs-on: ubuntu-latest
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Checkout repository
         uses: actions/checkout@v6
 
@@ -54,6 +56,8 @@ jobs:
     name: Gitleaks Secret Detection
     runs-on: ubuntu-latest
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
@@ -70,6 +74,8 @@ jobs:
     container:
       image: returntocorp/semgrep
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Checkout repository
         uses: actions/checkout@v6
 
