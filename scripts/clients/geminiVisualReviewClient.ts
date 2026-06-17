@@ -1,6 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
+import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
@@ -37,15 +37,18 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
     // Output: $0.30 / 1 million tokens
     const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
 
+    const feedback = typeof response.content === 'string'
+      ? response.content
+      : JSON.stringify(response.content);
+
     return {
       route: summary.route,
       severity: summary.severity,
       differencePercent: summary.differencePercent,
-      feedback: typeof response.content === 'string'
-        ? response.content
-        : JSON.stringify(response.content),
+      feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      llmVerdict: parseLLMVerdict(feedback),
     };
   }
 };
