@@ -10,7 +10,7 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
       env:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
@@ -18,16 +18,10 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           lfs: true
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Install Python Dependencies
         run: |
           python3 -m pip install -r etl/requirements.txt

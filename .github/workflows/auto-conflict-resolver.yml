@@ -48,7 +48,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
     permissions:
       contents: write
       pull-requests: write
@@ -94,13 +94,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 

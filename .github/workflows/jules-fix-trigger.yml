@@ -24,13 +24,10 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
+        uses: actions/checkout@v6
       - name: Install Dependencies
         run: |
           pip install PyGithub requests click

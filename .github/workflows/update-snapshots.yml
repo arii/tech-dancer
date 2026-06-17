@@ -31,8 +31,6 @@ jobs:
       pull-requests: write
       actions: write
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Create initial comment
         id: initial-comment
         uses: peter-evans/create-or-update-comment@v5
@@ -55,15 +53,12 @@ jobs:
             core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
 
       - name: Checkout source branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.HEAD_REF }}
           repository: ${{ env.HEAD_REPO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
@@ -87,7 +82,6 @@ jobs:
       - name: Commit and push changes
         id: commit
         run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .

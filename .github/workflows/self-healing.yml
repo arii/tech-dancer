@@ -16,7 +16,7 @@ permissions:
 jobs:
   repair:
     runs-on: ubuntu-latest
-    container: ghcr.io/arii/tech-dancer:latest
+    container: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
     env:
       PYTHONPATH: dev-tools
       AI_MODEL: gpt-4o
@@ -24,21 +24,12 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: main
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Fetch and Apply PR Patch
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -60,17 +51,11 @@ jobs:
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
           path: trusted-tools-temp
           ref: main
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Restore Trusted Dev-Tools
         run: |
           rm -rf dev-tools
