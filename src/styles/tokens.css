@@ -18,6 +18,13 @@
   --raw-color-error: #ef4444;
   --raw-color-error-bg: #1a0a0a;
 
+  /* in-dev-banner support */
+  --color-background-secondary: var(--raw-color-surface-alt);
+  --color-text-primary: var(--raw-color-text-main);
+  --color-text-secondary: var(--raw-color-text-body);
+  --color-text-tertiary: var(--raw-color-text-dim);
+  --border-radius-md: var(--raw-radius-md);
+
   /* Typography */
   --raw-font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
   --raw-font-display: "Bricolage Grotesque", "Albert Sans", sans-serif;
@@ -119,6 +126,37 @@
 
 /* Flagship tag styling */
 .flagship-tag {
-  background-color: color-mix(in srgb, var(--raw-color-line) 30%, transparent);
-  border: 1px solid color-mix(in srgb, var(--raw-color-accent) 10%, transparent);
+  font-size: 11px !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--color-text-secondary) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Card border utility classes */
+.card-border {
+  border: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-t {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-b {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-l {
+  border-left: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-r {
+  border-right: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-x {
+  border-left: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-y {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important;
 }

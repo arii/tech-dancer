@@ -8,7 +8,7 @@ import os
 import sys
 import re
 from typing import Optional
-from utils import call_ollama, clean_llm_output, get_ollama_model
+from utils import call_ai, clean_llm_output, get_ollama_model
 
 MODEL = get_ollama_model()
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
@@ -45,7 +45,7 @@ FILE CONTENT:
 
 REPAIRED CONTENT:
 """
-            raw_response = call_ollama(prompt, model=MODEL)
+            raw_response = call_ai(prompt, model=MODEL)
             if not raw_response:
                 log(f"Empty response from LLM for {file_path}")
                 return False

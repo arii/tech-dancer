@@ -10,7 +10,7 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
+      image: ghcr.io/arii/tech-dancer:latest
       env:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
@@ -18,11 +18,8 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Install system dependencies - git-lfs, gh
-        run: |
-          apt-get update && apt-get install -y git-lfs gh
-          git lfs install
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -33,12 +30,9 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-          cache: 'pip'
-          cache-dependency-path: 'etl/requirements.txt'
 
       - name: Install Python Dependencies
         run: |
-          python3 -m pip install --upgrade pip
           python3 -m pip install -r etl/requirements.txt
 
       - name: Run Pytest - Data Validation
@@ -52,11 +46,8 @@ jobs:
           # Configure Git for intermediate commits
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
           # Run scraper in batches of 10 events
-          # The loop will stop when the script exits with code 100 (no new data) 
-          # or when it reaches a safety limit of 10 batches.
           for i in {1..10}; do
             echo "Starting Batch ${i}..."
             PYTHONPATH=. python etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
@@ -85,14 +76,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git lfs track "*.parquet"
-          # Only track and add the Parquet ledger; Markdown studies are ignored
           git add etl/data/wcs_prelims.parquet etl/data/event_queue.json .gitattributes
           if ! git diff --staged --quiet; then
             git commit -m "chore(etl): finalize automated WCS data refresh"
           fi
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore(etl): automated WCS data refresh"

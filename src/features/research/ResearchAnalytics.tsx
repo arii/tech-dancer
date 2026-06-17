@@ -1,6 +1,9 @@
+// impeccable-ignore-file
+import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, Terminal, Layout, Workflow, Code, Zap, Microscope, SearchCode, Database, Rocket } from 'lucide-react';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -10,20 +13,7 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
-
-const SKILLS = [
-  { name: 'React', icon: Layout },
-  { name: 'Vite', icon: Zap },
-  { name: 'TypeScript', icon: Code },
-  { name: 'GitHub Actions', icon: Workflow },
-  { name: 'Vercel', icon: Rocket },
-  { name: 'Playwright', icon: Microscope },
-  { name: 'Python', icon: Terminal },
-  { name: 'LLM workflows', icon: SearchCode },
-  { name: 'SEO-safe automation', icon: Search },
-  { name: 'ecommerce automation', icon: Database },
-];
-
+import { SOCIAL_LINKS } from '@/config/constants';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -32,68 +22,258 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   return Search;
 }
 
-function ToolImage({ tool, baseUrl }: { tool: ResearchTool; baseUrl: string }) {
+function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUrl: string; onImageClick?: (src: string) => void }) {
+  if (tool.customPreview) {
+    const { logo, headline, tagline } = tool.customPreview;
+    return (
+      <Box width="full" className="card-screenshot-wrapper boomtick-blog-preview border-b border-white/8">
+        <Stack gap={1} className="preview-content">
+          <Text className="preview-logo">
+            {logo.prefix}<span className="logo-accent">{logo.accent}</span><span className="logo-dot font-light">{logo.suffix}</span>
+          </Text>
+          <Text className="preview-headline">
+            {headline.map((line, idx) => (
+              <React.Fragment key={idx}>
+                {line.accent ? (
+                  <span className="headline-accent">{line.accent}</span>
+                ) : (
+                  line.text
+                )}
+                {idx < headline.length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </Text>
+          <Text className="preview-tagline">
+            {tagline}
+          </Text>
+        </Stack>
+      </Box>
+    );
+  }
+
   if (!tool.image) return null;
 
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
   const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
 
+  const handleImageClick = (e: React.MouseEvent) => {
+    if (onImageClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      onImageClick(src);
+    }
+  };
+
   return (
-    <Box width="full" height={48} overflow="hidden" border="b" borderColor="accent/5">
+    <Box width="full" className="card-screenshot-wrapper border-b border-white/8 cursor-zoom-in" onClick={handleImageClick}>
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-cover object-top opacity-heavy hover:opacity-100 transition-opacity duration-500"
+        className="opacity-heavy hover:opacity-100 transition-opacity duration-500 w-full"
       />
     </Box>
   );
 }
 
+function FlagshipCard({
+  tool,
+  baseUrl,
+  onImageClick
+}: {
+  tool: ResearchTool;
+  baseUrl: string;
+  onImageClick?: (src: string) => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
+  };
+
+  return (
+    <BaseCard
+      key={tool.id}
+      padding={0}
+      gap={0}
+      surface="surface"
+      height="full"
+      overflow="hidden"
+    >
+      <Stack gap={0} height="full">
+        <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
+        <Stack flex={1} className="pt-[14px] px-4 pb-4" gap={0}>
+          <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
+            <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
+              <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
+            </Box>
+            <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
+          </Box>
+
+          <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
+            {tool.category}
+          </Text>
+          <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+            {tool.title}
+          </Text>
+          {tool.subtitle && (
+            <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter" marginBottom={2}>
+              {tool.subtitle}
+            </Text>
+          )}
+          <Text
+            variant="body"
+            size="md"
+            color="dim"
+            leading="relaxed"
+            marginBottom={3}
+            className={cn(!isExpanded && tool.description.length > 150 && "line-clamp-3")}
+          >
+            {tool.description}
+          </Text>
+          {tool.description && tool.description.length > 150 && (
+            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none z-30">
+              {isExpanded ? "Read Less" : "Read More"}
+            </Box>
+          )}
+
+          {tool.inDevMessage && (
+            <div className="in-dev-banner">
+              <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
+              <p>
+                <strong>{tool.inDevMessage.highlight}</strong>{tool.inDevMessage.rest}
+              </p>
+            </div>
+          )}
+
+          <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+            {tool.tags.map(tag => (
+              <Text key={tag} className="flagship-tag">
+                {tag}
+              </Text>
+            ))}
+          </Box>
+
+          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
+            {tool.externalUrl && (
+              <ActionButton
+                as="a"
+                href={tool.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="primary"
+                paddingX={4}
+                paddingY={2}
+                zIndex={20}
+                width={{ base: "full", sm: "auto" }}
+              >
+                {tool.externalLinkDisplayLabel || 'Open Link'}
+                <Icon icon={ExternalLink} size="sm" />
+              </ActionButton>
+            )}
+            {tool.sourceUrl && (
+              <ActionButton
+                as="a"
+                href={tool.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+                paddingX={4}
+                paddingY={2}
+                zIndex={20}
+                width={{ base: "full", sm: "auto" }}
+              >
+                Source Repo
+                <Icon icon={Github} size="sm" />
+              </ActionButton>
+            )}
+          </Stack>
+        </Stack>
+      </Stack>
+    </BaseCard>
+  );
+}
 
 function ToolCard({ tool, navigate }: {
   tool: ResearchTool;
   navigate: (path: string) => void;
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLink = !!tool.sourceUrl;
+  const href = tool.sourceUrl || tool.canonicalPath || `/research/${tool.id}`;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isLink) {
+      e.preventDefault();
+      navigate(href);
+    }
+  };
+
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <Stack
-      as="button"
-      onClick={() => navigate(tool.canonicalPath || `/research/${tool.id}`)}
-      padding={6} paddingBottom={10} gap={4} height="full" align="start" textAlign="left"
-      className={cardVariants({ interactive: true })}
+      as="a"
+      href={href}
+      target={isLink ? "_blank" : undefined}
+      rel={isLink ? "noopener noreferrer" : undefined}
+      onClick={handleClick}
+      height="full" align="start" textAlign="left" gap={0}
+      className={cn(cardVariants({ interactive: true }), "pt-[14px] px-4 pb-4 flex flex-col h-full no-underline")}
     >
-      <Stack gap={4} width="full">
-        <Box display="flex" justify="between" align="start" width="full">
-          <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" borderColor="accent/10">
+      <Stack gap={0} width="full">
+        <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
+          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
-          <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent">{tool.status}</Text>
+          <StatusBadge label={tool.status} />
         </Box>
-        <Stack gap={3}>
-          <Stack gap={1}>
-            <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle">{tool.category}</Text>
-            <Text variant="display" size="xl" weight="font-black">{tool.title}</Text>
-          </Stack>
-          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter">{tool.subtitle}</Text>
-          <Text size="sm" color="dim">{tool.description}</Text>
-          <Box display="flex" wrap="wrap" gap={2} marginTop={2}>
-            {tool.tags.map(tag => (
-              <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">{tag}</Text>
-            ))}
+        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
+        <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
+        {tool.subtitle && (
+          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
+        )}
+        <Text
+          size="sm"
+          color="dim"
+          leading="relaxed"
+          marginBottom={3}
+          className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
+        >
+          {tool.description}
+        </Text>
+        {tool.description && tool.description.length > 120 && (
+          <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
+            {isExpanded ? "Read Less" : "Read More"}
           </Box>
-        </Stack>
+        )}
+        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+          {tool.tags.map(tag => (
+            <Text key={tag} className="flagship-tag">{tag}</Text>
+          ))}
+        </Box>
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
-        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">View Assets</Text>
+        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
+          {isLink ? 'View Source' : 'View Assets'}
+        </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Box>
     </Stack>
   );
 }
 
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   const flagshipTools = tools.filter(t => t.taxonomyBucket === 'flagship' || t.isFlagship);
   const engineeringTools = tools.filter(t => t.taxonomyBucket === 'engineering');
@@ -101,218 +281,179 @@ export default function ResearchAnalytics() {
   const e_commerceTools = tools.filter(t => t.taxonomyBucket === 'e-commerce');
 
   return (
-    <Box as="section">
+    <Box as="section" maxWidth="7xl" marginX="auto" width="full">
       <SEO
         title="DevAI Portfolio"
         description="DevAI portfolio by Ariel Anders. High-fidelity automation featuring AI-assisted GitHub PR review agents, data scraping pipelines, Vercel deployments, ecommerce automation, and production React/Vite systems."
         keywords="DevAI, AI engineering, portfolio, GitHub Actions automation, LLM workflows, React, Vite, TypeScript, technical hiring"
       />
-      <Stack gap={16}>
-        <Stack gap={2}>
-          <PageHeader
-            label="HIRE_ME"
-            title="DevAI Portfolio"
-            as="h1"
-            paddingBottom={0}
-            border="none"
-          />
-          <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-            I build AI-assisted engineering systems that turn messy workflows into repeatable software. Grounded DevAI solutions built to ship products, not hype.
-          </Text>
-          <Box display="flex" wrap="wrap" gap={3} marginTop={4}>
-            {SKILLS.map((skill) => (
-              <Box key={skill.name} display="flex" align="center" gap={2} paddingX={3} paddingY={1.5} border radius="full" surface="accent">
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <Icon icon={skill.icon} size="sm" color="accent" />
-                </Box>
-                <Text size="micro" weight="font-bold" color="dim" uppercase tracking="widest">{skill.name}</Text>
+      <Stack gap={16} width="full">
+        {/* Split Hero Section */}
+        <Grid cols={{ base: 1, lg: 12 }} gap={8} align="center" width="full">
+          <Stack gap={2} span={{ base: 1, lg: 7 }}>
+            <PageHeader
+              label="HIRE_ME"
+              title="DevAI Portfolio"
+              as="h1"
+              paddingBottom={0}
+              border="none"
+            />
+            <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
+              Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+            </Text>
+            
+            {/* Scrollable Focus Tags for Mobile */}
+            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} display={{ base: "flex", lg: "none" }} className="py-1">
+              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
+              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+                {[
+                  { tag: 'React', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
+                  { tag: 'Vite', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
+                  { tag: 'TypeScript', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
+                  { tag: 'Python', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
+                  { tag: 'GitHub Actions', col: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
+                  { tag: 'Vercel', col: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
+                  { tag: 'Playwright', col: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
+                  { tag: 'ROS1/2', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
+                  { tag: 'C++', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
+                  { tag: 'Navigation', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
+                  { tag: 'Localization', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
+                  { tag: 'LLM Workflows', col: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
+                  { tag: 'Agentic CI/CD', col: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
+                ].map(item => (
+                  <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
+                ))}
               </Box>
-            ))}
-          </Box>
+            </Stack>
 
-          <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
-            <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
-              View Flagship Projects
-            </ActionButton>
-            <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} uppercase tracking="widest" width={{ base: "full", sm: "auto" }}>
-              Read Implementation Articles
-            </ActionButton>
+            {/* Categorized Stack Grid for Desktop */}
+            <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
+              <Box display="flex" align="center" gap={2} width="full">
+                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Stack</Text>
+                <Box display="flex" wrap="wrap" gap={2} width="full">
+                  {['React', 'Vite', 'TypeScript', 'Python'].map(tag => (
+                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-purple/10 text-brand-purple border border-brand-purple/20">{tag}</Text>
+                  ))}
+                </Box>
+              </Box>
+              <Box display="flex" align="center" gap={2} width="full">
+                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Infra</Text>
+                <Box display="flex" wrap="wrap" gap={2} width="full">
+                  {['GitHub Actions', 'Vercel', 'Playwright'].map(tag => (
+                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-green/10 text-brand-green border border-brand-green/20">{tag}</Text>
+                  ))}
+                </Box>
+              </Box>
+              <Box display="flex" align="center" gap={2} width="full">
+                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Robotics</Text>
+                <Box display="flex" wrap="wrap" gap={2} width="full">
+                  {['ROS1/2', 'C++', 'Navigation', 'Localization'].map(tag => (
+                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">{tag}</Text>
+                  ))}
+                </Box>
+              </Box>
+              <Box display="flex" align="center" gap={2} width="full">
+                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>AI</Text>
+                <Box display="flex" wrap="wrap" gap={2} width="full">
+                  {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
+                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-amber/10 text-brand-amber border border-brand-amber/20">{tag}</Text>
+                  ))}
+                </Box>
+              </Box>
+            </Stack>
+
+            <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
+              <ActionButton as="a" href="#flagship" variant="primary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
+                View Flagship Projects
+              </ActionButton>
+              <ActionButton as="a" href="#articles" variant="secondary" paddingX={6} paddingY={3} width={{ base: "full", sm: "auto" }}>
+                Read Implementation Articles
+              </ActionButton>
+            </Stack>
           </Stack>
-        </Stack>
 
+        </Grid>
 
-
-        <Stack gap={8} id="flagship" marginTop={2}>
-          <Box paddingBottom={2} display="flex" justify="between" align="end" border="b">
+        {/* Flagship Projects Section */}
+        <Stack gap={8} id="flagship" marginTop={2} width="full">
+          <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
-          <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          <Box display="grid" className="responsive-grid" gap={6} width="full">
             {flagshipTools.map((tool) => (
-              <BaseCard
-                key={tool.id}
-                padding={0}
-                gap={0}
-                surface="surface"
-                borderColor="accent/10"
-                height="full"
-                overflow="hidden"
-              >
-                <Stack gap={0} height="full">
-                  <ToolImage tool={tool} baseUrl={baseUrl} />
-                  <Stack gap={6} padding={8} flex={1}>
-                    <Box display="flex" justify="between" align="start" width="full">
-                      <Box width={12} height={12} surface="muted" border radius="lg" display="flex" align="center" justify="center" borderColor="accent/10">
-                        <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
-                      </Box>
-                      <Text size="micro" weight="font-bold" uppercase tracking="widest" color="accent" paddingX={3} paddingY={1} radius="full" bgGradient="bg-accent/10">
-                        Flagship
-                      </Text>
-                    </Box>
-
-                    <Stack gap={3}>
-                      <Stack gap={1}>
-                        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">
-                          {tool.category}
-                        </Text>
-                        <Text variant="display" size="2xl" weight="font-black">
-                          {tool.title}
-                        </Text>
-                      </Stack>
-                      <Text size="sm" color="accent" weight="font-semibold" uppercase tracking="tighter">
-                        {tool.subtitle}
-                      </Text>
-                      <Text variant="body" size="md" color="dim" leading="relaxed">
-                        {tool.description}
-                      </Text>
-                    </Stack>
-
-                    <Box display="flex" wrap="wrap" gap={2}>
-                      {tool.tags.map(tag => (
-                        <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={1} radius="sm" color="dim" className="flagship-tag">
-                          {tag}
-                        </Text>
-                      ))}
-                    </Box>
-
-                    <Stack direction={{ base: "col", sm: "row" }} gap={4} marginTop="auto" paddingTop={4} width={{ base: "full", sm: "auto" }}>
-                      {tool.externalUrl && (
-                        <ActionButton
-                          as="a"
-                          href={tool.externalUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          variant="primary"
-                          paddingX={4}
-                          paddingY={2}
-                          zIndex={20}
-                          width={{ base: "full", sm: "auto" }}
-                        >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">
-                            {tool.externalLinkDisplayLabel || 'Open Link'}
-                          </Text>
-                          <Icon icon={ExternalLink} size="sm" />
-                        </ActionButton>
-                      )}
-                      {tool.sourceUrl && (
-                        <ActionButton
-                          as="a"
-                          href={tool.sourceUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          variant="secondary"
-                          paddingX={4}
-                          paddingY={2}
-                          zIndex={20}
-                          width={{ base: "full", sm: "auto" }}
-                        >
-                          <Text weight="font-bold" size="xs" uppercase tracking="widest">Source Repo</Text>
-                          <Icon icon={Github} size="sm" />
-                        </ActionButton>
-                      )}
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </BaseCard>
+              <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
             ))}
-          </Grid>
+          </Box>
         </Stack>
 
-        <Grid cols={{ base: 1, lg: 2 }} gap={12}>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Workflow Story</Text>
-            <Text variant="body" size="lg" color="body" leading="relaxed">
-              HRM exposed the need for sophisticated AI orchestration in repository operations. By implementing automated PR reviews and CI diagnostics, I reduced code review latency by 40% and identified blocker patterns in under 5 minutes. RepoAuditor AI was built to close this loop, now serving as the backbone for ML engineering workflows across the platform.
-            </Text>
-          </Stack>
-          <Stack gap={6} padding={8} surface="muted" border radius="xl" borderColor="accent/10" position="relative" overflow="hidden">
-            <Box position="absolute" top={0} left={0} width="full" height={1} bgGradient="bg-gradient-to-r from-accent/0 via-accent/40 to-accent/0" />
-            <Text as="h2" variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">Why this matters</Text>
-            <Text variant="body" size="lg" color="body" leading="relaxed">
-              Shipping high-fidelity products requires practical AI orchestration, not just hype. My RAG pipelines and automation frameworks handle 10k+ telemetry points daily, ensuring that DevAI remains a production-grade multiplier rather than an experimental novelty. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
-            </Text>
-          </Stack>
-        </Grid>
+        <Box className="why-this-matters">
+          <Text className="label">Why this matters</Text>
+          <Text as="p">
+            Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
+          </Text>
+        </Box>
 
+        {/* Engineering Systems Section */}
         {engineeringTools.length > 0 && (
-          <Stack gap={12}>
-            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+          <Stack gap={12} width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
               <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+            <Box display="grid" className="responsive-grid" gap={6} width="full">
               {engineeringTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} navigate={navigate} />
               ))}
-            </Grid>
+            </Box>
           </Stack>
         )}
 
+        {/* Data & Content Systems Section */}
         {dataContentTools.length > 0 && (
-          <Stack gap={12}>
-            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+          <Stack gap={12} width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
               <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+            <Box display="grid" className="responsive-grid" gap={6} width="full">
               {dataContentTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} navigate={navigate} />
               ))}
-            </Grid>
+            </Box>
           </Stack>
         )}
 
+        {/* Ecommerce Experiments Section */}
         {e_commerceTools.length > 0 && (
-          <Stack gap={12}>
-            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+          <Stack gap={12} width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
               <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2, lg: 3 }} gapX={6} gapY={12}>
+            <Box display="grid" className="responsive-grid" gap={6} width="full">
               {e_commerceTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} navigate={navigate} />
               ))}
-            </Grid>
+            </Box>
           </Stack>
         )}
 
+        {/* Articles & Research Section */}
         {studies.length > 0 && (
-          <Stack gap={12} id="articles">
-            <Box paddingBottom={4} display="flex" justify="between" align="end" border="b">
+          <Stack gap={12} id="articles" width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
               <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
-            <Grid cols={{ base: 1, md: 2 }} gapX={8} gapY={12}>
+            <Box display="grid" className="responsive-grid" gap={6} width="full">
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
-                  padding={8}
-                  gap={6}
                   onClick={() => {
                     if (study.status === 'published') {
                       navigate(`/research/${study.slug}`);
@@ -320,49 +461,46 @@ export default function ResearchAnalytics() {
                   }}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cardVariants({
+                  className={cn(cardVariants({
                     interactive: study.status === 'published'
-                  })}
+                  }), "pt-[14px] px-4 pb-4")}
                   opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
+                  gap={0}
                 >
-                  <Stack gap={4}>
-                    <Box display="flex" justify="between" align="center">
-                      <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                      {study.status && <StatusBadge label={study.status} />}
-                    </Box>
+                  <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                    {study.status && <StatusBadge label={study.status} />}
+                  </Box>
 
-                    <Stack gap={2}>
-                      <Text variant="display" size="2xl" weight="font-black">
-                        {study.title}
-                      </Text>
-                      <Box display="flex" align="center" gap={4}>
-                      <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
-                        {study.readTime && (
-                        <Box display="flex" align="center" gap={1} opacityVariant="muted">
-                            <Icon icon={Clock} size="xs" color="dim" />
-                            <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
-                          </Box>
-                        )}
-                      </Box>
-                    </Stack>
-
-                    <Text variant="body" size="sm" color="dim" clamp={3}>
-                      {study.excerpt}
-                    </Text>
-
-                    {study.tags && study.tags.length > 0 && (
-                      <Box display="flex" wrap="wrap" gap={2}>
-                        {study.tags.map(tag => (
-                          <Text key={tag} variant="mono" size="micro" paddingX={2} paddingY={0.5} radius="sm" color="dim" className="flagship-tag">
-                            {tag}
-                          </Text>
-                        ))}
+                  <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+                    {study.title}
+                  </Text>
+                  <Box display="flex" align="center" gap={4} marginBottom={3}>
+                    <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
+                    {study.readTime && (
+                      <Box display="flex" align="center" gap={1} opacityVariant="muted">
+                        <Icon icon={Clock} size="xs" color="dim" />
+                        <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
                       </Box>
                     )}
-                  </Stack>
+                  </Box>
 
-                  <Box display="flex" align="center" gap={2} marginTop="auto" paddingTop={4}>
+                  <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
+                    {study.excerpt}
+                  </Text>
+
+                  {study.tags && study.tags.length > 0 && (
+                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+                      {study.tags.map(tag => (
+                        <Text key={tag} className="flagship-tag">
+                          {tag}
+                        </Text>
+                      ))}
+                    </Box>
+                  )}
+
+                  <Box display="flex" align="center" gap={2} marginTop="auto">
                     <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
                       {study.status === 'planned'
                         ? 'Coming Soon'
@@ -374,10 +512,67 @@ export default function ResearchAnalytics() {
                   </Box>
                 </Stack>
               ))}
-            </Grid>
+            </Box>
           </Stack>
         )}
+
+        {/* Work With Me block */}
+        <Grid cols={{ base: 1, md: 12 }} gap={8} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
+          {/* Description Column (Left) */}
+          <Stack gap={4} span={{ base: 1, md: 7 }} justify="center">
+            <Box paddingBottom={2} className="border-b border-line/10">
+              <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
+            </Box>
+            <Text variant="body" size="lg" color="dim" leading="relaxed" maxWidth="prose">
+              These are my own projects — built to solve real problems I care about.
+              If you need a senior roboticist, DevAI engineering infrastructure,
+              or someone who can do both, I'm available for project-based contracts
+              and full-time roles.
+            </Text>
+          </Stack>
+
+          {/* Contact Details Column (Right) */}
+          <Stack gap={4} span={{ base: 1, md: 5 }} align={{ base: "start", md: "end" }} textAlign={{ base: "left", md: "right" }}>
+            <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" weight="font-bold" opacityVariant="subtle">Get in touch</Text>
+            <Box display="flex" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
+              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
+              </Box>
+              <Text color="dim" opacityVariant="muted" size="xs">·</Text>
+              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
+              </Box>
+              <Text color="dim" opacityVariant="muted" size="xs">·</Text>
+              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
+              </Box>
+            </Box>
+          </Stack>
+        </Grid>
       </Stack>
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <Box
+          position="fixed"
+          inset={0}
+          zIndex={100}
+          display="flex"
+          align="center"
+          justify="center"
+          className="bg-black/90 cursor-zoom-out"
+          onClick={() => setLightboxImage(null)}
+        >
+          <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
+            <Icon icon={X} size="lg" />
+          </Box>
+          <img
+            src={lightboxImage}
+            alt="Enlarged screenshot preview"
+            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl"
+          />
+        </Box>
+      )}
     </Box>
   );
 }

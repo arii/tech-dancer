@@ -27,13 +27,13 @@ def get_ollama_url() -> str:
 
 def get_ollama_model() -> str:
     """Dynamic getter for Ollama Model."""
-    return os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
+    return os.environ.get("OLLAMA_MODEL", "gpt-4o")
 
 def get_ollama_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
-    'code-reviewer' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on qwen2.5-coder:7b.
+    'gpt-4o' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on gpt-4o.
     """
-    return os.environ.get("OLLAMA_REVIEW_MODEL", "code-reviewer")
+    return os.environ.get("OLLAMA_REVIEW_MODEL", "gpt-4o")
 
 def get_ollama_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
@@ -64,21 +64,9 @@ def clean_llm_output(text: str) -> str:
         return match.group(1).strip()
     return text.strip()
 
-def is_ollama_available() -> bool:
-    """Checks if Ollama API is reachable."""
-    base_url = get_ollama_url()
-    if not base_url.endswith("/"):
-        base_url += "/"
-
-    # Use relative path to preserve any sub-path in base_url
-    tags_url = urllib.parse.urljoin(base_url, "api/tags")
-
-    try:
-        req = urllib.request.Request(tags_url, method='GET')
-        with urllib.request.urlopen(req, timeout=5) as response:
-            return response.status == 200
-    except Exception:
-        return False
+def is_ai_available() -> bool:
+    """Checks if AI API token is present."""
+    return bool(os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN"))
 
 def to_standard_schema(schema):
     """Recursively converts Gemini-style uppercase types to standard lowercase JSON schema types."""
@@ -94,60 +82,37 @@ def to_standard_schema(schema):
         return [to_standard_schema(item) for item in schema]
     return schema
 
-def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call local Ollama API with retries using urllib."""
-    base_url = url or get_ollama_url()
-    if not base_url.endswith("/"):
-        base_url += "/"
+def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+    """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
+    try:
+        from langchain_openai import ChatOpenAI
+        from langchain_core.messages import HumanMessage
+    except ImportError:
+        print("langchain_openai or langchain_core is not installed.", file=sys.stderr)
+        return None
 
-    # Use relative path to preserve any sub-path in base_url
-    target_url = urllib.parse.urljoin(base_url, "api/generate")
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
+    if not token:
+        return None
 
     model = model or get_ollama_model()
 
-    data = {
-        "model": model,
-        "prompt": prompt,
-        "stream": False
-    }
-
-    if schema:
-        data["format"] = to_standard_schema(schema)
-
-    req = urllib.request.Request(
-        target_url,
-        data=json.dumps(data).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
+    llm = ChatOpenAI(
+        base_url="https://models.inference.ai.azure.com",
+        api_key=token,
+        model=model,
+        temperature=0.7,
+        max_tokens=2048,
+        max_retries=max_retries,
+        model_kwargs={"response_format": {"type": "json_object"}} if schema else {}
     )
 
-    for attempt in range(1, max_retries + 1):
-        try:
-            try:
-                with urllib.request.urlopen(req, timeout=900) as response:
-                    res_data = json.loads(response.read().decode("utf-8"))
-                    return res_data.get("response")
-            except (urllib.error.HTTPError, urllib.error.URLError) as e:
-                # Retry on 429 (Too Many Requests), 5xx (Server Error), or network errors
-                is_retryable = not isinstance(e, urllib.error.HTTPError) or (e.code == 429 or 500 <= e.code < 600)
-                if is_retryable:
-                    raise APIConnectionError(str(e)) from e
-                # Non-retriable HTTP error
-                print(f"API call failed with non-retriable error: {e}", file=sys.stderr)
-                return None
-        except APIConnectionError as e:
-            if attempt == max_retries:
-                print(f"API call failed after {attempt} attempts: {e}", file=sys.stderr)
-                return None
-
-            # Exponential backoff with jitter
-            sleep_time = (2 ** attempt) + random.uniform(0, 1)
-            print(f"API call failed ({e}). Retrying in {sleep_time:.2f}s...", file=sys.stderr)
-            time.sleep(sleep_time)
-        except Exception as e:
-            # Non-retryable exceptions (e.g. JSON parse error)
-            print(f"Unexpected error during API call: {e}", file=sys.stderr)
-            return None
-    return None
+    try:
+        response = llm.invoke([HumanMessage(content=prompt)])
+        return response.content
+    except Exception as e:
+        print(f"AI Call failed: {e}", file=sys.stderr)
+        return None
 
 def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True) -> Union[str, subprocess.CompletedProcess]:
     """
