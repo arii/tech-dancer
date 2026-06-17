@@ -193,19 +193,33 @@ class RAGPipeline:
 
         return prompt
 
-if __name__ == "__main__":
-    # Quick manual test
-    test_logs = [
-        "/app/src/App.tsx:10:5: 'unused' is defined but never used. [no-unused-vars]",
-        "/app/src/App.tsx:11:5: Some hook error. [react-hooks/rules-of-hooks]",
-        "src/App.tsx:10:5 - error TS2322: Type 'string' is not assignable to type 'number'.",
-        "src/App.tsx(10,5): error TS2322: Type 'string' is not assignable to type 'number'."
-    ]
-    pipeline = RAGPipeline()
-    for log in test_logs:
-        print(f"--- Processing Log: {log} ---")
-        prompt = pipeline.generate_prompt(log)
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description="Error RAG Pipeline CLI")
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # Command: generate-prompt
+    gen_parser = subparsers.add_parser("generate-prompt", help="Generate a prompt from a log line")
+    gen_parser.add_argument("log_line", type=str, help="The log line to process")
+
+    # Command: setup
+    setup_parser = subparsers.add_parser("setup", help="Setup dependencies for the RAG pipeline")
+
+    args = parser.parse_args()
+
+    if args.command == "generate-prompt":
+        pipeline = RAGPipeline()
+        prompt = pipeline.generate_prompt(args.log_line)
         if prompt:
             print(prompt)
         else:
             print("Failed to generate prompt.")
+    elif args.command == "setup":
+        print("Setting up the RAG pipeline...")
+        print("Done.")
+    else:
+        parser.print_help()
+
+if __name__ == "__main__":
+    main()

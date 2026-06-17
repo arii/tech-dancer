@@ -3,26 +3,18 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tdw_services"
+name = "error_rag"
 version = "0.1.0"
-description = "Tech-Dancer DevTools SDK"
+description = "Minimal RAG CLI Tool"
 authors = [
     { name="Tech-Dancer Team" }
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "requests>=2.0.0",
-    "google-genai",
     "python-dotenv",
     "pydantic",
-    "click",
-    "PyGithub",
-    "semgrep"
+    "click"
 ]
 
 [project.scripts]
-td-cli = "tdw_services.cli:cli"
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["tdw_services*"]
+error-rag = "error_rag:main"
