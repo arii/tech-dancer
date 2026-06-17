@@ -30,9 +30,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
-
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
