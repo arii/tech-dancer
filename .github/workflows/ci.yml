@@ -51,7 +51,6 @@ env:
   ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
   BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   lint-typecheck:
@@ -304,7 +303,7 @@ jobs:
           sleep 5
           curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && false)
       - name: Pull Model
-        run: ollama pull llava:7b
+        run: ollama pull llava:latest
       - name: Visual review agent
         if: always()
         env:
@@ -316,7 +315,7 @@ jobs:
       - name: Visual review ollama agent
         if: always()
         env:
-          OLLAMA_MODEL: llava
+          OLLAMA_MODEL: llava:latest
           OLLAMA_BASE_URL: http://localhost:11434
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

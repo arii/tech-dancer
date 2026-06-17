@@ -243,7 +243,9 @@ async function main(): Promise<void> {
   // Assuming Ollama is running locally, no API key required
 
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
-    throw new Error('Missing visual summary. Run pnpm impact:visual-diff first.');
+    console.warn('⚠️  Skipping agent review — missing visual summary. Run pnpm impact:visual-diff first.');
+    fs.writeFileSync(AGENT_REPORT_PATH, '## 🦙 Ollama Visual Review\n\nSkipped: Missing visual summary.\n');
+    return;
   }
 
   const summary: VisualSummary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8'));
