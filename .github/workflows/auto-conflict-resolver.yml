@@ -47,11 +47,16 @@ jobs:
   merge_and_resolve:
 
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: write
       pull-requests: write
       actions: write
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Resolve PR details
         if: env.PR_NUMBER && env.PR_NUMBER != '0'
         env:

@@ -18,7 +18,12 @@ jobs:
   resolve-conflicts:
     runs-on: ubuntu-latest
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
@@ -38,9 +43,6 @@ jobs:
           curl -fsSL https://ollama.com/install.sh > install_ollama.sh
           sh install_ollama.sh
           rm install_ollama.sh
-
-      - name: Install Click
-        run: pip install click
 
       - name: Start Ollama Server
         run: |

@@ -21,6 +21,8 @@ jobs:
     if: github.repository == 'disabled'
 
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
       OLLAMA_MODEL: qwen2.5-coder:1.5b
@@ -29,6 +31,9 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
@@ -66,9 +71,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          if ! python3 -c "import click, github, requests" 2>/dev/null; then
-            pip install click PyGithub requests
-          fi
           if [ ! -d "node_modules" ]; then
             pnpm install --frozen-lockfile
           fi

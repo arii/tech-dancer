@@ -22,7 +22,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
+      image: ghcr.io/arii/tech-dancer:latest
       env:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
@@ -31,6 +31,9 @@ jobs:
       pull-requests: write
       actions: write
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Create initial comment
         id: initial-comment
         uses: peter-evans/create-or-update-comment@v5

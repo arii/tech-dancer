@@ -23,18 +23,14 @@ jobs:
   trigger-jules:
 
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
-        run: |
-          pip install PyGithub requests click
 
       - name: Pre-check Jules Credentials
         run: |
