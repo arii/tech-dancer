@@ -13,7 +13,7 @@ function createModel(): ChatOpenAI {
 
   return new ChatOpenAI({
     modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-4o',
-    openAIApiKey: apiKey,
+    apiKey: apiKey,
     configuration: {
       baseURL: 'https://models.inference.ai.azure.com',
     },
