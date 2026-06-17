@@ -9,7 +9,7 @@ jobs:
     if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE }}
+      image: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: read
       pull-requests: write

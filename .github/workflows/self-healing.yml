@@ -16,7 +16,7 @@ permissions:
 jobs:
   repair:
     runs-on: ubuntu-latest
-    container: ${{ vars.CI_CONTAINER_IMAGE }}
+    container: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
       AI_MODEL: gpt-4o

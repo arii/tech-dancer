@@ -10,7 +10,7 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE }}
+      image: ghcr.io/arii/tech-dancer:latest
       env:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
@@ -27,7 +27,7 @@ jobs:
           python3 -m pip install --break-system-packages -r etl/requirements.txt
 
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install
+        run: playwright install
 
       - name: Run Pytest - Data Validation
         run: |

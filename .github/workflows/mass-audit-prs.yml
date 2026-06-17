@@ -9,7 +9,7 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    container: ${{ vars.CI_CONTAINER_IMAGE }}
+    container: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: write
       pull-requests: write

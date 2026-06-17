@@ -17,7 +17,7 @@ concurrency:
 jobs:
   resolve-conflicts:
     runs-on: ubuntu-latest
-    container: ${{ vars.CI_CONTAINER_IMAGE }}
+    container: ghcr.io/arii/tech-dancer:latest
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
     env:
       AI_MODEL: gpt-4o-mini

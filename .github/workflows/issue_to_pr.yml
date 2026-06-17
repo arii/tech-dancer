@@ -15,7 +15,7 @@ jobs:
     if: startsWith(github.event.issue.title, 'Draft') && contains(github.event.issue.title, ':') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE }}
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

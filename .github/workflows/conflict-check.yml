@@ -20,7 +20,7 @@ jobs:
   conflict-check:
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE }}
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - uses: actions/checkout@v6
         with:
