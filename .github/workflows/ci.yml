@@ -264,21 +264,27 @@ jobs:
         run: |
           if [ -f artifacts/deployment-review.md ]; then
             DELIMITER="EOF_$(openssl rand -hex 8)"
-            echo "IMPACT_BODY<<$DELIMITER" >> "$GITHUB_ENV"
-            cat artifacts/deployment-review.md >> "$GITHUB_ENV"
-            echo "" >> "$GITHUB_ENV"
-            echo "$DELIMITER" >> "$GITHUB_ENV"
+            {
+              echo "IMPACT_BODY<<$DELIMITER"
+              cat artifacts/deployment-review.md
+              echo ""
+              echo "$DELIMITER"
+            } >> "$GITHUB_ENV"
           elif [ -f artifacts/impact-analysis/impact.md ]; then
             DELIMITER="EOF_$(openssl rand -hex 8)"
-            echo "IMPACT_BODY<<$DELIMITER" >> "$GITHUB_ENV"
-            cat artifacts/impact-analysis/impact.md >> "$GITHUB_ENV"
-            echo "" >> "$GITHUB_ENV"
-            echo "$DELIMITER" >> "$GITHUB_ENV"
+            {
+              echo "IMPACT_BODY<<$DELIMITER"
+              cat artifacts/impact-analysis/impact.md
+              echo ""
+              echo "$DELIMITER"
+            } >> "$GITHUB_ENV"
           else
             DELIMITER="EOF_$(openssl rand -hex 8)"
-            echo "IMPACT_BODY<<$DELIMITER" >> "$GITHUB_ENV"
-            echo 'No impact report found.' >> "$GITHUB_ENV"
-            echo "$DELIMITER" >> "$GITHUB_ENV"
+            {
+              echo "IMPACT_BODY<<$DELIMITER"
+              echo 'No impact report found.'
+              echo "$DELIMITER"
+            } >> "$GITHUB_ENV"
           fi
 
       - name: Update Impact Analysis Feedback (Final Result)
