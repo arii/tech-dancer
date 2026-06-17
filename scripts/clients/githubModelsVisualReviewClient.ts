@@ -46,8 +46,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
     }
 
     // 2. Build the payload
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const baseContent: Array<any> = [
+    const baseContent: Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> = [
       { type: 'text', text: REVIEW_PROMPT },
       { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
       { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
