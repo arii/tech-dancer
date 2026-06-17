@@ -10,25 +10,18 @@ jobs:
   audit:
     if: github.repository == 'disabled'
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: write
       pull-requests: write
     steps:
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Install Python dependencies
-        run: pip install PyGithub
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |
@@ -37,22 +30,6 @@ jobs:
 
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
-
-      - name: Start Ollama Server
-        run: |
-          ollama serve > ollama_output.log 2>&1 &
-          sleep 5
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
-
-      - name: Pull Model
-        run: ollama pull qwen2.5-coder:7b
-
       - name: Run Headless Audit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -60,7 +37,7 @@ jobs:
           bash dev-tools/audit_headless.sh --sync
 
       - name: Commit and Push REVIEW_TRACKING.md
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: update PR review tracking"
           file_pattern: 'REVIEW_TRACKING.md pr_overlaps.txt'
