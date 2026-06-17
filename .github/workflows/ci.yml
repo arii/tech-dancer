@@ -295,15 +295,6 @@ jobs:
         run: pnpm run impact:visual-diff
       - name: DOM Diff
         run: pnpm run impact:dom-diff
-      - name: Setup Ollama
-        uses: ./.github/actions/setup-ollama
-      - name: Start Ollama Server
-        run: |
-          ollama serve > ollama_output.log 2>&1 &
-          sleep 5
-          curl -f --retry 10 --retry-connrefused --retry-delay 2 http://127.0.0.1:11434/api/tags || (cat ollama_output.log && false)
-      - name: Pull Model
-        run: ollama pull llava:latest
       - name: Visual review agent
         if: always()
         env:
@@ -312,15 +303,6 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-review
-      - name: Visual review ollama agent
-        if: always()
-        env:
-          OLLAMA_MODEL: llava:latest
-          OLLAMA_BASE_URL: http://127.0.0.1:11434
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: pnpm run impact:ollama-review
       - name: Visual review github models agent
         if: always()
         env:
