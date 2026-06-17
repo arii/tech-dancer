@@ -26,6 +26,9 @@ jobs:
         run: |
           python3 -m pip install --break-system-packages -r etl/requirements.txt
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install
+
       - name: Run Pytest - Data Validation
         run: |
           PYTHONPATH=. pytest etl/tests/
