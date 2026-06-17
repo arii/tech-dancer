@@ -76,8 +76,7 @@ class GitHubClient:
 
     def fetch_check_runs(self, ref: str) -> List[Dict[str, Any]]:
         try:
-            res = self.run_authenticated_gh(['api', f'/repos/{self.repo}/commits/{ref}/check-runs'])
-            data = json.loads(res)
+            data = self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-runs')
             return [{
                 'id': run.get('id'),
                 'name': run.get('name'),
