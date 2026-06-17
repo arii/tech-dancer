@@ -28,7 +28,7 @@ export function DevLabCallout() {
           <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0}>ROBOTICS</Text>
           <Box display="flex" wrap="wrap" gap={1.5}>
             {['ROS1/2', 'C++', 'Navigation'].map(tag => (
-              <span key={tag} className="devai-callout-tag bg-brand-green/10 text-brand-green border border-brand-green/20">{tag}</span>
+              <span key={tag} className="devai-callout-tag bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">{tag}</span>
             ))}
           </Box>
         </Stack>
