@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feat/issue-audit-3427313050104204388/sitemap.xml

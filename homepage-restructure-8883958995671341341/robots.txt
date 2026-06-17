@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/homepage-restructure-8883958995671341341/sitemap.xml
