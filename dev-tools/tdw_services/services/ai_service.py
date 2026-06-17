@@ -9,15 +9,15 @@ from utils import (
     call_ai,
     is_ai_available,
     clean_llm_output,
-    get_ollama_model,
-    get_ollama_review_model,
-    get_ollama_synthesis_model
+    get_ai_model,
+    get_ai_review_model,
+    get_ai_synthesis_model
 )
 
 # Model used for per-file chunk review (code-aware, focused)
-_REVIEW_MODEL = get_ollama_review_model()
+_REVIEW_MODEL = get_ai_review_model()
 # Lighter/faster model used only for the final synthesis step
-_SYNTHESIS_MODEL = get_ollama_synthesis_model()
+_SYNTHESIS_MODEL = get_ai_synthesis_model()
 
 # Per-file chunk review schema (small – easy for a 7B model)
 _CHUNK_SCHEMA = {
@@ -52,10 +52,10 @@ _SYNTHESIS_SCHEMA = {
 }
 
 
-class LocalAIClient:
-    def __init__(self, ollama_url: str = None, ollama_model: str = None, gemini_api_key: str = None):
+class AIClient:
+    def __init__(self, ollama_url: str = None, ai_model: str = None, gemini_api_key: str = None):
         # Note: ollama_url is now managed centrally in utils.py via get_ollama_url()
-        self.ollama_model = ollama_model or get_ollama_model()
+        self.ai_model = ai_model or get_ai_model()
         self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
 
         # Check environment or project config JSON for fallback toggle (env var takes precedence)
@@ -81,7 +81,7 @@ class LocalAIClient:
         return is_ai_available()
 
     def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
+        return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:

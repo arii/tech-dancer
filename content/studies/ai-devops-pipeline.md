@@ -177,7 +177,6 @@ This is intentionally boring. If this part feels magical, the pipeline is probab
 
 The model should not be responsible for knowing your repo's entire history. It should receive a bounded task, produce bounded output, and leave the final decision to deterministic code.
 
-> **Implemented:** `dev-tools/ollama_reviewer.py` wraps a similar pattern using a `qwen2.5-coder`-derived model running via Ollama.
 
 ---
 

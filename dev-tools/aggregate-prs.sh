@@ -18,7 +18,7 @@ for pr in "${PRs[@]}"; do
         fi
 
         # we can just use word splitting for the arguments
-        if ! python3 "$(dirname "${BASH_SOURCE[0]}")/mergellama.py" $CONFLICTED_FILES; then
+        if ! python3 "$(dirname "${BASH_SOURCE[0]}")/td_cli.py gh resolve" $CONFLICTED_FILES; then
             echo "CRITICAL: Conflict resolution failed in PR #$pr"
             git merge --abort
             exit 1

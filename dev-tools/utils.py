@@ -25,19 +25,19 @@ def get_ollama_url() -> str:
     """Dynamic getter for Ollama API URL."""
     return os.environ.get("OLLAMA_URL", "http://localhost:11434")
 
-def get_ollama_model() -> str:
+def get_ai_model() -> str:
     """Dynamic getter for Ollama Model."""
-    return os.environ.get("OLLAMA_MODEL", "gpt-4o")
+    return os.environ.get("AI_MODEL", "gpt-4o")
 
-def get_ollama_review_model() -> str:
+def get_ai_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
     'gpt-4o' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on gpt-4o.
     """
-    return os.environ.get("OLLAMA_REVIEW_MODEL", "gpt-4o")
+    return os.environ.get("AI_REVIEW_MODEL", "gpt-4o")
 
-def get_ollama_synthesis_model() -> str:
+def get_ai_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
-    env_val = os.environ.get("OLLAMA_SYNTHESIS_MODEL")
+    env_val = os.environ.get("AI_SYNTHESIS_MODEL")
     if env_val:
         return env_val
     try:
@@ -95,7 +95,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
     if not token:
         return None
 
-    model = model or get_ollama_model()
+    model = model or get_ai_model()
 
     llm = ChatOpenAI(
         base_url="https://models.inference.ai.azure.com",

@@ -4,10 +4,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .config import ProjectConfig
-from .services.gemini import GeminiService
+from .services.ai_service import AIService
 from .services.github import GitHubService
 from .services.jules import JulesService
-from .services.ollama import OllamaService
 from .services.review import ReviewService
 
 
@@ -21,19 +20,15 @@ class Orchestrator:
     def __init__(self, config: ProjectConfig):
         self.config = config
         self.github = GitHubService(repo=config.github_repo)
-        self.ollama = OllamaService(model=config.ollama_model, base_url=config.ollama_base_url)
-        self.gemini = GeminiService()
+        self.ai_service = AIService()
         self.jules = JulesService(api_url=config.jules_api_url)
         self.reviews = ReviewService()
 
     def review_pr(self, pr_number: int) -> ReviewResult:
         files = self.github.list_changed_files(pr_number)
         prompt = self.reviews.build_prompt("\n".join(files))
-        if self.ollama.is_available():
-            return ReviewResult(engine="ollama", output=self.ollama.generate(prompt))
-        if self.config.use_gemini_fallback:
-            return ReviewResult(engine="gemini", output=self.gemini.review(prompt))
-        raise RuntimeError("No inference engine available (Ollama unavailable, Gemini fallback disabled).")
+
+        return ReviewResult(engine="ai_service", output=self.ai_service.review(prompt))
 
     def audit_pr(self, pr_number: int) -> dict:
         pr = self.view_pr(pr_number)
@@ -45,11 +40,8 @@ class Orchestrator:
         if not p.exists():
             return f"file_not_found: {path}"
         prompt = self.reviews.build_prompt(p.read_text(encoding='utf-8')[:8000])
-        if self.ollama.is_available():
-            return self.ollama.generate(prompt)
-        if self.config.use_gemini_fallback:
-            return self.gemini.review(prompt)
-        return "No inference engine available"
+
+        return self.ai_service.review(prompt)
 
     def view_pr(self, pr_number: int) -> dict:
         pr = self.github.view_pr(pr_number)
@@ -72,8 +64,7 @@ class Orchestrator:
 
     def env_verify(self) -> dict[str, bool]:
         return {
-            "ollama_available": self.ollama.is_available(),
-            "gemini_fallback_enabled": self.config.use_gemini_fallback,
+            "ai_fallback_enabled": self.config.use_ai_fallback,
             "jules_configured": bool(self.config.jules_api_url),
             "repo_configured": bool(self.config.github_repo),
         }

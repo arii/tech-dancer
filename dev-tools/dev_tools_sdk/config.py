@@ -12,10 +12,7 @@ class ProjectConfig:
     github_repo: str | None = None
     github_token_env: str = "GITHUB_TOKEN"
     gh_token_env: str = "GH_TOKEN"
-    use_gemini_fallback: bool = True
-    ollama_model: str = "gpt-4o"
-    ollama_synthesis_model: str = "llama3.2"
-    ollama_base_url: str = "http://localhost:11434"
+    use_ai_fallback: bool = True
     jules_api_url: str | None = None
 
 
@@ -34,13 +31,13 @@ def _coerce_bool(value: Any, default: bool) -> bool:
 def load_project_config(path: str | Path = "dev-tools/project_config.json") -> ProjectConfig:
     p = Path(path)
     
-    # Check env var first for use_gemini_fallback
-    env_fallback = os.environ.get("USE_GEMINI_FALLBACK")
+    # Check env var first for use_ai_fallback
+    env_fallback = os.environ.get("USE_AI_FALLBACK")
     fallback_val = _coerce_bool(env_fallback, True) if env_fallback is not None else None
 
     if not p.exists():
         return ProjectConfig(
-            use_gemini_fallback=fallback_val if fallback_val is not None else True
+            use_ai_fallback=fallback_val if fallback_val is not None else True
         )
 
     raw = json.loads(p.read_text(encoding="utf-8"))
@@ -48,10 +45,7 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
         github_repo=raw.get("github_repo") or raw.get("repo_name"),
         github_token_env=raw.get("github_token_env", "GITHUB_TOKEN"),
         gh_token_env=raw.get("gh_token_env", "GH_TOKEN"),
-        use_gemini_fallback=fallback_val if fallback_val is not None else _coerce_bool(raw.get("use_gemini_fallback"), True),
-        ollama_model=raw.get("ollama_model", "gpt-4o"),
-        ollama_synthesis_model=raw.get("ollama_synthesis_model", "llama3.2"),
-        ollama_base_url=raw.get("ollama_base_url", "http://localhost:11434"),
+        use_ai_fallback=fallback_val if fallback_val is not None else _coerce_bool(raw.get("use_ai_fallback"), True),
         jules_api_url=raw.get("jules_api_url"),
     )
 

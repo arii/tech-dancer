@@ -10,14 +10,14 @@ class CommandHandler:
         """
         command = command_text.strip().lower()
 
-        if command.startswith("/ollama-review"):
-            return self._handle_ollama_review(pr_number)
-        elif command.startswith("/ollama-fix"):
-            return self._handle_ollama_fix(pr_number)
+        if command.startswith("/ai-review"):
+            return self._handle_ai_review(pr_number)
+        elif command.startswith("/ai-fix"):
+            return self._handle_ai_fix(pr_number)
 
         return {"status": "ignored", "message": f"Unknown command: {command}"}
 
-    def _handle_ollama_review(self, pr_number: int) -> Dict[str, Any]:
+    def _handle_ai_review(self, pr_number: int) -> Dict[str, Any]:
         review_data = self.orchestrator.review_pr(pr_number)
         recommendation = review_data.get("recommendation", "COMMENT")
 
@@ -34,7 +34,7 @@ class CommandHandler:
 
         return {"status": "success", "message": f"Submitted {event} review for PR #{pr_number}", "review": review_data}
 
-    def _handle_ollama_fix(self, pr_number: int) -> Dict[str, Any]:
+    def _handle_ai_fix(self, pr_number: int) -> Dict[str, Any]:
         # First, ensure we have the conflict files
         conflict_files = self.orchestrator.find_conflict_files()
         if not conflict_files:
