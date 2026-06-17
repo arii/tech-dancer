@@ -52,7 +52,8 @@
     "impact:visual-diff": "tsx scripts/impact-visual-diff.ts",
     "impact:dom-diff": "tsx scripts/impact-dom-diff.ts",
     "impact:gemini-review": "tsx scripts/impact-gemini-review.ts",
-    "impact:ollama-review": "tsx scripts/impact-ollama-review.ts"
+    "impact:ollama-review": "tsx scripts/impact-ollama-review.ts",
+    "impact:github-models-review": "tsx scripts/impact-github-models-review.ts"
   },
   "dependencies": {
     "@langchain/core": "^1.1.49",
@@ -102,6 +103,7 @@
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
     "@langchain/ollama": "^1.2.7",
+    "@langchain/openai": "^1.4.7",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "1.49.0",
     "@tailwindcss/typography": "^0.5.19",

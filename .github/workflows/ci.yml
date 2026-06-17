@@ -321,6 +321,14 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:ollama-review
+      - name: Visual review github models agent
+        if: always()
+        env:
+          GITHUB_MODELS_MODEL: gpt-4o
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:github-models-review
       - name: Report Summary
         if: always()
         run: |
