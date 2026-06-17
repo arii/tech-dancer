@@ -56,6 +56,8 @@ jobs:
   lint-typecheck:
     name: Lint & Type Check
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -113,6 +115,8 @@ jobs:
   audit:
     name: Anti-Pattern Audit
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
@@ -152,16 +156,10 @@ jobs:
     needs: lint-typecheck
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
-      env:
-        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Install system utilities
-        run: |
-          apt-get update
-          apt-get install -y lsof gh
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Configure Git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
@@ -302,7 +300,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: pnpm run impact:agent-review
+        run: pnpm run impact:gemini-review
+      - name: Visual review github models agent
+        if: always()
+        env:
+          GITHUB_MODELS_MODEL: gpt-4o
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:github-models-review
       - name: Report Summary
         if: always()
         run: |
