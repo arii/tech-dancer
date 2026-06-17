@@ -31,7 +31,9 @@ jobs:
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
-          pnpm run doctor      - name: Find and Resolve Conflicts
+          pnpm run doctor
+
+      - name: Find and Resolve Conflicts
         run: |
           # Use our unified CLI for resolution
           # Setting PYTHONPATH ensures modules can find each other without sys.path hacks
@@ -44,7 +46,7 @@ jobs:
           pnpm run type-check
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: auto-resolved merge conflicts using MergeLlama"
           file_pattern: '.'

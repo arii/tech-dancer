@@ -19,7 +19,6 @@ permissions:
 jobs:
   handle-command:
     if: github.repository == 'disabled'
-
     runs-on: ubuntu-latest
     container: ghcr.io/arii/tech-dancer:latest
     env:
@@ -37,6 +36,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
@@ -63,9 +63,13 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install Node dependencies
+        run: |
           if [ ! -d "node_modules" ]; then
             pnpm install --frozen-lockfile
           fi
+
       - name: Validate CLI
         run: |
           python3 dev-tools/td_cli.py gh --help
@@ -89,8 +93,9 @@ jobs:
 
       - name: Commit Fixes
         if: contains(inputs.comment_body, '/ollama-fix')
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: auto-resolved merge conflicts using /ollama-fix"
           branch: ${{ env.HEAD_REF }}
           file_pattern: '.'
+
