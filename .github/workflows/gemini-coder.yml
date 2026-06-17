@@ -678,6 +678,7 @@ jobs:
       github.event.action == 'labeled' &&
       github.event.label.name == 'auto-code'
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Post Guidance Comment
         uses: actions/github-script@v7
