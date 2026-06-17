@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "http://localhost:4173",
   "viewports": {
     "desktop": [
       { "name": "desktop-1280", "width": 1280, "height": 800 },
