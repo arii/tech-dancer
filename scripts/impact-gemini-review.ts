@@ -3,6 +3,12 @@ import * as path from 'path';
 import { ARTIFACTS_DIR } from './lib/visualReviewConstants';
 import { orchestrateVisualReview } from './lib/visualReviewOrchestrator';
 import { geminiVisualReviewClient } from './clients/geminiVisualReviewClient';
+import { githubModelsVisualReviewClient } from './clients/githubModelsVisualReviewClient';
+
+const ALL_REVIEW_TITLES = [
+  geminiVisualReviewClient.reportTitle,
+  githubModelsVisualReviewClient.reportTitle,
+];
 
 async function main(): Promise<void> {
   if (!process.env.GEMINI_API_KEY) {
@@ -17,7 +23,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  await orchestrateVisualReview(geminiVisualReviewClient);
+  await orchestrateVisualReview(geminiVisualReviewClient, ALL_REVIEW_TITLES);
 }
 
 main().catch(error => {

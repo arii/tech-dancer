@@ -256,17 +256,28 @@ jobs:
         run: pnpm run impact:visual-diff
       - name: DOM Diff
         run: pnpm run impact:dom-diff
+      - name: Check if visual changes exist
+        id: check_visuals
+        run: |
+          if [ -f artifacts/visual-review/summary.json ]; then
+            COUNT=$(jq '[.routes[] | select(.differencePercent > 1.5)] | length' artifacts/visual-review/summary.json)
+            echo "changed_routes=$COUNT" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed_routes=0" >> "$GITHUB_OUTPUT"
+          fi
       - name: Visual review agent
-        if: always()
+        if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
+          MAX_AI_REVIEWS: '1'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-review
       - name: Visual review github models agent
-        if: always()
+        if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
+          MAX_AI_REVIEWS: '1'
           GITHUB_MODELS_MODEL: gpt-4o
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

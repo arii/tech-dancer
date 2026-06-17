@@ -3,6 +3,12 @@ import * as path from 'path';
 import { ARTIFACTS_DIR } from './lib/visualReviewConstants';
 import { orchestrateVisualReview } from './lib/visualReviewOrchestrator';
 import { githubModelsVisualReviewClient } from './clients/githubModelsVisualReviewClient';
+import { geminiVisualReviewClient } from './clients/geminiVisualReviewClient';
+
+const ALL_REVIEW_TITLES = [
+  geminiVisualReviewClient.reportTitle,
+  githubModelsVisualReviewClient.reportTitle,
+];
 
 async function main(): Promise<void> {
   if (!process.env.GITHUB_TOKEN) {
@@ -14,7 +20,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  await orchestrateVisualReview(githubModelsVisualReviewClient);
+  await orchestrateVisualReview(githubModelsVisualReviewClient, ALL_REVIEW_TITLES);
 }
 
 main().catch(error => {

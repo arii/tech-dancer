@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
-export const MAX_ROUTES_TO_REVIEW = 5;
+export const MAX_ROUTES_TO_REVIEW = 2;
 export const VISUAL_SUMMARY_PATH = path.join(ARTIFACTS_DIR, 'visual-review', 'summary.json');
 export const DOM_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'dom-review');
 

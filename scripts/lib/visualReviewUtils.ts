@@ -93,6 +93,26 @@ ${sections}
 `;
 }
 
+export async function countExistingReviews(reportTitles: string[]): Promise<number> {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  const prNumber = process.env.PR_NUMBER;
+
+  if (!token || !repo || !prNumber) return 0;
+
+  const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+  });
+
+  if (!response.ok) return 0;
+
+  const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
+  return comments.filter(c =>
+    c.user.type === 'Bot' && reportTitles.some(title => c.body.includes(`## ${title}`))
+  ).length;
+}
+
 export async function postPRComment(body: string, reportTitle: string): Promise<void> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
