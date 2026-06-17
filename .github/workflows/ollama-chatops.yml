@@ -50,6 +50,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: Cache Ollama models
+        uses: actions/cache@v4
+        with:
+          path: ~/.ollama
+          key: ${{ runner.os }}-ollama-${{ env.OLLAMA_MODEL }}
+          restore-keys: |
+            ${{ runner.os }}-ollama-
+
       - name: Cache node modules
         uses: actions/cache@v4
         with:
@@ -73,6 +81,7 @@ jobs:
           for i in {1..15}; do
             if curl -sf http://localhost:11434/api/tags > /dev/null; then
               echo "Ollama is ready!"
+              ollama pull ${{ env.OLLAMA_MODEL }} || true
               ollama list
               exit 0
             fi
