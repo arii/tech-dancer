@@ -9,7 +9,7 @@ from urllib.parse import quote, urlparse
 from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
-from tdw_services.services.gemini import LocalAIClient
+from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
@@ -43,9 +43,9 @@ class Orchestrator:
         return self._github
 
     @property
-    def ai(self) -> LocalAIClient:
+    def ai(self) -> AIClient:
         if self._ai is None:
-            self._ai = LocalAIClient()
+            self._ai = AIClient()
         return self._ai
 
     @property

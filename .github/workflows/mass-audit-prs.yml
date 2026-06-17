@@ -8,20 +8,24 @@ on:
 
 jobs:
   audit:
-    if: github.repository == 'disabled'
     runs-on: ubuntu-latest
     container: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: write
       pull-requests: write
+    env:
+      AI_MODEL: gpt-4o-mini
+      GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
 
       - name: Check active runtime
         run: |
@@ -32,8 +36,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Headless Audit
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bash dev-tools/audit_headless.sh --sync
 

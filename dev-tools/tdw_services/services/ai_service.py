@@ -2,22 +2,20 @@ import os
 import sys
 import time
 import json
-import re
-import requests
 from typing import Optional, Dict, Any, List
 from utils import (
     call_ai,
     is_ai_available,
     clean_llm_output,
-    get_ollama_model,
-    get_ollama_review_model,
-    get_ollama_synthesis_model
+    get_ai_model,
+    get_ai_review_model,
+    get_ai_synthesis_model
 )
 
 # Model used for per-file chunk review (code-aware, focused)
-_REVIEW_MODEL = get_ollama_review_model()
+_REVIEW_MODEL = get_ai_review_model()
 # Lighter/faster model used only for the final synthesis step
-_SYNTHESIS_MODEL = get_ollama_synthesis_model()
+_SYNTHESIS_MODEL = get_ai_synthesis_model()
 
 # Per-file chunk review schema (small – easy for a 7B model)
 _CHUNK_SCHEMA = {
@@ -52,30 +50,9 @@ _SYNTHESIS_SCHEMA = {
 }
 
 
-class LocalAIClient:
-    def __init__(self, ollama_url: str = None, ollama_model: str = None, gemini_api_key: str = None):
-        # Note: ollama_url is now managed centrally in utils.py via get_ollama_url()
-        self.ollama_model = ollama_model or get_ollama_model()
-        self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
-
-        # Check environment or project config JSON for fallback toggle (env var takes precedence)
-        env_fallback = os.environ.get("USE_GEMINI_FALLBACK")
-        if env_fallback is not None:
-            self.use_gemini_fallback = env_fallback.lower() in ("true", "1", "yes")
-        else:
-            # Default: Ollama-only. Gemini fallback must be explicitly enabled via
-            # USE_GEMINI_FALLBACK=true env var or "use_gemini_fallback": true in project_config.json
-            self.use_gemini_fallback = False
-            try:
-                config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "project_config.json")
-                if os.path.exists(config_path):
-                    with open(config_path, 'r') as f:
-                        cfg = json.load(f)
-                        val = cfg.get("use_gemini_fallback")
-                        if val is not None:
-                            self.use_gemini_fallback = str(val).lower() in ("true", "1", "yes")
-            except Exception:
-                pass
+class AIClient:
+    def __init__(self, ai_model: str = None):
+        self.ai_model = ai_model or get_ai_model()
 
     def is_ai_available(self) -> bool:
         return is_ai_available()
@@ -121,13 +98,7 @@ class LocalAIClient:
             if res:
                 return res
 
-        # Fallback to Gemini only if enabled
-        if self.use_gemini_fallback:
-            res = self.call_gemini(prompt, schema)
-            if res:
-                return res
-
-        raise EnvironmentError("No inference engine available (Ollama unavailable/failed, Gemini fallback disabled).")
+        raise EnvironmentError("No AI service available (GitHub Models, Gemini, and Ollama all failed or are unavailable).")
 
     def clean_llm_output(self, text: str) -> str:
         return clean_llm_output(text)
@@ -207,14 +178,8 @@ class LocalAIClient:
         print(f"  AI available : {'✅ YES' if ollama_ok else '❌ NO'}")
         print(f"  Review model     : {_REVIEW_MODEL}")
         print(f"  Synthesis model  : {_SYNTHESIS_MODEL}")
-        print(f"  Gemini fallback  : {'enabled' if self.use_gemini_fallback else 'DISABLED'}")
         print(f"  Diff size        : {len(diff):,} chars")
-        print(f"  CI failures      : {failing_names}")
-        print(f"{'='*60}\n")
-
-        if not ollama_ok and not self.use_gemini_fallback:
-            print("❌ ABORT: Ollama is unreachable and Gemini fallback is disabled.", file=sys.stderr)
-            return {"reviewComment": "Ollama unavailable and fallback disabled.", "labels": [], "recommendation": "Not Approved"}
+        print(f"  CI failures      : {failing_names}\n")
 
         # ── Phase A: per-file-chunk reviews ───────────────────────────────────
         chunks = parse_diff_into_file_chunks(diff)
@@ -462,7 +427,7 @@ class LocalAIClient:
                     f"Blocking files: {blocking_files or 'none'}\n"
                     f"Files needing changes: {needs_files or 'none'}\n"
                     f"Total issues: {total_issues}\n\n"
-                    f"(Synthesis model returned no response; verdict derived from per-file data.)"
+                    f"(AI service returned no response; verdict derived from per-file data.)"
                 ),
                 "labels": ["needs-changes"] if rec != "Approved" else ["lgtm"],
                 "recommendation": rec,
