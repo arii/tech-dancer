@@ -62,22 +62,26 @@ jobs:
           # If triggered via workflow_dispatch, we need to fetch the issue details.
           # If triggered via 'issues' event, they are already in the context, but fetching ensures consistency.
           JSON=$(gh issue view "$ISSUE_NUMBER" --json title,body)
-          echo "title=$(echo "$JSON" | jq -r .title)" >> $GITHUB_OUTPUT
-          # Use a multi-line output for the body
           DELIMITER="EOF_$(openssl rand -hex 8)"
-          echo "body<<$DELIMITER" >> $GITHUB_OUTPUT
-          echo "$JSON" | jq -r .body >> $GITHUB_OUTPUT
-          echo "$DELIMITER" >> $GITHUB_OUTPUT
-          echo "number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          {
+            echo "title=$(echo "$JSON" | jq -r .title)"
+            # Use a multi-line output for the body
+            echo "body<<$DELIMITER"
+            echo "$JSON" | jq -r .body
+            echo "$DELIMITER"
+            echo "number=$ISSUE_NUMBER"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Build Triage Context
         id: context
         run: |
           # Aggregate project documentation for the prompt
-          echo "## Project Documentation" > context.txt
-          if [ -f "README.md" ]; then cat README.md >> context.txt; fi
-          if [ -f "CONTRIBUTING.md" ]; then cat CONTRIBUTING.md >> context.txt; fi
-          if [ -f "docs/agents/SPECIALIZED_AGENTS.md" ]; then cat docs/agents/SPECIALIZED_AGENTS.md >> context.txt; fi
+          {
+            echo "## Project Documentation"
+            if [ -f "README.md" ]; then cat README.md; fi
+            if [ -f "CONTRIBUTING.md" ]; then cat CONTRIBUTING.md; fi
+            if [ -f "docs/agents/SPECIALIZED_AGENTS.md" ]; then cat docs/agents/SPECIALIZED_AGENTS.md; fi
+          } > context.txt
 
       - name: Construct Analysis Prompt
         env:

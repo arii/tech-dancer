@@ -92,10 +92,6 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
@@ -104,9 +100,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ARI_PAT }}
           PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number || github.event.issue.number }}
+          BASE_SHA: ${{ inputs.base_sha || github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
         run: |
-          BASE_SHA="${{ inputs.base_sha || github.event.pull_request.base.sha }}"
-          HEAD_SHA="${{ inputs.head_sha || github.event.pull_request.head.sha }}"
           if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
             if [ -z "$PR_NUMBER" ]; then
               echo "::error::PR_NUMBER is required to fetch SHAs but was not provided."
@@ -154,10 +150,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
@@ -168,9 +160,9 @@ jobs:
         id: diff
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_SHA: ${{ needs.analyze-changes.outputs.base_sha }}
+          HEAD_SHA: ${{ inputs.last_non_empty_commit || needs.analyze-changes.outputs.head_sha }}
         run: |
-          BASE_SHA=${{ needs.analyze-changes.outputs.base_sha }}
-          HEAD_SHA=${{ inputs.last_non_empty_commit || needs.analyze-changes.outputs.head_sha }}
 
           echo "🔍 Generating diff between base commit ($BASE_SHA) and head commit ($HEAD_SHA)..."
 
@@ -186,6 +178,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ARI_PAT }}
           PR_NUMBER: ${{ inputs.pr_number || github.event.pull_request.number || github.event.issue.number }}
+          COMMIT_HASH: ${{ needs.analyze-changes.outputs.head_sha }}
+          BASE_SHA: ${{ needs.analyze-changes.outputs.base_sha }}
+          HEAD_SHA: ${{ inputs.last_non_empty_commit || needs.analyze-changes.outputs.head_sha }}
         run: |
           # Fetch the LIVE body to ensure we see the results of pr-enrichment
           LATEST_BODY=$(gh pr view "$PR_NUMBER" --json body -q '.body')
@@ -201,11 +196,11 @@ jobs:
 
           echo "PR_TITLE=$PR_TITLE" >> $GITHUB_ENV
           echo "PR_AUTHOR=$PR_AUTHOR" >> $GITHUB_ENV
-          echo "COMMIT_HASH=${{ needs.analyze-changes.outputs.head_sha }}" >> $GITHUB_ENV
+          echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
           echo "PR_BRANCH_NAME=$PR_BRANCH_NAME" >> $GITHUB_ENV
 
-          echo "BASE_SHA=${{ needs.analyze-changes.outputs.base_sha }}" >> $GITHUB_ENV
-          echo "HEAD_SHA=${{ inputs.last_non_empty_commit || needs.analyze-changes.outputs.head_sha }}" >> $GITHUB_ENV
+          echo "BASE_SHA=$BASE_SHA" >> $GITHUB_ENV
+          echo "HEAD_SHA=$HEAD_SHA" >> $GITHUB_ENV
 
           # Get REVIEW_COUNT using gh cli
           # If this fails (e.g. no PR context), default to 0
@@ -219,6 +214,9 @@ jobs:
 
       - name: Run AI Slop Detector
         id: slop-detector
+        env:
+          BASE_SHA: ${{ needs.analyze-changes.outputs.base_sha }}
+          HEAD_SHA: ${{ inputs.last_non_empty_commit || needs.analyze-changes.outputs.head_sha }}
         run: |
           SCRIPT_PATH="./scripts/find_slop.sh"
           SLOP_REPORT=""
@@ -231,8 +229,6 @@ jobs:
           fi
 
           if [ -z "$SLOP_REPORT" ]; then # If no errors so far
-            BASE_SHA=${{ needs.analyze-changes.outputs.base_sha }}
-            HEAD_SHA=${{ inputs.last_non_empty_commit || needs.analyze-changes.outputs.head_sha }}
 
             # Create temp files
             FILE_LIST=$(mktemp)
@@ -420,10 +416,6 @@ jobs:
         id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           name: review-result
           path: review_result.json
 
@@ -486,20 +478,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
       - name: Download review result
         uses: actions/download-artifact@v4
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           name: review-result
           path: .
         continue-on-error: true
@@ -521,10 +505,6 @@ jobs:
       - name: Post Guidance Comment
         uses: actions/github-script@v8
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           script: |
             const body = '### ℹ️ Gemini Review Disabled\n\n' +
               'Automatic review is currently disabled via `GEMINI_ENABLE_PR_REVIEW`. To run review manually:\n\n' +
@@ -555,10 +535,6 @@ jobs:
       - name: Create skip check
         uses: actions/github-script@v8
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const skipReason = process.env.SKIP_REASON;
@@ -578,10 +554,6 @@ jobs:
       - name: Post Skip Comment
         uses: actions/github-script@v8
         with:
-          env:
-            SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
-            HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
-            TRIGGER_EVENT: ${{ inputs.trigger_event }}
           script: |
             const skipReason = process.env.SKIP_REASON;
             const triggerEvent = process.env.TRIGGER_EVENT;

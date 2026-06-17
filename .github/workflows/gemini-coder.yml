@@ -145,9 +145,9 @@ jobs:
             printf "%s" "$TASK_DESC_PARSED" > task_desc.txt
             echo "FILES=$TARGET_FILES_PARSED" >> $GITHUB_ENV
             DELIMITER="EOF_$(openssl rand -hex 8)"
-  echo "TITLE<<$DELIMITER" >> $GITHUB_ENV
-  echo "$ISSUE_TITLE" >> $GITHUB_ENV
-  echo "$DELIMITER" >> $GITHUB_ENV
+            echo "TITLE<<$DELIMITER" >> $GITHUB_ENV
+            echo "$ISSUE_TITLE" >> $GITHUB_ENV
+            echo "$DELIMITER" >> $GITHUB_ENV
 
             if [ -n "$BRANCH_NAME_PARSED" ]; then
               echo "BRANCH=$BRANCH_NAME_PARSED" >> $GITHUB_ENV
