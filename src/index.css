@@ -528,3 +528,10 @@
 }
 
 
+
+.devai-callout-tag {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+}

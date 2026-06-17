@@ -1,8 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
-import { Terminal, GitPullRequest, Bluetooth, Shirt } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
 
 export function DevLabCallout() {
   return (
@@ -13,29 +12,41 @@ export function DevLabCallout() {
           <Terminal className="h-4 w-4 text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-          DevAI Portfolio
+          HIRE_ME
         </Text>
       </Stack>
 
 
       {/* Description */}
-      <Text variant="body" size="xs" color="dim" leading="relaxed">
-        A live testbed for agentic dev workflows — multi-agent pipelines, CI auditing, and evals running on this site.
+      <Text variant="body" size="xs" color="dim" leading="relaxed" marginTop={3}>
+        Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
       </Text>
 
       {/* Project highlights */}
       <Stack gap={1.5} marginTop={3}>
         <Stack direction="row" align="center" gap={2}>
-          <Icon icon={GitPullRequest} size="sm" color="accent" />
-          <Text size="xs" color="dim">Repo-auditor AI — PR auditing agent</Text>
+          <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0}>ROBOTICS</Text>
+          <Box display="flex" wrap="wrap" gap={1.5}>
+            {['ROS1/2', 'C++', 'Navigation'].map(tag => (
+              <span key={tag} className="devai-callout-tag bg-brand-green/10 text-brand-green border border-brand-green/20">{tag}</span>
+            ))}
+          </Box>
         </Stack>
         <Stack direction="row" align="center" gap={2}>
-          <Icon icon={Bluetooth} size="sm" color="accent" />
-          <Text size="xs" color="dim">Web Bluetooth heart-rate monitor</Text>
+          <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0}>AI</Text>
+          <Box display="flex" wrap="wrap" gap={1.5}>
+            {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
+              <span key={tag} className="devai-callout-tag bg-brand-amber/10 text-brand-amber border border-brand-amber/20">{tag}</span>
+            ))}
+          </Box>
         </Stack>
         <Stack direction="row" align="center" gap={2}>
-          <Icon icon={Shirt} size="sm" color="accent" />
-          <Text size="xs" color="dim">BoomTick merch store</Text>
+          <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0}>INFRA</Text>
+          <Box display="flex" wrap="wrap" gap={1.5}>
+            {['GitHub Actions', 'Playwright'].map(tag => (
+              <span key={tag} className="devai-callout-tag bg-brand-green/10 text-brand-green border border-brand-green/20">{tag}</span>
+            ))}
+          </Box>
         </Stack>
       </Stack>
 
