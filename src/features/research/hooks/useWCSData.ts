@@ -63,7 +63,7 @@ export function useWCSData() {
         setLatency(performance.now() - startTime);
         setIsLoading(false);
       } catch (err) {
-        console.error("Failed to load WCS data:", err);
+        console.warn("Failed to load WCS data:", err);
         setError("Failed to load dataset. Please ensure the data source is available.");
         setIsLoading(false);
       }
