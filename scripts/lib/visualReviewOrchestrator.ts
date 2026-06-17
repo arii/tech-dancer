@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visualReviewConstants';
-import { generateMarkdownReport, postPRComment } from './visualReviewUtils';
+import { generateMarkdownReport, postPRComment, countExistingReviews } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary } from './visualReviewTypes';
 
 export interface LLMClientStrategy {
@@ -12,8 +12,23 @@ export interface LLMClientStrategy {
   invokeReview: (summary: VisualRouteSummary) => Promise<RouteReview>;
 }
 
-export async function orchestrateVisualReview(client: LLMClientStrategy): Promise<void> {
+const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '1', 10);
+
+export async function orchestrateVisualReview(
+  client: LLMClientStrategy,
+  allReportTitles: string[] = []
+): Promise<void> {
   const agentReportPath = path.join(ARTIFACTS_DIR, client.reportFileName);
+
+  const existing = await countExistingReviews(allReportTitles);
+  if (existing >= MAX_REVIEWS_PER_PR) {
+    console.log(`⏭️  Skipping ${client.botName} — ${existing}/${MAX_REVIEWS_PER_PR} reviews already posted.`);
+    fs.writeFileSync(
+      agentReportPath,
+      `## ${client.reportTitle}\n\nSkipped: review quota (${MAX_REVIEWS_PER_PR}) already met.\n`
+    );
+    return;
+  }
 
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
     console.warn('⚠️  Skipping agent review — missing visual summary. Run pnpm impact:visual-diff first.');
@@ -26,7 +41,7 @@ export async function orchestrateVisualReview(client: LLMClientStrategy): Promis
   // Only review routes with actual visual changes
   // Limit to top N routes by difference percentage to manage costs
   let routesToReview = summary.routes
-    .filter(r => r.differencePercent > 0)
+    .filter(r => r.differencePercent > 1.5)
     .sort((a, b) => b.differencePercent - a.differencePercent);
 
   const totalRoutes = routesToReview.length;
