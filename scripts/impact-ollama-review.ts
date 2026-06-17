@@ -56,10 +56,12 @@ Format your response as a concise, bulleted list. Be direct and actionable. Make
 // ── Ollama client ──────────────────────────────────────────────────────────
 
 function createModel(): ChatOllama {
+  // Use baseUrl explicitly as it may be necessary depending on the environment
   return new ChatOllama({
     model: process.env.OLLAMA_MODEL || 'llava',
     baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     temperature: 0.1,
+    maxRetries: 3
   });
 }
 
