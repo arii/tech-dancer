@@ -288,30 +288,42 @@ jobs:
         run: |
           if [ -f artifacts/deployment-review.md ]; then
             cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
-            echo "IMPACT_BODY<<EOF" >> "$GITHUB_ENV"
-            cat artifacts/deployment-review.md >> "$GITHUB_ENV"
-            echo "EOF" >> "$GITHUB_ENV"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/deployment-review.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
           elif [ -f artifacts/impact-analysis/impact.md ]; then
             cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
-            echo "IMPACT_BODY<<EOF" >> "$GITHUB_ENV"
-            cat artifacts/impact-analysis/impact.md >> "$GITHUB_ENV"
-            echo "EOF" >> "$GITHUB_ENV"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/impact-analysis/impact.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
           else
-            echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
-            echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
-            echo "IMPACT_BODY<<EOF" >> "$GITHUB_ENV"
-            echo "No impact report found." >> "$GITHUB_ENV"
-            echo "EOF" >> "$GITHUB_ENV"
+            {
+              echo "## Deployment Impact Analysis"
+              echo "No impact report found."
+            } >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              echo "No impact report found."
+              echo "EOF"
+            } >> "$GITHUB_ENV"
           fi
 
           if [ -f artifacts/gemini-review.md ]; then
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            cat artifacts/gemini-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo ""
+              cat artifacts/gemini-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [ -f artifacts/github-models-review.md ]; then
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            cat artifacts/github-models-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo ""
+              cat artifacts/github-models-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
           # Aggregate verdict — fail the step explicitly if any verdict file says failed
