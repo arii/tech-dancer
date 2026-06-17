@@ -36,12 +36,6 @@ jobs:
           persist-credentials: false
           ref: main
 
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Fetch and Apply PR Patch
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -67,21 +61,12 @@ jobs:
             rm pr.patch
           fi
 
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Fetch Trusted Dev-Tools
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
           path: trusted-tools-temp
           ref: main
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Restore Trusted Dev-Tools
         run: |

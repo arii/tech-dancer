@@ -42,12 +42,6 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -60,7 +54,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}          if [ ! -d "node_modules" ]; then
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          if [ ! -d "node_modules" ]; then
             pnpm install --frozen-lockfile
           fi
       - name: Validate CLI

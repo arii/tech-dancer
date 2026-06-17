@@ -38,12 +38,6 @@ jobs:
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           python3 dev-tools/td_cli.py gh resolve
 
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Validate Resolution
         run: |
           pnpm install --frozen-lockfile

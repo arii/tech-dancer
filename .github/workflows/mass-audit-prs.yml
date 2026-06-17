@@ -18,23 +18,13 @@ jobs:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-      - name: Check active runtime
+          fetch-depth: 0      - name: Check active runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile

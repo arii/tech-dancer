@@ -1,7 +1,7 @@
 from __future__ import annotations
 from utils import call_ai, is_ai_available
 
-class AIService:
+class OllamaService:
     def __init__(self, model: str = "gpt-4o", base_url: str = None):
         self.model = model
         self.base_url = base_url
