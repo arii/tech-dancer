@@ -41,6 +41,7 @@ permissions:
   actions: read
   statuses: write
   pull-requests: write
+  models: read
   packages: read
 
 concurrency:
@@ -255,46 +256,88 @@ jobs:
         run: pnpm run impact:visual-diff
       - name: DOM Diff
         run: pnpm run impact:dom-diff
+      - name: Check if visual changes exist
+        id: check_visuals
+        run: |
+          if [ -f artifacts/visual-review/summary.json ]; then
+            COUNT=$(jq '[.routes[] | select(.differencePercent > 1.5)] | length' artifacts/visual-review/summary.json)
+            echo "changed_routes=$COUNT" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed_routes=0" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Visual review agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0'
+        env:
+          MAX_AI_REVIEWS: '1'
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:gemini-review
+      - name: Visual review github models agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0'
+        env:
+          MAX_AI_REVIEWS: '1'
+          GITHUB_MODELS_MODEL: gpt-4o
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:github-models-review
       - name: Report Summary
         if: always()
         run: |
           if [ -f artifacts/deployment-review.md ]; then
             cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/deployment-review.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
           elif [ -f artifacts/impact-analysis/impact.md ]; then
             cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
-            echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
-          fi
-      - name: Read Impact Analysis Body
-        if: always()
-        id: read_impact
-        run: |
-          if [ -f artifacts/deployment-review.md ]; then
-            DELIMITER="EOF_$(openssl rand -hex 8)"
             {
-              echo "IMPACT_BODY<<$DELIMITER"
-              cat artifacts/deployment-review.md
-              echo ""
-              echo "$DELIMITER"
-            } >> "$GITHUB_ENV"
-          elif [ -f artifacts/impact-analysis/impact.md ]; then
-            DELIMITER="EOF_$(openssl rand -hex 8)"
-            {
-              echo "IMPACT_BODY<<$DELIMITER"
+              echo "IMPACT_BODY<<EOF"
               cat artifacts/impact-analysis/impact.md
-              echo ""
-              echo "$DELIMITER"
+              echo "EOF"
             } >> "$GITHUB_ENV"
           else
-            DELIMITER="EOF_$(openssl rand -hex 8)"
             {
-              echo "IMPACT_BODY<<$DELIMITER"
-              echo 'No impact report found.'
-              echo "$DELIMITER"
+              echo "## Deployment Impact Analysis"
+              echo "No impact report found."
+            } >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              echo "No impact report found."
+              echo "EOF"
             } >> "$GITHUB_ENV"
           fi
 
+          if [ -f artifacts/gemini-review.md ]; then
+            {
+              echo ""
+              cat artifacts/gemini-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/github-models-review.md ]; then
+            {
+              echo ""
+              cat artifacts/github-models-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          # Aggregate verdict — fail the step explicitly if any verdict file says failed
+          FAILED=0
+          for f in artifacts/*-verdict.json; do
+            [ -f "$f" ] || continue
+            PASSED=$(jq -r '.passed' "$f")
+            if [ "$PASSED" = "false" ]; then
+              HIGH=$(jq -r '.highCount' "$f")
+              echo "❌ Visual review failed: $HIGH HIGH severity issues found ($f)" >&2
+              FAILED=1
+            fi
+          done
+          exit $FAILED
       - name: Update Impact Analysis Feedback (Final Result)
         if: always()
         uses: ./.github/actions/update-pr-comment
