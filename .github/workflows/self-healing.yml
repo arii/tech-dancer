@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   repair:
-    if: github.repository == 'disabled'
     runs-on: ubuntu-latest
     container: ghcr.io/arii/tech-dancer:latest
     env:
@@ -29,11 +28,14 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: main
+
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Fetch and Apply PR Patch
         env:
@@ -56,11 +58,14 @@ jobs:
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
           path: trusted-tools-temp
           ref: main
+
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Restore Trusted Dev-Tools
         run: |

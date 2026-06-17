@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-mergellama.py - Automated Merge Conflict Resolution via Local LLM (Ollama)
+mergellama.py - Automated Merge Conflict Resolution via AI
 Part of the Tech-Dancer 'Self-Healing' CI pipeline.
 """
 
@@ -10,12 +10,12 @@ import re
 from typing import Optional
 from utils import call_ai, clean_llm_output, get_ollama_model
 
-MODEL = get_ollama_model()
+MODEL = get_ai_model()
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"
 CONFLICT_MARKER = "<<<<<<<"
 
 def log(msg):
-    print(f"🦙 [MergeLlama] {msg}")
+    print(f"🤖 [MergeLlama] {msg}")
 
 def resolve_file_conflicts(file_path: str) -> bool:
     if not os.path.exists(file_path):
