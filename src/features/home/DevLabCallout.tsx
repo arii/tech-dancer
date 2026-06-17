@@ -1,7 +1,8 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
-import { Terminal } from 'lucide-react';
+import { Terminal, GitPullRequest, Bluetooth, Shirt } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Icon } from '@/components/ui/Icon';
 
 export function DevLabCallout() {
   return (
@@ -19,8 +20,24 @@ export function DevLabCallout() {
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed">
-        Welcome to my DevAI Portfolio. This platform is a live production testbed where every feature and data pipeline is audited and optimized by an autonomous suite of developer agents operating across local environments and CI/CD pipelines.
+        A live testbed for agentic dev workflows — multi-agent pipelines, CI auditing, and evals running on this site.
       </Text>
+
+      {/* Project highlights */}
+      <Stack gap={1.5} marginTop={3}>
+        <Stack direction="row" align="center" gap={2}>
+          <Icon icon={GitPullRequest} size="sm" color="accent" />
+          <Text size="xs" color="dim">Repo-auditor AI — PR auditing agent</Text>
+        </Stack>
+        <Stack direction="row" align="center" gap={2}>
+          <Icon icon={Bluetooth} size="sm" color="accent" />
+          <Text size="xs" color="dim">Web Bluetooth heart-rate monitor</Text>
+        </Stack>
+        <Stack direction="row" align="center" gap={2}>
+          <Icon icon={Shirt} size="sm" color="accent" />
+          <Text size="xs" color="dim">BoomTick merch store</Text>
+        </Stack>
+      </Stack>
 
       {/* CTA */}
       <Text
