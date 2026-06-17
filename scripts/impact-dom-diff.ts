@@ -140,20 +140,20 @@ function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummari
 
     visualArtifacts.push(`- DOM diff: ${domSummary.diffPath}`);
 
-    return `### ${domSummary.route}
+    return `<details>
+<summary><b>${domSummary.route}</b> (Visual Diff: ${(visual?.differencePercent ?? 0).toFixed(2)}%)</summary>
 
-Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
+<br/>
 
-DOM Changes:
+**Severity:** ${severity}
+**Review Required:** ${reviewRequired ? 'Yes' : 'No'}
+
+**DOM Changes:**
 ${formatDomMetrics(domSummary.metrics).join('\n')}
 
-Severity: ${severity}
-
-Review Required: ${reviewRequired ? 'Yes' : 'No'}
-
-Artifacts:
+**Artifacts:**
 ${visualArtifacts.join('\n')}
-`;
+</details>`;
   });
 
   const report = `# Deployment Review
@@ -162,12 +162,15 @@ ${visualArtifacts.join('\n')}
 
 Impact Level: ${impact.impactLevel ?? 'LOW'}
 
-Changed Files:
+<details>
+<summary><b>📝 Changed Files (${changedFiles.length})</b></summary>
+
 ${changedFiles.length > 0 ? changedFiles.map(file => `- ${file}`).join('\n') : '- None detected'}
+</details>
 
 ## Routes Reviewed
 
-${routeSections.length > 0 ? routeSections.join('\n---\n\n') : '_No concrete routes required review._'}
+${routeSections.length > 0 ? routeSections.join('\n\n') : '_No concrete routes required review._'}
 `;
 
   fs.writeFileSync(deploymentReviewPath, report);
