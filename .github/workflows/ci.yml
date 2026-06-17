@@ -311,7 +311,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: pnpm run impact:agent-review
+        run: pnpm run impact:gemini-review
       - name: Visual review ollama agent
         if: always()
         env:
