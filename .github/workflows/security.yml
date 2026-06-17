@@ -33,7 +33,7 @@ jobs:
     name: Oxlint Scan
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -55,7 +55,7 @@ jobs:
     name: Gitleaks Secret Detection
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

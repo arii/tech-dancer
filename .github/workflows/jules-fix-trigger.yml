@@ -24,7 +24,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6

@@ -20,7 +20,7 @@ jobs:
   handle-command:
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     env:
       PYTHONPATH: dev-tools
       AI_MODEL: gpt-4o

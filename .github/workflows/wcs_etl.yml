@@ -10,7 +10,7 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
       env:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net

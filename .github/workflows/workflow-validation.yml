@@ -26,7 +26,7 @@ jobs:
     name: Validate all workflow files
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     timeout-minutes: 10
     steps:
       - name: Checkout

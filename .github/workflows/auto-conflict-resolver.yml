@@ -48,7 +48,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     permissions:
       contents: write
       pull-requests: write

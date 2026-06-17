@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     concurrency:
       # Build jobs for the same branch can be cancelled if a newer push arrives
       # to save CI minutes, as only the latest build for a branch is relevant.
@@ -91,7 +91,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.CI_CONTAINER_IMAGE || 'ghcr.io/arii/tech-dancer:latest' }}
+      image: ${{ vars.CI_CONTAINER_IMAGE }}
     concurrency:
       # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
       group: deploy-${{ github.ref }}
