@@ -20,9 +20,8 @@ jobs:
     container: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
-      OLLAMA_MODEL: qwen2.5-coder:1.5b
-      OLLAMA_SYNTHESIS_MODEL: qwen2.5-coder:1.5b
-      OLLAMA_BASE_URL: http://localhost:11434
+      AI_MODEL: gpt-4o
+      AI_SYNTHESIS_MODEL: gpt-4o
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -42,8 +41,6 @@ jobs:
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          # We use patch application to avoid checking out untrusted code context natively via actions/checkout,
-          # which mitigates CodeQL alerts about untrusted checkout with later potential execution.
           if [ "$EVENT_NAME" == "workflow_run" ]; then
             PR_NUMBER=$(gh pr list --head "$HEAD_SHA" --json number -q '.[0].number')
           else
@@ -51,11 +48,8 @@ jobs:
           fi
 
           if [ -n "$PR_NUMBER" ]; then
-            # We fetch the target PR branch to track history properly for commits, but via safe local git branch creation
             PR_HEAD=$(gh pr view "$PR_NUMBER" --json headRefName --jq .headRefName)
             git checkout -b "$PR_HEAD" || git checkout "$PR_HEAD"
-
-            # Download the PR diff and apply it
             gh pr diff "$PR_NUMBER" > pr.patch
             git apply pr.patch || git apply pr.patch --3way || true
             rm pr.patch
@@ -74,6 +68,7 @@ jobs:
           cp -r trusted-tools-temp/dev-tools dev-tools
           rm -rf trusted-tools-temp
           chmod +x dev-tools/low-compute-review.sh
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
@@ -86,6 +81,7 @@ jobs:
         run: |
           if ! pnpm eslint . --fix; then echo "eslint failed"; exit 1; fi
           if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
+
       - name: Validate CLI
         run: |
           python3 dev-tools/td_cli.py gh --help

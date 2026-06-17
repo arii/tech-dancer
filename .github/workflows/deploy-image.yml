@@ -3,6 +3,8 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - .devcontainer/Dockerfile
 
 # Permissions required to write to GitHub Packages
 permissions:
