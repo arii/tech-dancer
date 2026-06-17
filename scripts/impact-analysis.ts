@@ -2,26 +2,14 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { IMPACT_CONFIG } from './impact-analysis.config';
-
-// Types for dependency-cruiser output
-interface Dependency {
-  resolved: string;
-}
-
-interface Module {
-  source: string;
-  dependencies: Dependency[];
-}
-
-interface DependencyGraph {
-  modules: Module[];
-}
+import { mapPageToUrl, getContentAffectedUrls, getAffectedUrlsByPublicFiles } from './route-map';
+import { DependencyGraph, buildReverseMap, findAffectedFiles } from './dependency-graph';
 
 /**
  * Executes a shell command and returns the output.
  * Throws an error if the command fails.
  */
-function exec(command: string): string {
+export function exec(command: string): string {
   try {
     return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
   } catch (error: unknown) {
@@ -65,61 +53,6 @@ function getChangedFiles(): string[] {
 }
 
 /**
- * Builds a reverse dependency map (child -> [parents]).
- */
-function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
-  const reverseMap: Record<string, string[]> = {};
-
-  graph.modules.forEach(module => {
-    module.dependencies.forEach(dep => {
-      const child = dep.resolved;
-      if (!reverseMap[child]) {
-        reverseMap[child] = [];
-      }
-      if (!reverseMap[child].includes(module.source)) {
-        reverseMap[child].push(module.source);
-      }
-    });
-  });
-
-  return reverseMap;
-}
-
-/**
- * Recursively finds all affected files starting from the changed files.
- */
-function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, string[]>): string[] {
-  const affected = new Set<string>();
-  const queue = [...changedFiles];
-
-  while (queue.length > 0) {
-    const file = queue.shift()!;
-    if (affected.has(file)) continue;
-    affected.add(file);
-
-    const parents = reverseMap[file] || [];
-    queue.push(...parents);
-  }
-
-  return Array.from(affected);
-}
-
-/**
- * Maps page component files to public URLs.
- */
-function mapPageToUrl(filePath: string): string {
-  const fileName = path.basename(filePath, path.extname(filePath));
-
-  if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
-    return IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
-  }
-
-  // Convert PascalCase to kebab-case
-  const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  return `/${route}`;
-}
-
-/**
  * Determines the severity of the change.
  */
 function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
@@ -132,53 +65,6 @@ function getSeverity(changedFiles: string[]): 'HIGH' | 'MEDIUM' | 'LOW' {
   }
 
   return 'LOW';
-}
-
-/**
- * Handles content changes and maps them to URLs.
- */
-function getContentAffectedUrls(changedFiles: string[]): string[] {
-  const urls: string[] = [];
-
-  for (const file of changedFiles) {
-    for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
-      if (file.startsWith(dir) && file.endsWith('.md')) {
-        const slug = path.basename(file, '.md');
-        urls.push(`${prefix}${slug}`);
-      }
-    }
-  }
-
-  return urls;
-}
-
-
-/**
- * Find affected markdown files when public static files (e.g. images) are changed.
- */
-function getAffectedUrlsByPublicFiles(changedFiles: string[]): string[] {
-  const urls: Set<string> = new Set();
-  const publicFiles = changedFiles.filter(f => f.startsWith('public/'));
-
-  if (publicFiles.length === 0) return [];
-
-  const searchStrings = publicFiles.map(f => f.replace(/^public/, ''));
-
-  for (const [dir, prefix] of Object.entries(IMPACT_CONFIG.CONTENT_MAP)) {
-    const mdFiles = exec(`find ${dir} -name "*.md"`).split('\n').filter(Boolean);
-
-    for (const mdFile of mdFiles) {
-      const content = fs.readFileSync(mdFile, 'utf-8');
-      for (const searchStr of searchStrings) {
-        if (content.includes(searchStr)) {
-          const slug = path.basename(mdFile, '.md');
-          urls.add(`${prefix}${slug}`);
-          urls.add(prefix.replace(/\/$/, '')); // Add index page
-        }
-      }
-    }
-  }
-  return Array.from(urls);
 }
 
 async function main() {
@@ -258,14 +144,13 @@ async function main() {
 
     console.log('\n' + '='.repeat(40));
 
-    // Write to artifacts
-    const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
+    // Write to reports
+    const outputDir = path.join(process.cwd(), 'reports');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
-    fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(report, null, 2));
+    fs.writeFileSync(path.join(outputDir, 'deployment-impact.json'), JSON.stringify(report, null, 2));
 
     const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
 
@@ -288,7 +173,7 @@ ${changedFilesList}
 *Generated by Boomtick Impact Analyzer*
 `;
 
-    fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
+    fs.writeFileSync(path.join(outputDir, 'deployment-impact.md'), markdown);
     console.log(`\n✅ Reports generated in ${outputDir}`);
   } catch (error: unknown) {
     const err = error as Error;

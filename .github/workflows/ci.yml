@@ -253,8 +253,8 @@ jobs:
         run: |
           if [ -f artifacts/deployment-review.md ]; then
             cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
-          elif [ -f artifacts/impact-analysis/impact.md ]; then
-            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+          elif [ -f reports/deployment-impact.md ]; then
+            cat reports/deployment-impact.md >> "$GITHUB_STEP_SUMMARY"
           else
             echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
             echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
@@ -271,11 +271,11 @@ jobs:
               echo ""
               echo "$DELIMITER"
             } >> "$GITHUB_ENV"
-          elif [ -f artifacts/impact-analysis/impact.md ]; then
+          elif [ -f reports/deployment-impact.md ]; then
             DELIMITER="EOF_$(openssl rand -hex 8)"
             {
               echo "IMPACT_BODY<<$DELIMITER"
-              cat artifacts/impact-analysis/impact.md
+              cat reports/deployment-impact.md
               echo ""
               echo "$DELIMITER"
             } >> "$GITHUB_ENV"
