@@ -1,5 +1,7 @@
 import * as fs from 'fs';
-import type { RouteReview } from './visualReviewTypes';
+import * as path from 'path';
+import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
+import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
 
 export function imageToBase64(filePath: string): string {
   return fs.readFileSync(filePath).toString('base64');
@@ -9,6 +11,43 @@ export function severityEmoji(severity: 'LOW' | 'MEDIUM' | 'HIGH'): string {
   if (severity === 'HIGH') return '🔴';
   if (severity === 'MEDIUM') return '🟡';
   return '🟢';
+}
+
+export function buildVisualReviewPayload(summary: VisualRouteSummary): Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> {
+  const beforePath = summary.beforePath;
+  const afterPath = summary.afterPath;
+  const diffPath = summary.diffPath;
+
+  // 1. Grab the DOM diff for ground truth
+  const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
+  let domDiffContext = 'No DOM diff available.';
+  if (fs.existsSync(domDiffPath)) {
+    const diffContent = fs.readFileSync(domDiffPath, 'utf8');
+    // Truncate to avoid exploding the context window on massive changes
+    domDiffContext = diffContent.length > 3000
+      ? diffContent.slice(0, 3000) + '\n...[TRUNCATED]'
+      : diffContent;
+  }
+
+  // 2. Build the payload
+  const baseContent: Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> = [
+    { type: 'text', text: REVIEW_PROMPT },
+    { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
+    { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
+    { type: 'text', text: 'BEFORE' },
+    { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },
+    { type: 'text', text: 'AFTER' },
+    { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(afterPath)}` } },
+  ];
+
+  if (diffPath && fs.existsSync(diffPath)) {
+    baseContent.push(
+      { type: 'text', text: 'VISUAL DIFF' },
+      { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(diffPath)}` } }
+    );
+  }
+
+  return baseContent;
 }
 
 export function generateMarkdownReport(
