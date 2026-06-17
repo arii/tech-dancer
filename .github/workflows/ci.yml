@@ -41,6 +41,7 @@ permissions:
   actions: read
   statuses: write
   pull-requests: write
+  packages: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -151,7 +152,7 @@ jobs:
     needs: lint-typecheck
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer-reviewer:latest
+      image: ghcr.io/arii/tech-dancer:latest
       env:
         PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
@@ -218,7 +219,7 @@ jobs:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer-reviewer:latest
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - uses: actions/checkout@v6
         with:
