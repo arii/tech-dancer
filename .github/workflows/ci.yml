@@ -90,7 +90,7 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
-          python3 -m pip install PyGithub pytest click
+          python3 -m pip install --break-system-packages PyGithub pytest click
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code

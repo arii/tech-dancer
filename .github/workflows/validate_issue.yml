@@ -15,7 +15,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v6
-      - run: pip install PyGithub click
+      - run: pip install --break-system-packages PyGithub click
       - name: Validate Issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

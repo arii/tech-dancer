@@ -24,7 +24,7 @@ jobs:
           lfs: true
       - name: Install Python Dependencies
         run: |
-          python3 -m pip install -r etl/requirements.txt
+          python3 -m pip install --break-system-packages -r etl/requirements.txt
 
       - name: Run Pytest - Data Validation
         run: |
