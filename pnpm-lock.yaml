@@ -132,6 +132,9 @@ importers:
       '@langchain/community':
         specifier: ^1.1.29
         version: 1.1.29(@browserbasehq/sdk@2.14.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.49.0)(deepmerge@4.3.1)(dotenv@16.4.5)(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(zod@3.25.76))(@ibm-cloud/watsonx-ai@1.7.14)(@langchain/core@1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))(ibm-cloud-sdk-core@5.4.21)(ignore@7.0.5)(jsdom@29.1.1)(jsonwebtoken@9.0.3)(lodash@4.18.1)(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(playwright@1.49.0)(ws@8.20.0)
+      '@langchain/ollama':
+        specifier: ^1.2.7
+        version: 1.2.7(@langchain/core@1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))
       '@lhci/cli':
         specifier: ^0.15.1
         version: 0.15.1
@@ -2048,6 +2051,12 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       '@langchain/core': ^1.1.47
+
+  '@langchain/ollama@1.2.7':
+    resolution: {integrity: sha512-7Gu17q1dn4nKGB3ZYJyaaL8H/2k7LHvcL6V25S8cVDniTTSvd0fWzI5MzPJvbf9WPxBhvmf+rDDLAhOWljHEtQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@langchain/core': ^1.0.0
 
   '@langchain/openai@1.4.7':
     resolution: {integrity: sha512-i1YLV4pWbGC6W8m0ZNpLObJuf1nyU4o8aWyX4AF9fHn7eM67HfIJWQ5n5XzcCpuSa41otrxA9jvH5XRKwI1qDA==}
@@ -5529,6 +5538,9 @@ packages:
   ohash@2.0.11:
     resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
 
+  ollama@0.6.3:
+    resolution: {integrity: sha512-KEWEhIqE5wtfzEIZbDCLH51VFZ6Z3ZSa6sIOg/E/tBV8S51flyqBOXi+bRxlOYKDf8i327zG9eSTb8IJxvm3Zg==}
+
   on-finished@2.4.1:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
     engines: {node: '>= 0.8'}
@@ -8787,6 +8799,11 @@ snapshots:
       '@google/generative-ai': 0.24.1
       '@langchain/core': 1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0)
 
+  '@langchain/ollama@1.2.7(@langchain/core@1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))':
+    dependencies:
+      '@langchain/core': 1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0)
+      ollama: 0.6.3
+
   '@langchain/openai@1.4.7(@langchain/core@1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))(ws@8.20.0)':
     dependencies:
       '@langchain/core': 1.1.49(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0)
@@ -11347,7 +11364,7 @@ snapshots:
       jsonwebtoken: 9.0.3
       load-esm: 1.0.3
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.16.1(debug@4.3.4))
+      retry-axios: 2.6.0(axios@1.16.1)
       tough-cookie: 4.1.3
     transitivePeerDependencies:
       - supports-color
@@ -12460,6 +12477,10 @@ snapshots:
 
   ohash@2.0.11: {}
 
+  ollama@0.6.3:
+    dependencies:
+      whatwg-fetch: 3.6.20
+
   on-finished@2.4.1:
     dependencies:
       ee-first: 1.1.1
@@ -13112,7 +13133,7 @@ snapshots:
       onetime: 2.0.1
       signal-exit: 3.0.7
 
-  retry-axios@2.6.0(axios@1.16.1(debug@4.3.4)):
+  retry-axios@2.6.0(axios@1.16.1):
     dependencies:
       axios: 1.16.1(debug@4.3.4)
 

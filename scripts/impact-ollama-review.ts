@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ChatOllama } from '@langchain/community/chat_models/ollama';
+import { ChatOllama } from '@langchain/ollama';
 import { HumanMessage } from '@langchain/core/messages';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -53,7 +53,7 @@ YOUR RULES:
 
 Format your response as a concise, bulleted list. Be direct and actionable. Make sure to include "Recommendations for Improvement" if applicable.`;
 
-// ── Gemini client ──────────────────────────────────────────────────────────
+// ── Ollama client ──────────────────────────────────────────────────────────
 
 function createModel(): ChatOllama {
   return new ChatOllama({
