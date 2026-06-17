@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HumanMessage } from '@langchain/core/messages';
+import { GoogleGenAI } from '@google/genai';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -55,15 +54,11 @@ Format your response as a concise, bulleted list. Be direct and actionable. Make
 
 // ── Gemini client ──────────────────────────────────────────────────────────
 
-function createModel(): ChatGoogleGenerativeAI {
+function createModel(): GoogleGenAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
-  return new ChatGoogleGenerativeAI({
-    model: 'gemini-3.5-flash',
-    apiKey,
-    maxOutputTokens: 1024,
-  });
+  return new GoogleGenAI({ apiKey });
 }
 
 // ── Image helpers ──────────────────────────────────────────────────────────
@@ -75,7 +70,7 @@ function imageToBase64(filePath: string): string {
 // ── Per-route review ───────────────────────────────────────────────────────
 
 async function reviewRoute(
-  model: ChatGoogleGenerativeAI,
+  client: GoogleGenAI,
   summary: VisualRouteSummary
 ): Promise<RouteReview> {
   const beforePath = summary.beforePath;
@@ -94,32 +89,50 @@ async function reviewRoute(
   }
 
   // 2. Build the payload
-  const baseContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
-    { type: 'text', text: REVIEW_PROMPT },
-    { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
-    { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
-    { type: 'text', text: 'BEFORE' },
-    { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },
-    { type: 'text', text: 'AFTER' },
-    { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(afterPath)}` } },
+  const contents: unknown[] = [
+    REVIEW_PROMPT,
+    `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}`,
+    `DOM TEXT DIFF:\n\n${domDiffContext}`,
+    'BEFORE',
+    {
+      inlineData: {
+        data: imageToBase64(beforePath),
+        mimeType: 'image/png'
+      }
+    },
+    'AFTER',
+    {
+      inlineData: {
+        data: imageToBase64(afterPath),
+        mimeType: 'image/png'
+      }
+    },
   ];
 
   if (diffPath && fs.existsSync(diffPath)) {
-    baseContent.push(
-      { type: 'text', text: 'VISUAL DIFF' },
-      { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(diffPath)}` } }
-    );
+    contents.push('VISUAL DIFF');
+    contents.push({
+      inlineData: {
+        data: imageToBase64(diffPath),
+        mimeType: 'image/png'
+      }
+    });
   }
 
-  const message = new HumanMessage({ content: baseContent });
-  const response = await model.invoke([message]);
+  const response = await client.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: contents,
+    config: {
+      temperature: 0.1,
+    }
+  });
 
-  const usageMetadata = response.usage_metadata;
-  const inputTokens = usageMetadata?.input_tokens ?? 0;
-  const outputTokens = usageMetadata?.output_tokens ?? 0;
-  const totalTokens = usageMetadata?.total_tokens ?? 0;
+  const usageMetadata = response.usageMetadata;
+  const inputTokens = usageMetadata?.promptTokenCount ?? 0;
+  const outputTokens = usageMetadata?.candidatesTokenCount ?? 0;
+  const totalTokens = usageMetadata?.totalTokenCount ?? 0;
 
-  // Gemini 3.5 Flash pricing (approx)
+  // Gemini 2.5 Flash pricing (approx)
   // Input: $0.075 / 1 million tokens
   // Output: $0.30 / 1 million tokens
   const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
@@ -128,9 +141,7 @@ async function reviewRoute(
     route: summary.route,
     severity: summary.severity,
     differencePercent: summary.differencePercent,
-    feedback: typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content),
+    feedback: response.text ?? 'No feedback provided.',
     tokens: totalTokens,
     cost: cost,
   };
