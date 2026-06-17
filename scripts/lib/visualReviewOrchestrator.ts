@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visualReviewConstants';
+import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH } from './visualReviewConstants';
 import { generateMarkdownReport, postPRComment } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary } from './visualReviewTypes';
 
@@ -24,15 +24,16 @@ export async function orchestrateVisualReview(client: LLMClientStrategy): Promis
   const summary: VisualSummary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8'));
 
   // Only review routes with actual visual changes
-  // Limit to top N routes by difference percentage to manage costs
+  // Limit to top 5 routes by difference percentage to manage costs
+  const MAX_ROUTES = 5;
   let routesToReview = summary.routes
     .filter(r => r.differencePercent > 0)
     .sort((a, b) => b.differencePercent - a.differencePercent);
 
   const totalRoutes = routesToReview.length;
-  if (routesToReview.length > MAX_ROUTES_TO_REVIEW) {
-    console.log(`⚠️  Too many routes changed (${totalRoutes}). Limiting review to the top ${MAX_ROUTES_TO_REVIEW}.`);
-    routesToReview = routesToReview.slice(0, MAX_ROUTES_TO_REVIEW);
+  if (routesToReview.length > MAX_ROUTES) {
+    console.log(`⚠️  Too many routes changed (${totalRoutes}). Limiting review to the top ${MAX_ROUTES}.`);
+    routesToReview = routesToReview.slice(0, MAX_ROUTES);
   }
 
   if (routesToReview.length === 0) {
