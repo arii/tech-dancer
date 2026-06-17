@@ -29,7 +29,7 @@ jobs:
     steps:
 
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
           path: trusted-tools-temp

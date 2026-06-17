@@ -17,12 +17,12 @@ jobs:
       pull-requests: read
     steps:
       - name: Checkout Source (for scripts)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           path: source
 
       - name: Checkout gh-pages
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages-branch

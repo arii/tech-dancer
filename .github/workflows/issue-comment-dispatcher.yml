@@ -33,7 +33,7 @@ jobs:
           fi
 
       - name: Checkout repository to dispatch workflows
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
