@@ -17,39 +17,21 @@ concurrency:
 jobs:
   resolve-conflicts:
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
     steps:
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
-
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
-
-      - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
-
-      - name: Install Click
-        run: pip install click
-
-      - name: Start Ollama Server
-        run: |
-          ollama serve > ollama_output.log 2>&1 &
-          sleep 5
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
-
-      - name: Pull Model
-        run: ollama pull qwen2.5-coder:7b
 
       - name: Find and Resolve Conflicts
         run: |

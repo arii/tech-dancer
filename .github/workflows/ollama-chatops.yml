@@ -19,8 +19,8 @@ permissions:
 jobs:
   handle-command:
     if: github.repository == 'disabled'
-
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
       OLLAMA_MODEL: qwen2.5-coder:1.5b
@@ -29,13 +29,13 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |
@@ -64,33 +64,11 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Install Dependencies
+      - name: Install Node dependencies
         run: |
-          if ! python3 -c "import click, github, requests" 2>/dev/null; then
-            pip install click PyGithub requests
-          fi
           if [ ! -d "node_modules" ]; then
             pnpm install --frozen-lockfile
           fi
-
-      - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh | sh
-          ollama serve > /tmp/ollama.log 2>&1 &
-          echo "Waiting for Ollama to be ready..."
-          for i in {1..15}; do
-            if curl -sf http://localhost:11434/api/tags > /dev/null; then
-              echo "Ollama is ready!"
-              ollama pull ${{ env.OLLAMA_MODEL }} || true
-              ollama list
-              exit 0
-            fi
-            echo "Waiting... ($i/15)"
-            sleep 2
-          done
-          echo "Ollama failed to start"
-          cat /tmp/ollama.log
-          exit 1
 
       - name: Validate CLI
         run: |
@@ -120,3 +98,4 @@ jobs:
           commit_message: "chore: auto-resolved merge conflicts using /ollama-fix"
           branch: ${{ env.HEAD_REF }}
           file_pattern: '.'
+

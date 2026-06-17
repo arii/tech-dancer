@@ -20,7 +20,7 @@ from utils import (
     set_gha_variable,
     CLIError,
     run_command,
-    is_ollama_available,
+    is_ai_available,
     extract_failing_info,
     clean_gha_logs
 )

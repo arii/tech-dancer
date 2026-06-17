@@ -10,13 +10,12 @@ jobs:
   audit:
     if: github.repository == 'disabled'
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
+    container: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Configure Git Safe Directory
+      - name: Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Repository
