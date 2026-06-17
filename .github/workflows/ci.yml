@@ -288,11 +288,20 @@ jobs:
         run: |
           if [ -f artifacts/deployment-review.md ]; then
             cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            echo "IMPACT_BODY<<EOF" >> "$GITHUB_ENV"
+            cat artifacts/deployment-review.md >> "$GITHUB_ENV"
+            echo "EOF" >> "$GITHUB_ENV"
           elif [ -f artifacts/impact-analysis/impact.md ]; then
             cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+            echo "IMPACT_BODY<<EOF" >> "$GITHUB_ENV"
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_ENV"
+            echo "EOF" >> "$GITHUB_ENV"
           else
             echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
             echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
+            echo "IMPACT_BODY<<EOF" >> "$GITHUB_ENV"
+            echo "No impact report found." >> "$GITHUB_ENV"
+            echo "EOF" >> "$GITHUB_ENV"
           fi
 
           if [ -f artifacts/gemini-review.md ]; then
