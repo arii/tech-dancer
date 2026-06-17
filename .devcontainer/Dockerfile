@@ -8,21 +8,29 @@ USER root
 # ── System tools ──────────────────────────────────────────────────────────────
 # lsof + gh: used in ci.yml (test-build job)
 # git-lfs:   used in wcs_etl.yml
+# gh is not in Ubuntu's default apt sources — add GitHub CLI's repo first
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
     jq \
     git \
     git-lfs \
-    gh \
     lsof \
-    python3.11 \
+    python3 \
     python3-pip \
     python3-venv \
     python3-setuptools \
     python3-wheel \
     build-essential \
   && git lfs install \
+  && rm -rf /var/lib/apt/lists/* \
+  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+      | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+      > /etc/apt/sources.list.d/github-cli.list \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends gh \
   && rm -rf /var/lib/apt/lists/*
 
 # ── Node.js 22.22.2 (matches .node-version / runtime contract) ────────────────
