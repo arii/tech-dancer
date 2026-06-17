@@ -21,8 +21,6 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Code
         uses: actions/checkout@v6

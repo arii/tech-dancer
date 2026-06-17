@@ -59,8 +59,6 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
         uses: actions/checkout@v6
@@ -112,8 +110,6 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
@@ -153,8 +149,6 @@ jobs:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
@@ -213,8 +207,6 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - uses: actions/checkout@v6
         with:
