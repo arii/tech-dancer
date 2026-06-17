@@ -8,10 +8,7 @@ on:
       - "docs/**"
   workflow_dispatch:
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 88a83c41ed (chore: Fix Node 20 Deprecation Warnings in GitHub Actions (#2279))
 permissions:
   contents: read
 

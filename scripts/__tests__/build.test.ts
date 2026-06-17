@@ -1,4 +1,5 @@
 import { test, expect } from 'vitest';
+
 import { DomRouteSummarySchema } from '../impact-review-utils';
 
 test('Pipeline telemetry payload complies exactly with the token schema contract', async () => {
@@ -10,9 +11,12 @@ test('Pipeline telemetry payload complies exactly with the token schema contract
     diffPath: 'artifacts/dom-review/research/diff.txt',
     severity: 'LOW',
     metrics: {
-      nodes: [0, 0],
-      images: [0, 0],
-      links: [0, 0]
+      nodesAdded: 0,
+      nodesRemoved: 0,
+      imagesAdded: 0,
+      imagesRemoved: 0,
+      linksAdded: 0,
+      linksRemoved: 0
     }
   };
 

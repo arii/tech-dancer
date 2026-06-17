@@ -8,16 +8,17 @@ import {
   type DomRouteSummary
 } from '../impact-review-utils';
 
+
 const deploymentReviewPath = path.join(ARTIFACTS_DIR, 'deployment-review.md');
 
 function formatDomMetrics(metrics: DomRouteSummary['metrics']): string[] {
   const rows = [
-    ['Added nodes', metrics.nodes[0]],
-    ['Removed nodes', metrics.nodes[1]],
-    ['Added images', metrics.images[0]],
-    ['Removed images', metrics.images[1]],
-    ['Added links', metrics.links[0]],
-    ['Removed links', metrics.links[1]]
+    ['Added nodes', metrics.nodesAdded],
+    ['Removed nodes', metrics.nodesRemoved],
+    ['Added images', metrics.imagesAdded],
+    ['Removed images', metrics.imagesRemoved],
+    ['Added links', metrics.linksAdded],
+    ['Removed links', metrics.linksRemoved]
   ] as const;
 
   const changed = rows.filter(([, value]) => value > 0);
@@ -34,15 +35,10 @@ export function generateDeploymentReport(domSummaries: DomRouteSummary[], visual
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
-    const visualArtifacts = [
-      `- Before screenshot: ${visual?.beforePath ?? 'Not captured'}`,
-      `- After screenshot: ${visual?.afterPath ?? 'Not captured'}`,
-      `- Visual diff: ${visual?.diffPath ?? 'Not captured'}`
-    ];
-
-    if (visual?.beforeCroppedPath) visualArtifacts.push(`- Before (cropped): ${visual.beforeCroppedPath}`);
-    if (visual?.afterCroppedPath) visualArtifacts.push(`- After (cropped): ${visual.afterCroppedPath}`);
-    if (visual?.diffCroppedPath) visualArtifacts.push(`- Visual diff (cropped): ${visual.diffCroppedPath}`);
+    // Since diffPath etc is no longer in the metric payload, we assume the naming convention or omit them if not specified.
+    // However, the visual review does supply diff paths. DOM diffs are still generated in the main loop so we can rebuild the path.
+    const routeSlug = domSummary.route === '/' ? 'home' : domSummary.route.split('?')[0].replace(/^\/+|\/+$/g, '').replace(/[^a-zA-Z0-9-]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'home';
+    const _domDiffPath = `dom-review/${routeSlug}/diff.txt`;
 
     return `### ${domSummary.route}
 
@@ -50,14 +46,16 @@ Visual Difference: ${(visual?.differencePercent ?? 0).toFixed(2)}%
 
 DOM Changes:
 ${formatDomMetrics(domSummary.metrics).join('\n')}
-- Diff path: ${domSummary.diffPath}
 
 Severity: ${severity}
 
 Review Required: ${reviewRequired ? 'Yes' : 'No'}
 
 Artifacts:
-${visualArtifacts.join('\n')}
+- Before screenshot: ${visual?.beforePath ?? 'Not captured'}
+- After screenshot: ${visual?.afterPath ?? 'Not captured'}
+- Visual diff: ${visual?.diffPath ?? 'Not captured'}
+- DOM diff: ${domSummary.diffPath}
 `;
   });
 

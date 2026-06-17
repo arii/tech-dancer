@@ -1,3 +1,4 @@
+import { VisualRouteSummarySchema } from './impact-review-utils';
 import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -12,11 +13,12 @@ import {
   ensureDirectory,
   readImpactAnalysis,
   routeToSlug,
+  startPreview,
+  stopPreview,
   visualSeverity,
+  waitForServer,
   type VisualRouteSummary
 } from './impact-review-utils';
-import { VisualRouteSummarySchema } from './impact-review-utils';
-import { startPreview, waitForServer, stopPreview } from './impact/preview-server';
 import { whiteCanvas, copyImage } from './image-processing-utils';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
@@ -213,6 +215,7 @@ async function main(): Promise<void> {
 
       const summary = VisualRouteSummarySchema.parse(summaryObj);
       summaries.push(summary);
+
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));

@@ -70,7 +70,7 @@ function main(): void {
       afterHtmlPath: path.relative(process.cwd(), afterHtmlPath),
       diffPath: path.relative(process.cwd(), diffPath),
       metrics,
-      severity: domSeverity(metrics.nodes[0] + metrics.nodes[1])
+      severity: domSeverity(metrics.nodesAdded + metrics.nodesRemoved)
     };
 
     const summary = DomRouteSummarySchema.parse(summaryObj);
