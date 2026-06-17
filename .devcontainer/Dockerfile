@@ -5,27 +5,57 @@ LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
 
 USER root
 
-ENV PNPM_VERSION=10.28.2
+# ── System tools ──────────────────────────────────────────────────────────────
+# lsof + gh: used in ci.yml (test-build job)
+# git-lfs:   used in wcs_etl.yml
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
     jq \
     git \
+    git-lfs \
     gh \
-    python3 \
+    lsof \
+    python3.11 \
     python3-pip \
     python3-venv \
     python3-setuptools \
     python3-wheel \
     build-essential \
+  && git lfs install \
   && rm -rf /var/lib/apt/lists/*
 
-# Install node version 22
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | /bin/bash - \
-  && apt-get install -y nodejs
+# ── Node.js 22.22.2 (matches .node-version / runtime contract) ────────────────
+# Uses NodeSource to get the exact patch version, then locks it via corepack.
+ENV NODE_MAJOR=22
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
+  && apt-get install -y nodejs \
+  && node --version
 
-RUN npm install -g pnpm@${PNPM_VERSION}
+# ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
+ENV PNPM_VERSION=10.28.2
+RUN corepack enable \
+  && corepack prepare pnpm@${PNPM_VERSION} --activate \
+  && pnpm --version
 
+# ── Python packages ────────────────────────────────────────────────────────────
+# Inline CI deps (ci.yml: pip install PyGithub pytest click)
+# ETL pipeline deps (etl/requirements.txt)
+RUN pip3 install --no-cache-dir --break-system-packages \
+    PyGithub \
+    click \
+    pytest==9.0.3 \
+    pytest-asyncio==1.3.0 \
+    pytest-mock==3.15.1 \
+    playwright==1.49.0 \
+    beautifulsoup4==4.14.3 \
+    pandas==3.0.2 \
+    pyarrow==23.0.1 \
+    tenacity==8.2.3 \
+    requests==2.33.1 \
+    tqdm==4.67.3
+
+# ── Workspace ──────────────────────────────────────────────────────────────────
 RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 
 USER pwuser
