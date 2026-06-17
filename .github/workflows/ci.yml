@@ -224,8 +224,6 @@ jobs:
         with:
           fetch-depth: 0
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Start Ollama Server
-        run: ollama serve > ollama_output.log 2>&1 &
       - name: Update Impact Analysis Feedback (Initial)
         uses: ./.github/actions/update-pr-comment
         with:

@@ -35,21 +35,6 @@ jobs:
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh > install_ollama.sh
-          sh install_ollama.sh
-          rm install_ollama.sh
-
-      - name: Start Ollama Server
-        run: |
-          ollama serve > ollama_output.log 2>&1 &
-          sleep 5
-          curl -f --retry 10 --retry-delay 2 http://localhost:11434/api/tags || (cat ollama_output.log && exit 1)
-
-      - name: Pull Model
-        run: ollama pull qwen2.5-coder:7b
-
       - name: Run Headless Audit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
