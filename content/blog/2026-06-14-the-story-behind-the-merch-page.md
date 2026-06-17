@@ -5,7 +5,7 @@ date: "2026-06-14"
 author: "Ariel Anders, PhD"
 category: "Community"
 excerpt: "How a single T-shirt for a local event evolved into a full collection of West Coast Swing apparel celebrating NorCal roots and role-fluid energy."
-image: "/assets/events/jjo-hero.jpg"
+image: "/assets/events/jjo-hero.svg"
 imageAlt: "Dancers at Jack & Jill Orama wearing event t-shirts."
 tags: ["merch", "community", "NorCal", "WCS"]
 affiliateIds:
@@ -19,7 +19,7 @@ Every great project has a "Day Zero"—a moment where a specific problem needs a
 
 It started with a simple goal: we needed shirts for a specific event. Jack & Jill Orama (JJO) is a beloved local West Coast Swing event, and we wanted to create something that captured the fun, competitive, yet community-focused spirit of the weekend.
 
-![Jack & Jill Orama Hero](/assets/events/jjo-hero.jpg)
+![Jack & Jill Orama Hero](/assets/events/jjo-hero.svg)
 
 The initial designs were highly focused. We weren't thinking about a "store" or a "brand" yet. We just wanted the dancers at JJO to have a piece of the event they could take home. But the response was overwhelming. Dancers didn't just want event shirts; they wanted shirts that spoke to their identity as West Coast Swing dancers year-round.
 

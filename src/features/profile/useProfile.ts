@@ -8,47 +8,38 @@ import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
-  role: "MIT Roboticist // WCS Tech-Dancer",
+  role: "Senior roboticist · DevAI engineer · West Coast Swing",
   sections: [
+    {
+      id: "professional",
+      title: "Professional Summary",
+      content: "MIT PhD and former senior engineer at Waymo and Robust.AI. I bridge the gap between shipping production robotics software and building the agentic engineering workflows that scale robotics teams. Below is a breakdown of my professional experience and independent projects.",
+      cards: [
+        {
+          icon: 'terminal',
+          title: "Robotics & Engineering",
+          content: "Senior roboticist with production experience at Waymo and Robust.AI. I work across navigation, localization, motion planning, and behavior for autonomous systems. At startups, that means owning the full stack — from algorithm to Docker to deployment. Stack: ROS1/ROS2, C++, Python."
+        },
+        {
+          icon: 'zap',
+          title: "DevAI tooling (independent projects)",
+          content: "I build agentic CI/CD pipelines, LLM-assisted code review, and developer tooling as self-directed projects — the tools I wish robotics teams had. Current work: RepoAuditor AI (Gemini-driven PR auditing) and BoomTick.blog (live RAG + LLM testbed in active development). Code at github.com/arii."
+        },
+        {
+          icon: 'globe',
+          title: "DevAI for robotics",
+          content: "Most DevAI practitioners don't know ROS. Most roboticists aren't building agentic pipelines. I work at that intersection, helping robotics teams adopt AI-assisted engineering practices: automated code review, agentic CI/CD, and LLM tooling built by someone who has shipped production robotics software."
+        }
+      ],
+      availability: "Open to Staff/Senior SWE roles, robotics contracts, and DevAI consulting — especially where robotics and AI-assisted engineering overlap."
+    },
     {
       id: "dance-background",
       title: "My Dance Background",
       content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.",
       gallery: [
+        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" },
         { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" }
-      ]
-    },
-    {
-      id: "professional",
-      title: "What I Do Professionally",
-      content: "I provide high-level technical consulting for startups and project-based digital execution for niche brands.",
-      gallery: [
-        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" }
-      ],
-      cards: [
-        {
-          icon: 'terminal',
-          title: "Robotics & Engineering",
-          content: "My background is in robot software engineering and architecture, helping startups build scalable, high-performance systems. My specialized skillsets include perception, motion planning, custom visualization tools, AWS IoT telemetry, and robust CI/CD and DevOps pipelines to keep autonomous fleets reliable and efficient."
-        },
-        {
-          icon: 'zap',
-          title: "AI Strategy (DevAI)",
-          content: "I implement generative AI tools to automate internal developer tasks and content management. Products built with these DevAI tools include boomtick.blog and a heartrate-monitoring WebBluetooth fitness system. The underlying workflows and internal tools are visible on my GitHub at github.com/arii."
-        },
-        {
-          icon: 'globe',
-          title: "Digital Presence & Management",
-          content: "I help artists and niche brands build the infrastructure they need to grow — from functional websites and merch stores to SEO, booking tools, and content workflows. I handle the technical logistics from start to finish so you can stay focused on your craft."
-        }
-      ]
-    },
-    {
-      id: "why-built",
-      title: "Why I Built This Site",
-      content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, practical tools, event notes, and the small choices that make a big difference over a season of dancing.",
-      gallery: [
-        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
       ]
     },
     {
@@ -76,28 +67,19 @@ const PROFILE_DATA: ProfileData = {
       ]
     },
     {
+      id: "why-built",
+      title: "Why I Built This Site",
+      content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, practical tools, event notes, and the small choices that make a big difference over a season of dancing.",
+      gallery: [
+        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
+      ]
+    },
+    {
       id: "financial-strategies",
       title: "Financial Strategies for WCS",
       content: "I love maximizing credit card perks and hotel benefits, which helps me make the WCS event lifestyle both high-end and feasible. The goal is to spend more energy dancing and less energy stressing over the logistics.",
       gallery: [
         { src: wwwAri, alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
-      ]
-    },
-    {
-      id: "education-focus",
-      items: [
-        {
-          title: "Education",
-          description: "PhD in Computer Science, MIT"
-        },
-        {
-          title: "Focus",
-          description: "Robotics // AI // Research"
-        },
-        {
-          title: "Dance Level",
-          description: "Competitive Intermediate Follow"
-        }
       ]
     },
     {
@@ -111,12 +93,12 @@ const PROFILE_DATA: ProfileData = {
     }
   ],
   details: [
-    { label: "LOCATION", value: "San Francisco, CA" },
-    { label: "STYLE", value: "West Coast Swing + Lindy Hop" },
-    { label: "DANCE LEVEL", value: "Competitive Intermediate Follow" },
-    { label: "PORTFOLIO", value: SOCIAL_LINKS.PORTFOLIO }
+    { label: "Location", value: "San Francisco, CA" },
+    { label: "Portfolio", value: "View Portfolio", url: "https://boomtick.blog/research" },
+    { label: "Resume", value: "View Resume", url: "https://boomtick.blog/ariel-anders-resume.pdf" }
   ]
 };
+
 export function useProfile(): { bio: ProfileData } {
   return { bio: PROFILE_DATA };
 }

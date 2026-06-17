@@ -3,7 +3,7 @@ type: post
 title: "Theme Wear, Costumes & Accessories"
 date: "2026-06-01"
 author: "Ariel Anders, PhD"
-category: "Gear"
+category: "Costumes"
 excerpt: "Accessories and props curated for themed social dance nights (e.g., Space/Alien, Glow, Nerd, Halloween)."
 image: "/images/gear/sketches/glow_suspenders.webp"
 affiliateIds:
@@ -22,10 +22,13 @@ tags:
 Theme nights are a staple of West Coast Swing conventions. From "Galactic" to "Nerd Night," having the right accessories can make your outfit stand out without breaking the bank.
 
 ### Galactic & Space Themes
+![Green Bodysuit](/images/gear/sketches/green-bodysuit.webp)
+![Alien Mask](/images/gear/sketches/alien-mask.webp)
+
 Commit to the alien look with a full-body spandex suit and a latex mask.
 
-<notice type="affiliate" id="green-bodysuit" />
 <notice type="affiliate" id="alien-mask" />
+
 
 ### Glow & Nerd Nights
 Light up the dance floor with LED suspenders, or go for the classic nerd look with a pre-assembled set.

@@ -6,9 +6,9 @@ ollama_reviewer.py - Standalone Ollama Code Reviewer CLI
 import os
 import sys
 import argparse
-from utils import call_ollama
+from utils import call_ai
 
-MODEL = "code-reviewer"
+MODEL = "gpt-4o"
 MAX_FILE_SIZE_KB = 50
 
 def is_binary(file_path):
@@ -48,7 +48,7 @@ def review_file(file_path, silent=False):
     if not silent:
         print(f"--- Reviewing {file_path} using model '{MODEL}' ---")
 
-    review = call_ollama(prompt, model=MODEL)
+    review = call_ai(prompt, model=MODEL)
     if review:
         print(review)
     else:

@@ -7,6 +7,7 @@ export interface ProfileSection {
   items?: ProfileItem[];
   gallery?: ProfileGalleryImage[];
   links?: ProfileLink[];
+  availability?: string;
 }
 
 export interface ProfileCard {
@@ -29,6 +30,7 @@ export interface ProfileGalleryImage {
 export interface ProfileDetail {
   label: string;
   value: string;
+  url?: string;
 }
 
 export interface ProfileLink {
