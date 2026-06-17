@@ -51,7 +51,8 @@
     "impact:build-main": "tsx scripts/impact-build-main.ts",
     "impact:visual-diff": "tsx scripts/impact-visual-diff.ts",
     "impact:dom-diff": "tsx scripts/impact-dom-diff.ts",
-    "impact:agent-review": "tsx scripts/impact-agent-review.ts"
+    "impact:agent-review": "tsx scripts/impact-agent-review.ts",
+    "impact:ollama-review": "tsx scripts/impact-ollama-review.ts"
   },
   "dependencies": {
     "@langchain/core": "^1.1.49",
@@ -100,6 +101,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
+    "@langchain/community": "^1.1.29",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "1.49.0",
     "@tailwindcss/typography": "^0.5.19",
