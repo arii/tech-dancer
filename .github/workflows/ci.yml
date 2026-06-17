@@ -42,6 +42,7 @@ permissions:
   actions: read
   statuses: write
   pull-requests: write
+  models: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -152,24 +153,14 @@ jobs:
     needs: lint-typecheck
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.49.0-noble
-      env:
-        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Install system utilities
-        run: |
-          apt-get update
-          apt-get install -y lsof gh
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Configure Git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
 
       - name: Build App
         env:
@@ -222,14 +213,15 @@ jobs:
   impact-analysis:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
+      - name: Configure Git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Install Playwright browser
-        run: pnpm run setup:playwright
       - name: Update Impact Analysis Feedback (Initial)
         uses: actions/github-script@v8
         with:
@@ -302,7 +294,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: pnpm run impact:agent-review
+        run: pnpm run impact:gemini-review
+      - name: Visual review github models agent
+        if: always()
+        env:
+          GITHUB_MODELS_MODEL: gpt-4o
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:github-models-review
       - name: Report Summary
         if: always()
         run: |
@@ -313,6 +313,16 @@ jobs:
           else
             echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
             echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/gemini-review.md ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            cat artifacts/gemini-review.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/github-models-review.md ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            cat artifacts/github-models-review.md >> "$GITHUB_STEP_SUMMARY"
           fi
       - name: Update Impact Analysis Feedback (Final Result)
         if: always()
