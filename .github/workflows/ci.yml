@@ -313,6 +313,19 @@ jobs:
             echo "" >> "$GITHUB_STEP_SUMMARY"
             cat artifacts/github-models-review.md >> "$GITHUB_STEP_SUMMARY"
           fi
+
+          # Aggregate verdict — fail the step explicitly if any verdict file says failed
+          FAILED=0
+          for f in artifacts/*-verdict.json; do
+            [ -f "$f" ] || continue
+            PASSED=$(jq -r '.passed' "$f")
+            if [ "$PASSED" = "false" ]; then
+              HIGH=$(jq -r '.highCount' "$f")
+              echo "❌ Visual review failed: $HIGH HIGH severity issues found ($f)" >&2
+              FAILED=1
+            fi
+          done
+          exit $FAILED
       - name: Update Impact Analysis Feedback (Final Result)
         if: always()
         uses: ./.github/actions/update-pr-comment

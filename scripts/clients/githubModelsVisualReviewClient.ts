@@ -1,6 +1,6 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
+import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
@@ -38,15 +38,18 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
     // GitHub Models are currently free/rate-limited depending on the tier.
     const cost = 0;
 
+    const feedback = typeof response.content === 'string'
+      ? response.content
+      : JSON.stringify(response.content);
+
     return {
       route: summary.route,
       severity: summary.severity,
       differencePercent: summary.differencePercent,
-      feedback: typeof response.content === 'string'
-        ? response.content
-        : JSON.stringify(response.content),
+      feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      llmVerdict: parseLLMVerdict(feedback),
     };
   }
 };

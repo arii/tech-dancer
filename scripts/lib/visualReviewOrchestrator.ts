@@ -75,4 +75,21 @@ export async function orchestrateVisualReview(
 
   // Post to GitHub PR
   await postPRComment(report, client.reportTitle);
+
+  // Write a structured result file alongside the markdown
+  const hasBlockingIssues = reviews.some(r =>
+    r.llmVerdict === 'fail' || (r.severity === 'HIGH' && r.llmVerdict !== 'pass')
+  );
+
+  const verdictPath = path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`);
+  fs.writeFileSync(verdictPath, JSON.stringify({
+    passed: !hasBlockingIssues,
+    highCount: reviews.filter(r => r.severity === 'HIGH').length,
+    routes: reviews.map(r => ({ route: r.route, severity: r.severity, llmVerdict: r.llmVerdict }))
+  }, null, 2));
+
+  if (hasBlockingIssues) {
+    console.error(`❌ Visual review found HIGH severity issues — failing CI.`);
+    process.exit(1);
+  }
 }
