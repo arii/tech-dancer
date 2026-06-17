@@ -14,6 +14,7 @@ import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 import { SOCIAL_LINKS } from '@/config/constants';
+import { Study } from '@/lib/content';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -269,6 +270,88 @@ function ToolCard({ tool, navigate }: {
 }
 
 
+function ToolSection({ title, tools, navigate }: { title: string; tools: ResearchTool[]; navigate: ReturnType<typeof useNavigate> }) {
+  if (tools.length === 0) return null;
+
+  return (
+    <Stack gap={12} width="full">
+      <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+        <Text variant="headline" size="2xl" weight="font-black">{title}</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{tools.length} TOOLS</Text>
+      </Box>
+
+      <Box display="grid" className="responsive-grid" gap={6} width="full">
+        {tools.map((tool) => (
+          <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+        ))}
+      </Box>
+    </Stack>
+  );
+}
+
+function ArticleCard({ study, navigate }: { study: Study; navigate: ReturnType<typeof useNavigate> }) {
+  return (
+    <Stack
+      onClick={() => {
+        if (study.status === 'published') {
+          navigate(`/research/${study.slug}`);
+        }
+      }}
+      height="full"
+      surface={study.status === 'published' ? 'surface' : 'muted'}
+      className={cn(cardVariants({
+        interactive: study.status === 'published'
+      }), "pt-[14px] px-4 pb-4")}
+      opacity={study.status === 'published' ? 1 : "high"}
+      cursor={study.status === 'published' ? 'pointer' : 'default'}
+      gap={0}
+    >
+      <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
+        <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+        {study.status && <StatusBadge label={study.status} />}
+      </Box>
+
+      <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+        {study.title}
+      </Text>
+      <Box display="flex" align="center" gap={4} marginBottom={3}>
+        <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
+        {study.readTime && (
+          <Box display="flex" align="center" gap={1} opacityVariant="muted">
+            <Icon icon={Clock} size="xs" color="dim" />
+            <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
+          </Box>
+        )}
+      </Box>
+
+      <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
+        {study.excerpt}
+      </Text>
+
+      {study.tags && study.tags.length > 0 && (
+        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+          {study.tags.map(tag => (
+            <Text key={tag} className="flagship-tag">
+              {tag}
+            </Text>
+          ))}
+        </Box>
+      )}
+
+      <Box display="flex" align="center" gap={2} marginTop="auto">
+        <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
+          {study.status === 'planned'
+            ? 'Coming Soon'
+            : study.status === 'draft'
+              ? 'Draft in Progress'
+              : 'Read Article'}
+        </Text>
+        <Icon icon={FileText} size="sm" color="accent" />
+      </Box>
+    </Stack>
+  );
+}
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
@@ -395,52 +478,13 @@ export default function ResearchAnalytics() {
         </Box>
 
         {/* Engineering Systems Section */}
-        {engineeringTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {engineeringTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
+        <ToolSection title="Engineering Systems" tools={engineeringTools} navigate={navigate} />
 
         {/* Data & Content Systems Section */}
-        {dataContentTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {dataContentTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
+        <ToolSection title="Data & Content Systems" tools={dataContentTools} navigate={navigate} />
 
         {/* Ecommerce Experiments Section */}
-        {e_commerceTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {e_commerceTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
+        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} navigate={navigate} />
 
         {/* Articles & Research Section */}
         {studies.length > 0 && (
@@ -452,65 +496,7 @@ export default function ResearchAnalytics() {
 
             <Box display="grid" className="responsive-grid" gap={6} width="full">
               {studies.map((study) => (
-                <Stack
-                  key={study.slug}
-                  onClick={() => {
-                    if (study.status === 'published') {
-                      navigate(`/research/${study.slug}`);
-                    }
-                  }}
-                  height="full"
-                  surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cn(cardVariants({
-                    interactive: study.status === 'published'
-                  }), "pt-[14px] px-4 pb-4")}
-                  opacity={study.status === 'published' ? 1 : "high"}
-                  cursor={study.status === 'published' ? 'pointer' : 'default'}
-                  gap={0}
-                >
-                  <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
-                    {study.status && <StatusBadge label={study.status} />}
-                  </Box>
-
-                  <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
-                    {study.title}
-                  </Text>
-                  <Box display="flex" align="center" gap={4} marginBottom={3}>
-                    <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
-                    {study.readTime && (
-                      <Box display="flex" align="center" gap={1} opacityVariant="muted">
-                        <Icon icon={Clock} size="xs" color="dim" />
-                        <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
-                      </Box>
-                    )}
-                  </Box>
-
-                  <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
-                    {study.excerpt}
-                  </Text>
-
-                  {study.tags && study.tags.length > 0 && (
-                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
-                      {study.tags.map(tag => (
-                        <Text key={tag} className="flagship-tag">
-                          {tag}
-                        </Text>
-                      ))}
-                    </Box>
-                  )}
-
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
-                      {study.status === 'planned'
-                        ? 'Coming Soon'
-                        : study.status === 'draft'
-                          ? 'Draft in Progress'
-                          : 'Read Article'}
-                    </Text>
-                    <Icon icon={FileText} size="sm" color="accent" />
-                  </Box>
-                </Stack>
+                <ArticleCard key={study.slug} study={study} navigate={navigate} />
               ))}
             </Box>
           </Stack>
