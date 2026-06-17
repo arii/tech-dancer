@@ -153,21 +153,20 @@ jobs:
               # Clean sync for branch subdirectories
               rm -rf "$DEST_DIR"
               mkdir -p "$DEST_DIR"
-              cp -r ../dist-assets/* "$DEST_DIR/"
+              cp -r ../dist-assets/. "$DEST_DIR/"
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
-              cp -r ../dist-assets/* ./
+              cp -r ../dist-assets/. ./
             fi
             touch .nojekyll
 
             # 3. Handle Main-specific requirements (tech-dancer/ subfolder and SEO)
             if [ "$REF_NAME" = "main" ]; then
               # Also deploy to tech-dancer/ subdirectory for root domain support
+              rm -rf tech-dancer
               mkdir -p tech-dancer
-              # Clean sync to tech-dancer
-              rm -rf tech-dancer/*
-              cp -r ../dist-assets/* tech-dancer/
+              cp -r ../dist-assets/. tech-dancer/
 
               # Ensure SEO assets are at the root
               cp ../dist-assets/sitemap.xml ./sitemap.xml 2>/dev/null || true
@@ -208,7 +207,7 @@ jobs:
 
                 echo "Verifying publish at $PUBLIC_VERIFY_URL"
                 ATTEMPTS=0
-                MAX_ATTEMPTS=30 # 5 minutes with 10s sleep
+                MAX_ATTEMPTS=60 # 10 minutes with 10s sleep
                 while [ "$ATTEMPTS" -lt "$MAX_ATTEMPTS" ]; do
                   RESPONSE=$(curl -sSL "$PUBLIC_VERIFY_URL" || echo "{}")
                   REMOTE_SHA=$(echo "$RESPONSE" | jq -r '.sha' 2>/dev/null || echo "none")
