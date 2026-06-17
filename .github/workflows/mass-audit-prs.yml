@@ -20,7 +20,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -39,7 +39,7 @@ jobs:
           bash dev-tools/audit_headless.sh --sync
 
       - name: Commit and Push REVIEW_TRACKING.md
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: update PR review tracking"
           file_pattern: 'REVIEW_TRACKING.md pr_overlaps.txt'
