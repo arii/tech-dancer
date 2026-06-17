@@ -12,14 +12,14 @@ export function DevLabCallout() {
           <Terminal className="h-4 w-4 text-accent" />
         </Box>
         <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase className="tracking-widest">
-          HIRE_ME
+          DevAI Portfolio
         </Text>
       </Stack>
 
 
       {/* Description */}
       <Text variant="body" size="xs" color="dim" leading="relaxed" marginTop={3}>
-        Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+        I build AI-assisted engineering infrastructure and autonomous systems. Below is a portfolio of independently led DevAI projects focusing on agentic CI/CD pipelines, LLM workflows, and automated developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
       </Text>
 
       {/* Project highlights */}
