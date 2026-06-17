@@ -115,6 +115,68 @@ async function captureRoute(
   }
 }
 
+async function captureViewport(
+  baseUrl: string,
+  headUrl: string,
+  route: string,
+  slug: string,
+  label: string,
+  suffix: string,
+  viewport: { width: number; height: number },
+  routeVisualDir: string,
+  routeDomDir: string
+): Promise<VisualRouteSummary> {
+  const beforePath = path.join(routeVisualDir, `before${suffix}.png`);
+  const afterPath = path.join(routeVisualDir, `after${suffix}.png`);
+  const diffPath = path.join(routeVisualDir, `diff${suffix}.png`);
+  const beforeHtmlPath = path.join(routeDomDir, `before${suffix}.html`);
+  const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
+
+  console.log(`📸 Capturing ${route} (${label})`);
+  await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
+  await captureRoute(headUrl, route, afterPath, afterHtmlPath, viewport);
+
+  const { before, after, ...diffMetrics } = createVisualDiff(beforePath, afterPath, diffPath);
+  const boundingBox = calculateBoundingBox(before, after);
+
+  let beforeCroppedPath: string | undefined;
+  let afterCroppedPath: string | undefined;
+  let diffCroppedPath: string | undefined;
+
+  if (boundingBox) {
+    const routeCroppedDir = path.join(routeVisualDir, `cropped${suffix}`);
+    ensureDirectory(routeCroppedDir);
+
+    const bcp = path.join(routeCroppedDir, 'before.png');
+    const acp = path.join(routeCroppedDir, 'after.png');
+    const dcp = path.join(routeCroppedDir, 'diff.png');
+
+    console.log(`✂️  Cropping changes for ${route} (${label})`);
+    await Promise.all([
+      cropImage(beforePath, bcp, boundingBox),
+      cropImage(afterPath, acp, boundingBox),
+      cropImage(diffPath, dcp, boundingBox)
+    ]);
+
+    beforeCroppedPath = path.relative(process.cwd(), bcp);
+    afterCroppedPath = path.relative(process.cwd(), acp);
+    diffCroppedPath = path.relative(process.cwd(), dcp);
+  }
+
+  return {
+    route: suffix ? `${route} (${label.toLowerCase()})` : route,
+    slug: `${slug}${suffix}`,
+    beforePath: path.relative(process.cwd(), beforePath),
+    afterPath: path.relative(process.cwd(), afterPath),
+    diffPath: path.relative(process.cwd(), diffPath),
+    beforeCroppedPath,
+    afterCroppedPath,
+    diffCroppedPath,
+    ...diffMetrics,
+    severity: visualSeverity(diffMetrics.differencePercent)
+  };
+}
+
 function createVisualDiff(beforePath: string, afterPath: string, diffPath: string): { diffPixels: number; totalPixels: number; differencePercent: number; before: PNG; after: PNG } {
   const beforeRaw = PNG.sync.read(fs.readFileSync(beforePath));
   const afterRaw = PNG.sync.read(fs.readFileSync(afterPath));
@@ -172,106 +234,12 @@ async function main(): Promise<void> {
       ensureDirectory(routeVisualDir);
       ensureDirectory(routeDomDir);
 
-      const beforePath = path.join(routeVisualDir, 'before.png');
-      const afterPath = path.join(routeVisualDir, 'after.png');
-      const diffPath = path.join(routeVisualDir, 'diff.png');
-      const beforeHtmlPath = path.join(routeDomDir, 'before.html');
-      const afterHtmlPath = path.join(routeDomDir, 'after.html');
+      const desktopSummary = await captureViewport(baseUrl, headUrl, route, slug, 'Desktop', '', { width: 1440, height: 900 }, routeVisualDir, routeDomDir);
+      desktopSummary.slug = `${slug}-desktop`; // Maintain exact slug formatting from before
 
-      console.log(`📸 Capturing ${route} (Desktop)`);
-      await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, { width: 1440, height: 900 });
-      await captureRoute(headUrl, route, afterPath, afterHtmlPath, { width: 1440, height: 900 });
+      const mobileSummary = await captureViewport(baseUrl, headUrl, route, slug, 'Mobile', '-mobile', { width: 375, height: 812 }, routeVisualDir, routeDomDir);
 
-      const { before, after, ...diffMetrics } = createVisualDiff(beforePath, afterPath, diffPath);
-
-      const boundingBox = calculateBoundingBox(before, after);
-      let beforeCroppedPath: string | undefined;
-      let afterCroppedPath: string | undefined;
-      let diffCroppedPath: string | undefined;
-
-      if (boundingBox) {
-        const routeCroppedDir = path.join(routeVisualDir, 'cropped');
-        ensureDirectory(routeCroppedDir);
-
-        const bcp = path.join(routeCroppedDir, 'before.png');
-        const acp = path.join(routeCroppedDir, 'after.png');
-        const dcp = path.join(routeCroppedDir, 'diff.png');
-
-        console.log(`✂️  Cropping changes for ${route} (Desktop)`);
-        await Promise.all([
-          cropImage(beforePath, bcp, boundingBox),
-          cropImage(afterPath, acp, boundingBox),
-          cropImage(diffPath, dcp, boundingBox)
-        ]);
-
-        beforeCroppedPath = path.relative(process.cwd(), bcp);
-        afterCroppedPath = path.relative(process.cwd(), acp);
-        diffCroppedPath = path.relative(process.cwd(), dcp);
-      }
-
-      summaries.push({
-        route,
-        slug: `${slug}-desktop`,
-        beforePath: path.relative(process.cwd(), beforePath),
-        afterPath: path.relative(process.cwd(), afterPath),
-        diffPath: path.relative(process.cwd(), diffPath),
-        beforeCroppedPath,
-        afterCroppedPath,
-        diffCroppedPath,
-        ...diffMetrics,
-        severity: visualSeverity(diffMetrics.differencePercent)
-      });
-
-      // Mobile Layout
-      const beforePathMobile = path.join(routeVisualDir, 'before-mobile.png');
-      const afterPathMobile = path.join(routeVisualDir, 'after-mobile.png');
-      const diffPathMobile = path.join(routeVisualDir, 'diff-mobile.png');
-      const beforeHtmlPathMobile = path.join(routeDomDir, 'before-mobile.html');
-      const afterHtmlPathMobile = path.join(routeDomDir, 'after-mobile.html');
-
-      console.log(`📸 Capturing ${route} (Mobile)`);
-      await captureRoute(baseUrl, route, beforePathMobile, beforeHtmlPathMobile, { width: 375, height: 812 });
-      await captureRoute(headUrl, route, afterPathMobile, afterHtmlPathMobile, { width: 375, height: 812 });
-
-      const { before: beforeMob, after: afterMob, ...diffMetricsMobile } = createVisualDiff(beforePathMobile, afterPathMobile, diffPathMobile);
-
-      const boundingBoxMobile = calculateBoundingBox(beforeMob, afterMob);
-      let beforeCroppedPathMobile: string | undefined;
-      let afterCroppedPathMobile: string | undefined;
-      let diffCroppedPathMobile: string | undefined;
-
-      if (boundingBoxMobile) {
-        const routeCroppedDirMobile = path.join(routeVisualDir, 'cropped-mobile');
-        ensureDirectory(routeCroppedDirMobile);
-
-        const bcpM = path.join(routeCroppedDirMobile, 'before.png');
-        const acpM = path.join(routeCroppedDirMobile, 'after.png');
-        const dcpM = path.join(routeCroppedDirMobile, 'diff.png');
-
-        console.log(`✂️  Cropping changes for ${route} (Mobile)`);
-        await Promise.all([
-          cropImage(beforePathMobile, bcpM, boundingBoxMobile),
-          cropImage(afterPathMobile, acpM, boundingBoxMobile),
-          cropImage(diffPathMobile, dcpM, boundingBoxMobile)
-        ]);
-
-        beforeCroppedPathMobile = path.relative(process.cwd(), bcpM);
-        afterCroppedPathMobile = path.relative(process.cwd(), acpM);
-        diffCroppedPathMobile = path.relative(process.cwd(), dcpM);
-      }
-
-      summaries.push({
-        route: `${route} (mobile)`,
-        slug: `${slug}-mobile`,
-        beforePath: path.relative(process.cwd(), beforePathMobile),
-        afterPath: path.relative(process.cwd(), afterPathMobile),
-        diffPath: path.relative(process.cwd(), diffPathMobile),
-        beforeCroppedPath: beforeCroppedPathMobile,
-        afterCroppedPath: afterCroppedPathMobile,
-        diffCroppedPath: diffCroppedPathMobile,
-        ...diffMetricsMobile,
-        severity: visualSeverity(diffMetricsMobile.differencePercent)
-      });
+      summaries.push(desktopSummary, mobileSummary);
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
