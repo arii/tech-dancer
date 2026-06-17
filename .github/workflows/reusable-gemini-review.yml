@@ -149,6 +149,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        env:
+          SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
@@ -415,6 +419,10 @@ jobs:
       - name: Upload review result
         id: upload_artifact
         uses: actions/upload-artifact@v4
+        env:
+          SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           name: review-result
           path: review_result.json
@@ -477,12 +485,20 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        env:
+          SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           ref: ${{ (github.event.pull_request || github.event.issue.pull_request) && format('refs/pull/{0}/head', inputs.pr_number || github.event.pull_request.number || github.event.issue.number) || github.sha }}
           fetch-depth: 0
 
       - name: Download review result
         uses: actions/download-artifact@v4
+        env:
+          SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           name: review-result
           path: .
@@ -504,6 +520,9 @@ jobs:
     steps:
       - name: Post Guidance Comment
         uses: actions/github-script@v8
+        env:
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           script: |
             const body = '### ℹ️ Gemini Review Disabled\n\n' +
@@ -534,6 +553,10 @@ jobs:
     steps:
       - name: Create skip check
         uses: actions/github-script@v8
+        env:
+          SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -553,6 +576,10 @@ jobs:
 
       - name: Post Skip Comment
         uses: actions/github-script@v8
+        env:
+          SKIP_REASON: ${{ needs.analyze-changes.outputs.skip-reason }}
+          HEAD_SHA: ${{ inputs.head_sha || github.event.pull_request.head.sha }}
+          TRIGGER_EVENT: ${{ inputs.trigger_event }}
         with:
           script: |
             const skipReason = process.env.SKIP_REASON;
