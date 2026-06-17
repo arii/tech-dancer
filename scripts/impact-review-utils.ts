@@ -49,6 +49,42 @@ export const IMPACT_ANALYSIS_PATH = path.join(ARTIFACTS_DIR, 'impact-analysis.js
 export const VISUAL_SUMMARY_PATH = path.join(VISUAL_REVIEW_DIR, 'summary.json');
 export const DOM_SUMMARY_PATH = path.join(DOM_REVIEW_DIR, 'summary.json');
 
+import { IMPACT_CONFIG } from './impact-analysis.config';
+
+/**
+ * Maps page component files to authoritative sitemap URLs.
+ */
+export function mapPageToUrls(filePath: string, sitemapUrls: string[]): string[] {
+  const fileName = path.basename(filePath, path.extname(filePath));
+
+  let routePattern = `/${fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}`;
+  if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
+    routePattern = IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
+  }
+
+  if (routePattern === '/') {
+    return sitemapUrls.includes('/') ? ['/'] : [];
+  }
+
+  // Convert dynamic routes like /blog/:slug to a prefix /blog/
+  const staticPrefixMatch = routePattern.match(/^(\/[a-z0-9-]+)\/:[a-zA-Z0-9_]+$/);
+
+  if (staticPrefixMatch) {
+    const prefix = `${staticPrefixMatch[1]}/`;
+    return sitemapUrls.filter(url => url.startsWith(prefix) && url !== staticPrefixMatch[1]);
+  }
+
+  // Exact match
+  if (sitemapUrls.includes(routePattern)) {
+    return [routePattern];
+  }
+
+  // Fallback for when the exact pattern isn't in sitemap and it's not a known prefix route.
+  // This avoids running impact analysis on nonexistent pages.
+  console.warn(`[Impact Analysis] Warning: Route pattern '${routePattern}' derived from '${filePath}' was not found in the authoritative sitemap.`);
+  return [];
+}
+
 export function ensureDirectory(directory: string): void {
   fs.mkdirSync(directory, { recursive: true });
 }

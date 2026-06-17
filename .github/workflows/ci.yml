@@ -29,6 +29,7 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
@@ -41,7 +42,6 @@ permissions:
   actions: read
   statuses: write
   pull-requests: write
-  packages: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -152,16 +152,20 @@ jobs:
     needs: lint-typecheck
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
       env:
         PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Install system utilities
+        run: |
+          apt-get update
+          apt-get install -y lsof gh
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
       - uses: actions/setup-python@v6
         with:
@@ -218,20 +222,63 @@ jobs:
   impact-analysis:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Start Ollama Server
-        run: ollama serve > ollama_output.log 2>&1 &
+      - name: Install Playwright browser
+        run: pnpm run setup:playwright
       - name: Update Impact Analysis Feedback (Initial)
-        uses: ./.github/actions/update-pr-comment
+        uses: actions/github-script@v8
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          status_line: '⏳ **Impact analysis running...**'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
+            if (branchName === 'main') return;
+
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open'
+            });
+            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
+
+            for (const pr of matchingPRs) {
+              const commentTag = `<!-- impact-analysis-comment-${branchName} -->`;
+              const body = [
+                `🚀 **Impact Analysis Details** (Last updated: ${pstTime} PST)`,
+                '',
+                `⏳ **Impact analysis running...**`,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                '',
+                commentTag
+              ].join('\n');
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: pr.number,
+              });
+
+              const existingComment = comments.find(c => c.body.includes(commentTag));
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
+              } else {
+                await github.rest.issues.createComment({ issue_number: pr.number, owner, repo, body });
+              }
+            }
 
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
@@ -259,42 +306,72 @@ jobs:
             echo "## Deployment Impact Analysis" >> "$GITHUB_STEP_SUMMARY"
             echo "No impact report found." >> "$GITHUB_STEP_SUMMARY"
           fi
-      - name: Read Impact Analysis Body
-        if: always()
-        id: read_impact
-        run: |
-          if [ -f artifacts/deployment-review.md ]; then
-            DELIMITER="EOF_$(openssl rand -hex 8)"
-            {
-              echo "IMPACT_BODY<<$DELIMITER"
-              cat artifacts/deployment-review.md
-              echo ""
-              echo "$DELIMITER"
-            } >> "$GITHUB_ENV"
-          elif [ -f artifacts/impact-analysis/impact.md ]; then
-            DELIMITER="EOF_$(openssl rand -hex 8)"
-            {
-              echo "IMPACT_BODY<<$DELIMITER"
-              cat artifacts/impact-analysis/impact.md
-              echo ""
-              echo "$DELIMITER"
-            } >> "$GITHUB_ENV"
-          else
-            DELIMITER="EOF_$(openssl rand -hex 8)"
-            {
-              echo "IMPACT_BODY<<$DELIMITER"
-              echo 'No impact report found.'
-              echo "$DELIMITER"
-            } >> "$GITHUB_ENV"
-          fi
-
       - name: Update Impact Analysis Feedback (Final Result)
         if: always()
-        uses: ./.github/actions/update-pr-comment
+        uses: actions/github-script@v8
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          status_line: '✅ **Impact Analysis Complete**'
-          impact_body: ${{ env.IMPACT_BODY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
+            if (branchName === 'main') return;
+
+            let impactBody = 'No impact report found.';
+            try {
+              if (fs.existsSync('artifacts/deployment-review.md')) {
+                impactBody = fs.readFileSync('artifacts/deployment-review.md', 'utf8');
+              } else if (fs.existsSync('artifacts/impact-analysis/impact.md')) {
+                impactBody = fs.readFileSync('artifacts/impact-analysis/impact.md', 'utf8');
+              }
+            } catch (err) {
+              console.error(err);
+            }
+
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open'
+            });
+            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
+
+            for (const pr of matchingPRs) {
+              const commentTag = `<!-- impact-analysis-comment-${branchName} -->`;
+              const statusLine = `✅ **Impact Analysis Complete**`;
+
+              const body = [
+                `🚀 **Impact Analysis Details** (Last updated: ${pstTime} PST)`,
+                '',
+                statusLine,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                '',
+                impactBody,
+                '',
+                commentTag
+              ].join('\n');
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: pr.number,
+              });
+
+              const existingComment = comments.find(c => c.body.includes(commentTag));
+
+              if (existingComment) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
+              } else {
+                await github.rest.issues.createComment({ issue_number: pr.number, owner, repo, body });
+              }
+            }
 
       - name: Upload Deployment Review Artifacts
         uses: actions/upload-artifact@v7

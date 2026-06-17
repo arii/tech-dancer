@@ -2,6 +2,8 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { IMPACT_CONFIG } from './impact-analysis.config';
+import { getAllRoutes } from '../src/lib/routes-discovery';
+import { mapPageToUrls } from './impact-review-utils';
 
 // Types for dependency-cruiser output
 interface Dependency {
@@ -104,20 +106,6 @@ function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, st
   return Array.from(affected);
 }
 
-/**
- * Maps page component files to public URLs.
- */
-function mapPageToUrl(filePath: string): string {
-  const fileName = path.basename(filePath, path.extname(filePath));
-
-  if (IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName]) {
-    return IMPACT_CONFIG.PAGE_ROUTE_OVERRIDES[fileName];
-  }
-
-  // Convert PascalCase to kebab-case
-  const route = fileName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  return `/${route}`;
-}
 
 /**
  * Determines the severity of the change.
@@ -211,11 +199,13 @@ async function main() {
 
     let pageUrls: string[];
 
+    const authoritativeSitemapUrls = getAllRoutes().stubs || [];
+
     if (hasGlobalImpact) {
       console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
       pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
     } else {
-      pageUrls = affectedPages.map(mapPageToUrl);
+      pageUrls = affectedPages.flatMap(pageFile => mapPageToUrls(pageFile, authoritativeSitemapUrls));
     }
 
     // Content URLs
@@ -271,12 +261,25 @@ async function main() {
 
     const severityEmoji = severity === 'HIGH' ? '🔴' : severity === 'MEDIUM' ? '🟡' : '🟢';
 
+    // Extract base URL if running in a branch context, otherwise default to boomtick.blog
+    // We check the standard GITHUB variables, or process.env.VITE_APP_URL
+    let baseUrl = process.env.VITE_APP_URL || 'https://boomtick.blog';
+    if (process.env.GITHUB_PAGES_URL) {
+      baseUrl = process.env.GITHUB_PAGES_URL.replace(/\/$/, '');
+    } else if (process.env.GITHUB_REPOSITORY && process.env.GITHUB_REF_NAME) {
+      const repoName = process.env.GITHUB_REPOSITORY.split('/')[1];
+      const owner = process.env.GITHUB_REPOSITORY.split('/')[0];
+      // Note: This matches the typical github pages path, but standard PR builds might have different links.
+      // This ensures we're not hardcoding the production boomtick.blog domain.
+      baseUrl = `https://${owner}.github.io/${repoName}/${process.env.GITHUB_REF_NAME}`;
+    }
+
     const markdown = `## ${severityEmoji} Deployment Impact Analysis
 
 > **Impact Level:** ${severity}
 
 ### 👁️ Visual Review Required
-${allUrls.length > 0 ? allUrls.map(url => `- [${url}](https://boomtick.blog${url})`).join('\n') : '_None detected (code-only change)_'}
+${allUrls.length > 0 ? allUrls.map(url => `- [${url}](${baseUrl}${url})`).join('\n') : '_None detected (code-only change)_'}
 
 <details>
 <summary><b>📝 Changed Files (${changedFiles.length})</b></summary>

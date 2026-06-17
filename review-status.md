@@ -1,6 +1,6 @@
 # PR Review Status (Open PRs)
 
-## PR #2440: feat: add initial ollama visual review agent scripts
+## PR #2440: [SUPERSEDED] feat: add initial ollama visual review agent scripts
 - [x] Review completed
 - [x] Desktop UX review completed
 - [x] Mobile UX review completed
@@ -18,7 +18,7 @@
 - [x] CI status checked
 - [x] Feedback provided
 - [x] Merge readiness assessment
-- Notes on blockers, risks, and required fixes: CI is failing. Good code quality. Needs CI fix to merge.
+- Notes on blockers, risks, and required fixes: CI is failing due to vite configs missing unit tests. Fixed. Ready to merge.
 
 ## PR #2401: test(e2e): mask dynamic content in Playwright visual snapshots
 - [x] Review completed
@@ -41,7 +41,7 @@
 - Notes on blockers, risks, and required fixes: UI components adhere to layout primitives. CI is green. Ready to merge.
 
 
-## PR #2439: refactor: implement visualReviewOrchestrator for Gemini and GitHub Models
+## PR #2439: refactor: implement visualReviewOrchestrator for Gemini and GitHub Models (Supersedes #2440)
 - [x] Review completed
 - [x] Desktop UX review completed
 - [x] Mobile UX review completed
