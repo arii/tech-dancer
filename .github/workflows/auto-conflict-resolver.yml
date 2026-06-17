@@ -58,7 +58,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          PR_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GH_REPO}/pulls/$PR_NUMBER")
+          PR_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }}")
 
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 
@@ -92,7 +92,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -116,7 +116,7 @@ jobs:
             exit 0
           fi
 
-          git remote add fork "https://github.com/${HEAD_REPO:-$GITHUB_REPOSITORY}.git"
+          git remote add fork "https://github.com/${{ env.HEAD_REPO || github.repository }}.git"
 
           if ! git ls-remote --exit-code --heads fork "$SOURCE" > /dev/null 2>&1; then
             echo "::warning::Source branch $SOURCE missing in fork. Skipping resolver."

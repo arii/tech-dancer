@@ -53,7 +53,6 @@
     "impact:dom-diff": "tsx scripts/impact-dom-diff.ts"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-query": "^5.99.2",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -89,8 +88,7 @@
     "unist-util-visit": "^5.1.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
-    "yaml": "^2.9.0",
-    "zod": "^3.24.2"
+    "yaml": "^2.9.0"
   },
   "engines": {
     "node": "22.x",
