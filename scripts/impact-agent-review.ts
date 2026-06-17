@@ -27,6 +27,8 @@ interface RouteReview {
   severity: 'LOW' | 'MEDIUM' | 'HIGH';
   differencePercent: number;
   feedback: string;
+  tokens: number;
+  cost: number;
 }
 
 // ── Config ─────────────────────────────────────────────────────────────────
@@ -47,8 +49,9 @@ YOUR RULES:
 - Use the DOM Text Diff as the ABSOLUTE GROUND TRUTH for any text changes. Do not guess or attempt to read blurry text from the screenshots.
 - Evaluate the changes (✅ INTENTIONAL or ❌ BUG/REGRESSION).
 - Focus on layout shifts, broken spacing, contrast issues, or clipping.
+- If the change is intentional, evaluate its visual quality and provide 1-2 actionable recommendations for further design/UI improvement (e.g., 'Consider adding 4px more padding to the new element').
 
-Format your response as a concise, bulleted list. Be direct and actionable.`;
+Format your response as a concise, bulleted list. Be direct and actionable. Make sure to include "Recommendations for Improvement" if applicable.`;
 
 // ── Gemini client ──────────────────────────────────────────────────────────
 
@@ -111,6 +114,16 @@ async function reviewRoute(
   const message = new HumanMessage({ content: baseContent });
   const response = await model.invoke([message]);
 
+  const usageMetadata = response.usage_metadata;
+  const inputTokens = usageMetadata?.input_tokens ?? 0;
+  const outputTokens = usageMetadata?.output_tokens ?? 0;
+  const totalTokens = usageMetadata?.total_tokens ?? 0;
+
+  // Gemini 3.5 Flash pricing (approx)
+  // Input: $0.075 / 1 million tokens
+  // Output: $0.30 / 1 million tokens
+  const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
+
   return {
     route: summary.route,
     severity: summary.severity,
@@ -118,6 +131,8 @@ async function reviewRoute(
     feedback: typeof response.content === 'string'
       ? response.content
       : JSON.stringify(response.content),
+    tokens: totalTokens,
+    cost: cost,
   };
 }
 
@@ -133,6 +148,9 @@ function generateMarkdownReport(reviews: RouteReview[]): string {
   const highCount = reviews.filter(r => r.severity === 'HIGH').length;
   const medCount = reviews.filter(r => r.severity === 'MEDIUM').length;
   const lowCount = reviews.filter(r => r.severity === 'LOW').length;
+
+  const totalCost = reviews.reduce((acc, r) => acc + r.cost, 0);
+  const totalTokens = reviews.reduce((acc, r) => acc + r.tokens, 0);
 
   const prNumber = process.env.PR_NUMBER;
   const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
@@ -151,6 +169,7 @@ ${r.feedback}
 
 **Summary:** 🔴 ${highCount} high · 🟡 ${medCount} medium · 🟢 ${lowCount} low
 **Reviewing:** ${prLink}
+**Cost:** ~$${totalCost.toFixed(5)} (${totalTokens} tokens)
 
 ${sections}
 
@@ -234,6 +253,12 @@ async function postPRComment(body: string): Promise<void> {
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
+  if (!process.env.GEMINI_API_KEY) {
+    console.warn('⚠️  Skipping agent review — GEMINI_API_KEY not set.');
+    fs.writeFileSync(AGENT_REPORT_PATH, '## 👁️ Visual Review Agent\n\nSkipped: No GEMINI_API_KEY provided.\n');
+    return;
+  }
+
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
     throw new Error('Missing visual summary. Run pnpm impact:visual-diff first.');
   }
@@ -241,7 +266,17 @@ async function main(): Promise<void> {
   const summary: VisualSummary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8'));
 
   // Only review routes with actual visual changes
-  const routesToReview = summary.routes.filter(r => r.differencePercent > 0);
+  // Limit to top 5 routes by difference percentage to manage costs
+  const MAX_ROUTES = 5;
+  let routesToReview = summary.routes
+    .filter(r => r.differencePercent > 0)
+    .sort((a, b) => b.differencePercent - a.differencePercent);
+
+  const totalRoutes = routesToReview.length;
+  if (routesToReview.length > MAX_ROUTES) {
+    console.log(`⚠️  Too many routes changed (${totalRoutes}). Limiting review to the top ${MAX_ROUTES}.`);
+    routesToReview = routesToReview.slice(0, MAX_ROUTES);
+  }
 
   if (routesToReview.length === 0) {
     console.log('✅ No visual changes detected — skipping agent review.');
