@@ -17,6 +17,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     concurrency:
       # Build jobs for the same branch can be cancelled if a newer push arrives
       # to save CI minutes, as only the latest build for a branch is relevant.
@@ -24,9 +26,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           lfs: true
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
@@ -89,13 +93,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     concurrency:
       # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
       group: deploy-${{ github.ref }}
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8

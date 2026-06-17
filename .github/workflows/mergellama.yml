@@ -32,11 +32,14 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
+
 
       - name: Find and Resolve Conflicts
         run: |

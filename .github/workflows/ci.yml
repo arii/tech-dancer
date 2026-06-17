@@ -63,9 +63,11 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
@@ -91,11 +93,6 @@ jobs:
 
       - name: Run Unit Tests - Vitest
         run: pnpm test
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
 
       - name: Run CLI Unit Tests
         run: |
@@ -125,20 +122,18 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
 
       - name: UI Anti-Pattern Audit - Gate
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 -m pip install PyGithub click
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
@@ -167,16 +162,15 @@ jobs:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
-      - name: Configure Git Safe Directory
+      - name: Fix Git Workspace
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
 
       - name: Build App
         env:
@@ -193,7 +187,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 -m pip install PyGithub click
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
@@ -232,12 +225,12 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Deployment Impact Analysis

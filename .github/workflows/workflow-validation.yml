@@ -25,10 +25,14 @@ jobs:
   validate-workflows:
     name: Validate all workflow files
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Download actionlint
         id: get_actionlint

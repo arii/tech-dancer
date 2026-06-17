@@ -33,6 +33,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           ref: main
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -63,6 +65,8 @@ jobs:
           fetch-depth: 1
           path: trusted-tools-temp
           ref: main
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"

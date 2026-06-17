@@ -14,14 +14,13 @@ jobs:
   create-pr:
     if: startsWith(github.event.issue.title, 'Draft') && contains(github.event.issue.title, ':') && (github.event.issue.author_association == 'OWNER' || github.event.issue.author_association == 'MEMBER' || github.event.issue.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.x'
+        uses: actions/checkout@v4
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Parse Issue and Generate Markdown File
         env:

@@ -26,6 +26,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fix Git Workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |
