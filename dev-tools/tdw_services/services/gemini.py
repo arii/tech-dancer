@@ -6,8 +6,8 @@ import re
 import requests
 from typing import Optional, Dict, Any, List
 from utils import (
-    call_ollama,
-    is_ollama_available,
+    call_ai,
+    is_ai_available,
     clean_llm_output,
     get_ollama_model,
     get_ollama_review_model,
@@ -77,11 +77,11 @@ class LocalAIClient:
             except Exception:
                 pass
 
-    def is_ollama_available(self) -> bool:
-        return is_ollama_available()
+    def is_ai_available(self) -> bool:
+        return is_ai_available()
 
-    def call_ollama(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ollama(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
+    def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
+        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:
@@ -113,11 +113,11 @@ class LocalAIClient:
             return None
 
     def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
-        if self.is_ollama_available():
+        if self.is_ai_available():
             # For JSON schema, we just append instruction for Ollama
             if schema:
                 prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
-            res = self.call_ollama(prompt, model=model, schema=schema)
+            res = self.call_ai(prompt, model=model, schema=schema)
             if res:
                 return res
 
@@ -181,7 +181,7 @@ class LocalAIClient:
                    the code-reviewer model.  Skips images, lock files, generated
                    files, and build artefacts.
           Phase B: synthesise all per-chunk results into a final PR verdict using
-                   the lighter llama3.2 model.
+                   the lighter gpt-4o model.
         Results are cached per file-chunk so interrupted runs resume cheaply.
         """
         import hashlib
@@ -200,11 +200,11 @@ class LocalAIClient:
         failing_names = ", ".join(c.get('name', '?') for c in ci_failures) if ci_failures else "none"
 
         # ── Diagnostics header ────────────────────────────────────────────────
-        ollama_ok = self.is_ollama_available()
+        ollama_ok = self.is_ai_available()
         print(f"\n{'='*60}")
         print(f"🔍 PR #{pr_num} – Piecemeal Review Diagnostics")
         print(f"{'='*60}")
-        print(f"  Ollama available : {'✅ YES' if ollama_ok else '❌ NO'}")
+        print(f"  AI available : {'✅ YES' if ollama_ok else '❌ NO'}")
         print(f"  Review model     : {_REVIEW_MODEL}")
         print(f"  Synthesis model  : {_SYNTHESIS_MODEL}")
         print(f"  Gemini fallback  : {'enabled' if self.use_gemini_fallback else 'DISABLED'}")
@@ -257,7 +257,7 @@ class LocalAIClient:
             prompt = self._build_chunk_prompt(chunk, pr_title, checks_summary)
             raw = None
             try:
-                raw = call_ollama(prompt, model=_REVIEW_MODEL, schema=_CHUNK_SCHEMA, max_retries=2)
+                raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_CHUNK_SCHEMA, max_retries=2)
             except Exception as e:
                 print(f" ❌ ERROR: {e}", flush=True)
 
@@ -404,7 +404,7 @@ class LocalAIClient:
         has_ci_failures: bool,
         ci_failures: List[Dict],
     ) -> Dict:
-        """Call the lighter llama3.2 model to produce the final verdict from structured per-chunk data."""
+        """Call the lighter gpt-4o model to produce the final verdict from structured per-chunk data."""
         total_issues = sum(len(fr.get('issues', [])) for fr in file_reviews)
         blocking_files = [fr['file'] for fr in file_reviews if fr.get('verdict') == 'blocking']
         error_files    = [fr['file'] for fr in file_reviews if fr.get('verdict') in ('error', 'parse_error')]
@@ -444,7 +444,7 @@ class LocalAIClient:
 
         raw = None
         try:
-            raw = call_ollama(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
+            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
         except Exception as e:
             print(f"\n❌ Synthesis call failed: {e}", file=sys.stderr)
 

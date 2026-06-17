@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 """
-ollama_vision_audit.py - Vision-based regression audit via local Ollama.
+ollama_vision_audit.py - Vision-based regression audit via AI API.
 """
 
 import os
 import json
 import base64
 import argparse
-import urllib.request
-import urllib.parse
 from typing import Optional, List, Dict
-from utils import get_ollama_url, run_command # dev-tools/utils.py
 
-VISION_MODEL = os.environ.get("OLLAMA_VISION_MODEL", "moondream")
+VISION_MODEL = os.environ.get("OLLAMA_VISION_MODEL", "gpt-4o")
 
-def call_ollama_vision(prompt: str, paths: List[str]) -> Optional[str]:
+def call_ai(prompt: str, paths: List[str]) -> Optional[str]:
     images = []
     for p in paths:
         if os.path.exists(p):
@@ -23,13 +20,36 @@ def call_ollama_vision(prompt: str, paths: List[str]) -> Optional[str]:
 
     if not images: return None
 
-    url = urllib.parse.urljoin(get_ollama_url() + "/", "api/generate")
-    data = json.dumps({"model": VISION_MODEL, "prompt": prompt, "images": images, "stream": False}).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    try:
+        from langchain_openai import ChatOpenAI
+        from langchain_core.messages import HumanMessage
+    except ImportError:
+        print("langchain_openai or langchain_core is not installed.")
+        return None
+
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
+    if not token:
+        print("No GITHUB_TOKEN or GH_TOKEN found.")
+        return None
+
+    llm = ChatOpenAI(
+        base_url="https://models.inference.ai.azure.com",
+        api_key=token,
+        model=VISION_MODEL,
+        temperature=0.7,
+        max_tokens=2048,
+    )
+
+    message_content = [{"type": "text", "text": prompt}]
+    for img in images:
+        message_content.append({
+            "type": "image_url",
+            "image_url": {"url": f"data:image/jpeg;base64,{img}"}
+        })
 
     try:
-        with urllib.request.urlopen(req, timeout=120) as res:
-            return json.loads(res.read().decode("utf-8")).get("response")
+        response = llm.invoke([HumanMessage(content=message_content)])
+        return response.content
     except Exception as e:
         print(f"❌ Vision call failed: {e}")
         return None
@@ -57,7 +77,6 @@ def main():
     routes = data.get('routes', [])
     if not routes: return
 
-    run_command(["ollama", "pull", VISION_MODEL], check=False)
     results = {}
 
     for s in routes:
@@ -65,7 +84,7 @@ def main():
         if not (before and after): continue
 
         prompt = f"Analyze visual changes for {s['route']}. Describe what changed between BEFORE and AFTER. Identify bugs vs improvements. Be concise."
-        res = call_ollama_vision(prompt, [os.path.join(root, before), os.path.join(root, after)])
+        res = call_ai(prompt, [os.path.join(root, before), os.path.join(root, after)])
         if res:
             results[s['route']] = res
             print(f"\n--- {s['route']} ---\n{res}\n")
