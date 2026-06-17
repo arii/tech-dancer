@@ -1,5 +1,8 @@
 FROM node:22.22.2-bookworm
 
+# Links the image to your repository
+LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
+
 USER root
 
 # Create pwuser to match expected devcontainer environment
