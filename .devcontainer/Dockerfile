@@ -1,4 +1,4 @@
-FROM node:22.22.2-bookworm
+FROM mcr.microsoft.com/playwright:v1.49.0-noble
 
 # Links the image to your repository
 LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
@@ -6,11 +6,11 @@ LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
 USER root
 
 # Create pwuser to match expected devcontainer environment
-RUN useradd -m pwuser && chsh -s /bin/bash pwuser
+# Playwright image already has a pwuser, we might just need to configure it
+RUN useradd -m jules || true
 
 ENV PNPM_VERSION=10.28.2
-ENV PLAYWRIGHT_DOWNLOAD_HOST=https://playwright.azureedge.net
-ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+ENV NODE_VERSION=22
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -24,9 +24,23 @@ RUN apt-get update \
     python3-setuptools \
     python3-wheel \
     build-essential \
+    zstd \
   && rm -rf /var/lib/apt/lists/*
 
-RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+# Install node version 22
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | /bin/bash - \
+  && apt-get install -y nodejs
+
+RUN npm install -g pnpm@${PNPM_VERSION}
+
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | /bin/bash
+
+# Bake Ollama model
+RUN ollama serve > ollama_output.log 2>&1 & \
+    sleep 5 \
+    && ollama pull llava:latest \
+    && pkill ollama
 
 RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 
