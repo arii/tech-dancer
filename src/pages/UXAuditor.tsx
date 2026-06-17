@@ -273,7 +273,8 @@ function SettingInput({
   type = "text",
   placeholder,
   autoComplete = "off",
-  actionNode
+  actionNode,
+  ariaLabel
 }: {
   id: string;
   label?: string;
@@ -283,6 +284,7 @@ function SettingInput({
   placeholder?: string;
   autoComplete?: string;
   actionNode?: React.ReactNode;
+  ariaLabel?: string;
 }) {
   return (
     <Stack
@@ -306,7 +308,7 @@ function SettingInput({
         value={value}
         title={type === "url" ? value : undefined}
         onChange={onChange}
-        onFocus={(e: ChangeEvent<HTMLInputElement>) => e.target.select()}
+        onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
         className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm truncate"
         flex={1}
         minWidth={0}
@@ -314,7 +316,7 @@ function SettingInput({
         paddingY={2}
         radius="lg"
         placeholder={placeholder}
-        aria-label={label || id}
+        aria-label={ariaLabel || label || id}
       />
       {actionNode}
     </Stack>
@@ -371,6 +373,7 @@ export default function UXAuditor() {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://..."
+            ariaLabel="URL to audit"
             actionNode={
               <Box
                 as="button"
