@@ -122,7 +122,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit - Gate

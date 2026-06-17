@@ -27,6 +27,10 @@ jobs:
         with:
           lfs: true
 
+      - name: Install Python Dependencies
+        run: |
+          python3 -m pip install -r etl/requirements.txt
+
       - name: Run Pytest - Data Validation
         run: |
           PYTHONPATH=. pytest etl/tests/
