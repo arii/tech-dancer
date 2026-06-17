@@ -17,6 +17,7 @@ jobs:
   repair:
     if: github.repository == 'disabled'
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
       OLLAMA_MODEL: qwen2.5-coder:1.5b
@@ -25,12 +26,21 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Main (Trusted)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: main
+
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Fetch and Apply PR Patch
         env:
@@ -57,6 +67,9 @@ jobs:
             rm pr.patch
           fi
 
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Fetch Trusted Dev-Tools
         uses: actions/checkout@v6
         with:
@@ -64,16 +77,18 @@ jobs:
           path: trusted-tools-temp
           ref: main
 
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Restore Trusted Dev-Tools
         run: |
           rm -rf dev-tools
           cp -r trusted-tools-temp/dev-tools dev-tools
           rm -rf trusted-tools-temp
           chmod +x dev-tools/low-compute-review.sh
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
-
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
