@@ -14,6 +14,8 @@ jobs:
       issues: write
       contents: read
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - uses: actions/checkout@v4
       - name: Validate Issue

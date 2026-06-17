@@ -63,16 +63,9 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     requests==2.33.1 \
     tqdm==4.67.3
 
-# ── Entrypoint ─────────────────────────────────────────────────────────────────
-COPY .devcontainer/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
 # ── Workspace ──────────────────────────────────────────────────────────────────
 RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 
 USER pwuser
 
 WORKDIR /workspace
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["bash"]

@@ -47,14 +47,11 @@ jobs:
   merge_and_resolve:
 
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
     permissions:
       contents: write
       pull-requests: write
       actions: write
     steps:
-
       - name: Resolve PR details
         if: env.PR_NUMBER && env.PR_NUMBER != '0'
         env:
@@ -99,6 +96,9 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |

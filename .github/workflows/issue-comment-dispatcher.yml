@@ -26,6 +26,10 @@ jobs:
             echo "update_snapshots=true" >> "$GITHUB_OUTPUT"
           fi
 
+          if [[ "$COMMENT_BODY" == *"/ollama-fix"* ]] || [[ "$COMMENT_BODY" == *"/ollama-review"* ]]; then
+            echo "ollama_chatops=true" >> "$GITHUB_OUTPUT"
+          fi
+
           if [[ "$COMMENT_BODY" == *"@jules-fix-ci"* ]]; then
              if [[ "${{ github.event.comment.author_association }}" == 'OWNER' ]] || [[ "${{ github.event.comment.author_association }}" == 'MEMBER' ]] || [[ "${{ github.event.comment.author_association }}" == 'COLLABORATOR' ]]; then
                echo "jules_fix_ci=true" >> "$GITHUB_OUTPUT"
@@ -38,7 +42,7 @@ jobs:
           fetch-depth: 1
 
       - name: Resolve Branch Details
-        if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.jules_fix_ci == 'true'
+        if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ollama_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -65,6 +69,15 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           gh workflow run update-snapshots.yml --ref "$HEAD_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+
+      - name: Trigger Ollama ChatOps
+        if: steps.check.outputs.ollama_chatops == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh workflow run ollama-chatops.yml --ref "$HEAD_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
 
       - name: Trigger Jules Fix CI
         if: steps.check.outputs.jules_fix_ci == 'true'

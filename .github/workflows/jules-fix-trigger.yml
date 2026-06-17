@@ -23,12 +23,18 @@ jobs:
   trigger-jules:
 
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          pip install PyGithub requests click
 
       - name: Pre-check Jules Credentials
         run: |

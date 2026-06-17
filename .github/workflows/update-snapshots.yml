@@ -22,7 +22,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/arii/tech-dancer:latest
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
       env:
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
@@ -31,7 +31,8 @@ jobs:
       pull-requests: write
       actions: write
     steps:
-
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Create initial comment
         id: initial-comment
         uses: peter-evans/create-or-update-comment@v5
@@ -60,6 +61,9 @@ jobs:
           repository: ${{ env.HEAD_REPO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |
