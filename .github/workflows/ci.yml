@@ -222,14 +222,15 @@ jobs:
   impact-analysis:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer-reviewer:latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - name: Install Playwright browser
-        run: pnpm run setup:playwright
+      - name: Start Ollama Server
+        run: ollama serve > ollama_output.log 2>&1 &
       - name: Update Impact Analysis Feedback (Initial)
         uses: actions/github-script@v8
         with:
