@@ -17,7 +17,7 @@ describe('check-visual-changes script', () => {
 
   it('should return 0 if summary file does not exist', async () => {
     await import('../../../scripts/check-visual-changes');
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 100));
     expect(process.stdout.write).toHaveBeenCalledWith('changed_routes=0\n');
   });
 
@@ -34,7 +34,7 @@ describe('check-visual-changes script', () => {
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify(mockSummary));
 
     await import('../../../scripts/check-visual-changes');
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 100));
     expect(process.stdout.write).toHaveBeenCalledWith('changed_routes=2\n');
   });
 
@@ -43,7 +43,7 @@ describe('check-visual-changes script', () => {
     fs.writeFileSync(VISUAL_SUMMARY_PATH, 'invalid json');
 
     await import('../../../scripts/check-visual-changes');
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 100));
     expect(process.stdout.write).toHaveBeenCalledWith('changed_routes=0\n');
     expect(console.error).toHaveBeenCalled();
   });
