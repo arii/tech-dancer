@@ -12,13 +12,13 @@ export function useBlog() {
     queryFn: getPosts,
     initialData: getPosts,
   });
-  const [activeCategory] = useSearchParam('category', 'All');
+  const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
   const [searchTerm, setSearchTerm] = useSearchParam('search');
   const [viewParam, setViewParam] = useSearchParam('view', 'card');
 
   const view = viewParam as ViewMode;
   const setView = (v: ViewMode) => setViewParam(v);
-  const setCategory = (c: string) => setCategoryParam(c);
+  const setCategory = (c: string) => setActiveCategory(c);
 
   const categories = useMemo(() => {
     return ['All', 'Guides', 'Gear', 'Events', 'Travel', 'Lifestyle', 'Dance'];
@@ -46,6 +46,7 @@ export function useBlog() {
     posts: filteredPosts,
     categories,
     activeCategory,
+    setCategory,
     view,
     setView,
     searchTerm,
