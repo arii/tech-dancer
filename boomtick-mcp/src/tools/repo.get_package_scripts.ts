@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { runCommand } from "../lib/shell.js";
 import fs from "fs/promises";
 import path from "path";
 import { config } from "../config.js";

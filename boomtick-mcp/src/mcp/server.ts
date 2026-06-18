@@ -16,8 +16,8 @@ import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_d
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
 import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
-import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
-import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
+import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
+import { getRouteMapHandler } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
 import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
@@ -115,7 +115,7 @@ export class BoomtickMCPServer {
             },
           ],
         };
-      } catch (e) {
+      } catch {
         throw new Error(`Prompt not found: ${name}`);
       }
     });

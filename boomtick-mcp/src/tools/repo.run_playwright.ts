@@ -26,7 +26,7 @@ export async function runPlaywrightHandler(args: z.infer<typeof RunPlaywrightInp
         }))
       );
     }
-  } catch (e) {}
+  } catch { }
 
   return {
     success: results.exitCode === 0,

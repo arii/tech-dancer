@@ -24,18 +24,15 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Git Safe Directory
+      - name: Environment Setup
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.0
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: main
-
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Fetch and Apply PR Patch
         env:
@@ -58,14 +55,11 @@ jobs:
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.0
         with:
           fetch-depth: 1
           path: trusted-tools-temp
           ref: main
-
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Restore Trusted Dev-Tools
         run: |
@@ -78,6 +72,8 @@ jobs:
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
+          python3 --version
+          python3 -c "import github; import click; print('Python dependencies verified')"
 
       - name: Install dependencies (Safe)
         run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
@@ -89,8 +85,9 @@ jobs:
 
       - name: Validate CLI
         run: |
-          python3 dev-tools/td_cli.py gh --help
-          python3 dev-tools/td_cli.py ai --help
+          set -x
+          python3 dev-tools/td_cli.py doctor
+          python3 dev-tools/td_cli.py gh status-board
 
       - name: Resolve PR Number
         env:

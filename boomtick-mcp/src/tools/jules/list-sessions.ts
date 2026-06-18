@@ -3,7 +3,7 @@ import { JulesSession, JulesStatus } from "../types.js";
 
 export const ListJulesSessionsInputSchema = z.object({});
 
-export async function listJulesSessionsHandler(input: z.infer<typeof ListJulesSessionsInputSchema>): Promise<JulesSession[]> {
+export async function listJulesSessionsHandler(_input: z.infer<typeof ListJulesSessionsInputSchema>): Promise<JulesSession[]> {
   const apiKey = process.env.JULES_API_KEY;
   if (!apiKey) {
     throw new Error("JULES_API_KEY environment variable is not set.");

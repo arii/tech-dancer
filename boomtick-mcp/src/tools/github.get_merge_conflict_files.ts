@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
 import { createWorktree, removeWorktree } from "../lib/git.js";
-import { config } from "../config.js";
 
 export const GetMergeConflictFilesInputSchema = z.object({
   prNumber: z.number(),
