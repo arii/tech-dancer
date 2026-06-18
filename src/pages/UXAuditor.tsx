@@ -165,9 +165,15 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   );
 }
 
-function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
+interface ViewportAnalysisCardProps {
+  vp: typeof VIEWPORTS[0];
+  data: ViewportAnalysis;
+  activeReportUrl?: string;
+}
+
+function ViewportAnalysisCard({ vp, data, activeReportUrl }: ViewportAnalysisCardProps) {
   return (
-    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
+    <Box className={cardVariants({ overflow: "hidden" })} minWidth="0">
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -218,7 +224,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
               </Box>
               <Stack gap={4}>
                 {data.improvements?.map((imp: Improvement, idx: number) => (
-                  <Box key={`${vp.name}-${imp.element}-${idx}`} padding={4} className={cardVariants({ interactive: true })}>
+                  <Box key={`${vp.name}-${imp.element}-${imp.severity}-${idx}`} padding={4} className={cardVariants({ interactive: true })}>
                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                       <Stack direction="row" align="center" gap={2}>
                         <Box
@@ -241,9 +247,9 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                     </Text>
                     {imp.suggestion && imp.suggestion.trim() !== '' && (
                       <Box surface="muted" padding={3} radius="lg" border={true}>
-                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
+                        <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth="0">
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth={0} overflow="hidden">
+                          <Box flex={1} minWidth="0" overflow="hidden">
                             <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
@@ -338,7 +344,7 @@ export default function UXAuditor() {
               surface="bg"
               className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
               flex={1}
-              minWidth={0}
+              minWidth="0"
               paddingX={4}
               paddingY={2}
               radius="lg"
@@ -445,11 +451,11 @@ export default function UXAuditor() {
 
       <Grid cols={{ base: 1, lg: 4 }} gap={8}>
         {/* Reports List */}
-        <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
+        <Stack gap={4} span={{ lg: 1 }} minWidth="0">
           <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
             Audit History
           </Text>
-          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth={0}>
+          <Stack className={`${cardVariants({ overflow: "hidden" })} divide-y divide-line`} minWidth="0">
             {reports.length === 0 && (
               <EmptyState
                 compact
@@ -494,7 +500,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full" style={{ gridColumn: 'span 3 / span 3' }} // impeccable-ignore - Override browser grid collapse issues identified in audit
+        <Stack gap={6} span={{ lg: 3 }} minWidth="0" width="full" style={{ gridColumn: 'span 3 / span 3' }} // impeccable-ignore - Override browser grid collapse issues identified in audit
         >
           {activeReport ? (
             <>
