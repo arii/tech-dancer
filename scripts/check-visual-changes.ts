@@ -1,9 +1,5 @@
 import fs from 'fs';
-import { VISUAL_SUMMARY_PATH, type VisualRouteSummary } from './impact-review-utils';
-
-interface VisualSummary {
-  routes: VisualRouteSummary[];
-}
+import { VISUAL_SUMMARY_PATH, type VisualSummary } from './impact-review-utils';
 
 function getChangedRoutesCount(): number {
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
