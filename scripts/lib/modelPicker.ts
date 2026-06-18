@@ -48,7 +48,7 @@ export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o
   if (!models || models.length === 0) return fallback;
 
   const suitableModels = models.filter(m => {
-    if (needsVision && !m.supported_input_modalities.includes('image')) return false;
+    if (needsVision && !m.supported_input_modalities?.includes('image')) return false;
     return true;
   });
 
@@ -63,10 +63,14 @@ export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o
 
   for (const preferred of priorities) {
     const found = poolToPickFrom.find(m => m.id === preferred || m.id.includes(preferred));
-    if (found) return found.id;
+    if (found) {
+        return found.id;
+    }
   }
 
-  if (poolToPickFrom.length > 0) return poolToPickFrom[0].id;
+  if (poolToPickFrom.length > 0 && poolToPickFrom[0]) {
+     return poolToPickFrom[0].id;
+  }
 
   return fallback;
 }
