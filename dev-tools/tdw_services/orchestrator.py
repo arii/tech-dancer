@@ -29,6 +29,19 @@ from scope_check import verify_pr_scope, get_project_config
 
 PROJECT_CONFIG = get_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
+SPEC_SECTIONS: List[str] = [
+    "Problem Statement",
+    "Goal",
+    "Non-Goals",
+    "Proposed Approach",
+    "Alternatives Considered",
+    "Architectural Impact",
+    "Scope",
+    "UNDERSTAND THE ISSUE",
+    "DETERMINE APPROACH",
+    "SPECIFY SCOPE",
+    "DEFINITION OF DONE"
+]
 
 class Orchestrator:
     def __init__(self):
@@ -304,31 +317,44 @@ class Orchestrator:
         if val is not None and str(val).strip() != "": return int(val)
         return fallback_value
 
-    def get_audit_results(self, content: str = None, targets: list[str] = None):
+    def get_audit_results(self, content: Optional[str] = None, targets: Optional[List[str]] = None) -> Dict[str, Any]:
         cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
-        if targets: cmd.extend(targets)
-        elif content is not None: cmd.append("-")
+        if targets:
+            cmd.extend(targets)
+        elif content is not None:
+            cmd.append("-")
         res = run_command(cmd, check=False, input_str=content)
-        try: return json.loads(res.stdout)
-        except json.JSONDecodeError: return {"violations": {}, "config": {}}
+        try:
+            return json.loads(res.stdout)
+        except json.JSONDecodeError:
+            return {"violations": {}, "config": {}}
 
-    def extract_code_blocks(self, text: str) -> list[str]:
+    def extract_code_blocks(self, text: str) -> List[str]:
         return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
 
-    def get_pr_files(self, pr) -> set[str]:
+    def get_pr_files(self, pr: Any) -> set[str]:
         return {f.filename for f in pr.get_files()}
 
-    def detect_conflicts(self, target_pr_num=None):
+    def detect_conflicts(self, target_pr_num: Optional[int] = None) -> Dict[Tuple[int, ...], List[str]]:
         repo = get_github_client().get_repo(get_repo_name())
         open_prs = list(repo.get_pulls(state='open'))
         file_to_prs = defaultdict(list)
         for pr in open_prs:
-            for f in self.get_pr_files(pr): file_to_prs[f].append(pr.number)
+            for f in self.get_pr_files(pr):
+                file_to_prs[f].append(pr.number)
         conflicts = defaultdict(list)
         for filename, prs in file_to_prs.items():
             if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
                 conflicts[tuple(sorted(prs))].append(filename)
         return conflicts
+
+    def _has_spec_section(self, section_name: str, text: str) -> bool:
+        """Robustly checks for the presence of a markdown section or numbered list item."""
+        # Matches markdown headers (# Section Name) or numbered items (1. SECTION NAME)
+        header_pattern = rf"^\s*#+\s*{re.escape(section_name)}\b"
+        list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
+        return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
+                    re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
@@ -378,28 +404,7 @@ class Orchestrator:
                 warnings.append("Mentions Tailwind but not layout primitives.")
 
             # Spec-Driven Issue Validation
-            spec_sections: List[str] = [
-                "Problem Statement",
-                "Goal",
-                "Non-Goals",
-                "Proposed Approach",
-                "Alternatives Considered",
-                "Architectural Impact",
-                "Scope",
-                "UNDERSTAND THE ISSUE",
-                "DETERMINE APPROACH",
-                "SPECIFY SCOPE",
-                "DEFINITION OF DONE"
-            ]
-
-            def has_section(section_name: str, text: str) -> bool:
-                # Matches markdown headers (# Section Name) or numbered items (1. SECTION NAME)
-                header_pattern = rf"^\s*#+\s*{re.escape(section_name)}\b"
-                list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
-                return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
-                            re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
-
-            missing_spec_sections: List[str] = [s for s in spec_sections if not has_section(s, body)]
+            missing_spec_sections: List[str] = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
             if missing_spec_sections:
                 findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
@@ -414,7 +419,7 @@ class Orchestrator:
 
         return {"status": "success" if total_findings == 0 else "error", "issues": results, "total_findings": total_findings}
 
-    def handle_detect_conflicts(self, pr_num=None):
+    def handle_detect_conflicts(self, pr_num: Optional[int] = None) -> List[Dict[str, Any]]:
         conflicts = self.detect_conflicts(pr_num)
         formatted = []
         for pr_pair, files in conflicts.items():
