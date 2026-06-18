@@ -23,7 +23,9 @@ export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'war
 
 function createModel(): ChatOpenAI {
   const apiKey = process.env.GITHUB_TOKEN;
-  if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
+  if (!apiKey) {
+    throw new Error('Review failed: GITHUB_TOKEN is not set. Ensure the secret is available in your workflow environment.');
+  }
 
   return new ChatOpenAI({
     modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini',

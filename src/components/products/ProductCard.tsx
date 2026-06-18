@@ -12,11 +12,17 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
     ? 'SEE OPTIONS'
     : 'VIEW ON PRINTFUL';
 
+  const cardPadding = isFeatured ? { base: 5, md: 8 } : { base: 5, md: 6 };
+  const cardGap = isFeatured ? 6 : 5;
+  const titleSize = isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' };
+  const descSize = isFeatured ? 'base' : 'sm';
+  const descClamp = isFeatured ? 0 : 2;
+
   return (
     <BaseCard
-      gap={isFeatured ? 5 : 4}
+      gap={cardGap}
       height="full"
-      padding={isFeatured ? { base: 4, md: 6 } : { base: 4, md: 5 }}
+      padding={cardPadding}
       radius="lg"
       border
       maxWidth="full"
@@ -67,11 +73,11 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
             target="_blank"
             rel="sponsored noopener noreferrer"
             variant="body"
-            size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
+            size={titleSize}
             weight="font-bold"
             color="main"
             leading="tight"
-            clamp={isFeatured ? 0 : 2}
+            clamp={descClamp}
             className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             {item.title}
@@ -80,7 +86,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         </Stack>
 
         <Stack gap={1}>
-          <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
+          <Text variant="body" size={descSize} color="dim" leading="relaxed" clamp={descClamp}>
             {item.description}
           </Text>
 

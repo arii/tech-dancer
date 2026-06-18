@@ -22,6 +22,7 @@ export function PromoStrip({ imageSrc, title, subtitle, ctaLabel, href }: PromoS
     <Box
       as="a"
       href={href}
+      aria-label={`${title} - ${subtitle}`}
       display="flex"
       align="center"
       justify="between"

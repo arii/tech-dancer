@@ -131,7 +131,7 @@ export default function Merch() {
           2. Minimize scrolling and layout shifts when switching between filters.
         */}
         {activeCollection === 'all' ? (
-          <Stack gap={{ base: 10, md: 16 }}>
+          <Stack gap={{ base: 12, md: 20 }}>
             {sections.map((section) => (
               <CollectionSection
                 key={section.id}
