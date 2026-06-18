@@ -3,6 +3,7 @@ import * as path from 'path';
 import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visualReviewConstants';
 import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary } from './visualReviewTypes';
+import { execSync } from 'child_process';
 
 export interface LLMClientStrategy {
   botName: string;
@@ -42,10 +43,9 @@ export async function orchestrateVisualReview(
   try {
     const ciFailureSchema = JSON.parse(fs.readFileSync('docs/agent/ci-failure.schema.json', 'utf8'));
     const cliSchema = JSON.parse(fs.readFileSync('dev-tools/cli-schema.json', 'utf8'));
-    let contextData: any = { schemas: { 'ci-failure': ciFailureSchema, cli: cliSchema } };
+    let contextData: Record<string, unknown> = { schemas: { 'ci-failure': ciFailureSchema, cli: cliSchema } };
 
     if (fs.existsSync('scripts/build-repo-context.py')) {
-      const { execSync } = require('child_process');
       const output = execSync('python3 scripts/build-repo-context.py', { encoding: 'utf-8' });
       contextData = { ...contextData, ...JSON.parse(output) };
     }
@@ -57,7 +57,6 @@ export async function orchestrateVisualReview(
   for (const route of summary.routes) {
     route.repoContext = repoContext;
   }
-
 
   // Only review routes with actual visual changes
   // Limit to top N routes by difference percentage to manage costs

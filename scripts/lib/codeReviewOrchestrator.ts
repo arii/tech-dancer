@@ -16,6 +16,20 @@ export interface CodeReviewClientStrategy {
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
 
 export function getCodeDiffSummary(): CodeReviewSummary {
+  let repoContext = '';
+  try {
+    const ciFailureSchema = JSON.parse(fs.readFileSync('docs/agent/ci-failure.schema.json', 'utf8'));
+    const cliSchema = JSON.parse(fs.readFileSync('dev-tools/cli-schema.json', 'utf8'));
+    let contextData: Record<string, unknown> = { schemas: { 'ci-failure': ciFailureSchema, cli: cliSchema } };
+
+    if (fs.existsSync('scripts/build-repo-context.py')) {
+      const output = execSync('python3 scripts/build-repo-context.py', { encoding: 'utf-8' });
+      contextData = { ...contextData, ...JSON.parse(output) };
+    }
+    repoContext = JSON.stringify(contextData);
+  } catch (error) {
+    console.warn('Could not generate repo context:', error);
+  }
   try {
     let diffCommand = 'git diff origin/main...HEAD';
     let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
@@ -42,11 +56,12 @@ export function getCodeDiffSummary(): CodeReviewSummary {
 
     return {
       files,
-      diffContext
+      diffContext,
+      repoContext
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '' };
+    return { files: [], diffContext: '', repoContext: '' };
   }
 }
 
