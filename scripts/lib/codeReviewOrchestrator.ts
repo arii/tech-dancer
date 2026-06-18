@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
-import { postPRComment, countExistingReviews } from './visualReviewUtils';
+import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
@@ -116,6 +116,15 @@ export async function orchestrateCodeReview(
 
   // Post to GitHub PR
   await postPRComment(report, client.reportTitle);
+
+  // Also alert Jules if this PR is from a Jules session
+  const julesSessionId = await getJulesSessionIdFromPR();
+  if (julesSessionId) {
+    const isFail = reviewResult.llmVerdict === 'fail';
+    const passFailMsg = isFail ? "FAIL ❌" : "PASS ✅";
+    const julesMessage = `[${client.reportTitle}] posted a code review (${passFailMsg}). Please read the review comments on the PR, analyze the diff context provided, and fix any failed or warned areas.`;
+    await sendJulesMessage(julesSessionId, julesMessage);
+  }
 
   // Write a structured result file alongside the markdown
   const isFail = reviewResult.llmVerdict === 'fail';
