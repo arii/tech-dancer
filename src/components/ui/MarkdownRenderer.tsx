@@ -145,8 +145,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
           img: ({node: _node, ...props}: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }) => {
-            const { src, alt, className, title, width, height, ...rest } = props;
+            const { src, alt, className, title, width, height, srcSet, sizes } = props;
             const normalizedSrc = normalizeAsset(src || '');
+            if (!normalizedSrc) return null;
+
             return (
               <Box marginY={8} width="full" display="flex" justify="center">
                 <Box
@@ -158,16 +160,18 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 >
                   <img
                     src={normalizedSrc}
+                    srcSet={srcSet}
+                    sizes={sizes}
                     loading="lazy"
-                    alt={typeof alt === 'string' ? alt : "Article illustration"}
+                    alt={typeof alt === 'string' && alt.trim() ? alt : "Article illustration"}
                     title={title}
                     width={width !== undefined ? String(width) : undefined}
                     height={height !== undefined ? String(height) : undefined}
+                    referrerPolicy="no-referrer"
                     className={cn(
                       "block mx-auto max-w-full max-h-full w-auto h-auto object-contain",
                       className
                     )}
-                    {...rest}
                   />
                 </Box>
               </Box>
