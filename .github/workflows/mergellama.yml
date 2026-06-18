@@ -21,7 +21,7 @@ jobs:
     if: github.event.pull_request.mergeable == false || contains(github.event.pull_request.labels.*.name, 'has-conflicts')
     env:
       AI_MODEL: gpt-4o-mini
-      GITHUB_MODELS_BASE_URL: https://models.github.ai/inference
+      GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Git Safe Directory

@@ -110,7 +110,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
     model = model or get_ollama_model()
 
     llm = ChatOpenAI(
-        base_url="https://models.github.ai/inference",
+        base_url="https://models.inference.ai.azure.com",
         api_key=token,
         model=model,
         temperature=0.7,
@@ -146,7 +146,7 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
     token = get_github_token()
     if not token: return None
 
-    base_url = os.environ.get("GITHUB_MODELS_BASE_URL", "https://models.github.ai/inference")
+    base_url = os.environ.get("GITHUB_MODELS_BASE_URL", "https://models.inference.ai.azure.com")
     if not base_url.endswith("/"): base_url += "/"
     target_url = urllib.parse.urljoin(base_url, "chat/completions")
 

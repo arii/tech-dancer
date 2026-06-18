@@ -25,7 +25,7 @@ jobs:
       PYTHONPATH: dev-tools
       AI_MODEL: gpt-4o-mini
       AI_SYNTHESIS_MODEL: gpt-4o-mini
-      GITHUB_MODELS_BASE_URL: https://models.github.ai/inference
+      GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout Code

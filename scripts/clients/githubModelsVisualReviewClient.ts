@@ -16,7 +16,7 @@ async function createModel(): Promise<ChatOpenAI> {
     modelName: modelName,
     apiKey: apiKey,
     configuration: {
-      baseURL: 'https://models.github.ai/inference',
+      baseURL: 'https://models.inference.ai.azure.com',
     },
     maxTokens: 1024,
     temperature: 0.1,

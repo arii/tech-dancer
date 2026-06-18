@@ -9,7 +9,7 @@ export interface GitHubModel {
 
 export async function getAvailableModels(token: string): Promise<GitHubModel[]> {
   try {
-    const apiVersion = process.env.GITHUB_API_VERSION || '2026-03-10';
+    const apiVersion = process.env.GITHUB_API_VERSION || '2024-02-28';
     const res = await fetch("https://models.github.ai/catalog/models", {
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -28,15 +28,21 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
       return [];
     }
 
-    let models: GitHubModel[];
+    let models: any[];
     try {
-      models = JSON.parse(text) as GitHubModel[];
+      models = JSON.parse(text);
     } catch (parseError) {
       console.warn(`⚠️ Failed to parse models catalog JSON: ${parseError}`);
       return [];
     }
 
-    return Array.isArray(models) ? models : [];
+    if (!Array.isArray(models)) {
+        console.warn(`⚠️ Models catalog response is not an array`);
+        return [];
+    }
+
+    const validModels = models.filter(m => m && typeof m.id === 'string' && typeof m.name === 'string');
+    return validModels as GitHubModel[];
   } catch (error) {
     console.warn(`⚠️ Error fetching models catalog: ${error}`);
     return [];
@@ -45,6 +51,9 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
 
 export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o-mini', needsVision: boolean = false): Promise<string> {
   const models = await getAvailableModels(token);
+
+  const isFallbackValid = models && models.some(m => m.id === fallback || m.id.includes(fallback));
+
   if (!models || models.length === 0) return fallback;
 
   const suitableModels = models.filter(m => {
@@ -64,13 +73,14 @@ export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o
   for (const preferred of priorities) {
     const found = poolToPickFrom.find(m => m.id === preferred || m.id.includes(preferred));
     if (found) {
-        return found.id;
+        return found.id.split('/').pop() || found.id;
     }
   }
 
   if (poolToPickFrom.length > 0 && poolToPickFrom[0]) {
-     return poolToPickFrom[0].id;
+     return poolToPickFrom[0].id.split('/').pop() || poolToPickFrom[0].id;
   }
 
-  return fallback;
+  if (isFallbackValid) return fallback;
+  return models[0].id.split('/').pop() || models[0].id;
 }
