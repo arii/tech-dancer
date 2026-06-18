@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewResult, JsonSchemaContext } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
@@ -15,7 +15,7 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
 
-export function getCodeDiffSummary(): CodeReviewSummary {
+export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
   try {
     let diffCommand = 'git diff origin/main...HEAD';
     let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
@@ -43,26 +43,102 @@ export function getCodeDiffSummary(): CodeReviewSummary {
     let schemasContext: string | undefined;
     try {
       const maxSchemaBytes = 10000;
+      const MAX_FILES = 10;
+      const MAX_DEPTH = 10;
+      const MAX_FILE_SIZE = 5000;
       let totalBytes = 0;
-      // Use fs.readdirSync recursively or simple shell glob to avoid 'find' compat issues
-      const globFiles = execSync('ls docs/agent/*.schema.json', { encoding: 'utf-8' }).split('\n').filter(Boolean);
+      let fileCount = 0;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sanitizePrototypePollution = (obj: any, depth = 0): any => {
+        if (depth > MAX_DEPTH) {
+            throw new Error(`Exceeded maximum object depth of ${MAX_DEPTH}`);
+        }
+        if (obj === null || typeof obj !== 'object') {
+          return obj;
+        }
+        if (Array.isArray(obj)) {
+          return obj.map(item => sanitizePrototypePollution(item, depth + 1));
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const cleaned: Record<string, any> = Object.create(null);
+        for (const key of Object.keys(obj)) {
+          if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+            continue;
+          }
+          cleaned[key] = sanitizePrototypePollution(obj[key], depth + 1);
+        }
+        return cleaned;
+      };
+
+      const schemaDir = path.join('docs', 'agent');
+      let globFiles: string[] = [];
+      try {
+        const files = await fs.promises.readdir(schemaDir);
+        globFiles = files.filter(f => f.endsWith('.schema.json'));
+      } catch {
+        // Directory might not exist, ignore
+      }
+
       if (globFiles.length > 0) {
-        const schemas: Record<string, unknown> = {};
-        for (const file of globFiles) {
+        const schemas: JsonSchemaContext = Object.create(null);
+        let successCount = 0;
+        let failureCount = 0;
+
+        for (const filename of globFiles) {
+          if (fileCount >= MAX_FILES) {
+            console.warn(`Reached maximum schema file limit (${MAX_FILES}). Skipping remaining files.`);
+            break;
+          }
+          const nativePath = path.join('docs', 'agent', filename);
+          const posixPath = path.posix.join('docs/agent', filename);
           try {
-            const stat = fs.statSync(file);
+            const stat = await fs.promises.stat(nativePath);
+            if (stat.size > MAX_FILE_SIZE) {
+                console.warn(`Schema file too large (>${MAX_FILE_SIZE} bytes). Skipping: ${nativePath}`);
+                continue;
+            }
             if (totalBytes + stat.size > maxSchemaBytes) {
-              console.warn(`Schema payload too large. Truncating file: ${file}`);
+              console.warn(`Schema payload too large. Truncating file: ${nativePath}`);
               continue;
             }
             totalBytes += stat.size;
-            const content = fs.readFileSync(file, 'utf-8');
-            schemas[file.replace(/^\.\//, '')] = JSON.parse(content);
+            fileCount++;
+
+            const content = await fs.promises.readFile(nativePath, 'utf-8');
+            let parsed = JSON.parse(content, (key, value) => {
+              if (['__proto__', 'constructor', 'prototype'].includes(key)) {
+                return undefined;
+              }
+              return value;
+            });
+            parsed = sanitizePrototypePollution(parsed);
+
+            if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+                throw new Error(`Parsed schema is not a plain object: ${nativePath}`);
+            }
+
+            if (!parsed['$schema'] && !parsed['title'] && !parsed['type']) {
+                throw new Error(`Parsed schema missing structural JSON Schema identifiers ($schema, title, type): ${nativePath}`);
+            }
+
+            schemas[posixPath] = parsed as Record<string, unknown>;
+            successCount++;
           } catch (e) {
-            console.warn(`Could not parse schema file ${file}:`, e);
+            console.warn(`Could not parse schema file ${nativePath}:`, e);
+            failureCount++;
           }
         }
-        schemasContext = JSON.stringify(schemas);
+
+        if (successCount === 0) {
+            console.warn(`No schemas were successfully parsed. Context will not be included.`);
+            schemasContext = undefined;
+        } else {
+            if (failureCount > 0) {
+                console.warn(`${failureCount} schema(s) failed to parse. Proceeding with ${successCount} successful schemas.`);
+            }
+            schemasContext = JSON.stringify(schemas);
+        }
       }
     } catch (error) {
       console.warn('Could not find or parse schema files:', error);
@@ -126,7 +202,7 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const summary = getCodeDiffSummary();
+  const summary = await getCodeDiffSummary();
 
   if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
