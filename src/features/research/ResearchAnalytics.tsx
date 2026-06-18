@@ -420,7 +420,7 @@ export default function ResearchAnalytics() {
           paddingY={4}
           paddingX={{ base: 4, sm: 0 }}
           marginX={{ base: -4, sm: 0 }}
-          className="backdrop-blur-md bg-bg/80"
+          className="backdrop-blur-md bg-bg/90 border-b border-line/10"
         >
           <Stack direction="row" align="center" gap={2}>
             <Filter className="w-4 h-4 text-dim" />

@@ -199,7 +199,7 @@
 
 @utility responsive-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
 }
 
 @utility transition-nav {
@@ -414,7 +414,10 @@
 
 /* Card Screenshot Wrapper to cap heights and crop bottom captions */
 .card-screenshot-wrapper {
-  height: 200px !important;
+  height: 180px !important;
+  @media (min-width: 640px) {
+    height: 220px !important;
+  }
   overflow: hidden !important;
   border-radius: 12px 12px 0 0 !important;
 }
@@ -425,7 +428,7 @@
   object-fit: cover !important;
   object-position: top !important;
   display: block !important;
-  transform: scale(1.1) !important;
+  transform: scale(1.05) !important;
   transform-origin: top !important;
 }
 
