@@ -107,6 +107,78 @@ class Orchestrator:
 
         return feedback
 
+    def auto_audit_prs(self, limit: int = 100) -> Dict[str, Any]:
+        """Audits open PRs, determines their state, minimizes scope, and updates metadata."""
+        from utils import call_ai_service, clean_llm_output
+        url = f"/repos/{self.github.repo}/pulls?state=open&per_page={limit}"
+        prs = self.github._request('GET', url)
+
+        schema = {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string"},
+                "description": {"type": "string"},
+                "state": {"type": "string", "enum": ["approved", "requires changes", "abandon"]},
+                "comment": {"type": "string"}
+            },
+            "required": ["title", "description", "state", "comment"]
+        }
+
+        results = []
+        for pr in prs:
+            pr_num = pr['number']
+
+            try:
+                diff = self.github.fetch_pr_diff(pr_num)
+            except Exception:
+                diff = ""
+
+            try:
+                files_data = self.github.fetch_pr_files(pr_num)
+                files = "\n".join([f"- {f.get('filename')} (+{f.get('additions',0)} -{f.get('deletions',0)})" for f in files_data])
+            except Exception:
+                files = ""
+
+            prompt = (
+                f"You are an expert GitHub Assistant. Audit the following PR.\n\n"
+                f"Current Title: {pr.get('title')}\n"
+                f"Current Description: {pr.get('body')}\n\n"
+                f"Files Changed:\n{files}\n\n"
+                f"Diff:\n{diff[:5000]}\n\n"
+                f"Task:\n"
+                f"1. Analyze all files changed and apply strict filtering to reduce code churn. Explicitly look for and suggest removing updated visual snapshots if not required.\n"
+                f"2. Determine PR state: 'approved', 'requires changes', or 'abandon'.\n"
+                f"3. Rewrite the title in format: '[type]: DESCRIPTION [state]'. Type must be chore, fix, or feat.\n"
+                f"4. Rewrite the description with a brief functional summary and a 'Scope Minimization Suggestions' section detailing what code/files should be removed.\n"
+                f"5. Provide a summary comment to post on the PR, including the state justification and scope reduction suggestions.\n\n"
+                f"Return ONLY JSON matching the schema."
+            )
+
+            try:
+                response = call_ai_service(prompt, schema=schema)
+                if response:
+                    parsed = json.loads(clean_llm_output(response))
+
+                    self.github.update_pr(pr_num, {
+                        "title": parsed["title"],
+                        "body": parsed["description"]
+                    })
+
+                    self.github.create_issue_comment(pr_num, parsed["comment"])
+
+                    print(f"✅ Automatically audited and updated PR #{pr_num}")
+                    print(f"   New Title: {parsed['title']}")
+                    print(f"   State: {parsed['state']}\n")
+                    results.append({"pr": pr_num, "status": "success", "data": parsed})
+                else:
+                    print(f"⚠️ Failed to get AI response for PR #{pr_num}")
+                    results.append({"pr": pr_num, "status": "failed"})
+            except Exception as e:
+                print(f"❌ Error processing PR #{pr_num}: {e}")
+                results.append({"pr": pr_num, "status": "error", "error": str(e)})
+
+        return {"evaluated_count": len(prs), "results": results}
+
     def mass_evaluate_prs(self, post_comments: bool = False, generate_report: bool = True, limit: int = 100) -> Dict[str, Any]:
         """Runs the mass evaluation for all open PRs."""
         url = f"/repos/{self.github.repo}/pulls?state=open&per_page={limit}"

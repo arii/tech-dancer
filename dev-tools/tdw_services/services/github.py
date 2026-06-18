@@ -108,6 +108,10 @@ class GitHubClient:
                     return f"Failed to fetch logs for job {job_id} after fallback: {str(fallback_e)}"
             return f"Failed to fetch logs for job {job_id}: {error_msg}"
 
+    def update_pr(self, number: int, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update pull request title, body, state, etc."""
+        return self._request('PATCH', f'/repos/{self.repo}/pulls/{number}', json_data=data)
+
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})
 

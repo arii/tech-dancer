@@ -72,6 +72,15 @@ def is_ai_available() -> bool:
     """Checks if AI API token is present."""
     return bool(os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN"))
 
+def is_ollama_available() -> bool:
+    """Checks if Ollama is running."""
+    try:
+        import urllib.request
+        with urllib.request.urlopen(get_ollama_url(), timeout=2) as response:
+            return response.status == 200
+    except Exception:
+        return False
+
 def to_standard_schema(schema, uppercase: bool = False):
     """Recursively prepares a standard JSON schema.
     - Ensures top-level 'type: object' if 'properties' is present.
@@ -125,6 +134,20 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
     except Exception as e:
         print(f"AI Call failed: {e}", file=sys.stderr)
         return None
+
+def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, timeout: int = 30) -> Optional[Dict]:
+    """Executes an HTTP request with exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except Exception as e:
+            if attempt == max_retries - 1:
+                print(f"API Call failed after {max_retries} attempts: {e}", file=sys.stderr)
+                return None
+            import time
+            time.sleep(2 ** attempt)
+    return None
 
 def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call local Ollama API."""

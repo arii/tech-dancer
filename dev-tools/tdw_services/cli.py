@@ -157,6 +157,16 @@ def detect_conflicts(ctx, pr):
             for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
 
+@gh.command(name='auto-audit')
+@click.option('--limit', type=int, default=100, help="Maximum number of PRs to process.")
+@click.pass_context
+def auto_audit(ctx, limit):
+    """Automatically audit open PRs, update metadata, minimize scope, and add comments."""
+    orch = ctx.obj['ORCHESTRATOR']
+    out(ctx, f"Starting automated audit for up to {limit} PRs...", data={})
+    res = orch.auto_audit_prs(limit=limit)
+    out(ctx, f"✅ Evaluated {res['evaluated_count']} PRs.", data=res)
+
 @gh.command()
 @click.option('--post-comments', is_flag=True, help="Post feedback as comments on PRs.")
 @click.option('--generate-report/--no-generate-report', default=True, help="Generate final-audit.md report (default: True).")
