@@ -1,3 +1,5 @@
+export type JsonSchemaContext = Record<string, Record<string, unknown>>;
+
 export interface CodeReviewSummary {
   files: string[];
   diffContext: string;

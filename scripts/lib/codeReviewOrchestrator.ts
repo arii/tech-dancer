@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewResult, JsonSchemaContext } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
@@ -44,16 +44,21 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     try {
       const maxSchemaBytes = 10000;
       const MAX_FILES = 10;
+      const MAX_DEPTH = 10;
+      const MAX_FILE_SIZE = 5000;
       let totalBytes = 0;
       let fileCount = 0;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const sanitizePrototypePollution = (obj: any): any => {
+      const sanitizePrototypePollution = (obj: any, depth = 0): any => {
+        if (depth > MAX_DEPTH) {
+            throw new Error(`Exceeded maximum object depth of ${MAX_DEPTH}`);
+        }
         if (obj === null || typeof obj !== 'object') {
           return obj;
         }
         if (Array.isArray(obj)) {
-          return obj.map(sanitizePrototypePollution);
+          return obj.map(item => sanitizePrototypePollution(item, depth + 1));
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const cleaned: Record<string, any> = Object.create(null);
@@ -61,7 +66,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
           if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
             continue;
           }
-          cleaned[key] = sanitizePrototypePollution(obj[key]);
+          cleaned[key] = sanitizePrototypePollution(obj[key], depth + 1);
         }
         return cleaned;
       };
@@ -76,7 +81,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       }
 
       if (globFiles.length > 0) {
-        const schemas: Record<string, unknown> = Object.create(null);
+        const schemas: JsonSchemaContext = Object.create(null);
         let successCount = 0;
         let failureCount = 0;
 
@@ -89,6 +94,10 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
           const posixPath = path.posix.join('docs/agent', filename);
           try {
             const stat = await fs.promises.stat(nativePath);
+            if (stat.size > MAX_FILE_SIZE) {
+                console.warn(`Schema file too large (>${MAX_FILE_SIZE} bytes). Skipping: ${nativePath}`);
+                continue;
+            }
             if (totalBytes + stat.size > maxSchemaBytes) {
               console.warn(`Schema payload too large. Truncating file: ${nativePath}`);
               continue;
@@ -109,7 +118,11 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
                 throw new Error(`Parsed schema is not a plain object: ${nativePath}`);
             }
 
-            schemas[posixPath] = parsed;
+            if (!parsed['$schema'] && !parsed['title'] && !parsed['type']) {
+                throw new Error(`Parsed schema missing structural JSON Schema identifiers ($schema, title, type): ${nativePath}`);
+            }
+
+            schemas[posixPath] = parsed as Record<string, unknown>;
             successCount++;
           } catch (e) {
             console.warn(`Could not parse schema file ${nativePath}:`, e);
