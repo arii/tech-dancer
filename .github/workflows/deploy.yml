@@ -26,12 +26,9 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           lfs: true
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
@@ -101,10 +98,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v4
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
+        uses: actions/checkout@v6
       - name: Download dist artifact
         uses: actions/download-artifact@v8
         with:

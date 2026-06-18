@@ -14,10 +14,8 @@ jobs:
       issues: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-      - run: pip install PyGithub click
+      - uses: actions/checkout@v6
+      - run: pip install --break-system-packages PyGithub click
       - name: Validate Issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

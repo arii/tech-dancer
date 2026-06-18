@@ -22,12 +22,9 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 

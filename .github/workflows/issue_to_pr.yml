@@ -18,10 +18,7 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
+        uses: actions/checkout@v6
       - name: Parse Issue and Generate Markdown File
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}

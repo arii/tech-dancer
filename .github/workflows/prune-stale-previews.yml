@@ -19,21 +19,15 @@ jobs:
       pull-requests: read
     steps:
       - name: Checkout Source (for scripts)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: source
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Checkout gh-pages
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: gh-pages
           path: gh-pages-branch
           fetch-depth: 0
-      - name: Fix Git Workspace
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Prune orphaned directories
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
