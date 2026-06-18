@@ -46,8 +46,15 @@ def build_repo_context():
 
     # 5. Changed Files
     try:
+        # Check if origin/main exists
+        try:
+            subprocess.check_call(["git", "rev-parse", "origin/main"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            diff_cmd = ["git", "diff", "--name-only", "origin/main...HEAD"]
+        except subprocess.CalledProcessError:
+            diff_cmd = ["git", "diff", "--name-only", "HEAD~1"]
+
         changed_files = subprocess.check_output(
-            ["git", "diff", "--name-only", "HEAD~1"]
+            diff_cmd
         ).decode().strip().splitlines()
     except Exception as e:
          print(f"Error getting changed files: {e}", file=sys.stderr)
