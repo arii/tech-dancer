@@ -1,0 +1,70 @@
+# .github/workflows/respond-to-jules.yml
+#
+# Triggered when a PR is opened or edited.
+# If the PR was created by Jules (google-labs-jules[bot]), this workflow:
+#   1. Parses the Jules task ID from the PR description
+#   2. Sends a message back to that Jules session via the REST API
+#
+# Required secret:
+#   JULES_API_KEY  – your Jules / Google Labs API key
+
+name: Respond to Jules PR
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  respond-to-jules:
+    # Only run when the PR author is the Jules bot
+    if: github.event.pull_request.user.login == 'google-labs-jules[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Parse Jules task ID from PR description
+        id: parse
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # The footer line looks like:
+          #   *PR created automatically by Jules for task [2264804411485856796](https://jules.google.com/task/2264804411485856796) started by @arii*
+          #
+          # We extract the numeric task ID from the markdown link.
+          TASK_ID=$(echo "$PR_BODY" \
+            | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
+            | head -1)
+
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Send message to Jules session
+        if: steps.parse.outputs.task_id != ''
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          TASK_ID: ${{ steps.parse.outputs.task_id }}
+        run: |
+          # Jules REST API endpoint for sending a follow-up message to a task/session.
+          # Adjust the URL / payload shape once the Jules API docs confirm the exact schema.
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "https://jules.google.com/api/v1/tasks/${TASK_ID}/messages" \
+            -H "Authorization: Bearer ${JULES_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{"message": "hello world!"}')
+
+          HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response body: $HTTP_BODY"
+
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "::error::Jules API call failed with status $HTTP_CODE"
+            exit 1
+          fi
+
+          echo "Message sent successfully to Jules task ${TASK_ID}."
