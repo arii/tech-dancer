@@ -3,8 +3,8 @@
 # back to that session using the existing JulesClient.
 #
 # Required secrets / env vars:
-#   JulesClient reads ANTIGRAVITY_API_KEY first, then JULES_API_KEY from
-#   dev-tools/tdw_services/services/jules.py. Add one of those secrets under
+#   JulesClient reads JULES_API_KEY from
+#   dev-tools/tdw_services/services/jules.py. Add the secret under
 #   repo Settings → Secrets → Actions.
 
 name: Respond to Jules PR
@@ -57,7 +57,7 @@ jobs:
         if: steps.parse.outputs.task_id != ''
         env:
           TASK_ID: ${{ steps.parse.outputs.task_id }}
-          ANTIGRAVITY_API_KEY: ${{ secrets.ANTIGRAVITY_API_KEY }}
+
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: |
           python3 - <<'PYEOF'
