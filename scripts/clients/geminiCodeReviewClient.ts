@@ -1,14 +1,19 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseLLMVerdict } from '../lib/visualReviewUtils';
+import { parseCodeReviewVerdict } from './githubModelsCodeReviewClient';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
 const SYSTEM_PROMPT = `You are an expert software engineer reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
 Provide actionable feedback. Focus on HIGH severity issues.
-End your review with a clear verdict: PASS, WARN, or FAIL.
-Use FAIL if there are blocking bugs or severe anti-patterns.
+
+You MUST end your review with exactly one of the following strings indicating your final verdict:
+[VERDICT: PASS]
+[VERDICT: WARN]
+[VERDICT: FAIL]
+
+Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns.
 `;
 
 function createModel(): ChatGoogleGenerativeAI {
@@ -53,7 +58,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
-      llmVerdict: parseLLMVerdict(feedback),
+      llmVerdict: parseCodeReviewVerdict(feedback),
     };
   }
 };
