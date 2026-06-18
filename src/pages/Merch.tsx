@@ -31,7 +31,7 @@ export default function Merch() {
       }
       acc[colId].products.push(product);
       return acc;
-    }, {} as Record<string, { id: string; title: string; products: any[] }>);
+    }, {} as Record<string, { id: string; title: string; products: typeof allProducts }>);
   }, [allProducts]);
 
   const sections = useMemo(() => {

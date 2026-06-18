@@ -14,9 +14,9 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
 
   return (
     <BaseCard
-      gap={isFeatured ? 5 : 4}
+      gap={isFeatured ? 6 : 5}
       height="full"
-      padding={isFeatured ? { base: 5, md: 6 } : { base: 4, md: 5 }}
+      padding={isFeatured ? { base: 6, md: 8 } : { base: 5, md: 7 }}
       radius="lg"
       border
       maxWidth="full"
@@ -58,8 +58,8 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         )}
       </Box>
 
-      <Stack gap={isFeatured ? 4 : 3}>
-        <Stack gap={1}>
+      <Stack gap={isFeatured ? 5 : 4}>
+        <Stack gap={1.5}>
           <Text
             as="a"
             href={item.href}
