@@ -155,8 +155,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   loading="lazy"
                   alt={alt || "Article illustration"}
                   maxWidth="full"
+                  maxHeight={{ base: "viewport-half", md: "none" }}
                   height="auto"
-                  className="object-contain img-constrained md:max-h-none"
+                  className="object-contain"
                   {...props}
                 />
               </Box>
@@ -202,7 +203,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       radius="lg"
                       shadow="sm"
                       maxWidth="full"
-                      className="object-contain img-constrained md:max-h-96"
+                      maxHeight={{ base: "viewport-half", md: 96 }}
+                      className="object-contain"
                       loading="lazy"
                     />
                   </Box>

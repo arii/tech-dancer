@@ -58,6 +58,7 @@
   --spacing-hero: var(--raw-spacing-hero);
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
+  --spacing-viewport-half: 50vh;
 
   /* Z-Index */
   --z-hide: var(--raw-z-hide);
@@ -226,12 +227,6 @@
 
 @utility z-top {
   z-index: 100;
-}
-
-@layer utilities {
-  .img-constrained {
-    max-height: 50vh;
-  }
 }
 
 @layer base {
