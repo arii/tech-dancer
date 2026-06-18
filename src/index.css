@@ -59,6 +59,7 @@
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
   --spacing-viewport-half: 50vh;
+  --spacing-none: none;
 
   /* Z-Index */
   --z-hide: var(--raw-z-hide);

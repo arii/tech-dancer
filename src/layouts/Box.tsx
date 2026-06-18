@@ -4,7 +4,7 @@ import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
-import { RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
+import { RADIUS_MAP, SHADOW_MAP, SPAN_MAP, SPACING_MAP } from "./layout-maps"
 import { resolveJIT, resolveSpacing } from "@/lib/style-utils"
 
 export interface BaseProps {
@@ -46,7 +46,7 @@ export interface BaseProps {
   minWidth?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
   minHeight?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
   maxWidth?: ResponsiveProp<"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl">
-  maxHeight?: ResponsiveProp<"none" | "full" | "screen" | "auto" | "min" | "fit" | number | string>
+  maxHeight?: ResponsiveProp<"none" | "viewport-half" | "full" | "screen" | "auto" | "min" | "fit" | number | string>
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"
@@ -197,7 +197,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(width, "w-", (v) => resolveJIT(v, "")),
           getResponsiveClasses(maxWidth, "max-w-", (v) => resolveJIT(v, "")),
           getResponsiveClasses(minHeight, "min-h-", (v) => resolveJIT(v, "")),
-          getResponsiveClasses(maxHeight, "max-h-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(maxHeight, "max-h-", (v) => {
+            if (v === "viewport-half") return "[50vh]";
+            if (v === "none") return "none";
+            const token = SPACING_MAP[v as keyof typeof SPACING_MAP];
+            if (token) return token;
+            return resolveJIT(v, "");
+          }),
           getResponsiveClasses(minWidth, "min-w-", (v) => resolveJIT(v, "")),
           overflow && (overflow === "y-auto" ? "overflow-y-auto" : overflow === "x-auto" ? "overflow-x-auto" : overflow === "y-hidden" ? "overflow-y-hidden" : `overflow-${overflow}`),
           overflowX && `overflow-x-${overflowX}`,
