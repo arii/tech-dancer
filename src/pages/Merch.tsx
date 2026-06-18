@@ -11,7 +11,7 @@ import { PRINTFUL_REFERRAL } from '@/config/constants';
 import { MerchFilterBar } from '@/components/products/MerchFilterBar';
 import { CollectionSection } from '@/components/products/CollectionSection';
 import { PromoStrip } from '@/components/products/PromoStrip';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState("all");

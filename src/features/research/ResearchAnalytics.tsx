@@ -15,7 +15,7 @@ import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 import { SOCIAL_LINKS } from '@/config/constants';
 import { FilterButton } from '@/components/ui/FilterButton';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
