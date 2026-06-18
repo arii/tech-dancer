@@ -102,7 +102,8 @@ export interface UXReport {
   id: string;
   url: string;
   timestamp: number;
-  status: 'processing' | 'completed';
+  status: 'processing' | 'completed' | 'error';
+  error?: string;
   findings_mobile?: ViewportAnalysis;
   findings_tablet?: ViewportAnalysis;
   findings_desktop?: ViewportAnalysis;
@@ -213,7 +214,10 @@ export function useUXAuditor(): UXAuditorHookReturn {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UXReport));
       queryClient.setQueryData(['ux-reports', user.uid], data);
-    }, (err) => console.error("Firestore error:", err));
+    }, (err) => {
+      console.error("Firestore error:", err);
+      setError("Failed to sync reports from backend.");
+    });
 
     return () => unsubscribe();
   }, [user, queryClient]);
@@ -302,7 +306,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
             );
           }
         } catch (err) {
-          console.error(`Failed to update viewport ${key} in Firestore:`, err);
+          console.error("Failed to update viewport findings in Firestore:", key, err);
         }
       }
 
@@ -335,13 +339,14 @@ export function useUXAuditor(): UXAuditorHookReturn {
   const isThrottled = useRef(false);
 
   const runUXAudit = useCallback(async (targetUrl: string) => {
-    if (isThrottled.current) return;
+    if (isThrottled.current || auditMutation.isPending) return;
 
     isThrottled.current = true;
     try {
       await auditMutation.mutateAsync(targetUrl);
     } catch (err) {
       console.error("Audit failed:", err);
+      setError(err instanceof Error ? err.message : "Analysis failed. Please try again.");
     } finally {
       // Throttle for 2s AFTER the audit completes
       setTimeout(() => {
@@ -445,9 +450,12 @@ export function useUXAuditor(): UXAuditorHookReturn {
     if (!activeReport) return "";
     let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
     VIEWPORTS.forEach(vp => {
-      const v = vp.name.toLowerCase() as ViewportKey;
-      const key = `findings_${v}` as const;
-      const data = activeReport[key];
+      const v = vp.name.toLowerCase();
+      let data: ViewportAnalysis | undefined;
+      if (v === 'mobile') data = activeReport.findings_mobile;
+      else if (v === 'tablet') data = activeReport.findings_tablet;
+      else if (v === 'desktop') data = activeReport.findings_desktop;
+
       if (data) {
         md += `## ${vp.name} Analysis\n${data.summary}\n\n`;
         md += `| Element | Issue | Suggestion | Severity |\n|---|---|---|---|\n`;
