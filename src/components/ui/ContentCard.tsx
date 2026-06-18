@@ -20,6 +20,13 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
 
 const MotionArticle = motion.article;
 
+/**
+ * Standardized content card for blog posts and research items.
+ *
+ * WHY:
+ * Ensures visual consistency across all content grids while
+ * providing clear category differentiation and meta-information.
+ */
 export function ContentCard(props: ContentCardProps) {
   const {
     slug,
@@ -31,22 +38,28 @@ export function ContentCard(props: ContentCardProps) {
     readingTime,
     image,
     imageAlt,
+    className
   } = props;
 
   const motionProps = pickRest(props, [
     ...CONTENT_METADATA_KEYS,
     'readingTime',
-    'basePath'
+    'basePath',
+    'className'
   ] as (keyof ContentCardProps)[]);
+
+  const categoryMap: Record<string, string> = {
+    travel: 'bg-brand-purple/20 text-brand-purple border-brand-purple/30',
+    gear: 'bg-brand-amber/20 text-brand-amber border-brand-amber/30',
+    guide: 'bg-brand-green/20 text-brand-green border-brand-green/30',
+    event: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/30',
+    lifestyle: 'bg-brand-magenta/20 text-brand-magenta border-brand-magenta/30',
+  };
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();
-    if (c.includes('travel')) return 'bg-brand-purple/20 text-brand-purple border-brand-purple/30';
-    if (c.includes('gear')) return 'bg-brand-amber/20 text-brand-amber border-brand-amber/30';
-    if (c.includes('guide')) return 'bg-brand-green/20 text-brand-green border-brand-green/30';
-    if (c.includes('event')) return 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/30';
-    if (c.includes('lifestyle')) return 'bg-brand-magenta/20 text-brand-magenta border-brand-magenta/30';
-    return 'bg-accent/20 text-accent border-accent/30';
+    const key = Object.keys(categoryMap).find(k => c.includes(k));
+    return key ? categoryMap[key] : 'bg-accent/20 text-accent border-accent/30';
   };
 
   return (
@@ -56,11 +69,14 @@ export function ContentCard(props: ContentCardProps) {
       height="full"
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
-      // impeccable-ignore
-      className="overflow-hidden group hover:shadow-[0_0_20px_rgba(var(--color-accent-rgb),0.15)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40"
+      className={cn(
+        "overflow-hidden group transition-all duration-300",
+        "hover:shadow-glow hover:-translate-y-1 hover:border-accent/40",
+        className
+      )}
       {...motionProps}
     >
-      <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden relative">
+      <Box width="full" aspect="video" surface="muted" border="b" borderColor="line" overflow="hidden" position="relative">
         {image ? (
           <img
             src={image}
@@ -69,7 +85,7 @@ export function ContentCard(props: ContentCardProps) {
             loading="lazy"
           />
         ) : (
-          <Box width="full" height="full" display="flex" align="center" justify="center" surface="muted">
+          <Box width="full" height="full" display="flex" align="center" justify="center">
             <Text variant="mono" size="xs" color="dim">NO IMAGE</Text>
           </Box>
         )}
@@ -81,7 +97,6 @@ export function ContentCard(props: ContentCardProps) {
           paddingY={0.5}
           radius="sm"
           border
-          // impeccable-ignore
           className={cn("backdrop-blur-md uppercase tracking-widest font-black text-[10px]", getTagColorClass(category))}
         >
           {category}

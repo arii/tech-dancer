@@ -4,8 +4,15 @@ import { SEO } from '@/components/SEO';
 import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 
+/**
+ * Main feed for the Boomtick Blog.
+ *
+ * WHY:
+ * Central hub for all editorial content, providing search,
+ * filtering, and featured article highlights.
+ */
 export default function BlogFeed() {
-  const { posts, view, setView, isLoading } = useBlog();
+  const { posts, categories, activeCategory, setCategory, view, setView, isLoading } = useBlog();
 
   return (
     <>
@@ -26,7 +33,11 @@ export default function BlogFeed() {
         loading={isLoading}
       >
         <Box marginTop={8}>
-          <FilterBar />
+          <FilterBar
+            categories={categories}
+            activeCategory={activeCategory}
+            onCategoryChange={setCategory}
+          />
         </Box>
       </FolioGrid>
     </>

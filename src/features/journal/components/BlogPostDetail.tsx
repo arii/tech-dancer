@@ -20,6 +20,13 @@ interface BlogPostDetailProps {
   backLabel: string;
 }
 
+/**
+ * Detailed view for a single blog post.
+ *
+ * WHY:
+ * Provides the primary reading experience for long-form content,
+ * including a Table of Contents, reading progress, and related posts.
+ */
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
   const rt = `${readingTime(post.content)} min read`;
   const [isCopied, setIsCopied] = useState(false);
@@ -220,7 +227,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         </Stack>
       }
     >
-      <Box className="prose-editorial">
+      <Box className="prose-editorial" paddingBottom={12}>
         <MarkdownRenderer content={post.content} />
       </Box>
 

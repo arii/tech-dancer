@@ -18,11 +18,11 @@ export function useBlog() {
 
   const view = viewParam as ViewMode;
   const setView = (v: ViewMode) => setViewParam(v);
+  const setCategory = (c: string) => setCategoryParam(c);
 
   const categories = useMemo(() => {
-    const cats = posts.map(p => p.category);
-    return ['All', ...new Set(cats)];
-  }, [posts]);
+    return ['All', 'Guides', 'Gear', 'Events', 'Travel', 'Lifestyle', 'Dance'];
+  }, []);
 
   const filteredPosts = useMemo(() => {
     let result = posts;
