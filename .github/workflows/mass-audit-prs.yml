@@ -15,7 +15,7 @@ jobs:
       pull-requests: write
     env:
       AI_MODEL: gpt-4o-mini
-      GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
+      GITHUB_MODELS_BASE_URL: https://models.github.ai/inference
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Git Safe Directory
