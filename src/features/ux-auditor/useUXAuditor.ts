@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSnapshotManager } from './useSnapshotManager';
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp, getApps, getApp, FirebaseOptions } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import {
   getFirestore,
@@ -102,7 +102,7 @@ export interface UXAuditorHookReturn {
   runUXAudit: (targetUrl: string) => void;
   exportToGithub: () => Promise<void>;
   copyMarkdown: () => Promise<void>;
-  firebaseConfig: any;
+  firebaseConfig: FirebaseOptions | null;
 }
 
 export function useUXAuditor(): UXAuditorHookReturn {
