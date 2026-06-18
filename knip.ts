@@ -14,7 +14,7 @@ const config: KnipConfig = {
     '@types/pixelmatch',
     '@google/genai'
   ],
-  ignoreBinaries: ['python3', 'semgrep'],
+  ignoreBinaries: ['python3', 'semgrep', 'gh'],
   ignoreExportsUsedInFile: true,
 };
 
