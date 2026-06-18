@@ -66,7 +66,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 20
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
@@ -128,7 +128,7 @@ jobs:
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 20
       - run: pnpm install --frozen-lockfile --prefer-offline
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -230,6 +230,9 @@ jobs:
   impact-analysis:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
+    outputs:
+      changed_code: ${{ steps.entropy_check.outputs.changed_code }}
+      changed_routes: ${{ steps.check_visuals.outputs.changed_routes }}
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
@@ -238,7 +241,7 @@ jobs:
 
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 20
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Deployment Impact Analysis
