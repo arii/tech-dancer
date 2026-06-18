@@ -49,43 +49,44 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       let globFiles: string[] = [];
       if (fs.existsSync(schemaDir)) {
         globFiles = fs.readdirSync(schemaDir)
-          .filter(f => f.endsWith('.schema.json'))
-          .map(f => path.posix.join('docs/agent', f));
+          .filter(f => f.endsWith('.schema.json'));
       }
       if (globFiles.length > 0) {
-        const schemas: Record<string, object> = {};
+        const schemas: Record<string, unknown> = {};
         let successCount = 0;
-        for (const file of globFiles) {
+        for (const filename of globFiles) {
+          const nativePath = path.join('docs', 'agent', filename);
+          const posixPath = path.posix.join('docs/agent', filename);
           try {
-            const stat = fs.statSync(file);
+            const stat = fs.statSync(nativePath);
             if (totalBytes + stat.size > maxSchemaBytes) {
-              console.warn(`Schema payload too large. Truncating file: ${file}`);
+              console.warn(`Schema payload too large. Truncating file: ${nativePath}`);
               continue;
             }
             totalBytes += stat.size;
-            const content = fs.readFileSync(file, 'utf-8');
+            const content = fs.readFileSync(nativePath, 'utf-8');
 
             const parsed = JSON.parse(content, (key, value) => {
               if (['__proto__', 'constructor', 'prototype'].includes(key)) {
-                throw new Error(`Dangerous key detected: ${key}`);
+                return undefined;
               }
               return value;
             });
 
             if (typeof parsed !== 'object' || parsed === null) {
-                throw new Error(`Parsed schema is not an object: ${file}`);
+                throw new Error(`Parsed schema is not an object: ${nativePath}`);
             }
 
-            schemas[file] = parsed;
+            schemas[posixPath] = parsed;
             successCount++;
           } catch (e) {
-            console.warn(`Could not parse schema file ${file}:`, e);
+            console.warn(`Could not parse schema file ${nativePath}:`, e);
           }
         }
 
         if (successCount === 0) {
-            console.warn(`No schemas were successfully parsed. Context will be empty.`);
-            schemasContext = JSON.stringify({});
+            console.warn(`No schemas were successfully parsed. Context will not be included.`);
+            schemasContext = undefined;
         } else {
             schemasContext = JSON.stringify(schemas);
         }
