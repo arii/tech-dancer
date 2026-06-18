@@ -45,9 +45,16 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       const maxSchemaBytes = 10000;
       let totalBytes = 0;
       // Use fs.readdirSync recursively or simple shell glob to avoid 'find' compat issues
-      const globFiles = execSync('ls docs/agent/*.schema.json', { encoding: 'utf-8' }).split('\n').filter(Boolean);
+      const schemaDir = path.join('docs', 'agent');
+      let globFiles: string[] = [];
+      if (fs.existsSync(schemaDir)) {
+        globFiles = fs.readdirSync(schemaDir)
+          .filter(f => f.endsWith('.schema.json'))
+          .map(f => path.posix.join('docs/agent', f));
+      }
       if (globFiles.length > 0) {
-        const schemas: Record<string, unknown> = {};
+        const schemas: Record<string, object> = {};
+        let successCount = 0;
         for (const file of globFiles) {
           try {
             const stat = fs.statSync(file);
@@ -57,12 +64,31 @@ export function getCodeDiffSummary(): CodeReviewSummary {
             }
             totalBytes += stat.size;
             const content = fs.readFileSync(file, 'utf-8');
-            schemas[file.replace(/^\.\//, '')] = JSON.parse(content);
+
+            const parsed = JSON.parse(content, (key, value) => {
+              if (['__proto__', 'constructor', 'prototype'].includes(key)) {
+                throw new Error(`Dangerous key detected: ${key}`);
+              }
+              return value;
+            });
+
+            if (typeof parsed !== 'object' || parsed === null) {
+                throw new Error(`Parsed schema is not an object: ${file}`);
+            }
+
+            schemas[file] = parsed;
+            successCount++;
           } catch (e) {
             console.warn(`Could not parse schema file ${file}:`, e);
           }
         }
-        schemasContext = JSON.stringify(schemas);
+
+        if (successCount === 0) {
+            console.warn(`No schemas were successfully parsed. Context will be empty.`);
+            schemasContext = JSON.stringify({});
+        } else {
+            schemasContext = JSON.stringify(schemas);
+        }
       }
     } catch (error) {
       console.warn('Could not find or parse schema files:', error);
