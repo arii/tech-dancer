@@ -30,8 +30,6 @@ export function FeaturedGuidePanel() {
       <img
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         alt={FEATURED.imageAlt}
-        width={420}
-        height={600}
         fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
         aria-hidden="true"

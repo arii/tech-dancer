@@ -26,14 +26,32 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
       )}
       data-testid="product-card"
     >
-      <MerchImageDisplay
-        title={item.title}
-        href={item.href}
-        imageUrl={item.imageUrl}
-        images={item.images}
-        imageDisplayMode={item.imageDisplayMode}
-        isFeatured={isFeatured}
-      />
+      <Box position="relative" width="full">
+        <MerchImageDisplay
+          title={item.title}
+          href={item.href}
+          imageUrl={item.imageUrl}
+          images={item.images}
+          imageDisplayMode={item.imageDisplayMode}
+          isFeatured={isFeatured}
+        />
+        {item.isBundle && (
+          <Box
+            position="absolute"
+            top={2}
+            right={2}
+            paddingX={2}
+            paddingY={1}
+            radius="md"
+            surface="accent"
+            className="shadow-glow"
+          >
+            <Text variant="mono" size="micro" weight="font-black" color="bg" uppercase tracking="widest">
+              Bundle
+            </Text>
+          </Box>
+        )}
+      </Box>
 
       <Stack gap={isFeatured ? 4 : 3}>
         <Text
@@ -55,6 +73,12 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
           {item.description}
         </Text>
+
+        {item.bundleNote && (
+          <Text variant="body" size="xs" color="accent" weight="font-medium">
+            {item.bundleNote}
+          </Text>
+        )}
 
         {item.roles && (
           <Stack direction="row" gap={1.5} wrap="wrap">

@@ -312,6 +312,37 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
 5. Ensure your changes introduce no new violations in touched files
 
 
+## 24) Affiliate & Product Content Requirements
+
+- Clearly identify Amazon affiliate content and keep required affiliate disclosures visible near affiliate sections/pages.
+- Do **not** use third-party brand logos, seller logos, vendor marks, or proprietary product branding in generated/edited images unless we have explicit written permission.
+- Prefer generic product imagery or cropped/edited images that avoid visible third-party trademarks.
+- Product images should match the referenced item category and should not misrepresent the product.
+- Keep affiliate links intact unless intentionally replacing them with verified working links.
+- Do **not** present Printful merch links as Amazon affiliate links; keep merch and affiliate resource content clearly separated where appropriate.
+
+## 25) SEO & URL Stability Requirements
+
+- Do **not** change existing page URLs, slugs, route paths, or permalink structures unless the task explicitly requests it.
+- Before renaming/moving a page, check for inbound links, internal links, existing sitemap entries, and indexed URL impact.
+- If a URL must change, add a **redirect plan** before merging so old URLs do not become 404s.
+- Do **not** delete or move public pages without confirming replacement routes or redirects.
+- Update all internal links when page paths change.
+- Avoid creating duplicate pages with near-identical titles/content that compete for the same search query.
+
+## 26) Metadata Requirements
+
+Every public page/post/product/resource page MUST have appropriate metadata, including:
+- Unique `<title>` / SEO title.
+- Unique meta description that accurately summarizes the page.
+- Canonical URL when applicable.
+- Open Graph title, description, image, and URL for share previews.
+- Twitter/social card metadata if the site already supports it.
+- Structured data where relevant, especially for articles, guides, products/resources, breadcrumbs, and event pages.
+- Image alt text for meaningful images.
+- Updated sitemap and robots-related files if the route/page inventory changes.
+
+
 ## Follow-up: Harden `td_cli.py gh conflicts` against malformed GitHub remote/token URLs
 
 `python3 dev-tools/td_cli.py gh conflicts` resolves correctly after the command-path fix, but it can still fail in Codex/Jules-style environments when the GitHub remote or token-derived URL is malformed.

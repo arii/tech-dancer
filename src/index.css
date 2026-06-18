@@ -298,7 +298,7 @@
     background: var(--hero-bg);
     min-height: auto;
     @media (min-width: 768px) {
-      min-height: 34vh;
+      min-height: 30vh;
     }
   }
   .hero-bottom-gradient {

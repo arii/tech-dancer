@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
@@ -21,6 +21,19 @@ export function EditorialLayout({
   sidebar,
   footer,
 }: EditorialLayoutProps) {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <Box
       width="full"
@@ -29,6 +42,24 @@ export function EditorialLayout({
       paddingX={{ base: 5, md: 10, lg: 12 }}
       paddingY={{ base: 8, md: 16 }}
     >
+      {/* Reading Progress Indicator */}
+      <Box
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        height={1}
+        zIndex="nav"
+        className="pointer-events-none"
+      >
+        <Box
+          height="full"
+          surface="accent"
+          className="transition-all duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </Box>
+
       <Stack gap="section-spacing">
         {/* Navigation */}
         <Box>

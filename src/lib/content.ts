@@ -131,6 +131,14 @@ function transform<T extends { date?: string; draft?: boolean }>(
       if (item.draft) {
         return item.type === 'study' && (item.status === 'planned' || item.status === 'draft');
       }
+
+      // Filter out future-dated blog posts from "Latest" feeds, but allow planned research.
+      if (item.date && item.type === 'post') {
+        const itemDate = new Date(item.date);
+        const now = new Date();
+        if (itemDate > now) return false;
+      }
+
       return true;
     })
     .sort((a, b) => {

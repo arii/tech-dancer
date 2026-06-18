@@ -34,9 +34,9 @@ export function BaseCard({
 
   // Standardized hover and transition classes
   const cardClasses = cn(
-    "group relative bg-surface transition-all duration-200",
+    "group relative bg-surface transition-all duration-300 ease-out",
     border === true && "card-border",
-    isLink && "hover:-translate-y-0.5 hover:border-accent/40",
+    isLink && "hover:-translate-y-1 hover:border-accent/40 hover:shadow-glow",
     className
   );
 

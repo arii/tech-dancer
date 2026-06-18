@@ -55,23 +55,29 @@ export default function FolioGrid({
   return (
     <Box as="section" height="full">
       <Box as="header" marginBottom={12}>
-        <PageHeader
-          label={label || "FOLIO"}
-          title={categoryTitle}
-          description={description}
-          as={as}
-        />
-        {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
-          <SearchBox
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
-          />
-          {onViewChange && (
-            <ViewToggle view={view} onChange={onViewChange} />
-          )}
+        <Box display="flex" align="start" justify="between" gap={8} flexWrap="wrap">
+          <Box flex={1} minWidth="300px">
+            <PageHeader
+              label={label || "FOLIO"}
+              title={categoryTitle}
+              description={description}
+              as={as}
+            />
+          </Box>
+          <Box width={{ base: "full", md: "320px" }} marginTop={{ base: 4, md: 0 }}>
+            <Stack gap={4}>
+              <SearchBox
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={searchPlaceholder}
+              />
+              {onViewChange && (
+                <ViewToggle view={view} onChange={onViewChange} />
+              )}
+            </Stack>
+          </Box>
         </Box>
+        {children}
       </Box>
 
       <Box marginTop={8}>

@@ -28,6 +28,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
 
   return (
     <Box
+      key={window.location.pathname}
       layout="root"
       position="relative"
       overflowX="hidden"
@@ -90,6 +91,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             width="full"
             minWidth={0}
             overflowX="clip"
+          className="animate-in fade-in duration-200"
           >
             {children}
             <Footer />

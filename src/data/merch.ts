@@ -10,6 +10,10 @@ export interface MerchProduct {
   imageDisplayMode?: MerchImageDisplayMode;
   printfulUrl: string;
   collections: string[];
+  collectionId?: string;
+  collectionLabel?: string;
+  isBundle?: boolean;
+  bundleNote?: string;
   roles?: ('lead' | 'follow' | 'switch')[];
   tags: string[];
 }
@@ -37,6 +41,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-follow',
     collections: ['lead-follow-switch', 'rainbow-pride'],
+    collectionId: 'lead-follow-switch',
+    collectionLabel: 'Lead · Follow · Switch',
     roles: ['follow'],
     tags: ['Follower', 'Neon', 'Pride'],
   },
@@ -53,6 +59,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/love-neon-tshirt-ask-me-to-lead',
     collections: ['lead-follow-switch', 'rainbow-pride'],
+    collectionId: 'lead-follow-switch',
+    collectionLabel: 'Lead · Follow · Switch',
     roles: ['lead'],
     tags: ['Leader', 'Neon', 'Pride'],
   },
@@ -69,6 +77,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageDisplayMode: 'back-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/lead-follow-or-switch-love-shirt-in-neon',
     collections: ['lead-follow-switch', 'rainbow-pride'],
+    collectionId: 'lead-follow-switch',
+    collectionLabel: 'Lead · Follow · Switch',
     roles: ['lead', 'follow', 'switch'],
     tags: ['Role Pride', 'Versatile', 'Neon'],
   },
@@ -85,6 +95,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageDisplayMode: 'both-equal',
     printfulUrl: 'https://boomtick.printful.me/product/war-eagle-oversized-high-neck-t-shirt',
     collections: ['norcal-bestcal'],
+    collectionId: 'norcal-golden-gate',
+    collectionLabel: 'NorCal Best Cal — Golden Gate',
     tags: ['NorCal', 'Oversized', 'Streetwear'],
   },
   {
@@ -100,6 +112,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-bestcal-golden-gate-rainbow-pride-shirt',
     collections: ['norcal-bestcal', 'rainbow-pride'],
+    collectionId: 'norcal-golden-gate',
+    collectionLabel: 'NorCal Best Cal — Golden Gate',
     tags: ['NorCal', 'Pride', 'Golden Gate'],
   },
   {
@@ -115,6 +129,8 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     imageDisplayMode: 'front-prominent',
     printfulUrl: 'https://boomtick.printful.me/product/norcal-best-cal-pride-california-bear-apparel',
     collections: ['norcal-bestcal', 'rainbow-pride'],
+    collectionId: 'rainbow-pride',
+    collectionLabel: 'Rainbow pride',
     tags: ['NorCal', 'Pride', 'California Bear'],
   },
   {

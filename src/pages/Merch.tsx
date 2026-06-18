@@ -80,11 +80,11 @@ export default function Merch() {
         />
 
         {/* Collection Filters */}
-        <Stack gap={3}>
+        <Stack gap={3} position="sticky" top={16} zIndex="docked" surface="bg" className="border-b border-line/30 py-2">
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto">
+          <Box overflowX="auto" className="no-scrollbar">
             <Stack direction="row" gap={2} padding={1} minWidth="max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton

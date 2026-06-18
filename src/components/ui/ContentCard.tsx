@@ -73,13 +73,14 @@ export function ContentCard(props: ContentCardProps) {
           paddingY={1}
           radius="full"
           border
-          className="border-line w-fit"
+          className="border-line w-fit bg-surface-alt/50"
         >
         <Text
           variant="mono"
           size="xs"
           weight="font-black"
-          tracking="wide"
+          tracking="widest"
+          uppercase
           className={getTagColorClass(category)}
         >
           {category}

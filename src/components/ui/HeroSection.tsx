@@ -64,7 +64,7 @@ export function HeroSection() {
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 5, lg: 6 }}
+          marginTop={{ base: 4, lg: 4 }}
           align="start"
           gap={0}
           width="full"
@@ -121,8 +121,8 @@ export function HeroSection() {
         <Stack
           direction="row"
           align="stretch"
-          gap={5}
-          marginTop={{ base: 2, lg: 4 }}
+          gap={4}
+          marginTop={{ base: 2, lg: 3 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"
