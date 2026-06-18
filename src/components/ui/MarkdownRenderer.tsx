@@ -144,9 +144,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({ node: _node, src, alt, className, title, width, height, srcSet, sizes, ..._rest }: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }): JSX.Element | null => {
+          img: ({ node: _node, src, alt, className, title, width, height, srcSet, sizes, ...rest }: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }): JSX.Element | null => {
             const normalizedSrc = normalizeAsset(src || '');
             if (!normalizedSrc) return null;
+
+            // Sanitize width/height to ensure they are numeric strings
+            const sanitizeDimension = (val: string | number | undefined) => {
+              if (val === undefined || val === null) return undefined;
+              const num = parseFloat(String(val));
+              return !isNaN(num) ? String(num) : undefined;
+            };
 
             return (
               <Box marginY={8} width="full" display="flex" justify="center">
@@ -158,14 +165,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   maxHeight={{ base: "50vh", lg: 96 }}
                 >
                   <img
+                    {...rest}
                     src={normalizedSrc}
                     srcSet={srcSet}
                     sizes={sizes}
                     loading="lazy"
                     alt={typeof alt === 'string' ? alt : "Article illustration"}
                     title={title}
-                    width={width !== undefined ? String(width) : undefined}
-                    height={height !== undefined ? String(height) : undefined}
+                    width={sanitizeDimension(width)}
+                    height={sanitizeDimension(height)}
                     /* Standard security policy for external images in markdown */
                     referrerPolicy="no-referrer"
                     crossOrigin="anonymous"
