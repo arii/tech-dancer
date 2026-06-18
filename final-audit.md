@@ -3,10 +3,10 @@
 ## 1. Summary of Open PRs Reviewed
 Total open PRs reviewed: 23
 
+- **PR #2541**: docs: issue dispatch audit — 4 ready-to-file issues + status/report (Branch: `copilot/update-agent-prompts`)
 - **PR #2539**: chore: Inject minified JSON schemas into GitHub AI Review Workflows (Branch: `jules-11829484570871605344-ba2db35e`)
 - **PR #2538**: Issue Dispatch Tracker and Fixes (Branch: `issue-dispatch-jules-2806821448259986966`)
 - **PR #2535**: Add entropy check to prevent redundant code reviews (Branch: `codex/add-entropy-check-for-pr-resubmission-16821078985180058117`)
-- **PR #2528**: chore(ci): Add direct artifact link to impact analysis PR comment (Branch: `add-artifact-link-pr-comment-6658022234094197874`)
 - **PR #2527**: Standardize AI Service Error Handling (Branch: `fix/standardize-ai-error-handling-16961552142328680041`)
 - **PR #2526**: Consolidate Merch and Filter UI Improvements (Branch: `consolidate-merch-filter-ui-11923204419815752414`)
 - **PR #2525**: feat: Include JSON schema files in AI code review context (Branch: `jules-json-schemas-context-7522525370161321074`)
@@ -29,145 +29,420 @@ Total open PRs reviewed: 23
 
 ## 2. Feedback Provided
 
+### PR #2541
+**Feedback:**
+## 🔍 PR #2541 Feedback — chore: add agent system prompts directory
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
+
 ### PR #2539
 **Feedback:**
-⚠️ **CI Failures Detected:** Lint & Type Check, Lint & Type Check. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+## 🔍 PR #2539 Feedback — chore: Inject minified JSON schemas into GitHub AI Review Workflows
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2538
 **Feedback:**
-✅ **General Review:** The changes look isolated and reasonable. Double check that no regressions were introduced to existing test suites.
+## 🔍 PR #2538 Feedback — Issue Dispatch Tracker and Fixes
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2535
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+## 🔍 PR #2535 Feedback — Add entropy check to prevent redundant code reviews
 
-### PR #2528
-**Feedback:**
-✅ **General Review:** The changes look isolated and reasonable. Double check that no regressions were introduced to existing test suites.
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2527
 **Feedback:**
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+## 🔍 PR #2527 Feedback — Standardize AI Service Error Handling
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2526
 **Feedback:**
-⚠️ **CI Failures Detected:** Lint & Type Check, Deployment Impact Analysis, Lint & Type Check, Deployment Impact Analysis. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+## 🔍 PR #2526 Feedback — Consolidate Merch and Filter UI Improvements
 
-🛑 **Design System Anti-patterns:** Raw Tailwind classes (e.g., `flex`, `p-*`, `m-*`) were detected in your component updates. Please replace these with our mapped primitives (e.g., `Stack`, `Box`, `Grid`) to pass the UX audit.
+### CI Status
+❌ Failed: Lint & Type Check, Deployment Impact Analysis, Lint & Type Check, Deployment Impact Analysis
 
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+### Code Audit Findings
+No violations found.
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+### Impact Analysis
+- **Impact**: UI Files Touched. Executed impact suite.
+
+### Next Steps
+- Please address the audit findings and CI failures above.
+
 
 ### PR #2525
 **Feedback:**
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+> ## 🔍 PR #2525 Feedback — feat: Include JSON schema files in AI code review context
+>
+> ### CI Status
+> ✅ All checks passed.
+>
+> ### Code Audit Findings
+> No violations found.
+>
+> ### Impact Analysis
+> - **Impact**: No UI Files Touched.
+>
+> ### Next Steps
+> - All checks passed — ready to merge
+>
+
+Acknowledged.
 
 ### PR #2524
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+## 🔍 PR #2524 Feedback — Consolidate Workflow Dependencies
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2523
 **Feedback:**
-⚠️ **CI Failures Detected:** Deployment Impact Analysis, Deployment Impact Analysis. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+> ## 🔍 PR #2523 Feedback — fix: update gpt-5.4-mini to gpt-4o-mini
+>
+> ### CI Status
+> ❌ Failed: Lint & Type Check, Lint & Type Check, Deployment Impact Analysis
+>
+> ### Code Audit Findings
+> No violations found.
+>
+> ### Impact Analysis
+> - **Impact**: No UI Files Touched.
+>
+> ### Next Steps
+> - Please address the audit findings and CI failures above.
+>
 
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
-
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+The linting errors and CI failures have been addressed by replacing explicit `any` types with `unknown` and applying safe type casting in `modelPicker.ts`.
 
 ### PR #2522
 **Feedback:**
-⚠️ **CI Failures Detected:** Build & E2E, Build & E2E, Deployment Impact Analysis, Deployment Impact Analysis. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+## 🔍 PR #2522 Feedback — Consolidate Content Tasks & Blog Redesign
 
-🛑 **Design System Anti-patterns:** Raw Tailwind classes (e.g., `flex`, `p-*`, `m-*`) were detected in your component updates. Please replace these with our mapped primitives (e.g., `Stack`, `Box`, `Grid`) to pass the UX audit.
+### CI Status
+❌ Failed: Build & E2E, Build & E2E, Deployment Impact Analysis, Deployment Impact Analysis
 
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: UI Files Touched. Executed impact suite.
+
+### Next Steps
+- Please address the audit findings and CI failures above.
+
 
 ### PR #2521
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+> ## 🔍 PR #2521 Feedback — Fix CLI validation in GitHub Actions workflows
+>
+> ### CI Status
+> ✅ All checks passed.
+>
+> ### Code Audit Findings
+> No violations found.
+>
+> ### Impact Analysis
+> - **Impact**: No UI Files Touched.
+>
+> ### Next Steps
+> - All checks passed — ready to merge
+>
+
+Acknowledged. The PR is ready to merge.
 
 ### PR #2520
 **Feedback:**
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+## 🔍 PR #2520 Feedback — Modularize impact-analysis scripts and add Zod validation
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2518
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+## 🔍 PR #2518 Feedback — Refactor CI visual change filtering into TypeScript
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2515
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+## 🔍 PR #2515 Feedback — Post Jules retry context comment and ensure full checkout for git diffs
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2513
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+## 🔍 PR #2513 Feedback — ci: Add entropy CI check to Jules fix trigger
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2509
 **Feedback:**
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+## 🔍 PR #2509 Feedback — Resolve CI Workflow Failures and Update Deprecated Actions
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2508
 **Feedback:**
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+## 🔍 PR #2508 Feedback — Workflow Audit: Consolidated Health Report Fixes
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2497
 **Feedback:**
-✅ **UI Modifications:** Your UI component updates look clean. Please ensure you verify the responsive layout on mobile viewports (down to 375px width) to ensure no horizontal scrolling or overflow occurs.
+## 🔍 PR #2497 Feedback — Consolidated UI Improvements and Homepage Restructure
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #2494
 **Feedback:**
-⚠️ **CI Failures Detected:** Deployment Impact Analysis. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+## 🔍 PR #2494 Feedback — Fix markdown syntax rendering inside Notice tags
 
-✅ **UI Modifications:** Your UI component updates look clean. Please ensure you verify the responsive layout on mobile viewports (down to 375px width) to ensure no horizontal scrolling or overflow occurs.
+### CI Status
+❌ Failed: Deployment Impact Analysis
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: UI Files Touched. Executed impact suite.
+
+### Next Steps
+- Please address the audit findings and CI failures above.
+
 
 ### PR #2454
 **Feedback:**
-✅ **UI Modifications:** Your UI component updates look clean. Please ensure you verify the responsive layout on mobile viewports (down to 375px width) to ensure no horizontal scrolling or overflow occurs.
+> ## 🔍 PR #2454 Feedback — Refactor: De-slop ResearchAnalytics by extracting common UI components
+>
+> ### CI Status
+> ✅ All checks passed.
+>
+> ### Code Audit Findings
+> No violations found.
+>
+> ### Impact Analysis
+> - **Impact**: UI Files Touched. Executed impact suite.
+>
+> ### Next Steps
+> - All checks passed — ready to merge
+>
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+Acknowledged. All checks have passed and the PR is ready to merge.
 
 ### PR #2453
 **Feedback:**
-⚠️ **CI Failures Detected:** Gitleaks Secret Detection. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+## 🔍 PR #2453 Feedback — fix: optimize github actions caching and checkout depths
 
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+### CI Status
+❌ Failed: Gitleaks Secret Detection
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- Please address the audit findings and CI failures above.
+
 
 ### PR #1848
 **Feedback:**
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+## 🔍 PR #1848 Feedback — Lightweight CPU RAG Multi-Agent PR Review Pipeline
+
+### CI Status
+✅ All checks passed.
+
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- All checks passed — ready to merge
+
 
 ### PR #1733
 **Feedback:**
-⚠️ **CI Failures Detected:** Build & E2E, Build & E2E. Please run tests locally (e.g., `pnpm run test` or `pnpm run lint`) to reproduce and fix these failures.
+## 🔍 PR #1733 Feedback — Implement Merch Design Generation Logic
 
-ℹ️ **Workflow Updates:** If modifying actions/setup-node or actions/setup-python, please ensure they are pinned to v6 as per infrastructure requirements.
+### CI Status
+❌ Failed: Build & E2E, Build & E2E
 
-ℹ️ **Tooling/Scripts:** Please ensure any Python script changes are covered by `pytest` and that typescript scripts pass `pnpm run test:scripts`.
+### Code Audit Findings
+No violations found.
+
+### Impact Analysis
+- **Impact**: No UI Files Touched.
+
+### Next Steps
+- Please address the audit findings and CI failures above.
+
 
 ## 3. CI Status & Failure Guidance
 
-- **PR #2539**: Failed checks: Lint & Type Check, Lint & Type Check. *Guidance*: Verify failing CI actions and ensure tests pass locally.
+- **PR #2541**: All checks pass.
+- **PR #2539**: All checks pass.
 - **PR #2538**: All checks pass.
 - **PR #2535**: All checks pass.
-- **PR #2528**: All checks pass.
-- **PR #2527**: All checks pass.
-- **PR #2526**: Failed checks: Lint & Type Check, Deployment Impact Analysis, Lint & Type Check, Deployment Impact Analysis. *Guidance*: Verify failing CI actions and ensure tests pass locally.
+- **PR #2527**: Failed checks: Deployment Impact Analysis. *Guidance*: Verify failing CI actions and ensure tests pass locally.
+- **PR #2526**: Failed checks: Lint & Type Check, Lint & Type Check. *Guidance*: Verify failing CI actions and ensure tests pass locally.
 - **PR #2525**: All checks pass.
 - **PR #2524**: All checks pass.
-- **PR #2523**: Failed checks: Deployment Impact Analysis, Deployment Impact Analysis. *Guidance*: Verify failing CI actions and ensure tests pass locally.
-- **PR #2522**: Failed checks: Build & E2E, Build & E2E, Deployment Impact Analysis, Deployment Impact Analysis. *Guidance*: Verify failing CI actions and ensure tests pass locally.
+- **PR #2523**: Failed checks: Deployment Impact Analysis. *Guidance*: Verify failing CI actions and ensure tests pass locally.
+- **PR #2522**: All checks pass.
 - **PR #2521**: All checks pass.
 - **PR #2520**: All checks pass.
-- **PR #2518**: All checks pass.
+- **PR #2518**: Failed checks: Oxlint Scan, conflict-check, Lint & Type Check, Deployment Impact Analysis, resolve-conflicts, Anti-Pattern Audit, Anti-Pattern Audit, Lint & Type Check, Deployment Impact Analysis, build. *Guidance*: Verify failing CI actions and ensure tests pass locally.
 - **PR #2515**: All checks pass.
 - **PR #2513**: All checks pass.
 - **PR #2509**: All checks pass.
