@@ -46,7 +46,7 @@ export interface BaseProps {
   minWidth?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
   minHeight?: ResponsiveProp<"0" | "full" | "min" | "fit" | number | string>
   maxWidth?: ResponsiveProp<"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full" | "prose" | "screen-sm" | "screen-md" | "screen-lg" | "screen-xl" | "screen-2xl">
-  maxHeight?: ResponsiveProp<"full" | "screen" | "auto" | "min" | "fit" | number | string>
+  maxHeight?: ResponsiveProp<"none" | "full" | "screen" | "auto" | "min" | "fit" | number | string>
   overflow?: "auto" | "hidden" | "scroll" | "x-auto" | "y-auto" | "y-hidden" | "visible"
   overflowX?: "auto" | "hidden" | "scroll" | "visible"
   overflowY?: "auto" | "hidden" | "scroll" | "visible"

@@ -24,6 +24,8 @@ export const SPACING_MAP: Record<string | number, string> = {
   80: '80',
   'section-spacing': 'section-spacing',
   auto: 'auto',
+  'viewport-half': 'viewport-half',
+  none: 'none',
 };
 
 export const RADIUS_MAP: Record<string, string> = {
