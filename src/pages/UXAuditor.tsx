@@ -119,7 +119,10 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
       justify="center"
       overflow="hidden"
       position="relative"
-      className="bg-surface rounded-xl shadow-2xl border border-line"
+      surface="default"
+      radius="xl"
+      shadow="2xl"
+      border={true}
     >
       {isLoading && (
         <Box position="absolute" inset={true} display="flex" align="center" justify="center" zIndex="docked" surface="muted">
@@ -180,7 +183,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
       </Stack>
 
       <Stack direction={{ base: 'col', md: 'row' }} width="full">
-        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }}>
+        <Box padding={8} surface="muted" display="flex" align="center" justify="center" border={{ base: 'b', md: 'r' }} minHeight={400} width={{ base: 'full', md: '41.666%' }} overflow="hidden">
           {activeReportUrl ? (
             <ViewportFrame
               key={`${vp.name}-${activeReportUrl}`}
@@ -203,7 +206,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
         <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
           {data ? (
             <>
-              <Box surface="alt" padding={5} className="border border-line rounded-lg">
+              <Box surface="alt" padding={5} border={true} radius="lg">
                 <Box marginBottom={3}>
                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                     Analysis Summary
@@ -218,7 +221,13 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                   <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                       <Stack direction="row" align="center" gap={2}>
-                        <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
+                        <Box
+                          width={2}
+                          height={2}
+                          radius="full"
+                          surface={imp.severity > 7 ? 'error' : 'warning'}
+                          shadow="sm"
+                        />
                         <Text variant="sans" size="sm" weight="font-black">
                           {imp.element}
                         </Text>
@@ -234,7 +243,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                       <Box surface="muted" padding={3} radius="lg" border={true}>
                         <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
-                          <Box flex={1} minWidth="0" className="overflow-hidden">
+                          <Box flex={1} minWidth={0} overflow="hidden">
                             <Text variant="sans" size="xs" weight="font-bold" className="break-all line-clamp-3" title={imp.suggestion}>
                               {imp.suggestion}
                             </Text>
@@ -326,9 +335,10 @@ export default function UXAuditor() {
               title={url}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
               onFocus={(e) => e.target.select()}
-              className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
-                flex={1}
-                minWidth={0}
+              surface="bg"
+              className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main text-sm"
+              flex={1}
+              minWidth={0}
               paddingX={4}
               paddingY={2}
               radius="lg"
@@ -362,14 +372,15 @@ export default function UXAuditor() {
               <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">API KEY</Text>
               <Box
                 as="input"
-              id="audit-api-key"
-              name="audit-api-key"
+                id="audit-api-key"
+                name="audit-api-key"
                 type="password"
-              autoComplete="new-password"
+                autoComplete="new-password"
                 value={customApiKey}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value)}
                 onFocus={(e) => e.target.select()}
-                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                surface="bg"
+                className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
                 flex={1}
                 paddingX={4}
                 paddingY={2}
@@ -415,7 +426,8 @@ export default function UXAuditor() {
                 value={snapshotService}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value)}
                 onFocus={(e) => e.target.select()}
-                className="bg-bg border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
+                surface="bg"
+                className="border-none focus:ring-2 focus:ring-accent outline-none font-mono text-text-main truncate text-sm"
                 flex={1}
                 paddingX={4}
                 paddingY={2}
@@ -459,7 +471,10 @@ export default function UXAuditor() {
                   height={9}
                   radius="full"
                   surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  className={report.status !== 'completed' ? 'animate-pulse' : ''}
                   shrink={0}
                 >
                   {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
