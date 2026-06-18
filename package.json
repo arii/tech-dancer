@@ -52,7 +52,9 @@
     "impact:visual-diff": "tsx scripts/impact-visual-diff.ts",
     "impact:dom-diff": "tsx scripts/impact-dom-diff.ts",
     "impact:gemini-review": "tsx scripts/impact-gemini-review.ts",
-    "impact:github-models-review": "tsx scripts/impact-github-models-review.ts"
+    "impact:github-models-review": "tsx scripts/impact-github-models-review.ts",
+    "impact:gemini-code-review": "tsx scripts/impact-gemini-code-review.ts",
+    "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
