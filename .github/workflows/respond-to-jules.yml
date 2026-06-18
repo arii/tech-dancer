@@ -51,10 +51,10 @@ jobs:
           # Jules REST API endpoint for sending a follow-up message to a task/session.
           # Adjust the URL / payload shape once the Jules API docs confirm the exact schema.
           RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X POST "https://jules.google.com/api/v1/tasks/${TASK_ID}/messages" \
-            -H "Authorization: Bearer ${JULES_API_KEY}" \
+            -X POST "https://jules.googleapis.com/v1alpha/sessions/${TASK_ID}:sendMessage" \
+            -H "x-goog-api-key: ${JULES_API_KEY}" \
             -H "Content-Type: application/json" \
-            -d '{"message": "hello world!"}')
+            -d '{"prompt": "hello world!"}')
 
           HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
           HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
