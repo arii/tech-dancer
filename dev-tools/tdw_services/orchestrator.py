@@ -367,6 +367,24 @@ class Orchestrator:
             if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
                 warnings.append("Mentions Tailwind but not layout primitives.")
 
+            # Spec-Driven Issue Validation
+            spec_sections = [
+                "## Problem Statement",
+                "## Goal",
+                "## Non-Goals",
+                "## Proposed Approach",
+                "### Alternatives Considered",
+                "### Architectural Impact",
+                "## Scope",
+                "1. UNDERSTAND THE ISSUE",
+                "2. DETERMINE APPROACH",
+                "3. SPECIFY SCOPE",
+                "4. DEFINITION OF DONE"
+            ]
+            missing_spec_sections = [s for s in spec_sections if s.lower() not in body.lower()]
+            if missing_spec_sections:
+                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
+
             issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
             results.append(issue_result)
             total_findings += len(findings)

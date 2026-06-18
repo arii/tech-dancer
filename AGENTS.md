@@ -156,6 +156,11 @@ When multiple agents work simultaneously:
 
 `dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
 
+### Issue Lifecycle
+
+All new issues must follow the **Spec-Driven Issue Template** (`.github/ISSUE_TEMPLATE/spec_driven_issue.md`).
+The `python3 dev-tools/td_cli.py gh validate-issue` command enforces this structure.
+
 ### PR Review Lifecycle
 
 Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
