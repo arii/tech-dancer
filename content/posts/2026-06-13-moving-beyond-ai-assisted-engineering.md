@@ -4,6 +4,7 @@ title: "Moving Beyond AI Assisted Engineering"
 date: "2026-06-13"
 author: "Ariel Anders, PhD"
 category: "Tech"
+featured: true
 excerpt: "Discover how I transitioned from manual AI-assisted coding to building a fully automated, deterministic DevAI platform for Tech-Dancer using local LLMs, Playwright, and multimodal visual regression testing."
 ---
 

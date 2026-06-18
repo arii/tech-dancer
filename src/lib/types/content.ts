@@ -21,6 +21,7 @@ export interface Post {
   tags?: string[];
   affiliateIds?: string[];
   imageFit?: 'cover' | 'contain';
+  featured?: boolean;
 }
 
 export interface Resource {

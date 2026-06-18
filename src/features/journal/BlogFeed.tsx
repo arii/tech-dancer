@@ -5,7 +5,7 @@ import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 
 export default function BlogFeed() {
-  const { posts, view, setView } = useBlog();
+  const { posts, view, setView, isLoading } = useBlog();
 
   return (
     <>
@@ -23,6 +23,7 @@ export default function BlogFeed() {
         basePath="/blog"
         view={view}
         onViewChange={setView}
+        loading={isLoading}
       >
         <Box marginTop={8}>
           <FilterBar />

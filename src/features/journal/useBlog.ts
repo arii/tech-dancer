@@ -7,7 +7,7 @@ import { safeSearch } from '@/lib/utils';
 import { ViewMode } from '@/components/ui/ViewToggle';
 
 export function useBlog() {
-  const { data: posts = [] } = useQuery({
+  const { data: posts = [], isLoading } = useQuery({
     queryKey: ['posts'],
     queryFn: getPosts,
     initialData: getPosts,
@@ -49,6 +49,7 @@ export function useBlog() {
     view,
     setView,
     searchTerm,
-    setSearchTerm
+    setSearchTerm,
+    isLoading
   };
 }
