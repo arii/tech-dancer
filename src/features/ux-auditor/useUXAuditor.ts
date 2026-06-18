@@ -63,7 +63,7 @@ function validateFirebaseConfig(config: unknown): FirebaseOptions | null {
   if (!config || typeof config !== 'object') return null;
   const cfg = config as Record<string, unknown>;
   const required = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
-  const hasAll = required.every(key => typeof cfg[key] === 'string');
+  const hasAll = required.every(key => typeof cfg[key] === 'string' && cfg[key] !== "");
   return hasAll ? (config as FirebaseOptions) : null;
 }
 
@@ -193,7 +193,8 @@ export function useUXAuditor(): UXAuditorHookReturn {
   // Real-time listener that updates TanStack Query cache
   useEffect(() => {
     if (!user || !firebaseConfig) return;
-    const db = getFirestore();
+    const app = getApp();
+    const db = getFirestore(app);
     const q = query(
       collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'),
       orderBy('timestamp', 'desc')
@@ -225,7 +226,8 @@ export function useUXAuditor(): UXAuditorHookReturn {
       queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) => [newReport, ...old]);
 
       if (user && firebaseConfig) {
-        const db = getFirestore();
+        const app = getApp();
+        const db = getFirestore(app);
         // Use setDoc with a pre-generated ID for idempotency during retries
         // Path alternates collection/doc: artifacts(col)/appId(doc)/users(col)/uid(doc)/ux_reports(col)/reportId(doc)
         await withRetry(() =>
@@ -265,7 +267,8 @@ export function useUXAuditor(): UXAuditorHookReturn {
         );
 
         if (user && firebaseConfig) {
-          const db = getFirestore();
+          const app = getApp();
+          const db = getFirestore(app);
           const updateData: Partial<UXReport> = {};
           if (key === 'mobile') {
             updateData.findings_mobile = analysis;
@@ -279,7 +282,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
           }
 
           await withRetry(() =>
-            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData as Record<string, unknown>)
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData as { [x: string]: any })
           );
         }
       }
@@ -290,7 +293,8 @@ export function useUXAuditor(): UXAuditorHookReturn {
       );
 
       if (user && firebaseConfig) {
-        const db = getFirestore();
+        const app = getApp();
+        const db = getFirestore(app);
         await withRetry(() =>
           updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
             status: 'completed'
@@ -435,6 +439,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
   const exportToGithub = async () => {
     if (!activeReport) return;
+    setError(null);
     setIsExportingToGithub(true);
     const body = encodeURIComponent(getMarkdown());
     const title = encodeURIComponent(`UX Audit Findings: ${activeReport.url}`);
@@ -456,12 +461,14 @@ export function useUXAuditor(): UXAuditorHookReturn {
   };
 
   const copyMarkdown = async () => {
+    setError(null);
     const md = getMarkdown();
     try {
       await navigator.clipboard.writeText(md);
       setIsCopiedMarkdown(true);
     } catch (err) {
       console.error('Failed to copy markdown:', err);
+      setError("Failed to copy report to clipboard.");
     }
   };
 
