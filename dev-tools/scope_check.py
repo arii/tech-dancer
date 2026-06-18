@@ -75,6 +75,12 @@ def verify_pr_scope(file_list=None):
     if has_content and len(code_files) > 2:
         return "PR scope warning: Mixing significant code changes with content updates. Consider splitting content corrections from feature development."
 
+    # Golden File Check
+    golden_files = config.get("golden_files", [])
+    modified_golden = [f for f in file_list if f in golden_files]
+    if modified_golden:
+        return f"PR scope warning: Modifying golden files: {', '.join(modified_golden)}. These files are shared surfaces and should be reconciled only by a designated merge step (AGENTS.md §20)."
+
     return None
 
 if __name__ == "__main__":

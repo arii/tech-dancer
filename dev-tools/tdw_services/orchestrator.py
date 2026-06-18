@@ -12,6 +12,9 @@ from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
 from tdw_services.handlers.command_handler import CommandHandler
+from tdw_services.lock_manager import LockManager
+from tdw_services.symbol_indexer import SymbolIndexer
+from tdw_services.reconciler import Reconciler
 from utils import (
     get_github_token,
     get_github_client,
@@ -35,6 +38,7 @@ class Orchestrator:
         self._github = None
         self._ai = None
         self._jules = None
+        self._lock_manager = None
 
     @property
     def github(self) -> GitHubClient:
@@ -53,6 +57,34 @@ class Orchestrator:
         if self._jules is None:
             self._jules = JulesClient()
         return self._jules
+
+    @property
+    def lock_manager(self) -> LockManager:
+        if self._lock_manager is None:
+            self._lock_manager = LockManager()
+        return self._lock_manager
+
+    def lock_task(self, task_id: str, owns: List[str], reads: List[str] = None):
+        manager = self.lock_manager
+        manager.lock(task_id, owns, reads)
+        return manager.get_status()
+
+    def unlock_task(self, task_id: str) -> bool:
+        return self.lock_manager.unlock(task_id)
+
+    def check_locks(self, task_id: str):
+        changed_files = run_command(["git", "diff", "--name-only", "origin/main"]).strip().splitlines()
+        return self.lock_manager.check_conflicts(task_id, changed_files)
+
+    def get_inventory(self, root: str = "src"):
+        indexer = SymbolIndexer(root)
+        return indexer.index()
+
+    def reconcile_branches(self, branch_a: str, branch_b: str):
+        diff_a = run_command(["git", "diff", f"origin/main...{branch_a}"]).strip()
+        diff_b = run_command(["git", "diff", f"origin/main...{branch_b}"]).strip()
+        reconciler = Reconciler(self.ai)
+        return reconciler.reconcile(branch_a, diff_a, branch_b, diff_b)
 
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()

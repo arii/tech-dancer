@@ -148,9 +148,13 @@ pnpm build
 When multiple agents work simultaneously:
 
 1. **Run conflict check first**: `python3 dev-tools/td_cli.py gh conflicts`
-2. **Stagger feature files**: Agents should not touch the same component file
-3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`)
-4. **Shared primitives**: Do not modify `src/layouts/*.tsx` in feature branches without coordination
+2. **Ownership Manifest**: Lock files you own before starting: `python3 dev-tools/td_cli.py gh lock <task_id> --owns src/feature-a/`. Verify locks during development: `python3 dev-tools/td_cli.py gh check-locks <task_id>`.
+3. **Symbol Inventory**: Check for existing symbols to avoid duplication: `python3 dev-tools/td_cli.py agent inventory`
+4. **Reconciliation**: If working on a parallel branch, reconcile before merging: `python3 dev-tools/td_cli.py gh reconcile <branch_a> <branch_b>`
+5. **Golden Files**: Avoid modifying shared surfaces like `package.json` or `tsconfig.json`. These should be reconciled by a designated merge step.
+6. **Stagger feature files**: Agents should not touch the same component file.
+7. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`).
+8. **Shared primitives**: Do not modify `src/layouts/*.tsx` in feature branches without coordination.
 
 ## 21) 🤝 Collaborative GitHub Workflows
 

@@ -58,7 +58,7 @@ class AIClient:
         return is_ai_available()
 
     def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
+        return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:

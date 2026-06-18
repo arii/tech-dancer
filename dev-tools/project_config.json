@@ -11,5 +11,15 @@
     "resources": "content/resources/",
     "posts": "content/posts/",
     "studies": "content/studies/"
-  }
+  },
+  "golden_files": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "tsconfig.json",
+    "tsconfig.base.json",
+    "vite.config.ts",
+    "tailwind.config.mjs",
+    "firestore.rules",
+    "vercel.json"
+  ]
 }

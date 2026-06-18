@@ -117,6 +117,28 @@ def validate_issue(ctx, issue_number, all_open, post_comments, dry_run):
         out(ctx, "✅ Issue validation complete.", data=res)
 
 @gh.command()
+@click.argument('branch_a')
+@click.argument('branch_b')
+@click.pass_context
+def reconcile(ctx, branch_a, branch_b):
+    """Reconcile two branches developed in parallel to find overlaps/conflicts."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.reconcile_branches(branch_a, branch_b)
+    if not ctx.obj['JSON']:
+        click.echo(f"Reconciliation Verdict: {res.get('verdict', 'UNKNOWN').upper()}")
+        click.echo(f"Summary: {res.get('summary', '')}")
+        if res.get('duplicates'):
+            click.echo("\nDuplicates:")
+            for d in res['duplicates']: click.echo(f"  - {d}")
+        if res.get('conflicts'):
+            click.echo("\nConflicts:")
+            for c in res['conflicts']: click.echo(f"  - {c}")
+        if res.get('phantom_fixes'):
+            click.echo("\nPhantom Fixes:")
+            for f in res['phantom_fixes']: click.echo(f"  - {f}")
+    out(ctx, f"Reconciliation complete for {branch_a} vs {branch_b}", data=res)
+
+@gh.command()
 @click.argument('target_branch')
 @click.argument('pr_numbers', nargs=-1, type=int)
 @click.pass_context
@@ -143,6 +165,44 @@ def conflicts(ctx, base):
         err(ctx, res['message'], code=1, data=res)
     else:
         err(ctx, res['message'], data=res)
+
+@gh.command()
+@click.argument('task_id')
+@click.option('--owns', multiple=True, help='Files or directories this task owns')
+@click.option('--reads', multiple=True, help='Files or directories this task reads')
+@click.pass_context
+def lock(ctx, task_id, owns, reads):
+    """Declare ownership of files/directories for a task."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.lock_task(task_id, list(owns), list(reads))
+    out(ctx, f"✅ Task '{task_id}' locked {len(owns)} paths.", data=res)
+
+@gh.command()
+@click.argument('task_id')
+@click.pass_context
+def unlock(ctx, task_id):
+    """Release ownership of files/directories for a task."""
+    orch = ctx.obj['ORCHESTRATOR']
+    if orch.unlock_task(task_id):
+        out(ctx, f"✅ Task '{task_id}' unlocked.")
+    else:
+        err(ctx, f"Task '{task_id}' not found.")
+
+@gh.command()
+@click.argument('task_id')
+@click.pass_context
+def check_locks(ctx, task_id):
+    """Check for lock conflicts on the current branch."""
+    orch = ctx.obj['ORCHESTRATOR']
+    conflicts = orch.check_locks(task_id)
+    if not ctx.obj['JSON']:
+        if not conflicts:
+            click.echo(f"✅ No lock conflicts detected for task '{task_id}'.")
+        else:
+            click.echo(f"❌ Lock conflicts detected for task '{task_id}':")
+            for c in conflicts:
+                click.echo(f"  - {c}")
+    out(ctx, f"Found {len(conflicts)} conflicts.", data={"conflicts": conflicts})
 
 @gh.command()
 @click.option('--pr', type=int)
@@ -467,6 +527,20 @@ def comment(ctx, pr, command, comment_id):
 def agent_group():
     """Agent Operations"""
     pass
+
+@agent_group.command()
+@click.option('--root', default='src', help='Root directory to index')
+@click.pass_context
+def inventory(ctx, root):
+    """Generate a symbol inventory of the repository."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_inventory(root)
+    if not ctx.obj['JSON']:
+        click.echo("<existing_symbols>")
+        for path, syms in sorted(res.items()):
+            click.echo(f"{path}: {', '.join(syms)}")
+        click.echo("</existing_symbols>")
+    out(ctx, f"Found symbols in {len(res)} files.", data=res)
 
 @agent_group.command()
 @click.argument('branch')
