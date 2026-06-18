@@ -1,18 +1,13 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import { VISUAL_SUMMARY_PATH, type VisualSummary } from './impact-review-utils';
 
-function getChangedRoutesCount(): number {
-  if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
-    return 0;
-  }
-
+function getSignificantVisualChangeCount(): number {
   try {
-    const summary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8')) as VisualSummary;
-    return summary.routes.filter((route) => route.differencePercent > 1.5).length;
-  } catch (error) {
-    console.error(`Failed to process visual summary: ${error instanceof Error ? error.message : String(error)}`);
+    const summary: VisualSummary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf-8'));
+    return summary.routes.filter(r => r.differencePercent > 1.5).length;
+  } catch {
     return 0;
   }
 }
 
-process.stdout.write(`changed_routes=${getChangedRoutesCount()}\n`);
+process.stdout.write(`changed_routes=${getSignificantVisualChangeCount()}\n`);
