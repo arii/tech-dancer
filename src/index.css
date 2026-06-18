@@ -228,6 +228,10 @@
   z-index: 100;
 }
 
+@utility img-constrained {
+  max-height: 50vh;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

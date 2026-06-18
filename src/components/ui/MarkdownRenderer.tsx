@@ -156,6 +156,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   alt={alt || "Article illustration"}
                   maxWidth="full"
                   height="auto"
+                  className="object-contain img-constrained md:max-h-none"
                   {...props}
                 />
               </Box>
@@ -201,8 +202,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       radius="lg"
                       shadow="sm"
                       maxWidth="full"
-                      maxHeight={96}
-                      className="object-contain"
+                      className="object-contain img-constrained md:max-h-96"
                       loading="lazy"
                     />
                   </Box>
