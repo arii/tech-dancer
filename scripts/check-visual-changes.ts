@@ -23,8 +23,8 @@ async function getSignificantVisualChangeCount(): Promise<number> {
 
     const threshold = 1.5;
     const significantChanges = summary.routes.filter((route: any) => {
-      if (typeof route?.differencePercent !== 'number') {
-        console.warn(`[check-visual-changes] Warning: Route entry missing numeric differencePercent: ${JSON.stringify(route)}`);
+      if (!route || typeof route.differencePercent !== 'number') {
+        console.warn(`[check-visual-changes] Warning: Skipping route entry with missing or non-numeric differencePercent: ${JSON.stringify(route)}`);
         return false;
       }
       return route.differencePercent > threshold;
@@ -39,11 +39,14 @@ async function getSignificantVisualChangeCount(): Promise<number> {
 }
 
 async function main() {
-  const count = await getSignificantVisualChangeCount();
-  process.stdout.write(`changed_routes=${count}\n`);
+  try {
+    const count = await getSignificantVisualChangeCount();
+    process.stdout.write(`changed_routes=${count}\n`);
+  } catch (error) {
+    console.error(`[check-visual-changes] Fatal error: ${error instanceof Error ? error.message : String(error)}`);
+    process.stdout.write(`changed_routes=0\n`);
+    process.exit(1);
+  }
 }
 
-main().catch((error) => {
-  console.error(`[check-visual-changes] Fatal error: ${error instanceof Error ? error.message : String(error)}`);
-  process.exit(1);
-});
+void main();

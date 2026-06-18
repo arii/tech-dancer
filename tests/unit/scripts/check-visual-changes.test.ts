@@ -17,6 +17,7 @@ describe('check-visual-changes script', () => {
 
   it('should return 0 if summary file does not exist', async () => {
     await import('../../../scripts/check-visual-changes');
+    await new Promise(resolve => setTimeout(resolve, 50));
     expect(process.stdout.write).toHaveBeenCalledWith('changed_routes=0\n');
   });
 
@@ -33,13 +34,7 @@ describe('check-visual-changes script', () => {
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify(mockSummary));
 
     await import('../../../scripts/check-visual-changes');
-    // Since it's an async script, we might need a small wait or check multiple times if using dynamic import
-    // But Vitest + dynamic import usually works synchronously in terms of the module side-effect if not top-level awaited inside the script
-    // However, the script DOES have top-level await now.
-
-    // Wait for the promise to resolve
-    await new Promise(resolve => setTimeout(resolve, 100));
-
+    await new Promise(resolve => setTimeout(resolve, 50));
     expect(process.stdout.write).toHaveBeenCalledWith('changed_routes=2\n');
   });
 
@@ -48,8 +43,7 @@ describe('check-visual-changes script', () => {
     fs.writeFileSync(VISUAL_SUMMARY_PATH, 'invalid json');
 
     await import('../../../scripts/check-visual-changes');
-    await new Promise(resolve => setTimeout(resolve, 100));
-
+    await new Promise(resolve => setTimeout(resolve, 50));
     expect(process.stdout.write).toHaveBeenCalledWith('changed_routes=0\n');
     expect(console.error).toHaveBeenCalled();
   });
