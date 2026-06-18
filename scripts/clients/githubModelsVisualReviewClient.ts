@@ -1,5 +1,5 @@
+import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import { createGitHubModel } from '../lib/githubModelsUtils';
 import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';

@@ -1,5 +1,5 @@
+import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import { createGitHubModel } from '../lib/githubModelsUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel } from '../lib/modelPicker';
@@ -22,8 +22,6 @@ export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'war
   return 'pass';
 }
 
-<<<<<<< consolidate-merch-filter-ui-11923204419815752414
-=======
 async function createModel(): Promise<ChatOpenAI> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
@@ -42,7 +40,6 @@ async function createModel(): Promise<ChatOpenAI> {
   });
 }
 
->>>>>>> main
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'github-models-code-review',
   reportTitle: '🐙 GitHub Models Code Review',
@@ -50,11 +47,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'github-models-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
-<<<<<<< consolidate-merch-filter-ui-11923204419815752414
-    const model = createGitHubModel();
-=======
     const model = await createModel();
->>>>>>> main
     const baseContent = [
       { type: 'text', text: SYSTEM_PROMPT } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
