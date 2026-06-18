@@ -201,11 +201,11 @@ function ToolCard({ tool, navigate }: {
   navigate: (path: string) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLink = !!tool.sourceUrl;
-  const href = tool.sourceUrl || tool.canonicalPath || `/research/${tool.id}`;
+  const href = tool.canonicalPath || tool.externalUrl || tool.sourceUrl || `/research/${tool.id}`;
+  const isExternal = href.startsWith('http');
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isLink) {
+    if (!isExternal) {
       e.preventDefault();
       navigate(href);
     }
@@ -221,8 +221,8 @@ function ToolCard({ tool, navigate }: {
     <Stack
       as="a"
       href={href}
-      target={isLink ? "_blank" : undefined}
-      rel={isLink ? "noopener noreferrer" : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
       className={cn(cardVariants({ interactive: true }), "pt-[14px] px-4 pb-4 flex flex-col h-full no-underline")}

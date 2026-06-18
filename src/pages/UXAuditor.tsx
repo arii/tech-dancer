@@ -14,6 +14,7 @@ import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
+import { cn } from '@/lib/utils';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -200,10 +201,10 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
           )}
         </Box>
 
-        <Stack gap={6} padding={8} flex={1} minWidth="0" overflow="hidden">
+        <Stack gap={6} padding={8} flex={1} minWidth={0} overflow="hidden">
           {data ? (
-            <>
-              <Box surface="alt" padding={5} className="border border-line rounded-lg">
+            <Stack gap={4} minWidth={0} overflow="hidden">
+              <Box surface="alt" padding={5} className="border border-line rounded-lg overflow-hidden min-w-0">
                 <Box marginBottom={3}>
                   <Text variant="sans" size="xs" weight="font-black" color="accent" uppercase display="block" tracking="widest">
                     Analysis Summary
@@ -213,9 +214,9 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                   "{data.summary}"
                 </Text>
               </Box>
-              <Stack gap={4}>
+              <Stack gap={4} minWidth={0} overflow="hidden">
                 {data.improvements?.map((imp, idx) => (
-                  <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
+                  <Box key={idx} padding={4} className={cn(cardVariants({ interactive: true }), "min-w-0 overflow-hidden")}>
                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                       <Stack direction="row" align="center" gap={2}>
                         <Box width={2} height={2} radius="full" className={imp.severity > 7 ? 'bg-error shadow-sm' : 'bg-accent-purple shadow-sm'} />
@@ -248,7 +249,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                   </Box>
                 ))}
               </Stack>
-            </>
+            </Stack>
           ) : (
             <Stack gap={4} width="full">
               <Skeleton height={20} width="full" />
@@ -292,10 +293,11 @@ function SettingInput({
       align="center"
       gap={3}
       padding={2}
-      className={cardVariants()}
+      className={cn(cardVariants(), "overflow-hidden min-w-0")}
+      minWidth={0}
     >
       {label && (
-        <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">
+        <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold" shrink={0}>
           {label}
         </Text>
       )}
