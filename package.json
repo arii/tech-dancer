@@ -50,9 +50,14 @@
     "impact:analysis": "tsx scripts/impact-analysis.ts",
     "impact:build-main": "tsx scripts/impact-build-main.ts",
     "impact:visual-diff": "tsx scripts/impact-visual-diff.ts",
-    "impact:dom-diff": "tsx scripts/impact-dom-diff.ts"
+    "impact:dom-diff": "tsx scripts/impact-dom-diff.ts",
+    "impact:gemini-review": "tsx scripts/impact-gemini-review.ts",
+    "impact:github-models-review": "tsx scripts/impact-github-models-review.ts",
+    "impact:gemini-code-review": "tsx scripts/impact-gemini-code-review.ts",
+    "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts"
   },
   "dependencies": {
+    "@google/genai": "^2.8.0",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-query": "^5.99.2",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -97,6 +102,9 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
+    "@langchain/core": "^1.2.0",
+    "@langchain/google-genai": "^2.2.0",
+    "@langchain/openai": "^1.4.7",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "1.49.0",
     "@tailwindcss/typography": "^0.5.19",

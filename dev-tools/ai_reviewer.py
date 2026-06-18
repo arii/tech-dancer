@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-ollama_reviewer.py - Standalone Ollama Code Reviewer CLI
+ai_reviewer.py - Standalone AI Code Reviewer CLI
 """
 
 import os
 import sys
 import argparse
-from utils import call_ollama
+from utils import call_ai
 
-MODEL = "code-reviewer"
+MODEL = "gpt-4o"
 MAX_FILE_SIZE_KB = 50
 
 def is_binary(file_path):
@@ -46,9 +46,9 @@ def review_file(file_path, silent=False):
     prompt = f"Please review the following code:\n\n```\n{content}\n```"
 
     if not silent:
-        print(f"--- Reviewing {file_path} using model '{MODEL}' ---")
+        print(f"--- Reviewing {file_path} using AI service ---")
 
-    review = call_ollama(prompt, model=MODEL)
+    review = call_ai(prompt, model=MODEL)
     if review:
         print(review)
     else:
@@ -56,7 +56,7 @@ def review_file(file_path, silent=False):
         sys.exit(1)
 
 def main():
-    parser = argparse.ArgumentParser(description="Standalone Ollama Code Reviewer CLI")
+    parser = argparse.ArgumentParser(description="Standalone AI Code Reviewer CLI")
     parser.add_argument("file", help="Path to the file to review")
     parser.add_argument("--silent", action="store_true", help="Suppress non-review output")
     args = parser.parse_args()

@@ -9,7 +9,7 @@ from urllib.parse import quote, urlparse
 from collections import defaultdict
 
 from tdw_services.services.github import GitHubClient
-from tdw_services.services.gemini import LocalAIClient
+from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
@@ -20,7 +20,7 @@ from utils import (
     set_gha_variable,
     CLIError,
     run_command,
-    is_ollama_available,
+    is_ai_available,
     extract_failing_info,
     clean_gha_logs
 )
@@ -43,9 +43,9 @@ class Orchestrator:
         return self._github
 
     @property
-    def ai(self) -> LocalAIClient:
+    def ai(self) -> AIClient:
         if self._ai is None:
-            self._ai = LocalAIClient()
+            self._ai = AIClient()
         return self._ai
 
     @property
@@ -619,7 +619,7 @@ class Orchestrator:
                                 auto_findings.append({"path": filepath, "issue": f"{v['pattern']}: {v['message']} (value: {v.get('value', 'N/A')})", "severity": v.get('severity', 'minor')})
                     except Exception: pass
             res["auto_findings"] = auto_findings
-            run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+            if not os.environ.get("HEADLESS"): run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
         if submit:
             from submit_review import submit_review
             submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)

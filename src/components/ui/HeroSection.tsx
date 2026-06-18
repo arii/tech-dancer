@@ -86,7 +86,7 @@ export function HeroSection() {
             variant="hero"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            <span className="hero-accent-color">Train smarter.</span>
+            <span className="hero-accent-color">Look good.</span>
           </Text>
           <Text
             as="span"
@@ -94,7 +94,15 @@ export function HeroSection() {
             color="white"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            Travel better.
+            Travel smart.
+          </Text>
+          <Text
+            as="span"
+            variant="hero"
+            color="white"
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+          >
+            Dance more.
           </Text>
         </Stack>
 
@@ -132,7 +140,7 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Training notes, gear reviews, and practical tools for better West Coast Swing weekends.
+            Gear guides, travel hacks, DIY tips, and merch for West Coast Swing dancers
           </Text>
         </Stack>
 

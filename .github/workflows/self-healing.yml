@@ -15,22 +15,27 @@ permissions:
 
 jobs:
   repair:
-    if: github.repository == 'disabled'
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
-      OLLAMA_MODEL: qwen2.5-coder:1.5b
-      OLLAMA_SYNTHESIS_MODEL: qwen2.5-coder:1.5b
-      OLLAMA_BASE_URL: http://localhost:11434
+      AI_MODEL: gpt-4o
+      AI_SYNTHESIS_MODEL: gpt-4o
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: main
+
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Fetch and Apply PR Patch
         env:
@@ -38,8 +43,6 @@ jobs:
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          # We use patch application to avoid checking out untrusted code context natively via actions/checkout,
-          # which mitigates CodeQL alerts about untrusted checkout with later potential execution.
           if [ "$EVENT_NAME" == "workflow_run" ]; then
             PR_NUMBER=$(gh pr list --head "$HEAD_SHA" --json number -q '.[0].number')
           else
@@ -47,22 +50,22 @@ jobs:
           fi
 
           if [ -n "$PR_NUMBER" ]; then
-            # We fetch the target PR branch to track history properly for commits, but via safe local git branch creation
             PR_HEAD=$(gh pr view "$PR_NUMBER" --json headRefName --jq .headRefName)
             git checkout -b "$PR_HEAD" || git checkout "$PR_HEAD"
-
-            # Download the PR diff and apply it
             gh pr diff "$PR_NUMBER" > pr.patch
             git apply pr.patch || git apply pr.patch --3way || true
             rm pr.patch
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
           path: trusted-tools-temp
           ref: main
+
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Restore Trusted Dev-Tools
         run: |
@@ -70,9 +73,6 @@ jobs:
           cp -r trusted-tools-temp/dev-tools dev-tools
           rm -rf trusted-tools-temp
           chmod +x dev-tools/low-compute-review.sh
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |
@@ -86,24 +86,6 @@ jobs:
         run: |
           if ! pnpm eslint . --fix; then echo "eslint failed"; exit 1; fi
           if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
-
-      - name: Setup Ollama
-        run: |
-          curl -fsSL https://ollama.com/install.sh | sh
-          ollama serve > /tmp/ollama.log 2>&1 &
-          echo "Waiting for Ollama to be ready..."
-          for i in {1..15}; do
-            if curl -sf http://localhost:11434/api/tags > /dev/null; then
-              echo "Ollama is ready!"
-              ollama list
-              exit 0
-            fi
-            echo "Waiting... ($i/15)"
-            sleep 2
-          done
-          echo "Ollama failed to start"
-          cat /tmp/ollama.log
-          exit 1
 
       - name: Validate CLI
         run: |

@@ -26,8 +26,8 @@ jobs:
             echo "update_snapshots=true" >> "$GITHUB_OUTPUT"
           fi
 
-          if [[ "$COMMENT_BODY" == *"/ollama-fix"* ]] || [[ "$COMMENT_BODY" == *"/ollama-review"* ]]; then
-            echo "ollama_chatops=true" >> "$GITHUB_OUTPUT"
+          if [[ "$COMMENT_BODY" == *"/ai-fix"* ]] || [[ "$COMMENT_BODY" == *"/ai-review"* ]]; then
+            echo "ai_chatops=true" >> "$GITHUB_OUTPUT"
           fi
 
           if [[ "$COMMENT_BODY" == *"@jules-fix-ci"* ]]; then
@@ -42,7 +42,7 @@ jobs:
           fetch-depth: 1
 
       - name: Resolve Branch Details
-        if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ollama_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
+        if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -68,16 +68,16 @@ jobs:
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          gh workflow run update-snapshots.yml --ref "$HEAD_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+          gh workflow run update-snapshots.yml --ref "$BASE_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
 
-      - name: Trigger Ollama ChatOps
-        if: steps.check.outputs.ollama_chatops == 'true'
+      - name: Trigger AI ChatOps
+        if: steps.check.outputs.ai_chatops == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          gh workflow run ollama-chatops.yml --ref "$HEAD_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+          gh workflow run ai-chatops.yml --ref "$BASE_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
 
       - name: Trigger Jules Fix CI
         if: steps.check.outputs.jules_fix_ci == 'true'
@@ -86,4 +86,4 @@ jobs:
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          gh workflow run jules-fix-trigger.yml --ref "$HEAD_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+          gh workflow run jules-fix-trigger.yml --ref "$BASE_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
