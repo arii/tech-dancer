@@ -4,9 +4,9 @@ from typing import Optional, List, Dict, Any
 
 class JulesClient:
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.environ.get("ANTIGRAVITY_API_KEY") or os.environ.get("JULES_API_KEY")
+        self.api_key = api_key or os.environ.get("JULES_API_KEY")
         if not self.api_key:
-            raise ValueError("ANTIGRAVITY_API_KEY or JULES_API_KEY is not set or empty")
+            raise ValueError("JULES_API_KEY is not set or empty")
 
         self.base_url = "https://jules.googleapis.com/v1alpha"
         self.legacy_url = "https://api.jules.ai/v1/sessions"
