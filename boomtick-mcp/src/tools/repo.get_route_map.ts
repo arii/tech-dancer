@@ -4,7 +4,7 @@ import path from "path";
 
 export const GetRouteMapInputSchema = z.object({});
 
-export async function getRouteMapHandler() {
+export async function getRouteMapHandler(_input: z.infer<typeof GetRouteMapInputSchema>) {
   // Logic based on tech-dancer repo structure: src/config/routes.ts and content/
 
   // For simplicity in MVP, we'll try to find routes by listing content files

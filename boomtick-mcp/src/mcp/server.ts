@@ -16,8 +16,8 @@ import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_d
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
 import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
 import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
-import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
-import { getRouteMapHandler } from "../tools/repo.get_route_map.js";
+import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
+import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
 import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
@@ -174,7 +174,7 @@ export class BoomtickMCPServer {
         };
       }
       if (uri === "repo://routes") {
-        const routeMap = await getRouteMapHandler();
+        const routeMap = await getRouteMapHandler({});
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(routeMap, null, 2) }],
         };
@@ -502,9 +502,9 @@ export class BoomtickMCPServer {
           case "repo.get_changed_files":
             return createSuccessResult(await getChangedFilesHandler(GetChangedFilesInputSchema.parse(request.params.arguments || {})));
           case "repo.get_package_scripts":
-            return createSuccessResult(await getPackageScriptsHandler());
+            return createSuccessResult(await getPackageScriptsHandler(GetPackageScriptsInputSchema.parse(request.params.arguments || {})));
           case "repo.get_route_map":
-            return createSuccessResult(await getRouteMapHandler());
+            return createSuccessResult(await getRouteMapHandler(GetRouteMapInputSchema.parse(request.params.arguments || {})));
           case "repo.read_ci_logs":
             return createSuccessResult(await readCiLogsHandler(ReadCiLogsInputSchema.parse(request.params.arguments)));
           case "repo.create_repair_branch":

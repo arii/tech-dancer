@@ -5,7 +5,7 @@ import { config } from "../config.js";
 
 export const GetPackageScriptsInputSchema = z.object({});
 
-export async function getPackageScriptsHandler() {
+export async function getPackageScriptsHandler(_input: z.infer<typeof GetPackageScriptsInputSchema>) {
   const packageJsonPath = path.join(config.repoPath, "package.json");
   try {
     const content = await fs.readFile(packageJsonPath, "utf-8");
