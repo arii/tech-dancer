@@ -228,8 +228,10 @@
   z-index: 100;
 }
 
-@utility img-constrained {
-  max-height: 50vh;
+@layer utilities {
+  .img-constrained {
+    max-height: 50vh;
+  }
 }
 
 @layer base {
