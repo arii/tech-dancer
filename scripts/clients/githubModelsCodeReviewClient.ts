@@ -30,11 +30,7 @@ async function createModel(): Promise<ChatOpenAI> {
   const modelName = await pickOptimalModel(apiKey, fallback, false);
 
   return new ChatOpenAI({
-<<<<<<< consolidate-workflow-deps-6456202301048938589
-    modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini',
-=======
     modelName: modelName,
->>>>>>> main
     apiKey: apiKey,
     configuration: {
       baseURL: 'https://models.inference.ai.azure.com',
