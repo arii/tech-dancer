@@ -26,7 +26,7 @@ function createModel(): ChatOpenAI {
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   return new ChatOpenAI({
-    modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-4o',
+    modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-5.4-nano',
     apiKey: apiKey,
     configuration: {
       baseURL: 'https://models.inference.ai.azure.com',
