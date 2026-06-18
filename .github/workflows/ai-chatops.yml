@@ -46,8 +46,8 @@ jobs:
 
       - name: Validate CLI
         run: |
-          python3 dev-tools/td_cli.py gh --help
-          python3 dev-tools/td_cli.py ai --help
+          python3 dev-tools/td_cli.py doctor
+          python3 dev-tools/td_cli.py gh status-board
 
       - name: Resolve PR Branch
         env:
