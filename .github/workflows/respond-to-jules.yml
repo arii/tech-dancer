@@ -1,0 +1,90 @@
+# Triggered when a Jules bot PR is opened or its description is edited.
+# Parses the Jules session ID from the PR footer and sends "hello world!"
+# back to that session using the existing JulesClient.
+#
+# Required secrets / env vars:
+#   JulesClient reads ANTIGRAVITY_API_KEY first, then JULES_API_KEY from
+#   dev-tools/tdw_services/services/jules.py. Add one of those secrets under
+#   repo Settings → Secrets → Actions.
+
+name: Respond to Jules PR
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  respond-to-jules:
+    # Only run when the PR was opened by the Jules bot
+    if: github.event.pull_request.user.login == 'google-labs-jules[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dev-tools dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e dev-tools
+
+      - name: Parse Jules session ID from PR description
+        id: parse
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # The PR footer looks like:
+          #   *PR created automatically by Jules for task [2264804411485856796](https://jules.google.com/task/2264804411485856796) started by @arii*
+          #
+          # Extract the numeric task ID; Jules session names are "sessions/{id}".
+          TASK_ID=$(echo "$PR_BODY" \
+            | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
+            | head -1)
+
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Send message to Jules session
+        if: steps.parse.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse.outputs.task_id }}
+          ANTIGRAVITY_API_KEY: ${{ secrets.ANTIGRAVITY_API_KEY }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          python3 - <<'PYEOF'
+          import os
+          import sys
+
+          sys.path.append("dev-tools")
+          from tdw_services.services.jules import JulesClient
+
+          task_id = os.environ["TASK_ID"]
+          session_id = f"sessions/{task_id}"
+
+          client = JulesClient()
+
+          # Guard: only send if Jules spoke last (avoid loops on PR edits).
+          messages = client.get_messages(session_id)
+          if messages and messages[-1].get("role") != "jules":
+              print(
+                  "Last message is not from Jules "
+                  f"(role={messages[-1].get('role')}). Skipping to avoid loop."
+              )
+              sys.exit(0)
+
+          result = client.send_message(session_id, "hello world!")
+          if result.get("status") != "success":
+              raise RuntimeError(result.get("message", "Jules send_message failed"))
+
+          print(f"✅ Sent 'hello world!' to {session_id}")
+          PYEOF
