@@ -56,7 +56,18 @@ declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
 
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'ux-auditor-v2';
-const firebaseConfig = (typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null) as FirebaseOptions | null;
+const rawFirebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+
+// Validation helper for Firebase configuration
+function validateFirebaseConfig(config: unknown): FirebaseOptions | null {
+  if (!config || typeof config !== 'object') return null;
+  const cfg = config as Record<string, unknown>;
+  const required = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+  const hasAll = required.every(key => typeof cfg[key] === 'string');
+  return hasAll ? (config as FirebaseOptions) : null;
+}
+
+const firebaseConfig = validateFirebaseConfig(rawFirebaseConfig);
 
 export const VIEWPORTS = [
   { name: 'Mobile', width: 375, height: 667 },
@@ -88,6 +99,8 @@ export interface UXReport {
   image_mobile?: string;
   image_tablet?: string;
   image_desktop?: string;
+  // Index signature for dynamic access in loops (safe because we restricted keys)
+  [key: string]: string | number | ViewportAnalysis | undefined;
 }
 
 export interface UXAuditorHookReturn {
@@ -230,12 +243,17 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
 
-        const key = vp.name.toLowerCase() as 'mobile' | 'tablet' | 'desktop';
-        const findingsKey = `findings_${key}` as const;
-        const imageKey = `image_${key}` as const;
-
-        newReport[findingsKey] = analysis;
-        newReport[imageKey] = mockImg;
+        const key = vp.name.toLowerCase();
+        if (key === 'mobile') {
+          newReport.findings_mobile = analysis;
+          newReport.image_mobile = mockImg;
+        } else if (key === 'tablet') {
+          newReport.findings_tablet = analysis;
+          newReport.image_tablet = mockImg;
+        } else if (key === 'desktop') {
+          newReport.findings_desktop = analysis;
+          newReport.image_desktop = mockImg;
+        }
 
         // Update the report in cache to reflect progress
         queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
@@ -244,12 +262,20 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
         if (user && firebaseConfig) {
           const db = getFirestore();
-          const updateData: Record<string, ViewportAnalysis | string> = {};
-          updateData[findingsKey] = analysis;
-          updateData[imageKey] = mockImg;
+          const updateData: Partial<UXReport> = {};
+          if (key === 'mobile') {
+            updateData.findings_mobile = analysis;
+            updateData.image_mobile = mockImg;
+          } else if (key === 'tablet') {
+            updateData.findings_tablet = analysis;
+            updateData.image_tablet = mockImg;
+          } else if (key === 'desktop') {
+            updateData.findings_desktop = analysis;
+            updateData.image_desktop = mockImg;
+          }
 
           await withRetry(() =>
-            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData)
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData as Record<string, unknown>)
           );
         }
       }
@@ -286,6 +312,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
     } catch (err) {
       console.error("Audit failed:", err);
     } finally {
+      // Throttle for 2s AFTER the audit completes
       setTimeout(() => {
         isThrottled.current = false;
       }, 2000);

@@ -224,7 +224,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: ViewportAnalysisCar
               </Box>
               <Stack gap={4}>
                 {data.improvements?.map((imp: Improvement) => (
-                  <Box key={imp.id || `${vp.name}-${imp.element}-${imp.severity}`} padding={4} className={cardVariants({ interactive: true })}>
+                  <Box key={imp.id} padding={4} className={cardVariants({ interactive: true })}>
                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                       <Stack direction="row" align="center" gap={2}>
                         <Box
@@ -500,7 +500,7 @@ export default function UXAuditor() {
         </Stack>
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ lg: 3 }} minWidth="0" width="full" style={{ gridColumn: 'span 3 / span 3' }} // impeccable-ignore - Override browser grid collapse issues identified in audit
+        <Stack gap={6} span={{ lg: 3 }} minWidth="0" width="full" className="lg:col-span-3"
         >
           {activeReport ? (
             <>
