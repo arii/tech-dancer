@@ -6,6 +6,10 @@ import os
 import pickle
 from collections import defaultdict
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from utils import get_github_client, get_repo_name
+
+
 def main():
     parser = argparse.ArgumentParser(description="Identify and propose consolidation of Pull Requests (PRs) that demonstrate high levels of functional or structural overlap.")
     parser.add_argument("--limit", type=int, default=50, help="Limit the number of open PRs to process (default: 50)")
@@ -16,19 +20,26 @@ def main():
     limit = args.limit
 
     def get_open_prs(limit):
-        cmd = ["gh", "pr", "list", "--state", "open", "--limit", str(limit), "--json", "number,title"]
         try:
-            return json.loads(subprocess.check_output(cmd, text=True))
-        except subprocess.CalledProcessError as e:
+            client = get_github_client()
+            repo = client.get_repo(get_repo_name())
+            pulls = repo.get_pulls(state='open')
+            prs = []
+            for pr in list(pulls)[:limit]:
+                prs.append({"number": pr.number, "title": pr.title})
+            return prs
+        except Exception as e:
             print(f"Error fetching open PRs: {e}", file=sys.stderr)
             sys.exit(1)
 
     def get_pr_files(pr_number):
-        cmd = ["gh", "pr", "diff", str(pr_number), "--name-only"]
         try:
-            files = subprocess.check_output(cmd, text=True).splitlines()
-            return {f for f in files if not f.startswith("tests/visual.spec.ts-snapshots/")}
-        except subprocess.CalledProcessError as e:
+            client = get_github_client()
+            repo = client.get_repo(get_repo_name())
+            pr = repo.get_pull(int(pr_number))
+            files = pr.get_files()
+            return {f.filename for f in files if not f.filename.startswith("tests/visual.spec.ts-snapshots/")}
+        except Exception as e:
             print(f"Error fetching files for PR #{pr_number}: {e}", file=sys.stderr)
             return set()
 
