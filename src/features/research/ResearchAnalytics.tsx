@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical, Filter } from 'lucide-react';
@@ -412,7 +412,16 @@ export default function ResearchAnalytics() {
         </Grid>
 
         {/* Filter Section */}
-        <Stack gap={3} className="sticky top-0 z-20 bg-background/80 backdrop-blur-md py-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <Stack
+          gap={3}
+          position="sticky"
+          top={0}
+          zIndex={20}
+          paddingY={4}
+          paddingX={{ base: 4, sm: 0 }}
+          marginX={{ base: -4, sm: 0 }}
+          className="backdrop-blur-md bg-bg/80"
+        >
           <Stack direction="row" align="center" gap={2}>
             <Filter className="w-4 h-4 text-dim" />
             <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">

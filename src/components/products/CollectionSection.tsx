@@ -1,7 +1,6 @@
 import { Stack, Text, Grid, Box } from '@/layouts/Primitives';
 import { ProductCard } from '@/components/products/ProductCard';
 import type { ProductCatalogItem } from '@/data/products/catalog';
-import { cn } from '@/lib/utils';
 
 interface CollectionSectionProps {
   id: string;
@@ -16,7 +15,7 @@ export function CollectionSection({ id, title, description, products, isFeatured
 
   return (
     <Stack as="section" id={id} gap={5} width="full">
-      <Stack gap={1} className="collection-header">
+      <Stack gap={1}>
         <Box display="flex" justify="between" align="baseline" wrap="wrap" gap={2}>
           <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
             {title}
@@ -43,7 +42,7 @@ export function CollectionSection({ id, title, description, products, isFeatured
       </Stack>
 
       {isFeatured ? (
-        <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full" className="product-grid">
+        <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
           <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
             <ProductCard item={products[0]} isFeatured />
           </Box>
@@ -54,7 +53,7 @@ export function CollectionSection({ id, title, description, products, isFeatured
           ))}
         </Grid>
       ) : (
-        <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0" className="product-grid">
+        <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
           {products.map((product) => (
             <ProductCard key={`${id}-${product.id}`} item={product} />
           ))}

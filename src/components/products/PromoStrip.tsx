@@ -27,6 +27,7 @@ export function PromoStrip({ imageSrc, title, subtitle, ctaLabel, href }: PromoS
       justify="between"
       padding={3}
       radius="md"
+      surface="surface"
       className={cn(
         "bg-surface-alt/40 border border-line/20 transition-all duration-200",
         "hover:bg-surface-alt/60 hover:border-accent/40 hover:shadow-sm group"
@@ -39,7 +40,8 @@ export function PromoStrip({ imageSrc, title, subtitle, ctaLabel, href }: PromoS
           radius="md"
           overflow="hidden"
           shrink={0}
-          className="bg-muted border border-line/10"
+          surface="muted"
+          className="border border-line/10"
         >
           <img
             src={resolveImageSrc(imageSrc)}
@@ -65,7 +67,7 @@ export function PromoStrip({ imageSrc, title, subtitle, ctaLabel, href }: PromoS
           color="accent"
           uppercase
           tracking="widest"
-          className="hidden sm:block group-hover:translate-x-[-4px] transition-transform"
+          className="hidden sm:block group-hover:-translate-x-1 transition-transform"
         >
           {ctaLabel}
         </Text>

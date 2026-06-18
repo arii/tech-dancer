@@ -36,20 +36,25 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           isFeatured={isFeatured}
         />
         {item.isBundle && (
-          <Box
+          <Stack
+            direction="row"
+            align="center"
+            gap={1.5}
             position="absolute"
             top={3}
             right={3}
             paddingX={2}
             paddingY={1}
             radius="md"
-            className="bg-accent text-white shadow-lg flex items-center gap-1.5 z-10"
+            surface="accent"
+            zIndex={10}
+            className="text-white shadow-lg"
           >
             <Package className="w-3.5 h-3.5" />
             <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest">
               Bundle
             </Text>
-          </Box>
+          </Stack>
         )}
       </Box>
 
@@ -71,16 +76,19 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
             {item.title}
           </Text>
 
+        </Stack>
+
+        <Stack gap={1.5}>
+          <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
+            {item.description}
+          </Text>
+
           {item.isBundle && item.bundleNote && (
-            <Text variant="body" size="xs" color="accent" weight="font-semibold">
+            <Text variant="body" size="xs" color="dim" className="opacity-80">
               {item.bundleNote}
             </Text>
           )}
         </Stack>
-
-        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
-          {item.description}
-        </Text>
 
         {item.roles && (
           <Stack direction="row" gap={1.5} wrap="wrap">
