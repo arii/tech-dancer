@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true" class="h-full w-auto max-w-none overflow-visible" viewBox="0 0 325 100"><style>.brand-stop-accent { stop-color: #22d3ee; }
+    .brand-stop-purple { stop-color: #a78bfa; }
+    .brand-text-accent { fill: #22d3ee; }
+    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    .brand-wordmark {
+      font-family: &apos;Bricolage Grotesque&apos;, sans-serif;
+      font-weight: 800;
+    }</style><text y="75" class="brand-wordmark" font-size="52" letter-spacing="-1.5">
+    <tspan fill="#fff">boom</tspan>
+    <tspan fill="#22d3ee" class="brand-text-accent">tick</tspan>
+    <tspan fill="rgba(241,245,249,0.6)" class="brand-text-muted" font-weight="300">.blog</tspan>
+  </text></svg>

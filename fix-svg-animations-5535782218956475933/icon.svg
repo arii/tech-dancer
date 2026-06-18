@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><style>.brand-stop-accent { stop-color: #22d3ee; }
+    .brand-stop-purple { stop-color: #a78bfa; }
+    .brand-text-accent { fill: #22d3ee; }
+    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    .brand-wordmark {
+      font-family: &apos;Bricolage Grotesque&apos;, sans-serif;
+      font-weight: 800;
+    }</style><rect width="512" height="512" fill="#020617" rx="108"/><text x="50%" y="53%" class="brand-wordmark" dominant-baseline="middle" font-size="440" letter-spacing="-38" text-anchor="middle">
+    <tspan fill="#fff">b</tspan><tspan fill="#22d3ee" class="brand-text-accent">t</tspan>
+  </text></svg>

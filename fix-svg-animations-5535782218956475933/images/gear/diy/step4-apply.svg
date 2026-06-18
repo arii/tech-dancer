@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" class="bg" rx="8"/><style>.bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: &apos;Albert Sans&apos;, system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: &apos;Albert Sans&apos;, system-ui, sans-serif; font-size: 12px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }</style><path stroke-width="2.25" d="M147.5 55Q185 40 215 55q22.5 22.5 15 97.5T207.5 265q-15 30-26.25 30T155 265q-15-37.5-22.5-112.5t15-97.5Z" class="shoe"/><path stroke-width="1.5" d="M151.25 58.75q33.75-15 60 0 22.5 22.5 15 97.5t-22.5 112.5q-15 30-22.5 30t-22.5-30q-15-37.5-22.5-112.5t15-97.5Z" class="suede"/><g transform="matrix(.75 0 0 .75 181.25 152.5)"><circle r="30" fill="#22d3ee" opacity=".3"/><text y="50" class="label">Press firmly</text></g><text x="200" y="350" class="text">4. Apply suede and remove air bubbles</text></svg>
