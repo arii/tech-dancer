@@ -51,16 +51,16 @@ _SYNTHESIS_SCHEMA = {
 
 
 class AIClient:
-    def __init__(self, ai_model: str = None):
+    def __init__(self, ai_model: Optional[str] = None):
         self.ai_model = ai_model or get_ai_model()
 
     def is_ai_available(self) -> bool:
         return is_ai_available()
 
-    def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
+    def call_ai(self, prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
         return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
-    def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
+    def generate(self, prompt: str, schema: Optional[Dict] = None, model: Optional[str] = None) -> str:
         if self.is_ai_available():
             # For JSON schema, we just append instruction for Ollama
             if schema:

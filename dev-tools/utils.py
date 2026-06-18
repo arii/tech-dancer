@@ -94,7 +94,7 @@ def to_standard_schema(schema, uppercase: bool = False):
         return [to_standard_schema(item, uppercase=uppercase) for item in schema]
     return schema
 
-def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_ai(prompt: str, model: Optional[str] = None, url: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
     """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
     try:
         from langchain_openai import ChatOpenAI
@@ -107,7 +107,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
     if not token:
         return None
 
-    model = model or get_ollama_model()
+    model = model or get_ai_model()
 
     llm = ChatOpenAI(
         base_url="https://models.inference.ai.azure.com",
@@ -193,7 +193,7 @@ def is_ollama_available() -> bool:
     except Exception:
         return False
 
-def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_ollama(prompt: str, model: Optional[str] = None, url: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
     """Unified helper to call local Ollama API."""
     base_url = url or get_ollama_url()
     if not base_url.endswith("/"): base_url += "/"
@@ -208,7 +208,7 @@ def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_r
     res = _call_api_with_retry(req, max_retries=max_retries, timeout=900)
     return res.get("response") if res else None
 
-def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_github_models(prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
     token = get_github_token()
     if not token: return None
@@ -232,7 +232,7 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
     res = _call_api_with_retry(req, max_retries=max_retries)
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
-def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_gemini(prompt: str, model: Optional[str] = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
     """Unified helper to call Gemini API."""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key: return None
@@ -252,7 +252,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         return res["candidates"][0]["content"]["parts"][0]["text"]
     return None
 
-def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
+def call_ai_service(prompt: str, model: Optional[str] = None, schema: Optional[Dict] = None) -> Optional[str]:
     """
     Orchestrates AI calls: GitHub Models -> Gemini -> Ollama.
     """
