@@ -261,7 +261,7 @@ function ToolCard({ tool, navigate }: {
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {isLink ? 'View Source' : 'View Assets'}
+          {isExternal ? 'View Source' : 'View Assets'}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Box>
