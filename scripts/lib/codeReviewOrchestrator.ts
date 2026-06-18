@@ -43,7 +43,29 @@ export function getCodeDiffSummary(): CodeReviewSummary {
     let schemasContext: string | undefined;
     try {
       const maxSchemaBytes = 10000;
+      const MAX_FILES = 10;
       let totalBytes = 0;
+      let fileCount = 0;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sanitizePrototypePollution = (obj: any): any => {
+        if (obj === null || typeof obj !== 'object') {
+          return obj;
+        }
+        if (Array.isArray(obj)) {
+          return obj.map(sanitizePrototypePollution);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const cleaned: Record<string, any> = {};
+        for (const key of Object.keys(obj)) {
+          if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+            continue;
+          }
+          cleaned[key] = sanitizePrototypePollution(obj[key]);
+        }
+        return cleaned;
+      };
+
       // Use fs.readdirSync recursively or simple shell glob to avoid 'find' compat issues
       const schemaDir = path.join('docs', 'agent');
       let globFiles: string[] = [];
@@ -54,7 +76,13 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       if (globFiles.length > 0) {
         const schemas: Record<string, unknown> = {};
         let successCount = 0;
+        let failureCount = 0;
+
         for (const filename of globFiles) {
+          if (fileCount >= MAX_FILES) {
+            console.warn(`Reached maximum schema file limit (${MAX_FILES}). Skipping remaining files.`);
+            break;
+          }
           const nativePath = path.join('docs', 'agent', filename);
           const posixPath = path.posix.join('docs/agent', filename);
           try {
@@ -64,27 +92,28 @@ export function getCodeDiffSummary(): CodeReviewSummary {
               continue;
             }
             totalBytes += stat.size;
+            fileCount++;
+
             const content = fs.readFileSync(nativePath, 'utf-8');
+            let parsed = JSON.parse(content);
+            parsed = sanitizePrototypePollution(parsed);
 
-            const parsed = JSON.parse(content, (key, value) => {
-              if (['__proto__', 'constructor', 'prototype'].includes(key)) {
-                return undefined;
-              }
-              return value;
-            });
-
-            if (typeof parsed !== 'object' || parsed === null) {
-                throw new Error(`Parsed schema is not an object: ${nativePath}`);
+            if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+                throw new Error(`Parsed schema is not a plain object: ${nativePath}`);
             }
 
             schemas[posixPath] = parsed;
             successCount++;
           } catch (e) {
             console.warn(`Could not parse schema file ${nativePath}:`, e);
+            failureCount++;
           }
         }
 
-        if (successCount === 0) {
+        if (failureCount > 0) {
+            console.warn(`${failureCount} schema(s) failed to parse. Schemas context will be omitted to avoid partial context.`);
+            schemasContext = undefined;
+        } else if (successCount === 0) {
             console.warn(`No schemas were successfully parsed. Context will not be included.`);
             schemasContext = undefined;
         } else {
