@@ -44,7 +44,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const model = createModel();
-    const baseContent: any[] = [
+    const baseContent: Array<{ type: 'text'; text: string }> = [
       { type: 'text', text: SYSTEM_PROMPT },
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` },
     ];
