@@ -107,6 +107,7 @@ export interface UXAuditorHookReturn {
   user: User | null;
   reports: UXReport[];
   isAnalyzing: boolean;
+  error: string | null;
   activeReport: UXReport | null;
   setActiveReport: (r: UXReport | null) => void;
   url: string;
@@ -126,6 +127,7 @@ export interface UXAuditorHookReturn {
 export function useUXAuditor(): UXAuditorHookReturn {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
   const [url, setUrl] = useState(import.meta.env.VITE_APP_URL || 'https://boomtick.blog/');
   const [customApiKey, setCustomApiKey] = useState(sessionStorage.getItem('ux-auditor-api-key') || "");
@@ -207,6 +209,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
+      setError(null);
       const reportId = Date.now().toString();
 
       const newReport: UXReport = {
@@ -224,6 +227,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
       if (user && firebaseConfig) {
         const db = getFirestore();
         // Use setDoc with a pre-generated ID for idempotency during retries
+        // Path alternates collection/doc: artifacts(col)/appId(doc)/users(col)/uid(doc)/ux_reports(col)/reportId(doc)
         await withRetry(() =>
           setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
         );
@@ -475,6 +479,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
     user,
     reports,
     isAnalyzing: auditMutation.isPending,
+    error,
     activeReport,
     setActiveReport: (r: UXReport | null) => setActiveReportId(r?.id || null),
     url,

@@ -299,10 +299,17 @@ export default function UXAuditor() {
     runUXAudit,
     exportToGithub,
     copyMarkdown,
+    error,
   } = useUXAuditor();
 
   return (
     <Stack gap={8} width="full">
+      {error && (
+        <Box padding={4} radius="lg" surface="error" border={true} display="flex" align="center" gap={3}>
+           <Icon icon={Trash2} size="sm" />
+           <Text variant="sans" size="sm" weight="font-bold">{error}</Text>
+        </Box>
+      )}
       <SEO
         title="Visual UX Auditor | Perception Telemetry System"
         description="Run automated visual UX audits on any URL using multimodal AI. Identify usability issues and get improvement suggestions for Mobile, Tablet, and Desktop."
