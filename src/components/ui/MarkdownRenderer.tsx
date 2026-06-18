@@ -148,11 +148,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             const normalizedSrc = normalizeAsset(src || '');
             if (!normalizedSrc) return null;
 
-            // Sanitize width/height to ensure they are numeric strings
+            const isExternal = /^(https?:)?\/\//.test(normalizedSrc);
+
+            // Sanitize width/height to ensure they are valid numeric values
             const sanitizeDimension = (val: string | number | undefined) => {
               if (val === undefined || val === null) return undefined;
-              const num = parseFloat(String(val));
-              return !isNaN(num) ? String(num) : undefined;
+              const num = typeof val === 'number' ? val : parseFloat(String(val));
+              return !isNaN(num) && isFinite(num) ? num : undefined;
             };
 
             return (
@@ -170,13 +172,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                     srcSet={srcSet}
                     sizes={sizes}
                     loading="lazy"
-                    alt={typeof alt === 'string' ? alt : "Article illustration"}
+                    alt={alt !== undefined ? String(alt) : "Article illustration"}
                     title={title}
                     width={sanitizeDimension(width)}
                     height={sanitizeDimension(height)}
                     /* Standard security policy for external images in markdown */
-                    referrerPolicy="no-referrer"
-                    crossOrigin="anonymous"
+                    referrerPolicy={isExternal ? "no-referrer" : undefined}
+                    crossOrigin={isExternal ? "anonymous" : undefined}
                     className={cn(
                       "block mx-auto max-w-full max-h-full w-auto h-auto object-contain",
                       className
