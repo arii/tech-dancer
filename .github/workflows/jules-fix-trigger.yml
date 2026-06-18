@@ -95,35 +95,34 @@ jobs:
             PREV_STATE=$(echo "$PREV_JOBS" | grep "^$NAME=" | cut -d= -f2)
 
             if [ "$PREV_STATE" = "failure" ] && [ "$CURR_STATE" = "success" ]; then
-              FIXED="${FIXED}
-          - ✅ $NAME"
+              FIXED="$FIXED"$'\n'"- ✅ $NAME"
             elif [ "$PREV_STATE" = "failure" ] && [ "$CURR_STATE" = "failure" ]; then
-              STILL_FAILING="${STILL_FAILING}
-          - ❌ $NAME (still failing)"
+              STILL_FAILING="$STILL_FAILING"$'\n'"- ❌ $NAME (still failing)"
             elif [ "$CURR_STATE" = "failure" ] && [ "$PREV_STATE" != "failure" ]; then
-              NEW_FAILURES="${NEW_FAILURES}
-          - 🆕 $NAME (new failure)"
+              NEW_FAILURES="$NEW_FAILURES"$'\n'"- 🆕 $NAME (new failure)"
             fi
           done <<< "$CURR_JOBS"
 
-          # Using a HEREDOC that ignores leading tabs (if we had tabs)
-          # We'll explicitly dedent to prevent turning into a Markdown codeblock.
-          BODY=$(cat <<EOF
+          # Use HEREDOC with a custom delimiter to construct the message.
+          # The sed command removes leading spaces from the YAML formatting.
+          BODY=$(cat <<'EOF' | sed 's/^[[:space:]]*//'
           ### 🔁 Jules Retry Context
 
           **Fixed this attempt:**
-          ${FIXED:-"_none_"}
+          __FIXED__
 
           **Still failing:**
-          ${STILL_FAILING:-"_none_"}
+          __STILL_FAILING__
 
           **New failures introduced:**
-          ${NEW_FAILURES:-"_none_"}
+          __NEW_FAILURES__
           EOF
           )
 
-          # Remove leading spaces from the body
-          BODY=$(echo "$BODY" | sed 's/^ *//')
+          # Substitute the variables into the body
+          BODY="${BODY/__FIXED__/${FIXED:-"_none_"}}"
+          BODY="${BODY/__STILL_FAILING__/${STILL_FAILING:-"_none_"}}"
+          BODY="${BODY/__NEW_FAILURES__/${NEW_FAILURES:-"_none_"}}"
 
           gh pr comment "$PR_NUMBER" --body "$BODY"
 
