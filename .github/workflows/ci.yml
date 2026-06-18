@@ -265,8 +265,20 @@ jobs:
           else
             echo "changed_routes=0" >> "$GITHUB_OUTPUT"
           fi
-      - name: Code review agent
+      - name: Entropy Check
+        id: entropy_check
         if: always()
+        run: |
+          git rev-parse origin/main >/dev/null 2>&1 && DIFF_CMD="git diff --name-only origin/main...HEAD" || DIFF_CMD="git diff --name-only HEAD~1 HEAD"
+          CHANGED_FILES=$($DIFF_CMD || echo "")
+          MATCH_COUNT=$(echo "$CHANGED_FILES" | grep -vE 'tests/visual\.spec\.ts-snapshots/' | grep -c . || true)
+          if [ "$MATCH_COUNT" -gt 0 ]; then
+            echo "changed_code=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed_code=0" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Code review agent
+        if: always() && steps.entropy_check.outputs.changed_code == '1'
         continue-on-error: true
         env:
           MAX_AI_REVIEWS: '2'
@@ -276,7 +288,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-code-review
       - name: Code review github models agent
-        if: always()
+        if: always() && steps.entropy_check.outputs.changed_code == '1'
         continue-on-error: true
         env:
           MAX_AI_REVIEWS: '2'
