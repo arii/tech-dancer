@@ -5,23 +5,39 @@ import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
 import { ProductCard } from '@/components/products/ProductCard';
-import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
+import { getAllMerchProducts } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
-import { FilterButton } from '@/components/ui/FilterButton';
 import { PRINTFUL_REFERRAL } from '@/config/constants';
+import { MerchFilterBar } from '@/components/products/MerchFilterBar';
+import { CollectionSection } from '@/components/products/CollectionSection';
+import { PromoStrip } from '@/components/products/PromoStrip';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Merch() {
   const [activeCollection, setActiveCollection] = useState("all");
 
-
   const allProducts = getAllMerchProducts();
-  const filteredProducts = getMerchByCollection(activeCollection);
 
-  // Group products for editorial sections when "all" is active
+  // Group products by collectionId
+  const groupedProducts = useMemo(() => {
+    return allProducts.reduce((acc, product) => {
+      const colId = product.collectionId || 'other';
+      if (!acc[colId]) {
+        acc[colId] = {
+          id: colId,
+          title: product.collectionLabel || COLLECTIONS.find(c => c.id === colId)?.label || 'More designs',
+          products: [],
+        };
+      }
+      acc[colId].products.push(product);
+      return acc;
+    }, {} as Record<string, { id: string; title: string; products: any[] }>);
+  }, [allProducts]);
+
   const sections = useMemo(() => {
-    if (activeCollection !== 'all') return null;
+    const definedOrder = ["norcal-golden-gate", "rainbow-pride", "lead-follow-switch", "other"];
 
-    return [
+    const baseSections = [
       {
         id: 'featured',
         title: 'Featured Picks',
@@ -31,27 +47,31 @@ export default function Merch() {
           allProducts.find(p => p.id === 'war-eagle-oversized'),
           allProducts.find(p => p.id === 'norcal-bestcal-golden-gate-pride'),
         ].filter((p): p is NonNullable<typeof p> => !!p),
+        isFeatured: true,
       },
-      {
-        id: 'lead-follow-switch',
-        title: 'Lead, Follow, and Switch Dance Shirts',
-        description: 'Role-specific and gender-neutral designs for West Coast Swing dancers who lead, follow, switch, or just love the social floor.',
-        products: allProducts.filter(p => p.collections.includes('lead-follow-switch')),
-      },
-      {
-        id: 'norcal-bestcal',
-        title: 'NorCal BestCal Pride Apparel',
-        description: 'Bay Area, California, Golden Gate, and bear designs representing our Northern California roots.',
-        products: allProducts.filter(p => p.collections.includes('norcal-bestcal')),
-      },
-      {
-        id: 'rainbow-pride',
-        title: 'Rainbow Pride Dance Apparel',
-        description: 'Pride-focused designs celebrating an inclusive dance floor and social dance identity.',
-        products: allProducts.filter(p => p.collections.includes('rainbow-pride')),
-      }
+      ...definedOrder.map(id => {
+        const group = groupedProducts[id];
+        if (!group) return null;
+
+        let description = "";
+        if (id === 'lead-follow-switch') description = "Role-specific and gender-neutral designs for West Coast Swing dancers who lead, follow, switch, or just love the social floor.";
+        if (id === 'norcal-golden-gate') description = "Bay Area, California, Golden Gate, and bear designs representing our Northern California roots.";
+        if (id === 'rainbow-pride') description = "Pride-focused designs celebrating an inclusive dance floor and social dance identity.";
+        if (id === 'other') description = "Explore more of our curated dance designs.";
+
+        return {
+          ...group,
+          description,
+        };
+      }).filter((s): s is NonNullable<typeof s> => !!s)
     ];
-  }, [activeCollection, allProducts]);
+
+    if (activeCollection === 'all') {
+      return baseSections;
+    }
+
+    return baseSections.filter(s => s.id === activeCollection);
+  }, [activeCollection, groupedProducts, allProducts]);
 
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center">
@@ -79,71 +99,51 @@ export default function Merch() {
           }
         />
 
-        {/* Collection Filters */}
-        <Stack gap={3}>
-          <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
-            Shop by Style
-          </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto">
-            <Stack direction="row" gap={2} padding={1} minWidth="max">
-              {COLLECTIONS.map((collection) => (
-                <FilterButton
-                  key={collection.id}
-                  label={collection.label}
-                  isActive={activeCollection === collection.id}
-                  onClick={() => setActiveCollection(collection.id)}
-                />
-              ))}
-            </Stack>
-          </Box>
-        </Stack>
+        <PromoStrip
+          imageSrc="/assets/gear/norcal-bestcal-front.webp"
+          title="Limited Edition NorCal Best Cal Tee"
+          subtitle="Support local dance with our signature Golden Gate design."
+          ctaLabel="Shop Now"
+          href="https://boomtick.printful.me/product/norcal-bestcal"
+        />
 
-        {/* Product Sections or Grid */}
-        {activeCollection === 'all' && sections ? (
-          <Stack gap={8}>
-            {sections.map((section) => (
-              <Stack key={section.id} gap={5}>
-                <Stack gap={1}>
-                  <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
-                    {section.title}
-                  </Text>
-                  <Text variant="body" color="dim">
-                    {section.description}
-                  </Text>
-                </Stack>
-                {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
-                    <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
-                      <ProductCard item={section.products[0]} isFeatured />
-                    </Box>
-                    {section.products.slice(1, 3).map((product) => (
-                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full">
-                        <ProductCard
-                          item={product}
-                        />
-                      </Box>
+        <MerchFilterBar
+          activeCollection={activeCollection}
+          onCollectionChange={setActiveCollection}
+        />
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCollection}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Stack gap={12}>
+              {sections.length > 0 ? (
+                sections.map((section) => (
+                  <CollectionSection
+                    key={section.id}
+                    id={section.id}
+                    title={section.title}
+                    description={section.description}
+                    products={section.products}
+                    isFeatured={section.isFeatured}
+                  />
+                ))
+              ) : (
+                <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
+                  {allProducts
+                    .filter(p => p.collections.includes(activeCollection) || p.collectionId === activeCollection)
+                    .map((product) => (
+                      <ProductCard key={product.id} item={product} />
                     ))}
-                  </Grid>
-                ) : (
-                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
-                    {section.products.map((product) => (
-                      <ProductCard
-                        key={`${section.id}-${product.id}`}
-                        item={product}
-                      />
-                    ))}
-                  </Grid>
-                )}
-              </Stack>
-            ))}
-          </Stack>
-        ) : (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} item={product} />
-            ))}
-          </Grid>
-        )}
+                </Grid>
+              )}
+            </Stack>
+          </motion.div>
+        </AnimatePresence>
 
         {/* Footer Callouts */}
         <Box padding={8} radius="lg" border surface="card" marginTop={8} width="full">

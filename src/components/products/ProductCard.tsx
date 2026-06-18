@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Package } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
@@ -26,31 +26,57 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
       )}
       data-testid="product-card"
     >
-      <MerchImageDisplay
-        title={item.title}
-        href={item.href}
-        imageUrl={item.imageUrl}
-        images={item.images}
-        imageDisplayMode={item.imageDisplayMode}
-        isFeatured={isFeatured}
-      />
+      <Box position="relative">
+        <MerchImageDisplay
+          title={item.title}
+          href={item.href}
+          imageUrl={item.imageUrl}
+          images={item.images}
+          imageDisplayMode={item.imageDisplayMode}
+          isFeatured={isFeatured}
+        />
+        {item.isBundle && (
+          <Box
+            position="absolute"
+            top={3}
+            right={3}
+            paddingX={2}
+            paddingY={1}
+            radius="md"
+            className="bg-accent text-white shadow-lg flex items-center gap-1.5 z-10"
+          >
+            <Package className="w-3.5 h-3.5" />
+            <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest">
+              Bundle
+            </Text>
+          </Box>
+        )}
+      </Box>
 
       <Stack gap={isFeatured ? 4 : 3}>
-        <Text
-          as="a"
-          href={item.href}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          variant="body"
-          size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
-          weight="font-bold"
-          color="main"
-          leading="tight"
-          clamp={isFeatured ? 0 : 2}
-          className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          {item.title}
-        </Text>
+        <Stack gap={1}>
+          <Text
+            as="a"
+            href={item.href}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            variant="body"
+            size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
+            weight="font-bold"
+            color="main"
+            leading="tight"
+            clamp={isFeatured ? 0 : 2}
+            className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            {item.title}
+          </Text>
+
+          {item.isBundle && item.bundleNote && (
+            <Text variant="body" size="xs" color="accent" weight="font-semibold">
+              {item.bundleNote}
+            </Text>
+          )}
+        </Stack>
 
         <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
           {item.description}

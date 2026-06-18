@@ -1,8 +1,8 @@
 // impeccable-ignore-file
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
-import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
@@ -14,6 +14,8 @@ import { useResearch } from './useResearch';
 import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 import { SOCIAL_LINKS } from '@/config/constants';
+import { FilterButton } from '@/components/ui/FilterButton';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -271,14 +273,49 @@ function ToolCard({ tool, navigate }: {
 
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeCategory = searchParams.get('category') || 'All';
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
-  const flagshipTools = tools.filter(t => t.taxonomyBucket === 'flagship' || t.isFlagship);
-  const engineeringTools = tools.filter(t => t.taxonomyBucket === 'engineering');
-  const dataContentTools = tools.filter(t => t.taxonomyBucket === 'data-content');
-  const e_commerceTools = tools.filter(t => t.taxonomyBucket === 'e-commerce');
+  const categories = useMemo(() => {
+    const cats = new Set(['All']);
+    tools.forEach(tool => {
+      tool.categories?.forEach(cat => cats.add(cat));
+    });
+    return Array.from(cats).sort((a, b) => {
+      if (a === 'All') return -1;
+      if (b === 'All') return 1;
+      return a.localeCompare(b);
+    });
+  }, [tools]);
+
+  const filteredTools = useMemo(() => {
+    if (activeCategory === 'All') return tools;
+    return tools.filter(tool => tool.categories?.includes(activeCategory));
+  }, [tools, activeCategory]);
+
+  const flagshipTools = filteredTools.filter(t => t.taxonomyBucket === 'flagship' || t.isFlagship);
+  const engineeringTools = filteredTools.filter(t => t.taxonomyBucket === 'engineering');
+  const dataContentTools = filteredTools.filter(t => t.taxonomyBucket === 'data-content');
+  const e_commerceTools = filteredTools.filter(t => t.taxonomyBucket === 'e-commerce');
+
+  const handleCategoryChange = (category: string) => {
+    if (category === 'All') {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', category);
+    }
+    setSearchParams(searchParams);
+  };
+
+  const researchCollections = [
+    { title: 'AI Engineering', id: 'AI' },
+    { title: 'Automation', id: 'Automation' },
+    { title: 'Observability', id: 'Observability' },
+    { title: 'Developer Productivity', id: 'Productivity' },
+  ];
 
   return (
     <Box as="section" maxWidth="7xl" marginX="auto" width="full">
@@ -374,17 +411,132 @@ export default function ResearchAnalytics() {
 
         </Grid>
 
-        {/* Flagship Projects Section */}
-        <Stack gap={8} id="flagship" marginTop={2} width="full">
+        {/* Filter Section */}
+        <Stack gap={3} className="sticky top-0 z-20 bg-background/80 backdrop-blur-md py-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <Stack direction="row" align="center" gap={2}>
+            <Filter className="w-4 h-4 text-dim" />
+            <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
+              Filter Research
+            </Text>
+          </Stack>
+          <Box border="b" paddingBottom={2} overflowX="auto" noScrollbar>
+            <Stack direction="row" gap={2} padding={1} minWidth="max">
+              {categories.map((category) => (
+                <FilterButton
+                  key={category}
+                  label={category}
+                  isActive={activeCategory === category}
+                  onClick={() => handleCategoryChange(category)}
+                />
+              ))}
+            </Stack>
+          </Box>
+        </Stack>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Stack gap={16}>
+              {/* Flagship Projects Section */}
+              {flagshipTools.length > 0 && (
+                <Stack gap={8} id="flagship" width="full">
+                  <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
+                    <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
+                  </Box>
+                  <Box display="grid" className="responsive-grid" gap={6} width="full">
+                    {flagshipTools.map((tool) => (
+                      <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
+                    ))}
+                  </Box>
+                </Stack>
+              )}
+
+              {/* Engineering Systems Section */}
+              {engineeringTools.length > 0 && (
+                <Stack gap={12} width="full">
+                  <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+                    <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
+                  </Box>
+
+                  <Box display="grid" className="responsive-grid" gap={6} width="full">
+                    {engineeringTools.map((tool) => (
+                      <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+                    ))}
+                  </Box>
+                </Stack>
+              )}
+
+              {/* Data & Content Systems Section */}
+              {dataContentTools.length > 0 && (
+                <Stack gap={12} width="full">
+                  <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+                    <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
+                  </Box>
+
+                  <Box display="grid" className="responsive-grid" gap={6} width="full">
+                    {dataContentTools.map((tool) => (
+                      <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+                    ))}
+                  </Box>
+                </Stack>
+              )}
+
+              {/* Ecommerce Experiments Section */}
+              {e_commerceTools.length > 0 && (
+                <Stack gap={12} width="full">
+                  <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+                    <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
+                    <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
+                  </Box>
+
+                  <Box display="grid" className="responsive-grid" gap={6} width="full">
+                    {e_commerceTools.map((tool) => (
+                      <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+                    ))}
+                  </Box>
+                </Stack>
+              )}
+            </Stack>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Research Collections Section */}
+        <Stack gap={8} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
-            <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
+            <Text variant="headline" size="2xl" weight="font-black">Research Collections</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CURATED GROUPS</Text>
           </Box>
-          <Box display="grid" className="responsive-grid" gap={6} width="full">
-            {flagshipTools.map((tool) => (
-              <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
+          <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={4}>
+            {researchCollections.map((collection) => (
+              <Stack
+                key={collection.id}
+                as="button"
+                onClick={() => handleCategoryChange(collection.id)}
+                padding={6}
+                surface="muted"
+                radius="xl"
+                align="center"
+                justify="center"
+                className="border border-line/20 hover:border-accent/40 transition-all group"
+              >
+                <Text weight="font-bold" color="main" className="group-hover:text-accent transition-colors">
+                  {collection.title}
+                </Text>
+                <Box display="flex" align="center" gap={1} marginTop={2}>
+                  <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Explore</Text>
+                  <Icon icon={ArrowRight} size="xs" color="accent" />
+                </Box>
+              </Stack>
             ))}
-          </Box>
+          </Grid>
         </Stack>
 
         <Box className="why-this-matters">
@@ -393,54 +545,6 @@ export default function ResearchAnalytics() {
             Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
           </Text>
         </Box>
-
-        {/* Engineering Systems Section */}
-        {engineeringTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {engineeringTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
-
-        {/* Data & Content Systems Section */}
-        {dataContentTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {dataContentTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
-
-        {/* Ecommerce Experiments Section */}
-        {e_commerceTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {e_commerceTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
 
         {/* Articles & Research Section */}
         {studies.length > 0 && (

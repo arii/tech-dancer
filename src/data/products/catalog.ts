@@ -37,6 +37,10 @@ export interface ProductCatalogItem {
   href: string;
   price?: string;
   collections: string[];
+  collectionId?: string;
+  collectionLabel?: string;
+  isBundle?: boolean;
+  bundleNote?: string;
   tags: string[];
   roles?: ('lead' | 'follow' | 'switch')[];
   eventTags?: string[];

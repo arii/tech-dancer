@@ -96,7 +96,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       aria-label={`View ${title} on Printful`}
       display="block"
       width="full"
-      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 48, sm: 56, md: 64 }}
+      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 36, sm: 44, md: 72 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"

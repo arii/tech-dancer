@@ -9,6 +9,7 @@ export interface ResearchTool {
   subtitle?: string;
   description: string;
   category: string;
+  categories?: string[];
   taxonomyBucket?: 'flagship' | 'engineering' | 'data-content' | 'e-commerce';
   status: string;
   tags: string[];
@@ -42,6 +43,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     title: 'HRM (Heart Rate Monitor)',
     description: 'Web Bluetooth heart-rate telemetry synced across multiple clients via persistent WebSocket server, with Spotify API integration and a synchronized timer. Built end-to-end as a DevAI-assisted engineering project.',
     category: 'Product Development',
+    categories: ['AI', 'Productivity'],
     status: 'Active',
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     sourceUrl: 'https://github.com/arii/hrm',
@@ -59,6 +61,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     title: 'RepoAuditor AI',
     description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow — not prior paid work.',
     category: 'DevAI Tooling',
+    categories: ['AI', 'Automation', 'DevTools'],
     status: 'Active',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
     externalUrl: 'https://repo-auditor-ai.vercel.app/',
@@ -79,6 +82,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'LIVE DEVELOPMENT ENVIRONMENT',
     description: 'West Coast Swing community platform and active testbed for RAG pipelines and LLM-assisted content workflows currently in development. Includes SEO-optimized publishing, analytics, and Printful API integration for automated merch listing generation.',
     category: 'Product development',
+    categories: ['AI', 'Data'],
     status: 'Active dev',
     tags: ['Next.js', 'LLM Workflows', 'SEO'],
     externalUrl: 'https://boomtick.blog',
@@ -102,6 +106,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'Automated Local PR Auditing',
     description: 'Local LLM-powered PR auditing using Ollama and GitHub Actions. Reviews code style and pattern consistency on every pull request without sending code to external APIs. The foundation for the RAG-grounded review pipeline being built into RepoAuditor AI.',
     category: 'DevAI System',
+    categories: ['AI', 'Automation', 'DevTools'],
     status: 'Active',
     tags: ['Ollama', 'GitHub Actions', 'Local LLM', 'PR Automation'],
     canonicalPath: '/research/gitops-pr-reviewer',
@@ -114,6 +119,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
     description: 'CI pipeline that determines which pages are visually affected by a pull request. Uses dependency-cruiser to trace changed files through the import graph, then captures Playwright screenshots of affected routes, runs pixelmatch pixel diffs, crops changed regions, and generates a deployment review report with severity scores. Agent integration in progress.',
     category: 'DevAI System',
+    categories: ['Automation', 'DevTools', 'Observability'],
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
     canonicalPath: '/research/scope-blast-radius',
@@ -126,6 +132,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'PLAYWRIGHT VISUAL REGRESSION',
     description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots before and after a PR, computes pixel-level diffs, crops the bounding box of changed regions, and scores severity by percentage of changed pixels. Part of the Blast-Radius Analyzer pipeline.',
     category: 'Perception Debugging',
+    categories: ['Automation', 'DevTools', 'Observability'],
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Screenshot Diff', 'CI/CD'],
     canonicalPath: '/ux-auditor',
@@ -138,6 +145,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'Scraper-to-Parquet Pipeline',
     description: 'A data engineering showcase for Dev AI systems, transforming raw competitive dance records into compressed Parquet formats. This enables efficient RAG indexing and complex analytical queries.',
     category: 'Data Engineering',
+    categories: ['Data', 'Experiments'],
     status: 'Active',
     tags: ['ETL', 'Apache Parquet', 'Scraping', 'Data Pipelines'],
     canonicalPath: '/research/wcs-scraper'
@@ -149,6 +157,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'Human-in-the-Loop Content Engine',
     description: 'A prompt engineering platform designed for brand-consistent content generation. It combines RAG over existing blog posts with a human-in-the-loop workflow to maintain editorial quality.',
     category: 'Content Tools',
+    categories: ['AI', 'Productivity'],
     status: 'Active',
     tags: ['LLM', 'Content Generation', 'Productivity'],
     canonicalPath: '/research/blog-drafter'
@@ -160,6 +169,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     subtitle: 'Printful & Merch Pipeline',
     description: 'Automated merch operations including programmatic design generation, Printful API storefront sync, and incoming Amazon affiliate integration workflows.',
     category: 'Business Automation',
+    categories: ['Automation', 'Experiments'],
     status: 'In Progress',
     tags: ['Printful API', 'Image Gen', 'Amazon Sync', 'Workflow'],
     canonicalPath: '/research/ecommerce-automation'
