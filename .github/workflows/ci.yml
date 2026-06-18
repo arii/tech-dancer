@@ -267,6 +267,7 @@ jobs:
           fi
       - name: Code review agent
         if: always()
+        continue-on-error: true
         env:
           MAX_AI_REVIEWS: '2'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -276,6 +277,7 @@ jobs:
         run: pnpm run impact:gemini-code-review
       - name: Code review github models agent
         if: always()
+        continue-on-error: true
         env:
           MAX_AI_REVIEWS: '2'
           GITHUB_MODELS_MODEL: gpt-4o
