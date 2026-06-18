@@ -558,14 +558,19 @@ export default function UXAuditor() {
               </Stack>
 
               <Stack gap={8}>
-                {VIEWPORTS.map(vp => (
-                  <ViewportAnalysisCard
-                    key={vp.name}
-                    vp={vp}
-                    data={activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis}
-                    activeReportUrl={activeReport.url}
-                  />
-                ))}
+                {VIEWPORTS.map(vp => {
+                  const key = vp.name.toLowerCase() as 'mobile' | 'tablet' | 'desktop';
+                  const findings = activeReport[`findings_${key}`] as ViewportAnalysis | undefined;
+                  if (!findings) return null;
+                  return (
+                    <ViewportAnalysisCard
+                      key={vp.name}
+                      vp={vp}
+                      data={findings}
+                      activeReportUrl={activeReport.url}
+                    />
+                  );
+                })}
               </Stack>
             </>
           ) : (

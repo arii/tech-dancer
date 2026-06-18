@@ -56,7 +56,7 @@ declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
 
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'ux-auditor-v2';
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+const firebaseConfig = (typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null) as FirebaseOptions | null;
 
 export const VIEWPORTS = [
   { name: 'Mobile', width: 375, height: 667 },
@@ -88,7 +88,6 @@ export interface UXReport {
   image_mobile?: string;
   image_tablet?: string;
   image_desktop?: string;
-  [key: string]: string | number | ViewportAnalysis | undefined; // Fallback for dynamic keys
 }
 
 export interface UXAuditorHookReturn {
@@ -105,7 +104,7 @@ export interface UXAuditorHookReturn {
   setSnapshotService: (url: string) => void;
   isCopiedMarkdown: boolean;
   isExportingToGithub: boolean;
-  runUXAudit: (targetUrl: string) => void;
+  runUXAudit: (targetUrl: string) => Promise<void>;
   exportToGithub: () => Promise<void>;
   copyMarkdown: () => Promise<void>;
   firebaseConfig: FirebaseOptions | null;
@@ -231,8 +230,12 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
 
-        newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
-        newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
+        const key = vp.name.toLowerCase() as 'mobile' | 'tablet' | 'desktop';
+        const findingsKey = `findings_${key}` as const;
+        const imageKey = `image_${key}` as const;
+
+        newReport[findingsKey] = analysis;
+        newReport[imageKey] = mockImg;
 
         // Update the report in cache to reflect progress
         queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
@@ -241,11 +244,12 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
         if (user && firebaseConfig) {
           const db = getFirestore();
+          const updateData: Record<string, ViewportAnalysis | string> = {};
+          updateData[findingsKey] = analysis;
+          updateData[imageKey] = mockImg;
+
           await withRetry(() =>
-            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-              [`findings_${vp.name.toLowerCase()}`]: analysis,
-              [`image_${vp.name.toLowerCase()}`]: mockImg
-            })
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData)
           );
         }
       }
@@ -273,15 +277,19 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
   const isThrottled = useRef(false);
 
-  const runUXAudit = useCallback((targetUrl: string) => {
+  const runUXAudit = useCallback(async (targetUrl: string) => {
     if (isThrottled.current) return;
 
     isThrottled.current = true;
-    auditMutation.mutate(targetUrl);
-
-    setTimeout(() => {
-      isThrottled.current = false;
-    }, 2000);
+    try {
+      await auditMutation.mutateAsync(targetUrl);
+    } catch (err) {
+      console.error("Audit failed:", err);
+    } finally {
+      setTimeout(() => {
+        isThrottled.current = false;
+      }, 2000);
+    }
   }, [auditMutation]);
 
   const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
@@ -379,7 +387,9 @@ export function useUXAuditor(): UXAuditorHookReturn {
     if (!activeReport) return "";
     let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
     VIEWPORTS.forEach(vp => {
-      const data = activeReport[`findings_${vp.name.toLowerCase()}`] as ViewportAnalysis;
+      const v = vp.name.toLowerCase();
+      const key = `findings_${v}` as keyof UXReport;
+      const data = activeReport[key] as ViewportAnalysis | undefined;
       if (data) {
         md += `## ${vp.name} Analysis\n${data.summary}\n\n`;
         md += `| Element | Issue | Suggestion | Severity |\n|---|---|---|---|\n`;
@@ -426,7 +436,12 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
   const updateApiKey = (key: string) => {
     setCustomApiKey(key);
-    sessionStorage.setItem('ux-auditor-api-key', key);
+    // Security check: Only persist if not empty, otherwise clear
+    if (key) {
+      sessionStorage.setItem('ux-auditor-api-key', key);
+    } else {
+      sessionStorage.removeItem('ux-auditor-api-key');
+    }
   };
 
   return {
