@@ -91,7 +91,10 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
+<<<<<<< optimize-github-actions-caching-17956393204820612491
           python3 -m pip install --break-system-packages PyGithub pytest click
+=======
+>>>>>>> main
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
@@ -119,9 +122,12 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
+<<<<<<< optimize-github-actions-caching-17956393204820612491
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install
+=======
+>>>>>>> main
 
       - name: UI Anti-Pattern Audit - Gate
         env:
@@ -159,9 +165,12 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
+<<<<<<< optimize-github-actions-caching-17956393204820612491
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install
+=======
+>>>>>>> main
 
       - name: Build App
         env:
