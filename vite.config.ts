@@ -118,6 +118,18 @@ export default defineConfig(({mode}) => {
         },
         svg: {
           multipass: true,
+          plugins: [
+            {
+              name: 'preset-default',
+              params: {
+                overrides: {
+                  cleanupIds: false,
+                  inlineStyles: false,
+                  minifyStyles: false,
+                },
+              },
+            },
+          ],
         },
       }),
       analyze && visualizer({
