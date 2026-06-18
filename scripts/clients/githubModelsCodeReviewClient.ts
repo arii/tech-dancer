@@ -50,7 +50,12 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const model = await createModel();
     const baseContent = [
       { type: 'text', text: SYSTEM_PROMPT } as const,
-      { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
+      { type: 'text', text: `DIFF:
+
+${summary.diffContext}` } as const,
+      { type: 'text', text: `REPO CONTEXT:
+
+${summary.repoContext || ''}` } as const,
     ];
 
     const message = new HumanMessage({ content: baseContent });

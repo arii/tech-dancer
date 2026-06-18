@@ -47,7 +47,7 @@ def build_repo_context():
     # 5. Changed Files
     try:
         changed_files = subprocess.check_output(
-            ["git", "diff", "--name-only", "main"]
+            [git, diff, --name-only, HEAD~1]
         ).decode().strip().splitlines()
     except Exception as e:
          print(f"Error getting changed files: {e}", file=sys.stderr)

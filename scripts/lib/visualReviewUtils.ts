@@ -41,6 +41,9 @@ export function buildVisualReviewPayload(summary: VisualRouteSummary): Array<{ t
   const baseContent: Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> = [
     { type: 'text', text: REVIEW_PROMPT },
     { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
+    { type: 'text', text: `REPO CONTEXT:
+
+${summary.repoContext || ''}` },
     { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
     { type: 'text', text: 'BEFORE' },
     { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },

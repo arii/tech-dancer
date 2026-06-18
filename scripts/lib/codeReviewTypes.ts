@@ -1,4 +1,5 @@
 export interface CodeReviewSummary {
+  repoContext?: string;
   files: string[];
   diffContext: string;
 }
