@@ -42,17 +42,20 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   }, []);
 
   useEffect(() => {
-    const headings = Array.from(document.querySelectorAll('.prose-editorial h2, .prose-editorial h3'));
-    const tocItems = headings.map((h, index) => {
-      const id = h.id || `heading-${index}`;
-      h.id = id;
-      return {
-        id,
-        text: h.textContent || '',
-        level: h.tagName === 'H2' ? 2 : 3
-      };
+    const frame = requestAnimationFrame(() => {
+      const headings = Array.from(document.querySelectorAll('.prose-editorial h2, .prose-editorial h3'));
+      const tocItems = headings.map((h, index) => {
+        const id = h.id || `heading-${index}`;
+        h.id = id;
+        return {
+          id,
+          text: h.textContent || '',
+          level: h.tagName === 'H2' ? 2 : 3
+        };
+      });
+      setToc(tocItems);
     });
-    setToc(tocItems);
+    return () => cancelAnimationFrame(frame);
   }, [post.content]);
 
   const share = async () => {
