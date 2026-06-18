@@ -40,10 +40,12 @@ export function ContentCard(props: ContentCardProps) {
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();
-    if (c.includes('travel')) return 'text-accent-purple';
-    if (c.includes('tech')) return 'text-accent';
-    if (c.includes('data') || c.includes('research')) return 'text-accent-magenta';
-    return 'text-accent';
+    if (c.includes('travel')) return 'bg-brand-purple/20 text-brand-purple border-brand-purple/30';
+    if (c.includes('gear')) return 'bg-brand-amber/20 text-brand-amber border-brand-amber/30';
+    if (c.includes('guide')) return 'bg-brand-green/20 text-brand-green border-brand-green/30';
+    if (c.includes('event')) return 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/30';
+    if (c.includes('lifestyle')) return 'bg-brand-magenta/20 text-brand-magenta border-brand-magenta/30';
+    return 'bg-accent/20 text-accent border-accent/30';
   };
 
   return (
@@ -53,64 +55,71 @@ export function ContentCard(props: ContentCardProps) {
       height="full"
       to={`${basePath}/${slug}`}
       ariaLabel={`Read article: ${title}`}
-      className="overflow-hidden"
+      // impeccable-ignore
+      className="overflow-hidden group hover:shadow-[0_0_20px_rgba(var(--color-accent-rgb),0.15)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40"
       {...motionProps}
     >
-      {image && (
-        <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden">
+      <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden relative">
+        {image ? (
           <img
             src={image}
             alt={imageAlt || title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
           />
-        </Box>
-      )}
-
-      <Stack gap={4} padding={6} height="full">
+        ) : (
+          <Box width="full" height="full" display="flex" align="center" justify="center" surface="muted">
+            <Text variant="mono" size="xs" color="dim">NO IMAGE</Text>
+          </Box>
+        )}
         <Box
+          position="absolute"
+          top={3}
+          left={3}
           paddingX={2}
-          paddingY={1}
-          radius="full"
+          paddingY={0.5}
+          radius="sm"
           border
-          className="border-line w-fit"
-        >
-        <Text
-          variant="mono"
-          size="xs"
-          weight="font-black"
-          tracking="wide"
-          className={getTagColorClass(category)}
+          // impeccable-ignore
+          className={cn("backdrop-blur-md uppercase tracking-widest font-black text-[10px]", getTagColorClass(category))}
         >
           {category}
-        </Text>
+        </Box>
       </Box>
 
-      <Stack gap={2}>
-        <Text
-          as="h3"
-          variant="body"
-          size="lg"
-          weight="font-bold"
+      <Stack gap={4} padding={5} height="full">
+        <Stack gap={2}>
+          <Text
+            as="h3"
+            variant="display"
+            size="xl"
+            weight="font-black"
             color="main"
             leading="tight"
             className="group-hover:text-accent transition-colors line-clamp-2"
-        >
-          {title}
-        </Text>
-
-        <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
-           {excerpt}
-        </Text>
-      </Stack>
-
-        <Box display="flex" align="center" justify="between" marginTop="auto">
-          <Text variant="mono" size="xs" color="dim" data-testid="content-date">
-            {[date, readingTime].filter(Boolean).join(' • ') || category}
+          >
+            {title}
           </Text>
-          <Text variant="mono" size="sm" weight="font-bold" color="accent" tracking="wide">
-            Read article
+
+          <Text variant="body" size="sm" color="dim" leading="relaxed" className="line-clamp-3" maxWidth="prose">
+            {excerpt}
           </Text>
+        </Stack>
+
+        <Box display="flex" align="center" justify="between" marginTop="auto" paddingTop={4} border="t" borderColor="line/10">
+          <Stack gap={1}>
+            <Text variant="mono" size="micro" color="dim" uppercase tracking="tighter">
+              {category}
+            </Text>
+            <Text variant="mono" size="micro" color="dim" opacityVariant="muted" data-testid="content-date">
+              {[date, readingTime].filter(Boolean).join(' • ')}
+            </Text>
+          </Stack>
+          <Box className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <Text variant="mono" size="micro" weight="font-bold" color="accent" tracking="widest" uppercase>
+              View →
+            </Text>
+          </Box>
         </Box>
       </Stack>
     </BaseCard>

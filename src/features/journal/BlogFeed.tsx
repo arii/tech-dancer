@@ -19,6 +19,7 @@ export default function BlogFeed() {
         as="h1"
         label="INSIGHTS"
         description="A searchable, categorized folio of posts covering travel, lifestyle, practical tools, technical portfolio pieces, and everything about West Coast Swing."
+        overview="Explore: • Guides • Gear Reviews • Event Resources • Travel & Lifestyle • Dance Knowledge"
         basePath="/blog"
         searchPlaceholder="Search posts..."
         view={view}

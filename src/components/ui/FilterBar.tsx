@@ -21,20 +21,26 @@ export function FilterBar({ categories }: FilterBarProps) {
       paddingY={4}
     >
       <Stack direction="row" gap={2} className="min-w-max" paddingX={1}>
-        {categories.map((cat) => (
-          <FilterButton
-            key={cat}
-            label={formatCategory(cat)}
-            onClick={() => setActiveCategory(cat)}
-            isActive={activeCategory === cat}
-            className={cn(
-              "transition-all duration-300 text-sm whitespace-nowrap px-3",
-              activeCategory === cat
-                ? "text-accent border-accent/60 bg-accent/10"
-                : "text-text-dim border-transparent hover:text-text-main hover:border-line"
-            )}
-          />
-        ))}
+        {['All', 'Guides', 'Gear', 'Events', 'Travel', 'Lifestyle', 'Dance'].map((label) => {
+          const categoryValue = label === 'All' ? 'All' : label;
+          const isActive = activeCategory === categoryValue;
+
+          return (
+            <FilterButton
+              key={label}
+              label={label === 'All' ? 'All Posts' : label}
+              onClick={() => setActiveCategory(categoryValue)}
+              isActive={isActive}
+              // impeccable-ignore
+              className={cn(
+                "transition-all duration-300 text-sm whitespace-nowrap px-4 py-2 min-w-[100px] border",
+                isActive
+                  ? "text-accent border-accent bg-accent/10"
+                  : "text-text-dim border-line/30 hover:text-text-main hover:border-line"
+              )}
+            />
+          );
+        })}
       </Stack>
     </Box>
   );

@@ -61,6 +61,23 @@ export default function BlogPost() {
 
   return (
     <>
+      <Box
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        height={1}
+        zIndex={100}
+        className="bg-accent/20"
+      >
+        <Box
+          height="full"
+          className="bg-accent transition-all duration-150"
+          // impeccable-ignore
+          style={{ width: `0%` }}
+          id="reading-progress-bar"
+        />
+      </Box>
       <SEO
         title={post.title}
         description={post.excerpt}

@@ -18,10 +18,8 @@ tags:
 
 Dancing outdoors brings its own set of challenges, from sun exposure to keeping your valuables secure while you're active. Here’s the essential gear for your next outdoor festival or warm-weather social.
 
-![Slim Running Belt](/images/gear/amazon/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpg)
-
 ### Keep Your Valuables Safe
-A slim fanny pack or running belt is perfect for keeping your phone, keys, and cash secure without adding bulk or restricting your movement.
+A slim fanny pack or running belt is perfect for keeping your phone, keys, and cash secure without adding bulk or restricting your movement. This essential item is listed in our sidebar for quick access.
 
 
 ### Sun Protection is Non-Negotiable

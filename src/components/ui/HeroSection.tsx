@@ -77,32 +77,16 @@ export function HeroSection() {
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            Built for dancers.
+            Research &
           </Text>
           <Text
             as="span"
             variant="hero"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
-            <span className="hero-accent-color">Look good.</span>
-          </Text>
-          <Text
-            as="span"
-            variant="hero"
-            color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          >
-            Travel smart.
-          </Text>
-          <Text
-            as="span"
-            variant="hero"
-            color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          >
-            Dance more.
+            <span className="hero-accent-color">Innovation</span>
           </Text>
         </Stack>
 
@@ -140,7 +124,7 @@ export function HeroSection() {
             size={{ base: "base", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Gear guides, travel hacks, DIY tips, and merch for West Coast Swing dancers
+            Exploring engineering systems, AI workflows, automation architecture, developer tooling, data engineering, and applied experiments.
           </Text>
         </Stack>
 

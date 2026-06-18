@@ -22,12 +22,7 @@ tags:
 Theme nights are a staple of West Coast Swing conventions. From "Galactic" to "Nerd Night," having the right accessories can make your outfit stand out without breaking the bank.
 
 ### Galactic & Space Themes
-![Green Bodysuit](/images/gear/sketches/green-bodysuit.webp)
-![Alien Mask](/images/gear/sketches/alien-mask.webp)
-
-Commit to the alien look with a full-body spandex suit and a latex mask.
-
-<notice type="affiliate" id="alien-mask" />
+Commit to the alien look with a full-body spandex suit and a latex mask. We've listed the Green Alien Bodysuit and Alien Latex Mask in our sidebar to help you complete the look.
 
 
 ### Glow & Nerd Nights

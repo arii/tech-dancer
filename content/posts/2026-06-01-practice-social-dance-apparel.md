@@ -5,7 +5,7 @@ date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Basic functional dance wear and layering accessories for your next practice or social."
-image: "/images/gear/sketches/mesh-fishnet-top.webp"
+image: "/images/gear/sketches/porvike-3-pack-sports-crop-tank-tops-women-s-cotton-racerback-yoga-gym.webp"
 imageFit: "contain"
 
 affiliateIds:
@@ -21,12 +21,8 @@ tags:
 
 Functional dance wear should be comfortable, breathable, and stylish. These non-merch basics are perfect for layering and creating your own unique look on the dance floor.
 
-![Crop Top](/images/gear/amazon/floerns-women-s-casual-reflective-short-sleeve-round-neck-crop-tops-t.jpg)
-
 ### Breathable Basics
-Crop tops are a favorite for a reason—they're lightweight and keep you cool during intense workshops.
-
-<notice type="affiliate" id="reflective-crop-tops" />
+Crop tops are a favorite for a reason—they're lightweight and keep you cool during intense workshops. The reflective versions are also a great way to stand out.
 
 ### Layering with Style
 Mesh and fishnet tops are great for adding texture to your outfit without adding heat, while fishnet tights provide a classic dance look.

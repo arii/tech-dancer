@@ -5,7 +5,7 @@ date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Products focused on modifying, drying, and preserving dance footwear."
-image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
+image: "/images/gear/amazon/suede-stick-on-sheets.jpg"
 affiliateIds:
   - "suede-sheets"
   - "shoe-dryer"

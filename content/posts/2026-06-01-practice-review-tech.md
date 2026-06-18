@@ -10,7 +10,7 @@ affiliateIds:
   - "portable-speaker"
   - "tripod"
 tags:
-  - "tech"
+  - "audio"
   - "practice"
 ---
 

@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
@@ -11,6 +11,7 @@ import { EditorialHero } from '@/components/editorial/EditorialHero';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
+import { NewsletterModule } from '@/components/ui/NewsletterModule';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 
 interface BlogPostDetailProps {
@@ -22,6 +23,39 @@ interface BlogPostDetailProps {
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
   const rt = `${readingTime(post.content)} min read`;
   const [isCopied, setIsCopied] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [toc, setToc] = useState<{ id: string; text: string; level: number }[]>([]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+
+      const progressBar = document.getElementById('reading-progress-bar');
+      if (progressBar) {
+        // impeccable-ignore
+        progressBar.style.width = `${progress}%`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const headings = Array.from(document.querySelectorAll('.prose-editorial h2, .prose-editorial h3'));
+    const tocItems = headings.map((h, index) => {
+      const id = h.id || `heading-${index}`;
+      h.id = id;
+      return {
+        id,
+        text: h.textContent || '',
+        level: h.tagName === 'H2' ? 2 : 3
+      };
+    });
+    setToc(tocItems);
+  }, [post.content]);
 
   const share = async () => {
     const shareData = {
@@ -109,24 +143,79 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         />
       }
       sidebar={
-        affiliateLinks.length > 0 ? (
-          <Stack gap={6}>
-            <AffiliateDisclosure compact={true} />
-            <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-              Shop selected items
-            </Text>
-            <Stack gap={4}>
-              {affiliateLinks.map(link => (
-                <AffiliateCard key={link.id} link={link} />
-              ))}
+        <Stack gap={10}>
+          {toc.length > 0 && (
+            <Stack gap={4} display={{ base: "none", lg: "flex" }}>
+              <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                Table of Contents
+              </Text>
+              <Stack gap={2}>
+                {toc.map(item => (
+                  <Box
+                    key={item.id}
+                    as="a"
+                    href={`#${item.id}`}
+                    paddingLeft={item.level === 3 ? 4 : 0}
+                    className="hover:text-accent transition-colors"
+                  >
+                    <Text variant="mono" size="micro" color="dim" className="hover:text-accent">
+                      {item.text}
+                    </Text>
+                  </Box>
+                ))}
+              </Stack>
             </Stack>
-          </Stack>
-        ) : undefined
+          )}
+
+          {affiliateLinks.length > 0 && (
+            <Stack gap={6}>
+              <AffiliateDisclosure compact={true} />
+              <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                Shop selected items
+              </Text>
+              <Stack gap={4}>
+                {affiliateLinks.map(link => (
+                  <AffiliateCard key={link.id} link={link} />
+                ))}
+              </Stack>
+            </Stack>
+          )}
+        </Stack>
       }
       footer={
-        <Stack gap={12}>
+        <Stack gap={16}>
           <ArticleNavigation previous={previous} next={next} />
+
+          <Box border="t" borderBottom="none" paddingTop={12} className="border-line/30">
+             <Stack gap={6}>
+                <Text variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+                  Browse More Topics
+                </Text>
+                <Grid cols={{ base: 2, md: 4 }} gap={4}>
+                  {['Guides', 'Gear', 'Events', 'Travel'].map(topic => (
+                    <Box
+                      key={topic}
+                      as="a"
+                      href={`/blog?category=${topic}`}
+                      padding={4}
+                      border
+                      radius="md"
+                      className="hover:border-accent hover:bg-accent/5 transition-all text-center"
+                    >
+                      <Text variant="mono" size="xs" weight="font-bold" color="main">
+                        {topic}
+                      </Text>
+                    </Box>
+                  ))}
+                </Grid>
+             </Stack>
+          </Box>
+
           <EditorialRelated items={relatedItems} />
+
+          <Box marginTop={8}>
+            <NewsletterModule />
+          </Box>
         </Stack>
       }
     >

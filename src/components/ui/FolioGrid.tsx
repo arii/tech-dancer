@@ -10,6 +10,8 @@ import { ListRow } from '@/components/ui/ListRow';
 import { ContentItem } from '@/lib/content';
 import { EmptyState } from './EmptyState';
 import { Search } from 'lucide-react';
+import { motion } from 'motion/react';
+import { motionTokens } from '@/styles/motion';
 
 interface FolioGridProps {
   items: ContentItem[];
@@ -17,6 +19,7 @@ interface FolioGridProps {
   basePath: string;
   label?: string;
   description?: string;
+  overview?: string;
   children?: ReactNode;
   view?: ViewMode;
   onViewChange?: (v: ViewMode) => void;
@@ -31,6 +34,7 @@ export default function FolioGrid({
   basePath,
   label,
   description,
+  overview,
   children,
   view = 'card',
   onViewChange,
@@ -61,20 +65,32 @@ export default function FolioGrid({
           description={description}
           as={as}
         />
-        {children}
-        <Box display="flex" align="center" justify="between" gap={4} marginTop={8} flexWrap="wrap">
+        {overview && (
+          <Box marginTop={4} paddingBottom={4} border="b" borderColor="line/30">
+            <Text variant="mono" size="xs" color="dim" tracking="widest" uppercase>
+              {overview}
+            </Text>
+          </Box>
+        )}
+
+        <Box marginTop={8} width="full" maxWidth="3xl">
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
+            placeholder={propsSearchPlaceholder || "Search posts, guides, gear recommendations..."}
           />
+        </Box>
+
+        {children}
+
+        <Box display="flex" align="center" justify="end" gap={4} marginTop={4}>
           {onViewChange && (
             <ViewToggle view={view} onChange={onViewChange} />
           )}
         </Box>
       </Box>
 
-      <Box marginTop={8}>
+      <Box marginTop={8} maxWidth="screen-2xl" marginX="auto" width="full">
         {filteredItems.length === 0 ? (
           <EmptyState
             icon={<Search className="w-12 h-12" />}
@@ -82,11 +98,22 @@ export default function FolioGrid({
             description={search ? `No matches for "${search}" in ${categoryTitle}.` : `No items found in ${categoryTitle}.`}
           />
         ) : view === 'card' ? (
-          <Grid cols={{ base: 1, md: 2, xl: 3, "2xl": 4 }} gap={4}>
-            {filteredItems.map((item) => (
+          <Grid
+            cols={{ base: 1 }}
+            gap={6}
+            // impeccable-ignore
+            className="grid-cols-[repeat(auto-fill,minmax(340px,1fr))]"
+          >
+            {filteredItems.map((item, index) => (
               <Box
                 key={item.slug}
-                padding={4}
+                as={motion.div}
+                variants={motionTokens.fadeIn}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+                transition={{ ...motionTokens.fadeIn.transition, delay: index * 0.05 }}
+                padding={0}
                 height="full"
                 className="bg-transparent"
               >
