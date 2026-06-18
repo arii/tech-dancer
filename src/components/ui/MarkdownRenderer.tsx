@@ -155,7 +155,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   loading="lazy"
                   alt={alt || "Article illustration"}
                   maxWidth="full"
+                  maxHeight={{ lg: 96 }}
                   height="auto"
+                  className="object-contain"
                   {...props}
                 />
               </Box>
