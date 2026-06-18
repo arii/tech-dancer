@@ -5,7 +5,7 @@ import {
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
   ChevronRight, Github, Trash2
 } from 'lucide-react';
-import { useUXAuditor, VIEWPORTS, ViewportAnalysis } from '@/features/ux-auditor/useUXAuditor';
+import { useUXAuditor, VIEWPORTS, ViewportAnalysis, Improvement } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
@@ -217,8 +217,8 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                 </Text>
               </Box>
               <Stack gap={4}>
-                {data.improvements?.map((imp, idx) => (
-                  <Box key={idx} padding={4} className={cardVariants({ interactive: true })}>
+                {data.improvements?.map((imp: Improvement, idx: number) => (
+                  <Box key={`${vp.name}-${imp.element}-${idx}`} padding={4} className={cardVariants({ interactive: true })}>
                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                       <Stack direction="row" align="center" gap={2}>
                         <Box
