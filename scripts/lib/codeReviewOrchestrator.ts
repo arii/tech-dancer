@@ -15,7 +15,7 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
 
-export function getCodeDiffSummary(): CodeReviewSummary {
+export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
   try {
     let diffCommand = 'git diff origin/main...HEAD';
     let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
@@ -56,7 +56,7 @@ export function getCodeDiffSummary(): CodeReviewSummary {
           return obj.map(sanitizePrototypePollution);
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const cleaned: Record<string, any> = {};
+        const cleaned: Record<string, any> = Object.create(null);
         for (const key of Object.keys(obj)) {
           if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
             continue;
@@ -66,15 +66,17 @@ export function getCodeDiffSummary(): CodeReviewSummary {
         return cleaned;
       };
 
-      // Use fs.readdirSync recursively or simple shell glob to avoid 'find' compat issues
       const schemaDir = path.join('docs', 'agent');
       let globFiles: string[] = [];
-      if (fs.existsSync(schemaDir)) {
-        globFiles = fs.readdirSync(schemaDir)
-          .filter(f => f.endsWith('.schema.json'));
+      try {
+        const files = await fs.promises.readdir(schemaDir);
+        globFiles = files.filter(f => f.endsWith('.schema.json'));
+      } catch {
+        // Directory might not exist, ignore
       }
+
       if (globFiles.length > 0) {
-        const schemas: Record<string, unknown> = {};
+        const schemas: Record<string, unknown> = Object.create(null);
         let successCount = 0;
         let failureCount = 0;
 
@@ -86,7 +88,7 @@ export function getCodeDiffSummary(): CodeReviewSummary {
           const nativePath = path.join('docs', 'agent', filename);
           const posixPath = path.posix.join('docs/agent', filename);
           try {
-            const stat = fs.statSync(nativePath);
+            const stat = await fs.promises.stat(nativePath);
             if (totalBytes + stat.size > maxSchemaBytes) {
               console.warn(`Schema payload too large. Truncating file: ${nativePath}`);
               continue;
@@ -94,8 +96,13 @@ export function getCodeDiffSummary(): CodeReviewSummary {
             totalBytes += stat.size;
             fileCount++;
 
-            const content = fs.readFileSync(nativePath, 'utf-8');
-            let parsed = JSON.parse(content);
+            const content = await fs.promises.readFile(nativePath, 'utf-8');
+            let parsed = JSON.parse(content, (key, value) => {
+              if (['__proto__', 'constructor', 'prototype'].includes(key)) {
+                return undefined;
+              }
+              return value;
+            });
             parsed = sanitizePrototypePollution(parsed);
 
             if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
@@ -110,13 +117,13 @@ export function getCodeDiffSummary(): CodeReviewSummary {
           }
         }
 
-        if (failureCount > 0) {
-            console.warn(`${failureCount} schema(s) failed to parse. Schemas context will be omitted to avoid partial context.`);
-            schemasContext = undefined;
-        } else if (successCount === 0) {
+        if (successCount === 0) {
             console.warn(`No schemas were successfully parsed. Context will not be included.`);
             schemasContext = undefined;
         } else {
+            if (failureCount > 0) {
+                console.warn(`${failureCount} schema(s) failed to parse. Proceeding with ${successCount} successful schemas.`);
+            }
             schemasContext = JSON.stringify(schemas);
         }
       }
@@ -182,7 +189,7 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const summary = getCodeDiffSummary();
+  const summary = await getCodeDiffSummary();
 
   if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
