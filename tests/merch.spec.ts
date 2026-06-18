@@ -52,13 +52,14 @@ test.describe('Merch Page', () => {
     // Click on 'Lead · Follow · Switch' filter
     await page.getByRole('button', { name: 'Lead · Follow · Switch' }).click();
 
-    // Check that we see the section
-    const section = page.locator('section#lead-follow-switch');
-    await expect(section).toBeVisible();
+    // In filtered view, sections are collapsed to a flat grid.
+    // We should check for product cards that belong to this collection.
+    const productCard = page.getByTestId('product-card').filter({ hasText: /Lead . Follow . Switch/i }).first();
+    await expect(productCard).toBeVisible();
 
-    // Check other sections are NOT visible
-    const otherSection = page.locator('section#norcal-golden-gate');
-    await expect(otherSection).not.toBeVisible();
+    // Check other collections' unique items are NOT visible (e.g., NorCal specific)
+    const norcalItem = page.getByTestId('product-card').filter({ hasText: /NorCal Best Cal/i }).first();
+    await expect(norcalItem).not.toBeVisible();
 
     // Check URL persistence
     await expect(page).toHaveURL(/collection=lead-follow-switch/);

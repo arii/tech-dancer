@@ -12,7 +12,6 @@ import { PRINTFUL_REFERRAL } from '@/config/constants';
 import { MerchFilterBar } from '@/components/products/MerchFilterBar';
 import { CollectionSection } from '@/components/products/CollectionSection';
 import { PromoStrip } from '@/components/products/PromoStrip';
-import { motion, AnimatePresence } from 'motion/react';
 
 export default function Merch() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,7 +28,7 @@ export default function Merch() {
 
   const allProducts = getAllMerchProducts();
 
-  // Group products by collectionId
+  // Group products by collectionId for the default multi-section view
   const groupedProducts = useMemo(() => {
     return allProducts.reduce((acc, product) => {
       const colId = product.collectionId || 'other';
@@ -48,7 +47,7 @@ export default function Merch() {
   const sections = useMemo(() => {
     const definedOrder = ["norcal-golden-gate", "rainbow-pride", "lead-follow-switch", "other"];
 
-    const baseSections = [
+    return [
       {
         id: 'featured',
         title: 'Featured Picks',
@@ -76,13 +75,14 @@ export default function Merch() {
         };
       }).filter((s): s is NonNullable<typeof s> => !!s)
     ];
+  }, [groupedProducts, allProducts]);
 
-    if (activeCollection === 'all') {
-      return baseSections;
-    }
-
-    return baseSections.filter(s => s.id === activeCollection);
-  }, [activeCollection, groupedProducts, allProducts]);
+  const filteredProducts = useMemo(() => {
+    if (activeCollection === 'all') return [];
+    return allProducts.filter(p =>
+      p.collections.includes(activeCollection) || p.collectionId === activeCollection
+    );
+  }, [allProducts, activeCollection]);
 
   return (
     <Box paddingX={{ base: 4, md: 8 }} display="flex" justify="center">
@@ -92,7 +92,7 @@ export default function Merch() {
         jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap={{ base: 5, md: 6 }} width="full" maxWidth="screen-xl">
+      <Stack gap={{ base: 6, md: 10 }} width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
@@ -123,38 +123,33 @@ export default function Merch() {
           onCollectionChange={setActiveCollection}
         />
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCollection}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Stack gap={{ base: 16, md: 24 }}>
-              {sections.length > 0 ? (
-                sections.map((section) => (
-                  <CollectionSection
-                    key={section.id}
-                    id={section.id}
-                    title={section.title}
-                    description={section.description}
-                    products={section.products}
-                    isFeatured={section.isFeatured}
-                  />
-                ))
-              ) : (
-                <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
-                  {allProducts
-                    .filter(p => p.collections.includes(activeCollection) || p.collectionId === activeCollection)
-                    .map((product) => (
-                      <ProductCard key={product.id} item={product} />
-                    ))}
-                </Grid>
-              )}
-            </Stack>
-          </motion.div>
-        </AnimatePresence>
+        {/*
+          DOCUMENTATION:
+          When "All" is selected, we show products grouped into themed sections (with descriptions and featured items).
+          When a specific collection is selected, we collapse to a flat grid to:
+          1. Correctl display items that belong to multiple collections (like Pride items in NorCal).
+          2. Minimize scrolling and layout shifts when switching between filters.
+        */}
+        {activeCollection === 'all' ? (
+          <Stack gap={{ base: 10, md: 16 }}>
+            {sections.map((section) => (
+              <CollectionSection
+                key={section.id}
+                id={section.id}
+                title={section.title}
+                description={section.description}
+                products={section.products}
+                isFeatured={section.isFeatured}
+              />
+            ))}
+          </Stack>
+        ) : (
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 6, md: 8 }} width="full" minWidth="0">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} item={product} />
+            ))}
+          </Box>
+        )}
 
         {/* Footer Callouts */}
         <Box padding={8} radius="lg" border surface="card" marginTop={8} width="full">

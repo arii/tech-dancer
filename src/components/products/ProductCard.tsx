@@ -1,4 +1,4 @@
-import { ArrowRight, Package } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { Box, Stack, Text, Button } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
@@ -14,9 +14,9 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
 
   return (
     <BaseCard
-      gap={isFeatured ? 6 : 6}
+      gap={isFeatured ? 5 : 4}
       height="full"
-      padding={isFeatured ? { base: 5, md: 8 } : { base: 5, md: 8 }}
+      padding={isFeatured ? { base: 4, md: 6 } : { base: 4, md: 5 }}
       radius="lg"
       border
       maxWidth="full"
@@ -79,13 +79,13 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
 
         </Stack>
 
-        <Stack gap={1.5}>
+        <Stack gap={1}>
           <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
             {item.description}
           </Text>
 
           {item.isBundle && item.bundleNote && (
-            <Text variant="body" size="xs" color="dim" className="opacity-80">
+            <Text variant="body" size="xs" color="dim">
               {item.bundleNote}
             </Text>
           )}
@@ -114,7 +114,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
         )}
       </Stack>
 
-      <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
+      <Stack marginTop="auto" paddingTop={isFeatured ? 4 : 3} border="t" gap={isFeatured ? 3 : 2} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
           {item.tags.slice(0, 3).map((tag) => (
             <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
