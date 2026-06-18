@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -52,6 +54,13 @@ jobs:
             echo "⚠️ JULES_SOURCE_ID variable not found. Script will attempt auto-discovery."
           fi
           echo "✅ Credentials pre-check passed."
+
+      - name: Post Jules retry entropy context
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.issue_number }}
+          WORKFLOW_FILE: ci.yml
+        run: dev-tools/post-jules-retry-context.sh
 
       - name: Initialize Jules Repair Session
         env:
