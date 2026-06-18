@@ -69,7 +69,7 @@ test.describe('Merch Page', () => {
     await page.getByRole('button', { name: 'More designs' }).click();
 
     const bundleCard = page.getByTestId('product-card').filter({ hasText: 'Test Bundle Product' });
-    await expect(bundleCard.getByText('Bundle')).toBeVisible();
+    await expect(bundleCard.getByTestId('bundle-badge')).toBeVisible();
     await expect(bundleCard.getByText('Save 10% as a set')).toBeVisible();
   });
 });

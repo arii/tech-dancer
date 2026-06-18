@@ -49,6 +49,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
             surface="accent"
             zIndex={10}
             className="text-white shadow-lg"
+            data-testid="bundle-badge"
           >
             <Package className="w-3.5 h-3.5" />
             <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest">
