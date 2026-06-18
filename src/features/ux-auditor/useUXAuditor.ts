@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSnapshotManager } from './useSnapshotManager';
-import { initializeApp, getApps, getApp, FirebaseOptions } from 'firebase/app';
+import { initializeApp, getApps, getApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, User } from 'firebase/auth';
 import {
   getFirestore,
@@ -14,7 +14,8 @@ import {
   query,
   orderBy,
   initializeFirestore,
-  persistentLocalCache
+  persistentLocalCache,
+  UpdateData
 } from 'firebase/firestore';
 
 
@@ -69,6 +70,15 @@ function validateFirebaseConfig(config: unknown): FirebaseOptions | null {
 
 const firebaseConfig = validateFirebaseConfig(rawFirebaseConfig);
 
+/**
+ * Ensures Firebase is initialized before returning the app instance.
+ */
+function getSafeApp(): FirebaseApp | null {
+  if (getApps().length > 0) return getApp();
+  if (firebaseConfig) return initializeApp(firebaseConfig);
+  return null;
+}
+
 export const VIEWPORTS = [
   { name: 'Mobile', width: 375, height: 667 },
   { name: 'Tablet', width: 768, height: 1024 },
@@ -99,9 +109,9 @@ export interface UXReport {
   image_mobile?: string;
   image_tablet?: string;
   image_desktop?: string;
-  // Index signature for dynamic access in loops (safe because we restricted keys)
-  [key: string]: string | number | ViewportAnalysis | undefined;
 }
+
+type ViewportKey = 'mobile' | 'tablet' | 'desktop';
 
 export interface UXAuditorHookReturn {
   user: User | null;
@@ -150,8 +160,8 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
   // Firebase Init
   useEffect(() => {
-    if (!firebaseConfig) return;
-    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    const app = getSafeApp();
+    if (!app) return;
 
     // Enable local persistence for offline support
     try {
@@ -192,8 +202,8 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
   // Real-time listener that updates TanStack Query cache
   useEffect(() => {
-    if (!user || !firebaseConfig) return;
-    const app = getApp();
+    const app = getSafeApp();
+    if (!user || !app) return;
     const db = getFirestore(app);
     const q = query(
       collection(db, 'artifacts', appId, 'users', user.uid, 'ux_reports'),
@@ -225,14 +235,19 @@ export function useUXAuditor(): UXAuditorHookReturn {
       // Optimistic update for immediate UI feedback
       queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) => [newReport, ...old]);
 
-      if (user && firebaseConfig) {
-        const app = getApp();
-        const db = getFirestore(app);
-        // Use setDoc with a pre-generated ID for idempotency during retries
-        // Path alternates collection/doc: artifacts(col)/appId(doc)/users(col)/uid(doc)/ux_reports(col)/reportId(doc)
-        await withRetry(() =>
-          setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
-        );
+      try {
+        const app = getSafeApp();
+        if (user && app) {
+          const db = getFirestore(app);
+          // Use setDoc with a pre-generated ID for idempotency during retries
+          // Path alternates collection/doc: artifacts(col)/appId(doc)/users(col)/uid(doc)/ux_reports(col)/reportId(doc)
+          await withRetry(() =>
+            setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
+          );
+        }
+      } catch (err) {
+        console.error("Failed to save initial report to Firestore:", err);
+        // We continue anyway, as the audit is primary
       }
 
       for (const vp of VIEWPORTS) {
@@ -249,7 +264,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
 
-        const key = vp.name.toLowerCase();
+        const key = vp.name.toLowerCase() as ViewportKey;
         if (key === 'mobile') {
           newReport.findings_mobile = analysis;
           newReport.image_mobile = mockImg;
@@ -266,24 +281,28 @@ export function useUXAuditor(): UXAuditorHookReturn {
           old.map(r => r.id === reportId ? { ...newReport } : r)
         );
 
-        if (user && firebaseConfig) {
-          const app = getApp();
-          const db = getFirestore(app);
-          const updateData: Partial<UXReport> = {};
-          if (key === 'mobile') {
-            updateData.findings_mobile = analysis;
-            updateData.image_mobile = mockImg;
-          } else if (key === 'tablet') {
-            updateData.findings_tablet = analysis;
-            updateData.image_tablet = mockImg;
-          } else if (key === 'desktop') {
-            updateData.findings_desktop = analysis;
-            updateData.image_desktop = mockImg;
-          }
+        try {
+          const app = getSafeApp();
+          if (user && app) {
+            const db = getFirestore(app);
+            const updateData: UpdateData<UXReport> = {};
+            if (key === 'mobile') {
+              updateData.findings_mobile = analysis;
+              updateData.image_mobile = mockImg;
+            } else if (key === 'tablet') {
+              updateData.findings_tablet = analysis;
+              updateData.image_tablet = mockImg;
+            } else if (key === 'desktop') {
+              updateData.findings_desktop = analysis;
+              updateData.image_desktop = mockImg;
+            }
 
-          await withRetry(() =>
-            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData as { [x: string]: any })
-          );
+            await withRetry(() =>
+              updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updateData)
+            );
+          }
+        } catch (err) {
+          console.error(`Failed to update viewport ${key} in Firestore:`, err);
         }
       }
 
@@ -292,14 +311,18 @@ export function useUXAuditor(): UXAuditorHookReturn {
         old.map(r => r.id === reportId ? { ...newReport } : r)
       );
 
-      if (user && firebaseConfig) {
-        const app = getApp();
-        const db = getFirestore(app);
-        await withRetry(() =>
-          updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-            status: 'completed'
-          })
-        );
+      try {
+        const app = getSafeApp();
+        if (user && app) {
+          const db = getFirestore(app);
+          await withRetry(() =>
+            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
+              status: 'completed'
+            })
+          );
+        }
+      } catch (err) {
+        console.error("Failed to mark report as completed in Firestore:", err);
       }
 
       return newReport;
@@ -327,7 +350,7 @@ export function useUXAuditor(): UXAuditorHookReturn {
     }
   }, [auditMutation]);
 
-  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string) => {
+  const analyzeViewport = async (viewport: { name: string, width: number, height: number }, targetUrl: string, base64DataUri?: string): Promise<ViewportAnalysis> => {
     const systemPrompt = `You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations. Output JSON.`;
     const userQuery = `Analyze the provided snapshot of ${targetUrl} for ${viewport.name} viewport issues.`;
 
@@ -422,9 +445,9 @@ export function useUXAuditor(): UXAuditorHookReturn {
     if (!activeReport) return "";
     let md = `# Visual UX Audit for ${activeReport.url}\n\n`;
     VIEWPORTS.forEach(vp => {
-      const v = vp.name.toLowerCase();
-      const key = `findings_${v}` as keyof UXReport;
-      const data = activeReport[key] as ViewportAnalysis | undefined;
+      const v = vp.name.toLowerCase() as ViewportKey;
+      const key = `findings_${v}` as const;
+      const data = activeReport[key];
       if (data) {
         md += `## ${vp.name} Analysis\n${data.summary}\n\n`;
         md += `| Element | Issue | Suggestion | Severity |\n|---|---|---|---|\n`;
