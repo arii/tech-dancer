@@ -38,7 +38,7 @@ export function Notice({ type = 'info', children }: NoticeProps) {
       >
         {label}
       </Text>
-      <Box className="prose-direct-children">
+      <Box className="[&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul:first-child]:mt-0 [&>ul:last-child]:mb-0">
         {children}
       </Box>
     </Box>
