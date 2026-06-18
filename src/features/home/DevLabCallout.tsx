@@ -53,15 +53,15 @@ export function DevLabCallout() {
       <Text
         as={NavLink}
         to="/research"
-        display="block"
+        display="flex"
+        align="center"
         marginTop={4}
-        paddingY={{ base: 4, sm: 0 }}
-        paddingX={{ base: 4, sm: 0 }}
+        paddingY={3}
         variant="mono"
         size="xs"
         color="accent"
         weight="font-bold"
-        className="hover:underline"
+        className="hover:underline h-11"
       >
         View Portfolio →
       </Text>
