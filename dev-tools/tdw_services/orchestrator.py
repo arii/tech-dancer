@@ -159,11 +159,17 @@ class Orchestrator:
                 if response:
                     parsed = json.loads(clean_llm_output(response))
 
-                    self.github.update_pr(pr_num, {
+                    import jsonschema
+                    jsonschema.validate(instance=parsed, schema=schema)
+
+                    update_data = {
                         "title": parsed["title"],
                         "body": parsed["description"]
-                    })
+                    }
+                    if parsed["state"] == "abandon":
+                        update_data["state"] = "closed"
 
+                    self.github.update_pr(pr_num, update_data)
                     self.github.create_issue_comment(pr_num, parsed["comment"])
 
                     print(f"✅ Automatically audited and updated PR #{pr_num}")
