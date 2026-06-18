@@ -110,7 +110,9 @@ class GitHubClient:
 
     def update_pr(self, number: int, data: Dict[str, Any]) -> Dict[str, Any]:
         """Update pull request title, body, state, etc."""
-        return self._request('PATCH', f'/repos/{self.repo}/pulls/{number}', json_data=data)
+        allowed_keys = {'title', 'body', 'state', 'base'}
+        filtered_data = {k: v for k, v in data.items() if k in allowed_keys}
+        return self._request('PATCH', f'/repos/{self.repo}/pulls/{number}', json_data=filtered_data)
 
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})

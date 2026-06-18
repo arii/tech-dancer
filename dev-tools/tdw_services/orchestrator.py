@@ -162,12 +162,17 @@ class Orchestrator:
                     import jsonschema
                     jsonschema.validate(instance=parsed, schema=schema)
 
+                    title = parsed["title"].replace("\n", "").strip()
+                    if len(title) > 255:
+                        title = title[:252] + "..."
+
                     update_data = {
-                        "title": parsed["title"],
+                        "title": title,
                         "body": parsed["description"]
                     }
-                    if parsed["state"] == "abandon":
-                        update_data["state"] = "closed"
+
+                    # NOTE: We do not automatically close 'abandon' PRs to prevent accidental data loss.
+                    # We just log it and apply the title/description format and the comment.
 
                     self.github.update_pr(pr_num, update_data)
                     self.github.create_issue_comment(pr_num, parsed["comment"])
