@@ -5,7 +5,7 @@ import FolioGrid from '@/components/ui/FolioGrid';
 import { FilterBar } from '@/components/ui/FilterBar';
 
 export default function BlogFeed() {
-  const { posts, categories, view, setView } = useBlog();
+  const { posts, view, setView } = useBlog();
 
   return (
     <>
@@ -21,14 +21,11 @@ export default function BlogFeed() {
         description="A searchable, categorized folio of posts covering travel, lifestyle, practical tools, technical portfolio pieces, and everything about West Coast Swing."
         overview="Explore: • Guides • Gear Reviews • Event Resources • Travel & Lifestyle • Dance Knowledge"
         basePath="/blog"
-        searchPlaceholder="Search posts..."
         view={view}
         onViewChange={setView}
       >
         <Box marginTop={8}>
-          <FilterBar
-            categories={categories}
-          />
+          <FilterBar />
         </Box>
       </FolioGrid>
     </>

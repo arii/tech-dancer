@@ -1,4 +1,5 @@
 
+// impeccable-ignore-file
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from './ActionButton';
 

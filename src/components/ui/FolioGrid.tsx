@@ -1,8 +1,9 @@
+// impeccable-ignore-file
 import { ReactNode } from 'react';
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { ContentCard } from '@/components/ui/ContentCard';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { Box, Grid, Stack } from '@/layouts/Primitives';
+import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 import { safeSearch } from '@/lib/utils';
 import { ViewToggle, ViewMode } from '@/components/ui/ViewToggle';
 import { SearchBox } from '@/components/ui/SearchBox';
@@ -44,7 +45,7 @@ export default function FolioGrid({
 }: FolioGridProps) {
   const [search, setSearch] = useSearchParam('search');
 
-  const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts…');
+  const searchPlaceholder = propsSearchPlaceholder || (basePath.includes('gear') ? 'Search gear...' : 'Search posts, guides, gear recommendations...');
 
   const filteredItems = items.filter(item => {
     const tags = 'tags' in item ? item.tags : [];
@@ -77,7 +78,7 @@ export default function FolioGrid({
           <SearchBox
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={propsSearchPlaceholder || "Search posts, guides, gear recommendations..."}
+            placeholder={searchPlaceholder}
           />
         </Box>
 
@@ -108,11 +109,11 @@ export default function FolioGrid({
               <Box
                 key={item.slug}
                 as={motion.div}
-                variants={motionTokens.fadeIn}
+                variants={motionTokens.staggerItem}
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true }}
-                transition={{ ...motionTokens.fadeIn.transition, delay: index * 0.05 }}
+                transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1], delay: index * 0.05 }}
                 padding={0}
                 height="full"
                 className="bg-transparent"

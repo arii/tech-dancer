@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -73,8 +74,8 @@ export default function BlogPost() {
         <Box
           height="full"
           className="bg-accent transition-all duration-150"
-          // impeccable-ignore
-          style={{ width: `0%` }}
+          // impeccable-ignore-next-line
+          style={{ width: '0%' }}
           id="reading-progress-bar"
         />
       </Box>

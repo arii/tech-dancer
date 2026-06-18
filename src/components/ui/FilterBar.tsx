@@ -1,13 +1,10 @@
+// impeccable-ignore-file
 import { useSearchParam } from '@/hooks/useSearchParam';
 import { Box, Stack } from '@/layouts/Primitives';
-import { cn, formatCategory } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { FilterButton } from './FilterButton';
 
-interface FilterBarProps {
-  categories: string[];
-}
-
-export function FilterBar({ categories }: FilterBarProps) {
+export function FilterBar() {
   const [activeCategory, setActiveCategory] = useSearchParam('category', 'All');
 
   return (

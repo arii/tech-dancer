@@ -23,18 +23,16 @@ interface BlogPostDetailProps {
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
   const rt = `${readingTime(post.content)} min read`;
   const [isCopied, setIsCopied] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [toc, setToc] = useState<{ id: string; text: string; level: number }[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
 
       const progressBar = document.getElementById('reading-progress-bar');
       if (progressBar) {
-        // impeccable-ignore
+        // impeccable-ignore-next-line
         progressBar.style.width = `${progress}%`;
       }
     };
