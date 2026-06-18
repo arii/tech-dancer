@@ -157,29 +157,47 @@ class Orchestrator:
             try:
                 response = call_ai_service(prompt, schema=schema)
                 if response:
-                    parsed = json.loads(clean_llm_output(response))
+                    try:
+                        parsed = json.loads(clean_llm_output(response))
+                    except json.JSONDecodeError as e:
+                        print(f"⚠️ Failed to parse AI JSON for PR #{pr_num}: {e}\nRaw output: {response[:300]}")
+                        results.append({"pr": pr_num, "status": "error", "error": f"JSON parse error: {e}"})
+                        continue
 
                     import jsonschema
-                    jsonschema.validate(instance=parsed, schema=schema)
+                    try:
+                        jsonschema.validate(instance=parsed, schema=schema)
+                    except jsonschema.exceptions.ValidationError as e:
+                        print(f"⚠️ AI output failed schema validation for PR #{pr_num}: {e}")
+                        results.append({"pr": pr_num, "status": "error", "error": f"Schema validation error: {e}"})
+                        continue
 
-                    title = parsed["title"].replace("\n", "").strip()
+                    title = parsed.get("title", "").replace("\n", "").replace("\r", "").strip()
                     if len(title) > 255:
+                        print(f"⚠️ Truncating title for PR #{pr_num} from {len(title)} to 255 characters.")
                         title = title[:252] + "..."
+
+                    body = parsed.get("description", "")
 
                     update_data = {
                         "title": title,
-                        "body": parsed["description"]
+                        "body": body
                     }
 
                     # NOTE: We do not automatically close 'abandon' PRs to prevent accidental data loss.
                     # We just log it and apply the title/description format and the comment.
 
-                    self.github.update_pr(pr_num, update_data)
-                    self.github.create_issue_comment(pr_num, parsed["comment"])
+                    try:
+                        self.github.update_pr(pr_num, update_data)
+                        self.github.create_issue_comment(pr_num, parsed.get("comment", ""))
+                    except Exception as e:
+                        print(f"❌ Error communicating with GitHub API for PR #{pr_num}: {e}")
+                        results.append({"pr": pr_num, "status": "error", "error": f"GitHub API error: {e}"})
+                        continue
 
                     print(f"✅ Automatically audited and updated PR #{pr_num}")
-                    print(f"   New Title: {parsed['title']}")
-                    print(f"   State: {parsed['state']}\n")
+                    print(f"   New Title: {title}")
+                    print(f"   State: {parsed.get('state', 'unknown')}\n")
                     results.append({"pr": pr_num, "status": "success", "data": parsed})
                 else:
                     print(f"⚠️ Failed to get AI response for PR #{pr_num}")
