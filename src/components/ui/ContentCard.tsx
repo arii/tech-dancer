@@ -5,6 +5,8 @@ import { BaseCard } from './BaseCard';
 import { cn, pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 
+type CategoryKey = 'travel' | 'gear' | 'guide' | 'event' | 'lifestyle' | 'dance' | 'tech';
+
 interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   slug: string;
   title: string;
@@ -15,6 +17,8 @@ interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
   readingTime?: string;
   image?: string;
   imageAlt?: string;
+  /** Optional additional class names for the container */
+  className?: string;
   [key: string]: unknown;
 }
 
@@ -48,18 +52,22 @@ export function ContentCard(props: ContentCardProps) {
     'className'
   ] as (keyof ContentCardProps)[]);
 
-  const categoryMap: Record<string, string> = {
+  const categoryMap: Record<CategoryKey, string> = {
     travel: 'bg-brand-purple/20 text-brand-purple border-brand-purple/30',
     gear: 'bg-brand-amber/20 text-brand-amber border-brand-amber/30',
     guide: 'bg-brand-green/20 text-brand-green border-brand-green/30',
     event: 'bg-brand-cyan/20 text-brand-cyan border-brand-cyan/30',
     lifestyle: 'bg-brand-magenta/20 text-brand-magenta border-brand-magenta/30',
+    dance: 'bg-brand-purple/20 text-brand-purple border-brand-purple/30',
+    tech: 'bg-accent/20 text-accent border-accent/30',
   };
 
   const getTagColorClass = (cat: string) => {
     const c = cat.toLowerCase();
-    const key = Object.keys(categoryMap).find(k => c.includes(k));
-    return key ? categoryMap[key] : 'bg-accent/20 text-accent border-accent/30';
+    for (const key of Object.keys(categoryMap) as CategoryKey[]) {
+      if (c.includes(key)) return categoryMap[key];
+    }
+    return 'bg-accent/20 text-accent border-accent/30';
   };
 
   return (
@@ -68,7 +76,7 @@ export function ContentCard(props: ContentCardProps) {
       direction="col"
       height="full"
       to={`${basePath}/${slug}`}
-      ariaLabel={`Read article: ${title}`}
+      ariaLabel={`Read ${category} article: ${title}`}
       className={cn(
         "overflow-hidden group transition-all duration-300",
         "hover:shadow-glow hover:-translate-y-1 hover:border-accent/40",
@@ -83,6 +91,9 @@ export function ContentCard(props: ContentCardProps) {
             alt={imageAlt || title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/images/placeholder-16-9.webp';
+            }}
           />
         ) : (
           <Box width="full" height="full" display="flex" align="center" justify="center">
