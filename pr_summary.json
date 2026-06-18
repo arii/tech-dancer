@@ -1,0 +1,1922 @@
+[
+  {
+    "number": 2540,
+    "title": "chore: perform full repository PR audit and post feedback",
+    "branch": "jules-review-status-audit-9350358726796846122",
+    "mergeable": true,
+    "files": [
+      "final-audit.md",
+      "review-status.md"
+    ],
+    "checks": [
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2540.diff"
+  },
+  {
+    "number": 2539,
+    "title": "chore: Inject minified JSON schemas into GitHub AI Review Workflows",
+    "branch": "jules-11829484570871605344-ba2db35e",
+    "mergeable": true,
+    "files": [
+      "scripts/clients/geminiCodeReviewClient.ts",
+      "scripts/lib/visualReviewOrchestrator.ts",
+      "scripts/lib/visualReviewTypes.ts",
+      "scripts/lib/visualReviewUtils.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "failure"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2539.diff"
+  },
+  {
+    "number": 2538,
+    "title": "Issue Dispatch Tracker and Fixes",
+    "branch": "issue-dispatch-jules-2806821448259986966",
+    "mergeable": true,
+    "files": [
+      "issue-dispatch-report.md",
+      "issue-dispatch-status.md",
+      "run_audit.sh"
+    ],
+    "checks": [],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2538.diff"
+  },
+  {
+    "number": 2537,
+    "title": "feat: send deployment impact analysis artifacts to Jules session",
+    "branch": "update-ci-jules-impact-analysis-9583325186075982509",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ci.yml",
+      "actionlint",
+      "scripts/send-jules-impact.py"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2537.diff"
+  },
+  {
+    "number": 2535,
+    "title": "Add entropy check to prevent redundant code reviews",
+    "branch": "codex/add-entropy-check-for-pr-resubmission-16821078985180058117",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ci.yml"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2535.diff"
+  },
+  {
+    "number": 2528,
+    "title": "chore(ci): Add direct artifact link to impact analysis PR comment",
+    "branch": "add-artifact-link-pr-comment-6658022234094197874",
+    "mergeable": true,
+    "files": [
+      ".github/actions/update-pr-comment/action.yml"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2528.diff"
+  },
+  {
+    "number": 2527,
+    "title": "Standardize AI Service Error Handling",
+    "branch": "fix/standardize-ai-error-handling-16961552142328680041",
+    "mergeable": true,
+    "files": [
+      "dev-tools/tdw_services/services/ai_service.py",
+      "dev-tools/utils.py",
+      "test_utils_bug.py"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2527.diff"
+  },
+  {
+    "number": 2526,
+    "title": "Consolidate Merch and Filter UI Improvements",
+    "branch": "consolidate-merch-filter-ui-11923204419815752414",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ai-chatops.yml",
+      ".github/workflows/ci.yml",
+      "scripts/clients/githubModelsCodeReviewClient.ts",
+      "scripts/clients/githubModelsVisualReviewClient.ts",
+      "src/components/products/CollectionSection.tsx",
+      "src/components/products/MerchFilterBar.tsx",
+      "src/components/products/MerchImageDisplay.tsx",
+      "src/components/products/ProductCard.tsx",
+      "src/components/products/PromoStrip.tsx",
+      "src/config/research-tools.ts",
+      "src/data/merch.ts",
+      "src/data/products/catalog.ts",
+      "src/data/products/merch.ts",
+      "src/features/research/ResearchAnalytics.tsx",
+      "src/index.css",
+      "src/pages/Merch.tsx",
+      "tests/merch.spec.ts",
+      "tests/research-filter.spec.ts",
+      "tests/visual.spec.ts-snapshots/detail_page_desktop_v2.png",
+      "tests/visual.spec.ts-snapshots/detail_page_mobile_v2.png",
+      "tests/visual.spec.ts-snapshots/homepage_desktop_v2.png",
+      "tests/visual.spec.ts-snapshots/homepage_mobile_v2.png",
+      "tests/visual.spec.ts-snapshots/mobile-research-blog-drafter.png",
+      "tests/visual.spec.ts-snapshots/mobile-research-wcs-scraper.png",
+      "tests/visual.spec.ts-snapshots/mobile-ux-auditor.png"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2526.diff"
+  },
+  {
+    "number": 2525,
+    "title": "feat: Include JSON schema files in AI code review context",
+    "branch": "jules-json-schemas-context-7522525370161321074",
+    "mergeable": true,
+    "files": [
+      "scripts/clients/geminiCodeReviewClient.ts",
+      "scripts/clients/githubModelsCodeReviewClient.ts",
+      "scripts/lib/codeReviewOrchestrator.ts",
+      "scripts/lib/codeReviewTypes.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2525.diff"
+  },
+  {
+    "number": 2524,
+    "title": "Consolidate Workflow Dependencies",
+    "branch": "consolidate-workflow-deps-6456202301048938589",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/wcs_etl.yml"
+    ],
+    "checks": [
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2524.diff"
+  },
+  {
+    "number": 2523,
+    "title": "fix: update gpt-5.4-mini to gpt-4o-mini",
+    "branch": "fix-github-models-typo-9568245598970045005",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ai-chatops.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/mass-audit-prs.yml",
+      ".github/workflows/mergellama.yml",
+      "dev-tools/utils.py",
+      "scripts/clients/githubModelsCodeReviewClient.ts",
+      "scripts/clients/githubModelsVisualReviewClient.ts",
+      "scripts/lib/modelPicker.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2523.diff"
+  },
+  {
+    "number": 2522,
+    "title": "Consolidate Content Tasks & Blog Redesign",
+    "branch": "feat/consolidate-content-and-blog-redesign-15298305368462730193",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ci.yml",
+      "AI.md",
+      "CLAUDE.md",
+      "content/posts/2026-06-01-outdoor-dancing.md",
+      "content/posts/2026-06-01-practice-review-tech.md",
+      "content/posts/2026-06-01-practice-social-dance-apparel.md",
+      "content/posts/2026-06-01-shoe-care-modification.md",
+      "content/posts/2026-06-01-theme-wear-costumes-accessories.md",
+      "content/posts/2026-06-01-wcs-essentials.md",
+      "content/posts/2026-06-13-moving-beyond-ai-assisted-engineering.md",
+      "src/components/ui/ContentCard.tsx",
+      "src/components/ui/FilterBar.tsx",
+      "src/components/ui/FolioGrid.tsx",
+      "src/components/ui/HeroSection.tsx",
+      "src/components/ui/NewsletterModule.tsx",
+      "src/data/affiliates.json",
+      "src/features/journal/BlogFeed.tsx",
+      "src/features/journal/BlogPost.tsx",
+      "src/features/journal/components/BlogPostDetail.tsx",
+      "src/features/journal/useBlog.ts",
+      "src/layouts/Footer.tsx",
+      "src/lib/types/content.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2522.diff"
+  },
+  {
+    "number": 2521,
+    "title": "Fix CLI validation in GitHub Actions workflows",
+    "branch": "fix/workflow-cli-validation-13257195615216423808",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ai-chatops.yml",
+      ".github/workflows/self-healing.yml"
+    ],
+    "checks": [
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2521.diff"
+  },
+  {
+    "number": 2520,
+    "title": "Modularize impact-analysis scripts and add Zod validation",
+    "branch": "feat/issue-impact-scripts-submodules-6659404272263102890",
+    "mergeable": true,
+    "files": [
+      "knip.ts",
+      "package.json",
+      "pnpm-lock.yaml",
+      "scripts/__tests__/build.test.ts",
+      "scripts/impact-dom-diff.ts",
+      "scripts/impact-review-utils.ts",
+      "scripts/impact-visual-diff.ts",
+      "scripts/impact/metric-calculator.ts",
+      "scripts/impact/parser-sanitizer.ts",
+      "scripts/impact/preview-server.ts",
+      "scripts/impact/report-generator.ts",
+      "scripts/vitest.config.scripts.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2520.diff"
+  },
+  {
+    "number": 2518,
+    "title": "Refactor CI visual change filtering into TypeScript",
+    "branch": "refactor-ci-visual-logic-ts-3280261073331696239",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ci.yml",
+      "scripts/check-visual-changes.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2518.diff"
+  },
+  {
+    "number": 2515,
+    "title": "Post Jules retry context comment and ensure full checkout for git diffs",
+    "branch": "codex/add-entropy-check-for-pr-resubmission",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/jules-fix-trigger.yml",
+      "dev-tools/post-jules-retry-context.sh"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2515.diff"
+  },
+  {
+    "number": 2513,
+    "title": "ci: Add entropy CI check to Jules fix trigger",
+    "branch": "add-ci-entropy-check-14636575779421571874",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/jules-fix-trigger.yml",
+      "actionlint",
+      "dev-tools/post-jules-retry-context.sh"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2513.diff"
+  },
+  {
+    "number": 2509,
+    "title": "Resolve CI Workflow Failures and Update Deprecated Actions",
+    "branch": "workflow-audit-fix-consolidated-health-report-607839352765381504-6370780499004218409",
+    "mergeable": true,
+    "files": [
+      "knip.ts",
+      "scripts/lib/visualReviewOrchestrator.ts",
+      "vite.config.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2509.diff"
+  },
+  {
+    "number": 2508,
+    "title": "Workflow Audit: Consolidated Health Report Fixes",
+    "branch": "fix/workflow-audit-consolidation-10330057666050207783",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/self-healing.yml",
+      "boomtick-mcp/src/evals/run-evals.ts",
+      "boomtick-mcp/src/lib/git.ts",
+      "boomtick-mcp/src/lib/shell.ts",
+      "boomtick-mcp/src/mcp/server.ts",
+      "boomtick-mcp/src/tools/github.get_merge_conflict_files.ts",
+      "boomtick-mcp/src/tools/jules/list-sessions.ts",
+      "boomtick-mcp/src/tools/repo.get_package_scripts.test.ts",
+      "boomtick-mcp/src/tools/repo.get_package_scripts.ts",
+      "boomtick-mcp/src/tools/repo.get_route_map.ts",
+      "boomtick-mcp/src/tools/repo.run_lighthouse.ts",
+      "boomtick-mcp/src/tools/repo.run_playwright.ts"
+    ],
+    "checks": [
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2508.diff"
+  },
+  {
+    "number": 2497,
+    "title": "Consolidated UI Improvements and Homepage Restructure",
+    "branch": "feat/consolidated-ui-updates-8678555418170047605",
+    "mergeable": true,
+    "files": [
+      "get_ci_status.py",
+      "get_pr_comments.py",
+      "get_pr_details.py",
+      "get_pr_details_v2.py",
+      "src/features/home/DevLabCallout.tsx"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2497.diff"
+  },
+  {
+    "number": 2494,
+    "title": "Fix markdown syntax rendering inside Notice tags",
+    "branch": "fix/markdown-notice-rendering-6012251978500177610",
+    "mergeable": true,
+    "files": [
+      "src/components/ui/MarkdownRenderer.tsx",
+      "src/components/ui/Notice.tsx",
+      "tests/visual.spec.ts-snapshots/about-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/blog-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/gear-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/home-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/merch-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/research-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/ux-auditor-chromium-linux.png"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "failure"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2494.diff"
+  },
+  {
+    "number": 2454,
+    "title": "Refactor: De-slop ResearchAnalytics by extracting common UI components",
+    "branch": "refactor/research-analytics-deslop-3333781340266180244",
+    "mergeable": false,
+    "files": [
+      "dev-tools/ux-audit.config.json",
+      "src/features/research/ResearchAnalytics.tsx",
+      "src/pages/Merch.tsx",
+      "src/pages/UXAuditor.tsx",
+      "tests/visual.spec.ts-snapshots/about-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/blog-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/gear-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/home-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/merch-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/mobile-research-blog-drafter.png",
+      "tests/visual.spec.ts-snapshots/mobile-research-wcs-scraper.png",
+      "tests/visual.spec.ts-snapshots/mobile-ux-auditor.png",
+      "tests/visual.spec.ts-snapshots/research-chromium-linux.png",
+      "tests/visual.spec.ts-snapshots/ux-auditor-chromium-linux.png"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2454.diff"
+  },
+  {
+    "number": 2453,
+    "title": "fix: optimize github actions caching and checkout depths",
+    "branch": "optimize-github-actions-caching-17956393204820612491",
+    "mergeable": true,
+    "files": [
+      ".github/workflows/ai-chatops.yml",
+      ".github/workflows/auto-conflict-resolver.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/codeql.yml",
+      ".github/workflows/conflict-check.yml",
+      ".github/workflows/deploy.yml",
+      ".github/workflows/issue-comment-dispatcher.yml",
+      ".github/workflows/issue_to_pr.yml",
+      ".github/workflows/jules-fix-trigger.yml",
+      ".github/workflows/mass-audit-prs.yml",
+      ".github/workflows/mergellama.yml",
+      ".github/workflows/prune-stale-previews.yml",
+      ".github/workflows/security.yml",
+      ".github/workflows/self-healing.yml",
+      ".github/workflows/update-snapshots.yml",
+      ".github/workflows/validate_issue.yml",
+      ".github/workflows/wcs_etl.yml",
+      ".github/workflows/workflow-validation.yml"
+    ],
+    "checks": [
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/2453.diff"
+  },
+  {
+    "number": 1848,
+    "title": "Lightweight CPU RAG Multi-Agent PR Review Pipeline",
+    "branch": "feat/issue-rag-pr-pipeline-1900371987344539683",
+    "mergeable": false,
+    "files": [
+      ".env.example",
+      ".gitignore",
+      "USAGE_NOTES.md",
+      "docs/TEST_PLAN_RAG_PIPELINE.md",
+      "pr_review_pipeline/README.md",
+      "pr_review_pipeline/TUTORIAL.md",
+      "pr_review_pipeline/__init__.py",
+      "pr_review_pipeline/__main__.py",
+      "pr_review_pipeline/agents/__init__.py",
+      "pr_review_pipeline/agents/code_reviewer.py",
+      "pr_review_pipeline/agents/issue_generator.py",
+      "pr_review_pipeline/agents/spec_validator.py",
+      "pr_review_pipeline/cli.py",
+      "pr_review_pipeline/config.py",
+      "pr_review_pipeline/diff_parser.py",
+      "pr_review_pipeline/github_client.py",
+      "pr_review_pipeline/ollama_client.py",
+      "pr_review_pipeline/prompts/code_reviewer.md",
+      "pr_review_pipeline/prompts/issue_generator.md",
+      "pr_review_pipeline/prompts/spec_validator.md",
+      "pr_review_pipeline/rag/__init__.py",
+      "pr_review_pipeline/rag/chunker.py",
+      "pr_review_pipeline/rag/retriever.py",
+      "pr_review_pipeline/rag/store.py",
+      "pr_review_pipeline/repo_context.py",
+      "pr_review_pipeline/schemas/__init__.py",
+      "pr_review_pipeline/schemas/issue_plan.py",
+      "pr_review_pipeline/schemas/review_report.py",
+      "pr_review_pipeline/schemas/spec_report.py",
+      "pyproject.toml",
+      "requirements.txt",
+      "scripts/verify-rag-pipeline.sh",
+      "tests/fixtures/accessible_diff.patch",
+      "tests/fixtures/diff_accessibility_issue.patch",
+      "tests/fixtures/inaccessible_diff.patch",
+      "tests/fixtures/pr_bad.md",
+      "tests/fixtures/pr_good.md",
+      "tests/fixtures/pr_missing_test_plan.md",
+      "tests/fixtures/sample_codex.md",
+      "tests/fixtures/tutorial_codex.md",
+      "tests/test_pipeline.py"
+    ],
+    "checks": [
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/1848.diff"
+  },
+  {
+    "number": 1733,
+    "title": "Implement Merch Design Generation Logic",
+    "branch": "merch-design-generation-15582678683175466037",
+    "mergeable": false,
+    "files": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/update-snapshots.yml",
+      ".github/workflows/wcs_etl.yml",
+      "public/assets/merch/previews/rainbow_shapes_sheet.png",
+      "public/assets/merch/previews/shirt_back_all_preview.png",
+      "public/assets/merch/previews/shirt_back_follow_preview.png",
+      "public/assets/merch/previews/shirt_back_lead_preview.png",
+      "public/assets/merch/previews/shirt_back_preview.png",
+      "public/assets/merch/previews/shirt_front_preview.png",
+      "public/assets/merch/print/shirt_back_all_print.png",
+      "public/assets/merch/print/shirt_back_follow_print.png",
+      "public/assets/merch/print/shirt_back_lead_print.png",
+      "public/assets/merch/print/shirt_back_print.png",
+      "public/assets/merch/print/shirt_front_print.png",
+      "scripts/merch/README.md",
+      "scripts/merch/generate_designs.py",
+      "scripts/merch/setup_env.sh",
+      "scripts/merch/verify_assets.py",
+      "src/data/merch.ts",
+      "tests/merch-ux-verify.test.ts"
+    ],
+    "checks": [
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Build & E2E",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "CodeQL",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "trigger-jules",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (actions)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "conflict-check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Oxlint Scan",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate all workflow files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "resolve-conflicts",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Gitleaks Secret Detection",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Semgrep Static Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint & Type Check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Anti-Pattern Audit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Deployment Impact Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "diff_url": "https://github.com/arii/tech-dancer/pull/1733.diff"
+  }
+]
