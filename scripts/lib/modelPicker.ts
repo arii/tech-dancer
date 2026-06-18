@@ -28,7 +28,7 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
       return [];
     }
 
-    let models: any[];
+    let models: unknown;
     try {
       models = JSON.parse(text);
     } catch (parseError) {
@@ -41,7 +41,7 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
         return [];
     }
 
-    const validModels = models.filter(m => m && typeof m.id === 'string' && typeof m.name === 'string');
+    const validModels = models.filter(m => m && typeof m === 'object' && typeof (m as Record<string, unknown>).id === 'string' && typeof (m as Record<string, unknown>).name === 'string');
     return validModels as GitHubModel[];
   } catch (error) {
     console.warn(`⚠️ Error fetching models catalog: ${error}`);
