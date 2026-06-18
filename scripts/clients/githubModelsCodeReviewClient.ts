@@ -1,5 +1,5 @@
-import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
+import { createGitHubModel } from '../lib/githubModelsUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
@@ -21,23 +21,6 @@ export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'war
   return 'pass';
 }
 
-function createModel(): ChatOpenAI {
-  const apiKey = process.env.GITHUB_TOKEN;
-  if (!apiKey) {
-    throw new Error('Review failed: GITHUB_TOKEN is not set. Ensure the secret is available in your workflow environment.');
-  }
-
-  return new ChatOpenAI({
-    modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini',
-    apiKey: apiKey,
-    configuration: {
-      baseURL: 'https://models.inference.ai.azure.com',
-    },
-    maxTokens: 1024,
-    temperature: 0.1,
-  });
-}
-
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'github-models-code-review',
   reportTitle: '🐙 GitHub Models Code Review',
@@ -45,7 +28,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'github-models-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
-    const model = createModel();
+    const model = createGitHubModel();
     const baseContent = [
       { type: 'text', text: SYSTEM_PROMPT } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,

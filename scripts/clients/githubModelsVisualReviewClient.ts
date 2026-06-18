@@ -1,25 +1,8 @@
-import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
+import { createGitHubModel } from '../lib/githubModelsUtils';
 import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
-
-function createModel(): ChatOpenAI {
-  const apiKey = process.env.GITHUB_TOKEN;
-  if (!apiKey) {
-    throw new Error('Review failed: GITHUB_TOKEN is not set. Ensure the secret is available in your workflow environment.');
-  }
-
-  return new ChatOpenAI({
-    modelName: process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini',
-    apiKey: apiKey,
-    configuration: {
-      baseURL: 'https://models.inference.ai.azure.com',
-    },
-    maxTokens: 1024,
-    temperature: 0.1,
-  });
-}
 
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-github-models-review',
@@ -28,7 +11,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'github-models-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const model = createModel();
+    const model = createGitHubModel();
     const baseContent = buildVisualReviewPayload(summary);
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);

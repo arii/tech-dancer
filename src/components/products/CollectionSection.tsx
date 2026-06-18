@@ -51,6 +51,8 @@ export function CollectionSection({ id, title, description, products, isFeatured
               <ProductCard item={product} />
             </Box>
           ))}
+          {/* Fill remaining slots if products count is between 1 and 3 */}
+          {products.length === 2 && <Box span={1} />}
         </Grid>
       ) : (
         <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
