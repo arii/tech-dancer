@@ -82,7 +82,13 @@ export interface UXReport {
   url: string;
   timestamp: number;
   status: 'processing' | 'completed';
-  [key: string]: string | number | ViewportAnalysis | undefined; // Allow dynamic keys like findings_mobile, image_mobile
+  findings_mobile?: ViewportAnalysis;
+  findings_tablet?: ViewportAnalysis;
+  findings_desktop?: ViewportAnalysis;
+  image_mobile?: string;
+  image_tablet?: string;
+  image_desktop?: string;
+  [key: string]: string | number | ViewportAnalysis | undefined; // Fallback for dynamic keys
 }
 
 export interface UXAuditorHookReturn {
