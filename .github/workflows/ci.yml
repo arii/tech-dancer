@@ -271,7 +271,7 @@ jobs:
         run: |
           git rev-parse origin/main >/dev/null 2>&1 && DIFF_CMD="git diff --name-only origin/main...HEAD" || DIFF_CMD="git diff --name-only HEAD~1 HEAD"
           CHANGED_FILES=$($DIFF_CMD || echo "")
-          MATCH_COUNT=$(echo "$CHANGED_FILES" | grep -E '^(src/|etl/|dev-tools/|tests/|scripts/|package\.json|pnpm-lock\.yaml|\.github/workflows/ci\.yml|\.github/actions/|AGENTS\.md|docs/github-workflows\.md|.*\.config\.ts|tsconfig.*\.json)' | wc -l || true)
+          MATCH_COUNT=$(echo "$CHANGED_FILES" | grep -Ec '^(src/|etl/|dev-tools/|tests/|scripts/|package\.json|pnpm-lock\.yaml|\.github/workflows/ci\.yml|\.github/actions/|AGENTS\.md|docs/github-workflows\.md|.*\.config\.ts|tsconfig.*\.json)' || true)
           if [ "$MATCH_COUNT" -gt 0 ]; then
             echo "changed_code=1" >> "$GITHUB_OUTPUT"
           else
