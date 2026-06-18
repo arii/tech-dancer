@@ -17,8 +17,9 @@
     "build:profile": "vite build --profile",
     "prepreview": "node scripts/cleanup-ports.mjs",
     "preview": "vite preview",
-    "test": "vitest run",
+    "test": "vitest run && pnpm run test:scripts",
     "test:watch": "vitest",
+    "test:scripts": "vitest run -c scripts/vitest.config.scripts.ts",
     "test:e2e": "playwright test --grep-invert 'visual comparison|Jack & Jill O.Rama'",
     "test:e2e:targeted": "playwright test",
     "lighthouse": "lhci autorun",
@@ -94,9 +95,7 @@
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
     "yaml": "^2.9.0",
-    "zod": "^3.24.1",
-    "jsdom": "^29.1.1",
-    "@types/jsdom": "^28.0.3"
+    "zod": "^3.24.1"
   },
   "engines": {
     "node": "22.x",
@@ -113,6 +112,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
+    "@types/jsdom": "^28.0.3",
     "@types/node": "^22.14.0",
     "@types/papaparse": "^5.5.2",
     "@types/pixelmatch": "^5.2.6",
@@ -122,6 +122,7 @@
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.5.0",
+    "jsdom": "^29.1.1",
     "knip": "^6.7.0",
     "npm-run-all": "^4.1.5",
     "oxlint": "^1.61.0",

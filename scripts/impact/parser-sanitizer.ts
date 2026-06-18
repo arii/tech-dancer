@@ -1,12 +1,9 @@
 import { JSDOM } from 'jsdom';
 
 /**
- * @summary Programmatically normalizes layout-tree HTML for deterministic diffing.
- * @purpose Strips volatile asset IDs, browser instrumentation, and build params
- * to prevent false-positive visual regression locks in CI.
- * @logic-gate Handles Vite asset hash strings. Drops layout-silent nodes (style, script, template).
- * @token-contract [AI Note] Treat as black-box. Do not modify selectors without consulting
- * scripts/__tests__/build.test.ts.
+ * Normalizes layout-tree HTML for deterministic diffing by stripping volatile
+ * asset IDs, browser instrumentation, and build-specific parameters to prevent
+ * false-positive regressions in CI.
  */
 export function normalizeHtmlForDiffing(htmlString: string): string {
   const dom = new JSDOM(htmlString);

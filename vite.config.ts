@@ -56,7 +56,7 @@ export default defineConfig(({mode}) => {
       globals: false,
       environment: 'jsdom',
       setupFiles: [],
-      include: ['src/**/*.{test,spec}.{ts,tsx}', 'tests/unit/**/*.{test,spec}.{ts,tsx}', 'scripts/__tests__/**/*.test.{js,ts}'],
+      include: ['src/**/*.{test,spec}.{ts,tsx}', 'tests/unit/**/*.{test,spec}.{ts,tsx}'],
     },
     build: {
       target: 'esnext',
