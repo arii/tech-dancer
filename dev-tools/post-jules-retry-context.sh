@@ -3,7 +3,7 @@ set -euo pipefail
 
 PR_NUMBER="${PR_NUMBER:-}"
 WORKFLOW_FILE="${WORKFLOW_FILE:-ci.yml}"
-COMMENT_PREFIX="### 🔁 Jules Retry Context"
+COMMENT_PREFIX="<!-- JULES_RETRY_CONTEXT -->### 🔁 Jules Retry Context"
 
 if [[ -z "$PR_NUMBER" ]]; then
   echo "::warning::PR_NUMBER is required to post Jules retry context."

@@ -230,6 +230,9 @@ jobs:
   impact-analysis:
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
+    outputs:
+      changed_code: ${{ steps.entropy_check.outputs.changed_code }}
+      changed_routes: ${{ steps.check_visuals.outputs.changed_routes }}
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
