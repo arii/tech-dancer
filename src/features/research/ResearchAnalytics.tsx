@@ -420,7 +420,7 @@ export default function ResearchAnalytics() {
           paddingY={4}
           paddingX={{ base: 4, sm: 0 }}
           marginX={{ base: -4, sm: 0 }}
-          className="backdrop-blur-md bg-bg/90 border-b border-line/10"
+          className="bg-bg border-b border-line/50 shadow-sm"
         >
           <Stack direction="row" align="center" gap={2}>
             <Filter className="w-4 h-4 text-dim" />
@@ -428,7 +428,7 @@ export default function ResearchAnalytics() {
               Filter Research
             </Text>
           </Stack>
-          <Box border="b" paddingBottom={2} overflowX="auto" noScrollbar>
+          <Box paddingBottom={2} overflowX="auto" noScrollbar>
             <Stack direction="row" gap={2} padding={1} minWidth="max">
               {categories.map((category) => (
                 <FilterButton

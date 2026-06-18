@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Box, Stack, Grid, Text, Button } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
@@ -14,7 +15,17 @@ import { PromoStrip } from '@/components/products/PromoStrip';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Merch() {
-  const [activeCollection, setActiveCollection] = useState("all");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeCollection = searchParams.get('collection') || 'all';
+
+  const setActiveCollection = (id: string) => {
+    if (id === 'all') {
+      searchParams.delete('collection');
+    } else {
+      searchParams.set('collection', id);
+    }
+    setSearchParams(searchParams);
+  };
 
   const allProducts = getAllMerchProducts();
 
@@ -120,7 +131,7 @@ export default function Merch() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            <Stack gap={12}>
+            <Stack gap={{ base: 16, md: 24 }}>
               {sections.length > 0 ? (
                 sections.map((section) => (
                   <CollectionSection

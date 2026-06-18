@@ -45,7 +45,7 @@ export function PromoStrip({ imageSrc, title, subtitle, ctaLabel, href }: PromoS
         >
           <img
             src={resolveImageSrc(imageSrc)}
-            alt=""
+            alt={title}
             className="w-full h-full object-cover"
           />
         </Box>

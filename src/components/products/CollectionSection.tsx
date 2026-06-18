@@ -14,7 +14,7 @@ export function CollectionSection({ id, title, description, products, isFeatured
   if (products.length === 0) return null;
 
   return (
-    <Stack as="section" id={id} gap={{ base: 6, md: 8 }} width="full">
+    <Stack as="section" id={id} gap={{ base: 8, md: 10 }} width="full">
       <Stack gap={1}>
         <Box display="flex" justify="between" align="baseline" wrap="wrap" gap={2}>
           <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">

@@ -227,4 +227,18 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
     isBundle: false,
     tags: ['NorCal', 'Classic', 'Essential'],
   },
+  {
+    id: 'test-bundle',
+    title: 'Test Bundle Product',
+    description: 'A multi-item set for testing purposes.',
+    price: '45.00',
+    imageUrl: gearImage('unisex-t-shirt-front.webp'),
+    printfulUrl: 'https://boomtick.printful.me/',
+    collections: ['other'],
+    collectionId: 'other',
+    collectionLabel: 'More designs',
+    isBundle: true,
+    bundleNote: 'Save 10% as a set',
+    tags: ['Bundle', 'Test'],
+  },
 ];

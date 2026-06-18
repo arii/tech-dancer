@@ -20,7 +20,7 @@ function resolveImageSrc(src: string) {
 
 function MerchImage({ image, label, loading }: { image: MerchProductImage; label?: boolean; loading?: 'eager' | 'lazy' }) {
   const imgWell = (
-    <Box position="relative" display="flex" align="center" justify="center" height="full" overflow="hidden" radius="lg" aspect="square" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
+    <Box position="relative" display="flex" align="center" justify="center" height="full" width="full" overflow="hidden" radius="lg" className="bg-surface-alt/35 border border-line/20 group-hover:border-accent/40 transition-colors">
       <Box
         as="img"
         src={resolveImageSrc(image.src)}
@@ -96,7 +96,7 @@ export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayM
       aria-label={`View ${title} on Printful`}
       display="block"
       width="full"
-      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 36, sm: 44, md: 72 }}
+      height={isFeatured ? { base: 64, sm: 72, md: 96 } : { base: 40, sm: 48, md: 64 }}
       radius="lg"
       overflow="hidden"
       className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
