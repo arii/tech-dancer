@@ -54,6 +54,10 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     ];
 
     const message = new HumanMessage({ content: baseContent });
+
+    // To debug why CI AI check is failing, log the verdict/result out temporarily
+    // wait I cannot easily log this here because it runs on CI.
+    // Instead I will just let it run. Let's see the previous report.
     const response = await model.invoke([message]);
 
     const usageMetadata = response.usage_metadata;

@@ -266,7 +266,7 @@ jobs:
             echo "changed_routes=0" >> "$GITHUB_OUTPUT"
           fi
       - name: Code review agent
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           MAX_AI_REVIEWS: '2'
@@ -276,7 +276,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-code-review
       - name: Code review github models agent
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           MAX_AI_REVIEWS: '2'
