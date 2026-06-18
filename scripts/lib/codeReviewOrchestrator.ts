@@ -42,12 +42,20 @@ export function getCodeDiffSummary(): CodeReviewSummary {
 
     let schemasContext: string | undefined;
     try {
-      const rawFind = execSync('find . -name "*.schema.json" -not -path "*/node_modules/*"', { encoding: 'utf-8' });
-      const schemaFiles = rawFind.split('\n').filter(Boolean);
-      if (schemaFiles.length > 0) {
+      const maxSchemaBytes = 10000;
+      let totalBytes = 0;
+      // Use fs.readdirSync recursively or simple shell glob to avoid 'find' compat issues
+      const globFiles = execSync('ls docs/agent/*.schema.json', { encoding: 'utf-8' }).split('\n').filter(Boolean);
+      if (globFiles.length > 0) {
         const schemas: Record<string, unknown> = {};
-        for (const file of schemaFiles) {
+        for (const file of globFiles) {
           try {
+            const stat = fs.statSync(file);
+            if (totalBytes + stat.size > maxSchemaBytes) {
+              console.warn(`Schema payload too large. Truncating file: ${file}`);
+              continue;
+            }
+            totalBytes += stat.size;
             const content = fs.readFileSync(file, 'utf-8');
             schemas[file.replace(/^\.\//, '')] = JSON.parse(content);
           } catch (e) {
