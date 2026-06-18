@@ -65,6 +65,7 @@ export const VIEWPORTS = [
 ];
 
 export interface Improvement {
+  id: string;
   element: string;
   issue: string;
   suggestion: string;
@@ -84,7 +85,27 @@ export interface UXReport {
   [key: string]: string | number | ViewportAnalysis | undefined; // Allow dynamic keys like findings_mobile, image_mobile
 }
 
-export function useUXAuditor() {
+export interface UXAuditorHookReturn {
+  user: User | null;
+  reports: UXReport[];
+  isAnalyzing: boolean;
+  activeReport: UXReport | null;
+  setActiveReport: (r: UXReport | null) => void;
+  url: string;
+  setUrl: (url: string) => void;
+  customApiKey: string;
+  setCustomApiKey: (key: string) => void;
+  snapshotService: string;
+  setSnapshotService: (url: string) => void;
+  isCopiedMarkdown: boolean;
+  isExportingToGithub: boolean;
+  runUXAudit: (targetUrl: string) => void;
+  exportToGithub: () => Promise<void>;
+  copyMarkdown: () => Promise<void>;
+  firebaseConfig: any;
+}
+
+export function useUXAuditor(): UXAuditorHookReturn {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [activeReportId, setActiveReportId] = useState<string | null>(null);
@@ -298,6 +319,7 @@ export function useUXAuditor() {
                   items: {
                     type: "OBJECT",
                     properties: {
+                      id: { type: "STRING" },
                       element: { type: "STRING" },
                       issue: { type: "STRING" },
                       suggestion: { type: "STRING" },
@@ -334,6 +356,7 @@ export function useUXAuditor() {
         summary: `Analysis failed: ${errorMessage}. Manual analysis required. Copy the prompt below.`,
         improvements: [
           {
+            id: `error-${Date.now()}`,
             element: "Manual Audit Required",
             issue: `The Gemini API returned an error: ${errorMessage}`,
             suggestion: `Prompt: You are a Senior UX Auditor. Analyze the UI for ${viewport.name}. Focus on specific elements, accessibility, and visual bugs. Identify 'Cardocalypse', 'Centering Sickness', and violations of flat design principles. Provide recommendations.\n\n${imgContext}`.trim(),

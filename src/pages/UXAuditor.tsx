@@ -223,8 +223,8 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: ViewportAnalysisCar
                 </Text>
               </Box>
               <Stack gap={4}>
-                {data.improvements?.map((imp: Improvement, idx: number) => (
-                  <Box key={`${vp.name}-${imp.element}-${imp.severity}-${idx}`} padding={4} className={cardVariants({ interactive: true })}>
+                {data.improvements?.map((imp: Improvement) => (
+                  <Box key={imp.id || `${vp.name}-${imp.element}-${imp.severity}`} padding={4} className={cardVariants({ interactive: true })}>
                     <Box display="flex" justify="between" align="start" marginBottom={2}>
                       <Stack direction="row" align="center" gap={2}>
                         <Box
