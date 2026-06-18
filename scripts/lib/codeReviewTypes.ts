@@ -1,6 +1,7 @@
 export interface CodeReviewSummary {
   files: string[];
   diffContext: string;
+  schemasContext?: string;
 }
 
 export interface CodeReviewResult {

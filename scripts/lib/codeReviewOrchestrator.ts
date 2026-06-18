@@ -40,9 +40,30 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       .split('\n')
       .filter(Boolean);
 
+    let schemasContext: string | undefined;
+    try {
+      const rawFind = execSync('find . -name "*.schema.json" -not -path "*/node_modules/*"', { encoding: 'utf-8' });
+      const schemaFiles = rawFind.split('\n').filter(Boolean);
+      if (schemaFiles.length > 0) {
+        const schemas: Record<string, unknown> = {};
+        for (const file of schemaFiles) {
+          try {
+            const content = fs.readFileSync(file, 'utf-8');
+            schemas[file.replace(/^\.\//, '')] = JSON.parse(content);
+          } catch (e) {
+            console.warn(`Could not parse schema file ${file}:`, e);
+          }
+        }
+        schemasContext = JSON.stringify(schemas);
+      }
+    } catch (error) {
+      console.warn('Could not find or parse schema files:', error);
+    }
+
     return {
       files,
-      diffContext
+      diffContext,
+      schemasContext
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);

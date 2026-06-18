@@ -35,10 +35,17 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const model = createModel();
-    const baseContent = [
-      { type: 'text', text: SYSTEM_PROMPT } as const,
-      { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
+    const baseContent: any[] = [
+      { type: 'text', text: SYSTEM_PROMPT },
+      { type: 'text', text: `DIFF:\n\n${summary.diffContext}` },
     ];
+
+    if (summary.schemasContext) {
+      baseContent.push({
+        type: 'text',
+        text: `JSON SCHEMAS IN REPOSITORY:\n\n${summary.schemasContext}`,
+      });
+    }
 
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
