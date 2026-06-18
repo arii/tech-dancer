@@ -38,6 +38,27 @@ export async function orchestrateVisualReview(
 
   const summary: VisualSummary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8'));
 
+  let repoContext = '';
+  try {
+    const ciFailureSchema = JSON.parse(fs.readFileSync('docs/agent/ci-failure.schema.json', 'utf8'));
+    const cliSchema = JSON.parse(fs.readFileSync('dev-tools/cli-schema.json', 'utf8'));
+    let contextData: any = { schemas: { 'ci-failure': ciFailureSchema, cli: cliSchema } };
+
+    if (fs.existsSync('scripts/build-repo-context.py')) {
+      const { execSync } = require('child_process');
+      const output = execSync('python3 scripts/build-repo-context.py', { encoding: 'utf-8' });
+      contextData = { ...contextData, ...JSON.parse(output) };
+    }
+    repoContext = JSON.stringify(contextData);
+  } catch (error) {
+    console.warn('Could not generate repo context:', error);
+  }
+
+  for (const route of summary.routes) {
+    route.repoContext = repoContext;
+  }
+
+
   // Only review routes with actual visual changes
   // Limit to top N routes by difference percentage to manage costs
   let routesToReview = summary.routes

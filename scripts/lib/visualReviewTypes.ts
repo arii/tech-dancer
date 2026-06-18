@@ -1,4 +1,5 @@
 export interface VisualRouteSummary {
+  repoContext?: string;
   route: string;
   slug: string;
   differencePercent: number;
