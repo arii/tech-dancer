@@ -135,12 +135,27 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         print(f"AI Call failed: {e}", file=sys.stderr)
         return None
 
-def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, timeout: int = 30) -> Optional[Dict]:
+def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 5, timeout: int = 30) -> Optional[Dict]:
     """Executes an HTTP request with exponential backoff."""
     for attempt in range(max_retries):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as response:
                 return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code == 429: # Rate limit hit
+                if attempt == max_retries - 1:
+                    print(f"API Call failed after {max_retries} attempts due to rate limit.", file=sys.stderr)
+                    return None
+                import time
+                sleep_time = (2 ** attempt) + random.uniform(1, 3)
+                print(f"Rate limited. Retrying in {sleep_time:.2f} seconds...", file=sys.stderr)
+                time.sleep(sleep_time)
+            else:
+                if attempt == max_retries - 1:
+                    print(f"API Call failed after {max_retries} attempts: {e}", file=sys.stderr)
+                    return None
+                import time
+                time.sleep(2 ** attempt)
         except Exception as e:
             if attempt == max_retries - 1:
                 print(f"API Call failed after {max_retries} attempts: {e}", file=sys.stderr)
