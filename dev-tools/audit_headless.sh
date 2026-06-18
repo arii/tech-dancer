@@ -37,7 +37,7 @@ fi
 # 3. Get Open PRs in JSON format
 echo "🔍 Fetching open PRs..."
 mkdir -p dev-tools/logs
-python3 dev-tools/td_cli.py --json status-board > dev-tools/logs/open_prs.json
+python3 dev-tools/td_cli.py --json gh status-board > dev-tools/logs/open_prs.json
 
 # 4. Process each PR
 # Using jq to extract PR numbers from the JSON output of status-board
@@ -50,19 +50,19 @@ for pr in $(jq -r '.work[].number // empty' dev-tools/logs/open_prs.json); do
   echo "🚀 Auditing PR #$pr..."
 
   # Fetch and Audit headlessly
-  python3 dev-tools/td_cli.py audit-pr "$pr" --fetch --audit
+  python3 dev-tools/td_cli.py gh audit-pr "$pr" --fetch --audit
 
   # Log Triage and Failure Analysis
   echo "🔍 Performing CI Log Triage for PR #$pr..."
   python3 dev-tools/td_cli.py jules repair-context --pr "$pr"
 
   # Track status
-  python3 dev-tools/td_cli.py track-review --pr "$pr" --status "Audited (Headless)" --auditor "TechDancer-Bot"
+  python3 dev-tools/td_cli.py gh track-review --pr "$pr" --status "Audited (Headless)" --auditor "TechDancer-Bot"
 done
 
 # 5. Analyze Overlaps
 echo "----------------------------------------"
 echo "📊 Analyzing file overlaps between PRs..."
-./dev-tools/analyze_overlaps.sh
+python3 dev-tools/td_cli.py gh overlaps
 
 echo "✅ Headless audit complete. See REVIEW_TRACKING.md and pr_overlaps.txt"
