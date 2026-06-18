@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Box, Text, Stack } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
@@ -143,23 +144,47 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({node: _node, src, alt, ...props}) => {
+          img: ({ node: _node, src, alt, className, title, width, height, srcSet, sizes, ...rest }: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }): JSX.Element | null => {
             const normalizedSrc = normalizeAsset(src || '');
+            if (!normalizedSrc) return null;
+
+            const isExternal = /^(https?:)?\/\//.test(normalizedSrc);
+
+            // Sanitize width/height to ensure they are valid numeric values
+            const sanitizeDimension = (val: string | number | undefined) => {
+              if (val === undefined || val === null) return undefined;
+              const num = typeof val === 'number' ? val : parseFloat(String(val));
+              return !isNaN(num) && isFinite(num) ? num : undefined;
+            };
+
             return (
               <Box marginY={8} width="full" display="flex" justify="center">
                 <Box
-                  as="img"
-                  src={normalizedSrc}
                   radius="lg"
                   shadow="sm"
-                  loading="lazy"
-                  alt={alt || "Article illustration"}
+                  overflow="hidden"
                   maxWidth="full"
-                  maxHeight={{ base: "viewport-half", md: "none" }}
-                  height="auto"
-                  className="object-contain"
-                  {...props}
-                />
+                  maxHeight={{ base: "50vh", lg: 96 }}
+                >
+                  <img
+                    {...rest}
+                    src={normalizedSrc}
+                    srcSet={srcSet}
+                    sizes={sizes}
+                    loading="lazy"
+                    alt={alt !== undefined ? String(alt) : "Article illustration"}
+                    title={title}
+                    width={sanitizeDimension(width)}
+                    height={sanitizeDimension(height)}
+                    /* Standard security policy for external images in markdown */
+                    referrerPolicy={isExternal ? "no-referrer" : undefined}
+                    crossOrigin={isExternal ? "anonymous" : undefined}
+                    className={cn(
+                      "block mx-auto max-w-full max-h-full w-auto h-auto object-contain",
+                      className
+                    )}
+                  />
+                </Box>
               </Box>
             );
           },
@@ -203,7 +228,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       radius="lg"
                       shadow="sm"
                       maxWidth="full"
-                      maxHeight={{ base: "viewport-half", md: 96 }}
+                      maxHeight={96}
                       className="object-contain"
                       loading="lazy"
                     />

@@ -199,7 +199,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(minHeight, "min-h-", (v) => resolveJIT(v, "")),
           getResponsiveClasses(maxHeight, "max-h-", (v) => {
             if (v === "viewport-half") return "[50vh]";
-            if (v === "none") return "none";
+            if (v === "none") return "[none]";
             const token = SPACING_MAP[v as keyof typeof SPACING_MAP];
             if (token) return token;
             return resolveJIT(v, "");
