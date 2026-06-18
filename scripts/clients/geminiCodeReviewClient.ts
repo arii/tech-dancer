@@ -16,7 +16,7 @@ function createModel(): ChatGoogleGenerativeAI {
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-3.5-flash',
+    model: 'gemini-1.5-flash',
     apiKey,
     maxOutputTokens: 1024,
   });
@@ -25,7 +25,7 @@ function createModel(): ChatGoogleGenerativeAI {
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'gemini-code-review',
   reportTitle: '👁️ Gemini Code Review Agent',
-  botTagline: 'Powered by Gemini 3.5',
+  botTagline: 'Powered by Gemini 1.5',
   reportFileName: 'gemini-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {

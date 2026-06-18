@@ -1,15 +1,25 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
 const SYSTEM_PROMPT = `You are an expert software engineer reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
 Provide actionable feedback. Focus on HIGH severity issues.
-End your review with a clear verdict: PASS, WARN, or FAIL.
-Use FAIL if there are blocking bugs or severe anti-patterns.
+
+You MUST end your review with exactly one of the following strings indicating your final verdict:
+[VERDICT: PASS]
+[VERDICT: WARN]
+[VERDICT: FAIL]
+
+Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns.
 `;
+
+export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
+  if (feedback.includes('[VERDICT: FAIL]')) return 'fail';
+  if (feedback.includes('[VERDICT: WARN]')) return 'warn';
+  return 'pass';
+}
 
 function createModel(): ChatOpenAI {
   const apiKey = process.env.GITHUB_TOKEN;
@@ -54,7 +64,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
-      llmVerdict: parseLLMVerdict(feedback),
+      llmVerdict: parseCodeReviewVerdict(feedback),
     };
   }
 };

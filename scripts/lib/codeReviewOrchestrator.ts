@@ -17,7 +17,17 @@ const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
 
 export function getCodeDiffSummary(): CodeReviewSummary {
   try {
-    const diffCommand = 'git diff origin/main...HEAD';
+    let diffCommand = 'git diff origin/main...HEAD';
+    let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
+
+    // Verify if origin/main exists, fallback to git history for CI if needed
+    try {
+        execSync('git rev-parse origin/main', { stdio: 'ignore' });
+    } catch {
+        diffCommand = 'git diff HEAD~1 HEAD';
+        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+    }
+
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
@@ -26,7 +36,7 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
       : rawDiff;
 
-    const files = execSync('git diff --name-only origin/main...HEAD', { encoding: 'utf-8' })
+    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
 
@@ -35,25 +45,8 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       diffContext
     };
   } catch (error) {
-    console.warn('Could not generate code diff using origin/main...HEAD, falling back to cached/unstaged:', error);
-    try {
-        const staged = execSync('git diff --cached', { encoding: 'utf-8' });
-        const unstaged = execSync('git diff', { encoding: 'utf-8' });
-        const rawDiff = staged + '\n' + unstaged;
-
-        const filesStaged = execSync('git diff --name-only --cached', { encoding: 'utf-8' }).split('\n').filter(Boolean);
-        const filesUnstaged = execSync('git diff --name-only', { encoding: 'utf-8' }).split('\n').filter(Boolean);
-        const files = Array.from(new Set([...filesStaged, ...filesUnstaged]));
-
-        const diffContext = rawDiff.length > 20000
-          ? rawDiff.slice(0, 20000) + '\n\n...[TRUNCATED FOR LLM]'
-          : rawDiff;
-
-        return { files, diffContext };
-    } catch(fallbackError) {
-        console.warn('Fallback failed:', fallbackError);
-        return { files: [], diffContext: '' };
-    }
+    console.warn('Could not generate code diff:', error);
+    return { files: [], diffContext: '' };
   }
 }
 
