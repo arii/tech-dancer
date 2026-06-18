@@ -9,10 +9,11 @@ export interface GitHubModel {
 
 export async function getAvailableModels(token: string): Promise<GitHubModel[]> {
   try {
+    const apiVersion = process.env.GITHUB_API_VERSION || '2026-03-10';
     const res = await fetch("https://models.github.ai/catalog/models", {
       headers: {
         "Authorization": `Bearer ${token}`,
-        "X-GitHub-Api-Version": "2026-03-10",
+        "X-GitHub-Api-Version": apiVersion,
         "Accept": "application/vnd.github+json"
       }
     });
@@ -20,7 +21,21 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
       console.warn(`⚠️ Failed to fetch models catalog: ${res.status} ${res.statusText}`);
       return [];
     }
-    const models = await res.json() as GitHubModel[];
+
+    const text = await res.text();
+    if (!text) {
+      console.warn('⚠️ Models catalog response is empty');
+      return [];
+    }
+
+    let models: GitHubModel[];
+    try {
+      models = JSON.parse(text) as GitHubModel[];
+    } catch (parseError) {
+      console.warn(`⚠️ Failed to parse models catalog JSON: ${parseError}`);
+      return [];
+    }
+
     return Array.isArray(models) ? models : [];
   } catch (error) {
     console.warn(`⚠️ Error fetching models catalog: ${error}`);
@@ -42,12 +57,12 @@ export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o
 
   const priorities = [
     'gpt-4o-mini',
-    'meta/meta-llama-3.1-8b-instruct',
-    'mistral-ai/mistral-small-2503',
+    'meta-llama-3.1-8b-instruct',
+    'mistral-small-2503',
   ];
 
   for (const preferred of priorities) {
-    const found = poolToPickFrom.find(m => m.id.endsWith(preferred) || m.id === preferred || m.name.toLowerCase().includes(preferred.split('/').pop()?.toLowerCase() || ''));
+    const found = poolToPickFrom.find(m => m.id === preferred || m.id.includes(preferred));
     if (found) return found.id;
   }
 
