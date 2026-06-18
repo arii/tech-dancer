@@ -2,6 +2,7 @@ import { HumanMessage } from '@langchain/core/messages';
 import { createGitHubModel } from '../lib/githubModelsUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
+import { pickOptimalModel } from '../lib/modelPicker';
 
 const SYSTEM_PROMPT = `You are an expert software engineer reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
@@ -21,6 +22,27 @@ export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'war
   return 'pass';
 }
 
+<<<<<<< consolidate-merch-filter-ui-11923204419815752414
+=======
+async function createModel(): Promise<ChatOpenAI> {
+  const apiKey = process.env.GITHUB_TOKEN;
+  if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
+
+  const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
+  const modelName = await pickOptimalModel(apiKey, fallback, false);
+
+  return new ChatOpenAI({
+    modelName: modelName,
+    apiKey: apiKey,
+    configuration: {
+      baseURL: 'https://models.inference.ai.azure.com',
+    },
+    maxTokens: 1024,
+    temperature: 0.1,
+  });
+}
+
+>>>>>>> main
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'github-models-code-review',
   reportTitle: '🐙 GitHub Models Code Review',
@@ -28,13 +50,21 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'github-models-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
+<<<<<<< consolidate-merch-filter-ui-11923204419815752414
     const model = createGitHubModel();
+=======
+    const model = await createModel();
+>>>>>>> main
     const baseContent = [
       { type: 'text', text: SYSTEM_PROMPT } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
     ];
 
     const message = new HumanMessage({ content: baseContent });
+
+    // To debug why CI AI check is failing, log the verdict/result out temporarily
+    // wait I cannot easily log this here because it runs on CI.
+    // Instead I will just let it run. Let's see the previous report.
     const response = await model.invoke([message]);
 
     const usageMetadata = response.usage_metadata;

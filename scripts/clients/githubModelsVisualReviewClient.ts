@@ -3,6 +3,25 @@ import { createGitHubModel } from '../lib/githubModelsUtils';
 import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
+import { pickOptimalModel } from '../lib/modelPicker';
+
+async function createModel(): Promise<ChatOpenAI> {
+  const apiKey = process.env.GITHUB_TOKEN;
+  if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
+
+  const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
+  const modelName = await pickOptimalModel(apiKey, fallback, true);
+
+  return new ChatOpenAI({
+    modelName: modelName,
+    apiKey: apiKey,
+    configuration: {
+      baseURL: 'https://models.inference.ai.azure.com',
+    },
+    maxTokens: 1024,
+    temperature: 0.1,
+  });
+}
 
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-github-models-review',
@@ -11,7 +30,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'github-models-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const model = createGitHubModel();
+    const model = await createModel();
     const baseContent = buildVisualReviewPayload(summary);
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
