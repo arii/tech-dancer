@@ -148,7 +148,7 @@ export default function Merch() {
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}
-          </Box>
+          </Grid>
         )}
 
         {/* Footer Callouts */}
