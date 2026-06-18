@@ -1,12 +1,11 @@
-# .github/workflows/respond-to-jules.yml
+# Triggered when a Jules bot PR is opened or its description is edited.
+# Parses the Jules session ID from the PR footer and sends "hello world!"
+# back to that session using the existing JulesClient.
 #
-# Triggered when a PR is opened or edited.
-# If the PR was created by Jules (google-labs-jules[bot]), this workflow:
-#   1. Parses the Jules task ID from the PR description
-#   2. Sends a message back to that Jules session via the REST API
-#
-# Required secret:
-#   JULES_API_KEY  – your Jules / Google Labs API key
+# Required secrets / env vars:
+#   JulesClient reads ANTIGRAVITY_API_KEY first, then JULES_API_KEY from
+#   dev-tools/tdw_services/services/jules.py. Add one of those secrets under
+#   repo Settings → Secrets → Actions.
 
 name: Respond to Jules PR
 
@@ -16,20 +15,32 @@ on:
 
 jobs:
   respond-to-jules:
-    # Only run when the PR author is the Jules bot
+    # Only run when the PR was opened by the Jules bot
     if: github.event.pull_request.user.login == 'google-labs-jules[bot]'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Parse Jules task ID from PR description
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          pip install requests PyGithub click
+
+      - name: Parse Jules session ID from PR description
         id: parse
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          # The footer line looks like:
+          # The PR footer looks like:
           #   *PR created automatically by Jules for task [2264804411485856796](https://jules.google.com/task/2264804411485856796) started by @arii*
           #
-          # We extract the numeric task ID from the markdown link.
+          # Extract the numeric task ID; Jules session names are "sessions/{id}".
           TASK_ID=$(echo "$PR_BODY" \
             | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
             | head -1)
@@ -45,26 +56,34 @@ jobs:
       - name: Send message to Jules session
         if: steps.parse.outputs.task_id != ''
         env:
-          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           TASK_ID: ${{ steps.parse.outputs.task_id }}
+          ANTIGRAVITY_API_KEY: ${{ secrets.ANTIGRAVITY_API_KEY }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
         run: |
-          # Jules REST API endpoint for sending a follow-up message to a task/session.
-          # Adjust the URL / payload shape once the Jules API docs confirm the exact schema.
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X POST "https://jules.googleapis.com/v1alpha/sessions/${TASK_ID}:sendMessage" \
-            -H "x-goog-api-key: ${JULES_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d '{"prompt": "hello world!"}')
+          python3 - <<'PYEOF'
+          import os
+          import sys
 
-          HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+          sys.path.append("dev-tools")
+          from tdw_services.services.jules import JulesClient
 
-          echo "HTTP status: $HTTP_CODE"
-          echo "Response body: $HTTP_BODY"
+          task_id = os.environ["TASK_ID"]
+          session_id = f"sessions/{task_id}"
 
-          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-            echo "::error::Jules API call failed with status $HTTP_CODE"
-            exit 1
-          fi
+          client = JulesClient()
 
-          echo "Message sent successfully to Jules task ${TASK_ID}."
+          # Guard: only send if Jules spoke last (avoid loops on PR edits).
+          messages = client.get_messages(session_id)
+          if messages and messages[-1].get("role") != "jules":
+              print(
+                  "Last message is not from Jules "
+                  f"(role={messages[-1].get('role')}). Skipping to avoid loop."
+              )
+              sys.exit(0)
+
+          result = client.send_message(session_id, "hello world!")
+          if result.get("status") != "success":
+              raise RuntimeError(result.get("message", "Jules send_message failed"))
+
+          print(f"✅ Sent 'hello world!' to {session_id}")
+          PYEOF
