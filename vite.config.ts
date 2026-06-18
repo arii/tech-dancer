@@ -33,9 +33,11 @@ export default defineConfig(({mode}) => {
   const fullAppUrl = new URL(base, hostname).href;
 
   const appVersion = process.env.npm_package_version || '0.0.0';
+  const isKnip = process.env.KNIP === 'true';
 
   // Guard: Production builds must have a valid version (not 0.0.0)
-  if (isProd && appVersion === '0.0.0') {
+  // We skip this check when running Knip to avoid false positives during dead code analysis.
+  if (isProd && appVersion === '0.0.0' && !isKnip) {
     throw new Error(
       'PRODUCTION BUILD FAILURE: package.json version is 0.0.0. ' +
       'Please use "pnpm release:patch|minor|major" to set a real version before deploying.'

@@ -62,9 +62,31 @@ export async function orchestrateVisualReview(
 
   for (const route of routesToReview) {
     console.log(`  → ${route.route} (${route.severity}, ${route.differencePercent.toFixed(2)}%)`);
-    const review = await client.invokeReview(route);
-    console.log(`    Feedback: ${review.feedback}`);
-    reviews.push(review);
+
+    let retryCount = 0;
+    const maxRetries = 3;
+    let review: RouteReview | null = null;
+
+    while (retryCount <= maxRetries) {
+      try {
+        review = await client.invokeReview(route);
+        break;
+      } catch (error) {
+        retryCount++;
+        if (retryCount > maxRetries) {
+          console.error(`❌ Failed to review ${route.route} after ${maxRetries} retries:`, error);
+          throw error;
+        }
+        const delay = Math.pow(2, retryCount) * 1000;
+        console.warn(`⚠️ Review failed for ${route.route}, retrying in ${delay}ms... (Attempt ${retryCount}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    if (review) {
+      console.log(`    Feedback: ${review.feedback}`);
+      reviews.push(review);
+    }
   }
 
   const report = generateMarkdownReport(reviews, client.botName, client.reportTitle, client.botTagline);
