@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -53,78 +55,12 @@ jobs:
           fi
           echo "✅ Credentials pre-check passed."
 
-      - name: Build retry context from check transitions
+      - name: Post Jules retry entropy context
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ inputs.issue_number }}
-        run: |
-          # Get check states from the last two CI runs on this PR
-          # Note: We filter for the PR number if possible, or just the branch.
-          # We'll use head branch of the PR.
-          PR_JSON=$(gh pr view "$PR_NUMBER" --json headRefName)
-          HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)
-
-          RUNS=$(gh run list --json databaseId,conclusion,createdAt \
-            --workflow ci.yml --branch "$HEAD_REF" \
-            | jq -r 'sort_by(.createdAt) | .[-2:]')
-
-          # If we don't have at least 2 runs, skip this step without failing
-          NUM_RUNS=$(echo "$RUNS" | jq -r 'length')
-          if [ "$NUM_RUNS" -lt 2 ]; then
-            echo "Not enough runs to build retry context."
-            exit 0
-          fi
-
-          PREV_RUN=$(echo "$RUNS" | jq -r '.[0].databaseId')
-          CURR_RUN=$(echo "$RUNS" | jq -r '.[1].databaseId')
-
-          PREV_JOBS=$(gh run view "$PREV_RUN" --json jobs \
-            | jq -r '.jobs[] | "\(.name)=\(.conclusion)"')
-          CURR_JOBS=$(gh run view "$CURR_RUN" --json jobs \
-            | jq -r '.jobs[] | "\(.name)=\(.conclusion)"')
-
-          # Find what flipped
-          FIXED=""
-          STILL_FAILING=""
-          NEW_FAILURES=""
-
-          while IFS= read -r line; do
-            [ -z "$line" ] && continue
-            NAME=$(echo "$line" | cut -d= -f1)
-            CURR_STATE=$(echo "$line" | cut -d= -f2)
-            PREV_STATE=$(echo "$PREV_JOBS" | grep "^$NAME=" | cut -d= -f2)
-
-            if [ "$PREV_STATE" = "failure" ] && [ "$CURR_STATE" = "success" ]; then
-              FIXED="$FIXED"$'\n'"- ✅ $NAME"
-            elif [ "$PREV_STATE" = "failure" ] && [ "$CURR_STATE" = "failure" ]; then
-              STILL_FAILING="$STILL_FAILING"$'\n'"- ❌ $NAME (still failing)"
-            elif [ "$CURR_STATE" = "failure" ] && [ "$PREV_STATE" != "failure" ]; then
-              NEW_FAILURES="$NEW_FAILURES"$'\n'"- 🆕 $NAME (new failure)"
-            fi
-          done <<< "$CURR_JOBS"
-
-          # Use HEREDOC with a custom delimiter to construct the message.
-          # The sed command removes leading spaces from the YAML formatting.
-          BODY=$(cat <<'EOF' | sed 's/^[[:space:]]*//'
-          ### 🔁 Jules Retry Context
-
-          **Fixed this attempt:**
-          __FIXED__
-
-          **Still failing:**
-          __STILL_FAILING__
-
-          **New failures introduced:**
-          __NEW_FAILURES__
-          EOF
-          )
-
-          # Substitute the variables into the body
-          BODY="${BODY/__FIXED__/${FIXED:-"_none_"}}"
-          BODY="${BODY/__STILL_FAILING__/${STILL_FAILING:-"_none_"}}"
-          BODY="${BODY/__NEW_FAILURES__/${NEW_FAILURES:-"_none_"}}"
-
-          gh pr comment "$PR_NUMBER" --body "$BODY"
+          WORKFLOW_FILE: ci.yml
+        run: dev-tools/post-jules-retry-context.sh
 
       - name: Initialize Jules Repair Session
         env:
