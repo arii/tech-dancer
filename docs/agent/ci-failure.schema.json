@@ -31,7 +31,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["typescript", "vitest", "playwright", "eslint", "oxlint", "build", "other"],
+            "enum": ["typescript", "vitest", "playwright", "eslint", "oxlint", "build", "workflows", "other"],
             "description": "The category of the failure."
           },
           "context": {

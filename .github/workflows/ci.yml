@@ -265,6 +265,26 @@ jobs:
           else
             echo "changed_routes=0" >> "$GITHUB_OUTPUT"
           fi
+      - name: Code review agent
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          MAX_AI_REVIEWS: '2'
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:gemini-code-review
+      - name: Code review github models agent
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          MAX_AI_REVIEWS: '2'
+          GITHUB_MODELS_MODEL: gpt-4o-mini
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: pnpm run impact:github-models-code-review
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
@@ -278,7 +298,7 @@ jobs:
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
           MAX_AI_REVIEWS: '1'
-          GITHUB_MODELS_MODEL: gpt-4o
+          GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -326,6 +346,20 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
           fi
 
+          if [ -f artifacts/gemini-code-review.md ]; then
+            {
+              echo ""
+              cat artifacts/gemini-code-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/github-models-code-review.md ]; then
+            {
+              echo ""
+              cat artifacts/github-models-code-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           # Aggregate verdict — fail the step explicitly if any verdict file says failed
           FAILED=0
           for f in artifacts/*-verdict.json; do
@@ -333,11 +367,34 @@ jobs:
             PASSED=$(jq -r '.passed' "$f")
             if [ "$PASSED" = "false" ]; then
               HIGH=$(jq -r '.highCount' "$f")
-              echo "❌ Visual review failed: $HIGH HIGH severity issues found ($f)" >&2
+              echo "❌ Review failed: $HIGH HIGH severity issues found ($f)" >&2
               FAILED=1
             fi
           done
           exit $FAILED
+      - name: Parse Jules session ID from PR description
+        if: always()
+        id: parse_jules
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          TASK_ID=$(echo "$PR_BODY" \
+            | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
+            | head -1)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Send impact analysis to Jules session
+        if: always() && steps.parse_jules.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: python3 scripts/send-jules-impact.py
+
       - name: Update Impact Analysis Feedback (Final Result)
         if: always()
         uses: ./.github/actions/update-pr-comment

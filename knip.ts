@@ -12,9 +12,7 @@ const config: KnipConfig = {
     'workbox-window',
     'dependency-cruiser',
     '@types/pixelmatch',
-    '@google/genai',
-    '@langchain/core',
-    '@langchain/google-genai'
+    '@google/genai'
   ],
   ignoreBinaries: ['python3', 'semgrep'],
   ignoreExportsUsedInFile: true,
