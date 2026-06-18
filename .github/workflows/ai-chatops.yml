@@ -23,8 +23,8 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
-      AI_MODEL: gpt-4o
-      AI_SYNTHESIS_MODEL: gpt-4o-mini
+      AI_MODEL: gpt-5.4-mini
+      AI_SYNTHESIS_MODEL: gpt-5.4-mini
       GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -54,12 +54,18 @@ jobs:
           echo "HEAD_REF=$HEAD_REF" >> "$GITHUB_ENV"
           gh pr checkout "$ISSUE_NUMBER"
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
       - name: Execute Review
         env:
-          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          PR_NUMBER: ${{ inputs.issue_number }}
+          MAX_AI_REVIEWS: '10' # Override limit for manual chatops
+          GITHUB_MODELS_MODEL: gpt-5.4-mini
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          chmod +x dev-tools/low-compute-review.sh
-          ./dev-tools/low-compute-review.sh "$ISSUE_NUMBER" --no-cache
+          pnpm run impact:github-models-code-review
 
       - name: Commit Fixes
         if: contains(inputs.comment_body, '/ai-fix')
