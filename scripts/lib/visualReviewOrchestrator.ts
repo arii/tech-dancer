@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visualReviewConstants';
-import { generateMarkdownReport, postPRComment, countExistingReviews } from './visualReviewUtils';
+import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary } from './visualReviewTypes';
 
 export interface LLMClientStrategy {
@@ -75,6 +75,20 @@ export async function orchestrateVisualReview(
 
   // Post to GitHub PR
   await postPRComment(report, client.reportTitle);
+
+  // Also alert Jules if this PR is from a Jules session
+  const julesSessionId = await getJulesSessionIdFromPR();
+  if (julesSessionId) {
+    const hasBlockingIssues = reviews.some(r =>
+      r.llmVerdict === 'fail' || (r.severity === 'HIGH' && r.llmVerdict !== 'pass')
+    );
+    const passFailMsg = hasBlockingIssues ? "FAIL ❌" : "PASS ✅";
+    const highCount = reviews.filter(r => r.severity === 'HIGH').length;
+    const medCount = reviews.filter(r => r.severity === 'MEDIUM').length;
+    const lowCount = reviews.filter(r => r.severity === 'LOW').length;
+    const julesMessage = `[${client.reportTitle}] posted a visual UI review (${passFailMsg}). Summary: 🔴 ${highCount} high · 🟡 ${medCount} medium · 🟢 ${lowCount} low. Please read the review comments on the PR, analyze the diff context provided, and fix any failed or warned areas.`;
+    await sendJulesMessage(julesSessionId, julesMessage);
+  }
 
   // Write a structured result file alongside the markdown
   const hasBlockingIssues = reviews.some(r =>

@@ -52,6 +52,7 @@ runs:
               '',
               statusLine,
               `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+              `- [Link to artifacts](https://github.com/${owner}/${repo}/actions/runs/${context.runId})`,
               ''
             ];
 
