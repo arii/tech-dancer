@@ -18,29 +18,29 @@ jobs:
       GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0
 
-
-      - name: Check active runtime
-        run: |
-          pnpm run check:runtime-files
-          pnpm run doctor
-
-      - name: Install Node dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Run Headless Audit
+        env:
+          DEBUG: true
         run: |
           bash dev-tools/audit_headless.sh --sync
 
+      - name: Upload Audit Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: headless-audit-logs
+          path: dev-tools/logs/
+
       - name: Commit and Push REVIEW_TRACKING.md
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
           commit_message: "chore: update PR review tracking"
           file_pattern: 'REVIEW_TRACKING.md pr_overlaps.txt'
