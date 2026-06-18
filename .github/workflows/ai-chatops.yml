@@ -23,13 +23,13 @@ jobs:
       image: ghcr.io/arii/tech-dancer:latest
     env:
       PYTHONPATH: dev-tools
-      AI_MODEL: gpt-5.4-mini
-      AI_SYNTHESIS_MODEL: gpt-5.4-mini
+      AI_MODEL: gpt-4o-mini
+      AI_SYNTHESIS_MODEL: gpt-4o-mini
       GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -46,8 +46,8 @@ jobs:
 
       - name: Validate CLI
         run: |
-          python3 dev-tools/td_cli.py gh --help
-          python3 dev-tools/td_cli.py ai --help
+          python3 dev-tools/td_cli.py doctor
+          python3 dev-tools/td_cli.py gh status-board
 
       - name: Resolve PR Branch
         env:
@@ -65,7 +65,7 @@ jobs:
         env:
           PR_NUMBER: ${{ inputs.issue_number }}
           MAX_AI_REVIEWS: '10' # Override limit for manual chatops
-          GITHUB_MODELS_MODEL: gpt-5.4-mini
+          GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |

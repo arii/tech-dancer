@@ -28,7 +28,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout Main (Trusted)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -58,7 +58,7 @@ jobs:
           fi
 
       - name: Fetch Trusted Dev-Tools
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
           path: trusted-tools-temp
@@ -89,8 +89,8 @@ jobs:
 
       - name: Validate CLI
         run: |
-          python3 dev-tools/td_cli.py gh --help
-          python3 dev-tools/td_cli.py ai --help
+          python3 dev-tools/td_cli.py doctor
+          python3 dev-tools/td_cli.py gh status-board
 
       - name: Resolve PR Number
         env:
