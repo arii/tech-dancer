@@ -58,36 +58,7 @@ class AIClient:
         return is_ai_available()
 
     def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
-
-    def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
-        if not self.gemini_api_key:
-            return None
-
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={self.gemini_api_key}"
-        headers = {"Content-Type": "application/json"}
-
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}]
-        }
-
-        if schema:
-            payload["generationConfig"] = {
-                "responseMimeType": "application/json",
-                "responseSchema": schema
-            }
-
-        try:
-            response = requests.post(url, headers=headers, json=payload, timeout=30)
-            response.raise_for_status()
-            res_data = response.json()
-            if "candidates" in res_data and len(res_data["candidates"]) > 0:
-                content = res_data["candidates"][0]["content"]["parts"][0]["text"]
-                return content
-            return None
-        except Exception as e:
-            print(f"⚠️  Gemini API call failed: {e}")
-            return None
+        return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
         if self.is_ai_available():
@@ -143,8 +114,6 @@ class AIClient:
         except Exception as e:
             return False
 
-    # ── Piecemeal review pipeline ─────────────────────────────────────────────
-
     def generate_code_review(self, pr: Dict, diff: str) -> Dict:
         """
         Two-phase piecemeal review:
@@ -170,7 +139,6 @@ class AIClient:
         has_ci_failures = bool(ci_failures)
         failing_names = ", ".join(c.get('name', '?') for c in ci_failures) if ci_failures else "none"
 
-        # ── Diagnostics header ────────────────────────────────────────────────
         ollama_ok = self.is_ai_available()
         print(f"\n{'='*60}")
         print(f"🔍 PR #{pr_num} – Piecemeal Review Diagnostics")
@@ -181,7 +149,6 @@ class AIClient:
         print(f"  Diff size        : {len(diff):,} chars")
         print(f"  CI failures      : {failing_names}\n")
 
-        # ── Phase A: per-file-chunk reviews ───────────────────────────────────
         chunks = parse_diff_into_file_chunks(diff)
         skipped = [c for c in chunks if c['skip']]
         reviewable = [c for c in chunks if not c['skip']]
@@ -254,12 +221,10 @@ class AIClient:
                         json.dump(fr, f)
                 except Exception:
                     pass
-            # ── Write live progress snapshot ──────────────────────────────────
             self._write_progress_snapshot(pr_num, reviewable, file_reviews, i, cache_dir)
 
         print()
 
-        # ── Phase B: synthesis ────────────────────────────────────────────────
         print(f"🔗 Synthesising {len(file_reviews)} chunk review(s) → final verdict …", end="", flush=True)
         t0 = time.time()
         final = self._synthesize_review(file_reviews, pr_num, pr_title, has_ci_failures, ci_failures)
@@ -442,8 +407,6 @@ class AIClient:
                 "labels": [],
                 "recommendation": "Not Approved" if blocking_files else "Approved with Minor Changes",
             }
-
-    # ── Output file ───────────────────────────────────────────────────────────
 
     def _write_review_file(
         self,

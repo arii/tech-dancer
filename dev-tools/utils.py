@@ -123,8 +123,75 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         response = llm.invoke([HumanMessage(content=prompt)])
         return response.content
     except Exception as e:
-        print(f"AI Call failed: {e}", file=sys.stderr)
+        error_msg = str(e).lower()
+        if any(x in error_msg for x in ["authentication", "api_key", "401", "403"]):
+            print(f"❌ [AUTH_ERROR] LangChain call failed: {e}", file=sys.stderr)
+        elif any(x in error_msg for x in ["not found", "404", "410"]):
+            print(f"❌ [MODEL_UNAVAILABLE] LangChain call failed: {e}", file=sys.stderr)
+        elif any(x in error_msg for x in ["rate limit", "429"]):
+            print(f"⚠️  [RATE_LIMIT] LangChain call failed: {e}", file=sys.stderr)
+        elif any(x in error_msg for x in ["timeout", "connection", "network"]):
+            print(f"⚠️  [NETWORK_ERROR] LangChain call failed: {e}", file=sys.stderr)
+        else:
+            print(f"❌ [SERVER_ERROR] LangChain call failed: {e}", file=sys.stderr)
         return None
+
+def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, timeout: int = 60) -> Optional[Dict]:
+    """
+    Standardized API caller with exponential backoff.
+    Distinguishes between:
+    - [AUTH_ERROR]: 401, 403 (No retry)
+    - [MODEL_UNAVAILABLE]: 404, 410 (No retry)
+    - [RATE_LIMIT]: 429 (Retry with backoff)
+    - [SERVER_ERROR]: 5xx (Retry with backoff)
+    """
+    retry_delay = 1.0  # initial delay in seconds
+    for attempt in range(max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code in [401, 403]:
+                print(f"❌ [AUTH_ERROR] {e.code}: {e.reason}", file=sys.stderr)
+                return None
+            if e.code in [404, 410]:
+                print(f"❌ [MODEL_UNAVAILABLE] {e.code}: {e.reason}", file=sys.stderr)
+                return None
+
+            if attempt < max_retries:
+                if e.code == 429:
+                    print(f"⚠️  [RATE_LIMIT] 429: Retrying in {retry_delay:.1f}s... (Attempt {attempt + 1}/{max_retries})", file=sys.stderr)
+                else:
+                    print(f"⚠️  [SERVER_ERROR] {e.code}: Retrying in {retry_delay:.1f}s... (Attempt {attempt + 1}/{max_retries})", file=sys.stderr)
+
+                time.sleep(retry_delay)
+                retry_delay *= 2  # Exponential backoff
+            else:
+                print(f"❌ AI API failed after {max_retries} retries: {e}", file=sys.stderr)
+                return None
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            if attempt < max_retries:
+                print(f"⚠️  [NETWORK_ERROR] {e}: Retrying in {retry_delay:.1f}s... (Attempt {attempt + 1}/{max_retries})", file=sys.stderr)
+                time.sleep(retry_delay)
+                retry_delay *= 2
+            else:
+                print(f"❌ AI API Network error: {e}", file=sys.stderr)
+                return None
+        except Exception as e:
+            print(f"❌ [UNKNOWN_ERROR] {e}", file=sys.stderr)
+            return None
+    return None
+
+def is_ollama_available() -> bool:
+    """Checks if Ollama service is reachable."""
+    try:
+        url = get_ollama_url()
+        if not url.endswith("/"): url += "/"
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=2) as response:
+            return response.getcode() == 200
+    except Exception:
+        return False
 
 def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call local Ollama API."""
