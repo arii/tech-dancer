@@ -1,4 +1,5 @@
 // impeccable-ignore-file
+import { useMemo } from 'react';
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
@@ -8,18 +9,26 @@ import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 type CategoryKey = 'travel' | 'gear' | 'guide' | 'event' | 'lifestyle' | 'dance' | 'tech';
 
 interface ContentCardProps extends BaseProps, Partial<HTMLMotionProps<"a">> {
+  /** Unique identifier for the content item */
   slug: string;
+  /** Title of the article */
   title: string;
+  /** Category name for badge rendering */
   category: string;
+  /** Short summary of the content */
   excerpt?: string;
+  /** The root URL path (e.g., /blog or /research) */
   basePath: string;
+  /** ISO date string or formatted date */
   date?: string;
+  /** Estimated reading time string */
   readingTime?: string;
+  /** Hero image URL */
   image?: string;
+  /** Alternative text for the hero image */
   imageAlt?: string;
   /** Optional additional class names for the container */
   className?: string;
-  [key: string]: unknown;
 }
 
 const MotionArticle = motion.article;
@@ -52,7 +61,7 @@ export function ContentCard(props: ContentCardProps) {
     'className'
   ] as (keyof ContentCardProps)[]);
 
-  const categoryMap: Record<CategoryKey, string> = {
+  const categoryMap = useMemo<Record<CategoryKey, string>>(() => ({
     travel: 'bg-brand-purple/20 text-brand-purple border-brand-purple/30',
     gear: 'bg-brand-amber/20 text-brand-amber border-brand-amber/30',
     guide: 'bg-brand-green/20 text-brand-green border-brand-green/30',
@@ -60,15 +69,15 @@ export function ContentCard(props: ContentCardProps) {
     lifestyle: 'bg-brand-magenta/20 text-brand-magenta border-brand-magenta/30',
     dance: 'bg-brand-purple/20 text-brand-purple border-brand-purple/30',
     tech: 'bg-accent/20 text-accent border-accent/30',
-  };
+  }), []);
 
-  const getTagColorClass = (cat: string) => {
-    const c = cat.toLowerCase();
+  const tagColorClass = useMemo(() => {
+    const c = category.toLowerCase();
     for (const key of Object.keys(categoryMap) as CategoryKey[]) {
       if (c.includes(key)) return categoryMap[key];
     }
     return 'bg-accent/20 text-accent border-accent/30';
-  };
+  }, [category, categoryMap]);
 
   return (
     <BaseCard
@@ -108,7 +117,7 @@ export function ContentCard(props: ContentCardProps) {
           paddingY={0.5}
           radius="sm"
           border
-          className={cn("backdrop-blur-md uppercase tracking-widest font-black text-[10px]", getTagColorClass(category))}
+          className={cn("backdrop-blur-md uppercase tracking-widest font-black text-[10px]", tagColorClass)}
         >
           {category}
         </Box>
