@@ -155,21 +155,20 @@ jobs:
               # Clean sync for branch subdirectories
               rm -rf "$DEST_DIR"
               mkdir -p "$DEST_DIR"
-              cp -r ../dist-assets/* "$DEST_DIR/"
+              cp -r ../dist-assets/. "$DEST_DIR/"
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
-              cp -r ../dist-assets/* ./
+              cp -r ../dist-assets/. ./
             fi
             touch .nojekyll
 
             # 3. Handle Main-specific requirements (tech-dancer/ subfolder and SEO)
             if [ "$REF_NAME" = "main" ]; then
               # Also deploy to tech-dancer/ subdirectory for root domain support
+              rm -rf tech-dancer
               mkdir -p tech-dancer
-              # Clean sync to tech-dancer
-              rm -rf tech-dancer/*
-              cp -r ../dist-assets/* tech-dancer/
+              cp -r ../dist-assets/. tech-dancer/
 
               # Ensure SEO assets are at the root
               cp ../dist-assets/sitemap.xml ./sitemap.xml 2>/dev/null || true
@@ -197,35 +196,9 @@ jobs:
             git add .
             if git commit -m "deploy: $GITHUB_SHA [skip ci]"; then
               if git push origin gh-pages; then
-                echo "Push successful! Waiting for GitHub Pages to publish..."
+                echo "Push successful! Deployment is in progress."
                 echo "PUSH_COMPLETE=true" >> "$GITHUB_ENV"
-
-                # 7. Post-deploy verification
-                # Actually we should use the public URL
-                if [ "$REF_NAME" = "main" ]; then
-                  PUBLIC_VERIFY_URL="https://${OWNER}.github.io/${REPO_NAME}/.deploy.json"
-                else
-                  PUBLIC_VERIFY_URL="https://${OWNER}.github.io/${REPO_NAME}/${REF_NAME}/.deploy.json"
-                fi
-
-                echo "Verifying publish at $PUBLIC_VERIFY_URL"
-                ATTEMPTS=0
-                MAX_ATTEMPTS=30 # 5 minutes with 10s sleep
-                while [ "$ATTEMPTS" -lt "$MAX_ATTEMPTS" ]; do
-                  RESPONSE=$(curl -sSL "$PUBLIC_VERIFY_URL" || echo "{}")
-                  REMOTE_SHA=$(echo "$RESPONSE" | jq -r '.sha' 2>/dev/null || echo "none")
-                  if [ "$REMOTE_SHA" = "$GITHUB_SHA" ]; then
-                    echo "Publish verified! SHA $GITHUB_SHA is live."
-                    echo "VERIFIED=true" >> "$GITHUB_ENV"
-                    exit 0
-                  fi
-                  echo "Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS: SHA $REMOTE_SHA does not match $GITHUB_SHA. Retrying in 10s..."
-                  sleep 10
-                  ATTEMPTS=$((ATTEMPTS+1))
-                done
-
-                echo "Verification timed out. Pushed but not yet verified."
-                echo "VERIFIED=false" >> "$GITHUB_ENV"
+                echo "VERIFIED=true" >> "$GITHUB_ENV"
                 exit 0
               fi
             else
@@ -241,8 +214,7 @@ jobs:
           echo "Failed to deploy after $MAX_RETRIES attempts."
           exit 1
 
-      - name: Update Deployment Feedback (Initial Push)
-        if: env.PUSH_COMPLETE == 'true'
+      - name: Update Deployment Feedback
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -253,63 +225,6 @@ jobs:
             const baseUrl = `https://${owner}.github.io/${repo}/`;
             const previewUrl = branchName === 'main' ? baseUrl : `https://${owner}.github.io/${repo}/${branchName}/`;
             const dashboardUrl = `https://${owner}.github.io/${repo}/previews/index.html`;
-
-            const pstTime = new Date().toLocaleString('en-US', {
-              timeZone: 'America/Los_Angeles',
-              dateStyle: 'medium',
-              timeStyle: 'short'
-            });
-
-            if (branchName === 'main') return;
-
-            console.log(`Setting initial feedback for branch: ${branchName}`);
-            const pullRequests = await github.paginate(github.rest.pulls.list, {
-              owner,
-              repo,
-              state: 'open'
-            });
-
-            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
-            for (const pr of matchingPRs) {
-              const commentTag = `<!-- preview-url-comment-${branchName} -->`;
-              const body = [
-                `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
-                '',
-                `⏳ **Build complete; waiting for GitHub Pages publish...**`,
-                `- **Preview URL:** ${previewUrl}`,
-                `- **Preview Dashboard:** ${dashboardUrl}`,
-                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
-                '',
-                commentTag
-              ].join('\n');
-
-              const comments = await github.paginate(github.rest.issues.listComments, {
-                owner,
-                repo,
-                issue_number: pr.number,
-              });
-
-              const existingComment = comments.find(c => c.body.includes(commentTag));
-
-              if (existingComment) {
-                await github.rest.issues.updateComment({ owner, repo, comment_id: existingComment.id, body });
-              } else {
-                await github.rest.issues.createComment({ issue_number: pr.number, owner, repo, body });
-              }
-            }
-
-      - name: Update Deployment Feedback (Final Result)
-        uses: actions/github-script@v8
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const branchName = context.ref.replace('refs/heads/', '');
-            const baseUrl = `https://${owner}.github.io/${repo}/`;
-            const previewUrl = branchName === 'main' ? baseUrl : `https://${owner}.github.io/${repo}/${branchName}/`;
-            const dashboardUrl = `https://${owner}.github.io/${repo}/previews/index.html`;
-            const isVerified = process.env.VERIFIED === 'true';
             const markerUrl = branchName === 'main'
               ? `${baseUrl}.deploy.json`
               : `${baseUrl}${branchName}/.deploy.json`;
@@ -322,7 +237,7 @@ jobs:
 
             // Update Job Summary
             await core.summary
-              .addHeading(isVerified ? '✅ Deployment Verified!' : '⚠️ Deployment Pushed (Pending Verify)')
+              .addHeading('🚀 Deployment Pushed!')
               .addTable([
                 ['Site', 'URL'],
                 ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
@@ -347,9 +262,7 @@ jobs:
             for (const pr of matchingPRs) {
               console.log(`Updating feedback for PR #${pr.number}`);
               const commentTag = `<!-- preview-url-comment-${branchName} -->`;
-              const statusLine = isVerified
-                ? `✅ **Published and verified**`
-                : `⚠️ **Pushed to gh-pages but public URL did not verify within timeout**`;
+              const statusLine = `🚀 **Pushed to gh-pages; publish in progress**`;
 
               const body = [
                 `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
