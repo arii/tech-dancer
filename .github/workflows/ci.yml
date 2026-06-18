@@ -275,7 +275,7 @@ jobs:
           if git rev-parse HEAD~1 >/dev/null 2>&1; then
             DIFF_CMD="git diff --name-only HEAD~1 HEAD"
           else
-            DIFF_CMD="git diff --name-only --diff-filter=A HEAD"
+            DIFF_CMD="git ls-tree -r HEAD --name-only"
           fi
           CHANGED_FILES=$($DIFF_CMD || echo "")
           MATCH_COUNT=$(echo "$CHANGED_FILES" | grep -vE 'tests/visual\.spec\.ts-snapshots/' | grep -c . || true)

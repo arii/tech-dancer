@@ -51,7 +51,7 @@ def build_repo_context():
             subprocess.check_call(["git", "rev-parse", "HEAD~1"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             diff_cmd = ["git", "diff", "--name-only", "HEAD~1", "HEAD"]
         except subprocess.CalledProcessError:
-            diff_cmd = ["git", "diff", "--name-only", "--diff-filter=A", "HEAD"]
+            diff_cmd = ["git", "ls-tree", "-r", "HEAD", "--name-only"]
 
         changed_files = subprocess.check_output(
             diff_cmd
