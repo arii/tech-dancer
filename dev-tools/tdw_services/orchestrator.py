@@ -332,18 +332,28 @@ class Orchestrator:
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
-        issues = []
-        if all_open: issues = list(repo.get_issues(state='open'))
-        elif issue_number: issues = [repo.get_issue(issue_number)]
-        else: raise CLIError("Provide --issue-number or --all-open")
+        issues: List[Any] = []
+        if all_open:
+            issues = list(repo.get_issues(state='open'))
+        elif issue_number:
+            issues = [repo.get_issue(issue_number)]
+        else:
+            raise CLIError("Provide --issue-number or --all-open")
 
-        results = []
-        total_findings = 0
-        audit_base = self.get_audit_results(content="")
-        config = audit_base.get("config", {})
+        results: List[Dict[str, Any]] = []
+        total_findings: int = 0
+        audit_base: Dict[str, Any] = self.get_audit_results(content="")
+        config: Dict[str, Any] = audit_base.get("config", {})
 
         for issue in issues:
-            findings, warnings = [], []; body = issue.body or ''; title = issue.title or ''
+            findings: List[str] = []
+            warnings: List[str] = []
+            body: str = issue.body or ''
+            title: str = issue.title or ''
+
+            if not body.strip():
+                findings.append("Issue body is empty.")
+
             for i, block in enumerate(self.extract_code_blocks(body)):
                 res = self.get_audit_results(content=block)
                 violations = res.get("violations", {}).get("stdin", [])
@@ -368,24 +378,32 @@ class Orchestrator:
                 warnings.append("Mentions Tailwind but not layout primitives.")
 
             # Spec-Driven Issue Validation
-            spec_sections = [
-                "## Problem Statement",
-                "## Goal",
-                "## Non-Goals",
-                "## Proposed Approach",
-                "### Alternatives Considered",
-                "### Architectural Impact",
-                "## Scope",
-                "1. UNDERSTAND THE ISSUE",
-                "2. DETERMINE APPROACH",
-                "3. SPECIFY SCOPE",
-                "4. DEFINITION OF DONE"
+            spec_sections: List[str] = [
+                "Problem Statement",
+                "Goal",
+                "Non-Goals",
+                "Proposed Approach",
+                "Alternatives Considered",
+                "Architectural Impact",
+                "Scope",
+                "UNDERSTAND THE ISSUE",
+                "DETERMINE APPROACH",
+                "SPECIFY SCOPE",
+                "DEFINITION OF DONE"
             ]
-            missing_spec_sections = [s for s in spec_sections if s.lower() not in body.lower()]
+
+            def has_section(section_name: str, text: str) -> bool:
+                # Matches markdown headers (# Section Name) or numbered items (1. SECTION NAME)
+                header_pattern = rf"^\s*#+\s*{re.escape(section_name)}\b"
+                list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
+                return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
+                            re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
+
+            missing_spec_sections: List[str] = [s for s in spec_sections if not has_section(s, body)]
             if missing_spec_sections:
                 findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
-            issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
+            issue_result: Dict[str, Any] = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
             results.append(issue_result)
             total_findings += len(findings)
             if post_comments and (findings or warnings):
