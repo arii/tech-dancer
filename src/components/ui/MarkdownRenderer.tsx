@@ -144,8 +144,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           td: ({node: _node, ...props}) => (
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
-          img: ({node: _node, ...props}: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }) => {
-            const { src, alt, className, title, width, height, srcSet, sizes } = props;
+          img: ({ node: _node, src, alt, className, title, width, height, srcSet, sizes, ..._rest }: React.ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }): JSX.Element | null => {
             const normalizedSrc = normalizeAsset(src || '');
             if (!normalizedSrc) return null;
 
@@ -163,11 +162,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                     srcSet={srcSet}
                     sizes={sizes}
                     loading="lazy"
-                    alt={typeof alt === 'string' && alt.trim() ? alt : "Article illustration"}
+                    alt={typeof alt === 'string' ? alt : "Article illustration"}
                     title={title}
                     width={width !== undefined ? String(width) : undefined}
                     height={height !== undefined ? String(height) : undefined}
+                    /* Standard security policy for external images in markdown */
                     referrerPolicy="no-referrer"
+                    crossOrigin="anonymous"
                     className={cn(
                       "block mx-auto max-w-full max-h-full w-auto h-auto object-contain",
                       className
