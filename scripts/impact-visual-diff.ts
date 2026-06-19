@@ -12,12 +12,11 @@ import {
   ensureDirectory,
   readImpactAnalysis,
   routeToSlug,
-  startPreview,
-  stopPreview,
   visualSeverity,
-  waitForServer,
-  type VisualRouteSummary
+  type VisualRouteSummary,
+  VisualRouteSummarySchema
 } from './impact-review-utils';
+import { startPreview, stopPreview, waitForServer } from './impact/preview-server';
 import { whiteCanvas, copyImage } from './image-processing-utils';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
@@ -163,7 +162,7 @@ async function captureViewport(
     diffCroppedPath = path.relative(process.cwd(), dcp);
   }
 
-  return {
+  const summaryObj = {
     route: suffix ? `${route} (${label.toLowerCase()})` : route,
     slug: `${slug}${suffix}`,
     beforePath: path.relative(process.cwd(), beforePath),
@@ -175,6 +174,8 @@ async function captureViewport(
     ...diffMetrics,
     severity: visualSeverity(diffMetrics.differencePercent)
   };
+
+  return VisualRouteSummarySchema.parse(summaryObj);
 }
 
 function createVisualDiff(beforePath: string, afterPath: string, diffPath: string): { diffPixels: number; totalPixels: number; differencePercent: number; before: PNG; after: PNG } {

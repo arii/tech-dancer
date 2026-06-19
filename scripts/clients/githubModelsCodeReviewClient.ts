@@ -16,7 +16,7 @@ function buildSystemPrompt(summary: CodeReviewSummary): string {
   if (summary.previousState && summary.previousState.findings.length > 0) {
     const findingsStr = summary.previousState.findings
       .map(f => {
-        let line = `- [${f.id}] ${f.file}${f.line ? `:${f.line}` : ''}: ${f.issue} (Status: ${f.status})`;
+        let line = `- [${f.id}] ${f.file}${f.line ? `:\${f.line}` : ''}: ${f.issue} (Status: ${f.status})`;
         if (f.fixSummary) {
           line += `\n   → ${f.fixSummary}`;
         }
@@ -64,7 +64,7 @@ You MUST end your review with exactly one of the following strings indicating yo
 Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
 demonstrate with evidence from the diff.
 
-You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag:
+You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a ` <findings>` tag:
 <findings>
 {
   "findings": [
@@ -137,6 +137,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const baseContent = [
       { type: 'text', text: buildSystemPrompt(summary) } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
+      { type: 'text', text: `REPO CONTEXT:\n\n${summary.repoContext || ''}` } as const,
     ];
 
     const message = new HumanMessage({ content: baseContent });

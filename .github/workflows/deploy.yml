@@ -126,7 +126,7 @@ jobs:
             DEST_DIR="$REF_NAME"
           fi
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.git"
-          MAX_RETRIES=10
+          MAX_RETRIES=5
 
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
@@ -204,10 +204,8 @@ jobs:
               exit 0
             fi
 
-            # Use exponential backoff with jitter to reduce collisions
-            RETRY_DELAY=$(( (i * 5) + (RANDOM % 10) ))
-            echo "Attempt $i failed. Retrying in ${RETRY_DELAY}s..."
-            sleep $RETRY_DELAY
+            echo "Attempt $i failed. Retrying in $((i * 5))s..."
+            sleep $((i * 5))
             cd - || exit
           done
 

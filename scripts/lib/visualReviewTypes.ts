@@ -1,16 +1,5 @@
-export interface VisualReviewFinding {
-  id: string;
-  route: string;
-  issue: string;
-  status: 'open' | 'resolved';
-  fixSummary?: string;
-}
-
-export interface VisualReviewState {
-  findings: VisualReviewFinding[];
-}
-
 export interface VisualRouteSummary {
+  repoContext?: string; // Always a JSON stringified object
   route: string;
   slug: string;
   differencePercent: number;
@@ -21,7 +10,6 @@ export interface VisualRouteSummary {
   beforePath: string;
   afterPath: string;
   diffPath?: string;
-  previousFindings?: VisualReviewFinding[];
 }
 
 export interface VisualSummary {
@@ -36,5 +24,4 @@ export interface RouteReview {
   tokens: number;
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
-  findings?: VisualReviewFinding[];
 }

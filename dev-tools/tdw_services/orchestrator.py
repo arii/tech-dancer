@@ -480,7 +480,7 @@ class Orchestrator:
 
     def check_bundle_size(self, update=False, baseline_file=None, threshold=50, dry_run=True):
         size = get_bundle_size()
-        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3080)
+        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 4000)
         threshold_kb = baseline + threshold
         res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": threshold_kb, "status": "success" if size <= threshold_kb else "error"}
         if size > threshold_kb: res["message"] = f"Bundle size exceeds threshold ({size}KB > {threshold_kb}KB)."

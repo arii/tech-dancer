@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - '**'
     paths:
       - 'src/**'
       - 'etl/**'
@@ -18,7 +19,8 @@ on:
       - '*.config.ts'
       - 'tsconfig*.json'
   pull_request:
-    branches: ['**']
+    branches:
+      - '**'
     paths:
       - 'src/**'
       - 'etl/**'
@@ -27,7 +29,6 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - '.github/workflows/ci.yml'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
@@ -71,24 +72,15 @@ jobs:
         uses: ./.github/actions/setup-node-pnpm
 
       - name: Validate Runtime
-        shell: bash
         run: |
-          echo "::group::Validate Runtime"
-          trap 'echo "::endgroup::"' EXIT
           pnpm run check:runtime-files
           pnpm run doctor
 
       - name: Verify lockfile integrity
-        shell: bash
         run: |
-          echo "::group::pnpm install"
-          trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile
-          echo "::endgroup::"
-          trap - EXIT
-
           if ! git diff --quiet pnpm-lock.yaml; then
-            echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
+            echo "❌ pnpm-lock.yaml is out of date. Run pnpm install and commit."
             exit 1
           fi
 
@@ -102,10 +94,7 @@ jobs:
         run: pnpm test
 
       - name: Run CLI Unit Tests
-        shell: bash
         run: |
-          echo "::group::Pytest"
-          trap 'echo "::endgroup::"' EXIT
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
@@ -114,10 +103,7 @@ jobs:
         run: CI=true pnpm run knip
 
       - name: TypeScript `any` Ratchet
-        shell: bash
         run: |
-          echo "::group::Ratchet Any"
-          trap 'echo "::endgroup::"' EXIT
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh ratchet-any
@@ -137,20 +123,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Install dependencies
-        shell: bash
-        run: |
-          echo "::group::pnpm install"
-          trap 'echo "::endgroup::"' EXIT
-          pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit - Gate
-        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "::group::Audit"
-          trap 'echo "::endgroup::"' EXIT
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
@@ -234,9 +212,11 @@ jobs:
           retention-days: 7
 
   impact-analysis:
-    needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
+    outputs:
+      changed_code: ${{ steps.entropy_check.outputs.changed_code }}
+      changed_routes: ${{ steps.check_visuals.outputs.changed_routes }}
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
@@ -265,22 +245,46 @@ jobs:
         run: pnpm run impact:dom-diff
       - name: Check if visual changes exist
         id: check_visuals
-        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+        run: |
+          if [ -f artifacts/visual-review/summary.json ]; then
+            COUNT=$(jq '[.routes[] | select(.differencePercent > 1.5)] | length' artifacts/visual-review/summary.json)
+            echo "changed_routes=$COUNT" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed_routes=0" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Entropy Check
+        id: entropy_check
+        if: always()
+        run: |
+          DIFF_CMD="git ls-tree -r HEAD --name-only"
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            DIFF_CMD="git diff --name-only origin/main...HEAD"
+          elif git rev-parse HEAD~1 >/dev/null 2>&1; then
+            DIFF_CMD="git diff --name-only HEAD~1 HEAD"
+          fi
+          CHANGED_FILES=$($DIFF_CMD || echo "")
+          MATCH_COUNT=$(echo "$CHANGED_FILES" | grep -vE 'tests/visual\.spec\.ts-snapshots/' | grep -c . || true)
+          if [ "$MATCH_COUNT" -gt 0 ]; then
+            echo "changed_code=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed_code=0" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Code review agent
-        if: always() && github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request' && steps.entropy_check.outputs.changed_code == '1'
         continue-on-error: true
         env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+          MAX_AI_REVIEWS: '2'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-code-review
       - name: Code review github models agent
-        if: always() && github.event_name == 'pull_request'
+        if: always() && steps.entropy_check.outputs.changed_code == '1' && github.event_name == 'pull_request'
         continue-on-error: true
         env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+          MAX_AI_REVIEWS: '2'
           GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -289,7 +293,7 @@ jobs:
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+          MAX_AI_REVIEWS: '1'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -298,7 +302,7 @@ jobs:
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+          MAX_AI_REVIEWS: '1'
           GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Buffer } from 'node:buffer';
 import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
 
@@ -42,6 +41,9 @@ export function buildVisualReviewPayload(summary: VisualRouteSummary): Array<{ t
   const baseContent: Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> = [
     { type: 'text', text: REVIEW_PROMPT },
     { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
+    { type: 'text', text: `REPO CONTEXT:
+
+${summary.repoContext || ''}` },
     { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
     { type: 'text', text: 'BEFORE' },
     { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },
@@ -182,51 +184,7 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   return totalReviews;
 }
 
-export async function getPreviousReviewState<T>(reportTitle: string): Promise<T | undefined> {
-  const token = process.env.GITHUB_TOKEN;
-  const repo = process.env.GITHUB_REPOSITORY;
-  const prNumber = process.env.PR_NUMBER;
-
-  if (!token || !repo || !prNumber) return undefined;
-
-  let url: string | null = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments?per_page=100`;
-  let existingComment: { body: string; user: { type: string } } | undefined;
-
-  while (url) {
-    const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
-    });
-
-    if (!response.ok) return undefined;
-
-    const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
-    existingComment = comments.find(c =>
-      c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
-    );
-
-    if (existingComment) break;
-
-    // Handle pagination
-    const linkHeader = response.headers.get('Link');
-    const nextMatch = linkHeader?.match(/<([^>]+)>;\s*rel="next"/);
-    url = nextMatch ? nextMatch[1] : null;
-  }
-
-  if (!existingComment) return undefined;
-
-  const stateMatch = existingComment.body.match(/<!-- ai-review-state: (.*?) -->/);
-  if (!stateMatch) return undefined;
-
-  try {
-    const base64 = stateMatch[1];
-    return JSON.parse(Buffer.from(base64, 'base64').toString('utf-8')) as T;
-  } catch (e) {
-    console.warn('Failed to parse previous review state:', e);
-    return undefined;
-  }
-}
-
-export async function postPRComment(body: string, reportTitle: string, state?: unknown): Promise<void> {
+export async function postPRComment(body: string, reportTitle: string): Promise<void> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
@@ -238,51 +196,29 @@ export async function postPRComment(body: string, reportTitle: string, state?: u
 
   const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
 
-  let stateTag = '';
-  if (state) {
-    try {
-      stateTag = `<!-- ai-review-state: ${Buffer.from(JSON.stringify(state)).toString('base64')} -->\n`;
-    } catch (e) {
-      console.warn('Failed to serialize review state:', e);
-      stateTag = '';
-    }
-  }
-
   // Check for existing comments from this bot to avoid spamming the PR
-  let fetchUrl: string | null = `${url}?per_page=100`;
-  let existingComment: { id: number; body: string; user: { type: string } } | undefined;
+  const getCommentsResponse = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+    },
+  });
 
-  while (fetchUrl) {
-    const getCommentsResponse = await fetch(fetchUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-      },
-    });
-
-    if (!getCommentsResponse.ok) break;
-
+  if (getCommentsResponse.ok) {
     const comments = await getCommentsResponse.json() as Array<{
       id: number;
       body: string;
       user: { type: string };
     }>;
-    existingComment = comments.find(c =>
+    const existingComment = comments.find(c =>
       c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
     );
 
-    if (existingComment) break;
-
-    const linkHeader = getCommentsResponse.headers.get('Link');
-    const nextMatch = linkHeader?.match(/<([^>]+)>;\s*rel="next"/);
-    fetchUrl = nextMatch ? nextMatch[1] : null;
-  }
-
-  if (existingComment) {
+    if (existingComment) {
       const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
       const currentCount = match ? parseInt(match[1], 10) : 1;
       const newCount = currentCount + 1;
-      const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${stateTag}${body}`;
+      const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${body}`;
 
       const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
       const updateResponse = await fetch(updateUrl, {
@@ -302,9 +238,10 @@ export async function postPRComment(body: string, reportTitle: string, state?: u
 
       console.log('✅ Updated existing PR comment');
       return;
+    }
   }
 
-  const newBody = `<!-- ai-review-count: 1 -->\n${stateTag}${body}`;
+  const newBody = `<!-- ai-review-count: 1 -->\n${body}`;
 
   const response = await fetch(url, {
     method: 'POST',

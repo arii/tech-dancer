@@ -46,8 +46,19 @@ def build_repo_context():
 
     # 5. Changed Files
     try:
+        import os
+        diff_cmd = ["git", "ls-tree", "-r", "HEAD", "--name-only"]
+        if os.environ.get("GITHUB_EVENT_NAME") == "pull_request":
+            diff_cmd = ["git", "diff", "--name-only", "origin/main...HEAD"]
+        else:
+            try:
+                subprocess.check_call(["git", "rev-parse", "HEAD~1"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                diff_cmd = ["git", "diff", "--name-only", "HEAD~1", "HEAD"]
+            except subprocess.CalledProcessError:
+                pass
+
         changed_files = subprocess.check_output(
-            ["git", "diff", "--name-only", "main"]
+            diff_cmd
         ).decode().strip().splitlines()
     except Exception as e:
          print(f"Error getting changed files: {e}", file=sys.stderr)

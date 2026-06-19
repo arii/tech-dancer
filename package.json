@@ -17,8 +17,10 @@
     "build:profile": "vite build --profile",
     "prepreview": "node scripts/cleanup-ports.mjs",
     "preview": "vite preview",
-    "test": "vitest run",
+    "test": "run-s -c test:app test:scripts",
+    "test:app": "vitest run",
     "test:watch": "vitest",
+    "test:scripts": "vitest run -c scripts/vitest.config.scripts.ts",
     "test:e2e": "playwright test --grep-invert 'visual comparison|Jack & Jill O.Rama'",
     "test:e2e:targeted": "playwright test",
     "lighthouse": "lhci autorun",
@@ -93,7 +95,8 @@
     "unist-util-visit": "^5.1.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "zod": "^3.24.1"
   },
   "engines": {
     "node": "22.x",
