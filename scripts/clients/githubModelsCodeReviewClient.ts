@@ -111,7 +111,7 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     // Did the model even attempt a findings block? If <findings> opened but
     // never closed, that's a strong truncation signal.
     const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
-    return { parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
+    return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
   }
 
   const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
@@ -120,7 +120,7 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
     console.warn('Failed to parse findings JSON from LLM response:', e);
-    return { parseError: 'invalid_json' };
+    return { state: undefined, parseError: 'invalid_json' };
   }
 }
 
@@ -198,8 +198,9 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       : '';
       
     if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
-      // Allocate up to 16,000 chars for diffText, or the remaining budget if smaller
-      const maxDiffChars = Math.min(diffText.length, Math.max(16000, remainingBudgetForDiffAndContext - 2000));
+      // Allocate the remaining budget between diff and external context.
+      // Diff gets priority: up to 16,000 characters, capped at remaining budget.
+      const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
       if (diffText.length > maxDiffChars) {
         diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
       }

@@ -117,8 +117,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       : '';
       
     if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
-      // Allocate up to 16,000 chars for diffText, or the remaining budget if smaller
-      const maxDiffChars = Math.min(diffText.length, Math.max(16000, remainingBudgetForDiffAndContext - 2000));
+      // Allocate the remaining budget between diff and external context.
+      // Diff gets priority: up to 16,000 characters, capped at remaining budget.
+      const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
       if (diffText.length > maxDiffChars) {
         diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
       }
