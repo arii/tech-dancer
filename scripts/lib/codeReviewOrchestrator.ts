@@ -74,7 +74,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '', prGoal: undefined, isTruncated: false };
+    return { files: [], diffContext: '', isTruncated: false };
   }
 }
 
