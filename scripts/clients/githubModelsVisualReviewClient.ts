@@ -37,9 +37,9 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
     const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
     let domDiffLength = 0;
     if (fs.existsSync(domDiffPath)) {
-      const stats = fs.statSync(domDiffPath);
+      const content = fs.readFileSync(domDiffPath, 'utf8');
       // Cap at 3000 to match visualReviewUtils.ts truncation logic
-      domDiffLength = Math.min(stats.size, 3000);
+      domDiffLength = Math.min(content.length, 3000);
     }
     const estimatedInputTokens = Math.ceil(domDiffLength / 4);
 
