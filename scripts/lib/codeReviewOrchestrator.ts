@@ -3,8 +3,7 @@ import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
-import { execSync, spawnSync } from 'child_process';
-import { IMPACT_CONFIG } from '../impact-analysis.config';
+import { execSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -36,65 +35,40 @@ async function fetchPRGoal(): Promise<string | undefined> {
 }
 
 export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
-  const prGoal = await fetchPRGoal();
   try {
-    let diffBase = ['origin/main...HEAD'];
+    let diffCommand = 'git diff origin/main...HEAD';
+    let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
 
     // Verify if origin/main exists, fallback to git history for CI if needed
     try {
-      execSync('git rev-parse origin/main', { stdio: 'ignore' });
+        execSync('git rev-parse origin/main', { stdio: 'ignore' });
     } catch {
-      diffBase = ['HEAD~1', 'HEAD'];
+        diffCommand = 'git diff HEAD~1 HEAD';
+        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
     }
 
-    const excludeSpecs = IMPACT_CONFIG.LOW_IMPACT_PATHS.map(p =>
-      p.endsWith('/') ? `:(exclude)${p}**` : `:(exclude)${p}`
-    );
-
-    // Get reviewable files using git pathspecs
-    const nameOnlyArgs = ['diff', '--name-only', ...diffBase, '--', ...excludeSpecs];
-    const nameOnlyResult = spawnSync('git', nameOnlyArgs, { encoding: 'utf-8' });
-
-    if (nameOnlyResult.error) throw nameOnlyResult.error;
-    if (nameOnlyResult.status !== 0) {
-      throw new Error(`git diff --name-only failed: ${nameOnlyResult.stderr}`);
-    }
-
-    const stdout = nameOnlyResult.stdout || '';
-    const reviewableFiles = stdout.split('\n').filter(Boolean);
-
-    if (reviewableFiles.length === 0) {
-      console.log('ℹ️ No reviewable files found after filtering low-impact paths.');
-      return { files: [], diffContext: '', isTruncated: false, prGoal };
-    }
-
-    // Get diff context for reviewable files only
-    const diffArgs = ['diff', '-U10', ...diffBase, '--', ...excludeSpecs];
-    const diffResult = spawnSync('git', diffArgs, { encoding: 'utf-8' });
-
-    if (diffResult.error) throw diffResult.error;
-    if (diffResult.status !== 0) {
-      throw new Error(`git diff failed: ${diffResult.stderr}`);
-    }
-
-    const rawDiff = diffResult.stdout;
+    const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
     const maxChars = 20000;
-    const isTruncated = rawDiff.length > maxChars;
-    const diffContext = isTruncated
+    const diffContext = rawDiff.length > maxChars
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
       : rawDiff;
 
+    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
+      .split('\n')
+      .filter(Boolean);
+
+    const prGoal = await fetchPRGoal();
+
     return {
-      files: reviewableFiles,
+      files,
       diffContext,
-      isTruncated,
       prGoal,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '', isTruncated: false, prGoal };
+    return { files: [], diffContext: '' };
   }
 }
 
