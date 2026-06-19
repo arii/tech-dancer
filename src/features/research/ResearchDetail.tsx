@@ -19,14 +19,13 @@ import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
 const BlogDrafter = lazy(() => import('@/features/lab/BlogDrafter').then(m => ({ default: m.BlogDrafter })));
 const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m => ({ default: m.WCSScraperTool })));
 const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
-const BlastRadiusTool = lazy(() => import('./components/BlastRadiusTool').then(m => ({ default: m.BlastRadiusTool })));
-const EcommerceAutomationTool = lazy(() => import('./components/EcommerceAutomationTool').then(m => ({ default: m.EcommerceAutomationTool })));
+const DeploymentImpactAnalyzerTool = lazy(() => import('./components/DeploymentImpactAnalyzerTool').then(m => ({ default: m.DeploymentImpactAnalyzerTool })));
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
   'gitops-pr-reviewer': GitOpsReviewerTool,
-  'deployment-impact-analyzer': BlastRadiusTool,
+  'deployment-impact-analyzer': DeploymentImpactAnalyzerTool,
   'ecommerce-automation': EcommerceAutomationTool,
 };
 

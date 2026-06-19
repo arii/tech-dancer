@@ -4,7 +4,7 @@ import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
 import { TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER } from '@/config/devai-tool-ids';
 
-export function BlastRadiusTool() {
+export function DeploymentImpactAnalyzerTool() {
   const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER);
 
   return (

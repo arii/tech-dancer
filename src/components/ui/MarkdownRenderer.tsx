@@ -162,13 +162,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, ...props}) => (
-            <Text as="p" color="dim" leading="relaxed" marginY={{ base: 6, md: 4 }} size="base" {...props} />
+            <Text as="p" color="dim" leading="relaxed" marginY={4} size="base" {...props} />
           ),
           ul: ({node: _node, ...props}) => (
-            <Box as="ul" marginY={{ base: 6, md: 4 }} paddingLeft={6} className="list-disc space-y-2.5" {...props} />
+            <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
           ),
           ol: ({node: _node, ...props}) => (
-            <Box as="ol" marginY={{ base: 6, md: 4 }} paddingLeft={6} className="list-decimal space-y-2.5" {...props} />
+            <Box as="ol" marginY={4} paddingLeft={6} className="list-decimal space-y-1.5" {...props} />
           ),
           li: ({node: _node, ...props}) => (
             <Box as="li" className="text-text-dim leading-relaxed" {...props} />
@@ -216,7 +216,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             if (isBlock) {
               return (
-                <Box marginY={{ base: 8, md: 6 }} radius="lg" border className="overflow-hidden">
+                <Box marginY={6} radius="lg" border className="overflow-hidden">
                   {language && (
                     <Stack
                       direction="row"
@@ -241,9 +241,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       margin: 0,
                       borderRadius: 0,
                       background: 'var(--color-surface)',
-                      fontSize: '0.85rem',
-                      lineHeight: '1.7',
-                      padding: '1.25rem',
+                        fontSize: '0.8rem',
+                        lineHeight: '1.6',
                     }}
                     {...(props as object)}
                   >
