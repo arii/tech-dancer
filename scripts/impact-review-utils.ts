@@ -24,7 +24,8 @@ export const VisualRouteSummarySchema = z.object({
   differencePercent: z.number(),
   severity: z.enum(['LOW', 'MEDIUM', 'HIGH'])
 });
-export type VisualRouteSummary = z.infer<typeof VisualRouteSummarySchema>;
+import type { VisualRouteSummary as ExtVisualRouteSummary } from "./lib/visualReviewTypes";
+export type VisualRouteSummary = ExtVisualRouteSummary;
 
 export const DomRouteSummarySchema = z.object({
   route: z.string(), slug: z.string(),
@@ -36,7 +37,22 @@ export const DomRouteSummarySchema = z.object({
   }),
   severity: z.enum(['LOW', 'MEDIUM', 'HIGH'])
 });
-export type DomRouteSummary = z.infer<typeof DomRouteSummarySchema>;
+export interface DomRouteSummary {
+  route: string;
+  slug: string;
+  beforeHtmlPath: string;
+  afterHtmlPath: string;
+  diffPath: string;
+  metrics: {
+    nodesAdded: number;
+    nodesRemoved: number;
+    imagesAdded: number;
+    imagesRemoved: number;
+    linksAdded: number;
+    linksRemoved: number;
+  };
+  severity: "LOW" | "MEDIUM" | "HIGH";
+}
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
 export const VISUAL_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'visual-review');

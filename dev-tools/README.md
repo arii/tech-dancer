@@ -253,7 +253,7 @@ Technical debt is tracked using **GitHub Actions Variables** instead of local fi
 ### How to Update
 When a PR intentionally increases one of these metrics, an admin must update the baseline in GitHub after merge:
 ```bash
-gh variable set BUNDLE_BASELINE_KB --body 3848
+gh variable set BUNDLE_BASELINE_KB --body 3080
 gh variable set ANY_COUNT_BASELINE --body 50
 ```
 
