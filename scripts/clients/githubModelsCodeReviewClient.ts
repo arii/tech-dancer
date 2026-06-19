@@ -6,10 +6,18 @@ import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 import {
   buildSystemPrompt,
   parseCodeReviewVerdict,
+  parseCodeReviewState,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
 } from '../lib/codeReviewUtils';
+
+export {
+  parseCodeReviewVerdict,
+  parseCodeReviewState,
+  parseCodeReviewStateDetailed,
+  estimateMaxOutputTokens,
+};
 
 async function createModel(
   estimatedInputTokens: number = 0,
