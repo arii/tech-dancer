@@ -129,8 +129,9 @@ async function captureViewport(
   const beforePath = path.join(routeVisualDir, `before${suffix}.png`);
   const afterPath = path.join(routeVisualDir, `after${suffix}.png`);
   const diffPath = path.join(routeVisualDir, `diff${suffix}.png`);
-  const beforeHtmlPath = path.join(routeDomDir, `before${suffix}.html`);
-  const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
+  // Use unique directories for DOM captures to match how dom-diff and review clients expect them
+  const beforeHtmlPath = path.join(routeDomDir, `before.html`);
+  const afterHtmlPath = path.join(routeDomDir, `after.html`);
 
   console.log(`📸 Capturing ${route} (${label})`);
   await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
@@ -165,7 +166,7 @@ async function captureViewport(
 
   return {
     route: suffix ? `${route} (${label.toLowerCase()})` : route,
-    slug: `${slug}${suffix}`,
+    slug,
     beforePath: path.relative(process.cwd(), beforePath),
     afterPath: path.relative(process.cwd(), afterPath),
     diffPath: path.relative(process.cwd(), diffPath),
@@ -230,14 +231,24 @@ async function main(): Promise<void> {
     for (const route of routes) {
       const slug = routeToSlug(route);
       const routeVisualDir = path.join(VISUAL_REVIEW_DIR, slug);
-      const routeDomDir = path.join(DOM_REVIEW_DIR, slug);
       ensureDirectory(routeVisualDir);
-      ensureDirectory(routeDomDir);
 
-      const desktopSummary = await captureViewport(baseUrl, headUrl, route, slug, 'Desktop', '', { width: 1440, height: 900 }, routeVisualDir, routeDomDir);
-      desktopSummary.slug = `${slug}-desktop`; // Maintain exact slug formatting from before
+      const desktopSlug = `${slug}-desktop`;
+      const mobileSlug = `${slug}-mobile`;
+      const desktopDomDir = path.join(DOM_REVIEW_DIR, desktopSlug);
+      const mobileDomDir = path.join(DOM_REVIEW_DIR, mobileSlug);
+      ensureDirectory(desktopDomDir);
+      ensureDirectory(mobileDomDir);
 
-      const mobileSummary = await captureViewport(baseUrl, headUrl, route, slug, 'Mobile', '-mobile', { width: 375, height: 812 }, routeVisualDir, routeDomDir);
+      const desktopSummary = await captureViewport(
+        baseUrl, headUrl, route, desktopSlug, 'Desktop', '',
+        { width: 1440, height: 900 }, routeVisualDir, desktopDomDir
+      );
+
+      const mobileSummary = await captureViewport(
+        baseUrl, headUrl, route, mobileSlug, 'Mobile', '-mobile',
+        { width: 375, height: 812 }, routeVisualDir, mobileDomDir
+      );
 
       summaries.push(desktopSummary, mobileSummary);
     }
