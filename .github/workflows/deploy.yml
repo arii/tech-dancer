@@ -134,13 +134,13 @@ jobs:
           gh pr list --limit 1000 --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
 
           for i in $(seq 1 "$MAX_RETRIES"); do
-            if [ $i -gt 1 ]; then
+            if [ "$i" -gt 1 ]; then
               # Exponential backoff with random jitter to reduce collision probability
               # during high contention on the shared gh-pages branch.
               JITTER=$(( RANDOM % 15 ))
               SLEEP_TIME=$(( (i - 1) * 10 + JITTER ))
               echo "Attempt $((i-1)) failed. Retrying in ${SLEEP_TIME}s..."
-              sleep $SLEEP_TIME
+              sleep "$SLEEP_TIME"
             fi
 
             echo "Deployment attempt $i..."
