@@ -1,7 +1,28 @@
+export interface ReviewFinding {
+  id: string;
+  file: string;
+  line?: number;
+  snippet?: string;
+  issue: string;
+  status: 'open' | 'resolved';
+  fixSummary?: string;
+}
+
+export interface CodeReviewState {
+  findings: ReviewFinding[];
+}
+
 export interface CodeReviewSummary {
-  files: string[];
   diffContext: string;
+  fullDiff?: string;
   prGoal?: string;
+  externalContext?: string;
+  previousState?: CodeReviewState;
+}
+
+export interface ParsedFindingsResult {
+  state?: CodeReviewState;
+  parseError?: 'missing_closing_tag' | 'invalid_json';
 }
 
 export interface CodeReviewResult {
@@ -9,4 +30,8 @@ export interface CodeReviewResult {
   tokens: number;
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
+  state?: CodeReviewState;
+  modelName?: string;
+  truncated?: boolean;
+  parseError?: 'missing_closing_tag' | 'invalid_json';
 }
