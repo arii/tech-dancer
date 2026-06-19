@@ -1,9 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visualReviewConstants';
-import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
-import type { RouteReview, VisualRouteSummary, VisualSummary } from './visualReviewTypes';
-import { execSync } from 'child_process';
+import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
+import type { RouteReview, VisualRouteSummary, VisualSummary, VisualReviewState } from './visualReviewTypes';
 
 export interface LLMClientStrategy {
   botName: string;
@@ -13,7 +12,7 @@ export interface LLMClientStrategy {
   invokeReview: (summary: VisualRouteSummary) => Promise<RouteReview>;
 }
 
-const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '1', 10);
+const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
 export async function orchestrateVisualReview(
   client: LLMClientStrategy,
@@ -28,43 +27,52 @@ export async function orchestrateVisualReview(
       agentReportPath,
       `## ${client.reportTitle}\n\nSkipped: review quota (${MAX_REVIEWS_PER_PR}) already met.\n`
     );
-    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
+    const prevState = await getPreviousReviewState<VisualReviewState>(client.reportTitle);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
     return;
   }
 
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
     console.warn('⚠️  Skipping agent review — missing visual summary. Run pnpm impact:visual-diff first.');
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nSkipped: Missing visual summary.\n`);
-    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
+    const prevState = await getPreviousReviewState<VisualReviewState>(client.reportTitle);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
     return;
   }
 
   const summary: VisualSummary = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8'));
 
-  let repoContext = '';
-  try {
-    const ciFailureSchema = JSON.parse(fs.readFileSync('docs/agent/ci-failure.schema.json', 'utf8'));
-    const cliSchema = JSON.parse(fs.readFileSync('dev-tools/cli-schema.json', 'utf8'));
-    let contextData: Record<string, unknown> = { schemas: { 'ci-failure': ciFailureSchema, cli: cliSchema } };
+  // Load previous state and handle auto-resolution
+  const prevState = await getPreviousReviewState<VisualReviewState>(client.reportTitle);
+  if (prevState?.findings && Array.isArray(prevState.findings)) {
+    for (const routeSummary of summary.routes) {
+      const relevantFindings = prevState.findings.filter(f => f.route === routeSummary.route);
 
-    if (fs.existsSync('scripts/build-repo-context.py')) {
-      const output = execSync('python3 scripts/build-repo-context.py', { encoding: 'utf-8' });
-      if (output.trim()) {
-        try {
-          const parsed = JSON.parse(output);
-          contextData = { ...contextData, ...parsed };
-        } catch (e) {
-          console.error('Invalid JSON output from build-repo-context.py:', e);
+      // Auto-resolution: if pixel diff is low, mark all previous findings for this route as resolved
+      if (routeSummary.differencePercent < 1.5) {
+        for (const finding of relevantFindings) {
+          if (finding.status === 'open') {
+            finding.status = 'resolved';
+            finding.fixSummary = 'Jules response: pixel difference is now below threshold (1.5%).';
+            console.log(`✅ Auto-resolved visual finding for ${routeSummary.route}: ${finding.issue}`);
+          }
         }
       }
-    }
-    repoContext = JSON.stringify(contextData);
-  } catch (error) {
-    console.warn('Could not generate repo context:', error);
-  }
 
-  for (const route of summary.routes) {
-    route.repoContext = repoContext;
+      routeSummary.previousFindings = relevantFindings;
+    }
   }
 
   // Only review routes with actual visual changes
@@ -103,8 +111,21 @@ export async function orchestrateVisualReview(
   fs.writeFileSync(agentReportPath, report);
   console.log(`✅ Local report written to ${agentReportPath}`);
 
+  // Collect all findings from all reviews and merge with previous state to avoid loss
+  const currentFindings = reviews.flatMap(r => r.findings || []);
+  const currentIds = new Set(currentFindings.map(f => f.id));
+
+  const state: VisualReviewState = { findings: currentFindings };
+  if (prevState?.findings) {
+    const missingFindings = prevState.findings.filter(f => !currentIds.has(f.id));
+    if (missingFindings.length > 0) {
+      console.log(`♻️  Restoring ${missingFindings.length} visual findings for untouched routes.`);
+      state.findings.push(...missingFindings);
+    }
+  }
+
   // Post to GitHub PR
-  await postPRComment(report, client.reportTitle);
+  await postPRComment(report, client.reportTitle, state);
 
   // Also alert Jules if this PR is from a Jules session
   const julesSessionId = await getJulesSessionIdFromPR();
@@ -129,7 +150,8 @@ export async function orchestrateVisualReview(
   fs.writeFileSync(verdictPath, JSON.stringify({
     passed: !hasBlockingIssues,
     highCount: reviews.filter(r => r.severity === 'HIGH').length,
-    routes: reviews.map(r => ({ route: r.route, severity: r.severity, llmVerdict: r.llmVerdict }))
+    routes: reviews.map(r => ({ route: r.route, severity: r.severity, llmVerdict: r.llmVerdict })),
+    state
   }, null, 2));
 
   if (hasBlockingIssues) {
