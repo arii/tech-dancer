@@ -277,7 +277,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={4} width="full">
+                  <Box marginY={6} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
@@ -290,7 +290,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={4} width="full">
+                  <Box marginY={6} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );

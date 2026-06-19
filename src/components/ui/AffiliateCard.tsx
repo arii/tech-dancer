@@ -36,11 +36,13 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
             align="center"
             justify="center"
           >
-            <img
+            <Box
+              as="img"
               src={link.image}
               alt={link.name}
+              width="full"
+              height="full"
               className={cn(
-                "max-w-full max-h-full",
                 link.imageMode === 'contain' ? 'object-contain' : 'object-cover'
               )}
               loading="lazy"
@@ -61,9 +63,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
             variant="body"
             size="base"
             weight="font-bold"
-            clamp={2}
-            display="block"
-            className="group-hover:text-accent transition-colors relative z-20 pointer-events-none"
+            className="line-clamp-2 group-hover:text-accent transition-colors relative z-20 pointer-events-none"
           >
             {link.name}
           </Text>
@@ -72,9 +72,7 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
             variant="body"
             size="xs"
             color="dim"
-            clamp={2}
-            display="block"
-            className="leading-relaxed relative z-20 pointer-events-none"
+            className="line-clamp-2 leading-relaxed relative z-20 pointer-events-none"
           >
             {link.description}
           </Text>
