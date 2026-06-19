@@ -170,9 +170,18 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   if (!response.ok) return 0;
 
   const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
-  return comments.filter(c =>
-    c.user.type === 'Bot' && reportTitles.some(title => c.body.includes(`## ${title}`))
-  ).length;
+  let totalReviews = 0;
+  for (const c of comments) {
+    if (c.user.type === 'Bot' && reportTitles.some(title => c.body.includes(`## ${title}`))) {
+      const match = c.body.match(/<!-- ai-review-count: (\d+) -->/);
+      if (match) {
+        totalReviews += parseInt(match[1], 10);
+      } else {
+        totalReviews += 1;
+      }
+    }
+  }
+  return totalReviews;
 }
 
 export async function postPRComment(body: string, reportTitle: string): Promise<void> {
@@ -206,6 +215,11 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
     );
 
     if (existingComment) {
+      const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
+      const currentCount = match ? parseInt(match[1], 10) : 1;
+      const newCount = currentCount + 1;
+      const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${body}`;
+
       const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
       const updateResponse = await fetch(updateUrl, {
         method: 'PATCH',
@@ -214,7 +228,7 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
           Accept: 'application/vnd.github+json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ body }),
+        body: JSON.stringify({ body: updatedBody }),
       });
 
       if (!updateResponse.ok) {
@@ -227,6 +241,8 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
     }
   }
 
+  const newBody = `<!-- ai-review-count: 1 -->\n${body}`;
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -234,7 +250,7 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ body }),
+    body: JSON.stringify({ body: newBody }),
   });
 
   if (!response.ok) {
