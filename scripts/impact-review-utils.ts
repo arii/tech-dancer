@@ -24,7 +24,8 @@ export const VisualRouteSummarySchema = z.object({
   differencePercent: z.number(),
   severity: z.enum(['LOW', 'MEDIUM', 'HIGH'])
 });
-export type VisualRouteSummary = z.infer<typeof VisualRouteSummarySchema>;
+import type { VisualRouteSummary as ExtVisualRouteSummary } from "./lib/visualReviewTypes";
+export type VisualRouteSummary = ExtVisualRouteSummary;
 
 export const DomRouteSummarySchema = z.object({
   route: z.string(), slug: z.string(),
