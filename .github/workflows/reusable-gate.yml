@@ -28,39 +28,22 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
           BEFORE_SHA: ${{ github.event.before }}
         run: |
+          # Define the diff range based on event type
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            echo "Comparing against base branch: $BASE_REF"
             git fetch origin "$BASE_REF"
-            if git diff --quiet "origin/$BASE_REF...HEAD"; then
-              echo "has_changes=false" >> "$GITHUB_OUTPUT"
-              echo "❌ Empty pull request detected! No code files modified."
-            else
-              echo "has_changes=true" >> "$GITHUB_OUTPUT"
-              echo "✅ Valid pull request found with actual file changes."
-            fi
+            RANGE="origin/$BASE_REF...HEAD"
           else
-            # For pushes, compare the push range to ignore empty metadata patches
-            # Default to checking against previous commit if before_sha is missing/empty
-            DIFF_TARGET="HEAD~1"
-            if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
-               # New branch or tag, check against parent if it exists
-               if ! git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
-                 DIFF_TARGET=""
-               fi
-            else
-               DIFF_TARGET="$BEFORE_SHA"
+            RANGE="$BEFORE_SHA"
+            # Fallback to parent if range is missing or null
+            if [ -z "$RANGE" ] || [ "$RANGE" = "0000000000000000000000000000000000000000" ]; then
+              RANGE="HEAD~1"
+              if ! git rev-parse --verify HEAD~1 >/dev/null 2>&1; then RANGE=""; fi
             fi
+          fi
 
-            if [ -n "$DIFF_TARGET" ]; then
-              if git diff --quiet "$DIFF_TARGET" HEAD; then
-                echo "has_changes=false" >> "$GITHUB_OUTPUT"
-                echo "❌ Empty commit detected! No code files modified."
-              else
-                echo "has_changes=true" >> "$GITHUB_OUTPUT"
-                echo "✅ Valid patch found with actual file changes."
-              fi
-            else
-              echo "has_changes=true" >> "$GITHUB_OUTPUT"
-              echo "✅ Initial commit found."
-            fi
+          # Perform the diff check
+          if [ -n "$RANGE" ] && git diff --quiet "$RANGE" HEAD; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
