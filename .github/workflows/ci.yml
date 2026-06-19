@@ -73,15 +73,17 @@ jobs:
       - name: Validate Runtime
         run: |
           echo "::group::Validate Runtime"
+          trap 'echo "::endgroup::"' EXIT
           pnpm run check:runtime-files
           pnpm run doctor
-          echo "::endgroup::"
 
       - name: Verify lockfile integrity
         run: |
-          echo "::group::pnpm install"
-          pnpm install --frozen-lockfile
-          echo "::endgroup::"
+          (
+            echo "::group::pnpm install"
+            trap 'echo "::endgroup::"' EXIT
+            pnpm install --frozen-lockfile
+          )
           if ! git diff --quiet pnpm-lock.yaml; then
             echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
             exit 1
@@ -99,8 +101,8 @@ jobs:
       - name: Run CLI Unit Tests
         run: |
           echo "::group::Pytest"
+          trap 'echo "::endgroup::"' EXIT
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
-          echo "::endgroup::"
 
       - name: Check for dead code
         env:
@@ -110,10 +112,10 @@ jobs:
       - name: TypeScript `any` Ratchet
         run: |
           echo "::group::Ratchet Any"
+          trap 'echo "::endgroup::"' EXIT
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh ratchet-any
-          echo "::endgroup::"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -133,19 +135,19 @@ jobs:
       - name: Install dependencies
         run: |
           echo "::group::pnpm install"
+          trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
-          echo "::endgroup::"
 
       - name: UI Anti-Pattern Audit - Gate
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::group::Audit"
+          trap 'echo "::endgroup::"' EXIT
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
           if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
           python3 dev-tools/td_cli.py gh audit-gate
-          echo "::endgroup::"
 
       - name: Design Token Compliance
         run: |
