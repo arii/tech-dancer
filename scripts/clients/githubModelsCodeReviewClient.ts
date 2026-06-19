@@ -1,6 +1,6 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from '../lib/codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, ParsedFindingsResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
@@ -97,14 +97,24 @@ export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'war
 }
 
 export function parseCodeReviewState(feedback: string): CodeReviewState | undefined {
+  return parseCodeReviewStateDetailed(feedback).state;
+}
+
+export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
   const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
-  if (!match) return undefined;
+  if (!match) {
+    // Did the model even attempt a findings block? If <findings> opened but
+    // never closed, that's a strong truncation signal distinct from
+    // "the model chose not to include findings."
+    const openedButNeverClosed = /<findings>/.test(feedback);
+    return { parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
+  }
 
   try {
-    return JSON.parse(match[1].trim()) as CodeReviewState;
+    return { state: JSON.parse(match[1].trim()) as CodeReviewState };
   } catch (e) {
     console.warn('Failed to parse findings JSON from LLM response:', e);
-    return undefined;
+    return { parseError: 'invalid_json' };
   }
 }
 
@@ -193,24 +203,28 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     const cost = 0;
 
-    const finishReason = response.response_metadata?.finish_reason;
+    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
+      .response_metadata?.finish_reason;
     const isTruncated = finishReason === 'length';
     if (isTruncated) {
-      console.warn('⚠️  Model output was truncated (finish_reason: length) — findings may be incomplete.');
+      console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
     const feedback = typeof response.content === 'string'
       ? response.content
       : JSON.stringify(response.content);
 
+    const parsedState = parseCodeReviewStateDetailed(feedback);
+
     return {
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
-      state: parseCodeReviewState(feedback),
+      state: parsedState.state,
       modelName: modelName,
       truncated: isTruncated,
+      parseError: parsedState.parseError,
     };
   }
 };

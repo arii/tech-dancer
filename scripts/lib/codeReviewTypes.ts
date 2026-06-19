@@ -20,6 +20,11 @@ export interface CodeReviewSummary {
   previousState?: CodeReviewState;
 }
 
+export interface ParsedFindingsResult {
+  state?: CodeReviewState;
+  parseError?: 'missing_closing_tag' | 'invalid_json';
+}
+
 export interface CodeReviewResult {
   feedback: string;
   tokens: number;
@@ -28,4 +33,5 @@ export interface CodeReviewResult {
   state?: CodeReviewState;
   modelName?: string;
   truncated?: boolean;
+  parseError?: 'missing_closing_tag' | 'invalid_json';
 }

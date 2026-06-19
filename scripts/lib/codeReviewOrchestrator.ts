@@ -298,6 +298,25 @@ export async function orchestrateCodeReview(
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
   let reviewResult = await client.invokeReview(summary);
+
+  // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
+  // A cut-off <findings> block, or a verdict tag that got chopped off the end,
+  // both currently degrade to the parser's default ('pass', undefined state) —
+  // which would let real bugs slip through with zero signal anyone is missing.
+  if (reviewResult.truncated || reviewResult.parseError) {
+    const reason = reviewResult.truncated 
+      ? "was truncated before completion (likely an output token limit)"
+      : `had a malformed findings block (parse error: ${reviewResult.parseError})`;
+    console.error(
+      `❌ ${client.botName} output ${reason} — treating as inconclusive, not PASS.`
+    );
+    reviewResult = {
+      ...reviewResult,
+      llmVerdict: 'warn',
+      feedback: `${reviewResult.feedback}\n\n---\n⚠️ **Review incomplete:** the model's response ${reason}. This review could not verify all findings and should not be treated as a clean pass. Consider re-running.`,
+    };
+  }
+
   reviewResult = reconcileVerdict(reviewResult, summary.fullDiff || summary.diffContext);
 
 
@@ -361,13 +380,11 @@ function reconcileVerdict(
   result: CodeReviewResult,
   diffForVerification: string
 ): CodeReviewResult {
-  if (result.truncated) {
-    console.warn(`⚠️  Model output was truncated! Overriding verdict to FAIL to prevent merging unverified changes.`);
-    return {
-      ...result,
-      llmVerdict: 'fail',
-      feedback: result.feedback + '\n\n⚠️ **WARNING: Code review response was truncated due to token limit constraints. Verdict was forced to FAIL to ensure code quality.**'
-    };
+  // If we couldn't parse findings at all but the model's prose still claims
+  // a FAIL, that's a parsing/format failure, not evidence — don't trust it blind.
+  if (result.llmVerdict === 'fail' && !result.state) {
+    console.warn(`⚠️  FAIL verdict with no parseable findings — downgrading to WARN.`);
+    return { ...result, llmVerdict: 'warn' };
   }
 
   if (result.llmVerdict !== 'fail' || !result.state?.findings?.length) {

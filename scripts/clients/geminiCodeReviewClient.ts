@@ -1,6 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseCodeReviewVerdict, parseCodeReviewState, estimateMaxOutputTokens } from './githubModelsCodeReviewClient';
+import { parseCodeReviewVerdict, parseCodeReviewStateDetailed, estimateMaxOutputTokens } from './githubModelsCodeReviewClient';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
@@ -126,23 +126,27 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
 
-    const finishReason = response.response_metadata?.finish_reason;
+    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
+      .response_metadata?.finish_reason;
     const isTruncated = finishReason === 'length';
     if (isTruncated) {
-      console.warn('⚠️  Model output was truncated (finish_reason: length) — findings may be incomplete.');
+      console.warn(`⚠️  gemini-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
     const feedback = typeof response.content === 'string'
       ? response.content
       : JSON.stringify(response.content);
 
+    const parsedState = parseCodeReviewStateDetailed(feedback);
+
     return {
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
-      state: parseCodeReviewState(feedback),
+      state: parsedState.state,
       truncated: isTruncated,
+      parseError: parsedState.parseError,
     };
   }
 };
