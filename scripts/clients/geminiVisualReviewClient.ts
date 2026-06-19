@@ -22,7 +22,7 @@ function createModel(): ChatGoogleGenerativeAI {
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-3.5-flash',
+    model: 'gemini-1.5-flash',
     apiKey,
     maxOutputTokens: 1024,
   });
