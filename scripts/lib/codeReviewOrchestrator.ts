@@ -140,9 +140,9 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
-    const maxChars = 20000;
+    const maxChars = 60000;
     const diffContext = rawDiff.length > maxChars
-      ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
+      ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM — diff continues beyond this point, do not assume missing context means missing code]'
       : rawDiff;
 
     const fullDiff = rawDiff;
@@ -218,10 +218,12 @@ export function generateCodeReviewMarkdown(
   const prNumber = process.env.PR_NUMBER;
   const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
 
+  // AFTER
   let costLine = '';
   if (result.cost > 0) {
     costLine = `**Cost:** ~$${result.cost.toFixed(5)} (${result.tokens} tokens)\n`;
   }
+  const modelLine = result.modelName ? `**Model:** ${result.modelName}\n` : '';
 
   return `## ${client.reportTitle}
 
@@ -229,6 +231,7 @@ export function generateCodeReviewMarkdown(
 
 **Reviewing:** ${prLink}
 ${costLine}
+${modelLine}
 
 ### Code Review Feedback
 ${result.feedback}
@@ -294,7 +297,9 @@ export async function orchestrateCodeReview(
 
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
-  const reviewResult = await client.invokeReview(summary);
+  let reviewResult = await client.invokeReview(summary);
+  reviewResult = reconcileVerdict(reviewResult, summary.fullDiff || summary.diffContext);
+
 
   // Merge findings in orchestrator instead of relying solely on LLM
   // This prevents data loss if LLM forgets to echo back some findings
@@ -341,4 +346,41 @@ export async function orchestrateCodeReview(
     console.error(`❌ Code review returned FAIL — failing CI.`);
     process.exit(1);
   }
+}
+
+
+const HEDGE_PATTERN = /\b(may|might|could|possibly|unless|if not handled|potentially|likely)\b/i;
+
+/**
+ * Defends against the LLM ignoring its own severity rules: downgrades a FAIL
+ * verdict to WARN if every finding backing it either (a) contains hedge
+ * language the prompt explicitly says is non-blocking, or (b) cites a
+ * snippet that doesn't actually appear in the diff it was given.
+ */
+function reconcileVerdict(
+  result: CodeReviewResult,
+  diffForVerification: string
+): CodeReviewResult {
+  if (result.llmVerdict !== 'fail' || !result.state?.findings?.length) {
+    return result;
+  }
+
+  const newFindings = result.state.findings.filter(f => f.status !== 'resolved');
+  if (newFindings.length === 0) return result;
+
+  const hasCredibleBlocker = newFindings.some(f => {
+    const text = `${f.issue} ${f.fixSummary ?? ''}`;
+    if (HEDGE_PATTERN.test(text)) return false;
+    if (f.snippet && !diffForVerification.includes(f.snippet)) return false;
+    return true;
+  });
+
+  if (!hasCredibleBlocker) {
+    console.warn(
+      `⚠️  Downgrading FAIL→WARN: no finding had both verifiable evidence and non-hedged language.`
+    );
+    return { ...result, llmVerdict: 'warn' };
+  }
+
+  return result;
 }

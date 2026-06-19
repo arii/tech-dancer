@@ -26,4 +26,5 @@ export interface CodeReviewResult {
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
   state?: CodeReviewState;
+  modelName?: string;
 }

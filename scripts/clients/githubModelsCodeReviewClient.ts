@@ -108,22 +108,24 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
   }
 }
 
-async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI> {
+
+async function createModel(estimatedInputTokens: number = 0): Promise<{ model: ChatOpenAI; modelName: string }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
   const modelName = await pickOptimalModel(apiKey, fallback, false, estimatedInputTokens);
+  console.log(`📌 github-models-code-review using model: ${modelName}`);
 
-  return new ChatOpenAI({
+  const model = new ChatOpenAI({
     modelName: modelName,
     apiKey: apiKey,
-    configuration: {
-      baseURL: 'https://models.inference.ai.azure.com',
-    },
+    configuration: { baseURL: 'https://models.inference.ai.azure.com' },
     maxTokens: 1024,
     temperature: 0.1,
   });
+
+  return { model, modelName };
 }
 
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
@@ -134,7 +136,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const estimatedInputTokens = Math.ceil(summary.diffContext.length / 4);
-    const model = await createModel(estimatedInputTokens);
+    const { model, modelName } = await createModel(estimatedInputTokens);
     const baseContent = [
       { type: 'text', text: buildSystemPrompt(summary) } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
@@ -168,6 +170,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parseCodeReviewState(feedback),
+      modelName: modelName,
     };
   }
 };
