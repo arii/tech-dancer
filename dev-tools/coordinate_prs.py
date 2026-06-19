@@ -16,9 +16,10 @@ def get_pr_comments_and_reviews(pr: Any) -> str:
         comments_data.append(f"Comment by {c.user.login}: {c.body}")
     for c in pr.get_review_comments():
         comments_data.append(f"Review comment by {c.user.login} on {c.path}: {c.body}")
-    for r in pr.get_reviews():
-        if r.body:
-            comments_data.append(f"Review by {r.user.login} ({r.state}): {r.body}")
+    if hasattr(pr, 'get_reviews'):
+        for r in pr.get_reviews():
+            if r.body:
+                comments_data.append(f"Review by {r.user.login} ({r.state}): {r.body}")
     return "\n".join(comments_data[-10:])
 
 def get_open_prs(limit=25):
@@ -183,7 +184,12 @@ Respond strictly with a JSON object following this schema. Do not include markdo
             response = match.group(1).strip()
 
         # Fallback to straight json parsing if no markdown blocks
-        return json.loads(response)
+        parsed = json.loads(response)
+        if isinstance(parsed, dict):
+            return parsed
+        else:
+            print("Warning: LLM returned JSON that is not a dictionary.", file=sys.stderr)
+            return {}
     except Exception as e:
         print(f"Failed to parse LLM response: {e}\nRaw response: {response}", file=sys.stderr)
         return {}
