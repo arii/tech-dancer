@@ -91,7 +91,7 @@ describe('codeReviewUtils', () => {
       const summary: CodeReviewSummary = {
         diffContext: '',
         previousState: {
-          findings: Array.from({ length: 5 }).fill({ id: 'f', file: 'f.ts', issue: 'i', status: 'open' }) as ReviewFinding[]
+          findings: Array.from({ length: 5 }, (_, i) => ({ id: `f-${i}`, file: 'f.ts', issue: 'i', status: 'open' })) as ReviewFinding[]
         }
       };
       // 1500 + 5 * 200 = 2500
@@ -102,7 +102,7 @@ describe('codeReviewUtils', () => {
       const summary: CodeReviewSummary = {
         diffContext: '',
         previousState: {
-          findings: Array.from({ length: 20 }).fill({ id: 'f', file: 'f.ts', issue: 'i', status: 'open' }) as ReviewFinding[]
+          findings: Array.from({ length: 20 }, (_, i) => ({ id: `f-${i}`, file: 'f.ts', issue: 'i', status: 'open' })) as ReviewFinding[]
         }
       };
       expect(estimateMaxOutputTokens(summary)).toBe(4096);
