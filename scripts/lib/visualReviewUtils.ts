@@ -189,21 +189,32 @@ export async function getPreviousReviewState<T>(reportTitle: string): Promise<T 
 
   if (!token || !repo || !prNumber) return undefined;
 
-  const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
-  });
+  let url: string | null = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments?per_page=100`;
+  let existingComment: { body: string; user: { type: string } } | undefined;
 
-  if (!response.ok) return undefined;
+  while (url) {
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+    });
 
-  const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
-  const existingComment = comments.find(c =>
-    c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
-  );
+    if (!response.ok) return undefined;
+
+    const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
+    existingComment = comments.find(c =>
+      c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
+    );
+
+    if (existingComment) break;
+
+    // Handle pagination
+    const linkHeader = response.headers.get('Link');
+    const nextMatch = linkHeader?.match(/<([^>]+)>;\s*rel="next"/);
+    url = nextMatch ? nextMatch[1] : null;
+  }
 
   if (!existingComment) return undefined;
 
-  const stateMatch = existingComment.body.match(/<!-- ai-review-state: (.*) -->/);
+  const stateMatch = existingComment.body.match(/<!-- ai-review-state: (.*?) -->/);
   if (!stateMatch) return undefined;
 
   try {

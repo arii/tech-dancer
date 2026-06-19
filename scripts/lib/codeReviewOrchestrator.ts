@@ -159,6 +159,18 @@ export async function orchestrateCodeReview(
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
   const reviewResult = await client.invokeReview(summary);
+
+  // Merge findings in orchestrator instead of relying solely on LLM
+  // This prevents data loss if LLM forgets to echo back some findings
+  if (reviewResult.state && summary.previousState) {
+    const existingIds = new Set(reviewResult.state.findings.map(f => f.id));
+    const missingFindings = summary.previousState.findings.filter(f => !existingIds.has(f.id));
+    if (missingFindings.length > 0) {
+      console.log(`♻️  Restoring ${missingFindings.length} findings omitted by LLM.`);
+      reviewResult.state.findings.push(...missingFindings);
+    }
+  }
+
   const report = generateCodeReviewMarkdown(reviewResult, client);
 
   // Write local report
