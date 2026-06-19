@@ -27,4 +27,5 @@ export interface CodeReviewResult {
   llmVerdict?: 'pass' | 'fail' | 'warn';
   state?: CodeReviewState;
   modelName?: string;
+  truncated?: boolean;
 }

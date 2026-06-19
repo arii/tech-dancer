@@ -2,7 +2,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
-import { pickOptimalModel } from '../lib/modelPicker';
+import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
 function buildSystemPrompt(summary: CodeReviewSummary): string {
   const goalSection = summary.prGoal
@@ -109,19 +109,51 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
 }
 
 
-async function createModel(estimatedInputTokens: number = 0): Promise<{ model: ChatOpenAI; modelName: string }> {
+export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
+  // Base budget covers prose review + a couple findings.
+  let budget = 1500;
+
+  // Each existing finding the model needs to echo back (resolved or not)
+  // costs real output tokens. Scale up so large finding sets don't truncate.
+  const priorFindingsCount = summary.previousState?.findings.length ?? 0;
+  budget += priorFindingsCount * 200;
+
+  // Larger diffs tend to surface more findings worth writing about.
+  const diffSizeTokens = Math.ceil(summary.diffContext.length / 4);
+  if (diffSizeTokens > 4000) budget += 1000;
+
+  // Hard ceiling — avoid runaway cost/latency on pathological inputs.
+  return Math.min(budget, 4096);
+}
+
+async function createModel(
+  estimatedInputTokens: number = 0,
+  maxOutputTokens: number = 1500
+): Promise<{ model: ChatOpenAI; modelName: string }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
   const modelName = await pickOptimalModel(apiKey, fallback, false, estimatedInputTokens);
-  console.log(`📌 github-models-code-review using model: ${modelName}`);
+
+  let finalMaxTokens = maxOutputTokens;
+  try {
+    const models = await getAvailableModels(apiKey);
+    const matchedModel = models.find(m => m.id === modelName || m.id.includes(modelName));
+    if (matchedModel?.limits?.max_output_tokens) {
+      finalMaxTokens = Math.min(finalMaxTokens, matchedModel.limits.max_output_tokens);
+    }
+  } catch (err) {
+    console.warn('⚠️ Could not check model limits from catalog, falling back to budgeted tokens:', err);
+  }
+
+  console.log(`📌 github-models-code-review using model: ${modelName}, maxOutputTokens: ${finalMaxTokens}`);
 
   const model = new ChatOpenAI({
     modelName: modelName,
     apiKey: apiKey,
     configuration: { baseURL: 'https://models.inference.ai.azure.com' },
-    maxTokens: 1024,
+    maxTokens: finalMaxTokens,
     temperature: 0.1,
   });
 
@@ -136,7 +168,8 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const estimatedInputTokens = Math.ceil(summary.diffContext.length / 4);
-    const { model, modelName } = await createModel(estimatedInputTokens);
+    const maxOutputTokens = estimateMaxOutputTokens(summary);
+    const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
     const baseContent = [
       { type: 'text', text: buildSystemPrompt(summary) } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
@@ -160,6 +193,12 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     const cost = 0;
 
+    const finishReason = response.response_metadata?.finish_reason;
+    const isTruncated = finishReason === 'length';
+    if (isTruncated) {
+      console.warn('⚠️  Model output was truncated (finish_reason: length) — findings may be incomplete.');
+    }
+
     const feedback = typeof response.content === 'string'
       ? response.content
       : JSON.stringify(response.content);
@@ -171,6 +210,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parseCodeReviewState(feedback),
       modelName: modelName,
+      truncated: isTruncated,
     };
   }
 };

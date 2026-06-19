@@ -361,6 +361,15 @@ function reconcileVerdict(
   result: CodeReviewResult,
   diffForVerification: string
 ): CodeReviewResult {
+  if (result.truncated) {
+    console.warn(`⚠️  Model output was truncated! Overriding verdict to FAIL to prevent merging unverified changes.`);
+    return {
+      ...result,
+      llmVerdict: 'fail',
+      feedback: result.feedback + '\n\n⚠️ **WARNING: Code review response was truncated due to token limit constraints. Verdict was forced to FAIL to ensure code quality.**'
+    };
+  }
+
   if (result.llmVerdict !== 'fail' || !result.state?.findings?.length) {
     return result;
   }

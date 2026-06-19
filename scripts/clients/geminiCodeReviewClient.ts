@@ -1,6 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseCodeReviewVerdict, parseCodeReviewState } from './githubModelsCodeReviewClient';
+import { parseCodeReviewVerdict, parseCodeReviewState, estimateMaxOutputTokens } from './githubModelsCodeReviewClient';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
@@ -84,14 +84,14 @@ Ensure 'snippet' is a unique string from the diff that identifies the issue.
 `;
 }
 
-function createModel(): ChatGoogleGenerativeAI {
+function createModel(maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
     model: 'gemini-1.5-flash',
     apiKey,
-    maxOutputTokens: 1024,
+    maxOutputTokens: maxOutputTokens,
   });
 }
 
@@ -102,7 +102,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'gemini-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
-    const model = createModel();
+    const maxOutputTokens = estimateMaxOutputTokens(summary);
+    const model = createModel(maxOutputTokens);
     const baseContent = [
       { type: 'text', text: buildSystemPrompt(summary) } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
@@ -125,6 +126,12 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
 
+    const finishReason = response.response_metadata?.finish_reason;
+    const isTruncated = finishReason === 'length';
+    if (isTruncated) {
+      console.warn('⚠️  Model output was truncated (finish_reason: length) — findings may be incomplete.');
+    }
+
     const feedback = typeof response.content === 'string'
       ? response.content
       : JSON.stringify(response.content);
@@ -135,6 +142,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parseCodeReviewState(feedback),
+      truncated: isTruncated,
     };
   }
 };

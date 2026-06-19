@@ -7,6 +7,7 @@ export interface GitHubModel {
   capabilities: string[];
   limits?: {
     max_input_tokens?: number;
+    max_output_tokens?: number;
   };
 }
 
