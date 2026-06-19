@@ -36,6 +36,7 @@ async function fetchPRGoal(): Promise<string | undefined> {
 }
 
 export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
+  const prGoal = await fetchPRGoal();
   try {
     let diffBase = ['origin/main...HEAD'];
 
@@ -46,14 +47,17 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       diffBase = ['HEAD~1', 'HEAD'];
     }
 
-    const excludeSpecs = IMPACT_CONFIG.LOW_IMPACT_PATHS.map(p => `:(exclude)${p}`);
+    const excludeSpecs = IMPACT_CONFIG.LOW_IMPACT_PATHS.map(p =>
+      p.endsWith('/') ? `:(exclude)${p}**` : `:(exclude)${p}`
+    );
 
     // Get reviewable files using git pathspecs
     const nameOnlyArgs = ['diff', '--name-only', ...diffBase, '--', ...excludeSpecs];
     const nameOnlyResult = spawnSync('git', nameOnlyArgs, { encoding: 'utf-8' });
 
-    if (nameOnlyResult.error) {
-      throw nameOnlyResult.error;
+    if (nameOnlyResult.error) throw nameOnlyResult.error;
+    if (nameOnlyResult.status !== 0) {
+      throw new Error(`git diff --name-only failed: ${nameOnlyResult.stderr}`);
     }
 
     const stdout = nameOnlyResult.stdout || '';
@@ -61,15 +65,16 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     if (reviewableFiles.length === 0) {
       console.log('ℹ️ No reviewable files found after filtering low-impact paths.');
-      return { files: [], diffContext: '' };
+      return { files: [], diffContext: '', prGoal };
     }
 
     // Get diff context for reviewable files only
     const diffArgs = ['diff', ...diffBase, '--', ...excludeSpecs];
     const diffResult = spawnSync('git', diffArgs, { encoding: 'utf-8' });
 
-    if (diffResult.error) {
-      throw diffResult.error;
+    if (diffResult.error) throw diffResult.error;
+    if (diffResult.status !== 0) {
+      throw new Error(`git diff failed: ${diffResult.stderr}`);
     }
 
     const rawDiff = diffResult.stdout;
@@ -80,8 +85,6 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
       : rawDiff;
 
-    const prGoal = await fetchPRGoal();
-
     return {
       files: reviewableFiles,
       diffContext,
@@ -89,7 +92,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '' };
+    return { files: [], diffContext: '', prGoal };
   }
 }
 
