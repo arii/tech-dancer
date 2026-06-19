@@ -28,9 +28,9 @@ PREVIOUS REVIEW ROUND FINDINGS:
 ${findingsStr}
 
 Your job:
-1. Confirm if 'open' issues are resolved.
-2. Only raise NEW issues if they are unrelated to already addressed ones or if the fix introduced a new problem.
-3. Do not re-open a 'resolved' issue under a different framing.
+- Confirm THIS issue is resolved before raising anything new.
+- Only raise a NEW issue if it is unrelated to anything already addressed, or if the fix for a previous issue introduced a new problem.
+- Do not re-open a resolved issue under a different framing.
 `;
   }
 
