@@ -90,9 +90,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     concurrency:
-      # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: true
+      # Serialise deployments to the shared gh-pages branch to avoid race conditions
+      group: deploy-gh-pages
+      cancel-in-progress: false
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v6
@@ -130,7 +130,7 @@ jobs:
 
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
-          gh pr list --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
+          gh pr list --limit 1000 --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
 
           for i in $(seq 1 "$MAX_RETRIES"); do
             echo "Deployment attempt $i..."
