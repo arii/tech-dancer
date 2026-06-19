@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
-import { getLatestPRComment, extractReviewState, formatReviewState } from '../../../scripts/lib/visualReviewUtils';
+import { getLatestPRComment, extractReviewState, formatReviewState, countExistingReviews } from '../../../scripts/lib/visualReviewUtils';
 import { ReviewState } from '../../../scripts/lib/codeReviewTypes';
 
 describe('getLatestPRComment', () => {
@@ -118,5 +118,54 @@ describe('ReviewState persistence', () => {
   it('returns null if state tag is malformed', () => {
     const extracted = extractReviewState('<!-- ai-review-state: invalid-base64!!! -->');
     expect(extracted).toBeNull();
+  });
+});
+
+describe('countExistingReviews', () => {
+  const mockToken = 'mock-token';
+  const mockRepo = 'owner/repo';
+  const mockPrNumber = '123';
+
+  beforeEach(() => {
+    vi.stubEnv('GITHUB_TOKEN', mockToken);
+    vi.stubEnv('GITHUB_REPOSITORY', mockRepo);
+    vi.stubEnv('PR_NUMBER', mockPrNumber);
+    global.fetch = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetAllMocks();
+  });
+
+  it('counts distinct bot comments regardless of internal counter', async () => {
+    const mockComments = [
+      { id: 1, body: 'User comment', user: { type: 'User' } },
+      { id: 2, body: '<!-- ai-review-count: 5 -->\n## Test Report', user: { type: 'Bot' } },
+      { id: 3, body: '<!-- ai-review-count: 2 -->\n## Test Report', user: { type: 'Bot' } },
+    ];
+
+    (global.fetch as Mock).mockResolvedValue({
+      ok: true,
+      json: async () => mockComments,
+    });
+
+    const count = await countExistingReviews(['Test Report']);
+    expect(count).toBe(2);
+  });
+
+  it('returns 0 if no matching bot comments exist', async () => {
+    const mockComments = [
+      { id: 1, body: 'User comment', user: { type: 'User' } },
+      { id: 2, body: '## Other Report', user: { type: 'Bot' } },
+    ];
+
+    (global.fetch as Mock).mockResolvedValue({
+      ok: true,
+      json: async () => mockComments,
+    });
+
+    const count = await countExistingReviews(['Test Report']);
+    expect(count).toBe(0);
   });
 });

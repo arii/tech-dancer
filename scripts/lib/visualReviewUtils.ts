@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
+import type { RouteReview, VisualRouteSummary, VisualReviewState } from './visualReviewTypes';
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
 import type { ReviewState } from './codeReviewTypes';
 
@@ -171,12 +171,7 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   let totalReviews = 0;
   for (const c of comments) {
     if (c.user.type === 'Bot' && reportTitles.some(title => c.body.includes(`## ${title}`))) {
-      const match = c.body.match(/<!-- ai-review-count: (\d+) -->/);
-      if (match) {
-        totalReviews += parseInt(match[1], 10);
-      } else {
-        totalReviews += 1;
-      }
+      totalReviews += 1;
     }
   }
   return totalReviews;
@@ -219,7 +214,7 @@ export async function getLatestPRComment(reportTitle: string): Promise<{ id: num
   }
 }
 
-export async function postPRComment(body: string, reportTitle: string): Promise<void> {
+export async function postPRComment(body: string, reportTitle: string, state?: ReviewState | VisualReviewState): Promise<void> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
@@ -235,7 +230,8 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
       const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
       const currentCount = match ? parseInt(match[1], 10) : 1;
       const newCount = currentCount + 1;
-      const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${body}`;
+      const stateTag = state ? formatReviewState(state) : "";
+      const updatedBody = `${stateTag}\n<!-- ai-review-count: ${newCount} -->\n${body}`;
 
       const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
       const updateResponse = await fetch(updateUrl, {
@@ -258,7 +254,8 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
   }
 
   const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
-  const newBody = `<!-- ai-review-count: 1 -->\n${body}`;
+  const stateTag = state ? formatReviewState(state) : "";
+  const newBody = `${stateTag}\n<!-- ai-review-count: 1 -->\n${body}`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -288,7 +285,13 @@ export function extractReviewState(body: string): ReviewState | null {
   }
 }
 
-export function formatReviewState(state: ReviewState): string {
+export function formatReviewState(state: ReviewState | VisualReviewState): string {
   const base64 = Buffer.from(JSON.stringify(state)).toString('base64');
   return `<!-- ai-review-state: ${base64} -->`;
+}
+
+export async function getPreviousReviewState<T>(reportTitle: string): Promise<T | null> {
+  const comment = await getLatestPRComment(reportTitle);
+  if (!comment) return null;
+  return extractReviewState(comment.body) as T | null;
 }

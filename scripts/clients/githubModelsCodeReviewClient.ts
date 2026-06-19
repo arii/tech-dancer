@@ -12,12 +12,12 @@ function buildSystemPrompt(summary: CodeReviewSummary): string {
 `
     : '';
 
-  const incrementalDiffSection = summary.incrementalDiff
+  const incrementalDiffSection = summary.incrementalDiff !== undefined
     ? `INCREMENTAL DIFF (since last review at ${summary.history?.[0]?.sha.slice(0, 7)}):
 This diff shows ONLY what has changed since your last review. Use it to verify fixes.
----
+${summary.incrementalDiff.trim() ? `---
 ${summary.incrementalDiff}
----
+---` : "(The incremental diff is empty, meaning no changes have occurred since your last review.)"}
 
 `
     : '';
@@ -27,7 +27,7 @@ ${summary.incrementalDiff}
 The following review was provided on a previous iteration of this PR.
 Use it to perform a DIFFERENTIAL REVIEW:
 1. Acknowledge fixed issues (e.g., "The type safety issue previously flagged is now resolved"). Use the INCREMENTAL DIFF above to verify.
-2. Only re-flag persistent issues if they were not addressed or if the fix is incomplete.
+2. Only re-flag persistent issues if they were not addressed or if the fix is incomplete. (Note: If the INCREMENTAL DIFF is empty, previously raised issues are likely still present).
 3. Maintain consistency in your verdict; do not reverse a PASS to a FAIL unless the new diff introduces a genuine regression or blocking bug.
 
 ---
