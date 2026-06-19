@@ -29,7 +29,7 @@ from scope_check import verify_pr_scope, get_project_config
 
 PROJECT_CONFIG = get_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
-SPEC_SECTIONS: List[str] = [
+SPEC_SECTIONS = [
     "Problem Statement",
     "Goal",
     "Non-Goals",
@@ -317,7 +317,7 @@ class Orchestrator:
         if val is not None and str(val).strip() != "": return int(val)
         return fallback_value
 
-    def get_audit_results(self, content: Optional[str] = None, targets: Optional[List[str]] = None) -> Dict[str, Any]:
+    def get_audit_results(self, content: str = None, targets: list[str] = None):
         cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
         if targets:
             cmd.extend(targets)
@@ -329,13 +329,13 @@ class Orchestrator:
         except json.JSONDecodeError:
             return {"violations": {}, "config": {}}
 
-    def extract_code_blocks(self, text: str) -> List[str]:
+    def extract_code_blocks(self, text: str) -> list[str]:
         return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
 
-    def get_pr_files(self, pr: Any) -> set[str]:
+    def get_pr_files(self, pr) -> set[str]:
         return {f.filename for f in pr.get_files()}
 
-    def detect_conflicts(self, target_pr_num: Optional[int] = None) -> Dict[Tuple[int, ...], List[str]]:
+    def detect_conflicts(self, target_pr_num=None):
         repo = get_github_client().get_repo(get_repo_name())
         open_prs = list(repo.get_pulls(state='open'))
         file_to_prs = defaultdict(list)
@@ -348,7 +348,7 @@ class Orchestrator:
                 conflicts[tuple(sorted(prs))].append(filename)
         return conflicts
 
-    def _has_spec_section(self, section_name: str, text: str) -> bool:
+    def _has_spec_section(self, section_name, text):
         """Robustly checks for the presence of a markdown section or numbered list item."""
         # Matches markdown headers (# Section Name) or numbered items (1. SECTION NAME)
         header_pattern = rf"^\s*#+\s*{re.escape(section_name)}\b"
@@ -358,7 +358,7 @@ class Orchestrator:
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
-        issues: List[Any] = []
+        issues = []
         if all_open:
             issues = list(repo.get_issues(state='open'))
         elif issue_number:
@@ -366,16 +366,16 @@ class Orchestrator:
         else:
             raise CLIError("Provide --issue-number or --all-open")
 
-        results: List[Dict[str, Any]] = []
-        total_findings: int = 0
-        audit_base: Dict[str, Any] = self.get_audit_results(content="")
-        config: Dict[str, Any] = audit_base.get("config", {})
+        results = []
+        total_findings = 0
+        audit_base = self.get_audit_results(content="")
+        config = audit_base.get("config", {})
 
         for issue in issues:
-            findings: List[str] = []
-            warnings: List[str] = []
-            body: str = issue.body or ''
-            title: str = issue.title or ''
+            findings = []
+            warnings = []
+            body = issue.body or ''
+            title = issue.title or ''
 
             if not body.strip():
                 findings.append("Issue body is empty.")
@@ -404,11 +404,11 @@ class Orchestrator:
                 warnings.append("Mentions Tailwind but not layout primitives.")
 
             # Spec-Driven Issue Validation
-            missing_spec_sections: List[str] = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
+            missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
             if missing_spec_sections:
                 findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
-            issue_result: Dict[str, Any] = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
+            issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
             results.append(issue_result)
             total_findings += len(findings)
             if post_comments and (findings or warnings):
@@ -419,7 +419,7 @@ class Orchestrator:
 
         return {"status": "success" if total_findings == 0 else "error", "issues": results, "total_findings": total_findings}
 
-    def handle_detect_conflicts(self, pr_num: Optional[int] = None) -> List[Dict[str, Any]]:
+    def handle_detect_conflicts(self, pr_num=None):
         conflicts = self.detect_conflicts(pr_num)
         formatted = []
         for pr_pair, files in conflicts.items():
