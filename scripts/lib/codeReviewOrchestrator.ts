@@ -13,7 +13,7 @@ export interface CodeReviewClientStrategy {
   invokeReview: (summary: CodeReviewSummary) => Promise<CodeReviewResult>;
 }
 
-const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
+const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
 async function fetchPRGoal(): Promise<string | undefined> {
   const token = process.env.GITHUB_TOKEN;
@@ -116,7 +116,14 @@ export async function orchestrateCodeReview(
       agentReportPath,
       `## ${client.reportTitle}\n\nSkipped: review quota (${MAX_REVIEWS_PER_PR}) already met.\n`
     );
-    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
+    const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
     return;
   }
 
