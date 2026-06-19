@@ -1,0 +1,56 @@
+name: Reusable CI Gate
+
+on:
+  workflow_call:
+    outputs:
+      has_changes:
+        description: "True if changes were detected"
+        value: ${{ jobs.verify-changes.outputs.has_changes }}
+
+jobs:
+  verify-changes:
+    name: "FOUNDATIONAL GATE: Checks for actual code modifications"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    outputs:
+      has_changes: ${{ steps.check_diff.outputs.has_changes }}
+    steps:
+      - name: Checkout Code with History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify Diff Composition
+        id: check_diff
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            echo "Comparing against base branch: $BASE_REF"
+            # Explicitly fetch the base branch to ensure it exists for the diff
+            git fetch origin "$BASE_REF"
+            if git diff --quiet "origin/$BASE_REF...HEAD"; then
+              echo "has_changes=false" >> "$GITHUB_OUTPUT"
+              echo "❌ Empty pull request detected! No code files modified."
+            else
+              echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              echo "✅ Valid pull request found with actual file changes."
+            fi
+          else
+            # For pushes, check if we have more than 1 commit to compare
+            COMMIT_COUNT=$(git rev-list --count HEAD)
+            if [ "$COMMIT_COUNT" -gt 1 ]; then
+              if git diff --quiet HEAD~1 HEAD; then
+                echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                echo "❌ Empty commit detected! No code files modified."
+              else
+                echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                echo "✅ Valid patch found with actual file changes."
+              fi
+            else
+              echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              echo "✅ Initial commit or single commit found."
+            fi
+          fi

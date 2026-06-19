@@ -27,41 +27,10 @@ concurrency:
 
 jobs:
   verify-changes:
-    name: "FOUNDATIONAL GATE: Checks for actual code modifications"
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/reusable-gate.yml
     permissions:
       pull-requests: write
       contents: write
-    outputs:
-      has_changes: ${{ steps.check_diff.outputs.has_changes }}
-    steps:
-      - name: Checkout Code with History
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Verify Diff Composition
-        id: check_diff
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "Comparing against base branch: ${{ github.base_ref }}"
-            git fetch origin ${{ github.base_ref }}
-            if git diff --quiet "origin/${{ github.base_ref }}...HEAD"; then
-              echo "has_changes=false" >> "$GITHUB_OUTPUT"
-              echo "❌ Empty pull request detected! No code files modified."
-            else
-              echo "has_changes=true" >> "$GITHUB_OUTPUT"
-              echo "✅ Valid pull request found with actual file changes."
-            fi
-          else
-            # For pushes, compare the last commit to its parent
-            if git diff --quiet HEAD~1 HEAD; then
-              echo "has_changes=false" >> "$GITHUB_OUTPUT"
-              echo "❌ Empty commit detected! No code files modified."
-            else
-              echo "has_changes=true" >> "$GITHUB_OUTPUT"
-              echo "✅ Valid patch found with actual file changes."
-            fi
-          fi
 
   analyze:
     needs: verify-changes

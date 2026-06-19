@@ -4,32 +4,21 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  block-empty-patch:
-    name: Block Empty AI Patch
-    runs-on: ubuntu-latest
-    # Run for all PRs to ensure any empty patch is caught and gated globally
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
     permissions:
       pull-requests: write
       contents: write
+
+  block-empty-patch:
+    name: Block Empty AI Patch
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
-      - name: Checkout Code with History
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Detect Empty Patch
-        id: check
-        run: |
-          echo "Comparing against base branch: ${{ github.base_ref }}"
-          git fetch origin ${{ github.base_ref }}
-          if git diff --quiet "origin/${{ github.base_ref }}...HEAD"; then
-            echo "EMPTY=true" >> "$GITHUB_OUTPUT"
-            echo "❌ Empty pull request detected!"
-          else
-            echo "EMPTY=false" >> "$GITHUB_OUTPUT"
-            echo "✅ Pull request contains changes."
-          fi
-      - name: Close PR if Empty
-        if: steps.check.outputs.EMPTY == 'true'
+      - name: Close PR
         uses: actions/github-script@v7
         with:
           script: |
