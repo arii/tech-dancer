@@ -13,7 +13,7 @@ export interface CodeReviewClientStrategy {
   invokeReview: (summary: CodeReviewSummary) => Promise<CodeReviewResult>;
 }
 
-const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
+const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
 async function fetchPRGoal(): Promise<string | undefined> {
   const token = process.env.GITHUB_TOKEN;
