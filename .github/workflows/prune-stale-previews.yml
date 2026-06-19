@@ -5,7 +5,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 concurrency:
-  group: prune-stale-previews
+  group: gh-pages-deployment
   cancel-in-progress: false
 
 
@@ -48,7 +48,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "chore: prune stale previews and update metadata"
-            git push origin gh-pages
+            git push origin gh-pages --force-with-lease || git push origin gh-pages
           else
             echo "No changes made."
           fi
