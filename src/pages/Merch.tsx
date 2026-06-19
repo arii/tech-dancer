@@ -120,6 +120,8 @@ export default function Merch() {
                       <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full">
                         <ProductCard
                           item={product}
+                          clampTitle={0}
+                          clampDescription={0}
                         />
                       </Box>
                     ))}

@@ -6,7 +6,17 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
-export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
+export function ProductCard({
+  item,
+  isFeatured,
+  clampTitle,
+  clampDescription
+}: {
+  item: ProductCatalogItem;
+  isFeatured?: boolean;
+  clampTitle?: number;
+  clampDescription?: number;
+}) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
     ? 'SEE OPTIONS'
@@ -46,13 +56,13 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           weight="font-bold"
           color="main"
           leading="tight"
-          clamp={isFeatured ? 0 : 2}
+          clamp={clampTitle ?? (isFeatured ? 0 : 2)}
           className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {item.title}
         </Text>
 
-        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
+        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription ?? (isFeatured ? 0 : 2)}>
           {item.description}
         </Text>
 
