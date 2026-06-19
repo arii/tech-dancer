@@ -26,10 +26,10 @@ jobs:
         run: |
           # Fetch the merge base or compare the last commit to its parent
           if git diff --quiet HEAD~1 HEAD; then
-            echo "EMPTY_COMMIT=true" >> $GITHUB_ENV
+            echo "EMPTY_COMMIT=true" >> "$GITHUB_ENV"
             echo "❌ Empty commit detected! No code files modified."
           else
-            echo "EMPTY_COMMIT=false" >> $GITHUB_ENV
+            echo "EMPTY_COMMIT=false" >> "$GITHUB_ENV"
             echo "✅ Valid patch found with actual file changes."
           fi
       - name: Handle Empty Pull Request
