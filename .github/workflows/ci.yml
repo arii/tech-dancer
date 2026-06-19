@@ -53,8 +53,16 @@ env:
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
 jobs:
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
   lint-typecheck:
     name: Lint & Type Check
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -126,6 +134,8 @@ jobs:
 
   audit:
     name: Anti-Pattern Audit
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -171,7 +181,8 @@ jobs:
 
   test-build:
     name: Build & E2E
-    needs: lint-typecheck
+    needs: [verify-changes, lint-typecheck]
+    if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -234,8 +245,9 @@ jobs:
           retention-days: 7
 
   impact-analysis:
-    needs: [lint-typecheck, audit, test-build]
+    needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
+    if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -409,3 +421,95 @@ jobs:
         with:
           name: deployment-review
           path: artifacts/
+
+  oxlint:
+    name: Oxlint Scan
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Oxlint
+        run: pnpm run lint:ox
+
+  gitleaks:
+    name: Gitleaks Secret Detection
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  semgrep:
+    name: Semgrep Static Analysis
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Semgrep Scan
+        run: semgrep scan --config auto --error
+
+  conflict-check:
+    name: Merge Conflict Check
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Verify clean merge simulation
+        run: |
+          git fetch origin main
+          git config user.email "ci@test.com"
+          git config user.name "CI"
+          git checkout -b temp-merge-test
+          if git merge --no-commit --no-ff origin/main; then
+            echo "✅ Branch merges cleanly into main"
+            git merge --abort 2>/dev/null || true
+          else
+            echo "❌ Branch cannot merge cleanly into main"
+            git merge --abort 2>/dev/null || true
+            exit 1
+          fi
