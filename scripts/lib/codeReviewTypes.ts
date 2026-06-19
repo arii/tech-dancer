@@ -2,6 +2,7 @@ export interface CodeReviewSummary {
   files: string[];
   diffContext: string;
   prGoal?: string;
+  externalContext?: string;
 }
 
 export interface CodeReviewResult {
