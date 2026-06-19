@@ -1,0 +1,21 @@
+#!/bin/bash
+# .githooks/pre-commit
+# Enforce the No-Op Protection Policy
+
+# Check if there are any staged changes
+if [ -z "$(git diff --cached --name-only)" ]; then
+    echo "❌ Error: Empty commit detected."
+    echo "The No-Op Protection Policy prohibits creating empty commits."
+    exit 1
+fi
+
+# Check for purely whitespace/formatting changes
+# If there are staged files, but `git diff --cached --ignore-all-space` is empty,
+# it means all changes are just whitespace.
+if [ -z "$(git diff --cached --ignore-all-space)" ]; then
+    echo "❌ Error: Whitespace-only commit detected."
+    echo "The No-Op Protection Policy prohibits submitting patches that contain only whitespace, formatting, or line-ending changes unless explicitly requested."
+    exit 1
+fi
+
+exit 0
