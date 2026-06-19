@@ -2,8 +2,7 @@ name: CI
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [main]
     paths:
       - 'src/**'
       - 'etl/**'
@@ -19,8 +18,7 @@ on:
       - '*.config.ts'
       - 'tsconfig*.json'
   pull_request:
-    branches:
-      - '**'
+    branches: ['**']
     paths:
       - 'src/**'
       - 'etl/**'
@@ -29,6 +27,7 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
@@ -247,7 +246,7 @@ jobs:
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
-          MAX_AI_REVIEWS: '2'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -257,7 +256,7 @@ jobs:
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
-          MAX_AI_REVIEWS: '2'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -266,7 +265,7 @@ jobs:
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
-          MAX_AI_REVIEWS: '1'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -275,7 +274,7 @@ jobs:
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
-          MAX_AI_REVIEWS: '1'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
