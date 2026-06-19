@@ -92,7 +92,7 @@ function resolveImportPath(importPath: string, currentFile: string): string | un
     return undefined;
   }
 
-  const extensions = ['.tsx', '.ts', '.jsx', '.js'];
+  const extensions = ['.tsx', '.ts', '.d.ts', '.jsx', '.js'];
   try {
     if (fs.existsSync(resolvedPath) && fs.lstatSync(resolvedPath).isFile()) {
       return resolvedPath;
@@ -152,8 +152,12 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     // Context gathering
     const externalFilePaths = new Set<string>();
-    const diffRange = diffCommand.split(' ').pop() || '';
-    const baseRef = diffRange.split('...')[0] || diffRange;
+
+    // Extract baseRef for git diff <baseRef> -- <file>
+    // diffCommand examples: 'git diff origin/main...HEAD', 'git diff main...HEAD', 'git diff HEAD~1 HEAD'
+    const diffParts = diffCommand.split(' ');
+    const diffSpec = diffParts[2] || ''; // 'origin/main...HEAD' or 'HEAD~1'
+    const baseRef = diffSpec.split('...')[0]; // 'origin/main' or 'HEAD~1'
 
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
