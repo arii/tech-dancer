@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -85,6 +85,7 @@ function FlagshipCard({
   onImageClick?: (src: string) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const internalPath = tool.canonicalPath || `/research/${tool.id}`;
 
   const toggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -156,19 +157,31 @@ function FlagshipCard({
           </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
+            <ActionButton
+              as={NavLink}
+              to={internalPath}
+              variant="primary"
+              paddingX={4}
+              paddingY={2}
+              zIndex={20}
+              width={{ base: "full", sm: "auto" }}
+            >
+              {tool.externalLinkDisplayLabel || 'View Assets'}
+              <Icon icon={ArrowRight} size="sm" />
+            </ActionButton>
             {tool.externalUrl && (
               <ActionButton
                 as="a"
                 href={tool.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                variant="primary"
+                variant="secondary"
                 paddingX={4}
                 paddingY={2}
                 zIndex={20}
                 width={{ base: "full", sm: "auto" }}
               >
-                {tool.externalLinkDisplayLabel || 'Open Link'}
+                Live Link
                 <Icon icon={ExternalLink} size="sm" />
               </ActionButton>
             )}
@@ -195,20 +208,11 @@ function FlagshipCard({
   );
 }
 
-function ToolCard({ tool, navigate }: {
+function ToolCard({ tool }: {
   tool: ResearchTool;
-  navigate: (path: string) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLink = !!tool.sourceUrl;
-  const href = tool.sourceUrl || tool.canonicalPath || `/research/${tool.id}`;
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isLink) {
-      e.preventDefault();
-      navigate(href);
-    }
-  };
+  const internalPath = tool.canonicalPath || `/research/${tool.id}`;
 
   const toggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -216,22 +220,44 @@ function ToolCard({ tool, navigate }: {
     setIsExpanded(!isExpanded);
   };
 
+  const handleSourceClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <Stack
-      as="a"
-      href={href}
-      target={isLink ? "_blank" : undefined}
-      rel={isLink ? "noopener noreferrer" : undefined}
-      onClick={handleClick}
+      as="article"
       height="full" align="start" textAlign="left" gap={0}
-      className={cn(cardVariants({ interactive: true }), "pt-[14px] px-4 pb-4 flex flex-col h-full no-underline")}
+      className={cn(cardVariants({ interactive: true }), "relative pt-[14px] px-4 pb-4 flex flex-col h-full group/card")}
     >
+      <Box
+        as={NavLink}
+        to={internalPath}
+        className="absolute inset-0 z-10 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        aria-label={`View details for ${tool.title}`}
+      />
       <Stack gap={0} width="full">
-        <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
+        <Box display="flex" justify="between" align="start" width="full" marginBottom={3} className="relative z-20">
           <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
-          <StatusBadge label={tool.status} />
+          <Box display="flex" align="center" gap={2}>
+            {tool.sourceUrl && (
+              <Box
+                as="a"
+                href={tool.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleSourceClick}
+                className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 text-dim hover:text-accent transition-colors"
+                title="View Source Code"
+              >
+                <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" className="hidden sm:inline">Source</Text>
+                <Icon icon={Github} size="sm" />
+              </Box>
+            )}
+            <StatusBadge label={tool.status} />
+          </Box>
         </Box>
         <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
         <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
@@ -248,7 +274,7 @@ function ToolCard({ tool, navigate }: {
           {tool.description}
         </Text>
         {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
+          <Box as="button" onClick={toggleExpand} className="relative z-20 text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
             {isExpanded ? "Read Less" : "Read More"}
           </Box>
         )}
@@ -260,7 +286,7 @@ function ToolCard({ tool, navigate }: {
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {isLink ? 'View Source' : 'View Assets'}
+          View Assets
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Box>
@@ -404,7 +430,7 @@ export default function ResearchAnalytics() {
 
             <Box display="grid" className="responsive-grid" gap={6} width="full">
               {engineeringTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+                <ToolCard key={tool.id} tool={tool} />
               ))}
             </Box>
           </Stack>
@@ -420,7 +446,7 @@ export default function ResearchAnalytics() {
 
             <Box display="grid" className="responsive-grid" gap={6} width="full">
               {dataContentTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+                <ToolCard key={tool.id} tool={tool} />
               ))}
             </Box>
           </Stack>
@@ -436,7 +462,7 @@ export default function ResearchAnalytics() {
 
             <Box display="grid" className="responsive-grid" gap={6} width="full">
               {e_commerceTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+                <ToolCard key={tool.id} tool={tool} />
               ))}
             </Box>
           </Stack>
