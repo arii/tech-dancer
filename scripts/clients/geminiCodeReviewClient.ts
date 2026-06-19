@@ -1,21 +1,46 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseCodeReviewVerdict } from './githubModelsCodeReviewClient';
+import { parseCodeReviewVerdict, parseCodeReviewState } from './githubModelsCodeReviewClient';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
-function buildSystemPrompt(prGoal: string | undefined): string {
-  const goalSection = prGoal
+function buildSystemPrompt(summary: CodeReviewSummary): string {
+  const goalSection = summary.prGoal
     ? `This PR's stated goal:
-"${prGoal}"
+"${summary.prGoal}"
 
 `
     : '';
+
+  let priorStateSection = '';
+  if (summary.previousState && summary.previousState.findings.length > 0) {
+    const findingsStr = summary.previousState.findings
+      .map(f => {
+        let line = `- [${f.id}] ${f.file}${f.line ? `:${f.line}` : ''}: ${f.issue} (Status: ${f.status})`;
+        if (f.fixSummary) {
+          line += `\n   → ${f.fixSummary}`;
+        }
+        return line;
+      })
+      .join('\n');
+    priorStateSection = `
+PREVIOUS REVIEW ROUND FINDINGS:
+${findingsStr}
+
+Your job:
+- Confirm THIS issue is resolved before raising anything new.
+- Only raise a NEW issue if it is unrelated to anything already addressed, or if the fix for a previous issue introduced a new problem.
+- Do not re-open a resolved issue under a different framing.
+`;
+  }
+
   return `You are an expert software engineer reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
 Provide actionable feedback. Focus on HIGH severity issues.
 
-${goalSection}Severity rules — apply these strictly:
+${goalSection}${priorStateSection}
+
+Severity rules — apply these strictly:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
   passed where the type doesn't allow it, a class or function that doesn't exist, a call
   with the wrong arity, a test that would fail. Cite the exact line(s).
@@ -38,6 +63,24 @@ You MUST end your review with exactly one of the following strings indicating yo
 
 Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
 demonstrate with evidence from the diff.
+
+You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag:
+<findings>
+{
+  "findings": [
+    {
+      "id": "finding-1",
+      "file": "src/App.tsx",
+      "line": 10,
+      "snippet": "const x = 1;",
+      "issue": "Brief description of the issue",
+      "status": "resolved",
+      "fixSummary": "Brief summary of how it was addressed"
+    }
+  ]
+}
+</findings>
+Ensure 'snippet' is a unique string from the diff that identifies the issue.
 `;
 }
 
@@ -61,7 +104,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const model = createModel();
     const baseContent = [
-      { type: 'text', text: buildSystemPrompt(summary.prGoal) } as const,
+      { type: 'text', text: buildSystemPrompt(summary) } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
     ];
 
@@ -91,6 +134,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       tokens: totalTokens,
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
+      state: parseCodeReviewState(feedback),
     };
   }
 };
