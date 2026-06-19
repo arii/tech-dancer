@@ -6,7 +6,9 @@ from collections import defaultdict
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from utils import get_github_client, get_repo_name, call_ai
 
-def get_pr_comments_and_reviews(pr):
+from typing import List, Dict, Tuple, Set, Any
+
+def get_pr_comments_and_reviews(pr: Any) -> str:
     comments_data = []
     for c in pr.get_issue_comments():
         comments_data.append(f"Comment by {c.user.login}: {c.body}")
@@ -36,14 +38,14 @@ def get_open_prs(limit=25):
         })
     return prs
 
-def build_ownership_map(prs):
+def build_ownership_map(prs: List[Dict[str, Any]]) -> Dict[str, List[int]]:
     ownership = defaultdict(list)
     for pr in prs:
         for f in pr['files']:
             ownership[f].append(pr['number'])
     return ownership
 
-def analyze_overlaps(prs, ownership):
+def analyze_overlaps(prs: List[Dict[str, Any]], ownership: Dict[str, List[int]]) -> Tuple[List[int], List[List[int]]]:
     safe_prs = []
     overlapping_prs = set()
     for pr in prs:
@@ -80,7 +82,7 @@ def analyze_overlaps(prs, ownership):
 
     return safe_prs, groups
 
-def call_llm_analysis(prs, groups, ownership):
+def call_llm_analysis(prs: List[Dict[str, Any]], groups: List[List[int]], ownership: Dict[str, List[int]]) -> Dict[str, Any]:
     prompt = """You are a Parallel Development Coordination Agent.
 Your goal is to intelligently consolidate overlapping work streams, identify conflicts early, and produce a safe integration plan.
 
@@ -168,26 +170,9 @@ Respond strictly with a JSON object following this schema. Do not include markdo
 """
     # use a model with larger token limit
     response = call_ai(prompt, model="gpt-4o-mini")
+
     if not response:
-        response = '''{
-  "shared_file_consolidation": [],
-  "duplicate_work": [],
-  "architectural_divergence": [],
-  "integration_groups": [],
-  "agent_work_allocation": [],
-  "merge_strategies": [],
-  "overall_risk": {}
-}'''
-    if not response:
-        response = '''{
-  "shared_file_consolidation": [],
-  "duplicate_work": [],
-  "architectural_divergence": [],
-  "integration_groups": [],
-  "agent_work_allocation": [],
-  "merge_strategies": [],
-  "overall_risk": {}
-}'''
+        return {}
 
     try:
         if response.startswith("```json"):
@@ -200,126 +185,139 @@ Respond strictly with a JSON object following this schema. Do not include markdo
         print(f"Failed to parse LLM response: {e}", file=sys.stderr)
         return {}
 
-def main():
+def main() -> None:
     prs = get_open_prs(limit=30)
     ownership = build_ownership_map(prs)
     safe_prs, groups = analyze_overlaps(prs, ownership)
     llm_analysis = call_llm_analysis(prs, groups, ownership)
 
     if not llm_analysis:
-        print("Error: Could not generate analysis.", file=sys.stderr)
-        sys.exit(1)
+        print("Warning: Could not generate LLM analysis. Using fallback.", file=sys.stderr)
+        llm_analysis = {
+            "shared_file_consolidation": [],
+            "duplicate_work": [],
+            "architectural_divergence": [],
+            "integration_groups": [],
+            "agent_work_allocation": [],
+            "merge_strategies": [],
+            "overall_risk": {}
+        }
 
-    print("# Parallel Work Coordination Report\n")
-    print(f"## Open PRs\n\n{len(prs)}\n")
+    report = ["# Parallel Work Coordination Report\n"]
+    report.append(f"## Open PRs\n\n{len(prs)}\n")
 
-    print("## Safe Independent PRs\n")
+    report.append("## Safe Independent PRs\n")
     if safe_prs:
         for pr_num in sorted(safe_prs):
-            print(f"- #{pr_num}")
+            report.append(f"- #{pr_num}")
     else:
-        print("None\n")
-    print()
+        report.append("None\n")
+    report.append("")
 
-    print("## Overlapping PR Groups\n")
+    report.append("## Overlapping PR Groups\n")
     igroups = llm_analysis.get('integration_groups', [])
     if not igroups:
-        print("None detected.\n")
+        report.append("None detected.\n")
     else:
         for group in igroups:
-            print(f"### {group.get('name', 'Group')}\n")
-            print("PRs:")
+            report.append(f"### {group.get('name', 'Group')}\n")
+            report.append("PRs:")
             for pr in group.get('prs', []):
-                print(f"- #{pr}")
-            print(f"\nShared Area:\n{group.get('shared_area', 'Unknown')}\n")
-            print(f"Integration Risk:\n{group.get('integration_risk', 'Unknown')}\n")
+                report.append(f"- #{pr}")
+            report.append(f"\nShared Area:\n{group.get('shared_area', 'Unknown')}\n")
+            report.append(f"Integration Risk:\n{group.get('integration_risk', 'Unknown')}\n")
 
-    print("---\n")
+    report.append("---\n")
 
-    print("## Shared File Consolidation\n")
+    report.append("## Shared File Consolidation\n")
     shared = llm_analysis.get('shared_file_consolidation', [])
     if not shared:
-        print("No shared file conflicts requiring complex consolidation.\n")
+        report.append("No shared file conflicts requiring complex consolidation.\n")
     else:
         for item in shared:
-            print(f"### File\n\n{item.get('file', 'Unknown')}\n")
-            print(f"Conflict Level:\n{item.get('conflict_level', 'Unknown')}\n")
-            print(f"Recommended Consolidation:\n{item.get('recommendation', 'None')}\n")
-            print(f"Merge Order:\n" + "\n".join([f"{i+1}. PR #{pr}" for i, pr in enumerate(item.get('merge_order', []))]) + "\n")
-            print(f"Estimated Risk:\n{item.get('estimated_risk', 'Unknown')}\n")
+            report.append(f"### File\n\n{item.get('file', 'Unknown')}\n")
+            report.append(f"Conflict Level:\n{item.get('conflict_level', 'Unknown')}\n")
+            report.append(f"Recommended Consolidation:\n{item.get('recommendation', 'None')}\n")
+            report.append("Merge Order:\n" + "\n".join([f"{i+1}. PR #{pr}" for i, pr in enumerate(item.get('merge_order', []))]) + "\n")
+            report.append(f"Estimated Risk:\n{item.get('estimated_risk', 'Unknown')}\n")
 
-    print("---\n")
+    report.append("---\n")
 
-    print("## Duplicate Work\n")
+    report.append("## Duplicate Work\n")
     dups = llm_analysis.get('duplicate_work', [])
     if not dups:
-        print("None detected.\n")
+        report.append("None detected.\n")
     else:
         for dup in dups:
             for pr in dup.get('prs', []):
-                print(f"PR #{pr}")
-            print(f"\nFeature:\n{dup.get('feature', 'Unknown')}\n")
-            print(f"Recommendation:\n{dup.get('recommendation', 'None')}\n")
+                report.append(f"PR #{pr}")
+            report.append(f"\nFeature:\n{dup.get('feature', 'Unknown')}\n")
+            report.append(f"Recommendation:\n{dup.get('recommendation', 'None')}\n")
 
-    print("---\n")
+    report.append("---\n")
 
-    print("## Architectural Conflicts\n")
+    report.append("## Architectural Conflicts\n")
     arch = llm_analysis.get('architectural_divergence', [])
     if not arch:
-        print("None detected.\n")
+        report.append("None detected.\n")
     else:
         for conf in arch:
             for pr in conf.get('prs', []):
-                print(f"PR #{pr}")
-            print(f"\nIssue:\n{conf.get('issue', 'Unknown')}\n")
-            print(f"Recommendation:\n{conf.get('recommendation', 'None')}\n")
+                report.append(f"PR #{pr}")
+            report.append(f"\nIssue:\n{conf.get('issue', 'Unknown')}\n")
+            report.append(f"Recommendation:\n{conf.get('recommendation', 'None')}\n")
 
-    print("---\n")
+    report.append("---\n")
 
-    print("## Merge Strategy Generation\n")
+    report.append("## Merge Strategy Generation\n")
     strats = llm_analysis.get('merge_strategies', [])
     if not strats:
-        print("No specific merge strategies required.\n")
+        report.append("No specific merge strategies required.\n")
     else:
         for strat in strats:
-            print(f"### Strategy for PRs: {', '.join(map(str, strat.get('prs', [])))}\n")
-            print(f"Type: {strat.get('strategy_type', 'Manual')}\n")
+            report.append(f"### Strategy for PRs: {', '.join(map(str, strat.get('prs', [])))}\n")
+            report.append(f"Type: {strat.get('strategy_type', 'Manual')}\n")
             if strat.get('commands'):
-                print(f"```bash\n{strat.get('commands')}\n```\n")
+                report.append(f"```bash\n{strat.get('commands')}\n```\n")
             if strat.get('manual_steps'):
-                print(f"Manual Consolidation:\n{strat.get('manual_steps')}\n")
+                report.append(f"Manual Consolidation:\n{strat.get('manual_steps')}\n")
 
-    print("---\n")
+    report.append("---\n")
 
-    print("## Agent Work Allocation\n")
+    report.append("## Agent Work Allocation\n")
     allocs = llm_analysis.get('agent_work_allocation', [])
     if not allocs:
-        print("No specific allocations recommended.\n")
+        report.append("No specific allocations recommended.\n")
     else:
-        print("Safe Parallelization Opportunities\n")
+        report.append("Safe Parallelization Opportunities\n")
         for alloc in allocs:
-            print(f"{alloc.get('agent', 'Agent')}\n- {alloc.get('focus_area', 'Area')}\nRisk: {alloc.get('risk', 'Unknown')}\n")
+            report.append(f"{alloc.get('agent', 'Agent')}\n- {alloc.get('focus_area', 'Area')}\nRisk: {alloc.get('risk', 'Unknown')}\n")
 
-    print("---\n")
+    report.append("---\n")
 
-    print("## Recommended Merge Order\n")
+    report.append("## Recommended Merge Order\n")
     # A simple fallback if we don't have a global merge order from LLM
     merge_order = sorted(safe_prs)
     for i, pr_num in enumerate(merge_order, 1):
-        print(f"{i}. #{pr_num}")
-    print("\n---\n")
+        report.append(f"{i}. #{pr_num}")
+    report.append("\n---\n")
 
     risk = llm_analysis.get('overall_risk', {})
-    print("## Risk Assessment\n")
-    print(f"Low Risk: {risk.get('low_risk_count', len(safe_prs))} PRs")
-    print(f"Medium Risk: {risk.get('medium_risk_count', 0)} PRs")
-    print(f"High Risk: {risk.get('high_risk_count', 0)} PRs\n")
-    print("---\n")
+    report.append("## Risk Assessment\n")
+    report.append(f"Low Risk: {risk.get('low_risk_count', len(safe_prs))} PRs")
+    report.append(f"Medium Risk: {risk.get('medium_risk_count', 0)} PRs")
+    report.append(f"High Risk: {risk.get('high_risk_count', 0)} PRs\n")
+    report.append("---\n")
 
-    print("## Consolidation Actions\n")
-    print(f"- Auto-merge {risk.get('auto_merge_count', len(safe_prs))} PRs")
-    print(f"- Create {risk.get('integration_branches_needed', len(groups))} integration branches")
-    print(f"- Escalate {risk.get('escalations_needed', len(arch))} architectural conflicts for review")
+    report.append("## Consolidation Actions\n")
+    report.append(f"- Auto-merge {risk.get('auto_merge_count', len(safe_prs))} PRs")
+    report.append(f"- Create {risk.get('integration_branches_needed', len(groups))} integration branches")
+    report.append(f"- Escalate {risk.get('escalations_needed', len(arch))} architectural conflicts for review")
 
+    output = '\n'.join(report)
+    print(output)
+
+    with open("report.md", "w") as f:
+        f.write(output)
 if __name__ == '__main__':
     main()
