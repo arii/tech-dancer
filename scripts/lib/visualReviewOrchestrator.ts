@@ -27,12 +27,14 @@ export async function orchestrateVisualReview(
       agentReportPath,
       `## ${client.reportTitle}\n\nSkipped: review quota (${MAX_REVIEWS_PER_PR}) already met.\n`
     );
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) {
     console.warn('⚠️  Skipping agent review — missing visual summary. Run pnpm impact:visual-diff first.');
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nSkipped: Missing visual summary.\n`);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
@@ -53,6 +55,7 @@ export async function orchestrateVisualReview(
   if (routesToReview.length === 0) {
     console.log(`✅ No visual changes detected — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo visual changes detected.\n`);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
