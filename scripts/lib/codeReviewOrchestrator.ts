@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
-import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
+import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
+import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
@@ -13,7 +13,7 @@ export interface CodeReviewClientStrategy {
   invokeReview: (summary: CodeReviewSummary) => Promise<CodeReviewResult>;
 }
 
-const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
+const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
 async function fetchPRGoal(): Promise<string | undefined> {
   const token = process.env.GITHUB_TOKEN;
@@ -61,6 +61,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       return {
         files,
         diffContext: `[DIFF TRUNCATED: ${files.length} files affected. First ${MAX_DIFF_CHARS} chars shown.]\n\nFiles changed:\n${fileList}\n\n${truncatedDiff}`,
+        fullDiff: rawDiff,
         prGoal,
         isTruncated: true,
       };
@@ -69,6 +70,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     return {
       files,
       diffContext: rawDiff,
+      fullDiff: rawDiff,
       prGoal,
       isTruncated: false,
     };
@@ -122,11 +124,35 @@ export async function orchestrateCodeReview(
       agentReportPath,
       `## ${client.reportTitle}\n\nSkipped: review quota (${MAX_REVIEWS_PER_PR}) already met.\n`
     );
-    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
+    const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
     return;
   }
 
   const summary = await getCodeDiffSummary();
+
+  // Load previous state and auto-resolve findings that are no longer in the diff
+  const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+  if (prevState?.findings && Array.isArray(prevState.findings)) {
+    for (const finding of prevState.findings) {
+      if (finding.status === 'open' && finding.snippet) {
+        // Use fullDiff for auto-resolution check to avoid truncation issues
+        const diffToCheck = summary.fullDiff || summary.diffContext;
+        if (!diffToCheck.includes(finding.snippet)) {
+          finding.status = 'resolved';
+          finding.fixSummary = 'Jules response: snippet no longer present in diff.';
+          console.log(`✅ Auto-resolved finding: ${finding.issue}`);
+        }
+      }
+    }
+    summary.previousState = prevState;
+  }
 
   if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
@@ -146,9 +172,21 @@ export async function orchestrateCodeReview(
       tokens: 0,
       cost: 0,
       llmVerdict: 'warn',
+      state: prevState
     };
   } else {
     reviewResult = await client.invokeReview(summary);
+
+    // Merge findings in orchestrator instead of relying solely on LLM
+    // This prevents data loss if LLM forgets to echo back some findings
+    if (reviewResult.state && summary.previousState) {
+      const existingIds = new Set(reviewResult.state.findings.map(f => f.id));
+      const missingFindings = summary.previousState.findings.filter(f => !existingIds.has(f.id));
+      if (missingFindings.length > 0) {
+        console.log(`♻️  Restoring ${missingFindings.length} findings omitted by LLM.`);
+        reviewResult.state.findings.push(...missingFindings);
+      }
+    }
   }
 
   const report = generateCodeReviewMarkdown(reviewResult, client);
@@ -158,7 +196,7 @@ export async function orchestrateCodeReview(
   console.log(`✅ Local report written to ${agentReportPath}`);
 
   // Post to GitHub PR
-  await postPRComment(report, client.reportTitle);
+  await postPRComment(report, client.reportTitle, reviewResult.state);
 
   // Also alert Jules if this PR is from a Jules session
   const julesSessionId = await getJulesSessionIdFromPR();
@@ -177,7 +215,8 @@ export async function orchestrateCodeReview(
     passed: !isFail,
     highCount: isFail ? 1 : 0,
     routes: [], // To maintain schema compatibility with visual-review if needed
-    llmVerdict: reviewResult.llmVerdict
+    llmVerdict: reviewResult.llmVerdict,
+    state: reviewResult.state
   }, null, 2));
 
   if (isFail) {
