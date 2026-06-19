@@ -36,15 +36,13 @@ async function fetchPRGoal(): Promise<string | undefined> {
 
 export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
   try {
-    let diffCommand = 'git diff origin/main...HEAD';
-    let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
+    let diffCommand = 'git diff -U10 origin/main...HEAD';
 
     // Verify if origin/main exists, fallback to git history for CI if needed
     try {
-        execSync('git rev-parse origin/main', { stdio: 'ignore' });
+      execSync('git rev-parse origin/main', { stdio: 'ignore' });
     } catch {
-        diffCommand = 'git diff HEAD~1 HEAD';
-        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+      diffCommand = 'git diff -U10 HEAD~1 HEAD';
     }
 
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
@@ -56,22 +54,16 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       : rawDiff;
 
     const fullDiff = rawDiff;
-
-    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
-      .split('\n')
-      .filter(Boolean);
-
     const prGoal = await fetchPRGoal();
 
     return {
-      files,
       diffContext,
       fullDiff,
       prGoal,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '' };
+    return { diffContext: '' };
   }
 }
 
