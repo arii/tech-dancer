@@ -192,11 +192,11 @@ jobs:
             # We copy the script to the current directory to run it easily
             cp "$GITHUB_WORKSPACE/scripts/manage-previews.sh" ./manage-previews.sh
             chmod +x ./manage-previews.sh
-            ./manage-previews.sh ../open_prs.txt
+            ./manage-previews.sh "../open_prs.txt"
             rm ./manage-previews.sh
 
             # Use the latest dashboard UI from the current deployment
-            cp ../dist-assets/previews/index.html previews/index.html
+            cp "../dist-assets/previews/index.html" previews/index.html
 
             # 6. Commit and Push
             git config user.name "github-actions[bot]"
