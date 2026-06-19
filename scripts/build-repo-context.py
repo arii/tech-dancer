@@ -46,12 +46,16 @@ def build_repo_context():
 
     # 5. Changed Files
     try:
-        # Check if HEAD~1 exists
-        try:
-            subprocess.check_call(["git", "rev-parse", "HEAD~1"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            diff_cmd = ["git", "diff", "--name-only", "HEAD~1", "HEAD"]
-        except subprocess.CalledProcessError:
-            diff_cmd = ["git", "ls-tree", "-r", "HEAD", "--name-only"]
+        import os
+        diff_cmd = ["git", "ls-tree", "-r", "HEAD", "--name-only"]
+        if os.environ.get("GITHUB_EVENT_NAME") == "pull_request":
+            diff_cmd = ["git", "diff", "--name-only", "origin/main...HEAD"]
+        else:
+            try:
+                subprocess.check_call(["git", "rev-parse", "HEAD~1"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                diff_cmd = ["git", "diff", "--name-only", "HEAD~1", "HEAD"]
+            except subprocess.CalledProcessError:
+                pass
 
         changed_files = subprocess.check_output(
             diff_cmd

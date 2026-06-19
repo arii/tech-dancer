@@ -67,7 +67,12 @@ RUNS_JSON=$(gh run list \
   --workflow "$WORKFLOW_FILE" \
   --branch "$PR_HEAD_BRANCH" \
   --json databaseId,conclusion,createdAt,headBranch,event,headSha \
-  --limit 50)
+  --limit 50 || true)
+
+if [[ -z "$RUNS_JSON" ]]; then
+  post_skip_comment "failed to fetch workflow runs."
+  exit 0
+fi
 
 RUNS=$(jq -c --arg branch "$PR_HEAD_BRANCH" '[.[] | select(.headBranch == $branch)] | sort_by(.createdAt) | .[-2:]' <<<"$RUNS_JSON")
 RUN_COUNT=$(jq 'length' <<<"$RUNS")
@@ -127,7 +132,9 @@ elif [[ -n "$PREV_COMMIT" && "$PREV_COMMIT" == "$HEAD_COMMIT" ]]; then
   COMMITS_APPLIED="0"
 fi
 
-cat > /tmp/jules-retry-context.md <<EOF_BODY
+BODY_FILE=$(mktemp)
+
+cat > "$BODY_FILE" <<EOF_BODY
 $COMMENT_PREFIX — Entropy Check
 
 This comment compares the last two \`$WORKFLOW_FILE\` runs on \`$PR_HEAD_BRANCH\` so the next repair attempt can focus on signal instead of re-reading the same failing state.
@@ -154,4 +161,6 @@ ${OTHER_TRANSITIONS:-_none_}
 $RELEVANT_TOUCHED
 EOF_BODY
 
-post_or_update_comment /tmp/jules-retry-context.md
+post_or_update_comment "$BODY_FILE"
+
+rm -f "$BODY_FILE"

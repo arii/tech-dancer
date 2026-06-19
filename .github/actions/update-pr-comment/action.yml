@@ -61,7 +61,13 @@ runs:
             }
 
             bodyParts.push(commentTag);
-            const body = bodyParts.join('\n');
+            let body = bodyParts.join('\n');
+
+            if (Buffer.byteLength(body, 'utf8') > 65536) {
+              const warning = '\n\n...[TRUNCATED due to GitHub comment size limit]...\n\n';
+              const suffix = '\n' + commentTag;
+              body = Buffer.from(body, 'utf8').subarray(0, 65536 - Buffer.byteLength(warning, 'utf8') - Buffer.byteLength(suffix, 'utf8')).toString('utf8') + warning + suffix;
+            }
 
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner,

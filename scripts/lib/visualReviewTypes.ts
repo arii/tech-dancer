@@ -1,5 +1,5 @@
 export interface VisualRouteSummary {
-  repoContext?: string;
+  repoContext?: string; // Always a JSON stringified object
   route: string;
   slug: string;
   differencePercent: number;

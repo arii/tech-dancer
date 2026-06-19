@@ -49,7 +49,14 @@ export async function orchestrateVisualReview(
 
     if (fs.existsSync('scripts/build-repo-context.py')) {
       const output = execSync('python3 scripts/build-repo-context.py', { encoding: 'utf-8' });
-      contextData = { ...contextData, ...JSON.parse(output) };
+      if (output.trim()) {
+        try {
+          const parsed = JSON.parse(output);
+          contextData = { ...contextData, ...parsed };
+        } catch (e) {
+          console.error('Invalid JSON output from build-repo-context.py:', e);
+        }
+      }
     }
     repoContext = JSON.stringify(contextData);
   } catch (error) {
