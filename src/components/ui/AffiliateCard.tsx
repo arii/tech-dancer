@@ -21,8 +21,8 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         {/* Product Image Thumbnail */}
         {link.image && (
           <Box
-            width={20}
-            height={20}
+            width={{ base: 16, md: 20 }}
+            height={{ base: 16, md: 20 }}
             padding={link.imageMode === 'contain' ? 2 : 0}
             shrink={0}
             radius="md"
@@ -36,20 +36,20 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
             align="center"
             justify="center"
           >
-            <Box
-              as="img"
+            <img
               src={link.image}
               alt={link.name}
-              maxWidth="full"
-              maxHeight="full"
-              className={link.imageMode === 'contain' ? 'object-contain' : 'object-cover'}
+              className={cn(
+                "max-w-full max-h-full",
+                link.imageMode === 'contain' ? 'object-contain' : 'object-cover'
+              )}
               loading="lazy"
             />
           </Box>
         )}
 
         <Stack gap={2} flex={1} minWidth={0}>
-          <Box display="flex" align="center" justify="between" width="full">
+          <Box display="flex" align="center" justify="between" width="full" className="relative z-20 pointer-events-none">
             <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
               {link.category}
             </Text>
@@ -57,16 +57,25 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
           </Box>
 
           <Text
+            as="h4"
             variant="body"
             size="base"
             weight="font-bold"
             clamp={2}
+            display="block"
             className="group-hover:text-accent transition-colors relative z-20 pointer-events-none"
           >
             {link.name}
           </Text>
 
-          <Text variant="body" size="xs" color="dim" className="leading-relaxed line-clamp-2">
+          <Text
+            variant="body"
+            size="xs"
+            color="dim"
+            clamp={2}
+            display="block"
+            className="leading-relaxed relative z-20 pointer-events-none"
+          >
             {link.description}
           </Text>
         </Stack>
