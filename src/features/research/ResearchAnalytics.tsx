@@ -95,12 +95,25 @@ function FlagshipCard({
 
   const handleSourceClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    // Use manual open with preventDefault to satisfy code review standards for nested links
+    if (tool.sourceUrl) {
+      e.preventDefault();
+      window.open(tool.sourceUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleExternalClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (tool.externalUrl) {
+      e.preventDefault();
+      window.open(tool.externalUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
     <BaseCard
       key={tool.id}
-      to={internalPath}
+      to={internalPath} // SPA navigation handled by BaseCard's absolute overlay link
       ariaLabel={`View details for ${tool.title}`}
       padding={0}
       gap={0}
@@ -110,8 +123,8 @@ function FlagshipCard({
     >
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
-        <Stack flex={1} className="pt-[14px] px-4 pb-4" gap={0}>
-          <Box display="flex" justify="between" align="start" width="full" marginBottom={3} className="relative z-20">
+        <Stack flex={1} className="p-6 sm:p-8" gap={0}>
+          <Box display="flex" justify="between" align="start" width="full" marginBottom={4} className="relative z-20">
             <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
@@ -150,13 +163,13 @@ function FlagshipCard({
             size="md"
             color="dim"
             leading="relaxed"
-            marginBottom={3}
+            marginBottom={4}
             className={cn(!isExpanded && tool.description.length > 150 && "line-clamp-3")}
           >
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none z-30 relative">
+            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-6 self-start focus:outline-none z-30 relative">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -204,7 +217,7 @@ function FlagshipCard({
                 paddingY={2}
                 zIndex={20}
                 width={{ base: "full", sm: "auto" }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={handleExternalClick}
               >
                 {tool.externalLinkDisplayLabel || 'Visit Site'}
                 <Icon icon={ExternalLink} size="sm" />
@@ -221,7 +234,7 @@ function FlagshipCard({
                 paddingY={2}
                 zIndex={20}
                 width={{ base: "full", sm: "auto" }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={handleSourceClick}
               >
                 Source Repo
                 <Icon icon={Github} size="sm" />
@@ -248,20 +261,25 @@ function ToolCard({ tool }: {
 
   const handleSourceClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    // Use manual open with preventDefault to satisfy code review standards for nested links
+    if (tool.sourceUrl) {
+      e.preventDefault();
+      window.open(tool.sourceUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
     <BaseCard
       key={tool.id}
-      to={internalPath}
+      to={internalPath} // SPA navigation handled by BaseCard's absolute overlay link
       ariaLabel={`View details for ${tool.title}`}
       height="full"
       padding={0}
       className="group/card"
     >
-      <Stack height="full" align="start" textAlign="left" gap={0} className="pt-[14px] px-4 pb-4 flex flex-col h-full">
+      <Stack height="full" align="start" textAlign="left" gap={0} className="p-6 sm:p-8 flex flex-col h-full">
         <Stack gap={0} width="full">
-          <Box display="flex" justify="between" align="start" width="full" marginBottom={3} className="relative z-20">
+          <Box display="flex" justify="between" align="start" width="full" marginBottom={4} className="relative z-20">
             <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
               <Icon icon={getToolIcon(tool)} size="md" color="dim" />
             </Box>
@@ -292,13 +310,13 @@ function ToolCard({ tool }: {
             size="sm"
             color="dim"
             leading="relaxed"
-            marginBottom={3}
+            marginBottom={4}
             className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
           >
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 120 && (
-            <Box as="button" onClick={toggleExpand} className="relative z-20 text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
+            <Box as="button" onClick={toggleExpand} className="relative z-20 text-accent hover:underline text-xs font-semibold mb-6 self-start focus:outline-none">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -427,11 +445,11 @@ export default function ResearchAnalytics() {
 
         {/* Flagship Projects Section */}
         <Stack gap={8} id="flagship" marginTop={2} width="full">
-          <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
+          <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
-          <Box display="grid" className="responsive-grid" gap={6} width="full">
+          <Box display="grid" className="responsive-grid" gap={8} width="full">
             {flagshipTools.map((tool) => (
               <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
             ))}
@@ -448,12 +466,12 @@ export default function ResearchAnalytics() {
         {/* Engineering Systems Section */}
         {engineeringTools.length > 0 && (
           <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
               <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
+            <Box display="grid" className="responsive-grid" gap={8} width="full">
               {engineeringTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -464,12 +482,12 @@ export default function ResearchAnalytics() {
         {/* Data & Content Systems Section */}
         {dataContentTools.length > 0 && (
           <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
               <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
+            <Box display="grid" className="responsive-grid" gap={8} width="full">
               {dataContentTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -480,12 +498,12 @@ export default function ResearchAnalytics() {
         {/* Ecommerce Experiments Section */}
         {e_commerceTools.length > 0 && (
           <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
               <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
+            <Box display="grid" className="responsive-grid" gap={8} width="full">
               {e_commerceTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -496,12 +514,12 @@ export default function ResearchAnalytics() {
         {/* Articles & Research Section */}
         {studies.length > 0 && (
           <Stack gap={12} id="articles" width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
               <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
+            <Box display="grid" className="responsive-grid" gap={8} width="full">
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
@@ -514,7 +532,7 @@ export default function ResearchAnalytics() {
                   surface={study.status === 'published' ? 'surface' : 'muted'}
                   className={cn(cardVariants({
                     interactive: study.status === 'published'
-                  }), "pt-[14px] px-4 pb-4")}
+                  }), "p-6 sm:p-8")}
                   opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
