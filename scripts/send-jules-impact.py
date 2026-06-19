@@ -11,6 +11,17 @@ logger = logging.getLogger(__name__)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'dev-tools')))
 from tdw_services.services.jules import JulesClient
 
+def is_skipped_review(content: str) -> bool:
+    lines = [line.strip() for line in content.splitlines() if line.strip()]
+    return len(lines) == 2 and lines[1].startswith("Skipped:")
+
+def is_skipped_verdict(content: str) -> bool:
+    try:
+        data = json.loads(content)
+        return data.get("llmVerdict") == "pass" and data.get("highCount") == 0 and len(data.get("routes", [])) == 0 and data.get("passed") is True
+    except Exception:
+        return False
+
 def main():
     task_id = os.environ.get("TASK_ID")
     if not task_id:
@@ -60,12 +71,17 @@ def main():
         "github-models-code-review.md"
     ]
 
+    has_valid_reviews = False
+
     for filename in review_files:
         filepath = os.path.join(artifacts_dir, filename)
         if os.path.isfile(filepath):
             try:
                 with open(filepath, "r", encoding="utf-8") as f:
-                    body += f.read() + "\n\n"
+                    content = f.read()
+                    if not is_skipped_review(content):
+                        body += content + "\n\n"
+                        has_valid_reviews = True
             except IOError as e:
                 logger.error(f"Failed to read {filepath}: {e}")
 
@@ -76,9 +92,16 @@ def main():
     for filepath in glob.glob(json_pattern):
         try:
             with open(filepath, "r", encoding="utf-8") as f:
-                verdicts.append((os.path.basename(filepath), f.read()))
+                content = f.read()
+                if not is_skipped_verdict(content):
+                    verdicts.append((os.path.basename(filepath), content))
+                    has_valid_reviews = True
         except IOError as e:
              logger.error(f"Failed to read JSON verdict {filepath}: {e}")
+
+    if not has_valid_reviews:
+        logger.info("No valid reviews found. Skipping sending impact analysis.")
+        sys.exit(0)
 
     if verdicts:
         body += "## Verdict JSONs\n"
