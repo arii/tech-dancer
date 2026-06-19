@@ -65,11 +65,11 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     if (reviewableFiles.length === 0) {
       console.log('ℹ️ No reviewable files found after filtering low-impact paths.');
-      return { files: [], diffContext: '', prGoal };
+      return { files: [], diffContext: '', isTruncated: false, prGoal };
     }
 
     // Get diff context for reviewable files only
-    const diffArgs = ['diff', ...diffBase, '--', ...excludeSpecs];
+    const diffArgs = ['diff', '-U10', ...diffBase, '--', ...excludeSpecs];
     const diffResult = spawnSync('git', diffArgs, { encoding: 'utf-8' });
 
     if (diffResult.error) throw diffResult.error;
@@ -81,18 +81,20 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
     const maxChars = 20000;
-    const diffContext = rawDiff.length > maxChars
+    const isTruncated = rawDiff.length > maxChars;
+    const diffContext = isTruncated
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
       : rawDiff;
 
     return {
       files: reviewableFiles,
       diffContext,
+      isTruncated,
       prGoal,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '', prGoal };
+    return { files: [], diffContext: '', isTruncated: false, prGoal };
   }
 }
 
