@@ -21,11 +21,11 @@ jobs:
         run: |
           echo "Comparing against base branch: ${{ github.base_ref }}"
           git fetch origin ${{ github.base_ref }}
-          if git diff --quiet origin/${{ github.base_ref }}...HEAD; then
-            echo "EMPTY=true" >> $GITHUB_OUTPUT
+          if git diff --quiet "origin/${{ github.base_ref }}...HEAD"; then
+            echo "EMPTY=true" >> "$GITHUB_OUTPUT"
             echo "❌ Empty pull request detected!"
           else
-            echo "EMPTY=false" >> $GITHUB_OUTPUT
+            echo "EMPTY=false" >> "$GITHUB_OUTPUT"
             echo "✅ Pull request contains changes."
           fi
       - name: Close PR if Empty
