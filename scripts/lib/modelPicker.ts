@@ -68,16 +68,20 @@ export async function pickOptimalModel(
   const suitableModels = models.filter(m => {
     if (needsVision && !m.supported_input_modalities?.includes('image')) return false;
 
+    let maxIn = m.limits?.max_input_tokens;
+    if (m.id.includes('gpt-4.1')) {
+      maxIn = 8000;
+    }
+
     // If we have an estimate, be strict about model limits
     if (estimatedInputTokens > 0) {
-      const rawMaxIn = m.limits?.max_input_tokens;
-      if (rawMaxIn === undefined || rawMaxIn === null) return false;
+      if (maxIn === undefined || maxIn === null) return false;
 
-      const maxIn = typeof rawMaxIn === 'number' ? rawMaxIn : Number(rawMaxIn);
-      if (isNaN(maxIn)) return false;
+      const maxInNum = typeof maxIn === 'number' ? maxIn : Number(maxIn);
+      if (isNaN(maxInNum)) return false;
 
       // leave headroom for system prompt + output
-      if (estimatedInputTokens > maxIn * 0.8) return false;
+      if (estimatedInputTokens > maxInNum * 0.8) return false;
     }
 
     return true;

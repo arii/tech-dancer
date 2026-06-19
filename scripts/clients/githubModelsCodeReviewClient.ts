@@ -177,19 +177,51 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'github-models-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
-    const estimatedInputTokens = Math.ceil(summary.diffContext.length / 4);
+    const systemPrompt = buildSystemPrompt(summary);
+    
+    // We must ensure the total input (systemPrompt + diffText + externalText) stays within the 8000-token limit of the endpoint.
+    // Let's set a strict ceiling for input tokens: 6000 tokens (~24000 characters).
+    const maxInputChars = 24000;
+    
+    // System prompt is essential. Let's see how much budget is left.
+    const remainingBudgetForDiffAndContext = maxInputChars - systemPrompt.length;
+    
+    let diffText = `DIFF:\n\n${summary.diffContext}`;
+    let externalText = summary.externalContext
+      ? `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${summary.externalContext}`
+      : '';
+      
+    if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
+      // Allocate up to 16,000 chars for diffText, or the remaining budget if smaller
+      const maxDiffChars = Math.min(diffText.length, Math.max(16000, remainingBudgetForDiffAndContext - 2000));
+      if (diffText.length > maxDiffChars) {
+        diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+      }
+      
+      const remainingForExternal = remainingBudgetForDiffAndContext - diffText.length;
+      if (externalText && remainingForExternal > 200) {
+        if (externalText.length > remainingForExternal) {
+          externalText = externalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+        }
+      } else {
+        externalText = '';
+      }
+    }
+
+    // Count every chunk that actually goes into the request.
+    const totalInputChars = systemPrompt.length + diffText.length + externalText.length;
+    const estimatedInputTokens = Math.ceil(totalInputChars / 4);
+
     const maxOutputTokens = estimateMaxOutputTokens(summary);
     const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
+
     const baseContent = [
-      { type: 'text', text: buildSystemPrompt(summary) } as const,
-      { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
+      { type: 'text', text: systemPrompt } as const,
+      { type: 'text', text: diffText } as const,
     ];
 
-    if (summary.externalContext) {
-      baseContent.push({
-        type: 'text',
-        text: `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${summary.externalContext}`
-      } as const);
+    if (externalText) {
+      baseContent.push({ type: 'text', text: externalText } as const);
     }
 
     const message = new HumanMessage({ content: baseContent });
