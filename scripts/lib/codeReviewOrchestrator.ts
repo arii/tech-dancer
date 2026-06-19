@@ -125,17 +125,18 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     // Verify if origin/main exists, fallback to git history for CI if needed
     try {
       execSync('git rev-parse origin/main', { stdio: 'ignore' });
+      diffCommand = 'git diff -U10 origin/main...HEAD';
+      nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
     } catch {
       try {
         execSync('git rev-parse main', { stdio: 'ignore' });
-        diffCommand = 'git diff main...HEAD';
+        diffCommand = 'git diff -U10 main...HEAD';
         nameOnlyCommand = 'git diff --name-only main...HEAD';
       } catch {
-        diffCommand = 'git diff HEAD~1 HEAD';
+        diffCommand = 'git diff -U10 HEAD~1 HEAD';
         nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
       }
     }
-
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
