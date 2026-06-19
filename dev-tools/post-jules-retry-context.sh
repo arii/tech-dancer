@@ -67,7 +67,12 @@ RUNS_JSON=$(gh run list \
   --workflow "$WORKFLOW_FILE" \
   --branch "$PR_HEAD_BRANCH" \
   --json databaseId,conclusion,createdAt,headBranch,event,headSha \
-  --limit 50)
+  --limit 50 || true)
+
+if [[ -z "$RUNS_JSON" ]]; then
+  post_skip_comment "failed to fetch workflow runs."
+  exit 0
+fi
 
 RUNS=$(jq -c --arg branch "$PR_HEAD_BRANCH" '[.[] | select(.headBranch == $branch)] | sort_by(.createdAt) | .[-2:]' <<<"$RUNS_JSON")
 RUN_COUNT=$(jq 'length' <<<"$RUNS")

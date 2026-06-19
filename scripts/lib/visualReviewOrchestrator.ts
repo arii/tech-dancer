@@ -49,11 +49,20 @@ export async function orchestrateVisualReview(
 
     if (fs.existsSync('scripts/build-repo-context.py')) {
       const output = execSync('python3 scripts/build-repo-context.py', { encoding: 'utf-8' });
-      contextData = { ...contextData, ...JSON.parse(output) };
+      if (output.trim()) {
+        try {
+          const parsed = JSON.parse(output);
+          contextData = { ...contextData, ...parsed };
+        } catch (e) {
+          console.error('Invalid JSON output from build-repo-context.py:', e);
+          throw new Error('Failed to parse repo context', { cause: e });
+        }
+      }
     }
     repoContext = JSON.stringify(contextData);
   } catch (error) {
     console.warn('Could not generate repo context:', error);
+    process.exit(1);
   }
 
   for (const route of summary.routes) {
