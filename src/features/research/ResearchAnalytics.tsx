@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -93,9 +93,15 @@ function FlagshipCard({
     setIsExpanded(!isExpanded);
   };
 
+  const handleSourceClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <BaseCard
       key={tool.id}
+      to={internalPath}
+      ariaLabel={`View details for ${tool.title}`}
       padding={0}
       gap={0}
       surface="surface"
@@ -105,11 +111,27 @@ function FlagshipCard({
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} className="pt-[14px] px-4 pb-4" gap={0}>
-          <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
+          <Box display="flex" justify="between" align="start" width="full" marginBottom={3} className="relative z-20">
             <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
-            <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
+            <Box display="flex" align="center" gap={2}>
+              {tool.sourceUrl && (
+                <Box
+                  as="a"
+                  href={tool.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handleSourceClick}
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 text-dim hover:text-accent transition-colors"
+                  title="View Source Code"
+                >
+                  <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" className="hidden sm:inline">Source</Text>
+                  <Icon icon={Github} size="sm" />
+                </Box>
+              )}
+              <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
+            </Box>
           </Box>
 
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
@@ -134,7 +156,7 @@ function FlagshipCard({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none z-30">
+            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none z-30 relative">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -157,31 +179,20 @@ function FlagshipCard({
           </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
-            <ActionButton
-              as={NavLink}
-              to={internalPath}
-              variant="primary"
-              paddingX={4}
-              paddingY={2}
-              zIndex={20}
-              width={{ base: "full", sm: "auto" }}
-            >
-              {tool.externalLinkDisplayLabel || 'View Assets'}
-              <Icon icon={ArrowRight} size="sm" />
-            </ActionButton>
             {tool.externalUrl && (
               <ActionButton
                 as="a"
                 href={tool.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                variant="secondary"
+                variant="primary"
                 paddingX={4}
                 paddingY={2}
                 zIndex={20}
                 width={{ base: "full", sm: "auto" }}
+                onClick={(e) => e.stopPropagation()}
               >
-                Live Link
+                {tool.externalLinkDisplayLabel || 'Open Link'}
                 <Icon icon={ExternalLink} size="sm" />
               </ActionButton>
             )}
@@ -196,6 +207,7 @@ function FlagshipCard({
                 paddingY={2}
                 zIndex={20}
                 width={{ base: "full", sm: "auto" }}
+                onClick={(e) => e.stopPropagation()}
               >
                 Source Repo
                 <Icon icon={Github} size="sm" />
@@ -225,72 +237,71 @@ function ToolCard({ tool }: {
   };
 
   return (
-    <Stack
-      as="article"
-      height="full" align="start" textAlign="left" gap={0}
-      className={cn(cardVariants({ interactive: true }), "relative pt-[14px] px-4 pb-4 flex flex-col h-full group/card")}
+    <BaseCard
+      key={tool.id}
+      to={internalPath}
+      ariaLabel={`View details for ${tool.title}`}
+      height="full"
+      padding={0}
+      className="group/card"
     >
-      <Box
-        as={NavLink}
-        to={internalPath}
-        className="absolute inset-0 z-10 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        aria-label={`View details for ${tool.title}`}
-      />
-      <Stack gap={0} width="full">
-        <Box display="flex" justify="between" align="start" width="full" marginBottom={3} className="relative z-20">
-          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
-            <Icon icon={getToolIcon(tool)} size="md" color="dim" />
+      <Stack height="full" align="start" textAlign="left" gap={0} className="pt-[14px] px-4 pb-4 flex flex-col h-full">
+        <Stack gap={0} width="full">
+          <Box display="flex" justify="between" align="start" width="full" marginBottom={3} className="relative z-20">
+            <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
+              <Icon icon={getToolIcon(tool)} size="md" color="dim" />
+            </Box>
+            <Box display="flex" align="center" gap={2}>
+              {tool.sourceUrl && (
+                <Box
+                  as="a"
+                  href={tool.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handleSourceClick}
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 text-dim hover:text-accent transition-colors"
+                  title="View Source Code"
+                >
+                  <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" className="hidden sm:inline">Source</Text>
+                  <Icon icon={Github} size="sm" />
+                </Box>
+              )}
+              <StatusBadge label={tool.status} />
+            </Box>
           </Box>
-          <Box display="flex" align="center" gap={2}>
-            {tool.sourceUrl && (
-              <Box
-                as="a"
-                href={tool.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handleSourceClick}
-                className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 text-dim hover:text-accent transition-colors"
-                title="View Source Code"
-              >
-                <Text variant="mono" size="micro" weight="font-bold" uppercase tracking="widest" className="hidden sm:inline">Source</Text>
-                <Icon icon={Github} size="sm" />
-              </Box>
-            )}
-            <StatusBadge label={tool.status} />
+          <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
+          <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
+          {tool.subtitle && (
+            <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
+          )}
+          <Text
+            size="sm"
+            color="dim"
+            leading="relaxed"
+            marginBottom={3}
+            className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
+          >
+            {tool.description}
+          </Text>
+          {tool.description && tool.description.length > 120 && (
+            <Box as="button" onClick={toggleExpand} className="relative z-20 text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
+              {isExpanded ? "Read Less" : "Read More"}
+            </Box>
+          )}
+          <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+            {tool.tags.map(tag => (
+              <Text key={tag} className="flagship-tag">{tag}</Text>
+            ))}
           </Box>
-        </Box>
-        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
-        <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
-        {tool.subtitle && (
-          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
-        )}
-        <Text
-          size="sm"
-          color="dim"
-          leading="relaxed"
-          marginBottom={3}
-          className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
-        >
-          {tool.description}
-        </Text>
-        {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} className="relative z-20 text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
-            {isExpanded ? "Read Less" : "Read More"}
-          </Box>
-        )}
-        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
-          {tool.tags.map(tag => (
-            <Text key={tag} className="flagship-tag">{tag}</Text>
-          ))}
+        </Stack>
+        <Box display="flex" align="center" gap={2} marginTop="auto">
+          <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
+            View Assets
+          </Text>
+          <Icon icon={ArrowRight} size="md" color="accent" />
         </Box>
       </Stack>
-      <Box display="flex" align="center" gap={2} marginTop="auto">
-        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          View Assets
-        </Text>
-        <Icon icon={ArrowRight} size="md" color="accent" />
-      </Box>
-    </Stack>
+    </BaseCard>
   );
 }
 
