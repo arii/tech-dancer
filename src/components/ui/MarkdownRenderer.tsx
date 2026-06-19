@@ -154,8 +154,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   shadow="sm"
                   loading="lazy"
                   alt={alt || "Article illustration"}
-                  maxWidth="full"
+                  maxWidth={{ base: "full", md: "2xl" }}
+                  maxHeight={{ md: "screen-md" }}
                   height="auto"
+                  className="object-contain"
                   {...props}
                 />
               </Box>
@@ -200,8 +202,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       alt="Workflow Diagram"
                       radius="lg"
                       shadow="sm"
-                      maxWidth="full"
-                      maxHeight={96}
+                      maxWidth={{ base: "full", md: "2xl" }}
+                      maxHeight={{ base: 96, md: "screen-sm" }}
                       className="object-contain"
                       loading="lazy"
                     />
