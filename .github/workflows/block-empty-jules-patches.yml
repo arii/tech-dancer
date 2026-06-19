@@ -15,16 +15,18 @@ jobs:
       - name: Checkout Code with History
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - name: Detect Empty Patch
         id: check
         run: |
-          if git diff --quiet HEAD~1 HEAD; then
-            echo "EMPTY=true" >> "$GITHUB_OUTPUT"
-            echo "❌ Empty commit detected!"
+          echo "Comparing against base branch: ${{ github.base_ref }}"
+          git fetch origin ${{ github.base_ref }}
+          if git diff --quiet origin/${{ github.base_ref }}...HEAD; then
+            echo "EMPTY=true" >> $GITHUB_OUTPUT
+            echo "❌ Empty pull request detected!"
           else
-            echo "EMPTY=false" >> "$GITHUB_OUTPUT"
-            echo "✅ Patch contains changes."
+            echo "EMPTY=false" >> $GITHUB_OUTPUT
+            echo "✅ Pull request contains changes."
           fi
       - name: Close PR if Empty
         if: steps.check.outputs.EMPTY == 'true'
