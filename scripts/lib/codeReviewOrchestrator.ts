@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -34,15 +34,106 @@ async function fetchPRGoal(): Promise<string | undefined> {
   }
 }
 
+function parseImports(content: string): Map<string, string> {
+  const imports = new Map<string, string>();
+  const importRegex = /import\s+([\s\S]*?)\s+from\s+['"]([^'"]+)['"]/g;
+  let match;
+  while ((match = importRegex.exec(content)) !== null) {
+    let symbolsPart = match[1].trim();
+    const importPath = match[2];
+
+    // Remove 'type ' prefix if it exists
+    if (symbolsPart.startsWith('type ')) {
+      symbolsPart = symbolsPart.slice(5).trim();
+    }
+
+    if (symbolsPart.includes('{')) {
+      const curlyMatch = symbolsPart.match(/\{([\s\S]*?)\}/);
+      if (curlyMatch) {
+        const curlySymbols = curlyMatch[1].split(',');
+        for (let s of curlySymbols) {
+          s = s.trim();
+          if (!s) continue;
+          if (s.startsWith('type ')) {
+            s = s.slice(5).trim();
+          }
+          const parts = s.split(/\s+as\s+/);
+          const localName = parts[parts.length - 1].trim();
+          imports.set(localName, importPath);
+        }
+      }
+      const beforeCurlies = symbolsPart.split('{')[0].replace(/,/g, '').trim();
+      if (beforeCurlies) {
+        imports.set(beforeCurlies, importPath);
+      }
+    } else if (symbolsPart.includes('* as ')) {
+      const parts = symbolsPart.split(/\s+as\s+/);
+      const localName = parts[parts.length - 1].trim();
+      imports.set(localName, importPath);
+    } else if (symbolsPart) {
+      imports.set(symbolsPart, importPath);
+    }
+  }
+  return imports;
+}
+
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function resolveImportPath(importPath: string, currentFile: string): string | undefined {
+  let resolvedPath: string;
+  if (importPath.startsWith('@/')) {
+    resolvedPath = path.join('src', importPath.slice(2));
+  } else if (importPath.startsWith('.')) {
+    resolvedPath = path.join(path.dirname(currentFile), importPath);
+  } else {
+    // Likely a node module, skip for now as we want project-specific interfaces
+    return undefined;
+  }
+
+  const extensions = ['.tsx', '.ts', '.d.ts', '.jsx', '.js'];
+  try {
+    if (fs.existsSync(resolvedPath) && fs.lstatSync(resolvedPath).isFile()) {
+      return resolvedPath;
+    }
+
+    for (const ext of extensions) {
+      if (fs.existsSync(resolvedPath + ext)) {
+        return resolvedPath + ext;
+      }
+    }
+
+    for (const ext of extensions) {
+      const indexPath = path.join(resolvedPath, 'index' + ext);
+      if (fs.existsSync(indexPath)) {
+        return indexPath;
+      }
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
 export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
   try {
-    let diffCommand = 'git diff -U10 origin/main...HEAD';
+    let diffCommand = 'git diff -U10 HEAD~1 HEAD';
+    let nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
 
     // Verify if origin/main exists, fallback to git history for CI if needed
     try {
       execSync('git rev-parse origin/main', { stdio: 'ignore' });
     } catch {
-      diffCommand = 'git diff -U10 HEAD~1 HEAD';
+      try {
+        execSync('git rev-parse main', { stdio: 'ignore' });
+        diffCommand = 'git diff main...HEAD';
+        nameOnlyCommand = 'git diff --name-only main...HEAD';
+      } catch {
+        diffCommand = 'git diff HEAD~1 HEAD';
+        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+      }
     }
 
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
@@ -56,10 +147,59 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
 
+    // Context gathering
+    const externalFilePaths = new Set<string>();
+
+    // Extract baseRef for git diff <baseRef> -- <file>
+    // diffCommand examples: 'git diff origin/main...HEAD', 'git diff main...HEAD', 'git diff HEAD~1 HEAD'
+    const diffParts = diffCommand.split(' ');
+    const diffSpec = diffParts[2] || 'HEAD~1';
+    const baseRef = diffSpec.split('...')[0] || 'HEAD~1';
+
+    for (const file of files) {
+      if (!fs.existsSync(file)) continue;
+
+      try {
+        const diffResult = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' });
+        const fileDiff = diffResult.stdout || '';
+        const fileContent = fs.readFileSync(file, 'utf-8');
+        const imports = parseImports(fileContent);
+
+        // Identify which imported symbols are used in the diff
+        for (const [symbol, importPath] of imports.entries()) {
+          // Use a safer regex that handles characters like $ and ensures word boundaries correctly
+          const symbolRegex = new RegExp(`(?:^|[^a-zA-Z0-9_$])${escapeRegExp(symbol)}(?:[^a-zA-Z0-9_$]|$)`);
+          if (symbolRegex.test(fileDiff)) {
+            const resolved = resolveImportPath(importPath, file);
+            if (resolved && resolved !== file) externalFilePaths.add(resolved);
+          }
+        }
+      } catch (err) {
+        console.warn(`Could not gather context for ${file}:`, err);
+      }
+    }
+
+    let externalContext = '';
+    const maxExternalChars = 30000;
+    for (const extPath of externalFilePaths) {
+      if (externalContext.length >= maxExternalChars) break;
+      if (fs.existsSync(extPath)) {
+        const content = fs.readFileSync(extPath, 'utf-8');
+        externalContext += `\n\n--- FILE: ${extPath} ---\n${content}`;
+      }
+    }
+
+    if (externalContext.length > maxExternalChars) {
+      externalContext = externalContext.slice(0, maxExternalChars) + '\n\n...[TRUNCATED EXTERNAL CONTEXT]';
+    }
+
+    const hasRealContent = externalContext.replace(/\n\n\.\.\.\[TRUNCATED EXTERNAL CONTEXT\]/g, '').trim().length > 0;
+
     return {
       diffContext,
       fullDiff,
       prGoal,
+      externalContext: hasRealContent ? externalContext.trim() : undefined,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);

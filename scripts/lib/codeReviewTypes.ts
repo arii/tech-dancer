@@ -16,6 +16,7 @@ export interface CodeReviewSummary {
   diffContext: string;
   fullDiff?: string;
   prGoal?: string;
+  externalContext?: string;
   previousState?: CodeReviewState;
 }
 

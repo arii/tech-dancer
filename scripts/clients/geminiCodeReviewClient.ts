@@ -108,6 +108,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
     ];
 
+    if (summary.externalContext) {
+      baseContent.push({
+        type: 'text',
+        text: `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${summary.externalContext}`
+      } as const);
+    }
+
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
 
