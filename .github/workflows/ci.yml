@@ -241,13 +241,7 @@ jobs:
         run: pnpm run impact:dom-diff
       - name: Check if visual changes exist
         id: check_visuals
-        run: |
-          if [ -f artifacts/visual-review/summary.json ]; then
-            COUNT=$(jq '[.routes[] | select(.differencePercent > 1.5)] | length' artifacts/visual-review/summary.json)
-            echo "changed_routes=$COUNT" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed_routes=0" >> "$GITHUB_OUTPUT"
-          fi
+        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
       - name: Code review agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
