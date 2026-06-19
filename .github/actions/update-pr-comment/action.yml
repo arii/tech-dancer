@@ -61,7 +61,17 @@ runs:
             }
 
             bodyParts.push(commentTag);
-            const body = bodyParts.join('\n');
+            let body = bodyParts.join('\n');
+
+            const MAX_LENGTH = 65536;
+            if (body.length > MAX_LENGTH) {
+              const truncationNotice = '\n\n... (truncated due to GitHub comment size limits)\n';
+              const availableLength = MAX_LENGTH - commentTag.length - truncationNotice.length;
+              const contentParts = bodyParts.slice(0, bodyParts.length - 1); // exclude commentTag
+              let content = contentParts.join('\n');
+              content = content.slice(0, availableLength) + truncationNotice;
+              body = content + commentTag;
+            }
 
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner,
