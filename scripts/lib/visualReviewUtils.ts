@@ -181,6 +181,39 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   return totalReviews;
 }
 
+export async function getLatestPRComment(reportTitle: string): Promise<{ id: number; body: string; user: { type: string } } | null> {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  const prNumber = process.env.PR_NUMBER;
+
+  if (!token || !repo || !prNumber) return null;
+
+  const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+
+    if (!response.ok) return null;
+
+    const comments = await response.json() as Array<{
+      id: number;
+      body: string;
+      user: { type: string };
+    }>;
+
+    return comments.find(c =>
+      c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
+    ) || null;
+  } catch (error) {
+    console.warn('⚠️ Error fetching PR comments:', error);
+    return null;
+  }
+}
+
 export async function postPRComment(body: string, reportTitle: string): Promise<void> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
@@ -191,27 +224,9 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
     return;
   }
 
-  const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
+  const existingComment = await getLatestPRComment(reportTitle);
 
-  // Check for existing comments from this bot to avoid spamming the PR
-  const getCommentsResponse = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-    },
-  });
-
-  if (getCommentsResponse.ok) {
-    const comments = await getCommentsResponse.json() as Array<{
-      id: number;
-      body: string;
-      user: { type: string };
-    }>;
-    const existingComment = comments.find(c =>
-      c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
-    );
-
-    if (existingComment) {
+  if (existingComment) {
       const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
       const currentCount = match ? parseInt(match[1], 10) : 1;
       const newCount = currentCount + 1;
@@ -235,9 +250,9 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
 
       console.log('✅ Updated existing PR comment');
       return;
-    }
   }
 
+  const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
   const newBody = `<!-- ai-review-count: 1 -->\n${body}`;
 
   const response = await fetch(url, {

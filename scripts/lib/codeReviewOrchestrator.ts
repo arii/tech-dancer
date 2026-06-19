@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
-import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
+import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getLatestPRComment } from './visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
@@ -84,11 +84,14 @@ export function generateCodeReviewMarkdown(
     costLine = `**Cost:** ~$${result.cost.toFixed(5)} (${result.tokens} tokens)\n`;
   }
 
+  const verdictEmoji = result.llmVerdict === 'fail' ? '❌ FAIL' : (result.llmVerdict === 'warn' ? '⚠️ WARN' : '✅ PASS');
+
   return `## ${client.reportTitle}
 
 > ${client.botTagline}
 
 **Reviewing:** ${prLink}
+**Latest Verdict:** ${verdictEmoji}
 ${costLine}
 
 ### Code Review Feedback
@@ -121,6 +124,12 @@ export async function orchestrateCodeReview(
   }
 
   const summary = await getCodeDiffSummary();
+
+  // Fetch previous review if it exists to provide stateful context
+  const previousComment = await getLatestPRComment(client.reportTitle);
+  if (previousComment) {
+    summary.previousReview = previousComment.body;
+  }
 
   if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);

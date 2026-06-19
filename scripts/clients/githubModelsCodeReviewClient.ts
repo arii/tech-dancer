@@ -4,18 +4,40 @@ import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel } from '../lib/modelPicker';
 
-function buildSystemPrompt(prGoal: string | undefined): string {
-  const goalSection = prGoal
+function buildSystemPrompt(summary: CodeReviewSummary): string {
+  const goalSection = summary.prGoal
     ? `This PR's stated goal:
-"${prGoal}"
+"${summary.prGoal}"
 
 `
     : '';
+
+  const previousReviewSection = summary.previousReview
+    ? `PREVIOUS REVIEW CONTEXT:
+The following review was provided on a previous iteration of this PR.
+Use it to perform a DIFFERENTIAL REVIEW:
+1. Acknowledge fixed issues (e.g., "The type safety issue previously flagged is now resolved").
+2. Only re-flag persistent issues if they were not addressed or if the fix is incomplete.
+3. Maintain consistency in your verdict; do not reverse a PASS to a FAIL unless the new diff introduces a genuine regression or blocking bug.
+
+---
+${summary.previousReview}
+---
+
+`
+    : '';
+
   return `You are an expert software engineer reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
 Provide actionable feedback. Focus on HIGH severity issues.
 
-${goalSection}Severity rules — apply these strictly:
+${goalSection}${previousReviewSection}Knowledge Base (Repository-specific facts):
+- Tailwind CSS: This project uses Tailwind CSS v4. 'max-h-none' is a valid utility (mapping to max-height: none).
+- Design System Primitives: Layout MUST use primitives (Box, Stack, Grid) from src/layouts/ instead of raw Tailwind classes.
+- Numeric Tokens: Spacing props (padding, margin, gap, top, left, etc.) and size props (height, width) in primitives accept numbers which correspond to Tailwind spacing tokens (e.g., 96 -> 384px). This is intentional and NOT a bug.
+- Custom Tokens: 'viewport-half' is a valid design token for 50vh, handled by the Box component's resolution logic.
+
+Severity rules — apply these strictly:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
   passed where the type doesn't allow it, a class or function that doesn't exist, a call
   with the wrong arity, a test that would fail. Cite the exact line(s).
@@ -80,7 +102,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const model = await createModel();
     const baseContent = [
-      { type: 'text', text: buildSystemPrompt(summary.prGoal) } as const,
+      { type: 'text', text: buildSystemPrompt(summary) } as const,
       { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
     ];
 
