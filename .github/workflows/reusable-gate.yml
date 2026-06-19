@@ -18,7 +18,7 @@ jobs:
       has_changes: ${{ steps.check_diff.outputs.has_changes }}
     steps:
       - name: Checkout Code with History
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Verify Diff Composition
@@ -26,10 +26,10 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
             echo "Comparing against base branch: $BASE_REF"
-            # Explicitly fetch the base branch to ensure it exists for the diff
             git fetch origin "$BASE_REF"
             if git diff --quiet "origin/$BASE_REF...HEAD"; then
               echo "has_changes=false" >> "$GITHUB_OUTPUT"
@@ -39,10 +39,20 @@ jobs:
               echo "✅ Valid pull request found with actual file changes."
             fi
           else
-            # For pushes, check if we have more than 1 commit to compare
-            COMMIT_COUNT=$(git rev-list --count HEAD)
-            if [ "$COMMIT_COUNT" -gt 1 ]; then
-              if git diff --quiet HEAD~1 HEAD; then
+            # For pushes, compare the push range to ignore empty metadata patches
+            # Default to checking against previous commit if before_sha is missing/empty
+            DIFF_TARGET="HEAD~1"
+            if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+               # New branch or tag, check against parent if it exists
+               if ! git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
+                 DIFF_TARGET=""
+               fi
+            else
+               DIFF_TARGET="$BEFORE_SHA"
+            fi
+
+            if [ -n "$DIFF_TARGET" ]; then
+              if git diff --quiet "$DIFF_TARGET" HEAD; then
                 echo "has_changes=false" >> "$GITHUB_OUTPUT"
                 echo "❌ Empty commit detected! No code files modified."
               else
@@ -51,6 +61,6 @@ jobs:
               fi
             else
               echo "has_changes=true" >> "$GITHUB_OUTPUT"
-              echo "✅ Initial commit or single commit found."
+              echo "✅ Initial commit found."
             fi
           fi
