@@ -55,6 +55,10 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const fullDiff = rawDiff;
 
+    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
+      .split('\n')
+      .filter(Boolean);
+
     const prGoal = await fetchPRGoal();
 
     return {
@@ -142,7 +146,7 @@ export async function orchestrateCodeReview(
     summary.previousState = prevState;
   }
 
-  if (!summary.diffContext) {
+  if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo code changes detected.\n`);
     fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));

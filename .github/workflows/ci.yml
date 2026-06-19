@@ -71,6 +71,7 @@ jobs:
         uses: ./.github/actions/setup-node-pnpm
 
       - name: Validate Runtime
+        shell: bash
         run: |
           echo "::group::Validate Runtime"
           trap 'echo "::endgroup::"' EXIT
@@ -78,6 +79,7 @@ jobs:
           pnpm run doctor
 
       - name: Verify lockfile integrity
+        shell: bash
         run: |
           echo "::group::pnpm install"
           trap 'echo "::endgroup::"' EXIT
@@ -100,6 +102,7 @@ jobs:
         run: pnpm test
 
       - name: Run CLI Unit Tests
+        shell: bash
         run: |
           echo "::group::Pytest"
           trap 'echo "::endgroup::"' EXIT
@@ -111,6 +114,7 @@ jobs:
         run: CI=true pnpm run knip
 
       - name: TypeScript `any` Ratchet
+        shell: bash
         run: |
           echo "::group::Ratchet Any"
           trap 'echo "::endgroup::"' EXIT
@@ -134,12 +138,14 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install dependencies
+        shell: bash
         run: |
           echo "::group::pnpm install"
           trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit - Gate
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
