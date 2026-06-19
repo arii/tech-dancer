@@ -30,14 +30,12 @@ export function getCodeDiffSummary(): CodeReviewSummary {
           contextData = { ...contextData, ...parsed };
         } catch (e) {
           console.error('Invalid JSON output from build-repo-context.py:', e);
-          throw new Error('Failed to parse repo context', { cause: e });
         }
       }
     }
     repoContext = JSON.stringify(contextData);
   } catch (error) {
     console.warn('Could not generate repo context:', error);
-    process.exit(1);
   }
   try {
     let diffCommand = 'git diff origin/main...HEAD';

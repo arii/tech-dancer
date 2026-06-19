@@ -1,5 +1,5 @@
 export interface CodeReviewSummary {
-  repoContext?: string;
+  repoContext?: string; // Always a JSON stringified object
   files: string[];
   diffContext: string;
 }

@@ -132,7 +132,9 @@ elif [[ -n "$PREV_COMMIT" && "$PREV_COMMIT" == "$HEAD_COMMIT" ]]; then
   COMMITS_APPLIED="0"
 fi
 
-cat > /tmp/jules-retry-context.md <<EOF_BODY
+BODY_FILE=$(mktemp)
+
+cat > "$BODY_FILE" <<EOF_BODY
 $COMMENT_PREFIX — Entropy Check
 
 This comment compares the last two \`$WORKFLOW_FILE\` runs on \`$PR_HEAD_BRANCH\` so the next repair attempt can focus on signal instead of re-reading the same failing state.
@@ -159,4 +161,6 @@ ${OTHER_TRANSITIONS:-_none_}
 $RELEVANT_TOUCHED
 EOF_BODY
 
-post_or_update_comment /tmp/jules-retry-context.md
+post_or_update_comment "$BODY_FILE"
+
+rm -f "$BODY_FILE"
