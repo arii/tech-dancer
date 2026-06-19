@@ -36,6 +36,10 @@ echo "Scanning for stale previews..."
 while IFS= read -r index_file; do
     dir=$(dirname "$index_file" | sed 's|^\./||')
 
+    # The true 'branch name' might contain slashes. We need a way to map 'dir' back to a known branch.
+    # Actually, gh-pages structure is usually just $REF_NAME as the root. So if $REF_NAME contains slashes,
+    # then $dir is the full branch name. The previous logic works if we just assume $dir is the branch name.
+
     # Skip protected top-level directories
     top_level="${dir%%/*}"
     is_protected=false
@@ -51,9 +55,23 @@ while IFS= read -r index_file; do
     fi
 
     # Check branch existence
+    # A directory path might be branch/nested/route. We need to check if $dir or any of its parents
+    # matches a known active branch.
     branch_exists=false
+
+    # Try the exact dir first
     if echo "$ACTIVE_BRANCHES" | grep -Fxq -- "$dir"; then
         branch_exists=true
+    else
+        # Find the longest matching prefix in ACTIVE_BRANCHES
+        for active_branch in $ACTIVE_BRANCHES; do
+            if [[ "$dir" == "$active_branch/"* ]]; then
+                branch_exists=true
+                # Update dir to be the actual branch root so we don't prune subdirectories individually
+                dir="$active_branch"
+                break
+            fi
+        done
     fi
 
     # Check if it has an open PR (if info provided)
