@@ -6,7 +6,7 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext
 } from '../../../scripts/lib/codeReviewUtils';
-import type { CodeReviewSummary } from '../../../scripts/lib/codeReviewTypes';
+import type { CodeReviewSummary, ReviewFinding } from '../../../scripts/lib/codeReviewTypes';
 
 describe('codeReviewUtils', () => {
   describe('buildSystemPrompt', () => {
@@ -91,7 +91,7 @@ describe('codeReviewUtils', () => {
       const summary: CodeReviewSummary = {
         diffContext: '',
         previousState: {
-          findings: Array.from({ length: 5 }).fill({ id: 'f', file: 'f.ts', issue: 'i', status: 'open' }) as any
+          findings: Array.from({ length: 5 }).fill({ id: 'f', file: 'f.ts', issue: 'i', status: 'open' }) as ReviewFinding[]
         }
       };
       // 1500 + 5 * 200 = 2500
@@ -102,7 +102,7 @@ describe('codeReviewUtils', () => {
       const summary: CodeReviewSummary = {
         diffContext: '',
         previousState: {
-          findings: Array.from({ length: 20 }).fill({ id: 'f', file: 'f.ts', issue: 'i', status: 'open' }) as any
+          findings: Array.from({ length: 20 }).fill({ id: 'f', file: 'f.ts', issue: 'i', status: 'open' }) as ReviewFinding[]
         }
       };
       expect(estimateMaxOutputTokens(summary)).toBe(4096);
