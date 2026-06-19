@@ -12,11 +12,21 @@ function buildSystemPrompt(summary: CodeReviewSummary): string {
 `
     : '';
 
+  const incrementalDiffSection = summary.incrementalDiff
+    ? `INCREMENTAL DIFF (since last review at ${summary.history?.[0]?.sha.slice(0, 7)}):
+This diff shows ONLY what has changed since your last review. Use it to verify fixes.
+---
+${summary.incrementalDiff}
+---
+
+`
+    : '';
+
   const previousReviewSection = summary.previousReview
     ? `PREVIOUS REVIEW CONTEXT:
 The following review was provided on a previous iteration of this PR.
 Use it to perform a DIFFERENTIAL REVIEW:
-1. Acknowledge fixed issues (e.g., "The type safety issue previously flagged is now resolved").
+1. Acknowledge fixed issues (e.g., "The type safety issue previously flagged is now resolved"). Use the INCREMENTAL DIFF above to verify.
 2. Only re-flag persistent issues if they were not addressed or if the fix is incomplete.
 3. Maintain consistency in your verdict; do not reverse a PASS to a FAIL unless the new diff introduces a genuine regression or blocking bug.
 
@@ -31,7 +41,7 @@ ${summary.previousReview}
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
 Provide actionable feedback. Focus on HIGH severity issues.
 
-${goalSection}${previousReviewSection}Knowledge Base (Repository-specific facts):
+${goalSection}${incrementalDiffSection}${previousReviewSection}Knowledge Base (Repository-specific facts):
 - Tailwind CSS: This project uses Tailwind CSS v4. 'max-h-none' is a valid utility (mapping to max-height: none).
 - Design System Primitives: Layout MUST use primitives (Box, Stack, Grid) from src/layouts/ instead of raw Tailwind classes.
 - Numeric Tokens: Spacing props (padding, margin, gap, top, left, etc.) and size props (height, width) in primitives accept numbers which correspond to Tailwind spacing tokens (e.g., 96 -> 384px). This is intentional and NOT a bug.

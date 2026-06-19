@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
+import type { ReviewState } from './codeReviewTypes';
 
 export function imageToBase64(filePath: string): string {
   return fs.readFileSync(filePath).toString('base64');
@@ -275,4 +276,19 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
   }
 
   console.log('✅ Posted PR comment');
+}
+
+export function extractReviewState(body: string): ReviewState | null {
+  const match = body.match(/<!-- ai-review-state: (.*) -->/);
+  if (!match) return null;
+  try {
+    return JSON.parse(Buffer.from(match[1], 'base64').toString('utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+export function formatReviewState(state: ReviewState): string {
+  const base64 = Buffer.from(JSON.stringify(state)).toString('base64');
+  return `<!-- ai-review-state: ${base64} -->`;
 }

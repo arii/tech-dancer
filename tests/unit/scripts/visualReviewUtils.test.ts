@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
-import { getLatestPRComment } from '../../../scripts/lib/visualReviewUtils';
+import { getLatestPRComment, extractReviewState, formatReviewState } from '../../../scripts/lib/visualReviewUtils';
+import { ReviewState } from '../../../scripts/lib/codeReviewTypes';
 
 describe('getLatestPRComment', () => {
   const mockToken = 'mock-token';
@@ -87,5 +88,35 @@ describe('getLatestPRComment', () => {
 
     const result = await getLatestPRComment('Test Report');
     expect(result).toBeNull();
+  });
+});
+
+describe('ReviewState persistence', () => {
+  it('correctly encodes and extracts state', () => {
+    const mockState: ReviewState = {
+      count: 5,
+      lastSha: 'abc1234',
+      history: [
+        { sha: 'abc1234', verdict: 'pass', timestamp: '2024-01-01T00:00:00Z' }
+      ]
+    };
+
+    const formatted = formatReviewState(mockState);
+    expect(formatted).toContain('<!-- ai-review-state: ');
+
+    const body = `Some prefix content\n${formatted}\nSome suffix content`;
+    const extracted = extractReviewState(body);
+
+    expect(extracted).toEqual(mockState);
+  });
+
+  it('returns null if state tag is missing', () => {
+    const extracted = extractReviewState('No state here');
+    expect(extracted).toBeNull();
+  });
+
+  it('returns null if state tag is malformed', () => {
+    const extracted = extractReviewState('<!-- ai-review-state: invalid-base64!!! -->');
+    expect(extracted).toBeNull();
   });
 });

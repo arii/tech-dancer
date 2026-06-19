@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
-import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getLatestPRComment } from './visualReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
+import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getLatestPRComment, extractReviewState, formatReviewState } from './visualReviewUtils';
+import type { CodeReviewSummary, CodeReviewResult, ReviewState } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
@@ -74,7 +74,8 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
 export function generateCodeReviewMarkdown(
   result: CodeReviewResult,
-  client: CodeReviewClientStrategy
+  client: CodeReviewClientStrategy,
+  state: ReviewState
 ): string {
   const prNumber = process.env.PR_NUMBER;
   const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
@@ -86,13 +87,25 @@ export function generateCodeReviewMarkdown(
 
   const verdictEmoji = result.llmVerdict === 'fail' ? '❌ FAIL' : (result.llmVerdict === 'warn' ? '⚠️ WARN' : '✅ PASS');
 
-  return `## ${client.reportTitle}
+  const historyRows = state.history.map(h =>
+    `| ${h.sha.slice(0, 7)} | ${h.verdict.toUpperCase()} | ${new Date(h.timestamp).toLocaleString()} |`
+  ).join('\n');
+
+  const historyTable = state.history.length > 0
+    ? `\n### Review History\n| Commit | Verdict | Date |\n| :--- | :--- | :--- |\n${historyRows}\n`
+    : '';
+
+  const stateTag = formatReviewState(state);
+
+  return `${stateTag}
+## ${client.reportTitle}
 
 > ${client.botTagline}
 
 **Reviewing:** ${prLink}
 **Latest Verdict:** ${verdictEmoji}
 ${costLine}
+${historyTable}
 
 ### Code Review Feedback
 ${result.feedback}
@@ -127,8 +140,21 @@ export async function orchestrateCodeReview(
 
   // Fetch previous review if it exists to provide stateful context
   const previousComment = await getLatestPRComment(client.reportTitle);
+  const state: ReviewState = previousComment
+    ? (extractReviewState(previousComment.body) || { count: 0, history: [] })
+    : { count: 0, history: [] };
+
   if (previousComment) {
     summary.previousReview = previousComment.body;
+    summary.history = state.history;
+
+    if (state.lastSha) {
+      try {
+        summary.incrementalDiff = execSync(`git diff -U10 ${state.lastSha} HEAD`, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      } catch {
+        // Fallback if SHA is missing from history
+      }
+    }
   }
 
   if (summary.files.length === 0 || !summary.diffContext) {
@@ -141,7 +167,19 @@ export async function orchestrateCodeReview(
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
   const reviewResult = await client.invokeReview(summary);
-  const report = generateCodeReviewMarkdown(reviewResult, client);
+
+  // Update state
+  const headSha = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
+  state.count += 1;
+  state.lastSha = headSha;
+  state.history.unshift({
+    sha: headSha,
+    verdict: reviewResult.llmVerdict || 'pass',
+    timestamp: new Date().toISOString()
+  });
+  state.history = state.history.slice(0, 10); // Keep last 10
+
+  const report = generateCodeReviewMarkdown(reviewResult, client, state);
 
   // Write local report
   fs.writeFileSync(agentReportPath, report);
