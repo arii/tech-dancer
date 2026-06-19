@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
   botName: string;
