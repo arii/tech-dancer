@@ -5,6 +5,7 @@ export interface ReviewFinding {
   snippet?: string;
   issue: string;
   status: 'open' | 'resolved';
+  fixSummary?: string;
 }
 
 export interface CodeReviewState {

@@ -141,6 +141,7 @@ export async function orchestrateCodeReview(
         const diffToCheck = summary.fullDiff || summary.diffContext;
         if (!diffToCheck.includes(finding.snippet)) {
           finding.status = 'resolved';
+          finding.fixSummary = 'Jules response: snippet no longer present in diff.';
           console.log(`✅ Auto-resolved finding: ${finding.issue}`);
         }
       }

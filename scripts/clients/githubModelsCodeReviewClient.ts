@@ -15,7 +15,13 @@ function buildSystemPrompt(summary: CodeReviewSummary): string {
   let priorStateSection = '';
   if (summary.previousState && summary.previousState.findings.length > 0) {
     const findingsStr = summary.previousState.findings
-      .map(f => `- [${f.id}] ${f.file}${f.line ? `:${f.line}` : ''}: ${f.issue} (Status: ${f.status})`)
+      .map(f => {
+        let line = `- [${f.id}] ${f.file}${f.line ? `:${f.line}` : ''}: ${f.issue} (Status: ${f.status})`;
+        if (f.fixSummary) {
+          line += `\n   → ${f.fixSummary}`;
+        }
+        return line;
+      })
       .join('\n');
     priorStateSection = `
 PREVIOUS REVIEW ROUND FINDINGS:
@@ -68,7 +74,8 @@ You MUST also provide a structured JSON summary of the findings (both old and ne
       "line": 10,
       "snippet": "const x = 1;",
       "issue": "Brief description of the issue",
-      "status": "resolved"
+      "status": "resolved",
+      "fixSummary": "Brief summary of how it was addressed"
     }
   ]
 }
