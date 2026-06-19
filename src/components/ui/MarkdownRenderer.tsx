@@ -148,18 +148,21 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             return (
               <Box marginY={8} width="full" display="flex" justify="center">
                 <Box
-                  as="img"
-                  src={normalizedSrc}
+                  maxWidth={{ base: "full", md: "2xl" }}
+                  maxHeight={{ md: 128 }}
+                  width="full"
                   radius="lg"
                   shadow="sm"
-                  loading="lazy"
-                  alt={alt || "Article illustration"}
-                  maxWidth={{ base: "full", md: "2xl" }}
-                  maxHeight={{ md: "screen-md" }}
-                  height="auto"
-                  className="object-contain"
-                  {...props}
-                />
+                  overflow="hidden"
+                >
+                  <img
+                    src={normalizedSrc}
+                    loading="lazy"
+                    alt={alt || "Article illustration"}
+                    className="w-full h-auto object-contain block"
+                    {...props}
+                  />
+                </Box>
               </Box>
             );
           },
@@ -197,16 +200,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 return (
                   <Box marginY={8} width="full" display="flex" justify="center">
                     <Box
-                      as="img"
-                      src={diagramUrl}
-                      alt="Workflow Diagram"
+                      maxWidth={{ base: "full", md: "2xl" }}
+                      maxHeight={{ base: 96, md: 128 }}
+                      width="full"
                       radius="lg"
                       shadow="sm"
-                      maxWidth={{ base: "full", md: "2xl" }}
-                      maxHeight={{ base: 96, md: "screen-sm" }}
-                      className="object-contain"
-                      loading="lazy"
-                    />
+                      overflow="hidden"
+                    >
+                      <img
+                        src={diagramUrl}
+                        alt="Workflow Diagram"
+                        className="w-full h-full object-contain block"
+                        loading="lazy"
+                      />
+                    </Box>
                   </Box>
                 );
               } catch (e) {
