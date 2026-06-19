@@ -167,9 +167,18 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   if (!response.ok) return 0;
 
   const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
-  return comments.filter(c =>
-    c.user.type === 'Bot' && reportTitles.some(title => c.body.includes(`## ${title}`))
-  ).length;
+  let totalReviews = 0;
+  for (const c of comments) {
+    if (c.user.type === 'Bot' && reportTitles.some(title => c.body.includes(`## ${title}`))) {
+      const match = c.body.match(/<!-- ai-review-count: (\d+) -->/);
+      if (match) {
+        totalReviews += parseInt(match[1], 10);
+      } else {
+        totalReviews += 1;
+      }
+    }
+  }
+  return totalReviews;
 }
 
 export async function postPRComment(body: string, reportTitle: string): Promise<void> {
@@ -192,52 +201,60 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
     },
   });
 
+  let existingComment: { id: number; body: string } | undefined;
+
   if (getCommentsResponse.ok) {
     const comments = await getCommentsResponse.json() as Array<{
       id: number;
       body: string;
       user: { type: string };
     }>;
-    const existingComment = comments.find(c =>
+    existingComment = comments.find(c =>
       c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
     );
+  }
 
-    if (existingComment) {
-      const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
-      const updateResponse = await fetch(updateUrl, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/vnd.github+json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ body }),
-      });
+  if (existingComment) {
+    const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
+    const currentCount = match ? parseInt(match[1], 10) : 1;
+    const newCount = currentCount + 1;
+    const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${body}`;
 
-      if (!updateResponse.ok) {
-        const text = await updateResponse.text();
-        throw new Error(`GitHub API error ${updateResponse.status}: ${text}`);
-      }
+    const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
+    const updateResponse = await fetch(updateUrl, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ body: updatedBody }),
+    });
 
-      console.log('✅ Updated existing PR comment');
-      return;
+    if (!updateResponse.ok) {
+      const text = await updateResponse.text();
+      throw new Error(`GitHub API error ${updateResponse.status}: ${text}`);
     }
+
+    console.log('✅ Updated existing PR comment');
+  } else {
+    const newBody = `<!-- ai-review-count: 1 -->\n${body}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ body: newBody }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`GitHub API error ${response.status}: ${text}`);
+    }
+
+    console.log('✅ Posted PR comment');
   }
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ body }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`GitHub API error ${response.status}: ${text}`);
-  }
-
-  console.log('✅ Posted PR comment');
 }
