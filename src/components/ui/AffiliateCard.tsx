@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { BaseCard } from './BaseCard';
 import { AffiliateLink } from '@/types';
+import { cn } from '@/lib/utils';
 
 interface AffiliateCardProps {
   link: AffiliateLink;
@@ -16,17 +17,21 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
       rel="noopener noreferrer sponsored"
       ariaLabel={`Open ${link.name}`}
     >
-      <Stack direction="row" gap={4} align="center" width="full">
+      <Stack direction="row" gap={4} align="start" width="full">
         {/* Product Image Thumbnail */}
         {link.image && (
           <Box
-            width={16}
-            height={16}
+            width={20}
+            height={20}
+            padding={link.imageMode === 'contain' ? 2 : 0}
             shrink={0}
             radius="md"
             overflow="hidden"
             border
-            className="border-line/40 bg-surface-alt/20"
+            className={cn(
+              "border-line/40",
+              link.imageMode === 'contain' ? "bg-white" : "bg-surface-alt/20"
+            )}
             display="flex"
             align="center"
             justify="center"
@@ -37,13 +42,13 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
               alt={link.name}
               maxWidth="full"
               maxHeight="full"
-              className={link.imageMode === 'contain' ? 'object-contain p-1' : 'object-cover'}
+              className={link.imageMode === 'contain' ? 'object-contain' : 'object-cover'}
               loading="lazy"
             />
           </Box>
         )}
 
-        <Stack gap={1} flex={1} minWidth={0}>
+        <Stack gap={2} flex={1} minWidth={0}>
           <Box display="flex" align="center" justify="between" width="full">
             <Text variant="mono" size="micro" weight="font-bold" color="accent" uppercase tracking="widest">
               {link.category}
@@ -55,7 +60,8 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
             variant="body"
             size="base"
             weight="font-bold"
-            className="group-hover:text-accent transition-colors relative z-20 pointer-events-none truncate"
+            clamp={2}
+            className="group-hover:text-accent transition-colors relative z-20 pointer-events-none"
           >
             {link.name}
           </Text>
