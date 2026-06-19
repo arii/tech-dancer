@@ -15,7 +15,26 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '2', 10);
 
-export function getCodeDiffSummary(): CodeReviewSummary {
+async function fetchPRGoal(): Promise<string | undefined> {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  const prNumber = process.env.PR_NUMBER;
+  if (!token || !repo || !prNumber) return undefined;
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/pulls/${prNumber}`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+    });
+    if (!res.ok) return undefined;
+    const pr = await res.json() as { title: string; body: string | null };
+    const body = pr.body?.trim() ? `\n\n${pr.body.trim()}` : '';
+    return `${pr.title}${body}`;
+  } catch {
+    return undefined;
+  }
+}
+
+export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
   try {
     let diffCommand = 'git diff origin/main...HEAD';
     let nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
@@ -40,9 +59,12 @@ export function getCodeDiffSummary(): CodeReviewSummary {
       .split('\n')
       .filter(Boolean);
 
+    const prGoal = await fetchPRGoal();
+
     return {
       files,
-      diffContext
+      diffContext,
+      prGoal,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
@@ -94,14 +116,16 @@ export async function orchestrateCodeReview(
       agentReportPath,
       `## ${client.reportTitle}\n\nSkipped: review quota (${MAX_REVIEWS_PER_PR}) already met.\n`
     );
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
-  const summary = getCodeDiffSummary();
+  const summary = await getCodeDiffSummary();
 
   if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo code changes detected.\n`);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
