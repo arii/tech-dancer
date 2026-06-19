@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -163,13 +163,15 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       if (!fs.existsSync(file)) continue;
 
       try {
-        const fileDiff = execSync(`git diff ${baseRef} -- "${file}"`, { encoding: 'utf-8' });
+        const diffResult = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' });
+        const fileDiff = diffResult.stdout || '';
         const fileContent = fs.readFileSync(file, 'utf-8');
         const imports = parseImports(fileContent);
 
         // Identify which imported symbols are used in the diff
         for (const [symbol, importPath] of imports.entries()) {
-          const symbolRegex = new RegExp(`\\b${escapeRegExp(symbol)}\\b`);
+          // Use a safer regex that handles characters like $ and ensures word boundaries correctly
+          const symbolRegex = new RegExp(`(?:^|[^a-zA-Z0-9_$])${escapeRegExp(symbol)}(?:[^a-zA-Z0-9_$]|$)`);
           if (symbolRegex.test(fileDiff)) {
             const resolved = resolveImportPath(importPath, file);
             if (resolved) externalFilePaths.add(resolved);
@@ -194,11 +196,13 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       externalContext = externalContext.slice(0, maxExternalChars) + '\n\n...[TRUNCATED EXTERNAL CONTEXT]';
     }
 
+    const hasRealContent = externalContext.replace(/\n\n\.\.\.\[TRUNCATED EXTERNAL CONTEXT\]/g, '').trim().length > 0;
+
     return {
       files,
       diffContext,
       prGoal,
-      externalContext: externalContext.trim() || undefined,
+      externalContext: hasRealContent ? externalContext.trim() : undefined,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
