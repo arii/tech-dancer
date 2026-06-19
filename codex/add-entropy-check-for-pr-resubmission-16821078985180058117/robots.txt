@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/codex/add-entropy-check-for-pr-resubmission-16821078985180058117/sitemap.xml

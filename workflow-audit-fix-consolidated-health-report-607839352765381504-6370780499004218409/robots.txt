@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/workflow-audit-fix-consolidated-health-report-607839352765381504-6370780499004218409/sitemap.xml
