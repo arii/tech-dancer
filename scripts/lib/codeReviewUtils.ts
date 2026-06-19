@@ -140,7 +140,7 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
 export function applyTokenBudget(
   systemPrompt: string,
   summary: CodeReviewSummary,
-  maxInputChars: number = 24000
+  maxInputChars: number = 100000
 ): { diffText: string; externalText: string } {
   // System prompt is essential. Let's see how much budget is left.
   const remainingBudgetForDiffAndContext = maxInputChars - systemPrompt.length;
@@ -152,8 +152,8 @@ export function applyTokenBudget(
 
   if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
     // Allocate the remaining budget between diff and external context.
-    // Diff gets priority: up to 16,000 characters, capped at remaining budget.
-    const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
+    // Diff gets priority: up to 80,000 characters, capped at remaining budget.
+    const maxDiffChars = Math.max(0, Math.min(diffText.length, 80000, remainingBudgetForDiffAndContext));
     if (diffText.length > maxDiffChars) {
       diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
     }
