@@ -29,6 +29,19 @@ from scope_check import verify_pr_scope, get_project_config
 
 PROJECT_CONFIG = get_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
+SPEC_SECTIONS = [
+    "Problem Statement",
+    "Goal",
+    "Non-Goals",
+    "Proposed Approach",
+    "Alternatives Considered",
+    "Architectural Impact",
+    "Scope",
+    "UNDERSTAND THE ISSUE",
+    "DETERMINE APPROACH",
+    "SPECIFY SCOPE",
+    "DEFINITION OF DONE"
+]
 
 class Orchestrator:
     def __init__(self):
@@ -306,11 +319,15 @@ class Orchestrator:
 
     def get_audit_results(self, content: str = None, targets: list[str] = None):
         cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
-        if targets: cmd.extend(targets)
-        elif content is not None: cmd.append("-")
+        if targets:
+            cmd.extend(targets)
+        elif content is not None:
+            cmd.append("-")
         res = run_command(cmd, check=False, input_str=content)
-        try: return json.loads(res.stdout)
-        except json.JSONDecodeError: return {"violations": {}, "config": {}}
+        try:
+            return json.loads(res.stdout)
+        except json.JSONDecodeError:
+            return {"violations": {}, "config": {}}
 
     def extract_code_blocks(self, text: str) -> list[str]:
         return re.findall(r'```(?:tsx?|jsx?|html)?\n(.*?)```', text, re.DOTALL)
@@ -323,19 +340,31 @@ class Orchestrator:
         open_prs = list(repo.get_pulls(state='open'))
         file_to_prs = defaultdict(list)
         for pr in open_prs:
-            for f in self.get_pr_files(pr): file_to_prs[f].append(pr.number)
+            for f in self.get_pr_files(pr):
+                file_to_prs[f].append(pr.number)
         conflicts = defaultdict(list)
         for filename, prs in file_to_prs.items():
             if len(prs) > 1 and (target_pr_num is None or target_pr_num in prs):
                 conflicts[tuple(sorted(prs))].append(filename)
         return conflicts
 
+    def _has_spec_section(self, section_name, text):
+        """Robustly checks for the presence of a markdown section or numbered list item."""
+        # Matches markdown headers (# Section Name) or numbered items (1. SECTION NAME)
+        header_pattern = rf"^\s*#+\s*{re.escape(section_name)}\b"
+        list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
+        return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
+                    re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
+
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
-        if all_open: issues = list(repo.get_issues(state='open'))
-        elif issue_number: issues = [repo.get_issue(issue_number)]
-        else: raise CLIError("Provide --issue-number or --all-open")
+        if all_open:
+            issues = list(repo.get_issues(state='open'))
+        elif issue_number:
+            issues = [repo.get_issue(issue_number)]
+        else:
+            raise CLIError("Provide --issue-number or --all-open")
 
         results = []
         total_findings = 0
@@ -343,7 +372,14 @@ class Orchestrator:
         config = audit_base.get("config", {})
 
         for issue in issues:
-            findings, warnings = [], []; body = issue.body or ''; title = issue.title or ''
+            findings = []
+            warnings = []
+            body = issue.body or ''
+            title = issue.title or ''
+
+            if not body.strip():
+                findings.append("Issue body is empty.")
+
             for i, block in enumerate(self.extract_code_blocks(body)):
                 res = self.get_audit_results(content=block)
                 violations = res.get("violations", {}).get("stdin", [])
@@ -366,6 +402,11 @@ class Orchestrator:
                 warnings.append("No acceptance criteria.")
             if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
                 warnings.append("Mentions Tailwind but not layout primitives.")
+
+            # Spec-Driven Issue Validation
+            missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
+            if missing_spec_sections:
+                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
             issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
             results.append(issue_result)
