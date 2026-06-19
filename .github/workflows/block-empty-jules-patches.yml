@@ -1,0 +1,61 @@
+name: Block Empty Agent Patches
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    # Optional: Run on pushes if Jules pushes directly to branches
+    branches-ignore:
+      - main
+      - master
+jobs:
+  check-empty-patch:
+    runs-on: ubuntu-latest
+    # Grant permissions to comment on and close the PR if it's empty
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Checkout Code with History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Ensures the parent commit is available for comparison
+
+      - name: Verify Diff Composition
+        id: verify_diff
+        run: |
+          # Fetch the merge base or compare the last commit to its parent
+          if git diff --quiet HEAD~1 HEAD; then
+            echo "EMPTY_COMMIT=true" >> $GITHUB_ENV
+            echo "❌ Empty commit detected! No code files modified."
+          else
+            echo "EMPTY_COMMIT=false" >> $GITHUB_ENV
+            echo "✅ Valid patch found with actual file changes."
+          fi
+      - name: Handle Empty Pull Request
+        if: env.EMPTY_COMMIT == 'true' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.payload.pull_request.number;
+
+            // 1. Post a comment indicating the empty commit problem
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: "🚨 **Workflow Blocked:** This Pull Request contains a patch with 0 code changes. Closing this PR automatically to break the loop."
+            });
+
+            // 2. Automatically close the empty PR
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: issue_number,
+              state: 'closed'
+            });
+      - name: Enforce Job Failure
+        if: env.EMPTY_COMMIT == 'true'
+        run: |
+          echo "Failing pipeline to prevent merging empty metadata changes."
+          exit 1
