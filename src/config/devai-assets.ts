@@ -1,4 +1,4 @@
-import { TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER, TOOL_ID_GITOPS_PR_REVIEWER } from './devai-tool-ids';
+import { TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER, TOOL_ID_GITOPS_PR_REVIEWER, TOOL_ID_SDLC_PROFILER } from './devai-tool-ids';
 
 export interface DevAIAsset {
   path: string;
@@ -18,7 +18,7 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
     path: 'dev-tools/workflow_summary.py',
     label: 'SDLC Profiler',
     description: 'Analyzes GitHub Workflow execution metrics.',
-    toolId: TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER
+    toolId: TOOL_ID_SDLC_PROFILER
   },
   {
     path: 'dev-tools/mergellama.py',
