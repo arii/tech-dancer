@@ -1,6 +1,10 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseCodeReviewVerdict, parseCodeReviewStateDetailed, estimateMaxOutputTokens } from './githubModelsCodeReviewClient';
+import {
+  parseCodeReviewVerdict,
+  parseCodeReviewStateDetailed,
+  estimateMaxOutputTokens,
+} from '../lib/codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
