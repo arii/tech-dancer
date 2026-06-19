@@ -302,7 +302,6 @@ export async function postPRComment(body: string, reportTitle: string, state?: u
 
       console.log('✅ Updated existing PR comment');
       return;
-    }
   }
 
   const newBody = `<!-- ai-review-count: 1 -->\n${stateTag}${body}`;
