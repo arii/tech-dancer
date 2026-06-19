@@ -249,24 +249,36 @@ export async function postPRComment(body: string, reportTitle: string, state?: u
   }
 
   // Check for existing comments from this bot to avoid spamming the PR
-  const getCommentsResponse = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-    },
-  });
+  let fetchUrl: string | null = `${url}?per_page=100`;
+  let existingComment: { id: number; body: string; user: { type: string } } | undefined;
 
-  if (getCommentsResponse.ok) {
+  while (fetchUrl) {
+    const getCommentsResponse = await fetch(fetchUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+
+    if (!getCommentsResponse.ok) break;
+
     const comments = await getCommentsResponse.json() as Array<{
       id: number;
       body: string;
       user: { type: string };
     }>;
-    const existingComment = comments.find(c =>
+    existingComment = comments.find(c =>
       c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
     );
 
-    if (existingComment) {
+    if (existingComment) break;
+
+    const linkHeader = getCommentsResponse.headers.get('Link');
+    const nextMatch = linkHeader?.match(/<([^>]+)>;\s*rel="next"/);
+    fetchUrl = nextMatch ? nextMatch[1] : null;
+  }
+
+  if (existingComment) {
       const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
       const currentCount = match ? parseInt(match[1], 10) : 1;
       const newCount = currentCount + 1;
