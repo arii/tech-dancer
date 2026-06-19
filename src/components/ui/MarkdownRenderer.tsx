@@ -146,23 +146,21 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justify="center">
-                <Box
-                  maxWidth={{ base: "full", md: "2xl" }}
-                  maxHeight={{ md: 96 }}
-                  radius="lg"
-                  shadow="sm"
-                  overflow="hidden"
-                >
-                  <img
-                    src={normalizedSrc}
-                    loading="lazy"
-                    alt={alt || "Article illustration"}
-                    className="max-w-full max-h-full h-auto block object-contain"
-                    {...props}
-                  />
-                </Box>
-              </Box>
+              <Box
+                as="img"
+                src={normalizedSrc}
+                alt={alt || "Article illustration"}
+                loading="lazy"
+                display="block"
+                marginX="auto"
+                marginY={8}
+                maxWidth={{ base: "full", md: "2xl" }}
+                maxHeight={{ md: 80 }}
+                radius="lg"
+                shadow="sm"
+                className="h-auto object-contain"
+                {...props}
+              />
             );
           },
           p: ({node: _node, ...props}) => (
@@ -197,22 +195,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justify="center">
-                    <Box
-                      maxWidth={{ base: "full", md: "2xl" }}
-                      maxHeight={{ base: 80, md: 96 }}
-                      radius="lg"
-                      shadow="sm"
-                      overflow="hidden"
-                    >
-                      <img
-                        src={diagramUrl}
-                        alt="Workflow Diagram"
-                        className="max-w-full max-h-full block object-contain"
-                        loading="lazy"
-                      />
-                    </Box>
-                  </Box>
+                  <Box
+                    as="img"
+                    src={diagramUrl}
+                    alt="Workflow Diagram"
+                    loading="lazy"
+                    display="block"
+                    marginX="auto"
+                    marginY={8}
+                    maxWidth={{ base: "full", md: "2xl" }}
+                    maxHeight={{ base: 80, md: 80 }}
+                    radius="lg"
+                    shadow="sm"
+                    className="h-auto object-contain"
+                  />
                 );
               } catch (e) {
                 console.error('Failed to render mermaid diagram', e);
