@@ -78,7 +78,7 @@ function parseImports(content: string): Map<string, string> {
 }
 
 function resolveImportPath(importPath: string, currentFile: string): string | undefined {
-  let resolvedPath = importPath;
+  let resolvedPath: string;
   if (importPath.startsWith('@/')) {
     resolvedPath = path.join('src', importPath.slice(2));
   } else if (importPath.startsWith('.')) {
@@ -142,11 +142,14 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     // Context gathering
     const externalFilePaths = new Set<string>();
+    const diffRange = diffCommand.split(' ').pop() || '';
+    const baseRef = diffRange.split('...')[0] || diffRange;
+
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
 
       try {
-        const fileDiff = execSync(`git diff ${diffCommand.split(' ')[2]} ${file}`, { encoding: 'utf-8' });
+        const fileDiff = execSync(`git diff ${baseRef} -- "${file}"`, { encoding: 'utf-8' });
         const fileContent = fs.readFileSync(file, 'utf-8');
         const imports = parseImports(fileContent);
 
