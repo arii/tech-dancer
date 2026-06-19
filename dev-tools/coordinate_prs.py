@@ -6,7 +6,9 @@ from collections import defaultdict
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from utils import get_github_client, get_repo_name, call_ai
 
-from typing import List, Dict, Tuple, Set, Any
+from typing import List, Dict, Tuple, Set, Any, Optional
+
+import re
 
 def get_pr_comments_and_reviews(pr: Any) -> str:
     comments_data = []
@@ -175,14 +177,15 @@ Respond strictly with a JSON object following this schema. Do not include markdo
         return {}
 
     try:
-        if response.startswith("```json"):
-            response = response.split("```json")[1].split("```")[0].strip()
-        elif response.startswith("```"):
-            response = response.split("```")[1].split("```")[0].strip()
+        # Robustly extract json
+        match = re.search(r'```(?:json)?\s*(.*?)\s*```', response, re.DOTALL | re.IGNORECASE)
+        if match:
+            response = match.group(1).strip()
 
+        # Fallback to straight json parsing if no markdown blocks
         return json.loads(response)
     except Exception as e:
-        print(f"Failed to parse LLM response: {e}", file=sys.stderr)
+        print(f"Failed to parse LLM response: {e}\nRaw response: {response}", file=sys.stderr)
         return {}
 
 def main() -> None:
@@ -317,7 +320,10 @@ def main() -> None:
     output = '\n'.join(report)
     print(output)
 
-    with open("report.md", "w") as f:
-        f.write(output)
+    try:
+        with open("report.md", "w") as f:
+            f.write(output)
+    except Exception as e:
+        print(f"Error writing to report.md: {e}", file=sys.stderr)
 if __name__ == '__main__':
     main()
