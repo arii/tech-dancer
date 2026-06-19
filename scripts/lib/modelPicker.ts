@@ -5,6 +5,9 @@ export interface GitHubModel {
   rate_limit_tier: 'high' | 'low';
   supported_input_modalities: string[];
   capabilities: string[];
+  limits?: {
+    max_input_tokens?: number;
+  };
 }
 
 export async function getAvailableModels(token: string): Promise<GitHubModel[]> {
@@ -49,7 +52,12 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
   }
 }
 
-export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o-mini', needsVision: boolean = false): Promise<string> {
+export async function pickOptimalModel(
+  token: string,
+  fallback: string = 'gpt-4o-mini',
+  needsVision: boolean = false,
+  estimatedInputTokens: number = 0
+): Promise<string> {
   const models = await getAvailableModels(token);
 
   const isFallbackValid = models && models.some(m => m.id === fallback || m.id.includes(fallback));
@@ -58,6 +66,9 @@ export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o
 
   const suitableModels = models.filter(m => {
     if (needsVision && !m.supported_input_modalities?.includes('image')) return false;
+    const maxIn = m.limits?.max_input_tokens ?? Infinity;
+    // leave headroom for system prompt + output
+    if (estimatedInputTokens > 0 && estimatedInputTokens > maxIn * 0.8) return false;
     return true;
   });
 
