@@ -101,17 +101,23 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
 }
 
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
-  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
-  if (!match) {
+  const openTag = '<findings>';
+  const closeTag = '</findings>';
+  
+  const openIdx = feedback.lastIndexOf(openTag);
+  const closeIdx = feedback.lastIndexOf(closeTag);
+  
+  if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
     // Did the model even attempt a findings block? If <findings> opened but
-    // never closed, that's a strong truncation signal distinct from
-    // "the model chose not to include findings."
-    const openedButNeverClosed = /<findings>/.test(feedback);
+    // never closed, that's a strong truncation signal.
+    const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
     return { parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
   }
 
+  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+
   try {
-    return { state: JSON.parse(match[1].trim()) as CodeReviewState };
+    return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
     console.warn('Failed to parse findings JSON from LLM response:', e);
     return { parseError: 'invalid_json' };
