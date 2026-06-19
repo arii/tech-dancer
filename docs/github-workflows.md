@@ -22,7 +22,7 @@ We use **GitHub Actions Variables** to manage thresholds for technical debt. Thi
 
 | Variable             | Default | Description                                                                     |
 | -------------------- | ------- | ------------------------------------------------------------------------------- |
-| `BUNDLE_BASELINE_KB` | `3080`  | The baseline size of the production bundle. CI fails if size > baseline + 50KB. |
+| `BUNDLE_BASELINE_KB` | `3848`  | The baseline size of the production bundle. CI fails if size > baseline + 50KB. |
 | `ANY_COUNT_BASELINE` | `0`     | The maximum allowed number of `any` types in the codebase.                      |
 
 ### Suppression Inventory

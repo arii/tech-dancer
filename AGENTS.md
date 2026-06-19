@@ -186,7 +186,7 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
 - CI enforces bundle size and TypeScript `any` count via GitHub Actions variables
 - After intentional approved debt increases, update baselines:
   ```bash
-  gh variable set BUNDLE_BASELINE_KB --body 3080
+  gh variable set BUNDLE_BASELINE_KB --body 3848
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 
