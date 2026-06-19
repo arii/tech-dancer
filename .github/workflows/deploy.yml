@@ -90,9 +90,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     concurrency:
-      # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: true
+      # Use a global concurrency group for gh-pages push to prevent race conditions
+      # We don't cancel in progress so that all PR previews eventually deploy
+      group: gh-pages-deployment
+      cancel-in-progress: false
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v6
