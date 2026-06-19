@@ -146,6 +146,9 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
+    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
+      .split('\n')
+      .filter(Boolean);
 
     // Context gathering
     const externalFilePaths = new Set<string>();
