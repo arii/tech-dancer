@@ -26,15 +26,6 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: Install Python Dependencies
-        run: |
-          python3 -m pip install -r etl/requirements.txt
-
       - name: Run Pytest - Data Validation
         run: |
           PYTHONPATH=. pytest etl/tests/
