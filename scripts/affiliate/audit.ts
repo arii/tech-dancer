@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { parseArgs } from 'util';
+import { parse } from 'yaml';
 import {
   readAffiliates,
   writeAffiliates,
@@ -28,27 +29,47 @@ async function main() {
   const contentFiles = findMarkdownFiles('content');
   for (const file of contentFiles) {
     const content = fs.readFileSync(file, 'utf-8');
-    const matches = content.match(/affiliateIds:\s*\[(.*?)\]/g);
-    if (matches) {
-      matches.forEach(m => {
-        const idsInFile = m.match(/\[(.*?)\]/)?.[1].split(',').map(s => s.trim().replace(/['"]/g, '')) || [];
-        idsInFile.forEach(id => {
-          if (id) {
-            usedIds.add(id);
-            if (!affiliates[id]) {
-              console.error(`[ERROR] File ${file} references missing affiliate ID: ${id}`);
-              errors++;
+
+    // Use yaml parser for robust affiliateId detection
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    if (match) {
+      try {
+        const frontmatter = parse(match[1]);
+        if (frontmatter && frontmatter.affiliateIds) {
+          const idsInFile = Array.isArray(frontmatter.affiliateIds)
+            ? frontmatter.affiliateIds
+            : [frontmatter.affiliateIds];
+
+          idsInFile.forEach((id: string) => {
+            if (id) {
+              usedIds.add(id);
+              if (!affiliates[id]) {
+                console.error(`[ERROR] File ${file} references missing affiliate ID: ${id}`);
+                errors++;
+              }
             }
-          }
-        });
-      });
+          });
+        }
+      } catch (e) {
+        console.error(`[ERROR] Failed to parse frontmatter in ${file}:`, e);
+        errors++;
+      }
     }
 
-    // Also check for event recommendations
-    // const _eventMatches = content.match(/-\s+([a-zA-Z0-9-]+)/g);
-    if (file.includes('events/')) {
-        // This is a bit broad, but let's see if we can narrow it down if needed.
-        // For now, let's just use the affiliateIds check as it is more explicit.
+    // Check for inline affiliate notices
+    const noticeMatches = content.match(/<notice type="affiliate" id="(.*?)"/g);
+    if (noticeMatches) {
+      noticeMatches.forEach(m => {
+        const idMatch = m.match(/id="(.*?)"/);
+        if (idMatch && idMatch[1]) {
+          const id = idMatch[1];
+          usedIds.add(id);
+          if (!affiliates[id]) {
+            console.error(`[ERROR] File ${file} has notice for missing affiliate ID: ${id}`);
+            errors++;
+          }
+        }
+      });
     }
   }
 

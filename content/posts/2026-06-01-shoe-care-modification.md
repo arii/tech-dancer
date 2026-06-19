@@ -6,15 +6,14 @@ author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Stop masking odors and start eliminating them. Why an electric shoe dryer has proven to be the most effective tool in my gear bag."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
-affiliateIds:
-  - "shoe-dryer"
+affiliateIds: ["shoe-dryer"]
 tags:
   - "shoes"
   - "maintenance"
   - "hygiene"
 ---
 
-Your shoes are your most important piece of equipment, but they are also the most prone to developing that dreaded \"dance shoe smell.\" For years, I tried almost every remedy in the book: foot powders, deodorizing sprays, and even stuffing dryer sheets into my shoes after a long night of social dancing.
+Your shoes are your most important piece of equipment, but they are also the most prone to developing that dreaded "dance shoe smell." For years, I tried almost every remedy in the book: foot powders, deodorizing sprays, and even stuffing dryer sheets into my shoes after a long night of social dancing.
 
 While some of these provided temporary relief, I found that none of them were a long-term solution. The powders created a messy paste when combined with sweat, the sprays often just added a floral scent to the funk, and the dryer sheets struggled against the deep-seated moisture that builds up during a multi-day event.
 
