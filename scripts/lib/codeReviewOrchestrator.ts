@@ -48,6 +48,15 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     }
 
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+
+    // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
+    const maxChars = 20000;
+    const diffContext = rawDiff.length > maxChars
+      ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
+      : rawDiff;
+
+    const fullDiff = rawDiff;
+
     const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
@@ -69,8 +78,8 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     return {
       files,
-      diffContext: rawDiff,
-      fullDiff: rawDiff,
+      diffContext,
+      fullDiff,
       prGoal,
       isTruncated: false,
     };
