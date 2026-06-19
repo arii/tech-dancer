@@ -5,7 +5,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 concurrency:
-  group: deploy-gh-pages
+  group: prune-stale-previews
   cancel-in-progress: false
 
 
@@ -34,7 +34,7 @@ jobs:
         run: |
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
-          gh pr list --limit 1000 --repo ${{ github.repository }} --state open --json headRefName --jq '.[].headRefName' > open_prs.txt
+          gh pr list --repo ${{ github.repository }} --state open --json headRefName --jq '.[].headRefName' > open_prs.txt
 
           cd gh-pages-branch
 

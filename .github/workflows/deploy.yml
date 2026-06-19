@@ -90,9 +90,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     concurrency:
-      # Serialise deployments to the shared gh-pages branch to avoid race conditions
-      group: deploy-gh-pages
-      cancel-in-progress: false
+      # Use a branch-specific concurrency group to prevent cancelling deployments from other branches
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v6
@@ -104,7 +104,6 @@ jobs:
           path: ../dist-assets
 
       - name: Deploy to gh-pages branch
-        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REF_NAME: ${{ github.ref_name }}
@@ -131,18 +130,9 @@ jobs:
 
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
-          gh pr list --limit 1000 --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
+          gh pr list --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
 
-          for ((i=1; i<=MAX_RETRIES; i++)); do
-            if [ "$i" -gt 1 ]; then
-              # Exponential backoff with random jitter to reduce collision probability
-              # during high contention on the shared gh-pages branch.
-              JITTER=$(( RANDOM % 15 ))
-              SLEEP_TIME=$(( (i - 1) * 10 + JITTER ))
-              echo "Attempt $((i - 1)) failed. Retrying in ${SLEEP_TIME}s..."
-              sleep "$SLEEP_TIME"
-            fi
-
+          for i in $(seq 1 "$MAX_RETRIES"); do
             echo "Deployment attempt $i..."
             rm -rf ../gh-pages-repo
 
@@ -192,11 +182,11 @@ jobs:
             # We copy the script to the current directory to run it easily
             cp "$GITHUB_WORKSPACE/scripts/manage-previews.sh" ./manage-previews.sh
             chmod +x ./manage-previews.sh
-            ./manage-previews.sh "../open_prs.txt"
+            ./manage-previews.sh ../open_prs.txt
             rm ./manage-previews.sh
 
             # Use the latest dashboard UI from the current deployment
-            cp "../dist-assets/previews/index.html" previews/index.html
+            cp ../dist-assets/previews/index.html previews/index.html
 
             # 6. Commit and Push
             git config user.name "github-actions[bot]"
@@ -214,7 +204,10 @@ jobs:
               exit 0
             fi
 
-            echo "Push failed. Will retry."
+            # Use exponential backoff with jitter to reduce collisions
+            RETRY_DELAY=$(( (i * 5) + (RANDOM % 10) ))
+            echo "Attempt $i failed. Retrying in ${RETRY_DELAY}s..."
+            sleep $RETRY_DELAY
             cd - || exit
           done
 
