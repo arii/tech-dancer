@@ -147,7 +147,7 @@ export function applyTokenBudget(
   maxInputChars: number = 24000
 ): { diffText: string; externalText: string } {
   // System prompt is essential. Let's see how much budget is left.
-  const remainingBudgetForDiffAndContext = maxInputChars - systemPrompt.length;
+  const remainingBudgetForDiffAndContext = Math.max(0, maxInputChars - systemPrompt.length);
 
   let diffText = `DIFF:\n\n${summary.diffContext}`;
   let externalText = summary.externalContext
@@ -163,14 +163,47 @@ export function applyTokenBudget(
     }
 
     const remainingForExternal = remainingBudgetForDiffAndContext - diffText.length;
-    if (externalText && remainingForExternal > 200) {
-      if (externalText.length > remainingForExternal) {
-        externalText = externalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+    if (externalText) {
+      if (remainingForExternal > 200) {
+        if (externalText.length > remainingForExternal) {
+          externalText = externalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+        }
+      } else {
+        // Harden: ensure we don't just drop the context entirely without notice
+        externalText = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
       }
-    } else {
-      externalText = '';
     }
   }
 
   return { diffText, externalText };
+}
+
+/**
+ * Heuristic: 1 token is roughly 4 characters.
+ */
+export function calculateEstimatedTokens(text: string | string[]): number {
+  const combined = Array.isArray(text) ? text.join('') : text;
+  return Math.ceil(combined.length / 4);
+}
+
+export type ReviewPayloadItem = { type: 'text'; text: string };
+
+/**
+ * Builds the standard payload for code review models.
+ */
+export function buildReviewPayload(
+  systemPrompt: string,
+  diffText: string,
+  externalText?: string
+): ReviewPayloadItem[] {
+  const payload: ReviewPayloadItem[] = [
+    { type: 'text', text: systemPrompt },
+    { type: 'text', text: diffText },
+  ];
+
+  if (externalText) {
+    payload.push({ type: 'text', text: externalText });
+  }
+
+  return payload;
 }

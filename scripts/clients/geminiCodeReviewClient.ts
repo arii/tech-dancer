@@ -5,7 +5,8 @@ import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
-  applyTokenBudget
+  applyTokenBudget,
+  buildReviewPayload
 } from '../lib/codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
@@ -33,14 +34,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const maxOutputTokens = estimateMaxOutputTokens(summary);
     const model = createModel(maxOutputTokens);
-    const baseContent = [
-      { type: 'text', text: systemPrompt } as const,
-      { type: 'text', text: diffText } as const,
-    ];
-
-    if (externalText) {
-      baseContent.push({ type: 'text', text: externalText } as const);
-    }
+    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
