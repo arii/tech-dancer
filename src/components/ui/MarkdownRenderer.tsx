@@ -149,8 +149,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <Box marginY={8} width="full" display="flex" justify="center">
                 <Box
                   maxWidth={{ base: "full", md: "2xl" }}
-                  maxHeight={{ md: 128 }}
-                  width="full"
+                  maxHeight={{ md: 96 }}
                   radius="lg"
                   shadow="sm"
                   overflow="hidden"
@@ -159,7 +158,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                     src={normalizedSrc}
                     loading="lazy"
                     alt={alt || "Article illustration"}
-                    className="w-full h-auto object-contain block"
+                    className="max-w-full max-h-full h-auto block object-contain"
                     {...props}
                   />
                 </Box>
@@ -201,8 +200,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   <Box marginY={8} width="full" display="flex" justify="center">
                     <Box
                       maxWidth={{ base: "full", md: "2xl" }}
-                      maxHeight={{ base: 96, md: 128 }}
-                      width="full"
+                      maxHeight={{ base: 80, md: 96 }}
                       radius="lg"
                       shadow="sm"
                       overflow="hidden"
@@ -210,7 +208,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       <img
                         src={diagramUrl}
                         alt="Workflow Diagram"
-                        className="w-full h-full object-contain block"
+                        className="max-w-full max-h-full block object-contain"
                         loading="lazy"
                       />
                     </Box>
