@@ -156,8 +156,8 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     // Extract baseRef for git diff <baseRef> -- <file>
     // diffCommand examples: 'git diff origin/main...HEAD', 'git diff main...HEAD', 'git diff HEAD~1 HEAD'
     const diffParts = diffCommand.split(' ');
-    const diffSpec = diffParts[2] || ''; // 'origin/main...HEAD' or 'HEAD~1'
-    const baseRef = diffSpec.split('...')[0]; // 'origin/main' or 'HEAD~1'
+    const diffSpec = diffParts[2] || 'HEAD~1';
+    const baseRef = diffSpec.split('...')[0] || 'HEAD~1';
 
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
@@ -174,7 +174,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
           const symbolRegex = new RegExp(`(?:^|[^a-zA-Z0-9_$])${escapeRegExp(symbol)}(?:[^a-zA-Z0-9_$]|$)`);
           if (symbolRegex.test(fileDiff)) {
             const resolved = resolveImportPath(importPath, file);
-            if (resolved) externalFilePaths.add(resolved);
+            if (resolved && resolved !== file) externalFilePaths.add(resolved);
           }
         }
       } catch (err) {
