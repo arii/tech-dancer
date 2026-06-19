@@ -11,6 +11,12 @@ export const IMPACT_CONFIG = {
   MEDIUM_IMPACT_PATHS: [
     'src/features/'
   ],
+  LOW_IMPACT_PATHS: [
+    'pnpm-lock.yaml',
+    'dist/',
+    '.tmp-main/',
+    'tests/visual.spec.ts-snapshots/'
+  ],
 
   // Global triggers and fallback URLs
   GLOBAL_TRIGGERS: [
