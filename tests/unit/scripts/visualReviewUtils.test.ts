@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { getLatestPRComment } from '../../../scripts/lib/visualReviewUtils';
 
 describe('getLatestPRComment', () => {
@@ -28,26 +28,42 @@ describe('getLatestPRComment', () => {
 
   it('returns the correct comment when it exists', async () => {
     const mockComments = [
-      { id: 1, body: 'Some other comment', user: { type: 'User' } },
-      { id: 2, body: '## Test Report\nContent', user: { type: 'Bot' } },
-      { id: 3, body: '## Other Report\nContent', user: { type: 'Bot' } },
+      { id: 1, body: 'Some other comment', user: { type: 'User' }, created_at: '2024-01-01T00:00:00Z' },
+      { id: 2, body: '## Test Report\nContent', user: { type: 'Bot' }, created_at: '2024-01-01T00:01:00Z' },
+      { id: 3, body: '## Other Report\nContent', user: { type: 'Bot' }, created_at: '2024-01-01T00:02:00Z' },
     ];
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as Mock).mockResolvedValue({
       ok: true,
       json: async () => mockComments,
     });
 
     const result = await getLatestPRComment('Test Report');
-    expect(result).toEqual({ id: 2, body: '## Test Report\nContent', user: { type: 'Bot' } });
+    expect(result).toEqual({ id: 2, body: '## Test Report\nContent', user: { type: 'Bot' }, created_at: '2024-01-01T00:01:00Z' });
+  });
+
+  it('returns the latest comment when multiple exist', async () => {
+    const mockComments = [
+      { id: 2, body: '## Test Report\nOld Content', user: { type: 'Bot' }, created_at: '2024-01-01T00:01:00Z' },
+      { id: 4, body: '## Test Report\nNew Content', user: { type: 'Bot' }, created_at: '2024-01-01T00:05:00Z' },
+    ];
+
+    (global.fetch as Mock).mockResolvedValue({
+      ok: true,
+      json: async () => mockComments,
+    });
+
+    const result = await getLatestPRComment('Test Report');
+    expect(result?.id).toBe(4);
+    expect(result?.body).toContain('New Content');
   });
 
   it('returns null if no matching comment is found', async () => {
     const mockComments = [
-      { id: 1, body: 'Some other comment', user: { type: 'User' } },
+      { id: 1, body: 'Some other comment', user: { type: 'User' }, created_at: '2024-01-01T00:00:00Z' },
     ];
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as Mock).mockResolvedValue({
       ok: true,
       json: async () => mockComments,
     });
@@ -57,14 +73,14 @@ describe('getLatestPRComment', () => {
   });
 
   it('handles fetch errors gracefully', async () => {
-    (global.fetch as any).mockRejectedValue(new Error('Network error'));
+    (global.fetch as Mock).mockRejectedValue(new Error('Network error'));
 
     const result = await getLatestPRComment('Test Report');
     expect(result).toBeNull();
   });
 
   it('handles non-OK responses gracefully', async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as Mock).mockResolvedValue({
       ok: false,
       status: 404,
     });

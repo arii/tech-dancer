@@ -181,7 +181,7 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   return totalReviews;
 }
 
-export async function getLatestPRComment(reportTitle: string): Promise<{ id: number; body: string; user: { type: string } } | null> {
+export async function getLatestPRComment(reportTitle: string): Promise<{ id: number; body: string; user: { type: string }; created_at: string } | null> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
@@ -203,11 +203,15 @@ export async function getLatestPRComment(reportTitle: string): Promise<{ id: num
       id: number;
       body: string;
       user: { type: string };
+      created_at: string;
     }>;
 
-    return comments.find(c =>
-      c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
-    ) || null;
+    // Filter for bot comments with the correct title and sort by ID descending to get the latest
+    const botComments = comments
+      .filter(c => c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`))
+      .sort((a, b) => b.id - a.id);
+
+    return botComments[0] || null;
   } catch (error) {
     console.warn('⚠️ Error fetching PR comments:', error);
     return null;
@@ -245,7 +249,7 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
 
       if (!updateResponse.ok) {
         const text = await updateResponse.text();
-        throw new Error(`GitHub API error ${updateResponse.status}: ${text}`);
+        throw new Error(`GitHub API error ${updateResponse.status} updating comment: ${text}`);
       }
 
       console.log('✅ Updated existing PR comment');
