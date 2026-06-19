@@ -8,9 +8,11 @@ import { stroke } from '@/styles/design-tokens';
 
 export function ProductCard({
   item,
-  isFeatured,
-  clampTitle,
-  clampDescription
+  isFeatured = false,
+  // ResponsiveProp is used here to allow the Merch page's height-matched Featured Picks
+  // grid to fill vertical space on desktop while maintaining a compact layout on mobile.
+  clampTitle = isFeatured ? true : 2,
+  clampDescription = isFeatured ? true : 2
 }: {
   item: ProductCatalogItem;
   isFeatured?: boolean;
@@ -56,13 +58,13 @@ export function ProductCard({
           weight="font-bold"
           color="main"
           leading="tight"
-          clamp={clampTitle ?? (isFeatured ? true : 2)}
+          clamp={clampTitle}
           className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {item.title}
         </Text>
 
-        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription ?? (isFeatured ? true : 2)}>
+        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription}>
           {item.description}
         </Text>
 
