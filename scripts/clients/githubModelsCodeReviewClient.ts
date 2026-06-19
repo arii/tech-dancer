@@ -42,8 +42,14 @@ demonstrate with evidence from the diff.
 }
 
 export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  if (feedback.includes('[VERDICT: FAIL]')) return 'fail';
-  if (feedback.includes('[VERDICT: WARN]')) return 'warn';
+  const matches = [...feedback.matchAll(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi)];
+  if (matches.length > 0) {
+    const lastMatch = matches[matches.length - 1][1].toUpperCase();
+    if (lastMatch === 'FAIL') return 'fail';
+    if (lastMatch === 'WARN') return 'warn';
+    return 'pass';
+  }
+
   return 'pass';
 }
 
