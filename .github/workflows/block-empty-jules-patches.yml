@@ -1,0 +1,46 @@
+name: Block Empty Jules Patches
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  block-empty-patch:
+    name: Block Empty AI Patch
+    runs-on: ubuntu-latest
+    # Run for all PRs to ensure any empty patch is caught and gated globally
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: Checkout Code with History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Detect Empty Patch
+        id: check
+        run: |
+          if git diff --quiet HEAD~1 HEAD; then
+            echo "EMPTY=true" >> "$GITHUB_OUTPUT"
+            echo "❌ Empty commit detected!"
+          else
+            echo "EMPTY=false" >> "$GITHUB_OUTPUT"
+            echo "✅ Patch contains changes."
+          fi
+      - name: Close PR if Empty
+        if: steps.check.outputs.EMPTY == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr_number = context.payload.pull_request.number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr_number,
+              body: "🚨 **Auto-Blocked:** This PR contains 0 code changes. Empty patches are prohibited by the repository policy and heavy CI workflows have been bypassed."
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr_number,
+              state: 'closed'
+            });
