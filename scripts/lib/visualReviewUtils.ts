@@ -9,10 +9,20 @@ export function imageToBase64(filePath: string): string {
 }
 
 export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  const lower = feedback.toLowerCase();
-  // Look for explicit failure signals in the LLM output
-  if (/❌|bug|regression|broken|clipping|overflow|missing|unintentional/i.test(lower)) return 'fail';
-  if (/⚠️|warn|minor|consider|recommend/i.test(lower)) return 'warn';
+  // 1. Clean the feedback of "resolved" findings to avoid false failure signals
+  // Many reviews repeat the issue description even when marking it resolved.
+  const lines = feedback.split('\n');
+  const activeLines = lines.filter(line => {
+    const isResolved = /status["']?\s*:\s*["']?resolved["']?/i.test(line) ||
+                       /✅|resolved|fixed/i.test(line);
+    return !isResolved;
+  });
+
+  const activeText = activeLines.join('\n').toLowerCase();
+
+  // 2. Look for explicit failure signals in the remaining "active" text
+  if (/❌|bug|regression|broken|clipping|overflow|missing|unintentional/i.test(activeText)) return 'fail';
+  if (/⚠️|warn|minor|consider|recommend/i.test(activeText)) return 'warn';
   return 'pass';
 }
 
