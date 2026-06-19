@@ -5,6 +5,10 @@ export interface GitHubModel {
   rate_limit_tier: 'high' | 'low';
   supported_input_modalities: string[];
   capabilities: string[];
+  limits?: {
+    max_input_tokens?: number;
+    max_output_tokens?: number;
+  };
 }
 
 export async function getAvailableModels(token: string): Promise<GitHubModel[]> {
@@ -49,7 +53,12 @@ export async function getAvailableModels(token: string): Promise<GitHubModel[]> 
   }
 }
 
-export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o-mini', needsVision: boolean = false): Promise<string> {
+export async function pickOptimalModel(
+  token: string,
+  fallback: string = 'gpt-4o-mini',
+  needsVision: boolean = false,
+  estimatedInputTokens: number = 0
+): Promise<string> {
   const models = await getAvailableModels(token);
 
   const isFallbackValid = models && models.some(m => m.id === fallback || m.id.includes(fallback));
@@ -58,6 +67,23 @@ export async function pickOptimalModel(token: string, fallback: string = 'gpt-4o
 
   const suitableModels = models.filter(m => {
     if (needsVision && !m.supported_input_modalities?.includes('image')) return false;
+
+    let maxIn = m.limits?.max_input_tokens;
+    if (m.id.includes('gpt-4.1')) {
+      maxIn = 8000;
+    }
+
+    // If we have an estimate, be strict about model limits
+    if (estimatedInputTokens > 0) {
+      if (maxIn === undefined || maxIn === null) return false;
+
+      const maxInNum = typeof maxIn === 'number' ? maxIn : Number(maxIn);
+      if (isNaN(maxInNum)) return false;
+
+      // leave headroom for system prompt + output
+      if (estimatedInputTokens > maxInNum * 0.8) return false;
+    }
+
     return true;
   });
 
