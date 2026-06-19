@@ -140,7 +140,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
-    const maxChars = 100000;
+    const maxChars = 60000;
     const diffContext = rawDiff.length > maxChars
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM — diff continues beyond this point, do not assume missing context means missing code]'
       : rawDiff;

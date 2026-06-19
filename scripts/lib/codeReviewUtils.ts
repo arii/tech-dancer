@@ -51,6 +51,10 @@ Scope and security rules:
   user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
 - Do not introduce review topics unrelated to the PR's stated goal unless you find a
   genuine, evidence-backed regression caused by this diff.
+- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"),
+  DO NOT fail the review solely because you cannot see the full implementation of a
+  newly introduced module or utility. Instead, provide a WARN or PASS verdict based on
+  what you CAN see, and explicitly state what remains unverified due to truncation.
 
 You MUST end your review with exactly one of the following strings indicating your final verdict:
 [VERDICT: PASS]
@@ -140,7 +144,7 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
 export function applyTokenBudget(
   systemPrompt: string,
   summary: CodeReviewSummary,
-  maxInputChars: number = 100000
+  maxInputChars: number = 24000
 ): { diffText: string; externalText: string } {
   // System prompt is essential. Let's see how much budget is left.
   const remainingBudgetForDiffAndContext = maxInputChars - systemPrompt.length;
@@ -152,8 +156,8 @@ export function applyTokenBudget(
 
   if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
     // Allocate the remaining budget between diff and external context.
-    // Diff gets priority: up to 80,000 characters, capped at remaining budget.
-    const maxDiffChars = Math.max(0, Math.min(diffText.length, 80000, remainingBudgetForDiffAndContext));
+    // Diff gets priority: up to 16,000 characters, capped at remaining budget.
+    const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
     if (diffText.length > maxDiffChars) {
       diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
     }
