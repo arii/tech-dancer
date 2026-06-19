@@ -42,7 +42,7 @@ async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-github-models-review',
   reportTitle: '🐙 GitHub Models Visual Review',
-  botTagline: 'Powered by GitHub Models Vision + Blast-Radius Analyzer',
+  botTagline: 'Powered by GitHub Models Vision + Deployment Impact Analyzer',
   reportFileName: 'github-models-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {

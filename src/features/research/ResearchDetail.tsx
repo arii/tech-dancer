@@ -26,7 +26,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
   'wcs-scraper': WCSScraperTool,
   'gitops-pr-reviewer': GitOpsReviewerTool,
-  'scope-blast-radius': BlastRadiusTool,
+  'deployment-impact-analyzer': BlastRadiusTool,
   'ecommerce-automation': EcommerceAutomationTool,
 };
 

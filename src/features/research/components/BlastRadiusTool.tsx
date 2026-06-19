@@ -2,16 +2,16 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { GitBranch, Layers, Activity } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
-import { TOOL_ID_SCOPE_BLAST_RADIUS } from '@/config/devai-tool-ids';
+import { TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER } from '@/config/devai-tool-ids';
 
 export function BlastRadiusTool() {
-  const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_SCOPE_BLAST_RADIUS);
+  const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER);
 
   return (
     <Box border radius="lg" padding={8} surface="default">
       <Stack gap={8}>
         <Stack gap={4}>
-          <Text variant="headline" size="xl" weight="font-black">Semantic Blast-Radius Analysis</Text>
+          <Text variant="headline" size="xl" weight="font-black">Deployment Impact Analyzer</Text>
           <Text variant="body" color="dim">
             Automatically maps and isolates code-change scopes. By analyzing the dependency tree of modified files, this agent identifies downstream side-effects, allowing us to prevent cascading breaks before running expensive integration suites.
           </Text>

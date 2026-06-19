@@ -31,7 +31,7 @@ function createModel(): ChatGoogleGenerativeAI {
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
   reportTitle: '👁️ Visual Review Agent',
-  botTagline: 'Powered by Gemini Vision + Blast-Radius Analyzer',
+  botTagline: 'Powered by Gemini Vision + Deployment Impact Analyzer',
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
