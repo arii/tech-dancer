@@ -1,9 +1,12 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary, VisualReviewState, VisualReviewFinding } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
+import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 
 function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
   const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
@@ -18,12 +21,12 @@ function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
   }
 }
 
-async function createModel(): Promise<ChatOpenAI> {
+async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
-  const modelName = await pickOptimalModel(apiKey, fallback, true);
+  const modelName = await pickOptimalModel(apiKey, fallback, true, estimatedInputTokens);
 
   return new ChatOpenAI({
     modelName: modelName,
@@ -43,7 +46,17 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'github-models-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const model = await createModel();
+    // Estimate tokens from DOM diff
+    const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
+    let domDiffLength = 0;
+    if (fs.existsSync(domDiffPath)) {
+      const content = fs.readFileSync(domDiffPath, 'utf8');
+      // Cap at 3000 to match visualReviewUtils.ts truncation logic
+      domDiffLength = Math.min(content.length, 3000);
+    }
+    const estimatedInputTokens = Math.ceil(domDiffLength / 4);
+
+    const model = await createModel(estimatedInputTokens);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {

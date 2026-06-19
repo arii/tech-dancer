@@ -13,11 +13,16 @@ export interface CodeReviewState {
 }
 
 export interface CodeReviewSummary {
-  files: string[];
   diffContext: string;
   fullDiff?: string;
   prGoal?: string;
+  externalContext?: string;
   previousState?: CodeReviewState;
+}
+
+export interface ParsedFindingsResult {
+  state?: CodeReviewState;
+  parseError?: 'missing_closing_tag' | 'invalid_json';
 }
 
 export interface CodeReviewResult {
@@ -26,4 +31,7 @@ export interface CodeReviewResult {
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
   state?: CodeReviewState;
+  modelName?: string;
+  truncated?: boolean;
+  parseError?: 'missing_closing_tag' | 'invalid_json';
 }

@@ -1,6 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { parseCodeReviewVerdict, parseCodeReviewState } from './githubModelsCodeReviewClient';
+import { parseCodeReviewVerdict, parseCodeReviewStateDetailed, estimateMaxOutputTokens } from './githubModelsCodeReviewClient';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
@@ -84,14 +84,14 @@ Ensure 'snippet' is a unique string from the diff that identifies the issue.
 `;
 }
 
-function createModel(): ChatGoogleGenerativeAI {
+function createModel(maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
     model: 'gemini-1.5-flash',
     apiKey,
-    maxOutputTokens: 1024,
+    maxOutputTokens: maxOutputTokens,
   });
 }
 
@@ -102,11 +102,48 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'gemini-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
-    const model = createModel();
+    const systemPrompt = buildSystemPrompt(summary);
+    
+    // We must ensure the total input (systemPrompt + diffText + externalText) stays within the 8000-token limit of the endpoint.
+    // Let's set a strict ceiling for input tokens: 6000 tokens (~24000 characters).
+    const maxInputChars = 24000;
+    
+    // System prompt is essential. Let's see how much budget is left.
+    const remainingBudgetForDiffAndContext = maxInputChars - systemPrompt.length;
+    
+    let diffText = `DIFF:\n\n${summary.diffContext}`;
+    let externalText = summary.externalContext
+      ? `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${summary.externalContext}`
+      : '';
+      
+    if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
+      // Allocate the remaining budget between diff and external context.
+      // Diff gets priority: up to 16,000 characters, capped at remaining budget.
+      const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
+      if (diffText.length > maxDiffChars) {
+        diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+      }
+      
+      const remainingForExternal = remainingBudgetForDiffAndContext - diffText.length;
+      if (externalText && remainingForExternal > 200) {
+        if (externalText.length > remainingForExternal) {
+          externalText = externalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+        }
+      } else {
+        externalText = '';
+      }
+    }
+
+    const maxOutputTokens = estimateMaxOutputTokens(summary);
+    const model = createModel(maxOutputTokens);
     const baseContent = [
-      { type: 'text', text: buildSystemPrompt(summary) } as const,
-      { type: 'text', text: `DIFF:\n\n${summary.diffContext}` } as const,
+      { type: 'text', text: systemPrompt } as const,
+      { type: 'text', text: diffText } as const,
     ];
+
+    if (externalText) {
+      baseContent.push({ type: 'text', text: externalText } as const);
+    }
 
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
@@ -118,16 +155,27 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
 
+    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
+      .response_metadata?.finish_reason;
+    const isTruncated = finishReason === 'length';
+    if (isTruncated) {
+      console.warn(`⚠️  gemini-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
+    }
+
     const feedback = typeof response.content === 'string'
       ? response.content
       : JSON.stringify(response.content);
+
+    const parsedState = parseCodeReviewStateDetailed(feedback);
 
     return {
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
-      state: parseCodeReviewState(feedback),
+      state: parsedState.state,
+      truncated: isTruncated,
+      parseError: parsedState.parseError,
     };
   }
 };
