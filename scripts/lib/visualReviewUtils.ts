@@ -214,7 +214,7 @@ export async function getPreviousReviewState<T>(reportTitle: string): Promise<T 
   }
 }
 
-export async function postPRComment(body: string, reportTitle: string, state?: any): Promise<void> {
+export async function postPRComment(body: string, reportTitle: string, state?: unknown): Promise<void> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
