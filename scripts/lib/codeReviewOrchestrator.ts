@@ -40,9 +40,9 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     // Verify if origin/main exists, fallback to git history for CI if needed
     try {
-        execSync('git rev-parse origin/main', { stdio: 'ignore' });
+      execSync('git rev-parse origin/main', { stdio: 'ignore' });
     } catch {
-        diffCommand = 'git diff -U10 HEAD~1 HEAD';
+      diffCommand = 'git diff -U10 HEAD~1 HEAD';
     }
 
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
@@ -54,11 +54,6 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       : rawDiff;
 
     const fullDiff = rawDiff;
-
-    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
-      .split('\n')
-      .filter(Boolean);
-
     const prGoal = await fetchPRGoal();
 
     return {
