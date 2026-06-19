@@ -116,46 +116,22 @@ export function GlobalSearch() {
   if (!isOpen) return null;
 
   return (
-    <Box
-      zIndex="search"
-      className="fixed inset-0 pointer-events-none"
-    >
+    <div className="fixed inset-0 pointer-events-none z-[100]">
       {/* Backdrop */}
-      <Box
-        position="absolute"
-        inset={true}
+      <div
         data-testid="search-backdrop"
-        className="bg-bg/80 backdrop-blur-md pointer-events-auto"
+        className="absolute inset-0 bg-bg/80 backdrop-blur-md pointer-events-auto"
         onClick={close}
       />
 
       {/* Modal Container */}
-      <Box
-        position="relative"
-        display="flex"
-        justify="center"
-        align="start"
-        width="full"
-        height="full"
-        paddingTop={{ base: 4, lg: 20 }}
-        paddingX={4}
-        className=""
-      >
-        <Box
-          as="section"
+      <div className="relative flex justify-center items-start w-full h-full pt-4 lg:pt-20 px-4">
+        <section
           role="dialog"
           data-testid="search-dialog"
           aria-modal="true"
           aria-label="Search BoomTick"
-          width="full"
-          maxWidth="3xl"
-          height="fit"
-          maxHeight="85vh"
-          overflow="hidden"
-          radius="lg"
-          border
-          shadow="topOverlay"
-          className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"
+          className="w-full max-w-3xl h-fit max-h-[85vh] overflow-hidden rounded-lg border shadow-[0_0_40px_rgba(0,0,0,0.1)] bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none flex flex-col"
           onClick={(e: MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
@@ -188,7 +164,7 @@ export function GlobalSearch() {
             }
           }}
         >
-          <Box border="b" padding={5} display="flex" align="center" gap={4} className="relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
+          <div className="border-b border-line p-5 flex items-center gap-4 relative focus-within:ring-1 focus-within:ring-accent/50 focus-within:bg-accent/5 transition-all">
             <Search className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
             <Text
               as="input"
@@ -206,81 +182,67 @@ export function GlobalSearch() {
               className="bg-transparent border-none outline-none focus:ring-0 placeholder:text-text-dim/50"
               autoFocus
             />
-            <Box 
-              as="button"
+            <button
               type="button"
               aria-label="Close search"
               onClick={close}
-              padding={1.5}
-              radius="sm"
-              cursor="pointer"
-              border
-              className="group hover:bg-accent/10 transition-colors border-line/50"
+              className="p-1.5 rounded-sm cursor-pointer border group hover:bg-accent/10 transition-colors border-line/50"
             >
               <X className="w-4 h-4 text-text-dim group-hover:text-accent" aria-hidden="true" />
-            </Box>
-          </Box>
+            </button>
+          </div>
 
-          <Box padding={2} overflow="y-auto" maxHeight="60vh">
+          <div className="p-2 overflow-y-auto max-h-[60vh]">
             {results.length > 0 ? (
               <Stack gap={1}>
                 {results.map((res: SearchResult) => (
-                  <Box 
+                  <button
                     key={`${res.type}-${res.slug}`}
-                    as="button"
                     type="button"
                     data-testid="search-result"
                     onClick={() => handleSelect(res)}
-                    width="full"
-                    paddingX={4}
-                    paddingY={3}
-                    display="flex"
-                    align="center"
-                    gap={4}
-                    radius="md"
-                    cursor="pointer"
-                    className="hover:bg-accent/10 group transition-colors text-left"
+                    className="w-full px-4 py-3 flex items-center gap-4 rounded-md cursor-pointer hover:bg-accent/10 group transition-colors text-left"
                   >
                      <Stack gap={0.5} flex className="min-w-0">
-                        <Box display="flex" align="center" gap={3}>
+                        <div className="flex items-center gap-3">
                            <Text size="base" weight="font-bold" className="group-hover:text-accent truncate">{highlight(res.title)}</Text>
-                           <Box border paddingX={2} paddingY={1} radius="none" className="border-accent/30 bg-accent/10 shrink-0">
+                           <div className="border px-2 py-1 bg-accent/10 shrink-0 border-accent/30 rounded-none">
                               <Text variant="mono" size="micro" color="accent" uppercase weight="font-bold" tracking="widest">{res.type}</Text>
-                           </Box>
-                        </Box>
+                           </div>
+                        </div>
                         <Text variant="body" size="xs" color="dim" opacityVariant="heavy" className="line-clamp-1 truncate">{highlight(res.excerpt)}</Text>
                      </Stack>
                      <CornerDownLeft className="w-4 h-4 text-accent opacity-0 group-hover:opacity-dim transition-opacity" />
-                  </Box>
+                  </button>
                 ))}
               </Stack>
             ) : (
-              <Box padding={20} display="flex" align="center" justify="center">
+              <div className="p-20 flex items-center justify-center">
                 <Stack align="center" gap={4} opacityVariant="dim">
                   <Sparkles className="w-10 h-10 text-accent animate-pulse" />
                   <Text variant="mono" size="tiny" color="dim" tracking="widest" uppercase weight="font-bold">
                      {query ? "No results found" : "Search gear, guides, and posts"}
                   </Text>
                 </Stack>
-              </Box>
+              </div>
             )}
-          </Box>
+          </div>
 
-          <Box border="t" paddingX={5} paddingY={3} surface="alt" display="flex" justify="between" align="center" className="pb-safe-area-search">
-            <Box display="flex" align="center" gap={6}>
-              <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+          <div className="border-t px-5 py-3 bg-surface-alt flex justify-between items-center pb-safe-area-search">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <div className="border px-1.5 py-0.5 rounded-sm bg-surface flex items-center justify-center border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none">ESC</Text>
-                </Box>
+                </div>
                 <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">CLOSE</Text>
-              </Box>
-              <Box display="flex" align="center" gap={2}>
-                <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="border px-1.5 py-0.5 rounded-sm bg-surface flex items-center justify-center border-line">
                   <Text variant="mono" size="tiny" color="dim" className="leading-none font-bold">↵</Text>
-                </Box>
+                </div>
                 <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">SELECT</Text>
-              </Box>
-            </Box>
+              </div>
+            </div>
             <Text
               variant="mono"
               size="micro"
@@ -293,9 +255,9 @@ export function GlobalSearch() {
             >
               {results.length} RESULTS FOUND
             </Text>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </section>
+      </div>
+    </div>
     );
 }
