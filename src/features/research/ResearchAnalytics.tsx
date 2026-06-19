@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -179,20 +179,34 @@ function FlagshipCard({
           </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
+            <ActionButton
+              as={NavLink}
+              to={internalPath}
+              variant="primary"
+              paddingX={4}
+              paddingY={2}
+              zIndex={20}
+              width={{ base: "full", sm: "auto" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              View Assets
+              <Icon icon={ArrowRight} size="sm" />
+            </ActionButton>
+
             {tool.externalUrl && (
               <ActionButton
                 as="a"
                 href={tool.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                variant="primary"
+                variant="secondary"
                 paddingX={4}
                 paddingY={2}
                 zIndex={20}
                 width={{ base: "full", sm: "auto" }}
                 onClick={(e) => e.stopPropagation()}
               >
-                {tool.externalLinkDisplayLabel || 'Open Link'}
+                {tool.externalLinkDisplayLabel || 'Visit Site'}
                 <Icon icon={ExternalLink} size="sm" />
               </ActionButton>
             )}
