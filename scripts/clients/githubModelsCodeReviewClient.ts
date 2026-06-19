@@ -17,17 +17,14 @@ Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns.
 `;
 
 export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  const matches = [...feedback.matchAll(/\[VERDICT: (PASS|WARN|FAIL)\]/g)];
+  const matches = [...feedback.matchAll(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi)];
   if (matches.length > 0) {
-    const lastMatch = matches[matches.length - 1][1];
+    const lastMatch = matches[matches.length - 1][1].toUpperCase();
     if (lastMatch === 'FAIL') return 'fail';
     if (lastMatch === 'WARN') return 'warn';
     return 'pass';
   }
 
-  // Fallback behavior if no tag is found
-  if (feedback.includes('[VERDICT: FAIL]')) return 'fail';
-  if (feedback.includes('[VERDICT: WARN]')) return 'warn';
   return 'pass';
 }
 
