@@ -124,7 +124,7 @@ export async function orchestrateCodeReview(
 
   // Load previous state and auto-resolve findings that are no longer in the diff
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
-  if (prevState?.findings) {
+  if (prevState?.findings && Array.isArray(prevState.findings)) {
     for (const finding of prevState.findings) {
       if (finding.status === 'open' && finding.snippet) {
         if (!summary.diffContext.includes(finding.snippet)) {

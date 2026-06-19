@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { Buffer } from 'node:buffer';
 import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
 
@@ -226,9 +227,15 @@ export async function postPRComment(body: string, reportTitle: string, state?: u
 
   const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
 
-  const stateTag = state
-    ? `<!-- ai-review-state: ${Buffer.from(JSON.stringify(state)).toString('base64')} -->\n`
-    : '';
+  let stateTag = '';
+  if (state) {
+    try {
+      stateTag = `<!-- ai-review-state: ${Buffer.from(JSON.stringify(state)).toString('base64')} -->\n`;
+    } catch (e) {
+      console.warn('Failed to serialize review state:', e);
+      stateTag = '';
+    }
+  }
 
   // Check for existing comments from this bot to avoid spamming the PR
   const getCommentsResponse = await fetch(url, {
