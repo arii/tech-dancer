@@ -181,7 +181,40 @@ export async function countExistingReviews(reportTitles: string[]): Promise<numb
   return totalReviews;
 }
 
-export async function postPRComment(body: string, reportTitle: string): Promise<void> {
+export async function getPreviousReviewState<T>(reportTitle: string): Promise<T | undefined> {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  const prNumber = process.env.PR_NUMBER;
+
+  if (!token || !repo || !prNumber) return undefined;
+
+  const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+  });
+
+  if (!response.ok) return undefined;
+
+  const comments = await response.json() as Array<{ body: string; user: { type: string } }>;
+  const existingComment = comments.find(c =>
+    c.user.type === 'Bot' && c.body.includes(`## ${reportTitle}`)
+  );
+
+  if (!existingComment) return undefined;
+
+  const stateMatch = existingComment.body.match(/<!-- ai-review-state: (.*) -->/);
+  if (!stateMatch) return undefined;
+
+  try {
+    const base64 = stateMatch[1];
+    return JSON.parse(Buffer.from(base64, 'base64').toString('utf-8')) as T;
+  } catch (e) {
+    console.warn('Failed to parse previous review state:', e);
+    return undefined;
+  }
+}
+
+export async function postPRComment(body: string, reportTitle: string, state?: any): Promise<void> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
@@ -192,6 +225,10 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
   }
 
   const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
+
+  const stateTag = state
+    ? `<!-- ai-review-state: ${Buffer.from(JSON.stringify(state)).toString('base64')} -->\n`
+    : '';
 
   // Check for existing comments from this bot to avoid spamming the PR
   const getCommentsResponse = await fetch(url, {
@@ -215,7 +252,7 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
       const match = existingComment.body.match(/<!-- ai-review-count: (\d+) -->/);
       const currentCount = match ? parseInt(match[1], 10) : 1;
       const newCount = currentCount + 1;
-      const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${body}`;
+      const updatedBody = `<!-- ai-review-count: ${newCount} -->\n${stateTag}${body}`;
 
       const updateUrl = `https://api.github.com/repos/${repo}/issues/comments/${existingComment.id}`;
       const updateResponse = await fetch(updateUrl, {
@@ -238,7 +275,7 @@ export async function postPRComment(body: string, reportTitle: string): Promise<
     }
   }
 
-  const newBody = `<!-- ai-review-count: 1 -->\n${body}`;
+  const newBody = `<!-- ai-review-count: 1 -->\n${stateTag}${body}`;
 
   const response = await fetch(url, {
     method: 'POST',

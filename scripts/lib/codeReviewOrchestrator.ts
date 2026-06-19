@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
-import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage } from './visualReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
+import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
+import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
 import { execSync } from 'child_process';
 
 export interface CodeReviewClientStrategy {
@@ -122,6 +122,20 @@ export async function orchestrateCodeReview(
 
   const summary = await getCodeDiffSummary();
 
+  // Load previous state and auto-resolve findings that are no longer in the diff
+  const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+  if (prevState?.findings) {
+    for (const finding of prevState.findings) {
+      if (finding.status === 'open' && finding.snippet) {
+        if (!summary.diffContext.includes(finding.snippet)) {
+          finding.status = 'resolved';
+          console.log(`✅ Auto-resolved finding: ${finding.issue}`);
+        }
+      }
+    }
+    summary.previousState = prevState;
+  }
+
   if (summary.files.length === 0 || !summary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo code changes detected.\n`);
@@ -139,7 +153,7 @@ export async function orchestrateCodeReview(
   console.log(`✅ Local report written to ${agentReportPath}`);
 
   // Post to GitHub PR
-  await postPRComment(report, client.reportTitle);
+  await postPRComment(report, client.reportTitle, reviewResult.state);
 
   // Also alert Jules if this PR is from a Jules session
   const julesSessionId = await getJulesSessionIdFromPR();
