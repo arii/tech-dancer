@@ -172,7 +172,8 @@ export async function orchestrateCodeReview(
     passed: !isFail,
     highCount: isFail ? 1 : 0,
     routes: [], // To maintain schema compatibility with visual-review if needed
-    llmVerdict: reviewResult.llmVerdict
+    llmVerdict: reviewResult.llmVerdict,
+    state: reviewResult.state
   }, null, 2));
 
   if (isFail) {
