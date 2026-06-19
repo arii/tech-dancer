@@ -12,7 +12,7 @@ export interface LLMClientStrategy {
   invokeReview: (summary: VisualRouteSummary) => Promise<RouteReview>;
 }
 
-const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '1', 10);
+const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
 export async function orchestrateVisualReview(
   client: LLMClientStrategy,
