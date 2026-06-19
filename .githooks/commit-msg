@@ -8,22 +8,20 @@ COMMIT_MSG=$(cat "$COMMIT_MSG_FILE" | grep -v '^#')
 # Convert to lowercase for case-insensitive matching
 COMMIT_MSG_LOWER=$(echo "$COMMIT_MSG" | tr '[:upper:]' '[:lower:]')
 
-# List of forbidden phrases
-FORBIDDEN_PHRASES=(
-    "agent update"
-    "review complete"
-    "sync changes"
-    "analysis complete"
-    "minor updates"
-)
+# Read forbidden phrases from file
+PHRASES_FILE="$(dirname "$0")/forbidden-phrases.txt"
 
-for phrase in "${FORBIDDEN_PHRASES[@]}"; do
-    if [[ "$COMMIT_MSG_LOWER" == *"$phrase"* ]]; then
-        echo "❌ Error: Forbidden commit message detected."
-        echo "The No-Op Protection Policy prohibits placeholder commits such as '$phrase'."
-        exit 1
-    fi
-done
+if [ -f "$PHRASES_FILE" ]; then
+    while IFS= read -r phrase || [ -n "$phrase" ]; do
+        # skip empty lines
+        [ -z "$phrase" ] && continue
+        if [[ "$COMMIT_MSG_LOWER" == *"$phrase"* ]]; then
+            echo "❌ Error: Forbidden commit message detected."
+            echo "The No-Op Protection Policy prohibits placeholder commits such as '$phrase'."
+            exit 1
+        fi
+    done < "$PHRASES_FILE"
+fi
 
 # Check if commit message is essentially empty (only whitespace)
 if [ -z "$(echo "$COMMIT_MSG" | tr -d '[:space:]')" ]; then
