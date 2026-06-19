@@ -15,12 +15,8 @@ def is_skipped_review(content: str) -> bool:
     lines = [line.strip() for line in content.splitlines() if line.strip()]
     return len(lines) == 2 and lines[1].startswith("Skipped:")
 
-def is_skipped_verdict(content: str) -> bool:
-    try:
-        data = json.loads(content)
-        return data.get("llmVerdict") == "pass" and data.get("highCount") == 0 and len(data.get("routes", [])) == 0 and data.get("passed") is True
-    except Exception:
-        return False
+def is_skipped_verdict(data: dict) -> bool:
+    return data.get("llmVerdict") == "pass" and data.get("highCount") == 0 and len(data.get("routes", [])) == 0 and data.get("passed") is True
 
 def main():
     task_id = os.environ.get("TASK_ID")
@@ -93,9 +89,14 @@ def main():
         try:
             with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read()
-                if not is_skipped_verdict(content):
-                    verdicts.append((os.path.basename(filepath), content))
-                    has_valid_reviews = True
+                try:
+                    data = json.loads(content)
+                    if not is_skipped_verdict(data):
+                        verdicts.append((os.path.basename(filepath), content))
+                        has_valid_reviews = True
+                except Exception as e:
+                    logger.error(f"Invalid JSON in verdict file {filepath}: {e}")
+                    continue
         except IOError as e:
              logger.error(f"Failed to read JSON verdict {filepath}: {e}")
 
