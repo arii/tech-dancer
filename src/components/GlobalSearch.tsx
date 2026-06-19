@@ -132,7 +132,7 @@ export function GlobalSearch() {
           aria-modal="true"
           aria-label="Search BoomTick"
           className="w-full max-w-3xl h-fit max-h-[85vh] overflow-hidden rounded-lg border shadow-[0_0_40px_rgba(0,0,0,0.1)] bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none flex flex-col"
-          onClick={(e: MouseEvent) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent) => {
             handleKeyDown(e);
