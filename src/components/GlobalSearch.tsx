@@ -1,9 +1,10 @@
+import React from "react";
 // impeccable-ignore-file
 import { Search, X, CornerDownLeft, Sparkles } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { getHighlightedParts } from '@/lib/utils';
-import { useRef, useMemo, useCallback, useEffect, ChangeEvent } from "react";
+import { useRef, useCallback, useEffect, ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useHotkeys } from '@/hooks/useHotkeys';
 import Fuse from 'fuse.js';
@@ -28,30 +29,23 @@ export function GlobalSearch() {
     ],
   });
 
-  const allContent = useMemo(() => {
-    return [
-      ...(postsQuery.data || []),
-      ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
-    ];
-  }, [postsQuery.data, studiesQuery.data]);
+  const allContent = [
+    ...(postsQuery.data || []),
+    ...(studiesQuery.data || []).map(s => ({ ...s, type: 'study' as const }))
+  ];
 
-  const fuse = useMemo(() => {
-    return new Fuse(allContent, {
-      keys: [
-        { name: 'title', weight: 0.7 },
-        { name: 'tags', weight: 0.5 },
-        { name: 'excerpt', weight: 0.3 },
-        { name: 'content', weight: 0.1 }
-      ],
-      threshold: 0.2,
-      ignoreLocation: true
-    });
-  }, [allContent]);
+  const fuse = new Fuse(allContent, {
+    keys: [
+      { name: 'title', weight: 0.7 },
+      { name: 'tags', weight: 0.5 },
+      { name: 'excerpt', weight: 0.3 },
+      { name: 'content', weight: 0.1 }
+    ],
+    threshold: 0.2,
+    ignoreLocation: true
+  });
 
-  const results = useMemo(() => {
-    if (!query.trim()) return [];
-    return fuse.search(query).map(result => result.item);
-  }, [fuse, query]);
+  const results: SearchResult[] = !query.trim() ? [] : fuse.search(query).map(result => result.item) as SearchResult[];
 
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -60,17 +54,14 @@ export function GlobalSearch() {
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
 
-  const debouncedSetQuery = useMemo(
-    () => (q: string) => {
-      if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current);
-      }
-      debounceTimer.current = setTimeout(() => {
-        setQuery(q);
-      }, 300);
-    },
-    [setQuery]
-  );
+  const debouncedSetQuery = (q: string) => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+    debounceTimer.current = setTimeout(() => {
+      setQuery(q);
+    }, 300);
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     debouncedSetQuery(e.target.value);
