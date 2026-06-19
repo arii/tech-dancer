@@ -1,6 +1,6 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel } from '../lib/modelPicker';
 
@@ -36,6 +36,27 @@ ${summary.previousReview}
 
 `
     : '';
+  let priorStateSection = '';
+  if (summary.previousState && summary.previousState.findings.length > 0) {
+    const findingsStr = summary.previousState.findings
+      .map(f => {
+        let line = `- [${f.id}] ${f.file}${f.line ? `:${f.line}` : ''}: ${f.issue} (Status: ${f.status})`;
+        if (f.fixSummary) {
+          line += `\n   → ${f.fixSummary}`;
+        }
+        return line;
+      })
+      .join('\n');
+    priorStateSection = `
+PREVIOUS REVIEW ROUND FINDINGS:
+${findingsStr}
+
+Your job:
+- Confirm THIS issue is resolved before raising anything new.
+- Only raise a NEW issue if it is unrelated to anything already addressed, or if the fix for a previous issue introduced a new problem.
+- Do not re-open a resolved issue under a different framing.
+`;
+  }
 
   return `You are an expert software engineer reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
@@ -46,6 +67,7 @@ ${goalSection}${incrementalDiffSection}${previousReviewSection}Knowledge Base (R
 - Design System Primitives: Layout MUST use primitives (Box, Stack, Grid) from src/layouts/ instead of raw Tailwind classes.
 - Numeric Tokens: Spacing props (padding, margin, gap, top, left, etc.) and size props (height, width) in primitives accept numbers which correspond to Tailwind spacing tokens (e.g., 96 -> 384px). This is intentional and NOT a bug.
 - Custom Tokens: 'viewport-half' is a valid design token for 50vh, handled by the Box component's resolution logic.
+${goalSection}${priorStateSection}
 
 Severity rules — apply these strictly:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
@@ -70,6 +92,24 @@ You MUST end your review with exactly one of the following strings indicating yo
 
 Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
 demonstrate with evidence from the diff.
+
+You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag:
+<findings>
+{
+  "findings": [
+    {
+      "id": "finding-1",
+      "file": "src/App.tsx",
+      "line": 10,
+      "snippet": "const x = 1;",
+      "issue": "Brief description of the issue",
+      "status": "resolved",
+      "fixSummary": "Brief summary of how it was addressed"
+    }
+  ]
+}
+</findings>
+Ensure 'snippet' is a unique string from the diff that identifies the issue.
 `;
 }
 
@@ -83,6 +123,18 @@ export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'war
   }
 
   return 'pass';
+}
+
+export function parseCodeReviewState(feedback: string): CodeReviewState | undefined {
+  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
+  if (!match) return undefined;
+
+  try {
+    return JSON.parse(match[1].trim()) as CodeReviewState;
+  } catch (e) {
+    console.warn('Failed to parse findings JSON from LLM response:', e);
+    return undefined;
+  }
 }
 
 async function createModel(): Promise<ChatOpenAI> {
@@ -136,6 +188,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       tokens: totalTokens,
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
+      state: parseCodeReviewState(feedback),
     };
   }
 };

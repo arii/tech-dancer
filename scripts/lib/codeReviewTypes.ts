@@ -8,6 +8,18 @@ export interface ReviewState {
   count: number;
   lastSha?: string;
   history: ReviewHistoryEntry[];
+export interface ReviewFinding {
+  id: string;
+  file: string;
+  line?: number;
+  snippet?: string;
+  issue: string;
+  status: 'open' | 'resolved';
+  fixSummary?: string;
+}
+
+export interface CodeReviewState {
+  findings: ReviewFinding[];
 }
 
 export interface CodeReviewSummary {
@@ -17,6 +29,9 @@ export interface CodeReviewSummary {
   prGoal?: string;
   previousReview?: string;
   history?: ReviewHistoryEntry[];
+  fullDiff?: string;
+  prGoal?: string;
+  previousState?: CodeReviewState;
 }
 
 export interface CodeReviewResult {
@@ -24,4 +39,5 @@ export interface CodeReviewResult {
   tokens: number;
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
+  state?: CodeReviewState;
 }
