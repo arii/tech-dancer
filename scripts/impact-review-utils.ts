@@ -37,6 +37,26 @@ export const DomRouteSummarySchema = z.object({
   }),
   severity: z.enum(['LOW', 'MEDIUM', 'HIGH'])
 });
+export type DomRouteSummary = z.infer<typeof DomRouteSummarySchema>;
+export interface VisualRouteSummary {
+  route: string;
+  slug: string;
+  beforePath: string;
+  afterPath: string;
+  diffPath: string;
+  beforeCroppedPath?: string;
+  afterCroppedPath?: string;
+  diffCroppedPath?: string;
+  diffPixels: number;
+  totalPixels: number;
+  differencePercent: number;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH';
+}
+
+export interface VisualSummary {
+  routes: VisualRouteSummary[];
+}
+
 export interface DomRouteSummary {
   route: string;
   slug: string;
@@ -51,7 +71,7 @@ export interface DomRouteSummary {
     linksAdded: number;
     linksRemoved: number;
   };
-  severity: "LOW" | "MEDIUM" | "HIGH";
+  severity: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
