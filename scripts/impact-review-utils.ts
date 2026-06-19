@@ -25,6 +25,10 @@ export interface VisualRouteSummary {
   severity: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
+export interface VisualSummary {
+  routes: VisualRouteSummary[];
+}
+
 export interface DomRouteSummary {
   route: string;
   slug: string;
