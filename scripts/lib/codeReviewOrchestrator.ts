@@ -55,6 +55,8 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
       : rawDiff;
 
+    const fullDiff = rawDiff;
+
     const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
@@ -64,6 +66,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     return {
       files,
       diffContext,
+      fullDiff,
       prGoal,
     };
   } catch (error) {
@@ -134,7 +137,9 @@ export async function orchestrateCodeReview(
   if (prevState?.findings && Array.isArray(prevState.findings)) {
     for (const finding of prevState.findings) {
       if (finding.status === 'open' && finding.snippet) {
-        if (!summary.diffContext.includes(finding.snippet)) {
+        // Use fullDiff for auto-resolution check to avoid truncation issues
+        const diffToCheck = summary.fullDiff || summary.diffContext;
+        if (!diffToCheck.includes(finding.snippet)) {
           finding.status = 'resolved';
           console.log(`✅ Auto-resolved finding: ${finding.issue}`);
         }
