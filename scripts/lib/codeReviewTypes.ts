@@ -1,5 +1,4 @@
 export interface CodeReviewSummary {
-  files: string[];
   diffContext: string;
   prGoal?: string;
 }
