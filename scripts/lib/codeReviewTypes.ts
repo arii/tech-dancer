@@ -2,6 +2,7 @@ export interface CodeReviewSummary {
   files: string[];
   diffContext: string;
   prGoal?: string;
+  isTruncated?: boolean;
 }
 
 export interface CodeReviewResult {

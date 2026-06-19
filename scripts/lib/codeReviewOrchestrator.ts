@@ -41,34 +41,40 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     // Verify if origin/main exists, fallback to git history for CI if needed
     try {
-        execSync('git rev-parse origin/main', { stdio: 'ignore' });
+      execSync('git rev-parse origin/main', { stdio: 'ignore' });
     } catch {
-        diffCommand = 'git diff HEAD~1 HEAD';
-        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+      diffCommand = 'git diff HEAD~1 HEAD';
+      nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
     }
 
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
-
-    // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
-    const maxChars = 20000;
-    const diffContext = rawDiff.length > maxChars
-      ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM]'
-      : rawDiff;
-
     const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
 
     const prGoal = await fetchPRGoal();
 
+    const MAX_DIFF_CHARS = 40_000;
+    if (rawDiff.length > MAX_DIFF_CHARS) {
+      const fileList = files.join('\n');
+      const truncatedDiff = rawDiff.slice(0, MAX_DIFF_CHARS);
+      return {
+        files,
+        diffContext: `[DIFF TRUNCATED: ${files.length} files affected. First ${MAX_DIFF_CHARS} chars shown.]\n\nFiles changed:\n${fileList}\n\n${truncatedDiff}`,
+        prGoal,
+        isTruncated: true,
+      };
+    }
+
     return {
       files,
-      diffContext,
+      diffContext: rawDiff,
       prGoal,
+      isTruncated: false,
     };
   } catch (error) {
     console.warn('Could not generate code diff:', error);
-    return { files: [], diffContext: '' };
+    return { files: [], diffContext: '', isTruncated: false };
   }
 }
 
@@ -131,7 +137,20 @@ export async function orchestrateCodeReview(
 
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
-  const reviewResult = await client.invokeReview(summary);
+  let reviewResult: CodeReviewResult;
+
+  if (summary.isTruncated) {
+    console.log(`⚠️  Diff is too large (${summary.diffContext.length} chars) — skipping AI review and requesting human review.`);
+    reviewResult = {
+      feedback: `⚠️ **Diff Truncated**: This pull request is too large for an automated AI review (${summary.files.length} files affected). To prevent inaccurate feedback and maintain CI speed, the AI review has been skipped.\n\n**Action Required:** Please perform a manual human review of these changes.`,
+      tokens: 0,
+      cost: 0,
+      llmVerdict: 'warn',
+    };
+  } else {
+    reviewResult = await client.invokeReview(summary);
+  }
+
   const report = generateCodeReviewMarkdown(reviewResult, client);
 
   // Write local report
