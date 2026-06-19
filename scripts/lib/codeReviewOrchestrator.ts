@@ -88,11 +88,6 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const fullDiff = rawDiff;
 
-    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
-      .split('\n')
-      .filter(Boolean);
-
-    const prGoal = await fetchPRGoal();
 
     return {
       files: reviewableFiles,
