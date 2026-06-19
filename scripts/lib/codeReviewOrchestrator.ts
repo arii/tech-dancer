@@ -77,6 +77,10 @@ function parseImports(content: string): Map<string, string> {
   return imports;
 }
 
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function resolveImportPath(importPath: string, currentFile: string): string | undefined {
   let resolvedPath: string;
   if (importPath.startsWith('@/')) {
@@ -122,8 +126,14 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     try {
         execSync('git rev-parse origin/main', { stdio: 'ignore' });
     } catch {
-        diffCommand = 'git diff main...HEAD';
-        nameOnlyCommand = 'git diff --name-only main...HEAD';
+        try {
+            execSync('git rev-parse main', { stdio: 'ignore' });
+            diffCommand = 'git diff main...HEAD';
+            nameOnlyCommand = 'git diff --name-only main...HEAD';
+        } catch {
+            diffCommand = 'git diff HEAD~1 HEAD';
+            nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+        }
     }
 
     const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
@@ -155,7 +165,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
         // Identify which imported symbols are used in the diff
         for (const [symbol, importPath] of imports.entries()) {
-          const symbolRegex = new RegExp(`\\b${symbol}\\b`);
+          const symbolRegex = new RegExp(`\\b${escapeRegExp(symbol)}\\b`);
           if (symbolRegex.test(fileDiff)) {
             const resolved = resolveImportPath(importPath, file);
             if (resolved) externalFilePaths.add(resolved);
@@ -169,7 +179,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     let externalContext = '';
     const maxExternalChars = 30000;
     for (const extPath of externalFilePaths) {
-      if (externalContext.length > maxExternalChars) break;
+      if (externalContext.length >= maxExternalChars) break;
       if (fs.existsSync(extPath)) {
         const content = fs.readFileSync(extPath, 'utf-8');
         externalContext += `\n\n--- FILE: ${extPath} ---\n${content}`;
