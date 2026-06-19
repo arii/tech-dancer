@@ -38,6 +38,8 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
+            minHeight={12}
+            paddingY={2}
             className={journalVariants.navLink()}
           >
             <Icon
