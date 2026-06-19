@@ -211,6 +211,7 @@ jobs:
           retention-days: 7
 
   impact-analysis:
+    needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
     runs-on: ubuntu-latest
     container:
