@@ -104,6 +104,7 @@ jobs:
           path: ../dist-assets
 
       - name: Deploy to gh-pages branch
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REF_NAME: ${{ github.ref_name }}
@@ -126,13 +127,22 @@ jobs:
             DEST_DIR="$REF_NAME"
           fi
           REPO_URL="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.git"
-          MAX_RETRIES=5
+          MAX_RETRIES=10
 
           # Prepare Open PR branches list for pruning
           echo "Fetching open PRs for pruning..."
           gh pr list --limit 1000 --state open --json headRefName --jq '.[].headRefName' > ../open_prs.txt
 
           for i in $(seq 1 "$MAX_RETRIES"); do
+            if [ $i -gt 1 ]; then
+              # Exponential backoff with random jitter to reduce collision probability
+              # during high contention on the shared gh-pages branch.
+              JITTER=$(( RANDOM % 15 ))
+              SLEEP_TIME=$(( (i - 1) * 10 + JITTER ))
+              echo "Attempt $((i-1)) failed. Retrying in ${SLEEP_TIME}s..."
+              sleep $SLEEP_TIME
+            fi
+
             echo "Deployment attempt $i..."
             rm -rf ../gh-pages-repo
 
@@ -204,8 +214,7 @@ jobs:
               exit 0
             fi
 
-            echo "Attempt $i failed. Retrying in $((i * 5))s..."
-            sleep $((i * 5))
+            echo "Push failed. Will retry."
             cd - || exit
           done
 
