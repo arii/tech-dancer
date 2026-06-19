@@ -2,8 +2,7 @@ name: CI
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [main]
     paths:
       - 'src/**'
       - 'etl/**'
@@ -19,8 +18,7 @@ on:
       - '*.config.ts'
       - 'tsconfig*.json'
   pull_request:
-    branches:
-      - '**'
+    branches: ['**']
     paths:
       - 'src/**'
       - 'etl/**'
@@ -29,6 +27,7 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
@@ -91,10 +90,7 @@ jobs:
 
       - name: Run CLI Unit Tests
         run: |
-<<<<<<< optimize-github-actions-caching-17956393204820612491
           python3 -m pip install --break-system-packages PyGithub pytest click
-=======
->>>>>>> main
           PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
@@ -122,12 +118,9 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-<<<<<<< optimize-github-actions-caching-17956393204820612491
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install
-=======
->>>>>>> main
 
       - name: UI Anti-Pattern Audit - Gate
         env:
@@ -165,12 +158,9 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-<<<<<<< optimize-github-actions-caching-17956393204820612491
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install
-=======
->>>>>>> main
 
       - name: Build App
         env:
@@ -251,21 +241,12 @@ jobs:
         run: pnpm run impact:dom-diff
       - name: Check if visual changes exist
         id: check_visuals
-        run: |
-          if [ -f artifacts/visual-review/summary.json ]; then
-            COUNT=$(jq '[.routes[] | select(.differencePercent > 1.5)] | length' artifacts/visual-review/summary.json)
-            echo "changed_routes=$COUNT" >> "$GITHUB_OUTPUT"
-          else
-            {
-              echo "## Deployment Impact Analysis"
-              echo "No impact report found."
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
       - name: Code review agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
-          MAX_AI_REVIEWS: '2'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -275,7 +256,7 @@ jobs:
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
-          MAX_AI_REVIEWS: '2'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -284,7 +265,7 @@ jobs:
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
-          MAX_AI_REVIEWS: '1'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -293,7 +274,7 @@ jobs:
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
-          MAX_AI_REVIEWS: '1'
+          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
           GITHUB_MODELS_MODEL: gpt-4o-mini
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
