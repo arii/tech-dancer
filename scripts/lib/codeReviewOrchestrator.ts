@@ -49,19 +49,15 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     const excludeSpecs = IMPACT_CONFIG.LOW_IMPACT_PATHS.map(p => `:(exclude)${p}`);
 
     // Get reviewable files using git pathspecs
-    const nameOnlyArgs = ['diff', '--name-only', ...diffBase, '--', '.', ...excludeSpecs];
-    const nameOnlyResult = spawnSync('git', nameOnlyArgs, {
-      encoding: 'utf-8',
-      maxBuffer: 1024 * 1024 * 10
-    });
+    const nameOnlyArgs = ['diff', '--name-only', ...diffBase, '--', ...excludeSpecs];
+    const nameOnlyResult = spawnSync('git', nameOnlyArgs, { encoding: 'utf-8' });
 
     if (nameOnlyResult.error) {
       throw nameOnlyResult.error;
     }
 
-    const reviewableFiles = nameOnlyResult.stdout
-      .split('\n')
-      .filter(Boolean);
+    const stdout = nameOnlyResult.stdout || '';
+    const reviewableFiles = stdout.split('\n').filter(Boolean);
 
     if (reviewableFiles.length === 0) {
       console.log('ℹ️ No reviewable files found after filtering low-impact paths.');
@@ -69,11 +65,8 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     }
 
     // Get diff context for reviewable files only
-    const diffArgs = ['diff', ...diffBase, '--', '.', ...excludeSpecs];
-    const diffResult = spawnSync('git', diffArgs, {
-      encoding: 'utf-8',
-      maxBuffer: 1024 * 1024 * 10
-    });
+    const diffArgs = ['diff', ...diffBase, '--', ...excludeSpecs];
+    const diffResult = spawnSync('git', diffArgs, { encoding: 'utf-8' });
 
     if (diffResult.error) {
       throw diffResult.error;
