@@ -66,9 +66,19 @@ export async function pickOptimalModel(
 
   const suitableModels = models.filter(m => {
     if (needsVision && !m.supported_input_modalities?.includes('image')) return false;
-    const maxIn = m.limits?.max_input_tokens ?? Infinity;
-    // leave headroom for system prompt + output
-    if (estimatedInputTokens > 0 && estimatedInputTokens > maxIn * 0.8) return false;
+
+    // If we have an estimate, be strict about model limits
+    if (estimatedInputTokens > 0) {
+      const rawMaxIn = m.limits?.max_input_tokens;
+      if (rawMaxIn === undefined || rawMaxIn === null) return false;
+
+      const maxIn = typeof rawMaxIn === 'number' ? rawMaxIn : Number(rawMaxIn);
+      if (isNaN(maxIn)) return false;
+
+      // leave headroom for system prompt + output
+      if (estimatedInputTokens > maxIn * 0.8) return false;
+    }
+
     return true;
   });
 
