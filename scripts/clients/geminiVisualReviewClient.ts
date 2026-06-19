@@ -1,21 +1,8 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
+import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
-import type { RouteReview, VisualRouteSummary, VisualReviewState, VisualReviewFinding } from '../lib/visualReviewTypes';
-
-function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
-  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
-  if (!match) return [];
-
-  try {
-    const data = JSON.parse(match[1].trim()) as VisualReviewState;
-    return data.findings || [];
-  } catch (e) {
-    console.warn('Failed to parse findings JSON from visual LLM response:', e);
-    return [];
-  }
-}
+import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
 function createModel(): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;

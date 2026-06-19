@@ -239,6 +239,13 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
+    env:
+      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -269,40 +276,16 @@ jobs:
       - name: Code review agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
-        env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-code-review
       - name: Code review github models agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
-        env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-          GITHUB_MODELS_MODEL: gpt-4o-mini
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:github-models-code-review
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
-        env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:gemini-review
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
-        env:
-          MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
-          GITHUB_MODELS_MODEL: gpt-4o-mini
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: pnpm run impact:github-models-review
       - name: Report Summary
         if: always()

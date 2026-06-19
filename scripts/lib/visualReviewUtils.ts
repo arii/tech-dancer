@@ -1,8 +1,21 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Buffer } from 'node:buffer';
-import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
+import type { RouteReview, VisualRouteSummary, VisualReviewFinding, VisualReviewState } from './visualReviewTypes';
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
+
+export function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
+  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
+  if (!match) return [];
+
+  try {
+    const data = JSON.parse(match[1].trim()) as VisualReviewState;
+    return data.findings || [];
+  } catch (e) {
+    console.warn('Failed to parse findings JSON from visual LLM response:', e);
+    return [];
+  }
+}
 
 export function imageToBase64(filePath: string): string {
   return fs.readFileSync(filePath).toString('base64');
