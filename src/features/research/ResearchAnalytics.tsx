@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -338,7 +338,6 @@ function ToolCard({ tool }: {
 
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
