@@ -5,7 +5,7 @@ import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
-  applyTokenBudget,
+  budgetInputContext,
   buildReviewPayload
 } from '../lib/codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
@@ -30,7 +30,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const systemPrompt = buildSystemPrompt(summary);
-    const { diffText, externalText } = applyTokenBudget(systemPrompt, summary);
+    const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     const maxOutputTokens = estimateMaxOutputTokens(summary);
     const model = createModel(maxOutputTokens);

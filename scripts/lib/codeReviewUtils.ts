@@ -141,7 +141,7 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   return Math.min(budget, 4096);
 }
 
-export function applyTokenBudget(
+export function budgetInputContext(
   systemPrompt: string,
   summary: CodeReviewSummary,
   maxInputChars: number = 24000
