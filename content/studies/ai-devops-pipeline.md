@@ -4,7 +4,7 @@ date: "2024-05-10"
 author: "Ariel Anders"
 category: "DevAI"
 tags: ["DevOps", "AI", "Ollama", "GitHub Actions", "Playwright"]
-excerpt: "A practical local AI review pipeline using GitHub Actions, Ollama, and Playwright. Not a replacement for human review — a way to make first-pass review more repeatable."
+excerpt: "A practical local AI review pipeline using GitHub Actions, Ollama, and Playwright. Not a replacement for human review, but a way to make first-pass review more repeatable."
 readTime: 14
 status: "published"
 ---
@@ -72,7 +72,7 @@ I call that out because AI automation articles often blur the line between "this
 For this article:
 
 - **Implemented** means the script, command, or workflow exists in the repo.
-- **Experimental** means it exists, but still needs manual setup, review, or judgment.
+- **Experimental** means it exists but still needs manual setup, review, or judgment.
 - **Pattern** means it is the architecture I recommend, even if the exact command name in your repo would be different.
 
 ---
@@ -113,7 +113,7 @@ That packet can include:
 Now the model has a narrower job: review the packet and produce findings.
 
 ```bash
-# Generic example — adjust command names to match your repo
+# Generic example: adjust command names to match your repo
 python dev-tools/aggregate_pr_context.py \
   --target-branch main \
   --output .devai/review-context.md
@@ -286,7 +286,7 @@ sequenceDiagram
 
 That last step is not ceremony. It is the safety boundary.
 
-> **Experimental:** `dev-tools/td_cli.py ai repair` can be triggered when CI fails. A GitHub Actions workflow (`jules-fix-trigger.yml`) exists to initiate repair sessions. Treat the output as a suggestion — always review before merge.
+> **Experimental:** `dev-tools/td_cli.py ai repair` can be triggered when CI fails. A GitHub Actions workflow (`jules-fix-trigger.yml`) exists to initiate repair sessions. Treat the output as a suggestion; always review before merge.
 
 ---
 
@@ -311,7 +311,7 @@ test("home page visual smoke test", async ({ page }) => {
 
 This works best for stable routes: home pages, article pages, navigation states, and important UI shells. It works poorly for pages with constantly changing content unless you mask or stabilize the dynamic areas.
 
-> **Pattern:** Playwright visual regression is the architecture this repo is moving toward. The test runner config exists. Baseline screenshot generation and CI comparison are not yet fully automated — that is the next step.
+> **Pattern:** Playwright visual regression is the architecture this repo is moving toward. The test runner config exists. Baseline screenshot generation and CI comparison are not yet fully automated; that is the next step.
 
 ---
 
@@ -324,7 +324,7 @@ The smallest useful version is just two steps:
 1. Create a review context file.
 2. Ask a local model to review that file.
 
-Everything else — GitHub comments, review states, CI repair, screenshot analysis — can come later.
+Everything else, including GitHub comments, review states, CI repair, and screenshot analysis, can come later.
 
 ```text
 .devai/
@@ -337,7 +337,7 @@ dev-tools/
 ```
 
 ```bash
-# Generic example — file names are adaptable
+# Generic example: file names are adaptable
 python dev-tools/aggregate_pr_context.py > .devai/review-context.md
 python dev-tools/ollama_review.py .devai/review-context.md > .devai/review-result.json
 python dev-tools/submit_review.py .devai/review-result.json

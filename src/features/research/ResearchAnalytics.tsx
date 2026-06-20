@@ -149,7 +149,7 @@ function FlagshipCard({
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
             {tool.category}
           </Text>
-          <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+          <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
             {tool.title}
           </Text>
           {tool.subtitle && (
@@ -301,7 +301,7 @@ function ToolCard({ tool }: {
             </Box>
           </Box>
           <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
-          <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
+          <Text as="h3" variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
           {tool.subtitle && (
             <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
           )}
@@ -366,7 +366,7 @@ export default function ResearchAnalytics() {
               border="none"
             />
             <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-              Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+              Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure, including agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
             </Text>
             
             {/* Scrollable Focus Tags for Mobile */}
@@ -444,7 +444,7 @@ export default function ResearchAnalytics() {
         {/* Flagship Projects Section */}
         <Stack gap={8} id="flagship" marginTop={2} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-            <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
+            <Text as="h2" variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
           <Box display="grid" className="responsive-grid" gap={8} width="full">
@@ -455,7 +455,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Box className="why-this-matters">
-          <Text className="label">Why this matters</Text>
+          <Text as="h2" className="label">Why this matters</Text>
           <Text as="p">
             Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
           </Text>
@@ -465,7 +465,7 @@ export default function ResearchAnalytics() {
         {engineeringTools.length > 0 && (
           <Stack gap={12} width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
             </Box>
 
@@ -481,7 +481,7 @@ export default function ResearchAnalytics() {
         {dataContentTools.length > 0 && (
           <Stack gap={12} width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
             </Box>
 
@@ -497,7 +497,7 @@ export default function ResearchAnalytics() {
         {e_commerceTools.length > 0 && (
           <Stack gap={12} width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
             </Box>
 
@@ -535,7 +535,7 @@ export default function ResearchAnalytics() {
                     {study.status && <StatusBadge label={study.status} />}
                   </Box>
 
-                  <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+                  <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
                     {study.title}
                   </Text>
                   <Box display="flex" align="center" gap={4} marginBottom={3}>
@@ -583,10 +583,10 @@ export default function ResearchAnalytics() {
           {/* Description Column (Left) */}
           <Stack gap={4} span={{ base: 1, md: 7 }} justify="center">
             <Box paddingBottom={2} className="border-b border-line/10">
-              <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
+              <Text as="h2" variant="headline" size="2xl" weight="font-black">Work with me</Text>
             </Box>
             <Text variant="body" size="lg" color="dim" leading="relaxed" maxWidth="prose">
-              These are my own projects — built to solve real problems I care about.
+              These are my own projects, built to solve real problems I care about.
               If you need a senior roboticist, DevAI engineering infrastructure,
               or someone who can do both, I'm available for project-based contracts
               and full-time roles.

@@ -57,7 +57,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     },
     taxonomyBucket: 'flagship',
     title: 'RepoAuditor AI',
-    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow — not prior paid work.',
+    description: 'Automated GitHub PR auditing built on a Gemini-driven CI/CD pipeline with Jules autonomous coding agent integration. An independent project demonstrating agentic engineering workflow, not prior paid work.',
     category: 'DevAI Tooling',
     status: 'Active',
     tags: ['DevAI', 'GitHub API', 'Multi-Agent', 'Workflow'],
