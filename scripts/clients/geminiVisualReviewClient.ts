@@ -5,14 +5,14 @@ import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
-function createModel(modelName: string): ChatGoogleGenerativeAI {
+function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
     model: modelName,
     apiKey,
-    maxOutputTokens: 2048,
+    maxOutputTokens: maxOutputTokens,
   });
 }
 
@@ -24,7 +24,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     const modelName = pickGeminiModel('flash');
-    const model = createModel(modelName);
+    const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
