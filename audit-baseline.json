@@ -1,27 +1,28 @@
 {
-  "count": 21,
+  "count": 22,
   "inventory": {
     "src/components/Equalizer.tsx": 1,
     "src/components/GlobalErrorBoundary.tsx": 1,
     "src/components/GlobalSearch.tsx": 1,
-    "src/components/ui/GearCard.tsx": 1,
-    "src/components/ui/HeroSection.tsx": 1,
+    "src/components/ui/Icon.tsx": 1,
     "src/components/ui/ListRow.tsx": 1,
-    "src/components/ui/MarkdownRenderer.tsx": 1,
     "src/components/ui/PageHeader.tsx": 1,
     "src/components/ui/PageSkeleton.tsx": 1,
     "src/components/ui/SearchBox.tsx": 1,
     "src/components/ui/ViewToggle.tsx": 1,
-
+    "src/features/home/FeaturedGuidePanel.tsx": 1,
+    "src/features/home/LatestPosts.tsx": 1,
+    "src/features/journal/components/BlogPostDetail.tsx": 1,
     "src/features/lab/BlogDrafter.tsx": 1,
-    "src/features/lab/wsdc-reminders/WSDCReminders.tsx": 1,
+    "src/features/research/ResearchAnalytics.tsx": 1,
     "src/features/research/components/WCSChartContainers.tsx": 1,
     "src/index.css": 1,
     "src/layouts/Text.tsx": 1,
     "src/lib/__tests__/generate-assets.test.ts": 1,
     "src/lib/variants.ts": 1,
+    "src/pages/Home.tsx": 1,
     "src/styles/design-tokens.ts": 1,
     "src/styles/tokens.css": 1
   },
-  "updatedAt": "2026-05-13T08:37:20.573Z"
+  "updatedAt": "2026-06-20T08:47:19.129Z"
 }
