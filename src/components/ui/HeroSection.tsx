@@ -1,8 +1,9 @@
 
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
-import { Stack, Text, Box } from '@/layouts/Primitives';
+import { Stack, Text, Box, Button } from '@/layouts/Primitives';
 import { Wordmark } from './Wordmark';
+import { Link } from 'react-router-dom';
 import { HERO_CONFIG } from '@/config/hero';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
@@ -143,6 +144,39 @@ export function HeroSection() {
             Gear guides, travel hacks, DIY tips, and merch for West Coast Swing dancers
           </Text>
         </Stack>
+
+        {/* CTA Buttons - High-contrast onboarding paths */}
+        <Box
+          opacity={0}
+          className="hero-cta-anim"
+          marginTop={{ base: 8, lg: 10 }}
+        >
+          <Stack
+            direction={{ base: 'column', sm: 'row' }}
+            gap={4}
+            width="full"
+            align="start"
+          >
+            <Button
+              as={Link}
+              to="/merch"
+              variant="primary"
+              size="lg"
+              width={{ base: 'full', sm: 'auto' }}
+            >
+              Explore Gear & Merch
+            </Button>
+            <Button
+              as={Link}
+              to="/blog"
+              variant="outline"
+              size="lg"
+              width={{ base: 'full', sm: 'auto' }}
+            >
+              Read the Journal
+            </Button>
+          </Stack>
+        </Box>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
 
