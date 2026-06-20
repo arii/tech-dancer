@@ -262,6 +262,16 @@ jobs:
           fetch-depth: 0
       - run: pnpm install --frozen-lockfile --prefer-offline
 
+      - name: Entropy Check
+        id: entropy_check
+        env:
+          DIFF_CMD: git diff --name-only origin/main...HEAD
+        run: |
+          echo "🔍 Checking PR entropy..."
+          CHANGES=$($DIFF_CMD | wc -l)
+          echo "changed_code=$CHANGES" >> "$GITHUB_OUTPUT"
+          echo "Detected $CHANGES changed files."
+
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
       - name: Build Main
@@ -286,12 +296,14 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG_AI_REVIEW: 'true'
         run: pnpm run impact:gemini-code-review
       - name: Code review github models agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG_AI_REVIEW: 'true'
         run: pnpm run impact:github-models-code-review
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
@@ -409,3 +421,4 @@ jobs:
         with:
           name: deployment-review
           path: artifacts/
+          retention-days: 7
