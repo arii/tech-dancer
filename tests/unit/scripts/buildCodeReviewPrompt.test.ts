@@ -9,7 +9,7 @@ describe('buildCodeReviewPrompt', () => {
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
     expect(prompt).toContain('CI/CD Workflows:');
-    expect(prompt).toContain('Ensure all GitHub Actions use specific versions');
+    expect(prompt).toContain('if: always()');
   });
 
   it('injects React guidance when .tsx file is changed', () => {
@@ -19,7 +19,7 @@ describe('buildCodeReviewPrompt', () => {
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
     expect(prompt).toContain('React Components:');
-    expect(prompt).toContain('Check for proper use of React hooks');
+    expect(prompt).toContain('Flag as blocking: conditional/early-return hook calls');
   });
 
   it('injects LLM integration guidance when CodeReviewClient is changed', () => {
@@ -28,8 +28,8 @@ describe('buildCodeReviewPrompt', () => {
       changedFiles: ['scripts/clients/githubModelsCodeReviewClient.ts']
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
-    expect(prompt).toContain('LLM Client Integrations:');
-    expect(prompt).toContain('Verify that API keys and sensitive tokens are never hardcoded');
+    expect(prompt).toContain('LLM Client Integrations — READ BEFORE FLAGGING AUTH/MODEL ISSUES:');
+    expect(prompt).toContain('Do NOT assume `ChatOpenAI` always means talking to OpenAI\'s own API');
   });
 
   it('concatenates multiple guidance blocks if multiple categories match', () => {
