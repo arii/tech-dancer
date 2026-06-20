@@ -98,6 +98,29 @@ jobs:
         run: python scripts/send-jules-impact.py
 ```
 
+### Example Report Output
+
+When a PR is opened, the analyzer posts a summary directly to the GitHub conversation. This allows developers to see the impact at a glance without leaving their workflow.
+
+| Route | Visual Diff | Severity | Action |
+| :--- | :--- | :--- | :--- |
+| `/blog/:slug` | 12.4% | 🔴 HIGH | Manual Review Required |
+| `/about` | 0.0% | 🟢 LOW | Auto-passed |
+| `/merch` | 1.2% | 🟡 MEDIUM | Review Suggested |
+
+> **Implemented:** We use the `cropped` diff artifacts to show exactly where the pixels changed, saving reviewers from playing "spot the difference" on full-page screenshots.
+
+### Real-World Finding: The "Invisible" Regression
+
+In a recent PR, a developer modified a global spacing variable. On the surface, the changed files seemed unrelated to the landing page. However, the analyzer traced the dependency and flagged a **15% visual diff** on the Home route.
+
+**The finding:**
+- **Issue:** The navigation menu items shifted by 4px, causing the logo to wrap on smaller viewports.
+- **Root Cause:** A Tailwind config change to the `gap-4` utility had unintended side effects on the header layout.
+- **Resolution:** The developer adjusted the header to use a fixed pixel value, isolating it from the global spacing change.
+
+Without the analyzer, this regression would likely have reached production, only to be discovered by a user on a mobile device.
+
 ## Lessons Learned
 
 Building this tool taught us that **context is king**. An LLM can review code, but it struggles to "see" layout shifts. By combining deterministic graph analysis with visual regression, we create a "tripwire" that catches regressions before they reach production.
