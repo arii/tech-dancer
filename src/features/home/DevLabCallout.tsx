@@ -27,7 +27,7 @@ export function DevLabCallout() {
           <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>ROBOTICS</Text>
           <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
             {['ROS1/2', 'C++', 'Navigation'].map(tag => (
-              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-brand-cyan/10 text-brand-cyan border-brand-cyan/20">{tag}</Text>
+              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-accent-sky/10 text-accent-sky border-accent-sky/20">{tag}</Text>
             ))}
           </Box>
         </Stack>
@@ -35,7 +35,7 @@ export function DevLabCallout() {
           <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>AI</Text>
           <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
             {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
-              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-brand-amber/10 text-brand-amber border-brand-amber/20">{tag}</Text>
+              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-accent-purple/10 text-accent-purple border-accent-purple/20">{tag}</Text>
             ))}
           </Box>
         </Stack>
@@ -43,7 +43,7 @@ export function DevLabCallout() {
           <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>INFRA</Text>
           <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
             {['GitHub Actions', 'Playwright'].map(tag => (
-              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-brand-green/10 text-brand-green border-brand-green/20">{tag}</Text>
+              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-accent/10 text-accent border-accent/20">{tag}</Text>
             ))}
           </Box>
         </Stack>
