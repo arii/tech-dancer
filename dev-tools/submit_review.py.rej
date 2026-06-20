@@ -1,0 +1,89 @@
+--- dev-tools/submit_review.py
++++ dev-tools/submit_review.py
+@@ -1,8 +1,76 @@
+ import os
+ import json
+ import re
++from typing import Dict, Any, List
+ from utils import get_github_token, get_github_client, get_repo_name, CLIError
+
++def validate_review_payload(payload: Dict[str, Any]):
++    """
++    Validates that the review payload is not just boilerplate or empty.
++    """
++    if not isinstance(payload, dict):
++        raise CLIError("Review rejected: Invalid payload format (expected dict).")
++
++    body = payload.get("body", "")
++    if not isinstance(body, str):
++        body = str(body)
++
++    comments = payload.get("comments", [])
++    if not isinstance(comments, list):
++        raise CLIError("Review rejected: 'comments' must be a list.")
++
++    # Robust placeholder detection using regex to handle minor variants
++    placeholders = [
++        r"<findings\s*/?>",
++        r"<summary\s*/?>",
++        r"<filename\s*/?>",
++        r"<feedback\s*/?>",
++        r"<Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved>"
++    ]
++
++    # Check body for placeholders
++    for p in placeholders:
++        if re.search(p, body, re.IGNORECASE):
++             raise CLIError(f"Review rejected: Contains boilerplate placeholder matching '{p}'")
++
++    # Check for real comments (not placeholders)
++    real_comments = []
++    for c in comments:
++        if not isinstance(c, dict):
++            continue
++
++        c_body = str(c.get("body", ""))
++        c_path = str(c.get("path", ""))
++
++        # Check if comment fields contain placeholders
++        is_placeholder = False
++        for p in placeholders:
++            if re.search(p, c_body, re.IGNORECASE) or re.search(p, c_path, re.IGNORECASE):
++                is_placeholder = True
++                break
++
++        if is_placeholder:
++            # We don't necessarily want to reject the WHOLE review if one comment has a placeholder
++            # but usually it means the whole thing is slop. Following the stricter path:
++            raise CLIError(f"Review rejected: Comment contains boilerplate placeholder.")
++
++        if c_body.strip() and c_path != "<filename>":
++            real_comments.append(c)
++
++    # Check for empty/meaningless body
++    # Remove markdown headers and comments to see if anything else remains
++    clean_body = body
++    clean_body = re.sub(r'^#+.*$', '', clean_body, flags=re.MULTILINE)
++    clean_body = re.sub(r'<!--.*?-->', '', clean_body, flags=re.DOTALL)
++
++    # Also remove the "selection" line if it wasn't replaced
++    clean_body = re.sub(r'Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved', '', clean_body, flags=re.IGNORECASE)
++
++    clean_body = clean_body.strip()
++
++    if not clean_body and not real_comments:
++        raise CLIError("Review rejected: No meaningful content found in body or comments.")
++
+ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_override=None, is_json=False):
+     """
+     Submits a PR review from a markdown file containing a JSON payload.
+@@ -22,6 +90,9 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
+     except json.JSONDecodeError as e:
+         raise CLIError(f"Failed to parse JSON block: {str(e)}")
+
++    # Validate payload before proceeding
++    validate_review_payload(payload)
++
+     repo_name = get_repo_name()
+     if not repo_name:
+         raise CLIError("Could not detect repository name")

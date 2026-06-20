@@ -37,7 +37,11 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
+
+    console.log(`[DEBUG] Sending payload to Gemini (${calculateEstimatedTokens(JSON.stringify(baseContent))} estimated tokens)...`);
     const response = await model.invoke([message]);
+
+    console.log(`[DEBUG] Gemini raw response: ${typeof response.content === 'string' ? response.content.slice(0, 500) : 'complex content'}...`);
 
     const usageMetadata = response.usage_metadata;
     const inputTokens = usageMetadata?.input_tokens ?? 0;
@@ -45,6 +49,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const totalTokens = usageMetadata?.total_tokens ?? 0;
 
     const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
+    console.log(`[DEBUG] Gemini usage: ${totalTokens} tokens (in: ${inputTokens}, out: ${outputTokens}), cost: $${cost.toFixed(5)}`);
 
     const finishReason = (response as { response_metadata?: { finish_reason?: string } })
       .response_metadata?.finish_reason;
