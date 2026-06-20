@@ -351,7 +351,8 @@ class Orchestrator:
     def _has_spec_section(self, section_name, text):
         """Robustly checks for the presence of a markdown section or numbered list item."""
         # Matches markdown headers (# Section Name) or numbered items (1. SECTION NAME)
-        header_pattern = rf"^\s*#+\s*{re.escape(section_name)}\b"
+        # Allows optional numbering like '### 1. Section' or '1. Section'
+        header_pattern = rf"^\s*#+\s*(\d+\.\s*)?{re.escape(section_name)}\b"
         list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
         return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
                     re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))

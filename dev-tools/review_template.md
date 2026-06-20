@@ -13,6 +13,10 @@ For EVERY changed file, verify against these standards. Mark as `- [x]` when ver
 - [ ] Responsibility creep: Component does not take on state/logic belonging in parent/hook.
 - [ ] Import bloat: No unnecessary `import React from 'react'` (React 17+).
 - [ ] Token compliance: Uses established design tokens (no raw Tailwind values or inline styles).
+- [ ] Visual Quality: WCAG AA contrast, proper line lengths (65-75ch), and no banned patterns (gradient text, side-stripes, over-rounded cards).
+- [ ] Layout Primitives: No raw Tailwind (flex, grid, px-4) in app layers; uses Stack, Grid, Box primitives.
+- [ ] Mobile UX: No horizontal overflow on 390px; minimum 48x48px touch targets for interactive elements.
+- [ ] Motion: Transitions respect prefers-reduced-motion; no animation of CSS layout dimensions (width, height).
 - [ ] Audit ratio: If > 100 lines added, identified at least 10 lines to refactor/remove.
 
 ## CI Log Triage
