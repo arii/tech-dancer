@@ -23,7 +23,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const modelName = pickGeminiModel('flash');
+    const modelName = pickGeminiModel('flash', 0);
     const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
@@ -77,7 +77,7 @@ Your job:
     const totalTokens = usageMetadata?.total_tokens ?? 0;
 
     const pricing = getGeminiPricing(modelName);
-    const cost = (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM;
+    const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     const feedback = typeof response.content === 'string'
       ? response.content
