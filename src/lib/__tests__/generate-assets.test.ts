@@ -10,7 +10,7 @@ describe('getTokens', () => {
     const mockCss = `
       :root {
         --raw-color-bg: #020617;
-        --raw-color-accent-brand: #22d3ee;
+        --raw-color-accent-brand: #0891b2;
         --raw-color-accent-purple: #8b5cf6;
         --hero-accent: var(--raw-color-accent-brand);
       }
@@ -22,7 +22,7 @@ describe('getTokens', () => {
     const tokens = await getTokens();
 
     expect(tokens).toEqual({
-      heroAccent: '#22d3ee',
+      heroAccent: '#0891b2',
       accentPurple: '#8b5cf6',
       rawColorBg: '#020617',
     });
