@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
@@ -39,13 +38,17 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            paddingY={4}
+            className="group w-full max-w-full min-w-0 border-b border-line transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
               radius="md"
               overflow="hidden"
-              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
+              width={18}
+              height={14}
+              marginTop={0.5}
+              className="shrink-0 bg-surface-alt"
             >
               {post.image ? (
                 <img
@@ -60,7 +63,7 @@ export function LatestPosts() {
             </Box>
 
             {/* Text content */}
-            <Stack gap={1} className="min-w-0 flex-1">
+            <Stack gap={1} flex={1} className="min-w-0">
               <Box display="flex" align="center" gap={3}>
                 <Text variant="mono" size="xs" color="accent" weight="font-bold" uppercase>
                   {post.category}
@@ -77,7 +80,9 @@ export function LatestPosts() {
               </Text>
             </Stack>
 
-            <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
+            <Box marginTop={1} className="shrink-0">
+              <ArrowRight className="h-4 w-4 text-accent opacity-subtle transition-opacity group-hover:opacity-full" />
+            </Box>
           </Box>
         ))}
       </Stack>

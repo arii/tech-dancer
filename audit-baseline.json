@@ -1,17 +1,15 @@
 {
-  "count": 22,
+  "count": 20,
   "inventory": {
     "src/components/Equalizer.tsx": 1,
     "src/components/GlobalErrorBoundary.tsx": 1,
     "src/components/GlobalSearch.tsx": 1,
-    "src/components/ui/Icon.tsx": 1,
     "src/components/ui/ListRow.tsx": 1,
     "src/components/ui/PageHeader.tsx": 1,
     "src/components/ui/PageSkeleton.tsx": 1,
     "src/components/ui/SearchBox.tsx": 1,
     "src/components/ui/ViewToggle.tsx": 1,
     "src/features/home/FeaturedGuidePanel.tsx": 1,
-    "src/features/home/LatestPosts.tsx": 1,
     "src/features/journal/components/BlogPostDetail.tsx": 1,
     "src/features/lab/BlogDrafter.tsx": 1,
     "src/features/research/ResearchAnalytics.tsx": 1,
@@ -24,5 +22,5 @@
     "src/styles/design-tokens.ts": 1,
     "src/styles/tokens.css": 1
   },
-  "updatedAt": "2026-06-20T08:35:57.527Z"
+  "updatedAt": "2026-06-20T09:09:24.408Z"
 }
