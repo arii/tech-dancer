@@ -8,6 +8,9 @@ import { mapPageToUrls } from './impact-review-utils';
 // Types for dependency-cruiser output
 interface Dependency {
   resolved: string;
+  dynamic?: boolean;
+  module?: string;
+  dependencyTypes?: string[];
 }
 
 interface Module {
@@ -25,7 +28,11 @@ interface DependencyGraph {
  */
 function exec(command: string): string {
   try {
-    return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+    return execSync(command, {
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large graphs
+    }).trim();
   } catch (error: unknown) {
     const err = error as { stderr?: string; message?: string };
     throw new Error(`Command failed: ${command}\n${err.stderr || err.message}`, { cause: error });
@@ -66,20 +73,31 @@ function getChangedFiles(): string[] {
   return Array.from(allChanges).filter(Boolean);
 }
 
+interface ReverseDependency {
+  source: string;
+  dynamic: boolean;
+}
+
 /**
  * Builds a reverse dependency map (child -> [parents]).
  */
-function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
-  const reverseMap: Record<string, string[]> = {};
+function buildReverseMap(graph: DependencyGraph): Record<string, ReverseDependency[]> {
+  const reverseMap: Record<string, ReverseDependency[]> = {};
 
   graph.modules.forEach(module => {
     module.dependencies.forEach(dep => {
       const child = dep.resolved;
+      if (!child) return;
+
       if (!reverseMap[child]) {
         reverseMap[child] = [];
       }
-      if (!reverseMap[child].includes(module.source)) {
-        reverseMap[child].push(module.source);
+
+      if (!reverseMap[child].some(rd => rd.source === module.source)) {
+        reverseMap[child].push({
+          source: module.source,
+          dynamic: !!dep.dynamic
+        });
       }
     });
   });
@@ -88,9 +106,53 @@ function buildReverseMap(graph: DependencyGraph): Record<string, string[]> {
 }
 
 /**
+ * Maps resolved file paths to their application routes by analyzing the router configuration and dependency graph.
+ */
+function getDynamicRouteMapping(graph: DependencyGraph): Record<string, string> {
+  const mapping: Record<string, string> = {};
+
+  // Find the routes configuration module
+  const routesModule = graph.modules.find(m => m.source === 'src/config/routes.ts');
+  if (!routesModule) return mapping;
+
+  // For each dynamic import in the routes file, we try to associate it with a route path
+  // Since we can't easily parse the TS AST here, we'll use a hybrid approach:
+  // We'll look at the modules that the routes file depends on dynamically.
+  routesModule.dependencies.forEach(dep => {
+    if (dep.dynamic && dep.resolved) {
+      // Look for known patterns in src/config/routes.ts via simple grep/regex
+      // to find which path is associated with this module
+      const modulePath = dep.module || '';
+      if (!modulePath) return;
+
+      try {
+        const routesContent = fs.readFileSync('src/config/routes.ts', 'utf-8');
+        // Match: path: '/blog', ... lazy: () => import('@/pages/Blog')
+        // This is a bit brittle but works for the current standardized route config
+        const escapedModule = modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`path:\\s*['"]([^'"]+)['"][^}]*import\\(['"]${escapedModule}['"]\\)`, 's');
+        const match = routesContent.match(regex);
+
+        if (match && match[1]) {
+          mapping[dep.resolved] = match[1];
+        }
+      } catch (e) {
+        console.error(`Error mapping route for ${modulePath}:`, e);
+      }
+    }
+  });
+
+  return mapping;
+}
+
+/**
  * Recursively finds all affected files starting from the changed files.
  */
-function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, string[]>): string[] {
+function findAffectedFiles(
+  changedFiles: string[],
+  reverseMap: Record<string, ReverseDependency[]>,
+  options: { includeDynamic: boolean } = { includeDynamic: true }
+): string[] {
   const affected = new Set<string>();
   const queue = [...changedFiles];
 
@@ -100,7 +162,11 @@ function findAffectedFiles(changedFiles: string[], reverseMap: Record<string, st
     affected.add(file);
 
     const parents = reverseMap[file] || [];
-    queue.push(...parents);
+    for (const parent of parents) {
+      if (options.includeDynamic || !parent.dynamic) {
+        queue.push(parent.source);
+      }
+    }
   }
 
   return Array.from(affected);
@@ -189,13 +255,27 @@ async function main() {
 
     // Find affected files in src/
     const srcChanges = changedFiles.filter(f => f.startsWith('src/'));
-    const allAffected = findAffectedFiles(srcChanges, reverseMap);
 
-    // Find affected pages
-    const affectedPages = allAffected.filter(f => f.startsWith(IMPACT_CONFIG.PAGES_DIR));
+    // allAffected includes dynamic dependencies for route discovery
+    const allAffected = findAffectedFiles(srcChanges, reverseMap, { includeDynamic: true });
 
-    // Global impact check - only if the CHANGED files themselves are global triggers
-    const hasGlobalImpact = changedFiles.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
+    // staticAffected excludes dynamic dependencies for global impact check
+    // This prevents page changes from triggering global impact via the router's dynamic imports
+    const staticAffected = findAffectedFiles(srcChanges, reverseMap, { includeDynamic: false });
+
+    // Create dynamic route mapping
+    const dynamicRouteMapping = getDynamicRouteMapping(graph);
+    const pageComponentFiles = Object.keys(dynamicRouteMapping);
+
+    // Find affected pages (either by directory or by being a registered dynamic import)
+    const affectedPages = allAffected.filter(f =>
+      f.startsWith(IMPACT_CONFIG.PAGES_DIR) ||
+      pageComponentFiles.includes(f)
+    );
+
+    // Global impact check - if ANY statically affected file is a global trigger,
+    // or if a global trigger was changed directly.
+    const hasGlobalImpact = staticAffected.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
 
     let pageUrls: string[];
 
@@ -205,7 +285,28 @@ async function main() {
       console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
       pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
     } else {
-      pageUrls = affectedPages.flatMap(pageFile => mapPageToUrls(pageFile, authoritativeSitemapUrls));
+      // Map affected pages to URLs using both heuristics and the new dynamic mapping
+      const mappedUrls = affectedPages.flatMap(pageFile => {
+        // Try dynamic mapping first
+        if (dynamicRouteMapping[pageFile]) {
+          const routePattern = dynamicRouteMapping[pageFile];
+
+          if (routePattern === '/') return authoritativeSitemapUrls.includes('/') ? ['/'] : [];
+
+          // Handle dynamic route parameters
+          const staticPrefixMatch = routePattern.match(/^(\/[a-z0-9-]+)\/:[a-zA-Z0-9_]+$/);
+          if (staticPrefixMatch) {
+            const prefix = `${staticPrefixMatch[1]}/`;
+            return authoritativeSitemapUrls.filter(url => url.startsWith(prefix) && url !== staticPrefixMatch[1]);
+          }
+
+          if (authoritativeSitemapUrls.includes(routePattern)) return [routePattern];
+        }
+
+        // Fallback to legacy heuristic mapping
+        return mapPageToUrls(pageFile, authoritativeSitemapUrls);
+      });
+      pageUrls = Array.from(new Set(mappedUrls));
     }
 
     // Content URLs
@@ -217,6 +318,21 @@ async function main() {
     // Combine and deduplicate URLs
     const allUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
 
+    // Find all dynamic imports in the whole graph to identify dynamic boundaries
+    const allDynamicImports = new Set<string>();
+    graph.modules.forEach(m => {
+      m.dependencies.forEach(d => {
+        if (d.dynamic && d.resolved) {
+          allDynamicImports.add(d.resolved);
+        }
+      });
+    });
+
+    // Affected dynamic imports are those that are in the affected dependency chain
+    const affectedDynamicImportsSet = allAffected
+      .filter(f => allDynamicImports.has(f))
+      .sort();
+
     // Severity
     const severity = getSeverity(changedFiles);
 
@@ -224,6 +340,7 @@ async function main() {
     const report = {
       changedFiles,
       affectedPages,
+      affectedDynamicImports: affectedDynamicImportsSet,
       routes: allUrls,
       visualReviewRequired: allUrls,
       impactLevel: severity
@@ -280,6 +397,12 @@ async function main() {
 
 ### 👁️ Visual Review Required
 ${allUrls.length > 0 ? allUrls.map(url => `- [${url}](${baseUrl}${url})`).join('\n') : '_None detected (code-only change)_'}
+
+<details>
+<summary><b>📦 Dynamic Imports Affected (${affectedDynamicImportsSet.length})</b></summary>
+
+${affectedDynamicImportsSet.length > 0 ? affectedDynamicImportsSet.map(f => `- ${f}`).join('\n') : '_None detected_'}
+</details>
 
 <details>
 <summary><b>📝 Changed Files (${changedFiles.length})</b></summary>
