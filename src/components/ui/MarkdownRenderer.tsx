@@ -45,8 +45,8 @@ const parseResponsiveProp = (value: unknown) => {
  * Filter and process props for layout components.
  */
 const processLayoutProps = (props: Record<string, unknown>) => {
-  const { node: _node, ...rest } = props;
-  const processed: Record<string, unknown> = {};
+  const { node: _node, children, ...rest } = props;
+  const processed: Record<string, unknown> = { children };
 
   Object.keys(rest).forEach(key => {
     processed[key] = parseResponsiveProp(rest[key]);
@@ -70,10 +70,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               notice: ['type', 'id'],
               Notice: ['type', 'id'],
               input: ['type', 'checked', 'disabled'],
-              grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className'],
-              Grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className'],
-              stack: ['direction', 'gap', 'align', 'justify', 'className'],
-              Stack: ['direction', 'gap', 'align', 'justify', 'className'],
+              grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className', 'padding', 'paddingX', 'paddingY', 'margin', 'marginX', 'marginY'],
+              Grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className', 'padding', 'paddingX', 'paddingY', 'margin', 'marginX', 'marginY'],
+              stack: ['direction', 'gap', 'align', 'justify', 'className', 'padding', 'paddingX', 'paddingY', 'margin', 'marginX', 'marginY'],
+              Stack: ['direction', 'gap', 'align', 'justify', 'className', 'padding', 'paddingX', 'paddingY', 'margin', 'marginX', 'marginY'],
               text: ['variant', 'size', 'color', 'weight', 'leading', 'tracking', 'align', 'uppercase', 'clamp', 'className'],
               Text: ['variant', 'size', 'color', 'weight', 'leading', 'tracking', 'align', 'uppercase', 'clamp', 'className']
             },

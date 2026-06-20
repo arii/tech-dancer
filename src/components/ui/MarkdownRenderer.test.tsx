@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
@@ -13,6 +13,10 @@ vi.mock('@/layouts/Primitives', () => ({
 }));
 
 describe('MarkdownRenderer Primitives Support', () => {
+  beforeEach(() => {
+    cleanup();
+  });
+
   it('correctly parses and passes responsive props to Grid', () => {
     const content = '<grid cols=\'{"base": 1, "md": 2}\' gap="10">Content</grid>';
     render(
@@ -25,6 +29,18 @@ describe('MarkdownRenderer Primitives Support', () => {
     const props = JSON.parse(grid.getAttribute('data-props') || '{}');
     expect(props.cols).toEqual({ base: 1, md: 2 });
     expect(props.gap).toBe("10");
+  });
+
+  it('preserves children and does not attempt to parse them', () => {
+    const content = '<stack gap="4">Complex Child Content</stack>';
+    render(
+      <MemoryRouter>
+        <MarkdownRenderer content={content} />
+      </MemoryRouter>
+    );
+
+    const stack = screen.getByTestId('stack');
+    expect(stack.textContent).toBe('Complex Child Content');
   });
 
   it('correctly parses and passes props to Stack', () => {
