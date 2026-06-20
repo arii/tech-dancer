@@ -19,6 +19,12 @@ updates:
       day: "wednesday"
 
   - package-ecosystem: "pip"
+    directory: "/dev-tools"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+
+  - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
