@@ -1,0 +1,31 @@
+version: 2
+updates:
+  # Maintain dependencies for the root Node.js project
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for the boomtick-mcp Node.js project
+  - package-ecosystem: "npm"
+    directory: "/boomtick-mcp"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for Python ETL tools
+  - package-ecosystem: "pip"
+    directory: "/etl"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for Python dev-tools SDK (root pyproject.toml)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
