@@ -146,7 +146,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={10} width="full" display="flex" justify="center">
+              <Box marginY={12} width="full" display="flex" justify="center">
                 <Box
                   as="img"
                   src={normalizedSrc}
