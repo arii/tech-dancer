@@ -270,36 +270,55 @@ jobs:
         id: entropy_check
         if: always()
         run: |
+          echo "::group::🔍 PR Entropy Analysis"
+          echo "Event: ${{ github.event_name }}"
+
           DIFF_CMD="git ls-tree -r HEAD --name-only"
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             DIFF_CMD="git diff --name-only origin/main...HEAD"
           elif git rev-parse HEAD~1 >/dev/null 2>&1; then
             DIFF_CMD="git diff --name-only HEAD~1 HEAD"
           fi
+          echo "Diff Command: $DIFF_CMD"
+
           CHANGED_FILES=$($DIFF_CMD || echo "")
-          MATCH_COUNT=$(echo "$CHANGED_FILES" | grep -vE 'tests/visual\.spec\.ts-snapshots/' | grep -c . || true)
+          RELEVANT_FILES=$(echo "$CHANGED_FILES" | grep -vE 'tests/visual\.spec\.ts-snapshots/' || true)
+          MATCH_COUNT=$(echo "$RELEVANT_FILES" | grep -c . || true)
+
           if [ "$MATCH_COUNT" -gt 0 ]; then
             echo "changed_code=1" >> "$GITHUB_OUTPUT"
+            echo "✅ Relevant code changes detected ($MATCH_COUNT files)."
+            echo "Files:"
+            echo "$RELEVANT_FILES" | sed 's/^/  - /'
           else
             echo "changed_code=0" >> "$GITHUB_OUTPUT"
+            echo "ℹ️ No relevant code changes detected (skipping code reviews)."
           fi
-          echo "Detected $MATCH_COUNT relevant changed files."
+          echo "::endgroup::"
 
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
       - name: Build Main
         env:
           DISABLE_MINIFY: true
-        run: pnpm run impact:build-main
+        run: |
+          echo "🏗️ Building main branch for comparison..."
+          pnpm run impact:build-main
       - name: Build PR
         env:
           VITE_BASE_PATH: /
           DISABLE_MINIFY: true
-        run: pnpm run build:review
+        run: |
+          echo "🏗️ Building PR branch for review..."
+          pnpm run build:review
       - name: Visual Diff
-        run: pnpm run impact:visual-diff
+        run: |
+          echo "📸 Generating visual diffs..."
+          pnpm run impact:visual-diff
       - name: DOM Diff
-        run: pnpm run impact:dom-diff
+        run: |
+          echo "📄 Generating DOM diffs..."
+          pnpm run impact:dom-diff
       - name: Check if visual changes exist
         id: check_visuals
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
@@ -310,25 +329,33 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG_AI_REVIEW: 'true'
-        run: pnpm run impact:gemini-code-review
+        run: |
+          echo "🤖 Starting Gemini Code Review..."
+          pnpm run impact:gemini-code-review
       - name: Code review github models agent
         if: always() && github.event_name == 'pull_request' && steps.entropy_check.outputs.changed_code == '1'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG_AI_REVIEW: 'true'
-        run: pnpm run impact:github-models-code-review
+        run: |
+          echo "🤖 Starting GitHub Models Code Review..."
+          pnpm run impact:github-models-code-review
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:gemini-review
+        run: |
+          echo "🤖 Starting Gemini Visual Review..."
+          pnpm run impact:gemini-review
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:github-models-review
+        run: |
+          echo "🤖 Starting GitHub Models Visual Review..."
+          pnpm run impact:github-models-review
       - name: Report Summary
         if: always()
         run: |
