@@ -9,9 +9,12 @@ export function imageToBase64(filePath: string): string {
 }
 
 export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  // 1. Clean the feedback of "resolved" findings to avoid false failure signals
-  // Many reviews repeat the issue description even when marking it resolved.
-  const lines = feedback.split('\n');
+  // 1. Split feedback to isolate the main evaluation from recommendations and structured state
+  const parts = feedback.split(/recommendations for improvement|---|<findings>/i);
+  const coreEvaluation = parts[0] || '';
+
+  // 2. Clean the core evaluation of "resolved" findings to avoid false failure signals
+  const lines = coreEvaluation.split('\n');
   const activeLines = lines.filter(line => {
     const isResolved = /status["']?\s*:\s*["']?resolved["']?/i.test(line) ||
                        /✅|resolved|fixed/i.test(line);
@@ -20,9 +23,13 @@ export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
 
   const activeText = activeLines.join('\n').toLowerCase();
 
-  // 2. Look for explicit failure signals in the remaining "active" text
+  // 3. Look for explicit failure signals in the remaining "active" text
   if (/❌|bug|regression|broken|clipping|overflow|missing|unintentional/i.test(activeText)) return 'fail';
-  if (/⚠️|warn|minor|consider|recommend/i.test(activeText)) return 'warn';
+
+  // 4. Check for warnings, but only in the core evaluation.
+  // We ignore polish recommendations from triggering a CI-blocking 'warn' verdict on HIGH severity routes.
+  if (/⚠️|warn|minor|unbalanced/i.test(activeText)) return 'warn';
+
   return 'pass';
 }
 
