@@ -262,43 +262,6 @@ jobs:
           fetch-depth: 0
       - run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Fetch origin/main
-        if: github.event_name == 'pull_request'
-        run: git fetch origin main
-
-      - name: Entropy Check
-        id: entropy_check
-        if: always()
-        shell: bash
-        run: |
-          echo "::group::🔍 PR Entropy Analysis"
-          echo "Event: ${{ github.event_name }}"
-
-          DIFF_CMD="git ls-tree -r HEAD --name-only"
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            DIFF_CMD="git diff --name-only origin/main...HEAD"
-          elif git rev-parse HEAD~1 >/dev/null 2>&1; then
-            DIFF_CMD="git diff --name-only HEAD~1 HEAD"
-          fi
-          echo "Diff Command: $DIFF_CMD"
-
-          CHANGED_FILES=$($DIFF_CMD || echo "")
-          RELEVANT_FILES=$(echo "$CHANGED_FILES" | grep -vE 'tests/visual\.spec\.ts-snapshots/' || true)
-          MATCH_COUNT=$(echo "$RELEVANT_FILES" | grep -c . || true)
-
-          if [ "$MATCH_COUNT" -gt 0 ]; then
-            echo "changed_code=1" >> "$GITHUB_OUTPUT"
-            echo "✅ Relevant code changes detected ($MATCH_COUNT files)."
-            echo "Files:"
-            while read -r file; do
-              [ -n "$file" ] && echo "  - $file"
-            done <<< "$RELEVANT_FILES"
-          else
-            echo "changed_code=0" >> "$GITHUB_OUTPUT"
-            echo "ℹ️ No relevant code changes detected (skipping code reviews)."
-          fi
-          echo "::endgroup::"
-
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
       - name: Build Main
@@ -326,21 +289,19 @@ jobs:
         id: check_visuals
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
       - name: Code review agent
-        if: always() && github.event_name == 'pull_request' && steps.entropy_check.outputs.changed_code == '1'
+        if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG_AI_REVIEW: 'true'
         run: |
           echo "🤖 Starting Gemini Code Review..."
           pnpm run impact:gemini-code-review
       - name: Code review github models agent
-        if: always() && github.event_name == 'pull_request' && steps.entropy_check.outputs.changed_code == '1'
+        if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG_AI_REVIEW: 'true'
         run: |
           echo "🤖 Starting GitHub Models Code Review..."
           pnpm run impact:github-models-code-review
