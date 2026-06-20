@@ -444,10 +444,10 @@ export default function ResearchAnalytics() {
         {/* Flagship Projects Section */}
         <Stack gap={8} id="flagship" marginTop={2} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-            <Text as="h2" variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
+            <Text as="h2" variant="headline" size="3xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
-          <Box display="grid" className="responsive-grid" gap={8} width="full">
+          <Box display="grid" className="responsive-grid" gap={10} width="full">
             {flagshipTools.map((tool) => (
               <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
             ))}
@@ -455,7 +455,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Box className="why-this-matters">
-          <Text as="h2" className="label">Why this matters</Text>
+          <Text as="h2" size="3xl" className="label">Why this matters</Text>
           <Text as="p">
             Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
           </Text>
@@ -465,11 +465,11 @@ export default function ResearchAnalytics() {
         {engineeringTools.length > 0 && (
           <Stack gap={12} width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text as="h2" variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
+              <Text as="h2" variant="headline" size="3xl" weight="font-black">Engineering Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={8} width="full">
+            <Box display="grid" className="responsive-grid" gap={10} width="full">
               {engineeringTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -481,11 +481,11 @@ export default function ResearchAnalytics() {
         {dataContentTools.length > 0 && (
           <Stack gap={12} width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text as="h2" variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
+              <Text as="h2" variant="headline" size="3xl" weight="font-black">Data & Content Systems</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={8} width="full">
+            <Box display="grid" className="responsive-grid" gap={10} width="full">
               {dataContentTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -497,11 +497,11 @@ export default function ResearchAnalytics() {
         {e_commerceTools.length > 0 && (
           <Stack gap={12} width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text as="h2" variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
+              <Text as="h2" variant="headline" size="3xl" weight="font-black">Ecommerce Experiments</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={8} width="full">
+            <Box display="grid" className="responsive-grid" gap={10} width="full">
               {e_commerceTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -513,11 +513,11 @@ export default function ResearchAnalytics() {
         {studies.length > 0 && (
           <Stack gap={12} id="articles" width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full" marginBottom={4}>
-              <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
+              <Text as="h2" variant="headline" size="3xl" weight="font-black">Articles & Research</Text>
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={8} width="full">
+            <Box display="grid" className="responsive-grid" gap={10} width="full">
               {studies.map((study) => (
                 <BaseCard
                   key={study.slug}
@@ -579,11 +579,11 @@ export default function ResearchAnalytics() {
         )}
 
         {/* Work With Me block */}
-        <Grid cols={{ base: 1, md: 12 }} gap={8} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
+        <Grid cols={{ base: 1, md: 12 }} gap={10} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
           {/* Description Column (Left) */}
           <Stack gap={4} span={{ base: 1, md: 7 }} justify="center">
             <Box paddingBottom={2} className="border-b border-line/10">
-              <Text as="h2" variant="headline" size="2xl" weight="font-black">Work with me</Text>
+              <Text as="h2" variant="headline" size="3xl" weight="font-black">Work with me</Text>
             </Box>
             <Text variant="body" size="lg" color="dim" leading="relaxed" maxWidth="prose">
               These are my own projects, built to solve real problems I care about.

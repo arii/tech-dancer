@@ -26,12 +26,13 @@ export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
   const parts = feedback.split(/recommendations for improvement|---|<findings>/i);
   const coreEvaluation = parts[0] || '';
 
-  // 2. Clean the core evaluation of "resolved" findings to avoid false failure signals
+  // 2. Clean the core evaluation of "resolved" findings and positive affirmations to avoid false failure signals
   const lines = coreEvaluation.split('\n');
   const activeLines = lines.filter(line => {
     const isResolved = /status["']?\s*:\s*["']?resolved["']?/i.test(line) ||
                        /✅|resolved|fixed/i.test(line);
-    return !isResolved;
+    const isPositiveAffirmation = /no regression|no broken|preserved|consistent|aligned|no evidence of/i.test(line);
+    return !isResolved && !isPositiveAffirmation;
   });
 
   const activeText = activeLines.join('\n').toLowerCase();
