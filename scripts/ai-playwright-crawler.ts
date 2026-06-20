@@ -95,7 +95,8 @@ function isValidAction(obj: unknown): obj is Action {
 
 async function cleanupSnapshots() {
   try {
-    if (fs.existsSync(SNAPSHOTS_DIR)) {
+    const dirExists = await fs.promises.access(SNAPSHOTS_DIR).then(() => true).catch(() => false);
+    if (dirExists) {
       const files = await fs.promises.readdir(SNAPSHOTS_DIR);
       await Promise.all(files.map(file => fs.promises.unlink(path.join(SNAPSHOTS_DIR, file))));
     } else {
@@ -221,7 +222,7 @@ async function runCrawler() {
 
     const report = await generateVisualReview(reportModel, capturedScreenshots);
     const reportPath = path.join(TMP_DIR, 'report.md');
-    fs.writeFileSync(reportPath, report);
+    await fs.promises.writeFile(reportPath, report);
     console.log(`✅ Visual review report saved to ${reportPath} (Model: ${reportModelName})`);
 
   } catch (error) {
@@ -249,7 +250,7 @@ Format your report in Markdown. Include a summary section and then detail findin
   const contents: { type: 'text' | 'image_url'; text?: string; image_url?: { url: string } }[] = [{ type: 'text', text: prompt }];
 
   for (const filePath of screenshots) {
-    const buffer = fs.readFileSync(filePath);
+    const buffer = await fs.promises.readFile(filePath);
     contents.push({
       type: 'image_url',
       image_url: { url: `data:image/png;base64,${buffer.toString('base64')}` }
@@ -298,10 +299,15 @@ Your task:
   "reason": "why you chose this action"
 }
 
+SAFETY RULES:
+- DO NOT click on destructive buttons (delete, remove, logout, signout).
+- DO NOT navigate to external third-party sites.
+- If you reach a state with no new interactive elements, try 'back' or 'scroll'.
+
 Provide ONLY the JSON.
 `;
 
-  const screenshotBuffer = fs.readFileSync(screenshotPath);
+  const screenshotBuffer = await fs.promises.readFile(screenshotPath);
 
   const message = new HumanMessage({
     content: [
