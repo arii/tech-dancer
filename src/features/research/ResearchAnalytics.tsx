@@ -11,7 +11,6 @@ import { BaseCard } from '@/components/ui/BaseCard';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
-import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 import { SOCIAL_LINKS } from '@/config/constants';
 
@@ -521,20 +520,15 @@ export default function ResearchAnalytics() {
 
             <Box display="grid" className="responsive-grid" gap={8} width="full">
               {studies.map((study) => (
-                <Stack
+                <BaseCard
                   key={study.slug}
-                  onClick={() => {
-                    if (study.status === 'published') {
-                      navigate(`/research/${study.slug}`);
-                    }
-                  }}
+                  to={study.status === 'published' ? `/research/${study.slug}` : undefined}
+                  ariaLabel={study.status === 'published' ? `Read article: ${study.title}` : undefined}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cn(cardVariants({
-                    interactive: study.status === 'published'
-                  }), "p-6 sm:p-8")}
+                  padding={0}
+                  className="p-6 sm:p-8"
                   opacity={study.status === 'published' ? 1 : "high"}
-                  cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
                 >
                   <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
@@ -579,7 +573,7 @@ export default function ResearchAnalytics() {
                     </Text>
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Box>
-                </Stack>
+                </BaseCard>
               ))}
             </Box>
           </Stack>
