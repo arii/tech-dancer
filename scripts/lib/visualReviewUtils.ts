@@ -22,26 +22,20 @@ export function imageToBase64(filePath: string): string {
 }
 
 export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  // 1. Split feedback to isolate the main evaluation from recommendations and structured state
-  const parts = feedback.split(/recommendations for improvement|---|<findings>/i);
-  const coreEvaluation = parts[0] || '';
+  // 1. Isolate core evaluation by splitting at recommendations or structured findings
+  const coreEvaluation = feedback.split(/recommendations for improvement|---|<findings>/i)[0] || '';
 
-  // 2. Clean the core evaluation of "resolved" findings and positive affirmations to avoid false failure signals
-  const lines = coreEvaluation.split('\n');
-  const activeLines = lines.filter(line => {
-    const isResolved = /status["']?\s*:\s*["']?resolved["']?/i.test(line) ||
-                       /✅|resolved|fixed/i.test(line);
-    const isPositiveAffirmation = /no regression|no broken|preserved|consistent|aligned|no evidence of/i.test(line);
-    return !isResolved && !isPositiveAffirmation;
-  });
+  // 2. Filter out positive affirmations and resolved statuses to prevent false negatives
+  const activeText = coreEvaluation
+    .split('\n')
+    .filter(line => !/✅|resolved|fixed|status["']?\s*:\s*["']?resolved|no (?:regression|broken|evidence of)|preserved|consistent|aligned/i.test(line))
+    .join('\n')
+    .toLowerCase();
 
-  const activeText = activeLines.join('\n').toLowerCase();
-
-  // 3. Look for explicit failure signals in the remaining "active" text
+  // 3. Detect explicit failure signals
   if (/❌|bug|regression|broken|clipping|overflow|missing|unintentional/i.test(activeText)) return 'fail';
 
-  // 4. Check for warnings, but only in the core evaluation.
-  // We ignore polish recommendations from triggering a CI-blocking 'warn' verdict on HIGH severity routes.
+  // 4. Detect warnings (ignoring polish recommendations outside the core evaluation)
   if (/⚠️|warn|minor|unbalanced/i.test(activeText)) return 'warn';
 
   return 'pass';

@@ -56,7 +56,7 @@ function ArielProfile() {
   const renderAtAGlance = () => (
     <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
       <Stack gap={6}>
-        <Text as="h2" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
+        <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
         <Stack gap={4}>
           {bio.details.map((detail: ProfileDetail) => {
             const href = detail.url || (detail.value.includes('.') && !detail.value.includes(' ') ? (detail.value.startsWith('http') ? detail.value : `https://${detail.value}`) : null);
@@ -110,7 +110,7 @@ function ArielProfile() {
                   {renderAtAGlance()}
                   <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                     <Stack gap={6}>
-                      <Text as="h2" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                      <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                       <ProfileLinks links={socialLinks} />
                     </Stack>
                   </Box>
@@ -122,13 +122,13 @@ function ArielProfile() {
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>
-                  <Text as="h2" id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Privacy Policy</Text>
+                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance.
                   </Text>
                 </Stack>
                 <Stack gap={4}>
-                  <Text as="h2" id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Terms of Use</Text>
+                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim">
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
@@ -164,7 +164,7 @@ function ArielProfile() {
                     {renderAtAGlance()}
                     <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
                       <Stack gap={6}>
-                        <Text as="h2" variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                        <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                         <ProfileLinks links={socialLinks} />
                       </Stack>
                     </Box>

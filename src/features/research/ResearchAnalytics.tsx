@@ -360,7 +360,7 @@ export default function ResearchAnalytics() {
           <Stack gap={2} span={{ base: 1, lg: 7 }}>
             <PageHeader
               label="HIRE_ME"
-              title="MIT PhD Roboticist"
+              title="DevAI Portfolio"
               as="h1"
               paddingBottom={0}
               border="none"
