@@ -6,6 +6,7 @@ author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Electronics and tools for listening to music, rehearsing, or recording practice runs."
 image: "/images/gear/sketches/ue-wonderboom.webp"
+imageAlt: "A sketch of a UE Wonderboom portable speaker, a key tool for dance practice."
 affiliateIds:
   - "portable-speaker"
   - "tripod"
@@ -19,11 +20,12 @@ Improving your dance requires consistent practice and review. These tech tools m
 ### Music on the Go
 A reliable, portable Bluetooth speaker is essential for hotel room practices or outdoor meetups. The UE Wonderboom 4 offers great sound in a compact, durable package.
 
-
-
+![A minimalist sketch of the UE Wonderboom 4 portable speaker, showing its compact cylindrical design and large volume control buttons.](/images/gear/sketches/ue-wonderboom.webp)
 
 ### Record Your Progress
 You can't fix what you can't see. A compact travel tripod allows you to easily film your practice sessions or competition heats for later review.
+
+![A portable Bluetooth speaker positioned on a dance floor, representing the clear audio feedback needed during practice video review.](/images/gear/amazon/portable-speaker.jpg)
 
 <notice type="affiliate" id="tripod" />
 
