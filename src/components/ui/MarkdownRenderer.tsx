@@ -2,7 +2,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypeSanitize from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
@@ -12,6 +12,7 @@ import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
 
 interface MarkdownRendererProps {
   content: string;
@@ -24,20 +25,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[
           rehypeRaw,
-          [rehypeSanitize, {
-            ...defaultSchema,
-              tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input', 'Grid', 'Stack', 'Text'],
-            attributes: {
-              ...defaultSchema.attributes,
-              notice: ['type', 'id'],
-              Notice: ['type', 'id'],
-                input: ['type', 'checked', 'disabled'],
-                Grid: ['cols', 'gap'],
-                Stack: ['gap', 'direction', 'align', 'justify'],
-                Text: ['variant', 'size', 'weight', 'color', 'align', 'uppercase']
-            },
-            clobberPrefix: ''
-          }]
+          [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
           Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,

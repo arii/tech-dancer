@@ -1,11 +1,11 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Cpu, ShieldAlert } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
-import { DEVAI_ASSETS } from '@/config/devai-assets';
 import { TOOL_ID_GITOPS_PR_REVIEWER } from '@/config/devai-tool-ids';
+import { useResearchToolAssets } from '@/lib/hooks/useResearchToolAssets';
 
 export function GitOpsReviewerTool() {
-  const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_GITOPS_PR_REVIEWER);
+  const assets = useResearchToolAssets([TOOL_ID_GITOPS_PR_REVIEWER]);
 
   return (
     <Box border radius="lg" padding={8} surface="default">

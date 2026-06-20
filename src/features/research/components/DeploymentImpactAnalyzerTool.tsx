@@ -1,14 +1,14 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { GitBranch, Layers, Activity } from 'lucide-react';
 import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
-import { DEVAI_ASSETS } from '@/config/devai-assets';
 import { TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER, TOOL_ID_SDLC_PROFILER } from '@/config/devai-tool-ids';
+import { useResearchToolAssets } from '@/lib/hooks/useResearchToolAssets';
 
 export function DeploymentImpactAnalyzerTool() {
-  const assets = DEVAI_ASSETS.filter(a =>
-    a.toolId === TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER ||
-    a.toolId === TOOL_ID_SDLC_PROFILER
-  );
+  const assets = useResearchToolAssets([
+    TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER,
+    TOOL_ID_SDLC_PROFILER
+  ]);
 
   return (
     <Box border radius="lg" padding={8} surface="default">
