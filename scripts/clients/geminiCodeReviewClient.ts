@@ -1,13 +1,13 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import {
+  buildSystemPrompt,
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload
 } from '../lib/codeReviewUtils';
-import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 

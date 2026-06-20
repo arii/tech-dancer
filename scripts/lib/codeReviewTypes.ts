@@ -16,7 +16,6 @@ export interface CodeReviewSummary {
   diffContext: string;
   fullDiff?: string;
   prGoal?: string;
-  changedFiles?: string[];
   externalContext?: string;
   previousState?: CodeReviewState;
 }

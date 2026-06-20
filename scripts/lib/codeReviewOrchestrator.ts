@@ -203,7 +203,6 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       diffContext,
       fullDiff,
       prGoal,
-      changedFiles: files,
       externalContext: hasRealContent ? externalContext.trim() : undefined,
     };
   } catch (error) {
