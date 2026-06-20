@@ -11,14 +11,19 @@ interface ButtonProps
     VariantProps<typeof buttonVariants> {
   as?: ElementType
   href?: string
+  to?: string
   loading?: boolean
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, ...props }, ref) => {
+  ({ className, as = "button", variant, intent, size, fullWidth, loading: _loading, children, type: typeProp, ...props }, ref) => {
+    // Only pass 'type' to native button elements to prevent invalid HTML on Links/anchors
+    const type = as === 'button' ? (typeProp || 'button') : undefined;
+
     return (
       <Box
         as={as}
+        type={type}
         ref={ref as Ref<HTMLDivElement>}
         cursor="pointer"
         className={cn(buttonVariants({ variant, intent, size, fullWidth }), "tap-target", className)}

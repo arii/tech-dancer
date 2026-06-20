@@ -39,7 +39,7 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-3.5 transition-colors hover:bg-surface/50"
+            className="group w-full max-w-full min-w-0 border-b border-line py-4 transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
@@ -69,10 +69,10 @@ export function LatestPosts() {
                   {post.date}
                 </Text>
               </Box>
-              <Text variant="body" size="sm" weight="font-bold" className="line-clamp-2 transition-colors group-hover:text-accent">
+              <Text variant="body" size="sm" weight="font-bold" clamp={2} className="transition-colors group-hover:text-accent">
                 {post.title}
               </Text>
-              <Text variant="body" size="xs" color="dim" className="line-clamp-1">
+              <Text variant="body" size="xs" color="dim" clamp={1}>
                 {post.excerpt}
               </Text>
             </Stack>

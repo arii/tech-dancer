@@ -73,6 +73,7 @@ export function TopicGrid() {
             padding={4}
             radius="md"
             border
+            minHeight={20}
             className={`group cursor-pointer bg-surface/30 border-line/30 topic-card-${id}`}
           >
             <Box

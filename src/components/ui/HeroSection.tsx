@@ -146,37 +146,34 @@ export function HeroSection() {
         </Stack>
 
         {/* CTA Buttons - High-contrast onboarding paths */}
-        <Box
+        <Stack
+          direction={{ base: 'column', sm: 'row' }}
+          gap={4}
+          width="full"
+          align="start"
+          marginTop={{ base: 6, lg: 8 }}
           opacity={0}
           className="hero-cta-anim"
-          marginTop={{ base: 8, lg: 10 }}
         >
-          <Stack
-            direction={{ base: 'column', sm: 'row' }}
-            gap={4}
-            width="full"
-            align="start"
+          <Button
+            as={Link}
+            to="/merch"
+            variant="primary"
+            size="lg"
+            width={{ base: 'full', sm: 'auto' }}
           >
-            <Button
-              as={Link}
-              to="/merch"
-              variant="primary"
-              size="lg"
-              width={{ base: 'full', sm: 'auto' }}
-            >
-              Explore Gear & Merch
-            </Button>
-            <Button
-              as={Link}
-              to="/blog"
-              variant="outline"
-              size="lg"
-              width={{ base: 'full', sm: 'auto' }}
-            >
-              Read the Journal
-            </Button>
-          </Stack>
-        </Box>
+            Explore Gear & Merch
+          </Button>
+          <Button
+            as={Link}
+            to="/blog"
+            variant="outline"
+            size="lg"
+            width={{ base: 'full', sm: 'auto' }}
+          >
+            Read the Journal
+          </Button>
+        </Stack>
 
         {/* Waveform - Height fixed and overflow-hidden for layout stability. Margin adjusted for breathing room. */}
 
