@@ -2,23 +2,37 @@ import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
-const HIGHLIGHTS = [
+type HighlightVariant = 'sky' | 'purple' | 'cyan';
+
+interface Highlight {
+  label: string;
+  tags: string[];
+  variant: HighlightVariant;
+}
+
+const VARIANT_MAP: Record<HighlightVariant, string> = {
+  sky: 'bg-accent-sky/10 text-accent-sky border-accent-sky/20',
+  purple: 'bg-accent-purple/10 text-accent-purple border-accent-purple/20',
+  cyan: 'bg-accent/10 text-accent border-accent/20',
+};
+
+const HIGHLIGHTS: Highlight[] = [
   {
     label: 'ROBOTICS',
     tags: ['ROS1/2', 'C++', 'Navigation'],
-    classes: 'bg-accent-sky/10 text-accent-sky border-accent-sky/20',
+    variant: 'sky',
   },
   {
     label: 'AI',
     tags: ['LLM Workflows', 'Agentic CI/CD'],
-    classes: 'bg-accent-purple/10 text-accent-purple border-accent-purple/20',
+    variant: 'purple',
   },
   {
     label: 'INFRA',
     tags: ['GitHub Actions', 'Playwright'],
-    classes: 'bg-accent/10 text-accent border-accent/20',
+    variant: 'cyan',
   },
-] as const;
+];
 
 export function DevLabCallout() {
   return (
@@ -41,7 +55,7 @@ export function DevLabCallout() {
 
       {/* Project highlights */}
       <Stack gap={2} marginTop={4}>
-        {HIGHLIGHTS.map(({ label, tags, classes }) => (
+        {HIGHLIGHTS.map(({ label, tags, variant }) => (
           <Stack key={label} direction="row" align="start" gap={2}>
             <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>
               {label}
@@ -57,7 +71,7 @@ export function DevLabCallout() {
                   paddingY={0.5}
                   radius="sm"
                   border
-                  className={classes}
+                  className={VARIANT_MAP[variant]}
                 >
                   {tag}
                 </Text>
