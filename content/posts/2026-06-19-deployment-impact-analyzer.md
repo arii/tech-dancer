@@ -1,4 +1,5 @@
 ---
+type: post
 title: "Technical Deep-Dive: Building the Deployment Impact Analyzer"
 date: "2026-06-19"
 author: "Ariel Anders, PhD"
@@ -113,15 +114,15 @@ When a PR is opened, the analyzer posts a summary directly to the GitHub convers
 <Grid cols={3} gap={4}>
   <Stack gap={2}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Before</Text>
-    ![Baseline](/assets/research/impact-example/before.png)
+    ![Baseline](/assets/studies/deployment-impact-analyzer/before.png)
   </Stack>
   <Stack gap={2}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">After</Text>
-    ![Current](/assets/research/impact-example/after.png)
+    ![Current](/assets/studies/deployment-impact-analyzer/after.png)
   </Stack>
   <Stack gap={2}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Diff</Text>
-    ![Visual Delta](/assets/research/impact-example/diff.png)
+    ![Visual Delta](/assets/studies/deployment-impact-analyzer/diff.png)
   </Stack>
 </Grid>
 *A "sandwich" comparison showing the baseline, the new state, and the highlighted pixel delta.*

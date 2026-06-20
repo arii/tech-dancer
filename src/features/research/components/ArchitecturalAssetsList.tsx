@@ -31,17 +31,24 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" opacityVariant="muted">
         Core Architectural Assets
       </Text>
-      <Stack gap={2}>
+      <Stack gap={3}>
         {assets.map((asset) => {
           const Icon = asset.icon || getIconForPath(asset.path);
           return (
-            <Box key={asset.path} border radius="md" surface="surface" padding={3}>
-              <Box display="flex" gap={3}>
+            <Box key={asset.path} border radius="md" surface="surface" padding={4} className="group hover:border-accent/30 transition-colors">
+              <Box display="flex" gap={4} align="start">
                 <Box className="shrink-0" paddingTop={0.5}>
-                  <Icon size={16} className="text-accent" />
+                  <Icon size={18} className="text-accent opacity-80 group-hover:opacity-100 transition-opacity" />
                 </Box>
-                <Stack gap={2} width="full">
-                  <Box display="flex" align="center" justify="between" width="full">
+                <Stack gap={2} width="full" className="min-w-0">
+                  <Box
+                    display="flex"
+                    direction={{ base: 'col', sm: 'row' }}
+                    align={{ base: 'start', sm: 'center' }}
+                    justify="between"
+                    width="full"
+                    gap={2}
+                  >
                     <Text
                       as="a"
                       href={`https://github.com/arii/tech-dancer/blob/main/${asset.path}`}
@@ -49,14 +56,24 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                       rel="noopener noreferrer"
                       variant="mono"
                       size="xs"
-                      className="hover:text-accent transition-colors cursor-pointer"
+                      weight="font-bold"
+                      className="hover:text-accent transition-colors cursor-pointer truncate block"
+                      title={asset.path}
                     >
                       {asset.path}
                     </Text>
-                    <Text variant="mono" size="micro" color="dim" opacityVariant="dim">{asset.label}</Text>
+                    <Text
+                      variant="mono"
+                      size="micro"
+                      color="dim"
+                      opacityVariant="dim"
+                      className="shrink-0 uppercase tracking-tighter"
+                    >
+                      {asset.label}
+                    </Text>
                   </Box>
                   {asset.description && (
-                    <Text variant="body" size="micro" color="dim">
+                    <Text variant="body" size="xs" color="dim" leading="relaxed">
                       {asset.description}
                     </Text>
                   )}
