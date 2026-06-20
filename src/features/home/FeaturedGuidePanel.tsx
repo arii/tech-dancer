@@ -44,7 +44,7 @@ export function FeaturedGuidePanel() {
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
-      <Stack gap={3} position="relative" zIndex={10} padding={8} width="full">
+      <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
