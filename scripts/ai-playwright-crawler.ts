@@ -25,7 +25,10 @@ interface Action {
 }
 
 const MAX_STEPS = 10;
-const DESTRUCTIVE_KEYWORDS = ['delete', 'remove', 'logout', 'signout', 'clear', 'reset', 'destroy'];
+const DESTRUCTIVE_KEYWORDS = [
+  'delete', 'remove', 'logout', 'signout', 'clear', 'reset', 'destroy',
+  'archive', 'trash', 'purge', 'discard', 'quit', 'exit'
+];
 
 async function getInteractiveElements(page: Page): Promise<InteractiveElement[]> {
   return await page.evaluate(() => {
@@ -82,8 +85,9 @@ function isValidAction(obj: unknown): obj is Action {
 
   if (cast.type === 'click' || cast.type === 'type') {
     if (typeof cast.selector !== 'string') return false;
-    // Strict selector format check: only allow our crawler data attribute
-    if (!cast.selector.startsWith('[data-crawler-index="') || !cast.selector.endsWith('"]')) return false;
+    // Flexible selector check to handle both single and double quotes
+    const isDataAttr = cast.selector.startsWith('[data-crawler-index=') && cast.selector.endsWith(']');
+    if (!isDataAttr) return false;
   }
 
   if (cast.type === 'type') {
@@ -159,21 +163,25 @@ async function runCrawler() {
 
       try {
         if ((action.type === 'click' || action.type === 'type') && action.selector) {
-          // Extract index from selector "[data-crawler-index='X']"
-          const indexMatch = action.selector.match(/index="(\d+)"/);
+          // Robust index extraction handling various quote types
+          const indexMatch = action.selector.match(/index=["']?(\d+)["']?/);
           const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
 
           if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
-             console.warn(`AI selected out-of-bounds element index: ${elementIndex}. discovered elements: ${elements.length}`);
+             console.warn(`AI selected out-of-bounds or invalid element index: ${elementIndex}. discovered elements: ${elements.length}`);
              continue;
           }
 
           const targetElementMeta = elements[elementIndex];
 
           // Safety: Don't click destructive keywords
-          const isDestructive = DESTRUCTIVE_KEYWORDS.some(k => targetElementMeta.text.toLowerCase().includes(k));
+          const isDestructive = DESTRUCTIVE_KEYWORDS.some(k =>
+             targetElementMeta.text.toLowerCase().includes(k) ||
+             (targetElementMeta.role || '').toLowerCase().includes(k)
+          );
+
           if (isDestructive && action.type === 'click') {
-            console.warn(`Safety check: Skipping click on likely destructive element "${targetElementMeta.text}"`);
+            console.warn(`Safety check: Skipping click on likely destructive element "${targetElementMeta.text}" (role: ${targetElementMeta.role})`);
             continue;
           }
 
@@ -294,13 +302,13 @@ Your task:
 3. Return your decision in JSON format:
 {
   "type": "click" | "type" | "back" | "scroll",
-  "selector": "[data-crawler-index='X']", (only for click and type)
+  "selector": "[data-crawler-index=\\"X\\"]", (strictly use double quotes around X)
   "text": "text to type", (only for type)
   "reason": "why you chose this action"
 }
 
 SAFETY RULES:
-- DO NOT click on destructive buttons (delete, remove, logout, signout).
+- DO NOT click on destructive buttons (delete, remove, logout, signout, archive, clear, reset).
 - DO NOT navigate to external third-party sites.
 - If you reach a state with no new interactive elements, try 'back' or 'scroll'.
 
