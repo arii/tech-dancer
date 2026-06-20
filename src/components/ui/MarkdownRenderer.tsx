@@ -5,7 +5,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Box, Text, Stack } from '@/layouts/Primitives';
+import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
@@ -25,12 +25,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input'],
+            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input', 'Grid', 'Stack', 'Text'],
             attributes: {
               ...defaultSchema.attributes,
               notice: ['type', 'id'],
               Notice: ['type', 'id'],
-              input: ['type', 'checked', 'disabled']
+              input: ['type', 'checked', 'disabled'],
+              Grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className'],
+              Stack: ['direction', 'gap', 'align', 'justify', 'className'],
+              Text: ['variant', 'size', 'color', 'weight', 'leading', 'tracking', 'align', 'uppercase', 'clamp', 'className']
             },
             clobberPrefix: ''
           }]
@@ -146,19 +149,21 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justify="center">
-                <Box
-                  as="img"
-                  src={normalizedSrc}
-                  radius="lg"
-                  shadow="sm"
-                  loading="lazy"
-                  alt={alt || "Article illustration"}
-                  maxWidth="full"
-                  height="auto"
-                  {...props}
-                />
-              </Box>
+              <Box
+                as="img"
+                src={normalizedSrc}
+                alt={alt || "Article illustration"}
+                display="block"
+                marginX="auto"
+                marginY={8}
+                radius="lg"
+                shadow="sm"
+                maxWidth={{ base: 'full', md: '2xl' }}
+                height="auto"
+                className="object-contain"
+                loading="lazy"
+                {...props}
+              />
             );
           },
           p: ({node: _node, ...props}) => (
@@ -193,19 +198,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justify="center">
-                    <Box
-                      as="img"
-                      src={diagramUrl}
-                      alt="Workflow Diagram"
-                      radius="lg"
-                      shadow="sm"
-                      maxWidth="full"
-                      maxHeight={96}
-                      className="object-contain"
-                      loading="lazy"
-                    />
-                  </Box>
+                  <Box
+                    as="img"
+                    src={diagramUrl}
+                    alt="Workflow Diagram"
+                    display="block"
+                    marginX="auto"
+                    marginY={8}
+                    radius="lg"
+                    shadow="sm"
+                    maxWidth={{ base: 'full', md: '2xl' }}
+                    maxHeight={{ md: 80 }}
+                    className="object-contain"
+                    loading="lazy"
+                  />
                 );
               } catch (e) {
                 console.error('Failed to render mermaid diagram', e);
@@ -297,7 +303,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               }
             }
             return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
-          }
+          },
+          Grid: (props: React.ComponentProps<typeof Grid>) => <Grid {...props} />,
+          Stack: (props: React.ComponentProps<typeof Stack>) => <Stack {...props} />,
+          Text: (props: React.ComponentProps<typeof Text>) => <Text {...props} />
         }}
       >
         {content}
