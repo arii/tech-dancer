@@ -146,15 +146,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justify="center">
+              <Box marginY={6} width="full" display="flex" justify="center">
                 <Box
                   as="img"
                   src={normalizedSrc}
                   radius="lg"
                   shadow="sm"
+                  border
                   loading="lazy"
                   alt={alt || "Article illustration"}
-                  maxWidth="full"
+                  maxWidth={{ base: 'full', md: '2xl' }}
                   height="auto"
                   {...props}
                 />

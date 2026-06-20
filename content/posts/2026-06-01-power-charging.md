@@ -28,7 +28,5 @@ Multi-charging cables allow you to charge multiple devices at once with high-spe
 
 ![Set of three multi-charging cables with red, white, and black braided cords, featuring Lightning, USB-C, and Micro-USB connectors on a single USB-A input.](/images/gear/amazon/short-multi-charging-cable-3a-3pack-multiple-usb-fast-charger-cable-fo.jpg)
 
-<notice type="affiliate" id="charging-cables" />
-
 ### Choosing the Right Capacity
 When selecting a power bank, a higher mAh capacity (e.g., 20,000mAh) is ideal for weekend-long events where wall outlets are scarce, providing multiple full charges for your phone and accessories.
