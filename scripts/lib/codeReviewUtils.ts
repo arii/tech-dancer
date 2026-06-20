@@ -141,7 +141,10 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   return Math.min(budget, 4096);
 }
 
-export function applyTokenBudget(
+export const EXTERNAL_CONTEXT_TRUNCATED_MESSAGE = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
+export const EXTERNAL_CONTEXT_MINIMUM_BUDGET = 200;
+
+export function budgetInputContext(
   systemPrompt: string,
   summary: CodeReviewSummary,
   maxInputChars: number = 24000
@@ -149,33 +152,31 @@ export function applyTokenBudget(
   // System prompt is essential. Let's see how much budget is left.
   const remainingBudgetForDiffAndContext = Math.max(0, maxInputChars - systemPrompt.length);
 
-  let diffText = `DIFF:\n\n${summary.diffContext}`;
-  let externalText = summary.externalContext
-    ? `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${summary.externalContext}`
-    : '';
+  let rawDiffText = summary.diffContext;
+  let rawExternalText = summary.externalContext || '';
 
-  if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
+  if (rawDiffText.length + rawExternalText.length > remainingBudgetForDiffAndContext) {
     // Allocate the remaining budget between diff and external context.
     // Diff gets priority: up to 16,000 characters, capped at remaining budget.
-    const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
-    if (diffText.length > maxDiffChars) {
-      diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+    const maxDiffChars = Math.max(0, Math.min(rawDiffText.length, 16000, remainingBudgetForDiffAndContext));
+    if (rawDiffText.length > maxDiffChars) {
+      rawDiffText = rawDiffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
     }
 
-    const remainingForExternal = remainingBudgetForDiffAndContext - diffText.length;
-    if (externalText) {
-      if (remainingForExternal > 200) {
-        if (externalText.length > remainingForExternal) {
-          externalText = externalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+    const remainingForExternal = remainingBudgetForDiffAndContext - rawDiffText.length;
+    if (rawExternalText) {
+      if (remainingForExternal > EXTERNAL_CONTEXT_MINIMUM_BUDGET) {
+        if (rawExternalText.length > remainingForExternal) {
+          rawExternalText = rawExternalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
         }
       } else {
         // Harden: ensure we don't just drop the context entirely without notice
-        externalText = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
+        rawExternalText = EXTERNAL_CONTEXT_TRUNCATED_MESSAGE;
       }
     }
   }
 
-  return { diffText, externalText };
+  return { diffText: rawDiffText, externalText: rawExternalText };
 }
 
 /**
@@ -188,21 +189,33 @@ export function calculateEstimatedTokens(text: string | string[]): number {
 
 export type ReviewPayloadItem = { type: 'text'; text: string };
 
+export interface PayloadConfig {
+  diffPrefix?: string;
+  externalPrefix?: string;
+}
+
 /**
  * Builds the standard payload for code review models.
  */
 export function buildReviewPayload(
   systemPrompt: string,
   diffText: string,
-  externalText?: string
+  externalText?: string,
+  config: PayloadConfig = {}
 ): ReviewPayloadItem[] {
+  const diffPrefix = config.diffPrefix ?? 'DIFF:\n\n';
+  const externalPrefix = config.externalPrefix ?? 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
+
   const payload: ReviewPayloadItem[] = [
     { type: 'text', text: systemPrompt },
-    { type: 'text', text: diffText },
+    { type: 'text', text: `${diffPrefix}${diffText}` },
   ];
 
   if (externalText) {
-    payload.push({ type: 'text', text: externalText });
+    const formattedExternal = externalText === EXTERNAL_CONTEXT_TRUNCATED_MESSAGE
+      ? externalText
+      : `${externalPrefix}${externalText}`;
+    payload.push({ type: 'text', text: formattedExternal });
   }
 
   return payload;

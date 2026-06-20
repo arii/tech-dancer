@@ -5,7 +5,7 @@ import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
-  applyTokenBudget,
+  budgetInputContext,
   buildReviewPayload
 } from '../lib/codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
@@ -54,7 +54,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
   invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
     const systemPrompt = buildSystemPrompt(summary);
-    const { diffText, externalText } = applyTokenBudget(systemPrompt, summary);
+    const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     // Count every chunk that actually goes into the request.
     const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
