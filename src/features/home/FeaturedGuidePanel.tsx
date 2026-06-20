@@ -14,10 +14,10 @@ const FEATURED = {
 
 export function FeaturedGuidePanel() {
   return (
-    <Box
+    <Stack
       as={NavLink}
       to={FEATURED.href}
-      display={{ base: 'none', lg: 'flex' }}
+      aspect={{ base: 'video', lg: 'auto' }}
       direction="col"
       justify="end"
       position="relative"
@@ -44,7 +44,7 @@ export function FeaturedGuidePanel() {
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
-      <Stack gap={2} position="relative" zIndex={10} padding={6}>
+      <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
@@ -64,6 +64,6 @@ export function FeaturedGuidePanel() {
           Read the guide →
         </Text>
       </Stack>
-    </Box>
+    </Stack>
   );
 }

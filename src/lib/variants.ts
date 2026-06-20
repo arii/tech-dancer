@@ -156,12 +156,12 @@ export const journalVariants = {
  * List row variants for interactive lists (e.g., Audit History)
  */
 export const listRowVariants = cva(
-  "text-left transition-all border-l-4 w-full",
+  "text-left transition-all w-full",
   {
     variants: {
       active: {
-        true: "bg-bg border-accent",
-        false: "border-transparent hover:bg-surface",
+        true: "bg-bg shadow-sm ring-1 ring-accent/20",
+        false: "hover:bg-surface",
       },
     },
     defaultVariants: {

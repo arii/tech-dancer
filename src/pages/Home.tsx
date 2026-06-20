@@ -22,7 +22,7 @@ export default function Home() {
       <Grid
         as="section"
         cols={{ base: 1 }}
-        gap={{ base: 0, lg: 6 }}
+        gap={{ base: 8, lg: 6 }}
         width="full"
         maxWidth="full"
         minWidth={0}
@@ -33,7 +33,7 @@ export default function Home() {
         <FeaturedGuidePanel />
       </Grid>
 
-      <Box marginTop={8}>
+      <Box marginTop={{ base: 12, lg: 8 }}>
         <PromoStrip
           imageSrc="/assets/gear/norcal-bestcal-front.webp"
           title="Shop NorCal pride merch"

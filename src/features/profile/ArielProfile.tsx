@@ -26,7 +26,7 @@ function ArielProfile() {
         )}
 
         {section.title && (
-          <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
+          <Text as="h2" variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
             {section.title}
           </Text>
         )}
