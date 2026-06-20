@@ -7,6 +7,8 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
+  EXTERNAL_CONTEXT_TRUNCATED_MESSAGE,
+  EXTERNAL_CONTEXT_MINIMUM_BUDGET
 } from '../../../scripts/lib/codeReviewUtils';
 
 describe('codeReviewUtils', () => {
@@ -146,9 +148,6 @@ describe('codeReviewUtils', () => {
     it('truncates diff string if exceeding 16000 chars when budgeting', () => {
       const systemPrompt = 'Prompt';
       const diffText = 'a'.repeat(20000);
-      // let remainingBudget = 24000 - 6 = 23994.
-      // total = 20000 + 0 = 20000.
-      // truncation fires because we cap diff at min(diffText, 16000, 23994) = 16000.
       const result = budgetInputContext(systemPrompt, { diffContext: diffText }, 16000);
 
       expect(result.diffText.length).toBeLessThan(16000 + 100);
@@ -164,15 +163,13 @@ describe('codeReviewUtils', () => {
       expect(result.externalText).toContain('...[TRUNCATED TO FIT TOKEN LIMIT]');
     });
 
-    it('hard truncates external context if budget remaining is extremely small', () => {
+    it(`hard truncates external context if budget remaining is extremely small (<= ${EXTERNAL_CONTEXT_MINIMUM_BUDGET})`, () => {
         const systemPrompt = 'Prompt';
-        // Need to make total > remainingBudget AND remainingForExternal <= 200.
-        // Let's set max = 16000. System prompt = 6. Remaining = 15994.
         const diffText = 'a'.repeat(16000);
         const externalText = 'External context that should be dropped';
         const result = budgetInputContext(systemPrompt, { diffContext: diffText, externalContext: externalText }, 16000);
 
-        expect(result.externalText).toBe('...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]');
+        expect(result.externalText).toBe(EXTERNAL_CONTEXT_TRUNCATED_MESSAGE);
     });
   });
 
@@ -183,9 +180,18 @@ describe('codeReviewUtils', () => {
       expect(payload[2].text).toBe('EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\nExternal content');
     });
 
+    it('applies custom prefixes to payload texts', () => {
+      const payload = buildReviewPayload('Prompt', 'Diff content', 'External content', {
+        diffPrefix: 'CustomDiff:\n',
+        externalPrefix: 'CustomExt:\n',
+      });
+      expect(payload[1].text).toBe('CustomDiff:\nDiff content');
+      expect(payload[2].text).toBe('CustomExt:\nExternal content');
+    });
+
     it('does not apply prefix if external text is fully truncated', () => {
-      const payload = buildReviewPayload('Prompt', 'Diff content', '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]');
-      expect(payload[2].text).toBe('...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]');
+      const payload = buildReviewPayload('Prompt', 'Diff content', EXTERNAL_CONTEXT_TRUNCATED_MESSAGE);
+      expect(payload[2].text).toBe(EXTERNAL_CONTEXT_TRUNCATED_MESSAGE);
     });
   });
 });

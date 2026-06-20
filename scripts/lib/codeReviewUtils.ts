@@ -141,6 +141,9 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   return Math.min(budget, 4096);
 }
 
+export const EXTERNAL_CONTEXT_TRUNCATED_MESSAGE = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
+export const EXTERNAL_CONTEXT_MINIMUM_BUDGET = 200;
+
 export function budgetInputContext(
   systemPrompt: string,
   summary: CodeReviewSummary,
@@ -162,13 +165,13 @@ export function budgetInputContext(
 
     const remainingForExternal = remainingBudgetForDiffAndContext - rawDiffText.length;
     if (rawExternalText) {
-      if (remainingForExternal > 200) {
+      if (remainingForExternal > EXTERNAL_CONTEXT_MINIMUM_BUDGET) {
         if (rawExternalText.length > remainingForExternal) {
           rawExternalText = rawExternalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
         }
       } else {
         // Harden: ensure we don't just drop the context entirely without notice
-        rawExternalText = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
+        rawExternalText = EXTERNAL_CONTEXT_TRUNCATED_MESSAGE;
       }
     }
   }
@@ -186,23 +189,32 @@ export function calculateEstimatedTokens(text: string | string[]): number {
 
 export type ReviewPayloadItem = { type: 'text'; text: string };
 
+export interface PayloadConfig {
+  diffPrefix?: string;
+  externalPrefix?: string;
+}
+
 /**
  * Builds the standard payload for code review models.
  */
 export function buildReviewPayload(
   systemPrompt: string,
   diffText: string,
-  externalText?: string
+  externalText?: string,
+  config: PayloadConfig = {}
 ): ReviewPayloadItem[] {
+  const diffPrefix = config.diffPrefix ?? 'DIFF:\n\n';
+  const externalPrefix = config.externalPrefix ?? 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
+
   const payload: ReviewPayloadItem[] = [
     { type: 'text', text: systemPrompt },
-    { type: 'text', text: `DIFF:\n\n${diffText}` },
+    { type: 'text', text: `${diffPrefix}${diffText}` },
   ];
 
   if (externalText) {
-    const formattedExternal = externalText === '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]'
+    const formattedExternal = externalText === EXTERNAL_CONTEXT_TRUNCATED_MESSAGE
       ? externalText
-      : `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${externalText}`;
+      : `${externalPrefix}${externalText}`;
     payload.push({ type: 'text', text: formattedExternal });
   }
 
