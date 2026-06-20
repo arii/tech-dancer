@@ -360,13 +360,13 @@ export default function ResearchAnalytics() {
           <Stack gap={2} span={{ base: 1, lg: 7 }}>
             <PageHeader
               label="HIRE_ME"
-              title="DevAI Portfolio"
+              title="MIT PhD Roboticist"
               as="h1"
               paddingBottom={0}
               border="none"
             />
             <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-              Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure, including agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+              building AI-assisted engineering infrastructure in my free time. This portfolio showcased my work in agentic CI/CD, LLM workflows, and developer tooling.
             </Text>
             
             {/* Scrollable Focus Tags for Mobile */}

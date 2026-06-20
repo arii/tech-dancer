@@ -3,8 +3,8 @@ title: "Stop Asking the LLM to Review Everything"
 date: "2024-05-10"
 author: "Ariel Anders"
 category: "DevAI"
-tags: ["DevOps", "AI", "Ollama", "GitHub Actions", "Playwright"]
-excerpt: "A practical local AI review pipeline using GitHub Actions, Ollama, and Playwright. Not a replacement for human review, but a way to make first-pass review more repeatable."
+tags: ["DevOps", "AI", "Gemini", "GitHub Models", "GitHub Actions", "Playwright"]
+excerpt: "A practical hybrid AI review pipeline using GitHub Actions, Gemini, GitHub Models, and Playwright. Not a replacement for human review, but a way to make first-pass review more repeatable."
 readTime: 14
 status: "published"
 ---
@@ -15,16 +15,16 @@ It had to understand the repo, inspect the diff, infer the design system, read C
 
 The better pattern was smaller and more boring: collect the important pull request context first, then ask the model to review that prepared packet.
 
-This article walks through the local review pipeline I use for BoomTick.blog: GitHub Actions collects the context, Ollama reviews it, structured findings decide what blocks the PR, and Playwright screenshots catch UI changes that normal tests miss.
+This article walks through the hybrid review pipeline I use for BoomTick.blog: GitHub Actions collects the context, Gemini and GitHub Models review it, structured findings decide what blocks the PR, and Playwright screenshots catch UI changes that normal tests miss.
 
 It is not a fully autonomous engineer. It is a review assistant made from scripts, prompts, CI glue, and a few hard safety boundaries.
 
 ## What you will build
 
-By the end of this walkthrough, you will understand how to build a small local review assistant that can:
+By the end of this walkthrough, you will understand how to build a small hybrid review assistant that can:
 
-- collect pull request context before calling an LLM
-- send a focused prompt to an Ollama model
+- collect pull request context and perform token budgeting before calling an LLM
+- send a focused prompt to Gemini or GitHub Models
 - request structured findings instead of vague prose
 - map findings into GitHub review states
 - optionally use CI logs and Playwright screenshots as review inputs
@@ -40,8 +40,8 @@ flowchart TD
   PR[Pull request opened] --> Collect[Collect review context]
   Collect --> Packet[Create review-context.md]
 
-  Packet --> Ollama[Send packet to Ollama]
-  Ollama --> Findings[Return structured findings]
+  Packet --> Models[Send packet to AI Service]
+  Models --> Findings[Return structured findings]
 
   Findings --> Decide{Any blocking issues?}
   Decide -->|Yes| Changes[Request changes]
@@ -125,18 +125,20 @@ The point is not that my aggregation command is special. The point is that the m
 
 ---
 
-## 2. Keep the Ollama call boring
+## 2. Orchestrate with Hybrid AI Services
 
-The Ollama part should be the least interesting part of the system.
+The AI part should be the least interesting part of the system. We use a hybrid approach, prioritizing **GitHub Models** (via the Azure inference endpoint) and **Gemini** (via Google Generative AI) for production reliability, with local models as a fallback.
 
-A local model call is just an HTTP request. The quality comes from everything around it: the context packet, the review rules, the output schema, and the script that decides what to do with the result.
+The quality comes from everything around it: the context packet, the review rules, the output schema, and the script that decides what to do with the result.
 
 ```python
+import os
 import requests
 from pathlib import Path
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "qwen2.5-coder:7b"
+# GitHub Models (OpenAI-compatible)
+GITHUB_MODELS_URL = "https://models.inference.ai.azure.com/chat/completions"
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 context = Path(".devai/review-context.md").read_text()
 
@@ -160,24 +162,28 @@ Context:
 """
 
 response = requests.post(
-    OLLAMA_URL,
+    GITHUB_MODELS_URL,
+    headers={
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Content-Type": "application/json"
+    },
     json={
-        "model": MODEL,
-        "prompt": prompt,
+        "model": "gpt-4o-mini",
+        "messages": [{"role": "user", "content": prompt}],
         "stream": False,
     },
     timeout=120,
 )
 
 response.raise_for_status()
-print(response.json()["response"])
+print(response.json()["choices"][0]["message"]["content"])
 ```
 
-This is intentionally boring. If this part feels magical, the pipeline is probably too hard to debug.
+This is intentionally boring. If this part feels magical, the pipeline is probably too hard to debug. Using remote models provides higher consistency and allows us to use larger context windows when needed.
 
 The model should not be responsible for knowing your repo's entire history. It should receive a bounded task, produce bounded output, and leave the final decision to deterministic code.
 
-> **Implemented:** `dev-tools/ollama_reviewer.py` wraps a similar pattern using a `qwen2.5-coder`-derived model running via Ollama.
+> **Implemented:** The AI orchestration logic (prioritizing GitHub Models and Gemini) is centralized in `dev-tools/utils.py`.
 
 ---
 
@@ -322,7 +328,7 @@ You do not need the whole pipeline to get value from this pattern.
 The smallest useful version is just two steps:
 
 1. Create a review context file.
-2. Ask a local model to review that file.
+2. Ask an AI model to review that file.
 
 Everything else, including GitHub comments, review states, CI repair, and screenshot analysis, can come later.
 
@@ -339,7 +345,7 @@ dev-tools/
 ```bash
 # Generic example: file names are adaptable
 python dev-tools/aggregate_pr_context.py > .devai/review-context.md
-python dev-tools/ollama_review.py .devai/review-context.md > .devai/review-result.json
+python dev-tools/ai_review.py .devai/review-context.md > .devai/review-result.json
 python dev-tools/submit_review.py .devai/review-result.json
 ```
 
@@ -381,4 +387,4 @@ That is the better pattern.
 
 The more deterministic the pipeline is before and after the model call, the more useful the model becomes.
 
-That is the pattern I would copy first: not the exact scripts, not the exact prompts, and not even the local model. Start by shrinking the job.
+That is the pattern I would copy first: not the exact scripts, not the exact prompts, and not even the models. Start by shrinking the job.
