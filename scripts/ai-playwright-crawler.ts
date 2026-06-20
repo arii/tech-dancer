@@ -60,7 +60,7 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
 
       return {
         index,
-        tagName: el.tagName,
+        tagName: el.tagName.toLowerCase(),
         text: el.textContent?.trim().substring(0, 100) || inputEl.value || inputEl.placeholder || '',
         selector: `[data-crawler-index="${index}"]`,
         role: el.getAttribute('role'),
@@ -156,7 +156,14 @@ async function runCrawler() {
         maxOutputTokens: 1024,
       });
 
-      const action = await decideNextAction(model, url, elements, actionHistory, screenshotPath);
+      const actionObj = await decideNextAction(model, url, elements, actionHistory, screenshotPath);
+
+      if (!isValidAction(actionObj)) {
+         console.error('AI returned invalid action, skipping this step:', actionObj);
+         continue;
+      }
+      const action = actionObj;
+
       console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
 
       actionHistory.push(action);
@@ -277,7 +284,7 @@ async function decideNextAction(
   elements: InteractiveElement[],
   history: Action[],
   screenshotPath: string
-): Promise<Action> {
+): Promise<unknown> {
   const elementsSummary = elements
     .map(e => `Index ${e.index}: <${e.tagName}> "${e.text}" ${e.role ? `(role: ${e.role})` : ''}`)
     .join('\n');
