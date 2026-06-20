@@ -16,6 +16,45 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+/**
+ * Helper to parse responsive props that might be passed as stringified JSON from Markdown.
+ * Supports standard JSON and simple {base: 1, md: 2} formats.
+ */
+const parseResponsiveProp = (value: unknown) => {
+  if (typeof value !== 'string' || !value.trim().startsWith('{')) {
+    return value;
+  }
+
+  try {
+    // Try standard JSON first
+    return JSON.parse(value);
+  } catch {
+    try {
+      // Fallback for JS-style objects (unquoted keys)
+      const jsonified = value
+        .replace(/([{,])\s*([a-z0-9A-Z_]+)\s*:/g, '$1"$2":')
+        .replace(/'/g, '"');
+      return JSON.parse(jsonified);
+    } catch {
+      return value;
+    }
+  }
+};
+
+/**
+ * Filter and process props for layout components.
+ */
+const processLayoutProps = (props: Record<string, unknown>) => {
+  const { node: _node, ...rest } = props;
+  const processed: Record<string, unknown> = {};
+
+  Object.keys(rest).forEach(key => {
+    processed[key] = parseResponsiveProp(rest[key]);
+  });
+
+  return processed;
+};
+
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
@@ -25,14 +64,17 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input', 'Grid', 'Stack', 'Text'],
+            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input', 'grid', 'stack', 'text', 'Grid', 'Stack', 'Text'],
             attributes: {
               ...defaultSchema.attributes,
               notice: ['type', 'id'],
               Notice: ['type', 'id'],
               input: ['type', 'checked', 'disabled'],
+              grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className'],
               Grid: ['cols', 'gap', 'gapX', 'gapY', 'align', 'justify', 'className'],
+              stack: ['direction', 'gap', 'align', 'justify', 'className'],
               Stack: ['direction', 'gap', 'align', 'justify', 'className'],
+              text: ['variant', 'size', 'color', 'weight', 'leading', 'tracking', 'align', 'uppercase', 'clamp', 'className'],
               Text: ['variant', 'size', 'color', 'weight', 'leading', 'tracking', 'align', 'uppercase', 'clamp', 'className']
             },
             clobberPrefix: ''
@@ -149,21 +191,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box
-                as="img"
-                src={normalizedSrc}
-                alt={alt || "Article illustration"}
-                display="block"
-                marginX="auto"
-                marginY={8}
-                radius="lg"
-                shadow="sm"
-                maxWidth={{ base: 'full', md: '2xl' }}
-                height="auto"
-                className="object-contain"
-                loading="lazy"
-                {...props}
-              />
+              <Box marginY={8} width="full" display="flex" justify="center">
+                <Box
+                  as="img"
+                  src={normalizedSrc}
+                  alt={alt || "Article illustration"}
+                  radius="lg"
+                  shadow="sm"
+                  maxWidth="full"
+                  height="auto"
+                  className="object-contain"
+                  loading="lazy"
+                  {...props}
+                />
+              </Box>
             );
           },
           p: ({node: _node, ...props}) => (
@@ -198,20 +239,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box
-                    as="img"
-                    src={diagramUrl}
-                    alt="Workflow Diagram"
-                    display="block"
-                    marginX="auto"
-                    marginY={8}
-                    radius="lg"
-                    shadow="sm"
-                    maxWidth={{ base: 'full', md: '2xl' }}
-                    maxHeight={{ md: 80 }}
-                    className="object-contain"
-                    loading="lazy"
-                  />
+                  <Box marginY={8} width="full" display="flex" justify="center">
+                    <Box
+                      as="img"
+                      src={diagramUrl}
+                      alt="Workflow Diagram"
+                      radius="lg"
+                      shadow="sm"
+                      maxWidth="full"
+                      maxHeight={96}
+                      className="object-contain"
+                      loading="lazy"
+                    />
+                  </Box>
                 );
               } catch (e) {
                 console.error('Failed to render mermaid diagram', e);
@@ -304,9 +344,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             }
             return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
           },
-          Grid: (props: React.ComponentProps<typeof Grid>) => <Grid {...props} />,
-          Stack: (props: React.ComponentProps<typeof Stack>) => <Stack {...props} />,
-          Text: (props: React.ComponentProps<typeof Text>) => <Text {...props} />
+          grid: (props: unknown) => <Grid {...processLayoutProps(props as Record<string, unknown>)} />,
+          Grid: (props: unknown) => <Grid {...processLayoutProps(props as Record<string, unknown>)} />,
+          stack: (props: unknown) => <Stack {...processLayoutProps(props as Record<string, unknown>)} />,
+          Stack: (props: unknown) => <Stack {...processLayoutProps(props as Record<string, unknown>)} />,
+          text: (props: unknown) => <Text {...processLayoutProps(props as Record<string, unknown>)} />,
+          Text: (props: unknown) => <Text {...processLayoutProps(props as Record<string, unknown>)} />
         }}
       >
         {content}
