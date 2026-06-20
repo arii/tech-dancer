@@ -1,6 +1,7 @@
 ---
 title: "The Ultimate Guide to Practice Review Tech"
 date: "2026-06-01"
+status: "published"
 tags: ["Practice", "Tech", "Review"]
 image: "/images/gear/sketches/ue-wonderboom.webp"
 imageAlt: "A detailed artistic sketch of a UE Wonderboom portable speaker, highlighting its rugged design and portability for practice sessions."
