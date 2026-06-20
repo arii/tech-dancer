@@ -1,4 +1,4 @@
-import { chromium, Page } from 'playwright';
+import { chromium, Page, Browser } from 'playwright';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import * as fs from 'fs';
@@ -68,16 +68,20 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
 
 function isValidAction(obj: unknown): obj is Action {
   if (!obj || typeof obj !== 'object') return false;
+  const cast = obj as Record<string, unknown>;
   const validTypes = ['click', 'type', 'back', 'scroll'];
-  if (!validTypes.includes(obj.type)) return false;
-  if (typeof obj.reason !== 'string') return false;
 
-  if (obj.type === 'click' || obj.type === 'type') {
-    if (typeof obj.selector !== 'string') return false;
+  if (typeof cast.type !== 'string' || !validTypes.includes(cast.type)) return false;
+  if (typeof cast.reason !== 'string') return false;
+
+  if (cast.type === 'click' || cast.type === 'type') {
+    if (typeof cast.selector !== 'string') return false;
+    // Strict selector format check: only allow our crawler data attribute
+    if (!cast.selector.startsWith('[data-crawler-index="') || !cast.selector.endsWith('"]')) return false;
   }
 
-  if (obj.type === 'type') {
-    if (typeof obj.text !== 'string') return false;
+  if (cast.type === 'type') {
+    if (typeof cast.text !== 'string') return false;
   }
 
   return true;
@@ -90,16 +94,26 @@ async function runCrawler() {
     process.exit(1);
   }
 
-  // Cleanup old snapshots
-  if (fs.existsSync(SNAPSHOTS_DIR)) {
-    fs.readdirSync(SNAPSHOTS_DIR).forEach(file => {
-      fs.unlinkSync(path.join(SNAPSHOTS_DIR, file));
-    });
-  } else {
-    fs.mkdirSync(SNAPSHOTS_DIR, { recursive: true });
+  // Cleanup old snapshots asynchronously
+  try {
+    if (fs.existsSync(SNAPSHOTS_DIR)) {
+      const files = await fs.promises.readdir(SNAPSHOTS_DIR);
+      await Promise.all(files.map(file => fs.promises.unlink(path.join(SNAPSHOTS_DIR, file))));
+    } else {
+      await fs.promises.mkdir(SNAPSHOTS_DIR, { recursive: true });
+    }
+  } catch (err) {
+    console.warn('Failed to perform initial directory cleanup:', err);
   }
 
-  const browser = await chromium.launch({ headless: true });
+  let browser: Browser | null = null;
+  try {
+    browser = await chromium.launch({ headless: true });
+  } catch (err) {
+    console.error('Failed to launch browser. Ensure Playwright browsers are installed (pnpm exec playwright install).', err);
+    process.exit(1);
+  }
+
   const context = await browser.newContext();
   const page = await context.newPage();
 
@@ -141,14 +155,34 @@ async function runCrawler() {
 
       try {
         if ((action.type === 'click' || action.type === 'type') && action.selector) {
-          // Verify selector exists and is visible
+          // Extract index from selector "[data-crawler-index='X']"
+          const indexMatch = action.selector.match(/index="(\d+)"/);
+          const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
+
+          if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
+             console.warn(`AI selected out-of-bounds element index: ${elementIndex}. discovered elements: ${elements.length}`);
+             continue;
+          }
+
+          const targetElementMeta = elements[elementIndex];
           const element = await page.$(action.selector);
+
           if (element && await element.isVisible()) {
             if (action.type === 'click') {
               await page.click(action.selector);
             } else if (action.text) {
-              await page.fill(action.selector, action.text);
-              await page.press(action.selector, 'Enter');
+              // Verify it's an input-capable element before typing
+              const isEditable = await element.evaluate(el => {
+                const tag = el.tagName.toLowerCase();
+                return tag === 'input' || tag === 'textarea' || (el as HTMLElement).isContentEditable;
+              });
+
+              if (isEditable) {
+                await page.fill(action.selector, action.text);
+                await page.press(action.selector, 'Enter');
+              } else {
+                console.warn(`Attempted to type into non-editable element <${targetElementMeta.tagName}>. Skipping.`);
+              }
             }
           } else {
             console.warn(`Element ${action.selector} not found or not visible. Skipping action.`);
@@ -182,7 +216,7 @@ async function runCrawler() {
   } catch (error) {
     console.error('Crawler failed:', error);
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
     console.log('Browser closed.');
   }
 }

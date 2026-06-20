@@ -111,13 +111,18 @@ export async function pickOptimalModel(
   return models[0].id.split('/').pop() || models[0].id;
 }
 
+const SUPPORTED_GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash', 'gemini-2.0-pro-exp-02-05'];
+
 export function pickOptimalGeminiModel(
   estimatedInputTokens: number = 0,
   fallback: string = 'gemini-1.5-flash'
 ): string {
   // Respect explicit user override if present
   if (process.env.GEMINI_MODEL) {
-    return process.env.GEMINI_MODEL;
+    if (SUPPORTED_GEMINI_MODELS.includes(process.env.GEMINI_MODEL)) {
+      return process.env.GEMINI_MODEL;
+    }
+    console.warn(`⚠️ GEMINI_MODEL environment variable specifies unsupported model "${process.env.GEMINI_MODEL}". Falling back to logic-based selection.`);
   }
 
   // Use Flash for small/medium contexts to keep costs and latency low.
