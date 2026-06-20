@@ -126,22 +126,27 @@ function getDynamicRouteMapping(graph: DependencyGraph): Record<string, string> 
   const routesContent = fs.readFileSync(routesFilePath, 'utf-8');
 
   // For each dynamic import in the routes file, we try to associate it with a route path.
-  // We use a robust parsing approach that splits the file by route configuration objects.
+  // We split the configuration by route objects to minimize regex brittleness.
+  const routeConfigs = routesContent.split(/\{[\s\n]*path:/);
+
   routesModule.dependencies.forEach(dep => {
     if (dep.dynamic && dep.resolved) {
       const modulePath = dep.module || '';
       if (!modulePath) return;
 
-      // Escaping for regex
       const escapedModule = modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const moduleRegex = new RegExp(`import\\(['"]${escapedModule}['"]\\)`);
 
-      // We look for a 'path' property followed by an 'import' of our module within the same object block.
-      // This matches the standardized RouteConfig structure in src/config/routes.ts.
-      const routeBlockRegex = new RegExp(`path:\\s*['"]([^'"]+)['"][^}]*import\\(['"]${escapedModule}['"]\\)`, 's');
-      const match = routesContent.match(routeBlockRegex);
-
-      if (match && match[1]) {
-        mapping[dep.resolved] = match[1];
+      for (const config of routeConfigs) {
+        if (moduleRegex.test(config)) {
+          // Extract the path value which was part of the split delimiter
+          // We search for the first quoted string in this block as the path
+          const pathMatch = config.match(/^\s*['"]([^'"]+)['"]/);
+          if (pathMatch && pathMatch[1]) {
+            mapping[dep.resolved] = pathMatch[1];
+            break;
+          }
+        }
       }
     }
   });
@@ -150,7 +155,11 @@ function getDynamicRouteMapping(graph: DependencyGraph): Record<string, string> 
 }
 
 /**
- * Recursively finds all affected files starting from the changed files.
+ * Recursively finds all affected files starting from the changed files using BFS.
+ *
+ * Note: While dependency-cruiser provides reachability analysis, we perform a manual
+ * traversal here to gain granular control over the 'dynamic' vs 'static' dependency
+ * links.
  *
  * The `includeDynamic` option allows us to control the depth and nature of the traversal.
  * 1. For route discovery: We include dynamic imports because we want to see which
@@ -245,6 +254,110 @@ function getAffectedUrlsByPublicFiles(changedFiles: string[]): string[] {
   return Array.from(urls);
 }
 
+/**
+ * Resolves the list of affected URLs based on code, content, and public file changes.
+ */
+function resolveAffectedUrls(
+  allAffected: string[],
+  changedFiles: string[],
+  dynamicRouteMapping: Record<string, string>,
+  staticAffected: string[]
+): string[] {
+  const pageComponentFiles = Object.keys(dynamicRouteMapping);
+  const authoritativeSitemapUrls = getAllRoutes().stubs || [];
+
+  // Global impact check - if ANY statically affected file is a global trigger
+  const hasGlobalImpact = staticAffected.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
+
+  let pageUrls: string[];
+  if (hasGlobalImpact) {
+    console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
+    pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
+  } else {
+    const affectedPages = allAffected.filter(f =>
+      f.startsWith(IMPACT_CONFIG.PAGES_DIR) || pageComponentFiles.includes(f)
+    );
+
+    pageUrls = Array.from(new Set(affectedPages.flatMap(pageFile => {
+      if (dynamicRouteMapping[pageFile]) {
+        const routePattern = dynamicRouteMapping[pageFile];
+        if (routePattern === '/') return authoritativeSitemapUrls.includes('/') ? ['/'] : [];
+
+        const staticPrefixMatch = routePattern.match(/^(\/[a-z0-9-]+)\/:[a-zA-Z0-9_]+$/);
+        if (staticPrefixMatch) {
+          const prefix = `${staticPrefixMatch[1]}/`;
+          return authoritativeSitemapUrls.filter(url => url.startsWith(prefix) && url !== staticPrefixMatch[1]);
+        }
+
+        if (authoritativeSitemapUrls.includes(routePattern)) return [routePattern];
+      }
+      return mapPageToUrls(pageFile, authoritativeSitemapUrls);
+    })));
+  }
+
+  const contentUrls = getContentAffectedUrls(changedFiles);
+  const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles);
+
+  return Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
+}
+
+interface ImpactReport {
+  changedFiles: string[];
+  affectedPages: string[];
+  affectedDynamicImports: string[];
+  routes: string[];
+  visualReviewRequired: string[];
+  impactLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+}
+
+/**
+ * Generates and writes the impact analysis reports.
+ */
+function generateReports(report: ImpactReport, changedFiles: string[], affectedDynamicImportsSet: string[]) {
+  const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+
+  fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
+  fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(report, null, 2));
+
+  let baseUrl = process.env.VITE_APP_URL || 'https://boomtick.blog';
+  if (process.env.GITHUB_PAGES_URL) {
+    baseUrl = process.env.GITHUB_PAGES_URL.replace(/\/$/, '');
+  } else if (process.env.GITHUB_REPOSITORY && process.env.GITHUB_REF_NAME) {
+    const [owner, repoName] = process.env.GITHUB_REPOSITORY.split('/');
+    baseUrl = `https://${owner}.github.io/${repoName}/${process.env.GITHUB_REF_NAME}`;
+  }
+
+  const severityEmoji = report.impactLevel === 'HIGH' ? '🔴' : report.impactLevel === 'MEDIUM' ? '🟡' : '🟢';
+  const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
+
+  const markdown = `## ${severityEmoji} Deployment Impact Analysis
+
+> **Impact Level:** ${report.impactLevel}
+
+### 👁️ Visual Review Required
+${report.routes.length > 0 ? report.routes.map((url: string) => `- [${url}](${baseUrl}${url})`).join('\n') : '_None detected (code-only change)_'}
+
+<details>
+<summary><b>📦 Dynamic Imports Affected (${affectedDynamicImportsSet.length})</b></summary>
+
+${affectedDynamicImportsSet.length > 0 ? affectedDynamicImportsSet.map(f => `- ${f}`).join('\n') : '_None detected_'}
+</details>
+
+<details>
+<summary><b>📝 Changed Files (${changedFiles.length})</b></summary>
+
+${changedFilesList}
+</details>
+
+---
+*Generated by Boomtick Impact Analyzer*
+`;
+
+  fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
+  console.log(`\n✅ Reports generated in ${outputDir}`);
+}
+
 async function main() {
   console.log('🚀 Running Deployment Impact Analysis...');
 
@@ -265,91 +378,25 @@ async function main() {
 
     // Find affected files in src/
     const srcChanges = changedFiles.filter(f => f.startsWith('src/'));
-
-    // allAffected includes dynamic dependencies for route discovery
     const allAffected = findAffectedFiles(srcChanges, reverseMap, { includeDynamic: true });
-
-    // staticAffected excludes dynamic dependencies for global impact check
-    // This prevents page changes from triggering global impact via the router's dynamic imports
     const staticAffected = findAffectedFiles(srcChanges, reverseMap, { includeDynamic: false });
 
-    // Create dynamic route mapping
+    // Resolve Dynamic Mapping and URLs
     const dynamicRouteMapping = getDynamicRouteMapping(graph);
-    const pageComponentFiles = Object.keys(dynamicRouteMapping);
-
-    // Find affected pages (either by directory or by being a registered dynamic import)
-    const affectedPages = allAffected.filter(f =>
-      f.startsWith(IMPACT_CONFIG.PAGES_DIR) ||
-      pageComponentFiles.includes(f)
-    );
-
-    // Global impact check - if ANY statically affected file is a global trigger,
-    // or if a global trigger was changed directly.
-    const hasGlobalImpact = staticAffected.some(f => IMPACT_CONFIG.GLOBAL_TRIGGERS.includes(f));
-
-    let pageUrls: string[];
-
-    const authoritativeSitemapUrls = getAllRoutes().stubs || [];
-
-    if (hasGlobalImpact) {
-      console.log('🌍 Global impact detected (App, Routes, or MainLayout affected).');
-      pageUrls = IMPACT_CONFIG.DEFAULT_STATIC_PAGES;
-    } else {
-      // Map affected pages to URLs using both heuristics and the new dynamic mapping
-      const mappedUrls = affectedPages.flatMap(pageFile => {
-        // Try dynamic mapping first
-        if (dynamicRouteMapping[pageFile]) {
-          const routePattern = dynamicRouteMapping[pageFile];
-
-          if (routePattern === '/') return authoritativeSitemapUrls.includes('/') ? ['/'] : [];
-
-          // Handle dynamic route parameters
-          const staticPrefixMatch = routePattern.match(/^(\/[a-z0-9-]+)\/:[a-zA-Z0-9_]+$/);
-          if (staticPrefixMatch) {
-            const prefix = `${staticPrefixMatch[1]}/`;
-            return authoritativeSitemapUrls.filter(url => url.startsWith(prefix) && url !== staticPrefixMatch[1]);
-          }
-
-          if (authoritativeSitemapUrls.includes(routePattern)) return [routePattern];
-        }
-
-        // Fallback to legacy heuristic mapping
-        return mapPageToUrls(pageFile, authoritativeSitemapUrls);
-      });
-      pageUrls = Array.from(new Set(mappedUrls));
-    }
-
-    // Content URLs
-    const contentUrls = getContentAffectedUrls(changedFiles);
-
-    // Public static files URLs (e.g., images referenced in markdown)
-    const publicFileUrls = getAffectedUrlsByPublicFiles(changedFiles);
-
-    // Combine and deduplicate URLs
-    const allUrls = Array.from(new Set([...pageUrls, ...contentUrls, ...publicFileUrls])).sort();
+    const allUrls = resolveAffectedUrls(allAffected, changedFiles, dynamicRouteMapping, staticAffected);
 
     // Find all dynamic imports in the whole graph to identify dynamic boundaries
     const allDynamicImports = new Set<string>();
-    graph.modules.forEach(m => {
-      m.dependencies.forEach(d => {
-        if (d.dynamic && d.resolved) {
-          allDynamicImports.add(d.resolved);
-        }
-      });
-    });
+    graph.modules.forEach(m => m.dependencies.forEach(d => {
+      if (d.dynamic && d.resolved) allDynamicImports.add(d.resolved);
+    }));
 
-    // Affected dynamic imports are those that are in the affected dependency chain
-    const affectedDynamicImportsSet = allAffected
-      .filter(f => allDynamicImports.has(f))
-      .sort();
-
-    // Severity
+    const affectedDynamicImportsSet = allAffected.filter(f => allDynamicImports.has(f)).sort();
     const severity = getSeverity(changedFiles);
 
-    // Generate Report
     const report = {
       changedFiles,
-      affectedPages,
+      affectedPages: allAffected.filter(f => f.startsWith(IMPACT_CONFIG.PAGES_DIR) || Object.keys(dynamicRouteMapping).includes(f)),
       affectedDynamicImports: affectedDynamicImportsSet,
       routes: allUrls,
       visualReviewRequired: allUrls,
@@ -360,72 +407,18 @@ async function main() {
     console.log('\n' + '='.repeat(40));
     console.log('DEPLOYMENT IMPACT ANALYSIS');
     console.log('='.repeat(40));
-
     console.log(`\nIMPACT LEVEL: ${severity}`);
-
     console.log('\nCHANGED FILES:');
     changedFiles.forEach(f => console.log(`  - ${f}`));
-
     console.log('\nVISUAL REVIEW REQUIRED:');
     if (allUrls.length > 0) {
       allUrls.forEach(url => console.log(`  - ${url}`));
     } else {
       console.log('  None detected (code-only changes)');
     }
-
     console.log('\n' + '='.repeat(40));
 
-    // Write to artifacts
-    const outputDir = path.join(process.cwd(), 'artifacts', 'impact-analysis');
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-
-    fs.writeFileSync(path.join(outputDir, 'impact.json'), JSON.stringify(report, null, 2));
-    fs.writeFileSync(path.join(process.cwd(), 'artifacts', 'impact-analysis.json'), JSON.stringify(report, null, 2));
-
-    const changedFilesList = changedFiles.map(f => `- ${f}`).join('\n');
-
-    const severityEmoji = severity === 'HIGH' ? '🔴' : severity === 'MEDIUM' ? '🟡' : '🟢';
-
-    // Extract base URL if running in a branch context, otherwise default to boomtick.blog
-    // We check the standard GITHUB variables, or process.env.VITE_APP_URL
-    let baseUrl = process.env.VITE_APP_URL || 'https://boomtick.blog';
-    if (process.env.GITHUB_PAGES_URL) {
-      baseUrl = process.env.GITHUB_PAGES_URL.replace(/\/$/, '');
-    } else if (process.env.GITHUB_REPOSITORY && process.env.GITHUB_REF_NAME) {
-      const repoName = process.env.GITHUB_REPOSITORY.split('/')[1];
-      const owner = process.env.GITHUB_REPOSITORY.split('/')[0];
-      // Note: This matches the typical github pages path, but standard PR builds might have different links.
-      // This ensures we're not hardcoding the production boomtick.blog domain.
-      baseUrl = `https://${owner}.github.io/${repoName}/${process.env.GITHUB_REF_NAME}`;
-    }
-
-    const markdown = `## ${severityEmoji} Deployment Impact Analysis
-
-> **Impact Level:** ${severity}
-
-### 👁️ Visual Review Required
-${allUrls.length > 0 ? allUrls.map(url => `- [${url}](${baseUrl}${url})`).join('\n') : '_None detected (code-only change)_'}
-
-<details>
-<summary><b>📦 Dynamic Imports Affected (${affectedDynamicImportsSet.length})</b></summary>
-
-${affectedDynamicImportsSet.length > 0 ? affectedDynamicImportsSet.map(f => `- ${f}`).join('\n') : '_None detected_'}
-</details>
-
-<details>
-<summary><b>📝 Changed Files (${changedFiles.length})</b></summary>
-
-${changedFilesList}
-</details>
-
----
-*Generated by Boomtick Impact Analyzer*
-`;
-
-    fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
-    console.log(`\n✅ Reports generated in ${outputDir}`);
+    generateReports(report, changedFiles, affectedDynamicImportsSet);
   } catch (error: unknown) {
     const err = error as Error;
     console.error(`❌ Error during impact analysis: ${err.message}`);
