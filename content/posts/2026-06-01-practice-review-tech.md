@@ -17,7 +17,7 @@ Mastering any skill requires consistent practice and, more importantly, effectiv
 ### Portable Speakers
 A good portable speaker is a game-changer. It allows you to practice anywhere, from your living room to a rented studio, with clear, motivating sound.
 
-![UE Wonderboom Sketch](/images/gear/sketches/ue-wonderboom.webp)
+![Artistic charcoal sketch of a UE Wonderboom portable speaker showing its distinctive oversized volume buttons and rugged textile mesh.](/images/gear/sketches/ue-wonderboom.webp)
 *The UE Wonderboom is a favorite for its durability and surprisingly powerful sound in a compact form factor.*
 
 Look for speakers that are:
@@ -29,7 +29,7 @@ Look for speakers that are:
 
 A tripod and phone are your best friends here. You don't need a fancy camera; your smartphone is more than capable of capturing high-quality video for review.
 
-![Practice Tech Essentials](/assets/home/wcs-travel-pack.webp)
+![Knolling layout of practice tech gear featuring a portable speaker, multi-charging cables, and recording accessories organized for travel.](/assets/home/wcs-travel-pack.webp)
 *A complete practice tech kit: including portable audio, charging essentials, and mobile recording tools organized for travel.*
 
 ### Why Video Review?
