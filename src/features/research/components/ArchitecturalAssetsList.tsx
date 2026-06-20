@@ -43,11 +43,11 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                 <Stack gap={2} width="full" className="min-w-0">
                   <Box
                     display="flex"
-                    direction={{ base: 'col', sm: 'row' }}
-                    align={{ base: 'start', sm: 'center' }}
+                    align="center"
                     justify="between"
                     width="full"
-                    gap={2}
+                    gap={4}
+                    className="min-w-0"
                   >
                     <Text
                       as="a"
@@ -57,7 +57,8 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                       variant="mono"
                       size="xs"
                       weight="font-bold"
-                      className="hover:text-accent transition-colors cursor-pointer truncate block"
+                      truncate
+                      className="hover:text-accent transition-colors cursor-pointer min-w-0"
                       title={asset.path}
                     >
                       {asset.path}
@@ -67,7 +68,7 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                       size="micro"
                       color="dim"
                       opacityVariant="dim"
-                      className="shrink-0 uppercase tracking-tighter"
+                      className="shrink-0 uppercase tracking-tighter whitespace-nowrap"
                     >
                       {asset.label}
                     </Text>

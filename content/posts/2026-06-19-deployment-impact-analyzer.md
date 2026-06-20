@@ -127,16 +127,34 @@ When a PR is opened, the analyzer posts a summary directly to the GitHub convers
 </Grid>
 *A "sandwich" comparison showing the baseline, the new state, and the highlighted pixel delta.*
 
-### Real-World Finding: The "Invisible" Regression
+### Real-World Finding: From 404 to Overflow Resolution
 
-In a recent PR, a developer modified a global spacing variable. On the surface, the changed files seemed unrelated to the landing page. However, the analyzer traced the dependency and flagged a **15% visual diff** on the Home route.
+Visual regression testing is particularly effective for catching "cumulative" bugs—issues that only appear once multiple components are integrated. During the development of this tool, we encountered a three-stage regression that perfectly illustrated the system's value.
 
-**The finding:**
-- **Issue:** The navigation menu items shifted by 4px, causing the logo to wrap on smaller viewports.
-- **Root Cause:** A Tailwind config change to the `gap-4` utility had unintended side effects on the header layout.
-- **Resolution:** The developer adjusted the header to use a fixed pixel value, isolating it from the global spacing change.
+#### 1. The Initial State (Missing Route)
+Initially, a routing configuration error caused the analyzer to hit a "Content Not Found" page. While the code for the tool existed, the dynamic route hadn't been registered in the main portfolio index.
 
-Without the analyzer, this regression would likely have reached production, only to be discovered by a user on a mobile device.
+#### 2. The Regression (Text Overflow)
+After fixing the routing, the page rendered, but a new issue emerged on mobile viewports. Long file paths in the `ArchitecturalAssetsList` component were overflowing their containers, breaking the layout and pushing the "Category" labels off-screen. This is a classic "invisible" regression that passes unit tests and type-checks but fails the "eyeball test."
+
+#### 3. The Resolution (Truncation & Wrapping)
+We implemented a fix using Tailwind's `truncate` and `flex-wrap` utilities, ensuring that assets are readable even on the narrowest devices.
+
+<Grid cols={3} gap={4}>
+  <Stack gap={2}>
+    <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">1. Missing</Text>
+    ![404 Error](/assets/studies/deployment-impact-analyzer/before-mobile.png)
+  </Stack>
+  <Stack gap={2}>
+    <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">2. Diff</Text>
+    ![Regression Delta](/assets/studies/deployment-impact-analyzer/diff-mobile.png)
+  </Stack>
+  <Stack gap={2}>
+    <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">3. Fixed</Text>
+    ![Resolution](/assets/studies/deployment-impact-analyzer/after-mobile.png)
+  </Stack>
+</Grid>
+*The mobile resolution sequence: from a 404 state to an overflow regression, and finally the resolved responsive layout.*
 
 ## Lessons Learned
 
