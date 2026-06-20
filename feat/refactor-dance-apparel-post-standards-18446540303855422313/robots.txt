@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/feat/refactor-dance-apparel-post-standards-18446540303855422313/sitemap.xml
