@@ -63,7 +63,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),
           getResponsiveClasses(lowercase, "", (v) => v ? "lowercase" : "normal-case"),
           getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
-          getResponsiveClasses(clamp, "", (v) => (v === true || v === 0 ? "line-clamp-none" : (typeof v === "number" ? `line-clamp-${v}` : ""))),
+          getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : "")),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
           italic && "italic",

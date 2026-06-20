@@ -1,7 +1,7 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <style>
     .brand-stop-accent { stop-color: #0891b2; }
-    .brand-stop-purple { stop-color: #7c3aed; }
+    .brand-stop-purple { stop-color: #c4b5fd; }
     .brand-text-accent { fill: #0891b2; }
     .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
     .brand-wordmark {
