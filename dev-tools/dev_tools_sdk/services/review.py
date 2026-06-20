@@ -1,14 +1,16 @@
 from __future__ import annotations
 import os
+import json
 
 
 def load_visual_guidelines() -> str:
-    """Loads visual guidelines from a shared markdown file."""
+    """Loads visual guidelines from a shared JSON file."""
     try:
-        guidelines_path = os.path.join(os.path.dirname(__file__), "..", "..", "visual_guidelines.md")
+        guidelines_path = os.path.join(os.path.dirname(__file__), "..", "..", "visual_guidelines.json")
         if os.path.exists(guidelines_path):
             with open(guidelines_path, "r", encoding="utf-8") as f:
-                return f.read()
+                data = json.load(f)
+                return data.get("VISUAL_DESIGN_GUIDELINES", "")
     except Exception:
         pass
     return "Impeccable design guidelines not available."

@@ -45,10 +45,12 @@ def review_file(file_path, silent=False):
 
     visual_guidelines = ""
     try:
-        guidelines_path = os.path.join(os.path.dirname(__file__), "visual_guidelines.md")
+        import json
+        guidelines_path = os.path.join(os.path.dirname(__file__), "visual_guidelines.json")
         if os.path.exists(guidelines_path):
             with open(guidelines_path, "r", encoding="utf-8") as f:
-                visual_guidelines = f.read()
+                data = json.load(f)
+                visual_guidelines = data.get("VISUAL_DESIGN_GUIDELINES", "")
     except Exception:
         pass
 
