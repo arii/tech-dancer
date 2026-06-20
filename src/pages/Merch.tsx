@@ -121,7 +121,6 @@ export default function Merch() {
                         <ProductCard
                           item={product}
                           fillHeight
-                          imageHeight={{ base: 64, sm: 72, md: 96 }}
                         />
                       </Box>
                     ))}

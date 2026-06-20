@@ -21,9 +21,26 @@ export function ProductCard({
   isFeatured,
   fillHeight,
   imageHeight,
-  clampTitle = fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2),
-  clampDescription = fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2),
+  clampTitle,
+  clampDescription,
 }: ProductCardProps) {
+  // Determine layout configuration based on props and context
+  const isStretched = isFeatured || fillHeight;
+
+  const finalClampTitle = clampTitle ?? (
+    fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2)
+  );
+
+  const finalClampDescription = clampDescription ?? (
+    fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2)
+  );
+
+  const finalImageHeight = imageHeight ?? (
+    isStretched
+      ? { base: 64, sm: 72, md: 96 }
+      : { base: 64, sm: 72, md: 64 }
+  );
+
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
     ? 'SEE OPTIONS'
@@ -49,7 +66,7 @@ export function ProductCard({
         imageUrl={item.imageUrl}
         images={item.images}
         imageDisplayMode={item.imageDisplayMode}
-        height={imageHeight ?? { base: 64, sm: 72, md: isFeatured ? 96 : 64 }}
+        height={finalImageHeight}
       />
 
       <Stack gap={isFeatured ? 4 : 3}>
@@ -63,13 +80,13 @@ export function ProductCard({
           weight="font-bold"
           color="main"
           leading="tight"
-          clamp={clampTitle}
+          clamp={finalClampTitle}
           className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {item.title}
         </Text>
 
-        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription}>
+        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={finalClampDescription}>
           {item.description}
         </Text>
 
