@@ -1,0 +1,62 @@
+{
+  "changedFiles": [
+    "src/components/ui/AffiliateCard.tsx",
+    "src/components/ui/MarkdownRenderer.tsx",
+    "src/features/journal/components/BlogPostDetail.tsx"
+  ],
+  "affectedPages": [
+    "src/pages/ResearchDetail.tsx",
+    "src/pages/BlogPost.tsx"
+  ],
+  "routes": [
+    "/blog/2026-04-18-halloween-costumes",
+    "/blog/2026-04-18-make-shoe-dance",
+    "/blog/2026-04-19-practical-tools-essentials",
+    "/blog/2026-06-01-event-travel-packing",
+    "/blog/2026-06-01-general-health-home-care",
+    "/blog/2026-06-01-outdoor-dancing",
+    "/blog/2026-06-01-power-charging",
+    "/blog/2026-06-01-practice-review-tech",
+    "/blog/2026-06-01-practice-social-dance-apparel",
+    "/blog/2026-06-01-shoe-care-modification",
+    "/blog/2026-06-01-theme-wear-costumes-accessories",
+    "/blog/2026-06-01-wcs-essentials",
+    "/blog/2026-06-14-the-story-behind-the-merch-page",
+    "/research/ai-devops-pipeline",
+    "/research/blog-drafter",
+    "/research/boomtick-blog",
+    "/research/ecommerce-automation",
+    "/research/gitops-pr-reviewer",
+    "/research/hrm-flagship",
+    "/research/repo-auditor-ai",
+    "/research/scope-blast-radius",
+    "/research/wcs-scraper",
+    "/research/wcs-scraper-initial-sync"
+  ],
+  "visualReviewRequired": [
+    "/blog/2026-04-18-halloween-costumes",
+    "/blog/2026-04-18-make-shoe-dance",
+    "/blog/2026-04-19-practical-tools-essentials",
+    "/blog/2026-06-01-event-travel-packing",
+    "/blog/2026-06-01-general-health-home-care",
+    "/blog/2026-06-01-outdoor-dancing",
+    "/blog/2026-06-01-power-charging",
+    "/blog/2026-06-01-practice-review-tech",
+    "/blog/2026-06-01-practice-social-dance-apparel",
+    "/blog/2026-06-01-shoe-care-modification",
+    "/blog/2026-06-01-theme-wear-costumes-accessories",
+    "/blog/2026-06-01-wcs-essentials",
+    "/blog/2026-06-14-the-story-behind-the-merch-page",
+    "/research/ai-devops-pipeline",
+    "/research/blog-drafter",
+    "/research/boomtick-blog",
+    "/research/ecommerce-automation",
+    "/research/gitops-pr-reviewer",
+    "/research/hrm-flagship",
+    "/research/repo-auditor-ai",
+    "/research/scope-blast-radius",
+    "/research/wcs-scraper",
+    "/research/wcs-scraper-initial-sync"
+  ],
+  "impactLevel": "HIGH"
+}

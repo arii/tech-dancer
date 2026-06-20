@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "highCount": 0,
+  "routes": [],
+  "llmVerdict": "pass",
+  "state": {
+    "findings": [
+      {
+        "id": "finding-1",
+        "route": "/blog/2026-06-01-theme-wear-costumes-accessories (mobile)",
+        "issue": "Severe layout shift, content loss, broken visual hierarchy, and accessibility issues.",
+        "status": "resolved",
+        "fixSummary": "Content structure, image alignment, visual hierarchy, and accessibility are restored and consistent with the original."
+      },
+      {
+        "id": "finding-2",
+        "route": "/blog/2026-06-01-theme-wear-costumes-accessories (mobile)",
+        "issue": "Reduced vertical spacing between 'Shop Selected Items' cards, impacting readability and touch accessibility.",
+        "status": "unresolved",
+        "fixSummary": "Recommend increasing spacing by 4px for improved usability."
+      },
+      {
+        "id": "finding-1",
+        "route": "/blog/2026-06-14-the-story-behind-the-merch-page (mobile)",
+        "issue": "Major visual regression detected with no accompanying DOM Text Diff. Widespread pixel changes across text, images, and cards.",
+        "status": "unresolved",
+        "fixSummary": "DOM Text Diff must be provided for all visual changes. Review layout, spacing, and contrast for potential regressions."
+      }
+    ]
+  }
+}

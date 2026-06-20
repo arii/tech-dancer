@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "highCount": 0,
+  "routes": [],
+  "llmVerdict": "pass",
+  "state": {
+    "findings": [
+      {
+        "id": "finding-1",
+        "file": "src/components/ui/AffiliateCard.tsx",
+        "line": 44,
+        "snippet": "<Text\n            as=\"h4\"\n            variant=\"body\"\n            size=\"base\"\n            weight=\"font-bold\"\n            clamp={2}\n            display=\"block\"\n            className=\"group-hover:text-accent transition-colors relative z-20 pointer-events-none\"\n          >",
+        "issue": "Passing 'clamp' and 'display' props to Text component, which likely does not support them. This will cause runtime or type errors.",
+        "status": "new",
+        "fixSummary": "Replace 'clamp' and 'display' with appropriate CSS classes in 'className'."
+      },
+      {
+        "id": "finding-2",
+        "file": "src/components/ui/AffiliateCard.tsx",
+        "line": 32,
+        "snippet": "<img\n               src={link.image}\n               alt={link.name}\n               className={cn(\n                 \"max-w-full max-h-full\",\n                 link.imageMode === 'contain' ? 'object-contain' : 'object-cover'\n               )}\n               loading=\"lazy\"\n             />",
+        "issue": "Switched from <Box as=\"img\"> to <img>. If Box is required for styling or layout, this is a regression and will break appearance.",
+        "status": "new",
+        "fixSummary": "Restore <Box as=\"img\"> unless there is a documented reason to switch."
+      },
+      {
+        "id": "finding-3",
+        "file": "src/components/ui/AffiliateCard.tsx",
+        "line": 39,
+        "snippet": "<Box display=\"flex\" align=\"center\" justify=\"between\" width=\"full\" className=\"relative z-20 pointer-events-none\">",
+        "issue": "The value 'between' for the 'justify' prop is invalid. Should be 'space-between'.",
+        "status": "new",
+        "fixSummary": "Change 'justify=\"between\"' to 'justify=\"space-between\"'."
+      }
+    ]
+  }
+}
