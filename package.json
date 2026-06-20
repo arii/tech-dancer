@@ -54,7 +54,8 @@
     "impact:gemini-review": "tsx scripts/impact-gemini-review.ts",
     "impact:github-models-review": "tsx scripts/impact-github-models-review.ts",
     "impact:gemini-code-review": "tsx scripts/impact-gemini-code-review.ts",
-    "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts"
+    "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts",
+    "impact:crawler": "tsx scripts/ai-playwright-crawler.ts"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",

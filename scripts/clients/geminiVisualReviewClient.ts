@@ -3,13 +3,16 @@ import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
+import { pickOptimalGeminiModel } from '../lib/modelPicker';
 
-function createModel(): ChatGoogleGenerativeAI {
+function createModel(estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
+  const modelName = pickOptimalGeminiModel(estimatedInputTokens);
+
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
+    model: modelName,
     apiKey,
     maxOutputTokens: 1024,
   });
@@ -18,11 +21,13 @@ function createModel(): ChatGoogleGenerativeAI {
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
   reportTitle: '👁️ Visual Review Agent',
-  botTagline: 'Powered by Gemini Vision + Blast-Radius Analyzer',
+  botTagline: 'Powered by Gemini Vision + Deployment Impact Analyzer',
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const model = createModel();
+    // Estimate tokens from payload (text only for now)
+    const estimatedInputTokens = Math.ceil(JSON.stringify(summary).length / 4);
+    const model = createModel(estimatedInputTokens);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
