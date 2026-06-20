@@ -1,28 +1,30 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
+import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
-function createModel(): ChatGoogleGenerativeAI {
+function createModel(modelName: string): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
+    model: modelName,
     apiKey,
-    maxOutputTokens: 1024,
+    maxOutputTokens: 2048,
   });
 }
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
   reportTitle: '👁️ Visual Review Agent',
-  botTagline: 'Powered by Gemini Vision + Blast-Radius Analyzer',
+  botTagline: 'Powered by Gemini 3.x Vision + Blast-Radius Analyzer',
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const model = createModel();
+    const modelName = pickGeminiModel('flash');
+    const model = createModel(modelName);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -74,10 +76,8 @@ Your job:
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
 
-    // Gemini 3.5 Flash pricing (approx)
-    // Input: $0.075 / 1 million tokens
-    // Output: $0.30 / 1 million tokens
-    const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
+    const pricing = getGeminiPricing(modelName);
+    const cost = (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM;
 
     const feedback = typeof response.content === 'string'
       ? response.content
@@ -90,6 +90,7 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };

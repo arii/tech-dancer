@@ -18,6 +18,7 @@ export interface CodeReviewSummary {
   prGoal?: string;
   externalContext?: string;
   previousState?: CodeReviewState;
+  estimatedInputTokens?: number;
 }
 
 export interface ParsedFindingsResult {

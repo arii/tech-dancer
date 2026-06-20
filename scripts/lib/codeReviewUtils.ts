@@ -36,6 +36,12 @@ Provide actionable feedback. Focus on HIGH severity issues.
 
 ${goalSection}${priorStateSection}
 
+UI and Layout Guidelines (MANDATORY):
+- NO RAW TAILWIND in App/Feature layers. Flag any arbitrary values (e.g., \`text-[11px]\`), direct layout classes (\`flex\`, \`grid\`), or direct spacing/color classes.
+- MANDATORY use of layout primitives: All layout MUST use \`Box\`, \`Stack\`, \`Grid\`, or \`Text\` from \`@/layouts/\`.
+- TYPOGRAPHY: All text must use the \`<Text />\` component. Flag raw \`text-*\` classes.
+- DESIGN TOKENS: Styling must use design tokens (\`spacing\`, \`radius\`, \`typography\`). Flag any bypasses.
+
 Severity rules — apply these strictly:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
   passed where the type doesn't allow it, a class or function that doesn't exist, a call
@@ -64,7 +70,8 @@ You MUST end your review with exactly one of the following strings indicating yo
 Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
 demonstrate with evidence from the diff.
 
-You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag:
+You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a ` <findings>` tag.
+The JSON must follow this schema:
 <findings>
 {
   "findings": [
@@ -74,7 +81,7 @@ You MUST also provide a structured JSON summary of the findings (both old and ne
       "line": 10,
       "snippet": "const x = 1;",
       "issue": "Brief description of the issue",
-      "status": "resolved",
+      "status": "open",
       "fixSummary": "Brief summary of how it was addressed"
     }
   ]
