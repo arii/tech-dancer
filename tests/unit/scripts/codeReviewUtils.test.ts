@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { buildSystemPrompt } from '../../../scripts/lib/buildCodeReviewPrompt';
 import {
-  buildSystemPrompt,
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   parseCodeReviewState,
