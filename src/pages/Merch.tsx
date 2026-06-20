@@ -112,7 +112,7 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 8, md: 8 }} minWidth="0" width="full">
+                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 10, md: 8 }} minWidth="0" width="full">
                     <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
                       <ProductCard item={section.products[0]} isFeatured />
                     </Box>
@@ -125,7 +125,7 @@ export default function Merch() {
                     ))}
                   </Grid>
                 ) : (
-                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 8, md: 8 }} width="full" minWidth="0">
+                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 10, md: 8 }} width="full" minWidth="0">
                     {section.products.map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
@@ -138,7 +138,7 @@ export default function Merch() {
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 8, md: 8 }} width="full" minWidth="0">
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 10, md: 8 }} width="full" minWidth="0">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}
