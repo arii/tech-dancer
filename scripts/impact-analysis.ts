@@ -31,7 +31,7 @@ function exec(command: string): string {
     return execSync(command, {
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'pipe'],
-      maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large graphs
+      maxBuffer: IMPACT_CONFIG.MAX_BUFFER
     }).trim();
   } catch (error: unknown) {
     const err = error as { stderr?: string; message?: string };
@@ -80,6 +80,11 @@ interface ReverseDependency {
 
 /**
  * Builds a reverse dependency map (child -> [parents]).
+ *
+ * We track whether a dependency is 'dynamic' because our impact analysis needs to
+ * distinguish between static and dynamic links. Specifically, we exclude dynamic
+ * links when calculating 'global impact' to avoid page changes incorrectly
+ * triggering application-wide visual review requirements via the router.
  */
 function buildReverseMap(graph: DependencyGraph): Record<string, ReverseDependency[]> {
   const reverseMap: Record<string, ReverseDependency[]> = {};
@@ -115,29 +120,28 @@ function getDynamicRouteMapping(graph: DependencyGraph): Record<string, string> 
   const routesModule = graph.modules.find(m => m.source === 'src/config/routes.ts');
   if (!routesModule) return mapping;
 
-  // For each dynamic import in the routes file, we try to associate it with a route path
-  // Since we can't easily parse the TS AST here, we'll use a hybrid approach:
-  // We'll look at the modules that the routes file depends on dynamically.
+  const routesFilePath = 'src/config/routes.ts';
+  if (!fs.existsSync(routesFilePath)) return mapping;
+
+  const routesContent = fs.readFileSync(routesFilePath, 'utf-8');
+
+  // For each dynamic import in the routes file, we try to associate it with a route path.
+  // We use a robust parsing approach that splits the file by route configuration objects.
   routesModule.dependencies.forEach(dep => {
     if (dep.dynamic && dep.resolved) {
-      // Look for known patterns in src/config/routes.ts via simple grep/regex
-      // to find which path is associated with this module
       const modulePath = dep.module || '';
       if (!modulePath) return;
 
-      try {
-        const routesContent = fs.readFileSync('src/config/routes.ts', 'utf-8');
-        // Match: path: '/blog', ... lazy: () => import('@/pages/Blog')
-        // This is a bit brittle but works for the current standardized route config
-        const escapedModule = modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`path:\\s*['"]([^'"]+)['"][^}]*import\\(['"]${escapedModule}['"]\\)`, 's');
-        const match = routesContent.match(regex);
+      // Escaping for regex
+      const escapedModule = modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-        if (match && match[1]) {
-          mapping[dep.resolved] = match[1];
-        }
-      } catch (e) {
-        console.error(`Error mapping route for ${modulePath}:`, e);
+      // We look for a 'path' property followed by an 'import' of our module within the same object block.
+      // This matches the standardized RouteConfig structure in src/config/routes.ts.
+      const routeBlockRegex = new RegExp(`path:\\s*['"]([^'"]+)['"][^}]*import\\(['"]${escapedModule}['"]\\)`, 's');
+      const match = routesContent.match(routeBlockRegex);
+
+      if (match && match[1]) {
+        mapping[dep.resolved] = match[1];
       }
     }
   });
@@ -147,6 +151,12 @@ function getDynamicRouteMapping(graph: DependencyGraph): Record<string, string> 
 
 /**
  * Recursively finds all affected files starting from the changed files.
+ *
+ * The `includeDynamic` option allows us to control the depth and nature of the traversal.
+ * 1. For route discovery: We include dynamic imports because we want to see which
+ *    routes are logically reached by a change.
+ * 2. For global impact: We exclude dynamic imports to ensure that changing a specific
+ *    page doesn't flag a "global impact" just because the router dynamically imports it.
  */
 function findAffectedFiles(
   changedFiles: string[],
