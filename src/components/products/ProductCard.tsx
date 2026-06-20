@@ -10,6 +10,8 @@ import { stroke } from '@/styles/design-tokens';
 interface ProductCardProps {
   item: ProductCatalogItem;
   isFeatured?: boolean;
+  fillHeight?: boolean;
+  imageHeight?: ResponsiveProp<string | number>;
   clampTitle?: ResponsiveProp<number | boolean>;
   clampDescription?: ResponsiveProp<number | boolean>;
 }
@@ -17,8 +19,10 @@ interface ProductCardProps {
 export function ProductCard({
   item,
   isFeatured,
-  clampTitle = isFeatured ? 0 : 2,
-  clampDescription = isFeatured ? 0 : 2,
+  fillHeight,
+  imageHeight,
+  clampTitle = fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2),
+  clampDescription = fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2),
 }: ProductCardProps) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
@@ -45,7 +49,7 @@ export function ProductCard({
         imageUrl={item.imageUrl}
         images={item.images}
         imageDisplayMode={item.imageDisplayMode}
-        isFeatured={isFeatured}
+        height={imageHeight ?? { base: 64, sm: 72, md: isFeatured ? 96 : 64 }}
       />
 
       <Stack gap={isFeatured ? 4 : 3}>
