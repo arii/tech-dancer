@@ -141,38 +141,58 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   return Math.min(budget, 4096);
 }
 
+export interface BudgetConfig {
+  diffPrefix?: string;
+  externalPrefix?: string;
+}
+
 export function budgetInputContext(
   systemPrompt: string,
   summary: CodeReviewSummary,
-  maxInputChars: number = 24000
+  maxInputChars: number = 24000,
+  config: BudgetConfig = {}
 ): { diffText: string; externalText: string } {
   // System prompt is essential. Let's see how much budget is left.
   const remainingBudgetForDiffAndContext = Math.max(0, maxInputChars - systemPrompt.length);
 
-  let diffText = `DIFF:\n\n${summary.diffContext}`;
-  let externalText = summary.externalContext
-    ? `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${summary.externalContext}`
-    : '';
+  let rawDiffText = summary.diffContext;
+  let rawExternalText = summary.externalContext || '';
 
-  if (diffText.length + externalText.length > remainingBudgetForDiffAndContext) {
+  if (rawDiffText.length + rawExternalText.length > remainingBudgetForDiffAndContext) {
     // Allocate the remaining budget between diff and external context.
     // Diff gets priority: up to 16,000 characters, capped at remaining budget.
-    const maxDiffChars = Math.max(0, Math.min(diffText.length, 16000, remainingBudgetForDiffAndContext));
-    if (diffText.length > maxDiffChars) {
-      diffText = diffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+    const maxDiffChars = Math.max(0, Math.min(rawDiffText.length, 16000, remainingBudgetForDiffAndContext));
+    if (rawDiffText.length > maxDiffChars) {
+      rawDiffText = rawDiffText.slice(0, maxDiffChars) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
     }
 
-    const remainingForExternal = remainingBudgetForDiffAndContext - diffText.length;
-    if (externalText) {
+    const remainingForExternal = remainingBudgetForDiffAndContext - rawDiffText.length;
+    if (rawExternalText) {
       if (remainingForExternal > 200) {
-        if (externalText.length > remainingForExternal) {
-          externalText = externalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
+        if (rawExternalText.length > remainingForExternal) {
+          rawExternalText = rawExternalText.slice(0, remainingForExternal - 50) + '\n\n...[TRUNCATED TO FIT TOKEN LIMIT]';
         }
       } else {
         // Harden: ensure we don't just drop the context entirely without notice
-        externalText = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
+        rawExternalText = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
       }
     }
+  }
+
+  const defaultDiffPrefix = 'DIFF:\n\n';
+  const defaultExternalPrefix = 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
+
+  const diffPrefix = config.diffPrefix !== undefined ? config.diffPrefix : defaultDiffPrefix;
+  const externalPrefix = config.externalPrefix !== undefined ? config.externalPrefix : defaultExternalPrefix;
+
+  const diffText = diffPrefix + rawDiffText;
+  let externalText = rawExternalText ? externalPrefix + rawExternalText : '';
+
+  // The tests expect the '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]' to completely replace
+  // the entire externalText string (not have the prefix), or we just adjust the tests!
+  // It is better to just keep it returning without the prefix if it's completely truncated.
+  if (rawExternalText === '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]') {
+    externalText = rawExternalText;
   }
 
   return { diffText, externalText };
