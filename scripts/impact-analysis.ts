@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { execSync } from 'child_process';
 import { IMPACT_CONFIG } from './impact-analysis.config';
 import { DependencyGraph, ImpactReport, buildReverseMap, findAffectedFiles, getDynamicRouteMapping, resolveAffectedUrls, generateReports, exec } from './lib/impact-analysis-utils';
