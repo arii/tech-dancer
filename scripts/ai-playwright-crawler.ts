@@ -3,6 +3,7 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import * as fs from 'fs';
 import * as path from 'path';
+import { pickOptimalGeminiModel } from './lib/modelPicker';
 
 const TMP_DIR = path.join(process.cwd(), '.tmp-crawler');
 const SNAPSHOTS_DIR = path.join(TMP_DIR, 'snapshots');
@@ -65,18 +66,29 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
   });
 }
 
+function isValidAction(obj: unknown): obj is Action {
+  if (!obj || typeof obj !== 'object') return false;
+  const validTypes = ['click', 'type', 'back', 'scroll'];
+  if (!validTypes.includes(obj.type)) return false;
+  if (typeof obj.reason !== 'string') return false;
+
+  if (obj.type === 'click' || obj.type === 'type') {
+    if (typeof obj.selector !== 'string') return false;
+  }
+
+  if (obj.type === 'type') {
+    if (typeof obj.text !== 'string') return false;
+  }
+
+  return true;
+}
+
 async function runCrawler() {
   const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
   if (!apiKey) {
     console.error('Error: Neither GEMINI_API_KEY nor JULES_API_KEY environment variable is set.');
     process.exit(1);
   }
-
-  const model = new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
-    apiKey,
-    maxOutputTokens: 2048,
-  });
 
   // Cleanup old snapshots
   if (fs.existsSync(SNAPSHOTS_DIR)) {
@@ -115,17 +127,32 @@ async function runCrawler() {
       visitedStates.add(stateHash);
 
       // Decision making with Gemini
+      const modelName = pickOptimalGeminiModel(0); // Navigation is low token
+      const model = new ChatGoogleGenerativeAI({
+        model: modelName,
+        apiKey,
+        maxOutputTokens: 1024,
+      });
+
       const action = await decideNextAction(model, url, elements, actionHistory, screenshotPath);
       console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
 
       actionHistory.push(action);
 
       try {
-        if (action.type === 'click' && action.selector) {
-          await page.click(action.selector);
-        } else if (action.type === 'type' && action.selector && action.text) {
-          await page.fill(action.selector, action.text);
-          await page.press(action.selector, 'Enter');
+        if ((action.type === 'click' || action.type === 'type') && action.selector) {
+          // Verify selector exists and is visible
+          const element = await page.$(action.selector);
+          if (element && await element.isVisible()) {
+            if (action.type === 'click') {
+              await page.click(action.selector);
+            } else if (action.text) {
+              await page.fill(action.selector, action.text);
+              await page.press(action.selector, 'Enter');
+            }
+          } else {
+            console.warn(`Element ${action.selector} not found or not visible. Skipping action.`);
+          }
         } else if (action.type === 'back') {
           await page.goBack();
         } else if (action.type === 'scroll') {
@@ -139,10 +166,18 @@ async function runCrawler() {
     }
 
     console.log('\nExploration complete. Generating final report...');
-    const report = await generateVisualReview(model, capturedScreenshots);
+    const estimatedReportTokens = capturedScreenshots.length * 1000; // heuristic for images
+    const reportModelName = pickOptimalGeminiModel(estimatedReportTokens);
+    const reportModel = new ChatGoogleGenerativeAI({
+      model: reportModelName,
+      apiKey,
+      maxOutputTokens: 2048,
+    });
+
+    const report = await generateVisualReview(reportModel, capturedScreenshots);
     const reportPath = path.join(TMP_DIR, 'report.md');
     fs.writeFileSync(reportPath, report);
-    console.log(`✅ Visual review report saved to ${reportPath}`);
+    console.log(`✅ Visual review report saved to ${reportPath} (Model: ${reportModelName})`);
 
   } catch (error) {
     console.error('Crawler failed:', error);
@@ -239,11 +274,18 @@ Provide ONLY the JSON.
   try {
     // Clean potential markdown blocks
     const jsonStr = text.replace(/```json\n?|\n?```/g, '').trim();
-    return JSON.parse(jsonStr) as Action;
+    const parsed = JSON.parse(jsonStr);
+
+    if (isValidAction(parsed)) {
+      return parsed;
+    } else {
+      console.warn('AI returned invalid action structure:', parsed);
+    }
   } catch (e) {
     console.error('Failed to parse Gemini response:', text, e);
-    return { type: 'scroll', reason: 'Failed to parse AI response, falling back to scroll.' };
   }
+
+  return { type: 'scroll', reason: 'Fallback to scroll due to invalid or unparseable AI response.' };
 }
 
 runCrawler().catch(err => {

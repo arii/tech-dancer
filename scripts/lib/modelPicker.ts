@@ -110,3 +110,22 @@ export async function pickOptimalModel(
   if (isFallbackValid) return fallback;
   return models[0].id.split('/').pop() || models[0].id;
 }
+
+export function pickOptimalGeminiModel(
+  estimatedInputTokens: number = 0,
+  fallback: string = 'gemini-1.5-flash'
+): string {
+  // Respect explicit user override if present
+  if (process.env.GEMINI_MODEL) {
+    return process.env.GEMINI_MODEL;
+  }
+
+  // Use Flash for small/medium contexts to keep costs and latency low.
+  // Switch to Pro if the input is very large (e.g. many high-res screenshots or massive DOM/diff).
+  // 30,000 tokens is a conservative threshold for "large" in this repo's typical use cases.
+  if (estimatedInputTokens > 30000) {
+    return 'gemini-1.5-pro';
+  }
+
+  return fallback;
+}

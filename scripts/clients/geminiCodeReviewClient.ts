@@ -6,17 +6,21 @@ import {
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
-  buildReviewPayload
+  buildReviewPayload,
+  calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
+import { pickOptimalGeminiModel } from '../lib/modelPicker';
 
-function createModel(maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
+function createModel(maxOutputTokens: number = 1500, estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
+  const modelName = pickOptimalGeminiModel(estimatedInputTokens);
+
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
+    model: modelName,
     apiKey,
     maxOutputTokens: maxOutputTokens,
   });
@@ -32,8 +36,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
+    const estimatedInputTokens = calculateEstimatedTokens([systemPrompt, diffText, externalText]);
     const maxOutputTokens = estimateMaxOutputTokens(summary);
-    const model = createModel(maxOutputTokens);
+    const model = createModel(maxOutputTokens, estimatedInputTokens);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
