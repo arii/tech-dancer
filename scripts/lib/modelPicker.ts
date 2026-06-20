@@ -128,9 +128,12 @@ export function pickOptimalGeminiModel(
   // Use Flash for small/medium contexts to keep costs and latency low.
   // Switch to Pro if the input is very large (e.g. many high-res screenshots or massive DOM/diff).
   // 30,000 tokens is a conservative threshold for "large" in this repo's typical use cases.
-  if (estimatedInputTokens > 30000) {
-    return 'gemini-1.5-pro';
+  const selected = estimatedInputTokens > 30000 ? 'gemini-1.5-pro' : fallback;
+
+  // Ultimate fallback to ensure we always return a valid/supported model name
+  if (!SUPPORTED_GEMINI_MODELS.includes(selected)) {
+    return 'gemini-1.5-flash';
   }
 
-  return fallback;
+  return selected;
 }

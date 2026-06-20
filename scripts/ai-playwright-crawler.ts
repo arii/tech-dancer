@@ -25,6 +25,7 @@ interface Action {
 }
 
 const MAX_STEPS = 10;
+const DESTRUCTIVE_KEYWORDS = ['delete', 'remove', 'logout', 'signout', 'clear', 'reset', 'destroy'];
 
 async function getInteractiveElements(page: Page): Promise<InteractiveElement[]> {
   return await page.evaluate(() => {
@@ -67,12 +68,17 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
 }
 
 function isValidAction(obj: unknown): obj is Action {
-  if (!obj || typeof obj !== 'object') return false;
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false;
   const cast = obj as Record<string, unknown>;
+
+  const allowedKeys = ['type', 'selector', 'text', 'reason'];
+  const keys = Object.keys(cast);
+  if (keys.some(k => !allowedKeys.includes(k))) return false;
+
   const validTypes = ['click', 'type', 'back', 'scroll'];
 
   if (typeof cast.type !== 'string' || !validTypes.includes(cast.type)) return false;
-  if (typeof cast.reason !== 'string') return false;
+  if (typeof cast.reason !== 'string' || cast.reason.length < 5) return false;
 
   if (cast.type === 'click' || cast.type === 'type') {
     if (typeof cast.selector !== 'string') return false;
@@ -81,20 +87,13 @@ function isValidAction(obj: unknown): obj is Action {
   }
 
   if (cast.type === 'type') {
-    if (typeof cast.text !== 'string') return false;
+    if (typeof cast.text !== 'string' || cast.text.length === 0) return false;
   }
 
   return true;
 }
 
-async function runCrawler() {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
-  if (!apiKey) {
-    console.error('Error: Neither GEMINI_API_KEY nor JULES_API_KEY environment variable is set.');
-    process.exit(1);
-  }
-
-  // Cleanup old snapshots asynchronously
+async function cleanupSnapshots() {
   try {
     if (fs.existsSync(SNAPSHOTS_DIR)) {
       const files = await fs.promises.readdir(SNAPSHOTS_DIR);
@@ -105,23 +104,27 @@ async function runCrawler() {
   } catch (err) {
     console.warn('Failed to perform initial directory cleanup:', err);
   }
+}
+
+async function runCrawler() {
+  const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
+  if (!apiKey) {
+    console.error('Error: Neither GEMINI_API_KEY nor JULES_API_KEY environment variable is set.');
+    process.exit(1);
+  }
+
+  await cleanupSnapshots();
 
   let browser: Browser | null = null;
   try {
     browser = await chromium.launch({ headless: true });
-  } catch (err) {
-    console.error('Failed to launch browser. Ensure Playwright browsers are installed (pnpm exec playwright install).', err);
-    process.exit(1);
-  }
+    const context = await browser.newContext();
+    const page = await context.newPage();
 
-  const context = await browser.newContext();
-  const page = await context.newPage();
+    const visitedStates = new Set<string>();
+    const actionHistory: Action[] = [];
+    const capturedScreenshots: string[] = [];
 
-  const visitedStates = new Set<string>();
-  const actionHistory: Action[] = [];
-  const capturedScreenshots: string[] = [];
-
-  try {
     console.log('Starting AI Crawler...');
     await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
 
@@ -141,7 +144,7 @@ async function runCrawler() {
       visitedStates.add(stateHash);
 
       // Decision making with Gemini
-      const modelName = pickOptimalGeminiModel(0); // Navigation is low token
+      const modelName = pickOptimalGeminiModel(0);
       const model = new ChatGoogleGenerativeAI({
         model: modelName,
         apiKey,
@@ -165,6 +168,14 @@ async function runCrawler() {
           }
 
           const targetElementMeta = elements[elementIndex];
+
+          // Safety: Don't click destructive keywords
+          const isDestructive = DESTRUCTIVE_KEYWORDS.some(k => targetElementMeta.text.toLowerCase().includes(k));
+          if (isDestructive && action.type === 'click') {
+            console.warn(`Safety check: Skipping click on likely destructive element "${targetElementMeta.text}"`);
+            continue;
+          }
+
           const element = await page.$(action.selector);
 
           if (element && await element.isVisible()) {
@@ -192,15 +203,15 @@ async function runCrawler() {
         } else if (action.type === 'scroll') {
           await page.mouse.wheel(0, 500);
         }
-      } catch (clickError) {
-        console.warn(`Failed to execute action ${action.type}:`, (clickError as Error).message);
+      } catch (execError) {
+        console.warn(`Failed to execute action ${action.type}:`, (execError as Error).message);
       }
 
       await page.waitForTimeout(2000); // Wait for animations/transitions
     }
 
     console.log('\nExploration complete. Generating final report...');
-    const estimatedReportTokens = capturedScreenshots.length * 1000; // heuristic for images
+    const estimatedReportTokens = capturedScreenshots.length * 1000;
     const reportModelName = pickOptimalGeminiModel(estimatedReportTokens);
     const reportModel = new ChatGoogleGenerativeAI({
       model: reportModelName,
