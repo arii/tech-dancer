@@ -99,3 +99,5 @@ dev-tools/logs/audits/
 gh_2.54.0_linux_amd64/
 gh_2.54.0_linux_amd64.tar.gz
 .tmp-main
+gh_2.42.0_linux_amd64
+gh.tar.gz
