@@ -137,9 +137,9 @@ export const journalVariants = {
       interactive: false
     }
   }),
-  shareAction: cva("text-text-dim hover:text-accent transition-colors group"),
+  shareAction: cva("text-text-dim hover:text-accent transition-colors group min-h-[48px] flex items-center"),
   tag: cva("border-line/50 hover:border-accent transition-colors cursor-default"),
-  navLink: cva("transition-colors group cursor-pointer", {
+  navLink: cva("transition-colors group cursor-pointer min-h-[48px] flex items-center", {
     variants: {
       active: {
         true: "text-accent",

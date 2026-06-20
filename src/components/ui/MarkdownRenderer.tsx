@@ -79,44 +79,45 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               }
             }
             return (
-              <Box border surface="warning" padding={6} marginY={8} radius="md">
-                <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
+              <Box border surface="warning" padding={{ base: 6, md: 8 }} marginY={{ base: 6, md: 10 }} radius="lg">
+                <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={4} display="block">
                   {label}
                 </Text>
-                <blockquote className="italic font-medium text-text-main" {...props}>
+                <blockquote className="italic font-medium text-text-main leading-relaxed" {...props}>
                   {children}
                 </blockquote>
               </Box>
             );
           },
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={12} marginBottom={6} className="prose-section group">
+            <Box marginTop={{ base: 12, md: 20 }} marginBottom={{ base: 6, md: 10 }} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
-                marginBottom={1}
+                marginBottom={2}
                 className="editorial-section-number"
               />
-              <Text as="h2" variant="h2" size="3xl" color="brand" margin={0} leading="tight" {...props} />
-              <Box height={0.5} width={12} marginTop={4} className="bg-accent transition-all group-hover:w-20" />
+              <Text as="h2" variant="h2" size={{ base: "2xl", md: "3xl" }} color="brand" margin={0} leading="tight" {...props} />
+              <Box height={1} width={12} marginTop={4} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box marginTop={8} marginBottom={4}>
+            <Box marginTop={{ base: 8, md: 12 }} marginBottom={{ base: 4, md: 6 }}>
               <Text
                 as="h3"
                 variant="h3"
-                size="xl"
+                size={{ base: "lg", md: "xl" }}
                 color="main"
                 margin={0}
-                paddingLeft={4}
-                className="border-l-2 border-accent/30"
+                paddingLeft={5}
+                className="border-l-4 border-accent/30"
+                leading="snug"
                 {...props}
               />
             </Box>
           ),
           table: ({node: _node, ...props}) => (
-            <Box width="full" overflowX="auto" marginY={8} radius="lg" border className="overflow-hidden">
+            <Box width="full" overflowX="auto" marginY={10} radius="lg" border className="overflow-hidden">
               <Box as="table" width="full" className="border-collapse" {...props} />
             </Box>
           ),
@@ -128,7 +129,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               color="dim"
               uppercase
               weight="font-bold"
-              padding={4}
+              padding={{ base: 4, md: 6 }}
               textAlign="left"
               surface="surface"
               className="border-b border-line"
@@ -136,17 +137,17 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             />
           ),
           td: ({node: _node, ...props}) => (
-            <Box as="td" padding={4} className="border-b border-line/50" {...props} />
+            <Box as="td" padding={{ base: 4, md: 6 }} className="border-b border-line/50" {...props} />
           ),
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justify="center">
+              <Box marginY={{ base: 8, md: 12 }} width="full" display="flex" justify="center">
                 <Box
                   as="img"
                   src={normalizedSrc}
                   radius="lg"
-                  shadow="sm"
+                  shadow="md"
                   loading="lazy"
                   alt={alt || "Article illustration"}
                   maxWidth="full"
@@ -157,16 +158,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, ...props}) => (
-            <Text as="p" color="dim" leading="relaxed" marginY={4} size="base" {...props} />
+            <Text as="p" color="dim" leading="relaxed" marginY={{ base: 4, md: 6 }} size={{ base: "base", md: "lg" }} {...props} />
           ),
           ul: ({node: _node, ...props}) => (
-            <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
+            <Box as="ul" marginY={{ base: 4, md: 6 }} paddingLeft={8} className="list-disc space-y-3" {...props} />
           ),
           ol: ({node: _node, ...props}) => (
-            <Box as="ol" marginY={4} paddingLeft={6} className="list-decimal space-y-1.5" {...props} />
+            <Box as="ol" marginY={{ base: 4, md: 6 }} paddingLeft={8} className="list-decimal space-y-3" {...props} />
           ),
           li: ({node: _node, ...props}) => (
-            <Box as="li" className="text-text-dim leading-relaxed" {...props} />
+            <Box as="li" className="text-text-dim leading-relaxed text-base md:text-lg" {...props} />
           ),
           hr: ({node: _node, ...props}) => (
             <Box marginY={10} height={0} className="border-t border-line/40" {...props} />
@@ -188,15 +189,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justify="center">
+                  <Box marginY={{ base: 8, md: 12 }} width="full" display="flex" justify="center">
                     <Box
                       as="img"
                       src={diagramUrl}
                       alt="Workflow Diagram"
                       radius="lg"
-                      shadow="sm"
+                      shadow="md"
                       maxWidth="full"
-                      maxHeight={96}
+                      maxHeight={128}
                       className="object-contain"
                       loading="lazy"
                     />
@@ -211,19 +212,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             if (isBlock) {
               return (
-                <Box marginY={6} radius="lg" border className="overflow-hidden">
+                <Box marginY={{ base: 6, md: 10 }} radius="lg" border className="overflow-hidden">
                   {language && (
                     <Stack
                       direction="row"
                       align="center"
                       gap={2}
-                      padding={2}
-                      paddingX={4}
+                      padding={{ base: 3, md: 4 }}
+                      paddingX={{ base: 4, md: 6 }}
                       surface="surface"
                       border="b"
                       borderColor="line"
                     >
-                      <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+                      <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" weight="font-bold">
                         {language}
                       </Text>
                     </Stack>
@@ -234,10 +235,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                     PreTag="div"
                     customStyle={{
                       margin: 0,
+                      padding: '1.5rem',
                       borderRadius: 0,
                       background: 'var(--color-surface)',
-                        fontSize: '0.8rem',
-                        lineHeight: '1.6',
+                      fontSize: '0.875rem',
+                      lineHeight: '1.7',
                     }}
                     {...(props as object)}
                   >
@@ -253,14 +255,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 as="code"
                 variant="mono"
                 size="xs"
-                paddingX={1.5}
-                paddingY={0.5}
+                paddingX={2}
+                paddingY={1}
                 radius="sm"
                 surface="surface"
                 border
                 borderColor="line"
                 color="accent"
-                className="normal-case"
+                className="normal-case font-bold"
                 {...props}
               >
                 {children}

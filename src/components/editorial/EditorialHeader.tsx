@@ -75,8 +75,8 @@ export function EditorialHeader({
           <Stack direction="row" align="center" gap={2} wrap>
             <Text variant="mono" size="micro" color="dim" weight="font-bold">TAGS:</Text>
             {tags.map(tag => (
-              <Box key={tag} paddingX={2} paddingY={0.5} border radius="sm" className={journalVariants.tag()}>
-                <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
+              <Box key={tag} paddingX={3} paddingY={1.5} border radius="sm" className={journalVariants.tag()}>
+                <Text variant="mono" size="micro" color="dim" weight="font-bold">{tag.toUpperCase()}</Text>
               </Box>
             ))}
           </Stack>
