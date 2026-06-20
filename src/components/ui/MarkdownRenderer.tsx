@@ -5,7 +5,8 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Box, Text, Stack } from '@/layouts/Primitives';
+import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
+import type { TextProps, StackProps, GridProps } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
@@ -39,9 +40,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           }]
         ]}
         components={{
-            Grid: ({ node: _node, ...props }: any) => <Grid {...props} />,
-            Stack: ({ node: _node, ...props }: any) => <Stack {...props} />,
-            Text: ({ node: _node, ...props }: any) => <Text {...props} />,
+          Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,
+          Stack: ({ node: _node, ...props }: StackProps & { node?: unknown }) => <Stack {...props} />,
+          Text: ({ node: _node, ...props }: TextProps & { node?: unknown }) => <Text {...props} />,
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
