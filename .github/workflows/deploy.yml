@@ -15,7 +15,15 @@ permissions:
   issues: write
 
 jobs:
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
   build:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     concurrency:
       # Build jobs for the same branch can be cancelled if a newer push arrives

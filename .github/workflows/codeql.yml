@@ -26,7 +26,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
   analyze:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     permissions:
