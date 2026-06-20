@@ -1,40 +1,71 @@
 import os
 import json
 import re
+from typing import Dict, Any, List
 from utils import get_github_token, get_github_client, get_repo_name, CLIError
 
-def validate_review_payload(payload):
+def validate_review_payload(payload: Dict[str, Any]):
     """
     Validates that the review payload is not just boilerplate or empty.
     """
-    body = payload.get("body", "")
-    comments = payload.get("comments", [])
+    if not isinstance(payload, dict):
+        raise CLIError("Review rejected: Invalid payload format (expected dict).")
 
+    body = payload.get("body", "")
+    if not isinstance(body, str):
+        body = str(body)
+
+    comments = payload.get("comments", [])
+    if not isinstance(comments, list):
+        raise CLIError("Review rejected: 'comments' must be a list.")
+
+    # Robust placeholder detection using regex to handle minor variants
     placeholders = [
-        "<findings>",
-        "<summary>",
-        "<filename>",
-        "<feedback>",
-        "<Approved | Approved with Minor Changes | Not Approved>"
+        r"<findings\s*/?>",
+        r"<summary\s*/?>",
+        r"<filename\s*/?>",
+        r"<feedback\s*/?>",
+        r"<Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved>"
     ]
+
+    # Check body for placeholders
+    for p in placeholders:
+        if re.search(p, body, re.IGNORECASE):
+             raise CLIError(f"Review rejected: Contains boilerplate placeholder matching '{p}'")
 
     # Check for real comments (not placeholders)
-    real_comments = [
-        c for c in comments
-        if c.get("body") and c.get("body").strip() != "<feedback>" and c.get("path") != "<filename>"
-    ]
+    real_comments = []
+    for c in comments:
+        if not isinstance(c, dict):
+            continue
 
-    # Check for placeholder markers anywhere in the payload
-    found_placeholders = [p for p in placeholders if p in body or any(p in str(c) for c in comments)]
+        c_body = str(c.get("body", ""))
+        c_path = str(c.get("path", ""))
 
-    if found_placeholders:
-        raise CLIError(f"Review rejected: Contains boilerplate placeholders: {', '.join(found_placeholders)}")
+        # Check if comment fields contain placeholders
+        is_placeholder = False
+        for p in placeholders:
+            if re.search(p, c_body, re.IGNORECASE) or re.search(p, c_path, re.IGNORECASE):
+                is_placeholder = True
+                break
+
+        if is_placeholder:
+            # We don't necessarily want to reject the WHOLE review if one comment has a placeholder
+            # but usually it means the whole thing is slop. Following the stricter path:
+            raise CLIError(f"Review rejected: Comment contains boilerplate placeholder.")
+
+        if c_body.strip() and c_path != "<filename>":
+            real_comments.append(c)
 
     # Check for empty/meaningless body
     # Remove markdown headers and comments to see if anything else remains
     clean_body = body
-    clean_body = re.sub(r'^#+.*', '', clean_body, flags=re.MULTILINE)
+    clean_body = re.sub(r'^#+.*$', '', clean_body, flags=re.MULTILINE)
     clean_body = re.sub(r'<!--.*?-->', '', clean_body, flags=re.DOTALL)
+
+    # Also remove the "selection" line if it wasn't replaced
+    clean_body = re.sub(r'Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved', '', clean_body, flags=re.IGNORECASE)
+
     clean_body = clean_body.strip()
 
     if not clean_body and not real_comments:
