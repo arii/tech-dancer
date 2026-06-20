@@ -37,15 +37,15 @@ export function LatestPosts() {
             as={NavLink}
             to={`/blog/${post.slug}`}
             display="flex"
-            align="start"
+            align="center"
             gap={4}
             className="group w-full max-w-full min-w-0 border-b border-line py-5 transition-colors hover:bg-surface/50"
           >
-            {/* Thumbnail — rectangular, 72×56 desktop feel */}
+            {/* Thumbnail — rectangular, 72×64 desktop feel */}
             <Box
               radius="md"
               overflow="hidden"
-              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
+              className="h-16 w-[72px] shrink-0 bg-surface-alt"
             >
               {post.image ? (
                 <img

@@ -67,7 +67,7 @@ export function Footer() {
               to={link.to}
               variant="ghost"
               paddingX={{ base: 4, md: 3 }}
-              paddingY={{ base: 5, md: 2 }}
+              paddingY={{ base: 4, md: 2 }}
               whileTap={{ scale: 0.95 }}
             >
               <Text
