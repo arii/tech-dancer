@@ -2,6 +2,7 @@ import sys
 import os
 import json
 from datetime import datetime, timezone
+from typing import List, Dict, Any
 import click
 from tdw_services.orchestrator import Orchestrator
 
@@ -135,7 +136,7 @@ def aggregate(ctx, target_branch, pr_numbers):
 @click.pass_context
 def conflicts(ctx):
     orch = ctx.obj['ORCHESTRATOR']
-    conflicts = orch.handle_detect_conflicts()
+    conflicts: List[Dict[str, Any]] = orch.handle_detect_conflicts()
     if not ctx.obj['JSON']:
         if not conflicts: click.echo("✅ No potential merge conflicts detected.")
         for c in conflicts:
