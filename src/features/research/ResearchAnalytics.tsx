@@ -366,7 +366,7 @@ export default function ResearchAnalytics() {
               border="none"
             />
             <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-              building AI-assisted engineering infrastructure in my free time. This portfolio showcased my work in agentic CI/CD, LLM workflows, and developer tooling.
+              Building AI-assisted engineering infrastructure independently. This portfolio showcases my work in agentic CI/CD, LLM workflows, and developer tooling.
             </Text>
             
             {/* Scrollable Focus Tags for Mobile */}
