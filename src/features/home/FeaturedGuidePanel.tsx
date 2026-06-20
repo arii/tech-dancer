@@ -17,7 +17,8 @@ export function FeaturedGuidePanel() {
     <Box
       as={NavLink}
       to={FEATURED.href}
-      display={{ base: 'none', lg: 'flex' }}
+      display="flex"
+      aspect={{ base: 'video', lg: 'auto' }}
       direction="col"
       justify="end"
       position="relative"
