@@ -141,16 +141,10 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   return Math.min(budget, 4096);
 }
 
-export interface BudgetConfig {
-  diffPrefix?: string;
-  externalPrefix?: string;
-}
-
 export function budgetInputContext(
   systemPrompt: string,
   summary: CodeReviewSummary,
-  maxInputChars: number = 24000,
-  config: BudgetConfig = {}
+  maxInputChars: number = 24000
 ): { diffText: string; externalText: string } {
   // System prompt is essential. Let's see how much budget is left.
   const remainingBudgetForDiffAndContext = Math.max(0, maxInputChars - systemPrompt.length);
@@ -179,23 +173,7 @@ export function budgetInputContext(
     }
   }
 
-  const defaultDiffPrefix = 'DIFF:\n\n';
-  const defaultExternalPrefix = 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
-
-  const diffPrefix = config.diffPrefix !== undefined ? config.diffPrefix : defaultDiffPrefix;
-  const externalPrefix = config.externalPrefix !== undefined ? config.externalPrefix : defaultExternalPrefix;
-
-  const diffText = diffPrefix + rawDiffText;
-  let externalText = rawExternalText ? externalPrefix + rawExternalText : '';
-
-  // The tests expect the '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]' to completely replace
-  // the entire externalText string (not have the prefix), or we just adjust the tests!
-  // It is better to just keep it returning without the prefix if it's completely truncated.
-  if (rawExternalText === '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]') {
-    externalText = rawExternalText;
-  }
-
-  return { diffText, externalText };
+  return { diffText: rawDiffText, externalText: rawExternalText };
 }
 
 /**
@@ -218,11 +196,14 @@ export function buildReviewPayload(
 ): ReviewPayloadItem[] {
   const payload: ReviewPayloadItem[] = [
     { type: 'text', text: systemPrompt },
-    { type: 'text', text: diffText },
+    { type: 'text', text: `DIFF:\n\n${diffText}` },
   ];
 
   if (externalText) {
-    payload.push({ type: 'text', text: externalText });
+    const formattedExternal = externalText === '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]'
+      ? externalText
+      : `EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${externalText}`;
+    payload.push({ type: 'text', text: formattedExternal });
   }
 
   return payload;

@@ -6,6 +6,7 @@ import {
   parseCodeReviewState,
   estimateMaxOutputTokens,
   budgetInputContext,
+  buildReviewPayload,
 } from '../../../scripts/lib/codeReviewUtils';
 
 describe('codeReviewUtils', () => {
@@ -138,18 +139,16 @@ describe('codeReviewUtils', () => {
       const externalText = 'External';
       const result = budgetInputContext(systemPrompt, { diffContext: diffText, externalContext: externalText }, defaultMaxChars);
 
-      expect(result.diffText).toBe(`DIFF:\n\n${diffText}`);
-      expect(result.externalText).toBe(`EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n${externalText}`);
+      expect(result.diffText).toBe(diffText);
+      expect(result.externalText).toBe(externalText);
     });
 
     it('truncates diff string if exceeding 16000 chars when budgeting', () => {
       const systemPrompt = 'Prompt';
       const diffText = 'a'.repeat(20000);
-      // DiffText inside the function will be DIFF:\n\n + diffText => length ~ 20007.
-      // 20007 + systemPrompt.length < 24000, so remainingBudgetForDiffAndContext = 24000 - 6 = 23994.
-      // total = 20007 + 0 = 20007. This is NOT > remainingBudgetForDiffAndContext.
-      // So truncation logic does NOT fire if diff is 20000 and max is 24000!
-      // Let's pass a lower maxInputChars so total > remainingBudget.
+      // let remainingBudget = 24000 - 6 = 23994.
+      // total = 20000 + 0 = 20000.
+      // truncation fires because we cap diff at min(diffText, 16000, 23994) = 16000.
       const result = budgetInputContext(systemPrompt, { diffContext: diffText }, 16000);
 
       expect(result.diffText.length).toBeLessThan(16000 + 100);
@@ -169,16 +168,24 @@ describe('codeReviewUtils', () => {
         const systemPrompt = 'Prompt';
         // Need to make total > remainingBudget AND remainingForExternal <= 200.
         // Let's set max = 16000. System prompt = 6. Remaining = 15994.
-        // diffText inside function will be `DIFF:\n\n` + `a`*16000 => 16007 chars.
-        // It's capped at maxDiffChars = min(16007, 16000, 15994) = 15994.
-        // So diffText is truncated to 15994 chars.
-        // Then remainingForExternal = 15994 - 15994 = 0.
-        // 0 <= 200, so externalText gets hard truncated!
         const diffText = 'a'.repeat(16000);
         const externalText = 'External context that should be dropped';
         const result = budgetInputContext(systemPrompt, { diffContext: diffText, externalContext: externalText }, 16000);
 
         expect(result.externalText).toBe('...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]');
+    });
+  });
+
+  describe('buildReviewPayload', () => {
+    it('applies prefixes to payload texts', () => {
+      const payload = buildReviewPayload('Prompt', 'Diff content', 'External content');
+      expect(payload[1].text).toBe('DIFF:\n\nDiff content');
+      expect(payload[2].text).toBe('EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\nExternal content');
+    });
+
+    it('does not apply prefix if external text is fully truncated', () => {
+      const payload = buildReviewPayload('Prompt', 'Diff content', '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]');
+      expect(payload[2].text).toBe('...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]');
     });
   });
 });
