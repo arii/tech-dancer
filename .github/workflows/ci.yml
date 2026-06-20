@@ -289,7 +289,9 @@ jobs:
             echo "changed_code=1" >> "$GITHUB_OUTPUT"
             echo "✅ Relevant code changes detected ($MATCH_COUNT files)."
             echo "Files:"
-            echo "$RELEVANT_FILES" | sed 's/^/  - /'
+            while read -r file; do
+              [ -n "$file" ] && echo "  - $file"
+            done <<< "$RELEVANT_FILES"
           else
             echo "changed_code=0" >> "$GITHUB_OUTPUT"
             echo "ℹ️ No relevant code changes detected (skipping code reviews)."
