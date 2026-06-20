@@ -50,9 +50,8 @@ export function ListRow(props: ListRowProps) {
     <Box as={NavLink} to={`${basePath}/${slug}`}
       {...rest}
       display="flex" align="center" border="b"
-      className="group hover:bg-surface/50 transition-colors"
+      className="group hover:bg-surface/10 transition-all active:scale-[0.995]"
     >
-      <Box width={1} shrink={0} self="stretch" opacityVariant="none" className="bg-accent group-hover:opacity-full transition-opacity" />
       <Box
         width={16}
         height={16}

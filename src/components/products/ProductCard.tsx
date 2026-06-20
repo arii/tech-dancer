@@ -95,6 +95,7 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           target="_blank"
           rel="sponsored noopener noreferrer"
           variant="primary"
+          size="lg"
           fullWidth
           gap={1.5}
           aria-label={`View ${item.title} on Printful`}
