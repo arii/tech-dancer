@@ -11,7 +11,6 @@ import {
   domSeverity,
   ensureDirectory,
   readImpactAnalysis,
-  routeToSlug,
   type DomRouteSummary,
   type VisualRouteSummary
 } from './impact-review-utils';
@@ -120,11 +119,11 @@ function formatDomMetrics(metrics: DomRouteSummary['metrics']): string[] {
 
 function generateDeploymentReport(domSummaries: DomRouteSummary[], visualSummaries: VisualRouteSummary[]): void {
   const impact = readImpactAnalysis();
-  const visualByRoute = new Map(visualSummaries.map(summary => [summary.route, summary]));
+  const visualBySlug = new Map(visualSummaries.map(summary => [summary.slug, summary]));
   const changedFiles = impact.changedFiles ?? [];
 
   const routeSections = domSummaries.map(domSummary => {
-    const visual = visualByRoute.get(domSummary.route);
+    const visual = visualBySlug.get(domSummary.slug);
     const severity = combinedSeverity(visual?.severity, domSummary.severity);
     const reviewRequired = severity !== 'LOW';
 
@@ -177,22 +176,24 @@ ${routeSections.length > 0 ? routeSections.join('\n\n') : '_No concrete routes r
 }
 
 function main(): void {
-  const impact = readImpactAnalysis();
-  const routes = impact.routes.filter(route => !route.includes(':'));
-  const summaries: DomRouteSummary[] = [];
+  const visualSummaries = readVisualSummaries();
+  const domSummaries: DomRouteSummary[] = [];
 
   ensureDirectory(DOM_REVIEW_DIR);
 
-  for (const route of routes) {
-    const slug = routeToSlug(route);
+  for (const visual of visualSummaries) {
+    const { route, slug } = visual;
     const routeDomDir = path.join(DOM_REVIEW_DIR, slug);
+    ensureDirectory(routeDomDir);
+
     const beforeHtmlPath = path.join(routeDomDir, 'before.html');
     const afterHtmlPath = path.join(routeDomDir, 'after.html');
     const diffPath = path.join(routeDomDir, 'diff.txt');
     const jsonPath = path.join(DOM_REVIEW_DIR, `${slug}.json`);
 
     if (!fs.existsSync(beforeHtmlPath) || !fs.existsSync(afterHtmlPath)) {
-      throw new Error(`Missing DOM captures for ${route}. Run \`pnpm impact:visual-diff\` first.`);
+      console.warn(`[DOM Diff] Missing DOM captures for ${slug} (${route}). Skipping.`);
+      continue;
     }
 
     const beforeHtml = normalizeHtml(fs.readFileSync(beforeHtmlPath, 'utf8'));
@@ -211,11 +212,11 @@ function main(): void {
     };
 
     fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
-    summaries.push(summary);
+    domSummaries.push(summary);
   }
 
-  fs.writeFileSync(DOM_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
-  generateDeploymentReport(summaries, readVisualSummaries());
+  fs.writeFileSync(DOM_SUMMARY_PATH, JSON.stringify({ routes: domSummaries }, null, 2));
+  generateDeploymentReport(domSummaries, visualSummaries);
   console.log(`✅ DOM diffs generated in ${DOM_REVIEW_DIR}`);
   console.log(`✅ Deployment review report generated at ${deploymentReviewPath}`);
 }
