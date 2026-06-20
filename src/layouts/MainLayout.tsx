@@ -82,7 +82,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <Stack
             paddingX={{ base: 4, md: 6, lg: 10 }}
             paddingTop={{ base: 8, md: 6 }}
-            paddingBottom={{ base: 28, md: 12 }}
+            paddingBottom={12}
             flex={1}
             direction="col"
             marginX="auto"

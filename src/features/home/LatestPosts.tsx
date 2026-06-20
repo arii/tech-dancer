@@ -39,7 +39,7 @@ export function LatestPosts() {
             display="flex"
             align="start"
             gap={4}
-            className="group w-full max-w-full min-w-0 border-b border-line py-4 transition-colors hover:bg-surface/50"
+            className="group w-full max-w-full min-w-0 border-b border-line py-5 transition-colors hover:bg-surface/50"
           >
             {/* Thumbnail — rectangular, 72×56 desktop feel */}
             <Box
