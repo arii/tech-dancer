@@ -3,6 +3,43 @@ import json
 import re
 from utils import get_github_token, get_github_client, get_repo_name, CLIError
 
+def validate_review_payload(payload):
+    """
+    Validates that the review payload is not just boilerplate or empty.
+    """
+    body = payload.get("body", "")
+    comments = payload.get("comments", [])
+
+    placeholders = [
+        "<findings>",
+        "<summary>",
+        "<filename>",
+        "<feedback>",
+        "<Approved | Approved with Minor Changes | Not Approved>"
+    ]
+
+    # Check for real comments (not placeholders)
+    real_comments = [
+        c for c in comments
+        if c.get("body") and c.get("body").strip() != "<feedback>" and c.get("path") != "<filename>"
+    ]
+
+    # Check for placeholder markers anywhere in the payload
+    found_placeholders = [p for p in placeholders if p in body or any(p in str(c) for c in comments)]
+
+    if found_placeholders:
+        raise CLIError(f"Review rejected: Contains boilerplate placeholders: {', '.join(found_placeholders)}")
+
+    # Check for empty/meaningless body
+    # Remove markdown headers and comments to see if anything else remains
+    clean_body = body
+    clean_body = re.sub(r'^#+.*', '', clean_body, flags=re.MULTILINE)
+    clean_body = re.sub(r'<!--.*?-->', '', clean_body, flags=re.DOTALL)
+    clean_body = clean_body.strip()
+
+    if not clean_body and not real_comments:
+        raise CLIError("Review rejected: No meaningful content found in body or comments.")
+
 def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_override=None, is_json=False):
     """
     Submits a PR review from a markdown file containing a JSON payload.
@@ -21,6 +58,9 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
         payload = json.loads(json_match.group(1))
     except json.JSONDecodeError as e:
         raise CLIError(f"Failed to parse JSON block: {str(e)}")
+
+    # Validate payload before proceeding
+    validate_review_payload(payload)
 
     repo_name = get_repo_name()
     if not repo_name:
