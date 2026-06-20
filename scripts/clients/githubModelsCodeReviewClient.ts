@@ -1,7 +1,7 @@
 import { buildSystemPrompt, parseCodeReviewVerdict, parseCodeReviewStateDetailed, estimateMaxOutputTokens, budgetInputContext } from '../lib/codeReviewUtils';
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, ParsedFindingsResult } from '../lib/codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 

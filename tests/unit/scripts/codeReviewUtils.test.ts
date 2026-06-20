@@ -75,7 +75,7 @@ describe('codeReviewUtils', () => {
       const summaryWithFindings = { diffContext: 'a', previousState: { findings: [
         { id: '1', file: 'a.ts', issue: 'a', status: 'open' },
         { id: '2', file: 'a.ts', issue: 'a', status: 'open' }
-      ] } as any };
+      ] } as unknown as import('../../../scripts/lib/codeReviewTypes').CodeReviewSummary['previousState'] };
       expect(estimateMaxOutputTokens(summaryWithFindings)).toBe(1900);
     });
   });
@@ -104,7 +104,7 @@ describe('codeReviewUtils', () => {
         prGoal: 'Fix bug',
         previousState: {
           findings: [
-            { id: '1', file: 'a.ts', issue: 'bug', status: 'open', fixSummary: 'fixed' } as any
+            { id: '1', file: 'a.ts', issue: 'bug', status: 'open', fixSummary: 'fixed' } as unknown as import('../../../scripts/lib/codeReviewTypes').ReviewFinding
           ]
         }
       };
