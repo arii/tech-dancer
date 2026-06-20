@@ -269,12 +269,13 @@ jobs:
       - name: Entropy Check
         id: entropy_check
         if: always()
+        shell: bash
         run: |
           echo "::group::🔍 PR Entropy Analysis"
           echo "Event: ${{ github.event_name }}"
 
           DIFF_CMD="git ls-tree -r HEAD --name-only"
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
             DIFF_CMD="git diff --name-only origin/main...HEAD"
           elif git rev-parse HEAD~1 >/dev/null 2>&1; then
             DIFF_CMD="git diff --name-only HEAD~1 HEAD"
