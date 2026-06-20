@@ -110,6 +110,22 @@ When a PR is opened, the analyzer posts a summary directly to the GitHub convers
 
 > **Implemented:** We use the `cropped` diff artifacts to show exactly where the pixels changed, saving reviewers from playing "spot the difference" on full-page screenshots.
 
+<Grid cols={3} gap={4}>
+  <Stack gap={2}>
+    <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Before</Text>
+    ![Baseline](/assets/research/impact-example/before.png)
+  </Stack>
+  <Stack gap={2}>
+    <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">After</Text>
+    ![Current](/assets/research/impact-example/after.png)
+  </Stack>
+  <Stack gap={2}>
+    <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Diff</Text>
+    ![Visual Delta](/assets/research/impact-example/diff.png)
+  </Stack>
+</Grid>
+*A "sandwich" comparison showing the baseline, the new state, and the highlighted pixel delta.*
+
 ### Real-World Finding: The "Invisible" Regression
 
 In a recent PR, a developer modified a global spacing variable. On the surface, the changed files seemed unrelated to the landing page. However, the analyzer traced the dependency and flagged a **15% visual diff** on the Home route.

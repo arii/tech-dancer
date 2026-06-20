@@ -25,17 +25,23 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           rehypeRaw,
           [rehypeSanitize, {
             ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input'],
+              tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input', 'Grid', 'Stack', 'Text'],
             attributes: {
               ...defaultSchema.attributes,
               notice: ['type', 'id'],
               Notice: ['type', 'id'],
-              input: ['type', 'checked', 'disabled']
+                input: ['type', 'checked', 'disabled'],
+                Grid: ['cols', 'gap'],
+                Stack: ['gap', 'direction', 'align', 'justify'],
+                Text: ['variant', 'size', 'weight', 'color', 'align', 'uppercase']
             },
             clobberPrefix: ''
           }]
         ]}
         components={{
+            Grid: ({ node: _node, ...props }: any) => <Grid {...props} />,
+            Stack: ({ node: _node, ...props }: any) => <Stack {...props} />,
+            Text: ({ node: _node, ...props }: any) => <Text {...props} />,
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
