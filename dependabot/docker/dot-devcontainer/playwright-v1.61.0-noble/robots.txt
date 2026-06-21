@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/dependabot/docker/dot-devcontainer/playwright-v1.61.0-noble/sitemap.xml
