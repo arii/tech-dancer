@@ -17,6 +17,7 @@ jobs:
       AI_MODEL: gpt-4o-mini
       GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PYTHONPATH: ${{ github.workspace }}/dev-tools
     steps:
       - name: Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -34,6 +35,9 @@ jobs:
 
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Install Python dependencies
+        run: pip install -e dev-tools/
 
       - name: Run Headless Audit
         run: |
