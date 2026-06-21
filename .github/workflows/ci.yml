@@ -365,10 +365,10 @@ jobs:
           FAILED=0
           # Ensure jq is installed
           if ! command -v jq >/dev/null 2>&1; then
-            sudo apt-get update && sudo apt-get install -y jq || {
-                echo "❌ Failed to install jq. Cannot parse verdict files." >&2
-                FAILED=1
-            }
+            if ! sudo apt-get update || ! sudo apt-get install -y jq; then
+              echo "❌ Failed to install jq. Cannot parse verdict files." >&2
+              FAILED=1
+            fi
           fi
 
           if [ "$FAILED" -eq 0 ]; then
