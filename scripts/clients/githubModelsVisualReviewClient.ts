@@ -2,24 +2,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
-import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
+import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
-import type { RouteReview, VisualRouteSummary, VisualReviewState, VisualReviewFinding } from '../lib/visualReviewTypes';
+import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
-
-function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
-  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
-  if (!match) return [];
-
-  try {
-    const data = JSON.parse(match[1].trim()) as VisualReviewState;
-    return data.findings || [];
-  } catch (e) {
-    console.warn('Failed to parse findings JSON from visual LLM response:', e);
-    return [];
-  }
-}
 
 async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI> {
   const apiKey = process.env.GITHUB_TOKEN;

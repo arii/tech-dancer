@@ -150,7 +150,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   shadow="md"
                   loading="lazy"
                   alt={alt || "Article illustration"}
-                  maxWidth="full"
+                  maxWidth={{ base: 'full', md: '2xl' }}
                   height="auto"
                   {...props}
                 />

@@ -1,0 +1,49 @@
+name: Reusable CI Gate
+
+on:
+  workflow_call:
+    outputs:
+      has_changes:
+        description: "True if changes were detected"
+        value: ${{ jobs.verify-changes.outputs.has_changes }}
+
+jobs:
+  verify-changes:
+    name: "FOUNDATIONAL GATE: Checks for actual code modifications"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    outputs:
+      has_changes: ${{ steps.check_diff.outputs.has_changes }}
+    steps:
+      - name: Checkout Code with History
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Verify Diff Composition
+        id: check_diff
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          # Define the diff range based on event type
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "$BASE_REF"
+            RANGE="origin/$BASE_REF...HEAD"
+          else
+            RANGE="$BEFORE_SHA"
+            # Fallback to parent if range is missing or null
+            if [ -z "$RANGE" ] || [ "$RANGE" = "0000000000000000000000000000000000000000" ]; then
+              RANGE="HEAD~1"
+              if ! git rev-parse --verify HEAD~1 >/dev/null 2>&1; then RANGE=""; fi
+            fi
+          fi
+
+          # Perform the diff check
+          if [ -n "$RANGE" ] && git diff --quiet "$RANGE" HEAD; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi

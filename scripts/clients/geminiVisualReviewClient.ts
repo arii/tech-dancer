@@ -1,30 +1,18 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
-import { buildVisualReviewPayload, parseLLMVerdict } from '../lib/visualReviewUtils';
+import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
+import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
-import type { RouteReview, VisualRouteSummary, VisualReviewState, VisualReviewFinding } from '../lib/visualReviewTypes';
+import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
-function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
-  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
-  if (!match) return [];
-
-  try {
-    const data = JSON.parse(match[1].trim()) as VisualReviewState;
-    return data.findings || [];
-  } catch (e) {
-    console.warn('Failed to parse findings JSON from visual LLM response:', e);
-    return [];
-  }
-}
-
-function createModel(): ChatGoogleGenerativeAI {
+function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
   return new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
+    model: modelName,
     apiKey,
-    maxOutputTokens: 1024,
+    maxOutputTokens: maxOutputTokens,
   });
 }
 
@@ -35,7 +23,8 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    const model = createModel();
+    const modelName = pickGeminiModel('flash', 0);
+    const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -87,10 +76,8 @@ Your job:
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
 
-    // Gemini 3.5 Flash pricing (approx)
-    // Input: $0.075 / 1 million tokens
-    // Output: $0.30 / 1 million tokens
-    const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
+    const pricing = getGeminiPricing(modelName);
+    const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     const feedback = typeof response.content === 'string'
       ? response.content
@@ -103,6 +90,7 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };

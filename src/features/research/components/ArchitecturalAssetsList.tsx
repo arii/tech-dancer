@@ -31,7 +31,7 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" opacityVariant="muted">
         Core Architectural Assets
       </Text>
-      <Stack gap={2}>
+      <Stack gap={3}>
         {assets.map((asset) => {
           const Icon = asset.icon || getIconForPath(asset.path);
           return (

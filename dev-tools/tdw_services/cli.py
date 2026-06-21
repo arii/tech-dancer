@@ -2,6 +2,7 @@ import sys
 import os
 import json
 from datetime import datetime, timezone
+from typing import List, Dict, Any
 import click
 from tdw_services.orchestrator import Orchestrator
 
@@ -132,17 +133,16 @@ def aggregate(ctx, target_branch, pr_numbers):
         err(ctx, str(e), code=e.code)
 
 @gh.command()
-@click.option('--base')
 @click.pass_context
-def conflicts(ctx, base):
+def conflicts(ctx):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.handle_conflicts(base_branch=base or 'main')
-    if res['status'] == 'success':
-        out(ctx, res['message'], data=res)
-    elif res['status'] == 'environment_error':
-        err(ctx, res['message'], code=1, data=res)
-    else:
-        err(ctx, res['message'], data=res)
+    conflicts: List[Dict[str, Any]] = orch.handle_detect_conflicts()
+    if not ctx.obj['JSON']:
+        if not conflicts: click.echo("✅ No potential merge conflicts detected.")
+        for c in conflicts:
+            click.echo(f"⚠️  {' ↔ '.join(f'#{p}' for p in c['prs'])} share {len(c['files'])} file(s):")
+            for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
+    out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
 
 @gh.command()
 @click.option('--pr', type=int)

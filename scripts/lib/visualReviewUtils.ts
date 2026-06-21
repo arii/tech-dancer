@@ -1,18 +1,61 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Buffer } from 'node:buffer';
-import type { RouteReview, VisualRouteSummary } from './visualReviewTypes';
+import type { RouteReview, VisualRouteSummary, VisualReviewFinding, VisualReviewState } from './visualReviewTypes';
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
+
+export function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
+  const openTag = '<findings>';
+  const closeTag = '</findings>';
+
+  const openIdx = feedback.lastIndexOf(openTag);
+  const closeIdx = feedback.lastIndexOf(closeTag);
+
+  if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
+    const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
+    if (openedButNeverClosed) {
+      console.warn('⚠️ Visual findings block opened but never closed (truncation?).');
+    }
+    return [];
+  }
+
+  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+
+  try {
+    const data = JSON.parse(jsonText) as VisualReviewState;
+    return data.findings || [];
+  } catch (e) {
+    console.warn('Failed to parse findings JSON from visual LLM response:', e);
+    return [];
+  }
+}
 
 export function imageToBase64(filePath: string): string {
   return fs.readFileSync(filePath).toString('base64');
 }
 
 export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  const lower = feedback.toLowerCase();
-  // Look for explicit failure signals in the LLM output
-  if (/❌|bug|regression|broken|clipping|overflow|missing|unintentional/i.test(lower)) return 'fail';
-  if (/⚠️|warn|minor|consider|recommend/i.test(lower)) return 'warn';
+  // 1. Split feedback to isolate the main evaluation from recommendations and structured state
+  const parts = feedback.split(/recommendations for improvement|---|<findings>/i);
+  const coreEvaluation = parts[0] || '';
+
+  // 2. Clean the core evaluation of "resolved" findings to avoid false failure signals
+  const lines = coreEvaluation.split('\n');
+  const activeLines = lines.filter(line => {
+    const isResolved = /status["']?\s*:\s*["']?resolved["']?/i.test(line) ||
+                       /✅|resolved|fixed/i.test(line);
+    return !isResolved;
+  });
+
+  const activeText = activeLines.join('\n').toLowerCase();
+
+  // 3. Look for explicit failure signals in the remaining "active" text
+  if (/❌|bug|regression|broken|clipping|overflow|missing|unintentional/i.test(activeText)) return 'fail';
+
+  // 4. Check for warnings, but only in the core evaluation.
+  // We ignore polish recommendations from triggering a CI-blocking 'warn' verdict on HIGH severity routes.
+  if (/⚠️|warn|minor|unbalanced/i.test(activeText)) return 'warn';
+
   return 'pass';
 }
 
@@ -88,6 +131,8 @@ ${r.feedback}
     costLine = `**Cost:** ~$${totalCost.toFixed(5)} (${totalTokens} tokens)\n`;
   }
 
+  const modelLine = reviews[0]?.modelName ? `**Model:** ${reviews[0].modelName}\n` : '';
+
   return `## ${reportTitle}
 
 > ${botTagline}
@@ -95,6 +140,7 @@ ${r.feedback}
 **Summary:** 🔴 ${highCount} high · 🟡 ${medCount} medium · 🟢 ${lowCount} low
 **Reviewing:** ${prLink}
 ${costLine}
+${modelLine}
 ${sections}
 
 ---
