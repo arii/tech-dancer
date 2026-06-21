@@ -115,7 +115,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
             <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
               Shop selected items
             </Text>
-            <Stack gap={6}>
+            <Stack gap={4}>
               {affiliateLinks.map(link => (
                 <AffiliateCard key={link.id} link={link} />
               ))}
