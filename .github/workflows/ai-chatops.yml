@@ -73,7 +73,7 @@ jobs:
 
       - name: Commit Fixes
         if: contains(inputs.comment_body, '/ai-fix')
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: apply AI-suggested fixes via /ai-fix"
           branch: ${{ env.HEAD_REF }}
