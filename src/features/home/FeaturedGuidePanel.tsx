@@ -18,7 +18,7 @@ export function FeaturedGuidePanel() {
       as={NavLink}
       to={FEATURED.href}
       width="full"
-      aspect={{ base: 'video', lg: 'auto' }}
+      aspect={{ base: '4/3', lg: 'auto' }}
       direction="col"
       justify="end"
       position="relative"
@@ -41,7 +41,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30 md:from-bg/90 md:via-bg/40 md:to-transparent"
+        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
