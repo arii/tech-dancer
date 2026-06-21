@@ -145,7 +145,6 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM — diff continues beyond this point, do not assume missing context means missing code]'
       : rawDiff;
 
-    console.log(`[DEBUG] Diff context size: ${diffContext.length} chars (total raw diff: ${rawDiff.length} chars).`);
 
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
@@ -153,7 +152,6 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       .split('\n')
       .filter(Boolean);
 
-    console.log(`[DEBUG] Files changed in diff: ${files.length}`);
 
     // Context gathering
     const externalFilePaths = new Set<string>();
@@ -274,7 +272,6 @@ export async function orchestrateCodeReview(
   }
 
   const summary = await getCodeDiffSummary();
-  console.log(`[DEBUG] Diff gathered: ${summary.diffContext.length} chars of diff, ${summary.externalContext?.length ?? 0} chars of external context.`);
 
   // Load previous state and auto-resolve findings that are no longer in the diff
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);

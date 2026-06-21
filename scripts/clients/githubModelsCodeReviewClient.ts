@@ -67,17 +67,12 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
     const message = new HumanMessage({ content: baseContent });
 
-    console.log(`[DEBUG] Sending payload to GitHub Models (${estimatedInputTokens} estimated tokens)...`);
     const response = await model.invoke([message]);
 
-    console.log(`[DEBUG] GitHub Models raw response: ${typeof response.content === 'string' ? response.content.slice(0, 500) : 'complex content'}...`);
 
     const usageMetadata = response.usage_metadata;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
     const cost = 0;
-    console.log(`[DEBUG] GitHub Models usage: ${totalTokens} tokens (in: ${inputTokens}, out: ${outputTokens})`);
 
     const finishReason = (response as { response_metadata?: { finish_reason?: string } })
       .response_metadata?.finish_reason;

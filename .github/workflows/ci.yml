@@ -363,14 +363,6 @@ jobs:
 
           # Aggregate verdict — fail the step explicitly if any verdict file says failed
           FAILED=0
-          # Ensure jq is installed
-          if ! command -v jq >/dev/null 2>&1; then
-            if ! sudo apt-get update || ! sudo apt-get install -y jq; then
-              echo "❌ Failed to install jq. Cannot parse verdict files." >&2
-              FAILED=1
-            fi
-          fi
-
           if [ "$FAILED" -eq 0 ]; then
             for f in artifacts/*-verdict.json; do
               [ -f "$f" ] || continue
