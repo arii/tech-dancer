@@ -47,7 +47,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
+
     const response = await model.invoke([message]);
+
 
     const usageMetadata = response.usage_metadata;
     const inputTokens = usageMetadata?.input_tokens ?? 0;
