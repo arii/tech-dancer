@@ -31,24 +31,17 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
       <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" opacityVariant="muted">
         Core Architectural Assets
       </Text>
-      <Stack gap={3}>
+      <Stack gap={2}>
         {assets.map((asset) => {
           const Icon = asset.icon || getIconForPath(asset.path);
           return (
-            <Box key={asset.path} border radius="md" surface="surface" padding={4} className="group hover:border-accent/30 transition-colors">
-              <Box display="flex" gap={4} align="start">
-                <Box className="shrink-0" paddingTop={0.5}>
-                  <Icon size={18} className="text-accent opacity-80 group-hover:opacity-100 transition-opacity" />
+            <Box key={asset.path} border radius="md" surface="surface" padding={3} className="group hover:border-accent/30 transition-colors">
+              <Box display="flex" gap={3} align="start">
+                <Box paddingTop={0.5} className="shrink-0">
+                  <Icon size={16} className="text-accent opacity-80 group-hover:opacity-100 transition-opacity" />
                 </Box>
-                <Stack gap={2} width="full" className="min-w-0">
-                  <Box
-                    display="flex"
-                    align="center"
-                    justify="between"
-                    width="full"
-                    gap={4}
-                    className="min-w-0"
-                  >
+                <Stack gap={1} width="full" className="min-w-0">
+                  <Box display="flex" align="center" justify="between" gap={3} className="min-w-0">
                     <Text
                       as="a"
                       href={`https://github.com/arii/tech-dancer/blob/main/${asset.path}`}
@@ -58,18 +51,12 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                       size="xs"
                       weight="font-bold"
                       truncate
-                      className="hover:text-accent transition-colors cursor-pointer min-w-0"
+                      className="hover:text-accent transition-colors cursor-pointer"
                       title={asset.path}
                     >
                       {asset.path}
                     </Text>
-                    <Text
-                      variant="mono"
-                      size="micro"
-                      color="dim"
-                      opacityVariant="dim"
-                      className="shrink-0 uppercase tracking-tighter whitespace-nowrap"
-                    >
+                    <Text variant="mono" size="micro" color="dim" opacityVariant="dim" className="shrink-0 uppercase tracking-tighter whitespace-nowrap">
                       {asset.label}
                     </Text>
                   </Box>

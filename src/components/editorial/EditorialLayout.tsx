@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { ReactNode, useState, useEffect } from 'react';
+import { ArrowLeft, ArrowUp } from 'lucide-react';
+import { Box, Stack, Text, Grid, Button } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { journalVariants } from '@/lib/variants';
+import { cn } from '@/lib/utils';
 
 interface EditorialLayoutProps {
   onBack: () => void;
@@ -21,6 +22,21 @@ export function EditorialLayout({
   sidebar,
   footer,
 }: EditorialLayoutProps) {
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 1000);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <Box
       width="full"
@@ -84,6 +100,28 @@ export function EditorialLayout({
           )}
         </Grid>
       </Stack>
+
+      {/* Back to Top Button */}
+      <Box
+        position="fixed"
+        bottom={8}
+        right={8}
+        zIndex={50}
+        className={cn(
+          "transition-all duration-300 transform",
+          showBackToTop ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
+        )}
+      >
+        <Button
+          onClick={scrollToTop}
+          variant="fab"
+          size="icon"
+          className="rounded-full shadow-xl border-accent/20 bg-surface/80 backdrop-blur-sm"
+          title="Back to Top"
+        >
+          <Icon icon={ArrowUp} size="md" color="accent" />
+        </Button>
+      </Box>
     </Box>
   );
 }
