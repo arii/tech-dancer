@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
+import { calculateEstimatedTokens } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
 import { execSync, spawnSync } from 'child_process';
 
@@ -145,11 +146,13 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM — diff continues beyond this point, do not assume missing context means missing code]'
       : rawDiff;
 
+
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
     const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
+
 
     // Context gathering
     const externalFilePaths = new Set<string>();
@@ -199,12 +202,20 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const hasRealContent = externalContext.replace(/\n\n\.\.\.\[TRUNCATED EXTERNAL CONTEXT\]/g, '').trim().length > 0;
 
-    return {
+    const summary: CodeReviewSummary = {
       diffContext,
       fullDiff,
       prGoal,
+      changedFiles: files,
       externalContext: hasRealContent ? externalContext.trim() : undefined,
     };
+
+    summary.estimatedInputTokens = calculateEstimatedTokens([
+      summary.diffContext,
+      summary.externalContext || ''
+    ]);
+
+    return summary;
   } catch (error) {
     console.warn('Could not generate code diff:', error);
     return { diffContext: '' };
