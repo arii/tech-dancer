@@ -1,5 +1,8 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import { globSync } from 'glob';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import { visit } from 'unist-util-visit';
 
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -11,6 +14,10 @@ interface LinkIssue {
   isWarning?: boolean;
 }
 
+interface AffiliateData {
+  url?: string;
+}
+
 async function main() {
   console.log('Starting Amazon Link Audit...');
   const issues: LinkIssue[] = [];
@@ -19,33 +26,51 @@ async function main() {
   // 1. Extract from affiliates.json
   const affiliatesPath = 'src/data/affiliates.json';
   if (fs.existsSync(affiliatesPath)) {
-    const affiliates = JSON.parse(fs.readFileSync(affiliatesPath, 'utf-8')) as Record<string, { url?: string }>;
-    Object.entries(affiliates).forEach(([id, item]) => {
-      if (item.url) {
-        try {
-          const url = new URL(item.url);
-          const hostname = url.hostname.toLowerCase();
-          if (hostname === 'amazon.com' || hostname.endsWith('.amazon.com') || hostname === 'a.co' || hostname.endsWith('.a.co')) {
-            linksToVerify.push({ url: item.url, source: `affiliates.json [${id}]` });
+    try {
+      const affiliates = JSON.parse(fs.readFileSync(affiliatesPath, 'utf-8')) as Record<string, AffiliateData>;
+      Object.entries(affiliates).forEach(([id, item]) => {
+        if (item.url) {
+          try {
+            const url = new URL(item.url);
+            const hostname = url.hostname.toLowerCase();
+            if (hostname === 'amazon.com' || hostname.endsWith('.amazon.com') || hostname === 'a.co' || hostname.endsWith('.a.co')) {
+              linksToVerify.push({ url: item.url, source: `affiliates.json [${id}]` });
+            }
+          } catch {
+            // Skip invalid URLs
           }
-        } catch {
-          // Skip invalid URLs
         }
-      }
-    });
+      });
+    } catch (err) {
+      console.error(`Error parsing ${affiliatesPath}:`, err);
+      issues.push({ url: affiliatesPath, source: 'system', reason: `Failed to parse JSON: ${err instanceof Error ? err.message : String(err)}` });
+    }
   }
 
-  // 2. Extract from markdown files
+  // 2. Extract from markdown files using AST traversal for better coverage
   const mdFiles = globSync('content/**/*.md');
-  const amazonUrlRegex = /https?:\/\/(www\.)?(amazon\.com|a\.co)\/[^\s)]+/g;
+  const processor = unified().use(remarkParse);
 
-  mdFiles.forEach(file => {
-    const content = fs.readFileSync(file, 'utf-8');
-    let match;
-    while ((match = amazonUrlRegex.exec(content)) !== null) {
-      linksToVerify.push({ url: match[0], source: file });
+  for (const file of mdFiles) {
+    try {
+      const content = fs.readFileSync(file, 'utf-8');
+      const tree = processor.parse(content);
+
+      visit(tree, 'link', (node) => {
+        try {
+          const url = new URL(node.url);
+          const hostname = url.hostname.toLowerCase();
+          if (hostname === 'amazon.com' || hostname.endsWith('.amazon.com') || hostname === 'a.co' || hostname.endsWith('.a.co')) {
+            linksToVerify.push({ url: node.url, source: file });
+          }
+        } catch {
+          // Skip relative or invalid URLs
+        }
+      });
+    } catch (err) {
+      console.error(`Error processing ${file}:`, err);
     }
-  });
+  }
 
   console.log(`Extracted ${linksToVerify.length} Amazon links to verify.`);
 
@@ -71,7 +96,7 @@ async function main() {
           if (response.status >= 500 && retries > 0) {
             console.warn(`  [RETRY] Received ${response.status} for ${item.url}. Retrying...`);
             retries--;
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 3000));
             continue;
           }
           issues.push({
@@ -80,10 +105,29 @@ async function main() {
             reason: 'HTTP Status Error',
             status: response.status
           });
-          break; // Stop retrying on non-retryable error
+          break;
         }
 
-        // Final URL after redirects
+        const body = await response.text();
+
+        // Check for Amazon's bot detection / CAPTCHA pages
+        if (body.includes('Robot Check') || body.includes('automated access') || body.includes('CAPTCHA')) {
+          if (retries > 0) {
+            console.warn(`  [RETRY] Bot detection triggered for ${item.url}. Retrying...`);
+            retries--;
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            continue;
+          }
+          issues.push({
+            url: item.url,
+            source: item.source,
+            reason: 'Amazon Bot Detection (CAPTCHA) triggered',
+            isWarning: true
+          });
+          break;
+        }
+
+        // Final URL after redirects validation
         const finalUrl = new URL(response.url);
         const finalHostname = finalUrl.hostname.toLowerCase();
         const isAmazon = finalHostname === 'amazon.com' || finalHostname.endsWith('.amazon.com');
@@ -102,10 +146,9 @@ async function main() {
             });
           }
         } catch {
-          // Original URL was already verified to be valid in extraction step
+          // Original URL was already verified to be valid
         }
 
-        const body = await response.text();
         // Check for specific Amazon "Page Not Found" indicators
         if (body.includes('Page Not Found') || body.includes('sorry.png') || body.includes('api-services-404')) {
           issues.push({
@@ -128,7 +171,7 @@ async function main() {
         if (retries > 0) {
           console.warn(`  [RETRY] Fetch error for ${item.url}: ${err instanceof Error ? err.message : String(err)}. Retrying...`);
           retries--;
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise(resolve => setTimeout(resolve, 3000));
           continue;
         }
         issues.push({
@@ -141,7 +184,7 @@ async function main() {
     }
 
     // Rate limiting
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
   }
 
   if (issues.length > 0) {
