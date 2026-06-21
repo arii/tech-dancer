@@ -64,27 +64,34 @@ describe('ProductCard', () => {
     expect(screen.getByText('VIEW ON PRINTFUL')).toBeTruthy();
   });
 
-  it('applies featured styling when isFeatured is true', () => {
-    render(<ProductCard item={item} isFeatured />);
+  it('applies featured styling when variant is featured', () => {
+    render(<ProductCard item={item} variant="featured" />);
     const card = screen.getByTestId('product-card');
 
-    // Check for featured classes (using classList because of cn utility)
     expect(card.classList.contains('bg-accent/5')).toBe(true);
     expect(card.classList.contains('border-accent/20')).toBe(true);
 
-    // Title should be larger
     const title = screen.getByText(item.title);
-    expect(title.classList.contains('text-xl')).toBe(true); // lg:text-2xl is handled by responsive tokens which might not show in vitest-dom as expected, but we check the base
+    expect(title.classList.contains('text-xl')).toBe(true);
   });
 
-  it('applies fillHeight configuration', () => {
+  it('applies featured styling when isFeatured is true (backward compatibility)', () => {
+    render(<ProductCard item={item} isFeatured />);
+    const card = screen.getByTestId('product-card');
+
+    expect(card.classList.contains('bg-accent/5')).toBe(true);
+    expect(card.classList.contains('border-accent/20')).toBe(true);
+  });
+
+  it('applies stretched variant configuration', () => {
+    render(<ProductCard item={item} variant="stretched" />);
+    const title = screen.getByText(item.title);
+    expect(title).toBeTruthy();
+  });
+
+  it('applies fillHeight configuration (backward compatibility)', () => {
     render(<ProductCard item={item} fillHeight />);
     const title = screen.getByText(item.title);
-
-    // Clamping for fillHeight should be { base: 2, md: 0 }
-    // This is passed to the Text component.
-    // In vitest/jsdom, we can't easily check computed responsive classes without more setup,
-    // but we've verified the logic in the component.
     expect(title).toBeTruthy();
   });
 });

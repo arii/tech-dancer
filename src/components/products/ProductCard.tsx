@@ -7,39 +7,81 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
+export type ProductCardVariant = 'default' | 'featured' | 'stretched';
+
 interface ProductCardProps {
   item: ProductCatalogItem;
+  /**
+   * Layout variant of the card.
+   * - 'default': Standard grid card with 2-line clamping.
+   * - 'featured': Prominent card with no clamping and larger image.
+   * - 'stretched': Card that fills vertical space and removes clamping on desktop.
+   */
+  variant?: ProductCardVariant;
+  /** @deprecated use variant="featured" */
   isFeatured?: boolean;
+  /** @deprecated use variant="stretched" */
   fillHeight?: boolean;
   imageHeight?: ResponsiveProp<string | number>;
   clampTitle?: ResponsiveProp<number | boolean>;
   clampDescription?: ResponsiveProp<number | boolean>;
 }
 
+const VARIANT_CONFIG = {
+  featured: {
+    clamp: 0,
+    imageHeight: { base: 64, sm: 72, md: 96 },
+    padding: { base: 5, md: 6 },
+    gap: 5,
+    contentGap: 4,
+    titleSize: { base: 'xl', md: '2xl' } as const,
+    descSize: 'base' as const,
+    footerPaddingTop: 5,
+    footerGap: 4,
+    highlight: true,
+  },
+  stretched: {
+    clamp: { base: 2, md: 0 },
+    imageHeight: { base: 64, sm: 72, md: 96 },
+    padding: { base: 4, md: 5 },
+    gap: 4,
+    contentGap: 3,
+    titleSize: { base: 'lg', md: 'xl' } as const,
+    descSize: 'sm' as const,
+    footerPaddingTop: 3,
+    footerGap: 3,
+    highlight: false,
+  },
+  default: {
+    clamp: 2,
+    imageHeight: { base: 64, sm: 72, md: 64 },
+    padding: { base: 4, md: 5 },
+    gap: 4,
+    contentGap: 3,
+    titleSize: { base: 'lg', md: 'xl' } as const,
+    descSize: 'sm' as const,
+    footerPaddingTop: 3,
+    footerGap: 3,
+    highlight: false,
+  },
+};
+
 export function ProductCard({
   item,
+  variant: variantProp,
   isFeatured,
   fillHeight,
   imageHeight,
   clampTitle,
   clampDescription,
 }: ProductCardProps) {
-  // Determine layout configuration based on props and context
-  const isStretched = isFeatured || fillHeight;
+  // Resolve variant with backward compatibility
+  const variant = variantProp ?? (isFeatured ? 'featured' : (fillHeight ? 'stretched' : 'default'));
+  const config = VARIANT_CONFIG[variant];
 
-  const finalClampTitle = clampTitle ?? (
-    fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2)
-  );
-
-  const finalClampDescription = clampDescription ?? (
-    fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2)
-  );
-
-  const finalImageHeight = imageHeight ?? (
-    isStretched
-      ? { base: 64, sm: 72, md: 96 }
-      : { base: 64, sm: 72, md: 64 }
-  );
+  const finalClampTitle = clampTitle ?? config.clamp;
+  const finalClampDescription = clampDescription ?? config.clamp;
+  const finalImageHeight = imageHeight ?? config.imageHeight;
 
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
@@ -48,15 +90,15 @@ export function ProductCard({
 
   return (
     <BaseCard
-      gap={isFeatured ? 5 : 4}
+      gap={config.gap}
       height="full"
-      padding={isFeatured ? { base: 5, md: 6 } : { base: 4, md: 5 }}
+      padding={config.padding}
       radius="lg"
       border
       maxWidth="full"
       className={cn(
         "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
-        isFeatured && "border-accent/20 bg-accent/5"
+        config.highlight && "border-accent/20 bg-accent/5"
       )}
       data-testid="product-card"
     >
@@ -69,14 +111,14 @@ export function ProductCard({
         height={finalImageHeight}
       />
 
-      <Stack gap={isFeatured ? 4 : 3}>
+      <Stack gap={config.contentGap}>
         <Text
           as="a"
           href={item.href}
           target="_blank"
           rel="sponsored noopener noreferrer"
           variant="body"
-          size={isFeatured ? { base: 'xl', md: '2xl' } : { base: 'lg', md: 'xl' }}
+          size={config.titleSize}
           weight="font-bold"
           color="main"
           leading="tight"
@@ -86,7 +128,7 @@ export function ProductCard({
           {item.title}
         </Text>
 
-        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={finalClampDescription}>
+        <Text variant="body" size={config.descSize} color="dim" leading="relaxed" clamp={finalClampDescription}>
           {item.description}
         </Text>
 
@@ -113,7 +155,7 @@ export function ProductCard({
         )}
       </Stack>
 
-      <Stack marginTop="auto" paddingTop={isFeatured ? 5 : 3} border="t" gap={isFeatured ? 4 : 3} className="border-line/30">
+      <Stack marginTop="auto" paddingTop={config.footerPaddingTop} border="t" gap={config.footerGap} className="border-line/30">
         <Stack direction="row" gap={1.5} wrap="wrap">
           {item.tags.slice(0, 3).map((tag) => (
             <Box key={tag} paddingX={2} paddingY={0.5} radius="md" surface="alt" className="border border-line/20">
