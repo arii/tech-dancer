@@ -56,7 +56,7 @@ export function DevLabCallout() {
             <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>
               {label}
             </Text>
-            <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
+            <Box display="flex" wrap="wrap" gap={2.5} grow={1}>
               {tags.map(tag => (
                 <span
                   key={tag}

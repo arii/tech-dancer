@@ -121,7 +121,7 @@ export const cardVariants = cva(
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = cva(
-  "rounded border px-3 py-1 text-xs font-medium transition-colors",
+  'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
   {
     variants: {
       variant: {
