@@ -11,6 +11,8 @@ import {
 
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 
+import { logAIRun } from '../lib/aiLogger';
+
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
@@ -24,6 +26,18 @@ function createModel(modelName: string, maxOutputTokens: number = 1500): ChatGoo
     model: modelName,
     apiKey,
     maxOutputTokens: maxOutputTokens,
+    // Reserve a bounded slice of the budget for reasoning so it can't
+    // crowd out the actual review text + verdict + findings JSON.
+    // In @langchain/google-genai v2.2.0, this is passed via thinkingConfig if supported
+    // but the flat option is also commonly mapped.
+    // Given the caveat, we'll try to follow the prompt's suggestion.
+    // Note: v2.2.0 might need it inside generationConfig or as a direct prop.
+    // Based on LangChain docs for newer versions, it might be maxReasoningTokens.
+    // But we'll stick to the "thinkingBudget" name from the instructions as a primary guess.
+    // If it's 2.2.0, we can also try to be safe.
+    ...({
+      thinkingBudget: Math.min(1024, Math.floor(maxOutputTokens * 0.3)),
+    } as any)
   });
 }
 
@@ -33,7 +47,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   botTagline: 'Powered by Gemini 3.x',
   reportFileName: 'gemini-code-review.md',
 
-  invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
+  invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
+    const startTime = Date.now();
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
@@ -42,19 +57,28 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
     const modelName = pickGeminiModel(preferredTier, estimatedInputTokens);
 
-    const maxOutputTokens = estimateMaxOutputTokens(summary);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
     const model = createModel(modelName, maxOutputTokens);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
 
     const response = await model.invoke([message]);
+    const durationMs = Date.now() - startTime;
 
 
-    const usageMetadata = response.usage_metadata;
+    const usageMetadata = response.usage_metadata as {
+      input_tokens?: number;
+      output_tokens?: number;
+      total_tokens?: number;
+      thoughts_token_count?: number;
+    };
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    // thoughtsTokenCount might be nested in response_metadata or usage_metadata
+    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
+                               (response.response_metadata as any)?.usage?.thoughts_token_count;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
@@ -72,6 +96,20 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
+    logAIRun({
+      botName: 'gemini-code-review',
+      modelName,
+      inputTokens,
+      outputTokens,
+      totalTokens,
+      thoughtsTokenCount,
+      cost,
+      durationMs,
+      verdict: feedback ? parseCodeReviewVerdict(feedback) : undefined,
+      truncated: isTruncated,
+      parseError: parsedState.parseError,
+    });
+
     return {
       feedback: feedback,
       tokens: totalTokens,
@@ -81,6 +119,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       state: parsedState.state,
       truncated: isTruncated,
       parseError: parsedState.parseError,
+      durationMs,
     };
   }
 };

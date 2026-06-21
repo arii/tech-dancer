@@ -119,16 +119,31 @@ describe('codeReviewUtils', () => {
       expect(estimateMaxOutputTokens({ diffContext: largeDiff })).toBe(2500);
     });
 
-    it('caps at 4096', () => {
+    it('caps at 8192', () => {
       const hugeDiff = 'a'.repeat(16001);
       const manyFindings = estimateMaxOutputTokens({
         diffContext: hugeDiff,
         previousState: {
-          findings: Array.from({ length: 20 }, (_, i) => ({ id: `f-${i}`, file: 'f', issue: 'i', status: 'open' }))
+          findings: Array.from({ length: 40 }, (_, i) => ({ id: `f-${i}`, file: 'f', issue: 'i', status: 'open' }))
         }
       });
-      // 1500 + 1000 + (20 * 200) = 6500, capped to 4096
-      expect(manyFindings).toBe(4096);
+      // 1500 + 1000 + (40 * 200) = 10500, capped to 8192
+      expect(manyFindings).toBe(8192);
+    });
+
+    it('scales up based on system prompt length', () => {
+      const smallDiff = 'diff';
+      const normalSystemPrompt = 400; // 100 tokens
+      const largeSystemPrompt = 2800; // 700 tokens
+      const hugeSystemPrompt = 5000;  // 1250 tokens
+
+      const base = estimateMaxOutputTokens({ diffContext: smallDiff }, normalSystemPrompt);
+      const large = estimateMaxOutputTokens({ diffContext: smallDiff }, largeSystemPrompt);
+      const huge = estimateMaxOutputTokens({ diffContext: smallDiff }, hugeSystemPrompt);
+
+      expect(base).toBe(1500);
+      expect(large).toBe(3000); // 1500 + 1500
+      expect(huge).toBe(4500);  // 1500 + 1500 + 1500
     });
   });
 
