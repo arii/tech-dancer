@@ -33,7 +33,7 @@ export function parseLLMVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
                        /✅|resolved|fixed/i.test(line);
 
     // Filter out positive affirmations to avoid false positives on negative keywords (e.g. "no clipping")
-    const isPositiveAffirmation = /no regression|consistent|no evidence of|intentional|preserved|no clipping|no overflow|no issues|no major|no significant/i.test(line);
+    const isPositiveAffirmation = /none found|no new issues|no regression|consistent|no evidence of|intentional|visually stable|preserved|no clipping|no overflow|no issues|no major|no significant/i.test(line);
 
     return !isResolved && !isPositiveAffirmation;
   });

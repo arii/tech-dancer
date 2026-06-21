@@ -44,8 +44,8 @@ export default function Home() {
       </Box>
 
       <Stack
-        gap={{ base: 8, lg: 'section-spacing' }}
-        marginTop={{ base: 8, lg: 'section-spacing' }}
+        gap={{ base: 12, lg: 'section-spacing' }}
+        marginTop={{ base: 12, lg: 'section-spacing' }}
         width="full"
         maxWidth="full"
         minWidth={0}
