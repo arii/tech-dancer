@@ -60,11 +60,11 @@ File: `.github/workflows/mass-audit-prs.yml`
 - Recommendation: Add concurrency cancellation at workflow level.
 - Status: Fixed
 
-### Finding: Missing CLI extension in mass-audit-prs.yml
+### Finding: Improper HEADLESS environment variable execution
 
 - Workflow: Mass Audit PRs
-- File: .github/workflows/mass-audit-prs.yml
+- File: dev-tools/audit_headless.sh
 - Run evidence: 27855143004
 - Severity: high
-- Recommendation: Add `gh extension install github/gh-copilot` to step.
+- Recommendation: Export `HEADLESS=true` so the tool avoids launching unsupported `copilot` commands.
 - Status: Fixed

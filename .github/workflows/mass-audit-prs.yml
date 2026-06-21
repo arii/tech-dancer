@@ -37,7 +37,6 @@ jobs:
 
       - name: Run Headless Audit
         run: |
-          gh extension install github/gh-copilot
           bash dev-tools/audit_headless.sh --sync
 
       - name: Commit and Push REVIEW_TRACKING.md

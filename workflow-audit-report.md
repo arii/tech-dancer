@@ -108,34 +108,32 @@ concurrency:
 
 ---
 
-### Finding: Missing CLI extension in mass-audit-prs.yml
+### Finding: Improper HEADLESS environment variable handling
 
 **Severity:** high
 **Priority:** P2
 **Workflow:** `Mass Audit PRs`
-**File:** `.github/workflows/mass-audit-prs.yml`
+**File:** `dev-tools/audit_headless.sh`
 **Jobs affected:** `audit`
 **Evidence:**
 - Run: 27855143004
 - Log excerpt: `FileNotFoundError: [Errno 2] No such file or directory: 'copilot'`
-- Impact: The scheduled daily PR audit completely fails every day because it cannot run the `copilot` command.
+- Impact: The scheduled daily PR audit completely fails every day because it attempts to execute interactive commands.
 
 ## Problem
-The `dev-tools/audit_headless.sh` script relies on `gh copilot` extension, but it is not installed in the GitHub Actions runner environment by default, causing immediate failures.
+The `dev-tools/audit_headless.sh` script does not explicitly set `HEADLESS=true`, causing downstream Python scripts (`orchestrator.py`) to mistakenly believe they are running in an interactive session and attempt to launch `copilot`.
 
 ## Impact
 - hidden failures in background audit tasks
 - missing insights over time
+- pipeline instability
 
 ## Recommended fix
-Add an installation step for the extension.
+Export `HEADLESS=true` at the top of the `audit_headless.sh` file.
 
 ## Example change
-```yaml
-      - name: Run Headless Audit
-        run: |
-          gh extension install github/gh-copilot
-          bash dev-tools/audit_headless.sh --sync
+```bash
+export HEADLESS=true
 ```
 
 ## Acceptance criteria

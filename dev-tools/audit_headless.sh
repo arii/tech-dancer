@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+export HEADLESS=true
+
 # Error trap for diagnostic feedback
 trap 'echo "❌ Error occurred on line $LINENO. Exiting." >&2' ERR
 
