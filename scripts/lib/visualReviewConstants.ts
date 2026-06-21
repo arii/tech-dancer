@@ -18,4 +18,19 @@ YOUR RULES:
 - Focus on layout shifts, broken spacing, contrast issues, or clipping.
 - If the change is intentional, evaluate its visual quality and provide 1-2 actionable recommendations for further design/UI improvement (e.g., 'Consider adding 4px more padding to the new element').
 
-Format your response as a concise, bulleted list. Be direct and actionable. Make sure to include "Recommendations for Improvement" if applicable.`;
+Format your response as a concise, bulleted list. Be direct and actionable. Make sure to include "Recommendations for Improvement" if applicable.
+
+You MUST end your response with a structured JSON summary of the findings inside a <findings> tag.
+The JSON must follow this schema:
+{
+  "findings": [
+    {
+      "id": "unique-id",
+      "route": "string",
+      "issue": "string",
+      "status": "open" | "resolved",
+      "fixSummary": "string (optional)"
+    }
+  ]
+}
+`;

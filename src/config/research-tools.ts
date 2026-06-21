@@ -108,15 +108,15 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
-    id: 'scope-blast-radius',
+    id: 'deployment-impact-analyzer',
     taxonomyBucket: 'engineering',
-    title: 'Blast-Radius Analyzer',
+    title: 'Deployment Impact Analyzer',
     subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
     description: 'CI pipeline that determines which pages are visually affected by a pull request. Uses dependency-cruiser to trace changed files through the import graph, then captures Playwright screenshots of affected routes, runs pixelmatch pixel diffs, crops changed regions, and generates a deployment review report with severity scores. Agent integration in progress.',
     category: 'DevAI System',
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
-    canonicalPath: '/research/scope-blast-radius',
+    canonicalPath: '/research/deployment-impact-analyzer',
     sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
@@ -124,7 +124,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     taxonomyBucket: 'engineering',
     title: 'Visual Regression & UX Auditor',
     subtitle: 'PLAYWRIGHT VISUAL REGRESSION',
-    description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots before and after a PR, computes pixel-level diffs, crops the bounding box of changed regions, and scores severity by percentage of changed pixels. Part of the Blast-Radius Analyzer pipeline.',
+    description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots before and after a PR, computes pixel-level diffs, crops the bounding box of changed regions, and scores severity by percentage of changed pixels. Part of the Deployment Impact Analyzer pipeline.',
     category: 'Perception Debugging',
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Screenshot Diff', 'CI/CD'],
