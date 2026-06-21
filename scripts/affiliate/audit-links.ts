@@ -21,8 +21,16 @@ async function main() {
   if (fs.existsSync(affiliatesPath)) {
     const affiliates = JSON.parse(fs.readFileSync(affiliatesPath, 'utf-8'));
     Object.entries(affiliates).forEach(([id, item]: [string, any]) => {
-      if (item.url && (item.url.includes('amazon.com') || item.url.includes('a.co'))) {
-        linksToVerify.push({ url: item.url, source: `affiliates.json [${id}]` });
+      if (item.url) {
+        try {
+          const url = new URL(item.url);
+          const hostname = url.hostname.toLowerCase();
+          if (hostname === 'amazon.com' || hostname.endsWith('.amazon.com') || hostname === 'a.co' || hostname.endsWith('.a.co')) {
+            linksToVerify.push({ url: item.url, source: `affiliates.json [${id}]` });
+          }
+        } catch {
+          // Skip invalid URLs
+        }
       }
     });
   }
@@ -76,14 +84,25 @@ async function main() {
         }
 
         // Final URL after redirects
-        const finalUrl = response.url;
-        if (item.url.includes('a.co') && !finalUrl.includes('amazon.com')) {
-          issues.push({
-            url: item.url,
-            source: item.source,
-            reason: `Redirected to non-Amazon URL: ${finalUrl}`,
-            isWarning: true
-          });
+        const finalUrl = new URL(response.url);
+        const finalHostname = finalUrl.hostname.toLowerCase();
+        const isAmazon = finalHostname === 'amazon.com' || finalHostname.endsWith('.amazon.com');
+
+        try {
+          const originalUrl = new URL(item.url);
+          const originalHostname = originalUrl.hostname.toLowerCase();
+          const isShortLink = originalHostname === 'a.co' || originalHostname.endsWith('.a.co');
+
+          if (isShortLink && !isAmazon) {
+            issues.push({
+              url: item.url,
+              source: item.source,
+              reason: `Redirected to non-Amazon URL: ${response.url}`,
+              isWarning: true
+            });
+          }
+        } catch {
+          // Original URL was already verified to be valid in extraction step
         }
 
         const body = await response.text();
