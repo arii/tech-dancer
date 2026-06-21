@@ -17,6 +17,7 @@ export function FeaturedGuidePanel() {
     <Stack
       as={NavLink}
       to={FEATURED.href}
+      width="full"
       aspect={{ base: 'video', lg: 'auto' }}
       direction="col"
       justify="end"
@@ -36,11 +37,11 @@ export function FeaturedGuidePanel() {
         className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />
-      {/* Gradient overlay for text legibility */}
+      {/* Gradient overlay for text legibility (bottom-up to protect bottom-aligned text) */}
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-b from-bg via-bg/70 to-transparent"
+        className="bg-gradient-to-t from-bg/90 via-bg/40 to-transparent"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
