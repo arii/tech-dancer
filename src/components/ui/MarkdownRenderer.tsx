@@ -254,7 +254,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 as="code"
                 variant="mono"
                 size="xs"
-                paddingX={1.5}
+                paddingX={2}
                 paddingY={0.5}
                 radius="sm"
                 surface="surface"

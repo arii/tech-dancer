@@ -24,6 +24,7 @@ The Deployment Impact Analyzer operates in four distinct phases:
 4.  **Severity Scoring**: Calculating the impact and reporting findings to the PR.
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
 flowchart TD
   PR[Pull Request] --> Diff[Identify Changed Files]
   Diff --> Graph[dependency-cruiser Graph Analysis]

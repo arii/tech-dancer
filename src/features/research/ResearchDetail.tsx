@@ -1,6 +1,6 @@
-import { useMemo, lazy, Suspense } from 'react';
+import { useMemo, lazy, Suspense, useState, useEffect } from 'react';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { Database, Activity, Search, ArrowLeft } from 'lucide-react';
+import { Database, Activity, Search, ArrowLeft, ArrowUp } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
@@ -81,10 +81,41 @@ export default function ResearchDetail() {
     return null;
   }, [tool, study]);
 
+
   const isResearchPath = useMemo(() => {
     const segments = pathname.split('/').filter(Boolean);
     return segments.includes('research');
   }, [pathname]);
+
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      // Use window.scrollY or document.documentElement.scrollTop
+      if (window.scrollY > 1000 || document.documentElement.scrollTop > 1000) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    // Check if the scroll container is window or the main layout container.
+    // In this app, it seems MainLayout uses a scrollRef which is often the document container.
+    // Let's just listen on window. If it's a specific ref, it might not trigger.
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Also try getting the #main-content element if present.
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      mainContent.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (mainContent) {
+        mainContent.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
 
   const { previous: studyPrevious, next: studyNext } = useArticleNavigation(
     studies,
@@ -232,11 +263,30 @@ export default function ResearchDetail() {
               </Stack>
             )}
 
+
             {study && (
               <Box className="prose-editorial" paddingTop={8} borderTop>
                 <MarkdownRenderer content={study.content} />
               </Box>
             )}
+
+            {/* Sticky Back to Top for long tool + study pages */}
+            {showBackToTop && (
+              <Box position="sticky" bottom={8} display="flex" justify="end" className="pointer-events-none mt-8 z-50">
+                <button
+                  onClick={() => {
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                     const mainContent = document.getElementById('main-content');
+                     if (mainContent) mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="pointer-events-auto bg-surface-elevated text-accent p-3 rounded-full shadow-lg border border-line hover:scale-110 hover:shadow-accent/20 transition-all active:scale-95"
+                  aria-label="Scroll to top"
+                >
+                  <ArrowUp size={20} />
+                </button>
+              </Box>
+            )}
+
           </Stack>
         </Box>
       </Stack>
