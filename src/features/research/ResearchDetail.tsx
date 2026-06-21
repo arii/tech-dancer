@@ -272,7 +272,7 @@ export default function ResearchDetail() {
 
             {/* Sticky Back to Top for long tool + study pages */}
             {showBackToTop && (
-              <Box position="sticky" bottom={8} display="flex" justify="end" className="pointer-events-none z-50" marginTop={8}>
+              <Box position="sticky" bottom={8} display="flex" justify="end" zIndex="popover" marginTop={8}>
                 <Box
                   as="button"
                   onClick={() => {
@@ -280,11 +280,10 @@ export default function ResearchDetail() {
                      const mainContent = document.getElementById('main-content');
                      if (mainContent) mainContent.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="pointer-events-auto hover:scale-110 hover:shadow-accent/20 transition-all active:scale-95"
                   surface="surface"
-                  color="accent"
+                  color="dim"
                   padding={3}
-                  radius="full"
+                  radius="lg"
                   shadow="lg"
                   border
                   borderColor="line"

@@ -260,7 +260,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 surface="surface"
                 border
                 borderColor="line"
-                color="accent"
+                color="dim"
                 className="normal-case"
                 {...props}
               >
