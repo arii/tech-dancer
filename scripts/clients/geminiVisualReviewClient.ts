@@ -71,7 +71,7 @@ Your job:
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
 
-    const usageMetadata = response.usage_metadata as any;
+    const usageMetadata = response.usage_metadata as { input_tokens?: number; output_tokens?: number; total_tokens?: number; cache_read_tokens?: number } | undefined;
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;

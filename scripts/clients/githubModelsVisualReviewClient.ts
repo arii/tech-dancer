@@ -94,7 +94,7 @@ Your job:
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const cacheTokens = (usageMetadata as any)?.cache_read_tokens || 0;
+    const cacheTokens = (usageMetadata as { cache_read_tokens?: number } | undefined)?.cache_read_tokens || 0;
 
     // Approximating cost for general OpenAI API usage (e.g. gpt-4o) if used over GitHub models natively
     // GitHub Models are currently free/rate-limited depending on the tier.
