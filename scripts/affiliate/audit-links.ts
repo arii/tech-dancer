@@ -19,8 +19,8 @@ async function main() {
   // 1. Extract from affiliates.json
   const affiliatesPath = 'src/data/affiliates.json';
   if (fs.existsSync(affiliatesPath)) {
-    const affiliates = JSON.parse(fs.readFileSync(affiliatesPath, 'utf-8'));
-    Object.entries(affiliates).forEach(([id, item]: [string, any]) => {
+    const affiliates = JSON.parse(fs.readFileSync(affiliatesPath, 'utf-8')) as Record<string, { url?: string }>;
+    Object.entries(affiliates).forEach(([id, item]) => {
       if (item.url) {
         try {
           const url = new URL(item.url);
