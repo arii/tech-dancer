@@ -33,7 +33,7 @@ export default function Home() {
         <FeaturedGuidePanel />
       </Grid>
 
-      <Box marginTop={{ base: 12, lg: 8 }}>
+      <Box marginTop={{ base: 16, lg: 8 }}>
         <PromoStrip
           imageSrc="/assets/gear/norcal-bestcal-front.webp"
           title="Shop NorCal pride merch"

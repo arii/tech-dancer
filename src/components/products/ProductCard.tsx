@@ -28,11 +28,11 @@ export function ProductCard({
   const isStretched = isFeatured || fillHeight;
 
   const finalClampTitle = clampTitle ?? (
-    fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2)
+    fillHeight ? { base: 3, md: 0 } : (isFeatured ? 0 : 2)
   );
 
   const finalClampDescription = clampDescription ?? (
-    fillHeight ? { base: 2, md: 0 } : (isFeatured ? 0 : 2)
+    fillHeight ? { base: 3, md: 0 } : (isFeatured ? 0 : 2)
   );
 
   const finalImageHeight = imageHeight ?? (

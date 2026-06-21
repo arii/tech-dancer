@@ -40,7 +40,7 @@ export function FeaturedGuidePanel() {
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-b from-bg via-bg/70 to-transparent"
+        className="bg-gradient-to-b from-bg/90 via-bg/80 to-bg/10"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
