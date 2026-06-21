@@ -134,7 +134,8 @@ ${r.feedback}
 
 **Summary:** 🔴 ${highCount} high · 🟡 ${medCount} medium · 🟢 ${lowCount} low
 **Reviewing:** ${prLink}
-${costLine}${modelLine}
+${costLine}
+${modelLine}
 ${sections}
 
 ---
