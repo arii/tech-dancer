@@ -1,7 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import {
-  buildSystemPrompt,
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
@@ -9,7 +8,11 @@ import {
   buildReviewPayload,
   calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
+
+import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
+
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
@@ -44,7 +47,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
+
     const response = await model.invoke([message]);
+
 
     const usageMetadata = response.usage_metadata;
     const inputTokens = usageMetadata?.input_tokens ?? 0;
@@ -52,7 +57,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const totalTokens = usageMetadata?.total_tokens ?? 0;
 
     const pricing = getGeminiPricing(modelName);
-    const cost = (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM;
+    const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     const finishReason = (response as { response_metadata?: { finish_reason?: string } })
       .response_metadata?.finish_reason;

@@ -146,11 +146,13 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM — diff continues beyond this point, do not assume missing context means missing code]'
       : rawDiff;
 
+
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
     const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
+
 
     // Context gathering
     const externalFilePaths = new Set<string>();
@@ -204,6 +206,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       diffContext,
       fullDiff,
       prGoal,
+      changedFiles: files,
       externalContext: hasRealContent ? externalContext.trim() : undefined,
     };
 

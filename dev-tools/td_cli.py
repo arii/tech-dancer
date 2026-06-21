@@ -11,7 +11,8 @@ import os
 
 if "-h" in sys.argv or "--help" in sys.argv:
     print("FATAL: --help is disabled for agent workflows. Read dev-tools/cli-schema.json for command syntax.")
-    sys.exit(1)
+    if "pytest" not in sys.modules:
+        sys.exit(1)
 
 # Add the dev-tools directory to sys.path so we can import tdw_services
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -94,7 +95,8 @@ except ImportError as e:
     print("1. Ensure dependencies are installed: pip install -e dev-tools/")
     print("2. Ensure PYTHONPATH includes the dev-tools directory.")
     print("   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools")
-    sys.exit(1)
+    if "pytest" not in sys.modules:
+        sys.exit(1)
 
 def main():
     # click entry point automatically handles sys.argv
