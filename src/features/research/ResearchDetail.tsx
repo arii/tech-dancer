@@ -132,7 +132,8 @@ export default function ResearchDetail() {
             </Box>
 
             {tool && (
-              <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
+              <Stack gap={12} marginTop={12}>
+                <Box height={0.5} width="full" surface="muted" opacityVariant="low" />
                 <Stack gap={12}>
                   {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
                     <Suspense fallback={
@@ -149,7 +150,7 @@ export default function ResearchDetail() {
                     <Stack gap={12}>
                       <Stack gap={4}>
                         <PageHeader
-                          label={`PROJECT // ${tool.category}`}
+                          label={`PROJECT // ${tool.taxonomyBucket || 'RESEARCH'}`}
                           title={tool.title}
                           paddingBottom={0}
                           border="none"
@@ -177,7 +178,7 @@ export default function ResearchDetail() {
                       </Grid>
 
                       {tool.status === 'Coming Soon' && (
-                        <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
+                        <Box border radius="lg" padding="card" surface="muted" borderStyle="dashed">
                           <Stack gap={4} align="center" textAlign="center">
                             <Search className="w-8 h-8 text-accent opacity-muted" />
                             <Stack gap={2}>
@@ -192,7 +193,7 @@ export default function ResearchDetail() {
                     </Stack>
                   )}
                 </Stack>
-              </Box>
+              </Stack>
             )}
           </Stack>
         </EditorialLayout>

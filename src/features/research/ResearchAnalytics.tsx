@@ -165,7 +165,7 @@ function FlagshipCard({
                 variant="primary"
                 paddingX={4}
                 paddingY={2}
-                zIndex={20}
+                zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
                 {tool.externalLinkDisplayLabel || 'Open Link'}
@@ -178,7 +178,7 @@ function FlagshipCard({
                 variant="primary"
                 paddingX={4}
                 paddingY={2}
-                zIndex={20}
+                zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
                 Read Deep-Dive
@@ -194,7 +194,7 @@ function FlagshipCard({
                 variant="secondary"
                 paddingX={4}
                 paddingY={2}
-                zIndex={20}
+                zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
                 Source Repo
