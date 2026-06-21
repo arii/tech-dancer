@@ -37,7 +37,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Python dependencies
-        run: pip install -e dev-tools/
+        run: |
+          if [ -f "dev-tools/setup.py" ] || [ -f "dev-tools/pyproject.toml" ]; then
+            pip install -e dev-tools/
+          else
+            echo "⚠️ dev-tools/ is not a valid Python package. Skipping installation."
+          fi
 
       - name: Run Headless Audit
         run: |
