@@ -120,7 +120,8 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
     console.warn('Failed to parse findings JSON from LLM response:', e);
-    return { state: undefined, parseError: 'invalid_json' };
+    // If JSON parsing fails, assume no state was returned so we don't block the pipeline on bad model output
+    return { state: { findings: [] }, parseError: 'invalid_json' };
   }
 }
 
