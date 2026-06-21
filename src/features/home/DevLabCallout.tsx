@@ -1,20 +1,16 @@
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { tagVariants } from '@/lib/variants';
+import type { VariantProps } from 'class-variance-authority';
 
-type HighlightVariant = 'sky' | 'purple' | 'cyan';
+type TagVariant = NonNullable<VariantProps<typeof tagVariants>['variant']>;
 
 interface Highlight {
   label: string;
   tags: string[];
-  variant: HighlightVariant;
+  variant: TagVariant;
 }
-
-const VARIANT_MAP: Record<HighlightVariant, string> = {
-  sky: 'bg-accent-sky/10 text-accent-sky border-accent-sky/20',
-  purple: 'bg-accent-purple/10 text-accent-purple border-accent-purple/20',
-  cyan: 'bg-accent/10 text-accent border-accent/20',
-};
 
 const HIGHLIGHTS: Highlight[] = [
   {
@@ -62,19 +58,12 @@ export function DevLabCallout() {
             </Text>
             <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
               {tags.map(tag => (
-                <Text
-                  as="span"
+                <span
                   key={tag}
-                  size="micro"
-                  weight="font-medium"
-                  paddingX={2}
-                  paddingY={0.5}
-                  radius="sm"
-                  border
-                  className={VARIANT_MAP[variant]}
+                  className={tagVariants({ variant, size: 'xs' })}
                 >
                   {tag}
-                </Text>
+                </span>
               ))}
             </Box>
           </Stack>
