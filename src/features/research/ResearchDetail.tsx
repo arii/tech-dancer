@@ -48,18 +48,9 @@ export default function ResearchDetail() {
   }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
-  const study = !tool && id ? getStudy(id) : null;
+  const study = id ? getStudy(id) : null;
 
   const structuredData = useMemo(() => {
-    if (tool) {
-      return {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": tool.title,
-        "description": tool.description,
-        "applicationCategory": "EducationalApplication"
-      };
-    }
     if (study) {
       return {
         "@context": "https://schema.org",
@@ -76,6 +67,15 @@ export default function ResearchDetail() {
           "@type": "Organization",
           "name": SITE_NAME
         }
+      };
+    }
+    if (tool) {
+      return {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": tool.title,
+        "description": tool.description,
+        "applicationCategory": "EducationalApplication"
       };
     }
     return null;
@@ -126,9 +126,75 @@ export default function ResearchDetail() {
             </Stack>
           }
         >
-          <Box className="prose-editorial">
-            <MarkdownRenderer content={study.content} />
-          </Box>
+          <Stack gap={12}>
+            <Box className="prose-editorial">
+              <MarkdownRenderer content={study.content} />
+            </Box>
+
+            {tool && (
+              <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
+                <Stack gap={12}>
+                  {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
+                    <Suspense fallback={
+                      <Box padding={20} display="flex" align="center" justify="center">
+                        <Activity className="animate-spin text-accent" />
+                      </Box>
+                    }>
+                      {(() => {
+                        const ToolComponent = TOOL_REGISTRY[id];
+                        return <ToolComponent />;
+                      })()}
+                    </Suspense>
+                  ) : (
+                    <Stack gap={12}>
+                      <Stack gap={4}>
+                        <PageHeader
+                          label={`PROJECT // ${tool.category}`}
+                          title={tool.title}
+                          paddingBottom={0}
+                          border="none"
+                        />
+                        <Box border radius="md" surface="default" padding="compact">
+                          <Text variant="body" size="lg" color="dim">{tool.description}</Text>
+                        </Box>
+                      </Stack>
+
+                      <Grid cols={{ base: 1, md: 2 }} gap={12}>
+                        <Stack gap={4}>
+                          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Status</Text>
+                          <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
+                            <Activity className="w-4 h-4 text-accent" />
+                            <StatusBadge label={tool.status} />
+                          </Box>
+                        </Stack>
+                        <Stack gap={4}>
+                          <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">Source</Text>
+                          <Box border radius="md" padding="compact" display="flex" align="center" gap={3}>
+                            <Database className="w-4 h-4 text-accent" />
+                            <Text variant="mono" size="xs">WSDC REGISTRY // PUBLIC</Text>
+                          </Box>
+                        </Stack>
+                      </Grid>
+
+                      {tool.status === 'Coming Soon' && (
+                        <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
+                          <Stack gap={4} align="center" textAlign="center">
+                            <Search className="w-8 h-8 text-accent opacity-muted" />
+                            <Stack gap={2}>
+                              <Text variant="display" size="xl">Work in Progress</Text>
+                              <Text variant="body" size="sm" color="dim" maxWidth="md">
+                                This tool is currently being built. We are finishing the data analysis and layout.
+                              </Text>
+                            </Stack>
+                          </Stack>
+                        </Box>
+                      )}
+                    </Stack>
+                  )}
+                </Stack>
+              </Box>
+            )}
+          </Stack>
         </EditorialLayout>
       </>
     );

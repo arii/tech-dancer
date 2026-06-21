@@ -1,5 +1,5 @@
 ---
-type: post
+type: study
 title: "Technical Deep-Dive: Building the Deployment Impact Analyzer"
 date: "2026-06-19"
 author: "Ariel Anders, PhD"

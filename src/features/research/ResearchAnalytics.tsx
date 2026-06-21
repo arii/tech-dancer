@@ -156,7 +156,7 @@ function FlagshipCard({
           </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
-            {tool.externalUrl && (
+            {tool.externalUrl ? (
               <ActionButton
                 as="a"
                 href={tool.externalUrl}
@@ -170,6 +170,19 @@ function FlagshipCard({
               >
                 {tool.externalLinkDisplayLabel || 'Open Link'}
                 <Icon icon={ExternalLink} size="sm" />
+              </ActionButton>
+            ) : tool.canonicalPath && (
+              <ActionButton
+                as="a"
+                href={tool.canonicalPath}
+                variant="primary"
+                paddingX={4}
+                paddingY={2}
+                zIndex={20}
+                width={{ base: "full", sm: "auto" }}
+              >
+                Read Deep-Dive
+                <Icon icon={ArrowRight} size="sm" />
               </ActionButton>
             )}
             {tool.sourceUrl && (
