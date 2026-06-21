@@ -28,16 +28,10 @@ function createModel(modelName: string, maxOutputTokens: number = 1500): ChatGoo
     maxOutputTokens: maxOutputTokens,
     // Reserve a bounded slice of the budget for reasoning so it can't
     // crowd out the actual review text + verdict + findings JSON.
-    // In @langchain/google-genai v2.2.0, this is passed via thinkingConfig if supported
-    // but the flat option is also commonly mapped.
-    // Given the caveat, we'll try to follow the prompt's suggestion.
-    // Note: v2.2.0 might need it inside generationConfig or as a direct prop.
-    // Based on LangChain docs for newer versions, it might be maxReasoningTokens.
-    // But we'll stick to the "thinkingBudget" name from the instructions as a primary guess.
-    // If it's 2.2.0, we can also try to be safe.
-    ...({
+    thinkingConfig: {
+      includeThoughts: true,
       thinkingBudget: Math.min(1024, Math.floor(maxOutputTokens * 0.3)),
-    } as any)
+    }
   });
 }
 
@@ -78,7 +72,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     // thoughtsTokenCount might be nested in response_metadata or usage_metadata
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (response.response_metadata as any)?.usage?.thoughts_token_count;
+                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
