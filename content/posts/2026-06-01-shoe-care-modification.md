@@ -1,13 +1,11 @@
 ---
 type: post
-status: "published"
 title: "The Most Effective Way to Combat Smelly Dance Shoes"
 date: "2026-06-01"
 author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Stop masking odors and start eliminating them. Why an electric shoe dryer has proven to be the most effective tool in my gear bag."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
-imageAlt: "A sketch of a deodorizing shoe dryer with two vertical airflow pipes, showing its compact design for quickly drying sweaty dance shoes."
 affiliateIds: ["shoe-dryer", "epsom-salt"]
 tags:
   - "shoes"
@@ -20,11 +18,11 @@ Your shoes are your most important piece of equipment, but they are also the mos
 While some of these provided temporary relief, I found that none of them were a long-term solution. The powders created a messy paste when combined with sweat, the sprays often just added a floral scent to the funk, and the dryer sheets struggled against the deep-seated moisture that builds up during a multi-day event.
 
 
-## The Science of the Stink
+### The Science of the Stink
 The odor isn't actually the sweat itself—it's the bacteria that thrive in the warm, damp environment inside your shoes. When you dance for hours, your shoes become a petri dish. If you don't remove that moisture completely before the next session, the bacteria continue to multiply, and the smell becomes increasingly difficult to manage.
 
 
-## Why the Electric Shoe Dryer is My Top Choice
+### Why the Electric Shoe Dryer is My Top Choice
 After experimenting with so many different methods, I found that an electric shoe dryer and deodorizer is the most effective way to combat this. Unlike passive drying, which can take days (especially in humid hotel rooms), an electric dryer uses gentle heat and airflow to pull moisture out of the deep foam and fabric layers of your dance shoes.
 
 In my experience, using a dryer for just 30-60 minutes after a dance session makes a world of difference:
@@ -35,9 +33,10 @@ In my experience, using a dryer for just 30-60 minutes after a dance session mak
 - **Freshness for Multi-Day Events:** There is nothing worse than putting on damp, smelly shoes for a morning workshop. A dryer ensures every day starts with a fresh pair.
 
 
-## Recovery After the Dance
+### Recovery After the Dance
 Beyond keeping your shoes fresh, taking care of your feet is just as important. After a long weekend of social dancing, I highly recommend an Epsom salt soak. It helps reduce swelling and soothes tired muscles, making sure you're ready for the next event.
 
 If you are looking for a reliable way to maintain your gear and your hygiene during long dance weekends, these have been the best investments I've made for my gear bag.
 
 <notice type="affiliate" id="shoe-dryer" />
+<notice type="affiliate" id="epsom-salt" />

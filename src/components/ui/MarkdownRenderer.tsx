@@ -2,15 +2,17 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypeSanitize from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Box, Text, Stack } from '@/layouts/Primitives';
+import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
+import type { TextProps, StackProps, GridProps } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
 
 interface MarkdownRendererProps {
   content: string;
@@ -23,19 +25,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[
           rehypeRaw,
-          [rehypeSanitize, {
-            ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input'],
-            attributes: {
-              ...defaultSchema.attributes,
-              notice: ['type', 'id'],
-              Notice: ['type', 'id'],
-              input: ['type', 'checked', 'disabled']
-            },
-            clobberPrefix: ''
-          }]
+          [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
+          Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,
+          Stack: ({ node: _node, ...props }: StackProps & { node?: unknown }) => <Stack {...props} />,
+          Text: ({ node: _node, ...props }: TextProps & { node?: unknown }) => <Text {...props} />,
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
@@ -242,8 +237,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       margin: 0,
                       borderRadius: 0,
                       background: 'var(--color-surface)',
-                      fontSize: '0.8rem',
-                      lineHeight: '1.6',
+                        fontSize: '0.8rem',
+                        lineHeight: '1.6',
                     }}
                     {...(props as object)}
                   >
@@ -278,7 +273,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={6} width="full">
+                  <Box marginY={4} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
@@ -291,7 +286,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={6} width="full">
+                  <Box marginY={4} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
