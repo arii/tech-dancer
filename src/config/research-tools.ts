@@ -124,7 +124,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     taxonomyBucket: 'engineering',
     title: 'Visual Regression & UX Auditor',
     subtitle: 'PLAYWRIGHT VISUAL REGRESSION',
-    description: 'Automated visual regression testing using Playwright and pixelmatch to capture and score pixel-level diffs across PRs.',
+    description: 'Automated visual regression testing using Playwright and pixelmatch. Captures full-page screenshots before and after a PR, computes pixel-level diffs, crops the bounding box of changed regions, and scores severity by percentage of changed pixels. Part of the Deployment Impact Analyzer pipeline.',
     category: 'Perception Debugging',
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Screenshot Diff', 'CI/CD'],
