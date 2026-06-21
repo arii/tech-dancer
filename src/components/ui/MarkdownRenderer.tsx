@@ -237,8 +237,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       margin: 0,
                       borderRadius: 0,
                       background: 'var(--color-surface)',
-                        fontSize: '0.8rem',
-                        lineHeight: '1.6',
+                      fontSize: '0.8rem',
+                      lineHeight: '1.6',
                     }}
                     {...(props as object)}
                   >
