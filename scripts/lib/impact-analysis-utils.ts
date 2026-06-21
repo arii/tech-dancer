@@ -281,3 +281,7 @@ ${changedFilesList}
   fs.writeFileSync(path.join(outputDir, 'impact.md'), markdown);
   console.log(`\n✅ Reports generated in ${outputDir}`);
 }
+
+export function splitAndFilter(output: string): string[] {
+  return output.split('\n').map(f => f.trim()).filter(f => f.length > 0);
+}

@@ -111,7 +111,7 @@ async function cleanupSnapshots() {
   }
 }
 
-async function runCrawler() {
+export async function runCrawler() {
   const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
   if (!apiKey) {
     console.error('Error: Neither GEMINI_API_KEY nor JULES_API_KEY environment variable is set.');
@@ -354,7 +354,9 @@ Provide ONLY the JSON.
   return { type: 'scroll', reason: 'Fallback to scroll due to invalid or unparseable AI response.' };
 }
 
-runCrawler().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  runCrawler().catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
+}

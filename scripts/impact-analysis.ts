@@ -1,10 +1,6 @@
 import { execSync } from 'child_process';
 import { IMPACT_CONFIG } from './impact-analysis.config';
-import { DependencyGraph, ImpactReport, buildReverseMap, findAffectedFiles, getDynamicRouteMapping, resolveAffectedUrls, generateReports, exec } from './lib/impact-analysis-utils';
-
-function splitAndFilter(output: string): string[] {
-  return output.split('\n').map(f => f.trim()).filter(f => f.length > 0);
-}
+import { DependencyGraph, ImpactReport, buildReverseMap, findAffectedFiles, getDynamicRouteMapping, resolveAffectedUrls, generateReports, exec, splitAndFilter } from './lib/impact-analysis-utils';
 
 /**
  * Gets the list of changed files using git detection.
