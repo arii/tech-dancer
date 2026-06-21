@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import {
-  buildSystemPrompt,
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   parseCodeReviewState,
@@ -10,6 +9,7 @@ import {
   EXTERNAL_CONTEXT_TRUNCATED_MESSAGE,
   EXTERNAL_CONTEXT_MINIMUM_BUDGET
 } from '../../../scripts/lib/codeReviewUtils';
+import { buildSystemPrompt } from '../../../scripts/lib/buildCodeReviewPrompt';
 
 describe('codeReviewUtils', () => {
   describe('buildSystemPrompt', () => {
