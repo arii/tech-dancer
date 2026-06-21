@@ -5,11 +5,24 @@ import type { RouteReview, VisualRouteSummary, VisualReviewFinding, VisualReview
 import { DOM_REVIEW_DIR, REVIEW_PROMPT } from './visualReviewConstants';
 
 export function parseVisualReviewFindings(feedback: string): VisualReviewFinding[] {
-  const match = feedback.match(/<findings>([\s\S]*?)<\/findings>/);
-  if (!match) return [];
+  const openTag = '<findings>';
+  const closeTag = '</findings>';
+
+  const openIdx = feedback.lastIndexOf(openTag);
+  const closeIdx = feedback.lastIndexOf(closeTag);
+
+  if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
+    const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
+    if (openedButNeverClosed) {
+      console.warn('⚠️ Visual findings block opened but never closed (truncation?).');
+    }
+    return [];
+  }
+
+  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
 
   try {
-    const data = JSON.parse(match[1].trim()) as VisualReviewState;
+    const data = JSON.parse(jsonText) as VisualReviewState;
     return data.findings || [];
   } catch (e) {
     console.warn('Failed to parse findings JSON from visual LLM response:', e);
@@ -122,6 +135,8 @@ ${r.feedback}
     costLine = `**Cost:** ~$${totalCost.toFixed(5)} (${totalTokens} tokens)\n`;
   }
 
+  const modelLine = reviews[0]?.modelName ? `**Model:** ${reviews[0].modelName}\n` : '';
+
   return `## ${reportTitle}
 
 > ${botTagline}
@@ -129,6 +144,7 @@ ${r.feedback}
 **Summary:** 🔴 ${highCount} high · 🟡 ${medCount} medium · 🟢 ${lowCount} low
 **Reviewing:** ${prLink}
 ${costLine}
+${modelLine}
 ${sections}
 
 ---
