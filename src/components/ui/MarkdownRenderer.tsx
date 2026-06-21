@@ -79,7 +79,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               }
             }
             return (
-              <Box border surface="warning" padding={6} marginY={8} radius="md">
+              <Box border surface="warning" padding={6} marginY={6} radius="md">
                 <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
                   {label}
                 </Text>
@@ -90,7 +90,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={12} marginBottom={6} className="prose-section group">
+            <Box marginTop={10} marginBottom={4} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
@@ -98,7 +98,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 className="editorial-section-number"
               />
               <Text as="h2" variant="h2" size="3xl" color="brand" margin={0} leading="tight" {...props} />
-              <Box height={0.5} width={12} marginTop={4} className="bg-accent transition-all group-hover:w-20" />
+              <Box height={0.5} width={12} marginTop={6} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
@@ -116,7 +116,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           table: ({node: _node, ...props}) => (
-            <Box width="full" overflowX="auto" marginY={8} radius="lg" border className="overflow-hidden">
+            <Box width="full" overflowX="auto" marginY={6} radius="lg" border className="overflow-hidden">
               <Box as="table" width="full" className="border-collapse" {...props} />
             </Box>
           ),
@@ -141,7 +141,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={12} width="full" display="flex" justify="center">
+              <Box marginY={8} width="full" display="flex" justify="center">
                 <Box
                   as="img"
                   src={normalizedSrc}
@@ -189,7 +189,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justify="center">
+                  <Box marginY={6} width="full" display="flex" justify="center">
                     <Box
                       as="img"
                       src={diagramUrl}
@@ -254,7 +254,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 as="code"
                 variant="mono"
                 size="xs"
-                paddingX={1.5}
+                paddingX={2}
                 paddingY={0.5}
                 radius="sm"
                 surface="surface"
