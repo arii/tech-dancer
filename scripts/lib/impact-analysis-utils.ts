@@ -53,6 +53,40 @@ export function exec(command: string): string {
 }
 
 /**
+ * Helper to split string into lines and filter empty values.
+ */
+const splitAndFilter = (output: string): string[] => (output ? output.split('\n').filter(Boolean) : []);
+
+/**
+ * Gets the list of changed files between current HEAD and origin/main.
+ * Falls back to HEAD~1 if origin/main is not available.
+ */
+export function getChangedFiles(): string[] {
+  // Check for staged and unstaged changes first
+  const staged = exec('git diff --name-only --cached');
+  const unstaged = exec('git diff --name-only');
+  const workingChanges = new Set([...splitAndFilter(staged), ...splitAndFilter(unstaged)]);
+
+  let base = 'origin/main';
+  try {
+    execSync(`git rev-parse ${base}`, { stdio: 'ignore' });
+  } catch {
+    try {
+      execSync('git rev-parse HEAD~1', { stdio: 'ignore' });
+      base = 'HEAD~1';
+    } catch {
+      // Use empty tree hash if no previous commit exists
+      base = exec('git hash-object -t tree /dev/null');
+    }
+  }
+
+  const committed = exec(`git diff --name-only ${base} HEAD`);
+  const allChanges = new Set([...workingChanges, ...splitAndFilter(committed)]);
+
+  return Array.from(allChanges).filter(Boolean);
+}
+
+/**
  * Builds a reverse dependency map (child -> [parents]).
  */
 export function buildReverseMap(graph: DependencyGraph): Record<string, ReverseDependency[]> {
@@ -85,6 +119,18 @@ export function buildReverseMap(graph: DependencyGraph): Record<string, ReverseD
  * Note: While dependency-cruiser provides reachability analysis, we perform a manual
  * traversal here to gain granular control over the 'dynamic' vs 'static' dependency
  * links.
+ *
+ * RATIONALE:
+ * In modern code-split React apps, every page is often dynamically imported by the
+ * router. If we treated these dynamic imports as standard dependencies, every change
+ * to any page would "reach" the router (src/config/routes.ts). Since the router is a
+ * "Global Trigger", this would cause every single change to flag a high-severity
+ * Global Impact, requiring visual review of the entire site.
+ *
+ * By distinguishing between static and dynamic links, we can:
+ * 1. Traverse dynamic links to find which routes are affected (Route Discovery).
+ * 2. Ignore dynamic links when checking if a change affects a global layout or
+ *    the app core (Global Impact Gating).
  */
 export function findAffectedFiles(
   changedFiles: string[],

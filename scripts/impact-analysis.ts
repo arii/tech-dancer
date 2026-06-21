@@ -1,7 +1,7 @@
-import { execSync } from 'child_process';
 import { IMPACT_CONFIG } from './impact-analysis.config';
 import {
   exec,
+  getChangedFiles,
   buildReverseMap,
   findAffectedFiles,
   getDynamicRouteMapping,
@@ -11,20 +11,6 @@ import {
   type ImpactReport
 } from './lib/impact-analysis-utils';
 
-/**
- * Helper to split string into lines and filter empty values.
- */
-const splitAndFilter = (output: string): string[] => (output ? output.split('\n').filter(Boolean) : []);
-
-/**
- * Gets the list of changed files using git detection.
- */
-function getChangedFiles(): string[] {
-  const staged = execSync('git diff --name-only --cached', { encoding: 'utf-8' });
-  const unstaged = execSync('git diff --name-only', { encoding: 'utf-8' });
-  return Array.from(new Set([...splitAndFilter(staged), ...splitAndFilter(unstaged)])).filter(Boolean);
-}
-
 async function main() {
   console.log('🚀 Running Deployment Impact Analysis...');
 
@@ -33,7 +19,16 @@ async function main() {
     const files = envChangedFiles.length > 0 ? envChangedFiles : getChangedFiles();
 
     if (files.length === 0) {
-      console.log('✅ No changes detected.');
+      console.log('✅ No changes detected. Generating empty report.');
+      const emptyReport: ImpactReport = {
+        changedFiles: [],
+        affectedPages: [],
+        affectedDynamicImports: [],
+        routes: [],
+        visualReviewRequired: [],
+        impactLevel: 'LOW'
+      };
+      generateReports(emptyReport, [], []);
       return;
     }
 
