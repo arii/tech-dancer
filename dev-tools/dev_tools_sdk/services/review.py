@@ -3,7 +3,7 @@ import os
 import json
 
 
-def load_visual_guidelines() -> str:
+def _load_visual_guidelines() -> str:
     """Loads visual guidelines from a shared JSON file."""
     try:
         guidelines_path = os.path.join(os.path.dirname(__file__), "..", "..", "visual_guidelines.json")
@@ -16,13 +16,15 @@ def load_visual_guidelines() -> str:
     return "Impeccable design guidelines not available."
 
 
+VISUAL_GUIDELINES = _load_visual_guidelines()
+
+
 class ReviewService:
     def build_prompt(self, context: str) -> str:
-        visual_guidelines = load_visual_guidelines()
         return (
             "You are an expert software engineer and UI/UX auditor. "
             "Review the following code for bugs, anti-patterns, and visual quality defects.\n\n"
-            f"{visual_guidelines}\n\n"
+            f"{VISUAL_GUIDELINES}\n\n"
             "If the diff contains UI files (.tsx, .css), you MUST audit them against the Visual & Design Guidelines above. "
             "Provide actionable fixes for any violations.\n\n"
             f"### Context\n\n{context}"

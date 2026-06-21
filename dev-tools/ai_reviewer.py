@@ -6,6 +6,7 @@ ai_reviewer.py - Standalone AI Code Reviewer CLI
 import os
 import sys
 import argparse
+import json
 from utils import call_ai
 
 MODEL = "gpt-4o"
@@ -19,6 +20,22 @@ def is_binary(file_path):
             return False
     except (UnicodeDecodeError, PermissionError):
         return True
+
+def _load_visual_guidelines() -> str:
+    """Loads visual guidelines from a shared JSON file."""
+    try:
+        guidelines_path = os.path.join(os.path.dirname(__file__), "visual_guidelines.json")
+        if os.path.exists(guidelines_path):
+            with open(guidelines_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("VISUAL_DESIGN_GUIDELINES", "")
+    except Exception:
+        pass
+    return ""
+
+
+VISUAL_GUIDELINES = _load_visual_guidelines()
+
 
 def review_file(file_path, silent=False):
     if not os.path.exists(file_path):
@@ -43,21 +60,10 @@ def review_file(file_path, silent=False):
         print(f"Error reading file {file_path}: {e}", file=sys.stderr)
         sys.exit(1)
 
-    visual_guidelines = ""
-    try:
-        import json
-        guidelines_path = os.path.join(os.path.dirname(__file__), "visual_guidelines.json")
-        if os.path.exists(guidelines_path):
-            with open(guidelines_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                visual_guidelines = data.get("VISUAL_DESIGN_GUIDELINES", "")
-    except Exception:
-        pass
-
     prompt = (
         "You are an expert software engineer and UI/UX auditor. "
         "Review the following code for bugs, anti-patterns, and visual quality defects.\n\n"
-        f"{visual_guidelines}\n\n"
+        f"{VISUAL_GUIDELINES}\n\n"
         "If the file contains UI code (.tsx, .css), you MUST audit it against the Visual & Design Guidelines above.\n\n"
         f"### Code to Review\n\n```\n{content}\n```"
     )
