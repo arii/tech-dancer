@@ -258,9 +258,10 @@
 
   .prose-editorial {
     @apply prose prose-slate prose-invert max-w-none;
-    @apply prose-p:font-sans prose-p:text-text-body prose-p:leading-[1.8] prose-p:text-lg prose-p:mb-6 prose-p:text-pretty;
+    @apply prose-p:font-sans prose-p:text-text-dim prose-p:leading-[1.8] prose-p:text-lg prose-p:mb-8 prose-p:text-pretty;
     @apply prose-headings:font-display prose-headings:text-text-main prose-headings:tracking-[-0.03em] prose-headings:font-black;
-    @apply prose-h2:mt-12 prose-h2:mb-6;
+    @apply prose-h2:mt-16 prose-h2:mb-8;
+    @apply prose-h3:mt-12 prose-h3:mb-6;
     @apply prose-strong:text-text-main prose-strong:font-black;
     @apply prose-a:text-accent prose-a:no-underline hover:prose-a:underline;
     @apply prose-li:text-text-body prose-li:text-lg prose-li:leading-relaxed;

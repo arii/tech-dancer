@@ -52,49 +52,56 @@ export function EditorialLayout({
         </Box>
 
         {/* Header */}
-        <Box width="full" marginX={!sidebar ? "auto" : undefined} maxWidth={!sidebar ? "3xl" : undefined}>
+        <Box width="full" marginX={!sidebar ? "auto" : undefined} maxWidth={!sidebar ? "3xl" : "full"}>
           {header}
         </Box>
 
-        {/* Content & Sidebar Grid */}
-        <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 12, lg: 16 }} align="start">
-          {/* Main Article Column */}
-          <Box
-            span={{ base: 1, lg: sidebar ? 8 : 10 }}
-            marginX={!sidebar ? "auto" : undefined}
-            width="full"
-            maxWidth={{ lg: "3xl" }}
-            className="order-2 lg:order-1"
-          >
-            <Box className="article-content-wrapper" width="full">
-              {children}
+        {/* Content & Sidebar Layout */}
+        {sidebar ? (
+          <Grid cols={{ base: 1, lg: 12 }} gap={{ base: 12, lg: 16 }} align="start">
+            {/* Main Article Column */}
+            <Box
+              span={{ base: 1, lg: 8 }}
+              width="full"
+              className="order-2 lg:order-1"
+            >
+              <Box className="article-content-wrapper" width="full">
+                {children}
+              </Box>
             </Box>
-          </Box>
 
-          {/* Sidebar */}
-          {sidebar && (
+            {/* Sidebar */}
             <Box span={{ base: 1, lg: 4 }} width="full" className="order-1 lg:order-2">
               <Stack gap={8} position={{ lg: "sticky" }} top={32}>
                 {sidebar}
               </Stack>
             </Box>
-          )}
 
-          {/* Footer */}
-          {footer && (
-            <Box
-              span={{ base: 1, lg: sidebar ? 8 : 10 }}
-              marginX={!sidebar ? "auto" : undefined}
-              width="full"
-              maxWidth={{ lg: "3xl" }}
-              className="order-3"
-            >
-              <Box marginTop={{ base: 12, lg: 0 }}>
+            {/* Footer */}
+            {footer && (
+              <Box
+                span={{ base: 1, lg: 8 }}
+                width="full"
+                className="order-3"
+              >
+                <Box marginTop={{ base: 12, lg: 0 }}>
+                  {footer}
+                </Box>
+              </Box>
+            )}
+          </Grid>
+        ) : (
+          <Stack gap={12} width="full" marginX="auto" maxWidth="3xl">
+            <Box className="article-content-wrapper" width="full">
+              {children}
+            </Box>
+            {footer && (
+              <Box width="full" marginTop={12}>
                 {footer}
               </Box>
-            </Box>
-          )}
-        </Grid>
+            )}
+          </Stack>
+        )}
       </Stack>
     </Box>
   );

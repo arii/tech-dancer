@@ -79,7 +79,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               }
             }
             return (
-              <Box border surface="warning" padding={6} marginY={6} radius="md">
+              <Box border surface="warning" padding={6} marginY={12} radius="md">
                 <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
                   {label}
                 </Text>
@@ -90,7 +90,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={10} marginBottom={4} className="prose-section group">
+            <Box marginTop={16} marginBottom={8} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
@@ -102,7 +102,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box marginTop={8} marginBottom={4}>
+            <Box marginTop={12} marginBottom={6}>
               <Text
                 as="h3"
                 variant="h3"
@@ -141,7 +141,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justify="center">
+              <Box marginY={12} width="full" display="flex" justify="center">
                 <Box
                   as="img"
                   src={normalizedSrc}
@@ -158,7 +158,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, ...props}) => (
-            <Text as="p" color="dim" leading="relaxed" marginY={4} size="base" {...props} />
+            <Text as="p" color="dim" leading="relaxed" marginY={6} size="lg" {...props} />
           ),
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
@@ -189,16 +189,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={6} width="full" display="flex" justify="center">
+                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8}>
                     <Box
                       as="img"
                       src={diagramUrl}
                       alt="Workflow Diagram"
-                      radius="lg"
-                      shadow="sm"
+                      radius="md"
                       maxWidth="full"
                       maxHeight={96}
-                      className="object-contain"
+                      className="object-contain invert brightness-200 contrast-150"
                       loading="lazy"
                     />
                   </Box>
@@ -212,7 +211,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             if (isBlock) {
               return (
-                <Box marginY={6} radius="lg" border className="overflow-hidden">
+                <Box marginY={12} radius="lg" border className="overflow-hidden">
                   {language && (
                     <Stack
                       direction="row"
