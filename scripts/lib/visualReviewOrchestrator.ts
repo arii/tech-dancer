@@ -3,6 +3,7 @@ import * as path from 'path';
 import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visualReviewConstants';
 import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary, VisualReviewState } from './visualReviewTypes';
+import { logAIRun } from './aiLogger';
 
 export interface LLMClientStrategy {
   botName: string;
@@ -100,9 +101,27 @@ export async function orchestrateVisualReview(
 
   for (const route of routesToReview) {
     console.log(`  → ${route.route} (${route.severity}, ${route.differencePercent.toFixed(2)}%)`);
+    const startTime = Date.now();
     const review = await client.invokeReview(route);
+    const durationMs = Date.now() - startTime;
+    review.durationMs = durationMs;
     console.log(`    Feedback: ${review.feedback}`);
     reviews.push(review);
+
+    logAIRun({
+      type: 'visual-review',
+      model: review.modelName || 'unknown',
+      inputTokens: review.inputTokens ?? 0,
+      outputTokens: review.outputTokens ?? 0,
+      cacheTokens: review.cacheTokens ?? 0,
+      totalTokens: review.tokens,
+      durationMs: durationMs,
+      cost: review.cost,
+      verdict: review.llmVerdict || 'unknown',
+      pr: process.env.PR_NUMBER,
+      route: route.route,
+      rawResponse: review.feedback,
+    });
   }
 
   const report = generateMarkdownReport(reviews, client.botName, client.reportTitle, client.botTagline);

@@ -34,6 +34,10 @@ export interface RouteReview {
   differencePercent: number;
   feedback: string;
   tokens: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  cacheTokens?: number;
+  durationMs?: number;
   cost: number;
   modelName?: string;
   llmVerdict?: 'pass' | 'fail' | 'warn';

@@ -91,7 +91,10 @@ Your job:
     const response = await model.invoke([message]);
 
     const usageMetadata = response.usage_metadata;
+    const inputTokens = usageMetadata?.input_tokens ?? 0;
+    const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = (usageMetadata as any)?.cache_read_tokens || 0;
 
     // Approximating cost for general OpenAI API usage (e.g. gpt-4o) if used over GitHub models natively
     // GitHub Models are currently free/rate-limited depending on the tier.
@@ -107,6 +110,9 @@ Your job:
       differencePercent: summary.differencePercent,
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),

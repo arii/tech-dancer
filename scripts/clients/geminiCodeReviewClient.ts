@@ -51,10 +51,11 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const response = await model.invoke([message]);
 
 
-    const usageMetadata = response.usage_metadata;
+    const usageMetadata = response.usage_metadata as any;
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens || 0;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
@@ -75,6 +76,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     return {
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       modelName: modelName,
       llmVerdict: parseCodeReviewVerdict(feedback),

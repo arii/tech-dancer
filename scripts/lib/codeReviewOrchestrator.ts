@@ -5,6 +5,7 @@ import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJules
 import { calculateEstimatedTokens } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
 import { execSync, spawnSync } from 'child_process';
+import { logAIRun } from './aiLogger';
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -308,7 +309,26 @@ export async function orchestrateCodeReview(
 
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
+  const startTime = Date.now();
   let reviewResult = await client.invokeReview(summary);
+  const durationMs = Date.now() - startTime;
+  reviewResult.durationMs = durationMs;
+
+  logAIRun({
+    type: 'code-review',
+    model: reviewResult.modelName || 'unknown',
+    inputTokens: reviewResult.inputTokens ?? 0,
+    outputTokens: reviewResult.outputTokens ?? 0,
+    cacheTokens: reviewResult.cacheTokens ?? 0,
+    totalTokens: reviewResult.tokens,
+    durationMs: durationMs,
+    cost: reviewResult.cost,
+    verdict: reviewResult.llmVerdict || 'unknown',
+    pr: process.env.PR_NUMBER,
+    truncated: reviewResult.truncated,
+    parseError: reviewResult.parseError,
+    rawResponse: reviewResult.feedback,
+  });
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,

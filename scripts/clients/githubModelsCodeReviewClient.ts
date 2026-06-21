@@ -71,7 +71,10 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
 
     const usageMetadata = response.usage_metadata;
+    const inputTokens = usageMetadata?.input_tokens ?? 0;
+    const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = (usageMetadata as any)?.cache_read_tokens || 0;
     const cost = 0;
 
     const finishReason = (response as { response_metadata?: { finish_reason?: string } })
@@ -90,6 +93,9 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     return {
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,

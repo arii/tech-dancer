@@ -44,3 +44,11 @@ jobs:
         with:
           commit_message: "chore: update PR review tracking"
           file_pattern: 'REVIEW_TRACKING.md pr_overlaps.txt'
+
+      - name: Upload AI Review Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-review-logs
+          path: dev-tools/logs/ai/
+          retention-days: 7
