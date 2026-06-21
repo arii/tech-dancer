@@ -267,24 +267,16 @@ jobs:
       - name: Build Main
         env:
           DISABLE_MINIFY: true
-        run: |
-          echo "🏗️ Building main branch for comparison..."
-          pnpm run impact:build-main
+        run: pnpm run impact:build-main
       - name: Build PR
         env:
           VITE_BASE_PATH: /
           DISABLE_MINIFY: true
-        run: |
-          echo "🏗️ Building PR branch for review..."
-          pnpm run build:review
+        run: pnpm run build:review
       - name: Visual Diff
-        run: |
-          echo "📸 Generating visual diffs..."
-          pnpm run impact:visual-diff
+        run: pnpm run impact:visual-diff
       - name: DOM Diff
-        run: |
-          echo "📄 Generating DOM diffs..."
-          pnpm run impact:dom-diff
+        run: pnpm run impact:dom-diff
       - name: Check if visual changes exist
         id: check_visuals
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
@@ -294,32 +286,24 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🤖 Starting Gemini Code Review..."
-          pnpm run impact:gemini-code-review
+        run: pnpm run impact:gemini-code-review 2>&1 | tee artifacts/gemini-code-review.log
       - name: Code review github models agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🤖 Starting GitHub Models Code Review..."
-          pnpm run impact:github-models-code-review
+        run: pnpm run impact:github-models-code-review 2>&1 | tee artifacts/github-models-code-review.log
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🤖 Starting Gemini Visual Review..."
-          pnpm run impact:gemini-review
+        run: pnpm run impact:gemini-review 2>&1 | tee artifacts/gemini-review.log
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🤖 Starting GitHub Models Visual Review..."
-          pnpm run impact:github-models-review
+        run: pnpm run impact:github-models-review 2>&1 | tee artifacts/github-models-review.log
       - name: Report Summary
         if: always()
         run: |
