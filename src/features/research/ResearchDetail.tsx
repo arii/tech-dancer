@@ -48,7 +48,7 @@ export default function ResearchDetail() {
   }, [paramId, pathname]);
 
   const tool = id ? getTool(id) : null;
-  const study = !tool && id ? getStudy(id) : null;
+  const study = id ? getStudy(id) : null;
 
   const structuredData = useMemo(() => {
     if (tool) {
@@ -96,7 +96,7 @@ export default function ResearchDetail() {
     return <Navigate to={tool.canonicalPath} replace />;
   }
 
-  if (study) {
+  if (study && !tool) {
     const rt = `${readingTime(study.content)} min read`;
     return (
       <>
@@ -230,6 +230,12 @@ export default function ResearchDetail() {
                   </Box>
                 )}
               </Stack>
+            )}
+
+            {study && (
+              <Box className="prose-editorial" paddingTop={8} borderTop>
+                <MarkdownRenderer content={study.content} />
+              </Box>
             )}
           </Stack>
         </Box>
