@@ -108,15 +108,15 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
-    id: 'deployment-impact-analyzer',
+    id: 'scope-blast-radius',
     taxonomyBucket: 'engineering',
-    title: 'Deployment Impact Analyzer',
+    title: 'Blast-Radius Analyzer',
     subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
     description: 'CI pipeline that identifies pages visually affected by a PR. Uses dependency-cruiser for impact analysis and Playwright for automated visual regression reports.',
     category: 'DevAI System',
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
-    canonicalPath: '/research/deployment-impact-analyzer',
+    canonicalPath: '/research/scope-blast-radius',
     sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
   },
   {
