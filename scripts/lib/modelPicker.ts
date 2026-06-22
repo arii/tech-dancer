@@ -110,3 +110,30 @@ export async function pickOptimalModel(
   if (isFallbackValid) return fallback;
   return models[0].id.split('/').pop() || models[0].id;
 }
+
+const SUPPORTED_GEMINI_MODELS = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash', 'gemini-2.0-pro-exp-02-05'];
+
+export function pickOptimalGeminiModel(
+  estimatedInputTokens: number = 0,
+  fallback: string = 'gemini-1.5-flash'
+): string {
+  // Respect explicit user override if present
+  if (process.env.GEMINI_MODEL) {
+    if (SUPPORTED_GEMINI_MODELS.includes(process.env.GEMINI_MODEL)) {
+      return process.env.GEMINI_MODEL;
+    }
+    console.warn(`⚠️ GEMINI_MODEL environment variable specifies unsupported model "${process.env.GEMINI_MODEL}". Falling back to logic-based selection.`);
+  }
+
+  // Use Flash for small/medium contexts to keep costs and latency low.
+  // Switch to Pro if the input is very large (e.g. many high-res screenshots or massive DOM/diff).
+  // 30,000 tokens is a conservative threshold for "large" in this repo's typical use cases.
+  const selected = estimatedInputTokens > 30000 ? 'gemini-1.5-pro' : fallback;
+
+  // Ultimate fallback to ensure we always return a valid/supported model name
+  if (!SUPPORTED_GEMINI_MODELS.includes(selected)) {
+    return 'gemini-1.5-flash';
+  }
+
+  return selected;
+}

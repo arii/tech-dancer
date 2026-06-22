@@ -38,6 +38,7 @@ pnpm-debug.log*
 Thumbs.db
 
 # Audit Artifacts
+.tmp-crawler/
 antipattern-report.txt
 TODO_ANTIPATTERNS.md
 ai-fix-prompt.txt
