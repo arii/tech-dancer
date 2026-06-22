@@ -25,7 +25,6 @@ let failed = false;
 
 const isCI = process.env.CI === "true" || process.env.CI === "1" || process.env.VERCEL === "1";
 const expectedMajorPrefix = expectedNodeExact.split('.')[0] + '.';
-const expectedPrefix = expectedNodeExact.split('.').slice(0, 2).join('.') + '.';
 const nodeMatches = isCI
   ? actualNode.startsWith(expectedMajorPrefix)
   : actualNode === expectedNodeExact;
