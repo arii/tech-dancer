@@ -21,10 +21,11 @@ export interface AIRunLogEntry {
 }
 
 const LOG_DIR = path.join(process.cwd(), 'dev-tools', 'logs', 'ai');
-const LOG_FILE = path.join(LOG_DIR, 'review-run.json');
+const LOG_FILE = path.join(LOG_DIR, 'review-run.jsonl');
 
 /**
- * Records an AI review run entry to a structured JSON log file.
+ * Records an AI review run entry to a structured JSON Lines (.jsonl) log file.
+ * This provides O(1) performance and ensures efficiency as logs accumulate.
  */
 export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
   try {
@@ -37,22 +38,50 @@ export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
       ...entry,
     };
 
-    let logs: AIRunLogEntry[] = [];
-    if (fs.existsSync(LOG_FILE)) {
-      try {
-        const content = fs.readFileSync(LOG_FILE, 'utf-8');
-        if (content.trim()) {
-          logs = JSON.parse(content);
-        }
-      } catch (e) {
-        console.warn(`⚠️ Failed to parse existing AI logs at ${LOG_FILE}, starting fresh.`, e);
-      }
-    }
-
-    logs.push(logEntry);
-    fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+    // Append as a single JSON line for performance
+    fs.appendFileSync(LOG_FILE, JSON.stringify(logEntry) + '\n');
     console.log(`📊 AI review metrics logged to ${LOG_FILE}`);
   } catch (error) {
-    console.error('❌ Failed to write AI run log:', error);
+    console.error('❌ Failed to append to AI run log:', error);
   }
+}
+
+interface ReviewResultLike {
+  tokens: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  cacheTokens?: number;
+  cost: number;
+  modelName?: string;
+  llmVerdict?: string;
+  truncated?: boolean;
+  parseError?: string;
+  feedback: string;
+}
+
+/**
+ * Unified helper to log review results from various orchestrators.
+ */
+export function logReviewExecution(
+  type: AIRunLogEntry['type'],
+  result: ReviewResultLike,
+  durationMs: number,
+  additional: { pr?: string; route?: string } = {}
+): void {
+  logAIRun({
+    type,
+    model: result.modelName || 'unknown',
+    inputTokens: result.inputTokens ?? 0,
+    outputTokens: result.outputTokens ?? 0,
+    cacheTokens: result.cacheTokens ?? 0,
+    totalTokens: result.tokens,
+    durationMs,
+    cost: result.cost,
+    verdict: result.llmVerdict || 'unknown',
+    pr: additional.pr || process.env.PR_NUMBER,
+    route: additional.route,
+    truncated: result.truncated,
+    parseError: result.parseError,
+    rawResponse: result.feedback,
+  });
 }

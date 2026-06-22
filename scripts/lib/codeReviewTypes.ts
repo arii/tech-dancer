@@ -33,7 +33,6 @@ export interface CodeReviewResult {
   inputTokens?: number;
   outputTokens?: number;
   cacheTokens?: number;
-  durationMs?: number;
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
   state?: CodeReviewState;
