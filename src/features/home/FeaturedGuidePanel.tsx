@@ -18,7 +18,7 @@ export function FeaturedGuidePanel() {
       as={NavLink}
       to={FEATURED.href}
       width="full"
-      aspect={{ base: 'video', lg: 'auto' }}
+      aspect={{ base: '4/3', lg: 'auto' }}
       direction="col"
       justify="end"
       position="relative"
@@ -34,14 +34,14 @@ export function FeaturedGuidePanel() {
         width={420}
         height={600}
         fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility (bottom-up to protect bottom-aligned text) */}
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-t from-bg/90 via-bg/40 to-transparent"
+        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
@@ -49,10 +49,10 @@ export function FeaturedGuidePanel() {
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
-        <Text variant="headline" size="xl" weight="font-black" color="main" leading="tight">
+        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
           {FEATURED.title}
         </Text>
-        <Text variant="body" size="sm" color="dim">
+        <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">
           {FEATURED.subtitle}
         </Text>
         <Text
