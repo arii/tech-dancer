@@ -36,6 +36,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
