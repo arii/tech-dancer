@@ -236,6 +236,7 @@ jobs:
           name: playwright-report-${{ github.run_id }}
           path: playwright-report/
           retention-days: 7
+          if-no-files-found: ignore
 
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
