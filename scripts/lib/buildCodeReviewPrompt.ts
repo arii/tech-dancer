@@ -42,17 +42,32 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
 `;
   }
 
+  // NEW: only pull in the (large) visual design rulebook when the diff can
+  // plausibly contain UI files. Previously this was injected unconditionally
+  // on every PR — including pure backend/CI/infra diffs with zero .tsx/.css
+  // files — which inflated prompt complexity and reasoning-token usage for
+  // no benefit. If changedFiles is unknown/undefined, default to INCLUDING
+  // the guidelines (fail safe, not fail open) since we can't rule UI out.
+  const touchesUI = summary.changedFiles
+    ? summary.changedFiles.some(f =>
+        f.endsWith('.tsx') || f.endsWith('.jsx') || f.endsWith('.css') || f.endsWith('.scss')
+      )
+    : true;
+
+  const guidelinesSection = touchesUI
+    ? `${VISUAL_DESIGN_GUIDELINES}\n\n`
+    : '';
+
+  const uiAuditInstruction = touchesUI
+    ? 'This diff contains UI files (.tsx, .css, .scss) — you MUST audit them against the VISUAL & DESIGN GUIDELINES above.\n\n'
+    : '';
+
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.
 Review the following code diff for bugs, anti-patterns, missing types, performance issues, and visual quality defects.
 Provide actionable feedback. Focus on HIGH severity issues.
 
-${VISUAL_DESIGN_GUIDELINES}
-
-${goalSection}${priorStateSection}
-
-If the diff contains UI files (.tsx, .css, .scss), you MUST audit them against the VISUAL & DESIGN GUIDELINES above.
-
-Severity rules — apply these strictly:
+${guidelinesSection}${goalSection}${priorStateSection}
+${uiAuditInstruction}Severity rules — apply these strictly:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
   passed where the type doesn't allow it, a class or function that doesn't exist, a call
   with the wrong arity, a test that would fail. Cite the exact line(s).

@@ -36,4 +36,5 @@ export interface CodeReviewResult {
   modelName?: string;
   truncated?: boolean;
   parseError?: 'missing_closing_tag' | 'invalid_json';
+  durationMs?: number;
 }
