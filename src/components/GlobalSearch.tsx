@@ -270,7 +270,7 @@ export function GlobalSearch() {
             <Box display="flex" align="center" gap={6}>
               {[ { key: 'ESC', label: 'CLOSE' }, { key: '↵', label: 'SELECT', bold: true } ].map(hint => (
                 <Box key={hint.key} display="flex" align="center" gap={2}>
-                  <Box border paddingX={1.5} paddingY={0.5} radius="industrial" surface="default" display="flex" align="center" justify="center" className="border-line">
+                  <Box border paddingX={1.5} paddingY={0.5} radius="sm" surface="default" display="flex" align="center" justify="center" className="border-line">
                     <Text variant="mono" size="tiny" color="dim" className={`leading-none ${hint.bold ? 'font-bold' : ''}`}>{hint.key}</Text>
                   </Box>
                   <Text variant="mono" size="micro" color="dim" opacityVariant="high" className="leading-none">{hint.label}</Text>

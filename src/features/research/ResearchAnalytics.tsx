@@ -285,11 +285,11 @@ function ToolSection({ title, tools, navigate }: { title: string, tools: Researc
         <Text variant="headline" size="2xl" weight="font-black">{title}</Text>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{tools.length} TOOLS</Text>
       </Box>
-      <Box display="grid" className="responsive-grid" gap={6} width="full">
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
         {tools.map((tool) => (
           <ToolCard key={tool.id} tool={tool} navigate={navigate} />
         ))}
-      </Box>
+      </Grid>
     </Stack>
   );
 }
@@ -369,11 +369,11 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
-          <Box display="grid" className="responsive-grid" gap={6} width="full">
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
             {flagshipTools.map((tool) => (
               <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
             ))}
-          </Box>
+          </Grid>
         </Stack>
 
         <Box className="why-this-matters">
@@ -400,7 +400,7 @@ export default function ResearchAnalytics() {
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
+            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
@@ -462,7 +462,7 @@ export default function ResearchAnalytics() {
                   </Box>
                 </Stack>
               ))}
-            </Box>
+            </Grid>
           </Stack>
         )}
 
