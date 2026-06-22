@@ -198,6 +198,9 @@ jobs:
           export PYTHONPATH
           python3 dev-tools/td_cli.py gh bundle-size
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Run Playwright Smoke Test
         run: |
           VITE_BASE_PATH=/ pnpm run test:e2e
