@@ -35,6 +35,7 @@ export interface RouteReview {
   feedback: string;
   tokens: number;
   cost: number;
+  modelName?: string;
   llmVerdict?: 'pass' | 'fail' | 'warn';
   findings?: VisualReviewFinding[];
 }

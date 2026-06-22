@@ -1,7 +1,6 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import {
-  buildSystemPrompt,
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
@@ -9,11 +8,19 @@ import {
   buildReviewPayload,
   calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
+
+import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
+
+import { logAIRun } from '../lib/aiLogger';
+
+import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalGeminiModel } from '../lib/modelPicker';
 
 function createModel(maxOutputTokens: number = 1500, estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
+function createModel(modelName: string, maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
@@ -23,33 +30,59 @@ function createModel(maxOutputTokens: number = 1500, estimatedInputTokens: numbe
     model: modelName,
     apiKey,
     maxOutputTokens: maxOutputTokens,
+    // Reserve a bounded slice of the budget for reasoning so it can't
+    // crowd out the actual review text + verdict + findings JSON.
+    thinkingConfig: {
+      includeThoughts: true,
+      thinkingBudget: Math.min(1024, Math.floor(maxOutputTokens * 0.3)),
+    }
   });
 }
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'gemini-code-review',
   reportTitle: '👁️ Gemini Code Review Agent',
-  botTagline: 'Powered by Gemini 1.5',
+  botTagline: 'Powered by Gemini 3.x',
   reportFileName: 'gemini-code-review.md',
 
-  invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
+  invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
+    const startTime = Date.now();
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     const estimatedInputTokens = calculateEstimatedTokens([systemPrompt, diffText, externalText]);
     const maxOutputTokens = estimateMaxOutputTokens(summary);
     const model = createModel(maxOutputTokens, estimatedInputTokens);
+    const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
+    // For code review, we prefer Pro if the diff is complex/large, otherwise Flash.
+    const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
+    const modelName = pickGeminiModel(preferredTier, estimatedInputTokens);
+
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
+    const model = createModel(modelName, maxOutputTokens);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
-    const response = await model.invoke([message]);
 
-    const usageMetadata = response.usage_metadata;
+    const response = await model.invoke([message]);
+    const durationMs = Date.now() - startTime;
+
+
+    const usageMetadata = response.usage_metadata as {
+      input_tokens?: number;
+      output_tokens?: number;
+      total_tokens?: number;
+      thoughts_token_count?: number;
+    };
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    // thoughtsTokenCount might be nested in response_metadata or usage_metadata
+    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
+                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count;
 
-    const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
+    const pricing = getGeminiPricing(modelName);
+    const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     const finishReason = (response as { response_metadata?: { finish_reason?: string } })
       .response_metadata?.finish_reason;
@@ -64,14 +97,30 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
+    logAIRun({
+      botName: 'gemini-code-review',
+      modelName,
+      inputTokens,
+      outputTokens,
+      totalTokens,
+      thoughtsTokenCount,
+      cost,
+      durationMs,
+      verdict: feedback ? parseCodeReviewVerdict(feedback) : undefined,
+      truncated: isTruncated,
+      parseError: parsedState.parseError,
+    });
+
     return {
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      modelName: modelName,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,
       truncated: isTruncated,
       parseError: parsedState.parseError,
+      durationMs,
     };
   }
 };

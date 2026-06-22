@@ -1,13 +1,13 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
 import {
-  buildSystemPrompt,
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload
 } from '../lib/codeReviewUtils';
+import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
@@ -52,7 +52,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   botTagline: 'Powered by GitHub Models',
   reportFileName: 'github-models-code-review.md',
 
-  invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
+  invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
@@ -60,17 +60,15 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
     const estimatedInputTokens = Math.ceil(totalInputChars / 4);
 
-    const maxOutputTokens = estimateMaxOutputTokens(summary);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
     const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
 
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
     const message = new HumanMessage({ content: baseContent });
 
-    // To debug why CI AI check is failing, log the verdict/result out temporarily
-    // wait I cannot easily log this here because it runs on CI.
-    // Instead I will just let it run. Let's see the previous report.
     const response = await model.invoke([message]);
+
 
     const usageMetadata = response.usage_metadata;
     const totalTokens = usageMetadata?.total_tokens ?? 0;

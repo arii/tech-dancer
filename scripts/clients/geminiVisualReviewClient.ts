@@ -1,11 +1,13 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
+import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalGeminiModel } from '../lib/modelPicker';
 
 function createModel(estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
+function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
@@ -14,20 +16,22 @@ function createModel(estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
   return new ChatGoogleGenerativeAI({
     model: modelName,
     apiKey,
-    maxOutputTokens: 1024,
+    maxOutputTokens: maxOutputTokens,
   });
 }
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
   reportTitle: '👁️ Visual Review Agent',
-  botTagline: 'Powered by Gemini Vision + Blast-Radius Analyzer',
+  botTagline: 'Powered by Gemini 3.x Vision + Blast-Radius Analyzer',
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     // Estimate tokens from payload (text only for now)
     const estimatedInputTokens = Math.ceil(JSON.stringify(summary).length / 4);
     const model = createModel(estimatedInputTokens);
+    const modelName = pickGeminiModel('flash', 0);
+    const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -79,10 +83,8 @@ Your job:
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
 
-    // Gemini 3.5 Flash pricing (approx)
-    // Input: $0.075 / 1 million tokens
-    // Output: $0.30 / 1 million tokens
-    const cost = (inputTokens / 1_000_000) * 0.075 + (outputTokens / 1_000_000) * 0.30;
+    const pricing = getGeminiPricing(modelName);
+    const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     const feedback = typeof response.content === 'string'
       ? response.content
@@ -95,6 +97,7 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };

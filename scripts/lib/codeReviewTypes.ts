@@ -16,8 +16,10 @@ export interface CodeReviewSummary {
   diffContext: string;
   fullDiff?: string;
   prGoal?: string;
+  changedFiles?: string[];
   externalContext?: string;
   previousState?: CodeReviewState;
+  estimatedInputTokens?: number;
 }
 
 export interface ParsedFindingsResult {
@@ -34,4 +36,5 @@ export interface CodeReviewResult {
   modelName?: string;
   truncated?: boolean;
   parseError?: 'missing_closing_tag' | 'invalid_json';
+  durationMs?: number;
 }

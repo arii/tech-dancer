@@ -1,89 +1,5 @@
 import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult } from './codeReviewTypes';
 
-export function buildSystemPrompt(summary: CodeReviewSummary): string {
-  const goalSection = summary.prGoal
-    ? `This PR's stated goal:
-"${summary.prGoal}"
-
-`
-    : '';
-
-  let priorStateSection = '';
-  if (summary.previousState && summary.previousState.findings.length > 0) {
-    const findingsStr = summary.previousState.findings
-      .map(f => {
-        let line = `- [${f.id}] ${f.file}${f.line ? `:${f.line}` : ''}: ${f.issue} (Status: ${f.status})`;
-        if (f.fixSummary) {
-          line += `\n   → ${f.fixSummary}`;
-        }
-        return line;
-      })
-      .join('\n');
-    priorStateSection = `
-PREVIOUS REVIEW ROUND FINDINGS:
-${findingsStr}
-
-Your job:
-- Confirm THIS issue is resolved before raising anything new.
-- Only raise a NEW issue if it is unrelated to anything already addressed, or if the fix for a previous issue introduced a new problem.
-- Do not re-open a resolved issue under a different framing.
-`;
-  }
-
-  return `You are an expert software engineer reviewing a pull request.
-Review the following code diff for bugs, anti-patterns, missing types, and performance issues.
-Provide actionable feedback. Focus on HIGH severity issues.
-
-${goalSection}${priorStateSection}
-
-Severity rules — apply these strictly:
-- HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
-  passed where the type doesn't allow it, a class or function that doesn't exist, a call
-  with the wrong arity, a test that would fail. Cite the exact line(s).
-- If your concern is phrased with "could," "might," "unless," "if not handled properly,"
-  or similar hedging language, it is NOT blocking. Downgrade it to a "Question" or
-  "Nitpick" section instead.
-- Do not raise a concern you cannot verify against the code you were given. State what
-  you'd need to see to verify it, rather than assuming the worst case.
-
-Scope and security rules:
-- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
-  user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
-- Do not introduce review topics unrelated to the PR's stated goal unless you find a
-  genuine, evidence-backed regression caused by this diff.
-- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"),
-  DO NOT fail the review solely because you cannot see the full implementation of a
-  newly introduced module or utility. Instead, provide a WARN or PASS verdict based on
-  what you CAN see, and explicitly state what remains unverified due to truncation.
-
-You MUST end your review with exactly one of the following strings indicating your final verdict:
-[VERDICT: PASS]
-[VERDICT: WARN]
-[VERDICT: FAIL]
-
-Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
-demonstrate with evidence from the diff.
-
-You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag:
-<findings>
-{
-  "findings": [
-    {
-      "id": "finding-1",
-      "file": "src/App.tsx",
-      "line": 10,
-      "snippet": "const x = 1;",
-      "issue": "Brief description of the issue",
-      "status": "resolved",
-      "fixSummary": "Brief summary of how it was addressed"
-    }
-  ]
-}
-</findings>
-Ensure 'snippet' is a unique string from the diff that identifies the issue.
-`;
-}
-
 export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
   const matches = [...feedback.matchAll(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi)];
   if (matches.length > 0) {
@@ -124,7 +40,10 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   }
 }
 
-export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
+export function estimateMaxOutputTokens(
+  summary: CodeReviewSummary,
+  systemPromptLength: number = 0
+): number {
   // Base budget covers prose review + a couple findings.
   let budget = 1500;
 
@@ -137,8 +56,23 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   const diffSizeTokens = Math.ceil(summary.diffContext.length / 4);
   if (diffSizeTokens > 4000) budget += 1000;
 
-  // Hard ceiling — avoid runaway cost/latency on pathological inputs.
-  return Math.min(budget, 4096);
+  // NEW: reasoning-capable Gemini models draw "thinking" tokens from the
+  // same maxOutputTokens budget as the visible answer. A longer, rule-dense
+  // system prompt (design guidelines, multiple matched PROMPT_CATEGORIES
+  // blocks) correlates with materially more internal deliberation before
+  // the model commits to an answer — give it proportionally more headroom
+  // even when the diff itself is small. Thresholds are deliberately coarse;
+  // tune against dev-tools/logs/ai/review-run.json once Fix 5's logging is
+  // live and you have real thoughtsTokenCount data to calibrate against.
+  const systemPromptTokens = Math.ceil(systemPromptLength / 4);
+  if (systemPromptTokens > 600) budget += 1500;
+  if (systemPromptTokens > 1200) budget += 1500;
+
+  // Hard ceiling — raised to match what the models actually support
+  // (gemini-3.5-flash and gemini-3.1-pro-preview both report
+  // maxOutputTokens: 8192 in geminiModelPicker.ts). The previous ceiling of
+  // 4096 was silently capping the budget below the model's real limit.
+  return Math.min(budget, 8192);
 }
 
 export const EXTERNAL_CONTEXT_TRUNCATED_MESSAGE = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
