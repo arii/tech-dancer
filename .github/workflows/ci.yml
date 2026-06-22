@@ -148,6 +148,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
       - name: Install dependencies
         shell: bash
         run: |
@@ -261,6 +263,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Deployment Impact Analysis
