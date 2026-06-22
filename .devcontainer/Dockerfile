@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.49.0-noble
+FROM mcr.microsoft.com/playwright:v1.61.0-noble
 
 # Links the image to your repository
 LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
@@ -6,9 +6,6 @@ LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
 USER root
 
 # ── System tools ──────────────────────────────────────────────────────────────
-# lsof + gh: used in ci.yml (test-build job)
-# git-lfs:   used in wcs_etl.yml
-# gh is not in Ubuntu's default apt sources — add GitHub CLI's repo first
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
@@ -33,9 +30,8 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends gh \
   && rm -rf /var/lib/apt/lists/*
 
-# ── Node.js 22.22.2 (matches .node-version / runtime contract) ────────────────
-# Uses NodeSource to get the exact patch version, then locks it via corepack.
-ENV NODE_MAJOR=22
+# ── Node.js 24.16.0 (matches .node-version / runtime contract) ────────────────
+ENV NODE_MAJOR=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
   && apt-get install -y nodejs \
   && node --version
@@ -47,21 +43,19 @@ RUN corepack enable \
   && pnpm --version
 
 # ── Python packages ────────────────────────────────────────────────────────────
-# Inline CI deps (ci.yml: pip install PyGithub pytest click)
-# ETL pipeline deps (etl/requirements.txt)
 RUN pip3 install --no-cache-dir --break-system-packages \
     PyGithub \
     click \
-    pytest==9.0.3 \
-    pytest-asyncio==1.3.0 \
+    pytest==9.1.1 \
+    pytest-asyncio==1.4.0 \
     pytest-mock==3.15.1 \
-    playwright==1.49.0 \
+    playwright \
     beautifulsoup4==4.14.3 \
-    pandas==3.0.2 \
-    pyarrow==23.0.1 \
+    pandas==3.0.3 \
+    pyarrow==24.0.0 \
     tenacity==8.2.3 \
     requests==2.33.1 \
-    tqdm==4.67.3 \
+    tqdm==4.68.3 \
     langchain-openai \
     langchain-core
 
