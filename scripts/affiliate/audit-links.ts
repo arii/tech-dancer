@@ -3,6 +3,7 @@ import { globSync } from 'glob';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import { visit } from 'unist-util-visit';
+import type { Link, Image, Definition, Html } from 'mdast';
 
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -56,15 +57,17 @@ async function main() {
       const content = fs.readFileSync(file, 'utf-8');
       const tree = processor.parse(content);
 
-      visit(tree, (node: any) => {
+      visit(tree, (node) => {
         let urlStr = '';
         if (node.type === 'link' || node.type === 'image' || node.type === 'definition') {
-          urlStr = node.url;
+          const typedNode = node as Link | Image | Definition;
+          urlStr = typedNode.url;
         } else if (node.type === 'html') {
           // Fallback for Amazon links in raw HTML tags
+          const typedNode = node as Html;
           const amazonUrlRegex = /https?:\/\/(www\.)?(amazon\.com|a\.co)\/[^\s"'>]+/g;
           let match;
-          while ((match = amazonUrlRegex.exec(node.value)) !== null) {
+          while ((match = amazonUrlRegex.exec(typedNode.value)) !== null) {
             linksToVerify.push({ url: match[0], source: file });
           }
           return;
