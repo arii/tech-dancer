@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -173,8 +173,8 @@ function FlagshipCard({
               </ActionButton>
             ) : tool.canonicalPath && (
               <ActionButton
-                as="a"
-                href={tool.canonicalPath}
+                as={Link}
+                to={tool.canonicalPath}
                 variant="primary"
                 paddingX={4}
                 paddingY={2}
