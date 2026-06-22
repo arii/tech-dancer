@@ -3,6 +3,7 @@ import os
 import re
 import json
 import sys
+import shutil
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse
@@ -588,7 +589,8 @@ class Orchestrator:
                                 auto_findings.append({"path": filepath, "issue": f"{v['pattern']}: {v['message']} (value: {v.get('value', 'N/A')})", "severity": v.get('severity', 'minor')})
                     except Exception: pass
             res["auto_findings"] = auto_findings
-            if not os.environ.get("HEADLESS"): run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
+            if not os.environ.get("HEADLESS") and shutil.which("copilot"):
+                run_command(["copilot", "-p", f"Auditing PR #{pr_number}...", "--allow-tool", "read", "--allow-tool", "write", "--allow-tool", "file_edit"], check=False)
         if submit:
             from submit_review import submit_review
             submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
