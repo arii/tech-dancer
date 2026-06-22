@@ -29,7 +29,7 @@ cd "$REPO_ROOT"
 
 # -------- configuration --------
 PNPM_VERSION="${PNPM_VERSION:-10.28.2}"
-NODE_MAJOR="${NODE_MAJOR:-22}"
+NODE_MAJOR="${NODE_MAJOR:-24}"
 SKIP_APT="${SKIP_APT:-0}"
 SKIP_PLAYWRIGHT="${SKIP_PLAYWRIGHT:-0}"
 SKIP_VALIDATION="${SKIP_VALIDATION:-0}"
@@ -127,7 +127,7 @@ ensure_node() {
 normalize_nvmrc_for_snapshot() {
   # dev-tools/snapshot.sh currently compares .nvmrc literally against `node --version`.
   # Agent runtimes often pin only a major version such as `v22`, while Node reports
-  # a full version such as `v22.22.2`. Normalize major-only pins so validation
+  # a full version such as `v24.16.0`. Normalize major-only pins so validation
   # does not report a false mismatch in Codex/Jules.
   [ -f ".nvmrc" ] || return 0
   have node || return 0

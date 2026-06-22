@@ -14,10 +14,11 @@ const FEATURED = {
 
 export function FeaturedGuidePanel() {
   return (
-    <Box
+    <Stack
       as={NavLink}
       to={FEATURED.href}
-      display={{ base: 'none', lg: 'flex' }}
+      width="full"
+      aspect={{ base: '4/3', lg: 'auto' }}
       direction="col"
       justify="end"
       position="relative"
@@ -33,25 +34,25 @@ export function FeaturedGuidePanel() {
         width={420}
         height={600}
         fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity duration-500 group-hover:opacity-high"
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />
-      {/* Gradient overlay for text legibility */}
+      {/* Gradient overlay for text legibility (bottom-up to protect bottom-aligned text) */}
       <Box
         position="absolute"
         inset
-        className="bg-gradient-to-b from-bg via-bg/70 to-transparent"
+        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
         aria-hidden="true"
       />
       {/* Content pinned to bottom */}
-      <Stack gap={2} position="relative" zIndex={10} padding={6}>
+      <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
         <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
-        <Text variant="headline" size="xl" weight="font-black" color="main" leading="tight">
+        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
           {FEATURED.title}
         </Text>
-        <Text variant="body" size="sm" color="dim">
+        <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">
           {FEATURED.subtitle}
         </Text>
         <Text
@@ -64,6 +65,6 @@ export function FeaturedGuidePanel() {
           Read the guide →
         </Text>
       </Stack>
-    </Box>
+    </Stack>
   );
 }

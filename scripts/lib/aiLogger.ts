@@ -1,6 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+/**
+ * Records an AI review run entry to a structured JSON Lines (.jsonl) log file.
+ * This provides O(1) performance and ensures efficiency as logs accumulate.
+ */
 export interface AIRunLogEntry {
   timestamp: string;
   type: 'code-review' | 'visual-review';
@@ -18,15 +22,25 @@ export interface AIRunLogEntry {
   truncated?: boolean;
   parseError?: string;
   rawResponse?: string;
+  
+    botName: string;
+  modelName: string;
+  inputTokens: number;
+  outputTokens: number;
+  thoughtsTokenCount?: number;
+  totalTokens: number;
+  cost: number;
+  durationMs?: number;
+  verdict?: string;
+  truncated: boolean;
+  parseError?: string;
 }
 
 const LOG_DIR = path.join(process.cwd(), 'dev-tools', 'logs', 'ai');
 const LOG_FILE = path.join(LOG_DIR, 'review-run.jsonl');
 
-/**
- * Records an AI review run entry to a structured JSON Lines (.jsonl) log file.
- * This provides O(1) performance and ensures efficiency as logs accumulate.
- */
+
+
 export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
   try {
     if (!fs.existsSync(LOG_DIR)) {
@@ -84,4 +98,18 @@ export function logReviewExecution(
     parseError: result.parseError,
     rawResponse: result.feedback,
   });
+    let logs: AIRunLogEntry[] = [];
+    if (fs.existsSync(LOG_FILE)) {
+      try {
+        logs = JSON.parse(fs.readFileSync(LOG_FILE, 'utf-8'));
+      } catch (e) {
+        console.warn('Failed to parse existing AI logs:', e);
+      }
+    }
+
+    logs.push(logEntry);
+    fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
+  } catch (e) {
+    console.warn('Failed to log AI run:', e);
+  }
 }
