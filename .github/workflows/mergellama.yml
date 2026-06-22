@@ -45,9 +45,11 @@ jobs:
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
           python3 dev-tools/td_cli.py gh resolve
 
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
       - name: Validate Resolution
         run: |
-          pnpm install --frozen-lockfile
           pnpm run type-check
 
       - name: Commit Changes
