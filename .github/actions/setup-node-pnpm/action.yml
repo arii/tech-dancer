@@ -5,9 +5,6 @@ inputs:
     description: "Path to .node-version file"
     required: false
     default: ".node-version"
-  node-version:
-    description: "Explicit Node.js version to use, overrides node-version-file if set"
-    required: false
   pnpm-version:
     description: "Version of pnpm to activate"
     required: false
@@ -19,16 +16,7 @@ runs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v6
 
-    - name: Setup Node.js (with specific version)
-      if: inputs.node-version != ''
-      uses: actions/setup-node@v6
-      with:
-        cache: 'pnpm'
-        cache-dependency-path: pnpm-lock.yaml
-        node-version: ${{ inputs.node-version }}
-
-    - name: Setup Node.js (with version file)
-      if: inputs.node-version == ''
+    - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
         cache: 'pnpm'

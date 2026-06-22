@@ -199,7 +199,7 @@ jobs:
           python3 dev-tools/td_cli.py gh bundle-size
 
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install chromium
 
       - name: Run Playwright Smoke Test
         run: |
