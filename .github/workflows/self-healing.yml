@@ -79,6 +79,8 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
       - name: Install dependencies (Safe)
         run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
 
