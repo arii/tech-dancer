@@ -103,7 +103,7 @@ function FlagshipCard({
     >
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
-        <Stack flex={1} className="pt-[14px] px-4 pb-4" gap={0}>
+        <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
             <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
@@ -133,7 +133,7 @@ function FlagshipCard({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none z-30">
+            <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -224,7 +224,8 @@ function ToolCard({ tool, navigate }: {
       rel={isLink ? "noopener noreferrer" : undefined}
       onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
-      className={cn(cardVariants({ interactive: true }), "pt-[14px] px-4 pb-4 flex flex-col h-full no-underline")}
+      paddingTop={3.5} paddingX={4} paddingBottom={4}
+      className={cn(cardVariants({ interactive: true }), "no-underline")}
     >
       <Stack gap={0} width="full">
         <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
@@ -248,7 +249,7 @@ function ToolCard({ tool, navigate }: {
           {tool.description}
         </Text>
         {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
+          <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
             {isExpanded ? "Read Less" : "Read More"}
           </Box>
         )}
@@ -303,9 +304,9 @@ export default function ResearchAnalytics() {
             </Text>
             
             {/* Scrollable Focus Tags for Mobile */}
-            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} display={{ base: "flex", lg: "none" }} className="py-1">
+            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
-              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" wrap="nowrap" className="scroll-mask-fade">
                 {[
                   { tag: 'React', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
                   { tag: 'Vite', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
@@ -461,9 +462,12 @@ export default function ResearchAnalytics() {
                   }}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cn(cardVariants({
+                  className={cardVariants({
                     interactive: study.status === 'published'
-                  }), "pt-[14px] px-4 pb-4")}
+                  })}
+                  paddingTop={3.5}
+                  paddingX={4}
+                  paddingBottom={4}
                   opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
