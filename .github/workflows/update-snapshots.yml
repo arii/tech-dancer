@@ -43,7 +43,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Resolve PR details
-        uses: actions/github-script@v9
+        uses: actions/github-script@v8
         with:
           script: |
             const pr = await github.rest.pulls.get({
@@ -55,7 +55,7 @@ jobs:
             core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
 
       - name: Checkout source branch
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.HEAD_REF }}
           repository: ${{ env.HEAD_REPO }}
