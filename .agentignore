@@ -1,0 +1,15 @@
+package-lock.json
+poetry.lock
+pnpm-lock.yaml
+yarn.lock
+node_modules/
+dist/
+build/
+coverage/
+.next/
+.nuxt/
+.vercel/
+vendor/
+.venv/
+env/
+__pycache__/
