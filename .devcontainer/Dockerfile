@@ -36,7 +36,8 @@ RUN apt-get update \
 # ── Node.js 22.22.2 (matches .node-version / runtime contract) ────────────────
 # Uses NodeSource to get the exact patch version, then locks it via corepack.
 ENV NODE_MAJOR=22
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
+RUN apt-get remove -y nodejs \
+  && curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
   && apt-get install -y nodejs \
   && node --version
 
