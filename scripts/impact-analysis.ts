@@ -1,11 +1,9 @@
 import { execSync } from 'child_process';
-
 import { IMPACT_CONFIG } from './impact-analysis.config';
 import { DependencyGraph, ImpactReport, buildReverseMap, findAffectedFiles, getDynamicRouteMapping, resolveAffectedUrls, generateReports, exec, splitAndFilter } from './lib/impact-analysis-utils';
 
 /**
  * Gets the list of changed files using git detection.
-
  */
 function getChangedFiles(): string[] {
   // Check for staged and unstaged changes first
@@ -44,8 +42,7 @@ async function main() {
       return;
     }
 
-    console.log(`
-Found ${files.length} changed files.`);
+    console.log(`\nFound ${files.length} changed files.`);
 
     // Generate dependency graph
     console.log('📊 Generating dependency graph...');
@@ -91,10 +88,8 @@ Found ${files.length} changed files.`);
     console.log('\n' + '='.repeat(40));
     console.log('DEPLOYMENT IMPACT ANALYSIS');
     console.log('='.repeat(40));
-    console.log(`
-IMPACT LEVEL: ${severity}`);
-    console.log('
-CHANGED FILES:');
+    console.log(`\nIMPACT LEVEL: ${severity}`);
+    console.log('\nCHANGED FILES:');
     files.forEach(f => console.log(`  - ${f}`));
     console.log('\nVISUAL REVIEW REQUIRED:');
     if (allUrls.length > 0) {
@@ -102,8 +97,7 @@ CHANGED FILES:');
     } else {
       console.log('  None detected (code-only changes)');
     }
-    console.log('
-' + '='.repeat(40));
+    console.log('\n' + '='.repeat(40));
 
     generateReports(report, files, affectedDynamicImportsSet);
   } catch (error: unknown) {
