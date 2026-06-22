@@ -14,7 +14,7 @@ The following files define and enforce the contract:
 - `.node-version`: Primary source for Node.js version.
 - `.nvmrc`: Compatibility file for NVM users.
 - `package.json`:
-    - `engines.node`: Set to `22.x` for Vercel compatibility.
+    - `engines.node`: Set to `24.x` for Vercel compatibility.
     - `engines.pnpm`: Set to `10.28.2`.
     - `packageManager`: Set to `pnpm@10.28.2`.
 - `vercel.json`: Ensures Corepack and the pinned pnpm version are used during deployment.
