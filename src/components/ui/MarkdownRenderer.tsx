@@ -5,12 +5,14 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Box, Text, Stack } from '@/layouts/Primitives';
+import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
+import type { TextProps, StackProps, GridProps } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
+import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
 
 interface MarkdownRendererProps {
   content: string;
@@ -24,10 +26,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         rehypePlugins={[
           rehypeRaw,
           [rehypeSanitize, {
-            ...defaultSchema,
-            tagNames: [...(defaultSchema.tagNames || []), 'notice', 'Notice', 'input'],
+            ...MARKDOWN_SANITIZATION_SCHEMA,
+            tagNames: [...(MARKDOWN_SANITIZATION_SCHEMA.tagNames || []), 'notice', 'Notice', 'input'],
             attributes: {
-              ...defaultSchema.attributes,
+              ...MARKDOWN_SANITIZATION_SCHEMA.attributes,
               notice: ['type', 'id'],
               Notice: ['type', 'id'],
               input: ['type', 'checked', 'disabled']
@@ -36,6 +38,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           }]
         ]}
         components={{
+          Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,
+          Stack: ({ node: _node, ...props }: StackProps & { node?: unknown }) => <Stack {...props} />,
+          Text: ({ node: _node, ...props }: TextProps & { node?: unknown }) => <Text {...props} />,
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
@@ -146,15 +151,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={8} width="full" display="flex" justify="center">
+<Box marginY={8} width="full" display="flex" justify="center">
                 <Box
                   as="img"
                   src={normalizedSrc}
                   radius="lg"
                   shadow="sm"
+                  border
                   loading="lazy"
                   alt={alt || "Article illustration"}
-                  maxWidth="full"
+                  maxWidth={{ base: 'full', md: '2xl' }}
                   height="auto"
                   {...props}
                 />
@@ -277,7 +283,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={6} width="full">
+<Box marginY={4} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
@@ -290,7 +296,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               const link = affiliateManager.getLink(props.id);
               if (link) {
                 return (
-                  <Box marginY={6} width="full">
+<Box marginY={4} width="full">
                     <AffiliateCard link={link} />
                   </Box>
                 );
