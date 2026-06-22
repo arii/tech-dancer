@@ -12,7 +12,7 @@
     "PLAYWRIGHT_BROWSERS_PATH": "/ms-playwright",
     "PLAYWRIGHT_DOWNLOAD_HOST": "https://playwright.azureedge.net",
     "PNPM_VERSION": "10.28.2",
-    "NODE_MAJOR": "22",
+    "NODE_MAJOR": "24",
     "SKIP_APT": "1"
   },
   "customizations": {
