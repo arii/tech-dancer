@@ -1,6 +1,6 @@
-import { useMemo, lazy, Suspense, useState, useEffect } from 'react';
+import { useMemo, lazy, Suspense } from 'react';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { Database, Activity, Search, ArrowLeft, ArrowUp } from 'lucide-react';
+import { Database, Activity, Search, ArrowLeft } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { useResearch } from './useResearch';
@@ -86,36 +86,6 @@ export default function ResearchDetail() {
     const segments = pathname.split('/').filter(Boolean);
     return segments.includes('research');
   }, [pathname]);
-
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  useEffect(() => {
-    const handleScroll = () => {
-      // Use window.scrollY or document.documentElement.scrollTop
-      if (window.scrollY > 1000 || document.documentElement.scrollTop > 1000) {
-        setShowBackToTop(true);
-      } else {
-        setShowBackToTop(false);
-      }
-    };
-
-    // Check if the scroll container is window or the main layout container.
-    // In this app, it seems MainLayout uses a scrollRef which is often the document container.
-    // Let's just listen on window. If it's a specific ref, it might not trigger.
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    // Also try getting the #main-content element if present.
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-      mainContent.addEventListener('scroll', handleScroll, { passive: true });
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (mainContent) {
-        mainContent.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
 
   const { previous: studyPrevious, next: studyNext } = useArticleNavigation(
     studies,
@@ -269,31 +239,6 @@ export default function ResearchDetail() {
                 <MarkdownRenderer content={study.content} />
               </Box>
             )}
-
-            {/* Sticky Back to Top for long tool + study pages */}
-            {showBackToTop && (
-              <Box position="sticky" bottom={8} display="flex" justify="end" zIndex="popover" marginTop={8}>
-                <Box
-                  as="button"
-                  onClick={() => {
-                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                     const mainContent = document.getElementById('main-content');
-                     if (mainContent) mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  surface="surface"
-                  color="dim"
-                  padding={3}
-                  radius="lg"
-                  shadow="lg"
-                  border
-                  borderColor="line"
-                  aria-label="Scroll to top"
-                >
-                  <ArrowUp size={20} />
-                </Box>
-              </Box>
-            )}
-
           </Stack>
         </Box>
       </Stack>
