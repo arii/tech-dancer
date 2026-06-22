@@ -360,7 +360,7 @@ class Orchestrator:
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
         if all_open:
-            issues = list(repo.get_issues(state='open'))
+            issues = [i for i in repo.get_issues(state='open') if not i.pull_request]
         elif issue_number:
             issues = [repo.get_issue(issue_number)]
         else:
