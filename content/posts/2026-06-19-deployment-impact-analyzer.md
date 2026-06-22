@@ -111,7 +111,6 @@ When a PR is opened, the analyzer posts a summary directly to the GitHub convers
 
 > **Implemented:** We use the `cropped` diff artifacts to show exactly where the pixels changed, saving reviewers from playing "spot the difference" on full-page screenshots.
 
-<Box paddingBottom={8}>
 <Grid cols={{ base: 1, md: 3 }} gap={6}>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Before</Text>
@@ -126,7 +125,6 @@ When a PR is opened, the analyzer posts a summary directly to the GitHub convers
     ![Visual Delta](/assets/studies/deployment-impact-analyzer/diff.png)
   </Stack>
 </Grid>
-</Box>
 *A "sandwich" comparison showing the baseline, the new state, and the highlighted pixel delta.*
 
 ### Real-World Finding: From 404 to Overflow Resolution
@@ -142,7 +140,6 @@ After fixing the routing, the page rendered, but a new issue emerged on mobile v
 #### 3. The Resolution (Truncation & Wrapping)
 We implemented a fix using Tailwind's `truncate` and `flex-wrap` utilities, ensuring that assets are readable even on the narrowest devices.
 
-<Box paddingBottom={8}>
 <Grid cols={{ base: 1, md: 3 }} gap={6}>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">1. Missing</Text>
@@ -157,7 +154,6 @@ We implemented a fix using Tailwind's `truncate` and `flex-wrap` utilities, ensu
     ![Resolution](/assets/studies/deployment-impact-analyzer/after-mobile.png)
   </Stack>
 </Grid>
-</Box>
 *The mobile resolution sequence: from a 404 state to an overflow regression, and finally the resolved responsive layout.*
 
 ## Lessons Learned
