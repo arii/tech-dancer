@@ -71,3 +71,4 @@ RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 USER pwuser
 
 WORKDIR /workspace
+# Rebuild to catch up with dependabot updates
