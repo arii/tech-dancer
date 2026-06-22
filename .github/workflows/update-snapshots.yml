@@ -70,9 +70,6 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Build project
         run: pnpm run build
 

@@ -44,9 +44,6 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Build Site
         env:
           REPO_NAME: ${{ github.event.repository.name }}

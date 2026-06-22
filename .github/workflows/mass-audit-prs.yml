@@ -27,13 +27,13 @@ jobs:
           fetch-depth: 0
 
 
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
           pnpm run doctor
-
-      - name: Install Node dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Run Headless Audit
         run: |
