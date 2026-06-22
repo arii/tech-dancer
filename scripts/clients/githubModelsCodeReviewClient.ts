@@ -52,7 +52,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   botTagline: 'Powered by GitHub Models',
   reportFileName: 'github-models-code-review.md',
 
-  invokeReview: async (summary: CodeReviewSummary): Promise<CodeReviewResult> => {
+  invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
@@ -60,7 +60,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
     const estimatedInputTokens = Math.ceil(totalInputChars / 4);
 
-    const maxOutputTokens = estimateMaxOutputTokens(summary);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
     const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
 
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
