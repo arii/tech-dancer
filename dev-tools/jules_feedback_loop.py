@@ -15,13 +15,25 @@ from utils import clean_gha_logs, extract_failing_info
 
 def run_audit(pr_number: int) -> str:
     cmd = ["python3", "dev-tools/td_cli.py", "gh", "audit-pr", str(pr_number), "--fetch", "--audit", "--execute"]
-    res = subprocess.run(cmd, capture_output=True, text=True)
-    return res.stdout + "\n" + res.stderr
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        output = res.stdout + "\n" + res.stderr
+        if res.returncode != 0:
+            output += f"\nERROR: Audit tool failed with exit code {res.returncode}"
+        return output
+    except Exception as e:
+        return f"ERROR: Failed to run audit tool: {e}"
 
 def run_conflicts(pr_number: int) -> str:
     cmd = ["python3", "dev-tools/td_cli.py", "gh", "detect-conflicts", "--pr", str(pr_number)]
-    res = subprocess.run(cmd, capture_output=True, text=True)
-    return res.stdout + "\n" + res.stderr
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        output = res.stdout + "\n" + res.stderr
+        if res.returncode != 0:
+            output += f"\nERROR: Conflict tool failed with exit code {res.returncode}"
+        return output
+    except Exception as e:
+        return f"ERROR: Failed to run conflict tool: {e}"
 
 
 def main():
