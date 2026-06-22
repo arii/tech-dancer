@@ -56,15 +56,30 @@ async function main() {
       const content = fs.readFileSync(file, 'utf-8');
       const tree = processor.parse(content);
 
-      visit(tree, 'link', (node) => {
-        try {
-          const url = new URL(node.url);
-          const hostname = url.hostname.toLowerCase();
-          if (hostname === 'amazon.com' || hostname.endsWith('.amazon.com') || hostname === 'a.co' || hostname.endsWith('.a.co')) {
-            linksToVerify.push({ url: node.url, source: file });
+      visit(tree, (node: any) => {
+        let urlStr = '';
+        if (node.type === 'link' || node.type === 'image' || node.type === 'definition') {
+          urlStr = node.url;
+        } else if (node.type === 'html') {
+          // Fallback for Amazon links in raw HTML tags
+          const amazonUrlRegex = /https?:\/\/(www\.)?(amazon\.com|a\.co)\/[^\s"'>]+/g;
+          let match;
+          while ((match = amazonUrlRegex.exec(node.value)) !== null) {
+            linksToVerify.push({ url: match[0], source: file });
           }
-        } catch {
-          // Skip relative or invalid URLs
+          return;
+        }
+
+        if (urlStr) {
+          try {
+            const url = new URL(urlStr);
+            const hostname = url.hostname.toLowerCase();
+            if (hostname === 'amazon.com' || hostname.endsWith('.amazon.com') || hostname === 'a.co' || hostname.endsWith('.a.co')) {
+              linksToVerify.push({ url: urlStr, source: file });
+            }
+          } catch {
+            // Skip relative or invalid URLs
+          }
         }
       });
     } catch (err) {
