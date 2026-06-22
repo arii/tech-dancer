@@ -60,14 +60,13 @@ async function main() {
       visit(tree, (node) => {
         let urlStr = '';
         if (node.type === 'link' || node.type === 'image' || node.type === 'definition') {
-          const typedNode = node as Link | Image | Definition;
-          urlStr = typedNode.url;
+          urlStr = (node as Link | Image | Definition).url;
         } else if (node.type === 'html') {
           // Fallback for Amazon links in raw HTML tags
-          const typedNode = node as Html;
+          const { value } = node as Html;
           const amazonUrlRegex = /https?:\/\/(www\.)?(amazon\.com|a\.co)\/[^\s"'>]+/g;
           let match;
-          while ((match = amazonUrlRegex.exec(typedNode.value)) !== null) {
+          while ((match = amazonUrlRegex.exec(value)) !== null) {
             linksToVerify.push({ url: match[0], source: file });
           }
           return;
