@@ -617,7 +617,7 @@ class Orchestrator:
                 with open(".nvmrc", "r") as f:
                     expected_node = f.read().strip().replace('v', '')
             except FileNotFoundError:
-                expected_node = "22.22.2"
+                expected_node = "24.16.0"
 
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
         is_ci = os.environ.get("CI") == "true"
