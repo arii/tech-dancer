@@ -55,7 +55,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     pytest==9.1.1 \
     pytest-asyncio==1.4.0 \
     pytest-mock==3.15.1 \
-    playwright==1.49.0 \
+    playwright==1.61.0 \
     beautifulsoup4==4.14.3 \
     pandas==3.0.3 \
     pyarrow==24.0.0 \
@@ -71,3 +71,4 @@ RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 USER pwuser
 
 WORKDIR /workspace
+# Rebuild to catch up with dependabot updates
