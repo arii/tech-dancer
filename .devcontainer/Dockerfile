@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.49.0-noble
+FROM mcr.microsoft.com/playwright:v1.61.0-noble
 
 # Links the image to your repository
 LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
@@ -56,7 +56,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     pytest==9.1.1 \
     pytest-asyncio==1.4.0 \
     pytest-mock==3.15.1 \
-    playwright==1.49.0 \
+    playwright==1.61.0 \
     beautifulsoup4==4.14.3 \
     pandas==3.0.3 \
     pyarrow==24.0.0 \
