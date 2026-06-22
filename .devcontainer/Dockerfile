@@ -6,9 +6,6 @@ LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
 USER root
 
 # ── System tools ──────────────────────────────────────────────────────────────
-# lsof + gh: used in ci.yml (test-build job)
-# git-lfs:   used in wcs_etl.yml
-# gh is not in Ubuntu's default apt sources — add GitHub CLI's repo first
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
@@ -34,7 +31,6 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # ── Node.js 24.16.0 (matches .node-version / runtime contract) ────────────────
-# Uses NodeSource to get the exact patch version, then locks it via corepack.
 ENV NODE_MAJOR=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
   && apt-get install -y nodejs \
@@ -47,8 +43,6 @@ RUN corepack enable \
   && pnpm --version
 
 # ── Python packages ────────────────────────────────────────────────────────────
-# Inline CI deps (ci.yml: pip install PyGithub pytest click)
-# ETL pipeline deps (etl/requirements.txt)
 RUN pip3 install --no-cache-dir --break-system-packages \
     PyGithub \
     click \
@@ -71,4 +65,3 @@ RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 USER pwuser
 
 WORKDIR /workspace
-# Rebuild to catch up with dependabot updates
