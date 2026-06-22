@@ -58,8 +58,8 @@ jobs:
           echo "HEAD_REF=$HEAD_REF" >> "$GITHUB_ENV"
           gh pr checkout "$ISSUE_NUMBER"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Execute Review
         env:

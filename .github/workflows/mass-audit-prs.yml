@@ -32,8 +32,8 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
-      - name: Install Node dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Run Headless Audit
         run: |

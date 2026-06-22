@@ -13,18 +13,15 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 
 import { logAIRun } from '../lib/aiLogger';
 
-import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+import { getGeminiPricing } from '../lib/geminiModelPicker';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalGeminiModel } from '../lib/modelPicker';
 
-function createModel(maxOutputTokens: number = 1500, estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
 function createModel(modelName: string, maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
-
-  const modelName = pickOptimalGeminiModel(estimatedInputTokens);
 
   return new ChatGoogleGenerativeAI({
     model: modelName,
@@ -50,13 +47,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
-    const estimatedInputTokens = calculateEstimatedTokens([systemPrompt, diffText, externalText]);
-    const maxOutputTokens = estimateMaxOutputTokens(summary);
-    const model = createModel(maxOutputTokens, estimatedInputTokens);
     const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
-    // For code review, we prefer Pro if the diff is complex/large, otherwise Flash.
-    const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
-    const modelName = pickGeminiModel(preferredTier, estimatedInputTokens);
+    const modelName = pickOptimalGeminiModel(estimatedInputTokens);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
     const model = createModel(modelName, maxOutputTokens);
