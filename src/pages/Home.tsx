@@ -11,7 +11,7 @@ import { PromoStrip } from '@/components/ui/PromoStrip';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8 pb-safe-bottom">
+    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8">
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -22,7 +22,7 @@ export default function Home() {
       <Grid
         as="section"
         cols={{ base: 1 }}
-        gap={{ base: 0, lg: 6 }}
+        gap={{ base: 8, lg: 6 }}
         width="full"
         maxWidth="full"
         minWidth={0}
@@ -33,7 +33,7 @@ export default function Home() {
         <FeaturedGuidePanel />
       </Grid>
 
-      <Box marginTop={8}>
+      <Box marginTop={{ base: 12, lg: 8 }}>
         <PromoStrip
           imageSrc="/assets/gear/norcal-bestcal-front.webp"
           title="Shop NorCal pride merch"
