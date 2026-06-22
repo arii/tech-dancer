@@ -219,6 +219,7 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
+          pnpm run setup:playwright
           VITE_BASE_PATH=/ pnpm run test:e2e
 
       - name: Run Lighthouse CI
