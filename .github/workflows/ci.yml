@@ -89,6 +89,20 @@ jobs:
           pnpm run check:runtime-files
           pnpm run doctor
 
+      - name: Verify lockfile integrity
+        shell: bash
+        run: |
+          echo "::group::pnpm install"
+          trap 'echo "::endgroup::"' EXIT
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+          trap - EXIT
+
+          if ! git diff --quiet pnpm-lock.yaml; then
+            echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
+            exit 1
+          fi
+
       - name: Lint
         run: pnpm run lint
 
@@ -136,6 +150,12 @@ jobs:
           fetch-depth: 0
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+      - name: Install dependencies
+        shell: bash
+        run: |
+          echo "::group::pnpm install"
+          trap 'echo "::endgroup::"' EXIT
+          pnpm install --frozen-lockfile --prefer-offline
 
       - name: UI Anti-Pattern Audit - Gate
         shell: bash
@@ -172,8 +192,6 @@ jobs:
     env:
       NODE_ENV: production
       REPO_NAME: ${{ github.event.repository.name }}
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -181,6 +199,7 @@ jobs:
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build App
         run: |
@@ -247,6 +266,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-node-pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
