@@ -11,7 +11,7 @@ export interface CodeReviewClientStrategy {
   reportTitle: string;
   botTagline: string;
   reportFileName: string;
-  invokeReview: (summary: CodeReviewSummary) => Promise<CodeReviewResult>;
+  invokeReview: (summary: CodeReviewSummary, forceMaxOutputTokens?: number) => Promise<CodeReviewResult>;
 }
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
@@ -308,7 +308,16 @@ export async function orchestrateCodeReview(
 
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
+  const startTime = Date.now();
   let reviewResult = await client.invokeReview(summary);
+
+  if (reviewResult.truncated) {
+    console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
+    reviewResult = await client.invokeReview(summary, 8192);
+  }
+
+  const durationMs = Date.now() - startTime;
+  reviewResult.durationMs = durationMs;
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,
