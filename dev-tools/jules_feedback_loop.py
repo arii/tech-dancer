@@ -3,6 +3,7 @@ import sys
 import os
 import json
 import time
+import subprocess
 
 # Ensure imports work regardless of execution directory
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -10,6 +11,17 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from tdw_services.services.jules import JulesClient
 from tdw_services.services.github import GitHubClient
 from utils import clean_gha_logs, extract_failing_info
+
+
+def run_audit(pr_number: int) -> str:
+    cmd = ["python3", "dev-tools/td_cli.py", "gh", "audit-pr", str(pr_number), "--fetch", "--audit", "--execute"]
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    return res.stdout + "\n" + res.stderr
+
+def run_conflicts(pr_number: int) -> str:
+    cmd = ["python3", "dev-tools/td_cli.py", "gh", "detect-conflicts", "--pr", str(pr_number)]
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    return res.stdout + "\n" + res.stderr
 
 
 def main():
@@ -83,31 +95,35 @@ def main():
 
         check_runs = gh_client.fetch_check_runs(commit_sha)
 
-        if not check_runs:
-            print(f"  No check runs found for PR #{matched_pr.get('number')}.")
-            continue
-
-
         all_passed = True
         failed_checks = []
+        is_still_running = False
 
-        for run in check_runs:
-            status = run.get('status')
-            conclusion = run.get('conclusion')
+        if check_runs:
+            for run in check_runs:
+                status = run.get('status')
+                conclusion = run.get('conclusion')
 
-            if status != 'completed':
-                print(f"  Check '{run.get('name')}' is still {status}, skipping feedback for now.")
-                all_passed = False
-                break
+                if status != 'completed':
+                    print(f"  Check '{run.get('name')}' is still {status}, skipping feedback for now.")
+                    all_passed = False
+                    is_still_running = True
+                    break
 
-            if conclusion == 'failure':
-                all_passed = False
-                failed_checks.append(run)
+                if conclusion == 'failure':
+                    all_passed = False
+                    failed_checks.append(run)
+        else:
+            print(f"  No check runs found for PR #{matched_pr.get('number')}.")
+
+        if is_still_running:
+            continue
 
         # If checks are still running, we skip (handled above)
-        # If checks failed, we send failure logs
+        feedback_parts = []
+
         if failed_checks:
-            feedback = "The CI pipeline reported failures. Here are the details:\n\n"
+            ci_feedback = "The CI pipeline reported failures. Here are the details:\n\n"
             for run in failed_checks:
                 run_id = run.get('id')
                 name = run.get('name')
@@ -119,24 +135,33 @@ def main():
                 clean_logs = clean_gha_logs(logs)
                 extracted_info = extract_failing_info(clean_logs)
 
-                feedback += f"### Failed Check: {name}\n"
+                ci_feedback += f"### Failed Check: {name}\n"
                 if extracted_info:
                     for info in extracted_info:
-                        feedback += f"- File: `{info['file']}:{info['line']}` ({info['type']})\n  Message: {info['message']}\n"
+                        ci_feedback += f"- File: `{info['file']}:{info['line']}` ({info['type']})\n  Message: {info['message']}\n"
                 else:
                     # Provide snippet of cleaned logs if extraction didn't catch it
                     lines = clean_logs.splitlines()
                     snippet = "\n".join(lines[-30:]) if lines else "No logs found."
-                    feedback += f"```\n{snippet}\n```\n"
-
-            print(f"  Sending failure feedback to session {session_id}...")
-            jules_client.send_message(session_id, feedback)
-            print("  Feedback sent.")
-
+                    ci_feedback += f"```\n{snippet}\n```\n"
+            feedback_parts.append(ci_feedback)
         elif all_passed and check_runs:
-            print(f"  All checks passed for session {session_id}. Sending success feedback...")
-            jules_client.send_message(session_id, "All checks passed successfully. You may proceed.")
-            print("  Success feedback sent.")
+            feedback_parts.append("All CI checks passed successfully.")
+
+        # Run Audit and Conflicts
+        print(f"  Running dev-tools audit and conflict checks for PR #{matched_pr.get('number')}...")
+        audit_output = run_audit(matched_pr.get('number'))
+        conflicts_output = run_conflicts(matched_pr.get('number'))
+
+        feedback_parts.append(f"### Audit Results (`td_cli.py gh audit-pr`)\n```text\n{audit_output}\n```")
+        feedback_parts.append(f"### Conflicts Check (`td_cli.py gh detect-conflicts`)\n```text\n{conflicts_output}\n```")
+
+        # Combine all feedback parts
+        final_feedback = "\n\n".join(feedback_parts)
+
+        print(f"  Sending feedback to session {session_id}...")
+        jules_client.send_message(session_id, final_feedback)
+        print("  Feedback sent.")
 
 if __name__ == "__main__":
     main()
