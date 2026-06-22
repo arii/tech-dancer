@@ -1,17 +1,14 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
-import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+import { getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalGeminiModel } from '../lib/modelPicker';
 
-function createModel(estimatedInputTokens: number = 0): ChatGoogleGenerativeAI {
 function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
-
-  const modelName = pickOptimalGeminiModel(estimatedInputTokens);
 
   return new ChatGoogleGenerativeAI({
     model: modelName,
@@ -29,8 +26,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     // Estimate tokens from payload (text only for now)
     const estimatedInputTokens = Math.ceil(JSON.stringify(summary).length / 4);
-    const model = createModel(estimatedInputTokens);
-    const modelName = pickGeminiModel('flash', 0);
+    const modelName = pickOptimalGeminiModel(estimatedInputTokens);
     const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
