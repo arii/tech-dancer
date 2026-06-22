@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/feat/relocate-impact-analyzer-study-11306658922826549792-7014075923397986780/sitemap.xml
