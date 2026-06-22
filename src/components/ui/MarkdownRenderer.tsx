@@ -90,7 +90,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={16} marginBottom={8} className="prose-section group">
+            <Box marginTop={16} marginBottom={10} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
@@ -189,7 +189,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8}>
+                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
                     <Box
                       as="img"
                       src={diagramUrl}
@@ -197,7 +197,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       radius="md"
                       maxWidth="full"
                       maxHeight={96}
-                      className="object-contain invert brightness-200 contrast-150"
+                      className="object-contain"
                       loading="lazy"
                     />
                   </Box>
@@ -253,7 +253,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 as="code"
                 variant="mono"
                 size="xs"
-                paddingX={2}
+                paddingX={3}
                 paddingY={0.5}
                 radius="sm"
                 surface="surface"

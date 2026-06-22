@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ReactNode, useState, useEffect } from 'react';
+import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { journalVariants } from '@/lib/variants';
@@ -21,6 +21,21 @@ export function EditorialLayout({
   sidebar,
   footer,
 }: EditorialLayoutProps) {
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 1000);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <Box
       width="full"
@@ -29,7 +44,7 @@ export function EditorialLayout({
       paddingX={{ base: 5, md: 10, lg: 12 }}
       paddingY={{ base: 8, md: 16 }}
     >
-      <Stack gap={12}>
+      <Stack gap="section-spacing">
         {/* Navigation */}
         <Box>
           <Stack
@@ -91,7 +106,7 @@ export function EditorialLayout({
             )}
           </Grid>
         ) : (
-          <Stack gap={12} width="full" marginX="auto" maxWidth="3xl">
+          <Stack gap="section-spacing" width="full" marginX="auto" maxWidth="3xl">
             <Box className="article-content-wrapper" width="full">
               {children}
             </Box>
@@ -103,6 +118,29 @@ export function EditorialLayout({
           </Stack>
         )}
       </Stack>
+
+      {/* Back to Top */}
+      <Box
+        position="fixed"
+        bottom={8}
+        right={8}
+        zIndex="sticky"
+        className={`transition-all duration-300 ${showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+      >
+        <Stack
+          as="button"
+          onClick={scrollToTop}
+          align="center"
+          justify="center"
+          padding={3}
+          radius="full"
+          surface="surface"
+          border
+          className="shadow-glow hover:text-accent transition-colors"
+        >
+          <Icon icon={ArrowUp} size="sm" />
+        </Stack>
+      </Box>
     </Box>
   );
 }
