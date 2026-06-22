@@ -190,7 +190,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justify="center">
+                  <Box marginY={8} width="full" display="flex" justify="center" overflowX="auto">
                     <Box
                       as="img"
                       src={diagramUrl}
@@ -198,7 +198,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                       radius="lg"
                       shadow="sm"
                       maxWidth="full"
-                      maxHeight={96}
+                      minWidth={{ base: "full", md: 0 }}
                       className="object-contain"
                       loading="lazy"
                     />
