@@ -33,9 +33,9 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends gh \
   && rm -rf /var/lib/apt/lists/*
 
-# ── Node.js 22.22.2 (matches .node-version / runtime contract) ────────────────
+# ── Node.js 24.16.0 (matches .node-version / runtime contract) ────────────────
 # Uses NodeSource to get the exact patch version, then locks it via corepack.
-ENV NODE_MAJOR=22
+ENV NODE_MAJOR=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
   && apt-get install -y nodejs \
   && node --version
