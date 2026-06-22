@@ -1,7 +1,7 @@
 # GitHub Actions Workflow Audit Report
 
 ## 1. Audit Scope
-This audit covered all 17 GitHub Actions workflow definitions in `.github/workflows/`, their associated scripts, and recent run history to identify correctness issues, performance bottlenecks, flakiness, unnecessary artifacts, and setup bloat.
+This audit covered all 18 GitHub Actions workflow definitions in `.github/workflows/`, their associated scripts, and recent run history to identify correctness issues, performance bottlenecks, flakiness, unnecessary artifacts, and setup bloat.
 
 ## 2. Workflow Files Reviewed
 - `.github/workflows/ai-chatops.yml`
