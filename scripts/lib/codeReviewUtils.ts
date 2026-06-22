@@ -40,7 +40,10 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   }
 }
 
-export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
+export function estimateMaxOutputTokens(
+  summary: CodeReviewSummary,
+  systemPromptLength: number = 0
+): number {
   // Base budget covers prose review + a couple findings.
   let budget = 1500;
 
@@ -53,8 +56,23 @@ export function estimateMaxOutputTokens(summary: CodeReviewSummary): number {
   const diffSizeTokens = Math.ceil(summary.diffContext.length / 4);
   if (diffSizeTokens > 4000) budget += 1000;
 
-  // Hard ceiling — avoid runaway cost/latency on pathological inputs.
-  return Math.min(budget, 4096);
+  // NEW: reasoning-capable Gemini models draw "thinking" tokens from the
+  // same maxOutputTokens budget as the visible answer. A longer, rule-dense
+  // system prompt (design guidelines, multiple matched PROMPT_CATEGORIES
+  // blocks) correlates with materially more internal deliberation before
+  // the model commits to an answer — give it proportionally more headroom
+  // even when the diff itself is small. Thresholds are deliberately coarse;
+  // tune against dev-tools/logs/ai/review-run.json once Fix 5's logging is
+  // live and you have real thoughtsTokenCount data to calibrate against.
+  const systemPromptTokens = Math.ceil(systemPromptLength / 4);
+  if (systemPromptTokens > 600) budget += 1500;
+  if (systemPromptTokens > 1200) budget += 1500;
+
+  // Hard ceiling — raised to match what the models actually support
+  // (gemini-3.5-flash and gemini-3.1-pro-preview both report
+  // maxOutputTokens: 8192 in geminiModelPicker.ts). The previous ceiling of
+  // 4096 was silently capping the budget below the model's real limit.
+  return Math.min(budget, 8192);
 }
 
 export const EXTERNAL_CONTEXT_TRUNCATED_MESSAGE = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';
