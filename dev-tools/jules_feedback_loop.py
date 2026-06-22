@@ -171,6 +171,11 @@ def main():
         # Combine all feedback parts
         final_feedback = "\n\n".join(feedback_parts)
 
+        # Check for duplicate feedback to prevent spamming
+        if last_message.get("content", "") == final_feedback:
+            print(f"  Duplicate feedback detected for session {session_id}, skipping send.")
+            continue
+
         print(f"  Sending feedback to session {session_id}...")
         jules_client.send_message(session_id, final_feedback)
         print("  Feedback sent.")
