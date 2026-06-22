@@ -203,11 +203,11 @@ To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright
 ./setup-agent.sh
 ```
 
-This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md).
+This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md).
 
 # Codex / Agent Runtime Rules
 
-This repository enforces a strict runtime contract (`Node.js 22.22.2`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md).
+This repository enforces a strict runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md).
 
 Before installing, testing, building, or editing dependencies, run:
 
