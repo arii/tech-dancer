@@ -28,6 +28,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
+          Box: ({ node: _node, ...props }: BoxProps & { node?: unknown }) => <Box {...props} />,
           Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,
           Stack: ({ node: _node, ...props }: StackProps & { node?: unknown }) => <Stack {...props} />,
           Text: ({ node: _node, ...props }: TextProps & { node?: unknown }) => <Text {...props} />,
