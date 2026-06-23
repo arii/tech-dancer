@@ -157,6 +157,7 @@ def detect_conflicts(ctx, pr):
             for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
 
+
 @gh.command()
 @click.option('--pr', required=True, type=int, help="The PR number to comment on.")
 @click.option('--file', required=True, type=str, help="Path to the file containing the comment body.")

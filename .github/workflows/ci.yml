@@ -80,8 +80,6 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
-        with:
-          node-version: "24.x"
 
       - name: Validate Runtime
         shell: bash
@@ -153,8 +151,6 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
-        with:
-          node-version: "24.x"
 
       - name: Install dependencies
         shell: bash
@@ -281,8 +277,6 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
-        with:
-          node-version: "24.x"
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 

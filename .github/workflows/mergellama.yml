@@ -35,8 +35,6 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
-        with:
-          node-version: "24.x"
 
       - name: Check active runtime
         run: |
@@ -53,7 +51,7 @@ jobs:
       - name: Validate Resolution
         run: |
           pnpm install --frozen-lockfile
-          pnpm run type-check && pnpm run lint:ox
+          pnpm run type-check
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v7

@@ -1,48 +1,29 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import { ChatOpenAI } from '@langchain/openai';
+import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
-import * as fs from 'fs';
-import * as path from 'path';
 
-type VisualReviewPayload = Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }>;
-
-async function createModelRequest(estimatedInputTokens: number = 0, prompt: VisualReviewPayload): Promise<{ feedback: string; totalTokens: number; modelName: string }> {
+async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
   const modelName = await pickOptimalModel(apiKey, fallback, true, estimatedInputTokens);
 
-  const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
+  return new ChatOpenAI({
+    modelName: modelName,
+    apiKey: apiKey,
+    configuration: {
+      baseURL: 'https://models.inference.ai.azure.com',
     },
-    body: JSON.stringify({
-      model: modelName,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 1024,
-      temperature: 0.1
-    })
+    maxTokens: 1024,
+    temperature: 0.1,
   });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`GitHub Models API request failed: ${response.status} ${response.statusText} - ${errText}`);
-  }
-
-  const data = await response.json() as Record<string, unknown>;
-  const choices = data.choices as Array<{ message: { content: string }; finish_reason: string }> | undefined;
-  if (!choices || choices.length === 0) throw new Error('No choices returned from GitHub Models API');
-
-  const feedback = choices[0].message.content;
-  const usage = data.usage as { total_tokens: number } | undefined;
-  const totalTokens = usage?.total_tokens ?? 0;
-
-  return { feedback, totalTokens, modelName };
 }
 
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
@@ -62,6 +43,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
     }
     const estimatedInputTokens = Math.ceil(domDiffLength / 4);
 
+    const model = await createModel(estimatedInputTokens);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -105,11 +87,19 @@ Your job:
 </findings>`
     });
 
-    const { feedback, totalTokens, modelName } = await createModelRequest(estimatedInputTokens, baseContent);
+    const message = new HumanMessage({ content: baseContent });
+    const response = await model.invoke([message]);
+
+    const usageMetadata = response.usage_metadata;
+    const totalTokens = usageMetadata?.total_tokens ?? 0;
 
     // Approximating cost for general OpenAI API usage (e.g. gpt-4o) if used over GitHub models natively
     // GitHub Models are currently free/rate-limited depending on the tier.
     const cost = 0;
+
+    const feedback = typeof response.content === 'string'
+      ? response.content
+      : JSON.stringify(response.content);
 
     return {
       route: summary.route,
@@ -118,7 +108,6 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
-      modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };

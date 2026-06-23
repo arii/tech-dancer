@@ -23,9 +23,8 @@ class APIConnectionError(Exception):
 
 def get_ai_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
-    'gpt-4o' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on gpt-4o.
     """
-    return os.environ.get("OLLAMA_REVIEW_MODEL", "gpt-4o")
+    return os.environ.get("AI_REVIEW_MODEL", "gpt-4o")
 
 def get_ai_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
@@ -86,9 +85,37 @@ def to_standard_schema(schema, uppercase: bool = False):
         return [to_standard_schema(item, uppercase=uppercase) for item in schema]
     return schema
 
-def call_ai(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call AI API using REST directly."""
-    return call_github_models(prompt, model=model, max_retries=max_retries, schema=schema)
+def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+    """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
+    try:
+        from langchain_openai import ChatOpenAI
+        from langchain_core.messages import HumanMessage
+    except ImportError:
+        print("langchain_openai or langchain_core is not installed.", file=sys.stderr)
+        return None
+
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
+    if not token:
+        return None
+
+    model = model or get_ai_model()
+
+    llm = ChatOpenAI(
+        base_url="https://models.inference.ai.azure.com",
+        api_key=token,
+        model=model,
+        temperature=0.7,
+        max_tokens=2048,
+        max_retries=max_retries,
+        model_kwargs={"response_format": {"type": "json_object"}} if schema else {}
+    )
+
+    try:
+        response = llm.invoke([HumanMessage(content=prompt)])
+        return response.content
+    except Exception as e:
+        print(f"AI Call failed: {e}", file=sys.stderr)
+        return None
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
@@ -115,47 +142,36 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call Gemini API."""
+    """Unified helper to call Gemini API using LangChain."""
+    try:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        from langchain_core.messages import HumanMessage
+    except ImportError:
+        print("langchain_google_genai or langchain_core is not installed.", file=sys.stderr)
+        return None
+
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key: return None
+    if not api_key:
+        return None
 
-    target_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model or 'gemini-1.5-flash'}:generateContent?key={api_key}"
-    payload = {"contents": [{"parts": [{"text": prompt}]}]}
+    llm = ChatGoogleGenerativeAI(
+        model=model or "gemini-1.5-flash",
+        google_api_key=api_key,
+        temperature=0.7,
+        max_retries=max_retries,
+    )
+
     if schema:
-        # Gemini requires uppercase types in responseSchema
-        payload["generationConfig"] = {
-            "responseMimeType": "application/json",
-            "responseSchema": to_standard_schema(schema, uppercase=True)
-        }
+        # Note: structured output handling varies by LangChain version/provider
+        # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
+        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
 
-    req = urllib.request.Request(target_url, data=json.dumps(payload).encode("utf-8"), headers={"Content-Type": "application/json"})
-    res = _call_api_with_retry(req, max_retries=max_retries)
-    if res and "candidates" in res and len(res["candidates"]) > 0:
-        return res["candidates"][0]["content"]["parts"][0]["text"]
-    return None
-
-def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, timeout: int = 60) -> Optional[Dict]:
-    """Internal helper to execute urllib requests with retries and exponential backoff."""
-    for attempt in range(max_retries):
-        try:
-            with urllib.request.urlopen(req, timeout=timeout) as response:
-                if response.status == 200:
-                    return json.loads(response.read().decode("utf-8"))
-                elif response.status in [429, 500, 502, 503, 504]:
-                    raise APIConnectionError(f"Server error {response.status}")
-                else:
-                    print(f"❌ API Error: {response.status} {response.reason}", file=sys.stderr)
-                    return None
-        except (urllib.error.URLError, APIConnectionError, TimeoutError) as e:
-            if attempt < max_retries - 1:
-                wait_time = (2 ** attempt) + random.uniform(0, 1)
-                time.sleep(wait_time)
-            else:
-                print(f"❌ API Max retries exceeded: {e}", file=sys.stderr)
-        except Exception as e:
-            print(f"❌ Unexpected API error: {e}", file=sys.stderr)
-            return None
-    return None
+    try:
+        response = llm.invoke([HumanMessage(content=prompt)])
+        return response.content
+    except Exception as e:
+        print(f"Gemini Call failed: {e}", file=sys.stderr)
+        return None
 
 def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
     """

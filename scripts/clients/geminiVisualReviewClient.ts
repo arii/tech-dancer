@@ -1,61 +1,19 @@
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
-type VisualReviewPayload = Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }>;
-
-async function createModelRequest(
-  modelName: string,
-  maxOutputTokens: number = 2048,
-  prompt: VisualReviewPayload
-): Promise<{ feedback: string; inputTokens: number; outputTokens: number; totalTokens: number; finishReason: string }> {
+function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      contents: [{ parts: prompt.map(p => {
-        if (p.type === 'text') return { text: p.text };
-        if (p.type === 'image_url') {
-          return { inline_data: { mime_type: 'image/png', data: p.image_url.url.split(',')[1] } };
-        }
-        return p;
-      }) }],
-      generationConfig: {
-        maxOutputTokens: maxOutputTokens
-      }
-    })
+  return new ChatGoogleGenerativeAI({
+    model: modelName,
+    apiKey,
+    maxOutputTokens: maxOutputTokens,
   });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Gemini API request failed: ${response.status} ${response.statusText} - ${errText}`);
-  }
-
-  const data = await response.json() as Record<string, unknown>;
-  const candidates = data.candidates as Array<Record<string, unknown>> | undefined;
-  if (!candidates || candidates.length === 0) throw new Error('No candidates returned from Gemini API');
-
-  const candidate = candidates[0];
-  const content = candidate.content as Record<string, unknown> | undefined;
-  const parts = content?.parts as Array<Record<string, unknown>> | undefined;
-  const feedbackPart = parts?.find(p => typeof p.text === 'string');
-  const feedback = (feedbackPart?.text as string) || '';
-
-  const usageMetadata = (data.usageMetadata as Record<string, number>) || {};
-  const inputTokens = usageMetadata.promptTokenCount || 0;
-  const outputTokens = usageMetadata.candidatesTokenCount || 0;
-  const totalTokens = usageMetadata.totalTokenCount || 0;
-  const finishReason = candidate.finishReason as string;
-
-  return { feedback, inputTokens, outputTokens, totalTokens, finishReason };
 }
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
@@ -66,6 +24,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     const modelName = pickGeminiModel('flash', 0);
+    const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -109,10 +68,20 @@ Your job:
 </findings>`
     });
 
-    const { feedback, inputTokens, outputTokens, totalTokens } = await createModelRequest(modelName, 2048, baseContent);
+    const message = new HumanMessage({ content: baseContent });
+    const response = await model.invoke([message]);
+
+    const usageMetadata = response.usage_metadata;
+    const inputTokens = usageMetadata?.input_tokens ?? 0;
+    const outputTokens = usageMetadata?.output_tokens ?? 0;
+    const totalTokens = usageMetadata?.total_tokens ?? 0;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
+
+    const feedback = typeof response.content === 'string'
+      ? response.content
+      : JSON.stringify(response.content);
 
     return {
       route: summary.route,
