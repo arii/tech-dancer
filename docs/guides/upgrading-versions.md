@@ -14,7 +14,7 @@ For workflows that checkout code using actions/checkout, to properly handle Depe
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          repository: ${{ github.event.pull_request && github.event.pull_request.head.repo.full_name || github.repository }}
           fetch-depth: 0
 ```
 

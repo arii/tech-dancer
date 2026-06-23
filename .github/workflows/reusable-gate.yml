@@ -20,7 +20,7 @@ jobs:
       - name: Checkout Code with History
         uses: actions/checkout@v7
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          repository: ${{ github.event.pull_request && github.event.pull_request.head.repo.full_name || github.repository }}
           fetch-depth: 0
       - name: Verify Diff Composition
         id: check_diff
