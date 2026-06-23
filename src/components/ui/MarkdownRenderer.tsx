@@ -105,7 +105,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={24} marginBottom={12} className="prose-section group">
+            <Box marginTop={16} marginBottom={10} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
@@ -117,7 +117,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box marginTop={20} marginBottom={10}>
+            <Box marginTop={12} marginBottom={6}>
               <Text
                 as="h3"
                 variant="h3"

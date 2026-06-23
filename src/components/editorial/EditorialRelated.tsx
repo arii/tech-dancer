@@ -22,7 +22,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
         <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
           {title}
         </Text>
-        <Stack gap={3}>
+        <Stack gap={4}>
           {items.map((item) => (
             <Link key={item.href} to={item.href} className="group">
               <Box padding={4} border radius="md" className={journalVariants.card({ interactive: true })}>

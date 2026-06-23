@@ -70,7 +70,7 @@ export function ContentCard(props: ContentCardProps) {
       <Stack gap={4} padding={6} height="full">
         <Box
           paddingX={2}
-          paddingY={2}
+          paddingY={1}
           radius="full"
           border
           className="border-line w-fit"
