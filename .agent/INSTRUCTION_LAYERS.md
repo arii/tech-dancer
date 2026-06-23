@@ -6,9 +6,6 @@
 | dev-tools/cli-schema.json        | Canonical CLI authority        | Define UI style rules   |
 | AGENTS.md                        | TSX, PR lifecycle, core rules  | Duplicate CLI schema    |
 | CODEX.md                         | Runtime contract, pnpm/node    | Duplicate UI rules      |
-| CLAUDE.md                        | Claude Code session context    | Conflict with AGENTS.md |
-| GEMINI.md                        | Gemini CLI session context     | Conflict with AGENTS.md |
-| .github/copilot-instructions.md  | Copilot workspace context      | Conflict with AGENTS.md |
 | .agents/skills/impeccable/SKILL.md| Frontend design system / UX    | Define git workflows    |
 | .agent/workflows/                | Task-specific protocols        | Redefine core rules     |
 | audit.config.yaml                | Define what is bad             | Suggest fixes or report |

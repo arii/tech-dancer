@@ -164,15 +164,15 @@ When multiple agents work simultaneously:
 ### Issue Lifecycle
 
 All new issues must follow the **Spec-Driven Issue Template** (`.github/ISSUE_TEMPLATE/spec_driven_issue.md`).
-The `python3 dev-tools/td_cli.py gh validate-issue --issue-number `<ISSUE_NUMBER>`` command enforces this structure.
+The `python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute` command enforces this structure.
 
 ### PR Review Lifecycle
 
-Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
+Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always consult `dev-tools/cli-schema.json` for authoritative usage.
 
-1. **Fetch context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch`
-2. **Perform audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit`
-3. **Submit review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup`
+1. **Fetch context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --execute`
+2. **Perform audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit --execute`
+3. **Submit review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup --execute`
 
 ### Quality Gates & Submission Protocol
 

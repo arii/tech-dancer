@@ -4,7 +4,7 @@ This skill defines the frontend design system and UX auditing rules for the Boom
 
 ## 🎨 Design System Principles
 
-- **Token-First Styling**: All styles must derive from design tokens. Never use raw hex codes or arbitrary pixel values.
+- **Token-First Styling**: All styles must derive from design tokens (defined in `src/styles/design-tokens.ts` and `src/styles/tokens.css`). Never use raw hex codes or arbitrary pixel values.
 - **Primitive Layouts**: Use `<Box />`, `<Stack />`, and `<Grid />` from `@/layouts` for all structural needs. No raw `flex` or `grid` classes.
 - **Component Composition**: Build complex UIs by composing existing primitives and components.
 - **Declarative UI**: Ensure UI state is predictable and derived from props or hooks.

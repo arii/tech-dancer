@@ -40,7 +40,7 @@
     },
     "gh overlaps": {
       "description": "Identify and propose consolidation of PRs with high functional or structural overlap.",
-      "exact_usage": "python3 dev-tools/td_cli.py gh overlaps --limit <LIMIT>",
+      "exact_usage": "python3 dev-tools/td_cli.py gh overlaps [--limit <LIMIT>]",
       "optional_flags": [
         {
           "flag": "--limit",
