@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import json
+import requests
 from typing import Optional, Dict, Any, List, Set
 from utils import (
     call_ai,

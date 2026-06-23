@@ -27,6 +27,9 @@ class DependencyGraph:
                     "--output-type", "json"
                 ]
                 try:
+                    # Explicitly check for npx availability
+                    subprocess.run(["npx", "--version"], capture_output=True, check=True)
+
                     result = subprocess.run(cmd, capture_output=True, text=True, cwd=self.root_dir)
                     if result.returncode != 0:
                         # Fallback or error
@@ -34,7 +37,7 @@ class DependencyGraph:
                         data = {"modules": []}
                     else:
                         data = json.loads(result.stdout)
-                except FileNotFoundError:
+                except (FileNotFoundError, subprocess.CalledProcessError):
                     print("Warning: npx or depcruise not found. Ensure dependencies are installed.")
                     data = {"modules": []}
 
