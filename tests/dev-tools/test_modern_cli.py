@@ -46,14 +46,14 @@ class TestModernCLI(unittest.TestCase):
         result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123'])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("Resolution complete", result.output)
-        mock_resolve.assert_called_once_with(123, allow_unrelated=False)
+        mock_resolve.assert_called_once_with(123, allow_unrelated=False, strategy=None, push=False)
 
     @patch('tdw_services.orchestrator.Orchestrator.resolve_pr_conflicts')
-    def test_resolve_conflicts_with_unrelated(self, mock_resolve):
+    def test_resolve_conflicts_with_strategy_and_push(self, mock_resolve):
         mock_resolve.return_value = {"status": "success", "message": "Resolution complete"}
-        result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123', '--allow-unrelated'])
+        result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123', '--strategy', 'ours', '--push'])
         self.assertEqual(result.exit_code, 0)
-        mock_resolve.assert_called_once_with(123, allow_unrelated=True)
+        mock_resolve.assert_called_once_with(123, allow_unrelated=False, strategy='ours', push=True)
 
     @patch('tdw_services.orchestrator.Orchestrator.resolve_pr_conflicts')
     def test_resolve_conflicts_handles_error(self, mock_resolve):

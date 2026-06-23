@@ -1009,7 +1009,7 @@ Respond only after the PR is created or updated:
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
 
-    def resolve_pr_conflicts(self, pr_number: int, allow_unrelated: bool = False) -> Dict[str, Any]:
+    def resolve_pr_conflicts(self, pr_number: int, allow_unrelated: bool = False, strategy: Optional[str] = None, push: bool = False) -> Dict[str, Any]:
         """
         Sets up a worktree for a specific PR and attempts to merge the base branch.
         """
@@ -1054,12 +1054,27 @@ Respond only after the PR is created or updated:
             merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{pr_number}"]
             if allow_unrelated:
                 merge_cmd.append("--allow-unrelated-histories")
+            if strategy in ["ours", "theirs"]:
+                merge_cmd.extend(["-X", strategy])
 
             res = run_command(merge_cmd, check=False)
 
             if res.returncode == 0:
                 message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
                 status = "success"
+                if push:
+                    head_branch = pr_data.get('head', {}).get('ref')
+                    try:
+                        # Use authenticated URL if token is available to avoid terminal prompts
+                        if self.github.token and self.github.repo:
+                            auth_url = f"https://x-access-token:{self.github.token}@github.com/{self.github.repo}.git"
+                            run_command(["git", "push", auth_url, f"HEAD:{head_branch}"], check=True)
+                        else:
+                            run_command(["git", "push", "origin", head_branch], check=True)
+                        message += f"\n🚀 Successfully pushed resolution to {head_branch}"
+                    except Exception as push_err:
+                        message += f"\n⚠️  Merge successful but push failed: {str(push_err)}"
+                        status = "partial_success"
             else:
                 message = f"⚠️  Conflicts detected in PR #{pr_number} when merging {base_branch}.\nAction Required: Resolve them manually in the worktree.\nCommand: cd {worktree_path}"
                 status = "conflict"
