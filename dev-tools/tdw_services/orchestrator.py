@@ -3,6 +3,7 @@ import os
 import re
 import json
 import sys
+import shutil
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse

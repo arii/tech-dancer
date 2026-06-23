@@ -109,7 +109,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
   },
   {
     id: 'deployment-impact-analyzer',
-    taxonomyBucket: 'engineering',
+    taxonomyBucket: 'flagship',
     title: 'Deployment Impact Analyzer',
     subtitle: 'VISUAL IMPACT ANALYSIS PIPELINE',
     description: 'CI pipeline that determines which pages are visually affected by a pull request. Uses dependency-cruiser to trace changed files through the import graph, then captures Playwright screenshots of affected routes, runs pixelmatch pixel diffs, crops changed regions, and generates a deployment review report with severity scores. Agent integration in progress.',
@@ -117,7 +117,8 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
     canonicalPath: '/research/deployment-impact-analyzer',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools',
+    isFlagship: true
   },
   {
     id: 'ux-auditor',

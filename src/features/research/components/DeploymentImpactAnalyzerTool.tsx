@@ -11,7 +11,7 @@ export function DeploymentImpactAnalyzerTool() {
   ]);
 
   return (
-    <Box border radius="lg" padding={8} surface="default">
+    <Box radius="md" padding={8} surface="default">
       <Stack gap={10}>
         <Stack gap={4}>
           <Text variant="headline" size="xl" weight="font-black">Deployment Impact Analyzer</Text>

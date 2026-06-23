@@ -52,6 +52,9 @@ for pr in $(jq -r '.work[].number // empty' dev-tools/logs/open_prs.json); do
   # Fetch and Audit headlessly
   python3 dev-tools/td_cli.py gh audit-pr "$pr" --fetch --audit
 
+  # AI Review
+  python3 dev-tools/td_cli.py ai review "$pr" > dev-tools/logs/ai_review_$pr.log 2>&1 || echo "⚠️ AI review failed for PR #$pr. See dev-tools/logs/ai_review_$pr.log for details."
+
   # Log Triage and Failure Analysis
   echo "🔍 Performing CI Log Triage for PR #$pr..."
   python3 dev-tools/td_cli.py jules repair-context --pr "$pr"

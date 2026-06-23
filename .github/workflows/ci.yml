@@ -148,8 +148,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+
       - name: Install dependencies
         shell: bash
         run: |
@@ -192,8 +194,6 @@ jobs:
     env:
       NODE_ENV: production
       REPO_NAME: ${{ github.event.repository.name }}
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -220,6 +220,7 @@ jobs:
 
       - name: Run Playwright Smoke Test
         run: |
+          pnpm exec playwright install chromium
           VITE_BASE_PATH=/ pnpm run test:e2e
 
       - name: Run Lighthouse CI
@@ -234,8 +235,18 @@ jobs:
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Test Results
+      - name: Check Playwright Report Exists
+        id: check_report
         if: always()
+        run: |
+          if [ -d "playwright-report/" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload Test Results
+        if: always() && steps.check_report.outputs.exists == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ github.run_id }}
@@ -263,8 +274,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Deployment Impact Analysis

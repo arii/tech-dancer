@@ -19,14 +19,8 @@ function ArielProfile() {
   const renderSection = (section: ProfileSection) => {
     return (
       <Stack key={section.id} gap={6} maxWidth="prose">
-        {section.eyebrow && (
-          <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">
-            {section.eyebrow}
-          </Text>
-        )}
-
         {section.title && (
-          <Text variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
+          <Text as="h2" variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
             {section.title}
           </Text>
         )}
