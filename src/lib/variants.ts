@@ -17,6 +17,7 @@ export const variants = {
     warning: "bg-accent-purple/5 border-accent-purple/20 text-accent-purple",
     error: "bg-error-surface border-error/20 text-error",
     bg: "bg-bg text-text-body",
+    overlay: "bg-black/90",
   },
   intent: {
     default: "text-text-main",

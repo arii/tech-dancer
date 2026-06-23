@@ -34,7 +34,7 @@ function ArielProfile() {
         {section.cards && <ExperienceCards cards={section.cards} />}
 
         {section.availability && (
-          <Box padding={6} radius="lg" border surface="accent">
+          <Box padding={6} radius="md" border surface="accent">
             <Text variant="body" size="base" color="accent" weight="font-medium">
               {section.availability}
             </Text>
@@ -48,7 +48,7 @@ function ArielProfile() {
   };
 
   const renderAtAGlance = () => (
-    <Box width="full" padding={6} border radius="lg" surface="alt">
+    <Box width="full" padding={6} border radius="md" surface="alt">
       <Stack gap={6}>
         <Text variant="mono" size="sm" color="brand" weight="font-bold" uppercase tracking="widest">AT A GLANCE</Text>
         <Stack gap={4}>
@@ -96,7 +96,7 @@ function ArielProfile() {
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             {/* Main Content Area */}
-            <Stack gap={12} span={{ base: 12, lg: 8 }} order={{ base: 2, lg: 1 }}>
+            <Stack gap={12} span={{ base: 1, lg: 8 }} order={{ base: 2, lg: 1 }}>
               {/* Professional Section (MIT PhD, Waymo, cards, availability) */}
               {professionalSection && renderSection(professionalSection)}
 
@@ -104,7 +104,7 @@ function ArielProfile() {
               <Box display={{ base: "block", lg: "none" }}>
                 <Stack gap={8}>
                   {renderAtAGlance()}
-                  <Box width="full" padding={6} border radius="lg" surface="alt">
+                  <Box width="full" padding={6} border radius="md" surface="alt">
                     <Stack gap={6}>
                       <Text variant="mono" size="sm" color="brand" weight="font-bold" uppercase tracking="widest">CONNECT</Text>
                       <ProfileLinks links={socialLinks} />
@@ -133,7 +133,7 @@ function ArielProfile() {
             </Stack>
 
             {/* Sticky Sidebar (Desktop only view for the details box) */}
-            <Box span={{ base: 12, lg: 4 }} position="relative" order={{ base: 1, lg: 2 }}>
+            <Box span={{ base: 1, lg: 4 }} position="relative" order={{ base: 1, lg: 2 }}>
               <Stack gap={8} position="sticky" top={12} align={{ base: "center", lg: "start" }}>
                 {/* Profile portrait (Always on top or as ordered) */}
                 <Box
@@ -144,7 +144,6 @@ function ArielProfile() {
                   surface="default"
                   width={{ base: "48", md: "56", lg: "64" }}
                   shadow="2xl"
-                  borderColor="line/10"
                   position="relative"
                 >
                   <Box
@@ -162,7 +161,7 @@ function ArielProfile() {
                 <Box display={{ base: "none", lg: "block" }} width="full">
                   <Stack gap={8}>
                     {renderAtAGlance()}
-                    <Box width="full" padding={6} border radius="lg" surface="alt">
+                    <Box width="full" padding={6} border radius="md" surface="alt">
                       <Stack gap={6}>
                         <Text variant="mono" size="sm" color="brand" weight="font-bold" uppercase tracking="widest">CONNECT</Text>
                         <ProfileLinks links={socialLinks} />

@@ -36,19 +36,21 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
             as={motion.div}
             padding={8}
             border
-            radius="lg"
+            radius="md"
             surface="alt"
             cursor="pointer"
             whileHover={{ ...motionTokens.hover, scale: 1.01, borderColor: "var(--color-accent)" }}
             whileTap={{ scale: 0.98 }}
-            className="group transition-colors duration-200"
+            transition="colors"
+            duration={200}
+            className="group"
           >
             <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
               {Icon && (
                 <Box
                   width={12}
                   height={12}
-                  radius="lg"
+                  radius="md"
                   border
                   display="flex"
                   align="center"
@@ -138,19 +140,22 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             border
             radius="md"
             surface="alt"
-            borderColor="line/10"
             cursor="pointer"
             className="group focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             onClick={() => setSelectedImage(image.src)}
             aria-label={`View ${image.alt}`}
           >
-            <img
+            <Box
+              as={motion.img}
               src={image.src}
               alt={image.alt}
-              width={800}
-              height={800}
+              width="full"
+              height="full"
+              objectFit="cover"
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              transition="transform"
+              duration={500}
+              whileHover={{ scale: 1.1 }}
             />
           </Box>
         ))}
@@ -161,16 +166,20 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           position="fixed"
           inset={0}
           zIndex="modal"
-          className="bg-black/90 cursor-pointer"
+          surface="overlay"
+          cursor="pointer"
           align="center"
           justify="center"
           onClick={() => setSelectedImage(null)}
         >
           <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center" pointerEvents="none">
-            <img
+            <Box
+              as="img"
               src={selectedImage}
               alt="Expanded view"
-              className="max-w-full max-h-full object-contain"
+              maxWidth="full"
+              maxHeight="full"
+              objectFit="contain"
             />
           </Box>
         </Stack>
@@ -202,7 +211,8 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           cursor="pointer"
           whileHover={{ ...motionTokens.hover, backgroundColor: "var(--color-surface-alt)", borderColor: "var(--color-accent)" }}
           whileTap={{ scale: 0.98 }}
-          className="group transition-all focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
+          transition="all"
+          className="group focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
         >
           <Text variant="mono" size="xs" weight="font-bold" hoverColor="accent">
             {link.label}

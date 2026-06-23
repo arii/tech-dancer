@@ -78,6 +78,8 @@ export interface BaseProps {
   objectFit?: ResponsiveProp<"contain" | "cover" | "fill" | "none" | "scale-down">
   objectPosition?: ResponsiveProp<string>
   bgGradient?: string
+  transition?: "all" | "colors" | "opacity" | "shadow" | "transform" | "none"
+  duration?: 150 | 200 | 300 | 500 | 700 | 1000
 }
 
 export interface BoxProps extends BaseProps, HTMLAttributes<HTMLDivElement> {
@@ -98,7 +100,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     position, inset, height, width, maxWidth, minHeight, maxHeight, minWidth, 
     overflow, overflowX, overflowY, overscroll, isolation, noScrollbar, pointerEvents,
     zIndex, opacity, opacityVariant, display, aspect, shrink, self, span, cursor, flexWrap, textAlign,
-    order, objectFit, objectPosition,
+    order, objectFit, objectPosition, transition: transitionProp, duration,
     justify, align, scrollBehavior: _scrollBehavior, scrollPaddingTop, scrollMarginTop,
     top, right, bottom, left, bgGradient,
     // Motion props filtering
@@ -234,6 +236,8 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           getResponsiveClasses(order, "order-"),
           getResponsiveClasses(objectFit, "object-"),
           getResponsiveClasses(objectPosition, "object-", (v) => resolveJIT(v, "")),
+          transitionProp && (transitionProp === "none" ? "transition-none" : `transition-${transitionProp}`),
+          duration && `duration-${duration}`,
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
           getResponsiveClasses(top, "", resolveSpacing("top")),
