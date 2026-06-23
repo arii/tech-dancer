@@ -21,12 +21,12 @@ Dancing outdoors brings its own set of challenges, from sun exposure to keeping 
 ### Keep Your Valuables Safe
 A slim fanny pack or running belt is perfect for keeping your phone, keys, and cash secure without adding bulk or restricting your movement.
 
-<notice type="affiliate" id="running-belt" />
+<notice type="affiliate" id="running-belt"></notice>
 
 ### Sun Protection is Non-Negotiable
 If you're dancing under the sun, SPF 50 sunscreen and a good visor are essential to prevent burns and keep the sun out of your eyes so you can focus on your partner.
 
 ![Ergonomic performance visor providing sun protection while maintaining visibility and breathability for outdoor social dancing.](/images/gear/sketches/visor.webp)
 
-<notice type="affiliate" id="sunscreen" />
-<notice type="affiliate" id="visor" />
+<notice type="affiliate" id="sunscreen"></notice>
+<notice type="affiliate" id="visor"></notice>
