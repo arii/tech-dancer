@@ -6,7 +6,9 @@ import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 import * as fs from 'fs';
 import * as path from 'path';
 
-async function createModelRequest(estimatedInputTokens: number = 0, prompt: any[]): Promise<{ feedback: string; totalTokens: number; modelName: string }> {
+type VisualReviewPayload = Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }>;
+
+async function createModelRequest(estimatedInputTokens: number = 0, prompt: VisualReviewPayload): Promise<{ feedback: string; totalTokens: number; modelName: string }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
@@ -32,9 +34,9 @@ async function createModelRequest(estimatedInputTokens: number = 0, prompt: any[
     throw new Error(`GitHub Models API request failed: ${response.status} ${response.statusText} - ${errText}`);
   }
 
-  const data = await response.json();
-  const feedback = data.choices[0].message.content;
-  const totalTokens = data.usage?.total_tokens ?? 0;
+  const data = await response.json() as Record<string, unknown>;
+  const feedback = data.choices[0].message.content as string;
+  const totalTokens = (data.usage?.total_tokens as number) ?? 0;
 
   return { feedback, totalTokens, modelName };
 }

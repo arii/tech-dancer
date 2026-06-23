@@ -3,10 +3,12 @@ import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
+type VisualReviewPayload = Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }>;
+
 async function createModelRequest(
   modelName: string,
   maxOutputTokens: number = 2048,
-  prompt: any[]
+  prompt: VisualReviewPayload
 ): Promise<{ feedback: string; inputTokens: number; outputTokens: number; totalTokens: number; finishReason: string }> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
@@ -22,9 +24,6 @@ async function createModelRequest(
       contents: [{ parts: prompt.map(p => {
         if (p.type === 'text') return { text: p.text };
         if (p.type === 'image_url') {
-          // REST API expects base64 data for inline_data
-          // Since buildingVisualReviewPayload might return URLs, this might need more logic
-          // but assuming it's structured for the SDK, we'll try to map it
           return { inline_data: { mime_type: 'image/png', data: p.image_url.url.split(',')[1] } };
         }
         return p;
@@ -40,14 +39,21 @@ async function createModelRequest(
     throw new Error(`Gemini API request failed: ${response.status} ${response.statusText} - ${errText}`);
   }
 
-  const data = await response.json();
-  const feedback = data.candidates[0].content.parts.find((p: any) => p.text)?.text || '';
+  const data = await response.json() as Record<string, unknown>;
+  const candidates = data.candidates as Array<Record<string, unknown>> | undefined;
+  if (!candidates || candidates.length === 0) throw new Error('No candidates returned from Gemini API');
 
-  const usageMetadata = data.usageMetadata || {};
+  const candidate = candidates[0];
+  const content = candidate.content as Record<string, unknown> | undefined;
+  const parts = content?.parts as Array<Record<string, unknown>> | undefined;
+  const feedbackPart = parts?.find(p => typeof p.text === 'string');
+  const feedback = (feedbackPart?.text as string) || '';
+
+  const usageMetadata = (data.usageMetadata as Record<string, number>) || {};
   const inputTokens = usageMetadata.promptTokenCount || 0;
   const outputTokens = usageMetadata.candidatesTokenCount || 0;
   const totalTokens = usageMetadata.totalTokenCount || 0;
-  const finishReason = data.candidates[0].finishReason;
+  const finishReason = candidate.finishReason as string;
 
   return { feedback, inputTokens, outputTokens, totalTokens, finishReason };
 }

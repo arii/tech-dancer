@@ -49,7 +49,7 @@ async function createModelRequest(
   }
 
   const data = await response.json();
-  const feedback = data.candidates[0].content.parts.find((p: any) => p.text)?.text || '';
+  const feedback = data.candidates[0].content.parts.find((p: Record<string, unknown>) => p.text)?.text || '';
   const thoughtsTokenCount = 0; // Gemini REST API might not return this easily in the same way as LangChain wrapper
 
   const usageMetadata = data.usageMetadata || {};

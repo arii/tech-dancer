@@ -1,1 +1,3 @@
-from . import github, ai_service, jules
+from . import github
+from . import ai_service
+from . import jules
