@@ -32,6 +32,14 @@ class VectorStore:
             )
         return self._collection
 
+    def is_available(self) -> bool:
+        """Checks if ChromaDB and dependencies are available."""
+        try:
+            import chromadb
+            return True
+        except ImportError:
+            return False
+
     def add_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]):
         """Adds documents to the collection."""
         self.collection.add(

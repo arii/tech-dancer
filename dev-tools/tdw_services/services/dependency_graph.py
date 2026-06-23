@@ -26,17 +26,23 @@ class DependencyGraph:
                     "--ts-config", "tsconfig.app.json",
                     "--output-type", "json"
                 ]
-                result = subprocess.run(cmd, capture_output=True, text=True, cwd=self.root_dir)
-                if result.returncode != 0:
-                    # Fallback or error
-                    print(f"Warning: dependency-cruiser failed: {result.stderr}")
+                try:
+                    result = subprocess.run(cmd, capture_output=True, text=True, cwd=self.root_dir)
+                    if result.returncode != 0:
+                        # Fallback or error
+                        print(f"Warning: dependency-cruiser failed: {result.stderr}")
+                        data = {"modules": []}
+                    else:
+                        data = json.loads(result.stdout)
+                except FileNotFoundError:
+                    print("Warning: npx or depcruise not found. Ensure dependencies are installed.")
                     data = {"modules": []}
-                else:
-                    data = json.loads(result.stdout)
+
+                if data.get("modules"):
                     # Cache it
                     os.makedirs(os.path.dirname(cache_path), exist_ok=True)
                     with open(cache_path, 'w') as f:
-                        f.write(result.stdout)
+                        json.dump(data, f)
 
             self._parse_modules(data.get("modules", []))
         except Exception as e:

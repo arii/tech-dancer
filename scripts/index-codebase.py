@@ -17,6 +17,9 @@ def chunk_file(filepath: str, content: str, chunk_size: int = 1000):
 def index_codebase():
     print("🚀 Indexing codebase...")
     store = VectorStore()
+    if not store.is_available():
+        print("⚠️ ChromaDB or dependencies not available. Skipping indexing.")
+        return
     store.reset()
 
     extensions = {'.ts', '.tsx', '.py', '.md'}
