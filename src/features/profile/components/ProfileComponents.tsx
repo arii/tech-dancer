@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { motion } from 'motion/react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
+import { motionTokens } from '@/styles/motion';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
 /**
@@ -29,27 +31,55 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
+          <Box
+            key={index}
+            as={motion.div}
+            padding={8}
+            border
+            radius="lg"
+            surface="alt"
+            cursor="pointer"
+            whileHover={{ ...motionTokens.hover, scale: 1.01, borderColor: "var(--raw-color-accent)" }}
+            whileTap={{ scale: 0.98 }}
+            className="group transition-colors duration-200"
+          >
             <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
               {Icon && (
-                <Box 
-                  width={12} 
-                  height={12} 
-                  radius="lg" 
-                  border 
-                  display="flex" 
-                  align="center" 
-                  justify="center" 
-                  className="bg-accent/5 border-accent/20 shrink-0 shadow-sm group-hover:shadow-accent/5"
+                <Box
+                  width={12}
+                  height={12}
+                  radius="lg"
+                  border
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  surface="accent"
+                  shadow="sm"
+                  shrink={0}
                 >
-                  <Icon className="w-6 h-6 text-accent" />
+                  <Icon size={24} color="var(--raw-color-accent)" />
                 </Box>
               )}
               <Stack gap={2} flex={1} align="start">
-                <Text as="h3" variant="headline" size="lg" weight="font-bold" color="main" className="leading-tight group-hover:text-accent transition-colors">
+                <Text
+                  as="h3"
+                  variant="headline"
+                  size="lg"
+                  weight="font-bold"
+                  color="main"
+                  leading="tight"
+                  hoverColor="accent"
+                >
                   {card.title}
                 </Text>
-                <Text variant="body" size="base" color="dim" opacityVariant="solid" className="leading-relaxed text-left">
+                <Text
+                  variant="body"
+                  size="base"
+                  color="dim"
+                  opacityVariant="solid"
+                  leading="relaxed"
+                  textAlign="left"
+                >
                   {card.content}
                 </Text>
               </Stack>
@@ -70,15 +100,15 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
       {items.map((item, index) => {
         const Icon = item.icon ? IconMap[item.icon] : null;
         return (
-          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+          <Box key={index} padding={6} border radius="lg" surface="alt">
             <Stack gap={3}>
-              {Icon && <Icon className="w-4 h-4 text-accent" />}
+              {Icon && <Icon size={16} color="var(--raw-color-accent)" />}
               {item.title && (
-                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" className="uppercase tracking-widest">
+                <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">
                   {item.title}
                 </Text>
               )}
-              <Text variant="body" size="xs" color="dim" className="leading-normal">
+              <Text variant="body" size="xs" color="dim" leading="normal">
                 {item.description}
               </Text>
             </Stack>
@@ -106,7 +136,10 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             overflow="hidden"
             border
             radius="lg"
-            className="border-line/10 bg-surface/30 group cursor-pointer focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+            surface="alt"
+            borderColor="line/10"
+            cursor="pointer"
+            className="group focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             onClick={() => setSelectedImage(image.src)}
             aria-label={`View ${image.alt}`}
           >
@@ -127,12 +160,14 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           position="fixed"
           inset={0}
           zIndex="modal"
-          className="bg-black/90 cursor-pointer"
+          surface="contrast"
+          opacity={0.9}
+          cursor="pointer"
           align="center"
           justify="center"
           onClick={() => setSelectedImage(null)}
         >
-          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
+          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center" pointerEvents="none">
             <img
               src={selectedImage}
               alt="Expanded view"
@@ -154,7 +189,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
       {links.map((link) => (
         <Box
           key={link.label}
-          as="a"
+          as={motion.a}
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
@@ -165,9 +200,12 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           minHeight={11}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
+          cursor="pointer"
+          whileHover={{ ...motionTokens.hover, backgroundColor: "var(--raw-color-surface-alt)", borderColor: "var(--raw-color-accent)" }}
+          whileTap={{ scale: 0.98 }}
+          className="group transition-all focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
         >
-          <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
+          <Text variant="mono" size="xs" weight="font-bold" hoverColor="accent">
             {link.label}
           </Text>
         </Box>

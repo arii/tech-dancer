@@ -26,7 +26,7 @@ function ArielProfile() {
         )}
 
         {section.content && (
-          <Text variant="body" size="lg" color="body" className="leading-relaxed">
+          <Text variant="body" size="lg" color="body" leading="relaxed">
             {section.content}
           </Text>
         )}
@@ -34,7 +34,7 @@ function ArielProfile() {
         {section.cards && <ExperienceCards cards={section.cards} />}
 
         {section.availability && (
-          <Box padding={6} radius="lg" border className="bg-accent/5 border-accent/30">
+          <Box padding={6} radius="lg" border surface="accent">
             <Text variant="body" size="base" color="accent" weight="font-medium">
               {section.availability}
             </Text>
@@ -48,19 +48,21 @@ function ArielProfile() {
   };
 
   const renderAtAGlance = () => (
-    <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+    <Box width="full" padding={6} border radius="lg" surface="alt">
       <Stack gap={6}>
-        <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
+        <Text variant="mono" size="sm" color="brand" weight="font-bold" uppercase tracking="widest">AT A GLANCE</Text>
         <Stack gap={4}>
           {bio.details.map((detail: ProfileDetail) => {
             const href = detail.url || (detail.value.includes('.') && !detail.value.includes(' ') ? (detail.value.startsWith('http') ? detail.value : `https://${detail.value}`) : null);
 
             return (
               <Stack key={detail.label} gap={1}>
-                <Text variant="mono" size="micro" color="dim" weight="font-bold" className="uppercase tracking-wider">{detail.label}</Text>
+                <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="wider">{detail.label}</Text>
                 {href ? (
-                  <Box as="a" href={href} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                    <Text variant="body" size="sm" color="main" weight="font-semibold" className="truncate">{detail.value.replace('https://', '').replace('http://', '')}</Text>
+                  <Box as="a" href={href} target="_blank" rel="noopener noreferrer">
+                    <Text variant="body" size="sm" color="main" weight="font-semibold" truncate hoverColor="accent">
+                      {detail.value.replace('https://', '').replace('http://', '')}
+                    </Text>
                   </Box>
                 ) : (
                   <Text variant="body" size="sm" color="main" weight="font-semibold">{detail.value}</Text>
@@ -94,17 +96,17 @@ function ArielProfile() {
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             {/* Main Content Area */}
-            <Stack gap={12} className="lg:col-span-8 order-2 lg:order-1">
+            <Stack gap={12} span={{ base: 12, lg: 8 }} className="order-2 lg:order-1">
               {/* Professional Section (MIT PhD, Waymo, cards, availability) */}
               {professionalSection && renderSection(professionalSection)}
 
               {/* Sidebar content injected here for mobile viewports */}
-              <Box className="lg:hidden">
+              <Box display={{ base: "block", lg: "none" }}>
                 <Stack gap={8}>
                   {renderAtAGlance()}
-                  <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+                  <Box width="full" padding={6} border radius="lg" surface="alt">
                     <Stack gap={6}>
-                      <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                      <Text variant="mono" size="sm" color="brand" weight="font-bold" uppercase tracking="widest">CONNECT</Text>
                       <ProfileLinks links={socialLinks} />
                     </Stack>
                   </Box>
@@ -116,13 +118,13 @@ function ArielProfile() {
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>
-                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Privacy Policy</Text>
+                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={8} uppercase tracking="widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim">
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance.
                   </Text>
                 </Stack>
                 <Stack gap={4}>
-                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Terms of Use</Text>
+                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={8} uppercase tracking="widest">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim">
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
@@ -131,7 +133,7 @@ function ArielProfile() {
             </Stack>
 
             {/* Sticky Sidebar (Desktop only view for the details box) */}
-            <Box className="lg:col-span-4 relative order-1 lg:order-2">
+            <Box span={{ base: 12, lg: 4 }} position="relative" className="order-1 lg:order-2">
               <Stack gap={8} position="sticky" top={12} align={{ base: "center", lg: "start" }}>
                 {/* Profile portrait (Always on top or as ordered) */}
                 <Box
@@ -141,7 +143,9 @@ function ArielProfile() {
                   aspect={{ base: "3/4", lg: "1/1" }}
                   surface="default"
                   width={{ base: "48", md: "56", lg: "64" }}
-                  className="shadow-2xl border-line/10 relative"
+                  shadow="2xl"
+                  borderColor="line/10"
+                  position="relative"
                 >
                   <img
                     src={roboticistPhoto}
@@ -153,12 +157,12 @@ function ArielProfile() {
                 </Box>
 
                 {/* Hide these in mobile since they are now injected in the main column sequence */}
-                <Box className="hidden lg:block w-full">
+                <Box display={{ base: "none", lg: "block" }} width="full">
                   <Stack gap={8}>
                     {renderAtAGlance()}
-                    <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+                    <Box width="full" padding={6} border radius="lg" surface="alt">
                       <Stack gap={6}>
-                        <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
+                        <Text variant="mono" size="sm" color="brand" weight="font-bold" uppercase tracking="widest">CONNECT</Text>
                         <ProfileLinks links={socialLinks} />
                       </Stack>
                     </Box>
