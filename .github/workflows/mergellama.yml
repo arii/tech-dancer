@@ -53,7 +53,7 @@ jobs:
       - name: Validate Resolution
         run: |
           pnpm install --frozen-lockfile
-          pnpm run type-check
+          pnpm run type-check && pnpm run lint:ox
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v7
