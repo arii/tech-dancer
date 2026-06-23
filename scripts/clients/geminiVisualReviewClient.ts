@@ -2,10 +2,11 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+import { GeminiTruncationError } from '../lib/errors';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
-function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
+function createModel(modelName: string, maxOutputTokens: number = 4096, thinkingBudget: number = 1024): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
@@ -13,6 +14,10 @@ function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoo
     model: modelName,
     apiKey,
     maxOutputTokens: maxOutputTokens,
+    thinkingConfig: {
+      includeThoughts: true,
+      thinkingBudget: thinkingBudget,
+    }
   });
 }
 
@@ -24,7 +29,10 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     const modelName = pickGeminiModel('flash', 0);
-    const model = createModel(modelName, 2048);
+
+    let maxOutputTokens = 4096;
+    let thinkingBudget = 1024;
+    let model = createModel(modelName, maxOutputTokens, thinkingBudget);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -69,19 +77,72 @@ Your job:
     });
 
     const message = new HumanMessage({ content: baseContent });
-    const response = await model.invoke([message]);
+    let response = await model.invoke([message]);
 
-    const usageMetadata = response.usage_metadata;
+    let finishReason = (response as { response_metadata?: { finish_reason?: string } })
+      .response_metadata?.finish_reason || 'UNKNOWN';
+
+    if (finishReason === 'MAX_TOKENS') {
+      console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
+        usage: response.usage_metadata,
+      });
+
+      maxOutputTokens = Math.round(maxOutputTokens * 1.25);
+      thinkingBudget = Math.round(thinkingBudget * 0.5);
+
+      model = createModel(modelName, maxOutputTokens, thinkingBudget);
+      response = await model.invoke([message]);
+
+      finishReason = (response as { response_metadata?: { finish_reason?: string } })
+        .response_metadata?.finish_reason || 'UNKNOWN';
+    }
+
+    const usageMetadata = response.usage_metadata as {
+      input_tokens?: number;
+      output_tokens?: number;
+      total_tokens?: number;
+      thoughts_token_count?: number;
+    };
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
+                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count ?? 0;
+
+    if (thoughtsTokenCount > thinkingBudget * 1.1) {
+      console.warn('Thinking budget exceeded by >10%', {
+        budgetSet: thinkingBudget,
+        thoughtsUsed: thoughtsTokenCount,
+        model: modelName,
+      });
+    }
+
+    if (finishReason !== 'STOP') {
+      console.error('Gemini truncation', {
+        finishReason,
+        usage: usageMetadata,
+      });
+      throw new GeminiTruncationError(
+        `Gemini call did not finish cleanly: finishReason=${finishReason}`
+      );
+    }
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
+    let feedback: string;
+    if (typeof response.content === 'string') {
+      feedback = response.content;
+    } else if (Array.isArray(response.content)) {
+      feedback = response.content
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((p: any) => !p.thought)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((p: any) => p.text ?? '')
+        .join('');
+    } else {
+      feedback = JSON.stringify(response.content);
+    }
 
     return {
       route: summary.route,
