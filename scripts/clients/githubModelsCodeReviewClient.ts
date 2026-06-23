@@ -86,12 +86,12 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
     return {
-      feedback: feedback,
+      feedback,
       tokens: totalTokens,
       cost: 0,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,
-      modelName: modelName,
+      modelName,
       truncated: isTruncated,
       parseError: parsedState.parseError,
     };

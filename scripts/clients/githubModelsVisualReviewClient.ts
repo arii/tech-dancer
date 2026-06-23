@@ -1,7 +1,7 @@
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
-import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
+import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -112,6 +112,7 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
+      modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };
