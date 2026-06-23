@@ -1,5 +1,5 @@
 
-import React from 'react';
+import { Children, isValidElement } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -176,9 +176,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           p: ({node: _node, children, ...props}) => {
             // Check if any child is a block-level element (like our img component which returns a Box/div)
             // React-markdown sometimes nests images inside paragraphs.
-            const hasBlockChild = React.Children.toArray(children).some(
+            const hasBlockChild = Children.toArray(children).some(
               (child) =>
-                React.isValidElement(child) &&
+                isValidElement(child) &&
                 typeof child.type !== 'string' &&
                 // Check if it's one of our components that might render a Box
                 ((child.props as Record<string, unknown>)?.node as Record<string, unknown>)?.type === 'element'
