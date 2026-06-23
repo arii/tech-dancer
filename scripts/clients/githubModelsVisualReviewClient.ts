@@ -118,7 +118,7 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
-      modelName: modelName,
+      modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };
