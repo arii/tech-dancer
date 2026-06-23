@@ -88,7 +88,7 @@ export function ContentCard(props: ContentCardProps) {
 
       <Stack gap={2}>
         <Text
-          as="h3"
+          as="h2"
           variant="body"
           size="lg"
           weight="font-bold"

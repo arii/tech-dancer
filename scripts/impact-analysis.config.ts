@@ -42,5 +42,8 @@ export const IMPACT_CONFIG = {
     'content/posts/': '/blog/',
     'content/blog/': '/blog/',
     'content/studies/': '/research/'
-  } as Record<string, string>
+  } as Record<string, string>,
+
+  // Performance and resource limits
+  MAX_BUFFER: 10 * 1024 * 1024 // 10MB buffer for large dependency graphs
 };
