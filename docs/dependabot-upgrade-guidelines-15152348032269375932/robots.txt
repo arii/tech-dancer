@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/docs/dependabot-upgrade-guidelines-15152348032269375932/sitemap.xml
