@@ -2,6 +2,7 @@
 export function extractFinishReason(res: any): string {
   // Langchain structure varies depending on the provider wrapper
   if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
+  if (res.response_metadata?.finishReason) return res.response_metadata.finishReason;
   if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
 
   // Look deeper into candidates if raw output exposes it
