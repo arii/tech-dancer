@@ -35,8 +35,12 @@ async function createModelRequest(estimatedInputTokens: number = 0, prompt: Visu
   }
 
   const data = await response.json() as Record<string, unknown>;
-  const feedback = data.choices[0].message.content as string;
-  const totalTokens = (data.usage?.total_tokens as number) ?? 0;
+  const choices = data.choices as Array<{ message: { content: string }; finish_reason: string }> | undefined;
+  if (!choices || choices.length === 0) throw new Error('No choices returned from GitHub Models API');
+
+  const feedback = choices[0].message.content;
+  const usage = data.usage as { total_tokens: number } | undefined;
+  const totalTokens = usage?.total_tokens ?? 0;
 
   return { feedback, totalTokens, modelName };
 }
@@ -114,7 +118,7 @@ Your job:
       feedback: feedback,
       tokens: totalTokens,
       cost: cost,
-      modelName,
+      modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };
