@@ -6,6 +6,8 @@ author: "Ariel Anders, PhD"
 category: "Travel"
 excerpt: "Packing organizers and garment care items for out-of-town events."
 image: "/images/gear/sketches/compression-cubes.webp"
+imageAlt: "A set of navy blue compression packing cubes with mesh tops and double-zipper systems, shown compressing stacked clothing to minimize suitcase volume."
+imageFit: "contain"
 affiliateIds:
   - "compression-cubes"
   - "travel-bottles"
@@ -16,22 +18,25 @@ tags:
   - "organization"
 ---
 
-Travel conventions can be stressful, but being organized makes a world of difference. These packing essentials help you fit more in your bag and keep your dance clothes looking their best.
+Packing for a performance or competition doesn't have to be a source of stress. Whether you're heading to a weekend dance competition or a week-long professional showcase, the secret to maintaining your edge is organization and efficiency.
+
+## Smart Packing Strategies
+
+### Space-Saving Organization
+Standard folding often leaves gaps in your luggage. Instead, try the "bundle" method or use high-quality compression cubes. These cubes allow you to group outfits by day or performance type, making it easy to find exactly what you need without unpacking your entire bag.
 
 ![A set of navy blue compression packing cubes with mesh tops and double-zipper systems, shown compressing stacked clothing to minimize suitcase volume.](/images/gear/sketches/compression-cubes.webp)
 
-### Space-Saving Organization
-Compression packing cubes are a must for fitting multiple outfits into a carry-on. They keep your workshops clothes separate from your social wear and save a significant amount of space.
-
 <notice type="affiliate" id="compression-cubes" />
 
-
 ### Travel-Sized Essentials
-Silicone travel bottles are leak-proof and TSA-approved, making it easy to bring your favorite shampoos and lotions without worry.
+Don't let bulky toiletries weigh you down. Opt for leak-proof silicone containers that meet TSA regulations. Labeling each bottle ensures you won't mix up your hair gel with your face wash during a quick costume change.
 
 ![Four multi-colored, leak-proof silicone travel bottles with labeled flip-top caps, designed for TSA-compliant storage of liquids.](/images/gear/sketches/leak-proof-refillable-silicone-travel-bottles-3oz-travel-size-containe.webp)
 
 <notice type="affiliate" id="travel-bottles" />
+
+## Maintaining Your Performance Gear
 
 ### Wrinkle-Free Outfits
 Don't let suitcase wrinkles ruin your competition look. A portable garment steamer is small enough to fit in your bag and powerful enough to freshen up your shirts and dresses in minutes.
