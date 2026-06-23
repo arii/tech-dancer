@@ -414,6 +414,8 @@ export class BoomtickMCPServer {
               type: "object",
               properties: {
                 task: { type: "string" },
+                branch: { type: "string", description: "The base branch to start from." },
+                pr: { type: "number", description: "The PR number to use as the base branch context." },
               },
               required: ["task"],
             },
