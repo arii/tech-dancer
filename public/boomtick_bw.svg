@@ -1,17 +1,35 @@
-<svg viewBox="0 0 325 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-  <title>BoomTick Logo</title>
-  <style>
-    .brand-text-muted { fill: rgba(255, 255, 255, 0.7); }
-    .brand-wordmark {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-weight: 800;
-    }
-  </style>
-
-  <!-- Wordmark -->
-  <text x="0" y="75" font-size="52" letter-spacing="-1" class="brand-wordmark">
-    <tspan fill="white">boom</tspan>
-    <tspan fill="white">tick</tspan>
-    <tspan class="brand-text-muted" font-weight="300">.blog</tspan>
-  </text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="22.613787mm"
+   height="6.0730228mm"
+   viewBox="0 0 22.613787 6.0730228"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <title>BoomTick Monochrome Logo</title>
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="translate(-72.231249,-130.43958)">
+    <g
+       id="g124"
+       transform="matrix(0.69275027,0,0,0.69275027,22.956768,1.629341)"
+       style="fill:currentColor;fill-opacity:1;stroke:none;">
+      <text
+         xml:space="preserve"
+         style="font-weight:normal;font-size:5.54553px;font-family:Arial, sans-serif;fill:currentColor;"
+         x="80.398727"
+         y="191.72491"
+         id="text109"
+         className="brand-wordmark">boom<tspan
+   style="font-weight:bold;"
+   id="tspan112">tick</tspan></text>
+      <path
+         style="fill:currentColor;"
+         d="m 75.512051,185.94037 -0.351163,3.7873 -1.442502,-1.19769 1.1977,1.4425 -3.787307,0.35116 3.787316,0.35115 -1.197709,1.44251 1.442502,-1.19769 0.351163,3.7873 0.351154,-3.78731 1.442502,1.1977 -1.197699,-1.44251 3.787317,-0.35115 -3.787308,-0.35116 1.19769,-1.4425 -1.442502,1.1977 z"
+         id="path4140" />
+    </g>
+  </g>
 </svg>

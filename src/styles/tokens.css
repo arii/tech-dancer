@@ -101,7 +101,7 @@
   --hero-slash-gradient: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
   --hero-slash-glow: 0 0 32px color-mix(in srgb, var(--raw-color-accent-brand) 40%, transparent), 0 0 64px color-mix(in srgb, var(--raw-color-accent-purple) 20%, transparent);
   --hero-accent-shadow: color-mix(in srgb, var(--raw-color-accent-brand) 20%, transparent);
-  --logo-muted-text: color-mix(in srgb, var(--raw-color-text-main) 60%, transparent);
+  --logo-muted-text: color-mix(in srgb, var(--raw-color-text-main) 70%, transparent);
   --brand-gradient-main: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-purple) 100%);
   --brand-gradient-alt: linear-gradient(180deg, var(--raw-color-accent-brand) 0%, var(--raw-color-accent-magenta) 100%);
 }

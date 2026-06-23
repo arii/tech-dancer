@@ -37,13 +37,20 @@ export function Wordmark({
       variant={VARIANT_MAP[variant]}
       color="white"
       size={size || (isHero ? undefined : (isNav ? "sm" : "base"))}
-      weight={weight || "font-extrabold"}
+      weight={weight || "font-normal"}
       className={cn("leading-none", VARIANT_CLASSES[variant], className)}
       style={style}
       tracking="wordmark"
       {...props}
     >
-      boomtick
+      boom
+      <Text
+        as="span"
+        weight="font-black"
+        color="inherit"
+      >
+        tick
+      </Text>
       <Text
         as="span"
         color="body"
