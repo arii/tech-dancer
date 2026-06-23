@@ -1013,32 +1013,37 @@ Respond only after the PR is created or updated:
         """
         Sets up a worktree for a specific PR and attempts to merge the base branch.
         """
-        pr_data = self.github.fetch_pr_details(pr_number)
-        base_branch = pr_data.get('base', {}).get('ref', 'main')
-        head_ref = pr_data.get('head', {}).get('ref')
-
-        if not head_ref:
-            raise CLIError(f"Could not determine head ref for PR #{pr_number}")
-
-        worktree_path = os.path.join(os.getcwd(), f"worktree-pr-{pr_number}")
-        if os.path.exists(worktree_path):
-            run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
-            if os.path.exists(worktree_path):
-                shutil.rmtree(worktree_path, ignore_errors=True)
-
-        # 1. Create detached worktree
-        run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"])
-
         original_cwd = os.getcwd()
+        worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}")
+
         try:
+            # 1. Fetch PR details early to fail fast
+            pr_data = self.github.fetch_pr_details(pr_number)
+            base_branch = pr_data.get('base', {}).get('ref', 'main')
+            head_ref = pr_data.get('head', {}).get('ref')
+
+            if not head_ref:
+                raise CLIError(f"Could not determine head ref for PR #{pr_number}")
+
+            # 2. Clean up existing worktree if present
+            if os.path.exists(worktree_path):
+                run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
+                if os.path.exists(worktree_path):
+                    shutil.rmtree(worktree_path, ignore_errors=True)
+
+            # 3. Create detached worktree
+            run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"])
+
+            # 4. Switch to worktree and perform git operations
             os.chdir(worktree_path)
-            # 2. Checkout the PR branch
+
+            # Checkout the PR branch
             self.github.run_authenticated_gh(["pr", "checkout", str(pr_number)])
 
-            # 2.5 Ensure origin/base_branch is up-to-date
+            # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=False)
 
-            # 3. Attempt merge from base branch
+            # Attempt merge from base branch
             res = run_command(["git", "merge", f"origin/{base_branch}"], check=False)
 
             if res.returncode == 0:
@@ -1055,6 +1060,8 @@ Respond only after the PR is created or updated:
                 "pr_number": pr_number,
                 "base_branch": base_branch
             }
+        except CLIError:
+            raise
         except Exception as e:
             raise CLIError(f"Failed to setup conflict resolution worktree: {str(e)}")
         finally:
