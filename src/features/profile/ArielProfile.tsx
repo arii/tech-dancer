@@ -118,13 +118,13 @@ function ArielProfile() {
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>
-                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={8} uppercase tracking="widest">Privacy Policy</Text>
+                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} uppercase tracking="widest">Privacy Policy</Text>
                   <Text variant="body" size="base" color="dim" pretty>
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance.
                   </Text>
                 </Stack>
                 <Stack gap={4}>
-                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={8} uppercase tracking="widest">Terms of Use</Text>
+                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} uppercase tracking="widest">Terms of Use</Text>
                   <Text variant="body" size="base" color="dim" pretty>
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
