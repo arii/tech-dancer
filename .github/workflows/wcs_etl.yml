@@ -11,9 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
-      env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
     permissions:
       contents: write
       pull-requests: write
