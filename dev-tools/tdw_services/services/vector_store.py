@@ -61,8 +61,11 @@ class VectorStore:
 
     def reset(self):
         """Resets the collection."""
-        self.client.delete_collection(self.collection_name)
-        self.collection = self.client.create_collection(
+        try:
+            self.client.delete_collection(self.collection_name)
+        except Exception:
+            pass
+        self._collection = self.client.create_collection(
             name=self.collection_name,
             embedding_function=self.embedding_fn
         )
