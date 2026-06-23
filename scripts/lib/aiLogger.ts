@@ -1,23 +1,33 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+/**
+ * Records an AI review run entry to a structured JSON Lines (.jsonl) log file.
+ * This provides O(1) performance and ensures efficiency as logs accumulate.
+ */
 export interface AIRunLogEntry {
   timestamp: string;
-  botName: string;
-  modelName: string;
+  type: 'code-review' | 'visual-review';
+  model: string;
   inputTokens: number;
   outputTokens: number;
-  thoughtsTokenCount?: number;
+  cacheTokens?: number;
   totalTokens: number;
+  durationMs: number;
   cost: number;
-  durationMs?: number;
-  verdict?: string;
-  truncated: boolean;
+  verdict: string;
+  pr?: string;
+  route?: string;
+  error?: string;
+  truncated?: boolean;
   parseError?: string;
+  rawResponse?: string;
 }
 
-const LOG_DIR = 'dev-tools/logs/ai';
-const LOG_FILE = path.join(LOG_DIR, 'review-run.json');
+const LOG_DIR = path.join(process.cwd(), 'dev-tools', 'logs', 'ai');
+const LOG_FILE = path.join(LOG_DIR, 'review-run.jsonl');
+
+
 
 export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
   try {
@@ -30,18 +40,50 @@ export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
       ...entry,
     };
 
-    let logs: AIRunLogEntry[] = [];
-    if (fs.existsSync(LOG_FILE)) {
-      try {
-        logs = JSON.parse(fs.readFileSync(LOG_FILE, 'utf-8'));
-      } catch (e) {
-        console.warn('Failed to parse existing AI logs:', e);
-      }
-    }
-
-    logs.push(logEntry);
-    fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
-  } catch (e) {
-    console.warn('Failed to log AI run:', e);
+    // Append as a single JSON line for performance
+    fs.appendFileSync(LOG_FILE, JSON.stringify(logEntry) + '\n');
+    console.log(`📊 AI review metrics logged to ${LOG_FILE}`);
+  } catch (error) {
+    console.error('❌ Failed to append to AI run log:', error);
   }
+}
+
+interface ReviewResultLike {
+  tokens: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  cacheTokens?: number;
+  cost: number;
+  modelName?: string;
+  llmVerdict?: string;
+  truncated?: boolean;
+  parseError?: string;
+  feedback: string;
+}
+
+/**
+ * Unified helper to log review results from various orchestrators.
+ */
+export function logReviewExecution(
+  type: AIRunLogEntry['type'],
+  result: ReviewResultLike,
+  durationMs: number,
+  additional: { pr?: string; route?: string } = {}
+): void {
+  logAIRun({
+    type,
+    model: result.modelName || 'unknown',
+    inputTokens: result.inputTokens ?? 0,
+    outputTokens: result.outputTokens ?? 0,
+    cacheTokens: result.cacheTokens ?? 0,
+    totalTokens: result.tokens,
+    durationMs,
+    cost: result.cost,
+    verdict: result.llmVerdict || 'unknown',
+    pr: additional.pr || process.env.PR_NUMBER,
+    route: additional.route,
+    truncated: result.truncated,
+    parseError: result.parseError,
+    rawResponse: result.feedback,
+  });
 }

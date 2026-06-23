@@ -30,6 +30,9 @@ export interface ParsedFindingsResult {
 export interface CodeReviewResult {
   feedback: string;
   tokens: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  cacheTokens?: number;
   cost: number;
   llmVerdict?: 'pass' | 'fail' | 'warn';
   state?: CodeReviewState;

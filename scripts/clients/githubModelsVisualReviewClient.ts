@@ -8,14 +8,14 @@ import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 
-async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI> {
+async function createModel(estimatedInputTokens: number = 0): Promise<{ model: ChatOpenAI; modelName: string }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
   const modelName = await pickOptimalModel(apiKey, fallback, true, estimatedInputTokens);
 
-  return new ChatOpenAI({
+  const model = new ChatOpenAI({
     modelName: modelName,
     apiKey: apiKey,
     configuration: {
@@ -24,6 +24,8 @@ async function createModel(estimatedInputTokens: number = 0): Promise<ChatOpenAI
     maxTokens: 1024,
     temperature: 0.1,
   });
+
+  return { model, modelName };
 }
 
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
@@ -43,7 +45,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
     }
     const estimatedInputTokens = Math.ceil(domDiffLength / 4);
 
-    const model = await createModel(estimatedInputTokens);
+    const { model, modelName } = await createModel(estimatedInputTokens);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -90,8 +92,11 @@ Your job:
     const message = new HumanMessage({ content: baseContent });
     const response = await model.invoke([message]);
 
-    const usageMetadata = response.usage_metadata;
+    const usageMetadata = response.usage_metadata as { input_tokens?: number; output_tokens?: number; total_tokens?: number; cache_read_tokens?: number } | undefined;
+    const inputTokens = usageMetadata?.input_tokens ?? 0;
+    const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens || 0;
 
     // Approximating cost for general OpenAI API usage (e.g. gpt-4o) if used over GitHub models natively
     // GitHub Models are currently free/rate-limited depending on the tier.
@@ -107,7 +112,11 @@ Your job:
       differencePercent: summary.differencePercent,
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
+      modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };

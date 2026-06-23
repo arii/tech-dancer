@@ -88,6 +88,7 @@ Your job:
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = (usageMetadata as any)?.cache_read_tokens ?? 0;
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
                                (typeof response.response_metadata === 'object' && response.response_metadata !== null
                                  ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
@@ -135,6 +136,9 @@ Your job:
       differencePercent: summary.differencePercent,
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),

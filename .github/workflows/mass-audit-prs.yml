@@ -27,6 +27,8 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Check active runtime
         run: |
@@ -53,3 +55,11 @@ jobs:
         with:
           commit_message: "chore: update PR review tracking"
           file_pattern: 'REVIEW_TRACKING.md pr_overlaps.txt'
+
+      - name: Upload AI Review Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-review-logs
+          path: dev-tools/logs/ai/
+          retention-days: 7
