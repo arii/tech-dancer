@@ -12,24 +12,33 @@ class VectorStore:
     @property
     def client(self):
         if self._client is None:
-            import chromadb
-            self._client = chromadb.PersistentClient(path=self.persist_directory)
+            try:
+                import chromadb
+                self._client = chromadb.PersistentClient(path=self.persist_directory)
+            except ImportError:
+                return None
         return self._client
 
     @property
     def embedding_fn(self):
         if self._embedding_fn is None:
-            from chromadb.utils import embedding_functions
-            self._embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+            try:
+                from chromadb.utils import embedding_functions
+                self._embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+            except ImportError:
+                return None
         return self._embedding_fn
 
     @property
     def collection(self):
         if self._collection is None:
-            self._collection = self.client.get_or_create_collection(
-                name=self.collection_name,
-                embedding_function=self.embedding_fn
-            )
+            client = self.client
+            embedding_fn = self.embedding_fn
+            if client and embedding_fn:
+                self._collection = client.get_or_create_collection(
+                    name=self.collection_name,
+                    embedding_function=embedding_fn
+                )
         return self._collection
 
     def is_available(self) -> bool:
@@ -42,15 +51,21 @@ class VectorStore:
 
     def add_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]):
         """Adds documents to the collection."""
-        self.collection.add(
-            documents=documents,
-            metadatas=metadatas,
-            ids=ids
-        )
+        collection = self.collection
+        if collection:
+            collection.add(
+                documents=documents,
+                metadatas=metadatas,
+                ids=ids
+            )
 
     def query(self, query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
         """Queries the collection for similar documents."""
-        results = self.collection.query(
+        collection = self.collection
+        if not collection:
+            return []
+
+        results = collection.query(
             query_texts=[query_text],
             n_results=n_results
         )
@@ -69,11 +84,16 @@ class VectorStore:
 
     def reset(self):
         """Resets the collection."""
+        client = self.client
+        embedding_fn = self.embedding_fn
+        if not client or not embedding_fn:
+            return
+
         try:
-            self.client.delete_collection(self.collection_name)
+            client.delete_collection(self.collection_name)
         except Exception:
             pass
-        self._collection = self.client.create_collection(
+        self._collection = client.create_collection(
             name=self.collection_name,
-            embedding_function=self.embedding_fn
+            embedding_function=embedding_fn
         )
