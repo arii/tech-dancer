@@ -95,4 +95,17 @@ describe("createJulesSessionHandler", () => {
     await expect(createJulesSessionHandler({ task: "do work", pr: 999 }))
       .rejects.toThrow("Failed to get PR info for PR #999: PR not found");
   });
+
+  it("should throw descriptive error if PR JSON is invalid", async () => {
+    vi.mocked(shell.runCommand).mockResolvedValue({
+      stdout: "invalid json",
+      stderr: "",
+      exitCode: 0,
+      durationMs: 10,
+      command: "gh pr view"
+    });
+
+    await expect(createJulesSessionHandler({ task: "do work", pr: 42 }))
+      .rejects.toThrow(/Failed to parse PR info for PR #42/);
+  });
 });

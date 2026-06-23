@@ -25,7 +25,7 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
     ]);
 
     if (prResult.exitCode !== 0) {
-      throw new Error(`Failed to get PR info for PR #${input.pr}: ${prResult.stderr}`);
+      throw new Error(`Failed to get PR info for PR #${input.pr}: ${prResult.stderr || "Unknown error (empty stderr)"}`);
     }
 
     try {
@@ -34,7 +34,7 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
         startingBranch = prData.headRefName;
       }
     } catch (e) {
-      throw new Error(`Failed to parse PR info for PR #${input.pr}: ${e}`);
+      throw new Error(`Failed to parse PR info for PR #${input.pr}: ${e}. Output was: ${prResult.stdout}`);
     }
   }
 
