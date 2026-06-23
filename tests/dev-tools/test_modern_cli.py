@@ -40,5 +40,12 @@ class TestModernCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_analyze.assert_called_once_with('README.md')
 
+    @patch('tdw_services.orchestrator.Orchestrator.resolve_pr_conflicts')
+    def test_resolve_conflicts_calls_orchestrator(self, mock_resolve):
+        mock_resolve.return_value = {"status": "success", "message": "done"}
+        result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123'])
+        self.assertEqual(result.exit_code, 0)
+        mock_resolve.assert_called_once_with(123)
+
 if __name__ == '__main__':
     unittest.main()

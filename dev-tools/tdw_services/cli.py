@@ -145,6 +145,18 @@ def conflicts(ctx):
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
 
 @gh.command()
+@click.option('--pr', required=True, type=int, help="The PR number to resolve conflicts for.")
+@click.pass_context
+def resolve_conflicts(ctx, pr):
+    """Resolve merge conflicts for a PR in a separate worktree."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.resolve_pr_conflicts(pr)
+        out(ctx, res['message'], data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
+@gh.command()
 @click.option('--pr', type=int)
 @click.pass_context
 def detect_conflicts(ctx, pr):
