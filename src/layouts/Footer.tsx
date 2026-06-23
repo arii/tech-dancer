@@ -25,7 +25,7 @@ export function Footer() {
 
   return (
     <Box as="footer" marginTop="auto" width="full">
-      <Box paddingY={12} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
+      <Box paddingTop={12} paddingBottom={16} paddingX={4} surface="bg" border="t" opacityVariant="heavy">
 
       <Stack direction={{ base: 'col', sm: 'row' }} justify="between" align="center" gap={4}>
         <Stack direction="row" align="center" gap={3} wrap>

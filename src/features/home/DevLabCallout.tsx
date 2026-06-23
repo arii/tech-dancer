@@ -1,6 +1,34 @@
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { tagVariants } from '@/lib/variants';
+import type { VariantProps } from 'class-variance-authority';
+
+type TagVariant = NonNullable<VariantProps<typeof tagVariants>['variant']>;
+
+interface Highlight {
+  label: string;
+  tags: string[];
+  variant: TagVariant;
+}
+
+const HIGHLIGHTS: Highlight[] = [
+  {
+    label: 'ROBOTICS',
+    tags: ['ROS1/2', 'C++', 'Navigation'],
+    variant: 'sky',
+  },
+  {
+    label: 'AI',
+    tags: ['LLM Workflows', 'Agentic CI/CD'],
+    variant: 'purple',
+  },
+  {
+    label: 'INFRA',
+    tags: ['GitHub Actions', 'Playwright'],
+    variant: 'cyan',
+  },
+];
 
 export function DevLabCallout() {
   return (
@@ -23,30 +51,23 @@ export function DevLabCallout() {
 
       {/* Project highlights */}
       <Stack gap={2} marginTop={4}>
-        <Stack direction="row" align="start" gap={2}>
-          <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>ROBOTICS</Text>
-          <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
-            {['ROS1/2', 'C++', 'Navigation'].map(tag => (
-              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-brand-cyan/10 text-brand-cyan border-brand-cyan/20">{tag}</Text>
-            ))}
-          </Box>
-        </Stack>
-        <Stack direction="row" align="start" gap={2}>
-          <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>AI</Text>
-          <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
-            {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
-              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-brand-amber/10 text-brand-amber border-brand-amber/20">{tag}</Text>
-            ))}
-          </Box>
-        </Stack>
-        <Stack direction="row" align="start" gap={2}>
-          <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>INFRA</Text>
-          <Box display="flex" wrap="wrap" gap={1.5} grow={1}>
-            {['GitHub Actions', 'Playwright'].map(tag => (
-              <Text as="span" key={tag} size="micro" weight="font-medium" paddingX={2} paddingY={0.5} radius="sm" border className="bg-brand-green/10 text-brand-green border-brand-green/20">{tag}</Text>
-            ))}
-          </Box>
-        </Stack>
+        {HIGHLIGHTS.map(({ label, tags, variant }) => (
+          <Stack key={label} direction="row" align="start" gap={2}>
+            <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={20} shrink={0} marginTop={1}>
+              {label}
+            </Text>
+            <Box display="flex" wrap="wrap" gap={2.5} grow={1}>
+              {tags.map(tag => (
+                <span
+                  key={tag}
+                  className={tagVariants({ variant, size: 'xs' })}
+                >
+                  {tag}
+                </span>
+              ))}
+            </Box>
+          </Stack>
+        ))}
       </Stack>
 
       {/* CTA */}
