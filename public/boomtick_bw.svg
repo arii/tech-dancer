@@ -1,6 +1,7 @@
 <svg viewBox="0 0 325 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+  <title>BoomTick Logo</title>
   <style>
-    .brand-text-muted { fill: rgba(255, 255, 255, 0.6); }
+    .brand-text-muted { fill: rgba(255, 255, 255, 0.7); }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
@@ -8,7 +9,7 @@
   </style>
 
   <!-- Wordmark -->
-  <text x="0" y="75" font-size="52" letter-spacing="-1.5" class="brand-wordmark">
+  <text x="0" y="75" font-size="52" letter-spacing="-1" class="brand-wordmark">
     <tspan fill="white">boom</tspan>
     <tspan fill="white">tick</tspan>
     <tspan class="brand-text-muted" font-weight="300">.blog</tspan>

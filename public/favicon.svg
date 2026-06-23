@@ -1,9 +1,5 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
-    .brand-stop-purple { stop-color: #a78bfa; }
-    .brand-text-accent { fill: #22d3ee; }
-    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
@@ -16,7 +12,7 @@
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="440"
-    letter-spacing="-38"
+    letter-spacing="-17"
     class="brand-wordmark"
   >
     <tspan fill="#ffffff">bt</tspan>
