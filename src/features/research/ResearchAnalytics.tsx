@@ -29,7 +29,7 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
       <Box width="full" className="card-screenshot-wrapper boomtick-blog-preview border-b border-white/8">
         <Stack gap={1} className="preview-content">
           <Text className="preview-logo">
-            {logo.prefix}<span className="logo-accent">{logo.accent}</span><span className="logo-dot font-light">{logo.suffix}</span>
+            {logo.prefix}{logo.accent}<span className="logo-dot font-light">{logo.suffix}</span>
           </Text>
           <Text className="preview-headline">
             {headline.map((line, idx) => (

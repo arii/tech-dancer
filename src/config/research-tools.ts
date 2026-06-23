@@ -86,7 +86,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     sourceUrl: 'https://github.com/arii/tech-dancer',
     isFlagship: true,
     customPreview: {
-      logo: { prefix: 'boom', accent: 'tick', suffix: '.blog' },
+      logo: { prefix: 'boomtick', accent: '', suffix: '.blog' },
       headline: [
         { text: 'Built for dancers.' },
         { text: 'Train smarter.', accent: 'Train smarter.' },

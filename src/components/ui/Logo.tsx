@@ -29,7 +29,7 @@ export function Logo({ className }: LogoProps) {
         fill="currentColor"
         className="brand-wordmark"
       >
-        boom<tspan className="brand-text-accent">tick</tspan><tspan className="brand-text-muted font-light">.blog</tspan>
+        boomtick<tspan className="brand-text-muted font-light">.blog</tspan>
       </text>
     </svg>
   );

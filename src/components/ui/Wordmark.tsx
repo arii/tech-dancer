@@ -43,8 +43,7 @@ export function Wordmark({
       tracking="wordmark"
       {...props}
     >
-      boom
-      <span className="text-accent">tick</span>
+      boomtick
       <Text
         as="span"
         color="body"

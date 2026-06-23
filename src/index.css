@@ -164,7 +164,6 @@
     font-size: var(--brand-logo-size-text);
     letter-spacing: var(--brand-logo-tracking);
   }
-  .brand-text-accent { fill: var(--raw-color-accent-brand); }
   .brand-text-muted { fill: var(--logo-muted-text); }
 
   /* Wordmark Utilities */

@@ -1,9 +1,6 @@
 <svg viewBox="0 0 325 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-full w-auto max-w-none overflow-visible" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
   <style>
-    .brand-stop-accent { stop-color: #22d3ee; }
-    .brand-stop-purple { stop-color: #a78bfa; }
-    .brand-text-accent { fill: #22d3ee; }
-    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    .brand-text-muted { fill: rgba(255, 255, 255, 0.6); }
     .brand-wordmark {
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
@@ -12,7 +9,8 @@
 
   <!-- Wordmark -->
   <text x="0" y="75" font-size="52" letter-spacing="-1.5" class="brand-wordmark">
-    <tspan fill="white">boomtick</tspan>
-    <tspan class="brand-text-muted" fill="rgba(241,245,249,0.6)" font-weight="300">.blog</tspan>
+    <tspan fill="white">boom</tspan>
+    <tspan fill="white">tick</tspan>
+    <tspan class="brand-text-muted" font-weight="300">.blog</tspan>
   </text>
 </svg>
