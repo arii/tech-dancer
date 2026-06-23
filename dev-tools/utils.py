@@ -95,36 +95,8 @@ def to_standard_schema(schema, uppercase: bool = False):
     return schema
 
 def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
-    try:
-        from langchain_openai import ChatOpenAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        print("langchain_openai or langchain_core is not installed.", file=sys.stderr)
-        return None
-
-    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
-    if not token:
-        return None
-
-    model = model or get_ollama_model()
-
-    llm = ChatOpenAI(
-        base_url="https://models.inference.ai.azure.com",
-        api_key=token,
-        model=model,
-        temperature=0.7,
-        max_tokens=2048,
-        max_retries=max_retries,
-        model_kwargs={"response_format": {"type": "json_object"}} if schema else {}
-    )
-
-    try:
-        response = llm.invoke([HumanMessage(content=prompt)])
-        return response.content
-    except Exception as e:
-        print(f"AI Call failed: {e}", file=sys.stderr)
-        return None
+    """Unified helper to call AI API using REST directly."""
+    return call_github_models(prompt, model=model, max_retries=max_retries, schema=schema)
 
 def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call local Ollama API."""

@@ -1,5 +1,5 @@
-import { ChatOpenAI } from '@langchain/openai';
-import { HumanMessage } from '@langchain/core/messages';
+import * as fs from 'fs';
+import * as path from 'path';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -12,10 +12,11 @@ import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
-async function createModel(
+async function createModelRequest(
   estimatedInputTokens: number = 0,
-  maxOutputTokens: number = 1500
-): Promise<{ model: ChatOpenAI; modelName: string }> {
+  maxOutputTokens: number = 1500,
+  prompt: string
+): Promise<{ feedback: string; totalTokens: number; modelName: string; isTruncated: boolean }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
@@ -35,15 +36,31 @@ async function createModel(
 
   console.log(`📌 github-models-code-review using model: ${modelName}, maxOutputTokens: ${finalMaxTokens}`);
 
-  const model = new ChatOpenAI({
-    modelName: modelName,
-    apiKey: apiKey,
-    configuration: { baseURL: 'https://models.inference.ai.azure.com' },
-    maxTokens: finalMaxTokens,
-    temperature: 0.1,
+  const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: modelName,
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: finalMaxTokens,
+      temperature: 0.1
+    })
   });
 
-  return { model, modelName };
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`GitHub Models API request failed: ${response.status} ${response.statusText} - ${errText}`);
+  }
+
+  const data = await response.json();
+  const feedback = data.choices[0].message.content;
+  const totalTokens = data.usage?.total_tokens ?? 0;
+  const isTruncated = data.choices[0].finish_reason === 'length';
+
+  return { feedback, totalTokens, modelName, isTruncated };
 }
 
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
@@ -56,41 +73,24 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
-    // Count every chunk that actually goes into the request.
     const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
     const estimatedInputTokens = Math.ceil(totalInputChars / 4);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
-    const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
-
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
-    const message = new HumanMessage({ content: baseContent });
+    const { feedback, totalTokens, modelName, isTruncated } = await createModelRequest(estimatedInputTokens, maxOutputTokens, baseContent);
 
-    const response = await model.invoke([message]);
-
-
-    const usageMetadata = response.usage_metadata;
-    const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const cost = 0;
-
-    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
-      .response_metadata?.finish_reason;
-    const isTruncated = finishReason === 'length';
     if (isTruncated) {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
-
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
     return {
       feedback: feedback,
       tokens: totalTokens,
-      cost: cost,
+      cost: 0,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,
       modelName: modelName,

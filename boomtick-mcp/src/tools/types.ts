@@ -1,4 +1,4 @@
-export type LocalAgentProvider = "copilot" | "agy" | "ollama";
+export type LocalAgentProvider = "agy" | "ollama";
 
 export type JulesStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 
