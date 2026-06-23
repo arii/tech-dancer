@@ -81,6 +81,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Install Python dependencies
+        run: python3 -m pip install chromadb sentence-transformers
+
       - name: Validate Runtime
         shell: bash
         run: |
@@ -152,6 +155,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Install Python dependencies
+        run: python3 -m pip install chromadb sentence-transformers
+
       - name: Install dependencies
         shell: bash
         run: |
@@ -200,6 +206,8 @@ jobs:
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v7
+      - name: Install Python dependencies
+        run: python3 -m pip install chromadb sentence-transformers
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build App
@@ -277,6 +285,9 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+
+      - name: Install Python dependencies
+        run: python3 -m pip install chromadb sentence-transformers
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 

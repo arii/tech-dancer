@@ -36,3 +36,10 @@ runs:
         PNPM_VERSION: ${{ inputs.pnpm-version }}
       run: corepack prepare pnpm@"$PNPM_VERSION" --activate
       shell: bash
+
+    - name: Install Python dependencies
+      run: |
+        if [ -f "pyproject.toml" ]; then
+          python3 -m pip install chromadb sentence-transformers
+        fi
+      shell: bash
