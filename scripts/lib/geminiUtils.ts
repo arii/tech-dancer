@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function extractFinishReason(res: any): string {
   // Langchain structure varies depending on the provider wrapper
+  if (res.response_metadata?.finishReason) return res.response_metadata.finishReason;
   if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
   if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
 
@@ -52,4 +53,27 @@ export function createGeminiModel(
       thinkingBudget: thinkingBudget,
     }
   });
+}
+export function getConfiguredTokens(type: 'code' | 'visual'): { maxOutputTokens: number; thinkingBudget: number } {
+  let maxOutputTokens = type === 'code' ? 6000 : 4096;
+  let thinkingBudget = type === 'code' ? 2048 : 1024;
+
+  if (process.env.GEMINI_MAX_OUTPUT_TOKENS) {
+    const val = parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS, 10);
+    if (!isNaN(val)) maxOutputTokens = val;
+  }
+
+  if (process.env.GEMINI_THINKING_BUDGET) {
+    const val = parseInt(process.env.GEMINI_THINKING_BUDGET, 10);
+    if (!isNaN(val)) thinkingBudget = val;
+  }
+
+  return { maxOutputTokens, thinkingBudget };
+}
+
+export function applyRetryStrategy(currentMax: number, currentThinking: number): { newMax: number; newThinking: number } {
+  // Hard cap to avoid runaways
+  const newMax = Math.min(Math.round(currentMax * 1.25), 8192);
+  const newThinking = Math.round(currentThinking * 0.5);
+  return { newMax, newThinking };
 }
