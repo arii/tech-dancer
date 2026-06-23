@@ -89,7 +89,9 @@ Your job:
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (typeof response.response_metadata === 'object' && response.response_metadata !== null ? (response.response_metadata as any).usage?.thoughts_token_count : 0) ?? 0;
+                               (typeof response.response_metadata === 'object' && response.response_metadata !== null
+                                 ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
+                                 : 0) ?? 0;
 
     if (thoughtsTokenCount > thinkingBudget * 1.1) {
       console.warn('Thinking budget exceeded by >10%', {
