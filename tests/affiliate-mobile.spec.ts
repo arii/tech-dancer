@@ -1,4 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, devices } from '@playwright/test';
+
+test.use({ ...devices['Pixel 5'] });
 
 test('Capture affiliate card on mobile', async ({ page }) => {
   // Go directly to the known post
