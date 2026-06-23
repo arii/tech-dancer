@@ -284,7 +284,10 @@ jobs:
           python3 -m pip install --break-system-packages chromadb sentence-transformers
 
       - name: Index Codebase for AI Audit
-        run: pnpm run ai:index
+        run: |
+          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+          export PYTHONPATH
+          pnpm run ai:index
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
