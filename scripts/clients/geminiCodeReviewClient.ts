@@ -86,7 +86,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     const feedback = typeof response.content === 'string'
       ? response.content
-      : JSON.stringify(response.content);
+      : Array.isArray(response.content)
+        ? response.content.map((c: Record<string, unknown>) => {
+            if (c.type === 'text') return c.text;
+            if (c.type === 'thinking') return '';
+            return '';
+          }).join('\n')
+        : JSON.stringify(response.content);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
