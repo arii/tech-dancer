@@ -49,6 +49,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+        fetch-depth: 0
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
