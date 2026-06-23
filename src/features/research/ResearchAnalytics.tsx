@@ -283,6 +283,31 @@ function ToolCard({ tool, navigate }: {
 }
 
 
+
+const STACK_CATEGORIES = [
+  { label: 'Stack', tags: ['React', 'Vite', 'TypeScript', 'Python'], colorClass: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
+  { label: 'Infra', tags: ['GitHub Actions', 'Vercel', 'Playwright'], colorClass: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
+  { label: 'Robotics', tags: ['ROS1/2', 'C++', 'Navigation', 'Localization'], colorClass: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
+  { label: 'AI', tags: ['LLM Workflows', 'Agentic CI/CD'], colorClass: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
+];
+
+function ToolSection({ title, tools, navigate }: { title: string, tools: ResearchTool[], navigate: (path: string) => void }) {
+  if (tools.length === 0) return null;
+  return (
+    <Stack gap={12} width="full">
+      <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+        <Text variant="headline" size="2xl" weight="font-black">{title}</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{tools.length} TOOLS</Text>
+      </Box>
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
+        {tools.map((tool) => (
+          <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+        ))}
+      </Grid>
+    </Stack>
+  );
+}
+
 export default function ResearchAnalytics() {
   const navigate = useNavigate();
   const { studies, tools } = useResearch();
@@ -319,22 +344,8 @@ export default function ResearchAnalytics() {
             {/* Scrollable Focus Tags for Mobile */}
             <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
-              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" wrap="nowrap" className="scroll-mask-fade">
-                {[
-                  { tag: 'React', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
-                  { tag: 'Vite', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
-                  { tag: 'TypeScript', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
-                  { tag: 'Python', col: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/20' },
-                  { tag: 'GitHub Actions', col: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
-                  { tag: 'Vercel', col: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
-                  { tag: 'Playwright', col: 'bg-brand-green/10 text-brand-green border border-brand-green/20' },
-                  { tag: 'ROS1/2', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
-                  { tag: 'C++', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
-                  { tag: 'Navigation', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
-                  { tag: 'Localization', col: 'bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20' },
-                  { tag: 'LLM Workflows', col: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
-                  { tag: 'Agentic CI/CD', col: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
-                ].map(item => (
+              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+                {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
                   <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
                 ))}
               </Box>
@@ -342,38 +353,16 @@ export default function ResearchAnalytics() {
 
             {/* Categorized Stack Grid for Desktop */}
             <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
-              <Box display="flex" align="center" gap={2} width="full">
-                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Stack</Text>
-                <Box display="flex" wrap="wrap" gap={2} width="full">
-                  {['React', 'Vite', 'TypeScript', 'Python'].map(tag => (
-                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-purple/10 text-brand-purple border border-brand-purple/20">{tag}</Text>
-                  ))}
+              {STACK_CATEGORIES.map(cat => (
+                <Box key={cat.label} display="flex" align="center" gap={2} width="full">
+                  <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
+                  <Box display="flex" wrap="wrap" gap={2} width="full">
+                    {cat.tags.map(tag => (
+                      <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cat.colorClass}>{tag}</Text>
+                    ))}
+                  </Box>
                 </Box>
-              </Box>
-              <Box display="flex" align="center" gap={2} width="full">
-                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Infra</Text>
-                <Box display="flex" wrap="wrap" gap={2} width="full">
-                  {['GitHub Actions', 'Vercel', 'Playwright'].map(tag => (
-                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-green/10 text-brand-green border border-brand-green/20">{tag}</Text>
-                  ))}
-                </Box>
-              </Box>
-              <Box display="flex" align="center" gap={2} width="full">
-                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>Robotics</Text>
-                <Box display="flex" wrap="wrap" gap={2} width="full">
-                  {['ROS1/2', 'C++', 'Navigation', 'Localization'].map(tag => (
-                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">{tag}</Text>
-                  ))}
-                </Box>
-              </Box>
-              <Box display="flex" align="center" gap={2} width="full">
-                <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>AI</Text>
-                <Box display="flex" wrap="wrap" gap={2} width="full">
-                  {['LLM Workflows', 'Agentic CI/CD'].map(tag => (
-                    <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className="bg-brand-amber/10 text-brand-amber border border-brand-amber/20">{tag}</Text>
-                  ))}
-                </Box>
-              </Box>
+              ))}
             </Stack>
 
             <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop={2} width={{ base: "full", sm: "auto" }}>
@@ -394,11 +383,11 @@ export default function ResearchAnalytics() {
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
             <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
-          <Box display="grid" className="responsive-grid" gap={6} width="full">
+          <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
             {flagshipTools.map((tool) => (
               <FlagshipCard key={tool.id} tool={tool} baseUrl={baseUrl} onImageClick={setLightboxImage} />
             ))}
-          </Box>
+          </Grid>
         </Stack>
 
         <Box className="why-this-matters">
@@ -409,52 +398,13 @@ export default function ResearchAnalytics() {
         </Box>
 
         {/* Engineering Systems Section */}
-        {engineeringTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Engineering Systems</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{engineeringTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {engineeringTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
+        <ToolSection title="Engineering Systems" tools={engineeringTools} navigate={navigate} />
 
         {/* Data & Content Systems Section */}
-        {dataContentTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Data & Content Systems</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{dataContentTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {dataContentTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
+        <ToolSection title="Data & Content Systems" tools={dataContentTools} navigate={navigate} />
 
         {/* Ecommerce Experiments Section */}
-        {e_commerceTools.length > 0 && (
-          <Stack gap={12} width="full">
-            <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
-              <Text variant="headline" size="2xl" weight="font-black">Ecommerce Experiments</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{e_commerceTools.length} TOOLS</Text>
-            </Box>
-
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
-              {e_commerceTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} navigate={navigate} />
-              ))}
-            </Box>
-          </Stack>
-        )}
+        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} navigate={navigate} />
 
         {/* Articles & Research Section */}
         {studies.length > 0 && (
@@ -464,7 +414,7 @@ export default function ResearchAnalytics() {
               <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
-            <Box display="grid" className="responsive-grid" gap={6} width="full">
+            <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
@@ -529,7 +479,7 @@ export default function ResearchAnalytics() {
                   </Box>
                 </Stack>
               ))}
-            </Box>
+            </Grid>
           </Stack>
         )}
 

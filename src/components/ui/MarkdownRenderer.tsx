@@ -18,6 +18,21 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+
+const RenderNotice = (props: { type?: string; id?: string; children?: React.ReactNode }) => {
+  if (props.type === 'affiliate' && props.id) {
+    const link = affiliateManager.getLink(props.id);
+    if (link) {
+      return (
+        <Box marginY={4} width="full">
+          <AffiliateCard link={link} />
+        </Box>
+      );
+    }
+  }
+  return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
+};
+
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
@@ -267,32 +282,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               </Text>
             );
           },
-          notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
-            if (props.type === 'affiliate' && props.id) {
-              const link = affiliateManager.getLink(props.id);
-              if (link) {
-                return (
-                  <Box marginY={4} width="full">
-                    <AffiliateCard link={link} />
-                  </Box>
-                );
-              }
-            }
-            return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
-          },
-          Notice: (props: { type?: string; id?: string; children?: React.ReactNode }) => {
-            if (props.type === 'affiliate' && props.id) {
-              const link = affiliateManager.getLink(props.id);
-              if (link) {
-                return (
-                  <Box marginY={4} width="full">
-                    <AffiliateCard link={link} />
-                  </Box>
-                );
-              }
-            }
-            return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
-          }
+          notice: RenderNotice,
+          Notice: RenderNotice
         }}
       >
         {content}
