@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/revert-2770-feat/consolidated-dependabot-updates-16279982188562686809/sitemap.xml
