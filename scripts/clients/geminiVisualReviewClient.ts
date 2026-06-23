@@ -140,6 +140,7 @@ Your job:
         modelName,
         llmVerdict: 'warn',
         findings: [],
+        truncated: true,
       };
     }
 
@@ -174,6 +175,7 @@ Your job:
       modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
+      truncated: isTruncated,
     };
   }
 };
