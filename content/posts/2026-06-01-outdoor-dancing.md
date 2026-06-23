@@ -8,10 +8,6 @@ excerpt: "Gear specifically suited for outdoor events, festivals, or warm-weathe
 image: "/images/gear/sketches/fanny-pack.webp"
 imageAlt: "Minimalist ink-style sketch of a slim, low-profile fanny pack, emphasizing its lightweight and non-intrusive design for active use."
 imageFit: "contain"
-affiliateIds:
-  - "running-belt"
-  - "sunscreen"
-  - "visor"
 tags:
   - "outdoor"
   - "summer"

@@ -88,7 +88,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                   <Grid cols={{ base: 1, md: 2 }} gap={4}>
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
-                      <EditorialHero src={post.image} alt={`${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
+                      <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
                     </Stack>
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
@@ -96,7 +96,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                     </Stack>
                   </Grid>
                 ) : (
-                  <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
+                  <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
                 )}
                 {post.image?.includes('/sketches/') && (
                   <Text variant="mono" size="xs" color="dim" className="italic">
