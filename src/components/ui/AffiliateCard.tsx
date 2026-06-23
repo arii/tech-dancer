@@ -21,8 +21,8 @@ export function AffiliateCard({ link }: AffiliateCardProps) {
         {/* Product Image Thumbnail */}
         {link.image && (
           <Box
-            width={{ base: 16, md: 20 }}
-            height={{ base: 16, md: 20 }}
+            width={{ base: 14, md: 20 }}
+            height={{ base: 14, md: 20 }}
             padding={link.imageMode === 'contain' ? 2 : 0}
             shrink={0}
             radius="md"
