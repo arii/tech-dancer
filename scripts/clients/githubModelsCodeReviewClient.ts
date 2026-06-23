@@ -53,10 +53,14 @@ async function createModelRequest(
     throw new Error(`GitHub Models API request failed: ${response.status} ${response.statusText} - ${errText}`);
   }
 
-  const data = await response.json();
-  const feedback = data.choices[0].message.content;
-  const totalTokens = data.usage?.total_tokens ?? 0;
-  const isTruncated = data.choices[0].finish_reason === 'length';
+  const data = await response.json() as Record<string, unknown>;
+  const choices = data.choices as Array<{ message: { content: string }; finish_reason: string }> | undefined;
+  if (!choices || choices.length === 0) throw new Error('No choices returned from GitHub Models API');
+
+  const feedback = choices[0].message.content;
+  const usage = data.usage as { total_tokens: number } | undefined;
+  const totalTokens = usage?.total_tokens ?? 0;
+  const isTruncated = choices[0].finish_reason === 'length';
 
   return { feedback, totalTokens, modelName, isTruncated };
 }

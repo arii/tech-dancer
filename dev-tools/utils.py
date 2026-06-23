@@ -157,6 +157,38 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         return res["candidates"][0]["content"]["parts"][0]["text"]
     return None
 
+def is_ollama_available() -> bool:
+    """Checks if Ollama is running and accessible."""
+    try:
+        req = urllib.request.Request(urllib.parse.urljoin(get_ollama_url(), "api/tags"))
+        with urllib.request.urlopen(req, timeout=2) as response:
+            return response.status == 200
+    except Exception:
+        return False
+
+def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, timeout: int = 60) -> Optional[Dict]:
+    """Internal helper to execute urllib requests with retries and exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                if response.status == 200:
+                    return json.loads(response.read().decode("utf-8"))
+                elif response.status in [429, 500, 502, 503, 504]:
+                    raise APIConnectionError(f"Server error {response.status}")
+                else:
+                    print(f"❌ API Error: {response.status} {response.reason}", file=sys.stderr)
+                    return None
+        except (urllib.error.URLError, APIConnectionError, TimeoutError) as e:
+            if attempt < max_retries - 1:
+                wait_time = (2 ** attempt) + random.uniform(0, 1)
+                time.sleep(wait_time)
+            else:
+                print(f"❌ API Max retries exceeded: {e}", file=sys.stderr)
+        except Exception as e:
+            print(f"❌ Unexpected API error: {e}", file=sys.stderr)
+            return None
+    return None
+
 def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
     """
     Orchestrates AI calls: GitHub Models -> Gemini -> Ollama.

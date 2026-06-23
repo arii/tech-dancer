@@ -48,15 +48,22 @@ async function createModelRequest(
     throw new Error(`Gemini API request failed: ${response.status} ${response.statusText} - ${errText}`);
   }
 
-  const data = await response.json();
-  const feedback = data.candidates[0].content.parts.find((p: Record<string, unknown>) => p.text)?.text || '';
-  const thoughtsTokenCount = 0; // Gemini REST API might not return this easily in the same way as LangChain wrapper
+  const data = await response.json() as Record<string, unknown>;
+  const candidates = data.candidates as Array<Record<string, unknown>> | undefined;
+  if (!candidates || candidates.length === 0) throw new Error('No candidates returned from Gemini API');
 
-  const usageMetadata = data.usageMetadata || {};
+  const candidate = candidates[0];
+  const content = candidate.content as Record<string, unknown> | undefined;
+  const parts = content?.parts as Array<Record<string, unknown>> | undefined;
+  const feedbackPart = parts?.find(p => typeof p.text === 'string');
+  const feedback = (feedbackPart?.text as string) || '';
+  const thoughtsTokenCount = 0;
+
+  const usageMetadata = (data.usageMetadata as Record<string, number>) || {};
   const inputTokens = usageMetadata.promptTokenCount || 0;
   const outputTokens = usageMetadata.candidatesTokenCount || 0;
   const totalTokens = usageMetadata.totalTokenCount || 0;
-  const finishReason = data.candidates[0].finishReason;
+  const finishReason = candidate.finishReason as string;
 
   return { feedback, inputTokens, outputTokens, totalTokens, thoughtsTokenCount, finishReason };
 }

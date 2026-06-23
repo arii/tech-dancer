@@ -58,42 +58,10 @@ class AIClient:
         return is_ai_available()
 
     def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
-
-    def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
-        if not self.gemini_api_key:
-            return None
-
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={self.gemini_api_key}"
-        headers = {"Content-Type": "application/json"}
-
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}]
-        }
-
-        if schema:
-            payload["generationConfig"] = {
-                "responseMimeType": "application/json",
-                "responseSchema": schema
-            }
-
-        try:
-            response = requests.post(url, headers=headers, json=payload, timeout=30)
-            response.raise_for_status()
-            res_data = response.json()
-            if "candidates" in res_data and len(res_data["candidates"]) > 0:
-                content = res_data["candidates"][0]["content"]["parts"][0]["text"]
-                return content
-            return None
-        except Exception as e:
-            print(f"⚠️  Gemini API call failed: {e}")
-            return None
+        return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
         if self.is_ai_available():
-            # For JSON schema, we just append instruction for Ollama
-            if schema:
-                prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
             res = self.call_ai(prompt, model=model, schema=schema)
             if res:
                 return res
