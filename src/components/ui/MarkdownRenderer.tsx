@@ -79,7 +79,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               }
             }
             return (
-              <Box border surface="warning" padding={6} marginY={8} radius="md">
+              <Box border surface="warning" padding={6} marginY={12} radius="md">
                 <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
                   {label}
                 </Text>
@@ -90,7 +90,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={12} marginBottom={6} className="prose-section group">
+            <Box marginTop={16} marginBottom={10} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
@@ -98,11 +98,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 className="editorial-section-number"
               />
               <Text as="h2" variant="h2" size="3xl" color="brand" margin={0} leading="tight" {...props} />
-              <Box height={0.5} width={12} marginTop={4} className="bg-accent transition-all group-hover:w-20" />
+              <Box height={0.5} width={12} marginTop={6} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
           h3: ({node: _node, ...props}) => (
-            <Box marginTop={8} marginBottom={4}>
+            <Box marginTop={12} marginBottom={6}>
               <Text
                 as="h3"
                 variant="h3"
@@ -116,7 +116,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           table: ({node: _node, ...props}) => (
-            <Box width="full" overflowX="auto" marginY={8} radius="lg" border className="overflow-hidden">
+            <Box width="full" overflowX="auto" marginY={6} radius="lg" border className="overflow-hidden">
               <Box as="table" width="full" className="border-collapse" {...props} />
             </Box>
           ),
@@ -158,7 +158,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, ...props}) => (
-            <Text as="p" color="dim" leading="relaxed" marginY={4} size="base" {...props} />
+            <Text as="p" color="dim" leading="relaxed" marginY={6} size="lg" {...props} />
           ),
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
@@ -189,13 +189,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={8} width="full" display="flex" justify="center">
+                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
                     <Box
                       as="img"
                       src={diagramUrl}
                       alt="Workflow Diagram"
-                      radius="lg"
-                      shadow="sm"
+                      radius="md"
                       maxWidth="full"
                       maxHeight={96}
                       className="object-contain"
@@ -212,7 +211,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             if (isBlock) {
               return (
-                <Box marginY={6} radius="lg" border className="overflow-hidden">
+                <Box marginY={12} radius="lg" border className="overflow-hidden">
                   {language && (
                     <Stack
                       direction="row"
@@ -254,7 +253,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 as="code"
                 variant="mono"
                 size="xs"
-                paddingX={1.5}
+                paddingX={3}
                 paddingY={0.5}
                 radius="sm"
                 surface="surface"

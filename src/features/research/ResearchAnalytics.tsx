@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -156,7 +156,7 @@ function FlagshipCard({
           </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
-            {tool.externalUrl && (
+            {tool.externalUrl ? (
               <ActionButton
                 as="a"
                 href={tool.externalUrl}
@@ -165,11 +165,24 @@ function FlagshipCard({
                 variant="primary"
                 paddingX={4}
                 paddingY={2}
-                zIndex={20}
+                zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
                 {tool.externalLinkDisplayLabel || 'Open Link'}
                 <Icon icon={ExternalLink} size="sm" />
+              </ActionButton>
+            ) : tool.canonicalPath && (
+              <ActionButton
+                as={Link}
+                to={tool.canonicalPath}
+                variant="primary"
+                paddingX={4}
+                paddingY={2}
+                zIndex="docked"
+                width={{ base: "full", sm: "auto" }}
+              >
+                Read Deep-Dive
+                <Icon icon={ArrowRight} size="sm" />
               </ActionButton>
             )}
             {tool.sourceUrl && (
@@ -181,7 +194,7 @@ function FlagshipCard({
                 variant="secondary"
                 paddingX={4}
                 paddingY={2}
-                zIndex={20}
+                zIndex="docked"
                 width={{ base: "full", sm: "auto" }}
               >
                 Source Repo

@@ -166,4 +166,5 @@ export const tailwindSafelist = [
   'scroll-mt-40',
   'lg:scroll-mt-16',
   'gap-section-spacing',
+  'mx-auto',
 ];
