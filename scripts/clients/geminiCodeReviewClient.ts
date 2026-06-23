@@ -84,15 +84,25 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       console.warn(`⚠️  gemini-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : Array.isArray(response.content)
-        ? response.content.map((c: Record<string, unknown>) => {
-            if (c.type === 'text') return c.text;
-            if (c.type === 'thinking') return '';
+    const feedback = (() => {
+      if (typeof response.content === 'string') {
+        return response.content;
+      }
+      if (Array.isArray(response.content)) {
+        return response.content
+          .map((c: Record<string, unknown>) => {
+            if (c.type === 'text' && typeof c.text === 'string') {
+              return c.text;
+            }
+            // Note: Thinking blocks are specifically excluded from the code review payload
+            // because we only want the generated JSON payload or text verdict block.
             return '';
-          }).join('\n')
-        : JSON.stringify(response.content);
+          })
+          .filter(Boolean)
+          .join('\n');
+      }
+      return JSON.stringify(response.content);
+    })();
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
