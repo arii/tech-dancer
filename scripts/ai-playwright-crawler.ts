@@ -149,7 +149,7 @@ async function runCrawler() {
       visitedStates.add(stateHash);
 
       // Decision making with Gemini
-      const modelName = pickOptimalGeminiModel(0);
+      const modelName = await pickOptimalGeminiModel(0);
       const model = new ChatGoogleGenerativeAI({
         model: modelName,
         apiKey,
@@ -221,7 +221,7 @@ async function runCrawler() {
 
     console.log('\nExploration complete. Generating final report...');
     const estimatedReportTokens = capturedScreenshots.length * 1000;
-    const reportModelName = pickOptimalGeminiModel(estimatedReportTokens);
+    const reportModelName = await pickOptimalGeminiModel(estimatedReportTokens);
     const reportModel = new ChatGoogleGenerativeAI({
       model: reportModelName,
       apiKey,
