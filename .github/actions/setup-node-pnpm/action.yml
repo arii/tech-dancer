@@ -40,6 +40,6 @@ runs:
     - name: Install Python dependencies
       run: |
         if [ -f "pyproject.toml" ]; then
-          python3 -m pip install chromadb sentence-transformers
+          python3 -m pip install --break-system-packages chromadb sentence-transformers
         fi
       shell: bash
