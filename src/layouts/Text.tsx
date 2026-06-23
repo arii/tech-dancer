@@ -24,6 +24,8 @@ export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes
   clamp?: ResponsiveProp<number | boolean>
   truncate?: ResponsiveProp<boolean>
   leading?: ResponsiveProp<"none" | "tight" | "snug" | "normal" | "relaxed" | "loose" | string>
+  balance?: boolean
+  pretty?: boolean
   italic?: boolean
   hoverColor?: "accent" | "main" | "body" | "dim"
   opacityVariant?: keyof typeof opacityTokens
@@ -66,6 +68,8 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? `line-clamp-${v}` : (v ? "line-clamp-none" : ""))),
           getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
           getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
+          balance && "text-balance",
+          pretty && "text-pretty",
           italic && "italic",
           hoverColor === "accent" && "transition-colors group-hover:text-accent",
           hoverColor === "main" && "transition-colors group-hover:text-text-main",

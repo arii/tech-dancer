@@ -39,7 +39,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
             radius="lg"
             surface="alt"
             cursor="pointer"
-            whileHover={{ ...motionTokens.hover, scale: 1.01, borderColor: "var(--raw-color-accent)" }}
+            whileHover={{ ...motionTokens.hover, scale: 1.01, borderColor: "var(--color-accent)" }}
             whileTap={{ scale: 0.98 }}
             className="group transition-colors duration-200"
           >
@@ -57,7 +57,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                   shadow="sm"
                   shrink={0}
                 >
-                  <Icon size={24} color="var(--raw-color-accent)" />
+                  <Icon size={24} color="var(--color-accent)" />
                 </Box>
               )}
               <Stack gap={2} flex={1} align="start">
@@ -69,6 +69,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                   color="main"
                   leading="tight"
                   hoverColor="accent"
+                  balance
                 >
                   {card.title}
                 </Text>
@@ -100,9 +101,9 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
       {items.map((item, index) => {
         const Icon = item.icon ? IconMap[item.icon] : null;
         return (
-          <Box key={index} padding={6} border radius="lg" surface="alt">
+          <Box key={index} padding={6} border radius="md" surface="alt">
             <Stack gap={3}>
-              {Icon && <Icon size={16} color="var(--raw-color-accent)" />}
+              {Icon && <Icon size={16} color="var(--color-accent)" />}
               {item.title && (
                 <Text as="h3" variant="mono" size="micro" color="brand" weight="font-bold" uppercase tracking="widest">
                   {item.title}
@@ -135,7 +136,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             aspect="square"
             overflow="hidden"
             border
-            radius="lg"
+            radius="md"
             surface="alt"
             borderColor="line/10"
             cursor="pointer"
@@ -160,9 +161,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           position="fixed"
           inset={0}
           zIndex="modal"
-          surface="contrast"
-          opacity={0.9}
-          cursor="pointer"
+          className="bg-black/90 cursor-pointer"
           align="center"
           justify="center"
           onClick={() => setSelectedImage(null)}
@@ -201,7 +200,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           border
           radius="full"
           cursor="pointer"
-          whileHover={{ ...motionTokens.hover, backgroundColor: "var(--raw-color-surface-alt)", borderColor: "var(--raw-color-accent)" }}
+          whileHover={{ ...motionTokens.hover, backgroundColor: "var(--color-surface-alt)", borderColor: "var(--color-accent)" }}
           whileTap={{ scale: 0.98 }}
           className="group transition-all focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
         >

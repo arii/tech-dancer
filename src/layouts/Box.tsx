@@ -74,6 +74,9 @@ export interface BaseProps {
   cursor?: "auto" | "default" | "pointer" | "wait" | "text" | "move" | "help" | "not-allowed" | "none" | string
   flexWrap?: boolean | "wrap" | "wrap-reverse" | "nowrap"
   textAlign?: ResponsiveProp<"left" | "center" | "right" | "justify">
+  order?: ResponsiveProp<number | string>
+  objectFit?: ResponsiveProp<"contain" | "cover" | "fill" | "none" | "scale-down">
+  objectPosition?: ResponsiveProp<string>
   bgGradient?: string
 }
 
@@ -227,13 +230,16 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
           getResponsiveClasses(textAlign, "text-"),
+          getResponsiveClasses(order, "order-"),
+          getResponsiveClasses(objectFit, "object-"),
+          getResponsiveClasses(objectPosition, "object-", (v) => resolveJIT(v, "")),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
           getResponsiveClasses(top, "", resolveSpacing("top")),
           getResponsiveClasses(right, "", resolveSpacing("right")),
           getResponsiveClasses(bottom, "", resolveSpacing("bottom")),
           getResponsiveClasses(left, "", resolveSpacing("left")),
-          getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => resolveJIT(v, "")),
+          getResponsiveClasses(scrollMarginTop, "", resolveSpacing("scroll-mt")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
           className
         )}

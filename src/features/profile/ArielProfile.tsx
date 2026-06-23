@@ -20,13 +20,13 @@ function ArielProfile() {
     return (
       <Stack key={section.id} gap={6} maxWidth="prose">
         {section.title && (
-          <Text as="h2" variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight">
+          <Text as="h2" variant="headline" size="2xl" weight="font-bold" uppercase tracking="tight" balance>
             {section.title}
           </Text>
         )}
 
         {section.content && (
-          <Text variant="body" size="lg" color="body" leading="relaxed">
+          <Text variant="body" size="lg" color="body" leading="relaxed" pretty>
             {section.content}
           </Text>
         )}
@@ -96,7 +96,7 @@ function ArielProfile() {
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             {/* Main Content Area */}
-            <Stack gap={12} span={{ base: 12, lg: 8 }} className="order-2 lg:order-1">
+            <Stack gap={12} span={{ base: 12, lg: 8 }} order={{ base: 2, lg: 1 }}>
               {/* Professional Section (MIT PhD, Waymo, cards, availability) */}
               {professionalSection && renderSection(professionalSection)}
 
@@ -119,13 +119,13 @@ function ArielProfile() {
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>
                   <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={8} uppercase tracking="widest">Privacy Policy</Text>
-                  <Text variant="body" size="base" color="dim">
+                  <Text variant="body" size="base" color="dim" pretty>
                     We value your privacy. This site does not track personal data beyond what is necessary for functional performance.
                   </Text>
                 </Stack>
                 <Stack gap={4}>
                   <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={8} uppercase tracking="widest">Terms of Use</Text>
-                  <Text variant="body" size="base" color="dim">
+                  <Text variant="body" size="base" color="dim" pretty>
                     By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
                   </Text>
                 </Stack>
@@ -133,12 +133,12 @@ function ArielProfile() {
             </Stack>
 
             {/* Sticky Sidebar (Desktop only view for the details box) */}
-            <Box span={{ base: 12, lg: 4 }} position="relative" className="order-1 lg:order-2">
+            <Box span={{ base: 12, lg: 4 }} position="relative" order={{ base: 1, lg: 2 }}>
               <Stack gap={8} position="sticky" top={12} align={{ base: "center", lg: "start" }}>
                 {/* Profile portrait (Always on top or as ordered) */}
                 <Box
                   border
-                  radius="lg"
+                  radius="md"
                   overflow="hidden"
                   aspect={{ base: "3/4", lg: "1/1" }}
                   surface="default"
@@ -147,12 +147,14 @@ function ArielProfile() {
                   borderColor="line/10"
                   position="relative"
                 >
-                  <img
+                  <Box
+                    as="img"
                     src={roboticistPhoto}
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
-                    width={960}
-                    height={949}
-                    className="w-full h-full object-cover object-center-20"
+                    width="full"
+                    height="full"
+                    objectFit="cover"
+                    objectPosition="center 20%"
                   />
                 </Box>
 
