@@ -89,7 +89,7 @@ Your job:
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count ?? 0;
+                               (typeof response.response_metadata === 'object' && response.response_metadata !== null ? (response.response_metadata as any).usage?.thoughts_token_count : 0) ?? 0;
 
     if (thoughtsTokenCount > thinkingBudget * 1.1) {
       console.warn('Thinking budget exceeded by >10%', {
@@ -99,7 +99,7 @@ Your job:
       });
     }
 
-    const isTruncated = finishReason !== 'STOP';
+    const isTruncated = finishReason === 'MAX_TOKENS' || finishReason === 'length' || finishReason === 'max_tokens';
 
     if (isTruncated) {
       console.error('Gemini truncation', {
@@ -123,7 +123,9 @@ Your job:
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const feedback = extractFeedbackText(response.content);
+    const feedback = extractFeedbackText(response.content) || (
+      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
+    );
 
     return {
       route: summary.route,

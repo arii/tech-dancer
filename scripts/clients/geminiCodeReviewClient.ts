@@ -71,7 +71,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     // thoughtsTokenCount might be nested in response_metadata or usage_metadata
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count ?? 0;
+                               (typeof response.response_metadata === 'object' && response.response_metadata !== null ? (response.response_metadata as any).usage?.thoughts_token_count : 0) ?? 0;
 
     if (thoughtsTokenCount > thinkingBudget * 1.1) {
       console.warn('Thinking budget exceeded by >10%', {
@@ -81,7 +81,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       });
     }
 
-    const isTruncated = finishReason !== 'STOP';
+    const isTruncated = finishReason === 'MAX_TOKENS' || finishReason === 'length' || finishReason === 'max_tokens';
 
     if (isTruncated) {
       console.error('Gemini truncation', {
@@ -108,7 +108,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
     // typically in @langchain response.content is a string, but if we extract only text it's better
-    const feedback = extractFeedbackText(response.content);
+    const feedback = extractFeedbackText(response.content) || (
+      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
+    );
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

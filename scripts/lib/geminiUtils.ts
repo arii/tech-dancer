@@ -31,7 +31,7 @@ export function extractFeedbackText(content: any): string {
   if (!feedback && Array.isArray(content)) {
     feedback = JSON.stringify(content);
   }
-  return feedback;
+  return feedback || '';
 }
 
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
