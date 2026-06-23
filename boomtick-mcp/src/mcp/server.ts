@@ -35,6 +35,7 @@ import { getJulesMessagesHandler, GetJulesMessagesInputSchema } from "../tools/j
 import { listJulesSessionsHandler, ListJulesSessionsInputSchema } from "../tools/jules/list-sessions.js";
 import { cancelJulesSessionHandler, CancelJulesSessionInputSchema } from "../tools/jules/cancel-session.js";
 import { getJulesPullRequestHandler, GetJulesPullRequestInputSchema } from "../tools/jules/get-pr.js";
+import { triggerJulesFeedbackHandler, TriggerJulesFeedbackInputSchema } from "../tools/jules/trigger-feedback.js";
 
 import fs from "fs/promises";
 import path from "path";
@@ -484,6 +485,17 @@ export class BoomtickMCPServer {
               required: ["id"],
             },
           },
+          {
+            name: "jules.trigger_feedback",
+            description: "Automatically collect CI status/logs for the PR associated with a Jules session and send them back as feedback.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                sessionId: { type: "string" },
+              },
+              required: ["sessionId"],
+            },
+          },
         ],
       };
     });
@@ -540,6 +552,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await cancelJulesSessionHandler(CancelJulesSessionInputSchema.parse(request.params.arguments)));
           case "jules.get_pr":
             return createSuccessResult(await getJulesPullRequestHandler(GetJulesPullRequestInputSchema.parse(request.params.arguments)));
+          case "jules.trigger_feedback":
+            return createSuccessResult(await triggerJulesFeedbackHandler(TriggerJulesFeedbackInputSchema.parse(request.params.arguments)));
           default:
             return createErrorResult(`Tool not found: ${request.params.name}`);
         }
