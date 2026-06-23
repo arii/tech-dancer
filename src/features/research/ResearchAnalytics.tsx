@@ -103,7 +103,7 @@ function FlagshipCard({
     >
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
-        <Stack flex={1} className="pt-[14px] px-4 pb-4" gap={0}>
+        <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
             <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
@@ -114,7 +114,7 @@ function FlagshipCard({
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
             {tool.category}
           </Text>
-          <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+          <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
             {tool.title}
           </Text>
           {tool.subtitle && (
@@ -133,7 +133,7 @@ function FlagshipCard({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none z-30">
+            <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -224,7 +224,8 @@ function ToolCard({ tool, navigate }: {
       rel={isLink ? "noopener noreferrer" : undefined}
       onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
-      className={cn(cardVariants({ interactive: true }), "pt-[14px] px-4 pb-4 flex flex-col h-full no-underline")}
+      paddingTop={3.5} paddingX={4} paddingBottom={4}
+      className={cn(cardVariants({ interactive: true }), "no-underline")}
     >
       <Stack gap={0} width="full">
         <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
@@ -248,7 +249,7 @@ function ToolCard({ tool, navigate }: {
           {tool.description}
         </Text>
         {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} className="text-accent hover:underline text-xs font-semibold mb-5 self-start focus:outline-none">
+          <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
             {isExpanded ? "Read Less" : "Read More"}
           </Box>
         )}
@@ -324,11 +325,11 @@ export default function ResearchAnalytics() {
               border="none"
             />
             <Text variant="body" size={{ base: "lg", lg: "xl" }} color="dim" maxWidth="prose" leading="relaxed">
-              Senior roboticist and MIT PhD. I ship production robotics systems and build AI-assisted engineering infrastructure — agentic CI/CD, LLM workflows, and developer tooling. Open to Staff SWE roles, robotics contracts, and DevAI consulting.
+              building AI-assisted engineering infrastructure in my free time. This portfolio showcased my work in agentic CI/CD, LLM workflows, and developer tooling.
             </Text>
             
             {/* Scrollable Focus Tags for Mobile */}
-            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} display={{ base: "flex", lg: "none" }} className="py-1">
+            <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
               <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
                 {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
@@ -377,7 +378,7 @@ export default function ResearchAnalytics() {
         </Stack>
 
         <Box className="why-this-matters">
-          <Text className="label">Why this matters</Text>
+          <Text as="h2" size="3xl" className="label">Why this matters</Text>
           <Text as="p">
             Shipping high-fidelity products requires <Text weight="font-bold" color="main">practical AI orchestration</Text>, not hype. I focus on engineering systems that keep the developer in the loop while maintaining high standards.
           </Text>
@@ -411,9 +412,12 @@ export default function ResearchAnalytics() {
                   }}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cn(cardVariants({
+                  className={cardVariants({
                     interactive: study.status === 'published'
-                  }), "pt-[14px] px-4 pb-4")}
+                  })}
+                  paddingTop={3.5}
+                  paddingX={4}
+                  paddingBottom={4}
                   opacity={study.status === 'published' ? 1 : "high"}
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
@@ -423,7 +427,7 @@ export default function ResearchAnalytics() {
                     {study.status && <StatusBadge label={study.status} />}
                   </Box>
 
-                  <Text variant="display" size="2xl" weight="font-black" marginBottom={2}>
+                  <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
                     {study.title}
                   </Text>
                   <Box display="flex" align="center" gap={4} marginBottom={3}>
@@ -467,14 +471,14 @@ export default function ResearchAnalytics() {
         )}
 
         {/* Work With Me block */}
-        <Grid cols={{ base: 1, md: 12 }} gap={8} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
+        <Grid cols={{ base: 1, md: 12 }} gap={10} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
           {/* Description Column (Left) */}
           <Stack gap={4} span={{ base: 1, md: 7 }} justify="center">
             <Box paddingBottom={2} className="border-b border-line/10">
-              <Text variant="headline" size="2xl" weight="font-black">Work with me</Text>
+              <Text as="h2" variant="headline" size="3xl" weight="font-black">Work with me</Text>
             </Box>
             <Text variant="body" size="lg" color="dim" leading="relaxed" maxWidth="prose">
-              These are my own projects — built to solve real problems I care about.
+              These are my own projects, built to solve real problems I care about.
               If you need a senior roboticist, DevAI engineering infrastructure,
               or someone who can do both, I'm available for project-based contracts
               and full-time roles.
