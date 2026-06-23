@@ -1,4 +1,3 @@
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import {
   parseCodeReviewVerdict,
@@ -14,26 +13,10 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+import { extractFinishReason, extractFeedbackText, createGeminiModel } from '../lib/geminiUtils';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
-
-function createModel(modelName: string, maxOutputTokens: number = 6000, thinkingBudget: number = 2048): ChatGoogleGenerativeAI {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
-
-  return new ChatGoogleGenerativeAI({
-    model: modelName,
-    apiKey,
-    maxOutputTokens: maxOutputTokens,
-    // Reserve a bounded slice of the budget for reasoning so it can't
-    // crowd out the actual review text + verdict + findings JSON.
-    thinkingConfig: {
-      includeThoughts: true,
-      thinkingBudget: thinkingBudget,
-    }
-  });
-}
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'gemini-code-review',
@@ -54,24 +37,11 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     let thinkingBudget = 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
-    let model = createModel(modelName, maxOutputTokens, thinkingBudget);
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
     const message = new HumanMessage({ content: baseContent });
 
     let response = await model.invoke([message]);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const extractFinishReason = (res: any): string => {
-      // Langchain structure varies depending on the provider wrapper
-      if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
-      if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
-
-      // Look deeper into candidates if raw output exposes it
-      const candidate = res.response_metadata?.candidates?.[0];
-      if (candidate?.finishReason) return candidate.finishReason;
-
-      return 'UNKNOWN';
-    };
 
     let finishReason = extractFinishReason(response);
 
@@ -83,7 +53,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       const retryMaxOutputTokens = Math.round(maxOutputTokens * 1.25);
       thinkingBudget = Math.round(thinkingBudget * 0.5);
 
-      model = createModel(modelName, retryMaxOutputTokens, thinkingBudget);
+      model = createGeminiModel(modelName, retryMaxOutputTokens, thinkingBudget);
       response = await model.invoke([message]);
 
       finishReason = extractFinishReason(response);
@@ -138,23 +108,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
     // typically in @langchain response.content is a string, but if we extract only text it's better
-    let feedback: string;
-    if (typeof response.content === 'string') {
-      feedback = response.content;
-    } else if (Array.isArray(response.content)) {
-      feedback = response.content
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .filter((p: any) => !p.thought)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((p: any) => p.text ?? '')
-        .join('');
-    } else {
-      feedback = JSON.stringify(response.content);
-    }
-
-    if (!feedback && Array.isArray(response.content)) {
-      feedback = JSON.stringify(response.content);
-    }
+    const feedback = extractFeedbackText(response.content);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

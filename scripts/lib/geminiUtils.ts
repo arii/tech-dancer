@@ -1,0 +1,55 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function extractFinishReason(res: any): string {
+  // Langchain structure varies depending on the provider wrapper
+  if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
+  if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
+
+  // Look deeper into candidates if raw output exposes it
+  const candidate = res.response_metadata?.candidates?.[0];
+  if (candidate?.finishReason) return candidate.finishReason;
+
+  return 'UNKNOWN';
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function extractFeedbackText(content: any): string {
+  let feedback: string;
+  if (typeof content === 'string') {
+    feedback = content;
+  } else if (Array.isArray(content)) {
+    feedback = content
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((p: any) => !p.thought)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((p: any) => p.text ?? '')
+      .join('');
+  } else {
+    feedback = JSON.stringify(content);
+  }
+
+  if (!feedback && Array.isArray(content)) {
+    feedback = JSON.stringify(content);
+  }
+  return feedback;
+}
+
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+
+export function createGeminiModel(
+  modelName: string,
+  maxOutputTokens: number,
+  thinkingBudget: number
+): ChatGoogleGenerativeAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
+
+  return new ChatGoogleGenerativeAI({
+    model: modelName,
+    apiKey,
+    maxOutputTokens: maxOutputTokens,
+    thinkingConfig: {
+      includeThoughts: true,
+      thinkingBudget: thinkingBudget,
+    }
+  });
+}

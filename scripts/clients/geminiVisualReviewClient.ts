@@ -1,24 +1,9 @@
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
+import { extractFinishReason, extractFeedbackText, createGeminiModel } from '../lib/geminiUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
-
-function createModel(modelName: string, maxOutputTokens: number = 4096, thinkingBudget: number = 1024): ChatGoogleGenerativeAI {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
-
-  return new ChatGoogleGenerativeAI({
-    model: modelName,
-    apiKey,
-    maxOutputTokens: maxOutputTokens,
-    thinkingConfig: {
-      includeThoughts: true,
-      thinkingBudget: thinkingBudget,
-    }
-  });
-}
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
@@ -31,7 +16,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
     let maxOutputTokens = 4096;
     let thinkingBudget = 1024;
-    let model = createModel(modelName, maxOutputTokens, thinkingBudget);
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -78,15 +63,6 @@ Your job:
     const message = new HumanMessage({ content: baseContent });
     let response = await model.invoke([message]);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const extractFinishReason = (res: any): string => {
-      if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
-      if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
-      const candidate = res.response_metadata?.candidates?.[0];
-      if (candidate?.finishReason) return candidate.finishReason;
-      return 'UNKNOWN';
-    };
-
     let finishReason = extractFinishReason(response);
 
     if (finishReason === 'MAX_TOKENS') {
@@ -97,7 +73,7 @@ Your job:
       maxOutputTokens = Math.round(maxOutputTokens * 1.25);
       thinkingBudget = Math.round(thinkingBudget * 0.5);
 
-      model = createModel(modelName, maxOutputTokens, thinkingBudget);
+      model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
       response = await model.invoke([message]);
 
       finishReason = extractFinishReason(response);
@@ -147,23 +123,7 @@ Your job:
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    let feedback: string;
-    if (typeof response.content === 'string') {
-      feedback = response.content;
-    } else if (Array.isArray(response.content)) {
-      feedback = response.content
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .filter((p: any) => !p.thought)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((p: any) => p.text ?? '')
-        .join('');
-    } else {
-      feedback = JSON.stringify(response.content);
-    }
-
-    if (!feedback && Array.isArray(response.content)) {
-      feedback = JSON.stringify(response.content);
-    }
+    const feedback = extractFeedbackText(response.content);
 
     return {
       route: summary.route,
