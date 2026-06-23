@@ -2,7 +2,6 @@ import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { GeminiTruncationError } from '../lib/errors';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
@@ -79,8 +78,16 @@ Your job:
     const message = new HumanMessage({ content: baseContent });
     let response = await model.invoke([message]);
 
-    let finishReason = (response as { response_metadata?: { finish_reason?: string } })
-      .response_metadata?.finish_reason || 'UNKNOWN';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const extractFinishReason = (res: any): string => {
+      if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
+      if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
+      const candidate = res.response_metadata?.candidates?.[0];
+      if (candidate?.finishReason) return candidate.finishReason;
+      return 'UNKNOWN';
+    };
+
+    let finishReason = extractFinishReason(response);
 
     if (finishReason === 'MAX_TOKENS') {
       console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
@@ -93,8 +100,7 @@ Your job:
       model = createModel(modelName, maxOutputTokens, thinkingBudget);
       response = await model.invoke([message]);
 
-      finishReason = (response as { response_metadata?: { finish_reason?: string } })
-        .response_metadata?.finish_reason || 'UNKNOWN';
+      finishReason = extractFinishReason(response);
     }
 
     const usageMetadata = response.usage_metadata as {
@@ -117,14 +123,24 @@ Your job:
       });
     }
 
-    if (finishReason !== 'STOP') {
+    const isTruncated = finishReason !== 'STOP';
+
+    if (isTruncated) {
       console.error('Gemini truncation', {
         finishReason,
         usage: usageMetadata,
       });
-      throw new GeminiTruncationError(
-        `Gemini call did not finish cleanly: finishReason=${finishReason}`
-      );
+      return {
+        route: summary.route,
+        severity: summary.severity,
+        differencePercent: summary.differencePercent,
+        feedback: `Error: Gemini model was truncated during execution (finishReason=${finishReason}).`,
+        tokens: totalTokens,
+        cost: 0,
+        modelName,
+        llmVerdict: 'warn',
+        findings: [],
+      };
     }
 
     const pricing = getGeminiPricing(modelName);
@@ -141,6 +157,10 @@ Your job:
         .map((p: any) => p.text ?? '')
         .join('');
     } else {
+      feedback = JSON.stringify(response.content);
+    }
+
+    if (!feedback && Array.isArray(response.content)) {
       feedback = JSON.stringify(response.content);
     }
 

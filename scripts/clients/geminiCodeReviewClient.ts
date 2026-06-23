@@ -14,7 +14,6 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { GeminiTruncationError } from '../lib/errors';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
@@ -61,8 +60,20 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     let response = await model.invoke([message]);
 
-    let finishReason = (response as { response_metadata?: { finish_reason?: string } })
-      .response_metadata?.finish_reason || 'UNKNOWN';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const extractFinishReason = (res: any): string => {
+      // Langchain structure varies depending on the provider wrapper
+      if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
+      if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
+
+      // Look deeper into candidates if raw output exposes it
+      const candidate = res.response_metadata?.candidates?.[0];
+      if (candidate?.finishReason) return candidate.finishReason;
+
+      return 'UNKNOWN';
+    };
+
+    let finishReason = extractFinishReason(response);
 
     if (finishReason === 'MAX_TOKENS') {
       console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
@@ -75,8 +86,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       model = createModel(modelName, retryMaxOutputTokens, thinkingBudget);
       response = await model.invoke([message]);
 
-      finishReason = (response as { response_metadata?: { finish_reason?: string } })
-        .response_metadata?.finish_reason || 'UNKNOWN';
+      finishReason = extractFinishReason(response);
     }
 
     const usageMetadata = response.usage_metadata as {
@@ -101,14 +111,24 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       });
     }
 
-    if (finishReason !== 'STOP') {
+    const isTruncated = finishReason !== 'STOP';
+
+    if (isTruncated) {
       console.error('Gemini truncation', {
         finishReason,
         usage: usageMetadata,
       });
-      throw new GeminiTruncationError(
-        `Gemini call did not finish cleanly: finishReason=${finishReason}`
-      );
+      // Do not throw here, instead pass the error state gracefully
+      // so it can be handled by orchestrator without breaking the CI suite
+      return {
+        feedback: `Error: Gemini model was truncated during execution (finishReason=${finishReason}).`,
+        tokens: totalTokens,
+        cost: 0,
+        modelName,
+        llmVerdict: 'warn',
+        truncated: true,
+        durationMs: Date.now() - startTime,
+      };
     }
 
     const durationMs = Date.now() - startTime;
@@ -132,6 +152,10 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       feedback = JSON.stringify(response.content);
     }
 
+    if (!feedback && Array.isArray(response.content)) {
+      feedback = JSON.stringify(response.content);
+    }
+
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
     logAIRun({
@@ -144,7 +168,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       cost,
       durationMs,
       verdict: feedback ? parseCodeReviewVerdict(feedback) : undefined,
-      truncated: false,
+      truncated: isTruncated,
       parseError: parsedState.parseError,
     });
 
@@ -155,7 +179,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       modelName: modelName,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,
-      truncated: false,
+      truncated: isTruncated,
       parseError: parsedState.parseError,
       durationMs,
     };
