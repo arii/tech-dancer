@@ -320,8 +320,7 @@ export async function orchestrateCodeReview(
     reviewResult = await client.invokeReview(summary, 8192);
   }
 
-  const durationMs = Date.now() - startTime;
-  reviewResult.durationMs = durationMs;
+  reviewResult.durationMs = Date.now() - startTime;
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,

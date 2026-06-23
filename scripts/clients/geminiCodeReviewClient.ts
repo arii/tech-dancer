@@ -71,6 +71,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens ?? 0;
     // thoughtsTokenCount might be nested in response_metadata or usage_metadata
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
                                (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count;

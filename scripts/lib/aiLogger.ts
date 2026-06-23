@@ -98,18 +98,4 @@ export function logReviewExecution(
     parseError: result.parseError,
     rawResponse: result.feedback,
   });
-    let logs: AIRunLogEntry[] = [];
-    if (fs.existsSync(LOG_FILE)) {
-      try {
-        logs = JSON.parse(fs.readFileSync(LOG_FILE, 'utf-8'));
-      } catch (e) {
-        console.warn('Failed to parse existing AI logs:', e);
-      }
-    }
-
-    logs.push(logEntry);
-    fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
-  } catch (e) {
-    console.warn('Failed to log AI run:', e);
-  }
 }
