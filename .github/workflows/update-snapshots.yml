@@ -54,8 +54,8 @@ jobs:
       - name: Checkout source branch
         uses: actions/checkout@v7
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ env.HEAD_REF }}
+          repository: ${{ env.HEAD_REPO }}
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
