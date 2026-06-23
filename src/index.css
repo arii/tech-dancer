@@ -121,7 +121,7 @@
     @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
   }
   .industrial-gradient { background: linear-gradient(135deg, var(--raw-color-bg) 0%, var(--raw-color-surface) 100%); }
-  .text-glow { text-shadow: 0 0 20px rgba(8, 145, 178, 0.4); }
+  .text-glow { text-shadow: 0 0 20px var(--raw-color-accent-shadow); }
   .gold-accent { @apply border-line hover:border-accent transition-colors; }
   .scanline-hover { @apply relative overflow-hidden; }
   .scanline-hover::after {
@@ -457,7 +457,7 @@
 
 /* BoomTick Blog mock screenshot styling */
 .boomtick-blog-preview {
-  background-color: #020617 !important;
+  background-color: var(--color-bg) !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
@@ -492,10 +492,6 @@
   letter-spacing: -0.03em !important;
 }
 
-.boomtick-blog-preview .preview-logo .logo-accent {
-  color: #22d3ee !important; /* cyan 400 */
-}
-
 .boomtick-blog-preview .preview-logo .logo-dot {
   color: var(--color-text-dim) !important;
   font-weight: 300 !important;
@@ -511,7 +507,7 @@
 }
 
 .boomtick-blog-preview .preview-headline .headline-accent {
-  color: #22d3ee !important;
+  color: var(--color-accent) !important;
 }
 
 .boomtick-blog-preview .preview-tagline {

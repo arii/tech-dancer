@@ -25,7 +25,7 @@ export interface ResearchTool {
     rest: string;
   };
   customPreview?: {
-    logo: { prefix: string; accent: string; suffix: string };
+    logo: { prefix: string; suffix: string };
     headline: { text: string; accent?: string }[];
     tagline: string;
   };
@@ -86,11 +86,12 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     sourceUrl: 'https://github.com/arii/tech-dancer',
     isFlagship: true,
     customPreview: {
-      logo: { prefix: 'boomtick', accent: '', suffix: '.blog' },
+      logo: { prefix: 'boomtick', suffix: '.blog' },
       headline: [
         { text: 'Built for dancers.' },
-        { text: 'Train smarter.', accent: 'Train smarter.' },
-        { text: 'Travel better.' }
+        { text: 'Look good.', accent: 'Look good.' },
+        { text: 'Travel smart.' },
+        { text: 'Dance more.' }
       ],
       tagline: 'Training notes, gear reviews, and WCS guides.'
     }
