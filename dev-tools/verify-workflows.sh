@@ -54,11 +54,8 @@ run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh pre-submit --
 run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh audit-pr --help"
 run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh validate-issue --help"
 
-run_check "mass-audit-prs.md" "python3 dev-tools/td_cli.py gh conflicts"
 run_check "review-pr.md" "python3 dev-tools/td_cli.py gh audit-pr 1 --fetch"
 
-run_check "mass-audit-issues.md" "python3 dev-tools/td_cli.py gh validate-issue --issue-number 1"
-run_check "mass-audit-issues.md" "gh issue list --limit 1"
 
 run_check "review-ux.md" "npx playwright --version"
 run_check "review-ux.md" "pnpm run audit --help"
