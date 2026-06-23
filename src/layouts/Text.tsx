@@ -37,7 +37,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     className, as: Component = "span", 
     variant, intent, color = "main", size, weight, align, tracking, 
     uppercase, lowercase, capitalize,
-    clamp, truncate, leading, italic,
+    clamp, truncate, leading, balance, pretty, italic,
     hoverColor,
     opacityVariant,
     ...props 
