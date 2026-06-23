@@ -11,13 +11,13 @@ interface AffiliateCardProps {
 export function AffiliateCard({ link }: AffiliateCardProps) {
   return (
     <BaseCard
-      padding={{ base: 3, md: 4 }}
+      padding={{ base: 2.5, md: 4 }}
       height="full"
       href={link.url}
       rel="noopener noreferrer sponsored"
       ariaLabel={`Open ${link.name}`}
     >
-      <Stack direction="row" gap={4} align="start" width="full">
+      <Stack direction="row" gap={{ base: 3, md: 4 }} align="start" width="full">
         {/* Product Image Thumbnail */}
         {link.image && (
           <Box
