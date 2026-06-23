@@ -56,8 +56,6 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     tenacity==8.2.3 \
     requests==2.33.1 \
     tqdm==4.68.3 \
-    langchain-openai \
-    langchain-core
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
 RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace

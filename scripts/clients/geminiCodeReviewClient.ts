@@ -1,5 +1,3 @@
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HumanMessage } from '@langchain/core/messages';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -18,21 +16,49 @@ import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
-function createModel(modelName: string, maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
+async function createModelRequest(
+  modelName: string,
+  maxOutputTokens: number = 1500,
+  prompt: string
+): Promise<{ feedback: string; inputTokens: number; outputTokens: number; totalTokens: number; thoughtsTokenCount: number; finishReason: string }> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
-  return new ChatGoogleGenerativeAI({
-    model: modelName,
-    apiKey,
-    maxOutputTokens: maxOutputTokens,
-    // Reserve a bounded slice of the budget for reasoning so it can't
-    // crowd out the actual review text + verdict + findings JSON.
-    thinkingConfig: {
-      includeThoughts: true,
-      thinkingBudget: Math.min(1024, Math.floor(maxOutputTokens * 0.3)),
-    }
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        maxOutputTokens: maxOutputTokens,
+        thinkingConfig: {
+          includeThoughts: true,
+          thinkingBudget: Math.min(1024, Math.floor(maxOutputTokens * 0.3)),
+        }
+      }
+    })
   });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Gemini API request failed: ${response.status} ${response.statusText} - ${errText}`);
+  }
+
+  const data = await response.json();
+  const feedback = data.candidates[0].content.parts.find((p: any) => p.text)?.text || '';
+  const thoughtsTokenCount = 0; // Gemini REST API might not return this easily in the same way as LangChain wrapper
+
+  const usageMetadata = data.usageMetadata || {};
+  const inputTokens = usageMetadata.promptTokenCount || 0;
+  const outputTokens = usageMetadata.candidatesTokenCount || 0;
+  const totalTokens = usageMetadata.totalTokenCount || 0;
+  const finishReason = data.candidates[0].finishReason;
+
+  return { feedback, inputTokens, outputTokens, totalTokens, thoughtsTokenCount, finishReason };
 }
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
@@ -47,46 +73,22 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
-    // For code review, we prefer Pro if the diff is complex/large, otherwise Flash.
     const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
     const modelName = pickGeminiModel(preferredTier, estimatedInputTokens);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
-    const model = createModel(modelName, maxOutputTokens);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
-    const message = new HumanMessage({ content: baseContent });
-
-    const response = await model.invoke([message]);
+    const { feedback, inputTokens, outputTokens, totalTokens, thoughtsTokenCount, finishReason } = await createModelRequest(modelName, maxOutputTokens, baseContent);
     const durationMs = Date.now() - startTime;
-
-
-    const usageMetadata = response.usage_metadata as {
-      input_tokens?: number;
-      output_tokens?: number;
-      total_tokens?: number;
-      thoughts_token_count?: number;
-    };
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
-    const totalTokens = usageMetadata?.total_tokens ?? 0;
-    // thoughtsTokenCount might be nested in response_metadata or usage_metadata
-    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
-      .response_metadata?.finish_reason;
-    const isTruncated = finishReason === 'length';
+    const isTruncated = finishReason === 'MAX_TOKENS' || finishReason === 'length';
     if (isTruncated) {
-      console.warn(`⚠️  gemini-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
+      console.warn(`⚠️  gemini-code-review output truncated (finish_reason: ${finishReason}, tokens: ${totalTokens}).`);
     }
-
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

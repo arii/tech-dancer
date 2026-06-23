@@ -20,25 +20,13 @@ def call_ai(prompt: str, paths: List[str]) -> Optional[str]:
 
     if not images: return None
 
-    try:
-        from langchain_openai import ChatOpenAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        print("langchain_openai or langchain_core is not installed.")
-        return None
-
     token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     if not token:
         print("No GITHUB_TOKEN or GH_TOKEN found.")
         return None
 
-    llm = ChatOpenAI(
-        base_url="https://models.inference.ai.azure.com",
-        api_key=token,
-        model=VISION_MODEL,
-        temperature=0.7,
-        max_tokens=2048,
-    )
+    import urllib.request
+    import json
 
     message_content = [{"type": "text", "text": prompt}]
     for img in images:
@@ -47,9 +35,27 @@ def call_ai(prompt: str, paths: List[str]) -> Optional[str]:
             "image_url": {"url": f"data:image/jpeg;base64,{img}"}
         })
 
+    url = "https://models.inference.ai.azure.com/chat/completions"
+    data = {
+        "model": VISION_MODEL,
+        "messages": [{"role": "user", "content": message_content}],
+        "max_tokens": 2048,
+        "temperature": 0.7
+    }
+
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {token}"
+        }
+    )
+
     try:
-        response = llm.invoke([HumanMessage(content=message_content)])
-        return response.content
+        with urllib.request.urlopen(req) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+            return res_data["choices"][0]["message"]["content"]
     except Exception as e:
         print(f"❌ Vision call failed: {e}")
         return None

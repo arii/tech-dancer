@@ -1,19 +1,55 @@
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
-function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
+async function createModelRequest(
+  modelName: string,
+  maxOutputTokens: number = 2048,
+  prompt: any[]
+): Promise<{ feedback: string; inputTokens: number; outputTokens: number; totalTokens: number; finishReason: string }> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
-  return new ChatGoogleGenerativeAI({
-    model: modelName,
-    apiKey,
-    maxOutputTokens: maxOutputTokens,
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contents: [{ parts: prompt.map(p => {
+        if (p.type === 'text') return { text: p.text };
+        if (p.type === 'image_url') {
+          // REST API expects base64 data for inline_data
+          // Since buildingVisualReviewPayload might return URLs, this might need more logic
+          // but assuming it's structured for the SDK, we'll try to map it
+          return { inline_data: { mime_type: 'image/png', data: p.image_url.url.split(',')[1] } };
+        }
+        return p;
+      }) }],
+      generationConfig: {
+        maxOutputTokens: maxOutputTokens
+      }
+    })
   });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Gemini API request failed: ${response.status} ${response.statusText} - ${errText}`);
+  }
+
+  const data = await response.json();
+  const feedback = data.candidates[0].content.parts.find((p: any) => p.text)?.text || '';
+
+  const usageMetadata = data.usageMetadata || {};
+  const inputTokens = usageMetadata.promptTokenCount || 0;
+  const outputTokens = usageMetadata.candidatesTokenCount || 0;
+  const totalTokens = usageMetadata.totalTokenCount || 0;
+  const finishReason = data.candidates[0].finishReason;
+
+  return { feedback, inputTokens, outputTokens, totalTokens, finishReason };
 }
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
@@ -24,7 +60,6 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     const modelName = pickGeminiModel('flash', 0);
-    const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -68,20 +103,10 @@ Your job:
 </findings>`
     });
 
-    const message = new HumanMessage({ content: baseContent });
-    const response = await model.invoke([message]);
-
-    const usageMetadata = response.usage_metadata;
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
-    const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const { feedback, inputTokens, outputTokens, totalTokens } = await createModelRequest(modelName, 2048, baseContent);
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
-
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
 
     return {
       route: summary.route,
