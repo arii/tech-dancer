@@ -59,6 +59,9 @@ importers:
       motion:
         specifier: ^12.23.24
         version: 12.38.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      node-fetch:
+        specifier: ^3.3.2
+        version: 3.3.2
       papaparse:
         specifier: 5.5.3
         version: 5.5.3
