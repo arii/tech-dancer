@@ -81,13 +81,24 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
+    interface TextBlock {
+      type: 'text';
+      text: string;
+    }
+
+    function isTextBlock(block: unknown): block is TextBlock {
+      if (typeof block !== 'object' || block === null) return false;
+      const b = block as Record<string, unknown>;
+      return b.type === 'text' && typeof b.text === 'string';
+    }
+
     let feedback: string;
     if (typeof response.content === 'string') {
       feedback = response.content;
     } else if (Array.isArray(response.content)) {
       feedback = response.content
-        .filter((block: unknown) => typeof block === 'object' && block !== null && 'type' in block && block.type === 'text' && 'text' in block && typeof block.text === 'string')
-        .map((block: unknown) => typeof block === 'object' && block !== null && 'text' in block ? String(block.text) : '')
+        .filter(isTextBlock)
+        .map(block => block.text)
         .join('\n\n');
       if (!feedback) {
         feedback = JSON.stringify(response.content);
