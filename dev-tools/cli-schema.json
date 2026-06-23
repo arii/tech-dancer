@@ -1,8 +1,21 @@
 {
   "tool_name": "td_cli.py",
+  "schema_authority": "This file is the single source of truth for td_cli.py. Consult before every CLI call. Takes precedence over examples in AGENTS.md or any agent-specific instruction file.",
   "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
   "base_command": "python3 dev-tools/td_cli.py",
+  "never_do": [
+    "Do not chain subcommands in a single shell call",
+    "Do not use --help or -h to discover flags — use this schema",
+    "Do not guess flags not listed here",
+    "Do not run td_cli.py without checking this schema first",
+    "Do not use interactive menus if prompted"
+  ],
   "subcommands": {
+    "doctor": {
+      "description": "Performs a runtime consistency check (Node.js and pnpm versions) to ensure the environment matches the project contract.",
+      "exact_usage": "python3 dev-tools/td_cli.py doctor",
+      "required_flags": []
+    },
     "gh conflicts": {
       "description": "Runs a global check across the repository to detect any active PR merge conflicts.",
       "exact_usage": "python3 dev-tools/td_cli.py gh conflicts",
@@ -28,14 +41,12 @@
     "gh overlaps": {
       "description": "Identify and propose consolidation of PRs with high functional or structural overlap.",
       "exact_usage": "python3 dev-tools/td_cli.py gh overlaps --limit <LIMIT>",
-      "required_flags": [
+      "optional_flags": [
         {
           "flag": "--limit",
           "type": "integer",
           "description": "Maximum number of open PRs to process (default: 50)."
-        }
-      ],
-      "optional_flags": [
+        },
         {
           "flag": "--no-cache",
           "type": "boolean",
@@ -46,6 +57,10 @@
     "gh audit-pr": {
       "description": "Perform an automated audit on a specific Pull Request.",
       "exact_usage": "python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute",
+      "examples": [
+        "python3 dev-tools/td_cli.py gh audit-pr 2280 --fetch --audit --submit --execute",
+        "python3 dev-tools/td_cli.py gh audit-pr 2280 --fetch"
+      ],
       "required_arguments": [
         {
           "name": "pr_number",
@@ -113,7 +128,7 @@
       "required_flags": []
     },
     "gh validate-issue": {
-      "description": "Validate that a GitHub issue follows the required spec-driven sections.",
+      "description": "Validates that a GitHub issue follows the Spec-Driven Issue Template.",
       "exact_usage": "python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",
       "optional_flags": [
         {

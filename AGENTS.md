@@ -8,14 +8,22 @@ These are **rules for writing clean `.tsx` files** so UI code consistently follo
 
 ---
 
-## 0) Quick Start (Run at the beginning of UI work)
+## 0) Quick Start
 
+**Before reading any other section:**
+1. `dev-tools/cli-schema.json` — canonical CLI reference
+2. `.agent/INSTRUCTION_LAYERS.md` — which file owns which domain
+
+**For UI/TSX work, also read first:**
+- `.agents/skills/impeccable/SKILL.md`
+
+**Then run:**
 1. `python3 dev-tools/td_cli.py gh conflicts`
 2. `pnpm run audit`
 3. Read `TODO_ANTIPATTERNS.md`
 4. Implement changes using primitives/tokens only
 5. Re-run `pnpm run audit`
-6. Run `python3 dev-tools/td_cli.py gh pre-submit`
+6. `python3 dev-tools/td_cli.py gh pre-submit`
 
 ---
 
@@ -30,12 +38,7 @@ python3 dev-tools/td_cli.py gh conflicts
 python3 dev-tools/td_cli.py gh pre-submit
 ```
 
-- For discovery:
-
-```bash
-python3 dev-tools/td_cli.py --help
-python3 dev-tools/td_cli.py gh --help
-```
+- **CLI authority**: Always consult `dev-tools/cli-schema.json` for exact command syntax. Examples in this file are illustrative only. Do not run `--help` flags.
 
 - If a DevTools subcommand is unavailable in a local environment, report it separately and continue core verification with:
 
@@ -156,10 +159,12 @@ When multiple agents work simultaneously:
 
 `dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
 
+**CLI authority**: Always consult `dev-tools/cli-schema.json` for exact command syntax. Examples in this file are illustrative only.
+
 ### Issue Lifecycle
 
 All new issues must follow the **Spec-Driven Issue Template** (`.github/ISSUE_TEMPLATE/spec_driven_issue.md`).
-The `python3 dev-tools/td_cli.py gh validate-issue` command enforces this structure.
+The `python3 dev-tools/td_cli.py gh validate-issue --issue-number `<ISSUE_NUMBER>`` command enforces this structure.
 
 ### PR Review Lifecycle
 
@@ -173,8 +178,8 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`.
 
 - **Autonomous repair** (for persistent lint/type errors):
   ```bash
-  python3 dev-tools/td_cli.py ai repair
-  python3 dev-tools/td_cli.py ai repair --worktree
+  python3 dev-tools/td_cli.py agent repair
+  python3 dev-tools/td_cli.py agent repair --worktree
   ```
 - **CI Remediation**: For failing CI checks, follow the [CI Failure Remediation Guide](docs/agent/ci-remediation.md) to use targeted testing (e.g., `pnpm run test:e2e:targeted`).
 - **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
@@ -315,22 +320,3 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
    - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
    - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
 5. Ensure your changes introduce no new violations in touched files
-
-
-## Follow-up: Harden `td_cli.py gh conflicts` against malformed GitHub remote/token URLs
-
-`python3 dev-tools/td_cli.py gh conflicts` resolves correctly after the command-path fix, but it can still fail in Codex/Jules-style environments when the GitHub remote or token-derived URL is malformed.
-
-### Goal
-
-Make `gh conflicts` fail with a clear remediation message instead of a low-level malformed URL/auth error.
-
-### Acceptance criteria
-
-- Detect missing or malformed `origin` remote before running conflict logic.
-- Detect missing GitHub token / invalid token-derived URL separately.
-- Print a clear fix message, for example:
-  - `git remote add origin https://github.com/arii/tech-dancer.git`
-  - `Set CODEX_GH_TOKEN or GITHUB_TOKEN`
-- Prefer `CODEX_GH_TOKEN` when available, then fall back to `GITHUB_TOKEN`.
-- Do not mark command registration as failed when the command exists but environment setup is incomplete.
