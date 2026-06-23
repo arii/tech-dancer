@@ -55,6 +55,10 @@ _SYNTHESIS_SCHEMA = {
 class AIClient:
     def __init__(self, ai_model: str = None):
         self.ai_model = ai_model or get_ai_model()
+        # Default models for backward compatibility/internal calls
+        self.ollama_model = self.ai_model
+        self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
+
         self._dependency_graph = None
         self._vector_store = None
 
@@ -74,7 +78,7 @@ class AIClient:
         return is_ai_available()
 
     def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
+        return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:
