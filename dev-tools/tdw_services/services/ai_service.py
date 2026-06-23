@@ -116,11 +116,11 @@ class AIClient:
     def generate_code_review(self, pr: Dict, diff: str) -> Dict:
         """
         Two-phase piecemeal review:
-          Phase A: call Ollama once per file-chunk (≤50 added lines each) using
+          Phase A: call AI once per file-chunk (≤50 added lines each) using
                    the code-reviewer model.  Skips images, lock files, generated
                    files, and build artefacts.
           Phase B: synthesise all per-chunk results into a final PR verdict using
-                   the lighter gpt-4o model.
+                   the synthesis model.
         Results are cached per file-chunk so interrupted runs resume cheaply.
         """
         import hashlib
@@ -139,11 +139,11 @@ class AIClient:
         failing_names = ", ".join(c.get('name', '?') for c in ci_failures) if ci_failures else "none"
 
         # ── Diagnostics header ────────────────────────────────────────────────
-        ollama_ok = self.is_ai_available()
+        ai_ok = self.is_ai_available()
         print(f"\n{'='*60}")
         print(f"🔍 PR #{pr_num} – Piecemeal Review Diagnostics")
         print(f"{'='*60}")
-        print(f"  AI available : {'✅ YES' if ollama_ok else '❌ NO'}")
+        print(f"  AI available : {'✅ YES' if ai_ok else '❌ NO'}")
         print(f"  Review model     : {_REVIEW_MODEL}")
         print(f"  Synthesis model  : {_SYNTHESIS_MODEL}")
         print(f"  Diff size        : {len(diff):,} chars")

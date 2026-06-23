@@ -1,4 +1,4 @@
-export type LocalAgentProvider = "agy" | "ollama";
+export type LocalAgentProvider = "agy";
 
 export type JulesStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED";
 

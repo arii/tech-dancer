@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ollama_vision_audit.py - Vision-based regression audit via AI API.
+vision_audit.py - Vision-based regression audit via AI API.
 """
 
 import os
@@ -9,7 +9,7 @@ import base64
 import argparse
 from typing import Optional, List, Dict
 
-VISION_MODEL = os.environ.get("OLLAMA_VISION_MODEL", "gpt-4o")
+VISION_MODEL = os.environ.get("VISION_MODEL", "gpt-4o")
 
 def call_ai(prompt: str, paths: List[str]) -> Optional[str]:
     images = []

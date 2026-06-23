@@ -21,14 +21,6 @@ class APIConnectionError(Exception):
     """Custom exception for retriable API connection issues."""
     pass
 
-def get_ollama_url() -> str:
-    """Dynamic getter for Ollama API URL."""
-    return os.environ.get("OLLAMA_URL", "http://localhost:11434")
-
-def get_ollama_model() -> str:
-    """Dynamic getter for Ollama Model."""
-    return os.environ.get("OLLAMA_MODEL", "gpt-4o")
-
 def get_ai_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
     'gpt-4o' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on gpt-4o.
@@ -37,13 +29,13 @@ def get_ai_review_model() -> str:
 
 def get_ai_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
-    env_val = os.environ.get("AI_SYNTHESIS_MODEL") or os.environ.get("OLLAMA_SYNTHESIS_MODEL")
+    env_val = os.environ.get("AI_SYNTHESIS_MODEL")
     if env_val:
         return env_val
     try:
         from dev_tools_sdk.config import load_project_config
         config = load_project_config()
-        return config.ollama_synthesis_model
+        return getattr(config, "ai_synthesis_model", "gpt-4o-mini")
     except Exception:
         # Fallback to direct json reading if sdk not available
         try:
@@ -53,13 +45,13 @@ def get_ai_synthesis_model() -> str:
                 config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
             with open(config_path, "r") as f:
                 raw = json.load(f)
-                return raw.get("ollama_synthesis_model", "llama3.2")
+                return raw.get("ai_synthesis_model", "gpt-4o-mini")
         except Exception:
-            return "llama3.2"
+            return "gpt-4o-mini"
 
 def get_ai_model() -> str:
     """Dynamic getter for the primary AI model."""
-    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or os.environ.get("OLLAMA_MODEL") or "gpt-4o-mini"
+    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
@@ -94,24 +86,9 @@ def to_standard_schema(schema, uppercase: bool = False):
         return [to_standard_schema(item, uppercase=uppercase) for item in schema]
     return schema
 
-def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
+def call_ai(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call AI API using REST directly."""
     return call_github_models(prompt, model=model, max_retries=max_retries, schema=schema)
-
-def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call local Ollama API."""
-    base_url = url or get_ollama_url()
-    if not base_url.endswith("/"): base_url += "/"
-    target_url = urllib.parse.urljoin(base_url, "api/generate")
-
-    data = {"model": model or get_ollama_model(), "prompt": prompt, "stream": False}
-    if schema:
-        # Ollama/Qwen expects standard JSON schema with lowercase types
-        data["format"] = to_standard_schema(schema, uppercase=False)
-
-    req = urllib.request.Request(target_url, data=json.dumps(data).encode("utf-8"), headers={"Content-Type": "application/json"})
-    res = _call_api_with_retry(req, max_retries=max_retries, timeout=900)
-    return res.get("response") if res else None
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
@@ -157,15 +134,6 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         return res["candidates"][0]["content"]["parts"][0]["text"]
     return None
 
-def is_ollama_available() -> bool:
-    """Checks if Ollama is running and accessible."""
-    try:
-        req = urllib.request.Request(urllib.parse.urljoin(get_ollama_url(), "api/tags"))
-        with urllib.request.urlopen(req, timeout=2) as response:
-            return response.status == 200
-    except Exception:
-        return False
-
 def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, timeout: int = 60) -> Optional[Dict]:
     """Internal helper to execute urllib requests with retries and exponential backoff."""
     for attempt in range(max_retries):
@@ -191,7 +159,7 @@ def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3, time
 
 def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
     """
-    Orchestrates AI calls: GitHub Models -> Gemini -> Ollama.
+    Orchestrates AI calls: GitHub Models -> Gemini.
     """
     # 1. Try GitHub Models
     res = call_github_models(prompt, model=model, schema=schema)
@@ -200,10 +168,6 @@ def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[s
     # 2. Try Gemini
     res = call_gemini(prompt, schema=schema) # Gemini model naming is different, let it use default for now
     if res: return res
-
-    # 3. Try Ollama (Fallback)
-    if is_ollama_available():
-        return call_ollama(prompt, model=model, schema=schema)
 
     return None
 
