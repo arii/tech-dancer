@@ -146,12 +146,13 @@ def conflicts(ctx):
 
 @gh.command()
 @click.option('--pr', required=True, type=int, help="The PR number to resolve conflicts for.")
+@click.option('--allow-unrelated', is_flag=True, help="Allow merging unrelated histories.")
 @click.pass_context
-def resolve_conflicts(ctx, pr):
+def resolve_conflicts(ctx, pr, allow_unrelated):
     """Resolve merge conflicts for a PR in a separate worktree."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.resolve_pr_conflicts(pr)
+        res = orch.resolve_pr_conflicts(pr, allow_unrelated=allow_unrelated)
         out(ctx, res['message'], data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)

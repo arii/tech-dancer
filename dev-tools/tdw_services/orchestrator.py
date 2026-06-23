@@ -1009,14 +1009,21 @@ Respond only after the PR is created or updated:
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
 
-    def resolve_pr_conflicts(self, pr_number: int) -> Dict[str, Any]:
+    def resolve_pr_conflicts(self, pr_number: int, allow_unrelated: bool = False) -> Dict[str, Any]:
         """
         Sets up a worktree for a specific PR and attempts to merge the base branch.
         """
         original_cwd = os.getcwd()
-        worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}")
+        # Use a path that is clearly temporary and matches existing patterns for ignored files
+        worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}.tmp")
 
         try:
+            # 0. Pre-flight check for 'gh' CLI
+            try:
+                run_command(["gh", "--version"], check=False)
+            except Exception:
+                raise CLIError("The 'gh' CLI is required but was not found in your PATH. Please install it first.")
+
             # 1. Fetch PR details early to fail fast
             pr_data = self.github.fetch_pr_details(pr_number)
             base_branch = pr_data.get('base', {}).get('ref', 'main')
@@ -1043,14 +1050,18 @@ Respond only after the PR is created or updated:
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=False)
 
-            # Attempt merge from base branch
-            res = run_command(["git", "merge", f"origin/{base_branch}"], check=False)
+            # Attempt merge from base branch.
+            merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{pr_number}"]
+            if allow_unrelated:
+                merge_cmd.append("--allow-unrelated-histories")
+
+            res = run_command(merge_cmd, check=False)
 
             if res.returncode == 0:
-                message = f"✅ PR #{pr_number} merged successfully with {base_branch} in {worktree_path}"
+                message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
                 status = "success"
             else:
-                message = f"⚠️  Conflicts detected in PR #{pr_number} when merging {base_branch}. Resolve them in: {worktree_path}"
+                message = f"⚠️  Conflicts detected in PR #{pr_number} when merging {base_branch}.\nAction Required: Resolve them manually in the worktree.\nCommand: cd {worktree_path}"
                 status = "conflict"
 
             return {
