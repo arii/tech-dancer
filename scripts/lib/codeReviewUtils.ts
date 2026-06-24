@@ -135,6 +135,16 @@ export function extractFeedbackText(content: any): string {
   return feedback || '';
 }
 
+/**
+ * Strips machine-readable tags like <findings> and [VERDICT] from the feedback.
+ */
+export function cleanupFeedback(feedback: string): string {
+  let cleaned = feedback.replace(/<findings>[\s\S]*?<\/findings>/gi, '');
+  cleaned = cleaned.replace(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi, '');
+  // Collapse multiple newlines into two and trim
+  return cleaned.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 export type ReviewPayloadItem = { type: 'text'; text: string };
 
 export interface PayloadConfig {
