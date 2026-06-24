@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/aggregate-visual-review-18092582149350145366/sitemap.xml
