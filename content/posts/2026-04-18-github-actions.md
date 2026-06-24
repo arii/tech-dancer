@@ -62,7 +62,7 @@ audit:
     - run: pnpm install
     - name: UI Anti-Pattern Audit
       run: |
-        pnpm run audit || true
+        node scripts/detect-antipatterns.mjs || true
         python3 dev-tools/td_cli.py audit-gate
 ```
 

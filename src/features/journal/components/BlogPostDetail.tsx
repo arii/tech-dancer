@@ -88,7 +88,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                   <Grid cols={{ base: 1, md: 2 }} gap={4}>
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
-                      <EditorialHero src={post.image} alt={`${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
+                      <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
                     </Stack>
                     <Stack gap={2}>
                       <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
@@ -96,7 +96,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
                     </Stack>
                   </Grid>
                 ) : (
-                  <EditorialHero src={post.image} alt={post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
+                  <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
                 )}
                 {post.image?.includes('/sketches/') && (
                   <Text variant="mono" size="xs" color="dim" className="italic">
@@ -110,12 +110,12 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       }
       sidebar={
         affiliateLinks.length > 0 ? (
-          <Stack gap={6}>
+          <Stack gap={8}>
             <AffiliateDisclosure compact={true} />
             <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
               Shop selected items
             </Text>
-            <Stack gap={4}>
+            <Stack gap={6}>
               {affiliateLinks.map(link => (
                 <AffiliateCard key={link.id} link={link} />
               ))}
@@ -138,9 +138,9 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
         <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
           <Stack gap={4}>
             <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
-            <Stack direction="row" wrap gap={2}>
+            <Stack direction="row" wrap gap={3}>
               {post.tags.map(tag => (
-                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                <Box key={tag} paddingX={5} paddingY={2} surface="muted" border className="hover:border-accent transition-colors">
                   <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
                 </Box>
               ))}
