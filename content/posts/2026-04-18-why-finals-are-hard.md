@@ -1,13 +1,15 @@
 ---
 type: post
-draft: true
-status: draft
+draft: false
+status: published
 title: "Why Most Above-Average Dancers Don't Make Finals"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "WCS"
 excerpt: "A closer look at competition results and how judging works, explaining why placement is a poor metric for progress."
-image: ""
+image: "/assets/posts/competition-data-thumb.svg"
+imageAlt: "A technical bar chart titled 'WCS Competition Data Scraper' comparing Prelim Scores and Recall Rates across events like JJO, WWW, and P4J, with a dashed trend line indicating data patterns."
+imageFit: "contain"
 tags:
   - research
   - wcs
@@ -18,9 +20,27 @@ tags:
 
 In most West Coast Swing competitions, the margin between making a final and being the "first alternate" is razor-thin. When we look at the raw scores from events like the Jack & Jill O'Rama or Mission City Swing, we see a grouping of "above average" dancers who are often separated by a single judge's mark.
 
+```mermaid
+graph TD
+    A[Prelims: 60 Dancers] --> B[Quarterfinals: 32 Dancers]
+    B --> C[Semifinals: 18 Dancers]
+    C --> D[Finals: 10 Dancers]
+    style D fill:#00cfff,stroke:#00cfff,color:#000
+```
+
 ### How Results Vary
 
 If there are 40 dancers in a heat and only 10 make the final, the 11th through 15th dancers are basically tied in many cases. Differences in judging, split-second focus shifts, and partner pairings all play a role in the final results.
+
+```mermaid
+pie title "Scoring Distribution in Prelims"
+    "Definite Finals" : 5
+    "The Bubble (Alternate/Finalist)" : 10
+    "Strong Prelim Performance" : 15
+    "Developing" : 10
+```
+
+The "Bubble" represents the most volatile group in competition. These dancers have the skills to final, but their placement depends heavily on the specific "moment" captured by the judges.
 
 ### Looking at the Big Picture
 
