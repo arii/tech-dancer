@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -61,14 +60,23 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
     // Construct the standard messages payload
     // OpenAI REST API takes an array of parts for multi-modal content
-    let contentParts: any[] = [];
+    let contentParts: Array<{ type: string; text?: string; image_url?: { url: string } }> = [];
     if (typeof baseContent === 'string') {
         contentParts = [{ type: 'text', text: baseContent }];
     } else if (Array.isArray(baseContent)) {
         contentParts = baseContent.map(item => {
             if (typeof item === 'string') return { type: 'text', text: item };
-            // Ensure object matches API spec (type, text, or image_url)
-            return item;
+
+            // Structural transformation for Azure OpenAI REST API
+            const anyItem = item as any;
+            if (anyItem.type === 'image_url' && typeof anyItem.image_url === 'string') {
+                return {
+                    type: 'image_url',
+                    image_url: { url: anyItem.image_url }
+                };
+            }
+
+            return item as { type: string; text?: string; image_url?: { url: string } };
         });
     }
 
@@ -95,7 +103,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
             body: JSON.stringify(payload)
         });
     } catch (e) {
-        throw new Error(`Failed to fetch from GitHub Models API: ${e}`);
+        throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
     }
 
     if (!fetchResponse.ok) {
@@ -103,7 +111,15 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
         throw new Error(`GitHub Models API error: ${fetchResponse.status} ${fetchResponse.statusText} - ${errText}`);
     }
 
-    const response = await fetchResponse.json() as any;
+    const response = await fetchResponse.json() as {
+      usage?: {
+          prompt_tokens?: number,
+          completion_tokens?: number,
+          total_tokens?: number,
+          prompt_tokens_details?: { cached_tokens?: number }
+      },
+      choices?: Array<{ finish_reason?: string, message?: { content?: string } }>
+    };
 
     const usageMetadata = response.usage;
     const inputTokens = usageMetadata?.prompt_tokens ?? 0;
