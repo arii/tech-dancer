@@ -35,15 +35,14 @@ export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
       fs.mkdirSync(LOG_DIR, { recursive: true });
     }
 
-    // Clean up stale JSON files to prevent artifacts conflicts
-    const staleLogFile = path.join(LOG_DIR, 'review-run.json');
-    if (fs.existsSync(staleLogFile)) {
-      fs.unlinkSync(staleLogFile);
-    }
-    const staleArtifactsLogFile = path.join(process.cwd(), 'artifacts', 'review-run.json');
-    if (fs.existsSync(staleArtifactsLogFile)) {
-      fs.unlinkSync(staleArtifactsLogFile);
-    }
+    // Clean up stale JSON files safely to prevent artifacts conflicts or race conditions
+    try {
+      fs.unlinkSync(path.join(LOG_DIR, 'review-run.json'));
+    } catch { /* ignore */ }
+
+    try {
+      fs.unlinkSync(path.join(process.cwd(), 'artifacts', 'review-run.json'));
+    } catch { /* ignore */ }
 
     const logEntry: AIRunLogEntry = {
       timestamp: new Date().toISOString(),
