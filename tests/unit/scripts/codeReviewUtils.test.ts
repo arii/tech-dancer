@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -129,10 +129,12 @@ describe('codeReviewUtils', () => {
     });
 
     it('handles invalid JSON', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const feedback = `Some text\n<findings>\nbad json\n</findings>`;
       const result = parseCodeReviewStateDetailed(feedback);
       expect(result.state).toBeUndefined();
       expect(result.parseError).toBe('invalid_json');
+      consoleSpy.mockRestore();
     });
 
     it('handles no findings tags', () => {

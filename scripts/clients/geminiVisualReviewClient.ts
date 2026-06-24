@@ -2,7 +2,7 @@ import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel } from '../lib/geminiUtils';
+import { extractFinishReason, extractFeedbackText, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
@@ -71,8 +71,9 @@ Your job:
         usage: response.usage_metadata,
       });
 
-      maxOutputTokens = Math.round(maxOutputTokens * 1.25);
-      thinkingBudget = Math.round(thinkingBudget * 0.5);
+      const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
+      maxOutputTokens = newMax;
+      thinkingBudget = newThinking;
 
       model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
       response = await model.invoke([message]);

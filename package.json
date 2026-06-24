@@ -42,6 +42,7 @@
     "check:runtime-files": "node scripts/check-runtime-files.mjs",
     "preinstall": "node scripts/check-runtime.mjs",
     "drafter": "tsx scripts/affiliate/add-item.ts",
+    "ai:index": "python3 scripts/index-codebase.py",
     "affiliate:add": "tsx scripts/affiliate/add-item.ts",
     "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
     "affiliate:audit": "tsx scripts/affiliate/audit.ts",

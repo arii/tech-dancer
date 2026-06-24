@@ -31,13 +31,15 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
 
   // Strip markdown code block markers that LLMs sometimes insert inside the tags
-  jsonText = jsonText.replace(/^```(?:json|xml)?\s*/gi, '').replace(/\s*```$/g, '').trim();
+  jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
 
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
       console.warn('Failed to parse findings JSON from LLM response:', e);
+      // Log a snippet of the failed JSON for debugging
+      console.warn('JSON snippet:', jsonText.slice(0, 100) + '...');
     }
     return { state: undefined, parseError: 'invalid_json' };
   }
@@ -63,9 +65,6 @@ export function estimateMaxOutputTokens(
   const totalBudget = Math.ceil(estimatedOutput + thinkingBudget + outputPadding + priorFindingsBudget);
 
   // Hard ceiling — raised to match what the models actually support
-  // (gemini-3.5-flash and gemini-3.1-pro-preview both report
-  // maxOutputTokens: 8192 in geminiModelPicker.ts). The previous ceiling of
-  // 4096 was silently capping the budget below the model's real limit.
   return Math.min(totalBudget, 8192);
 }
 
