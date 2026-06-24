@@ -31,7 +31,7 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
 
   // Strip markdown code block markers that LLMs sometimes insert inside the tags
-  jsonText = jsonText.replace(/^\`\`\`(?:json|xml)?\s*/gi, '').replace(/\s*\`\`\`$/g, '').trim();
+  jsonText = jsonText.replace(/^```(?:json|xml)?\s*/gi, '').replace(/\s*```$/g, '').trim();
 
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
@@ -115,27 +115,38 @@ export function calculateEstimatedTokens(text: string | string[]): number {
   return Math.ceil(combined.length / 4);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function extractFeedbackText(content: any): string {
+export function extractFeedbackText(content: unknown): string {
   if (content === null || content === undefined) return '';
   let feedback: string;
+
   if (typeof content === 'string') {
-    feedback = content.replace(/^```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```$/i, '');
+    feedback = content.replace(/^\s*```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```\s*$/i, '');
   } else if (Array.isArray(content)) {
-    feedback = content
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .filter((p: any) => !p.thought)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((p: any) => p.text ?? '')
-      .join('');
+    const textParts = content
+      .filter((p: unknown) => {
+        if (typeof p === 'object' && p !== null) {
+          return !('thought' in p);
+        }
+        return true;
+      })
+      .map((p: unknown) => {
+        if (typeof p === 'object' && p !== null && 'text' in p) {
+          return String((p as Record<string, unknown>).text ?? '');
+        }
+        return '';
+      })
+      .filter(p => p !== ''); // Only keep actual text parts
+
+    if (textParts.length > 0) {
+      feedback = textParts.join('');
+    } else {
+      feedback = JSON.stringify(content); // Fallback to full JSON stringification if no text parts
+    }
   } else {
     feedback = JSON.stringify(content);
   }
 
-  if (!feedback && Array.isArray(content)) {
-    feedback = JSON.stringify(content);
-  }
-  return feedback || '';
+  return feedback;
 }
 
 /**

@@ -5,7 +5,8 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
-  extractFeedbackText
+  extractFeedbackText,
+  calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
@@ -49,8 +50,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     // Count every chunk that actually goes into the request.
-    const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
-    const estimatedInputTokens = Math.ceil(totalInputChars / 4);
+    const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
     const { apiKey, modelName, maxTokens } = await createModelConfig(estimatedInputTokens, maxOutputTokens);
