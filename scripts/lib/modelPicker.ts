@@ -1,4 +1,6 @@
 
+import fetch from 'node-fetch';
+
 export interface GitHubModel {
   id: string;
   name: string;
@@ -114,7 +116,7 @@ export async function pickOptimalModel(
 
 export async function pickOptimalGeminiModel(
   estimatedInputTokens: number = 0,
-  fallback: string = 'gemini-3.5-flash'
+  fallback: string = 'gemini-1.5-flash'
 ): Promise<string> {
   // Respect explicit user override if present
   if (process.env.GEMINI_MODEL) {
@@ -143,15 +145,15 @@ export async function pickOptimalGeminiModel(
     // Filter available models
     const availableModelNames = data.models.map((m: { name: string }) => m.name.replace('models/', ''));
 
-    // Preference list. If it's a huge context we might prefer gemini-3.1-pro or gemini-2.5-pro
-    // but gemini-3.1-pro is paid only.
+    // Preference list. If it's a huge context we might prefer gemini-1.5-pro
+    // but gemini-1.5-pro is paid only.
     let preferred: string[] = [];
     if (estimatedInputTokens > 200000) {
       // Prioritize pro models with high context
-      preferred = ['gemini-2.5-pro', 'gemini-3.1-pro', 'gemini-3.5-flash'];
+      preferred = ['gemini-1.5-pro', 'gemini-2.0-flash'];
     } else {
       // Prioritize flash models for cost/latency
-      preferred = ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-3.1-flash-lite'];
+      preferred = ['gemini-1.5-flash', 'gemini-2.0-flash'];
     }
 
     for (const pref of preferred) {
