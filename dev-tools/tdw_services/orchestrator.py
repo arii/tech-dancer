@@ -963,12 +963,9 @@ Respond only after the PR is created or updated:
             if strategy in ["ours", "theirs"]:
                 merge_cmd.extend(["-X", strategy])
 
-            try:
-                res = run_command(merge_cmd, check=False)
-            except Exception as e:
-                raise CLIError(f"Merge command execution failed unexpectedly: {str(e)}")
+            res = run_command(merge_cmd, check=False)
 
-            if getattr(res, "returncode", -1) == 0:
+            if res.returncode == 0:
                 message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
                 status = "success"
                 if push:
