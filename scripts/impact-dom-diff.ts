@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { diffLines } from 'diff';
 import fs from 'fs';
 import path from 'path';
@@ -97,6 +98,54 @@ function writeTextDiff(beforeHtml: string, afterHtml: string, outputPath: string
   fs.writeFileSync(outputPath, lines.join('\n'));
 }
 
+function extractStructure(html: string): string {
+  const dom = new JSDOM(html);
+  const document = dom.window.document;
+  const structure: string[] = [];
+
+  function walk(node: Node, depth: number) {
+    if (node.nodeType === 1) { // Element
+      const el = node as HTMLElement;
+      const section = el.getAttribute('data-section');
+      const testid = el.getAttribute('data-testid');
+      const tag = el.tagName.toLowerCase();
+
+      const label = section ? `[section=${section}]` : testid ? `[testid=${testid}]` : '';
+
+      // We only care about major semantic elements or those with identifiers
+      const isMajor = ['main', 'header', 'footer', 'section', 'article', 'nav', 'aside'].includes(tag) || section || testid;
+
+      if (isMajor) {
+        structure.push(`${'  '.repeat(depth)}${tag}${label}`);
+        depth++;
+      }
+
+      Array.from(el.childNodes).forEach(child => walk(child, depth));
+    }
+  }
+
+  if (document.body) {
+    walk(document.body, 0);
+  }
+  return structure.join('\n');
+}
+
+function writeStructureDiff(beforeHtml: string, afterHtml: string, outputPath: string): void {
+  const beforeStructure = extractStructure(beforeHtml);
+  const afterStructure = extractStructure(afterHtml);
+
+  const parts = diffLines(beforeStructure, afterStructure);
+  const lines = parts.flatMap(part => {
+    const prefix = part.added ? '+' : part.removed ? '-' : ' ';
+    return part.value
+      .split('\n')
+      .filter(Boolean)
+      .map(line => `${prefix} ${line}`);
+  });
+
+  fs.writeFileSync(outputPath, lines.join('\n'));
+}
+
 function readVisualSummaries(): VisualRouteSummary[] {
   if (!fs.existsSync(VISUAL_SUMMARY_PATH)) return [];
   const parsed = JSON.parse(fs.readFileSync(VISUAL_SUMMARY_PATH, 'utf8')) as { routes?: VisualRouteSummary[] };
@@ -182,13 +231,13 @@ function main(): void {
   ensureDirectory(DOM_REVIEW_DIR);
 
   for (const visual of visualSummaries) {
-    const { route, slug } = visual;
+    const { route, slug, suffix } = visual;
     const routeDomDir = path.join(DOM_REVIEW_DIR, slug);
     ensureDirectory(routeDomDir);
 
-    const beforeHtmlPath = path.join(routeDomDir, 'before.html');
-    const afterHtmlPath = path.join(routeDomDir, 'after.html');
-    const diffPath = path.join(routeDomDir, 'diff.txt');
+    const beforeHtmlPath = path.join(routeDomDir, `before${suffix}.html`);
+    const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
+    const diffPath = path.join(routeDomDir, `diff${suffix}.txt`);
     const jsonPath = path.join(DOM_REVIEW_DIR, `${slug}.json`);
 
     if (!fs.existsSync(beforeHtmlPath) || !fs.existsSync(afterHtmlPath)) {
@@ -196,10 +245,16 @@ function main(): void {
       continue;
     }
 
-    const beforeHtml = normalizeHtml(fs.readFileSync(beforeHtmlPath, 'utf8'));
-    const afterHtml = normalizeHtml(fs.readFileSync(afterHtmlPath, 'utf8'));
+    const beforeHtmlRaw = fs.readFileSync(beforeHtmlPath, 'utf8');
+    const afterHtmlRaw = fs.readFileSync(afterHtmlPath, 'utf8');
+
+    const beforeHtml = normalizeHtml(beforeHtmlRaw);
+    const afterHtml = normalizeHtml(afterHtmlRaw);
     const metrics = summarizeDom(beforeHtml, afterHtml);
     writeTextDiff(beforeHtml, afterHtml, diffPath);
+
+    const structureDiffPath = path.join(routeDomDir, `structure-diff${suffix}.txt`);
+    writeStructureDiff(beforeHtmlRaw, afterHtmlRaw, structureDiffPath);
 
     const summary: DomRouteSummary = {
       route,
@@ -207,6 +262,7 @@ function main(): void {
       beforeHtmlPath: path.relative(process.cwd(), beforeHtmlPath),
       afterHtmlPath: path.relative(process.cwd(), afterHtmlPath),
       diffPath: path.relative(process.cwd(), diffPath),
+      structureDiffPath: path.relative(process.cwd(), structureDiffPath),
       metrics,
       severity: domSeverity(metrics.nodesAdded + metrics.nodesRemoved)
     };

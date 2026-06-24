@@ -163,7 +163,6 @@ python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup --execute
 ```
 
 #### 2. Local AI Code Reviewer (Ollama)
-The CLI includes a local AI reviewer that reviews PR files using Ollama. For setup and detailed usage, see [docs/agent/ollama-reviewer.md](../docs/agent/ollama-reviewer.md).
 
 #### 3. Pre-Submission Quality Gate
 Before pushing code or opening a PR, run the full suite of local checks:

@@ -83,10 +83,10 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
 
     const data = await response.json();
     const usageMetadata = data.usage;
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
+    const inputTokens = usageMetadata?.input_tokens ?? usageMetadata?.prompt_tokens ?? 0;
+    const outputTokens = usageMetadata?.output_tokens ?? usageMetadata?.completion_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const cacheTokens = usageMetadata?.cache_read_tokens || 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens ?? usageMetadata?.prompt_tokens_details?.cached_tokens ?? 0;
 
     const cost = 0;
 

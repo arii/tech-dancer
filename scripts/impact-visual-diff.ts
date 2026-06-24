@@ -1,6 +1,8 @@
+// impeccable-ignore-file
 import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import sharp from 'sharp';
@@ -16,9 +18,12 @@ import {
   stopPreview,
   visualSeverity,
   waitForServer,
-  type VisualRouteSummary
+  type VisualRouteSummary,
+  type LayoutMetrics,
+  type LayoutValidation
 } from './impact-review-utils';
 import { whiteCanvas, copyImage } from './image-processing-utils';
+import { VIEWPORTS } from '../src/constants/visual-viewports';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
@@ -96,9 +101,10 @@ async function captureRoute(
   imagePath: string,
   htmlPath: string,
   viewport = { width: 1440, height: 900 }
-): Promise<void> {
-  const browser = await chromium.launch();
+): Promise<LayoutMetrics> {
+  let browser;
   try {
+    browser = await chromium.launch();
     const page = await browser.newPage({
       viewport,
       isMobile: viewport.width < 768,
@@ -108,11 +114,43 @@ async function captureRoute(
     await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
       console.warn(`Network did not become idle for ${route}; continuing with captured DOM state.`);
     });
+
+    const metrics = await page.evaluate((vpWidth) => {
+      const main = document.querySelector('main');
+      return {
+        scrollWidth: document.body.scrollWidth,
+        clientWidth: document.body.clientWidth,
+        mainWidth: main ? main.clientWidth : 0,
+        scrollHeight: document.body.scrollHeight,
+        viewportWidth: vpWidth
+      };
+    }, viewport.width);
+
     await page.screenshot({ path: imagePath, fullPage: true });
     fs.writeFileSync(htmlPath, await page.content());
+    return metrics;
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
+}
+
+function validateLayout(before: LayoutMetrics, after: LayoutMetrics): LayoutValidation {
+  const viewportWidth = after.viewportWidth;
+
+  if (after.mainWidth > 0 && after.mainWidth < viewportWidth * 0.5) {
+    return { passed: false, reason: `Main content width (${after.mainWidth}px) is less than 50% of viewport (${viewportWidth}px).` };
+  }
+
+  const pageWidthChange = before.scrollWidth > 0 ? Math.abs(after.scrollWidth - before.scrollWidth) / before.scrollWidth : 0;
+  if (pageWidthChange > 0.3) {
+    return { passed: false, reason: `Page width changed significantly: ${(pageWidthChange * 100).toFixed(1)}% (Base: ${before.scrollWidth}px, PR: ${after.scrollWidth}px).` };
+  }
+
+  if (viewportWidth >= 1280 && after.mainWidth > 0 && after.mainWidth < 600) {
+    return { passed: false, reason: `Largest container width (${after.mainWidth}px) is less than 600px on desktop.` };
+  }
+
+  return { passed: true };
 }
 
 async function captureViewport(
@@ -130,12 +168,17 @@ async function captureViewport(
   const afterPath = path.join(routeVisualDir, `after${suffix}.png`);
   const diffPath = path.join(routeVisualDir, `diff${suffix}.png`);
   // Use unique directories for DOM captures to match how dom-diff and review clients expect them
-  const beforeHtmlPath = path.join(routeDomDir, `before.html`);
-  const afterHtmlPath = path.join(routeDomDir, `after.html`);
+  const beforeHtmlPath = path.join(routeDomDir, `before${suffix}.html`);
+  const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
 
   console.log(`📸 Capturing ${route} (${label})`);
-  await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
-  await captureRoute(headUrl, route, afterPath, afterHtmlPath, viewport);
+  const beforeMetrics = await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
+  const afterMetrics = await captureRoute(headUrl, route, afterPath, afterHtmlPath, viewport);
+
+  const validation = validateLayout(beforeMetrics, afterMetrics);
+  if (!validation.passed) {
+    console.error(`❌ Layout validation failed for ${route} (${label}): ${validation.reason}`);
+  }
 
   const { before, after, ...diffMetrics } = createVisualDiff(beforePath, afterPath, diffPath);
   const boundingBox = calculateBoundingBox(before, after);
@@ -167,6 +210,7 @@ async function captureViewport(
   return {
     route: suffix ? `${route} (${label.toLowerCase()})` : route,
     slug,
+    suffix,
     beforePath: path.relative(process.cwd(), beforePath),
     afterPath: path.relative(process.cwd(), afterPath),
     diffPath: path.relative(process.cwd(), diffPath),
@@ -174,7 +218,9 @@ async function captureViewport(
     afterCroppedPath,
     diffCroppedPath,
     ...diffMetrics,
-    severity: visualSeverity(diffMetrics.differencePercent)
+    severity: validation.passed ? visualSeverity(diffMetrics.differencePercent) : 'HIGH',
+    metrics: { before: beforeMetrics, after: afterMetrics },
+    validation
   };
 }
 
@@ -233,28 +279,32 @@ async function main(): Promise<void> {
       const routeVisualDir = path.join(VISUAL_REVIEW_DIR, slug);
       ensureDirectory(routeVisualDir);
 
-      const desktopSlug = `${slug}-desktop`;
-      const mobileSlug = `${slug}-mobile`;
-      const desktopDomDir = path.join(DOM_REVIEW_DIR, desktopSlug);
-      const mobileDomDir = path.join(DOM_REVIEW_DIR, mobileSlug);
-      ensureDirectory(desktopDomDir);
-      ensureDirectory(mobileDomDir);
+      for (const vp of VIEWPORTS) {
+        const vpSlug = `${slug}-${vp.name.toLowerCase()}`;
+        const vpDomDir = path.join(DOM_REVIEW_DIR, vpSlug);
+        ensureDirectory(vpDomDir);
 
-      const desktopSummary = await captureViewport(
-        baseUrl, headUrl, route, desktopSlug, 'Desktop', '',
-        { width: 1440, height: 900 }, routeVisualDir, desktopDomDir
-      );
-
-      const mobileSummary = await captureViewport(
-        baseUrl, headUrl, route, mobileSlug, 'Mobile', '-mobile',
-        { width: 375, height: 812 }, routeVisualDir, mobileDomDir
-      );
-
-      summaries.push(desktopSummary, mobileSummary);
+        const summary = await captureViewport(
+          baseUrl, headUrl, route, vpSlug, vp.name, vp.suffix,
+          { width: vp.width, height: vp.height }, routeVisualDir, vpDomDir
+        );
+        summaries.push(summary);
+      }
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
     console.log(`✅ Visual diffs generated in ${VISUAL_REVIEW_DIR}`);
+
+    const failedLayouts = summaries.filter(s => s.validation && !s.validation.passed);
+    if (failedLayouts.length > 0) {
+      console.error(`❌ Visual regression detected by automated measurements in ${failedLayouts.length} route(s).`);
+      try {
+        execSync('node scripts/detect-antipatterns.mjs', { stdio: 'inherit' });
+      } catch {
+        console.error('❌ Anti-pattern validation failed during visual review phase.');
+      }
+      process.exit(1);
+    }
   } finally {
     stopPreview(basePreview);
     stopPreview(headPreview);

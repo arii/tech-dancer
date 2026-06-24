@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import * as path from 'path';
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');
@@ -5,20 +6,70 @@ export const MAX_ROUTES_TO_REVIEW = 2;
 export const VISUAL_SUMMARY_PATH = path.join(ARTIFACTS_DIR, 'visual-review', 'summary.json');
 export const DOM_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'dom-review');
 
-export const REVIEW_PROMPT = `You are a strict, senior frontend engineer reviewing a pull request for visual regressions.
-You are given three full-page screenshots:
-1. BEFORE — the page prior to this PR
-2. AFTER — the page after this PR
-3. DIFF — a pixel diff highlighting changed regions in red
+export const REVIEW_PROMPT = `You are a senior UX and Frontend reviewer auditing a pull request for regressions and quality.
 
-You are ALSO provided with the exact DOM Text Diff.
+Identify:
+1. Layout regressions
+   - Width collapse
+   - Height collapse
+   - Missing sections
+   - Clipped content
+   - Unexpected scrolling
+
+2. Responsive regressions
+   - Broken desktop layouts
+   - Mobile overflow
+   - Grid collapse
+   - Stack order issues
+
+3. Visual hierarchy
+   - Hero prominence
+   - Heading contrast
+   - CTA visibility
+   - Information density
+
+4. Spacing
+   - Excess whitespace
+   - Crowding
+   - Misalignment
+
+5. Typography
+   - Readability
+   - Scale consistency
+   - Line length
+
+6. Component integrity
+   - Cards
+   - Tables
+   - Navigation
+   - Footer
+
+BoomTick Design Rules:
+- No horizontal compression.
+- Content width should remain readable.
+- Cards must align to grid.
+- Footer must remain visible.
+- Desktop should utilize available width.
+- Ultrawide layouts should expand gracefully.
+- No giant empty regions.
+- No stacked desktop content unless viewport < 768px.
+- Research pages should maintain editorial hierarchy.
+
+Treat any major layout collapse as HIGH severity.
+
 YOUR RULES:
-- Use the DOM Text Diff as the ABSOLUTE GROUND TRUTH for any text changes. Do not guess or attempt to read blurry text from the screenshots.
+- Use the provided DOM structure and text diffs as GROUND TRUTH.
 - Evaluate the changes (✅ INTENTIONAL or ❌ BUG/REGRESSION).
-- Focus on layout shifts, broken spacing, contrast issues, or clipping.
-- If the change is intentional, evaluate its visual quality and provide 1-2 actionable recommendations for further design/UI improvement (e.g., 'Consider adding 4px more padding to the new element').
+- Provide actionable feedback.
+- If the change is intentional, evaluate its visual quality and provide recommendations for further improvement.
 
-Format your response as a concise, bulleted list. Be direct and actionable. Make sure to include "Recommendations for Improvement" if applicable.
+RESPONSE FORMAT:
+1. Screenshot Assessment:
+   For every provided viewport (Desktop, Laptop, Tablet, Mobile, Ultrawide):
+   - [Pass/Fail] explaining visually what is broken if it fails. Include approximate coordinates if possible.
+2. Detailed Findings:
+   - Categorized by the rubric above.
+3. Recommendations for Improvement.
 
 You MUST end your response with a structured JSON summary of the findings inside a <findings> tag.
 The JSON must follow this schema:

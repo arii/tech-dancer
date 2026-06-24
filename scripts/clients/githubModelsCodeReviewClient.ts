@@ -60,13 +60,16 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       throw new Error('Failed to build a valid messages payload for the AI client.');
     }
 
-    let response;
+    const apiKey = process.env.GITHUB_TOKEN;
+    const url = 'https://models.inference.ai.azure.com/chat/completions';
+
+    let fetchResponse;
     try {
-      response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+      fetchResponse = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -75,19 +78,33 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
           temperature: 0.1
         })
       });
-    } catch (err) {
-      throw new Error(`Network or fetch error during GitHub Models Code Review: ${err instanceof Error ? err.message : String(err)}`, { cause: err });
+    } catch (e) {
+      throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
     }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`GitHub Models API error: ${response.status} ${response.statusText} - ${errorText}`);
+    if (!fetchResponse.ok) {
+      const errText = await fetchResponse.text();
+      throw new Error(`GitHub Models API error: ${fetchResponse.status} ${fetchResponse.statusText} - ${errText}`);
     }
 
-    const data = await response.json();
-    const usageMetadata = data.usage;
+    const response = await fetchResponse.json() as {
+      usage?: {
+        prompt_tokens?: number,
+        completion_tokens?: number,
+        total_tokens?: number,
+        prompt_tokens_details?: { cached_tokens?: number }
+      },
+      choices?: Array<{ finish_reason?: string, message?: { content?: string } }>
+    };
+
+    const usageMetadata = response.usage;
+    const inputTokens = usageMetadata?.prompt_tokens ?? 0;
+    const outputTokens = usageMetadata?.completion_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const firstChoice = data.choices && data.choices[0];
+    const cacheTokens = usageMetadata?.prompt_tokens_details?.cached_tokens ?? 0;
+    const cost = 0;
+
+    const firstChoice = response.choices && response.choices[0];
     const finishReason = firstChoice?.finish_reason;
     const isTruncated = finishReason === 'length';
     if (isTruncated) {
@@ -102,10 +119,10 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     return {
       feedback: feedback,
       tokens: totalTokens,
-      inputTokens: usageMetadata?.prompt_tokens ?? 0,
-      outputTokens: usageMetadata?.completion_tokens ?? 0,
-      cacheTokens: usageMetadata?.prompt_tokens_details?.cached_tokens ?? 0,
-      cost: 0,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
+      cost: cost,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,
       modelName: modelName,

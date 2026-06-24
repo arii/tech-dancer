@@ -4,13 +4,14 @@ import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visu
 import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary, VisualReviewState } from './visualReviewTypes';
 import { logReviewExecution } from './aiLogger';
+export type AgentRole = 'CODE_REVIEW' | 'ACCESSIBILITY' | 'UX' | 'VISUAL_REGRESSION' | 'RESPONSIVE_LAYOUT';
 
 export interface LLMClientStrategy {
   botName: string;
   reportTitle: string;
   botTagline: string;
   reportFileName: string;
-  invokeReview: (summary: VisualRouteSummary) => Promise<RouteReview>;
+  invokeReview: (summary: VisualRouteSummary, role?: AgentRole) => Promise<RouteReview>;
 }
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
@@ -98,16 +99,22 @@ export async function orchestrateVisualReview(
   console.log(`🤖 Reviewing ${routesToReview.length} route(s) with ${client.botName}...`);
 
   const reviews: RouteReview[] = [];
+  const roles: AgentRole[] = ['CODE_REVIEW', 'ACCESSIBILITY', 'UX', 'VISUAL_REGRESSION', 'RESPONSIVE_LAYOUT'];
 
   for (const route of routesToReview) {
     console.log(`  → ${route.route} (${route.severity}, ${route.differencePercent.toFixed(2)}%)`);
-    const startTime = Date.now();
-    const review = await client.invokeReview(route);
-    const durationMs = Date.now() - startTime;
-    console.log(`    Feedback: ${review.feedback}`);
-    reviews.push(review);
 
-    logReviewExecution('visual-review', review, durationMs, { route: route.route });
+    // Execute all specialized agents for this route
+    const routeReviews = await Promise.all(roles.map(async (role) => {
+      console.log(`    → Agent: ${role}`);
+      const startTime = Date.now();
+      const review = await client.invokeReview(route, role);
+      const durationMs = Date.now() - startTime;
+      logReviewExecution('visual-review', review, durationMs, { route: route.route });
+      return { ...review, role };
+    }));
+
+    reviews.push(...routeReviews);
   }
 
   const report = generateMarkdownReport(reviews, client.botName, client.reportTitle, client.botTagline);

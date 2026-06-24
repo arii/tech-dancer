@@ -3,8 +3,17 @@ import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } 
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
-import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
+import type { LLMClientStrategy, AgentRole } from '../lib/visualReviewOrchestrator';
+
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
+
+const ROLE_PROMPTS: Record<AgentRole, string> = {
+  CODE_REVIEW: "You are a Senior Software Engineer. Focus on the impact of code changes on the rendered output. Verify that the DOM diff aligns with the visual changes.",
+  ACCESSIBILITY: "You are an Accessibility Specialist. Audit the page for contrast issues, tap target sizes, and semantic structure regressions.",
+  UX: "You are a Senior UX Researcher. Evaluate the visual hierarchy, information density, and overall user experience. Flag any 'BoomTick' design system violations.",
+  VISUAL_REGRESSION: "You are a QA Engineer specialized in visual testing. Look for unintended pixel-perfect shifts, clipping, and color regressions.",
+  RESPONSIVE_LAYOUT: "You are a Mobile-First Designer. Specifically audit how the layout collapses across viewports. Flag any horizontal compression or broken grids."
+};
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
@@ -12,13 +21,18 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
   botTagline: 'Powered by Gemini 3.x Vision + Blast-Radius Analyzer',
   reportFileName: 'gemini-review.md',
 
-  invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
+  invokeReview: async (summary: VisualRouteSummary, role: AgentRole = 'UX'): Promise<RouteReview> => {
     const modelName = pickGeminiModel('flash', 0);
 
     let maxOutputTokens = 4096;
     let thinkingBudget = 1024;
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
     const baseContent = buildVisualReviewPayload(summary);
+
+    baseContent.push({
+      type: 'text',
+      text: `YOUR SPECIFIC ROLE FOR THIS REVIEW: ${role}\n${ROLE_PROMPTS[role]}`
+    });
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
       const findingsStr = summary.previousFindings
