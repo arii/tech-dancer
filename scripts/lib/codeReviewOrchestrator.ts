@@ -202,54 +202,12 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const hasRealContent = externalContext.replace(/\n\n\.\.\.\[TRUNCATED EXTERNAL CONTEXT\]/g, '').trim().length > 0;
 
-    // AI Context enrichment
-    let impactSemanticContext = '';
-    try {
-      const batchFiles = [];
-      for (const file of files) {
-        if (!fs.existsSync(file)) continue;
-        const fileDiff = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' }).stdout || '';
-        if (fileDiff) {
-          batchFiles.push({ path: file, diff: fileDiff });
-        }
-      }
-
-      if (batchFiles.length > 0) {
-        const inputData = JSON.stringify({ files: batchFiles });
-        const res = spawnSync('python3', ['dev-tools/get_ai_context.py'], {
-          input: inputData,
-          encoding: 'utf-8',
-          maxBuffer: 1024 * 1024 * 50 // 50MB buffer for large diffs
-        });
-
-        if (res.status === 0 && res.stdout) {
-          const contextResults = JSON.parse(res.stdout);
-          for (const ctx of contextResults) {
-            if (ctx.dependencies?.length || ctx.dependents?.length || ctx.semantic?.length) {
-              impactSemanticContext += `\n\n### Context for ${ctx.path}\n`;
-              if (ctx.dependencies?.length) impactSemanticContext += `- Dependencies: ${ctx.dependencies.join(', ')}\n`;
-              if (ctx.dependents?.length) impactSemanticContext += `- Impacted (dependents): ${ctx.dependents.join(', ')}\n`;
-              if (ctx.semantic?.length) {
-                impactSemanticContext += `- Semantically related snippets:\n`;
-                for (const s of ctx.semantic) {
-                  impactSemanticContext += `  - From ${s.path}:\n    \`\`\`\n    ${s.document.slice(0, 300).replace(/\n/g, '\n    ')}\n    \`\`\`\n`;
-                }
-              }
-            }
-          }
-        }
-      }
-    } catch (err) {
-      console.warn('Could not gather impact/semantic context:', err);
-    }
-
     const summary: CodeReviewSummary = {
       diffContext,
       fullDiff,
       prGoal,
       changedFiles: files,
       externalContext: hasRealContent ? externalContext.trim() : undefined,
-      impactSemanticContext: impactSemanticContext.trim() || undefined,
     };
 
     summary.estimatedInputTokens = calculateEstimatedTokens([
