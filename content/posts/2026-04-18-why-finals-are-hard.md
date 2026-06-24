@@ -40,7 +40,7 @@ pie title "Scoring Distribution in Prelims"
     "Developing" : 10
 ```
 
-The "Bubble" represents the most volatile group in competition. These dancers have the skills to final, but their placement depends heavily on the specific "moment" captured by the judges.
+This distribution highlights the "noise" inherent in subjective judging. While the top tier is often clear, the majority of competitive dancers occupy a space where a single judge's preference for musicality over footwork (or vice versa) can swing a result from "Finalist" to "Alternate."
 
 ### Looking at the Big Picture
 
