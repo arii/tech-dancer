@@ -6,9 +6,9 @@ title: "Why Most Above-Average Dancers Don't Make Finals"
 date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "WCS"
-excerpt: "A closer look at competition results and how judging works, explaining why placement is a poor metric for progress."
+excerpt: "A data-driven look at the WSDC points system, the 'Tier 3 Sweet Spot', and why survival math is the hardest part of West Coast Swing."
 image: "/assets/posts/competition-data-thumb.svg"
-imageAlt: "A technical visualization from our WCS Data Scraper showing Prelim Scores and Recall Rates across five events, illustrating the clear patterns that emerge when we look beyond individual placements."
+imageAlt: "A technical visualization showing the WSDC Tier structure and round requirements, illustrating why the jump from Tier 3 to Tier 4 is the biggest hurdle for competitive dancers."
 imageFit: "contain"
 tags:
   - research
@@ -18,42 +18,62 @@ tags:
 
 ## The Reality of WCS Finals
 
-In most West Coast Swing competitions, the margin between making a final and being the "first alternate" is razor-thin. When we look at the raw scores from events like the Jack & Jill O'Rama or Mission City Swing, we see a grouping of "above average" dancers who are often separated by a single judge's mark.
+In West Coast Swing, the margin between making a final and being the "first alternate" is razor-thin. But it's not just about how you dance; it's about the **math of the Tier system**.
+
+The World Swing Dance Council (WSDC) defines Tiers based on the number of unique competitors. These Tiers determine both the points awarded and the number of rounds you must survive.
+
+### The Competition Funnel: Survive the Rounds
+
+As the number of competitors grows, so does the complexity of the tournament. The "survival math" changes dramatically once you hit Tier 4.
 
 ```mermaid
 graph TD
-    A[Prelims: 60 Dancers] --> B[Quarterfinals: 32 Dancers]
-    B --> C[Semifinals: 18 Dancers]
-    C --> D[Finals: 10 Dancers]
-    style D fill:#00cfff,stroke:#00cfff,color:#000
+    subgraph "Tier 3 (20-39 Dancers)"
+        T3A[Prelims] --> T3B[Finals: 10-12 Dancers]
+        style T3B fill:#00cfff,stroke:#00cfff,color:#000
+    end
+
+    subgraph "Tier 4 (40-79 Dancers)"
+        T4A[Prelims] --> T4B[Semifinals]
+        T4B --> T4C[Finals: 12-15 Dancers]
+        style T4C fill:#00cfff,stroke:#00cfff,color:#000
+    end
 ```
 
-### How Results Vary
+In a Tier 3 event, you only have to beat roughly 50-60% of the field once to make finals. In Tier 4, you have to beat the field in Prelims, and then beat a *filtered* field of semi-finalists just to get a chance to place.
 
-If there are 40 dancers in a heat and only 10 make the final, the 11th through 15th dancers are basically tied in many cases. Differences in judging, split-second focus shifts, and partner pairings all play a role in the final results.
+### The "Tier 3 Sweet Spot"
 
-```mermaid
-pie title "Scoring Distribution in Prelims"
-    "Definite Finals" : 5
-    "The Bubble (Alternate/Finalist)" : 10
-    "Strong Prelim Performance" : 15
-    "Developing" : 10
-```
+For many dancers, Tier 3 is the "Sweet Spot." It offers the best ratio of points-potential to effort.
 
-This distribution highlights the "noise" inherent in subjective judging. While the top tier is often clear, the majority of competitive dancers occupy a space where a single judge's preference for musicality over footwork (or vice versa) can be the deciding factor between a callback and a seat in the audience.
+| Tier | Competitors | Rounds | Points for 1st | Points for 5th | Points for 10th |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Tier 1 | 5-10 | 1 | 3 | 0 | 0 |
+| Tier 2 | 11-19 | 1-2 | 6 | 1 | 0 |
+| **Tier 3** | **20-39** | **2** | **10** | **2** | **1** |
+| Tier 4 | 40-79 | 3 | 15 | 6 | 1 |
+| Tier 5 | 80-129 | 3-4 | 20 | 10 | 2 |
 
-### Looking at the Big Picture
+**Why Tier 3 is better than Tier 4 for progress:**
+1. **Fewer Rounds:** You only need to be "on" for two dances (Prelims and Finals). Tier 4 requires a Semifinal round, which adds fatigue and another opportunity for a bad draw or a single mistake to knock you out.
+2. **Probability:** In Tier 3, with 20 dancers, 10 make finals. Your odds are 50%. In Tier 4, with 79 dancers, only 12-15 make finals. Your odds drop to ~18%.
+3. **The Bubble:** Because the field is smaller, the "noise" of judging has less impact.
 
-I'm building tools in the [DevAI Portfolio](/research) to look at these results across multiple events. By tracking performance over time rather than just looking at one rank, we can see a much more reliable picture of improvement.
+### Strategic Event Selection
+
+If you are hunting for points to move up a division, bigger isn't always better. A massive Tier 5 event like *The Open* or *Wild Wild West* is a "grind" where even elite dancers can get stuck in the "Semis Bubble."
 
 ```mermaid
 graph LR
-    A[Individual Events] --> B[Data Normalization]
-    B --> C[Historical Trends]
-    C --> D[True Progress]
+    A[Small Local Event] --> B{Strategy?}
+    B -->|Tier 2| C[Low Points / Easy Final]
+    B -->|Tier 3| D[The Sweet Spot: 10pts / 2 Rounds]
+    B -->|Tier 4+| E[High Variance / The Grind]
     style D fill:#00cfff,stroke:#00cfff,color:#000
 ```
 
-By aggregating data, we move away from the high variance of a single weekend and towards a meaningful understanding of your dance journey.
+### Looking at the Big Picture
 
-Don't let a "no-recall" define your weekend. Look at your dance videos.
+I'm building tools in the [DevAI Portfolio](/research) to normalize these results. By tracking whether you are consistently making Semis in Tier 4 or placing in Tier 3, we can see a much more reliable picture of your improvement than a single "No Recall" at a major event.
+
+Don't let the math discourage you—let it inform your expectations. If you made the Semis at a Tier 4 event, you are likely an "above-average" dancer who just got caught in the survival math.
