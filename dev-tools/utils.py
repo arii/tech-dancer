@@ -21,29 +21,20 @@ class APIConnectionError(Exception):
     """Custom exception for retriable API connection issues."""
     pass
 
-def get_ollama_url() -> str:
-    """Dynamic getter for Ollama API URL."""
-    return os.environ.get("OLLAMA_URL", "http://localhost:11434")
-
-def get_ollama_model() -> str:
-    """Dynamic getter for Ollama Model."""
-    return os.environ.get("OLLAMA_MODEL", "gpt-4o")
-
 def get_ai_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
-    'gpt-4o' is a custom alias defined in dev-tools/CodeReviewer.mf which is based on gpt-4o.
     """
-    return os.environ.get("OLLAMA_REVIEW_MODEL", "gpt-4o")
+    return os.environ.get("AI_REVIEW_MODEL", "gpt-4o")
 
 def get_ai_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
-    env_val = os.environ.get("AI_SYNTHESIS_MODEL") or os.environ.get("OLLAMA_SYNTHESIS_MODEL")
+    env_val = os.environ.get("AI_SYNTHESIS_MODEL")
     if env_val:
         return env_val
     try:
         from dev_tools_sdk.config import load_project_config
         config = load_project_config()
-        return config.ollama_synthesis_model
+        return getattr(config, "ai_synthesis_model", "gpt-4o-mini")
     except Exception:
         # Fallback to direct json reading if sdk not available
         try:
@@ -53,13 +44,13 @@ def get_ai_synthesis_model() -> str:
                 config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
             with open(config_path, "r") as f:
                 raw = json.load(f)
-                return raw.get("ollama_synthesis_model", "llama3.2")
+                return raw.get("ai_synthesis_model", "gpt-4o-mini")
         except Exception:
-            return "llama3.2"
+            return "gpt-4o-mini"
 
 def get_ai_model() -> str:
     """Dynamic getter for the primary AI model."""
-    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or os.environ.get("OLLAMA_MODEL") or "gpt-4o-mini"
+    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
@@ -107,7 +98,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
     if not token:
         return None
 
-    model = model or get_ollama_model()
+    model = model or get_ai_model()
 
     llm = ChatOpenAI(
         base_url="https://models.inference.ai.azure.com",
@@ -125,21 +116,6 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
     except Exception as e:
         print(f"AI Call failed: {e}", file=sys.stderr)
         return None
-
-def call_ollama(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call local Ollama API."""
-    base_url = url or get_ollama_url()
-    if not base_url.endswith("/"): base_url += "/"
-    target_url = urllib.parse.urljoin(base_url, "api/generate")
-
-    data = {"model": model or get_ollama_model(), "prompt": prompt, "stream": False}
-    if schema:
-        # Ollama/Qwen expects standard JSON schema with lowercase types
-        data["format"] = to_standard_schema(schema, uppercase=False)
-
-    req = urllib.request.Request(target_url, data=json.dumps(data).encode("utf-8"), headers={"Content-Type": "application/json"})
-    res = _call_api_with_retry(req, max_retries=max_retries, timeout=900)
-    return res.get("response") if res else None
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
@@ -166,28 +142,40 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call Gemini API."""
+    """Unified helper to call Gemini API using LangChain."""
+    try:
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        from langchain_core.messages import HumanMessage
+    except ImportError:
+        print("langchain_google_genai or langchain_core is not installed.", file=sys.stderr)
+        return None
+
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key: return None
+    if not api_key:
+        return None
 
-    target_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model or 'gemini-1.5-flash'}:generateContent?key={api_key}"
-    payload = {"contents": [{"parts": [{"text": prompt}]}]}
+    llm = ChatGoogleGenerativeAI(
+        model=model or "gemini-1.5-flash",
+        google_api_key=api_key,
+        temperature=0.7,
+        max_retries=max_retries,
+    )
+
     if schema:
-        # Gemini requires uppercase types in responseSchema
-        payload["generationConfig"] = {
-            "responseMimeType": "application/json",
-            "responseSchema": to_standard_schema(schema, uppercase=True)
-        }
+        # Note: structured output handling varies by LangChain version/provider
+        # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
+        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
 
-    req = urllib.request.Request(target_url, data=json.dumps(payload).encode("utf-8"), headers={"Content-Type": "application/json"})
-    res = _call_api_with_retry(req, max_retries=max_retries)
-    if res and "candidates" in res and len(res["candidates"]) > 0:
-        return res["candidates"][0]["content"]["parts"][0]["text"]
-    return None
+    try:
+        response = llm.invoke([HumanMessage(content=prompt)])
+        return response.content
+    except Exception as e:
+        print(f"Gemini Call failed: {e}", file=sys.stderr)
+        return None
 
 def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
     """
-    Orchestrates AI calls: GitHub Models -> Gemini -> Ollama.
+    Orchestrates AI calls: GitHub Models -> Gemini.
     """
     # 1. Try GitHub Models
     res = call_github_models(prompt, model=model, schema=schema)
@@ -196,10 +184,6 @@ def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[s
     # 2. Try Gemini
     res = call_gemini(prompt, schema=schema) # Gemini model naming is different, let it use default for now
     if res: return res
-
-    # 3. Try Ollama (Fallback)
-    if is_ollama_available():
-        return call_ollama(prompt, model=model, schema=schema)
 
     return None
 
