@@ -12,11 +12,12 @@ tags:
   - "outdoor"
   - "summer"
   - "gear"
+  - "travel"
 ---
 
 Dancing outdoors brings its own set of challenges, from sun exposure to keeping your valuables secure while you're active. Here’s the essential gear for your next outdoor festival or warm-weather social.
 
-![Ultra-light, bounce-free slim running belt designed to be worn discreetly under clothing, keeping keys and phone secure on the social floor.](/images/gear/amazon/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpg)
+![Ultra-light, bounce-free slim running belt designed for keys and phone, featuring a low-profile silhouette that stays secure on the social floor and fits discreetly under clothing.](/images/gear/amazon/ushake-slim-running-belt-ultra-light-bounce-free-waist-pouch-fitness-w.jpg)
 
 ### Keep Your Valuables Safe
 A slim fanny pack or running belt is perfect for keeping your phone, keys, and cash secure without adding bulk or restricting your movement.
@@ -29,4 +30,5 @@ If you're dancing under the sun, SPF 50 sunscreen and a good visor are essential
 ![Ergonomic performance visor providing sun protection while maintaining visibility and breathability for outdoor social dancing.](/images/gear/sketches/visor.webp)
 
 <notice type="affiliate" id="sunscreen"></notice>
+
 <notice type="affiliate" id="visor"></notice>
