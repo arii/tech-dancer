@@ -103,6 +103,14 @@ jobs:
             exit 1
           fi
 
+      - name: Verify Agent Context
+        run: |
+          pnpm run agent:prime
+          if ! git diff --quiet .agent-context.json; then
+            echo "::error::.agent-context.json is out of date. Run 'pnpm run agent:prime' and commit the changes."
+            exit 1
+          fi
+
       - name: Lint
         run: pnpm run lint
 

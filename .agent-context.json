@@ -171,9 +171,11 @@
     ".agent-context.json",
     ".agent/AGENT_CONTRACT.md",
     ".agent/INSTRUCTION_LAYERS.md",
+    ".github/workflows/ci.yml",
     "AGENTS.md",
     "boomtick-mcp/src/agents/repo-context.prompt.md",
     "dev-tools/cli-schema.json",
-    "package.json"
+    "package.json",
+    "scripts/build-repo-context.py"
   ]
 }

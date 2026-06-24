@@ -66,5 +66,11 @@ def build_repo_context():
     }
 
 if __name__ == "__main__":
-    context = build_repo_context()
-    print(json.dumps(context, indent=2))
+    try:
+        context = build_repo_context()
+        if not context.get("package_json"):
+            raise ValueError("Failed to gather basic repository context (package.json missing or invalid)")
+        print(json.dumps(context, indent=2))
+    except Exception as e:
+        print(f"FATAL: Context generation failed: {e}", file=sys.stderr)
+        sys.exit(1)
