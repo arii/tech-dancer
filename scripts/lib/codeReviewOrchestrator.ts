@@ -314,15 +314,15 @@ export async function orchestrateCodeReview(
 
   if (reviewResult.truncated) {
     console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
-    logReviewExecution('code-review', reviewResult, Date.now() - startTime);
+    logReviewExecution('code-review', reviewResult, reviewResult.durationMs ?? (Date.now() - startTime));
     const retryStartTime = Date.now();
     reviewResult = await client.invokeReview(summary, 8192);
-    reviewResult.durationMs = Date.now() - retryStartTime;
+    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - retryStartTime);
   } else {
-    reviewResult.durationMs = Date.now() - startTime;
+    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - startTime);
   }
 
-  logReviewExecution('code-review', reviewResult, reviewResult.durationMs);
+  logReviewExecution('code-review', reviewResult, reviewResult.durationMs); // Captured telemetry from client
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,
