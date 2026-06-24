@@ -163,32 +163,5 @@
     ".github/workflows/prune-stale-previews.yml",
     ".github/workflows/validate_issue.yml"
   ],
-  "test_snapshots": [],
-  "recent_commits": [
-    "ebbd2b8f fix: enforce gemini thinking tokens budget and verify complete responses (#2824)"
-  ],
-  "changed_files": [
-    ".agent-context.json",
-    ".agent/AGENT_CONTRACT.md",
-    ".agent/INSTRUCTION_LAYERS.md",
-    ".github/workflows/ci.yml",
-    ".github/workflows/codeql.yml",
-    ".github/workflows/deploy-image.yml",
-    ".github/workflows/deploy.yml",
-    ".github/workflows/issue-comment-dispatcher.yml",
-    ".github/workflows/issue_to_pr.yml",
-    ".github/workflows/jules-fix-trigger.yml",
-    ".github/workflows/mergellama.yml",
-    ".github/workflows/prune-stale-previews.yml",
-    ".github/workflows/self-healing.yml",
-    ".github/workflows/validate_issue.yml",
-    ".github/workflows/wcs_etl.yml",
-    ".github/workflows/workflow-validation.yml",
-    "AGENTS.md",
-    "boomtick-mcp/src/agents/repo-context.prompt.md",
-    "dev-tools/cli-schema.json",
-    "docs/guides/upgrading-versions.md",
-    "package.json",
-    "scripts/build-repo-context.py"
-  ]
+  "test_snapshots": []
 }

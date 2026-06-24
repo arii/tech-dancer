@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-import subprocess
 import json
 import pathlib
 import sys
 
 def build_repo_context():
-    """Gathers context about the repository."""
+    """Gathers static context about the repository."""
 
     # 1. Package JSON
     try:
@@ -35,28 +34,6 @@ def build_repo_context():
         print(f"Error reading snapshots: {e}", file=sys.stderr)
         test_snapshots = []
 
-    # 4. Recent Commits
-    try:
-        recent_commits = subprocess.check_output(
-            ["git", "log", "--oneline", "-10"]
-        ).decode().strip().splitlines()
-    except Exception as e:
-        print(f"Error getting recent commits: {e}", file=sys.stderr)
-        recent_commits = []
-
-    # 5. Changed Files
-    changed_files = []
-    for ref in ["origin/main", "main"]:
-        try:
-            changed_files = subprocess.check_output(
-                ["git", "diff", "--name-only", ref],
-                stderr=subprocess.DEVNULL
-            ).decode().strip().splitlines()
-            if changed_files:
-                break
-        except Exception:
-            continue
-
     # Assemble context
     return {
         "repo": {
@@ -65,8 +42,6 @@ def build_repo_context():
         "package_json": package_summary,
         "workflows": workflows,
         "test_snapshots": test_snapshots,
-        "recent_commits": recent_commits,
-        "changed_files": changed_files,
     }
 
 if __name__ == "__main__":
