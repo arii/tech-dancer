@@ -441,6 +441,8 @@ jobs:
       - name: Merge AI Logs into Artifacts
         if: always()
         run: |
+          # Clean up legacy logs
+          rm -f dev-tools/logs/ai/review-run.json artifacts/review-run.json || true
           mkdir -p artifacts/logs/ai
           cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
 
