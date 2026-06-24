@@ -50,26 +50,36 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     // Count every chunk that actually goes into the request.
-    const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
+    const calculatedTokens = calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
+    const estimatedInputTokens = Math.max(summary.estimatedInputTokens || 0, calculatedTokens);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
     const { apiKey, modelName, maxTokens } = await createModelConfig(estimatedInputTokens, maxOutputTokens);
 
     const messages = buildReviewPayload(systemPrompt, diffText, externalText);
 
-    const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: modelName,
-        messages: messages,
-        max_tokens: maxTokens,
-        temperature: 0.1
-      })
-    });
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      throw new Error('Failed to build a valid messages payload for the AI client.');
+    }
+
+    let response;
+    try {
+      response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: messages,
+          max_tokens: maxTokens,
+          temperature: 0.1
+        })
+      });
+    } catch (err) {
+      throw new Error(`Network or fetch error during GitHub Models Code Review: ${err instanceof Error ? err.message : String(err)}`, { cause: err });
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -89,7 +99,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
-    const rawContent = firstChoice?.message?.content;
+    const rawContent = firstChoice?.message?.content || '';
     const feedback = extractFeedbackText(rawContent);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
