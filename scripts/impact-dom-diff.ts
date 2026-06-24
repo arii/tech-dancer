@@ -119,7 +119,7 @@ function extractStructure(html: string): string {
         depth++;
       }
 
-      el.childNodes.forEach(child => walk(child, depth));
+      Array.from(el.childNodes).forEach(child => walk(child, depth));
     }
   }
 
@@ -230,13 +230,13 @@ function main(): void {
   ensureDirectory(DOM_REVIEW_DIR);
 
   for (const visual of visualSummaries) {
-    const { route, slug } = visual;
+    const { route, slug, suffix } = visual;
     const routeDomDir = path.join(DOM_REVIEW_DIR, slug);
     ensureDirectory(routeDomDir);
 
-    const beforeHtmlPath = path.join(routeDomDir, 'before.html');
-    const afterHtmlPath = path.join(routeDomDir, 'after.html');
-    const diffPath = path.join(routeDomDir, 'diff.txt');
+    const beforeHtmlPath = path.join(routeDomDir, `before${suffix}.html`);
+    const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
+    const diffPath = path.join(routeDomDir, `diff${suffix}.txt`);
     const jsonPath = path.join(DOM_REVIEW_DIR, `${slug}.json`);
 
     if (!fs.existsSync(beforeHtmlPath) || !fs.existsSync(afterHtmlPath)) {
@@ -252,7 +252,7 @@ function main(): void {
     const metrics = summarizeDom(beforeHtml, afterHtml);
     writeTextDiff(beforeHtml, afterHtml, diffPath);
 
-    const structureDiffPath = path.join(routeDomDir, 'structure-diff.txt');
+    const structureDiffPath = path.join(routeDomDir, `structure-diff${suffix}.txt`);
     writeStructureDiff(beforeHtmlRaw, afterHtmlRaw, structureDiffPath);
 
     const summary: DomRouteSummary = {

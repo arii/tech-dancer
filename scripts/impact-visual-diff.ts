@@ -107,8 +107,9 @@ async function captureRoute(
   htmlPath: string,
   viewport = { width: 1440, height: 900 }
 ): Promise<LayoutMetrics> {
-  const browser = await chromium.launch();
+  let browser;
   try {
+    browser = await chromium.launch();
     const page = await browser.newPage({
       viewport,
       isMobile: viewport.width < 768,
@@ -134,7 +135,7 @@ async function captureRoute(
     fs.writeFileSync(htmlPath, await page.content());
     return metrics;
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
 }
 
@@ -145,7 +146,7 @@ function validateLayout(before: LayoutMetrics, after: LayoutMetrics): LayoutVali
     return { passed: false, reason: `Main content width (${after.mainWidth}px) is less than 50% of viewport (${viewportWidth}px).` };
   }
 
-  const pageWidthChange = Math.abs(after.scrollWidth - before.scrollWidth) / before.scrollWidth;
+  const pageWidthChange = before.scrollWidth > 0 ? Math.abs(after.scrollWidth - before.scrollWidth) / before.scrollWidth : 0;
   if (pageWidthChange > 0.3) {
     return { passed: false, reason: `Page width changed significantly: ${(pageWidthChange * 100).toFixed(1)}% (Base: ${before.scrollWidth}px, PR: ${after.scrollWidth}px).` };
   }
@@ -172,8 +173,8 @@ async function captureViewport(
   const afterPath = path.join(routeVisualDir, `after${suffix}.png`);
   const diffPath = path.join(routeVisualDir, `diff${suffix}.png`);
   // Use unique directories for DOM captures to match how dom-diff and review clients expect them
-  const beforeHtmlPath = path.join(routeDomDir, `before.html`);
-  const afterHtmlPath = path.join(routeDomDir, `after.html`);
+  const beforeHtmlPath = path.join(routeDomDir, `before${suffix}.html`);
+  const afterHtmlPath = path.join(routeDomDir, `after${suffix}.html`);
 
   console.log(`📸 Capturing ${route} (${label})`);
   const beforeMetrics = await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
@@ -214,6 +215,7 @@ async function captureViewport(
   return {
     route: suffix ? `${route} (${label.toLowerCase()})` : route,
     slug,
+    suffix,
     beforePath: path.relative(process.cwd(), beforePath),
     afterPath: path.relative(process.cwd(), afterPath),
     diffPath: path.relative(process.cwd(), diffPath),

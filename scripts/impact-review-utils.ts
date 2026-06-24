@@ -26,6 +26,7 @@ export interface LayoutValidation {
 export interface VisualRouteSummary {
   route: string;
   slug: string;
+  suffix: string;
   beforePath: string;
   afterPath: string;
   diffPath: string;
@@ -53,7 +54,7 @@ export interface DomRouteSummary {
   beforeHtmlPath: string;
   afterHtmlPath: string;
   diffPath: string;
-  structureDiffPath?: string;
+  structureDiffPath: string;
   metrics: {
     nodesAdded: number;
     nodesRemoved: number;
