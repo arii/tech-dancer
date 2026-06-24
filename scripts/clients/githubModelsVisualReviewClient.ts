@@ -8,24 +8,14 @@ import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 
-async function createModel(estimatedInputTokens: number = 0): Promise<{ model: ChatOpenAI; modelName: string }> {
+async function createModelConfig(estimatedInputTokens: number = 0): Promise<{ apiKey: string; modelName: string; maxTokens: number }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
   const modelName = await pickOptimalModel(apiKey, fallback, true, estimatedInputTokens);
-  
-  const model = new ChatOpenAI({
-    modelName: modelName,
-    apiKey: apiKey,
-    configuration: {
-      baseURL: 'https://models.inference.ai.azure.com',
-    },
-    maxTokens: 1024,
-    temperature: 0.1,
-  });
 
-  return { model, modelName };
+  return { apiKey, modelName, maxTokens: 1024 };
 }
 
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
@@ -43,7 +33,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
     }
     const estimatedInputTokens = Math.ceil(domDiffLength / 4);
 
-    const { model, modelName } = await createModel(estimatedInputTokens);
+    const { apiKey, modelName, maxTokens } = await createModelConfig(estimatedInputTokens);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -79,7 +69,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
         body: JSON.stringify({
           model: modelName,
           messages: [{ role: 'user', content: baseContent }],
-          max_tokens: 1024,
+          max_tokens: maxTokens,
           temperature: 0.1
         })
       });
