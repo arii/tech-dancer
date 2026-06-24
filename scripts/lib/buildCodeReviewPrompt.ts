@@ -76,8 +76,18 @@ ${uiAuditInstruction}Severity rules — apply these strictly:
   "Nitpick" section instead.
 - Do not raise a concern you cannot verify against the code you were given. State what
   you'd need to see to verify it, rather than assuming the worst case.
+
+Snippet and verification rules:
+- STRICT SNIPPET RULE: When citing an error or anti-pattern, you MUST quote the entire, exact line from the diff in the "snippet" field. Do not truncate the line.
+- Before flagging a "syntax error" or "missing property/method", re-read the diff to confirm the code isn't simply continued on the next line or truncated in the diff chunk. Hallucinating errors due to chunk truncation is a severe failure.
+- If a line appears truncated in the diff (e.g. at the edge of a chunk), DO NOT assume it is a syntax error. Assume it is valid code that continues outside the visible context.
 ${dynamicGuidance}
 Scope and security rules:
+- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
+- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or
+  broken by this diff. If a symbol is used but its definition is not in the context,
+  ASSUME it is correctly defined elsewhere.
+- DO NOT hallucinate bugs in code you cannot see.
 - Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
   user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
 - Do not introduce review topics unrelated to the PR's stated goal unless you find a

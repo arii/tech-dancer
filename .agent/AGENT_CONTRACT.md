@@ -1,5 +1,13 @@
 # Agent Contract
 
+## Available Workflows
+
+Read the matching workflow before starting these task types:
+- PR audit → `.agent/workflows/review-pr.md`
+- UX review → `.agent/workflows/review-ux.md`
+
+
+
 ## What You Will Always Do
 
 - Read all referenced files before taking any action.
