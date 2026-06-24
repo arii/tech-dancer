@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import argparse
 
 # Add dev-tools to path
 sys.path.append(os.path.join(os.getcwd(), "dev-tools"))
