@@ -110,12 +110,12 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       }
       sidebar={
         affiliateLinks.length > 0 ? (
-          <Stack gap={6}>
+          <Stack gap={8}>
             <AffiliateDisclosure compact={true} />
             <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
               Shop selected items
             </Text>
-            <Stack gap={4}>
+            <Stack gap={6}>
               {affiliateLinks.map(link => (
                 <AffiliateCard key={link.id} link={link} />
               ))}
@@ -140,7 +140,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
             <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
             <Stack direction="row" wrap gap={2}>
               {post.tags.map(tag => (
-                <Box key={tag} paddingX={3} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
+                <Box key={tag} paddingX={4} paddingY={1} surface="muted" border className="hover:border-accent transition-colors">
                   <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
                 </Box>
               ))}

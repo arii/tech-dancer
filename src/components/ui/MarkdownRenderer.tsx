@@ -1,5 +1,4 @@
 
-import { Children, isValidElement } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -174,21 +173,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
           },
           p: ({node: _node, children, ...props}) => {
-            // Check if any child is a block-level element (like our img component which returns a Box/div)
-            // React-markdown sometimes nests images inside paragraphs.
-            const hasBlockChild = Children.toArray(children).some(
-              (child) =>
-                isValidElement(child) &&
-                typeof child.type !== 'string' &&
-                // Check if it's one of our components that might render a Box
-                ((child.props as Record<string, unknown>)?.node as Record<string, unknown>)?.type === 'element'
-            );
-
-            if (hasBlockChild) {
-              return <Box marginY={6}>{children}</Box>;
-            }
-
-            return <Text as="p" color="dim" leading="relaxed" marginY={6} size="lg" {...props}>{children}</Text>;
+            // Always render as div to safely contain any children (block or inline)
+            // while preserving paragraph-like styling. This prevents hydration errors.
+            return <Text as="div" color="dim" leading="relaxed" marginY={8} size="lg" {...props}>{children}</Text>;
           },
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
