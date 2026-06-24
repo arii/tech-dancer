@@ -66,20 +66,20 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
 
   return (
     <Box width="full" className="card-screenshot-wrapper border-b border-white/8 cursor-zoom-in" onClick={handleImageClick}>
-      <img
+      <Box as="img"
         src={src}
         alt={alt}
-        className="opacity-heavy hover:opacity-100 transition-opacity duration-500 w-full"
+        className="opacity-heavy hover:opacity-100 transition-opacity duration-500 motion-reduce:transition-none w-full"
       />
     </Box>
   );
 }
 
 
-function TagsList({ tags }: { tags: string[] }) {
+function TagsList({ tags }: { tags?: string[] }) {
   if (!tags || tags.length === 0) return null;
   return (
-    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+    <Box display="flex" wrap="wrap" gap={2} marginBottom={3}>
       {tags.map(tag => (
         <Text key={tag} className="flagship-tag">{tag}</Text>
       ))}
@@ -116,13 +116,13 @@ function FlagshipCard({
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
-            <Box width={12} height={12} surface="muted" radius="lg" display="flex" align="center" justify="center" className="border border-white/8">
+            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
             <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
           </Box>
 
-          <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
+          <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wide" marginBottom={1}>
             {tool.category}
           </Text>
           <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
@@ -251,7 +251,7 @@ function ToolCard({ tool, navigate }: {
           </Box>
           <StatusBadge label={tool.status} />
         </Box>
-        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
+        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="wide" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
         <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
         {tool.subtitle && (
           <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
@@ -273,7 +273,7 @@ function ToolCard({ tool, navigate }: {
         <TagsList tags={tool.tags} />
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
-        <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
+        <Text weight="font-bold" size="xs" uppercase tracking="wide" color="accent">
           {isLink ? 'View Source' : 'View Assets'}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
@@ -297,7 +297,7 @@ function ToolSection({ title, tools, navigate }: { title: string, tools: Researc
     <Stack gap={12} width="full">
       <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
         <Text variant="headline" size="2xl" weight="font-black">{title}</Text>
-        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{tools.length} TOOLS</Text>
+        <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="wide" opacityVariant="subtle">{tools.length} TOOLS</Text>
       </Box>
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
         {tools.map((tool) => (
@@ -343,7 +343,7 @@ export default function ResearchAnalytics() {
             
             {/* Scrollable Focus Tags for Mobile */}
             <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
-              <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
+              <Text size="micro" color="dim" uppercase tracking="wide" weight="font-bold">Focus</Text>
               <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
                 {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
                   <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
@@ -355,7 +355,7 @@ export default function ResearchAnalytics() {
             <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
               {STACK_CATEGORIES.map(cat => (
                 <Box key={cat.label} display="flex" align="center" gap={2} width="full">
-                  <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
+                  <Text size="micro" color="dim" uppercase tracking="wide" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
                   <Box display="flex" wrap="wrap" gap={2} width="full">
                     {cat.tags.map(tag => (
                       <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cat.colorClass}>{tag}</Text>
@@ -381,7 +381,7 @@ export default function ResearchAnalytics() {
         <Stack gap={8} id="flagship" marginTop={2} width="full">
           <Box paddingBottom={2} display="flex" justify="between" align="center" border="b" width="full">
             <Text variant="headline" size="2xl" weight="font-black">Flagship Projects</Text>
-            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">CASE STUDIES</Text>
+            <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="wide" opacityVariant="subtle">CASE STUDIES</Text>
           </Box>
           <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
             {flagshipTools.map((tool) => (
@@ -411,7 +411,7 @@ export default function ResearchAnalytics() {
           <Stack gap={12} id="articles" width="full">
             <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
               <Text as="h2" variant="headline" size="2xl" weight="font-black">Articles & Research</Text>
-              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{studies.length} POSTS</Text>
+              <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="wide" opacityVariant="subtle">{studies.length} POSTS</Text>
             </Box>
 
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
@@ -436,7 +436,7 @@ export default function ResearchAnalytics() {
                   gap={0}
                 >
                   <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
-                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
+                    <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="wide">{study.category}</Text>
                     {study.status && <StatusBadge label={study.status} />}
                   </Box>
 
@@ -460,7 +460,7 @@ export default function ResearchAnalytics() {
                   <TagsList tags={study.tags} />
 
                   <Box display="flex" align="center" gap={2} marginTop="auto">
-                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
+                    <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="wide" color="accent">
                       {study.status === 'planned'
                         ? 'Coming Soon'
                         : study.status === 'draft'
@@ -492,18 +492,18 @@ export default function ResearchAnalytics() {
 
           {/* Contact Details Column (Right) */}
           <Stack gap={4} span={{ base: 1, md: 5 }} align={{ base: "start", md: "end" }} textAlign={{ base: "left", md: "right" }}>
-            <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" weight="font-bold" opacityVariant="subtle">Get in touch</Text>
+            <Text variant="mono" size="xs" color="dim" uppercase tracking="wide" weight="font-bold" opacityVariant="subtle">Get in touch</Text>
             <Box display="flex" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
               <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
-                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wide">Email</Text>
               </Box>
               <Text color="dim" opacityVariant="muted" size="xs">·</Text>
               <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wide">LinkedIn</Text>
               </Box>
               <Text color="dim" opacityVariant="muted" size="xs">·</Text>
               <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
+                <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="wide">GitHub</Text>
               </Box>
             </Box>
           </Stack>
