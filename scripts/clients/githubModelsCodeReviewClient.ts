@@ -4,14 +4,15 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
-  extractFeedbackText
+  extractFeedbackText,
+  calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
-async function createModel(
+async function createModelConfig(
   estimatedInputTokens: number = 0,
   maxOutputTokens: number = 1500
 ): Promise<{ modelName: string, maxTokens: number }> {
@@ -47,77 +48,51 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
-    // Count every chunk that actually goes into the request.
-    const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
-    const estimatedInputTokens = Math.ceil(totalInputChars / 4);
+    const calculatedTokens = calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
+    const estimatedInputTokens = Math.max(summary.estimatedInputTokens || 0, calculatedTokens);
 
-    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
-    const { modelName, maxTokens } = await createModel(estimatedInputTokens, maxOutputTokens);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0);
+    const { modelName, maxTokens } = await createModelConfig(estimatedInputTokens, maxOutputTokens);
 
-    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
+    const messages = buildReviewPayload(systemPrompt, diffText, externalText);
+
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      throw new Error('Failed to build a valid messages payload for the AI client.');
+    }
 
     const apiKey = process.env.GITHUB_TOKEN;
     const url = 'https://models.inference.ai.azure.com/chat/completions';
 
-    // Construct the standard messages payload
-    // OpenAI REST API takes an array of parts for multi-modal content
-    let contentParts: Array<{ type: string; text?: string; image_url?: { url: string } }> = [];
-    if (typeof baseContent === 'string') {
-        contentParts = [{ type: 'text', text: baseContent }];
-    } else if (Array.isArray(baseContent)) {
-        contentParts = baseContent.map(item => {
-            if (typeof item === 'string') return { type: 'text', text: item };
-
-            // Structural transformation for Azure OpenAI REST API
-            const recordItem = item as Record<string, unknown>;
-            if (recordItem.type === 'image_url' && typeof recordItem.image_url === 'string') {
-                return {
-                    type: 'image_url',
-                    image_url: { url: recordItem.image_url }
-                };
-            }
-
-            return item as { type: string; text?: string; image_url?: { url: string } };
-        });
-    }
-
-    const payload = {
-        model: modelName,
-        messages: [
-            {
-                role: 'user',
-                content: contentParts
-            }
-        ],
-        max_tokens: maxTokens,
-        temperature: 0.1
-    };
-
     let fetchResponse;
     try {
-        fetchResponse = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify(payload)
-        });
+      fetchResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: messages,
+          max_tokens: maxTokens,
+          temperature: 0.1
+        })
+      });
     } catch (e) {
-        throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
+      throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
     }
 
     if (!fetchResponse.ok) {
-        const errText = await fetchResponse.text();
-        throw new Error(`GitHub Models API error: ${fetchResponse.status} ${fetchResponse.statusText} - ${errText}`);
+      const errText = await fetchResponse.text();
+      throw new Error(`GitHub Models API error: ${fetchResponse.status} ${fetchResponse.statusText} - ${errText}`);
     }
 
     const response = await fetchResponse.json() as {
       usage?: {
-          prompt_tokens?: number,
-          completion_tokens?: number,
-          total_tokens?: number,
-          prompt_tokens_details?: { cached_tokens?: number }
+        prompt_tokens?: number,
+        completion_tokens?: number,
+        total_tokens?: number,
+        prompt_tokens_details?: { cached_tokens?: number }
       },
       choices?: Array<{ finish_reason?: string, message?: { content?: string } }>
     };
@@ -126,17 +101,18 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const inputTokens = usageMetadata?.prompt_tokens ?? 0;
     const outputTokens = usageMetadata?.completion_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    // Extract cached tokens if available
     const cacheTokens = usageMetadata?.prompt_tokens_details?.cached_tokens ?? 0;
     const cost = 0;
 
-    const finishReason = response.choices?.[0]?.finish_reason;
+    const firstChoice = response.choices && response.choices[0];
+    const finishReason = firstChoice?.finish_reason;
     const isTruncated = finishReason === 'length';
     if (isTruncated) {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
-    const feedback = extractFeedbackText(response.content);
+    const rawContent = firstChoice?.message?.content || '';
+    const feedback = extractFeedbackText(rawContent);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

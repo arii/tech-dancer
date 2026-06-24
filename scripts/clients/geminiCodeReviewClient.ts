@@ -14,7 +14,7 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
@@ -39,7 +39,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
+    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText).map(msg => msg.content).join('\n\n');
     const message = new HumanMessage({ content: baseContent });
 
     let response = await model.invoke([message]);
@@ -51,10 +51,10 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
         usage: response.usage_metadata,
       });
 
-      const retryMaxOutputTokens = Math.round(maxOutputTokens * 1.25);
-      thinkingBudget = Math.round(thinkingBudget * 0.5);
+      const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
+      thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, retryMaxOutputTokens, thinkingBudget);
+      model = createGeminiModel(modelName, newMax, thinkingBudget);
       response = await model.invoke([message]);
 
       finishReason = extractFinishReason(response);

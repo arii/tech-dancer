@@ -18,6 +18,7 @@ export interface CodeReviewSummary {
   prGoal?: string;
   changedFiles?: string[];
   externalContext?: string;
+  impactSemanticContext?: string;
   previousState?: CodeReviewState;
   estimatedInputTokens?: number;
 }

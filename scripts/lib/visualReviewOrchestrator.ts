@@ -4,7 +4,6 @@ import { ARTIFACTS_DIR, VISUAL_SUMMARY_PATH, MAX_ROUTES_TO_REVIEW } from './visu
 import { generateMarkdownReport, postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import type { RouteReview, VisualRouteSummary, VisualSummary, VisualReviewState } from './visualReviewTypes';
 import { logReviewExecution } from './aiLogger';
-
 export type AgentRole = 'CODE_REVIEW' | 'ACCESSIBILITY' | 'UX' | 'VISUAL_REGRESSION' | 'RESPONSIVE_LAYOUT';
 
 export interface LLMClientStrategy {
@@ -116,7 +115,6 @@ export async function orchestrateVisualReview(
     }));
 
     reviews.push(...routeReviews);
-
   }
 
   const report = generateMarkdownReport(reviews, client.botName, client.reportTitle, client.botTagline);
