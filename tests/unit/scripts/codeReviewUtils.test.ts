@@ -3,6 +3,8 @@ import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
   parseCodeReviewState,
+  extractFeedbackText,
+  cleanupFeedback,
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
@@ -39,6 +41,48 @@ describe('codeReviewUtils', () => {
       });
       expect(prompt).toContain('PREVIOUS REVIEW ROUND FINDINGS:');
       expect(prompt).toContain('- [f-1] a.js: Bad code (Status: open)');
+    });
+  });
+
+  describe('cleanupFeedback', () => {
+    it('strips findings and verdict tags', () => {
+      const feedback = 'Review here.\n<findings>{"f":[]}</findings>\n[VERDICT: PASS]\nFooter.';
+      expect(cleanupFeedback(feedback)).toBe('Review here.\n\nFooter.');
+    });
+
+    it('is case-insensitive and handles multiline findings', () => {
+      const feedback = 'Start\n<FINDINGS>\nline1\nline2\n</FINDINGS>\n[verdict: FAIL]\nEnd';
+      expect(cleanupFeedback(feedback)).toBe('Start\n\nEnd');
+    });
+  });
+
+  describe('extractFeedbackText', () => {
+    it('returns string content as is', () => {
+      expect(extractFeedbackText('Plain text')).toBe('Plain text');
+    });
+
+    it('joins text parts from an array, skipping thoughts', () => {
+      const content = [
+        { thought: 'Thinking...' },
+        { text: 'Part 1 ' },
+        { text: 'Part 2' }
+      ];
+      expect(extractFeedbackText(content)).toBe('Part 1 Part 2');
+    });
+
+    it('stringifies object content that is not an array', () => {
+      const content = { unexpected: 'format' };
+      expect(extractFeedbackText(content)).toBe(JSON.stringify(content));
+    });
+
+    it('stringifies array if no text content is found', () => {
+      const content = [{ other: 'data' }];
+      expect(extractFeedbackText(content)).toBe(JSON.stringify(content));
+    });
+
+    it('returns empty string for null/undefined content', () => {
+      expect(extractFeedbackText(null)).toBe('');
+      expect(extractFeedbackText(undefined)).toBe('');
     });
   });
 

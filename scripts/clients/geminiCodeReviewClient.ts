@@ -5,7 +5,8 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
-  calculateEstimatedTokens
+  calculateEstimatedTokens,
+  extractFeedbackText
 } from '../lib/codeReviewUtils';
 
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
@@ -13,7 +14,7 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, extractFeedbackText, createGeminiModel } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel } from '../lib/geminiUtils';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';

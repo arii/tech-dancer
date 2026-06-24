@@ -5,9 +5,6 @@ inputs:
     description: "Path to .node-version file"
     required: false
     default: ".node-version"
-  node-version:
-    description: "Explicit Node.js version to use, overrides node-version-file if set"
-    required: false
   pnpm-version:
     description: "Version of pnpm to activate"
     required: false
