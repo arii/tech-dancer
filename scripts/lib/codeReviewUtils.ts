@@ -40,9 +40,11 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
-    console.warn('Failed to parse findings JSON from LLM response:', e);
-    // Log a snippet of the failed JSON for debugging
-    console.warn('JSON snippet:', jsonText.slice(0, 100) + '...');
+    if (process.env.NODE_ENV !== 'test') {
+      console.warn('Failed to parse findings JSON from LLM response:', e);
+      // Log a snippet of the failed JSON for debugging
+      console.warn('JSON snippet:', jsonText.slice(0, 100) + '...');
+    }
     return { state: undefined, parseError: 'invalid_json' };
   }
 }
