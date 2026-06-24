@@ -79,7 +79,7 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
 function TagsList({ tags }: { tags?: string[] }) {
   if (!tags || tags.length === 0) return null;
   return (
-    <Box display="flex" wrap="wrap" gap={2} marginBottom={3}>
+    <Box display="flex" wrap="wrap" gap={2} marginBottom={3} minHeight={7}>
       {tags.map(tag => (
         <Text key={tag} className="flagship-tag">{tag}</Text>
       ))}
