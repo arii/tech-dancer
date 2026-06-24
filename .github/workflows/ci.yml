@@ -453,4 +453,3 @@ jobs:
           name: deployment-review
           path: |
             artifacts/
-            dev-tools/logs/ai/
