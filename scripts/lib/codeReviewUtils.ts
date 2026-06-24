@@ -112,6 +112,29 @@ export function calculateEstimatedTokens(text: string | string[]): number {
   return Math.ceil(combined.length / 4);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function extractFeedbackText(content: any): string {
+  if (content === null || content === undefined) return '';
+  let feedback: string;
+  if (typeof content === 'string') {
+    feedback = content;
+  } else if (Array.isArray(content)) {
+    feedback = content
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((p: any) => !p.thought)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((p: any) => p.text ?? '')
+      .join('');
+  } else {
+    feedback = JSON.stringify(content);
+  }
+
+  if (!feedback && Array.isArray(content)) {
+    feedback = JSON.stringify(content);
+  }
+  return feedback || '';
+}
+
 export type ReviewPayloadItem = { type: 'text'; text: string };
 
 export interface PayloadConfig {
