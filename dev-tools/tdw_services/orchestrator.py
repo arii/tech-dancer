@@ -943,10 +943,12 @@ Respond only after the PR is created or updated:
                 if os.path.exists(worktree_path):
                     raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
 
-            # 3. Create detached worktree
-            run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"])
+            # 3. Fetch PR branch and create worktree directly on it
+            run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "worktree", "add", worktree_path, head_ref], check=True)
 
             # 4. Switch to worktree and perform git operations
+            changed_dir = True
             os.chdir(worktree_path)
             changed_dir = True
 
@@ -955,7 +957,7 @@ Respond only after the PR is created or updated:
             run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
-            run_command(["git", "fetch", "origin", base_branch], check=False)
+            run_command(["git", "fetch", "origin", base_branch], check=True)
 
             # Attempt merge from base branch.
             merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{pr_number}"]
@@ -974,7 +976,7 @@ Respond only after the PR is created or updated:
                 if push:
                     head_branch = pr_data.get('head', {}).get('ref')
                     if not head_branch:
-                        raise CLIError(f"Could not determine head branch reference to push to origin")
+                        raise CLIError(f"Cannot push: head branch is missing for PR #{pr_number}")
                     try:
                         # Use authenticated URL if token is available to avoid terminal prompts
                         if self.github.token and self.github.repo:
