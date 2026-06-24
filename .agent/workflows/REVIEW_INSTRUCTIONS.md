@@ -89,4 +89,4 @@ Before suggesting an implementation, verify if it already exists:
 
 ## 8. Tooling Guidelines
 
-Agents must not directly use git or gh commands but reuse existing tooling (`td-cli`). Agents should not use Copilot, but may use Ollama.
+Agents must not directly use git or gh commands but reuse existing tooling (`td-cli`).
