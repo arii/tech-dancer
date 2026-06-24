@@ -113,12 +113,12 @@ def main():
     try:
         result = client.send_message(session_id, body)
         if result.get("status") != "success":
-             logger.error(f"Failed to send message to Jules API: {result}")
-             sys.exit(1)
+             logger.warning(f"⚠️ Failed to send message to Jules API (non-blocking): {result}")
+             sys.exit(0)
         logger.info(f"✅ Sent impact analysis to {session_id}")
     except Exception as e:
-        logger.error(f"Exception while sending message: {e}")
-        sys.exit(1)
+        logger.warning(f"⚠️ Exception while sending message to Jules API (non-blocking): {e}")
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()
