@@ -53,16 +53,13 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
 
     return elements.map((el, index) => {
       const rect = el.getBoundingClientRect();
-
-      // Add a data attribute for easy selection during the crawl
       el.setAttribute('data-crawler-index', index.toString());
-
       const inputEl = el as HTMLInputElement;
 
       return {
         index,
         tagName: el.tagName,
-        text: el.textContent?.trim().substring(0, 100) || inputEl.value || inputEl.placeholder || '',
+        text: el.textContent?.trim().substring(0, 50) || inputEl.value || inputEl.placeholder || '', // Cut to 50 chars max
         selector: `[data-crawler-index="${index}"]`,
         role: el.getAttribute('role'),
         location: { x: rect.left, y: rect.top, width: rect.width, height: rect.height }
@@ -74,27 +71,9 @@ async function getInteractiveElements(page: Page): Promise<InteractiveElement[]>
 function isValidAction(obj: unknown): obj is Action {
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false;
   const cast = obj as Record<string, unknown>;
-
-  const allowedKeys = ['type', 'selector', 'text', 'reason'];
-  const keys = Object.keys(cast);
-  if (keys.some(k => !allowedKeys.includes(k))) return false;
-
   const validTypes = ['click', 'type', 'back', 'scroll'];
-
   if (typeof cast.type !== 'string' || !validTypes.includes(cast.type)) return false;
-  if (typeof cast.reason !== 'string' || cast.reason.length < 5) return false;
-
-  if (cast.type === 'click' || cast.type === 'type') {
-    if (typeof cast.selector !== 'string') return false;
-    // Flexible selector check to handle both single and double quotes
-    const isDataAttr = cast.selector.startsWith('[data-crawler-index=') && cast.selector.endsWith(']');
-    if (!isDataAttr) return false;
-  }
-
-  if (cast.type === 'type') {
-    if (typeof cast.text !== 'string' || cast.text.length === 0) return false;
-  }
-
+  if (typeof cast.reason !== 'string') return false;
   return true;
 }
 
@@ -115,12 +94,10 @@ async function cleanupSnapshots() {
 async function runCrawler() {
   const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY || '';
   if (!apiKey) {
-    console.error('Error: Neither GEMINI_API_KEY nor JULES_API_KEY environment variable is set.');
+    console.error('Error: API Key missing.');
     process.exit(1);
   }
-  if (!process.env.GEMINI_API_KEY) {
-    process.env.GEMINI_API_KEY = apiKey;
-  }
+  if (!process.env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = apiKey;
 
   await cleanupSnapshots();
 
@@ -147,14 +124,24 @@ async function runCrawler() {
       capturedScreenshots.push(screenshotPath);
 
       const stateHash = `${url}-${elements.length}`;
-      if (visitedStates.has(stateHash) && step > 0) {
-        console.log('Detected likely loop or repeat state, but continuing exploration.');
-      }
       visitedStates.add(stateHash);
 
-      // Decision making with Gemini
       const modelName = await pickOptimalGeminiModel(0);
-      const model = createGeminiModel(modelName, 4096, 1024);
+
+      // OPTIMIZATION: Configure Gemini for structured output JSON matching your layout
+      const model = createGeminiModel(modelName, 4096, 1024).bind({
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "object",
+          properties: {
+            type: { type: "string", enum: ["click", "type", "back", "scroll"] },
+            selector: { type: "string" },
+            text: { type: "string" },
+            reason: { type: "string" }
+          },
+          required: ["type", "reason"]
+        }
+      }) as unknown as ChatGoogleGenerativeAI;
 
       const action = await decideNextAction(model, url, elements, actionHistory, screenshotPath);
       console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
@@ -163,35 +150,30 @@ async function runCrawler() {
 
       try {
         if ((action.type === 'click' || action.type === 'type') && action.selector) {
-          // Robust index extraction handling various quote types
           const indexMatch = action.selector.match(/index=["']?(\d+)["']?/);
           const elementIndex = indexMatch ? parseInt(indexMatch[1], 10) : -1;
 
           if (isNaN(elementIndex) || elementIndex < 0 || elementIndex >= elements.length) {
-             console.warn(`AI selected out-of-bounds or invalid element index: ${elementIndex}. discovered elements: ${elements.length}`);
+             console.warn(`Invalid index: ${elementIndex}.`);
              continue;
           }
 
           const targetElementMeta = elements[elementIndex];
-
-          // Safety: Don't click destructive keywords
           const isDestructive = DESTRUCTIVE_KEYWORDS.some(k =>
              targetElementMeta.text.toLowerCase().includes(k) ||
              (targetElementMeta.role || '').toLowerCase().includes(k)
           );
 
           if (isDestructive && action.type === 'click') {
-            console.warn(`Safety check: Skipping click on likely destructive element "${targetElementMeta.text}" (role: ${targetElementMeta.role})`);
+            console.warn(`Skipping destructive element "${targetElementMeta.text}"`);
             continue;
           }
 
           const element = await page.$(action.selector);
-
           if (element && await element.isVisible()) {
             if (action.type === 'click') {
               await page.click(action.selector);
             } else if (action.text) {
-              // Verify it's an input-capable element before typing
               const isEditable = await element.evaluate(el => {
                 const tag = el.tagName.toLowerCase();
                 return tag === 'input' || tag === 'textarea' || (el as HTMLElement).isContentEditable;
@@ -200,12 +182,8 @@ async function runCrawler() {
               if (isEditable) {
                 await page.fill(action.selector, action.text);
                 await page.press(action.selector, 'Enter');
-              } else {
-                console.warn(`Attempted to type into non-editable element <${targetElementMeta.tagName}>. Skipping.`);
               }
             }
-          } else {
-            console.warn(`Element ${action.selector} not found or not visible. Skipping action.`);
           }
         } else if (action.type === 'back') {
           await page.goBack();
@@ -216,7 +194,7 @@ async function runCrawler() {
         console.warn(`Failed to execute action ${action.type}:`, (execError as Error).message);
       }
 
-      await page.waitForTimeout(2000); // Wait for animations/transitions
+      await page.waitForTimeout(2000);
     }
 
     console.log('\nExploration complete. Generating final report...');
@@ -233,7 +211,6 @@ async function runCrawler() {
     console.error('Crawler failed:', error);
   } finally {
     if (browser) await browser.close();
-    console.log('Browser closed.');
   }
 }
 
@@ -274,45 +251,30 @@ async function decideNextAction(
   history: Action[],
   screenshotPath: string
 ): Promise<Action> {
+
+  // OPTIMIZATION 1: Drastically slice text strings and exclude locations
   const elementsSummary = elements
-    .map(e => `Index ${e.index}: <${e.tagName}> "${e.text}" ${e.role ? `(role: ${e.role})` : ''}`)
+    .map(e => `[${e.index}] <${e.tagName}> "${e.text}" ${e.role ? `(${e.role})` : ''}`)
     .join('\n');
 
+  // OPTIMIZATION 2: Only show the last 4 actions to prevent ballooning history tokens
   const historySummary = history
-    .map((a, i) => `Step ${i}: ${a.type} ${a.selector || ''} - ${a.reason}`)
+    .slice(-4)
+    .map(a => `${a.type} ${a.selector || ''}`)
     .join('\n');
 
-  const prompt = `
-You are an autonomous web crawler agent. Your goal is to explore as many unique UI states as possible in a web application.
-Current URL: ${url}
-
-Interactive elements found on this page:
+  // OPTIMIZATION 3: Shortened systemic tone instruction since JSON mode handles structure constraints
+  const prompt = `URL: ${url}
+Elements available:
 ${elementsSummary}
 
-History of actions taken so far:
+Recent Actions:
 ${historySummary}
 
-Your task:
-1. Analyze the current state and history.
-2. Decide on the next best action to discover new components, routes, or interactive states (like modals, dropdowns).
-3. Return your decision in JSON format:
-{
-  "type": "click" | "type" | "back" | "scroll",
-  "selector": "[data-crawler-index=\\"X\\"]", (strictly use double quotes around X)
-  "text": "text to type", (only for type)
-  "reason": "why you chose this action"
-}
-
-SAFETY RULES:
-- DO NOT click on destructive buttons (delete, remove, logout, signout, archive, clear, reset).
-- DO NOT navigate to external third-party sites.
-- If you reach a state with no new interactive elements, try 'back' or 'scroll'.
-
-Provide ONLY the JSON.
-`;
+Task: Choose the next action to explore new states. Format selector exactly as "[data-crawler-index="X"]".
+Do not select destructive elements.`;
 
   const screenshotBuffer = await fs.promises.readFile(screenshotPath);
-
   const message = new HumanMessage({
     content: [
       { type: 'text', text: prompt },
@@ -327,20 +289,13 @@ Provide ONLY the JSON.
   const text = extractFeedbackText(response.content);
 
   try {
-    // Clean potential markdown blocks
-    const jsonStr = text.replace(/```json\n?|\n?```/g, '').trim();
-    const parsed = JSON.parse(jsonStr);
-
-    if (isValidAction(parsed)) {
-      return parsed;
-    } else {
-      console.warn('AI returned invalid action structure:', parsed);
-    }
-  } catch (e) {
-    console.error('Failed to parse Gemini response:', text, e);
+    const parsed = JSON.parse(text.trim());
+    if (isValidAction(parsed)) return parsed;
+  } catch {
+    console.error('JSON parse fail', text);
   }
 
-  return { type: 'scroll', reason: 'Fallback to scroll due to invalid or unparseable AI response.' };
+  return { type: 'scroll', reason: 'Fallback due to parse error.' };
 }
 
 runCrawler().catch(err => {
