@@ -54,7 +54,7 @@ def get_ai_model() -> str:
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
-    match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
+    match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
     if match:
         return match.group(1).strip()
     return text.strip()
@@ -117,6 +117,20 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         print(f"AI Call failed: {e}", file=sys.stderr)
         return None
 
+
+def log_ai_run(entry: dict):
+    try:
+        log_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "ai")
+        log_file = os.path.join(log_dir, "review-run.jsonl")
+        os.makedirs(log_dir, exist_ok=True)
+        from datetime import datetime
+        entry["timestamp"] = datetime.utcnow().isoformat() + "Z"
+        with open(log_file, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+    except Exception as e:
+        print(f"Failed to append to AI run log: {e}", file=sys.stderr)
+
+
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
     token = get_github_token()
@@ -138,7 +152,25 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 
     req = urllib.request.Request(target_url, data=json.dumps(data).encode("utf-8"),
                                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
+
+    start_time = time.time()
     res = _call_api_with_retry(req, max_retries=max_retries)
+    duration_ms = int((time.time() - start_time) * 1000)
+
+    if res and "usage" in res:
+        usage = res["usage"]
+        log_ai_run({
+            "type": "python-tool",
+            "model": model or get_ai_model(),
+            "inputTokens": usage.get("prompt_tokens", 0),
+            "outputTokens": usage.get("completion_tokens", 0),
+            "cacheTokens": usage.get("prompt_tokens_details", {}).get("cached_tokens", 0),
+            "totalTokens": usage.get("total_tokens", 0),
+            "durationMs": duration_ms,
+            "cost": 0,
+            "verdict": "unknown"
+        })
+
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
