@@ -60,7 +60,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const totalInputChars = systemPrompt.length + diffText.length + (externalText ? externalText.length : 0);
     const estimatedInputTokens = Math.ceil(totalInputChars / 4);
 
-    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
     const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
 
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
