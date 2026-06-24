@@ -950,7 +950,7 @@ Respond only after the PR is created or updated:
             os.chdir(worktree_path)
 
             # Checkout the PR branch
-            run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
             run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date

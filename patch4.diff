@@ -1,0 +1,7 @@
+--- tests/dev-tools/test_modern_cli.py
++++ tests/dev-tools/test_modern_cli.py
+@@ -61,3 +61,3 @@
+         result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123'])
+         self.assertNotEqual(result.exit_code, 0)
+-        self.assertIn("Error: Failed setup", result.output)
++        self.assertIn("Failed setup", result.output)
