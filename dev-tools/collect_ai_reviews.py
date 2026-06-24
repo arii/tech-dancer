@@ -1,10 +1,14 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath('dev-tools'))
-from tdw_services.services.github import GitHubClient
 import json
 import time
 from typing import List, Dict, Any
+
+try:
+    from tdw_services.services.github import GitHubClient
+except ImportError:
+    print("Error: Could not import tdw_services. Ensure you have run `pip install -e dev-tools/` and your PYTHONPATH is set correctly (e.g., `export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools`).")
+    sys.exit(1)
 
 def main() -> None:
     try:
@@ -26,6 +30,22 @@ def main() -> None:
                     else:
                         raise
 
+        def fetch_and_filter_comments(pr_number: int, endpoint: str, comment_type: str) -> List[Dict[str, Any]]:
+            fetched_comments = []
+            res = client.run_authenticated_gh(['api', f'/repos/{repo}/{endpoint}/{pr_number}/comments'])
+            comments: List[Dict[str, Any]] = json.loads(res)
+            for comment in comments:
+                user_login: str = comment.get('user', {}).get('login', '')
+                if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot']:
+                    fetched_comments.append({
+                        'type': comment_type,
+                        'pr': pr_number,
+                        'bot': user_login,
+                        'body': comment['body'],
+                        'html_url': comment['html_url']
+                    })
+            return fetched_comments
+
         print("Fetching PRs...")
         prs: List[Dict[str, Any]] = fetch_prs_with_retry()
 
@@ -35,33 +55,9 @@ def main() -> None:
         for pr in prs[:50]:
             pr_number: int = pr['number']
             try:
-                # Read comments
-                comments_res = client.run_authenticated_gh(['api', f'/repos/{repo}/issues/{pr_number}/comments'])
-                comments: List[Dict[str, Any]] = json.loads(comments_res)
-                for comment in comments:
-                    user_login: str = comment.get('user', {}).get('login', '')
-                    if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot']:
-                        results.append({
-                            'type': 'issue',
-                            'pr': pr_number,
-                            'bot': user_login,
-                            'body': comment['body'],
-                            'html_url': comment['html_url']
-                        })
-
-                # Read review comments
-                review_comments_res = client.run_authenticated_gh(['api', f'/repos/{repo}/pulls/{pr_number}/comments'])
-                review_comments: List[Dict[str, Any]] = json.loads(review_comments_res)
-                for comment in review_comments:
-                    user_login: str = comment.get('user', {}).get('login', '')
-                    if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot']:
-                        results.append({
-                            'type': 'review',
-                            'pr': pr_number,
-                            'bot': user_login,
-                            'body': comment['body'],
-                            'html_url': comment['html_url']
-                        })
+                # Read issue comments and review comments
+                results.extend(fetch_and_filter_comments(pr_number, 'issues', 'issue'))
+                results.extend(fetch_and_filter_comments(pr_number, 'pulls', 'review'))
             except Exception as e:
                 print(f"Error fetching comments for PR #{pr_number}: {e}")
 
