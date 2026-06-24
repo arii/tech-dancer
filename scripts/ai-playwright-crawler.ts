@@ -1,10 +1,7 @@
 import { chromium, Page, Browser } from 'playwright';
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HumanMessage } from '@langchain/core/messages';
 import * as fs from 'fs';
 import * as path from 'path';
 import { pickOptimalGeminiModel } from './lib/modelPicker';
-import { createGeminiModel, extractFeedbackText } from './lib/geminiUtils';
 
 const TMP_DIR = path.join(process.cwd(), '.tmp-crawler');
 const SNAPSHOTS_DIR = path.join(TMP_DIR, 'snapshots');
@@ -112,7 +109,7 @@ async function runCrawler() {
     const capturedScreenshots: string[] = [];
 
     console.log('Starting AI Crawler...');
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:4173', { waitUntil: 'networkidle' });
 
     for (let step = 0; step < MAX_STEPS; step++) {
       const url = page.url();
@@ -128,22 +125,7 @@ async function runCrawler() {
 
       const modelName = await pickOptimalGeminiModel(0);
 
-      // OPTIMIZATION: Configure Gemini for structured output JSON matching your layout
-      const model = createGeminiModel(modelName, 4096, 1024).bind({
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "object",
-          properties: {
-            type: { type: "string", enum: ["click", "type", "back", "scroll"] },
-            selector: { type: "string" },
-            text: { type: "string" },
-            reason: { type: "string" }
-          },
-          required: ["type", "reason"]
-        }
-      }) as unknown as ChatGoogleGenerativeAI;
-
-      const action = await decideNextAction(model, url, elements, actionHistory, screenshotPath);
+      const action = await decideNextAction(modelName, url, elements, actionHistory, screenshotPath);
       console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
 
       actionHistory.push(action);
@@ -200,9 +182,8 @@ async function runCrawler() {
     console.log('\nExploration complete. Generating final report...');
     const estimatedReportTokens = capturedScreenshots.length * 1000;
     const reportModelName = await pickOptimalGeminiModel(estimatedReportTokens);
-    const reportModel = createGeminiModel(reportModelName, 4096, 1024);
 
-    const report = await generateVisualReview(reportModel, capturedScreenshots);
+    const report = await generateVisualReview(reportModelName, capturedScreenshots);
     const reportPath = path.join(TMP_DIR, 'report.md');
     await fs.promises.writeFile(reportPath, report);
     console.log(`✅ Visual review report saved to ${reportPath} (Model: ${reportModelName})`);
@@ -214,7 +195,7 @@ async function runCrawler() {
   }
 }
 
-async function generateVisualReview(model: ChatGoogleGenerativeAI, screenshots: string[]): Promise<string> {
+async function generateVisualReview(modelName: string, screenshots: string[]): Promise<string> {
   const prompt = `
 You are a senior UI/UX engineer. You have been provided with a series of screenshots captured during an autonomous crawl of a web application.
 Your task is to provide a comprehensive visual audit and UX critique based on these discovered states.
@@ -228,24 +209,51 @@ Focus on:
 Format your report in Markdown. Include a summary section and then detail findings for specific screens if relevant.
 `;
 
-  const contents: { type: 'text' | 'image_url'; text?: string; image_url?: { url: string } }[] = [{ type: 'text', text: prompt }];
+  const parts: { text?: string; inlineData?: { mimeType: string, data: string } }[] = [{ text: prompt }];
 
   for (const filePath of screenshots) {
     const buffer = await fs.promises.readFile(filePath);
-    contents.push({
-      type: 'image_url',
-      image_url: { url: `data:image/png;base64,${buffer.toString('base64')}` }
+    parts.push({
+      inlineData: {
+        mimeType: 'image/png',
+        data: buffer.toString('base64')
+      }
     });
   }
 
-  const message = new HumanMessage({ content: contents });
-  const response = await model.invoke([message]);
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not set');
+  }
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
-  return extractFeedbackText(response.content);
+  const payload = {
+    contents: [{ parts }]
+  };
+
+  try {
+    const apiResponse = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!apiResponse.ok) {
+      console.warn(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText}. Continuing gracefully.`);
+      return 'No review generated due to API restriction.';
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await apiResponse.json() as any;
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  } catch (error) {
+    console.warn(`Gemini API Request failed: ${error}. Continuing gracefully.`);
+    return 'No review generated due to API request failure.';
+  }
 }
 
 async function decideNextAction(
-  model: ChatGoogleGenerativeAI,
+  modelName: string,
   url: string,
   elements: InteractiveElement[],
   history: Action[],
@@ -275,24 +283,67 @@ Task: Choose the next action to explore new states. Format selector exactly as "
 Do not select destructive elements.`;
 
   const screenshotBuffer = await fs.promises.readFile(screenshotPath);
-  const message = new HumanMessage({
-    content: [
-      { type: 'text', text: prompt },
-      {
-        type: 'image_url',
-        image_url: { url: `data:image/png;base64,${screenshotBuffer.toString('base64')}` }
-      }
-    ]
-  });
 
-  const response = await model.invoke([message]);
-  const text = extractFeedbackText(response.content);
+  const payload = {
+    contents: [
+      {
+        parts: [
+          { text: prompt },
+          {
+            inlineData: {
+              mimeType: 'image/png',
+              data: screenshotBuffer.toString('base64')
+            }
+          }
+        ]
+      }
+    ],
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "OBJECT",
+        properties: {
+          type: { type: "STRING", enum: ["click", "type", "back", "scroll"] },
+          selector: { type: "STRING" },
+          text: { type: "STRING" },
+          reason: { type: "STRING" }
+        },
+        required: ["type", "reason"]
+      }
+    }
+  };
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not set');
+  }
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
   try {
-    const parsed = JSON.parse(text.trim());
-    if (isValidAction(parsed)) return parsed;
-  } catch {
-    console.error('JSON parse fail', text);
+    const apiResponse = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!apiResponse.ok) {
+      const errorText = await apiResponse.text();
+      console.error(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText} - ${errorText}`);
+      return { type: 'scroll', reason: 'Fallback due to API error.' };
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await apiResponse.json() as any;
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    try {
+      const parsed = JSON.parse(text.trim());
+      if (isValidAction(parsed)) return parsed;
+    } catch {
+      console.error('JSON parse fail', text);
+    }
+  } catch (error) {
+    console.error(`Gemini API Request failed: ${error}.`);
   }
 
   return { type: 'scroll', reason: 'Fallback due to parse error.' };
