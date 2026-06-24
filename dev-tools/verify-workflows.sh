@@ -57,7 +57,7 @@ run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh validate-issu
 run_check "review-pr.md" "python3 dev-tools/td_cli.py gh audit-pr 2821 --fetch"
 
 run_check "review-ux.md" "npx playwright --version"
-run_check "review-ux.md" "pnpm run audit --help"
+run_check "review-ux.md" "node scripts/detect-antipatterns.mjs --help"
 
 echo "== Done =="
 echo "Report: $REPORT"
