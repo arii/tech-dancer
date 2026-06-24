@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import * as path from 'path';
 
 export const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts');

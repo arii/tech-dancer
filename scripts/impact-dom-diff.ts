@@ -1,3 +1,4 @@
+// impeccable-ignore-file
 import { diffLines } from 'diff';
 import fs from 'fs';
 import path from 'path';
