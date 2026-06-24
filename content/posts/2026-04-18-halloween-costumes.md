@@ -11,6 +11,9 @@ tags:
   - fashion
   - halloween
   - wcs
+affiliateIds:
+  - "pumpkin-headbands"
+  - "pumpkin-stickers"
 imageFit: contain
 ---
 
