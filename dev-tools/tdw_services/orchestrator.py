@@ -917,6 +917,7 @@ Respond only after the PR is created or updated:
         original_cwd = os.getcwd()
         # Use a path that is clearly temporary and matches existing patterns for ignored files
         worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}.tmp")
+        changed_dir = False
 
         try:
             # 0. Pre-flight check for 'gh' CLI
@@ -938,18 +939,22 @@ Respond only after the PR is created or updated:
                 run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
                 if os.path.exists(worktree_path):
                     shutil.rmtree(worktree_path, ignore_errors=True)
+                if os.path.exists(worktree_path):
+                    raise CLIError(f"Failed to clean up existing worktree at {worktree_path}")
 
             # 3. Create detached worktree
-            run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"])
+            run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"], check=True)
 
             # 4. Switch to worktree and perform git operations
             os.chdir(worktree_path)
+            changed_dir = True
 
             # Checkout the PR branch
-            self.github.run_authenticated_gh(["pr", "checkout", str(pr_number)])
+            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
-            run_command(["git", "fetch", "origin", base_branch], check=False)
+            run_command(["git", "fetch", "origin", base_branch], check=True)
 
             # Attempt merge from base branch.
             merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{pr_number}"]
@@ -965,6 +970,8 @@ Respond only after the PR is created or updated:
                 status = "success"
                 if push:
                     head_branch = pr_data.get('head', {}).get('ref')
+                    if not head_branch:
+                        raise CLIError(f"Cannot push: head branch is missing for PR #{pr_number}")
                     try:
                         # Use authenticated URL if token is available to avoid terminal prompts
                         if self.github.token and self.github.repo:
@@ -992,4 +999,5 @@ Respond only after the PR is created or updated:
         except Exception as e:
             raise CLIError(f"Failed to setup conflict resolution worktree: {str(e)}")
         finally:
-            os.chdir(original_cwd)
+            if changed_dir:
+                os.chdir(original_cwd)
