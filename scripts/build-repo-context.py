@@ -13,8 +13,8 @@ def build_repo_context():
         package_summary = {
             "name": package_json.get("name"),
             "scripts": package_json.get("scripts", {}),
-            "dependencies": list(package_json.get("dependencies", {}).keys()),
-            "devDependencies": list(package_json.get("devDependencies", {}).keys()),
+            "dependencies": sorted(list(package_json.get("dependencies", {}).keys())),
+            "devDependencies": sorted(list(package_json.get("devDependencies", {}).keys())),
         }
     except Exception as e:
         print(f"Error reading package.json: {e}", file=sys.stderr)
@@ -22,14 +22,14 @@ def build_repo_context():
 
     # 2. Workflows
     try:
-        workflows = [str(p) for p in pathlib.Path(".github/workflows").glob("*.yml")]
+        workflows = sorted([str(p) for p in pathlib.Path(".github/workflows").glob("*.yml")])
     except Exception as e:
         print(f"Error reading workflows: {e}", file=sys.stderr)
         workflows = []
 
     # 3. Test Snapshots
     try:
-        test_snapshots = [str(p) for p in pathlib.Path("src").rglob("__snapshots__/*.snap")]
+        test_snapshots = sorted([str(p) for p in pathlib.Path("src").rglob("__snapshots__/*.snap")])
     except Exception as e:
         print(f"Error reading snapshots: {e}", file=sys.stderr)
         test_snapshots = []
@@ -49,7 +49,8 @@ if __name__ == "__main__":
         context = build_repo_context()
         if not context.get("package_json"):
             raise ValueError("Failed to gather basic repository context (package.json missing or invalid)")
-        print(json.dumps(context, indent=2))
+        # sort_keys=True ensures the output is deterministic for revision control
+        print(json.dumps(context, indent=2, sort_keys=True))
     except Exception as e:
         print(f"FATAL: Context generation failed: {e}", file=sys.stderr)
         sys.exit(1)
