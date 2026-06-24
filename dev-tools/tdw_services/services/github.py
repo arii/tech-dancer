@@ -3,6 +3,7 @@ import subprocess
 import json
 import base64
 import requests
+import time
 from typing import Optional, List, Dict, Any
 
 class GitHubClient:
@@ -37,6 +38,18 @@ class GitHubClient:
         if proc.returncode != 0:
             raise Exception(f"GH command failed: {proc.stderr}")
         return proc.stdout
+
+    def run_authenticated_gh_with_retry(self, command_args: List[str], max_retries: int = 3, delay: int = 5) -> str:
+        """Executes a GH CLI command using the PAT with retry mechanism."""
+        for attempt in range(max_retries):
+            try:
+                return self.run_authenticated_gh(command_args)
+            except Exception as e:
+                print(f"Attempt {attempt+1} failed: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(delay)
+                else:
+                    raise
 
     def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
