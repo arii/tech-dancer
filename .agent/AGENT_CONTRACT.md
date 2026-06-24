@@ -5,8 +5,8 @@
 Read the matching workflow before starting these task types:
 - PR audit → `.agent/workflows/review-pr.md`
 - UX review → `.agent/workflows/review-ux.md`
-- Mass issue audit → `.agent/workflows/mass-audit-issues.md`
-- Mass PR audit → `.agent/workflows/mass-audit-prs.md`
+
+
 
 ## What You Will Always Do
 

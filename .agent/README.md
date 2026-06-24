@@ -16,7 +16,7 @@
 Located in `.agent/workflows/`:
 
 - **ai-slop-audit-[DATE].md** - Auto-generated audit results (latest run)
-- Other workflows: mass-audit-issues, review-pr, review-ux, etc.
+- Other workflows: review-pr, review-ux, etc.
 
 ### Scripts
 
