@@ -1,41 +1,14 @@
 import { z } from "zod";
 import { JulesSession, JulesStatus } from "../types.js";
-import { runCommand } from "../../lib/shell.js";
 
 export const CreateJulesSessionInputSchema = z.object({
   task: z.string(),
-  branch: z.string().optional(),
-  pr: z.number().optional(),
 });
 
 export async function createJulesSessionHandler(input: z.infer<typeof CreateJulesSessionInputSchema>): Promise<JulesSession> {
   const apiKey = process.env.JULES_API_KEY;
   if (!apiKey) {
     throw new Error("JULES_API_KEY environment variable is not set.");
-  }
-
-  let startingBranch = input.branch || process.env.DEFAULT_BASE_BRANCH || "main";
-
-  if (!input.branch && input.pr) {
-    const prResult = await runCommand("gh", [
-      "pr",
-      "view",
-      input.pr.toString(),
-      "--json", "headRefName"
-    ]);
-
-    if (prResult.exitCode !== 0) {
-      throw new Error(`Failed to get PR info for PR #${input.pr}: ${prResult.stderr || "Unknown error (empty stderr)"}`);
-    }
-
-    try {
-      const prData = JSON.parse(prResult.stdout);
-      if (prData.headRefName) {
-        startingBranch = prData.headRefName;
-      }
-    } catch (e) {
-      throw new Error(`Failed to parse PR info for PR #${input.pr}: ${e}. Output was: ${prResult.stdout}`);
-    }
   }
 
   const response = await fetch("https://jules.googleapis.com/v1alpha/sessions", {
@@ -49,7 +22,7 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
       sourceContext: {
         source: "sources/github/arii/tech-dancer",
         githubRepoContext: {
-          startingBranch: startingBranch,
+          startingBranch: process.env.DEFAULT_BASE_BRANCH || "main",
         },
       },
       automationMode: "AUTO_CREATE_PR",

@@ -1,9 +1,20 @@
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, extractFeedbackText, createGeminiModel } from '../lib/geminiUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
+
+function createModel(modelName: string, maxOutputTokens: number = 2048): ChatGoogleGenerativeAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
+
+  return new ChatGoogleGenerativeAI({
+    model: modelName,
+    apiKey,
+    maxOutputTokens: maxOutputTokens,
+  });
+}
 
 export const geminiVisualReviewClient: LLMClientStrategy = {
   botName: 'impact-gemini-review',
@@ -13,10 +24,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
     const modelName = pickGeminiModel('flash', 0);
-
-    let maxOutputTokens = 4096;
-    let thinkingBudget = 1024;
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
+    const model = createModel(modelName, 2048);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -61,73 +69,19 @@ Your job:
     });
 
     const message = new HumanMessage({ content: baseContent });
-    let response = await model.invoke([message]);
+    const response = await model.invoke([message]);
 
-    let finishReason = extractFinishReason(response);
-
-    if (finishReason === 'MAX_TOKENS') {
-      console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
-        usage: response.usage_metadata,
-      });
-
-      maxOutputTokens = Math.round(maxOutputTokens * 1.25);
-      thinkingBudget = Math.round(thinkingBudget * 0.5);
-
-      model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-      response = await model.invoke([message]);
-
-      finishReason = extractFinishReason(response);
-    }
-
-    const usageMetadata = response.usage_metadata as {
-      input_tokens?: number;
-      output_tokens?: number;
-      total_tokens?: number;
-      thoughts_token_count?: number;
-    };
+    const usageMetadata = response.usage_metadata;
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (typeof response.response_metadata === 'object' && response.response_metadata !== null
-                                 ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
-                                 : 0) ?? 0;
-
-    if (thoughtsTokenCount > thinkingBudget * 1.1) {
-      console.warn('Thinking budget exceeded by >10%', {
-        budgetSet: thinkingBudget,
-        thoughtsUsed: thoughtsTokenCount,
-        model: modelName,
-      });
-    }
-
-    const isTruncated = finishReason === 'MAX_TOKENS' || finishReason === 'length' || finishReason === 'max_tokens';
-
-    if (isTruncated) {
-      console.error('Gemini truncation', {
-        finishReason,
-        usage: usageMetadata,
-      });
-      return {
-        route: summary.route,
-        severity: summary.severity,
-        differencePercent: summary.differencePercent,
-        feedback: `Error: Gemini model was truncated during execution (finishReason=${finishReason}).`,
-        tokens: totalTokens,
-        cost: 0,
-        modelName,
-        llmVerdict: 'warn',
-        findings: [],
-        truncated: true,
-      };
-    }
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
+    const feedback = typeof response.content === 'string'
+      ? response.content
+      : JSON.stringify(response.content);
 
     return {
       route: summary.route,
@@ -139,7 +93,6 @@ Your job:
       modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
-      truncated: isTruncated,
     };
   }
 };

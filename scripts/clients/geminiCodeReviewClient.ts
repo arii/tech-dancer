@@ -1,3 +1,4 @@
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage } from '@langchain/core/messages';
 import {
   parseCodeReviewVerdict,
@@ -13,10 +14,26 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, extractFeedbackText, createGeminiModel } from '../lib/geminiUtils';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
+
+function createModel(modelName: string, maxOutputTokens: number = 1500): ChatGoogleGenerativeAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
+
+  return new ChatGoogleGenerativeAI({
+    model: modelName,
+    apiKey,
+    maxOutputTokens: maxOutputTokens,
+    // Reserve a bounded slice of the budget for reasoning so it can't
+    // crowd out the actual review text + verdict + findings JSON.
+    thinkingConfig: {
+      includeThoughts: true,
+      thinkingBudget: Math.min(1024, Math.floor(maxOutputTokens * 0.3)),
+    }
+  });
+}
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   botName: 'gemini-code-review',
@@ -34,30 +51,15 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
     const modelName = pickGeminiModel(preferredTier, estimatedInputTokens);
 
-    let thinkingBudget = 2048;
-    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
-
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length);
+    const model = createModel(modelName, maxOutputTokens);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
+
     const message = new HumanMessage({ content: baseContent });
 
-    let response = await model.invoke([message]);
+    const response = await model.invoke([message]);
+    const durationMs = Date.now() - startTime;
 
-    let finishReason = extractFinishReason(response);
-
-    if (finishReason === 'MAX_TOKENS') {
-      console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
-        usage: response.usage_metadata,
-      });
-
-      const retryMaxOutputTokens = Math.round(maxOutputTokens * 1.25);
-      thinkingBudget = Math.round(thinkingBudget * 0.5);
-
-      model = createGeminiModel(modelName, retryMaxOutputTokens, thinkingBudget);
-      response = await model.invoke([message]);
-
-      finishReason = extractFinishReason(response);
-    }
 
     const usageMetadata = response.usage_metadata as {
       input_tokens?: number;
@@ -65,54 +67,26 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       total_tokens?: number;
       thoughts_token_count?: number;
     };
-
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     // thoughtsTokenCount might be nested in response_metadata or usage_metadata
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (typeof response.response_metadata === 'object' && response.response_metadata !== null
-                                 ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
-                                 : 0) ?? 0;
-
-    if (thoughtsTokenCount > thinkingBudget * 1.1) {
-      console.warn('Thinking budget exceeded by >10%', {
-        budgetSet: thinkingBudget,
-        thoughtsUsed: thoughtsTokenCount,
-        model: modelName,
-      });
-    }
-
-    const isTruncated = finishReason === 'MAX_TOKENS' || finishReason === 'length' || finishReason === 'max_tokens';
-
-    if (isTruncated) {
-      console.error('Gemini truncation', {
-        finishReason,
-        usage: usageMetadata,
-      });
-      // Do not throw here, instead pass the error state gracefully
-      // so it can be handled by orchestrator without breaking the CI suite
-      return {
-        feedback: `Error: Gemini model was truncated during execution (finishReason=${finishReason}).`,
-        tokens: totalTokens,
-        cost: 0,
-        modelName,
-        llmVerdict: 'warn',
-        truncated: true,
-        durationMs: Date.now() - startTime,
-      };
-    }
-
-    const durationMs = Date.now() - startTime;
+                               (response.response_metadata as { usage?: { thoughts_token_count?: number } })?.usage?.thoughts_token_count;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
-    // typically in @langchain response.content is a string, but if we extract only text it's better
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
+    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
+      .response_metadata?.finish_reason;
+    const isTruncated = finishReason === 'length';
+    if (isTruncated) {
+      console.warn(`⚠️  gemini-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
+    }
+
+    const feedback = typeof response.content === 'string'
+      ? response.content
+      : JSON.stringify(response.content);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

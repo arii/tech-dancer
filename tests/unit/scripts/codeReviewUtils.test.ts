@@ -99,11 +99,7 @@ describe('codeReviewUtils', () => {
 
   describe('estimateMaxOutputTokens', () => {
     it('returns base budget for empty diff and no findings', () => {
-      // estimatedOutput = 0
-      // thinkingBudget = 2048
-      // outputPadding = 256
-      // priorFindingsBudget = 0
-      expect(estimateMaxOutputTokens({ diffContext: '' })).toBe(2304);
+      expect(estimateMaxOutputTokens({ diffContext: '' })).toBe(1500);
     });
 
     it('scales up based on prior findings count', () => {
@@ -113,16 +109,14 @@ describe('codeReviewUtils', () => {
           findings: Array.from({ length: 5 }, (_, i) => ({ id: `f-${i}`, file: 'f', issue: 'i', status: 'open' }))
         }
       });
-      // 2304 + (5 * 200) = 3304
-      expect(withFindings).toBe(3304);
+      // 1500 + (5 * 200) = 2500
+      expect(withFindings).toBe(2500);
     });
 
-    it('adds tokens for large diffs capped at 2000', () => {
-      // 4000 tokens * 4 chars = 16000 chars -> diffTokens = 4000
-      // 4000 * 0.4 = 1600 estimatedOutput
-      // 1600 + 2048 + 256 = 3904
+    it('adds 1000 for large diffs', () => {
+      // 4000 tokens * 4 chars = 16000 chars
       const largeDiff = 'a'.repeat(16001);
-      expect(estimateMaxOutputTokens({ diffContext: largeDiff })).toBe(3905);
+      expect(estimateMaxOutputTokens({ diffContext: largeDiff })).toBe(2500);
     });
 
     it('caps at 8192', () => {
@@ -133,10 +127,23 @@ describe('codeReviewUtils', () => {
           findings: Array.from({ length: 40 }, (_, i) => ({ id: `f-${i}`, file: 'f', issue: 'i', status: 'open' }))
         }
       });
-      // estimatedOutput = 1600 (capped at 2000)
-      // priorFindingsBudget = 40 * 200 = 8000
-      // total > 8192
+      // 1500 + 1000 + (40 * 200) = 10500, capped to 8192
       expect(manyFindings).toBe(8192);
+    });
+
+    it('scales up based on system prompt length', () => {
+      const smallDiff = 'diff';
+      const normalSystemPrompt = 400; // 100 tokens
+      const largeSystemPrompt = 2800; // 700 tokens
+      const hugeSystemPrompt = 5000;  // 1250 tokens
+
+      const base = estimateMaxOutputTokens({ diffContext: smallDiff }, normalSystemPrompt);
+      const large = estimateMaxOutputTokens({ diffContext: smallDiff }, largeSystemPrompt);
+      const huge = estimateMaxOutputTokens({ diffContext: smallDiff }, hugeSystemPrompt);
+
+      expect(base).toBe(1500);
+      expect(large).toBe(3000); // 1500 + 1500
+      expect(huge).toBe(4500);  // 1500 + 1500 + 1500
     });
   });
 
