@@ -1,6 +1,4 @@
 
-import fetch from 'node-fetch';
-
 export interface GitHubModel {
   id: string;
   name: string;

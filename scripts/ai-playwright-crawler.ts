@@ -1,7 +1,6 @@
 import { chromium, Page, Browser } from 'playwright';
 import * as fs from 'fs';
 import * as path from 'path';
-import fetch from 'node-fetch';
 import { pickOptimalGeminiModel } from './lib/modelPicker';
 
 const TMP_DIR = path.join(process.cwd(), '.tmp-crawler');
@@ -223,6 +222,9 @@ Format your report in Markdown. Include a summary section and then detail findin
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not set');
+  }
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
   const payload = {
@@ -230,19 +232,19 @@ Format your report in Markdown. Include a summary section and then detail findin
   };
 
   try {
-    const response = await fetch(url, {
+    const apiResponse = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
-    if (!response.ok) {
-      console.warn(`Gemini API Error: ${response.status} ${response.statusText}. Continuing gracefully.`);
+    if (!apiResponse.ok) {
+      console.warn(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText}. Continuing gracefully.`);
       return 'No review generated due to API restriction.';
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await response.json() as any;
+    const data = await apiResponse.json() as any;
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   } catch (error) {
     console.warn(`Gemini API Request failed: ${error}. Continuing gracefully.`);
@@ -312,23 +314,26 @@ Do not select destructive elements.`;
   };
 
   const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY is not set');
+  }
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
   try {
-    const response = await fetch(apiUrl, {
+    const apiResponse = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Gemini API Error: ${response.status} ${response.statusText} - ${errorText}`);
+    if (!apiResponse.ok) {
+      const errorText = await apiResponse.text();
+      console.error(`Gemini API Error: ${apiResponse.status} ${apiResponse.statusText} - ${errorText}`);
       return { type: 'scroll', reason: 'Fallback due to API error.' };
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await response.json() as any;
+    const data = await apiResponse.json() as any;
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     try {
