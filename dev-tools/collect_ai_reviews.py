@@ -9,12 +9,16 @@ from typing import List, Dict, Any
 def main() -> None:
     try:
         client = GitHubClient()
-        repo: str = client.repo
+        repo = client.repo
+
+        if not isinstance(repo, str) or not repo:
+            raise ValueError("GitHub repository could not be determined or is not a string.")
 
         def fetch_prs_with_retry(retries: int = 3, delay: int = 5) -> List[Dict[str, Any]]:
             for attempt in range(retries):
                 try:
-                    return client._request('GET', f'/repos/{repo}/pulls?state=all&per_page=100') # type: ignore
+                    res = client.run_authenticated_gh(['api', f'/repos/{repo}/pulls?state=all&per_page=100'])
+                    return json.loads(res)
                 except Exception as e:
                     print(f"Attempt {attempt+1} failed: {e}")
                     if attempt < retries - 1:
@@ -32,7 +36,8 @@ def main() -> None:
             pr_number: int = pr['number']
             try:
                 # Read comments
-                comments: List[Dict[str, Any]] = client._request('GET', f'/repos/{repo}/issues/{pr_number}/comments') # type: ignore
+                comments_res = client.run_authenticated_gh(['api', f'/repos/{repo}/issues/{pr_number}/comments'])
+                comments: List[Dict[str, Any]] = json.loads(comments_res)
                 for comment in comments:
                     user_login: str = comment.get('user', {}).get('login', '')
                     if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot']:
@@ -45,7 +50,8 @@ def main() -> None:
                         })
 
                 # Read review comments
-                review_comments: List[Dict[str, Any]] = client._request('GET', f'/repos/{repo}/pulls/{pr_number}/comments') # type: ignore
+                review_comments_res = client.run_authenticated_gh(['api', f'/repos/{repo}/pulls/{pr_number}/comments'])
+                review_comments: List[Dict[str, Any]] = json.loads(review_comments_res)
                 for comment in review_comments:
                     user_login: str = comment.get('user', {}).get('login', '')
                     if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot']:
