@@ -172,17 +172,6 @@ def detect_conflicts(ctx, pr):
             for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
     out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
 
-@gh.command()
-@click.option('--post-comments', is_flag=True, help="Post feedback as comments on PRs.")
-@click.option('--generate-report/--no-generate-report', default=True, help="Generate final-audit.md report (default: True).")
-@click.option('--limit', type=int, default=100, help="Maximum number of open PRs to process (default: 100).")
-@click.pass_context
-def mass_evaluate(ctx, post_comments, generate_report, limit):
-    """Evaluate open PRs using heuristics and optionally post feedback or generate a report."""
-    orch = ctx.obj['ORCHESTRATOR']
-    out(ctx, f"Starting mass evaluation for up to {limit} PRs...", data={})
-    res = orch.mass_evaluate_prs(post_comments=post_comments, generate_report=generate_report, limit=limit)
-    out(ctx, f"✅ Evaluated {res['evaluated_count']} PRs. Report: {res['report_generated']}, Comments posted: {res['comments_posted']}", data=res)
 
 @gh.command()
 @click.option('--pr', required=True, type=int, help="The PR number to comment on.")

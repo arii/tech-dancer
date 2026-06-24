@@ -35,44 +35,37 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
-    console.warn('Failed to parse findings JSON from LLM response:', e);
+    if (process.env.NODE_ENV !== 'test') {
+      console.warn('Failed to parse findings JSON from LLM response:', e);
+    }
     return { state: undefined, parseError: 'invalid_json' };
   }
 }
 
 export function estimateMaxOutputTokens(
   summary: CodeReviewSummary,
-  systemPromptLength: number = 0
+  _systemPromptLength: number = 0,
+  thinkingBudget: number = 2048,
+  outputPadding: number = 256
 ): number {
-  // Base budget covers prose review + a couple findings.
-  let budget = 1500;
+  // Thinking tokens consume the same budget as output tokens.
+  // Add padding for JSON findings block and verdict line.
+  const diffTokens = Math.ceil(summary.diffContext.length / 4);
+  const estimatedOutput = Math.min(
+    diffTokens * 0.4,  // heuristic: review output ~40% of diff size
+    2000,              // cap — reviews shouldn't exceed this
+  );
 
-  // Each existing finding the model needs to echo back (resolved or not)
-  // costs real output tokens. Scale up so large finding sets don't truncate.
   const priorFindingsCount = summary.previousState?.findings.length ?? 0;
-  budget += priorFindingsCount * 200;
+  const priorFindingsBudget = priorFindingsCount * 200;
 
-  // Larger diffs tend to surface more findings worth writing about.
-  const diffSizeTokens = Math.ceil(summary.diffContext.length / 4);
-  if (diffSizeTokens > 4000) budget += 1000;
-
-  // NEW: reasoning-capable Gemini models draw "thinking" tokens from the
-  // same maxOutputTokens budget as the visible answer. A longer, rule-dense
-  // system prompt (design guidelines, multiple matched PROMPT_CATEGORIES
-  // blocks) correlates with materially more internal deliberation before
-  // the model commits to an answer — give it proportionally more headroom
-  // even when the diff itself is small. Thresholds are deliberately coarse;
-  // tune against dev-tools/logs/ai/review-run.json once Fix 5's logging is
-  // live and you have real thoughtsTokenCount data to calibrate against.
-  const systemPromptTokens = Math.ceil(systemPromptLength / 4);
-  if (systemPromptTokens > 600) budget += 1500;
-  if (systemPromptTokens > 1200) budget += 1500;
+  const totalBudget = Math.ceil(estimatedOutput + thinkingBudget + outputPadding + priorFindingsBudget);
 
   // Hard ceiling — raised to match what the models actually support
   // (gemini-3.5-flash and gemini-3.1-pro-preview both report
   // maxOutputTokens: 8192 in geminiModelPicker.ts). The previous ceiling of
   // 4096 was silently capping the budget below the model's real limit.
-  return Math.min(budget, 8192);
+  return Math.min(totalBudget, 8192);
 }
 
 export const EXTERNAL_CONTEXT_TRUNCATED_MESSAGE = '...[TRUNCATED EXTERNAL CONTEXT TO FIT TOKEN LIMIT]';

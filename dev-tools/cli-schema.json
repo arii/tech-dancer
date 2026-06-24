@@ -122,6 +122,85 @@
       "description": "Run automated repository validation and quality gates prior to code submission.",
       "exact_usage": "python3 dev-tools/td_cli.py gh pre-submit",
       "required_flags": []
+    },
+    "gh validate-issue": {
+      "description": "Validate that a GitHub issue follows the required spec-driven sections.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",
+      "optional_flags": [
+        {
+          "flag": "--issue-number",
+          "type": "integer",
+          "description": "The GitHub issue number to validate."
+        },
+        {
+          "flag": "--all-open",
+          "type": "boolean",
+          "description": "Validate all open issues."
+        },
+        {
+          "flag": "--post-comments",
+          "type": "boolean",
+          "description": "Post validation results as comments on the issue."
+        },
+        {
+          "flag": "--execute",
+          "type": "boolean",
+          "description": "Run without dry-run mode (default is --dry-run)."
+        }
+      ]
+    },
+    "agent fix-ci": {
+      "description": "Initialize an AI agent (Jules) session to fix CI failures for a PR or branch.",
+      "exact_usage": "python3 dev-tools/td_cli.py agent fix-ci --pr-number <PR_NUMBER> --execute",
+      "optional_flags": [
+        {
+          "flag": "--pr-number",
+          "type": "integer",
+          "description": "The PR number to fix CI for."
+        },
+        {
+          "flag": "--branch",
+          "type": "string",
+          "description": "The branch name to fix CI for (if no PR exists)."
+        },
+        {
+          "flag": "--execute",
+          "type": "boolean",
+          "description": "Run without dry-run mode (default is --dry-run)."
+        }
+      ]
+    },
+    "agent sync": {
+      "description": "Sync and list active agent sessions.",
+      "exact_usage": "python3 dev-tools/td_cli.py agent sync",
+      "required_flags": []
+    },
+    "agent messages": {
+      "description": "Retrieve message history for a specific agent session.",
+      "exact_usage": "python3 dev-tools/td_cli.py agent messages <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "string",
+          "description": "The ID of the Jules session."
+        }
+      ]
+    },
+    "agent send": {
+      "description": "Send a message to an active agent session.",
+      "exact_usage": "python3 dev-tools/td_cli.py agent send <SESSION_ID> <MESSAGE>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "string",
+          "description": "The ID of the Jules session."
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "The message text to send."
+        }
+      ]
     }
   }
 }

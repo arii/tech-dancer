@@ -168,7 +168,7 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
-          if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
+          if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
           python3 dev-tools/td_cli.py gh audit-gate
 
       - name: Design Token Compliance
@@ -200,6 +200,8 @@ jobs:
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build App
