@@ -4,6 +4,7 @@ import re
 import json
 import sys
 import shutil
+import subprocess
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse
@@ -917,6 +918,7 @@ Respond only after the PR is created or updated:
         original_cwd = os.getcwd()
         # Use a path that is clearly temporary and matches existing patterns for ignored files
         worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}.tmp")
+        changed_dir = False
 
         try:
             # 0. Pre-flight check for 'gh' CLI
@@ -938,16 +940,19 @@ Respond only after the PR is created or updated:
                 run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
                 if os.path.exists(worktree_path):
                     shutil.rmtree(worktree_path, ignore_errors=True)
+                if os.path.exists(worktree_path):
+                    raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
 
             # 3. Create detached worktree
             run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"])
 
             # 4. Switch to worktree and perform git operations
             os.chdir(worktree_path)
+            changed_dir = True
 
             # Checkout the PR branch using git
-            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=False)
-            run_command(["git", "checkout", head_ref], check=False)
+            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=False)
@@ -960,12 +965,16 @@ Respond only after the PR is created or updated:
                 merge_cmd.extend(["-X", strategy])
 
             res = run_command(merge_cmd, check=False)
+            if not isinstance(res, subprocess.CompletedProcess):
+                raise CLIError("Failed to execute git merge command")
 
             if res.returncode == 0:
                 message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
                 status = "success"
                 if push:
                     head_branch = pr_data.get('head', {}).get('ref')
+                    if not head_branch:
+                        raise CLIError(f"Could not determine head branch reference to push to origin")
                     try:
                         # Use authenticated URL if token is available to avoid terminal prompts
                         if self.github.token and self.github.repo:
@@ -986,11 +995,13 @@ Respond only after the PR is created or updated:
                 "message": message,
                 "worktree_path": worktree_path,
                 "pr_number": pr_number,
-                "base_branch": base_branch
+                "base_branch": base_branch,
+                "head_branch": head_ref
             }
         except CLIError:
             raise
         except Exception as e:
             raise CLIError(f"Failed to setup conflict resolution worktree: {str(e)}")
         finally:
-            os.chdir(original_cwd)
+            if changed_dir:
+                os.chdir(original_cwd)
