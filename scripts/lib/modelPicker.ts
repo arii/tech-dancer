@@ -1,3 +1,4 @@
+
 export interface GitHubModel {
   id: string;
   name: string;
@@ -109,4 +110,68 @@ export async function pickOptimalModel(
 
   if (isFallbackValid) return fallback;
   return models[0].id.split('/').pop() || models[0].id;
+}
+
+export async function pickOptimalGeminiModel(
+  estimatedInputTokens: number = 0,
+  fallback: string = 'gemini-1.5-flash'
+): Promise<string> {
+  // Respect explicit user override if present
+  if (process.env.GEMINI_MODEL) {
+    return process.env.GEMINI_MODEL;
+  }
+
+  try {
+    const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY;
+    if (!apiKey) {
+      console.warn("⚠️ No API key found for Gemini, falling back to default model.");
+      return fallback;
+    }
+
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+    if (!res.ok) {
+      console.warn(`⚠️ Failed to fetch Gemini models: ${res.status} ${res.statusText}`);
+      return fallback;
+    }
+
+    const data = await res.json();
+    if (!data || !Array.isArray(data.models)) {
+      console.warn("⚠️ Invalid format returned from Gemini models endpoint.");
+      return fallback;
+    }
+
+    // Filter available models
+    const availableModelNames = data.models.map((m: { name: string }) => m.name.replace('models/', ''));
+
+    // Preference list. If it's a huge context we might prefer gemini-1.5-pro
+    // but gemini-1.5-pro is paid only.
+    let preferred: string[] = [];
+    if (estimatedInputTokens > 200000) {
+      // Prioritize pro models with high context
+      preferred = ['gemini-1.5-pro', 'gemini-2.0-flash'];
+    } else {
+      // Prioritize flash models for cost/latency
+      preferred = ['gemini-1.5-flash', 'gemini-2.0-flash'];
+    }
+
+    for (const pref of preferred) {
+      if (availableModelNames.includes(pref)) {
+        return pref;
+      }
+    }
+
+    // If none of preferred found, try fallback
+    if (availableModelNames.includes(fallback)) {
+      return fallback;
+    }
+
+    // Ultimate fallback
+    if (availableModelNames.length > 0) {
+       return availableModelNames[0];
+    }
+  } catch(error) {
+    console.warn(`⚠️ Error picking optimal Gemini model: ${error}`);
+  }
+
+  return fallback;
 }
