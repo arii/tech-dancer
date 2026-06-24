@@ -260,7 +260,7 @@ async function decideNextAction(
   // OPTIMIZATION 2: Only show the last 4 actions to prevent ballooning history tokens
   const historySummary = history
     .slice(-4)
-    .map((a, i) => `${a.type} ${a.selector || ''}`)
+    .map(a => `${a.type} ${a.selector || ''}`)
     .join('\n');
 
   // OPTIMIZATION 3: Shortened systemic tone instruction since JSON mode handles structure constraints
@@ -291,7 +291,7 @@ Do not select destructive elements.`;
   try {
     const parsed = JSON.parse(text.trim());
     if (isValidAction(parsed)) return parsed;
-  } catch (e) {
+  } catch {
     console.error('JSON parse fail', text);
   }
 
