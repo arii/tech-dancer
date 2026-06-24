@@ -10,6 +10,11 @@ image: "/assets/home/wcs-travel-pack.webp"
 imageAlt: "A flat-lay of WCS travel essentials including dance shoes, earplugs, and a travel steamer."
 imageFit: contain
 author: "Ariel Anders, PhD"
+affiliateIds:
+  - "loop-experience"
+  - "portable-steamer"
+  - "jbl-flip-6"
+  - "portable-charger"
 ---
 
 > Here is a practical packing checklist for a smoother West Coast Swing weekend, based on common dancer pain points: sore feet, loud ballrooms, sweaty workshops, cold hotel spaces, and late-night social dancing.
