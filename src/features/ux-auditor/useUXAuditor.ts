@@ -50,7 +50,8 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3, baseDelay = 10
 }
 
 // --- Configuration & Constants ---
-const apiKey = import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || sessionStorage.getItem('ux-auditor-api-key') || "";
+const env = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}) as Record<string, string>;
+const apiKey = env.VITE_OPENAI_API_KEY || env.VITE_GEMINI_API_KEY || (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('ux-auditor-api-key') : "") || "";
 declare const __app_id: string | undefined;
 declare const __firebase_config: string | undefined;
 declare const __initial_auth_token: string | undefined;
