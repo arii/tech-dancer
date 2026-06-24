@@ -30,39 +30,57 @@ def main() -> None:
                     else:
                         raise
 
+        def detect_ai_source(body: str) -> str:
+            body_lower = body.lower()
+            if "github models" in body_lower or "github-models" in body_lower:
+                return "github-models"
+            elif "gemini" in body_lower:
+                return "gemini"
+            elif "repoauditor" in body_lower or "technical audit" in body_lower:
+                return "repo-auditor"
+            return "unknown"
+
         def fetch_and_filter_comments(pr_number: int, endpoint: str, comment_type: str) -> List[Dict[str, Any]]:
             fetched_comments = []
             res = client.run_authenticated_gh(['api', f'/repos/{repo}/{endpoint}/{pr_number}/comments'])
             comments: List[Dict[str, Any]] = json.loads(res)
             for comment in comments:
                 user_login: str = comment.get('user', {}).get('login', '')
-                if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot']:
-                    fetched_comments.append({
-                        'type': comment_type,
-                        'pr': pr_number,
-                        'bot': user_login,
-                        'body': comment['body'],
-                        'html_url': comment['html_url']
-                    })
+                if 'bot' in user_login.lower() or user_login in ['github-actions[bot]', 'tech-dancer-bot', 'ariii']:
+                    body = comment.get('body', '')
+                    if "AI Review" in body or "Gemini Code Review Agent" in body or "<!-- ai-review-count" in body:
+                        source = detect_ai_source(body)
+                        # If the user is a human but it doesn't have a clear AI signature, maybe it's still an AI review
+                        # because they copy-pasted it, so we'll fallback to their username if it's unknown.
+                        if source == "unknown" and user_login == 'ariii':
+                            source = "user-ariii"
+                        elif source == "unknown":
+                            source = "github-actions" # generic bot
+
+                        fetched_comments.append({
+                            'type': comment_type,
+                            'pr': pr_number,
+                            'bot': user_login,
+                            'source': source,
+                            'body': body,
+                            'html_url': comment['html_url']
+                        })
             return fetched_comments
 
         print("Fetching PRs...")
         prs: List[Dict[str, Any]] = fetch_prs_with_retry()
 
-        results: List[Dict[str, Any]] = []
+        ai_comments: List[Dict[str, Any]] = []
         # Process up to 50 recent PRs
         print("Collecting AI review comments from the last 50 PRs...")
         for pr in prs[:50]:
             pr_number: int = pr['number']
             try:
                 # Read issue comments and review comments
-                results.extend(fetch_and_filter_comments(pr_number, 'issues', 'issue'))
-                results.extend(fetch_and_filter_comments(pr_number, 'pulls', 'review'))
+                ai_comments.extend(fetch_and_filter_comments(pr_number, 'issues', 'issue'))
+                ai_comments.extend(fetch_and_filter_comments(pr_number, 'pulls', 'review'))
             except Exception as e:
                 print(f"Error fetching comments for PR #{pr_number}: {e}")
-
-        # Filter for AI review comments
-        ai_comments: List[Dict[str, Any]] = [c for c in results if "AI Review" in c['body'] or "Gemini Code Review Agent" in c['body'] or "<!-- ai-review-count" in c['body']]
 
         with open('ai_reviews_summary.json', 'w') as f:
             json.dump(ai_comments, f, indent=2)
