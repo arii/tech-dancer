@@ -8,7 +8,7 @@ import os
 import sys
 import re
 from typing import Optional
-from utils import call_ai, clean_llm_output, get_ollama_model
+from utils import call_ai, clean_llm_output, get_ai_model
 
 MODEL = get_ai_model()
 MOCK_MODE = os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true"

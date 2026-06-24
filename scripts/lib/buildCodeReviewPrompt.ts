@@ -58,6 +58,10 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
     ? `${VISUAL_DESIGN_GUIDELINES}\n\n`
     : '';
 
+  const impactSemanticContextSection = summary.impactSemanticContext
+    ? `IMPACT & SEMANTIC CONTEXT (Dependency relationships and semantically similar code):\n${summary.impactSemanticContext}\n\n`
+    : '';
+
   const uiAuditInstruction = touchesUI
     ? 'This diff contains UI files (.tsx, .css, .scss) — you MUST audit them against the VISUAL & DESIGN GUIDELINES above.\n\n'
     : '';
@@ -66,7 +70,7 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
 Review the following code diff for bugs, anti-patterns, missing types, performance issues, and visual quality defects.
 Provide actionable feedback. Focus on HIGH severity issues.
 
-${guidelinesSection}${goalSection}${priorStateSection}
+${guidelinesSection}${goalSection}${priorStateSection}${impactSemanticContextSection}
 ${uiAuditInstruction}Severity rules — apply these strictly:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
   passed where the type doesn't allow it, a class or function that doesn't exist, a call

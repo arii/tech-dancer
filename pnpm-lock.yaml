@@ -132,9 +132,6 @@ importers:
       '@langchain/google-genai':
         specifier: ^2.2.0
         version: 2.2.0(@langchain/core@1.2.0(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))
-      '@langchain/openai':
-        specifier: ^1.4.7
-        version: 1.4.7(@langchain/core@1.2.0(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))(ws@8.20.0)
       '@lhci/cli':
         specifier: ^0.15.1
         version: 0.15.1
@@ -1662,12 +1659,6 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       '@langchain/core': ^1.2.0
-
-  '@langchain/openai@1.4.7':
-    resolution: {integrity: sha512-i1YLV4pWbGC6W8m0ZNpLObJuf1nyU4o8aWyX4AF9fHn7eM67HfIJWQ5n5XzcCpuSa41otrxA9jvH5XRKwI1qDA==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      '@langchain/core': ^1.1.48
 
   '@lhci/cli@0.15.1':
     resolution: {integrity: sha512-yhC0oXnXqGHYy1xl4D8YqaydMZ/khFAnXGY/o2m/J3PqPa/D0nj3V6TLoH02oVMFeEF2AQim7UbmdXMiXx2tOw==}
@@ -8128,15 +8119,6 @@ snapshots:
       '@google/generative-ai': 0.24.1
       '@langchain/core': 1.2.0(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0)
 
-  '@langchain/openai@1.4.7(@langchain/core@1.2.0(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0))(ws@8.20.0)':
-    dependencies:
-      '@langchain/core': 1.2.0(openai@6.43.0(ws@8.20.0)(zod@3.25.76))(ws@8.20.0)
-      js-tiktoken: 1.0.21
-      openai: 6.43.0(ws@8.20.0)(zod@4.3.6)
-      zod: 4.3.6
-    transitivePeerDependencies:
-      - ws
-
   '@lhci/cli@0.15.1':
     dependencies:
       '@lhci/utils': 0.15.1
@@ -11714,11 +11696,6 @@ snapshots:
       ws: 8.20.0
       zod: 3.25.76
     optional: true
-
-  openai@6.43.0(ws@8.20.0)(zod@4.3.6):
-    optionalDependencies:
-      ws: 8.20.0
-      zod: 4.3.6
 
   optionator@0.9.4:
     dependencies:

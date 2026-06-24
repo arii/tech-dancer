@@ -14,7 +14,7 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
@@ -39,7 +39,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
+    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText).map(msg => msg.content).join('\n\n');
     const message = new HumanMessage({ content: baseContent });
 
     let response = await model.invoke([message]);
@@ -51,10 +51,10 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
         usage: response.usage_metadata,
       });
 
-      const retryMaxOutputTokens = Math.round(maxOutputTokens * 1.25);
-      thinkingBudget = Math.round(thinkingBudget * 0.5);
+      const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
+      thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, retryMaxOutputTokens, thinkingBudget);
+      model = createGeminiModel(modelName, newMax, thinkingBudget);
       response = await model.invoke([message]);
 
       finishReason = extractFinishReason(response);
@@ -65,11 +65,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       output_tokens?: number;
       total_tokens?: number;
       thoughts_token_count?: number;
+      cache_read_tokens?: number;
     };
 
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens ?? 0;
     // thoughtsTokenCount might be nested in response_metadata or usage_metadata
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
                                (typeof response.response_metadata === 'object' && response.response_metadata !== null
@@ -118,15 +120,15 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
     logAIRun({
-      botName: 'gemini-code-review',
-      modelName,
+      type: 'code-review',
+      model: modelName,
       inputTokens,
       outputTokens,
+      cacheTokens,
       totalTokens,
-      thoughtsTokenCount,
       cost,
       durationMs,
-      verdict: feedback ? parseCodeReviewVerdict(feedback) : undefined,
+      verdict: feedback ? parseCodeReviewVerdict(feedback) : 'unknown',
       truncated: isTruncated,
       parseError: parsedState.parseError,
     });
@@ -134,6 +136,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     return {
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       modelName: modelName,
       llmVerdict: parseCodeReviewVerdict(feedback),

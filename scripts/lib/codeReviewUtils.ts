@@ -24,19 +24,22 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   const closeIdx = feedback.lastIndexOf(closeTag);
 
   if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
-    // Did the model even attempt a findings block? If <findings> opened but
-    // never closed, that's a strong truncation signal.
     const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
     return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
   }
 
-  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+
+  // Strip markdown code block markers that LLMs sometimes insert inside the tags
+  jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
 
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
       console.warn('Failed to parse findings JSON from LLM response:', e);
+      // Log a snippet of the failed JSON for debugging
+      console.warn('JSON snippet:', jsonText.slice(0, 100) + '...');
     }
     return { state: undefined, parseError: 'invalid_json' };
   }
@@ -62,9 +65,6 @@ export function estimateMaxOutputTokens(
   const totalBudget = Math.ceil(estimatedOutput + thinkingBudget + outputPadding + priorFindingsBudget);
 
   // Hard ceiling — raised to match what the models actually support
-  // (gemini-3.5-flash and gemini-3.1-pro-preview both report
-  // maxOutputTokens: 8192 in geminiModelPicker.ts). The previous ceiling of
-  // 4096 was silently capping the budget below the model's real limit.
   return Math.min(totalBudget, 8192);
 }
 
@@ -114,27 +114,38 @@ export function calculateEstimatedTokens(text: string | string[]): number {
   return Math.ceil(combined.length / 4);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function extractFeedbackText(content: any): string {
+export function extractFeedbackText(content: unknown): string {
   if (content === null || content === undefined) return '';
   let feedback: string;
+
   if (typeof content === 'string') {
-    feedback = content;
+    feedback = content.replace(/^\s*```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```\s*$/i, '');
   } else if (Array.isArray(content)) {
-    feedback = content
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .filter((p: any) => !p.thought)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((p: any) => p.text ?? '')
-      .join('');
+    const textParts = content
+      .filter((p: unknown) => {
+        if (typeof p === 'object' && p !== null) {
+          return !('thought' in p);
+        }
+        return true;
+      })
+      .map((p: unknown) => {
+        if (typeof p === 'object' && p !== null && 'text' in p) {
+          return String((p as Record<string, unknown>).text ?? '');
+        }
+        return '';
+      })
+      .filter(p => p !== ''); // Only keep actual text parts
+
+    if (textParts.length > 0) {
+      feedback = textParts.join('');
+    } else {
+      feedback = JSON.stringify(content); // Fallback to full JSON stringification if no text parts
+    }
   } else {
     feedback = JSON.stringify(content);
   }
 
-  if (!feedback && Array.isArray(content)) {
-    feedback = JSON.stringify(content);
-  }
-  return feedback || '';
+  return feedback;
 }
 
 /**
@@ -147,7 +158,7 @@ export function cleanupFeedback(feedback: string): string {
   return cleaned.replace(/\n{3,}/g, '\n\n').trim();
 }
 
-export type ReviewPayloadItem = { type: 'text'; text: string };
+export type ReviewPayloadItem = { role: string; content: string };
 
 export interface PayloadConfig {
   diffPrefix?: string;
@@ -155,7 +166,7 @@ export interface PayloadConfig {
 }
 
 /**
- * Builds the standard payload for code review models.
+ * Builds the standard payload for code review models using direct REST API role structure.
  */
 export function buildReviewPayload(
   systemPrompt: string,
@@ -167,15 +178,17 @@ export function buildReviewPayload(
   const externalPrefix = config.externalPrefix ?? 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
 
   const payload: ReviewPayloadItem[] = [
-    { type: 'text', text: systemPrompt },
-    { type: 'text', text: `${diffPrefix}${diffText}` },
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: `${diffPrefix}${diffText}` },
   ];
 
   if (externalText) {
     const formattedExternal = externalText === EXTERNAL_CONTEXT_TRUNCATED_MESSAGE
       ? externalText
       : `${externalPrefix}${externalText}`;
-    payload.push({ type: 'text', text: formattedExternal });
+    // Using a separate system message for symbol resolution context ensures it's treated
+    // as context mapping rather than part of the user's diff input
+    payload.push({ role: 'system', content: formattedExternal });
   }
 
   return payload;

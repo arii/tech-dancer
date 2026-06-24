@@ -2,7 +2,7 @@ import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
@@ -71,8 +71,9 @@ Your job:
         usage: response.usage_metadata,
       });
 
-      maxOutputTokens = Math.round(maxOutputTokens * 1.25);
-      thinkingBudget = Math.round(thinkingBudget * 0.5);
+      const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
+      maxOutputTokens = newMax;
+      thinkingBudget = newThinking;
 
       model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
       response = await model.invoke([message]);
@@ -89,6 +90,7 @@ Your job:
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = (usageMetadata as { cache_read_tokens?: number })?.cache_read_tokens ?? 0;
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
                                (typeof response.response_metadata === 'object' && response.response_metadata !== null
                                  ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
@@ -136,6 +138,9 @@ Your job:
       differencePercent: summary.differencePercent,
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),

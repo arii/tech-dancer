@@ -5,6 +5,7 @@ import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJules
 import { calculateEstimatedTokens, cleanupFeedback } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
 import { execSync, spawnSync } from 'child_process';
+import { logReviewExecution } from './aiLogger';
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -232,12 +233,54 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const hasRealContent = externalContext.replace(/\n\n\.\.\.\[TRUNCATED EXTERNAL CONTEXT\]/g, '').trim().length > 0;
 
+    // AI Context enrichment
+    let impactSemanticContext = '';
+    try {
+      const batchFiles = [];
+      for (const file of files) {
+        if (!fs.existsSync(file)) continue;
+        const fileDiff = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' }).stdout || '';
+        if (fileDiff) {
+          batchFiles.push({ path: file, diff: fileDiff });
+        }
+      }
+
+      if (batchFiles.length > 0) {
+        const inputData = JSON.stringify({ files: batchFiles });
+        const res = spawnSync('python3', ['dev-tools/get_ai_context.py'], {
+          input: inputData,
+          encoding: 'utf-8',
+          maxBuffer: 1024 * 1024 * 50 // 50MB buffer for large diffs
+        });
+
+        if (res.status === 0 && res.stdout) {
+          const contextResults = JSON.parse(res.stdout);
+          for (const ctx of contextResults) {
+            if (ctx.dependencies?.length || ctx.dependents?.length || ctx.semantic?.length) {
+              impactSemanticContext += `\n\n### Context for ${ctx.path}\n`;
+              if (ctx.dependencies?.length) impactSemanticContext += `- Dependencies: ${ctx.dependencies.join(', ')}\n`;
+              if (ctx.dependents?.length) impactSemanticContext += `- Impacted (dependents): ${ctx.dependents.join(', ')}\n`;
+              if (ctx.semantic?.length) {
+                impactSemanticContext += `- Semantically related snippets:\n`;
+                for (const s of ctx.semantic) {
+                  impactSemanticContext += `  - From ${s.path}:\n    \`\`\`\n    ${s.document.slice(0, 300).replace(/\n/g, '\n    ')}\n    \`\`\`\n`;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Could not gather impact/semantic context:', err);
+    }
+
     const summary: CodeReviewSummary = {
       diffContext,
       fullDiff,
       prGoal,
       changedFiles: files,
       externalContext: hasRealContent ? externalContext.trim() : undefined,
+      impactSemanticContext: impactSemanticContext.trim() || undefined,
     };
 
     summary.estimatedInputTokens = calculateEstimatedTokens([
@@ -345,11 +388,15 @@ export async function orchestrateCodeReview(
 
   if (reviewResult.truncated) {
     console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
+    logReviewExecution('code-review', reviewResult, reviewResult.durationMs ?? (Date.now() - startTime));
+    const retryStartTime = Date.now();
     reviewResult = await client.invokeReview(summary, 8192);
+    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - retryStartTime);
+  } else {
+    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - startTime);
   }
 
-  const durationMs = Date.now() - startTime;
-  reviewResult.durationMs = durationMs;
+  logReviewExecution('code-review', reviewResult, reviewResult.durationMs); // Captured telemetry from client
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,
