@@ -4,6 +4,7 @@ import { HumanMessage } from '@langchain/core/messages';
 import * as fs from 'fs';
 import * as path from 'path';
 import { pickOptimalGeminiModel } from './lib/modelPicker';
+import { createGeminiModel, extractFeedbackText } from './lib/geminiUtils';
 
 const TMP_DIR = path.join(process.cwd(), '.tmp-crawler');
 const SNAPSHOTS_DIR = path.join(TMP_DIR, 'snapshots');
@@ -117,6 +118,9 @@ async function runCrawler() {
     console.error('Error: Neither GEMINI_API_KEY nor JULES_API_KEY environment variable is set.');
     process.exit(1);
   }
+  if (!process.env.GEMINI_API_KEY) {
+    process.env.GEMINI_API_KEY = apiKey;
+  }
 
   await cleanupSnapshots();
 
@@ -150,11 +154,7 @@ async function runCrawler() {
 
       // Decision making with Gemini
       const modelName = await pickOptimalGeminiModel(0);
-      const model = new ChatGoogleGenerativeAI({
-        model: modelName,
-        apiKey,
-        maxOutputTokens: 1024,
-      });
+      const model = createGeminiModel(modelName, 4096, 1024);
 
       const action = await decideNextAction(model, url, elements, actionHistory, screenshotPath);
       console.log(`Action: ${action.type}${action.selector ? ` on ${action.selector}` : ''} - Reason: ${action.reason}`);
@@ -222,11 +222,7 @@ async function runCrawler() {
     console.log('\nExploration complete. Generating final report...');
     const estimatedReportTokens = capturedScreenshots.length * 1000;
     const reportModelName = await pickOptimalGeminiModel(estimatedReportTokens);
-    const reportModel = new ChatGoogleGenerativeAI({
-      model: reportModelName,
-      apiKey,
-      maxOutputTokens: 2048,
-    });
+    const reportModel = createGeminiModel(reportModelName, 4096, 1024);
 
     const report = await generateVisualReview(reportModel, capturedScreenshots);
     const reportPath = path.join(TMP_DIR, 'report.md');
@@ -268,7 +264,7 @@ Format your report in Markdown. Include a summary section and then detail findin
   const message = new HumanMessage({ content: contents });
   const response = await model.invoke([message]);
 
-  return typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
+  return extractFeedbackText(response.content);
 }
 
 async function decideNextAction(
@@ -328,7 +324,7 @@ Provide ONLY the JSON.
   });
 
   const response = await model.invoke([message]);
-  const text = typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
+  const text = extractFeedbackText(response.content);
 
   try {
     // Clean potential markdown blocks
