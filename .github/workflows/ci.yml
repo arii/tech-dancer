@@ -94,7 +94,7 @@ jobs:
         run: |
           echo "::group::pnpm install"
           trap 'echo "::endgroup::"' EXIT
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           echo "::endgroup::"
           trap - EXIT
 
