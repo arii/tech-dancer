@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import * as fs from 'fs';
 import * as path from 'path';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';

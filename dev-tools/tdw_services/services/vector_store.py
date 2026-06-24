@@ -11,22 +11,16 @@ class VectorStore:
 
     @property
     def client(self):
-        if self._client is None:
-            try:
-                import chromadb
-                self._client = chromadb.PersistentClient(path=self.persist_directory)
-            except ImportError:
-                return None
+        if self._client is None and self.is_available():
+            import chromadb
+            self._client = chromadb.PersistentClient(path=self.persist_directory)
         return self._client
 
     @property
     def embedding_fn(self):
-        if self._embedding_fn is None:
-            try:
-                from chromadb.utils import embedding_functions
-                self._embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-            except ImportError:
-                return None
+        if self._embedding_fn is None and self.is_available():
+            from chromadb.utils import embedding_functions
+            self._embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
         return self._embedding_fn
 
     @property

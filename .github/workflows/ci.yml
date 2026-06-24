@@ -438,11 +438,17 @@ jobs:
           status_line: '✅ **Impact Analysis Complete**'
           impact_body: ${{ env.IMPACT_BODY }}
 
+      - name: Merge AI Logs into Artifacts
+        if: always()
+        run: |
+          # Safely clean legacy logs
+          rm -f dev-tools/logs/ai/review-run.json artifacts/review-run.json || true
+          mkdir -p artifacts/logs/ai
+          cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
+
       - name: Upload Deployment Review Artifacts
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: deployment-review
-          path: |
-            artifacts/
-            dev-tools/logs/ai/
+          path: artifacts/
