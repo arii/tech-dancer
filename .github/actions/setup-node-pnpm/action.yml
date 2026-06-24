@@ -24,8 +24,7 @@ runs:
       with:
         cache: 'pnpm'
         cache-dependency-path: pnpm-lock.yaml
-        node-version-file: ${{ inputs.node-version == '' && inputs.node-version-file || null }}
-        node-version: ${{ inputs.node-version != '' && inputs.node-version || null }}
+        node-version-file: ${{ inputs.node-version-file }}
 
     - name: Enable Corepack
       run: corepack enable
