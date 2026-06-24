@@ -14,9 +14,6 @@ These are **rules for writing clean `.tsx` files** so UI code consistently follo
 1. `dev-tools/cli-schema.json` — canonical CLI reference
 2. `.agent/INSTRUCTION_LAYERS.md` — which file owns which domain
 
-**For UI/TSX work, also read first:**
-- `.agents/skills/impeccable/SKILL.md`
-
 **Then run:**
 1. `python3 dev-tools/td_cli.py gh conflicts`
 2. `pnpm run audit`
@@ -158,8 +155,6 @@ When multiple agents work simultaneously:
 ## 21) 🤝 Collaborative GitHub Workflows
 
 `dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
-
-**CLI authority**: Always consult `dev-tools/cli-schema.json` for exact command syntax. Examples in this file are illustrative only.
 
 ### Issue Lifecycle
 
