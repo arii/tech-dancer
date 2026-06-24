@@ -57,8 +57,9 @@ describe('codeReviewUtils', () => {
   });
 
   describe('extractFeedbackText', () => {
-    it('returns string content as is', () => {
+    it('returns string content as is, stripping markdown code blocks if present', () => {
       expect(extractFeedbackText('Plain text')).toBe('Plain text');
+      expect(extractFeedbackText('```json\n{ "test": 1 }\n```')).toBe('{ "test": 1 }');
     });
 
     it('joins text parts from an array, skipping thoughts', () => {
@@ -228,8 +229,9 @@ describe('codeReviewUtils', () => {
   describe('buildReviewPayload', () => {
     it('applies prefixes to payload texts', () => {
       const payload = buildReviewPayload('Prompt', 'Diff content', 'External content');
-      expect(payload[1].text).toBe('DIFF:\n\nDiff content');
-      expect(payload[2].text).toBe('EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\nExternal content');
+      expect(payload[0]).toEqual({ role: 'system', content: 'Prompt' });
+      expect(payload[1]).toEqual({ role: 'user', content: 'DIFF:\n\nDiff content' });
+      expect(payload[2]).toEqual({ role: 'system', content: 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\nExternal content' });
     });
 
     it('applies custom prefixes to payload texts', () => {
@@ -237,13 +239,13 @@ describe('codeReviewUtils', () => {
         diffPrefix: 'CustomDiff:\n',
         externalPrefix: 'CustomExt:\n',
       });
-      expect(payload[1].text).toBe('CustomDiff:\nDiff content');
-      expect(payload[2].text).toBe('CustomExt:\nExternal content');
+      expect(payload[1]).toEqual({ role: 'user', content: 'CustomDiff:\nDiff content' });
+      expect(payload[2]).toEqual({ role: 'system', content: 'CustomExt:\nExternal content' });
     });
 
     it('does not apply prefix if external text is fully truncated', () => {
       const payload = buildReviewPayload('Prompt', 'Diff content', EXTERNAL_CONTEXT_TRUNCATED_MESSAGE);
-      expect(payload[2].text).toBe(EXTERNAL_CONTEXT_TRUNCATED_MESSAGE);
+      expect(payload[2]).toEqual({ role: 'system', content: EXTERNAL_CONTEXT_TRUNCATED_MESSAGE });
     });
   });
 });

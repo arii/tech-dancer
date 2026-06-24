@@ -24,13 +24,14 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   const closeIdx = feedback.lastIndexOf(closeTag);
 
   if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
-    // Did the model even attempt a findings block? If <findings> opened but
-    // never closed, that's a strong truncation signal.
     const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
     return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
   }
 
-  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+
+  // Strip markdown code block markers that LLMs sometimes insert inside the tags
+  jsonText = jsonText.replace(/^\`\`\`(?:json|xml)?\s*/gi, '').replace(/\s*\`\`\`$/g, '').trim();
 
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
@@ -119,7 +120,7 @@ export function extractFeedbackText(content: any): string {
   if (content === null || content === undefined) return '';
   let feedback: string;
   if (typeof content === 'string') {
-    feedback = content;
+    feedback = content.replace(/^```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```$/i, '');
   } else if (Array.isArray(content)) {
     feedback = content
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -147,7 +148,7 @@ export function cleanupFeedback(feedback: string): string {
   return cleaned.replace(/\n{3,}/g, '\n\n').trim();
 }
 
-export type ReviewPayloadItem = { type: 'text'; text: string };
+export type ReviewPayloadItem = { role: string; content: string };
 
 export interface PayloadConfig {
   diffPrefix?: string;
@@ -155,7 +156,7 @@ export interface PayloadConfig {
 }
 
 /**
- * Builds the standard payload for code review models.
+ * Builds the standard payload for code review models using direct REST API role structure.
  */
 export function buildReviewPayload(
   systemPrompt: string,
@@ -167,15 +168,17 @@ export function buildReviewPayload(
   const externalPrefix = config.externalPrefix ?? 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
 
   const payload: ReviewPayloadItem[] = [
-    { type: 'text', text: systemPrompt },
-    { type: 'text', text: `${diffPrefix}${diffText}` },
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: `${diffPrefix}${diffText}` },
   ];
 
   if (externalText) {
     const formattedExternal = externalText === EXTERNAL_CONTEXT_TRUNCATED_MESSAGE
       ? externalText
       : `${externalPrefix}${externalText}`;
-    payload.push({ type: 'text', text: formattedExternal });
+    // Using a separate system message for symbol resolution context ensures it's treated
+    // as context mapping rather than part of the user's diff input
+    payload.push({ role: 'system', content: formattedExternal });
   }
 
   return payload;

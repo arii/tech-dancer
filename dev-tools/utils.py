@@ -54,7 +54,7 @@ def get_ai_model() -> str:
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
-    match = re.search(r"```(?:\w+)?\n(.*?)\n```", text, re.DOTALL)
+    match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
     if match:
         return match.group(1).strip()
     return text.strip()

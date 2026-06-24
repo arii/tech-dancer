@@ -1,5 +1,4 @@
-import { ChatOpenAI } from '@langchain/openai';
-import { HumanMessage } from '@langchain/core/messages';
+import fetch from 'node-fetch';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -13,10 +12,10 @@ import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
-async function createModel(
+async function createModelConfig(
   estimatedInputTokens: number = 0,
   maxOutputTokens: number = 1500
-): Promise<{ model: ChatOpenAI; modelName: string }> {
+): Promise<{ apiKey: string; modelName: string; maxTokens: number }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
@@ -36,15 +35,7 @@ async function createModel(
 
   console.log(`📌 github-models-code-review using model: ${modelName}, maxOutputTokens: ${finalMaxTokens}`);
 
-  const model = new ChatOpenAI({
-    modelName: modelName,
-    apiKey: apiKey,
-    configuration: { baseURL: 'https://models.inference.ai.azure.com' },
-    maxTokens: finalMaxTokens,
-    temperature: 0.1,
-  });
-
-  return { model, modelName };
+  return { apiKey, modelName, maxTokens: finalMaxTokens };
 }
 
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
@@ -62,27 +53,44 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const estimatedInputTokens = Math.ceil(totalInputChars / 4);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
-    const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
+    const { apiKey, modelName, maxTokens } = await createModelConfig(estimatedInputTokens, maxOutputTokens);
 
-    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
+    const messages = buildReviewPayload(systemPrompt, diffText, externalText);
 
-    const message = new HumanMessage({ content: baseContent });
+    const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: modelName,
+        messages: messages,
+        max_tokens: maxTokens,
+        temperature: 0.1
+      })
+    });
 
-    const response = await model.invoke([message]);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`GitHub Models API error: ${response.status} ${response.statusText} - ${errorText}`);
+    }
 
+    const data = await response.json();
 
-    const usageMetadata = response.usage_metadata;
+    const usageMetadata = data.usage;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
     const cost = 0;
 
-    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
-      .response_metadata?.finish_reason;
+    const firstChoice = data.choices && data.choices[0];
+    const finishReason = firstChoice?.finish_reason;
     const isTruncated = finishReason === 'length';
     if (isTruncated) {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
-    const feedback = extractFeedbackText(response.content);
+    const rawContent = firstChoice?.message?.content;
+    const feedback = extractFeedbackText(rawContent);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
