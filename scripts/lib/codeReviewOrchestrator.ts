@@ -390,13 +390,13 @@ export async function orchestrateCodeReview(
 
 const HEDGE_PATTERN = /\b(may|might|could|possibly|unless|if not handled|potentially|likely)\b/i;
 
-export /**
+/**
  * Defends against the LLM ignoring its own severity rules: downgrades a FAIL
  * verdict to WARN if every finding backing it either (a) contains hedge
  * language the prompt explicitly says is non-blocking, or (b) cites a
  * snippet that doesn't actually appear in the diff it was given.
  */
-function reconcileVerdict(
+export function reconcileVerdict(
   result: CodeReviewResult,
   diffForVerification: string
 ): CodeReviewResult {
