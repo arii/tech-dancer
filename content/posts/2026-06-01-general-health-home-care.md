@@ -18,8 +18,6 @@ tags:
 
 Recovery is just as important as practice. After a long weekend of dancing—often clocking 20,000+ steps a day on hard ballroom floors—your muscles need targeted attention to prevent injury, reduce soreness, and maintain the flexibility required for high-level West Coast Swing.
 
-![A high-density solid-core foam roller used for deep tissue muscle recovery and myofascial release.](/images/gear/sketches/foam-roller.webp)
-
 ### Muscle Recovery & Myofascial Release
 
 A high-density foam roller is an essential tool for any dancer's home recovery kit. It uses your own body weight to perform deep tissue massage, breaking up adhesions in the fascia and increasing blood flow to tired tissues.
@@ -27,18 +25,6 @@ A high-density foam roller is an essential tool for any dancer's home recovery k
 #### Target Muscle Groups for Dancers
 
 For West Coast Swing dancers, the primary focus should be on the posterior chain and the muscles responsible for stabilization and explosive movement.
-
-```mermaid
-graph TD
-    A[Foam Rolling Target Areas] --> B[Lower Body]
-    A --> C[Upper Body]
-    B --> D[Calves]
-    B --> E[Quads]
-    B --> F[IT Band]
-    B --> G[Glutes]
-    C --> H[Lats]
-    C --> I[Thoracic Spine]
-```
 
 #### 1. Calves (Gastrocnemius & Soleus)
 Dancers spend significant time on their toes (the "Tick"). Place the roller under your ankles and slowly roll up toward the knee. To increase pressure, cross one leg over the other.
