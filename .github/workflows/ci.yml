@@ -177,7 +177,7 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
           export PYTHONPATH
-          if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
+          if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
           python3 dev-tools/td_cli.py gh audit-gate
 
       - name: Design Token Compliance
