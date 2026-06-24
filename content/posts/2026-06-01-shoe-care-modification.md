@@ -24,12 +24,13 @@ While some of these provided temporary relief, I found that none of them were a 
 The odor isn't actually the sweat itself—it's the bacteria that thrive in the warm, damp environment inside your shoes. When you dance for hours, your shoes become a petri dish. If you don't remove that moisture completely before the next session, the bacteria continue to multiply, and the smell becomes increasingly difficult to manage.
 
 ![A pair of black strappy ballroom dance shoes, which can trap moisture and bacteria during long social dancing sessions.](/images/gear/amazon/hxyoo-ballroom-dance-shoes-boots-for-women-salsa-latin-wedding-party-2.jpg)
-
+<Text variant="mono" size="micro" color="dim" uppercase textAlign="center" display="block" marginTop={-10} marginBottom={12}>Equipment Hygiene</Text>
 
 ### Why the Electric Shoe Dryer is My Top Choice
 After experimenting with so many different methods, I found that an electric shoe dryer and deodorizer is the most effective way to combat this. Unlike passive drying, which can take days (especially in humid hotel rooms), an electric dryer uses gentle heat and airflow to pull moisture out of the deep foam and fabric layers of your dance shoes.
 
 ![Portable electric shoe dryer showing the two heating elements and the wired timer control unit.](/images/gear/amazon/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpg)
+<Text variant="mono" size="micro" color="dim" uppercase textAlign="center" display="block" marginTop={-10} marginBottom={12}>Portable Maintenance Gear</Text>
 
 In my experience, using a dryer for just 30-60 minutes after a dance session makes a world of difference:
 
