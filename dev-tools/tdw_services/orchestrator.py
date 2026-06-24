@@ -945,8 +945,9 @@ Respond only after the PR is created or updated:
             # 4. Switch to worktree and perform git operations
             os.chdir(worktree_path)
 
-            # Checkout the PR branch
-            self.github.run_authenticated_gh(["pr", "checkout", str(pr_number)])
+            # Checkout the PR branch using git
+            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=False)
+            run_command(["git", "checkout", head_ref], check=False)
 
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=False)
