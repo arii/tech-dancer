@@ -40,5 +40,28 @@ class TestModernCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_analyze.assert_called_once_with('README.md')
 
+    @patch('tdw_services.orchestrator.Orchestrator.resolve_pr_conflicts')
+    def test_resolve_conflicts_calls_orchestrator(self, mock_resolve):
+        mock_resolve.return_value = {"status": "success", "message": "Resolution complete"}
+        result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123'])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("Resolution complete", result.output)
+        mock_resolve.assert_called_once_with(123, allow_unrelated=False, strategy=None, push=False)
+
+    @patch('tdw_services.orchestrator.Orchestrator.resolve_pr_conflicts')
+    def test_resolve_conflicts_with_strategy_and_push(self, mock_resolve):
+        mock_resolve.return_value = {"status": "success", "message": "Resolution complete"}
+        result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123', '--strategy', 'ours', '--push'])
+        self.assertEqual(result.exit_code, 0)
+        mock_resolve.assert_called_once_with(123, allow_unrelated=False, strategy='ours', push=True)
+
+    @patch('tdw_services.orchestrator.Orchestrator.resolve_pr_conflicts')
+    def test_resolve_conflicts_handles_error(self, mock_resolve):
+        from utils import CLIError
+        mock_resolve.side_effect = CLIError("Failed setup", code=500)
+        result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123'])
+        self.assertNotEqual(result.exit_code, 0)
+        self.assertIn("Failed setup", result.output)
+
 if __name__ == '__main__':
     unittest.main()

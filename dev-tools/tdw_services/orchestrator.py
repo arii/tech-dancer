@@ -4,6 +4,7 @@ import re
 import json
 import sys
 import shutil
+import subprocess
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse
@@ -909,3 +910,100 @@ Respond only after the PR is created or updated:
             "pr_url": pr_url,
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
+
+    def resolve_pr_conflicts(self, pr_number: int, allow_unrelated: bool = False, strategy: Optional[str] = None, push: bool = False) -> Dict[str, Any]:
+        """
+        Sets up a worktree for a specific PR and attempts to merge the base branch.
+        """
+        original_cwd = os.getcwd()
+        # Use a path that is clearly temporary and matches existing patterns for ignored files
+        worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}.tmp")
+        changed_dir = False
+
+        try:
+            # 0. Pre-flight check for 'gh' CLI
+            try:
+                run_command(["gh", "--version"], check=False)
+            except Exception:
+                raise CLIError("The 'gh' CLI is required but was not found in your PATH. Please install it first.")
+
+            # 1. Fetch PR details early to fail fast
+            pr_data = self.github.fetch_pr_details(pr_number)
+            base_branch = pr_data.get('base', {}).get('ref', 'main')
+            head_ref = pr_data.get('head', {}).get('ref')
+
+            if not head_ref:
+                raise CLIError(f"Could not determine head ref for PR #{pr_number}")
+
+            # 2. Clean up existing worktree if present
+            if os.path.exists(worktree_path):
+                run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
+                if os.path.exists(worktree_path):
+                    shutil.rmtree(worktree_path, ignore_errors=True)
+                if os.path.exists(worktree_path):
+                    raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
+
+            # 3. Fetch PR branch and create worktree directly on it
+            run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "worktree", "add", worktree_path, head_ref], check=True)
+
+            # 4. Switch to worktree and perform git operations
+            changed_dir = True
+            os.chdir(worktree_path)
+            changed_dir = True
+
+            # Checkout the PR branch using git
+            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "checkout", head_ref], check=True)
+
+            # Ensure origin/base_branch is up-to-date
+            run_command(["git", "fetch", "origin", base_branch], check=True)
+
+            # Attempt merge from base branch.
+            merge_cmd = ["git", "merge", f"origin/{base_branch}", "-m", f"Merge {base_branch} into PR #{pr_number}"]
+            if allow_unrelated:
+                merge_cmd.append("--allow-unrelated-histories")
+            if strategy in ["ours", "theirs"]:
+                merge_cmd.extend(["-X", strategy])
+
+            res = run_command(merge_cmd, check=False)
+            if not isinstance(res, subprocess.CompletedProcess):
+                raise CLIError("Failed to execute git merge command")
+
+            if res.returncode == 0:
+                message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
+                status = "success"
+                if push:
+                    head_branch = pr_data.get('head', {}).get('ref')
+                    if not head_branch:
+                        raise CLIError(f"Cannot push: head branch is missing for PR #{pr_number}")
+                    try:
+                        # Use authenticated URL if token is available to avoid terminal prompts
+                        if self.github.token and self.github.repo:
+                            auth_url = f"https://x-access-token:{self.github.token}@github.com/{self.github.repo}.git"
+                            run_command(["git", "push", auth_url, f"HEAD:{head_branch}"], check=True)
+                        else:
+                            run_command(["git", "push", "origin", head_branch], check=True)
+                        message += f"\n🚀 Successfully pushed resolution to {head_branch}"
+                    except Exception as push_err:
+                        message += f"\n⚠️  Merge successful but push failed: {str(push_err)}"
+                        status = "partial_success"
+            else:
+                message = f"⚠️  Conflicts detected in PR #{pr_number} when merging {base_branch}.\nAction Required: Resolve them manually in the worktree.\nCommand: cd {worktree_path}"
+                status = "conflict"
+
+            return {
+                "status": status,
+                "message": message,
+                "worktree_path": worktree_path,
+                "pr_number": pr_number,
+                "base_branch": base_branch,
+                "head_branch": head_ref
+            }
+        except CLIError:
+            raise
+        except Exception as e:
+            raise CLIError(f"Failed to setup conflict resolution worktree: {str(e)}")
+        finally:
+            if changed_dir:
+                os.chdir(original_cwd)

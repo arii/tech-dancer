@@ -22,6 +22,17 @@
       "required_flags": [],
       "expected_output": "A list of conflicting files and branches. Does not resolve conflicts."
     },
+    "gh resolve-conflicts": {
+      "description": "Sets up a separate git worktree, checks out the PR branch, and attempts to merge the target branch to surface conflicts for resolution.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh resolve-conflicts --pr <PR_NUMBER>",
+      "required_flags": [
+        {
+          "flag": "--pr",
+          "type": "integer",
+          "description": "The GitHub Pull Request ID."
+        }
+      ]
+    },
     "gh detect-conflicts": {
       "description": "Detects conflicts for a single, specific Pull Request.",
       "exact_usage": "python3 dev-tools/td_cli.py gh detect-conflicts --pr <PR_NUMBER>",
