@@ -8,7 +8,7 @@ author: "Ariel Anders, PhD"
 category: "WCS"
 excerpt: "A closer look at competition results and how judging works, explaining why placement is a poor metric for progress."
 image: "/assets/posts/competition-data-thumb.svg"
-imageAlt: "A technical bar chart titled 'WCS Competition Data Scraper' comparing Prelim Scores and Recall Rates across events like JJO, WWW, and P4J, with a dashed trend line indicating data patterns."
+imageAlt: "A technical visualization from our WCS Data Scraper showing Prelim Scores and Recall Rates across five events, illustrating the clear patterns that emerge when we look beyond individual placements."
 imageFit: "contain"
 tags:
   - research
@@ -45,5 +45,15 @@ This distribution highlights the "noise" inherent in subjective judging. While t
 ### Looking at the Big Picture
 
 I'm building tools in the [DevAI Portfolio](/research) to look at these results across multiple events. By tracking performance over time rather than just looking at one rank, we can see a much more reliable picture of improvement.
+
+```mermaid
+graph LR
+    A[Individual Events] --> B[Data Normalization]
+    B --> C[Historical Trends]
+    C --> D[True Progress]
+    style D fill:#00cfff,stroke:#00cfff,color:#000
+```
+
+By aggregating data, we move away from the high variance of a single weekend and towards a meaningful understanding of your dance journey.
 
 Don't let a "no-recall" define your weekend. Look at your dance videos.
