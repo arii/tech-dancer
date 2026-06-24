@@ -75,26 +75,57 @@ export function buildVisualReviewPayload(summary: VisualRouteSummary): Array<{ t
   const diffPath = summary.diffPath;
 
   // 1. Grab the DOM diff for ground truth
-  const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
+  const routeDomDir = path.join(DOM_REVIEW_DIR, summary.slug);
+  const domDiffPath = path.join(routeDomDir, 'diff.txt');
   let domDiffContext = 'No DOM diff available.';
   if (fs.existsSync(domDiffPath)) {
     const diffContent = fs.readFileSync(domDiffPath, 'utf8');
-    // Truncate to avoid exploding the context window on massive changes
     domDiffContext = diffContent.length > 3000
       ? diffContent.slice(0, 3000) + '\n...[TRUNCATED]'
       : diffContent;
   }
 
-  // 2. Build the payload
+  // 2. Grab the DOM structure diff
+  const structureDiffPath = path.join(routeDomDir, 'structure-diff.txt');
+  let structureDiffContext = 'No DOM structure diff available.';
+  if (fs.existsSync(structureDiffPath)) {
+    const diffContent = fs.readFileSync(structureDiffPath, 'utf8');
+    structureDiffContext = diffContent.length > 2000
+      ? diffContent.slice(0, 2000) + '\n...[TRUNCATED]'
+      : diffContent;
+  }
+
+  // 3. Build the payload
   const baseContent: Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> = [
     { type: 'text', text: REVIEW_PROMPT },
     { type: 'text', text: `Route: ${summary.route} | Pixel difference: ${summary.differencePercent.toFixed(2)}% | Severity: ${summary.severity}` },
+  ];
+
+  if (summary.validation && !summary.validation.passed) {
+    baseContent.push({
+      type: 'text',
+      text: `AUTOMATED LAYOUT FAILURE: ${summary.validation.reason}`
+    });
+  }
+
+  if (summary.metrics) {
+    baseContent.push({
+      type: 'text',
+      text: `LAYOUT METRICS:
+Base: Width=${summary.metrics.before.scrollWidth}px, Main=${summary.metrics.before.mainWidth}px, Height=${summary.metrics.before.scrollHeight}px
+PR: Width=${summary.metrics.after.scrollWidth}px, Main=${summary.metrics.after.mainWidth}px, Height=${summary.metrics.after.scrollHeight}px
+Viewport: ${summary.metrics.after.viewportWidth}px`
+    });
+  }
+
+  baseContent.push(
+    { type: 'text', text: `DOM STRUCTURE DIFF:\n\n${structureDiffContext}` },
     { type: 'text', text: `DOM TEXT DIFF:\n\n${domDiffContext}` },
     { type: 'text', text: 'BEFORE' },
     { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(beforePath)}` } },
     { type: 'text', text: 'AFTER' },
     { type: 'image_url', image_url: { url: `data:image/png;base64,${imageToBase64(afterPath)}` } },
-  ];
+  );
 
   if (diffPath && fs.existsSync(diffPath)) {
     baseContent.push(
@@ -123,7 +154,7 @@ export function generateMarkdownReport(
   const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
 
   const sections = reviews.map(r => `
-### ${severityEmoji(r.severity)} \`${r.route}\`
+### ${severityEmoji(r.severity)} \`${r.route}\` ${r.role ? `(${r.role})` : ''}
 
 **Pixel diff:** ${r.differencePercent.toFixed(2)}%
 
