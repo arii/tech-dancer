@@ -1,13 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function extractFinishReason(res: any): string {
-  // Langchain structure varies depending on the provider wrapper
-  if (res.response_metadata?.finishReason) return res.response_metadata.finishReason;
-  if (res.response_metadata?.finish_reason) return res.response_metadata.finish_reason;
-  if (res.response_metadata?.finishReason) return res.response_metadata.finishReason;
-  if (res.generationInfo?.finishReason) return res.generationInfo.finishReason;
-
-  // Look deeper into candidates if raw output exposes it
-  const candidate = res.response_metadata?.candidates?.[0];
+  const candidate = res.candidates?.[0];
   if (candidate?.finishReason) return candidate.finishReason;
 
   return 'UNKNOWN';
@@ -35,26 +28,45 @@ export function extractFeedbackText(content: any): string {
   return feedback || '';
 }
 
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-
 export function createGeminiModel(
   modelName: string,
   maxOutputTokens: number,
   thinkingBudget: number
-): ChatGoogleGenerativeAI {
+): { modelName: string; apiKey: string; maxOutputTokens: number; thinkingBudget: number } {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
 
-  return new ChatGoogleGenerativeAI({
-    model: modelName,
+  return {
+    modelName,
     apiKey,
-    maxOutputTokens: maxOutputTokens,
-    thinkingConfig: {
-      includeThoughts: true,
-      thinkingBudget: thinkingBudget,
-    }
-  });
+    maxOutputTokens,
+    thinkingBudget
+  };
 }
+
+export async function invokeGeminiAPI(model: { modelName: string; apiKey: string; maxOutputTokens: number; thinkingBudget: number }, contents: unknown) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model.modelName}:generateContent?key=${model.apiKey}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents,
+      generationConfig: {
+        maxOutputTokens: model.maxOutputTokens,
+        thinkingConfig: {
+          thinkingBudget: model.thinkingBudget
+        }
+      }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Gemini API Error: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
 export function getConfiguredTokens(type: 'code' | 'visual'): { maxOutputTokens: number; thinkingBudget: number } {
   let maxOutputTokens = type === 'code' ? 6000 : 4096;
   let thinkingBudget = type === 'code' ? 2048 : 1024;

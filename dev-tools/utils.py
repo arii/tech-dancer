@@ -63,6 +63,27 @@ def is_ai_available() -> bool:
     """Checks if AI API token is present."""
     return bool(os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN"))
 
+
+def _call_api_with_retry(req, max_retries: int = 3, timeout: int = 60) -> Optional[dict]:
+    import urllib.request
+    import urllib.error
+    import time
+    import json
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            print(f"API HTTP Error {e.code}: {e.read().decode('utf-8', errors='ignore')}", file=sys.stderr)
+            if e.code in [429, 500, 502, 503, 504]:
+                time.sleep(2 ** attempt)
+                continue
+            return None
+        except Exception as e:
+            print(f"API Error: {e}", file=sys.stderr)
+            time.sleep(2 ** attempt)
+    return None
+
 def to_standard_schema(schema, uppercase: bool = False):
     """Recursively prepares a standard JSON schema.
     - Ensures top-level 'type: object' if 'properties' is present.
@@ -86,36 +107,8 @@ def to_standard_schema(schema, uppercase: bool = False):
     return schema
 
 def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
-    try:
-        from langchain_openai import ChatOpenAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        print("langchain_openai or langchain_core is not installed.", file=sys.stderr)
-        return None
-
-    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
-    if not token:
-        return None
-
-    model = model or get_ai_model()
-
-    llm = ChatOpenAI(
-        base_url="https://models.inference.ai.azure.com",
-        api_key=token,
-        model=model,
-        temperature=0.7,
-        max_tokens=2048,
-        max_retries=max_retries,
-        model_kwargs={"response_format": {"type": "json_object"}} if schema else {}
-    )
-
-    try:
-        response = llm.invoke([HumanMessage(content=prompt)])
-        return response.content
-    except Exception as e:
-        print(f"AI Call failed: {e}", file=sys.stderr)
-        return None
+    """Unified helper to call AI API with retries."""
+    return call_github_models(prompt, model=model, max_retries=max_retries, schema=schema)
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""
@@ -142,36 +135,36 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call Gemini API using LangChain."""
-    try:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        print("langchain_google_genai or langchain_core is not installed.", file=sys.stderr)
-        return None
-
+    """Unified helper to call Gemini API."""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         return None
 
-    llm = ChatGoogleGenerativeAI(
-        model=model or "gemini-1.5-flash",
-        google_api_key=api_key,
-        temperature=0.7,
-        max_retries=max_retries,
-    )
+    target_model = model or "gemini-1.5-flash"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{target_model}:generateContent?key={api_key}"
 
     if schema:
-        # Note: structured output handling varies by LangChain version/provider
-        # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
         prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
 
-    try:
-        response = llm.invoke([HumanMessage(content=prompt)])
-        return response.content
-    except Exception as e:
-        print(f"Gemini Call failed: {e}", file=sys.stderr)
-        return None
+    data = {
+        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": 0.7
+        }
+    }
+
+    import urllib.request
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+
+    res = _call_api_with_retry(req, max_retries=max_retries)
+    if res and "candidates" in res and len(res["candidates"]) > 0:
+        parts = res["candidates"][0].get("content", {}).get("parts", [])
+        return "".join([p.get("text", "") for p in parts])
+    return None
 
 def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
     """

@@ -11,10 +11,10 @@ These are **rules for writing clean `.tsx` files** so UI code consistently follo
 ## 0) Quick Start (Run at the beginning of UI work)
 
 1. `python3 dev-tools/td_cli.py gh conflicts`
-2. `pnpm run audit`
+2. `node scripts/detect-antipatterns.mjs`
 3. Read `TODO_ANTIPATTERNS.md`
 4. Implement changes using primitives/tokens only
-5. Re-run `pnpm run audit`
+5. Re-run `node scripts/detect-antipatterns.mjs`
 6. Run `python3 dev-tools/td_cli.py gh pre-submit`
 
 ---
@@ -40,7 +40,7 @@ python3 dev-tools/td_cli.py gh --help
 - If a DevTools subcommand is unavailable in a local environment, report it separately and continue core verification with:
 
 ```bash
-pnpm run audit
+node scripts/detect-antipatterns.mjs
 pnpm run -s test -- --runInBand
 pnpm build
 ```
@@ -282,7 +282,7 @@ The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) identifies arbitrary Ta
 Before starting a UI task:
 
 ```bash
-pnpm run audit
+node scripts/detect-antipatterns.mjs
 cat TODO_ANTIPATTERNS.md
 ```
 
@@ -308,7 +308,7 @@ python3 dev-tools/td_cli.py gh pre-submit
 
 Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
 
-1. Run `pnpm run audit`
+1. Run `node scripts/detect-antipatterns.mjs`
 2. Review `TODO_ANTIPATTERNS.md` for violations introduced by your changes
 3. Fix all identified anti-patterns
 4. For intentional deviations:

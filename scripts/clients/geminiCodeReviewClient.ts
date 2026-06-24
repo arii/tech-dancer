@@ -1,4 +1,3 @@
-import { HumanMessage } from '@langchain/core/messages';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -13,7 +12,7 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { logAIRun } from '../lib/aiLogger';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, extractFeedbackText, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy, invokeGeminiAPI } from '../lib/geminiUtils';
 
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
@@ -39,41 +38,32 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
-    const message = new HumanMessage({ content: baseContent });
+    const message = { role: 'user', parts: baseContent.map(part => typeof part === 'string' ? { text: part } : (part.type === 'text' ? { text: part.text } : { text: JSON.stringify(part) })) };
 
-    let response = await model.invoke([message]);
+    let response = await invokeGeminiAPI(model, [message]);
 
     let finishReason = extractFinishReason(response);
 
     if (finishReason === 'MAX_TOKENS') {
       console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
-        usage: response.usage_metadata,
+        usage: response.usageMetadata,
       });
 
       const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
       thinkingBudget = newThinking;
 
       model = createGeminiModel(modelName, newMax, thinkingBudget);
-      response = await model.invoke([message]);
+      response = await invokeGeminiAPI(model, [message]);
 
       finishReason = extractFinishReason(response);
     }
 
-    const usageMetadata = response.usage_metadata as {
-      input_tokens?: number;
-      output_tokens?: number;
-      total_tokens?: number;
-      thoughts_token_count?: number;
-    };
+    const usageMetadata = response.usageMetadata || {};
 
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
-    const totalTokens = usageMetadata?.total_tokens ?? 0;
-    // thoughtsTokenCount might be nested in response_metadata or usage_metadata
-    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (typeof response.response_metadata === 'object' && response.response_metadata !== null
-                                 ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
-                                 : 0) ?? 0;
+    const inputTokens = usageMetadata.promptTokenCount ?? 0;
+    const outputTokens = usageMetadata.candidatesTokenCount ?? 0;
+    const totalTokens = usageMetadata.totalTokenCount ?? 0;
+    const thoughtsTokenCount = usageMetadata.promptTokenCount ? (usageMetadata.totalTokenCount - usageMetadata.promptTokenCount - usageMetadata.candidatesTokenCount) || 0 : 0;
 
     if (thoughtsTokenCount > thinkingBudget * 1.1) {
       console.warn('Thinking budget exceeded by >10%', {
@@ -108,11 +98,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
-    // typically in @langchain response.content is a string, but if we extract only text it's better
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
+    const textParts = response.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text) || [];
+    const feedback = textParts.join('');
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

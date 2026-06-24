@@ -1,7 +1,6 @@
-import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, extractFeedbackText, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy, invokeGeminiAPI } from '../lib/geminiUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 
@@ -60,14 +59,30 @@ Your job:
 </findings>`
     });
 
-    const message = new HumanMessage({ content: baseContent });
-    let response = await model.invoke([message]);
+    const message = {
+      role: 'user',
+      parts: baseContent.map(part => {
+        if (typeof part === 'string') return { text: part };
+        if (part.type === 'text') return { text: part.text };
+        if (part.type === 'image_url') {
+          return {
+            inlineData: {
+              mimeType: 'image/jpeg',
+              data: part.image_url.url.replace(/^data:image\/jpeg;base64,/, '')
+            }
+          };
+        }
+        return { text: JSON.stringify(part) };
+      })
+    };
+
+    let response = await invokeGeminiAPI(model, [message]);
 
     let finishReason = extractFinishReason(response);
 
     if (finishReason === 'MAX_TOKENS') {
       console.warn('Gemini MAX_TOKENS — retrying with adjusted budget', {
-        usage: response.usage_metadata,
+        usage: response.usageMetadata,
       });
 
       const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
@@ -75,24 +90,17 @@ Your job:
       thinkingBudget = newThinking;
 
       model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-      response = await model.invoke([message]);
+      response = await invokeGeminiAPI(model, [message]);
 
       finishReason = extractFinishReason(response);
     }
 
-    const usageMetadata = response.usage_metadata as {
-      input_tokens?: number;
-      output_tokens?: number;
-      total_tokens?: number;
-      thoughts_token_count?: number;
-    };
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
-    const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
-                               (typeof response.response_metadata === 'object' && response.response_metadata !== null
-                                 ? ((response.response_metadata as Record<string, unknown>).usage as Record<string, unknown>)?.thoughts_token_count as number | undefined
-                                 : 0) ?? 0;
+    const usageMetadata = response.usageMetadata || {};
+
+    const inputTokens = usageMetadata.promptTokenCount ?? 0;
+    const outputTokens = usageMetadata.candidatesTokenCount ?? 0;
+    const totalTokens = usageMetadata.totalTokenCount ?? 0;
+    const thoughtsTokenCount = usageMetadata.promptTokenCount ? (usageMetadata.totalTokenCount - usageMetadata.promptTokenCount - usageMetadata.candidatesTokenCount) || 0 : 0;
 
     if (thoughtsTokenCount > thinkingBudget * 1.1) {
       console.warn('Thinking budget exceeded by >10%', {
@@ -126,9 +134,8 @@ Your job:
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
+    const textParts = response.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text) || [];
+    const feedback = textParts.join('');
 
     return {
       route: summary.route,
