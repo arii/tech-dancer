@@ -28,8 +28,6 @@ Travel conventions can be stressful, but being organized makes a world of differ
 
 Standard folding often leaves gaps in your luggage. Instead, try the "bundle" method or use high-quality compression cubes. These cubes allow you to group outfits by day or performance type, making it easy to find exactly what you need without unpacking your entire bag.
 
-![A set of navy blue compression packing cubes with mesh tops and double-zipper systems, shown compressing stacked clothing to minimize suitcase volume.](/images/gear/sketches/compression-cubes.webp)
-
 
 <notice type="affiliate" id="compression-cubes"></notice>
 
