@@ -65,11 +65,13 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       output_tokens?: number;
       total_tokens?: number;
       thoughts_token_count?: number;
+      cache_read_tokens?: number;
     };
 
     const inputTokens = usageMetadata?.input_tokens ?? 0;
     const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens ?? 0;
     // thoughtsTokenCount might be nested in response_metadata or usage_metadata
     const thoughtsTokenCount = usageMetadata?.thoughts_token_count ??
                                (typeof response.response_metadata === 'object' && response.response_metadata !== null
@@ -118,15 +120,15 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
     logAIRun({
-      botName: 'gemini-code-review',
-      modelName,
+      type: 'code-review',
+      model: modelName,
       inputTokens,
       outputTokens,
+      cacheTokens,
       totalTokens,
-      thoughtsTokenCount,
       cost,
       durationMs,
-      verdict: feedback ? parseCodeReviewVerdict(feedback) : undefined,
+      verdict: feedback ? parseCodeReviewVerdict(feedback) : 'unknown',
       truncated: isTruncated,
       parseError: parsedState.parseError,
     });
@@ -134,6 +136,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     return {
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
       modelName: modelName,
       llmVerdict: parseCodeReviewVerdict(feedback),

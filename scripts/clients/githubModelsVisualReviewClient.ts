@@ -8,14 +8,24 @@ import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 
-async function createModelConfig(estimatedInputTokens: number = 0): Promise<{ apiKey: string; modelName: string; maxTokens: number }> {
+async function createModel(estimatedInputTokens: number = 0): Promise<{ model: ChatOpenAI; modelName: string }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
   const fallback = process.env.GITHUB_MODELS_MODEL || 'gpt-4o-mini';
   const modelName = await pickOptimalModel(apiKey, fallback, true, estimatedInputTokens);
+  
+  const model = new ChatOpenAI({
+    modelName: modelName,
+    apiKey: apiKey,
+    configuration: {
+      baseURL: 'https://models.inference.ai.azure.com',
+    },
+    maxTokens: 1024,
+    temperature: 0.1,
+  });
 
-  return { apiKey, modelName, maxTokens: 1024 };
+  return { model, modelName };
 }
 
 export const githubModelsVisualReviewClient: LLMClientStrategy = {
@@ -25,18 +35,15 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'github-models-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
-    // Estimate tokens from DOM diff
     const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
     let domDiffLength = 0;
     if (fs.existsSync(domDiffPath)) {
       const content = fs.readFileSync(domDiffPath, 'utf8');
-      // Cap at 3000 to match visualReviewUtils.ts truncation logic
       domDiffLength = Math.min(content.length, 3000);
     }
     const estimatedInputTokens = Math.ceil(domDiffLength / 4);
 
-
-    const { apiKey, modelName, maxTokens } = await createModelConfig(estimatedInputTokens);
+    const { model, modelName } = await createModel(estimatedInputTokens);
     const baseContent = buildVisualReviewPayload(summary);
 
     if (summary.previousFindings && summary.previousFindings.length > 0) {
@@ -72,7 +79,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
         body: JSON.stringify({
           model: modelName,
           messages: [{ role: 'user', content: baseContent }],
-          max_tokens: maxTokens,
+          max_tokens: 1024,
           temperature: 0.1
         })
       });
@@ -87,13 +94,16 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
 
     const data = await response.json();
     const usageMetadata = data.usage;
+    const inputTokens = usageMetadata?.input_tokens ?? 0;
+    const outputTokens = usageMetadata?.output_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
+    const cacheTokens = usageMetadata?.cache_read_tokens || 0;
+
     const cost = 0;
 
     const firstChoice = data.choices && data.choices[0];
     const rawContent = firstChoice?.message?.content || '';
     const feedback = extractFeedbackText(rawContent);
-
 
     return {
       route: summary.route,
@@ -101,7 +111,11 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
       differencePercent: summary.differencePercent,
       feedback: feedback,
       tokens: totalTokens,
+      inputTokens,
+      outputTokens,
+      cacheTokens,
       cost: cost,
+      modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
     };

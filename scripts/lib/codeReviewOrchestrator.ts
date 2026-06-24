@@ -5,6 +5,7 @@ import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJules
 import { calculateEstimatedTokens, cleanupFeedback } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
 import { execSync, spawnSync } from 'child_process';
+import { logReviewExecution } from './aiLogger';
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -345,11 +346,15 @@ export async function orchestrateCodeReview(
 
   if (reviewResult.truncated) {
     console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
+    logReviewExecution('code-review', reviewResult, reviewResult.durationMs ?? (Date.now() - startTime));
+    const retryStartTime = Date.now();
     reviewResult = await client.invokeReview(summary, 8192);
+    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - retryStartTime);
+  } else {
+    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - startTime);
   }
 
-  const durationMs = Date.now() - startTime;
-  reviewResult.durationMs = durationMs;
+  logReviewExecution('code-review', reviewResult, reviewResult.durationMs); // Captured telemetry from client
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,

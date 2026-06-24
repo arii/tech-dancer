@@ -14,7 +14,7 @@ import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 async function createModelConfig(
   estimatedInputTokens: number = 0,
   maxOutputTokens: number = 1500
-): Promise<{ apiKey: string; modelName: string; maxTokens: number }> {
+): Promise<{ modelName: string, maxTokens: number }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
@@ -34,7 +34,7 @@ async function createModelConfig(
 
   console.log(`📌 github-models-code-review using model: ${modelName}, maxOutputTokens: ${finalMaxTokens}`);
 
-  return { apiKey, modelName, maxTokens: finalMaxTokens };
+  return { modelName, maxTokens: finalMaxTokens };
 }
 
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
@@ -47,12 +47,11 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
-    // Count every chunk that actually goes into the request.
     const calculatedTokens = calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
     const estimatedInputTokens = Math.max(summary.estimatedInputTokens || 0, calculatedTokens);
 
-    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
-    const { apiKey, modelName, maxTokens } = await createModelConfig(estimatedInputTokens, maxOutputTokens);
+    const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0);
+    const { modelName, maxTokens } = await createModelConfig(estimatedInputTokens, maxOutputTokens);
 
     const messages = buildReviewPayload(systemPrompt, diffText, externalText);
 
@@ -66,7 +65,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -85,11 +84,8 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     }
 
     const data = await response.json();
-
     const usageMetadata = data.usage;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const cost = 0;
-
     const firstChoice = data.choices && data.choices[0];
     const finishReason = firstChoice?.finish_reason;
     const isTruncated = finishReason === 'length';
@@ -105,7 +101,10 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     return {
       feedback: feedback,
       tokens: totalTokens,
-      cost: cost,
+      inputTokens: usageMetadata?.prompt_tokens ?? 0,
+      outputTokens: usageMetadata?.completion_tokens ?? 0,
+      cacheTokens: usageMetadata?.prompt_tokens_details?.cached_tokens ?? 0,
+      cost: 0,
       llmVerdict: parseCodeReviewVerdict(feedback),
       state: parsedState.state,
       modelName: modelName,
