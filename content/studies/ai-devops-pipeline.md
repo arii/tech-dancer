@@ -339,7 +339,6 @@ Everything else, including GitHub comments, review states, CI repair, and screen
 
 dev-tools/
   aggregate_pr_context.py
-  ollama_review.py
 ```
 
 ```bash
