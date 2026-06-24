@@ -1,5 +1,4 @@
-import { ChatOpenAI } from '@langchain/openai';
-import { HumanMessage } from '@langchain/core/messages';
+import fetch from 'node-fetch';
 import {
   parseCodeReviewVerdict,
   parseCodeReviewStateDetailed,
@@ -15,7 +14,7 @@ import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 async function createModel(
   estimatedInputTokens: number = 0,
   maxOutputTokens: number = 1500
-): Promise<{ model: ChatOpenAI; modelName: string }> {
+): Promise<{ modelName: string, maxTokens: number }> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) throw new Error('Missing GITHUB_TOKEN environment variable');
 
@@ -35,15 +34,7 @@ async function createModel(
 
   console.log(`📌 github-models-code-review using model: ${modelName}, maxOutputTokens: ${finalMaxTokens}`);
 
-  const model = new ChatOpenAI({
-    modelName: modelName,
-    apiKey: apiKey,
-    configuration: { baseURL: 'https://models.inference.ai.azure.com' },
-    maxTokens: finalMaxTokens,
-    temperature: 0.1,
-  });
-
-  return { model, modelName };
+  return { modelName, maxTokens: finalMaxTokens };
 }
 
 export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
@@ -61,32 +52,74 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const estimatedInputTokens = Math.ceil(totalInputChars / 4);
 
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, 0); // OpenAi via github models does not support thinking tokens.
-    const { model, modelName } = await createModel(estimatedInputTokens, maxOutputTokens);
+    const { modelName, maxTokens } = await createModel(estimatedInputTokens, maxOutputTokens);
 
     const baseContent = buildReviewPayload(systemPrompt, diffText, externalText);
 
-    const message = new HumanMessage({ content: baseContent });
+    const apiKey = process.env.GITHUB_TOKEN;
+    const url = 'https://models.inference.ai.azure.com/chat/completions';
 
-    const response = await model.invoke([message]);
+    // Construct the standard messages payload
+    // OpenAI REST API takes an array of parts for multi-modal content
+    let contentParts: any[] = [];
+    if (typeof baseContent === 'string') {
+        contentParts = [{ type: 'text', text: baseContent }];
+    } else if (Array.isArray(baseContent)) {
+        contentParts = baseContent.map(item => {
+            if (typeof item === 'string') return { type: 'text', text: item };
+            // Ensure object matches API spec (type, text, or image_url)
+            return item;
+        });
+    }
 
+    const payload = {
+        model: modelName,
+        messages: [
+            {
+                role: 'user',
+                content: contentParts
+            }
+        ],
+        max_tokens: maxTokens,
+        temperature: 0.1
+    };
 
-    const usageMetadata = response.usage_metadata as { input_tokens?: number; output_tokens?: number; total_tokens?: number; cache_read_tokens?: number } | undefined;
-    const inputTokens = usageMetadata?.input_tokens ?? 0;
-    const outputTokens = usageMetadata?.output_tokens ?? 0;
+    let fetchResponse;
+    try {
+        fetchResponse = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(payload)
+        });
+    } catch (e) {
+        throw new Error(`Failed to fetch from GitHub Models API: ${e}`);
+    }
+
+    if (!fetchResponse.ok) {
+        const errText = await fetchResponse.text();
+        throw new Error(`GitHub Models API error: ${fetchResponse.status} ${fetchResponse.statusText} - ${errText}`);
+    }
+
+    const response = await fetchResponse.json() as any;
+
+    const usageMetadata = response.usage;
+    const inputTokens = usageMetadata?.prompt_tokens ?? 0;
+    const outputTokens = usageMetadata?.completion_tokens ?? 0;
     const totalTokens = usageMetadata?.total_tokens ?? 0;
-    const cacheTokens = usageMetadata?.cache_read_tokens || 0;
+    // Extract cached tokens if available
+    const cacheTokens = usageMetadata?.prompt_tokens_details?.cached_tokens ?? 0;
     const cost = 0;
 
-    const finishReason = (response as { response_metadata?: { finish_reason?: string } })
-      .response_metadata?.finish_reason;
+    const finishReason = response.choices?.[0]?.finish_reason;
     const isTruncated = finishReason === 'length';
     if (isTruncated) {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
+    const feedback = response.choices?.[0]?.message?.content || '';
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 

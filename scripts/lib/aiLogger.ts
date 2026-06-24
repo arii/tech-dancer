@@ -8,14 +8,14 @@ import * as path from 'path';
 export interface AIRunLogEntry {
   timestamp: string;
   type: 'code-review' | 'visual-review';
-  model: string;
+  model?: string;
   inputTokens: number;
   outputTokens: number;
   cacheTokens?: number;
-  totalTokens: number;
+  totalTokens?: number;
   durationMs: number;
   cost: number;
-  verdict: string;
+  verdict?: string;
   pr?: string;
   route?: string;
   error?: string;
