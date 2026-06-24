@@ -10,6 +10,19 @@ export interface ImpactAnalysisArtifact {
   impactLevel?: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 
+export interface LayoutMetrics {
+  scrollWidth: number;
+  clientWidth: number;
+  mainWidth: number;
+  scrollHeight: number;
+  viewportWidth: number;
+}
+
+export interface LayoutValidation {
+  passed: boolean;
+  reason?: string;
+}
+
 export interface VisualRouteSummary {
   route: string;
   slug: string;
@@ -23,6 +36,11 @@ export interface VisualRouteSummary {
   totalPixels: number;
   differencePercent: number;
   severity: 'LOW' | 'MEDIUM' | 'HIGH';
+  metrics?: {
+    before: LayoutMetrics;
+    after: LayoutMetrics;
+  };
+  validation?: LayoutValidation;
 }
 
 export interface VisualSummary {
@@ -35,6 +53,7 @@ export interface DomRouteSummary {
   beforeHtmlPath: string;
   afterHtmlPath: string;
   diffPath: string;
+  structureDiffPath?: string;
   metrics: {
     nodesAdded: number;
     nodesRemoved: number;

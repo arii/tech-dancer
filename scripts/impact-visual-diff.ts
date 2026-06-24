@@ -16,7 +16,9 @@ import {
   stopPreview,
   visualSeverity,
   waitForServer,
-  type VisualRouteSummary
+  type VisualRouteSummary,
+  type LayoutMetrics,
+  type LayoutValidation
 } from './impact-review-utils';
 import { whiteCanvas, copyImage } from './image-processing-utils';
 
@@ -26,6 +28,14 @@ const baseUrl = process.env.IMPACT_BASE_URL ?? `http://127.0.0.1:${basePort}`;
 const headUrl = process.env.IMPACT_HEAD_URL ?? `http://127.0.0.1:${headPort}`;
 const baseWorktree = process.env.IMPACT_BASE_WORKTREE ?? path.join(process.cwd(), '.tmp-main');
 const DEFAULT_CROP_PADDING = Number(process.env.IMPACT_CROP_PADDING ?? 20);
+
+const VIEWPORTS = [
+  { name: 'Desktop', width: 1440, height: 900, suffix: '' },
+  { name: 'Laptop', width: 1280, height: 800, suffix: '-laptop' },
+  { name: 'Tablet', width: 768, height: 1024, suffix: '-tablet' },
+  { name: 'Mobile', width: 390, height: 844, suffix: '-mobile' },
+  { name: 'Ultrawide', width: 1920, height: 1080, suffix: '-ultrawide' },
+];
 
 interface BoundingBox {
   minX: number;
@@ -96,7 +106,7 @@ async function captureRoute(
   imagePath: string,
   htmlPath: string,
   viewport = { width: 1440, height: 900 }
-): Promise<void> {
+): Promise<LayoutMetrics> {
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage({
@@ -108,11 +118,43 @@ async function captureRoute(
     await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {
       console.warn(`Network did not become idle for ${route}; continuing with captured DOM state.`);
     });
+
+    const metrics = await page.evaluate((vpWidth) => {
+      const main = document.querySelector('main');
+      return {
+        scrollWidth: document.body.scrollWidth,
+        clientWidth: document.body.clientWidth,
+        mainWidth: main ? main.clientWidth : 0,
+        scrollHeight: document.body.scrollHeight,
+        viewportWidth: vpWidth
+      };
+    }, viewport.width);
+
     await page.screenshot({ path: imagePath, fullPage: true });
     fs.writeFileSync(htmlPath, await page.content());
+    return metrics;
   } finally {
     await browser.close();
   }
+}
+
+function validateLayout(before: LayoutMetrics, after: LayoutMetrics): LayoutValidation {
+  const viewportWidth = after.viewportWidth;
+
+  if (after.mainWidth > 0 && after.mainWidth < viewportWidth * 0.5) {
+    return { passed: false, reason: `Main content width (${after.mainWidth}px) is less than 50% of viewport (${viewportWidth}px).` };
+  }
+
+  const pageWidthChange = Math.abs(after.scrollWidth - before.scrollWidth) / before.scrollWidth;
+  if (pageWidthChange > 0.3) {
+    return { passed: false, reason: `Page width changed significantly: ${(pageWidthChange * 100).toFixed(1)}% (Base: ${before.scrollWidth}px, PR: ${after.scrollWidth}px).` };
+  }
+
+  if (viewportWidth >= 1280 && after.mainWidth > 0 && after.mainWidth < 600) {
+    return { passed: false, reason: `Largest container width (${after.mainWidth}px) is less than 600px on desktop.` };
+  }
+
+  return { passed: true };
 }
 
 async function captureViewport(
@@ -134,8 +176,13 @@ async function captureViewport(
   const afterHtmlPath = path.join(routeDomDir, `after.html`);
 
   console.log(`📸 Capturing ${route} (${label})`);
-  await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
-  await captureRoute(headUrl, route, afterPath, afterHtmlPath, viewport);
+  const beforeMetrics = await captureRoute(baseUrl, route, beforePath, beforeHtmlPath, viewport);
+  const afterMetrics = await captureRoute(headUrl, route, afterPath, afterHtmlPath, viewport);
+
+  const validation = validateLayout(beforeMetrics, afterMetrics);
+  if (!validation.passed) {
+    console.error(`❌ Layout validation failed for ${route} (${label}): ${validation.reason}`);
+  }
 
   const { before, after, ...diffMetrics } = createVisualDiff(beforePath, afterPath, diffPath);
   const boundingBox = calculateBoundingBox(before, after);
@@ -174,7 +221,9 @@ async function captureViewport(
     afterCroppedPath,
     diffCroppedPath,
     ...diffMetrics,
-    severity: visualSeverity(diffMetrics.differencePercent)
+    severity: validation.passed ? visualSeverity(diffMetrics.differencePercent) : 'HIGH',
+    metrics: { before: beforeMetrics, after: afterMetrics },
+    validation
   };
 }
 
@@ -233,28 +282,27 @@ async function main(): Promise<void> {
       const routeVisualDir = path.join(VISUAL_REVIEW_DIR, slug);
       ensureDirectory(routeVisualDir);
 
-      const desktopSlug = `${slug}-desktop`;
-      const mobileSlug = `${slug}-mobile`;
-      const desktopDomDir = path.join(DOM_REVIEW_DIR, desktopSlug);
-      const mobileDomDir = path.join(DOM_REVIEW_DIR, mobileSlug);
-      ensureDirectory(desktopDomDir);
-      ensureDirectory(mobileDomDir);
+      for (const vp of VIEWPORTS) {
+        const vpSlug = `${slug}-${vp.name.toLowerCase()}`;
+        const vpDomDir = path.join(DOM_REVIEW_DIR, vpSlug);
+        ensureDirectory(vpDomDir);
 
-      const desktopSummary = await captureViewport(
-        baseUrl, headUrl, route, desktopSlug, 'Desktop', '',
-        { width: 1440, height: 900 }, routeVisualDir, desktopDomDir
-      );
-
-      const mobileSummary = await captureViewport(
-        baseUrl, headUrl, route, mobileSlug, 'Mobile', '-mobile',
-        { width: 375, height: 812 }, routeVisualDir, mobileDomDir
-      );
-
-      summaries.push(desktopSummary, mobileSummary);
+        const summary = await captureViewport(
+          baseUrl, headUrl, route, vpSlug, vp.name, vp.suffix,
+          { width: vp.width, height: vp.height }, routeVisualDir, vpDomDir
+        );
+        summaries.push(summary);
+      }
     }
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
     console.log(`✅ Visual diffs generated in ${VISUAL_REVIEW_DIR}`);
+
+    const failedLayouts = summaries.filter(s => s.validation && !s.validation.passed);
+    if (failedLayouts.length > 0) {
+      console.error(`❌ Visual regression detected by automated measurements in ${failedLayouts.length} route(s).`);
+      process.exit(1);
+    }
   } finally {
     stopPreview(basePreview);
     stopPreview(headPreview);
