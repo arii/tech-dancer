@@ -90,6 +90,7 @@
       "affiliate:audit:links": "tsx scripts/affiliate/audit-links.ts",
       "affiliate:image": "tsx scripts/affiliate/image-helper.ts",
       "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json",
+      "ai:index": "python3 scripts/index-codebase.py",
       "audit:anti-patterns": "node scripts/detect-antipatterns.mjs",
       "audit:dead-code": "pnpm run knip",
       "audit:inventory": "node scripts/check-suppression-inventory.mjs",
