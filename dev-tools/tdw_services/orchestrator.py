@@ -4,6 +4,7 @@ import re
 import json
 import sys
 import shutil
+import subprocess
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse
@@ -940,7 +941,7 @@ Respond only after the PR is created or updated:
                 if os.path.exists(worktree_path):
                     shutil.rmtree(worktree_path, ignore_errors=True)
                 if os.path.exists(worktree_path):
-                    raise CLIError(f"Failed to clean up existing worktree at {worktree_path}")
+                    raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
 
             # 3. Fetch PR branch and create worktree directly on it
             run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
@@ -949,6 +950,11 @@ Respond only after the PR is created or updated:
             # 4. Switch to worktree and perform git operations
             changed_dir = True
             os.chdir(worktree_path)
+            changed_dir = True
+
+            # Checkout the PR branch using git
+            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=True)
@@ -961,6 +967,8 @@ Respond only after the PR is created or updated:
                 merge_cmd.extend(["-X", strategy])
 
             res = run_command(merge_cmd, check=False)
+            if not isinstance(res, subprocess.CompletedProcess):
+                raise CLIError("Failed to execute git merge command")
 
             if res.returncode == 0:
                 message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
@@ -989,7 +997,8 @@ Respond only after the PR is created or updated:
                 "message": message,
                 "worktree_path": worktree_path,
                 "pr_number": pr_number,
-                "base_branch": base_branch
+                "base_branch": base_branch,
+                "head_branch": head_ref
             }
         except CLIError:
             raise

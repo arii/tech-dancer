@@ -84,7 +84,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
 #### 4) Headless / Bot Auditing
 - For batch auditing open PRs:
-  - `bash dev-tools/audit_headless.sh`
+  - `python3 dev-tools/td_cli.py gh audit`
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
 
 
