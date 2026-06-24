@@ -115,6 +115,7 @@ function transform<T extends { date?: string; draft?: boolean }>(
         seoTitle: data.seoTitle ? String(data.seoTitle) : undefined,
         seoDescription: data.seoDescription ? String(data.seoDescription) : undefined,
         imageAlt: data.imageAlt ? String(data.imageAlt) : undefined,
+        imageFit: (data.imageFit === 'cover' || data.imageFit === 'contain') ? data.imageFit : undefined,
 
         status: normalizeStatus(data.status),
         readTime: normalizeReadTime(data.readTime),
