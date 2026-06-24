@@ -1,0 +1,31 @@
+# PR Review Status
+
+- [x] PR #2863: chore(deps): bump tenacity from 8.2.3 to 9.1.4 in /etl
+- [x] PR #2862: chore(deps): bump beautifulsoup4 from 4.14.3 to 4.15.0 in /etl
+- [x] PR #2860: chore(deps): bump tenacity from 8.2.3 to 9.1.4
+- [x] PR #2861: chore(deps): bump pyarrow from 23.0.1 to 24.0.0 in /etl
+- [x] PR #2859: chore(deps): bump beautifulsoup4 from 4.14.3 to 4.15.0
+- [x] PR #2858: chore(deps): bump pytest from 9.0.3 to 9.1.1 in /etl
+- [x] PR #2857: refactor(ui): flatten components and deduplicate tag lists in research views
+- [x] PR #2856: Enhance Visual UX Review System
+- [x] PR #2855: docs: generate full github issue audit and status files
+- [x] PR #2854: Stabilize CI/CD Pipeline and Pin GitHub Actions
+- [x] PR #2853: Refactor Shoe Care Post to Impeccable Standards
+- [x] PR #2852: Improve AI Review Agent Accuracy and Fix Response Parsing Errors
+- [x] PR #2851: Refactor Halloween Costumes post to Impeccable standards
+- [x] PR #2850: Refactor WCS Travel Pack Blog Post
+- [x] PR #2849: Prevent AI Review Hallucinations on Truncated Snippets
+- [x] PR #2848: Refactor 'Why Finals Are Hard' to Impeccable standards
+- [x] PR #2845: Refactor health post to meet Impeccable standards
+- [x] PR #2844: Add collect_ai_reviews script
+- [x] PR #2843: Optimize token efficiency in AI Playwright crawler
+- [x] PR #2842: Self-review fix: validation and testing warnings
+- [x] PR #2837: Consolidate AI telemetry logging changes (PR 2768)
+- [x] PR #2836: Refactor Event Travel Packing Post to Impeccable Standards
+- [x] PR #2835: Agent Configuration & Instruction Hierarchy Optimization
+- [x] PR #2834: Refactor Outdoor Dancing Gear Guide for Impeccable Standards
+- [x] PR #2822: fix: Remove out-of-scope changes and resolve massive merge conflicts for AI crawler PR
+- [x] PR #2821: Implement Context-Aware Chunking & Vector Embeddings for AI Audit
+- [x] PR #2820: Remove mass audit PR and Copilot workflows, refactor AI to REST
+- [x] PR #2815: Improvement: Handle merge conflicts for a different PR within a worktree effectively
+- [x] PR #1733: Implement Merch Design Generation Logic
