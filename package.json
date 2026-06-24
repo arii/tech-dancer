@@ -12,7 +12,7 @@
     "prebuild": "tsx scripts/generate-assets.ts",
     "build": "shx mkdir -p public/data && shx cp etl/data/wcs_prelims.parquet public/data/wcs_prelims.parquet && pnpm run type-check && vite build",
     "build:review": "DISABLE_MINIFY=true pnpm run build",
-    "postbuild": "tsx scripts/generate-robots.ts && tsx scripts/generate-spa-stubs.mjs && node scripts/clean-sitemap.mjs",
+    "postbuild": "tsx scripts/generate-robots.ts && tsx scripts/generate-spa-stubs.mjs && node scripts/clean-sitemap.mjs && pnpm run agent:prime",
     "build:analyze": "ANALYZE=true vite build",
     "build:profile": "vite build --profile",
     "prepreview": "node scripts/cleanup-ports.mjs",
@@ -55,7 +55,8 @@
     "impact:gemini-review": "tsx scripts/impact-gemini-review.ts",
     "impact:github-models-review": "tsx scripts/impact-github-models-review.ts",
     "impact:gemini-code-review": "tsx scripts/impact-gemini-code-review.ts",
-    "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts"
+    "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts",
+    "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
