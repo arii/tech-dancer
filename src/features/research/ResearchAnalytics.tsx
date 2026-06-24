@@ -75,6 +75,18 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
   );
 }
 
+
+function TagsList({ tags }: { tags: string[] }) {
+  if (!tags || tags.length === 0) return null;
+  return (
+    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+      {tags.map(tag => (
+        <Text key={tag} className="flagship-tag">{tag}</Text>
+      ))}
+    </Box>
+  );
+}
+
 function FlagshipCard({
   tool,
   baseUrl,
@@ -101,7 +113,6 @@ function FlagshipCard({
       height="full"
       overflow="hidden"
     >
-      <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
@@ -147,13 +158,7 @@ function FlagshipCard({
             </div>
           )}
 
-          <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
-            {tool.tags.map(tag => (
-              <Text key={tag} className="flagship-tag">
-                {tag}
-              </Text>
-            ))}
-          </Box>
+          <TagsList tags={tool.tags} />
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
             {tool.externalUrl ? (
@@ -203,7 +208,6 @@ function FlagshipCard({
             )}
           </Stack>
         </Stack>
-      </Stack>
     </BaseCard>
   );
 }
@@ -266,11 +270,7 @@ function ToolCard({ tool, navigate }: {
             {isExpanded ? "Read Less" : "Read More"}
           </Box>
         )}
-        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
-          {tool.tags.map(tag => (
-            <Text key={tag} className="flagship-tag">{tag}</Text>
-          ))}
-        </Box>
+        <TagsList tags={tool.tags} />
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
@@ -457,15 +457,7 @@ export default function ResearchAnalytics() {
                     {study.excerpt}
                   </Text>
 
-                  {study.tags && study.tags.length > 0 && (
-                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
-                      {study.tags.map(tag => (
-                        <Text key={tag} className="flagship-tag">
-                          {tag}
-                        </Text>
-                      ))}
-                    </Box>
-                  )}
+                  <TagsList tags={study.tags} />
 
                   <Box display="flex" align="center" gap={2} marginTop="auto">
                     <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
