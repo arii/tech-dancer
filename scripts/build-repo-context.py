@@ -20,28 +20,12 @@ def build_repo_context():
         print(f"Error reading package.json: {e}", file=sys.stderr)
         package_summary = {}
 
-    # 2. Workflows
-    try:
-        workflows = sorted([str(p) for p in pathlib.Path(".github/workflows").glob("*.yml")])
-    except Exception as e:
-        print(f"Error reading workflows: {e}", file=sys.stderr)
-        workflows = []
-
-    # 3. Test Snapshots
-    try:
-        test_snapshots = sorted([str(p) for p in pathlib.Path("src").rglob("__snapshots__/*.snap")])
-    except Exception as e:
-        print(f"Error reading snapshots: {e}", file=sys.stderr)
-        test_snapshots = []
-
     # Assemble context
     return {
         "repo": {
              "name": package_summary.get("name", "Unknown Repo"),
         },
         "package_json": package_summary,
-        "workflows": workflows,
-        "test_snapshots": test_snapshots,
     }
 
 if __name__ == "__main__":

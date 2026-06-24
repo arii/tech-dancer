@@ -142,26 +142,5 @@
   },
   "repo": {
     "name": "react-example"
-  },
-  "test_snapshots": [],
-  "workflows": [
-    ".github/workflows/ai-chatops.yml",
-    ".github/workflows/auto-conflict-resolver.yml",
-    ".github/workflows/ci.yml",
-    ".github/workflows/codeql.yml",
-    ".github/workflows/deploy-image.yml",
-    ".github/workflows/deploy.yml",
-    ".github/workflows/issue-comment-dispatcher.yml",
-    ".github/workflows/issue_to_pr.yml",
-    ".github/workflows/jules-fix-trigger.yml",
-    ".github/workflows/mass-audit-prs.yml",
-    ".github/workflows/mergellama.yml",
-    ".github/workflows/prune-stale-previews.yml",
-    ".github/workflows/reusable-gate.yml",
-    ".github/workflows/self-healing.yml",
-    ".github/workflows/update-snapshots.yml",
-    ".github/workflows/validate_issue.yml",
-    ".github/workflows/wcs_etl.yml",
-    ".github/workflows/workflow-validation.yml"
-  ]
+  }
 }
