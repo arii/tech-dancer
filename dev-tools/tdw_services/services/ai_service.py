@@ -58,7 +58,7 @@ class AIClient:
         return is_ai_available()
 
     def call_ai(self, prompt: str, model: str = None, max_retries: int = 3, schema: Optional[Dict] = None) -> Optional[str]:
-        return call_ai(prompt, model=model or self.ollama_model, max_retries=max_retries, schema=schema)
+        return call_ai(prompt, model=model or self.ai_model, max_retries=max_retries, schema=schema)
 
     def call_gemini(self, prompt: str, schema: Optional[Dict] = None) -> Optional[str]:
         if not self.gemini_api_key:
@@ -91,14 +91,11 @@ class AIClient:
 
     def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
         if self.is_ai_available():
-            # For JSON schema, we just append instruction for Ollama
-            if schema:
-                prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
             res = self.call_ai(prompt, model=model, schema=schema)
             if res:
                 return res
 
-        raise EnvironmentError("No AI service available (GitHub Models, Gemini, and Ollama all failed or are unavailable).")
+        raise EnvironmentError("No AI service available (GitHub Models, and Gemini failed or are unavailable).")
 
     def clean_llm_output(self, text: str) -> str:
         return clean_llm_output(text)
@@ -148,11 +145,11 @@ class AIClient:
     def generate_code_review(self, pr: Dict, diff: str) -> Dict:
         """
         Two-phase piecemeal review:
-          Phase A: call Ollama once per file-chunk (≤50 added lines each) using
+          Phase A: call AI once per file-chunk (≤50 added lines each) using
                    the code-reviewer model.  Skips images, lock files, generated
                    files, and build artefacts.
           Phase B: synthesise all per-chunk results into a final PR verdict using
-                   the lighter gpt-4o model.
+                   the synthesis model.
         Results are cached per file-chunk so interrupted runs resume cheaply.
         """
         import hashlib
@@ -171,11 +168,11 @@ class AIClient:
         failing_names = ", ".join(c.get('name', '?') for c in ci_failures) if ci_failures else "none"
 
         # ── Diagnostics header ────────────────────────────────────────────────
-        ollama_ok = self.is_ai_available()
+        ai_ok = self.is_ai_available()
         print(f"\n{'='*60}")
         print(f"🔍 PR #{pr_num} – Piecemeal Review Diagnostics")
         print(f"{'='*60}")
-        print(f"  AI available : {'✅ YES' if ollama_ok else '❌ NO'}")
+        print(f"  AI available : {'✅ YES' if ai_ok else '❌ NO'}")
         print(f"  Review model     : {_REVIEW_MODEL}")
         print(f"  Synthesis model  : {_SYNTHESIS_MODEL}")
         print(f"  Diff size        : {len(diff):,} chars")
