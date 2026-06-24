@@ -440,7 +440,8 @@ export function reconcileVerdict(
       // STRICT SNIPPET RULE: It must be a full line. If it's only a substring, it might be truncated.
       // We specifically target "syntax error" claims which are the classic hallucination pattern
       // when a line is truncated in the LLM's reasoning.
-      if (!isFullLineMatch && isExactMatch && f.issue.toLowerCase().includes('syntax error')) {
+      const issueLower = f.issue.toLowerCase();
+      if (!isFullLineMatch && isExactMatch && (issueLower.includes('syntax error') || issueLower.includes('missing property') || issueLower.includes('missing method'))) {
         console.warn(`⚠️  Suspicious truncated snippet claiming syntax error: "${snippet}"`);
         return {
           ...f,
