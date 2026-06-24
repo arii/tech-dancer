@@ -99,7 +99,7 @@ class Orchestrator:
         if is_ui:
             if "px-" in diff or "py-" in diff or "mt-" in diff or "flex" in diff or "grid" in diff or "text-[" in diff:
                 feedback += "- **Design System Anti-patterns:** The diff contains raw Tailwind classes (e.g. padding/margin utility classes, arbitrary values).\n"
-                feedback += "  - *Fix:* Replace raw Tailwind layout classes with `Stack`, `Box`, or `Grid` primitives using design tokens (e.g., `gap={4}`, `paddingY={{ base: 4, md: 1.5 }}`). Verify by running `pnpm run audit`.\n"
+                feedback += "  - *Fix:* Replace raw Tailwind layout classes with `Stack`, `Box`, or `Grid` primitives using design tokens (e.g., `gap={4}`, `paddingY={{ base: 4, md: 1.5 }}`). Verify by running `node scripts/detect-antipatterns.mjs`.\n"
 
             feedback += "- **Mobile UX Verification:** For any UI additions, ensure horizontal layout does not overflow a 390px viewport.\n"
             feedback += "  - *Fix:* If adding interactive elements, wrap them to enforce a minimum 48x48px touch target for accessibility.\n"

@@ -5,7 +5,8 @@ import {
   parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
-  buildReviewPayload
+  buildReviewPayload,
+  extractFeedbackText
 } from '../lib/codeReviewUtils';
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
@@ -81,9 +82,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       console.warn(`⚠️  github-models-code-review output truncated (finish_reason: length, tokens: ${totalTokens}).`);
     }
 
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
+    const feedback = extractFeedbackText(response.content);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
 
