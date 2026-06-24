@@ -23,6 +23,7 @@ import {
   type LayoutValidation
 } from './impact-review-utils';
 import { whiteCanvas, copyImage } from './image-processing-utils';
+import { VIEWPORTS } from '../src/constants/visual-viewports';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
@@ -30,14 +31,6 @@ const baseUrl = process.env.IMPACT_BASE_URL ?? `http://127.0.0.1:${basePort}`;
 const headUrl = process.env.IMPACT_HEAD_URL ?? `http://127.0.0.1:${headPort}`;
 const baseWorktree = process.env.IMPACT_BASE_WORKTREE ?? path.join(process.cwd(), '.tmp-main');
 const DEFAULT_CROP_PADDING = Number(process.env.IMPACT_CROP_PADDING ?? 20);
-
-const VIEWPORTS = [
-  { name: 'Desktop', width: 1440, height: 900, suffix: '' },
-  { name: 'Laptop', width: 1280, height: 800, suffix: '-laptop' },
-  { name: 'Tablet', width: 768, height: 1024, suffix: '-tablet' },
-  { name: 'Mobile', width: 390, height: 844, suffix: '-mobile' },
-  { name: 'Ultrawide', width: 1920, height: 1080, suffix: '-ultrawide' },
-];
 
 interface BoundingBox {
   minX: number;

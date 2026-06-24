@@ -7,7 +7,6 @@ from .config import ProjectConfig
 from .services.gemini import GeminiService
 from .services.github import GitHubService
 from .services.jules import JulesService
-
 from .services.review import ReviewService
 
 
@@ -21,7 +20,6 @@ class Orchestrator:
     def __init__(self, config: ProjectConfig):
         self.config = config
         self.github = GitHubService(repo=config.github_repo)
-
         self.gemini = GeminiService()
         self.jules = JulesService(api_url=config.jules_api_url)
         self.reviews = ReviewService()
@@ -29,8 +27,6 @@ class Orchestrator:
     def review_pr(self, pr_number: int) -> ReviewResult:
         files = self.github.list_changed_files(pr_number)
         prompt = self.reviews.build_prompt("\n".join(files))
-
-
         if self.config.use_gemini_fallback:
             return ReviewResult(engine="gemini", output=self.gemini.review(prompt))
         raise RuntimeError("No inference engine available (Gemini fallback disabled).")
@@ -45,8 +41,6 @@ class Orchestrator:
         if not p.exists():
             return f"file_not_found: {path}"
         prompt = self.reviews.build_prompt(p.read_text(encoding='utf-8')[:8000])
-
-
         if self.config.use_gemini_fallback:
             return self.gemini.review(prompt)
         return "No inference engine available"
@@ -72,7 +66,6 @@ class Orchestrator:
 
     def env_verify(self) -> dict[str, bool]:
         return {
-
             "gemini_fallback_enabled": self.config.use_gemini_fallback,
             "jules_configured": bool(self.config.jules_api_url),
             "repo_configured": bool(self.config.github_repo),
