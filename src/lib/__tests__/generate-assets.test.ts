@@ -29,8 +29,10 @@ describe('getTokens', () => {
   });
 
   it('should return null if tokens file does not exist', async () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.spyOn(fs, 'existsSync').mockReturnValue(false);
     const tokens = await getTokens();
     expect(tokens).toBeNull();
+    consoleSpy.mockRestore();
   });
 });

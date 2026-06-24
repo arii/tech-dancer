@@ -30,14 +30,19 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
   }
 
-  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+
+  // Strip markdown code block markers if present
+  if (jsonText.startsWith('```')) {
+    jsonText = jsonText.replace(/^```[a-z]*\n/i, '').replace(/\n```$/m, '').trim();
+  }
 
   try {
     return { state: JSON.parse(jsonText) as CodeReviewState };
   } catch (e) {
-    if (process.env.NODE_ENV !== 'test') {
-      console.warn('Failed to parse findings JSON from LLM response:', e);
-    }
+    console.warn('Failed to parse findings JSON from LLM response:', e);
+    // Log a snippet of the failed JSON for debugging
+    console.warn('JSON snippet:', jsonText.slice(0, 100) + '...');
     return { state: undefined, parseError: 'invalid_json' };
   }
 }
