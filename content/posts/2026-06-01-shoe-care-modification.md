@@ -6,7 +6,8 @@ author: "Ariel Anders, PhD"
 category: "Gear"
 excerpt: "Stop masking odors and start eliminating them. Why an electric shoe dryer has proven to be the most effective tool in my gear bag."
 image: "/images/gear/sketches/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.webp"
-affiliateIds: ["shoe-dryer", "epsom-salt"]
+imageAlt: "A minimalist sketch of an electric shoe dryer with a timer control unit, highlighting its portability for dance travel."
+imageFit: "contain"
 tags:
   - "shoes"
   - "maintenance"
@@ -21,9 +22,13 @@ While some of these provided temporary relief, I found that none of them were a 
 ### The Science of the Stink
 The odor isn't actually the sweat itself—it's the bacteria that thrive in the warm, damp environment inside your shoes. When you dance for hours, your shoes become a petri dish. If you don't remove that moisture completely before the next session, the bacteria continue to multiply, and the smell becomes increasingly difficult to manage.
 
+<Box as="img" src="/images/gear/amazon/hxyoo-ballroom-dance-shoes-boots-for-women-salsa-latin-wedding-party-2.jpg" alt="A pair of black strappy ballroom dance shoes, which can trap moisture and bacteria during long social dancing sessions." radius="lg" shadow="sm" />
+
 
 ### Why the Electric Shoe Dryer is My Top Choice
 After experimenting with so many different methods, I found that an electric shoe dryer and deodorizer is the most effective way to combat this. Unlike passive drying, which can take days (especially in humid hotel rooms), an electric dryer uses gentle heat and airflow to pull moisture out of the deep foam and fabric layers of your dance shoes.
+
+<Box as="img" src="/images/gear/amazon/shoe-dryer-and-deodorizer-enhanced-deodorising-boot-dryer-with-timer-s.jpg" alt="Portable electric shoe dryer showing the two heating elements and the wired timer control unit." radius="lg" shadow="md" />
 
 In my experience, using a dryer for just 30-60 minutes after a dance session makes a world of difference:
 
@@ -33,10 +38,22 @@ In my experience, using a dryer for just 30-60 minutes after a dance session mak
 - **Freshness for Multi-Day Events:** There is nothing worse than putting on damp, smelly shoes for a morning workshop. A dryer ensures every day starts with a fresh pair.
 
 
+### The Role of Cedar Shoe Trees
+While the electric dryer handles the heavy lifting of moisture removal immediately after a session, cedar shoe trees are essential for long-term maintenance. Cedar is naturally absorbent and has antimicrobial properties that help neutralize any remaining odors while maintaining the structural integrity of the shoe.
+
+```mermaid
+graph TD
+    A[Post-Dance Session] --> B[Electric Shoe Dryer]
+    B -->|30-60 Minutes| C[Cedar Shoe Trees]
+    C -->|Absorb Residual Moisture| D[Fresh Shoes for Next Session]
+```
+
 ### Recovery After the Dance
-Beyond keeping your shoes fresh, taking care of your feet is just as important. After a long weekend of social dancing, I highly recommend an Epsom salt soak. It helps reduce swelling and soothes tired muscles, making sure you're ready for the next event.
+Beyond keeping your shoes fresh, taking care of your feet is just as important. After a long weekend of social dancing, I highly recommend an Epsom salt soak. It helps reduce swelling and soothes tired muscles, making sure you're ready for the next event. In addition to soaking, using a foam roller on your calves and arches can help break up tension and prevent soreness.
+
+<Box as="img" src="/images/gear/sketches/foam-roller.webp" alt="A minimalist sketch of a foam roller, an essential tool for post-dance muscle recovery and foot care." radius="lg" shadow="md" />
 
 If you are looking for a reliable way to maintain your gear and your hygiene during long dance weekends, these have been the best investments I've made for my gear bag.
 
-<notice type="affiliate" id="shoe-dryer" />
-<notice type="affiliate" id="epsom-salt" />
+<notice type="affiliate" id="shoe-dryer"></notice>
+<notice type="affiliate" id="epsom-salt"></notice>
