@@ -407,61 +407,71 @@ function reconcileVerdict(
     return { ...result, llmVerdict: 'warn' };
   }
 
-  if (!result.state?.findings?.length) {
-    return result;
+  let reconciledState = result.state;
+
+  if (result.state?.findings?.length) {
+    // Pre-process lines for easier matching
+    const diffLines = diffForVerification.split('\n');
+    const cleanDiffLines = diffLines.map(l => l.replace(/^([ +-])/, '').trim());
+
+    // Scrub/Verify findings against hallucination
+    const verifiedFindings = result.state.findings.map(f => {
+      if (f.status === 'resolved' || !f.snippet) return f;
+
+      const snippet = f.snippet.trim();
+      if (!snippet) return f;
+
+      // A snippet is "verifiable" if it exists exactly or as a full line (minus diff markers/indentation)
+      const isExactMatch = diffForVerification.includes(f.snippet);
+      const isFullLineMatch = cleanDiffLines.some(line => line === snippet);
+
+      const verified = isExactMatch || isFullLineMatch;
+
+      if (!verified) {
+        console.warn(`🚫 Hallucinated snippet detected in ${f.file}: "${snippet}"`);
+        return {
+          ...f,
+          issue: `[UNVERIFIED] ${f.issue}`,
+          fixSummary: `Automatically invalidated: snippet not found in diff context.`,
+          status: 'resolved',
+        };
+      }
+
+      // STRICT SNIPPET RULE: It must be a full line. If it's only a substring, it might be truncated.
+      // We specifically target "syntax error" claims which are the classic hallucination pattern
+      // when a line is truncated in the LLM's reasoning.
+      if (!isFullLineMatch && isExactMatch && f.issue.toLowerCase().includes('syntax error')) {
+        console.warn(`⚠️  Suspicious truncated snippet claiming syntax error: "${snippet}"`);
+        return {
+          ...f,
+          issue: `[SUSPECTED TRUNCATION] ${f.issue}`,
+          fixSummary: `Automatically invalidated: cites a truncated line which often triggers false syntax errors.`,
+          status: 'resolved',
+        };
+      }
+
+      return f;
+    });
+
+    reconciledState = {
+      ...result.state,
+      findings: verifiedFindings,
+    };
   }
 
-  // Pre-process lines for easier matching
-  const diffLines = diffForVerification.split('\n');
-  const cleanDiffLines = diffLines.map(l => l.replace(/^[+-]/, '').trim());
+  const reconciledResult = {
+    ...result,
+    state: reconciledState,
+  };
 
-  // Scrub/Verify findings against hallucination
-  result.state.findings = result.state.findings.map(f => {
-    if (f.status === 'resolved' || !f.snippet) return f;
-
-    const snippet = f.snippet.trim();
-    if (!snippet) return f;
-
-    // A snippet is "verifiable" if it exists exactly or as a full line (minus diff markers/indentation)
-    const isExactMatch = diffForVerification.includes(f.snippet);
-    const isFullLineMatch = cleanDiffLines.some(line => line === snippet);
-
-    const verified = isExactMatch || isFullLineMatch;
-
-    if (!verified) {
-      console.warn(`🚫 Hallucinated snippet detected in ${f.file}: "${snippet}"`);
-      return {
-        ...f,
-        issue: `[UNVERIFIED] ${f.issue}`,
-        fixSummary: `Automatically invalidated: snippet not found in diff context.`,
-        status: 'resolved' as const,
-      };
-    }
-
-    // STRICT SNIPPET RULE: It must be a full line. If it's only a substring, it might be truncated.
-    // We specifically target "syntax error" claims which are the classic hallucination pattern
-    // when a line is truncated in the LLM's reasoning.
-    if (!isFullLineMatch && isExactMatch && f.issue.toLowerCase().includes('syntax error')) {
-      console.warn(`⚠️  Suspicious truncated snippet claiming syntax error: "${snippet}"`);
-      return {
-        ...f,
-        issue: `[SUSPECTED TRUNCATION] ${f.issue}`,
-        fixSummary: `Automatically invalidated: cites a truncated line which often triggers false syntax errors.`,
-        status: 'resolved' as const,
-      };
-    }
-
-    return f;
-  });
-
-  if (result.llmVerdict !== 'fail') {
-    return result;
+  if (reconciledResult.llmVerdict !== 'fail') {
+    return reconciledResult;
   }
 
-  const newFindings = result.state.findings.filter(f => f.status !== 'resolved');
+  const newFindings = reconciledResult.state?.findings?.filter(f => f.status !== 'resolved') || [];
   if (newFindings.length === 0) {
     console.warn(`⚠️  Downgrading FAIL→WARN: all findings were invalidated or already resolved.`);
-    return { ...result, llmVerdict: 'warn' };
+    return { ...reconciledResult, llmVerdict: 'warn' };
   }
 
   const hasCredibleBlocker = newFindings.some(f => {
@@ -475,8 +485,8 @@ function reconcileVerdict(
     console.warn(
       `⚠️  Downgrading FAIL→WARN: no finding had both verifiable evidence and non-hedged language.`
     );
-    return { ...result, llmVerdict: 'warn' };
+    return { ...reconciledResult, llmVerdict: 'warn' };
   }
 
-  return result;
+  return reconciledResult;
 }
