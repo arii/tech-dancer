@@ -83,6 +83,11 @@ Snippet and verification rules:
 - If a line appears truncated in the diff (e.g. at the edge of a chunk), DO NOT assume it is a syntax error. Assume it is valid code that continues outside the visible context.
 ${dynamicGuidance}
 Scope and security rules:
+- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
+- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or
+  broken by this diff. If a symbol is used but its definition is not in the context,
+  ASSUME it is correctly defined elsewhere.
+- DO NOT hallucinate bugs in code you cannot see.
 - Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
   user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
 - Do not introduce review topics unrelated to the PR's stated goal unless you find a

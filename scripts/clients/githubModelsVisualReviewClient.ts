@@ -3,6 +3,7 @@ import * as path from 'path';
 import { ChatOpenAI } from '@langchain/openai';
 import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
+import { extractFeedbackText } from '../lib/codeReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
@@ -97,9 +98,7 @@ Your job:
     // GitHub Models are currently free/rate-limited depending on the tier.
     const cost = 0;
 
-    const feedback = typeof response.content === 'string'
-      ? response.content
-      : JSON.stringify(response.content);
+    const feedback = extractFeedbackText(response.content);
 
     return {
       route: summary.route,
