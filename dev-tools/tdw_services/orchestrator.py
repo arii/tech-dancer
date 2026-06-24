@@ -478,7 +478,7 @@ class Orchestrator:
             if scope_warning: auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
             files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
             if files_to_audit:
-                audit_res = run_command(["pnpm", "run", "audit", "--", "--json"] + files_to_audit, check=False)
+                audit_res = run_command(["node", "scripts/detect-antipatterns.mjs", "--json"] + files_to_audit, check=False)
                 output = audit_res.stdout
                 if output and "{" in output:
                     try:
@@ -561,7 +561,7 @@ class Orchestrator:
             except CLIError as e:
                 results["steps"].append({"name": name, "status": "failure", "error": str(e)})
                 raise e
-        run_step("Anti-Pattern Audit", ["pnpm", "run", "audit"])
+        run_step("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
