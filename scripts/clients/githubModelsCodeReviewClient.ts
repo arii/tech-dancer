@@ -68,11 +68,11 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
             if (typeof item === 'string') return { type: 'text', text: item };
 
             // Structural transformation for Azure OpenAI REST API
-            const anyItem = item as any;
-            if (anyItem.type === 'image_url' && typeof anyItem.image_url === 'string') {
+            const recordItem = item as Record<string, unknown>;
+            if (recordItem.type === 'image_url' && typeof recordItem.image_url === 'string') {
                 return {
                     type: 'image_url',
-                    image_url: { url: anyItem.image_url }
+                    image_url: { url: recordItem.image_url }
                 };
             }
 
