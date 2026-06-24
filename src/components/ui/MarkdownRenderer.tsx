@@ -156,7 +156,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           img: ({node: _node, src, alt, ...props}) => {
             const normalizedSrc = normalizeAsset(src || '');
             return (
-              <Box marginY={12} width="full" display="flex" justify="center">
+              <Box marginY={12} width="full" display="flex" justify="center" className="markdown-image-wrapper">
                 <Box
                   as="img"
                   src={normalizedSrc}
@@ -172,9 +172,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               </Box>
             );
           },
-          p: ({node: _node, ...props}) => (
-            <Text as="p" color="dim" leading="relaxed" marginY={6} size="lg" {...props} />
-          ),
+          p: ({node: _node, children, ...props}) => {
+            // Always render as div to safely contain any children (block or inline)
+            // while preserving paragraph-like styling. This prevents hydration errors.
+            // Spacing is standardized to tokens (8px units). marginY={8} is 32px.
+            return <Text as="div" color="dim" leading="relaxed" marginY={8} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
+          },
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
           ),

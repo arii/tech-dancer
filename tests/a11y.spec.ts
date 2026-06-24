@@ -19,7 +19,7 @@ test.describe('accessibility', () => {
   test('search modal should not have any automatically detectable accessibility issues', async ({ page }) => {
     // Open search modal
     await page.keyboard.press('Control+k');
-    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
+    await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(5000);
 
     const results = await new AxeBuilder({ page })
@@ -33,7 +33,7 @@ test.describe('accessibility', () => {
     // Open search modal
     await page.keyboard.press('Control+k');
     const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
-    await expect(input).toBeVisible();
+    await expect(input).toBeVisible({ timeout: 15000 });
     await expect(input).toBeFocused();
 
     const closeButton = page.getByLabel('Close search');

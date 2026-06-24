@@ -121,6 +121,39 @@ export function calculateEstimatedTokens(text: string | string[]): number {
   return Math.ceil(combined.length / 4);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function extractFeedbackText(content: any): string {
+  if (content === null || content === undefined) return '';
+  let feedback: string;
+  if (typeof content === 'string') {
+    feedback = content;
+  } else if (Array.isArray(content)) {
+    feedback = content
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((p: any) => !p.thought)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((p: any) => p.text ?? '')
+      .join('');
+  } else {
+    feedback = JSON.stringify(content);
+  }
+
+  if (!feedback && Array.isArray(content)) {
+    feedback = JSON.stringify(content);
+  }
+  return feedback || '';
+}
+
+/**
+ * Strips machine-readable tags like <findings> and [VERDICT] from the feedback.
+ */
+export function cleanupFeedback(feedback: string): string {
+  let cleaned = feedback.replace(/<findings>[\s\S]*?<\/findings>/gi, '');
+  cleaned = cleaned.replace(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi, '');
+  // Collapse multiple newlines into two and trim
+  return cleaned.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 export type ReviewPayloadItem = { type: 'text'; text: string };
 
 export interface PayloadConfig {

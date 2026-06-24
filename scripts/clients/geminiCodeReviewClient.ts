@@ -5,7 +5,8 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
-  calculateEstimatedTokens
+  calculateEstimatedTokens,
+  extractFeedbackText
 } from '../lib/codeReviewUtils';
 
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
