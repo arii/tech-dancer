@@ -13,7 +13,7 @@ class TestCommandHandler(unittest.TestCase):
         self.mock_orchestrator = MagicMock()
         self.handler = CommandHandler(self.mock_orchestrator)
 
-    def test_handle_ollama_review(self):
+    def test_handle_ai_review(self):
         # Setup
         pr_number = 123
         self.mock_orchestrator.review_pr.return_value = {
@@ -22,7 +22,7 @@ class TestCommandHandler(unittest.TestCase):
         }
 
         # Execute
-        result = self.handler.handle(pr_number, "/ollama-review")
+        result = self.handler.handle(pr_number, "/ai-review")
 
         # Verify
         self.assertEqual(result["status"], "success")
@@ -35,14 +35,14 @@ class TestCommandHandler(unittest.TestCase):
         self.assertIn("Looks good!", args[1])
         self.assertEqual(args[3], "APPROVE")
 
-    def test_handle_ollama_fix_success(self):
+    def test_handle_ai_fix_success(self):
         # Setup
         pr_number = 123
         self.mock_orchestrator.find_conflict_files.return_value = ["file1.ts"]
         self.mock_orchestrator.resolve_conflict.return_value = True
 
         # Execute
-        result = self.handler.handle(pr_number, "/ollama-fix")
+        result = self.handler.handle(pr_number, "/ai-fix")
 
         # Verify
         self.assertEqual(result["status"], "success")
@@ -50,13 +50,13 @@ class TestCommandHandler(unittest.TestCase):
         self.mock_orchestrator.find_conflict_files.assert_called_once()
         self.mock_orchestrator.resolve_conflict.assert_called_once_with("file1.ts")
 
-    def test_handle_ollama_fix_no_conflicts(self):
+    def test_handle_ai_fix_no_conflicts(self):
         # Setup
         pr_number = 123
         self.mock_orchestrator.find_conflict_files.return_value = []
 
         # Execute
-        result = self.handler.handle(pr_number, "/ollama-fix")
+        result = self.handler.handle(pr_number, "/ai-fix")
 
         # Verify
         self.assertEqual(result["status"], "error")

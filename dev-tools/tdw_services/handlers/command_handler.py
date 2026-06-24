@@ -10,9 +10,9 @@ class CommandHandler:
         """
         command = command_text.strip().lower()
 
-        if command.startswith("/ai-review") or command.startswith("/ollama-review"):
+        if command.startswith("/ai-review"):
             return self._handle_ai_review(pr_number)
-        elif command.startswith("/ai-fix") or command.startswith("/ollama-fix"):
+        elif command.startswith("/ai-fix"):
             return self._handle_ai_fix(pr_number)
 
         return {"status": "ignored", "message": f"Unknown command: {command}"}

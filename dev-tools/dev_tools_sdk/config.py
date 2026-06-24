@@ -13,9 +13,9 @@ class ProjectConfig:
     github_token_env: str = "GITHUB_TOKEN"
     gh_token_env: str = "GH_TOKEN"
     use_gemini_fallback: bool = True
-    ollama_model: str = "gpt-4o"
-    ollama_synthesis_model: str = "llama3.2"
-    ollama_base_url: str = "http://localhost:11434"
+
+
+
     jules_api_url: str | None = None
 
 
@@ -49,9 +49,9 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
         github_token_env=raw.get("github_token_env", "GITHUB_TOKEN"),
         gh_token_env=raw.get("gh_token_env", "GH_TOKEN"),
         use_gemini_fallback=fallback_val if fallback_val is not None else _coerce_bool(raw.get("use_gemini_fallback"), True),
-        ollama_model=raw.get("ollama_model", "gpt-4o"),
-        ollama_synthesis_model=raw.get("ollama_synthesis_model", "llama3.2"),
-        ollama_base_url=raw.get("ollama_base_url", "http://localhost:11434"),
+
+
+
         jules_api_url=raw.get("jules_api_url"),
     )
 
