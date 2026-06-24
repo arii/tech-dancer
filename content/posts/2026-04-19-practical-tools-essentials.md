@@ -2,7 +2,7 @@
 type: post
 title: "The WCS Travel Pack"
 date: "2026-04-19"
-updated: "2026-05-29"
+updated: "2026-06-24"
 excerpt: "A practical packing checklist for West Coast Swing weekends, covering shoes, earplugs, layers, recovery, hygiene, and travel tech."
 category: "Travel"
 tags: ["guide", "travel", "gear"]
