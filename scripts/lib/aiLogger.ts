@@ -42,7 +42,6 @@ export function logAIRun(entry: Omit<AIRunLogEntry, 'timestamp'>): void {
 
     // Append as a single JSON line for performance
     fs.appendFileSync(LOG_FILE, JSON.stringify(logEntry) + '\n');
-    console.log(`📊 AI review metrics logged to ${LOG_FILE}`);
   } catch (error) {
     console.error('❌ Failed to append to AI run log:', error);
   }
