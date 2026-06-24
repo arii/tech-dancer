@@ -21,6 +21,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v7
         with:
+          fetch-depth: 0
           lfs: true
 
       - name: Run Pytest - Data Validation
