@@ -390,7 +390,7 @@ export async function orchestrateCodeReview(
 
 const HEDGE_PATTERN = /\b(may|might|could|possibly|unless|if not handled|potentially|likely)\b/i;
 
-/**
+export /**
  * Defends against the LLM ignoring its own severity rules: downgrades a FAIL
  * verdict to WARN if every finding backing it either (a) contains hedge
  * language the prompt explicitly says is non-blocking, or (b) cites a
@@ -407,17 +407,67 @@ function reconcileVerdict(
     return { ...result, llmVerdict: 'warn' };
   }
 
-  if (result.llmVerdict !== 'fail' || !result.state?.findings?.length) {
+  if (!result.state?.findings?.length) {
+    return result;
+  }
+
+  // Pre-process lines for easier matching
+  const diffLines = diffForVerification.split('\n');
+  const cleanDiffLines = diffLines.map(l => l.replace(/^[+-]/, '').trim());
+
+  // Scrub/Verify findings against hallucination
+  result.state.findings = result.state.findings.map(f => {
+    if (f.status === 'resolved' || !f.snippet) return f;
+
+    const snippet = f.snippet.trim();
+    if (!snippet) return f;
+
+    // A snippet is "verifiable" if it exists exactly or as a full line (minus diff markers/indentation)
+    const isExactMatch = diffForVerification.includes(f.snippet);
+    const isFullLineMatch = cleanDiffLines.some(line => line === snippet);
+
+    const verified = isExactMatch || isFullLineMatch;
+
+    if (!verified) {
+      console.warn(`🚫 Hallucinated snippet detected in ${f.file}: "${snippet}"`);
+      return {
+        ...f,
+        issue: `[UNVERIFIED] ${f.issue}`,
+        fixSummary: `Automatically invalidated: snippet not found in diff context.`,
+        status: 'resolved' as const,
+      };
+    }
+
+    // STRICT SNIPPET RULE: It must be a full line. If it's only a substring, it might be truncated.
+    // We specifically target "syntax error" claims which are the classic hallucination pattern
+    // when a line is truncated in the LLM's reasoning.
+    if (!isFullLineMatch && isExactMatch && f.issue.toLowerCase().includes('syntax error')) {
+      console.warn(`⚠️  Suspicious truncated snippet claiming syntax error: "${snippet}"`);
+      return {
+        ...f,
+        issue: `[SUSPECTED TRUNCATION] ${f.issue}`,
+        fixSummary: `Automatically invalidated: cites a truncated line which often triggers false syntax errors.`,
+        status: 'resolved' as const,
+      };
+    }
+
+    return f;
+  });
+
+  if (result.llmVerdict !== 'fail') {
     return result;
   }
 
   const newFindings = result.state.findings.filter(f => f.status !== 'resolved');
-  if (newFindings.length === 0) return result;
+  if (newFindings.length === 0) {
+    console.warn(`⚠️  Downgrading FAIL→WARN: all findings were invalidated or already resolved.`);
+    return { ...result, llmVerdict: 'warn' };
+  }
 
   const hasCredibleBlocker = newFindings.some(f => {
     const text = `${f.issue} ${f.fixSummary ?? ''}`;
     if (HEDGE_PATTERN.test(text)) return false;
-    if (f.snippet && !diffForVerification.includes(f.snippet)) return false;
+    // Verification already performed in the mapping step above
     return true;
   });
 
