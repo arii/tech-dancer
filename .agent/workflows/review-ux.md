@@ -26,7 +26,7 @@ playwright-cli install --skills
 1. **Pre-flight validation**:
 
 ```bash
-pnpm run audit
+node scripts/detect-antipatterns.mjs
 ```
 
 2. **Start the Application**:
