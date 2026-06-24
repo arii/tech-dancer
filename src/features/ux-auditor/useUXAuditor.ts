@@ -58,11 +58,9 @@ declare const __initial_auth_token: string | undefined;
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'ux-auditor-v2';
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
 
-export const VIEWPORTS = [
-  { name: 'Mobile', width: 375, height: 667 },
-  { name: 'Tablet', width: 768, height: 1024 },
-  { name: 'Desktop', width: 1440, height: 900 }
-];
+import { VIEWPORTS } from '@/constants/visual-viewports';
+
+export { VIEWPORTS };
 
 export interface Improvement {
   element: string;

@@ -23,7 +23,7 @@ import {
   type LayoutValidation
 } from './impact-review-utils';
 import { whiteCanvas, copyImage } from './image-processing-utils';
-import { VIEWPORTS } from '../src/features/ux-auditor/useUXAuditor';
+import { VIEWPORTS } from '../src/constants/visual-viewports';
 
 const basePort = Number(process.env.IMPACT_BASE_PORT ?? 4173);
 const headPort = Number(process.env.IMPACT_HEAD_PORT ?? 4174);
