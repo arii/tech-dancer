@@ -942,16 +942,13 @@ Respond only after the PR is created or updated:
                 if os.path.exists(worktree_path):
                     raise CLIError(f"Failed to clean up existing worktree at {worktree_path}")
 
-            # 3. Create detached worktree
-            run_command(["git", "worktree", "add", "--detach", worktree_path, "HEAD"], check=True)
+            # 3. Fetch PR branch and create worktree directly on it
+            run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
+            run_command(["git", "worktree", "add", worktree_path, head_ref], check=True)
 
             # 4. Switch to worktree and perform git operations
             changed_dir = True
             os.chdir(worktree_path)
-
-            # Checkout the PR branch
-            run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
-            run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=True)
