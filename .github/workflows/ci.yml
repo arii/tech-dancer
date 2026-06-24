@@ -208,6 +208,8 @@ jobs:
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build App
