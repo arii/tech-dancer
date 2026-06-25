@@ -1,4 +1,4 @@
-import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';

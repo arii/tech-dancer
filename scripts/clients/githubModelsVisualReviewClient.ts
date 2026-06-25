@@ -3,7 +3,7 @@ import * as path from 'path';
 import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
-import { VISUAL_REVIEW_SCHEMA, type RouteReview, type VisualRouteSummary, type VisualReviewFinding } from '../lib/visualReviewTypes';
+import { type RouteReview, type VisualRouteSummary, type VisualReviewFinding } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 

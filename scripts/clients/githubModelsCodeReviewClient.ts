@@ -6,7 +6,7 @@ import {
   calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
-import { CODE_REVIEW_SCHEMA, type CodeReviewSummary, type CodeReviewResult, type ReviewFinding } from '../lib/codeReviewTypes';
+import { type CodeReviewSummary, type CodeReviewResult, type ReviewFinding } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
