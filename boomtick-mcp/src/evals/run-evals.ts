@@ -1,6 +1,6 @@
-import { healthHandler } from "../mcp/tools.js";
-import { searchOpenPrsHandler } from "../tools/github.search_open_prs.js";
-import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
+import { healthHandler, HealthCheckInputSchema } from "../mcp/tools.js";
+import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
+import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
 
 async function runEvals() {
   console.log("Starting Boomtick MCP Evaluations...");

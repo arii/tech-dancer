@@ -3,9 +3,12 @@ import { runCommand } from "../lib/shell.js";
 import { config } from "../config.js";
 import path from "path";
 
-export const GetRouteMapInputSchema = z.object({});
+export const GetRouteMapInputSchema = z.object({
+  includeStatic: z.boolean().optional(),
+});
 
-export async function getRouteMapHandler() {
+export async function getRouteMapHandler(args: z.infer<typeof GetRouteMapInputSchema>) {
+  GetRouteMapInputSchema.parse(args);
   // Logic based on tech-dancer repo structure: src/config/routes.ts and content/
   const routesPath = path.join(config.repoPath, "src/config/routes.ts");
 
@@ -31,5 +34,8 @@ export async function getRouteMapHandler() {
     // If no content files, that's fine
   }
 
+  if (args.includeStatic) {
+    routeMap["/favicon.ico"] = "public/favicon.ico";
+  }
   return { routeMap };
 }
