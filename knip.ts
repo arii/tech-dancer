@@ -1,17 +1,8 @@
 import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
-  workspaces: {
-    '.': {
-      entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.{ts,mjs}'],
-      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
-    },
-    'boomtick-mcp': {
-      entry: ['src/index.ts'],
-      project: ['src/**/*.ts'],
-      ignore: ['src/evals/run-evals.ts'],
-    },
-  },
+  entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.{ts,mjs}'],
+  project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
   ignore: [
     'src/components/Equalizer.tsx'
   ],
