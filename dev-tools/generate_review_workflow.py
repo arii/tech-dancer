@@ -5,9 +5,9 @@ import argparse
 import subprocess
 import re
 
-def run_command(cmd: str) -> str:
+def run_command(cmd: list) -> str:
     try:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
         return result.stdout.strip() + ("\n" + result.stderr.strip() if result.stderr.strip() else "")
     except Exception as e:
         return f"Execution failed: {e}"
@@ -24,23 +24,27 @@ def main():
     print(f"Generating workflow plan for PR #{pr_number}...")
 
     # 1. Environment Validation
-    env_output = run_command("bash dev-tools/verify.sh")
+    env_output = run_command(["bash", "dev-tools/verify.sh"])
 
     # 2. Issue Validation
     issue_output = "No issue number provided."
     if issue_number:
-        issue_output = run_command(f"td-cli gh validate-issue --issue-number {issue_number}")
+        issue_output = run_command(["td-cli", "gh", "validate-issue", "--issue-number", issue_number])
 
     # 3. Conflict Detection
-    conflict_output = run_command(f"td-cli gh conflicts --pr {pr_number}")
+    conflict_output = run_command(["td-cli", "gh", "conflicts", "--pr", pr_number])
 
     # 4. PR Context Generation
-    run_command(f"td-cli gh audit-pr {pr_number} --fetch")
+    run_command(["td-cli", "gh", "audit-pr", pr_number, "--fetch"])
 
     pr_context_file = f"dev-tools/logs/reviews/pr-context-{pr_number}.md"
     pr_summary = ""
     ci_status = ""
     failure_logs = ""
+
+    if not os.path.exists(pr_context_file):
+        print(f"Error: Context file {pr_context_file} was not generated.", file=sys.stderr)
+        sys.exit(1)
 
     if os.path.exists(pr_context_file):
         with open(pr_context_file, "r") as f:
@@ -65,7 +69,7 @@ def main():
     # 5. Impact Analysis
     impact_output = "Not available."
     if os.path.exists("scripts/impact-analysis.ts"):
-        impact_output = run_command("npx tsx scripts/impact-analysis.ts")
+        impact_output = run_command(["npx", "tsx", "scripts/impact-analysis.ts"])
 
     # 6. Existing Review Data
     gemini_review = "None."
@@ -77,6 +81,8 @@ def main():
     if os.path.exists("artifacts/github-models-code-review.md"):
         with open("artifacts/github-models-code-review.md", "r") as f:
             github_models_review = f.read()
+
+    # Fix: Ensure all {pr_number} template variables in markdown are resolved
 
     # Generate workflow plan
     plan_path = f"dev-tools/logs/workflows/workflow-plan-pr-{pr_number}.md"
