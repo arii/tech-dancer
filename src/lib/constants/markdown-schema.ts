@@ -1,5 +1,8 @@
 import { defaultSchema } from 'rehype-sanitize';
 
+/**
+ * Standard layout attributes for Box, Grid, and Stack primitives.
+ */
 const LAYOUT_ATTRIBUTES = [
   'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
   'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'marginX', 'marginY',
@@ -7,9 +10,12 @@ const LAYOUT_ATTRIBUTES = [
   'overflow', 'gap', 'span'
 ];
 
+/**
+ * Standard typography attributes for Text primitive.
+ */
 const TEXT_ATTRIBUTES = [
-  'variant', 'size', 'weight', 'color', 'align', 'uppercase', 'display', 'marginBottom',
-  'intent', 'tracking', 'leading', 'as'
+  ...LAYOUT_ATTRIBUTES,
+  'variant', 'size', 'weight', 'color', 'align', 'uppercase', 'intent', 'tracking', 'leading', 'as'
 ];
 
 export const MARKDOWN_SANITIZATION_SCHEMA = {
@@ -25,10 +31,10 @@ export const MARKDOWN_SANITIZATION_SCHEMA = {
     notice: ['type', 'id'],
     Notice: ['type', 'id'],
     input: ['type', 'checked', 'disabled'],
-    grid: ['cols', 'gap', 'rows', ...LAYOUT_ATTRIBUTES],
-    Grid: ['cols', 'gap', 'rows', ...LAYOUT_ATTRIBUTES],
-    stack: ['gap', 'direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
-    Stack: ['gap', 'direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
+    grid: ['cols', 'rows', ...LAYOUT_ATTRIBUTES],
+    Grid: ['cols', 'rows', ...LAYOUT_ATTRIBUTES],
+    stack: ['direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
+    Stack: ['direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
     text: [...TEXT_ATTRIBUTES],
     Text: [...TEXT_ATTRIBUTES],
     box: [...LAYOUT_ATTRIBUTES],

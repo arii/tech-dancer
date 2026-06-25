@@ -81,13 +81,18 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
 /**
  * Processes all incoming markdown attributes through parseProp to ensure
  * numbers, booleans, and objects are correctly converted.
+ * Filters out internal markdown metadata.
  */
 function propMap<T>(props: Record<string, unknown>): T {
   const result: Record<string, unknown> = {};
   Object.entries(props).forEach(([key, value]) => {
-    if (key !== 'node') {
-      result[key] = parseProp(value);
+    // node is internal metadata, children should remain untouched
+    if (key === 'node') return;
+    if (key === 'children') {
+      result[key] = value;
+      return;
     }
+    result[key] = parseProp(value);
   });
   return result as T;
 }
@@ -97,6 +102,20 @@ function propMap<T>(props: Record<string, unknown>): T {
  */
 const createRenderer = <T,>(Component: React.ComponentType<T>) => {
   return (props: Record<string, unknown>) => <Component {...propMap<T>(props)} />;
+};
+
+/**
+ * Mapping of markdown custom tags to their respective layout primitives.
+ */
+const LAYOUT_COMPONENT_MAP = {
+  grid: Grid,
+  Grid: Grid,
+  stack: Stack,
+  Stack: Stack,
+  text: Text,
+  Text: Text,
+  box: Box,
+  Box: Box,
 };
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
@@ -109,14 +128,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
-          grid: createRenderer<GridProps>(Grid),
-          Grid: createRenderer<GridProps>(Grid),
-          stack: createRenderer<StackProps>(Stack),
-          Stack: createRenderer<StackProps>(Stack),
-          text: createRenderer<TextProps>(Text),
-          Text: createRenderer<TextProps>(Text),
-          box: createRenderer<BoxProps>(Box),
-          Box: createRenderer<BoxProps>(Box),
+          ...Object.fromEntries(
+            Object.entries(LAYOUT_COMPONENT_MAP).map(([name, Component]) => [
+              name,
+              createRenderer(Component)
+            ])
+          ),
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
