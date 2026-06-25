@@ -2,18 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { reconcileVerdict } from '../../../scripts/lib/codeReviewOrchestrator';
 
 import { IMPACT_CONFIG } from '../../../scripts/impact-analysis.config';
+import { filterLowImpactFiles } from '../../../scripts/lib/codeReviewUtils';
 
 describe('filtering logic', () => {
   function filterFiles(files: string[]) {
-    return files.filter(f => {
-      return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
-        if (f === p || f.endsWith(`/${p}`)) return true;
-        if (p.endsWith('/')) {
-          return f.startsWith(p) || f.includes(`/${p}`);
-        }
-        return false;
-      });
-    });
+    return filterLowImpactFiles(files, IMPACT_CONFIG.LOW_IMPACT_PATHS);
   }
 
   it('filters out exact file matches', () => {
@@ -28,10 +21,31 @@ describe('filtering logic', () => {
     expect(filtered).toEqual(['src/App.tsx']);
   });
 
+  it('filters out files in nested directories', () => {
+    const files = ['dist/subdir/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
   it('does not filter out partial name matches that are not directory matches', () => {
     const files = ['distribute.ts', 'src/App.tsx'];
     const filtered = filterFiles(files);
     expect(filtered).toEqual(['distribute.ts', 'src/App.tsx']);
+  });
+
+  it('filters out files with directory name matches inside other directories', () => {
+    const files = ['src/dist/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('handles empty or malformed low impact paths gracefully', () => {
+    const files = ['dist/index.js', 'src/App.tsx'];
+    expect(filterLowImpactFiles(files, [])).toEqual(files);
+
+    // Test validation
+    expect(() => filterLowImpactFiles(files, null as unknown as string[])).toThrow(TypeError);
+    expect(() => filterLowImpactFiles(undefined as unknown as string[], [])).toThrow(TypeError);
   });
 
   it('does not filter out exact file matches with suffixes', () => {
