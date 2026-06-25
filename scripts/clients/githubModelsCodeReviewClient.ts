@@ -1,6 +1,4 @@
 import {
-  parseCodeReviewVerdict,
-  parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
@@ -8,7 +6,7 @@ import {
   calculateEstimatedTokens
 } from '../lib/codeReviewUtils';
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
-import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
+import { CODE_REVIEW_SCHEMA, type CodeReviewSummary, type CodeReviewResult, type ReviewFinding } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 import { pickOptimalModel, getAvailableModels } from '../lib/modelPicker';
 
@@ -75,7 +73,8 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
           model: modelName,
           messages: messages,
           max_tokens: maxTokens,
-          temperature: 0.1
+          temperature: 0.1,
+          response_format: { type: 'json_object' }
         })
       });
     } catch (e) {
@@ -112,9 +111,26 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     }
 
     const rawContent = firstChoice?.message?.content || '';
-    const feedback = extractFeedbackText(rawContent);
+    const rawFeedback = extractFeedbackText(rawContent);
 
-    const parsedState = parseCodeReviewStateDetailed(feedback);
+    let feedback: string;
+    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
+    let findings: ReviewFinding[] = [];
+    let parseError: CodeReviewResult['parseError'] = undefined;
+
+    try {
+      if (!rawFeedback || rawFeedback.trim() === '') {
+        throw new Error('Empty response from LLM');
+      }
+      const parsed = JSON.parse(rawFeedback);
+      feedback = parsed.feedback || rawFeedback;
+      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
+      findings = parsed.findings || [];
+    } catch (e) {
+      console.warn('Failed to parse structured GitHub Models response:', e, 'Raw content:', rawFeedback.slice(0, 200));
+      parseError = 'invalid_json';
+      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
+    }
 
     return {
       feedback: feedback,
@@ -124,11 +140,11 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       outputTokens,
       cacheTokens,
       cost: cost,
-      llmVerdict: parseCodeReviewVerdict(feedback),
-      state: parsedState.state,
+      llmVerdict: verdict,
+      state: { findings },
       modelName: modelName,
       truncated: isTruncated,
-      parseError: parsedState.parseError,
+      parseError,
     };
   }
 };

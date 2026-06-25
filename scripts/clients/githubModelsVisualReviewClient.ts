@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
+import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
-import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
+import { VISUAL_REVIEW_SCHEMA, type RouteReview, type VisualRouteSummary, type VisualReviewFinding } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
 import { DOM_REVIEW_DIR } from '../lib/visualReviewConstants';
 
@@ -69,7 +69,8 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
           model: modelName,
           messages: [{ role: 'user', content: baseContent }],
           max_tokens: maxTokens,
-          temperature: 0.1
+          temperature: 0.1,
+          response_format: { type: 'json_object' }
         })
       });
     } catch (err) {
@@ -92,7 +93,26 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
 
     const firstChoice = data.choices && data.choices[0];
     const rawContent = firstChoice?.message?.content || '';
-    const feedback = extractFeedbackText(rawContent);
+    const rawFeedback = extractFeedbackText(rawContent);
+
+    let feedback: string;
+    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
+    let findings: VisualReviewFinding[] = [];
+    let parseError: RouteReview['parseError'] = undefined;
+
+    try {
+      if (!rawFeedback || rawFeedback.trim() === '') {
+        throw new Error('Empty response from LLM');
+      }
+      const parsed = JSON.parse(rawFeedback);
+      feedback = parsed.feedback || rawFeedback;
+      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
+      findings = parsed.findings || [];
+    } catch (e) {
+      console.warn('Failed to parse structured GitHub Models visual response:', e, 'Raw content:', rawFeedback.slice(0, 200));
+      parseError = 'invalid_json';
+      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
+    }
 
     return {
       route: summary.route,
@@ -105,8 +125,9 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
       cacheTokens,
       cost: cost,
       modelName: modelName,
-      llmVerdict: parseLLMVerdict(feedback),
-      findings: parseVisualReviewFindings(feedback),
+      llmVerdict: verdict,
+      findings: findings,
+      parseError,
     };
   }
 };

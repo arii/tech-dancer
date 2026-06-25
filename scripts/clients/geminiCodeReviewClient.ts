@@ -40,14 +40,14 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     let thinkingBudget = 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json');
     const payload = buildReviewPayload(systemPrompt, diffText, externalText);
-    const messages = payload.map(msg => {
-      if (msg.role === 'system') return new SystemMessage({ content: msg.content });
-      return new HumanMessage({ content: msg.content });
-    });
+    const systemInstruction = payload.find(msg => msg.role === 'system')?.content;
+    const userMessages = payload
+      .filter(msg => msg.role !== 'system')
+      .map(msg => new HumanMessage({ content: msg.content }));
 
-    let response = await model.invoke(messages);
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json', systemInstruction);
+    let response = await model.invoke(userMessages);
 
     let finishReason = extractFinishReason(response);
 
@@ -59,8 +59,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
       thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, newMax, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json');
-      response = await model.invoke(messages);
+      model = createGeminiModel(modelName, newMax, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json', systemInstruction);
+      response = await model.invoke(userMessages);
 
       finishReason = extractFinishReason(response);
     }

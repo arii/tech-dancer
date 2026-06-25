@@ -32,7 +32,6 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
     let maxOutputTokens = 4096;
     let thinkingBudget = 1024;
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json');
     const baseContent = buildVisualReviewPayload(summary);
 
     baseContent.push({
@@ -63,23 +62,18 @@ Your job:
       });
     }
 
-    // Actually, ChatGoogleGenerativeAI expects a list of messages, where each message can have parts.
-    // Let's bundle them into a single HumanMessage for now as building multi-message vision payloads
-    // with separate SystemMessages is model-dependent.
-    // However, the core request was to separate system instructions.
-
     const systemInstruction = baseContent.filter(p => p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))).map(p => p.text).join('\n\n');
     const otherParts = baseContent.filter(p => !(p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))));
 
-    const finalMessages = [
-      new SystemMessage({ content: systemInstruction }),
+    const userMessages = [
       new HumanMessage({ content: otherParts.map(p => {
         if (p.type === 'text') return { type: 'text', text: p.text };
         return { type: 'image_url', image_url: p.image_url };
       })})
     ];
 
-    let response = await model.invoke(finalMessages);
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json', systemInstruction);
+    let response = await model.invoke(userMessages);
 
     let finishReason = extractFinishReason(response);
 
@@ -92,8 +86,8 @@ Your job:
       maxOutputTokens = newMax;
       thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json');
-      response = await model.invoke(finalMessages);
+      model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json', systemInstruction);
+      response = await model.invoke(userMessages);
 
       finishReason = extractFinishReason(response);
     }

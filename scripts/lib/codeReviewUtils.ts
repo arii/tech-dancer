@@ -168,6 +168,8 @@ export function extractFeedbackText(content: unknown): string {
  * Strips machine-readable tags like <findings> and [VERDICT] from the feedback.
  */
 export function cleanupFeedback(feedback: string): string {
+  // If the feedback is already just the Markdown text (new structured output pattern),
+  // this will largely be a no-op or just handle spacing.
   let cleaned = feedback.replace(/<findings>[\s\S]*?<\/findings>/gi, '');
   cleaned = cleaned.replace(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi, '');
   // Collapse multiple newlines into two and trim

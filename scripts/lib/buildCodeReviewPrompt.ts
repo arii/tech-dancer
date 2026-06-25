@@ -118,7 +118,12 @@ Scope and security rules:
   newly introduced module or utility. Instead, provide a WARN or PASS verdict based on
   what you CAN see, and explicitly state what remains unverified due to truncation.
 
-Your response must be a structured JSON object. Focus on audit rules and evidence-backed findings.`;
+Your response must be a structured JSON object with the following keys:
+- "verdict": "PASS", "WARN", or "FAIL"
+- "feedback": "Your detailed markdown review"
+- "findings": an array of finding objects (id, file, line, snippet, issue, status, fixSummary)
+
+Focus on audit rules and evidence-backed findings.`;
 
   return basePrompt;
 }

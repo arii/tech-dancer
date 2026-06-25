@@ -21,7 +21,8 @@ export function createGeminiModel(
   maxOutputTokens: number,
   thinkingBudget: number,
   responseSchema?: object,
-  responseMimeType?: string
+  responseMimeType?: string,
+  systemInstruction?: string
 ): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
@@ -32,6 +33,7 @@ export function createGeminiModel(
     maxOutputTokens: maxOutputTokens,
     responseMimeType: responseMimeType,
     responseSchema: responseSchema,
+    systemInstruction: systemInstruction,
     thinkingConfig: {
       includeThoughts: true,
       thinkingBudget: thinkingBudget,

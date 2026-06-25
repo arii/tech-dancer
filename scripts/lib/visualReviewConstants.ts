@@ -63,4 +63,9 @@ YOUR RULES:
 - Provide actionable feedback.
 - If the change is intentional, evaluate its visual quality and provide recommendations for further improvement.
 
-Your response must be a structured JSON object. Focus on audit rules and evidence-backed findings.`;
+Your response must be a structured JSON object with the following keys:
+- "verdict": "PASS", "WARN", or "FAIL"
+- "feedback": "Your detailed markdown review"
+- "findings": an array of finding objects (id, route, issue, status, fixSummary)
+
+Focus on audit rules and evidence-backed findings.`;
