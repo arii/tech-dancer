@@ -227,6 +227,22 @@
         }
       ]
     },
+    "agent dispatch": {
+      "description": "Initialize a Jules session for a specific branch and task.",
+      "exact_usage": "python3 dev-tools/td_cli.py agent dispatch <BRANCH> <TASK>",
+      "required_arguments": [
+        {
+          "name": "branch",
+          "type": "string",
+          "description": "The target branch for the task."
+        },
+        {
+          "name": "task",
+          "type": "string",
+          "description": "The task description for Jules."
+        }
+      ]
+    },
     "agent sync": {
       "description": "Sync and list active agent sessions.",
       "exact_usage": "python3 dev-tools/td_cli.py agent sync",

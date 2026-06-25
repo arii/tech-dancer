@@ -52,8 +52,10 @@ class JulesClient:
     def discover_source_id(self, repo_full_name: str) -> Optional[str]:
         sources = self.list_sources()
         for s in sources:
-            ctx = s.get("githubRepoContext", {})
-            if ctx.get("repo") == repo_full_name:
+            ctx = s.get("githubRepo", {})
+            owner = ctx.get("owner")
+            repo = ctx.get("repo")
+            if owner and repo and f"{owner}/{repo}" == repo_full_name:
                 return s.get("name").replace("sources/", "")
             if repo_full_name in s.get("displayName", ""):
                 return s.get("name").replace("sources/", "")
