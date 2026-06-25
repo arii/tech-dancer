@@ -16,10 +16,11 @@ const CHECK_DIRS = [
   'src/hooks',
   'src/lib',
   'src/App.tsx',
-  '.github/workflows'
+  '.github/workflows',
+  '.npmrc'
 ];
 
-const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss'];
+const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss', '.npmrc'];
 
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
@@ -143,6 +144,13 @@ const CONFIG = {
       severity: 'minor',
       message: 'Avoid hardcoded pixel values in CSS. Use design tokens.',
       filePattern: /\.(css|scss|tsx|ts)$/
+    },
+    {
+      name: 'Forbidden .npmrc property',
+      pattern: /use-node-version/g,
+      severity: 'major',
+      message: 'use-node-version is forbidden in .npmrc as it breaks Vercel deployments. Use "engines" in package.json instead.',
+      filePattern: /\.npmrc$/
     }
   ],
   deprecated: {

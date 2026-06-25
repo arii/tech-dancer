@@ -66,7 +66,7 @@ Do NOT assume \`ChatOpenAI\` always means talking to OpenAI's own API.
     name: 'Build/Bundler Configurations',
     matcher: (files) => files.some(f =>
       f.includes('vite.config') || (f.includes('tsconfig') && f.endsWith('.json')) ||
-      f === 'package.json' || f.includes('rollup.config')
+      f === 'package.json' || f.includes('rollup.config') || f === '.npmrc'
     ),
     guidance: `Build/Bundler Configurations:
 - \`pnpm-lock.yaml\`-adjacent \`package.json\` diffs are often auto-generated alongside dependency
@@ -78,7 +78,9 @@ Do NOT assume \`ChatOpenAI\` always means talking to OpenAI's own API.
 - Env var prefixing rules (e.g. Vite requires \`VITE_\` for client-exposed vars) matter — flag a
   new env var read in client-side code that lacks the required prefix.
 - Do not flag missing type-checking strictness changes as a problem unless the diff is the one
-  loosening an existing strict setting (e.g. removing \`strict: true\`).`,
+  loosening an existing strict setting (e.g. removing \`strict: true\`).
+- DO NOT allow \`use-node-version\` in \`.npmrc\`. This property breaks Vercel deployments.
+  Node versioning must be handled via \`engines\` in \`package.json\`, \`.node-version\`, or \`.nvmrc\`.`,
   },
   {
     id: 'react-components',
