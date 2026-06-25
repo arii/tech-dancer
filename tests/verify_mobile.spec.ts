@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 test('verify mobile layout', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
