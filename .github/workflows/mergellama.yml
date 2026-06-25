@@ -55,7 +55,7 @@ jobs:
           pnpm run type-check
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore: auto-resolved merge conflicts using AI"
           file_pattern: '.'
