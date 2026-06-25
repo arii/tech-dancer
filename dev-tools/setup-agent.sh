@@ -104,7 +104,7 @@ install_apt_tools() {
     # Ensure /usr/share/keyrings exists as a standard location for system keyrings
     if run_sudo mkdir -p /usr/share/keyrings; then
       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-        | run_sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 2>/dev/null || true
+        | run_sudo tee /usr/share/keyrings/githubcli-archive-keyring.gpg >/dev/null || true
       run_sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg || true
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
         | run_sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null || true

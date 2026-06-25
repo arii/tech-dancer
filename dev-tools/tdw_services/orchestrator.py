@@ -260,8 +260,33 @@ class Orchestrator:
         return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
                     re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
 
-    def create_issue(self, title: str, body: str) -> Dict[str, Any]:
-        """Creates a new GitHub issue."""
+    def create_issue(self, title: str, file_path: str) -> Dict[str, Any]:
+        """
+        Creates a new GitHub issue from a file, with validation.
+        """
+        # 1. Path Traversal & Sanity Validation
+        abs_path = os.path.abspath(file_path)
+        repo_root = os.path.abspath(os.getcwd())
+        try:
+            if os.path.commonpath([repo_root, abs_path]) != repo_root:
+                raise CLIError(f"Security Error: Path {file_path} is outside of repository root.")
+        except ValueError:
+            # commonpath raises ValueError if paths are on different drives (Windows) or other issues
+            raise CLIError(f"Security Error: Path {file_path} is invalid or outside of repository root.")
+
+        if not os.path.exists(abs_path):
+            raise CLIError(f"File not found: {file_path}")
+
+        # 2. Size limit (1MB) to prevent OOM/abuse
+        if os.path.getsize(abs_path) > 1024 * 1024:
+            raise CLIError("File size exceeds 1MB limit.")
+
+        with open(abs_path, 'r', encoding='utf-8') as f:
+            body = f.read()
+
+        if not body.strip():
+            raise CLIError("Issue body cannot be empty.")
+
         return self.github.create_issue(title, body)
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:

@@ -162,16 +162,11 @@ def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, e
 def create_issue(ctx, title, file):
     """Create a new GitHub issue from a file."""
     orch = ctx.obj['ORCHESTRATOR']
-    if not os.path.exists(file):
-        err(ctx, f"File {file} does not exist.", data={"status": "error", "file": file})
-        return
-
-    with open(file, 'r') as f:
-        body = f.read()
-
     try:
-        res = orch.create_issue(title, body)
+        res = orch.create_issue(title, file)
         out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
     except Exception as e:
         err(ctx, str(e))
 
