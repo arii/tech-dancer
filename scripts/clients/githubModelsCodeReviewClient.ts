@@ -118,6 +118,7 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
 
     return {
       feedback: feedback,
+      role: summary.role,
       tokens: totalTokens,
       inputTokens,
       outputTokens,
