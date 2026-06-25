@@ -28,7 +28,7 @@ export function SearchBox({
       maxWidth={maxWidth}
       flex={1}
       minHeight="44px"
-      radius="md"
+      radius="lg"
       className="focus-within:ring-2 focus-within:ring-accent transition-all w-full sm:w-auto"
     >
       <Text

@@ -77,8 +77,8 @@ export function EditorialHeader({
             {tags.map(tag => (
               <Box
                 key={tag}
-                paddingX={{ base: 3, sm: 2 }}
-                paddingY={{ base: 2, sm: 0.5 }}
+                paddingX={{ base: 4, sm: 2 }}
+                paddingY={{ base: 3, sm: 0.5 }}
                 minWidth={{ base: 11, sm: "auto" }}
                 minHeight={{ base: 11, sm: "auto" }}
                 display="flex"

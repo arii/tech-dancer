@@ -53,9 +53,13 @@ function parseProp<T>(val: unknown): T {
     const inner = trimmed.slice(1, -1).trim();
 
     try {
-      // Use Function to safely evaluate simple JS expressions like {6} or {{base: 1}}
-      // Strictly follows Audit Roadmap directive for simple parsing.
-      return new Function(`return ${inner}`)();
+      // Safely parse JSON strings by converting non-quoted keys to quoted
+      // e.g. { base: 1, md: 3 } -> { "base": 1, "md": 3 }
+      let jsonStr = inner;
+      if (inner.startsWith('{')) {
+        jsonStr = inner.replace(/([a-zA-Z0-9_]+)\s*:/g, '"$1":').replace(/'/g, '"');
+      }
+      return JSON.parse(jsonStr) as T;
     } catch (e) {
       console.warn('MarkdownRenderer: Failed to parse prop expression:', inner, e);
       return inner as T;
@@ -127,7 +131,7 @@ const RenderBlockquote = ({ children, node: _node, ...props }: { children: React
     }
   }
   return (
-    <Box border surface="warning" padding={6} marginY={12} radius="md">
+    <Box border surface="warning" padding={6} marginY={12} radius="lg">
       <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
         {label}
       </Text>
@@ -166,7 +170,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             as="img"
             src={diagramUrl}
             alt="Workflow Diagram"
-            radius="md"
+            radius="lg"
             maxWidth="full"
             maxHeight={96}
             className="object-contain"
@@ -316,7 +320,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           table: ({node: _node, ...props}) => (
-            <Box width="full" overflowX="auto" marginY={6} radius="md" border className="overflow-hidden">
+            <Box width="full" overflowX="auto" marginY={6} radius="lg" border className="overflow-hidden">
               <Box as="table" width="full" className="border-collapse" {...props} />
             </Box>
           ),
@@ -345,7 +349,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 <Box
                   as="img"
                   src={normalizedSrc}
-                  radius="md"
+                  radius="lg"
                   shadow="sm"
                   border
                   loading="lazy"
