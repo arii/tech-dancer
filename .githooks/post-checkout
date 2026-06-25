@@ -4,8 +4,6 @@
 # Runs after 'git checkout' or 'git switch'
 # $1 = previous HEAD, $2 = new HEAD, $3 = flag (1 = branch checkout, 0 = file checkout)
 
-set -e
-
 if [ "$3" -eq 0 ]; then
     # Skip if it was only a file checkout
     exit 0
@@ -19,27 +17,45 @@ if [ -z "$prev_head" ] || [ "$prev_head" = "000000000000000000000000000000000000
     exit 0
 fi
 
-changed_files="$(git diff --name-only "$prev_head" "$new_head")"
+changed_files="$(git diff --name-only "$prev_head" "$new_head" 2>/dev/null || echo "")"
 
 check_run() {
-    echo "$changed_files" | grep -qE "$1"
+    [ -n "$changed_files" ] && echo "$changed_files" | grep -qE "$1"
 }
 
 echo "⚓ Running post-checkout hooks..."
 
 if check_run "pnpm-lock.yaml|package.json"; then
-    echo "📦 Node dependencies changed. Running pnpm install..."
-    pnpm install
+    if command -v pnpm >/dev/null 2>&1; then
+        echo "📦 Node dependencies changed. Running pnpm install..."
+        if [ -f "pnpm-lock.yaml" ]; then
+            pnpm install --frozen-lockfile || echo "⚠️  pnpm install --frozen-lockfile failed. Please run manually."
+        else
+            pnpm install || echo "⚠️  pnpm install failed. Please run manually."
+        fi
+    else
+        echo "⚠️  pnpm not found. Skipping dependency update."
+    fi
 fi
 
 if check_run "^dev-tools/"; then
-    echo "🐍 dev-tools changed. Re-installing in editable mode..."
-    if ! python3 -m pip install --root-user-action=ignore -e ./dev-tools; then
-        python3 -m pip install --root-user-action=ignore -e ./dev-tools --break-system-packages
+    if command -v python3 >/dev/null 2>&1; then
+        echo "🐍 dev-tools changed. Re-installing in editable mode..."
+        if ! python3 -m pip install --root-user-action=ignore -e ./dev-tools; then
+            python3 -m pip install --root-user-action=ignore -e ./dev-tools --break-system-packages || echo "⚠️  dev-tools re-installation failed. Please run manually."
+        fi
+    else
+        echo "⚠️  python3 not found. Skipping dev-tools update."
     fi
 fi
 
 if check_run "^boomtick-mcp/"; then
-    echo "🤖 boomtick-mcp changed. Rebuilding..."
-    pnpm --filter boomtick-mcp run build
+    if command -v pnpm >/dev/null 2>&1; then
+        echo "🤖 boomtick-mcp changed. Rebuilding..."
+        pnpm --filter boomtick-mcp run build || echo "⚠️  boomtick-mcp build failed. Please run manually."
+    else
+        echo "⚠️  pnpm not found. Skipping boomtick-mcp build."
+    fi
 fi
+
+exit 0
