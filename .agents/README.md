@@ -13,14 +13,14 @@
 
 ### Workflows
 
-Located in `.agent/workflows/`:
+Located in `.agents/workflows/`:
 
 - **ai-slop-audit-[DATE].md** - Auto-generated audit results (latest run)
 - Other workflows: review-pr, review-ux, etc.
 
 ### Scripts
 
-Located in `.agent/scripts/`:
+Located in `.agents/scripts/`:
 
 - **audit-ai-slop.py** - Automated auditor that searches codebase and generates action plan. Consumes `audit.config.yaml`.
 
@@ -37,10 +37,10 @@ Before starting any work, ensure the agent environment is fully bootstrapped:
 ### Run Automated Audit
 
 ```bash
-python3 .agent/scripts/audit-ai-slop.py
+python3 .agents/scripts/audit-ai-slop.py
 ```
 
-This generates a timestamped report in `.agent/workflows/ai-slop-audit-[DATE].md` with:
+This generates a timestamped report in `.agents/workflows/ai-slop-audit-[DATE].md` with:
 
 - All violations found (grouped by category and priority)
 - Exact file paths and line numbers

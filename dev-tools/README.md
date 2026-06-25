@@ -20,18 +20,18 @@ This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools, Node
 
 | Variable | Required? | Purpose |
 |---|---|---|
-| `CODEX_GH_TOKEN` (string) | **Recommended (preferred)** | Primary secret for Codex/Jules/Antigravity agent runs; setup maps it to `GH_TOKEN` for `gh` + dev-tools commands. |
-| `GH_TOKEN` (string) | Required if `CODEX_GH_TOKEN` is not set | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). |
+| `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
+| `GH_TOKEN` (string) | Optional fallback | Legacy authentication variable, deprecated in favor of `GITHUB_TOKEN`. |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
 | `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 
 **Secret handling guidance**
-- GitHub Actions / agent runners: store `CODEX_GH_TOKEN` (preferred), plus `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
+- GitHub Actions / agent runners: store `GITHUB_TOKEN`, plus `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
 - Dev containers/local shells: export secrets before running setup/CLI, for example:
 
 ```bash
-export CODEX_GH_TOKEN="<token>"
+export GITHUB_TOKEN="<token>"
 export GITHUB_REPOSITORY="owner/repo"
 # optional
 export ANTIGRAVITY_API_KEY="<key>"
@@ -56,7 +56,7 @@ export GEMINI_API_KEY="<key>"
 After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
 #### 1) Deploy / GitHub Automation Workflows
-- Ensure GitHub auth is present in env: `GITHUB_TOKEN` or `GH_TOKEN`.
+- Ensure GitHub auth is present in env: `GITHUB_TOKEN`.
 - Verify CLI auth and repo context:
   - `gh auth status`
   - `gh repo view`
@@ -89,7 +89,7 @@ python3 dev-tools/td_cli.py gh <repo-command>
 
 Use raw `gh` only when `td_cli.py` does not expose the needed operation.
 
-If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `CODEX_GH_TOKEN`.
+If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `GITHUB_TOKEN`.
 
 
 ### Verification Commands (Post-Setup)
@@ -125,7 +125,7 @@ gh issue create --title "<title>" --body "<details>"
 
 If auth fails, report this exact issue (do not run interactive auth):
 
-> GitHub CLI is not authenticated. Please add a Codex environment secret named `CODEX_GH_TOKEN` with a repo-scoped GitHub token.
+> GitHub CLI is not authenticated. Please add a Codex environment secret named `GITHUB_TOKEN` with a repo-scoped GitHub token.
 
 ## 🚀 Repository CLI (`td_cli.py`)
 
@@ -220,8 +220,7 @@ Use `dev-tools/setup-agent.sh` to fully bootstrap a fresh agent environment.
 ### Required / Recommended Environment Variables & Secrets
 | Variable | Purpose |
 |---|---|
-| `CODEX_GH_TOKEN` | Primary secret for agent runs. |
-| `GH_TOKEN` | Auth for `gh` and `td_cli.py gh ...` commands. |
+| `GITHUB_TOKEN` | Primary secret for agent runs and auth for `gh` and `td_cli.py gh ...` commands. |
 
 ### Environment Setup Prerequisites
 The project requires **Node >=22.0.0** (as specified in `.nvmrc` and `package.json` engines).
