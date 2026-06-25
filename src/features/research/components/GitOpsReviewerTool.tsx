@@ -8,7 +8,7 @@ export function GitOpsReviewerTool() {
   const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_GITOPS_PR_REVIEWER);
 
   return (
-    <Box border radius="lg" padding={8} surface="default">
+    <Box border radius="md" padding={8} surface="default">
       <Stack gap={8}>
         <Stack gap={4}>
           <Text variant="headline" size="xl" weight="font-black">Automating the Outer Loop</Text>

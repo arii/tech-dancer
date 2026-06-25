@@ -146,7 +146,7 @@ export default function Merch() {
         )}
 
         {/* Footer Callouts */}
-        <Box padding={8} radius="lg" border surface="card" marginTop={8} width="full">
+        <Box padding={8} radius="md" border surface="card" marginTop={8} width="full">
            <Stack gap={6}>
               <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
                 Referral Discount

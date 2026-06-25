@@ -298,7 +298,7 @@ export function WCSScraperTool() {
             </Grid>
           </Stack>
           <Stack gap={6} justify="center">
-            <Box padding={6} border radius="lg" surface="surface">
+            <Box padding={6} border radius="md" surface="surface">
               <Stack gap={4}>
                 <Box display="flex" justify="between" align="center">
                   <Text variant="mono" size="xs" weight="font-bold" color="dim">VERIFICATION</Text>

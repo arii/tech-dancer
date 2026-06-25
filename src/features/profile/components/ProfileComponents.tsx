@@ -29,13 +29,13 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="lg" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
+          <Box key={index} padding={8} border radius="md" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
             <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
               {Icon && (
                 <Box 
                   width={12} 
                   height={12} 
-                  radius="lg" 
+                  radius="md"
                   border 
                   display="flex" 
                   align="center" 
@@ -70,7 +70,7 @@ export function ProfileItems({ items }: { items: ProfileItem[] }) {
       {items.map((item, index) => {
         const Icon = item.icon ? IconMap[item.icon] : null;
         return (
-          <Box key={index} padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+          <Box key={index} padding={6} border radius="md" className="bg-surface/20 border-line/5">
             <Stack gap={3}>
               {Icon && <Icon className="w-4 h-4 text-accent" />}
               {item.title && (
@@ -105,7 +105,7 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
             aspect="square"
             overflow="hidden"
             border
-            radius="lg"
+            radius="md"
             className="border-line/10 bg-surface/30 group cursor-pointer focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             onClick={() => setSelectedImage(image.src)}
             aria-label={`View ${image.alt}`}

@@ -34,7 +34,7 @@ function ArielProfile() {
         {section.cards && <ExperienceCards cards={section.cards} />}
 
         {section.availability && (
-          <Box padding={6} radius="lg" border className="bg-accent/5 border-accent/30">
+          <Box padding={6} radius="md" border className="bg-accent/5 border-accent/30">
             <Text variant="body" size="base" color="accent" weight="font-medium">
               {section.availability}
             </Text>
@@ -48,7 +48,7 @@ function ArielProfile() {
   };
 
   const renderAtAGlance = () => (
-    <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+    <Box width="full" padding={6} border radius="md" className="bg-surface/20 border-line/5">
       <Stack gap={6}>
         <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">AT A GLANCE</Text>
         <Stack gap={4}>
@@ -102,7 +102,7 @@ function ArielProfile() {
               <Box className="lg:hidden">
                 <Stack gap={8}>
                   {renderAtAGlance()}
-                  <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+                  <Box width="full" padding={6} border radius="md" className="bg-surface/20 border-line/5">
                     <Stack gap={6}>
                       <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                       <ProfileLinks links={socialLinks} />
@@ -136,7 +136,7 @@ function ArielProfile() {
                 {/* Profile portrait (Always on top or as ordered) */}
                 <Box
                   border
-                  radius="lg"
+                  radius="md"
                   overflow="hidden"
                   aspect={{ base: "3/4", lg: "1/1" }}
                   surface="default"
@@ -156,7 +156,7 @@ function ArielProfile() {
                 <Box className="hidden lg:block w-full">
                   <Stack gap={8}>
                     {renderAtAGlance()}
-                    <Box width="full" padding={6} border radius="lg" className="bg-surface/20 border-line/5">
+                    <Box width="full" padding={6} border radius="md" className="bg-surface/20 border-line/5">
                       <Stack gap={6}>
                         <Text variant="mono" size="sm" color="brand" weight="font-bold" className="uppercase tracking-widest">CONNECT</Text>
                         <ProfileLinks links={socialLinks} />

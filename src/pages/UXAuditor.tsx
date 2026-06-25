@@ -167,7 +167,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
     <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
-          <Box width={9} height={9} surface="default" radius="lg" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
+          <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
             {viewportIcons[vp.name as keyof typeof viewportIcons]}
           </Box>
           <Text variant="sans" size="base" weight="font-bold">
@@ -231,7 +231,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
                       {imp.issue}
                     </Text>
                     {imp.suggestion && imp.suggestion.trim() !== '' && (
-                      <Box surface="muted" padding={3} radius="lg" border={true}>
+                      <Box surface="muted" padding={3} radius="md" border={true}>
                         <Stack direction={{ base: 'col', sm: 'row' }} align="start" gap={2} minWidth={0}>
                           <Text variant="sans" size="xs" weight="font-black" color="accent" marginTop={0.5} uppercase tracking="widest" className="shrink-0">FIX</Text>
                           <Box flex={1} minWidth="0" className="overflow-hidden">
@@ -331,7 +331,7 @@ export default function UXAuditor() {
                 minWidth={0}
               paddingX={4}
               paddingY={2}
-              radius="lg"
+              radius="md"
               placeholder="https://..."
               aria-label="URL to audit"
             />
@@ -373,7 +373,7 @@ export default function UXAuditor() {
                 flex={1}
                 paddingX={4}
                 paddingY={2}
-                radius="lg"
+                radius="md"
                 placeholder="OpenAI or Gemini API Key (optional override)"
                 aria-label="API Key"
               />
@@ -419,7 +419,7 @@ export default function UXAuditor() {
                 flex={1}
                 paddingX={4}
                 paddingY={2}
-                radius="lg"
+                radius="md"
                 placeholder="Custom service URL with {url}, {width}, {height} (optional)"
                 aria-label="Snapshot Service URL"
               />

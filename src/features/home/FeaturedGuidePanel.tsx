@@ -24,7 +24,7 @@ export function FeaturedGuidePanel() {
       position="relative"
       overflow="hidden"
       border
-      radius="lg"
+      radius="md"
       className="group self-stretch"
     >
       {/* Background image — fills the column height naturally */}

@@ -178,7 +178,7 @@ export default function ResearchDetail() {
                       </Grid>
 
                       {tool.status === 'Coming Soon' && (
-                        <Box border radius="lg" padding="card" surface="muted" borderStyle="dashed">
+                        <Box border radius="md" padding="card" surface="muted" borderStyle="dashed">
                           <Stack gap={4} align="center" textAlign="center">
                             <Search className="w-8 h-8 text-accent opacity-muted" />
                             <Stack gap={2}>
@@ -239,7 +239,7 @@ export default function ResearchDetail() {
           <Text variant="mono" size="xs" weight="font-bold" color="dim" className="group-hover:text-accent">Back to Portfolio</Text>
         </Box>
 
-        <Box border surface="surface" radius="lg" padding={{ base: 4, md: 12 }}>
+        <Box border surface="surface" radius="md" padding={{ base: 4, md: 12 }}>
           <Stack gap={12}>
             {tool.status !== 'Coming Soon' && id && TOOL_REGISTRY[id] ? (
               <Suspense fallback={
@@ -284,7 +284,7 @@ export default function ResearchDetail() {
                 </Grid>
 
                 {tool.status === 'Coming Soon' && (
-                  <Box border radius="lg" padding="card" className="bg-surface/50 border-dashed">
+                  <Box border radius="md" padding="card" className="bg-surface/50 border-dashed">
                     <Stack gap={4} align="center" textAlign="center">
                       <Search className="w-8 h-8 text-accent opacity-muted" />
                       <Stack gap={2}>
