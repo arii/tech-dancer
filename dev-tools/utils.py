@@ -254,8 +254,8 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
     return proc
 
 def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment (prioritizing CODEX_GH_TOKEN) or via gh CLI."""
-    token = os.getenv("CODEX_GH_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("GITHUB_TOKEN") or os.getenv("PAT_TOKEN")
+    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN) or via gh CLI."""
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("PAT_TOKEN")
     if token:
         return token
     try:

@@ -73,6 +73,22 @@ class Orchestrator:
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
 
+    def _cleanup_worktree(self, worktree_path: str):
+        """Robustly cleans up a git worktree and its directory."""
+        # Unregister and attempt to remove the worktree via git
+        run_command(["git", "worktree", "remove", "-f", worktree_path], check=False, log_on_error=False)
+
+        # Forcefully delete the directory if it still exists
+        if os.path.exists(worktree_path):
+            shutil.rmtree(worktree_path, ignore_errors=True)
+
+        # Prune stale worktree metadata
+        run_command(["git", "worktree", "prune"], check=False, log_on_error=False)
+
+        # Final safety check
+        if os.path.exists(worktree_path):
+            raise CLIError(f"Failed to clean up worktree directory: {worktree_path}")
+
     def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
         is_ui = "src/components" in diff or "src/pages" in diff or "src/layouts" in diff or "src/index.css" in diff or "tailwind" in diff
@@ -259,6 +275,45 @@ class Orchestrator:
         list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
         return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
                     re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
+
+    def _read_safe_file(self, file_path: str, max_size: int = 1024 * 1024) -> str:
+        """
+        Validates and reads a file from within the repository root.
+        """
+        abs_path = os.path.abspath(file_path)
+        repo_root = os.path.abspath(os.getcwd())
+        try:
+            if os.path.commonpath([repo_root, abs_path]) != repo_root:
+                raise CLIError(f"Security Error: Path {file_path} is outside of repository root.")
+        except ValueError:
+            raise CLIError(f"Security Error: Path {file_path} is invalid or outside of repository root.")
+
+        if not os.path.exists(abs_path):
+            raise CLIError(f"File not found: {file_path}")
+
+        if os.path.getsize(abs_path) > max_size:
+            raise CLIError(f"File size exceeds limit of {max_size} bytes.")
+
+        with open(abs_path, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    def create_issue(self, title: str, file_path: str) -> Dict[str, Any]:
+        """
+        Creates a new GitHub issue from a file, with validation.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Issue body cannot be empty.")
+        return self.github.create_issue(title, body)
+
+    def post_comment(self, pr_number: int, file_path: str) -> Dict[str, Any]:
+        """
+        Posts a comment to a PR from a file, with validation.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Comment body cannot be empty.")
+        return self.github.create_issue_comment(pr_number, body)
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
@@ -942,9 +997,7 @@ Respond only after the PR is created or updated:
         run_command(["git", "fetch", "origin", base_branch])
 
         worktree_path = os.path.join(os.getcwd(), f"worktree-conflict-{pr_number}.tmp")
-        if os.path.exists(worktree_path):
-            run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
-            shutil.rmtree(worktree_path, ignore_errors=True)
+        self._cleanup_worktree(worktree_path)
 
         run_command(["git", "worktree", "add", worktree_path, f"origin/{head_ref}"])
 
@@ -1127,12 +1180,7 @@ Respond only after the PR is created or updated:
                 raise CLIError(f"Could not determine head ref for PR #{pr_number}")
 
             # 2. Clean up existing worktree if present
-            if os.path.exists(worktree_path):
-                run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
-                if os.path.exists(worktree_path):
-                    shutil.rmtree(worktree_path, ignore_errors=True)
-                if os.path.exists(worktree_path):
-                    raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
+            self._cleanup_worktree(worktree_path)
 
             # 3. Fetch PR branch and create worktree directly on it
             run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
@@ -1141,11 +1189,6 @@ Respond only after the PR is created or updated:
             # 4. Switch to worktree and perform git operations
             changed_dir = True
             os.chdir(worktree_path)
-            changed_dir = True
-
-            # Checkout the PR branch using git
-            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
-            run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=True)

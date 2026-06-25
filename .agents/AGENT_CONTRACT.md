@@ -3,8 +3,8 @@
 ## Available Workflows
 
 Read the matching workflow before starting these task types:
-- PR audit → `.agent/workflows/review-pr.md`
-- UX review → `.agent/workflows/review-ux.md`
+- PR audit → `.agents/workflows/review-pr.md`
+- UX review → `.agents/workflows/review-ux.md`
 
 
 

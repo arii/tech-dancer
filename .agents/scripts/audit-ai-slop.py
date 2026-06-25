@@ -15,7 +15,7 @@ from typing import List, Dict, Tuple
 import yaml
 
 class AISlopAuditor:
-    def __init__(self, root_dir: str = ".", config_path: str = ".agent/audit.config.yaml"):
+    def __init__(self, root_dir: str = ".", config_path: str = ".agents/audit.config.yaml"):
         self.root_dir = Path(root_dir)
         self.config_path = self.root_dir / config_path
         self.violations: List[Dict] = []
@@ -149,7 +149,7 @@ class AISlopAuditor:
         report += "4. Commit with clear message referencing this audit\n\n"
         
         report += "---\n\n"
-        report += "**Reference:** See `.agent/audit.config.yaml` for full standards\n"
+        report += "**Reference:** See `.agents/audit.config.yaml` for full standards\n"
         
         return report
     
@@ -169,7 +169,7 @@ def main():
     
     # Save to file
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    output_dir = Path(".agent/workflows")
+    output_dir = Path(".agents/workflows")
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / f"ai-slop-audit-{timestamp}.md"
     output_file.write_text(report)

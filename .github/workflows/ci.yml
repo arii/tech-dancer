@@ -143,7 +143,7 @@ jobs:
           export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           td-cli gh ratchet-any
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
@@ -175,7 +175,7 @@ jobs:
       - name: UI Anti-Pattern Audit - Gate
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::group::Audit"
           trap 'echo "::endgroup::"' EXIT
@@ -234,7 +234,7 @@ jobs:
 
       - name: Bundle Size Check
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Ensure local python bin is on path for td-cli
           export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"

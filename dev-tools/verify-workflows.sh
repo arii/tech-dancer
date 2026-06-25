@@ -40,7 +40,7 @@ run_check() {
   fi
 }
 
-echo "== Verifying .agent/workflows =="
+echo "== Verifying .agents/workflows =="
 repair_origin
 
 run_check "shared" "python3 --version"
@@ -48,7 +48,7 @@ run_check "shared" "pnpm --version"
 run_check "shared" "python3 dev-tools/td_cli.py gh --help"
 run_check "shared" "python3 dev-tools/td_cli.py jules --help"
 
-run_check "ai-slop-audit.md" "python3 .agent/scripts/audit-ai-slop.py"
+run_check "ai-slop-audit.md" "python3 .agents/scripts/audit-ai-slop.py"
 
 run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh pre-submit --help"
 run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh audit-pr --help"
