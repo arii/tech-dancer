@@ -45,7 +45,7 @@ fi
 echo "pnpm version: $(pnpm --version 2>&1 || echo 'Not installed')"
 
 # Token check (do not print token!)
-if [ -n "$GITHUB_TOKEN" ] || [ -n "$GH_TOKEN" ] || [ -n "$CODEX_GH_TOKEN" ]; then
+if [ -n "$GITHUB_TOKEN" ] || [ -n "$GH_TOKEN" ]; then
     echo "GitHub token: Present"
 else
     echo "GitHub token: Missing"

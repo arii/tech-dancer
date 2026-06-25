@@ -11,7 +11,7 @@ from typing import Any
 class ProjectConfig:
     github_repo: str | None = None
     github_token_env: str = "GITHUB_TOKEN"
-    gh_token_env: str = "GITHUB_TOKEN"
+    gh_token_env: str = "GH_TOKEN"
     use_gemini_fallback: bool = True
     jules_api_url: str | None = None
 
@@ -44,7 +44,7 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
     return ProjectConfig(
         github_repo=raw.get("github_repo") or raw.get("repo_name"),
         github_token_env=raw.get("github_token_env", "GITHUB_TOKEN"),
-        gh_token_env=raw.get("gh_token_env", "GITHUB_TOKEN"),
+        gh_token_env=raw.get("gh_token_env", "GH_TOKEN"),
         use_gemini_fallback=fallback_val if fallback_val is not None else _coerce_bool(raw.get("use_gemini_fallback"), True),
         jules_api_url=raw.get("jules_api_url"),
     )

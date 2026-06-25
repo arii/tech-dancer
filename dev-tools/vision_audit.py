@@ -27,9 +27,9 @@ def call_ai(prompt: str, paths: List[str]) -> Optional[str]:
         print("langchain_openai or langchain_core is not installed.")
         return None
 
-    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("CODEX_GH_TOKEN")
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     if not token:
-        print("No GITHUB_TOKEN or GH_TOKEN or CODEX_GH_TOKEN found.")
+        print("No GITHUB_TOKEN or GH_TOKEN found.")
         return None
 
     llm = ChatOpenAI(

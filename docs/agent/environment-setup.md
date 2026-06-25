@@ -21,8 +21,7 @@ This script installs and configures:
 
 | Variable | Required? | Purpose |
 |---|---|---|
-| `CODEX_GH_TOKEN` | **Recommended** | Primary secret for agent runs; mapped to `GITHUB_TOKEN` for `gh` and CLI tools. |
-| `GITHUB_TOKEN` | Required if `CODEX_GH_TOKEN` missing | Auth for GitHub CLI and PR audits. |
+| `GITHUB_TOKEN` | **Required** | Auth for GitHub CLI and PR audits. |
 | `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g., `owner/repo`). |
 | `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables Antigravity/Jules cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed audit and review workflows. |
@@ -32,7 +31,7 @@ This script installs and configures:
 - **CI / Agent Runners**: Store these as repository or organization secrets.
 - **Local Development**: Export them in your shell before running setup:
   ```bash
-  export CODEX_GH_TOKEN="your_token"
+  export GITHUB_TOKEN="your_token"
   export GITHUB_REPOSITORY="arii/tech-dancer"
   ```
 
