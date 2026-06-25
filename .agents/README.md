@@ -18,6 +18,11 @@ Located in `.agents/workflows/`:
 - **ai-slop-audit-[DATE].md** - Auto-generated audit results (latest run)
 - Other workflows: review-pr, review-ux, etc.
 
+### Core Standards
+
+- **AGENTS.md** - Primary Tooling and MCP Protocol. Defines the hierarchy of tool selection (MCP > Local > Bash) and task mapping.
+- **AGENT_CONTRACT.md** - Invariant rules for agent behavior.
+
 ### Scripts
 
 Located in `.agents/scripts/`:
