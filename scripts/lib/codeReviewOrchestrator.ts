@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { IMPACT_CONFIG } from '../impact-analysis.config';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
-import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache } from './codeReviewUtils';
+import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache, filterLowImpactFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
 import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
@@ -452,6 +453,11 @@ export async function orchestrateCodeReview(
 
   const agentReportPath = path.join(ARTIFACTS_DIR, client.reportFileName);
 
+  // Guarantee artifacts directory exists before any check or early return
+  if (!fs.existsSync(ARTIFACTS_DIR)) {
+    fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
+  }
+
   const existing = await countExistingReviews(allReportTitles);
   if (existing >= MAX_REVIEWS_PER_PR) {
     console.log(`⏭️  Skipping ${client.botName} — ${existing}/${MAX_REVIEWS_PER_PR} reviews already posted.`);
@@ -480,6 +486,22 @@ export async function orchestrateCodeReview(
   }
 
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+  const rawChangedFiles = Array.isArray(initialSummary.changedFiles) ? initialSummary.changedFiles : [];
+
+  const changedFiles = filterLowImpactFiles(rawChangedFiles, IMPACT_CONFIG.LOW_IMPACT_PATHS);
+
+  if (changedFiles.length === 0) {
+    console.log(`✅ No reviewable code changes detected after filtering (${rawChangedFiles.length} files filtered) — skipping agent review.`);
+    fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo reviewable code changes detected.\n`);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
+    return;
+  }
 
   if (initialSummary.isTruncated) {
     const report = generateTruncatedReviewMarkdown(initialSummary, client);
@@ -498,10 +520,8 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const changedFiles = (initialSummary.changedFiles || []).sort();
-
   // Batch files (max 10 per batch)
-  const fileBatches = batchFiles(changedFiles, 10);
+  const fileBatches = batchFiles(changedFiles.sort(), 10);
   const roles: CodeReviewRole[] = ['SECURITY', 'PERFORMANCE', 'STYLE', 'ARCHITECTURE'];
 
   console.log(`🤖 Reviewing ${changedFiles.length} files in ${fileBatches.length} batches with ${roles.length} specialized agents...`);

@@ -1,17 +1,21 @@
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
 
-export const ReadCiLogsInputSchema = z.object({
+export const RepoLogsInputSchema = z.object({
   prNumber: z.number(),
-  all: z.boolean().optional(),
+  grep: z.string().optional(),
 });
 
-export async function readCiLogsHandler(args: z.infer<typeof ReadCiLogsInputSchema>) {
-  ReadCiLogsInputSchema.parse(args);
-  const params = ["repo", "ci-logs", args.prNumber.toString()];
-  if (args.all) {
-    params.push("--all");
+export async function repoLogsHandler(args: z.infer<typeof RepoLogsInputSchema>) {
+  RepoLogsInputSchema.parse(args);
+  const params = [
+    "repo", "logs", args.prNumber.toString()
+  ];
+
+  if (args.grep) {
+    params.push("--grep", args.grep);
   }
+
   const result = await runCommand("td-cli", params);
 
   if (result.exitCode !== 0) {
@@ -24,8 +28,6 @@ export async function readCiLogsHandler(args: z.infer<typeof ReadCiLogsInputSche
   }
 
   return {
-    checks: output.checks,
-    failedChecks: output.failedChecks,
-    logs: output.logs
+    logs: output.logs || (output.data ? output.data.logs : undefined)
   };
 }

@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as crypto from 'crypto';
 import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeReviewResult } from './codeReviewTypes';
 
@@ -6,6 +7,37 @@ import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeRevi
  * Includes diff context, role, goal, and all relevant semantic/external context.
  * Explicitly handles undefined values to ensure stable serialization.
  */
+export function filterLowImpactFiles(files: string[], lowImpactPaths: string[]): string[] {
+  if (!Array.isArray(files) || !Array.isArray(lowImpactPaths)) {
+    throw new TypeError('Both files and lowImpactPaths must be arrays.');
+  }
+  return files.filter(f => {
+    return !lowImpactPaths.some(p => {
+      // Normalize to handle mixed slashes and dot segments safely
+      const normalizedF = path.normalize(f);
+      let normalizedP = path.normalize(p);
+
+      // Handle exact matches
+      if (normalizedF === normalizedP) return true;
+
+      // Ensure directory patterns check correctly
+      const isDirPattern = p.endsWith('/') || p.endsWith(path.sep);
+      if (isDirPattern) {
+        if (!normalizedP.endsWith(path.sep)) {
+          normalizedP += path.sep;
+        }
+        // It must start with the directory pattern, OR the directory pattern must be preceded by a path separator.
+        // And since normalizedP already ends with a path separator, we know it's matching a full directory.
+        return normalizedF.startsWith(normalizedP) || normalizedF.includes(path.sep + normalizedP);
+      }
+
+      // Handle file matches (e.g., packages/web/pnpm-lock.yaml matching pnpm-lock.yaml)
+      // Must be an exact match or preceded by a path separator to avoid partial name matches
+      return normalizedF === normalizedP || normalizedF.endsWith(path.sep + normalizedP);
+    });
+  });
+}
+
 export function calculateReviewHash(summary: CodeReviewSummary): string {
   const hash = crypto.createHash('sha256');
   const data = JSON.stringify({
