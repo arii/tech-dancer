@@ -260,6 +260,45 @@ class Orchestrator:
         return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
                     re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
 
+    def _read_safe_file(self, file_path: str, max_size: int = 1024 * 1024) -> str:
+        """
+        Validates and reads a file from within the repository root.
+        """
+        abs_path = os.path.abspath(file_path)
+        repo_root = os.path.abspath(os.getcwd())
+        try:
+            if os.path.commonpath([repo_root, abs_path]) != repo_root:
+                raise CLIError(f"Security Error: Path {file_path} is outside of repository root.")
+        except ValueError:
+            raise CLIError(f"Security Error: Path {file_path} is invalid or outside of repository root.")
+
+        if not os.path.exists(abs_path):
+            raise CLIError(f"File not found: {file_path}")
+
+        if os.path.getsize(abs_path) > max_size:
+            raise CLIError(f"File size exceeds limit of {max_size} bytes.")
+
+        with open(abs_path, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    def create_issue(self, title: str, file_path: str) -> Dict[str, Any]:
+        """
+        Creates a new GitHub issue from a file, with validation.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Issue body cannot be empty.")
+        return self.github.create_issue(title, body)
+
+    def post_comment(self, pr_number: int, file_path: str) -> Dict[str, Any]:
+        """
+        Posts a comment to a PR from a file, with validation.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Comment body cannot be empty.")
+        return self.github.create_issue_comment(pr_number, body)
+
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
         issues = []

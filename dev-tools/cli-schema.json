@@ -180,6 +180,14 @@
       "exact_usage": "python3 dev-tools/td_cli.py gh pre-submit",
       "required_flags": []
     },
+    "gh create-issue": {
+      "description": "Creates a new GitHub issue using a title and a markdown file for the body.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh create-issue --title <TITLE> --file <PATH_TO_BODY_FILE>",
+      "required_flags": [
+        { "flag": "--title", "type": "string", "description": "The title of the issue." },
+        { "flag": "--file", "type": "string", "description": "Path to the Markdown file containing the issue body." }
+      ]
+    },
     "gh validate-issue": {
       "description": "Validates that a GitHub issue follows the Spec-Driven Issue Template.",
       "exact_usage": "python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",
