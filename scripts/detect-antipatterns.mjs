@@ -6,7 +6,10 @@ import { execFileSync } from 'child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CHECK_DIRS = [
+/**
+ * Default list of directories or individual files to audit.
+ */
+const CHECK_PATHS = [
   'src/features',
   'src/pages',
   'src/components',
@@ -23,18 +26,23 @@ const CHECK_DIRS = [
 const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss', '.npmrc'];
 
 function collectAuditFiles(targets) {
-  const resolvedTargets = targets.length > 0 ? targets : CHECK_DIRS;
+  const resolvedTargets = targets.length > 0 ? targets : CHECK_PATHS;
   const results = new Set();
 
+  const isAuditFile = (filepath) => {
+    return AUDIT_EXTENSIONS.some(ext => filepath.endsWith(ext));
+  };
+
   const walk = (dir) => {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
         walk(fullPath);
-        continue;
+      } else if (isAuditFile(fullPath)) {
+        results.add(fullPath);
       }
-      if (AUDIT_EXTENSIONS.some(ext => fullPath.endsWith(ext))) results.add(fullPath);
     }
   };
 
@@ -42,8 +50,12 @@ function collectAuditFiles(targets) {
     const absoluteTarget = path.isAbsolute(target) ? target : path.join(ROOT, target);
     if (!fs.existsSync(absoluteTarget)) continue;
     const stat = fs.statSync(absoluteTarget);
-    if (stat.isDirectory()) walk(absoluteTarget);
-    else if (AUDIT_EXTENSIONS.some(ext => absoluteTarget.endsWith(ext))) results.add(absoluteTarget);
+
+    if (stat.isDirectory()) {
+      walk(absoluteTarget);
+    } else if (isAuditFile(absoluteTarget)) {
+      results.add(absoluteTarget);
+    }
   }
 
   return Array.from(results);
