@@ -7,6 +7,7 @@ export const RepoLogsInputSchema = z.object({
 });
 
 export async function repoLogsHandler(args: z.infer<typeof RepoLogsInputSchema>) {
+  RepoLogsInputSchema.parse(args);
   const params = [
     "repo", "logs", args.prNumber.toString()
   ];

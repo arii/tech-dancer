@@ -2,7 +2,7 @@ import { z } from "zod";
 import { config } from "../config.js";
 
 export const HealthCheckInputSchema = z.object({
-  checkDeep: z.boolean().optional(),
+  checkDeep: z.boolean().optional().default(false),
 });
 
 export async function healthHandler(args: z.infer<typeof HealthCheckInputSchema>) {

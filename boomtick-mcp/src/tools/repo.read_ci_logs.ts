@@ -7,6 +7,7 @@ export const ReadCiLogsInputSchema = z.object({
 });
 
 export async function readCiLogsHandler(args: z.infer<typeof ReadCiLogsInputSchema>) {
+  ReadCiLogsInputSchema.parse(args);
   const params = ["repo", "ci-logs", args.prNumber.toString()];
   if (args.all) {
     params.push("--all");

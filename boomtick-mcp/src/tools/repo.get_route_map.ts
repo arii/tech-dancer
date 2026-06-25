@@ -8,6 +8,7 @@ export const GetRouteMapInputSchema = z.object({
 });
 
 export async function getRouteMapHandler(args: z.infer<typeof GetRouteMapInputSchema>) {
+  GetRouteMapInputSchema.parse(args);
   // Logic based on tech-dancer repo structure: src/config/routes.ts and content/
   const routesPath = path.join(config.repoPath, "src/config/routes.ts");
 

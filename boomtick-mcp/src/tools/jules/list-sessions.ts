@@ -7,9 +7,14 @@ export const ListJulesSessionsInputSchema = z.object({
 });
 
 export async function listJulesSessionsHandler(input: z.infer<typeof ListJulesSessionsInputSchema>): Promise<JulesSession[]> {
+  ListJulesSessionsInputSchema.parse(input);
   const apiKey = process.env.JULES_API_KEY;
   if (!apiKey) {
     throw new Error("JULES_API_KEY environment variable is not set.");
+  }
+
+  if (apiKey.length < 20) {
+    throw new Error("JULES_API_KEY appears to be invalid (too short).");
   }
 
   const url = new URL("https://jules.googleapis.com/v1alpha/sessions");
