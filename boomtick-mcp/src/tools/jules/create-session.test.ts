@@ -32,7 +32,7 @@ describe("createJulesSessionHandler", () => {
   it("should create a session with just task", async () => {
     const result = await createJulesSessionHandler({ task: "do work" });
     expect(result.id).toBe("1234567890");
-    expect(result.status).toBe("PENDING");
+    expect(result.status).toBe("IN_PROGRESS");
     expect(result.createdAt).toBeInstanceOf(Date);
 
     expect(global.fetch).toHaveBeenCalledWith(
