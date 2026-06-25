@@ -4,33 +4,38 @@ import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeRevi
 /**
  * Generates a stable SHA-256 hash for a code review batch.
  * Includes diff context, role, goal, and all relevant semantic/external context.
+ * Explicitly handles undefined values to ensure stable serialization.
  */
 export function calculateReviewHash(summary: CodeReviewSummary): string {
   const hash = crypto.createHash('sha256');
   const data = JSON.stringify({
-    role: summary.role,
-    diff: summary.diffContext,
-    goal: summary.prGoal,
-    external: summary.externalContext,
-    semantic: summary.impactSemanticContext,
+    role: summary.role || '',
+    diff: summary.diffContext || '',
+    goal: summary.prGoal || '',
+    external: summary.externalContext || '',
+    semantic: summary.impactSemanticContext || '',
   });
   return hash.update(data).digest('hex');
 }
 
 /**
- * prunes a cache object to maintain a maximum number of entries, preventing
- * the serialized state from exceeding GitHub's 65k comment character limit.
+ * Prunes a cache object to maintain a maximum number of entries.
+ * Since GitHub comments have a 65,536 character limit, we must cap the state.
+ * This implementation keeps the most recently added N entries (insertion order).
  */
 export function pruneCache(
   cache: Record<string, CodeReviewResult>,
   maxEntries: number = 15
 ): Record<string, CodeReviewResult> {
+  const safeMax = Math.max(0, Math.floor(maxEntries));
+  if (safeMax === 0) return {};
   const keys = Object.keys(cache);
-  if (keys.length <= maxEntries) return cache;
+  if (keys.length <= safeMax) return cache;
 
-  // We don't have timestamps, so we'll just prune the oldest keys (by insertion order)
   const newCache: Record<string, CodeReviewResult> = {};
-  keys.slice(-maxEntries).forEach(key => {
+  // Keep the most recently added entries (the end of the keys array)
+  // String keys in JS objects follow insertion order for slice/iteration.
+  keys.slice(-safeMax).forEach(key => {
     newCache[key] = cache[key];
   });
   return newCache;

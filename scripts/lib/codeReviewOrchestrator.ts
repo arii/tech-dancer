@@ -624,6 +624,9 @@ export async function orchestrateCodeReview(
   await Promise.all(workers);
   const orchestratorDurationMs = Date.now() - orchestratorStartTime;
 
+  // Clear batch summary cache to free memory
+  batchSummaryCache.clear();
+
   // Aggregation logic - Sort results for deterministic output
   allResults.sort((a, b) => (a.role || '').localeCompare(b.role || ''));
 
