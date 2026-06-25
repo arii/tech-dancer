@@ -7,10 +7,10 @@ describe('filtering logic', () => {
   function filterFiles(files: string[]) {
     return files.filter(f => {
       return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
-        // Exact match for files
-        if (f === p) return true;
-        // Directory match (must end with / to be a dir prefix)
-        if (p.endsWith('/') && f.startsWith(p)) return true;
+        if (f === p || f.endsWith(`/${p}`)) return true;
+        if (p.endsWith('/')) {
+          return f.startsWith(p) || f.includes(`/${p}`);
+        }
         return false;
       });
     });
@@ -38,6 +38,18 @@ describe('filtering logic', () => {
     const files = ['pnpm-lock.yaml.bak', 'src/App.tsx'];
     const filtered = filterFiles(files);
     expect(filtered).toEqual(['pnpm-lock.yaml.bak', 'src/App.tsx']);
+  });
+
+  it('filters out nested directory prefix matches', () => {
+    const files = ['packages/web/dist/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('filters out nested file matches', () => {
+    const files = ['packages/web/pnpm-lock.yaml', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
   });
 });
 

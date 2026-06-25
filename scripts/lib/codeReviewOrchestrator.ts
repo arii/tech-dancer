@@ -503,13 +503,12 @@ export async function orchestrateCodeReview(
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
   const rawChangedFiles = initialSummary.changedFiles || [];
 
-  // Filter out low-value paths (lockfiles, snapshots, etc.)
   const changedFiles = rawChangedFiles.filter(f => {
     return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
-      // Exact match for files
-      if (f === p) return true;
-      // Directory match (must end with / to be a dir prefix)
-      if (p.endsWith('/') && f.startsWith(p)) return true;
+      if (f === p || f.endsWith(`/${p}`)) return true;
+      if (p.endsWith('/')) {
+        return f.startsWith(p) || f.includes(`/${p}`);
+      }
       return false;
     });
   });
