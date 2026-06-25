@@ -11,6 +11,9 @@ fi
 
 echo "⚓ Running post-checkout hooks..."
 
+# Get the script's directory to safely locate update-env.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 prev_head="$1"
 new_head="$2"
 
@@ -21,6 +24,6 @@ fi
 
 changed_files="$(git diff --name-only "$prev_head" "$new_head" 2>/dev/null || echo "")"
 
-bash .githooks/update-env.sh "$changed_files"
+bash "$SCRIPT_DIR/update-env.sh" "$changed_files"
 
 exit 0
