@@ -16,6 +16,14 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
   return parseCodeReviewStateDetailed(feedback).state;
 }
 
+/**
+ * Validates the findings schema to ensure all required fields are present.
+ */
+function validateFindingsSchema(state: CodeReviewState): boolean {
+  if (!state.findings || !Array.isArray(state.findings)) return false;
+  return state.findings.every(f => f.id && f.file && f.issue && f.status);
+}
+
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
   const openTag = '<findings>';
   const closeTag = '</findings>';
@@ -29,30 +37,17 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   }
 
   let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
-
-  // Strip markdown code block markers that LLMs sometimes insert inside the tags
   jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
 
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
-
-    // Strict schema verification
-    if (!state.findings || !Array.isArray(state.findings)) {
+    if (!validateFindingsSchema(state)) {
       return { state, parseError: 'incomplete_findings' };
     }
-
-    for (const finding of state.findings) {
-      if (!finding.id || !finding.file || !finding.issue || !finding.status) {
-        return { state, parseError: 'incomplete_findings' };
-      }
-    }
-
     return { state };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
-      console.warn('Failed to parse findings JSON from LLM response:', e);
-      // Log a snippet of the failed JSON for debugging
-      console.warn('JSON snippet:', jsonText.slice(0, 100) + '...');
+      console.warn('Failed to parse findings JSON:', e, 'JSON snippet:', jsonText.slice(0, 100));
     }
     return { state: undefined, parseError: 'invalid_json' };
   }

@@ -77,38 +77,25 @@ export async function pickGeminiModel(
   preferredTier: 'pro' | 'flash' | 'lite' = 'flash',
   estimatedInputTokens: number = 0
 ): Promise<string> {
-  // Respect explicit user override if present
-  if (process.env.GEMINI_MODEL) {
-    return process.env.GEMINI_MODEL;
-  }
+  if (process.env.GEMINI_MODEL) return process.env.GEMINI_MODEL;
 
-  const availableModelIds = await resolveAvailableGeminiModels();
-
-  // Filter models that are both in our metadata list and actually available
+  const availableIds = await resolveAvailableGeminiModels();
   const activeModels = GEMINI_MODELS_METADATA.filter(m =>
-    availableModelIds.includes(m.id) && !DEPRECATED_MODELS.includes(m.id)
+    availableIds.includes(m.id) && !DEPRECATED_MODELS.includes(m.id)
   );
 
-  // If no tracked 3.x models are found, fallback to any available 3.x model
   if (activeModels.length === 0) {
-    const fallback3x = availableModelIds.find(id => id.includes('3.1') || id.includes('3.5'));
-    if (fallback3x) return fallback3x;
-
-    // Last resort fallback from our known list (even if API didn't list it, it might still work)
-    const knownDefault = GEMINI_MODELS_METADATA.find(m => m.tier === preferredTier) || GEMINI_MODELS_METADATA[1];
-    return knownDefault.id;
+    return availableIds.find(id => id.includes('3.1') || id.includes('3.5')) ||
+           GEMINI_MODELS_METADATA.find(m => m.tier === preferredTier)?.id ||
+           GEMINI_MODELS_METADATA[1].id;
   }
 
-  let selected = activeModels.find(m => m.tier === preferredTier);
+  let selected = activeModels.find(m => m.tier === preferredTier) ||
+                 activeModels.find(m => m.tier === 'flash') ||
+                 activeModels[0];
 
-  if (!selected) {
-    selected = activeModels.find(m => m.tier === 'flash') || activeModels[0];
-  }
-
-  // If we have an estimate, ensure it fits
-  if (estimatedInputTokens > 0 && selected.maxInputTokens < estimatedInputTokens) {
-    const betterModel = activeModels.find(m => m.maxInputTokens >= estimatedInputTokens);
-    if (betterModel) selected = betterModel;
+  if (estimatedInputTokens > selected.maxInputTokens) {
+    selected = activeModels.find(m => m.maxInputTokens >= estimatedInputTokens) || selected;
   }
 
   return selected.id;
