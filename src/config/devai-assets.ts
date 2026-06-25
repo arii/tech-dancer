@@ -27,12 +27,6 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
     toolId: TOOL_ID_GITOPS_PR_REVIEWER
   },
   {
-    path: 'dev-tools/ollama_reviewer.py',
-    label: 'Local LLM Reviewer',
-    description: 'Local-first model execution for privacy-safe reviews.',
-    toolId: TOOL_ID_GITOPS_PR_REVIEWER
-  },
-  {
     path: 'dev-tools/td_cli.py',
     label: 'CLI Manager',
     description: 'Unified command-line interface for DevAI operations.',

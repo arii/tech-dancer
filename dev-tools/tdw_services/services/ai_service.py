@@ -60,8 +60,6 @@ _SYNTHESIS_SCHEMA = {
 class AIClient:
     def __init__(self, ai_model: str = None):
         self.ai_model = ai_model or get_ai_model()
-        # Default models for backward compatibility/internal calls
-        self.ollama_model = self.ai_model
         self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
 
         self._dependency_graph = None

@@ -492,7 +492,7 @@ def ai():
 
 @ai.command()
 @click.argument('pr_number', type=int)
-@click.option('--no-cache', is_flag=True, default=False, help='Bust the diff cache and force a fresh Ollama call')
+@click.option('--no-cache', is_flag=True, default=False, help='Bust the diff cache and force a fresh review call')
 @click.pass_context
 def review(ctx, pr_number, no_cache):
     import glob

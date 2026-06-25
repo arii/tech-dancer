@@ -64,7 +64,7 @@ def to_standard_schema(schema, uppercase: bool = False):
     """Recursively prepares a standard JSON schema.
     - Ensures top-level 'type: object' if 'properties' is present.
     - Converts type names to uppercase if uppercase=True (Gemini requirement).
-    - Otherwise ensures lowercase (Ollama/OpenAI standard).
+    - Otherwise ensures lowercase (Standard AI model naming).
     """
     if isinstance(schema, dict):
         # Auto-inject object type if properties are defined without a type

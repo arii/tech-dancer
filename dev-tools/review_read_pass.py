@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
 review_read_pass.py – Diff parser and file-chunk splitter for the piecemeal
-Ollama review pipeline.
+AI review pipeline.
 
 Key exports
 -----------
 parse_diff_into_file_chunks(diff_text) -> list[dict]
     Groups a unified diff into one chunk per file (or multiple chunks for
     large files) and applies skip rules so non-code assets are never sent
-    to Ollama.
+    to the AI reviewer.
 
 parse_diff_into_hunks(diff_text) -> list[dict]
     Legacy hunk-level parser (kept for backward compatibility).
@@ -44,7 +44,7 @@ _SKIP_PATTERNS = [
     re.compile(r"^__generated__/"),                 # GraphQL / codegen
 ]
 
-# Maximum diff characters sent per Ollama call for a single hunk-group
+# Maximum diff characters sent per AI call for a single hunk-group
 MAX_CHUNK_CHARS = 8_000
 # Maximum added lines before we split a file's diff into multiple chunks
 HUNK_GROUP_SIZE = 50
