@@ -9,6 +9,7 @@
   "content_scopes": {
     "resources": "content/resources/",
     "posts": "content/posts/",
+    "blog": "content/blog/",
     "studies": "content/studies/"
   }
 }
