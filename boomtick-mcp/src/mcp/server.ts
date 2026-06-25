@@ -239,9 +239,9 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                state: { type: "string", enum: ["open", "closed", "all"], description: "The state of the PRs to search for (open, closed, all)." },
-                includeDrafts: { type: "boolean", description: "Whether to include draft PRs in the results." },
-                limit: { type: "number", minimum: 1, maximum: 1000, description: "The maximum number of PRs to return (default: 100, range: 1-1000)." },
+                state: { type: "string", enum: ["open", "closed", "all"], default: "open", description: "The state of the PRs to search for (open, closed, all)." },
+                includeDrafts: { type: "boolean", default: true, description: "Whether to include draft PRs in the results." },
+                limit: { type: "number", minimum: 1, maximum: 100, default: 100, description: "The maximum number of PRs to return (default: 100, range: 1-100)." },
                 labels: { type: "array", items: { type: "string" }, description: "Filter PRs by labels." },
               },
               required: [],
@@ -277,7 +277,7 @@ export class BoomtickMCPServer {
               type: "object",
               properties: {
                 prNumber: { type: "number", description: "The number of the pull request to check for conflicts." },
-                baseBranch: { type: "string", description: "The base branch to check against (default: 'main')." },
+                baseBranch: { type: "string", default: "main", description: "The base branch to check against (default: 'main')." },
               },
               required: ["prNumber"],
             },
@@ -288,8 +288,8 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                base: { type: "string", description: "The base ref to compare from (default: 'main')." },
-                head: { type: "string", description: "The head ref to compare to (default: 'HEAD')." },
+                base: { type: "string", default: "main", description: "The base ref to compare from (default: 'main')." },
+                head: { type: "string", default: "HEAD", description: "The head ref to compare to (default: 'HEAD')." },
               },
               required: [],
             },
@@ -343,7 +343,7 @@ export class BoomtickMCPServer {
               type: "object",
               properties: {
                 commands: { type: "array", items: { type: "string" }, description: "Optional list of commands to run (default includes install, lint, test, build)." },
-                timeoutSeconds: { type: "number", description: "Maximum time in seconds to wait for tests (default: 300)." },
+                timeoutSeconds: { type: "number", default: 300, description: "Maximum time in seconds to wait for tests (default: 300)." },
                 worktreePath: { type: "string", description: "Optional path to the worktree to run tests in." },
               },
               required: [],
@@ -355,7 +355,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                route: { type: "string", description: "The route to audit (default: '/')." },
+                route: { type: "string", default: "/", description: "The route to audit (default: '/')." },
                 worktreePath: { type: "string", description: "Optional path to the worktree to run the audit in." },
               },
               required: [],
@@ -398,7 +398,7 @@ export class BoomtickMCPServer {
                 baseBranch: { type: "string", description: "The branch to merge the fixes into." },
                 title: { type: "string", description: "The title of the new PR." },
                 body: { type: "string", description: "The body/description of the new PR." },
-                draft: { type: "boolean", description: "Whether to create the PR as a draft (default: true)." },
+                draft: { type: "boolean", default: true, description: "Whether to create the PR as a draft (default: true)." },
                 worktreePath: { type: "string", description: "Optional path to the worktree where the PR is created from." },
                 pushMode: { type: "boolean", const: true, description: "Must be true to push the branch and open the PR." },
               },

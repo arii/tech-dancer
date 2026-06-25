@@ -24,7 +24,7 @@ async function runEvals() {
 
     console.log("\n3. GitHub PR Search (Dry Run):");
     try {
-      const prs = await searchOpenPrsHandler({ state: "open", limit: 1, includeDrafts: true });
+      const prs = await searchOpenPrsHandler({ state: "open", includeDrafts: true });
       console.log(`Found ${prs.prs.length} open PRs.`);
     } catch (e) {
       console.log("GitHub search failed (likely due to environment/auth):", e instanceof Error ? e.message : String(e));
