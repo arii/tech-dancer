@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { IMPACT_CONFIG } from '../impact-analysis.config';
+import { filterLowImpactFiles } from './fileUtils';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache } from './codeReviewUtils';
@@ -503,15 +504,7 @@ export async function orchestrateCodeReview(
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
   const rawChangedFiles = Array.isArray(initialSummary.changedFiles) ? initialSummary.changedFiles : [];
 
-  const changedFiles = rawChangedFiles.filter(f => {
-    return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
-      if (f === p || f.endsWith(`/${p}`)) return true;
-      if (p.endsWith('/')) {
-        return f.startsWith(p) || f.includes(`/${p}`);
-      }
-      return false;
-    });
-  });
+  const changedFiles = filterLowImpactFiles(rawChangedFiles, IMPACT_CONFIG.LOW_IMPACT_PATHS);
 
   if (changedFiles.length === 0) {
     console.log(`✅ No reviewable code changes detected after filtering (${rawChangedFiles.length} files filtered) — skipping agent review.`);
@@ -543,10 +536,8 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const changedFiles = (initialSummary.changedFiles || []).sort();
-
   // Batch files (max 10 per batch)
-  const fileBatches = batchFiles(changedFiles, 10);
+  const fileBatches = batchFiles(changedFiles.sort(), 10);
   const roles: CodeReviewRole[] = ['SECURITY', 'PERFORMANCE', 'STYLE', 'ARCHITECTURE'];
 
   console.log(`🤖 Reviewing ${changedFiles.length} files in ${fileBatches.length} batches with ${roles.length} specialized agents...`);

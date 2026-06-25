@@ -2,18 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { reconcileVerdict } from '../../../scripts/lib/codeReviewOrchestrator';
 
 import { IMPACT_CONFIG } from '../../../scripts/impact-analysis.config';
+import { filterLowImpactFiles } from '../../../scripts/lib/fileUtils';
 
 describe('filtering logic', () => {
   function filterFiles(files: string[]) {
-    return files.filter(f => {
-      return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
-        if (f === p || f.endsWith(`/${p}`)) return true;
-        if (p.endsWith('/')) {
-          return f.startsWith(p) || f.includes(`/${p}`);
-        }
-        return false;
-      });
-    });
+    return filterLowImpactFiles(files, IMPACT_CONFIG.LOW_IMPACT_PATHS);
   }
 
   it('filters out exact file matches', () => {
