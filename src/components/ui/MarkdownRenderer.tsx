@@ -78,76 +78,33 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
   return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
 };
 
-const GridRenderer = ({ node: _node, cols, rows, gap, ...props }: GridProps & { node?: unknown }) => (
-  <Grid
-    cols={parseProp(cols)}
-    rows={parseProp(rows)}
-    gap={parseProp(gap)}
-    {...props}
-  />
+/**
+ * Processes all incoming markdown attributes through parseProp to ensure
+ * numbers, booleans, and objects are correctly converted.
+ */
+function parseProps<T>(props: Record<string, unknown>): T {
+  const result: Record<string, unknown> = {};
+  Object.entries(props).forEach(([key, value]) => {
+    if (key === 'node') return;
+    result[key] = parseProp(value);
+  });
+  return result as T;
+}
+
+const GridRenderer = (props: Record<string, unknown>) => (
+  <Grid {...parseProps<GridProps>(props)} />
 );
 
-const StackRenderer = ({ node: _node, gap, ...props }: StackProps & { node?: unknown }) => (
-  <Stack gap={parseProp(gap)} {...props} />
+const StackRenderer = (props: Record<string, unknown>) => (
+  <Stack {...parseProps<StackProps>(props)} />
 );
 
-const TextRenderer = ({
-  node: _node,
-  marginBottom,
-  size,
-  weight,
-  color,
-  variant,
-  intent,
-  align,
-  tracking,
-  leading,
-  ...props
-}: TextProps & { node?: unknown }) => (
-  <Text
-    marginBottom={parseProp(marginBottom)}
-    size={parseProp(size)}
-    weight={parseProp(weight)}
-    color={parseProp(color)}
-    variant={parseProp(variant)}
-    intent={parseProp(intent)}
-    align={parseProp(align)}
-    tracking={parseProp(tracking)}
-    leading={parseProp(leading)}
-    {...props}
-  />
+const TextRenderer = (props: Record<string, unknown>) => (
+  <Text {...parseProps<TextProps>(props)} />
 );
 
-const BoxRenderer = ({
-  node: _node,
-  padding, paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
-  margin, marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
-  width, height, maxWidth, minWidth, gap, span,
-  ...props
-}: BoxProps & { node?: unknown }) => (
-  <Box
-    padding={parseProp(padding)}
-    paddingTop={parseProp(paddingTop)}
-    paddingBottom={parseProp(paddingBottom)}
-    paddingLeft={parseProp(paddingLeft)}
-    paddingRight={parseProp(paddingRight)}
-    paddingX={parseProp(paddingX)}
-    paddingY={parseProp(paddingY)}
-    margin={parseProp(margin)}
-    marginTop={parseProp(marginTop)}
-    marginBottom={parseProp(marginBottom)}
-    marginLeft={parseProp(marginLeft)}
-    marginRight={parseProp(marginRight)}
-    marginX={parseProp(marginX)}
-    marginY={parseProp(marginY)}
-    width={parseProp(width)}
-    height={parseProp(height)}
-    maxWidth={parseProp(maxWidth)}
-    minWidth={parseProp(minWidth)}
-    gap={parseProp(gap)}
-    span={parseProp(span)}
-    {...props}
-  />
+const BoxRenderer = (props: Record<string, unknown>) => (
+  <Box {...parseProps<BoxProps>(props)} />
 );
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
@@ -253,7 +210,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             </Box>
           ),
           table: ({node: _node, ...props}) => (
-            <Box width="full" overflowX="auto" marginY={6} radius="lg" border className="overflow-hidden">
+            <Box width="full" overflowX="auto" marginY={6} radius="md" border className="overflow-hidden">
               <Box as="table" width="full" className="border-collapse" {...props} />
             </Box>
           ),
@@ -282,7 +239,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 <Box
                   as="img"
                   src={normalizedSrc}
-                  radius="lg"
+                  radius="md"
                   shadow="sm"
                   border
                   loading="lazy"
@@ -329,7 +286,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 const base64 = window.btoa(binary);
                 const diagramUrl = `https://mermaid.ink/svg/${base64}`;
                 return (
-                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
+                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="md" padding={8} className="bg-surface-alt/50 border border-line/30">
                     <Box
                       as="img"
                       src={diagramUrl}
@@ -351,7 +308,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
             if (isBlock) {
               return (
-                <Box marginY={12} radius="lg" border className="overflow-hidden">
+                <Box marginY={12} radius="md" border className="overflow-hidden">
                   {language && (
                     <Stack
                       direction="row"
