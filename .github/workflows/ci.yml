@@ -81,6 +81,10 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Install Python dependencies
+        shell: bash
+        run: pip install -e dev-tools/ --break-system-packages
+
       - name: Validate Runtime
         shell: bash
         run: |
@@ -440,8 +444,13 @@ jobs:
       - name: Merge AI Logs into Artifacts
         if: always()
         run: |
-          # Safely clean legacy logs
-          rm -f dev-tools/logs/ai/review-run.json artifacts/review-run.json || true
+          # Safely backup legacy logs
+          if [ -f dev-tools/logs/ai/review-run.json ]; then
+            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          fi
+          if [ -f artifacts/review-run.json ]; then
+            mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          fi
           mkdir -p artifacts/logs/ai
           cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
 

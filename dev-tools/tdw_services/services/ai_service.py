@@ -2,7 +2,6 @@ import os
 import sys
 import time
 import json
-import requests
 from typing import Optional, Dict, Any, List, Set
 from tdw_services.utils import log_info, log_error, log_warn
 from utils import (
@@ -320,7 +319,11 @@ class AIClient:
             if not self.vector_store.is_available():
                 return "\n".join(context_parts)
 
-            semantic_results = self.vector_store.query(chunk['diff_text'], n_results=3)
+            diff_text = chunk.get('diff_text') or chunk.get('diff') or ""
+            if not diff_text:
+                return "\n".join(context_parts)
+
+            semantic_results = self.vector_store.query(diff_text, n_results=3)
             if semantic_results:
                 context_parts.append("\n### Semantically Related Code")
                 for res in semantic_results:
@@ -329,7 +332,7 @@ class AIClient:
                         context_parts.append(f"#### From {path}:")
                         context_parts.append(f"```\n{res['document'][:500]}\n```")
         except Exception as e:
-            pass # Silently fail vector search if not indexed
+            print(f"Error searching vector store: {e}", file=sys.stderr) # Log failure if not indexed
 
         return "\n".join(context_parts)
 
