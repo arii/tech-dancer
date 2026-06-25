@@ -45,17 +45,17 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
   return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
 };
 
-const RenderBlockquote = ({ children, ...props }: { children: React.ReactNode }) => {
+const RenderBlockquote = ({ children, node: _node, ...props }: { children: React.ReactNode, node?: unknown }) => {
   // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
   const childArray = Array.isArray(children) ? children : [children];
   let label = 'Note';
   const firstChild = childArray[0];
   if (firstChild && typeof firstChild === 'object' && 'props' in firstChild) {
-    const pChildren = (firstChild as React.ReactElement).props?.children;
+    const pChildren = (firstChild as any).props?.children;
     const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
     const firstStrong = pArr.find(
-      (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as React.ReactElement).type === 'strong'
-    ) as React.ReactElement | undefined;
+      (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as any).type === 'strong'
+    ) as any | undefined;
     if (firstStrong?.props?.children) {
       const raw = Array.isArray(firstStrong.props.children)
         ? firstStrong.props.children.join('')
@@ -75,7 +75,7 @@ const RenderBlockquote = ({ children, ...props }: { children: React.ReactNode })
   );
 };
 
-const RenderCode = ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => {
+const RenderCode = ({ className, children, node: _node, ...props }: { className?: string; children: React.ReactNode, node?: unknown }) => {
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : '';
   const isMermaid = language === 'mermaid';
@@ -219,7 +219,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             }
             return <a href={href} {...props} rel="noopener noreferrer" target="_blank" />;
           },
-          blockquote: ({node: _node, ...props}) => <RenderBlockquote {...props} />,
+          blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (
             <Box marginTop={16} marginBottom={10} className="prose-section group">
               <Text
@@ -306,7 +306,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           hr: ({node: _node, ...props}) => (
             <Box marginY={10} height={0} className="border-t border-line/40" {...props} />
           ),
-          code: ({ node: _node, ...props }) => <RenderCode {...props} />,
+          code: RenderCode,
           notice: RenderNotice,
           Notice: RenderNotice
         }}
