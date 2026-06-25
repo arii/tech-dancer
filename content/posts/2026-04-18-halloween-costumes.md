@@ -25,7 +25,7 @@ Need a Halloween costume in two minutes that won't restrict your movement or mak
 
 <grid cols="{{ base: 1, md: 3 }}" gap="{6}">
 
-<stack gap="{4}" padding="{4}" border radius="lg" surface="surface">
+<stack gap="{4}" padding="{4}">
 
 **1. Orange Base (BYO)**
 
@@ -37,7 +37,7 @@ Start with a comfortable orange dress, shirt, jumpsuit, or matching athletic set
 
 </stack>
 
-<stack gap="{4}" padding="{4}" border radius="lg" surface="surface">
+<stack gap="{4}" padding="{4}">
 
 **2. Pumpkin Headband**
 
@@ -49,7 +49,7 @@ A lightweight headband or small pumpkin hat gives you the pumpkin silhouette ins
 
 </stack>
 
-<stack gap="{4}" padding="{4}" border radius="lg" surface="surface">
+<stack gap="{4}" padding="{4}">
 
 **3. Felt Face Stickers**
 
