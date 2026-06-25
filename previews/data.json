@@ -1,1255 +1,1303 @@
 {
   "about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/previews": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/add-ddgs-mcp-tool-8578231096872553791/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/about": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/blog": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/merch": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/preview": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/previews": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/research": {
-    "commitTimestamp": ,
-    "deployTimestamp": ,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 ,
   "feat/issue-2920-agents-guidelines/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/previews": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/modernize-pnpm-docker-17723009625860832567/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/previews": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "feat/repo-auditor-showcase-13681829227738264407/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-power-charging": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/ai-devops-pipeline": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/blog-drafter": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/boomtick-blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/confidently-incorrect-v4": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/deployment-impact-analyzer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/ecommerce-automation": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/gitops-pr-reviewer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/hrm-flagship": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/repo-auditor-ai": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/wcs-scraper-initial-sync": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/wcs-scraper": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "fix/halloween-costume-mobile-layout-11441022168988344597/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-power-charging": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/previews": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/ai-devops-pipeline": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/blog-drafter": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/boomtick-blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/confidently-incorrect-v4": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/deployment-impact-analyzer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/ecommerce-automation": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/gitops-pr-reviewer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/hrm-flagship": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/repo-auditor-ai": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/wcs-scraper-initial-sync": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/research/wcs-scraper": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "issue-audit-13618819509051330922/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-power-charging": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/previews": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/ai-devops-pipeline": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/blog-drafter": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/boomtick-blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/confidently-incorrect-v4": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/deployment-impact-analyzer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/ecommerce-automation": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/gitops-pr-reviewer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/hrm-flagship": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/repo-auditor-ai": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/wcs-scraper-initial-sync": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/research/wcs-scraper": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "migrate-mcp-logic-to-python-10919911270318162460/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-financial-literacy-dancers": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-halloween-costumes": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-make-shoe-dance": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-why-finals-are-hard": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-19-practical-tools-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-event-travel-packing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-general-health-home-care": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-outdoor-dancing": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-power-charging": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-practice-review-tech": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-practice-social-dance-apparel": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-shoe-care-modification": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-theme-wear-costumes-accessories": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-wcs-essentials": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-14-the-story-behind-the-merch-page": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/previews": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/ai-devops-pipeline": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/blog-drafter": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/boomtick-blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/confidently-incorrect-v4": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/deployment-impact-analyzer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/ecommerce-automation": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/gitops-pr-reviewer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/hrm-flagship": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/repo-auditor-ai": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/wcs-scraper-initial-sync": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/research/wcs-scraper": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor-financial-literacy-post-888126080912458635/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221/about": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221/blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221/merch": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221/preview": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221/research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "refactor/merch-story-blog-post-13852664179882563221/ux-auditor": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/ai-devops-pipeline": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/blog-drafter": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/boomtick-blog": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/confidently-incorrect-v4": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/deployment-impact-analyzer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/ecommerce-automation": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/gitops-pr-reviewer": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/hrm-flagship": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/repo-auditor-ai": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-scraper-initial-sync": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "research/wcs-scraper": {
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
+    "sha": "unknown"
+  }
+,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/about": {
     "commitTimestamp": ,
     "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/blog": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/merch": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/preview": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/previews": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567/previews": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/research": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
-  "feat/modernize-pnpm-docker-17723009625860832567/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/modernize-pnpm-docker-17723009625860832567/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/previews": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "feat/repo-auditor-showcase-13681829227738264407/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/blog-drafter": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/boomtick-blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/ecommerce-automation": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/hrm-flagship": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/repo-auditor-ai": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/research/wcs-scraper": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix-td-cli-path-resolution-3422112323324-16408789719905923626/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "fix/halloween-costume-mobile-layout-11441022168988344597/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/previews": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/blog-drafter": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/boomtick-blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/ecommerce-automation": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/hrm-flagship": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/repo-auditor-ai": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/research/wcs-scraper": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "issue-audit-13618819509051330922/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/previews": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/blog-drafter": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/boomtick-blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/ecommerce-automation": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/hrm-flagship": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/repo-auditor-ai": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/research/wcs-scraper": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "migrate-mcp-logic-to-python-10919911270318162460/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-financial-literacy-dancers": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/previews": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/blog-drafter": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/boomtick-blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/ecommerce-automation": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/hrm-flagship": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/repo-auditor-ai": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/research/wcs-scraper": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor-financial-literacy-post-888126080912458635/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221/about": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221/blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221/merch": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221/preview": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221/research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "refactor/merch-story-blog-post-13852664179882563221/ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/ai-devops-pipeline": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/blog-drafter": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/boomtick-blog": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/ecommerce-automation": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/hrm-flagship": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/repo-auditor-ai": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
-    "sha": "unknown"
-  }
-,
-  "research/wcs-scraper": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+  "revert-2916-feat/modernize-pnpm-docker-17723009625860832567/ux-auditor": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "ux-auditor": {
-    "commitTimestamp": 1782374219,
-    "deployTimestamp": 1782374219,
+    "commitTimestamp": 1782374381,
+    "deployTimestamp": 1782374381,
     "sha": "unknown"
   }
 }
