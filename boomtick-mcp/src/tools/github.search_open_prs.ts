@@ -10,29 +10,31 @@ export const SearchOpenPrsInputSchema = z.object({
 
 export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInputSchema>) {
   const params = SearchOpenPrsInputSchema.parse(args);
-  const cliArgs = [
-    "gh",
-    "search-open-prs",
+
+  const tdArgs = [
+    "gh", "search-prs",
     "--state", params.state,
-    "--max-results", params.maxResults.toString()
+    "--limit", params.maxResults.toString(),
   ];
 
-  if (params.includeDrafts) {
-    cliArgs.push("--include-drafts");
-  } else {
-    cliArgs.push("--no-include-drafts");
+  if (!params.includeDrafts) {
+    tdArgs.push("--no-include-drafts");
   }
 
   if (params.labels && params.labels.length > 0) {
-    cliArgs.push("--labels", params.labels.join(","));
+    tdArgs.push("--labels", params.labels.join(","));
   }
 
-  const result = await runCommand("td-cli", cliArgs);
+  const result = await runCommand("td-cli", tdArgs);
 
   if (result.exitCode !== 0) {
     throw new Error(`Failed to list PRs: ${result.stderr}`);
   }
 
-  const parsed = JSON.parse(result.stdout);
-  return { prs: parsed.prs || parsed };
+  const output = JSON.parse(result.stdout);
+  if (output.status === "error") {
+    throw new Error(`Failed to list PRs: ${output.message}`);
+  }
+
+  return { prs: output.prs };
 }

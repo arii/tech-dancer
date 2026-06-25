@@ -8,16 +8,24 @@ export const GetMergeConflictFilesInputSchema = z.object({
 
 export async function getMergeConflictFilesHandler(args: z.infer<typeof GetMergeConflictFilesInputSchema>) {
   const result = await runCommand("td-cli", [
-    "gh",
-    "get-merge-conflict-files",
-    args.prNumber.toString(),
-    "--base-branch",
-    args.baseBranch
+    "gh", "merge-conflicts", args.prNumber.toString(),
+    "--base", args.baseBranch || "main"
   ]);
 
   if (result.exitCode !== 0) {
-    throw new Error(`Failed to get merge conflict files: ${result.stderr}`);
+    throw new Error(`Failed to get merge conflicts: ${result.stderr}`);
   }
 
-  return JSON.parse(result.stdout);
+  const output = JSON.parse(result.stdout);
+  if (output.status === "error") {
+    throw new Error(`Failed to get merge conflicts: ${output.message}`);
+  }
+
+  return {
+    prNumber: output.prNumber,
+    baseBranch: output.baseBranch,
+    headRef: output.headRef,
+    conflictFiles: output.conflictFiles,
+    commandLog: output.commandLog
+  };
 }

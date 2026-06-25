@@ -5,12 +5,12 @@ import path from "path";
 export const ALLOWED_COMMANDS = {
   git: "git",
   gh: "gh",
+  "td-cli": "td-cli",
   pnpm: "pnpm",
   ls: "ls",
   rm: "rm",
   mkdir: "mkdir",
-  cp: "cp",
-  "td-cli": "td-cli"
+  cp: "cp"
 } as const;
 
 export type AllowedCommand = keyof typeof ALLOWED_COMMANDS;

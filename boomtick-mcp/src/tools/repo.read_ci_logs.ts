@@ -7,14 +7,21 @@ export const ReadCiLogsInputSchema = z.object({
 
 export async function readCiLogsHandler(args: z.infer<typeof ReadCiLogsInputSchema>) {
   const result = await runCommand("td-cli", [
-    "gh",
-    "read-ci-logs",
-    args.prNumber.toString()
+    "repo", "ci-logs", args.prNumber.toString()
   ]);
 
   if (result.exitCode !== 0) {
-    throw new Error(`Failed to read CI logs: ${result.stderr}`);
+    throw new Error(`Failed to get CI logs: ${result.stderr}`);
   }
 
-  return JSON.parse(result.stdout);
+  const output = JSON.parse(result.stdout);
+  if (output.status === "error") {
+    throw new Error(`Failed to get CI logs: ${output.message}`);
+  }
+
+  return {
+    checks: output.checks,
+    failedChecks: output.failedChecks,
+    logs: output.logs
+  };
 }

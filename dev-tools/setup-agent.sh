@@ -45,6 +45,16 @@ if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
   mkdir -p "$NPM_CONFIG_PREFIX/bin"
 fi
 
+# Ensure local python bin is on path for td-cli
+# We add these unconditionally so that even if the directories don't exist yet,
+# they are present on the PATH for when pip later creates them during installation.
+for bin_dir in "$HOME/.local/bin" "/github/home/.local/bin"; do
+  case ":$PATH:" in
+    *":$bin_dir:"*) ;;
+    *) export PATH="$bin_dir:$PATH" ;;
+  esac
+done
+
 # -------- helpers --------
 log() { echo "[setup-agent] $*"; }
 warn() { echo "[setup-agent] WARNING: $*" >&2; }
@@ -175,6 +185,7 @@ install_python_deps() {
 
   if [ -f "dev-tools/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .)
+    have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
   else
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
   fi

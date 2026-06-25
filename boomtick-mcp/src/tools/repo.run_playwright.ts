@@ -7,21 +7,29 @@ export const RunPlaywrightInputSchema = z.object({
 });
 
 export async function runPlaywrightHandler(args: z.infer<typeof RunPlaywrightInputSchema>) {
-  const cliArgs = ["test", "run-playwright"];
-
+  const tdArgs = ["repo", "run-playwright"];
   if (args.grep) {
-    cliArgs.push("--grep", args.grep);
+    tdArgs.push("--grep", args.grep);
   }
-
   if (args.worktreePath) {
-    cliArgs.push("--worktree-path", args.worktreePath);
+    tdArgs.push("--worktree", args.worktreePath);
   }
 
-  const results = await runCommand("td-cli", cliArgs);
+  const result = await runCommand("td-cli", tdArgs);
 
-  if (results.exitCode !== 0 && !results.stdout) {
-    throw new Error(`Failed to run Playwright: ${results.stderr}`);
+  if (result.exitCode !== 0) {
+    // Playwright might exit with non-zero if tests fail, but our td-cli should ideally handle it
+    // and return a JSON with success: false.
   }
 
-  return JSON.parse(results.stdout);
+  const output = JSON.parse(result.stdout);
+  if (output.status === "error") {
+     throw new Error(`Failed to run Playwright: ${output.message}`);
+  }
+
+  return {
+    success: output.success,
+    command: output.command,
+    failedTests: output.failedTests
+  };
 }

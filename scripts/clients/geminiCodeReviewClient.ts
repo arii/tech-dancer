@@ -11,8 +11,6 @@ import {
 
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 
-import { logAIRun } from '../lib/aiLogger';
-
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 
@@ -26,7 +24,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'gemini-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
-    const startTime = Date.now();
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
@@ -102,11 +99,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
         modelName,
         llmVerdict: 'warn',
         truncated: true,
-        durationMs: Date.now() - startTime,
       };
     }
-
-    const durationMs = Date.now() - startTime;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
@@ -118,21 +112,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     );
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
-
-    logAIRun({
-      type: 'code-review',
-      model: modelName,
-      role: summary.role,
-      inputTokens,
-      outputTokens,
-      cacheTokens,
-      totalTokens,
-      cost,
-      durationMs,
-      verdict: feedback ? parseCodeReviewVerdict(feedback) : 'unknown',
-      truncated: isTruncated,
-      parseError: parsedState.parseError,
-    });
 
     return {
       feedback: feedback,
@@ -147,7 +126,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       state: parsedState.state,
       truncated: isTruncated,
       parseError: parsedState.parseError,
-      durationMs,
     };
   }
 };

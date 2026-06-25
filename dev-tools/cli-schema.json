@@ -16,6 +16,48 @@
       "exact_usage": "python3 dev-tools/td_cli.py doctor",
       "required_flags": []
     },
+    "gh search-prs": {
+      "description": "Lists open Pull Requests with optional filtering by state, limit, draft status, and labels.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh search-prs [--state <STATE>] [--limit <LIMIT>] [--no-include-drafts] [--labels <LABELS>]",
+      "optional_flags": [
+        { "flag": "--state", "type": "string", "description": "PR state (open, closed, all)." },
+        { "flag": "--limit", "type": "integer", "description": "Maximum results." },
+        { "flag": "--no-include-drafts", "type": "boolean", "description": "Exclude draft PRs." },
+        { "flag": "--labels", "type": "string", "description": "Comma-separated labels." }
+      ]
+    },
+    "gh pr-diff": {
+      "description": "Fetches PR diff and file list, applying truncation and shaping.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh pr-diff <PR_NUMBER>",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ]
+    },
+    "gh merge-conflicts": {
+      "description": "Detects merge conflicts for a PR against a base branch.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh merge-conflicts <PR_NUMBER> [--base <BASE_BRANCH>]",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ],
+      "optional_flags": [
+        { "flag": "--base", "type": "string", "description": "Base branch (default: main)." }
+      ]
+    },
+    "repo ci-logs": {
+      "description": "Fetches CI logs for failing check runs in a PR.",
+      "exact_usage": "python3 dev-tools/td_cli.py repo ci-logs <PR_NUMBER>",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ]
+    },
+    "repo run-playwright": {
+      "description": "Runs Playwright tests and returns failed tests in JSON.",
+      "exact_usage": "python3 dev-tools/td_cli.py repo run-playwright [--grep <PATTERN>] [--worktree <PATH>]",
+      "optional_flags": [
+        { "flag": "--grep", "type": "string", "description": "Grep pattern for tests." },
+        { "flag": "--worktree", "type": "string", "description": "Path to worktree." }
+      ]
+    },
     "gh conflicts": {
       "description": "Runs a global check across the repository to detect any active PR merge conflicts.",
       "exact_usage": "python3 dev-tools/td_cli.py gh conflicts",
@@ -28,88 +70,6 @@
       "required_flags": [
         {
           "flag": "--pr",
-          "type": "integer",
-          "description": "The GitHub Pull Request ID."
-        }
-      ]
-    },
-    "gh search-open-prs": {
-      "description": "Searches for PRs with given state and limits, filtering out drafts if requested.",
-      "exact_usage": "python3 dev-tools/td_cli.py gh search-open-prs [--state open|closed|all] [--include-drafts] [--max-results <INT>] [--labels <COMMA_SEPARATED_LABELS>]",
-      "optional_flags": [
-        {
-          "flag": "--state",
-          "type": "string",
-          "description": "State of the PR (open, closed, all)."
-        },
-        {
-          "flag": "--include-drafts/--no-include-drafts",
-          "type": "boolean",
-          "description": "Whether to include draft PRs."
-        },
-        {
-          "flag": "--max-results",
-          "type": "integer",
-          "description": "Maximum number of PRs to return."
-        },
-        {
-          "flag": "--labels",
-          "type": "string",
-          "description": "Comma-separated list of labels."
-        }
-      ]
-    },
-    "gh get-merge-conflict-files": {
-      "description": "Sets up a worktree, attempts to merge base branch, and returns conflicted files.",
-      "exact_usage": "python3 dev-tools/td_cli.py gh get-merge-conflict-files <PR_NUMBER> [--base-branch <BRANCH>]",
-      "required_arguments": [
-        {
-          "name": "pr_number",
-          "type": "integer",
-          "description": "The GitHub Pull Request ID."
-        }
-      ],
-      "optional_flags": [
-        {
-          "flag": "--base-branch",
-          "type": "string",
-          "description": "The branch to attempt to merge into the PR branch (default: main)."
-        }
-      ]
-    },
-    "gh get-pr-diff": {
-      "description": "Fetches files and truncated diff text for a PR.",
-      "exact_usage": "python3 dev-tools/td_cli.py gh get-pr-diff <PR_NUMBER>",
-      "required_arguments": [
-        {
-          "name": "pr_number",
-          "type": "integer",
-          "description": "The GitHub Pull Request ID."
-        }
-      ]
-    },
-    "test run-playwright": {
-      "description": "Runs Playwright tests and shapes the output.",
-      "exact_usage": "python3 dev-tools/td_cli.py test run-playwright [--grep <PATTERN>] [--worktree-path <PATH>]",
-      "optional_flags": [
-        {
-          "flag": "--grep",
-          "type": "string",
-          "description": "Only run tests matching this string or regexp."
-        },
-        {
-          "flag": "--worktree-path",
-          "type": "string",
-          "description": "Directory to run the tests in."
-        }
-      ]
-    },
-    "gh read-ci-logs": {
-      "description": "Reads CI logs for a PR.",
-      "exact_usage": "python3 dev-tools/td_cli.py gh read-ci-logs <PR_NUMBER>",
-      "required_arguments": [
-        {
-          "name": "pr_number",
           "type": "integer",
           "description": "The GitHub Pull Request ID."
         }
