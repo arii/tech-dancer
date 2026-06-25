@@ -94,10 +94,10 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
         status = "IN_PROGRESS";
       } else {
         const errText = await bootstrapResponse.text();
-        console.error(`Failed to auto-bootstrap session ${id} (HTTP ${bootstrapResponse.status}): ${errText}`);
+        console.error("Failed to auto-bootstrap session %s (HTTP %s): %s", id, bootstrapResponse.status, errText);
       }
     } catch (e) {
-      console.error(`Failed to auto-bootstrap session ${id}:`, e);
+      console.error("Failed to auto-bootstrap session %s:", id, e);
     }
   }
 
