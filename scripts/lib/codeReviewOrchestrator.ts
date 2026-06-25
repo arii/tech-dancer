@@ -4,8 +4,12 @@ import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
-import { execSync, spawnSync } from 'child_process';
+import { exec as execCb, execFile as execFileCb } from 'child_process';
+import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
+
+const exec = promisify(execCb);
+const execFile = promisify(execFileCb);
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -122,30 +126,31 @@ function resolveImportPath(importPath: string, currentFile: string): string | un
 export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {
   try {
     const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
-    let diffCommand = `git diff -U10 ${baseRef}...HEAD`;
-    let nameOnlyCommand = `git diff --name-only ${baseRef}...HEAD`;
+    let diffArgs = ['diff', '-U10', `${baseRef}...HEAD`];
+    let nameOnlyArgs = ['diff', '--name-only', `${baseRef}...HEAD`];
 
     // Verify if baseRef exists, fallback to git history for CI if needed
     try {
-      execSync(`git rev-parse ${baseRef}`, { stdio: 'ignore' });
+      await exec(`git rev-parse ${baseRef}`);
     } catch {
       try {
-        execSync('git rev-parse main', { stdio: 'ignore' });
-        diffCommand = 'git diff -U10 main...HEAD';
-        nameOnlyCommand = 'git diff --name-only main...HEAD';
+        await exec('git rev-parse main');
+        diffArgs = ['diff', '-U10', 'main...HEAD'];
+        nameOnlyArgs = ['diff', '--name-only', 'main...HEAD'];
       } catch {
-        diffCommand = 'git diff -U10 HEAD~1 HEAD';
-        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+        diffArgs = ['diff', '-U10', 'HEAD~1', 'HEAD'];
+        nameOnlyArgs = ['diff', '--name-only', 'HEAD~1', 'HEAD'];
       }
     }
 
     let rawDiff: string;
     if (targetFiles && targetFiles.length > 0) {
-      const quotedFiles = targetFiles.map(f => `"${f}"`).join(' ');
-      const specificDiffCommand = `${diffCommand} -- ${quotedFiles}`;
-      rawDiff = execSync(specificDiffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      const specificDiffArgs = [...diffArgs, '--', ...targetFiles];
+      const res = await execFile('git', specificDiffArgs, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      rawDiff = res.stdout || '';
     } else {
-      rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      const res = await execFile('git', diffArgs, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      rawDiff = res.stdout || '';
     }
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
@@ -157,9 +162,13 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
 
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
-    const files = targetFiles || execSync(nameOnlyCommand, { encoding: 'utf-8' })
-      .split('\n')
-      .filter(Boolean);
+    let files: string[];
+    if (targetFiles) {
+      files = targetFiles;
+    } else {
+      const res = await execFile('git', nameOnlyArgs, { encoding: 'utf-8' });
+      files = (res.stdout || '').split('\n').filter(Boolean);
+    }
 
 
     // Context gathering
@@ -167,18 +176,15 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
     let localDefinitions = '';
 
     // Extract baseRef for git diff <baseRef> -- <file>
-    // diffCommand examples: 'git diff origin/main...HEAD', 'git diff main...HEAD', 'git diff HEAD~1 HEAD'
-    const diffParts = diffCommand.split(' ');
-    const diffSpec = diffParts[2] || 'HEAD~1';
-    const contextBaseRef = diffSpec.split('...')[0] || 'HEAD~1';
+    const contextBaseRef = diffArgs[diffArgs.length - 1].split('...')[0] || 'HEAD~1';
 
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
 
       try {
-        const diffResult = spawnSync('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
+        const diffResult = await execFile('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
         const fileDiff = diffResult.stdout || '';
-        const fileContent = fs.readFileSync(file, 'utf-8');
+        const fileContent = await fs.promises.readFile(file, 'utf-8');
         const imports = parseImports(fileContent);
 
         // Identify which imported symbols are used in the diff
@@ -229,7 +235,7 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
     for (const extPath of externalFilePaths) {
       if (externalContext.length >= maxExternalChars) break;
       if (fs.existsSync(extPath)) {
-        const content = fs.readFileSync(extPath, 'utf-8');
+        const content = await fs.promises.readFile(extPath, 'utf-8');
         externalContext += `\n\n--- FILE: ${extPath} ---\n${content}`;
       }
     }
@@ -246,7 +252,8 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
       const batchFiles = [];
       for (const file of files) {
         if (!fs.existsSync(file)) continue;
-        const fileDiff = spawnSync('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' }).stdout || '';
+        const diffResult = await execFile('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
+        const fileDiff = diffResult.stdout || '';
         if (fileDiff) {
           batchFiles.push({ path: file, diff: fileDiff });
         }
@@ -381,13 +388,18 @@ export async function orchestrateCodeReview(
   console.log(`🤖 Reviewing ${changedFiles.length} files in ${fileBatches.length} batches with ${roles.length} specialized agents...`);
 
   const orchestratorStartTime = Date.now();
-  const reviewPromises: Promise<CodeReviewResult>[] = [];
+  const allResults: CodeReviewResult[] = [];
+  const rolesPerBatch = roles.length;
+  const totalTasks = fileBatches.length * rolesPerBatch;
+  const CONCURRENCY_LIMIT = 4;
+
+  const taskQueue: (() => Promise<void>)[] = [];
 
   for (const batch of fileBatches) {
     const batchSummaryPromise = getCodeDiffSummary(batch);
 
     for (const role of roles) {
-      reviewPromises.push((async () => {
+      taskQueue.push(async () => {
         const summary = { ...(await batchSummaryPromise), role, previousState: prevState };
 
         const startTime = Date.now();
@@ -406,15 +418,25 @@ export async function orchestrateCodeReview(
 
         // Final verification/reconciliation
         result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
-        return result;
-      })());
+        allResults.push(result);
+      });
     }
   }
 
-  const allResults = await Promise.all(reviewPromises);
+  // Execute with concurrency limit
+  const workers = Array.from({ length: Math.min(CONCURRENCY_LIMIT, taskQueue.length) }, async () => {
+    while (taskQueue.length > 0) {
+      const task = taskQueue.shift();
+      if (task) await task();
+    }
+  });
+
+  await Promise.all(workers);
   const orchestratorDurationMs = Date.now() - orchestratorStartTime;
 
-  // Aggregation logic
+  // Aggregation logic - Sort results for deterministic output
+  allResults.sort((a, b) => (a.role || '').localeCompare(b.role || ''));
+
   let aggregatedFeedback = '';
   const aggregatedFindings = [];
   let totalTokens = 0;
@@ -448,9 +470,26 @@ export async function orchestrateCodeReview(
   if (prevState?.findings) {
     const currentIds = new Set(aggregatedFindings.map(f => f.id));
     const missingFindings = prevState.findings.filter(f => !currentIds.has(f.id));
+
     if (missingFindings.length > 0) {
-      console.log(`♻️  Restoring ${missingFindings.length} findings omitted by LLM agents.`);
-      aggregatedFindings.push(...missingFindings);
+      const diffToVerify = initialSummary.fullDiff || initialSummary.diffContext;
+      const restored = [];
+
+      for (const finding of missingFindings) {
+        if (finding.status === 'open' && finding.snippet) {
+          if (!diffToVerify.includes(finding.snippet)) {
+            finding.status = 'resolved';
+            finding.fixSummary = 'Jules response: snippet no longer present in diff.';
+            console.log(`✅ Auto-resolved finding: ${finding.issue}`);
+          }
+        }
+        restored.push(finding);
+      }
+
+      if (restored.length > 0) {
+        console.log(`♻️  Restoring ${restored.length} findings omitted by LLM agents.`);
+        aggregatedFindings.push(...restored);
+      }
     }
   }
 
