@@ -18,6 +18,17 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+/**
+ * Preprocesses markdown content to fix rendering issues.
+ * Specifically, it ensures blank lines around Notice tag inner content
+ * so that markdown inside the tags is parsed correctly by rehype-raw.
+ */
+const preprocessMarkdown = (content: string): string => {
+  return content.replace(
+    /<(Notice|notice)([^>]*)>([\s\S]*?)<\/\1>/g,
+    (match, tag, attrs, inner) => `<${tag}${attrs}>\n\n${inner.trim()}\n\n</${tag}>`
+  );
+};
 
 const RenderNotice = (props: { type?: string; id?: string; children?: React.ReactNode }) => {
   if (props.type === 'affiliate' && props.id) {
@@ -33,13 +44,134 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
   return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
 };
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  // Preprocess content to ensure blank lines around Notice tag inner content
-  // so that markdown inside the tags is parsed correctly.
-  const processedContent = content.replace(
-    /<(Notice|notice)([^>]*)>([\s\S]*?)<\/\1>/g,
-    (match, tag, attrs, inner) => `<${tag}${attrs}>\n\n${inner.trim()}\n\n</${tag}>`
+const RenderBlockquote = ({ children, ...props }: { children: React.ReactNode }) => {
+  // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
+  const childArray = Array.isArray(children) ? children : [children];
+  let label = 'Note';
+  const firstChild = childArray[0];
+  if (firstChild && typeof firstChild === 'object' && 'props' in firstChild) {
+    const pChildren = (firstChild as React.ReactElement).props?.children;
+    const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
+    const firstStrong = pArr.find(
+      (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as React.ReactElement).type === 'strong'
+    ) as React.ReactElement | undefined;
+    if (firstStrong?.props?.children) {
+      const raw = Array.isArray(firstStrong.props.children)
+        ? firstStrong.props.children.join('')
+        : String(firstStrong.props.children);
+      label = raw.replace(/:$/, '').trim();
+    }
+  }
+  return (
+    <Box border surface="warning" padding={6} marginY={12} radius="md">
+      <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
+        {label}
+      </Text>
+      <blockquote className="italic font-medium text-text-main" {...props}>
+        {children}
+      </blockquote>
+    </Box>
   );
+};
+
+const RenderCode = ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => {
+  const match = /language-(\w+)/.exec(className || '');
+  const language = match ? match[1] : '';
+  const isMermaid = language === 'mermaid';
+  const codeString = String(children).replace(/\n$/, '');
+
+  if (isMermaid) {
+    try {
+      const bytes = new TextEncoder().encode(codeString);
+      let binary = '';
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const base64 = window.btoa(binary);
+      const diagramUrl = `https://mermaid.ink/svg/${base64}`;
+      return (
+        <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
+          <Box
+            as="img"
+            src={diagramUrl}
+            alt="Workflow Diagram"
+            radius="md"
+            maxWidth="full"
+            maxHeight={96}
+            className="object-contain"
+            loading="lazy"
+          />
+        </Box>
+      );
+    } catch (e) {
+      console.error('Failed to render mermaid diagram', e);
+    }
+  }
+
+  const isBlock = codeString.includes('\n') || !!language;
+
+  if (isBlock) {
+    return (
+      <Box marginY={12} radius="lg" border className="overflow-hidden">
+        {language && (
+          <Stack
+            direction="row"
+            align="center"
+            gap={2}
+            padding={2}
+            paddingX={4}
+            surface="surface"
+            border="b"
+            borderColor="line"
+          >
+            <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
+              {language}
+            </Text>
+          </Stack>
+        )}
+        <SyntaxHighlighter
+          style={vscDarkPlus}
+          language={language || 'text'}
+          PreTag="div"
+          customStyle={{
+            margin: 0,
+            borderRadius: 0,
+            background: 'var(--color-surface)',
+            fontSize: '0.8rem',
+            lineHeight: '1.6',
+          }}
+          {...(props as object)}
+        >
+          {codeString}
+        </SyntaxHighlighter>
+      </Box>
+    );
+  }
+
+  // Inline code
+  return (
+    <Text
+      as="code"
+      variant="mono"
+      size="xs"
+      paddingX={3}
+      paddingY={0.5}
+      radius="sm"
+      surface="surface"
+      border
+      borderColor="line"
+      color="accent"
+      className="normal-case"
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+};
+
+export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+  const processedContent = preprocessMarkdown(content);
 
   return (
     <Box className="prose-counters">
@@ -82,35 +214,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             }
             return <a href={href} {...props} rel="noopener noreferrer" target="_blank" />;
           },
-          blockquote: ({node: _node, children, ...props}) => {
-            // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
-            const childArray = Array.isArray(children) ? children : [children];
-            let label = 'Note';
-            const firstChild = childArray[0];
-            if (firstChild && typeof firstChild === 'object' && 'props' in firstChild) {
-              const pChildren = (firstChild as React.ReactElement).props?.children;
-              const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
-              const firstStrong = pArr.find(
-                (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as React.ReactElement).type === 'strong'
-              ) as React.ReactElement | undefined;
-              if (firstStrong?.props?.children) {
-                const raw = Array.isArray(firstStrong.props.children)
-                  ? firstStrong.props.children.join('')
-                  : String(firstStrong.props.children);
-                label = raw.replace(/:$/, '').trim();
-              }
-            }
-            return (
-              <Box border surface="warning" padding={6} marginY={12} radius="md">
-                <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
-                  {label}
-                </Text>
-                <blockquote className="italic font-medium text-text-main" {...props}>
-                  {children}
-                </blockquote>
-              </Box>
-            );
-          },
+          blockquote: ({node: _node, ...props}) => <RenderBlockquote {...props} />,
           h2: ({node: _node, ...props}) => (
             <Box marginTop={16} marginBottom={10} className="prose-section group">
               <Text
@@ -197,101 +301,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           hr: ({node: _node, ...props}) => (
             <Box marginY={10} height={0} className="border-t border-line/40" {...props} />
           ),
-          code: ({ node: _node, className, children, ...props }) => {
-            const match = /language-(\w+)/.exec(className || '');
-            const language = match ? match[1] : '';
-            const isMermaid = language === 'mermaid';
-            const codeString = String(children).replace(/\n$/, '');
-
-            if (isMermaid) {
-              try {
-                const bytes = new TextEncoder().encode(codeString);
-                let binary = '';
-                const len = bytes.byteLength;
-                for (let i = 0; i < len; i++) {
-                  binary += String.fromCharCode(bytes[i]);
-                }
-                const base64 = window.btoa(binary);
-                const diagramUrl = `https://mermaid.ink/svg/${base64}`;
-                return (
-                  <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
-                    <Box
-                      as="img"
-                      src={diagramUrl}
-                      alt="Workflow Diagram"
-                      radius="md"
-                      maxWidth="full"
-                      maxHeight={96}
-                      className="object-contain"
-                      loading="lazy"
-                    />
-                  </Box>
-                );
-              } catch (e) {
-                console.error('Failed to render mermaid diagram', e);
-              }
-            }
-
-            const isBlock = codeString.includes('\n') || !!language;
-
-            if (isBlock) {
-              return (
-                <Box marginY={12} radius="lg" border className="overflow-hidden">
-                  {language && (
-                    <Stack
-                      direction="row"
-                      align="center"
-                      gap={2}
-                      padding={2}
-                      paddingX={4}
-                      surface="surface"
-                      border="b"
-                      borderColor="line"
-                    >
-                      <Text variant="mono" size="micro" color="dim" uppercase tracking="widest">
-                        {language}
-                      </Text>
-                    </Stack>
-                  )}
-                  <SyntaxHighlighter
-                    style={vscDarkPlus}
-                    language={language || 'text'}
-                    PreTag="div"
-                    customStyle={{
-                      margin: 0,
-                      borderRadius: 0,
-                      background: 'var(--color-surface)',
-                      fontSize: '0.8rem',
-                      lineHeight: '1.6',
-                    }}
-                    {...(props as object)}
-                  >
-                    {codeString}
-                  </SyntaxHighlighter>
-                </Box>
-              );
-            }
-
-            // Inline code
-            return (
-              <Text
-                as="code"
-                variant="mono"
-                size="xs"
-                paddingX={3}
-                paddingY={0.5}
-                radius="sm"
-                surface="surface"
-                border
-                borderColor="line"
-                color="accent"
-                className="normal-case"
-                {...props}
-              >
-                {children}
-              </Text>
-            );
-          },
+          code: ({ node: _node, ...props }) => <RenderCode {...props} />,
           notice: RenderNotice,
           Notice: RenderNotice
         }}

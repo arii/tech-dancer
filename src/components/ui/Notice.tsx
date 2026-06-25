@@ -5,6 +5,12 @@ interface NoticeProps {
   children: React.ReactNode;
 }
 
+/**
+ * Margin reset utility for markdown content inside the notice.
+ * Targets first/last children to ensure consistent internal padding.
+ */
+const PROSE_MARGIN_RESET = "[&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul:first-child]:mt-0 [&>ul:last-child]:mb-0";
+
 export function Notice({ type = 'info', children }: NoticeProps) {
   const surface = type === 'warning' ? 'warning' : 'accent';
   const label = type === 'warning' ? 'CAUTION' : 'NOTE';
@@ -38,7 +44,7 @@ export function Notice({ type = 'info', children }: NoticeProps) {
       >
         {label}
       </Text>
-      <Box className="prose-direct-children [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul:first-child]:mt-0 [&>ul:last-child]:mb-0"> {/* impeccable-ignore */}
+      <Box className={`prose-direct-children ${PROSE_MARGIN_RESET}`}> {/* impeccable-ignore */}
         {children}
       </Box>
     </Box>
