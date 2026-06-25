@@ -69,7 +69,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     langchain-core
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
-RUN mkdir -p /workspace /pnpm && chown -R pwuser:pwuser /workspace /pnpm
+RUN mkdir -p /workspace /pnpm/store && chown -R pwuser:pwuser /workspace /pnpm
 
 USER pwuser
 
