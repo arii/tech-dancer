@@ -21,6 +21,7 @@ export interface Module {
 
 export interface DependencyGraph {
   modules: Module[];
+  summary?: Record<string, unknown>;
 }
 
 export interface ReverseDependency {
