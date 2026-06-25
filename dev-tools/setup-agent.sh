@@ -175,6 +175,7 @@ install_python_deps() {
 
   if [ -f "dev-tools/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .)
+    have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
   else
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
   fi

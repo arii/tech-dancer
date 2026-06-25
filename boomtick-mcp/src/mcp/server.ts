@@ -564,6 +564,20 @@ export class BoomtickMCPServer {
   }
 
   async run() {
+    // Pre-flight check for td-cli
+    try {
+      const { spawnSync } = await import("child_process");
+      const result = spawnSync("td-cli", ["--version"], { encoding: "utf-8" });
+      if (result.status !== 0) {
+        throw new Error("td-cli --version returned non-zero exit code");
+      }
+      console.error("✅ td-cli verified on PATH");
+    } catch (error) {
+      console.error("❌ Fatal: td-cli is not resolvable on PATH. MCP tools will fail.");
+      console.error("Please ensure dev-tools are installed: pip install -e dev-tools/");
+      process.exit(1);
+    }
+
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     console.error("Boomtick MCP Server running on stdio");

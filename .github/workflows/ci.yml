@@ -81,9 +81,8 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
-      - name: Install Python dependencies
-        shell: bash
-        run: pip install -e dev-tools/ --break-system-packages
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Validate Runtime
         shell: bash
@@ -130,7 +129,7 @@ jobs:
         run: |
           echo "::group::Pytest"
           trap 'echo "::endgroup::"' EXIT
-          PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
+          python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
         run: pnpm run knip
@@ -140,9 +139,7 @@ jobs:
         run: |
           echo "::group::Ratchet Any"
           trap 'echo "::endgroup::"' EXIT
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
-          python3 dev-tools/td_cli.py gh ratchet-any
+          td-cli gh ratchet-any
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -177,10 +174,8 @@ jobs:
         run: |
           echo "::group::Audit"
           trap 'echo "::endgroup::"' EXIT
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
           if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
-          python3 dev-tools/td_cli.py gh audit-gate
+          td-cli gh audit-gate
 
       - name: Design Token Compliance
         run: |
@@ -227,9 +222,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
-          python3 dev-tools/td_cli.py gh bundle-size
+          td-cli gh bundle-size
 
       - name: Run Playwright Smoke Test
         run: |
@@ -289,6 +282,9 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 

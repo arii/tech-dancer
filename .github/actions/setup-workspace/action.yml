@@ -1,0 +1,26 @@
+name: 'Setup Workspace'
+description: 'Bootstraps the workspace by installing dev-tools and configuring the environment'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install dev-tools
+      shell: bash
+      run: |
+        echo "::group::Install dev-tools"
+        pip install -e dev-tools/ --break-system-packages
+        echo "::endgroup::"
+
+    - name: Verify td-cli on PATH
+      shell: bash
+      run: |
+        if ! command -v td-cli >/dev/null 2>&1; then
+          echo "::error::td-cli not found on PATH after installation."
+          exit 1
+        fi
+        echo "✅ td-cli is resolvable on PATH."
+
+    - name: Export PYTHONPATH
+      shell: bash
+      run: |
+        echo "PYTHONPATH=$PYTHONPATH:${{ github.workspace }}/dev-tools" >> "$GITHUB_ENV"
+        echo "✅ PYTHONPATH exported."
