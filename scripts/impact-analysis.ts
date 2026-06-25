@@ -3,7 +3,6 @@ import {
   exec,
   getChangedFiles,
   buildReverseMap,
-  augmentGraphWithCSS,
   findAffectedFiles,
   getDynamicRouteMapping,
   resolveAffectedUrls,
@@ -52,10 +51,6 @@ async function main() {
       console.error('❌ Error parsing dependency graph JSON:', error);
       throw error;
     }
-
-    // Augment graph with CSS dependencies
-    console.log('🎨 Augmenting style dependency graph...');
-    graph = augmentGraphWithCSS(graph);
 
     const reverseMap = buildReverseMap(graph);
 
