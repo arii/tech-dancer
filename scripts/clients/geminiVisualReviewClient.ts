@@ -146,7 +146,7 @@ Your job:
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
     const rawFeedback = extractFeedbackText(response.content);
-    let feedback = rawFeedback;
+    let feedback: string;
     let verdict: 'pass' | 'fail' | 'warn' = 'warn';
     let findings: VisualReviewFinding[] = [];
     let parseError: RouteReview['parseError'] = undefined;

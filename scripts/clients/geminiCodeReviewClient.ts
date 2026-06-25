@@ -116,7 +116,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
     // typically in @langchain response.content is a string, but if we extract only text it's better
     const rawFeedback = extractFeedbackText(response.content);
-    let feedback = rawFeedback;
+    let feedback: string;
     let verdict: 'pass' | 'fail' | 'warn' = 'warn';
     let findings: ReviewFinding[] = [];
     let parseError: CodeReviewResult['parseError'] = undefined;
