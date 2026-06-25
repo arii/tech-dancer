@@ -44,12 +44,66 @@ def err(ctx, msg, code=1, data=None):
     sys.exit(code)
 
 # ==========================================
+# REPO COMMAND GROUP
+# ==========================================
+@cli.group()
+def repo():
+    """Repository Operations"""
+    pass
+
+@repo.command()
+@click.option('--grep')
+@click.option('--worktree')
+@click.pass_context
+def run_playwright(ctx, grep, worktree):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.run_playwright(grep=grep, worktree_path=worktree)
+    out(ctx, f"Playwright run complete.", data=res)
+
+@repo.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def ci_logs(ctx, pr_number):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_ci_logs(pr_number)
+    out(ctx, f"Fetched CI logs for PR #{pr_number}", data=res)
+
+# ==========================================
 # GH COMMAND GROUP
 # ==========================================
 @cli.group()
 def gh():
     """GitHub Operations"""
     pass
+
+@gh.command()
+@click.option('--state', default='open')
+@click.option('--limit', type=int, default=10)
+@click.option('--include-drafts/--no-include-drafts', default=True)
+@click.option('--labels')
+@click.pass_context
+def search_prs(ctx, state, limit, include_drafts, labels):
+    orch = ctx.obj['ORCHESTRATOR']
+    label_list = labels.split(',') if labels else None
+    res = orch.list_prs(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
+    out(ctx, f"Found {len(res['prs'])} PRs.", data=res)
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.option('--base', default='main')
+@click.pass_context
+def merge_conflicts(ctx, pr_number, base):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_merge_conflicts(pr_number, base_branch=base)
+    out(ctx, f"Checked merge conflicts for PR #{pr_number}", data=res)
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def pr_diff(ctx, pr_number):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_pr_diff_shapen(pr_number)
+    out(ctx, f"Fetched diff for PR #{pr_number}", data=res)
 
 @gh.command()
 @click.argument('pr_number', type=int)

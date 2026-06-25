@@ -8,12 +8,15 @@ vi.mock("../lib/shell.js", () => ({
 
 describe("github.search_open_prs", () => {
   it("should return normalized PR objects", async () => {
-    const mockPrs = [
-      { number: 1, title: "Test PR", author: { login: "user" }, isDraft: false }
-    ];
+    const mockResponse = {
+      status: "success",
+      prs: [
+        { number: 1, title: "Test PR", author: { login: "user" }, isDraft: false }
+      ]
+    };
 
     vi.mocked(shell.runCommand).mockResolvedValue({
-      stdout: JSON.stringify(mockPrs),
+      stdout: JSON.stringify(mockResponse),
       stderr: "",
       exitCode: 0,
       durationMs: 10,
@@ -26,8 +29,13 @@ describe("github.search_open_prs", () => {
   });
 
   it("should handle empty PR list", async () => {
+    const mockResponse = {
+      status: "success",
+      prs: []
+    };
+
     vi.mocked(shell.runCommand).mockResolvedValue({
-      stdout: "[]",
+      stdout: JSON.stringify(mockResponse),
       stderr: "",
       exitCode: 0,
       durationMs: 10,
