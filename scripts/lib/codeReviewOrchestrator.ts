@@ -4,11 +4,10 @@ import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
-import { exec as execCb, execFile as execFileCb } from 'child_process';
+import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
 
-const exec = promisify(execCb);
 const execFile = promisify(execFileCb);
 
 export interface CodeReviewClientStrategy {
@@ -138,10 +137,10 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
   let contextBaseRef = baseRef;
 
   try {
-    await exec(`git rev-parse ${baseRef}`);
+    await execFile('git', ['rev-parse', '--verify', baseRef]);
   } catch {
     try {
-      await exec('git rev-parse main');
+      await execFile('git', ['rev-parse', '--verify', 'main']);
       diffArgs = ['diff', '-U10', 'main...HEAD'];
       nameOnlyArgs = ['diff', '--name-only', 'main...HEAD'];
       contextBaseRef = 'main';
@@ -156,6 +155,36 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
   return cachedGitArgs;
 }
 
+async function getAIContext(inputData: string): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    const child = spawn('python3', ['dev-tools/get_ai_context.py']);
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (data) => { stdout += data; });
+    child.stderr.on('data', (data) => { stderr += data; });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        try {
+          resolve(JSON.parse(stdout));
+        } catch (e) {
+          reject(new Error(`Failed to parse AI context: ${e instanceof Error ? e.message : String(e)}`));
+        }
+      } else {
+        reject(new Error(`AI context error (code ${code}): ${stderr}`));
+      }
+    });
+
+    child.on('error', (err) => {
+      reject(err);
+    });
+
+    child.stdin.write(inputData);
+    child.stdin.end();
+  });
+}
+
 export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {
   try {
     const { diffArgs, nameOnlyArgs, contextBaseRef } = await getGitArgs();
@@ -164,10 +193,10 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
     if (targetFiles && targetFiles.length > 0) {
       const specificDiffArgs = [...diffArgs, '--', ...targetFiles];
       const res = await execFile('git', specificDiffArgs, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
-      rawDiff = res.stdout || '';
+      rawDiff = (res.stdout as string) || '';
     } else {
       const res = await execFile('git', diffArgs, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
-      rawDiff = res.stdout || '';
+      rawDiff = (res.stdout as string) || '';
     }
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
@@ -184,7 +213,7 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
       files = targetFiles;
     } else {
       const res = await execFile('git', nameOnlyArgs, { encoding: 'utf-8' });
-      files = (res.stdout || '').split('\n').filter(Boolean);
+      files = (res.stdout as string || '').split('\n').filter(Boolean);
     }
 
 
@@ -266,23 +295,22 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
       const batchFiles = [];
       for (const file of files) {
         if (!fs.existsSync(file)) continue;
-        const diffResult = await execFile('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
-        const fileDiff = diffResult.stdout || '';
-        if (fileDiff) {
-          batchFiles.push({ path: file, diff: fileDiff });
+        try {
+          const diffResult = await execFile('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
+          const fileDiff = (diffResult.stdout as string) || '';
+          if (fileDiff) {
+            batchFiles.push({ path: file, diff: fileDiff });
+          }
+        } catch (err) {
+          console.warn(`Could not gather diff context for ${file}:`, err);
         }
       }
 
       if (batchFiles.length > 0) {
         const inputData = JSON.stringify({ files: batchFiles });
-        const res = spawnSync('python3', ['dev-tools/get_ai_context.py'], {
-          input: inputData,
-          encoding: 'utf-8',
-          maxBuffer: 1024 * 1024 * 50 // 50MB buffer for large diffs
-        });
+        const contextResults = await getAIContext(inputData);
 
-        if (res.status === 0 && res.stdout) {
-          const contextResults = JSON.parse(res.stdout);
+        if (contextResults) {
           for (const ctx of contextResults) {
             if (ctx.dependencies?.length || ctx.dependents?.length || ctx.semantic?.length) {
               impactSemanticContext += `\n\n### Context for ${ctx.path}\n`;
@@ -405,15 +433,28 @@ export async function orchestrateCodeReview(
   const allResults: CodeReviewResult[] = [];
   const CONCURRENCY_LIMIT = 4;
 
+  const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();
+  const getMemoizedBatchSummary = (batch: string[]) => {
+    const key = batch.join(',');
+    if (!batchSummaryCache.has(key)) {
+      batchSummaryCache.set(key, getCodeDiffSummary(batch));
+    }
+    return batchSummaryCache.get(key)!;
+  };
+
   const taskQueue: (() => Promise<void>)[] = [];
 
   for (const batch of fileBatches) {
-    const batchSummaryPromise = getCodeDiffSummary(batch);
-
     for (const role of roles) {
       taskQueue.push(async () => {
         try {
-          const summary = { ...(await batchSummaryPromise), role, previousState: prevState };
+          const batchSummary = await getMemoizedBatchSummary(batch);
+          if (!batchSummary.diffContext) {
+            console.warn(`⚠️  Empty diff for batch ${batch.join(', ')} — skipping ${role} review.`);
+            return;
+          }
+
+          const summary = { ...batchSummary, role, previousState: prevState };
 
           const startTime = Date.now();
           let result = await client.invokeReview(summary);
@@ -433,9 +474,10 @@ export async function orchestrateCodeReview(
           result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
           allResults.push(result);
         } catch (err) {
+          const errorMsg = err instanceof Error ? err.message : String(err);
           console.error(`❌ Error in ${role} review task:`, err);
           allResults.push({
-            feedback: `Error: failed to execute ${role} review.`,
+            feedback: `Error: failed to execute ${role} review. Details: ${errorMsg}`,
             role,
             tokens: 0,
             cost: 0,
