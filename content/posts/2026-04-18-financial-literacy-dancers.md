@@ -27,26 +27,16 @@ Attending West Coast Swing events is one of the most rewarding parts of the danc
 
 ### Sample Weekend Budget
 
-To make your travel expense guidance actionable, let's look at a typical three-day regional event budget. Using responsive layout primitives, we can visualize where your "Dance Fund" actually goes.
+A typical three-day regional event budget highlights where your "Dance Fund" actually goes.
 
-<Grid cols={{ base: 1, md: 2 }} gap={6}>
-  <Stack gap={4}>
-    <Text weight="bold" size="lg">Fixed Costs</Text>
-    <Stack gap={2}>
-      <Text>Event Pass: $180</Text>
-      <Text>Roundtrip Flight: $350</Text>
-      <Text>Hotel (Quad Share): $240</Text>
-    </Stack>
-  </Stack>
-  <Stack gap={4}>
-    <Text weight="bold" size="lg">Variable Costs</Text>
-    <Stack gap={2}>
-      <Text>Food & Coffee: $150</Text>
-      <Text>Workshops/Privates: $200</Text>
-      <Text>Social Fund: $50</Text>
-    </Stack>
-  </Stack>
-</Grid>
+| Category | Item | Cost |
+| :--- | :--- | :--- |
+| **Fixed** | Event Pass | $180 |
+| **Fixed** | Roundtrip Flight | $350 |
+| **Fixed** | Hotel (Quad Share) | $240 |
+| **Variable** | Food & Coffee | $150 |
+| **Variable** | Workshops/Privates | $200 |
+| **Variable** | Social Fund | $50 |
 
 ### Staying Powered and Secure
 
