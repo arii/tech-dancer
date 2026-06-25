@@ -7,27 +7,12 @@ import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRo
 import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
+import { loadProjectConfig } from './projectConfig';
 
 const execFile = promisify(execFileCb);
 
-/**
- * Loads project configuration from dev-tools/project_config.json.
- * Gracefully handles missing or malformed configuration files.
- */
-function loadProjectConfig(): Record<string, unknown> {
-  try {
-    const configPath = path.join(process.cwd(), 'dev-tools/project_config.json');
-    if (!fs.existsSync(configPath)) return {};
-    return JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, unknown>;
-  } catch (err) {
-    console.warn('⚠️  Failed to load project_config.json, using defaults.', err);
-    return {};
-  }
-}
-
 const projectConfig = loadProjectConfig();
-const DEFAULT_MAX_DIFF_CHARS = 40000;
-const MAX_DIFF_CHARS = (projectConfig.max_diff_chars as number) ?? DEFAULT_MAX_DIFF_CHARS;
+const MAX_DIFF_CHARS = projectConfig.max_diff_chars;
 
 export interface CodeReviewClientStrategy {
   botName: string;
