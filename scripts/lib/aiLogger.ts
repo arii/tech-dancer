@@ -22,7 +22,7 @@ export interface AIRunLogEntry {
   truncated?: boolean;
   parseError?: string;
   rawResponse?: string;
-  findings?: any[];
+  findings?: unknown[];
   inputChars?: number;
 }
 
@@ -60,8 +60,8 @@ interface ReviewResultLike {
   truncated?: boolean;
   parseError?: string;
   feedback: string;
-  state?: { findings: any[] };
-  findings?: any[];
+  state?: { findings: unknown[] };
+  findings?: unknown[];
 }
 
 /**
