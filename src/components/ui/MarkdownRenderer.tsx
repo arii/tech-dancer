@@ -1,5 +1,5 @@
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -50,13 +50,15 @@ const RenderBlockquote = ({ children, node: _node, ...props }: { children: React
   const childArray = Array.isArray(children) ? children : [children];
   let label = 'Note';
   const firstChild = childArray[0];
-  if (firstChild && typeof firstChild === 'object' && 'props' in firstChild) {
-    const pChildren = (firstChild as any).props?.children;
+
+  if (React.isValidElement(firstChild)) {
+    const pChildren = firstChild.props.children;
     const pArr = Array.isArray(pChildren) ? pChildren : [pChildren];
     const firstStrong = pArr.find(
-      (c: unknown) => c && typeof c === 'object' && 'type' in (c as object) && (c as any).type === 'strong'
-    ) as any | undefined;
-    if (firstStrong?.props?.children) {
+      (c) => React.isValidElement(c) && c.type === 'strong'
+    );
+
+    if (React.isValidElement(firstStrong) && firstStrong.props.children) {
       const raw = Array.isArray(firstStrong.props.children)
         ? firstStrong.props.children.join('')
         : String(firstStrong.props.children);
