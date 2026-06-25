@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# .githooks/post-merge
+# Runs after a successful 'git merge' (or 'git pull')
+
+echo "⚓ Running post-merge hooks..."
+
+# Get the script's directory to safely locate update-env.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# ORIG_HEAD is a git reference set by git to the state before the merge.
+changed_files="$(git diff --name-only ORIG_HEAD HEAD 2>/dev/null || echo "")"
+
+bash "$SCRIPT_DIR/update-env.sh" "$changed_files"
+
+exit 0

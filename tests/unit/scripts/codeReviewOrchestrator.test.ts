@@ -1,6 +1,72 @@
 import { describe, it, expect } from 'vitest';
 import { reconcileVerdict } from '../../../scripts/lib/codeReviewOrchestrator';
 
+import { IMPACT_CONFIG } from '../../../scripts/impact-analysis.config';
+import { filterLowImpactFiles } from '../../../scripts/lib/codeReviewUtils';
+
+describe('filtering logic', () => {
+  function filterFiles(files: string[]) {
+    return filterLowImpactFiles(files, IMPACT_CONFIG.LOW_IMPACT_PATHS);
+  }
+
+  it('filters out exact file matches', () => {
+    const files = ['pnpm-lock.yaml', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('filters out directory prefix matches', () => {
+    const files = ['dist/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('filters out files in nested directories', () => {
+    const files = ['dist/subdir/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('does not filter out partial name matches that are not directory matches', () => {
+    const files = ['distribute.ts', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['distribute.ts', 'src/App.tsx']);
+  });
+
+  it('filters out files with directory name matches inside other directories', () => {
+    const files = ['src/dist/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('handles empty or malformed low impact paths gracefully', () => {
+    const files = ['dist/index.js', 'src/App.tsx'];
+    expect(filterLowImpactFiles(files, [])).toEqual(files);
+
+    // Test validation
+    expect(() => filterLowImpactFiles(files, null as unknown as string[])).toThrow(TypeError);
+    expect(() => filterLowImpactFiles(undefined as unknown as string[], [])).toThrow(TypeError);
+  });
+
+  it('does not filter out exact file matches with suffixes', () => {
+    const files = ['pnpm-lock.yaml.bak', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['pnpm-lock.yaml.bak', 'src/App.tsx']);
+  });
+
+  it('filters out nested directory prefix matches', () => {
+    const files = ['packages/web/dist/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('filters out nested file matches', () => {
+    const files = ['packages/web/pnpm-lock.yaml', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+});
+
 describe('reconcileVerdict', () => {
   it('downgrades fail to warn if no parseable findings', () => {
     const result = reconcileVerdict({ feedback: '', llmVerdict: 'fail', tokens: 0, cost: 0 }, '');

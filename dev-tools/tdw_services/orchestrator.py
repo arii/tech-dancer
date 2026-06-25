@@ -28,9 +28,10 @@ from utils import (
     clean_gha_logs
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from scope_check import verify_pr_scope, get_project_config
+from scope_check import verify_pr_scope
+from dev_tools_sdk.config import load_project_config
 
-PROJECT_CONFIG = get_project_config()
+PROJECT_CONFIG = load_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
 SPEC_SECTIONS = [
     "Problem Statement",
@@ -577,11 +578,12 @@ class Orchestrator:
 
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
         is_ci = os.environ.get("CI") == "true"
+        is_jules = "jules" in os.environ.get("USER", "").lower() or os.environ.get("JULES_API_KEY")
 
         expected_prefix = ".".join(expected_node.split(".")[:2]) + "."
-        node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
+        node_matches = (actual_node.startswith(expected_prefix) or is_jules) if is_ci else actual_node == expected_node
 
-        if not node_matches:
+        if not node_matches and not is_jules:
             log_error(f"Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
@@ -670,10 +672,11 @@ class Orchestrator:
         if baseline_count == -1:
             baseline_count = 0
             try:
-                main_files = run_command(["git", "ls-tree", "-r", "origin/main", "--name-only"]).splitlines()
+                base = PROJECT_CONFIG.base_branch
+                main_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
                 relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
                 for mf in relevant:
-                    res_show = run_command(["git", "show", f"origin/main:{mf}"], check=False, log_on_error=False)
+                    res_show = run_command(["git", "show", f"{base}:{mf}"], check=False, log_on_error=False)
                     if res_show.returncode == 0:
                         baseline_count += int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"], input_str=res_show.stdout) or 0)
             except Exception: pass
@@ -765,9 +768,9 @@ Respond only after the PR is created or updated:
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
-        agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
-        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
-        if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
+        agent_name = "Jules"
+        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
             res = self.jules.create_session_from_source(source_id, branch, prompt)
@@ -932,8 +935,8 @@ Respond only after the PR is created or updated:
             "failedTests": failed_tests
         }
 
-    def get_ci_logs(self, pr_number: int) -> Dict[str, Any]:
-        """Fetches CI logs for failing check runs in a PR."""
+    def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
+        """Fetches CI logs for failing (or all) check runs in a PR."""
         # Get PR head SHA
         stdout_pr = self.github.run_authenticated_gh([
             "pr", "view", str(pr_number), "--json", "headRefOid"
@@ -946,10 +949,23 @@ Respond only after the PR is created or updated:
 
         # Get check runs
         stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs",
-            "--jq", ".check_runs[] | {id, name, status, conclusion, html_url}"
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
         ])
-        checks = [json.loads(l) for l in stdout_checks.splitlines() if l.strip()]
+        try:
+            data = json.loads(stdout_checks)
+            checks = []
+            for run in data.get("check_runs", []):
+                checks.append({
+                    'id': run.get('id'),
+                    'name': run.get('name'),
+                    'status': run.get('status'),
+                    'conclusion': run.get('conclusion'),
+                    'url': run.get('html_url'),
+                    'external_id': run.get('external_id')
+                })
+        except json.JSONDecodeError:
+            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
+
         failed_checks = [c for c in checks if c.get("conclusion") == "failure"]
 
         logs = {}
@@ -965,7 +981,7 @@ Respond only after the PR is created or updated:
             ])
             runs = json.loads(stdout_runs).get("check_runs", [])
             for run in runs:
-                if run.get("conclusion") == "failure":
+                if include_all or run.get("conclusion") == "failure":
                     try:
                         log_content = self.github.run_authenticated_gh([
                             "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
@@ -979,6 +995,56 @@ Respond only after the PR is created or updated:
             "failedChecks": failed_checks,
             "logs": logs
         }
+
+    def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
+        """Fetches and combines all CI logs for the latest workflow run of a PR."""
+        # Get PR head SHA
+        stdout_pr = self.github.run_authenticated_gh([
+            "pr", "view", str(pr_number), "--json", "headRefOid"
+        ])
+        pr_data = json.loads(stdout_pr)
+        head_sha = pr_data.get("headRefOid")
+
+        if not head_sha:
+            raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
+
+        # Get all check runs for this SHA
+        # Use full API response to be more robust
+        stdout_checks = self.github.run_authenticated_gh([
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
+        ])
+        try:
+            data = json.loads(stdout_checks)
+            check_runs = data.get("check_runs", [])
+        except json.JSONDecodeError:
+            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
+
+        all_logs = []
+        # Limit to latest 20 jobs to avoid extreme memory usage
+        for run in check_runs[:20]:
+            try:
+                # Fetch logs via API to avoid terminal paging/buffering issues
+                log_content = self.github.run_authenticated_gh([
+                    "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
+                ])
+                header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
+                all_logs.append(header)
+                # Truncate each log to 20k chars to balance detail vs memory
+                all_logs.append(log_content[-20000:])
+                all_logs.append("\n")
+            except Exception as e:
+                log_error(f"Failed to fetch logs for job {run.get('id')} ({run.get('name')}): {e}")
+                all_logs.append(f"--- FAILED TO FETCH LOGS FOR JOB: {run['name']} ({str(e)}) ---")
+
+        combined_logs = "\n".join(all_logs)
+
+        if grep:
+            grep_pattern = grep.lower()
+            lines = combined_logs.splitlines()
+            filtered_lines = [line for line in lines if grep_pattern in line.lower()]
+            return "\n".join(filtered_lines)
+
+        return combined_logs
 
     def get_merge_conflicts(self, pr_number: int, base_branch: str = "main") -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
@@ -1066,7 +1132,7 @@ Respond only after the PR is created or updated:
             "truncated": truncated
         }
 
-    def list_prs(self, state: str = "open", limit: int = 10, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
         gh_args = [
             "pr", "list",

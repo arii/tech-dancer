@@ -1,33 +1,19 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { IMPACT_CONFIG } from '../impact-analysis.config';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
-import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
+import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache, filterLowImpactFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
 import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
+import { loadProjectConfig } from './projectConfig';
 
 const execFile = promisify(execFileCb);
 
-/**
- * Loads project configuration from dev-tools/project_config.json.
- * Gracefully handles missing or malformed configuration files.
- */
-function loadProjectConfig(): Record<string, unknown> {
-  try {
-    const configPath = path.join(process.cwd(), 'dev-tools/project_config.json');
-    if (!fs.existsSync(configPath)) return {};
-    return JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, unknown>;
-  } catch (err) {
-    console.warn('⚠️  Failed to load project_config.json, using defaults.', err);
-    return {};
-  }
-}
-
 const projectConfig = loadProjectConfig();
-const DEFAULT_MAX_DIFF_CHARS = 40000;
-const MAX_DIFF_CHARS = (projectConfig.max_diff_chars as number) ?? DEFAULT_MAX_DIFF_CHARS;
+const MAX_DIFF_CHARS = projectConfig.max_diff_chars;
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -154,7 +140,7 @@ let cachedGitArgs: { diffArgs: string[], nameOnlyArgs: string[], contextBaseRef:
 async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[], contextBaseRef: string }> {
   if (cachedGitArgs) return cachedGitArgs;
 
-  const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
+  const baseRef = process.env.GITHUB_BASE_REF || projectConfig.base_branch;
   let diffArgs = ['diff', '-U10', `${baseRef}...HEAD`];
   let nameOnlyArgs = ['diff', '--name-only', `${baseRef}...HEAD`];
   let contextBaseRef = baseRef;
@@ -467,6 +453,11 @@ export async function orchestrateCodeReview(
 
   const agentReportPath = path.join(ARTIFACTS_DIR, client.reportFileName);
 
+  // Guarantee artifacts directory exists before any check or early return
+  if (!fs.existsSync(ARTIFACTS_DIR)) {
+    fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
+  }
+
   const existing = await countExistingReviews(allReportTitles);
   if (existing >= MAX_REVIEWS_PER_PR) {
     console.log(`⏭️  Skipping ${client.botName} — ${existing}/${MAX_REVIEWS_PER_PR} reviews already posted.`);
@@ -495,6 +486,22 @@ export async function orchestrateCodeReview(
   }
 
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+  const rawChangedFiles = Array.isArray(initialSummary.changedFiles) ? initialSummary.changedFiles : [];
+
+  const changedFiles = filterLowImpactFiles(rawChangedFiles, IMPACT_CONFIG.LOW_IMPACT_PATHS);
+
+  if (changedFiles.length === 0) {
+    console.log(`✅ No reviewable code changes detected after filtering (${rawChangedFiles.length} files filtered) — skipping agent review.`);
+    fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo reviewable code changes detected.\n`);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
+    return;
+  }
 
   if (initialSummary.isTruncated) {
     const report = generateTruncatedReviewMarkdown(initialSummary, client);
@@ -513,10 +520,8 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const changedFiles = initialSummary.changedFiles || [];
-
   // Batch files (max 10 per batch)
-  const fileBatches = batchFiles(changedFiles, 10);
+  const fileBatches = batchFiles(changedFiles.sort(), 10);
   const roles: CodeReviewRole[] = ['SECURITY', 'PERFORMANCE', 'STYLE', 'ARCHITECTURE'];
 
   console.log(`🤖 Reviewing ${changedFiles.length} files in ${fileBatches.length} batches with ${roles.length} specialized agents...`);
@@ -524,14 +529,17 @@ export async function orchestrateCodeReview(
   const orchestratorStartTime = Date.now();
   const allResults: CodeReviewResult[] = [];
   const CONCURRENCY_LIMIT = 4;
+  const newCache: Record<string, CodeReviewResult> = {};
 
   const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();
-  const getMemoizedBatchSummary = (batch: string[]) => {
+  const getMemoizedBatchSummary = async (batch: string[]) => {
     const key = batch.join(',');
-    if (!batchSummaryCache.has(key)) {
-      batchSummaryCache.set(key, getCodeDiffSummary(batch));
-    }
-    return batchSummaryCache.get(key)!;
+    const cached = batchSummaryCache.get(key);
+    if (cached) return cached;
+
+    const promise = getCodeDiffSummary(batch);
+    batchSummaryCache.set(key, promise);
+    return promise;
   };
 
   const taskQueue: (() => Promise<void>)[] = [];
@@ -547,6 +555,16 @@ export async function orchestrateCodeReview(
           }
 
           const summary = { ...batchSummary, role, previousState: prevState };
+          const hash = calculateReviewHash(summary);
+
+          // Semantic Cache Check
+          if (prevState?.cache?.[hash]) {
+            console.log(`✨ Cache hit for ${role} (hash: ${hash.slice(0, 8)}) on batch ${batch.join(', ')} — skipping API call.`);
+            const cachedResult = prevState.cache[hash];
+            allResults.push(cachedResult);
+            newCache[hash] = cachedResult;
+            return;
+          }
 
           const invokeWithTelemetry = async (forceMaxTokens?: number): Promise<CodeReviewResult> => {
             const start = Date.now();
@@ -586,6 +604,7 @@ export async function orchestrateCodeReview(
           // Final verification/reconciliation
           result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
           allResults.push(result);
+          newCache[hash] = result;
         } catch (err) {
           const errorMsg = err instanceof Error ? err.message : String(err);
           console.error(`❌ Error in ${role} review task:`, err);
@@ -611,6 +630,9 @@ export async function orchestrateCodeReview(
 
   await Promise.all(workers);
   const orchestratorDurationMs = Date.now() - orchestratorStartTime;
+
+  // Clear batch summary cache to free memory
+  batchSummaryCache.clear();
 
   // Aggregation logic - Sort results for deterministic output
   allResults.sort((a, b) => (a.role || '').localeCompare(b.role || ''));
@@ -679,7 +701,10 @@ export async function orchestrateCodeReview(
     cacheTokens: totalCacheTokens,
     cost: totalCost,
     llmVerdict: finalVerdict,
-    state: { findings: aggregatedFindings },
+    state: {
+      findings: aggregatedFindings,
+      cache: pruneCache({ ...prevState?.cache, ...newCache }),
+    },
     modelName: Array.from(modelNames).join(', '),
     durationMs: orchestratorDurationMs,
   };

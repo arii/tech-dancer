@@ -1,95 +1,54 @@
-# .agent Directory
+# .agents/
 
-**Purpose:** Central location for agent-runnable workflows, standards, and audit processes
+This directory contains the agent operating contract, tooling protocols,
+workflows, and supporting scripts for automated operations in this repository.
 
 ---
 
-## Contents
+## Core Standards
 
-### Automation Configuration
+- **`AGENTS.md`** — Primary Tooling and MCP Protocol. Defines the three-tier
+  tool hierarchy (MCP → `td_cli.py` → bash), the full tool mapping table, and
+  enforcement rules. **Read this before any GitHub or repository operation.**
+- **`AGENT_CONTRACT.md`** — Invariant rules for agent behavior. Always wins
+  over other instruction layers.
+- **`INSTRUCTION_LAYERS.md`** — Reference for which file governs which concern
+  and how conflicts are resolved.
 
-- **audit.config.yaml** - Unified configuration defining all banned language categories, terms, and standard fixes.
-- **docs/agent/issue-audit-rules.md** - Standards for GitHub issue auditing and closure.
+---
 
-### Workflows
+## Workflows
 
 Located in `.agents/workflows/`:
 
-- **ai-slop-audit-[DATE].md** - Auto-generated audit results (latest run)
-- Other workflows: review-pr, review-ux, etc.
+- **`fix-ci.md`** — Protocol for diagnosing and dispatching CI repair via Jules
+- **`review-pr.md`** — PR review workflow
+- **`review-ux.md`** — UX audit workflow
+- **`ai-slop-audit-[DATE].md`** — Auto-generated audit results (latest run)
 
-### Scripts
+---
+
+## Scripts
 
 Located in `.agents/scripts/`:
 
-- **audit-ai-slop.py** - Automated auditor that searches codebase and generates action plan. Consumes `audit.config.yaml`.
+Supporting scripts for workflow automation. These are called by workflows or
+MCP tools — do not invoke directly unless a workflow explicitly instructs it.
 
 ---
 
-## Quick Start
+## Context Index
 
-Before starting any work, ensure the agent environment is fully bootstrapped:
+`.agent-context.json` (repository root) is the pre-built index consumed by
+`boomtick-mcp` on every tool call. It contains:
 
-```bash
-./setup-agent.sh
-```
+- `file_tree` — repository structure snapshot
+- `cli_schema` — full `td_cli.py` command/flag reference
+- `package_json` — dependency and script metadata
 
-### Run Automated Audit
+It is rebuilt automatically by:
+- `pnpm run agent:prime` (manual)
+- `.githooks/post-checkout` and `.githooks/post-merge` (automatic on branch
+  switch or pull)
 
-```bash
-python3 .agents/scripts/audit-ai-slop.py
-```
-
-This generates a timestamped report in `.agents/workflows/ai-slop-audit-[DATE].md` with:
-
-- All violations found (grouped by category and priority)
-- Exact file paths and line numbers
-- Context for each violation
-- Action plan with next steps
-
-### Apply Fixes
-
-Follow the audit report to fix violations in priority order:
-
-1. Critical (About page, home page)
-2. High (Content/blog posts)
-3. Normal (Other files)
-
----
-
-## Process Flow
-
-```
-1. Run automated audit
-   ↓
-2. Review violations by priority
-   ↓
-3. Apply fixes per audit.config.yaml
-   ↓
-4. Run pnpm build to verify
-   ↓
-5. Commit with clear message
-```
-
----
-
-## When to Run
-
-- **Before submitting PR** with content changes
-- **Before major releases** to catch language drift
-- **Quarterly** as routine maintenance
-
----
-
-## Standards
-
-- **Language**: All content must follow rules defined in `audit.config.yaml`. No weak intensifiers, corporate speak, credential crutch, passive voice, invented scar tissue, or AI clichés. Active voice only, specific terminology, direct language.
-- **Issue Auditing**: All issue audits and PR linkages must follow `docs/agent/issue-audit-rules.md`.
-
----
-
-## Owner
-
-Quality Assurance - Language Standards
-
-**Last Updated:** 2026-05-02
+If the index is stale, run `pnpm run agent:prime` before any agent operation.

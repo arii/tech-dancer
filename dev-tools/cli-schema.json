@@ -44,10 +44,23 @@
       ]
     },
     "repo ci-logs": {
-      "description": "Fetches CI logs for failing check runs in a PR.",
-      "exact_usage": "python3 dev-tools/td_cli.py repo ci-logs <PR_NUMBER>",
+      "description": "Fetches CI logs for failing (or all) check runs in a PR.",
+      "exact_usage": "python3 dev-tools/td_cli.py repo ci-logs <PR_NUMBER> [--all]",
       "required_arguments": [
         { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ],
+      "optional_flags": [
+        { "flag": "--all", "type": "boolean", "description": "Include logs for successful runs." }
+      ]
+    },
+    "repo logs": {
+      "description": "Fetches and combines CI logs for all jobs in a PR, optionally filtered by grep.",
+      "exact_usage": "python3 dev-tools/td_cli.py repo logs <PR_NUMBER> [--grep <PATTERN>]",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ],
+      "optional_flags": [
+        { "flag": "--grep", "type": "string", "description": "Filter logs by pattern." }
       ]
     },
     "repo run-playwright": {

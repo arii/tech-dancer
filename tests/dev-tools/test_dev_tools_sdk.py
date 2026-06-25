@@ -8,7 +8,7 @@ def test_load_project_config_defaults_for_missing_file(tmp_path: Path):
     cfg = load_project_config(tmp_path / "missing.json")
     assert cfg.github_token_env == "GITHUB_TOKEN"
     assert cfg.gh_token_env == "GH_TOKEN"
-    assert cfg.use_gemini_fallback is True
+    assert cfg.base_branch == "origin/main"
 
 
 def test_cli_parser_supports_grouped_commands():
@@ -31,5 +31,4 @@ def test_cli_parser_supports_new_commands():
     assert parser.parse_args(["gh", "audit", "5"]).command == "audit"
     assert parser.parse_args(["ai", "analyze", "README.md"]).command == "analyze"
     assert parser.parse_args(["jules", "sync"]).command == "sync"
-    assert parser.parse_args(["antigravity", "sync"]).command == "sync"
     assert parser.parse_args(["repair"]).group == "repair"

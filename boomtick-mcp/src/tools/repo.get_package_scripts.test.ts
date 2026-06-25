@@ -13,20 +13,39 @@ describe("repo.get_package_scripts", () => {
 
     vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(mockPkg));
 
-    const result = await getPackageScriptsHandler();
+    const result = await getPackageScriptsHandler({});
     expect(result.scripts.test).toBe("vitest");
   });
 
   it("should handle missing scripts", async () => {
     vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify({}));
 
-    const result = await getPackageScriptsHandler();
+    const result = await getPackageScriptsHandler({});
     expect(result.scripts).toEqual({});
   });
 
   it("should throw error when file not found", async () => {
     vi.mocked(fs.readFile).mockRejectedValue(new Error("File not found"));
 
-    await expect(getPackageScriptsHandler()).rejects.toThrow("Failed to read package.json: File not found");
+    await expect(getPackageScriptsHandler({})).rejects.toThrow("Failed to read package.json: File not found");
+  });
+
+  it("should filter scripts by pattern", async () => {
+    const mockPkg = {
+      scripts: {
+        test: "vitest",
+        build: "vite build",
+        "test:ui": "vitest --ui"
+      }
+    };
+
+    vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(mockPkg));
+
+    const result = await getPackageScriptsHandler({ filter: "test" });
+    expect(result.scripts).toEqual({
+      test: "vitest",
+      "test:ui": "vitest --ui"
+    });
+    expect(result.scripts.build).toBeUndefined();
   });
 });
