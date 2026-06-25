@@ -36,21 +36,8 @@ async function main() {
 
     // Generate dependency graph
     console.log('📊 Generating dependency graph...');
-    let graphJson: string;
-    try {
-      graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
-    } catch (error) {
-      console.error('❌ Error executing dependency-cruiser:', error);
-      throw error;
-    }
-
-    let graph: DependencyGraph;
-    try {
-      graph = JSON.parse(graphJson);
-    } catch (error) {
-      console.error('❌ Error parsing dependency graph JSON:', error);
-      throw error;
-    }
+    const graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
+    const graph: DependencyGraph = JSON.parse(graphJson);
 
     const reverseMap = buildReverseMap(graph);
 
