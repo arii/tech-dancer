@@ -21,6 +21,7 @@ const WCSScraperTool = lazy(() => import('./components/WCSScraperTool').then(m =
 const GitOpsReviewerTool = lazy(() => import('./components/GitOpsReviewerTool').then(m => ({ default: m.GitOpsReviewerTool })));
 const DeploymentImpactAnalyzerTool = lazy(() => import('./components/DeploymentImpactAnalyzerTool').then(m => ({ default: m.DeploymentImpactAnalyzerTool })));
 const EcommerceAutomationTool = lazy(() => import('./components/EcommerceAutomationTool').then(m => ({ default: m.EcommerceAutomationTool })));
+const RepoAuditorTool = lazy(() => import('./components/RepoAuditorTool').then(m => ({ default: m.RepoAuditorTool })));
 
 const TOOL_REGISTRY: Record<string, ComponentType> = {
   'blog-drafter': BlogDrafter,
@@ -28,6 +29,7 @@ const TOOL_REGISTRY: Record<string, ComponentType> = {
   'gitops-pr-reviewer': GitOpsReviewerTool,
   'deployment-impact-analyzer': DeploymentImpactAnalyzerTool,
   'ecommerce-automation': EcommerceAutomationTool,
+  'repo-auditor-ai': RepoAuditorTool,
 };
 
 export default function ResearchDetail() {
