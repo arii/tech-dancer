@@ -6,27 +6,16 @@ export const DdgsSearchInputSchema = z.object({
   maxResults: z.number().optional().default(5),
 });
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export async function ddgsSearchHandler(args: z.infer<typeof DdgsSearchInputSchema>) {
-  const pythonScript = `
-import json
-import sys
-try:
-    from ddgs import DDGS
-except ImportError:
-    print(json.dumps({"error": "ddgs package not found. Please run 'pip install ddgs --break-system-packages'"}), file=sys.stderr)
-    sys.exit(1)
+  const scriptPath = path.join(__dirname, "ddgs_search.py");
 
-try:
-    query = sys.argv[1]
-    max_results = int(sys.argv[2])
-    results = DDGS().text(query, max_results=max_results)
-    print(json.dumps(list(results)))
-except Exception as e:
-    print(json.dumps({"error": str(e)}), file=sys.stderr)
-    sys.exit(1)
-`;
-
-  const result = await runCommand("python", ["-c", pythonScript, args.query, args.maxResults.toString()]);
+  const result = await runCommand("python", [scriptPath, args.query, args.maxResults.toString()]);
 
   if (result.exitCode !== 0) {
     throw new Error(`Failed to search ddgs: ${result.stderr}`);
