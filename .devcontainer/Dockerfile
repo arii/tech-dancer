@@ -38,9 +38,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
 
 # ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
 ENV PNPM_VERSION=10.28.2
-ENV PNPM_HOME=/pnpm
-ENV PNPM_STORE_DIR=/pnpm/store
-ENV PATH=$PNPM_HOME:$PATH
 # Use pre-installed browsers from the Playwright base image
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
@@ -48,11 +45,7 @@ ENV PYTHONPATH=/workspace/dev-tools
 
 RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
-  && mkdir -p /workspace && chown pwuser:pwuser /workspace \
-  && mkdir -p $PNPM_HOME && chown pwuser:pwuser $PNPM_HOME
-
-# ── Workspace ──────────────────────────────────────────────────────────────────
-WORKDIR /workspace
+  && pnpm --version
 
 # ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
@@ -77,11 +70,9 @@ RUN pip3 install --no-cache-dir --break-system-packages \
 COPY dev-tools/ /workspace/dev-tools/
 RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/dev-tools/
 
-# ── pnpm Dependencies (Pre-bake) ──────────────────────────────────────────────
-# Copy lockfile and workspace config to pre-install dependencies
-COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY --chown=pwuser:pwuser boomtick-mcp/package.json ./boomtick-mcp/
+# ── Workspace ──────────────────────────────────────────────────────────────────
+RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
 
 USER pwuser
 
-RUN --mount=type=cache,id=pnpm,uid=1000,target=/pnpm/store pnpm install --frozen-lockfile
+WORKDIR /workspace
