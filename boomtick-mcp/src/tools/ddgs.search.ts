@@ -27,7 +27,7 @@ export async function ddgsSearchHandler(args: z.infer<typeof DdgsSearchInputSche
   // duckduckgo_search logs annoying deprecation warnings to stderr we want to ignore
   // if it really failed, exitCode will be non-zero and we'll have stdout/stderr
   if (result.exitCode !== 0) {
-    let parsedError = result.stderr || result.stdout;
+    let parsedError = result.stderr || result.stdout || "";
 
     const lines = parsedError.split("\n");
     for (const line of lines) {
