@@ -155,7 +155,9 @@ When multiple agents work simultaneously:
 
 ## 21) 🤝 Collaborative GitHub Workflows
 
-`dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
+Consult `.agents/AGENTS.md` for the **Tooling and MCP Protocol** before executing any GitHub or repository operations. Specialized MCP tools must be prioritized over raw shell commands.
+
+`dev-tools/td_cli.py` remains the unified entry point for local repository automation and PR reviews when MCP tools are not used.
 
 ### Issue Lifecycle
 

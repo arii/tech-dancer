@@ -53,3 +53,12 @@ if check_run "^boomtick-mcp/"; then
         echo "⚠️  WARNING: pnpm not found. Skipping boomtick-mcp build."
     fi
 fi
+
+if check_run "^(src/|content/|package\.json|scripts/build-repo-context\.py)"; then
+    if command -v pnpm >/dev/null 2>&1; then
+        echo "🔍 Indexable content changed. Updating .agent-context.json..."
+        pnpm run agent:prime || echo "❌ ERROR: 'pnpm run agent:prime' failed. Please run it manually to update the agent index."
+    else
+        echo "⚠️  WARNING: pnpm not found. Skipping agent index update."
+    fi
+fi
