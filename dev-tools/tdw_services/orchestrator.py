@@ -671,10 +671,11 @@ class Orchestrator:
         if baseline_count == -1:
             baseline_count = 0
             try:
-                main_files = run_command(["git", "ls-tree", "-r", "origin/main", "--name-only"]).splitlines()
+                base = PROJECT_CONFIG.base_branch
+                main_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
                 relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
                 for mf in relevant:
-                    res_show = run_command(["git", "show", f"origin/main:{mf}"], check=False, log_on_error=False)
+                    res_show = run_command(["git", "show", f"{base}:{mf}"], check=False, log_on_error=False)
                     if res_show.returncode == 0:
                         baseline_count += int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"], input_str=res_show.stdout) or 0)
             except Exception: pass

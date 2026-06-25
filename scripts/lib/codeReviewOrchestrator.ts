@@ -139,7 +139,7 @@ let cachedGitArgs: { diffArgs: string[], nameOnlyArgs: string[], contextBaseRef:
 async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[], contextBaseRef: string }> {
   if (cachedGitArgs) return cachedGitArgs;
 
-  const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
+  const baseRef = process.env.GITHUB_BASE_REF || projectConfig.base_branch;
   let diffArgs = ['diff', '-U10', `${baseRef}...HEAD`];
   let nameOnlyArgs = ['diff', '--name-only', `${baseRef}...HEAD`];
   let contextBaseRef = baseRef;
