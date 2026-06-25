@@ -62,6 +62,20 @@ describe("ddgsSearchHandler", () => {
     );
   });
 
+  it("should handle parsed JSON error mixed with plain text warnings", async () => {
+    vi.mocked(runCommand).mockResolvedValue({
+      stdout: "",
+      stderr: "Warning: some deprecation notice\n" + JSON.stringify({ error: "Hidden JSON error" }) + "\nAnother line",
+      exitCode: 1,
+      durationMs: 100,
+      command: "mock python3",
+    });
+
+    await expect(ddgsSearchHandler({ query: "test query", maxResults: 2 })).rejects.toThrow(
+      "Failed to search ddgs: Hidden JSON error"
+    );
+  });
+
   it("should handle error when python output is not an array", async () => {
     vi.mocked(runCommand).mockResolvedValue({
       stdout: JSON.stringify({ error: "Something went wrong" }),

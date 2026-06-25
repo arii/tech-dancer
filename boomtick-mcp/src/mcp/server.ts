@@ -43,6 +43,9 @@ import path from "path";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
+const SERVER_DIRNAME = path.dirname(fileURLToPath(import.meta.url));
+const DDGS_SCRIPT_PATH = path.join(SERVER_DIRNAME, "..", "tools", "ddgs_search.py");
+
 export class BoomtickMCPServer {
   private server: Server;
 
@@ -594,12 +597,10 @@ export class BoomtickMCPServer {
       process.exit(1);
     }
 
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const ddgsScriptPath = path.join(__dirname, "..", "tools", "ddgs_search.py");
     try {
-      await fs.access(ddgsScriptPath);
+      await fs.access(DDGS_SCRIPT_PATH);
     } catch (err) {
-      console.error(`❌ Fatal: ddgs_search.py not found at ${ddgsScriptPath}`);
+      console.error(`❌ Fatal: ddgs_search.py not found at ${DDGS_SCRIPT_PATH}`);
       process.exit(1);
     }
 
