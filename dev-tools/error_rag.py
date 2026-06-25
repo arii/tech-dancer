@@ -138,8 +138,6 @@ class RAGPipeline:
         if knowledge_base_path is None:
             if os.path.exists(".agents/knowledge/errors.json"):
                 knowledge_base_path = ".agents/knowledge/errors.json"
-            elif os.path.exists(".antigravity/knowledge/errors.json"):
-                knowledge_base_path = ".antigravity/knowledge/errors.json"
             else:
                 knowledge_base_path = ".jules/knowledge/errors.json"
         self.knowledge_base_path = knowledge_base_path

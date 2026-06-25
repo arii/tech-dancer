@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 import { IMPACT_CONFIG } from '../impact-analysis.config';
 import { getAllRoutes } from '../../src/lib/routes-discovery';
 import { mapPageToUrls } from '../impact-review-utils';
+import { loadProjectConfig } from './projectConfig';
 
 // Types for dependency-cruiser output
 export interface Dependency {
@@ -67,7 +68,8 @@ export function getChangedFiles(): string[] {
   const unstaged = exec('git diff --name-only');
   const workingChanges = new Set([...splitAndFilter(staged), ...splitAndFilter(unstaged)]);
 
-  let base = 'origin/main';
+  const config = loadProjectConfig();
+  let base = config.base_branch;
   try {
     execSync(`git rev-parse ${base}`, { stdio: 'ignore' });
   } catch {

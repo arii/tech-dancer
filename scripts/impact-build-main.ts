@@ -1,9 +1,11 @@
 import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { loadProjectConfig } from './lib/projectConfig';
 
 const worktreePath = path.join(process.cwd(), '.tmp-main');
-const baseRef = process.env.IMPACT_BASE_REF ?? 'origin/main';
+const config = loadProjectConfig();
+const baseRef = process.env.IMPACT_BASE_REF ?? config.base_branch;
 
 function run(command: string, args: string[], cwd = process.cwd()): void {
   console.log(`$ ${command} ${args.join(' ')}`);

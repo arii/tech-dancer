@@ -38,21 +38,12 @@ def get_ai_synthesis_model() -> str:
     if env_val:
         return env_val
     try:
+        # Standardize on SDK loader
         from dev_tools_sdk.config import load_project_config
         config = load_project_config()
-        return getattr(config, "ai_synthesis_model", "gpt-4o-mini")
+        return config.ai_synthesis_model
     except Exception:
-        # Fallback to direct json reading if sdk not available
-        try:
-            import json
-            config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev-tools", "project_config.json")
-            if not os.path.exists(config_path):
-                config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
-            with open(config_path, "r") as f:
-                raw = json.load(f)
-                return raw.get("ai_synthesis_model", "gpt-4o-mini")
-        except Exception:
-            return "gpt-4o-mini"
+        return "gpt-4o-mini"
 
 def get_ai_model() -> str:
     """Dynamic getter for the primary AI model."""

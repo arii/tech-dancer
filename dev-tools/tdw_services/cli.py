@@ -62,11 +62,21 @@ def run_playwright(ctx, grep, worktree):
 
 @repo.command()
 @click.argument('pr_number', type=int)
+@click.option('--all', 'include_all', is_flag=True, help='Include logs for successful runs')
 @click.pass_context
-def ci_logs(ctx, pr_number):
+def ci_logs(ctx, pr_number, include_all):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.get_ci_logs(pr_number)
+    res = orch.get_ci_logs(pr_number, include_all=include_all)
     out(ctx, f"Fetched CI logs for PR #{pr_number}", data=res)
+
+@repo.command()
+@click.argument('pr_number', type=int)
+@click.option('--grep', help='Filter logs by pattern')
+@click.pass_context
+def logs(ctx, pr_number, grep):
+    orch = ctx.obj['ORCHESTRATOR']
+    logs_content = orch.stream_ci_logs(pr_number, grep=grep)
+    out(ctx, f"Fetched logs for PR #{pr_number}", data={"logs": logs_content})
 
 # ==========================================
 # GH COMMAND GROUP
@@ -78,7 +88,7 @@ def gh():
 
 @gh.command()
 @click.option('--state', default='open')
-@click.option('--limit', type=int, default=10)
+@click.option('--limit', type=int, default=100)
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
@@ -642,12 +652,7 @@ def jules_group():
     """Agent Operations (alias for agent)"""
     pass
 
-@cli.group(name='antigravity')
-def antigravity_group():
-    """Agent Operations (alias for agent)"""
-    pass
-
-for group in [jules_group, antigravity_group]:
+for group in [jules_group]:
     group.add_command(dispatch)
     group.add_command(sync)
     group.add_command(fix_ci)

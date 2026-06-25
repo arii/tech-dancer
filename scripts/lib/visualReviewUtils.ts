@@ -205,7 +205,7 @@ export async function getJulesSessionIdFromPR(): Promise<string | null> {
 }
 
 export async function sendJulesMessage(taskId: string, message: string): Promise<void> {
-  const apiKey = process.env.JULES_API_KEY || process.env.ANTIGRAVITY_API_KEY;
+  const apiKey = process.env.JULES_API_KEY;
   if (!apiKey) {
     console.warn('⚠️  Skipping sending message to Jules session — JULES_API_KEY not set.');
     return;

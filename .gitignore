@@ -85,10 +85,6 @@ workflow_overlaps.txt
 dev-tools/logs/reviews/*.md
 /product-mockups/
 
-# Antigravity
-.antigravity/
-.antigravity/cli/
-.antigravitycli/
 
 # Runtime audit reports
 # [Sensitive] Ensure these are never indexed
@@ -100,3 +96,4 @@ gh_2.54.0_linux_amd64/
 gh_2.54.0_linux_amd64.tar.gz
 .tmp-main
 amazon-link-audit-report.md
+dev-tools/logs/workflows/*.md
