@@ -20,9 +20,9 @@ test('verify homepage and guide visual consistency', async ({ page, isMobile }) 
   };
 
   if (isMobile) {
-    await expect(page).toHaveScreenshot('homepage_mobile_v2.png', screenshotOptions);
+    await expect(page).toHaveScreenshot('homepage-mobile-v2.png', screenshotOptions);
   } else {
-    await expect(page).toHaveScreenshot('homepage_desktop_v2.png', screenshotOptions);
+    await expect(page).toHaveScreenshot('homepage-desktop-v2.png', screenshotOptions);
   }
 
   // 2. WCS Travel Pack Guide
@@ -33,8 +33,8 @@ test('verify homepage and guide visual consistency', async ({ page, isMobile }) 
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
 
   if (isMobile) {
-    await expect(page).toHaveScreenshot('detail_page_mobile_v2.png', screenshotOptions);
+    await expect(page).toHaveScreenshot('detail-page-mobile-v2.png', screenshotOptions);
   } else {
-    await expect(page).toHaveScreenshot('detail_page_desktop_v2.png', screenshotOptions);
+    await expect(page).toHaveScreenshot('detail-page-desktop-v2.png', screenshotOptions);
   }
 });
