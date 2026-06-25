@@ -42,7 +42,7 @@ async function main() {
     try {
       graph = JSON.parse(graphJson);
     } catch (err: unknown) {
-      throw new Error(`Failed to parse dependency-cruiser output as JSON. The tool output might be malformed or it failed silently. Error: ${(err as Error).message}`);
+      throw new Error(`Failed to parse dependency-cruiser output as JSON. The tool output might be malformed or it failed silently. Error: ${(err as Error).message}`, { cause: err });
     }
 
     const reverseMap = buildReverseMap(graph);
