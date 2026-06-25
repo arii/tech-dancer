@@ -28,10 +28,8 @@ class Orchestrator:
     def review_pr(self, pr_number: int) -> ReviewResult:
         files = self.github.list_changed_files(pr_number)
         prompt = self.reviews.build_prompt("\n".join(files))
-        if self.config.use_gemini_fallback:
-            return ReviewResult(engine="gemini", output=self.gemini.review(prompt))
-        logging.error("No inference engine available (Gemini fallback disabled).")
-        return ReviewResult(engine="none", output="Error: No inference engine available.")
+        # Defaulting to Gemini as the primary engine now
+        return ReviewResult(engine="gemini", output=self.gemini.review(prompt))
 
     def audit_pr(self, pr_number: int) -> dict:
         pr = self.view_pr(pr_number)
@@ -43,10 +41,7 @@ class Orchestrator:
         if not p.exists():
             return f"file_not_found: {path}"
         prompt = self.reviews.build_prompt(p.read_text(encoding='utf-8')[:8000])
-        if self.config.use_gemini_fallback:
-            return self.gemini.review(prompt)
-        logging.error("No inference engine available for analyze_file")
-        return "Error: No inference engine available"
+        return self.gemini.review(prompt)
 
     def view_pr(self, pr_number: int) -> dict:
         pr = self.github.view_pr(pr_number)
@@ -69,7 +64,6 @@ class Orchestrator:
 
     def env_verify(self) -> dict[str, bool]:
         return {
-            "gemini_fallback_enabled": self.config.use_gemini_fallback,
             "jules_configured": bool(self.config.jules_api_url),
             "repo_configured": bool(self.config.github_repo),
         }

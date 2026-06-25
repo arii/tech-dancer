@@ -63,7 +63,4 @@ else
     echo "Gemini API key: Missing"
 fi
 
-echo "Ollama URL: ${OLLAMA_URL:-http://localhost:11434/api/generate}"
-echo "Ollama Model: ${OLLAMA_MODEL:-qwen2.5-coder:7b}"
-
 echo "=== Snapshot Complete ==="
