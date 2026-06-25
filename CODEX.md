@@ -13,6 +13,7 @@ The following files define and enforce the contract:
 
 - `.node-version`: Primary source for Node.js version.
 - `.nvmrc`: Compatibility file for NVM users.
+- `.npmrc`: Development environment configuration (must **not** contain `use-node-version`).
 - `package.json`:
     - `engines.node`: Set to `24.x` for Vercel compatibility.
     - `engines.pnpm`: Set to `10.28.2`.
@@ -38,6 +39,7 @@ This script handles environment activation, runtime verification, and dependency
 - ❌ Do **not** run `pnpm env use`.
 - ❌ Do **not** run `nvm install` or `nvm use`.
 - ❌ Do **not** change the Node.js version in any configuration file unless explicitly instructed to update the runtime contract.
+- ❌ Do **not** add `use-node-version` to `.npmrc` (this breaks Vercel deployments).
 - ❌ Do **not** delete `pnpm-lock.yaml`.
 
 If the environment validation fails, stop and report the mismatch immediately.
