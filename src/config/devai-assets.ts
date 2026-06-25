@@ -45,20 +45,20 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
   },
   {
     path: 'dev-tools/ai_reviewer.py',
-    label: 'AI Auditor',
-    description: 'Gemini-powered deep code analysis and PR auditing.',
+    label: 'Auditor',
+    description: 'AI review.',
     toolId: TOOL_ID_REPO_AUDITOR
   },
   {
     path: 'dev-tools/jules_feedback_loop.py',
-    label: 'Jules Coordinator',
-    description: 'Autonomous agent coordination and feedback loop management.',
+    label: 'Jules',
+    description: 'Agent.',
     toolId: TOOL_ID_REPO_AUDITOR
   },
   {
     path: 'dev-tools/get_ai_context.py',
-    label: 'Context Engine',
-    description: 'Generates high-precision RAG context for LLM analysis.',
+    label: 'Context',
+    description: 'RAG.',
     toolId: TOOL_ID_REPO_AUDITOR
   }
 ];
