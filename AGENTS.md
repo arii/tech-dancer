@@ -208,7 +208,7 @@ This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contr
 
 # Codex / Agent Runtime Rules
 
-This repository enforces a strict runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md).
+This repository enforces a strict runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md). **DO NOT** add `use-node-version` to `.npmrc` as it breaks Vercel deployments.
 
 Before installing, testing, building, or editing dependencies, run:
 
