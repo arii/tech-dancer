@@ -38,15 +38,18 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
 
 # ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
 ENV PNPM_VERSION=10.28.2
+# PNPM_HOME is where binaries are installed
 ENV PNPM_HOME="/pnpm"
+# PNPM_STORE_DIR ensures the store is located in the cache mount
+ENV PNPM_STORE_DIR="/pnpm/store"
 ENV PATH="$PNPM_HOME:$PATH"
+
 # Use pre-installed browsers from the Playwright base image
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 RUN corepack enable \
-  && corepack prepare pnpm@${PNPM_VERSION} --activate \
-  && pnpm config set store-dir /pnpm/store
+  && corepack prepare pnpm@${PNPM_VERSION} --activate
 
 # ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
@@ -78,5 +81,7 @@ COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY --chown=pwuser:pwuser boomtick-mcp/package.json ./boomtick-mcp/
 
 # Install dependencies using BuildKit cache mount for pnpm store
+# We use the environment variable PNPM_STORE_DIR to point pnpm to the mount.
+# Playwright base image uses UID 1001 for pwuser.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store,uid=1001 \
     pnpm install --frozen-lockfile
