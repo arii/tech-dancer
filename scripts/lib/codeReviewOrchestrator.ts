@@ -501,7 +501,7 @@ export async function orchestrateCodeReview(
   }
 
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
-  const rawChangedFiles = initialSummary.changedFiles || [];
+  const rawChangedFiles = Array.isArray(initialSummary.changedFiles) ? initialSummary.changedFiles : [];
 
   const changedFiles = rawChangedFiles.filter(f => {
     return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
