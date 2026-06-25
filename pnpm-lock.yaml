@@ -252,9 +252,6 @@ importers:
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
-      node-fetch:
-        specifier: ^3.3.2
-        version: 3.3.2
       zod:
         specifier: ^4.4.3
         version: 4.4.3
