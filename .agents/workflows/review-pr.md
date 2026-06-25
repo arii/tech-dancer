@@ -1,4 +1,4 @@
-> Follow `.agent/AGENT_CONTRACT.md` before reading anything else.
+> Follow `.agents/AGENT_CONTRACT.md` before reading anything else.
 
 ## Failure Modes (Read Before Starting)
 
@@ -46,7 +46,7 @@ PYTHONPATH=$(pwd)/dev-tools python3 dev-tools/tdw_services/cli.py gh audit-pr PR
 (This creates `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` for reading, and `dev-tools/logs/reviews/pr-review-PR_NUMBER.md` for writing).
 
 2. **Read the Context & Instructions**:
-   - Read `.agent/workflows/REVIEW_INSTRUCTIONS.md` to understand the audit criteria. The audit scope includes `src/features`, `src/pages`, `src/components`, and `src/layouts`.
+   - Read `.agents/workflows/REVIEW_INSTRUCTIONS.md` to understand the audit criteria. The audit scope includes `src/features`, `src/pages`, `src/components`, and `src/layouts`.
    - Read `dev-tools/logs/reviews/pr-context-PR_NUMBER.md` to analyze the code diffs, stats, and **CI Status**.
    - **Log Triage**: If the CI Status section shows failures, examine the "Failing Tests/Build Errors" and "Failure Logs Snippet" to identify root causes.
 
