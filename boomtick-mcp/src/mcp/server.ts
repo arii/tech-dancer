@@ -232,6 +232,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -240,11 +241,12 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                state: { type: "string", enum: ["open", "closed", "all"] },
-                includeDrafts: { type: "boolean" },
-                maxResults: { type: "number" },
-                labels: { type: "array", items: { type: "string" } },
+                state: { type: "string", enum: ["open", "closed", "all"], default: "open", description: "The state of the PRs to search for (open, closed, all)." },
+                includeDrafts: { type: "boolean", default: true, description: "Whether to include draft PRs in the results." },
+                limit: { type: "number", minimum: 1, maximum: 100, default: 100, description: "The maximum number of PRs to return (default: 100, range: 1-100)." },
+                labels: { type: "array", items: { type: "string" }, description: "Filter PRs by labels." },
               },
+              required: [],
             },
           },
           {
@@ -253,7 +255,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number" },
+                prNumber: { type: "number", description: "The number of the pull request to get the diff for." },
               },
               required: ["prNumber"],
             },
@@ -264,8 +266,8 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                branch: { type: "string" },
-                worktreePath: { type: "string" },
+                branch: { type: "string", description: "The name of the branch to checkout." },
+                worktreePath: { type: "string", description: "Optional path to the worktree to perform the checkout in." },
               },
               required: ["branch"],
             },
@@ -276,8 +278,8 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number" },
-                baseBranch: { type: "string" },
+                prNumber: { type: "number", description: "The number of the pull request to check for conflicts." },
+                baseBranch: { type: "string", default: "main", description: "The base branch to check against (default: 'main')." },
               },
               required: ["prNumber"],
             },
@@ -288,9 +290,10 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                base: { type: "string" },
-                head: { type: "string" },
+                base: { type: "string", default: "main", description: "The base ref to compare from (default: 'main')." },
+                head: { type: "string", default: "HEAD", description: "The head ref to compare to (default: 'HEAD')." },
               },
+              required: [],
             },
           },
           {
@@ -299,6 +302,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -307,6 +311,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -315,7 +320,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number" },
+                prNumber: { type: "number", description: "The number of the pull request to read logs for." },
               },
               required: ["prNumber"],
             },
@@ -326,11 +331,11 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number" },
-                repairBranchName: { type: "string" },
-                writeMode: { type: "boolean" },
+                prNumber: { type: "number", description: "The original pull request number." },
+                repairBranchName: { type: "string", description: "Optional name for the new repair branch." },
+                writeMode: { type: "boolean", const: true, description: "Must be true to perform the branch creation." },
               },
-              required: ["prNumber"],
+              required: ["prNumber", "writeMode"],
             },
           },
           {
@@ -339,10 +344,11 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                commands: { type: "array", items: { type: "string" } },
-                timeoutSeconds: { type: "number" },
-                worktreePath: { type: "string" },
+                commands: { type: "array", items: { type: "string" }, description: "Optional list of commands to run (default includes install, lint, test, build)." },
+                timeoutSeconds: { type: "number", default: 300, description: "Maximum time in seconds to wait for tests (default: 300)." },
+                worktreePath: { type: "string", description: "Optional path to the worktree to run tests in." },
               },
+              required: [],
             },
           },
           {
@@ -351,9 +357,10 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                route: { type: "string" },
-                worktreePath: { type: "string" },
+                route: { type: "string", default: "/", description: "The route to audit (default: '/')." },
+                worktreePath: { type: "string", description: "Optional path to the worktree to run the audit in." },
               },
+              required: [],
             },
           },
           {
@@ -362,9 +369,10 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                grep: { type: "string" },
-                worktreePath: { type: "string" },
+                grep: { type: "string", description: "Optional pattern to filter tests by name." },
+                worktreePath: { type: "string", description: "Optional path to the worktree to run tests in." },
               },
+              required: [],
             },
           },
           {
@@ -373,12 +381,12 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                worktreePath: { type: "string" },
-                message: { type: "string" },
-                allowedFiles: { type: "array", items: { type: "string" } },
-                writeMode: { type: "boolean" },
+                worktreePath: { type: "string", description: "Path to the worktree where changes are made." },
+                message: { type: "string", description: "Commit message." },
+                allowedFiles: { type: "array", items: { type: "string" }, description: "List of files that are allowed to be committed." },
+                writeMode: { type: "boolean", const: true, description: "Must be true to perform the commit." },
               },
-              required: ["worktreePath", "message", "allowedFiles"],
+              required: ["worktreePath", "message", "allowedFiles", "writeMode"],
             },
           },
           {
@@ -387,16 +395,16 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                originalPrNumber: { type: "number" },
-                repairBranch: { type: "string" },
-                baseBranch: { type: "string" },
-                title: { type: "string" },
-                body: { type: "string" },
-                draft: { type: "boolean" },
-                worktreePath: { type: "string" },
-                pushMode: { type: "boolean" },
+                originalPrNumber: { type: "number", description: "The number of the original pull request being replaced." },
+                repairBranch: { type: "string", description: "The branch containing the fixes." },
+                baseBranch: { type: "string", description: "The branch to merge the fixes into." },
+                title: { type: "string", description: "The title of the new PR." },
+                body: { type: "string", description: "The body/description of the new PR." },
+                draft: { type: "boolean", default: true, description: "Whether to create the PR as a draft (default: true)." },
+                worktreePath: { type: "string", description: "Optional path to the worktree where the PR is created from." },
+                pushMode: { type: "boolean", const: true, description: "Must be true to push the branch and open the PR." },
               },
-              required: ["originalPrNumber", "repairBranch", "baseBranch", "title", "body"],
+              required: ["originalPrNumber", "repairBranch", "baseBranch", "title", "body", "pushMode"],
             },
           },
           {
@@ -405,8 +413,8 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number" },
-                body: { type: "string" },
+                prNumber: { type: "number", description: "The number of the original PR to comment on." },
+                body: { type: "string", description: "The content of the comment." },
               },
               required: ["prNumber", "body"],
             },
@@ -417,8 +425,8 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                task: { type: "string" },
-                branch: { type: "string", description: "The base branch to start from." },
+                task: { type: "string", description: "The instructions for Jules." },
+                branch: { type: "string", description: "The base branch to start from (e.g., 'main')." },
                 pr: { type: "number", description: "The PR number to use as the base branch context." },
               },
               required: ["task"],
@@ -430,7 +438,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                id: { type: "string" }
+                id: { type: "string", description: "The unique ID of the Jules session." }
               },
               required: ["id"],
             },
@@ -441,8 +449,8 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                id: { type: "string" },
-                message: { type: "string" }
+                id: { type: "string", description: "The unique ID of the Jules session." },
+                message: { type: "string", description: "The message content to send." }
               },
               required: ["id", "message"],
             },
@@ -453,7 +461,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                id: { type: "string" }
+                id: { type: "string", description: "The unique ID of the Jules session." }
               },
               required: ["id"],
             },
@@ -464,6 +472,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -472,7 +481,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                id: { type: "string" },
+                id: { type: "string", description: "The unique ID of the Jules session to cancel." },
               },
               required: ["id"],
             },
@@ -483,7 +492,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                id: { type: "string" },
+                id: { type: "string", description: "The unique ID of the Jules session." },
               },
               required: ["id"],
             },
@@ -494,7 +503,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                sessionId: { type: "string" },
+                sessionId: { type: "string", description: "The unique ID of the Jules session." },
               },
               required: ["sessionId"],
             },

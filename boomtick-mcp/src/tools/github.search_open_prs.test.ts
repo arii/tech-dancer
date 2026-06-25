@@ -23,7 +23,7 @@ describe("github.search_open_prs", () => {
       command: "gh pr list"
     });
 
-    const result = await searchOpenPrsHandler({ state: "open", maxResults: 1, includeDrafts: true });
+    const result = await searchOpenPrsHandler({ state: "open", limit: 1, includeDrafts: true });
     expect(result.prs).toHaveLength(1);
     expect(result.prs[0].number).toBe(1);
   });
@@ -42,7 +42,7 @@ describe("github.search_open_prs", () => {
       command: "gh pr list"
     });
 
-    const result = await searchOpenPrsHandler({ state: "open", maxResults: 10, includeDrafts: true });
+    const result = await searchOpenPrsHandler({ state: "open", limit: 10, includeDrafts: true });
     expect(result.prs).toHaveLength(0);
   });
 
@@ -55,6 +55,6 @@ describe("github.search_open_prs", () => {
       command: "gh pr list"
     });
 
-    await expect(searchOpenPrsHandler({ state: "open", maxResults: 10, includeDrafts: true })).rejects.toThrow("Failed to list PRs: Auth failed");
+    await expect(searchOpenPrsHandler({ state: "open", limit: 10, includeDrafts: true })).rejects.toThrow("Failed to list PRs: Auth failed");
   });
 });
