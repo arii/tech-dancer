@@ -34,6 +34,13 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
 };
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+  // Preprocess content to ensure blank lines around Notice tag inner content
+  // so that markdown inside the tags is parsed correctly.
+  const processedContent = content.replace(
+    /<(Notice|notice)([^>]*)>([\s\S]*?)<\/\1>/g,
+    (match, tag, attrs, inner) => `<${tag}${attrs}>\n\n${inner.trim()}\n\n</${tag}>`
+  );
+
   return (
     <Box className="prose-counters">
       <ReactMarkdown
@@ -289,7 +296,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           Notice: RenderNotice
         }}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </Box>
   );
