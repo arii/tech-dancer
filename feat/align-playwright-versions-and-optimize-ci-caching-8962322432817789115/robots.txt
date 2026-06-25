@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/feat/align-playwright-versions-and-optimize-ci-caching-8962322432817789115/sitemap.xml
