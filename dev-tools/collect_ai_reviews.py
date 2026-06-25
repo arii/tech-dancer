@@ -5,12 +5,14 @@ from typing import List, Dict, Any
 
 try:
     from tdw_services.services.github import GitHubClient
+    from dev_tools_sdk.config import load_project_config
 except ImportError:
-    print("Error: Could not import tdw_services. Ensure you have run `pip install -e dev-tools/` and your PYTHONPATH is set correctly (e.g., `export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools`).")
+    print("Error: Could not import tdw_services or dev_tools_sdk. Ensure you have run `pip install -e dev-tools/` and your PYTHONPATH is set correctly (e.g., `export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools`).")
     sys.exit(1)
 
 # Configuration-driven allow-list for AI review bot sources
-ALLOWED_AI_BOTS = ['github-actions[bot]', 'tech-dancer-bot', 'ariii']
+PROJECT_CONFIG = load_project_config()
+ALLOWED_AI_BOTS = PROJECT_CONFIG.allowed_bots
 
 def detect_ai_source(body: str) -> str:
     """Parses comment body to detect the AI source."""

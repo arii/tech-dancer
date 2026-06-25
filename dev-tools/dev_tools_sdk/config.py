@@ -24,6 +24,31 @@ class ProjectConfig:
         "studies": "content/studies/"
     })
     ai_synthesis_model: str = "gpt-4o-mini"
+    ai_review_model: str = "gpt-4o"
+    ai_vision_model: str = "gpt-4o"
+    ui_indicators: List[str] = field(default_factory=lambda: [
+        "src/components", "src/pages", "src/layouts", "src/index.css", "tailwind"
+    ])
+    audit_check_dirs: List[str] = field(default_factory=lambda: [
+        "src/features", "src/pages", "src/components", "src/layouts", "src/App.tsx"
+    ])
+    allowed_bots: List[str] = field(default_factory=lambda: [
+        "github-actions[bot]", "tech-dancer-bot", "ariii"
+    ])
+    worktree_prefix: str = "tech-dancer-repair-"
+    spec_sections: List[str] = field(default_factory=lambda: [
+        "Problem Statement",
+        "Goal",
+        "Non-Goals",
+        "Proposed Approach",
+        "Alternatives Considered",
+        "Architectural Impact",
+        "Scope",
+        "UNDERSTAND THE ISSUE",
+        "DETERMINE APPROACH",
+        "SPECIFY SCOPE",
+        "DEFINITION OF DONE"
+    ])
 
 
 def load_project_config(path: str | Path = "dev-tools/project_config.json") -> ProjectConfig:
@@ -72,4 +97,29 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
             "studies": "content/studies/"
         }),
         ai_synthesis_model=raw.get("ai_synthesis_model", "gpt-4o-mini"),
+        ai_review_model=raw.get("ai_review_model", "gpt-4o"),
+        ai_vision_model=raw.get("ai_vision_model", "gpt-4o"),
+        ui_indicators=get_list("ui_indicators", [
+            "src/components", "src/pages", "src/layouts", "src/index.css", "tailwind"
+        ]),
+        audit_check_dirs=get_list("audit_check_dirs", [
+            "src/features", "src/pages", "src/components", "src/layouts", "src/App.tsx"
+        ]),
+        allowed_bots=get_list("allowed_bots", [
+            "github-actions[bot]", "tech-dancer-bot", "ariii"
+        ]),
+        worktree_prefix=raw.get("worktree_prefix", "tech-dancer-repair-"),
+        spec_sections=get_list("spec_sections", [
+            "Problem Statement",
+            "Goal",
+            "Non-Goals",
+            "Proposed Approach",
+            "Alternatives Considered",
+            "Architectural Impact",
+            "Scope",
+            "UNDERSTAND THE ISSUE",
+            "DETERMINE APPROACH",
+            "SPECIFY SCOPE",
+            "DEFINITION OF DONE"
+        ]),
     )

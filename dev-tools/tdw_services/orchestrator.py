@@ -32,20 +32,8 @@ from scope_check import verify_pr_scope
 from dev_tools_sdk.config import load_project_config
 
 PROJECT_CONFIG = load_project_config()
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
-SPEC_SECTIONS = [
-    "Problem Statement",
-    "Goal",
-    "Non-Goals",
-    "Proposed Approach",
-    "Alternatives Considered",
-    "Architectural Impact",
-    "Scope",
-    "UNDERSTAND THE ISSUE",
-    "DETERMINE APPROACH",
-    "SPECIFY SCOPE",
-    "DEFINITION OF DONE"
-]
+AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
+SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
 
 class Orchestrator:
     def __init__(self):
@@ -92,7 +80,12 @@ class Orchestrator:
 
     def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
-        is_ui = "src/components" in diff or "src/pages" in diff or "src/layouts" in diff or "src/index.css" in diff or "tailwind" in diff
+        ui_indicators = PROJECT_CONFIG.ui_indicators.copy()
+        # Use core_dirs if they seem more accurate for the current project
+        if hasattr(PROJECT_CONFIG, 'core_dirs') and PROJECT_CONFIG.core_dirs:
+            ui_indicators.extend([d.rstrip('/') for d in PROJECT_CONFIG.core_dirs])
+
+        is_ui = any(indicator in diff for indicator in ui_indicators)
         is_python = ".py" in diff
 
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
@@ -652,7 +645,8 @@ class Orchestrator:
         try:
             if worktree:
                 branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
-                worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
+                prefix = PROJECT_CONFIG.worktree_prefix
+                worktree_path = tempfile.mkdtemp(prefix=prefix)
                 run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
                 os.chdir(worktree_path)
                 if os.path.exists(os.path.join(original_cwd, "node_modules")):
@@ -674,6 +668,7 @@ class Orchestrator:
             try:
                 base = PROJECT_CONFIG.base_branch
                 main_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
+                # Ensure AUDIT_CHECK_DIRS are handled as a list of prefixes
                 relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
                 for mf in relevant:
                     res_show = run_command(["git", "show", f"{base}:{mf}"], check=False, log_on_error=False)

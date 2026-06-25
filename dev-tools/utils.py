@@ -30,7 +30,15 @@ class APIConnectionError(Exception):
 def get_ai_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
     """
-    return os.environ.get("AI_REVIEW_MODEL", "gpt-4o")
+    env_val = os.environ.get("AI_REVIEW_MODEL")
+    if env_val:
+        return env_val
+    try:
+        from dev_tools_sdk.config import load_project_config
+        config = load_project_config()
+        return config.ai_review_model
+    except Exception:
+        return "gpt-4o"
 
 def get_ai_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
@@ -47,7 +55,15 @@ def get_ai_synthesis_model() -> str:
 
 def get_ai_model() -> str:
     """Dynamic getter for the primary AI model."""
-    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
+    env_val = os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL")
+    if env_val:
+        return env_val
+    try:
+        from dev_tools_sdk.config import load_project_config
+        config = load_project_config()
+        return config.ai_synthesis_model
+    except Exception:
+        return "gpt-4o-mini"
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
