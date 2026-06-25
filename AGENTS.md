@@ -1,10 +1,10 @@
-# TSX File System Checklist (For Coding Agents)
+# Agent Rules & Runtime Contract
 
-These are **rules for writing clean `.tsx` files** so UI code consistently follows the design system, architecture, and modern frontend best practices.
+This document defines the rules for writing clean code and the strictly pinned runtime environment used in this repository.
 
 ## 🧠 Core Principle
 
-> **A `.tsx` file should build UI using standard pieces.**
+> **UI code should build UI using standard pieces, and the runtime environment must remain consistent.**
 
 ---
 
@@ -196,7 +196,7 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always co
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 
-## 22) Setup (Jules Environment)
+## 22) Setup (Agent Environment)
 
 To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright), run the consolidated setup script:
 
@@ -204,13 +204,43 @@ To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright
 ./setup-agent.sh
 ```
 
-This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md).
+This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`) and installs all necessary dependencies.
 
-# Codex / Agent Runtime Rules
+## Runtime Environment Contract
 
-This repository enforces a strict runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md). **DO NOT** add `use-node-version` to `.npmrc` as it breaks Vercel deployments.
+This repository uses a strictly pinned runtime environment to prevent build inconsistencies and dependency drift.
 
-Before installing, testing, building, or editing dependencies, run:
+### Runtime Contract
+
+- **Node.js**: `24.16.0`
+- **pnpm**: `10.28.2`
+
+### Implementation Files
+
+The following files define and enforce the contract:
+
+- `.node-version`: Primary source for Node.js version.
+- `.nvmrc`: Compatibility file for NVM users.
+- `.npmrc`: Development environment configuration (must **not** contain `use-node-version`).
+- `package.json`:
+    - `engines.node`: Set to `24.x` for Vercel compatibility.
+    - `engines.pnpm`: Set to `10.28.2`.
+    - `packageManager`: Set to `pnpm@10.28.2`.
+- `vercel.json`: Ensures Corepack and the pinned pnpm version are used during deployment.
+- `.devcontainer/Dockerfile`: Uses `node:24.16.0-bookworm` as the base image.
+- `.github/workflows/*.yml`: All workflows use `actions/setup-node` with `node-version-file: '.node-version'`.
+
+### Mandatory Protocol for Agents
+
+Before performing any tasks involving dependencies, builds, or tests, you **must** ensure the environment is correctly configured using the consolidated setup script:
+
+```bash
+./setup-agent.sh
+```
+
+This script handles environment activation, runtime verification, and dependency installation in a single step.
+
+Alternatively, you can run the individual check commands:
 
 ```bash
 corepack enable
@@ -219,27 +249,18 @@ pnpm run check:runtime-files
 pnpm run doctor
 ```
 
-Use:
+### Forbidden Actions
 
-```bash
-pnpm install --frozen-lockfile
-pnpm run lint
-pnpm run build
-```
+- ❌ Do **not** run `npm install`.
+- ❌ Do **not** run `npm install -g pnpm`.
+- ❌ Do **not** run `pnpm env use`.
+- ❌ Do **not** run `nvm install` or `nvm use`.
+- ❌ Do **not** run `volta pin` or `asdf local nodejs`.
+- ❌ Do **not** change the Node.js version in any configuration file unless explicitly instructed to update the runtime contract.
+- ❌ Do **not** add `use-node-version` to `.npmrc` (this breaks Vercel deployments).
+- ❌ Do **not** delete `pnpm-lock.yaml`.
 
-Do not run:
-
-```bash
-npm install
-npm install -g pnpm
-pnpm env use
-nvm install
-nvm use
-volta pin
-asdf local nodejs
-```
-
-If Node or pnpm mismatches, stop and report the mismatch. Do not change runtime versions unless the user explicitly asks to update the runtime contract.
+If the environment validation fails, stop and report the mismatch immediately.
 
 ## GitHub Actions runtime policy
 

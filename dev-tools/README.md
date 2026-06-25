@@ -77,7 +77,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
 
 
-### Codex / Jules GitHub Command Pattern
+### Agent / Jules GitHub Command Pattern
 
 Prefer repository CLI commands over raw `gh`:
 
@@ -89,7 +89,7 @@ python3 dev-tools/td_cli.py gh <repo-command>
 
 Use raw `gh` only when `td_cli.py` does not expose the needed operation.
 
-If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `GITHUB_TOKEN`.
+If auth fails, do not run `gh auth login`. Instead, set an environment secret named `GITHUB_TOKEN`.
 
 
 ### Verification Commands (Post-Setup)
@@ -125,7 +125,7 @@ gh issue create --title "<title>" --body "<details>"
 
 If auth fails, report this exact issue (do not run interactive auth):
 
-> GitHub CLI is not authenticated. Please add a Codex environment secret named `GITHUB_TOKEN` with a repo-scoped GitHub token.
+> GitHub CLI is not authenticated. Please add an environment secret named `GITHUB_TOKEN` with a repo-scoped GitHub token.
 
 ## 🚀 Repository CLI (`td_cli.py`)
 
