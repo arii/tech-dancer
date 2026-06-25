@@ -23,18 +23,17 @@ This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools, Node
 | `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
 | `GH_TOKEN` (string) | Optional fallback | Legacy authentication variable, deprecated in favor of `GITHUB_TOKEN`. |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
-| `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
-| `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
+| `JULES_API_KEY` | Optional | Enables `td_cli.py jules ...` cloud workflows. |
 
 **Secret handling guidance**
-- GitHub Actions / agent runners: store `GITHUB_TOKEN`, plus `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
+- GitHub Actions / agent runners: store `GITHUB_TOKEN`, plus `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
 - Dev containers/local shells: export secrets before running setup/CLI, for example:
 
 ```bash
 export GITHUB_TOKEN="<token>"
 export GITHUB_REPOSITORY="owner/repo"
 # optional
-export ANTIGRAVITY_API_KEY="<key>"
+export JULES_API_KEY="<key>"
 export GEMINI_API_KEY="<key>"
 ```
 
@@ -51,7 +50,7 @@ export GEMINI_API_KEY="<key>"
 - `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
 
 
-### Non-Traditional Workflows (Deploy, Antigravity, Jules)
+### Non-Traditional Workflows (Deploy, Jules)
 
 After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
@@ -63,13 +62,12 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Pre-submit quality gate before push/merge:
   - `python3 dev-tools/td_cli.py gh pre-submit`
 
-#### 2) Antigravity / Jules Workflows
-- Required secret: `ANTIGRAVITY_API_KEY` or `JULES_API_KEY`.
+#### 2) Jules Workflows
+- Required secret: `JULES_API_KEY`.
 - Optional context env vars:
-  - `ANTIGRAVITY_SOURCE_ID` or `JULES_SOURCE_ID` (if your environment already knows the source mapping)
+  - `JULES_SOURCE_ID` (if your environment already knows the source mapping)
 - Typical commands:
-  - `python3 dev-tools/td_cli.py antigravity repair`
-  - `python3 dev-tools/td_cli.py antigravity repair --worktree`
+  - `python3 dev-tools/td_cli.py jules repair-context`
 
 #### 3) Headless / Bot Auditing
 - For batch auditing open PRs:
@@ -77,7 +75,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
 
 
-### Codex / Jules GitHub Command Pattern
+### Agent / Jules GitHub Command Pattern
 
 Prefer repository CLI commands over raw `gh`:
 
@@ -89,7 +87,7 @@ python3 dev-tools/td_cli.py gh <repo-command>
 
 Use raw `gh` only when `td_cli.py` does not expose the needed operation.
 
-If auth fails, do not run `gh auth login`. Instead, set a Codex secret named `GITHUB_TOKEN`.
+If auth fails, do not run `gh auth login`. Instead, set an environment secret named `GITHUB_TOKEN`.
 
 
 ### Verification Commands (Post-Setup)
@@ -125,7 +123,7 @@ gh issue create --title "<title>" --body "<details>"
 
 If auth fails, report this exact issue (do not run interactive auth):
 
-> GitHub CLI is not authenticated. Please add a Codex environment secret named `GITHUB_TOKEN` with a repo-scoped GitHub token.
+> GitHub CLI is not authenticated. Please add an environment secret named `GITHUB_TOKEN` with a repo-scoped GitHub token.
 
 ## 🚀 Repository CLI (`td_cli.py`)
 

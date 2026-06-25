@@ -31,5 +31,4 @@ def test_cli_parser_supports_new_commands():
     assert parser.parse_args(["gh", "audit", "5"]).command == "audit"
     assert parser.parse_args(["ai", "analyze", "README.md"]).command == "analyze"
     assert parser.parse_args(["jules", "sync"]).command == "sync"
-    assert parser.parse_args(["antigravity", "sync"]).command == "sync"
     assert parser.parse_args(["repair"]).group == "repair"

@@ -39,7 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     ai_analyze = ai_subparsers.add_parser("analyze", help="Analyze a file path")
     ai_analyze.add_argument("path")
 
-    agent_parser = root.add_parser("agent", aliases=["jules", "antigravity"], help="Agent operations")
+    agent_parser = root.add_parser("agent", aliases=["jules"], help="Agent operations")
     agent_subparsers = agent_parser.add_subparsers(dest="command", required=True)
     agent_dispatch = agent_subparsers.add_parser("dispatch", help="Dispatch review task")
     agent_dispatch.add_argument("pr", type=pr_number)
@@ -77,11 +77,11 @@ def main(argv: list[str] | None = None) -> int:
         print(orchestrator.analyze_file(args.path))
         return 0
 
-    if args.group in ("agent", "jules", "antigravity") and args.command == "dispatch":
+    if args.group in ("agent", "jules") and args.command == "dispatch":
         status = orchestrator.dispatch_jules_review(args.pr)
         print(f"status={status}")
         return 0
-    if args.group in ("agent", "jules", "antigravity") and args.command == "sync":
+    if args.group in ("agent", "jules") and args.command == "sync":
         print(json.dumps(orchestrator.sync_jules(), indent=2))
         return 0
 
