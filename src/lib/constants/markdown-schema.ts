@@ -22,23 +22,17 @@ export const MARKDOWN_SANITIZATION_SCHEMA = {
   ...defaultSchema,
   tagNames: [
     ...(defaultSchema.tagNames || []),
-    'notice', 'Notice', 'input',
-    'grid', 'stack', 'text', 'box',
-    'Grid', 'Stack', 'Text', 'Box'
+    'notice', 'input',
+    'grid', 'stack', 'text', 'box'
   ],
   attributes: {
     ...defaultSchema.attributes,
     notice: ['type', 'id'],
-    Notice: ['type', 'id'],
     input: ['type', 'checked', 'disabled'],
     grid: [...LAYOUT_ATTRIBUTES],
-    Grid: [...LAYOUT_ATTRIBUTES],
     stack: [...LAYOUT_ATTRIBUTES],
-    Stack: [...LAYOUT_ATTRIBUTES],
     text: [...TEXT_ATTRIBUTES],
-    Text: [...TEXT_ATTRIBUTES],
-    box: [...LAYOUT_ATTRIBUTES],
-    Box: [...LAYOUT_ATTRIBUTES]
+    box: [...LAYOUT_ATTRIBUTES]
   },
   clobberPrefix: ''
 };

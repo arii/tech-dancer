@@ -53,9 +53,12 @@ function parseProp<T>(val: unknown): T {
     const inner = trimmed.slice(1, -1).trim();
 
     try {
-      // Use Function to safely evaluate simple JS expressions like {6} or {{base: 1}}
-      // Strictly follows Audit Roadmap directive for simple parsing.
-      return new Function(`return ${inner}`)();
+      let jsonString = inner;
+      if (jsonString.startsWith('{') && jsonString.endsWith('}')) {
+        jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
+        jsonString = jsonString.replace(/'/g, '"');
+      }
+      return JSON.parse(jsonString);
     } catch (e) {
       console.warn('MarkdownRenderer: Failed to parse prop expression:', inner, e);
       return inner as T;
