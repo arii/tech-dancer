@@ -37,6 +37,8 @@ The collection expanded to include print-on-demand options, offering a variety o
 
 ![Ariel Anders wearing the pink NorCal BestCal shirt, highlighting the versatile color options in the collection.](/assets/posts/me_wearing_new_norcalshirt.jpg)
 
+<notice type="affiliate" id="norcal-bestcal-tshirt" />
+
 What started as a single "NorCal BestCal" tee quickly expanded. We added rainbow pride versions, cropped hoodies for those foggy San Francisco nights, and tanks for the summer workshop season.
 
 <notice type="affiliate" id="norcal-pride-gate-shirt" />
