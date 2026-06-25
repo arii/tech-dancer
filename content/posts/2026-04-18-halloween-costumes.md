@@ -23,10 +23,45 @@ Need a Halloween costume in two minutes that won't restrict your movement or mak
 
 ### The 2-Minute Costume Formula
 
-| Orange Base (BYO) | Pumpkin Headband | Felt Face Stickers |
-| :--- | :--- | :--- |
-| ![A bright orange, moisture-wicking athletic jumpsuit that provides full range of motion and breathability for crowded social dance floors.](/images/gear/sketches/assembly-guide.webp) | ![A lightweight, plush pumpkin hat headband with a green stem and a friendly jack-o'-lantern face, designed to stay secure and comfortable during high-energy spins.](/images/gear/sketches/pumpkin-headbands.webp) | ![A set of pre-cut, matte black felt adhesive stickers in various geometric eye, nose, and mouth shapes to create a custom jack-o'-lantern face.](/images/gear/sketches/pumpkin-stickers.webp) |
-| **Bring Your Own Orange Base** <br><br> Start with a comfortable orange dress, shirt, jumpsuit, or matching athletic set. Choose a breathable fabric like cotton or moisture-wicking tech wear that handles sweat well on the social floor. | **Add Pumpkin Headband** <br><br> A lightweight headband or small pumpkin hat gives you the pumpkin silhouette instantly. Secure it with bobby pins to keep it in place during high-speed spins and double turns. | **Apply Jack-O'-Lantern Stickers** <br><br> Use large, pre-cut adhesive felt stickers to assemble a jack-o’-lantern face on your torso in seconds. Start with the eyes, add the nose, and place the mouth last. |
+<grid cols="{{ base: 1, md: 3 }}" gap="{6}">
+
+<stack gap="{4}" padding="{4}" border radius="lg" surface="surface">
+
+**1. Orange Base (BYO)**
+
+![A bright orange, moisture-wicking athletic jumpsuit that provides full range of motion and breathability for crowded social dance floors.](/images/gear/sketches/assembly-guide.webp)
+
+**Bring Your Own Orange Base**
+
+Start with a comfortable orange dress, shirt, jumpsuit, or matching athletic set. Choose a breathable fabric like cotton or moisture-wicking tech wear that handles sweat well on the social floor.
+
+</stack>
+
+<stack gap="{4}" padding="{4}" border radius="lg" surface="surface">
+
+**2. Pumpkin Headband**
+
+![A lightweight, plush pumpkin hat headband with a green stem and a friendly jack-o'-lantern face, designed to stay secure and comfortable during high-energy spins.](/images/gear/sketches/pumpkin-headbands.webp)
+
+**Add Pumpkin Headband**
+
+A lightweight headband or small pumpkin hat gives you the pumpkin silhouette instantly. Secure it with bobby pins to keep it in place during high-speed spins and double turns.
+
+</stack>
+
+<stack gap="{4}" padding="{4}" border radius="lg" surface="surface">
+
+**3. Felt Face Stickers**
+
+![A set of pre-cut, matte black felt adhesive stickers in various geometric eye, nose, and mouth shapes to create a custom jack-o'-lantern face.](/images/gear/sketches/pumpkin-stickers.webp)
+
+**Apply Jack-O'-Lantern Stickers**
+
+Use large, pre-cut adhesive felt stickers to assemble a jack-o’-lantern face on your torso in seconds. Start with the eyes, add the nose, and place the mouth last.
+
+</stack>
+
+</grid>
 
 ### How to Assemble:
 1. **Put on your orange outfit first** to avoid stretching or distorting the face placement.

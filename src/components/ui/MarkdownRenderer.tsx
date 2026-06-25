@@ -6,7 +6,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
-import type { TextProps, StackProps, GridProps } from '@/layouts/Primitives';
+import type { BoxProps, TextProps, StackProps, GridProps } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
@@ -18,6 +18,51 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+/**
+ * Parses a prop value from a markdown tag.
+ * Markdown attributes are always strings when parsed via rehype-raw,
+ * but we want to support JSX-like syntax for numbers, booleans, and responsive objects.
+ * e.g. cols="{{ base: 1, md: 3 }}" or gap="{6}"
+ */
+function parseProp<T>(val: unknown): T {
+  if (typeof val !== 'string') return val as T;
+  const trimmed = val.trim();
+
+  // Handle JSX-style curly braces: {1} or {{base: 1}}
+  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    const inner = trimmed.slice(1, -1).trim();
+
+    // If it's another level of braces, it's likely an object: {{ base: 1 }}
+    if (inner.startsWith('{') && inner.endsWith('}')) {
+      try {
+        // Conversion of JS-like object literal string to JSON
+        const jsonStr = inner
+          .replace(/(['"])?([a-z0-9_]+)(['"])?\s*:/gi, '"$2":') // Ensure keys are double-quoted
+          .replace(/'/g, '"') // Standardize to double quotes for JSON
+          .replace(/,\s*([}\]])/g, '$1'); // Remove trailing commas
+        return JSON.parse(jsonStr);
+      } catch (e) {
+        // Fallback to original string if parsing fails
+        console.warn('MarkdownRenderer: Failed to parse prop object:', inner, e);
+        return inner as T;
+      }
+    }
+
+    // Handle booleans and numbers inside braces
+    if (inner === 'true') return true as T;
+    if (inner === 'false') return false as T;
+    const num = Number(inner);
+    if (inner !== '' && !Number.isNaN(num)) return num as T;
+
+    return inner as T;
+  }
+
+  // Auto-convert plain numeric strings (e.g. margin="4")
+  const num = Number(trimmed);
+  if (trimmed !== '' && !Number.isNaN(num)) return num as T;
+
+  return val as T;
+}
 
 const RenderNotice = (props: { type?: string; id?: string; children?: React.ReactNode }) => {
   if (props.type === 'affiliate' && props.id) {
@@ -33,6 +78,78 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
   return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
 };
 
+const GridRenderer = ({ node: _node, cols, rows, gap, ...props }: GridProps & { node?: unknown }) => (
+  <Grid
+    cols={parseProp(cols)}
+    rows={parseProp(rows)}
+    gap={parseProp(gap)}
+    {...props}
+  />
+);
+
+const StackRenderer = ({ node: _node, gap, ...props }: StackProps & { node?: unknown }) => (
+  <Stack gap={parseProp(gap)} {...props} />
+);
+
+const TextRenderer = ({
+  node: _node,
+  marginBottom,
+  size,
+  weight,
+  color,
+  variant,
+  intent,
+  align,
+  tracking,
+  leading,
+  ...props
+}: TextProps & { node?: unknown }) => (
+  <Text
+    marginBottom={parseProp(marginBottom)}
+    size={parseProp(size)}
+    weight={parseProp(weight)}
+    color={parseProp(color)}
+    variant={parseProp(variant)}
+    intent={parseProp(intent)}
+    align={parseProp(align)}
+    tracking={parseProp(tracking)}
+    leading={parseProp(leading)}
+    {...props}
+  />
+);
+
+const BoxRenderer = ({
+  node: _node,
+  padding, paddingTop, paddingBottom, paddingLeft, paddingRight, paddingX, paddingY,
+  margin, marginTop, marginBottom, marginLeft, marginRight, marginX, marginY,
+  width, height, maxWidth, minWidth, gap, span,
+  ...props
+}: BoxProps & { node?: unknown }) => (
+  <Box
+    padding={parseProp(padding)}
+    paddingTop={parseProp(paddingTop)}
+    paddingBottom={parseProp(paddingBottom)}
+    paddingLeft={parseProp(paddingLeft)}
+    paddingRight={parseProp(paddingRight)}
+    paddingX={parseProp(paddingX)}
+    paddingY={parseProp(paddingY)}
+    margin={parseProp(margin)}
+    marginTop={parseProp(marginTop)}
+    marginBottom={parseProp(marginBottom)}
+    marginLeft={parseProp(marginLeft)}
+    marginRight={parseProp(marginRight)}
+    marginX={parseProp(marginX)}
+    marginY={parseProp(marginY)}
+    width={parseProp(width)}
+    height={parseProp(height)}
+    maxWidth={parseProp(maxWidth)}
+    minWidth={parseProp(minWidth)}
+    gap={parseProp(gap)}
+    span={parseProp(span)}
+    {...props}
+  />
+);
+
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Box className="prose-counters">
@@ -43,9 +160,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
-          Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,
-          Stack: ({ node: _node, ...props }: StackProps & { node?: unknown }) => <Stack {...props} />,
-          Text: ({ node: _node, ...props }: TextProps & { node?: unknown }) => <Text {...props} />,
+          grid: GridRenderer,
+          Grid: GridRenderer,
+          stack: StackRenderer,
+          Stack: StackRenderer,
+          text: TextRenderer,
+          Text: TextRenderer,
+          box: BoxRenderer,
+          Box: BoxRenderer,
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
