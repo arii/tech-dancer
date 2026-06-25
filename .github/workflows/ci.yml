@@ -83,7 +83,7 @@ jobs:
 
       - name: Install Python dependencies
         shell: bash
-        run: pip install -e dev-tools/
+        run: pip install -e dev-tools/ --break-system-packages
 
       - name: Validate Runtime
         shell: bash
@@ -446,8 +446,12 @@ jobs:
         if: always()
         run: |
           # Safely backup legacy logs
-          [ -f dev-tools/logs/ai/review-run.json ] && mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
-          [ -f artifacts/review-run.json ] && mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          if [ -f dev-tools/logs/ai/review-run.json ]; then
+            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          fi
+          if [ -f artifacts/review-run.json ]; then
+            mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          fi
           mkdir -p artifacts/logs/ai
           cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
 
