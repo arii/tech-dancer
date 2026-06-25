@@ -3,6 +3,7 @@ import {
   exec,
   getChangedFiles,
   buildReverseMap,
+  augmentGraphWithCSS,
   findAffectedFiles,
   getDynamicRouteMapping,
   resolveAffectedUrls,
@@ -37,7 +38,12 @@ async function main() {
     // Generate dependency graph
     console.log('📊 Generating dependency graph...');
     const graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
-    const graph: DependencyGraph = JSON.parse(graphJson);
+    let graph: DependencyGraph = JSON.parse(graphJson);
+
+    // Augment graph with CSS dependencies
+    console.log('🎨 Augmenting style dependency graph...');
+    graph = augmentGraphWithCSS(graph);
+
     const reverseMap = buildReverseMap(graph);
 
     // Find affected files in src/

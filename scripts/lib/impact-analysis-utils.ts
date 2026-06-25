@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { globSync } from 'glob';
 import { IMPACT_CONFIG } from '../impact-analysis.config';
 import { getAllRoutes } from '../../src/lib/routes-discovery';
 import { mapPageToUrls } from '../impact-review-utils';
@@ -20,6 +21,61 @@ export interface Module {
 
 export interface DependencyGraph {
   modules: Module[];
+  summary?: any;
+}
+
+/**
+ * Augments the dependency graph with CSS-to-CSS dependencies by scanning for @import statements.
+ * This is necessary because dependency-cruiser may skip deep CSS dependencies in some configurations.
+ */
+export function augmentGraphWithCSS(graph: DependencyGraph): DependencyGraph {
+  const allCssFiles = globSync('src/**/*.css');
+  const modulesBySource = new Map(graph.modules.map(m => [m.source, m]));
+
+  allCssFiles.forEach(cssFile => {
+    if (!fs.existsSync(cssFile)) return;
+
+    let module = modulesBySource.get(cssFile);
+    if (!module) {
+      module = { source: cssFile, dependencies: [] };
+      modulesBySource.set(cssFile, module);
+    }
+
+    const content = fs.readFileSync(cssFile, 'utf-8');
+    const importRegex = /@import\s+['"]([^'"]+)['"]/g;
+    let match;
+
+    while ((match = importRegex.exec(content)) !== null) {
+      const importPath = match[1];
+      let resolvedPath: string | null = null;
+
+      if (importPath.startsWith('.')) {
+        resolvedPath = path.join(path.dirname(cssFile), importPath);
+      }
+
+      if (resolvedPath) {
+        // Ensure it's relative to the project root and exists
+        if (!resolvedPath.endsWith('.css') && fs.existsSync(resolvedPath + '.css')) {
+          resolvedPath += '.css';
+        }
+
+        if (fs.existsSync(resolvedPath)) {
+          if (!module.dependencies.some(d => d.resolved === resolvedPath)) {
+            module.dependencies.push({
+              resolved: resolvedPath,
+              dynamic: false,
+              module: importPath
+            });
+          }
+        }
+      }
+    }
+  });
+
+  return {
+    ...graph,
+    modules: Array.from(modulesBySource.values())
+  };
 }
 
 export interface ReverseDependency {
