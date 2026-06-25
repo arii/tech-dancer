@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { IMPACT_CONFIG } from '../impact-analysis.config';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
@@ -425,7 +426,19 @@ export async function orchestrateCodeReview(
   }
 
   const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
-  const changedFiles = initialSummary.changedFiles || [];
+  const rawChangedFiles = initialSummary.changedFiles || [];
+
+  // Filter out low-value paths (lockfiles, snapshots, etc.)
+  const changedFiles = rawChangedFiles.filter(f =>
+    !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => f.startsWith(p))
+  );
+
+  if (changedFiles.length === 0) {
+    console.log(`✅ No reviewable code changes detected after filtering — skipping agent review.`);
+    fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo reviewable code changes detected.\n`);
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
+    return;
+  }
 
   // Batch files (max 10 per batch)
   const fileBatches = batchFiles(changedFiles, 10);
