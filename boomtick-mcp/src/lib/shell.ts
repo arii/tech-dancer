@@ -10,7 +10,8 @@ export const ALLOWED_COMMANDS = {
   ls: "ls",
   rm: "rm",
   mkdir: "mkdir",
-  cp: "cp"
+  cp: "cp",
+  python3: "python3"
 } as const;
 
 export type AllowedCommand = keyof typeof ALLOWED_COMMANDS;

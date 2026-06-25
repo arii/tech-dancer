@@ -69,7 +69,8 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     requests==2.33.1 \
     tqdm==4.68.3 \
     langchain-openai \
-    langchain-core
+    langchain-core \
+    duckduckgo-search>=6.0.0
 
 # ── Dev Tools ──────────────────────────────────────────────────────────────────
 # We copy the full dev-tools directory so that pip install -e can create the
