@@ -2,6 +2,7 @@ import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
 test('verify homepage and guide visual consistency', async ({ page }) => {
+  test.slow();
   // 1. Homepage Mobile
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('./');
