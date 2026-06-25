@@ -1,4 +1,4 @@
-import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, ReviewFinding } from './codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult } from './codeReviewTypes';
 
 /**
  * Normalizes a verdict string from the LLM into a standard 'pass', 'fail', or 'warn' status.
