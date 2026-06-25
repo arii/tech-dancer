@@ -1127,13 +1127,15 @@ Respond only after the PR is created or updated:
                 raise CLIError(f"Could not determine head ref for PR #{pr_number}")
 
             # 2. Clean up existing worktree if present
-            # We run 'remove -f' and 'prune' to ensure the branch is not considered "checked out"
-            # by git, even if the directory was manually deleted.
-            run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
-            run_command(["git", "worktree", "prune"], check=False)
+            # We run 'remove -f' to unregister, rmtree to clear the path, and 'prune'
+            # to ensure the branch is not considered "checked out" by git metadata.
+            # We use log_on_error=False to suppress noise if the worktree doesn't exist.
+            run_command(["git", "worktree", "remove", "-f", worktree_path], check=False, log_on_error=False)
 
             if os.path.exists(worktree_path):
                 shutil.rmtree(worktree_path, ignore_errors=True)
+
+            run_command(["git", "worktree", "prune"], check=False, log_on_error=False)
 
             if os.path.exists(worktree_path):
                 raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
