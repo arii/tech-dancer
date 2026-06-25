@@ -42,16 +42,6 @@ def err(ctx, msg, code=1, data=None):
         click.echo(f"❌ Error: {msg}", err=True)
     sys.exit(code)
 
-@cli.result_callback()
-@click.pass_context
-def process_result(ctx, result, **kwargs):
-    """
-    Handle unhandled exceptions in click commands to ensure JSON output if requested.
-    """
-    # This is only called if the command successfully completes.
-    # To handle exceptions, we'd need a custom Group or Command class or a wrapper in main.
-    return result
-
 # ==========================================
 # GH COMMAND GROUP
 # ==========================================
@@ -429,7 +419,6 @@ def ai():
 @click.pass_context
 def review(ctx, pr_number, no_cache):
     import glob
-    import sys as _sys
 
     # Optionally bust the /tmp review cache so stale results are not silently returned
     if no_cache:
@@ -439,9 +428,9 @@ def review(ctx, pr_number, no_cache):
             import os as _os
             _os.remove(f)
         if removed:
-            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}", file=_sys.stderr)
+            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}", file=sys.stderr)
         else:
-            print("ℹ️  No cache files found to remove.", file=_sys.stderr)
+            print("ℹ️  No cache files found to remove.", file=sys.stderr)
 
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)
@@ -451,7 +440,7 @@ def review(ctx, pr_number, no_cache):
         # Likely an error result – dump full dict to stderr for diagnosis
         print(f"""⚠️  Review returned 'Not Approved' (may indicate an error).
     recommendation : {res.get('recommendation')}
-    reviewComment  : {res.get('reviewComment', '')[:500]}""", file=_sys.stderr)
+    reviewComment  : {res.get('reviewComment', '')[:500]}""", file=sys.stderr)
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 

@@ -104,12 +104,10 @@ def main():
     try:
         cli(obj={})
     except Exception as e:
-        # If we are in JSON mode, we should ideally output JSON error
-        # Detecting JSON mode from sys.argv since click context isn't available here yet if it failed early
-        is_json = "--json" in sys.argv or "--no-json" not in sys.argv # Default is True now
-
-        # However, we should be careful not to break non-JSON users if we change default
-        # Actually, my previous change made it default True.
+        # If we are in JSON mode, we should ideally output JSON error.
+        # Detecting JSON mode from sys.argv since click context isn't available here yet if it failed early.
+        # Note: td_cli.py subcommands are JSON by default.
+        is_json = "--no-json" not in sys.argv
 
         if is_json:
             import json
@@ -118,14 +116,18 @@ def main():
                 "message": str(e),
                 "type": e.__class__.__name__
             }
-            if hasattr(e, 'code'):
-                error_payload["code"] = e.code
+            # CLIError and some others might have a custom 'code' attribute
+            code = getattr(e, 'code', 1)
+            error_payload["code"] = code
+            # JSON errors remain on stdout to maintain the contract for piped machine consumers
+            # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
             print(json.dumps(error_payload, indent=2))
         else:
             print(f"Error: {e}", file=sys.stderr)
+            code = getattr(e, 'code', 1)
 
         if "pytest" not in sys.modules:
-            sys.exit(getattr(e, 'code', 1))
+            sys.exit(code)
 
 if __name__ == "__main__":
     main()

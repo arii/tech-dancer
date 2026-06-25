@@ -91,5 +91,5 @@ if __name__ == "__main__":
 
     if warning:
         print(warning, file=sys.stderr)
-        sys.exit(0)
+        sys.exit(1)
     sys.exit(0)
