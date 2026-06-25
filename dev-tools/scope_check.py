@@ -2,21 +2,12 @@ import os
 import sys
 from typing import List, Optional, Set
 
-# Add current directory to path to allow dev_tools_sdk import if not in PYTHONPATH
-sys.path.append(os.path.dirname(__file__))
-
 try:
     from tdw_services.utils import log_info
 except ImportError:
     def log_info(msg): print(msg, file=sys.stderr)
 
-# Import load_project_config from SDK
-try:
-    from dev_tools_sdk.config import load_project_config
-except ImportError:
-    # Fallback for direct script execution if SDK is not installed in environment
-    sys.path.append(os.path.join(os.path.dirname(__file__), "dev_tools_sdk"))
-    from config import load_project_config
+from dev_tools_sdk.config import load_project_config
 
 # Import run_command from utils
 from utils import run_command

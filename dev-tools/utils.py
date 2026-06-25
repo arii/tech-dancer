@@ -39,7 +39,6 @@ def get_ai_synthesis_model() -> str:
         return env_val
     try:
         # Standardize on SDK loader
-        sys.path.append(os.path.dirname(__file__))
         from dev_tools_sdk.config import load_project_config
         config = load_project_config()
         return config.ai_synthesis_model
