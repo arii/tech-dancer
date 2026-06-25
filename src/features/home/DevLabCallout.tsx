@@ -32,7 +32,7 @@ const HIGHLIGHTS: Highlight[] = [
 
 export function DevLabCallout() {
   return (
-    <Box border radius="lg" padding={5} className="w-full max-w-full min-w-0">
+    <Box border radius="md" padding={5} className="w-full max-w-full min-w-0">
       {/* Header row */}
       <Stack direction="row" align="center" gap={3}>
         <Box padding={2} radius="md" shrink={0} className="bg-accent/10">

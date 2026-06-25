@@ -152,7 +152,7 @@ export function GlobalSearch() {
           height="fit"
           maxHeight="85vh"
           overflow="hidden"
-          radius="lg"
+          radius="md"
           border
           shadow="topOverlay"
           className="bg-surface/90 backdrop-blur-2xl border-accent/20 pointer-events-auto outline-none"

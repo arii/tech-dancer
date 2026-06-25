@@ -7,7 +7,7 @@ const LAYOUT_ATTRIBUTES = [
   'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
   'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'marginX', 'marginY',
   'width', 'height', 'display', 'border', 'radius', 'surface', 'shadow', 'maxWidth', 'minWidth',
-  'overflow', 'gap', 'span'
+  'overflow', 'gap', 'span', 'cols', 'rows', 'direction', 'align', 'justify'
 ];
 
 /**
@@ -31,10 +31,10 @@ export const MARKDOWN_SANITIZATION_SCHEMA = {
     notice: ['type', 'id'],
     Notice: ['type', 'id'],
     input: ['type', 'checked', 'disabled'],
-    grid: ['cols', 'rows', ...LAYOUT_ATTRIBUTES],
-    Grid: ['cols', 'rows', ...LAYOUT_ATTRIBUTES],
-    stack: ['direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
-    Stack: ['direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
+    grid: [...LAYOUT_ATTRIBUTES],
+    Grid: [...LAYOUT_ATTRIBUTES],
+    stack: [...LAYOUT_ATTRIBUTES],
+    Stack: [...LAYOUT_ATTRIBUTES],
     text: [...TEXT_ATTRIBUTES],
     Text: [...TEXT_ATTRIBUTES],
     box: [...LAYOUT_ATTRIBUTES],

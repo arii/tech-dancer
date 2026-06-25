@@ -87,7 +87,7 @@ export function EcommerceAutomationTool() {
           <Text variant="headline" size="xl" weight="font-black" as="h2">Active Experiments</Text>
           <Stack gap={4}>
             {workflowItems.map((item, index) => (
-              <Box key={index} border radius="lg" padding={4} surface="default">
+              <Box key={index} border radius="md" padding={4} surface="default">
                 <Box display="flex" gap={4} align="start">
                   <Box width={10} height={10} surface="muted" border radius="md" display="flex" align="center" justify="center" shrink={0}>
                     <Icon icon={item.icon} size="md" color="accent" />
@@ -189,7 +189,7 @@ export function EcommerceAutomationTool() {
       <Stack gap={6}>
         <Text variant="headline" size="xl" weight="font-black" as="h2">Visual Image QA Examples</Text>
         <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
-          <Box border radius="lg" overflow="hidden" surface="default">
+          <Box border radius="md" overflow="hidden" surface="default">
             <Box padding={4} aspect="square" display="flex" align="center" justify="center">
               <img
                 src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-front.webp`}
@@ -202,7 +202,7 @@ export function EcommerceAutomationTool() {
               <Text size="micro" color="dim">Center alignment and color profile validation.</Text>
             </Box>
           </Box>
-          <Box border radius="lg" overflow="hidden" surface="default">
+          <Box border radius="md" overflow="hidden" surface="default">
             <Box padding={4} aspect="square" display="flex" align="center" justify="center">
               <img
                 src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-back.webp`}
@@ -215,7 +215,7 @@ export function EcommerceAutomationTool() {
               <Text size="micro" color="dim">Print area boundaries and text legibility.</Text>
             </Box>
           </Box>
-          <Box border radius="lg" overflow="hidden" surface="default" display="flex" align="center" justify="center" padding={8}>
+          <Box border radius="md" overflow="hidden" surface="default" display="flex" align="center" justify="center" padding={8}>
              <Stack gap={4} align="center" textAlign="center">
                 <Icon icon={CheckCircle2} size="xl" color="accent" />
                 <Stack gap={2}>
