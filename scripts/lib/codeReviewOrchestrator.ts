@@ -20,6 +20,10 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
+function getInputComplexity(summary: CodeReviewSummary): number {
+  return (summary.diffContext?.length ?? 0) + (summary.externalContext?.length ?? 0);
+}
+
 let cachedPRGoal: string | undefined | null = null;
 async function fetchPRGoal(): Promise<string | undefined> {
   if (cachedPRGoal !== null) return cachedPRGoal;
@@ -456,19 +460,40 @@ export async function orchestrateCodeReview(
 
           const summary = { ...batchSummary, role, previousState: prevState };
 
-          const startTime = Date.now();
-          let result = await client.invokeReview(summary);
+          const invokeWithTelemetry = async (forceMaxTokens?: number): Promise<CodeReviewResult> => {
+            const start = Date.now();
+            const result = await client.invokeReview(summary, forceMaxTokens);
+            const durationMs = Date.now() - start;
+            logReviewExecution('code-review', result, durationMs, {
+              inputChars: getInputComplexity(summary)
+            });
+            return result;
+          };
+
+          let result = await invokeWithTelemetry();
 
           if (result.truncated) {
-            logReviewExecution('code-review', result, result.durationMs ?? (Date.now() - startTime));
-            const retryStartTime = Date.now();
-            result = await client.invokeReview(summary, 8192);
-            result.durationMs = result.durationMs ?? (Date.now() - retryStartTime);
-          } else {
-            result.durationMs = result.durationMs ?? (Date.now() - startTime);
+            console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
+            result = await invokeWithTelemetry(8192);
           }
 
-          logReviewExecution('code-review', result, result.durationMs);
+          // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
+          // A cut-off <findings> block, or a verdict tag that got chopped off the end,
+          // both currently degrade to the parser's default ('pass', undefined state) —
+          // which would let real bugs slip through with zero signal anyone is missing.
+          if (result.truncated || result.parseError) {
+            const reason = result.truncated 
+              ? "was truncated before completion (likely an output token limit)"
+              : `had a malformed findings block (parse error: ${result.parseError})`;
+            console.error(
+              `❌ ${client.botName} output ${reason} — treating as inconclusive, not PASS.`
+            );
+            result = {
+              ...result,
+              llmVerdict: 'warn',
+              feedback: `${result.feedback}\n\n---\n⚠️ **Review incomplete:** the model's response ${reason}. This review could not verify all findings and should not be treated as a clean pass. Consider re-running.`,
+            };
+          }
 
           // Final verification/reconciliation
           result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);

@@ -71,6 +71,14 @@ jobs:
         run: |
           pnpm run impact:github-models-code-review
 
+      - name: Upload AI Logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ai-chatops-logs-${{ github.run_id }}
+          path: dev-tools/logs/ai/
+          retention-days: 7
+
       - name: Commit Fixes
         if: contains(inputs.comment_body, '/ai-fix')
         uses: stefanzweifel/git-auto-commit-action@v7

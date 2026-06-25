@@ -22,6 +22,8 @@ export interface AIRunLogEntry {
   truncated?: boolean;
   parseError?: string;
   rawResponse?: string;
+  findings?: unknown[];
+  inputChars?: number;
 }
 
 const LOG_DIR = path.join(process.cwd(), 'dev-tools', 'logs', 'ai');
@@ -58,6 +60,8 @@ interface ReviewResultLike {
   truncated?: boolean;
   parseError?: string;
   feedback: string;
+  state?: { findings: unknown[] };
+  findings?: unknown[];
 }
 
 /**
@@ -67,7 +71,7 @@ export function logReviewExecution(
   type: AIRunLogEntry['type'],
   result: ReviewResultLike,
   durationMs: number,
-  additional: { pr?: string; route?: string } = {}
+  additional: { pr?: string; route?: string; inputChars?: number } = {}
 ): void {
   logAIRun({
     type,
@@ -84,5 +88,7 @@ export function logReviewExecution(
     truncated: result.truncated,
     parseError: result.parseError,
     rawResponse: result.feedback,
+    findings: result.findings || result.state?.findings,
+    inputChars: additional.inputChars,
   });
 }
