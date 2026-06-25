@@ -7,16 +7,24 @@ async function runEvals() {
 
   try {
     console.log("\n1. Health Check:");
-    const health = await healthHandler(HealthCheckInputSchema.parse({}));
-    console.log(JSON.stringify(health, null, 2));
+    try {
+      const health = await healthHandler();
+      console.log(JSON.stringify(health, null, 2));
+    } catch (e) {
+      console.log("Health check failed:", e instanceof Error ? e.message : String(e));
+    }
 
     console.log("\n2. Repository Scripts:");
-    const scripts = await getPackageScriptsHandler(GetPackageScriptsInputSchema.parse({}));
-    console.log(`Found ${Object.keys(scripts.scripts).length} scripts.`);
+    try {
+      const scripts = await getPackageScriptsHandler();
+      console.log(`Found ${Object.keys(scripts.scripts).length} scripts.`);
+    } catch (e) {
+      console.log("Repository scripts fetch failed:", e instanceof Error ? e.message : String(e));
+    }
 
     console.log("\n3. GitHub PR Search (Dry Run):");
     try {
-      const prs = await searchOpenPrsHandler({ state: "open", maxResults: 1, includeDrafts: true });
+      const prs = await searchOpenPrsHandler({ state: "open", includeDrafts: true });
       console.log(`Found ${prs.prs.length} open PRs.`);
     } catch (e) {
       console.log("GitHub search failed (likely due to environment/auth):", e instanceof Error ? e.message : String(e));

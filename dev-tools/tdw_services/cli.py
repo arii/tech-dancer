@@ -88,7 +88,7 @@ def gh():
 
 @gh.command()
 @click.option('--state', default='open')
-@click.option('--limit', type=int, default=10)
+@click.option('--limit', type=int, default=100)
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
