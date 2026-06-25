@@ -14,11 +14,13 @@ from utils import get_github_client, get_repo_name, CLIError, run_command, set_g
 
 # CLI Group
 @click.group()
-@click.option('--json', 'json_output', is_flag=True, help='Output results in JSON format')
+@click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
 @click.pass_context
 def cli(ctx, json_output):
     """Unified Tech-Dancer DevTools CLI"""
     ctx.ensure_object(dict)
+    # If the user explicitly passed --no-json (if supported) or we want to detect if it's a TTY
+    # But for now, we follow the requirement to be JSON by default for machine consumption.
     ctx.obj['JSON'] = json_output
     ctx.obj['ORCHESTRATOR'] = Orchestrator()
 
@@ -39,6 +41,16 @@ def err(ctx, msg, code=1, data=None):
     else:
         click.echo(f"❌ Error: {msg}", err=True)
     sys.exit(code)
+
+@cli.result_callback()
+@click.pass_context
+def process_result(ctx, result, **kwargs):
+    """
+    Handle unhandled exceptions in click commands to ensure JSON output if requested.
+    """
+    # This is only called if the command successfully completes.
+    # To handle exceptions, we'd need a custom Group or Command class or a wrapper in main.
+    return result
 
 # ==========================================
 # GH COMMAND GROUP
@@ -427,9 +439,9 @@ def review(ctx, pr_number, no_cache):
             import os as _os
             _os.remove(f)
         if removed:
-            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
+            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}", file=_sys.stderr)
         else:
-            print("ℹ️  No cache files found to remove.")
+            print("ℹ️  No cache files found to remove.", file=_sys.stderr)
 
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)

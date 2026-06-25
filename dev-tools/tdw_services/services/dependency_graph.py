@@ -1,4 +1,5 @@
 import json
+import sys
 import os
 import subprocess
 from typing import Dict, List, Set, Optional
@@ -33,12 +34,12 @@ class DependencyGraph:
                     result = subprocess.run(cmd, capture_output=True, text=True, cwd=self.root_dir)
                     if result.returncode != 0:
                         # Fallback or error
-                        print(f"Warning: dependency-cruiser failed: {result.stderr}")
+                        print(f"Warning: dependency-cruiser failed: {result.stderr}", file=sys.stderr)
                         data = {"modules": []}
                     else:
                         data = json.loads(result.stdout)
                 except (FileNotFoundError, subprocess.CalledProcessError):
-                    print("Warning: npx or depcruise not found. Ensure dependencies are installed.")
+                    print("Warning: npx or depcruise not found. Ensure dependencies are installed.", file=sys.stderr)
                     data = {"modules": []}
 
                 if data.get("modules"):
@@ -49,7 +50,7 @@ class DependencyGraph:
 
             self._parse_modules(data.get("modules", []))
         except Exception as e:
-            print(f"Error loading dependency graph: {e}")
+            print(f"Error loading dependency graph: {e}", file=sys.stderr)
             self.graph = {}
             self.reverse_graph = {}
 

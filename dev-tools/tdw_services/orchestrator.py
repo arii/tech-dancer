@@ -526,7 +526,7 @@ class Orchestrator:
         node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
 
         if not node_matches:
-            print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
+            print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}", file=sys.stderr)
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
         with open("package.json", "r") as f:
@@ -539,7 +539,7 @@ class Orchestrator:
             actual_pnpm = None
 
         if not actual_pnpm or actual_pnpm != expected_pnpm:
-            print(f"❌ pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
+            print(f"❌ pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}", file=sys.stderr)
             raise CLIError(f"Run: corepack enable && corepack prepare pnpm@{expected_pnpm} --activate")
 
         return {"node": actual_node, "pnpm": actual_pnpm}

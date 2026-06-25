@@ -10,7 +10,7 @@ import sys
 import os
 
 if "-h" in sys.argv or "--help" in sys.argv:
-    print("FATAL: --help is disabled for agent workflows. Read dev-tools/cli-schema.json for command syntax.")
+    print("FATAL: --help is disabled for agent workflows. Read dev-tools/cli-schema.json for command syntax.", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)
 
@@ -89,18 +89,42 @@ try:
             event=getattr(args, 'event', None)
         )
 except ImportError as e:
-    print(f"Error: Could not import tdw_services or its dependencies.")
-    print(f"Details: {e}")
-    print("\nTroubleshooting:")
-    print("1. Ensure dependencies are installed: pip install -e dev-tools/")
-    print("2. Ensure PYTHONPATH includes the dev-tools directory.")
-    print("   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools")
+    print(f"Error: Could not import tdw_services or its dependencies.", file=sys.stderr)
+    print(f"Details: {e}", file=sys.stderr)
+    print("\nTroubleshooting:", file=sys.stderr)
+    print("1. Ensure dependencies are installed: pip install -e dev-tools/", file=sys.stderr)
+    print("2. Ensure PYTHONPATH includes the dev-tools directory.", file=sys.stderr)
+    print("   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)
 
 def main():
     # click entry point automatically handles sys.argv
-    cli(obj={})
+    try:
+        cli(obj={})
+    except Exception as e:
+        # If we are in JSON mode, we should ideally output JSON error
+        # Detecting JSON mode from sys.argv since click context isn't available here yet if it failed early
+        is_json = "--json" in sys.argv or "--no-json" not in sys.argv # Default is True now
+
+        # However, we should be careful not to break non-JSON users if we change default
+        # Actually, my previous change made it default True.
+
+        if is_json:
+            import json
+            error_payload = {
+                "status": "error",
+                "message": str(e),
+                "type": e.__class__.__name__
+            }
+            if hasattr(e, 'code'):
+                error_payload["code"] = e.code
+            print(json.dumps(error_payload, indent=2))
+        else:
+            print(f"Error: {e}", file=sys.stderr)
+
+        if "pytest" not in sys.modules:
+            sys.exit(getattr(e, 'code', 1))
 
 if __name__ == "__main__":
     main()

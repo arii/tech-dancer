@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 from typing import Optional, List, Dict, Any
 
@@ -22,7 +23,7 @@ class JulesClient:
             response.raise_for_status()
             return response.json().get("sources", [])
         except Exception as e:
-            print(f"⚠️  Jules API list_sources failed: {e}")
+            print(f"⚠️  Jules API list_sources failed: {e}", file=sys.stderr)
             return []
 
     def list_sessions(self, pageSize: int = 10) -> List[Dict[str, Any]]:
@@ -33,7 +34,7 @@ class JulesClient:
             response.raise_for_status()
             return response.json().get("sessions", [])
         except Exception as e:
-            print(f"⚠️  Jules API list_sessions failed: {e}")
+            print(f"⚠️  Jules API list_sessions failed: {e}", file=sys.stderr)
             return []
 
     def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
@@ -44,7 +45,7 @@ class JulesClient:
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"⚠️  Jules API get_session failed: {e}")
+            print(f"⚠️  Jules API get_session failed: {e}", file=sys.stderr)
             return None
 
     def discover_source_id(self, repo_full_name: str) -> Optional[str]:
@@ -70,17 +71,17 @@ class JulesClient:
             "automationMode": "AUTO_CREATE_PR"
         }
 
-        print(f"DEBUG: Creating Jules session at {url}")
-        print(f"DEBUG: Payload: {payload}")
+        print(f"DEBUG: Creating Jules session at {url}", file=sys.stderr)
+        print(f"DEBUG: Payload: {payload}", file=sys.stderr)
 
         try:
             response = requests.post(url, headers=self.headers, json=payload, timeout=15)
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"⚠️  Jules API create_session failed: {e}")
+            print(f"⚠️  Jules API create_session failed: {e}", file=sys.stderr)
             if hasattr(e, 'response') and e.response is not None:
-                print(f"DEBUG: Response Body: {e.response.text}")
+                print(f"DEBUG: Response Body: {e.response.text}", file=sys.stderr)
             return None
 
     def create_session(self, prompt: str, branch: str, title: str, owner: str, repo_name: str) -> str:
@@ -152,7 +153,7 @@ class JulesClient:
                     })
             return messages
         except Exception as e:
-            print(f"⚠️  Jules API get_messages failed: {e}")
+            print(f"⚠️  Jules API get_messages failed: {e}", file=sys.stderr)
             return []
 
     def send_message(self, session_id: str, message: str) -> Dict[str, Any]:
@@ -164,5 +165,5 @@ class JulesClient:
             response.raise_for_status()
             return {"status": "success", "message": "Message sent successfully"}
         except Exception as e:
-            print(f"⚠️  Jules API send_message failed: {e}")
+            print(f"⚠️  Jules API send_message failed: {e}", file=sys.stderr)
             return {"status": "error", "message": str(e)}

@@ -1,6 +1,7 @@
 import os
 import subprocess
 import json
+import sys
 import base64
 import requests
 import time
@@ -45,7 +46,7 @@ class GitHubClient:
             try:
                 return self.run_authenticated_gh(command_args)
             except Exception as e:
-                print(f"Attempt {attempt+1} failed: {e}")
+                print(f"Attempt {attempt+1} failed: {e}", file=sys.stderr)
                 if attempt < max_retries - 1:
                     time.sleep(delay)
                 else:

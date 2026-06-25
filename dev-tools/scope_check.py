@@ -90,6 +90,6 @@ if __name__ == "__main__":
         warning = verify_pr_scope(files)
 
     if warning:
-        print(warning)
+        print(warning, file=sys.stderr)
         sys.exit(0)
     sys.exit(0)
