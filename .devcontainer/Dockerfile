@@ -47,11 +47,11 @@ ENV PYTHONPATH=/workspace/dev-tools
 
 RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
-  && pnpm config set store-dir /pnpm/store
+  && pnpm config set store-dir /pnpm/store \
+  && mkdir -p /workspace && chown pwuser:pwuser /workspace
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
 WORKDIR /workspace
-RUN chown -R pwuser:pwuser /workspace
 
 # ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
