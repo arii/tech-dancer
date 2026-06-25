@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# .githooks/post-checkout
+# Runs after 'git checkout' or 'git switch'
+# $1 = previous HEAD, $2 = new HEAD, $3 = flag (1 = branch checkout, 0 = file checkout)
+
+if [ "$3" -eq 0 ]; then
+    # Skip if it was only a file checkout
+    exit 0
+fi
+
+echo "⚓ Running post-checkout hooks..."
+
+# Get the script's directory to safely locate update-env.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+prev_head="$1"
+new_head="$2"
+
+# If previous HEAD is null (e.g. initial clone), skip.
+if [ -z "$prev_head" ] || [ "$prev_head" = "0000000000000000000000000000000000000000" ]; then
+    exit 0
+fi
+
+changed_files="$(git diff --name-only "$prev_head" "$new_head" 2>/dev/null || echo "")"
+
+bash "$SCRIPT_DIR/update-env.sh" "$changed_files"
+
+exit 0
