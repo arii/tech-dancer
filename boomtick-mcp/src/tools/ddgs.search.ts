@@ -18,22 +18,30 @@ export async function ddgsSearchHandler(args: z.infer<typeof DdgsSearchInputSche
   // Sanitize query by removing control characters, newlines, and null bytes
   // eslint-disable-next-line no-control-regex
   const safeQuery = args.query.replace(/[\x00-\x1F\x7F-\x9F]/g, " ").trim();
+  if (!safeQuery) {
+    throw new Error("Query cannot be empty after sanitization.");
+  }
 
   const result = await runCommand("python3", [scriptPath, safeQuery, (args.maxResults ?? 5).toString()]);
 
   // duckduckgo_search logs annoying deprecation warnings to stderr we want to ignore
   // if it really failed, exitCode will be non-zero and we'll have stdout/stderr
   if (result.exitCode !== 0) {
-    const errorOutput = result.stderr || result.stdout;
-    let parsedError = errorOutput;
-    try {
-      const errorJson = JSON.parse(errorOutput);
-      if (errorJson.error) {
-        parsedError = errorJson.error;
+    let parsedError = result.stderr || result.stdout;
+
+    const lines = parsedError.split("\n");
+    for (const line of lines) {
+      try {
+        const json = JSON.parse(line);
+        if (json.error) {
+          parsedError = json.error;
+          break;
+        }
+      } catch {
+        // continue
       }
-    } catch {
-      // Not JSON or missing "error" field, use raw output
     }
+
     throw new Error(`Failed to search ddgs: ${parsedError}`);
   }
 

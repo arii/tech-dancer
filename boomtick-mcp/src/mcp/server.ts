@@ -41,6 +41,7 @@ import { ddgsSearchHandler, DdgsSearchInputSchema } from "../tools/ddgs.search.j
 import fs from "fs/promises";
 import path from "path";
 import { spawnSync } from "child_process";
+import { fileURLToPath } from "url";
 
 export class BoomtickMCPServer {
   private server: Server;
@@ -590,6 +591,15 @@ export class BoomtickMCPServer {
     } catch (error) {
       console.error("❌ Fatal: td-cli is not resolvable on PATH. MCP tools will fail.");
       console.error("Please ensure dev-tools are installed: pip install -e dev-tools/");
+      process.exit(1);
+    }
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const ddgsScriptPath = path.join(__dirname, "..", "tools", "ddgs_search.py");
+    try {
+      await fs.access(ddgsScriptPath);
+    } catch (err) {
+      console.error(`❌ Fatal: ddgs_search.py not found at ${ddgsScriptPath}`);
       process.exit(1);
     }
 
