@@ -1,6 +1,46 @@
 import { describe, it, expect } from 'vitest';
 import { reconcileVerdict } from '../../../scripts/lib/codeReviewOrchestrator';
 
+import { IMPACT_CONFIG } from '../../../scripts/impact-analysis.config';
+
+describe('filtering logic', () => {
+  function filterFiles(files: string[]) {
+    return files.filter(f => {
+      return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
+        // Exact match for files
+        if (f === p) return true;
+        // Directory match (must end with / to be a dir prefix)
+        if (p.endsWith('/') && f.startsWith(p)) return true;
+        return false;
+      });
+    });
+  }
+
+  it('filters out exact file matches', () => {
+    const files = ['pnpm-lock.yaml', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('filters out directory prefix matches', () => {
+    const files = ['dist/index.js', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['src/App.tsx']);
+  });
+
+  it('does not filter out partial name matches that are not directory matches', () => {
+    const files = ['distribute.ts', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['distribute.ts', 'src/App.tsx']);
+  });
+
+  it('does not filter out exact file matches with suffixes', () => {
+    const files = ['pnpm-lock.yaml.bak', 'src/App.tsx'];
+    const filtered = filterFiles(files);
+    expect(filtered).toEqual(['pnpm-lock.yaml.bak', 'src/App.tsx']);
+  });
+});
+
 describe('reconcileVerdict', () => {
   it('downgrades fail to warn if no parseable findings', () => {
     const result = reconcileVerdict({ feedback: '', llmVerdict: 'fail', tokens: 0, cost: 0 }, '');

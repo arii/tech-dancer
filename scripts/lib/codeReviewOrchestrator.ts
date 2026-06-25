@@ -445,9 +445,15 @@ export async function orchestrateCodeReview(
   });
 
   if (changedFiles.length === 0) {
-    console.log(`✅ No reviewable code changes detected after filtering — skipping agent review.`);
+    console.log(`✅ No reviewable code changes detected after filtering (${rawChangedFiles.length} files filtered) — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo reviewable code changes detected.\n`);
-    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
+    fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
+      llmVerdict: 'pass',
+      state: prevState
+    }, null, 2));
     return;
   }
 
