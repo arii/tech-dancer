@@ -82,30 +82,22 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
  * Processes all incoming markdown attributes through parseProp to ensure
  * numbers, booleans, and objects are correctly converted.
  */
-function parseProps<T>(props: Record<string, unknown>): T {
+function propMap<T>(props: Record<string, unknown>): T {
   const result: Record<string, unknown> = {};
   Object.entries(props).forEach(([key, value]) => {
-    if (key === 'node') return;
-    result[key] = parseProp(value);
+    if (key !== 'node') {
+      result[key] = parseProp(value);
+    }
   });
   return result as T;
 }
 
-const GridRenderer = (props: Record<string, unknown>) => (
-  <Grid {...parseProps<GridProps>(props)} />
-);
-
-const StackRenderer = (props: Record<string, unknown>) => (
-  <Stack {...parseProps<StackProps>(props)} />
-);
-
-const TextRenderer = (props: Record<string, unknown>) => (
-  <Text {...parseProps<TextProps>(props)} />
-);
-
-const BoxRenderer = (props: Record<string, unknown>) => (
-  <Box {...parseProps<BoxProps>(props)} />
-);
+/**
+ * Factory that creates a markdown component renderer.
+ */
+const createRenderer = <T,>(Component: React.ComponentType<T>) => {
+  return (props: Record<string, unknown>) => <Component {...propMap<T>(props)} />;
+};
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
@@ -117,14 +109,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
-          grid: GridRenderer,
-          Grid: GridRenderer,
-          stack: StackRenderer,
-          Stack: StackRenderer,
-          text: TextRenderer,
-          Text: TextRenderer,
-          box: BoxRenderer,
-          Box: BoxRenderer,
+          grid: createRenderer<GridProps>(Grid),
+          Grid: createRenderer<GridProps>(Grid),
+          stack: createRenderer<StackProps>(Stack),
+          Stack: createRenderer<StackProps>(Stack),
+          text: createRenderer<TextProps>(Text),
+          Text: createRenderer<TextProps>(Text),
+          box: createRenderer<BoxProps>(Box),
+          Box: createRenderer<BoxProps>(Box),
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (

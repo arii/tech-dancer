@@ -7,6 +7,11 @@ const LAYOUT_ATTRIBUTES = [
   'overflow', 'gap', 'span'
 ];
 
+const TEXT_ATTRIBUTES = [
+  'variant', 'size', 'weight', 'color', 'align', 'uppercase', 'display', 'marginBottom',
+  'intent', 'tracking', 'leading', 'as'
+];
+
 export const MARKDOWN_SANITIZATION_SCHEMA = {
   ...defaultSchema,
   tagNames: [
@@ -24,8 +29,8 @@ export const MARKDOWN_SANITIZATION_SCHEMA = {
     Grid: ['cols', 'gap', 'rows', ...LAYOUT_ATTRIBUTES],
     stack: ['gap', 'direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
     Stack: ['gap', 'direction', 'align', 'justify', ...LAYOUT_ATTRIBUTES],
-    text: ['variant', 'size', 'weight', 'color', 'align', 'uppercase', 'display', 'marginBottom', 'intent', 'tracking', 'leading', 'as'],
-    Text: ['variant', 'size', 'weight', 'color', 'align', 'uppercase', 'display', 'marginBottom', 'intent', 'tracking', 'leading', 'as'],
+    text: [...TEXT_ATTRIBUTES],
+    Text: [...TEXT_ATTRIBUTES],
     box: [...LAYOUT_ATTRIBUTES],
     Box: [...LAYOUT_ATTRIBUTES]
   },
