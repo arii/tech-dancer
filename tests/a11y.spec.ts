@@ -16,9 +16,15 @@ test.describe('accessibility', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test('search modal should not have any automatically detectable accessibility issues', async ({ page }) => {
+  test('search modal should not have any automatically detectable accessibility issues', async ({ page, isMobile }) => {
     // Open search modal
-    await page.keyboard.press('Control+k');
+    if (isMobile) {
+      await page.getByRole('button', { name: 'Open menu' }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      await page.keyboard.press('Control+k');
+    }
+
     await expect(page.getByTestId("search-backdrop")).toBeVisible({ timeout: 15000 });
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
     await page.waitForTimeout(5000);
@@ -30,9 +36,15 @@ test.describe('accessibility', () => {
     expect(results.violations).toEqual([]);
   });
 
-  test('search modal should trap focus', async ({ page }) => {
+  test('search modal should trap focus', async ({ page, isMobile }) => {
     // Open search modal
-    await page.keyboard.press('Control+k');
+    if (isMobile) {
+      await page.getByRole('button', { name: 'Open menu' }).click();
+      await page.getByRole('button', { name: 'Search' }).click();
+    } else {
+      await page.keyboard.press('Control+k');
+    }
+
     const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await expect(page.getByTestId("search-backdrop")).toBeVisible({ timeout: 15000 });
     await expect(input).toBeVisible();

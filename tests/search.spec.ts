@@ -1,14 +1,22 @@
 import { test, expect } from '@playwright/test';
 
+async function openSearch(page, isMobile) {
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    await page.getByRole('button', { name: 'Search' }).click();
+  } else {
+    await page.locator('button[aria-label="Open search"]').first().click();
+  }
+}
+
 test.describe('Global Search Modal', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
   });
 
-  test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
-    await searchButton.click();
+  test('should open and close search modal via button', async ({ page, isMobile }) => {
+    await openSearch(page, isMobile);
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     const closeButton = page.getByLabel('Close search');
@@ -16,18 +24,16 @@ test.describe('Global Search Modal', () => {
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
-  test('should close search modal when pressing Escape', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+  test('should close search modal when pressing Escape', async ({ page, isMobile }) => {
+    await openSearch(page, isMobile);
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     await page.keyboard.press('Escape');
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).not.toBeVisible();
   });
 
-// Test removed due to gear page decommissioning
-
-  test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+  test('should close search modal when a search result is clicked', async ({ page, isMobile }) => {
+    await openSearch(page, isMobile);
     const searchInput = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await searchInput.fill('ai');
 
@@ -41,12 +47,11 @@ test.describe('Global Search Modal', () => {
 
 test.describe('Search and Filter URL Persistence', () => {
 
-  test('Global Search parameter should persist after reload', async ({ page }) => {
+  test('Global Search parameter should persist after reload', async ({ page, isMobile }) => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
 
-    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
-    await searchButton.click();
+    await openSearch(page, isMobile);
 
     const searchInput = page.getByPlaceholder(/Search BoomTick/i);
     await expect(searchInput).toBeVisible();
@@ -55,8 +60,6 @@ test.describe('Search and Filter URL Persistence', () => {
 
     await page.reload();
 
-    // The modal should open automatically because 'modal=true' is in the URL
-    // No need to click the search button again.
     const searchInputReload = page.getByPlaceholder(/Search BoomTick/i);
     await expect(searchInputReload).toBeVisible({ timeout: 10000 });
     await expect(searchInputReload).toHaveValue('swing');
