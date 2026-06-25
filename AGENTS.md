@@ -11,9 +11,10 @@ This document defines the rules for writing clean code and the strictly pinned r
 ## 0) Quick Start
 
 **Before reading any other section:**
-1. `dev-tools/cli-schema.json` — canonical CLI reference
-2. `.agents/INSTRUCTION_LAYERS.md` — which file owns which domain
-3. `.agent-context.json` — repository context snapshot (run `pnpm run agent:prime` to update)
+1. `.agents/AGENTS.md` — **Tooling and MCP Protocol** (Hierarchy of tool usage)
+2. `dev-tools/cli-schema.json` — canonical CLI reference
+3. `.agents/INSTRUCTION_LAYERS.md` — which file owns which domain
+4. `.agent-context.json` — repository context snapshot (run `pnpm run agent:prime` to update)
 
 **Then run:**
 1. `python3 dev-tools/td_cli.py gh conflicts`

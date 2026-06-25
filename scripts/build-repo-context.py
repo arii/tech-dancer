@@ -29,6 +29,15 @@ def build_repo_context():
     except Exception as e:
         print(f"Error reading cli-schema.json: {e}", file=sys.stderr)
 
+    # 2b. Project Config
+    project_config = {}
+    try:
+        project_config_path = pathlib.Path("dev-tools/project_config.json")
+        if project_config_path.exists():
+            project_config = json.loads(project_config_path.read_text())
+    except Exception as e:
+        print(f"Error reading project_config.json: {e}", file=sys.stderr)
+
     # 3. File Tree (Top level and key directories)
     file_tree = {}
     def get_dir_structure(path, max_depth=2, current_depth=0):
@@ -56,6 +65,7 @@ def build_repo_context():
         },
         "package_json": package_summary,
         "cli_schema": cli_schema,
+        "project_config": project_config,
         "file_tree": file_tree,
     }
 

@@ -692,6 +692,21 @@
       "type-check": "tsc --noEmit"
     }
   },
+  "project_config": {
+    "base_branch": "origin/main",
+    "content_scopes": {
+      "posts": "content/posts/",
+      "resources": "content/resources/",
+      "studies": "content/studies/"
+    },
+    "core_dirs": [
+      "src/layouts/",
+      "src/components/"
+    ],
+    "max_diff_chars": 40000,
+    "monolithic_pr_threshold": 3,
+    "use_gemini_fallback": false
+  },
   "repo": {
     "name": "react-example"
   }

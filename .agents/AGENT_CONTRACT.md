@@ -11,8 +11,8 @@ Read the matching workflow before starting these task types:
 ## What You Will Always Do
 
 - Read all referenced files before taking any action.
-- **Prioritize Index & Schema**: Always consult `.agent-context.json` for repository state and `dev-tools/cli-schema.json` for CLI authority before taking action.
-- **Prioritize MCP Tools**: Consult the tool hierarchy in `.agents/AGENTS.md` before executing any repository or GitHub operations.
+- **Index & Schema First**: **MUST** prioritize consulting `.agent-context.json` for repository state and `dev-tools/cli-schema.json` for CLI authority over manual exploration or guessing.
+- **MCP Tool Priority**: **MUST** follow the tool hierarchy in `.agents/AGENTS.md`. Specialized MCP tools (Tier 1) take precedence over local scripts (Tier 2) and raw shell commands (Tier 3).
 - Update the workflow state machine header before proceeding past each step.
 - Produce output only to the specified output files.
 - Never write to `pr-context-*.md` files (read-only by convention).
