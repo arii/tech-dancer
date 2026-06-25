@@ -139,7 +139,7 @@ normalize_nvmrc_for_snapshot() {
   # dev-tools/snapshot.sh currently compares .nvmrc literally against `node --version`.
   # Agent runtimes often pin only a major version such as `v22`, while Node reports
   # a full version such as `v24.16.0`. Normalize major-only pins so validation
-  # does not report a false mismatch in Codex/Jules.
+  # does not report a false mismatch in Agent/Jules.
   [ -f ".nvmrc" ] || return 0
   have node || return 0
 
@@ -259,6 +259,16 @@ configure_remote_origin() {
   log "Configured remote.origin => https://github.com/${repo_slug}.git"
 }
 
+configure_git_hooks() {
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    warn "Not a git repository; skipping git hooks configuration."
+    return 0
+  fi
+
+  log "Configuring git hooks path to .githooks..."
+  git config core.hooksPath .githooks
+}
+
 run_validation() {
   if [ "$SKIP_VALIDATION" = "1" ]; then
     warn "SKIP_VALIDATION=1; skipping validation."
@@ -287,9 +297,10 @@ main() {
   install_apt_tools
   ensure_corepack_pnpm
   install_python_deps
+  configure_remote_origin
+  configure_git_hooks
   install_node_deps
   install_playwright
-  configure_remote_origin
   run_validation
 }
 

@@ -51,10 +51,10 @@ else
     echo "GitHub token: Missing"
 fi
 
-if [ -n "$ANTIGRAVITY_API_KEY" ] || [ -n "$JULES_API_KEY" ]; then
-    echo "Antigravity/Jules API key: Present"
+if [ -n "$JULES_API_KEY" ]; then
+    echo "Jules API key: Present"
 else
-    echo "Antigravity/Jules API key: Missing"
+    echo "Jules API key: Missing"
 fi
 
 if [ -n "$GEMINI_API_KEY" ]; then

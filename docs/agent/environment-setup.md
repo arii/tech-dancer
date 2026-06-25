@@ -1,6 +1,6 @@
 # Agent Environment Setup & Configuration
 
-This guide details how to bootstrap and configure the agent environment for the `tech-dancer` repository.
+This guide details how to bootstrap and configure the agent environment.
 
 ## 🧰 One-Step Agent Environment Bootstrap
 
@@ -23,7 +23,7 @@ This script installs and configures:
 |---|---|---|
 | `GITHUB_TOKEN` | **Required** | Auth for GitHub CLI and PR audits. |
 | `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g., `owner/repo`). |
-| `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables Antigravity/Jules cloud workflows. |
+| `JULES_API_KEY` | Optional | Enables Jules cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed audit and review workflows. |
 | `OLLAMA_URL` | Optional | Override the default local Ollama endpoint. |
 
