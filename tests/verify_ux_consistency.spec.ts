@@ -1,40 +1,29 @@
 import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
-test('verify homepage and guide visual consistency', async ({ page, isMobile }) => {
-  // 1. Homepage Mobile
-  if (isMobile) {
-    await page.setViewportSize({ width: 375, height: 812 });
-  }
-  await page.goto('./');
-  const homeUrl = page.url();
+const HOMEPAGE_URL = './';
+const GUIDE_URL = './blog/2026-04-19-practical-tools-essentials';
+
+test('verify homepage visual consistency', async ({ page }) => {
+  await page.goto(HOMEPAGE_URL);
   await page.waitForLoadState('networkidle');
 
-  // On mobile, the FeaturedGuidePanel is hidden (display: none for base)
-  // Just wait for the hero section to be stable
   await expect(page.locator('h1')).toContainText(/Look good/i);
 
-  const screenshotOptions = {
+  await expect(page).toHaveScreenshot('homepage-v2.png', {
     fullPage: true,
     mask: getVisualTestMasks(page)
-  };
+  });
+});
 
-  if (isMobile) {
-    await expect(page).toHaveScreenshot('homepage-mobile-v2.png', screenshotOptions);
-  } else {
-    await expect(page).toHaveScreenshot('homepage-desktop-v2.png', screenshotOptions);
-  }
-
-  // 2. WCS Travel Pack Guide
-  const guideUrl = new URL('blog/2026-04-19-practical-tools-essentials', homeUrl).toString();
-  await page.goto(guideUrl);
+test('verify guide visual consistency', async ({ page }) => {
+  await page.goto(GUIDE_URL);
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(/.*2026-04-19-practical-tools-essentials/);
+  await expect(page).toHaveURL(new RegExp(`.*${GUIDE_URL.replace('./', '')}`));
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
 
-  if (isMobile) {
-    await expect(page).toHaveScreenshot('detail-page-mobile-v2.png', screenshotOptions);
-  } else {
-    await expect(page).toHaveScreenshot('detail-page-desktop-v2.png', screenshotOptions);
-  }
+  await expect(page).toHaveScreenshot('detail-page-v2.png', {
+    fullPage: true,
+    mask: getVisualTestMasks(page)
+  });
 });
