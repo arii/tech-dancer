@@ -1,4 +1,4 @@
-> Follow `.agent/AGENT_CONTRACT.md` before reading anything else.
+> Follow `.agents/AGENT_CONTRACT.md` before reading anything else.
 
 ## Failure Modes (Read Before Starting)
 
