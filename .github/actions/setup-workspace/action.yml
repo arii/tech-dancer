@@ -8,6 +8,7 @@ runs:
       run: |
         echo "::group::Install dev-tools"
         pip install -e dev-tools/ --break-system-packages
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "::endgroup::"
 
     - name: Verify td-cli on PATH

@@ -45,6 +45,14 @@ if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
   mkdir -p "$NPM_CONFIG_PREFIX/bin"
 fi
 
+# Ensure local python bin is on path for td-cli
+if [ -d "$HOME/.local/bin" ]; then
+  case ":$PATH:" in
+    *":$HOME/.local/bin:"*) ;;
+    *) export PATH="$HOME/.local/bin:$PATH" ;;
+  esac
+fi
+
 # -------- helpers --------
 log() { echo "[setup-agent] $*"; }
 warn() { echo "[setup-agent] WARNING: $*" >&2; }

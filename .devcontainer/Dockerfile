@@ -65,8 +65,9 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     langchain-core
 
 # ── Dev Tools ──────────────────────────────────────────────────────────────────
-RUN mkdir -p /workspace/dev-tools
-COPY dev-tools/pyproject.toml /workspace/dev-tools/
+# We copy the full dev-tools directory so that pip install -e can create the
+# necessary metadata/links during the image build.
+COPY dev-tools/ /workspace/dev-tools/
 RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/dev-tools/
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
