@@ -44,19 +44,19 @@ async function runTests() {
 
   // Ignore Tests
   console.log('- should skip files with // impeccable-ignore-file');
-  const ignoreFile = checkContent('// impeccable-ignore-file\n.my-class { color: #ff0000; }');
+  const ignoreFile = checkContent('// impeccable-ignore-file\n.my-class { color: #ff0000; }', 'test.css');
   assert.strictEqual(ignoreFile.length, 0);
 
   console.log('- should skip files with /* impeccable-ignore-file */');
-  const ignoreFileCss = checkContent('/* impeccable-ignore-file */\n.my-class { color: #ff0000; }');
+  const ignoreFileCss = checkContent('/* impeccable-ignore-file */\n.my-class { color: #ff0000; }', 'test.css');
   assert.strictEqual(ignoreFileCss.length, 0);
 
   console.log('- should skip lines with // impeccable-ignore');
-  const ignoreLine = checkContent('.my-class { color: #ff0000; } // impeccable-ignore');
+  const ignoreLine = checkContent('.my-class { color: #ff0000; } // impeccable-ignore', 'test.css');
   assert.strictEqual(ignoreLine.length, 0);
 
   console.log('- should skip lines with /* impeccable-ignore */');
-  const ignoreLineCss = checkContent('.my-class { color: #ff0000; } /* impeccable-ignore */');
+  const ignoreLineCss = checkContent('.my-class { color: #ff0000; } /* impeccable-ignore */', 'test.css');
   assert.strictEqual(ignoreLineCss.length, 0);
 
   // .npmrc Tests
