@@ -260,6 +260,10 @@ class Orchestrator:
         return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
                     re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
 
+    def create_issue(self, title: str, body: str) -> Dict[str, Any]:
+        """Creates a new GitHub issue."""
+        return self.github.create_issue(title, body)
+
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
         issues = []

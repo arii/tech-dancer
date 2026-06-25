@@ -156,6 +156,26 @@ def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, e
         err(ctx, str(e), code=e.code)
 
 @gh.command()
+@click.option('--title', required=True, help='Issue title')
+@click.option('--file', required=True, help='Path to file containing issue body')
+@click.pass_context
+def create_issue(ctx, title, file):
+    """Create a new GitHub issue from a file."""
+    orch = ctx.obj['ORCHESTRATOR']
+    if not os.path.exists(file):
+        err(ctx, f"File {file} does not exist.", data={"status": "error", "file": file})
+        return
+
+    with open(file, 'r') as f:
+        body = f.read()
+
+    try:
+        res = orch.create_issue(title, body)
+        out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data=res)
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
 @click.option('--issue-number', type=int)
 @click.option('--all-open', is_flag=True)
 @click.option('--post-comments', is_flag=True)

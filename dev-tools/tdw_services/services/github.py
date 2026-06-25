@@ -126,6 +126,10 @@ class GitHubClient:
     def create_issue_comment(self, number: int, body: str) -> Dict[str, Any]:
         return self._request('POST', f'/repos/{self.repo}/issues/{number}/comments', json_data={'body': body})
 
+    def create_issue(self, title: str, body: str) -> Dict[str, Any]:
+        """Creates a new GitHub issue."""
+        return self._request('POST', f'/repos/{self.repo}/issues', json_data={'title': title, 'body': body})
+
     def create_review(self, number: int, body: str, comments: List[Dict[str, Any]], event: str) -> Dict[str, Any]:
         data = {
             "body": body,
