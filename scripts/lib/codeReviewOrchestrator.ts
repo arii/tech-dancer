@@ -10,7 +10,8 @@ import { logReviewExecution } from './aiLogger';
 
 const execFile = promisify(execFileCb);
 
-const MAX_DIFF_CHARS = 40000;
+const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'dev-tools/project_config.json'), 'utf-8'));
+const MAX_DIFF_CHARS = config.max_diff_chars ?? 40000;
 
 export interface CodeReviewClientStrategy {
   botName: string;
