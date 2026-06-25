@@ -60,12 +60,10 @@ function parseProp<T>(val: unknown): T {
       if (!Number.isNaN(Number(inner)) && inner !== '') return Number(inner) as T;
 
       let jsonString = inner;
-      if (jsonString.startsWith('{') && jsonString.endsWith('}')) {
-        jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
-        jsonString = jsonString.replace(/'/g, '"');
-      } else if (jsonString.includes(':')) {
-        // handle the case of "{base: 1}" getting sliced to "base: 1"
+      if (jsonString.includes(':') && !jsonString.startsWith('{')) {
         jsonString = '{' + jsonString + '}';
+      }
+      if (jsonString.startsWith('{') && jsonString.endsWith('}')) {
         jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
         jsonString = jsonString.replace(/'/g, '"');
       }
