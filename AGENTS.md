@@ -1,200 +1,190 @@
 # Agent Rules & Runtime Contract
 
-This document defines the rules for writing clean code and the strictly pinned runtime environment used in this repository.
+This document defines the rules for writing clean code and the strictly pinned
+runtime environment used in this repository.
 
 ## 🧠 Core Principle
 
-> **UI code should build UI using standard pieces, and the runtime environment must remain consistent.**
+> **UI code should build UI using standard pieces, and the runtime environment
+> must remain consistent.**
 
 ---
 
-## 0) Quick Start
+## 1) Import Order
 
-**Before reading any other section:**
-1. `dev-tools/cli-schema.json` — canonical CLI reference
-2. `.agents/INSTRUCTION_LAYERS.md` — which file owns which domain
-3. `.agent-context.json` — repository context snapshot (run `pnpm run agent:prime` to update)
+Always sort imports: React → third-party → internal (`@/`) → relative.
 
-**Then run:**
-1. `python3 dev-tools/td_cli.py gh conflicts`
-2. `node scripts/detect-antipatterns.mjs`
-3. Read `TODO_ANTIPATTERNS.md`
-4. Implement changes using primitives/tokens only
-5. Re-run `node scripts/detect-antipatterns.mjs`
-6. `python3 dev-tools/td_cli.py gh pre-submit`
+## 2) No Inline Styles
 
----
+Use Tailwind utility classes. Never use `style={{}}` except for dynamic values
+that cannot be expressed as utilities (e.g. CSS custom property injection).
 
+## 3) Component File Structure
 
-## DevTools CLI command contract
-
-- `dev-tools/td_cli.py` uses grouped commands; for repository/PR checks use the `gh` group.
-- Do **not** call top-level `conflicts`/`pre-submit`; use:
-
-```bash
-python3 dev-tools/td_cli.py gh conflicts
-python3 dev-tools/td_cli.py gh pre-submit
+```
+imports
+↓
+types / interfaces
+↓
+component function
+↓
+export default
 ```
 
-- **CLI authority**: Always consult `dev-tools/cli-schema.json` for exact command syntax. Examples in this file are illustrative only. Do not run `--help` flags.
+## 4) Props Interface Naming
 
-- If a DevTools subcommand is unavailable in a local environment, report it separately and continue core verification with:
+Name prop interfaces `<ComponentName>Props`. Export them.
 
-```bash
-node scripts/detect-antipatterns.mjs
-pnpm run -s test -- --runInBand
-pnpm build
+## 5) No `any`
+
+Use `unknown` and narrow, or define a proper type. `any` is a lint error.
+
+## 6) Prefer `const` Arrow Functions for Components
+
+```tsx
+// ✅
+const MyComponent = ({ title }: MyComponentProps) => { ... }
+
+// ❌
+function MyComponent({ title }) { ... }
 ```
 
----
+## 7) Event Handler Naming
 
-## 1) ❌ No Raw Tailwind in App/Feature Layers
+Prefix with `handle`: `handleClick`, `handleSubmit`, `handleChange`.
 
-- No arbitrary values (`text-[11px]`, `tracking-[3px]`, `shadow-[...]`)
-- No direct layout classes (`flex`, `grid`, `items-center`)
-- No direct spacing (`px-*`, `py-*`)
-- No color classes (`bg-*`, `text-*`) outside tokens
+## 8) Conditional Rendering
 
-## 2) ✅ Only Use Approved Styling Sources
+Use ternary or `&&` inline. Do not use `if` statements inside JSX return.
 
-- Design tokens (`spacing`, `radius`, `typography`, `motion`)
-- CVA variants
-- Primitives (`Box`, `Stack`, `Text`, `Grid`)
-- Composed components (e.g., `Button`, `Card`)
+## 9) Key Props
 
-## 3) 🧱 Primitives Must Be Used for Layout
+Always provide stable, unique `key` props on mapped elements. Never use array
+index as key when the list can reorder.
 
-- Layout uses `Stack`, `Grid`, `Box`, etc.
-- No manual flex/grid usage
-- Responsive behavior handled via primitive props (not `className`)
+## 10) No Hardcoded Colors
 
-## 4) 🎨 Typography Must Be Tokenized
+Use design token classes (`text-primary`, `bg-surface`, etc.) from the Tailwind
+config. Never use `text-blue-500` directly.
 
-- No raw `text-*` classes
-- All text uses `<Text />` or equivalent abstraction
+## 11) Component Size Limit
 
-## 5) 🎛 Variants Must Be Standardized
+If a component exceeds ~150 lines, split it. Extract sub-components or hooks.
 
-- Variant names match global system (e.g., `default`, `accent`, `ghost`)
+## 12) Custom Hooks
 
-## 6) ⚙️ No Business Logic in UI Components
+Extract stateful logic into `use<Name>` hooks in `src/hooks/`. Hooks must not
+contain JSX.
 
-- Logic extracted into hooks (`useX`)
-- No DOM querying (`querySelector`, `getElementById`)
+## 13) Async in Components
 
-## 7) 🧩 Components Must Be Declarative
+Use `useEffect` + `useState` or a data-fetching hook. Never `async` the
+component function itself.
 
-- UI is predictable and compositional
+## 14) Error Boundaries
 
-## 8) 📦 Feature Isolation Required
+Wrap page-level and async-heavy components in an error boundary.
 
-- Features belong in `features/<feature-name>/`
+## 15) Accessibility
 
-## 9) 🧭 Routing Is Declarative
+- All interactive elements must be keyboard-accessible.
+- Images require meaningful `alt` text (or `alt=""` for decorative).
+- Use semantic HTML (`<button>`, `<nav>`, `<main>`) over `<div onClick>`.
 
-- Navigation uses route config (not hardcoded)
-- Do **not** use `HashRouter`
+## 16) Test Coverage
 
-## 10) 🎞 Motion Must Use Tokens
+New components require at least a smoke test. New utility functions require
+unit tests covering the happy path and one edge case.
 
-- Motion values come from `motionTokens`
+## 17) No Direct DOM Manipulation
 
-## 11) 🧼 No Inline Styles or Magic Numbers
+Do not use `document.querySelector` or `element.style` in React components.
+Use refs (`useRef`) when direct DOM access is unavoidable.
 
-- No inline `style` usage
-- Everything mapped to tokens
+## 18) Environment Variables
 
-## 12) 🧱 Composition Over Configuration
+Access via `import.meta.env.VITE_*`. Never hardcode secrets or API keys.
+New env vars must be added to `.env.example`.
 
-- Repeated patterns extracted into specialized components
+## 19) Path Aliases
 
-## 13) 🔌 No Direct DOM Access
+Use `@/` for `src/` imports. Never use deep relative paths (`../../../`).
 
-- Controlled inputs used
-
-## 14) 🧪 Hooks Are Reusable & Pure
-
-- Side effects properly isolated
-
-## 15) 🧭 App Layer = Composition Only
-
-- `App.tsx` only composes layout, routes, and global UI
-
-## 16) 🧩 Avoid “God Components”
-
-- Components are small and focused
-
-## 17) 📐 Responsive Design via System
-
-- Responsive behavior handled via system props
-
-## 18) 🚫 No System Bypass via `className`
-
-- `className` should **not** introduce new design decisions
-
-## 19) 🏗 Modular Architecture
-
-- Layout primitives (`Box`, `Grid`, `Stack`) must reside in `src/layouts/`
-- Page-level compositors must reside in `src/pages/`
-- Component imports must use the `@/layouts/` or `@/pages/` alias
-
-## 20) 🛤 SPA Routing & Parallel Work Protocol
-
-- Application routes must be code-split using `React.lazy()`
-- Use `<Suspense>` with a standardized fallback (e.g., `<PageSkeleton />`) at route boundaries
-- Ensure environment-agnostic routing (handle base URLs cleanly for GitHub Pages)
-
-### Parallel Work Protocol
+## 20) Multi-Agent Coordination
 
 When multiple agents work simultaneously:
 
-1. **Run conflict check first**: `python3 dev-tools/td_cli.py gh conflicts`
-2. **Stagger feature files**: Agents should not touch the same component file
-3. **Branch naming**: Use `feat/issue-{NUMBER}-{file-scope}` (e.g., `feat/issue-247-gear-card`)
-4. **Shared primitives**: Do not modify `src/layouts/*.tsx` in feature branches without coordination
+- Each agent works on its own branch.
+- No agent merges to `main` without CI passing.
+- Conflicts are resolved via `td_cli.py gh resolve-conflicts` (Tier 2) or
+  the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
+  tool mapping.
+- All agents read `.agent-context.json` before starting work to get current
+  repository state.
+
+---
 
 ## 21) 🤝 Collaborative GitHub Workflows
 
-`dev-tools/td_cli.py` is the unified entry point for repository automation and PR reviews.
+Consult `.agents/AGENTS.md` for the **Tooling and MCP Protocol** before
+executing any GitHub or repository operation.
+
+### The Execution Chain
+
+`boomtick-mcp` is a thin gateway over `dev-tools/td_cli.py`. Every MCP tool
+call automatically:
+1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
+2. Calls the appropriate `td_cli.py` subcommand internally
+3. Returns structured output with repo context already attached
+
+Calling `td_cli.py` directly skips step 1. Calling raw bash skips steps 1–2.
+Only escalate to a lower tier if the MCP tool is **genuinely unavailable**.
+
+### CLI Schema Authority
+
+`dev-tools/cli-schema.json` (also embedded in `.agent-context.json` under
+`cli_schema`) is the single source of truth for all `td_cli.py` flags.
+MCP tools read this automatically. If calling Tier 2 directly, always
+read `cli_schema` from `.agent-context.json` first — never guess flags,
+never use `--help`.
+
+### Code Review Token Budget
+
+Agents invoking `orchestrateCodeReview` must respect the optimization pipeline:
+
+- Follow the input chain: `repo.read_agent_context` → `github.get_pr_diff` →
+  `repo.get_changed_files` → cache check → role gate → LLM call
+- Do not dispatch all 4 roles unconditionally — check changed file surface
+  first (see role gating table in `.agents/AGENTS.md`)
+- Max ~8,000 estimated tokens per batch; split earlier if diff sizes warrant
+- A `fail` from SECURITY or ARCHITECTURE is sufficient to block a PR — skip
+  STYLE/PERFORMANCE after 2+ failures
+- Cache hits (`prevState.cache` hash match) skip the LLM call entirely
 
 ### Issue Lifecycle
 
-All new issues must follow the **Spec-Driven Issue Template** (`.github/ISSUE_TEMPLATE/spec_driven_issue.md`).
-The `python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute` command enforces this structure.
+Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always
+validate issues against the Spec-Driven Issue Template before dispatching Jules.
 
-### PR Review Lifecycle
+```bash
+# Validate a single issue (dry-run by default)
+python3 dev-tools/td_cli.py gh validate-issue --issue-number <N>
 
-Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always consult `dev-tools/cli-schema.json` for authoritative usage.
+# Validate and post results
+python3 dev-tools/td_cli.py gh validate-issue --issue-number <N> --post-comments --execute
+```
 
-1. **Fetch context**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --execute`
-2. **Perform audit**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --audit --execute`
-3. **Submit review**: `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --submit --cleanup --execute`
+### Setting GitHub Variables
 
-### Quality Gates & Submission Protocol
+```bash
+# Read current value
+gh variable get ANY_COUNT_BASELINE
 
-- **Autonomous repair** (for persistent lint/type errors):
-  ```bash
-  python3 dev-tools/td_cli.py agent repair
-  python3 dev-tools/td_cli.py agent repair --worktree
-  ```
-- **CI Remediation**: For failing CI checks, follow the [CI Failure Remediation Guide](docs/agent/ci-remediation.md) to use targeted testing (e.g., `pnpm run test:e2e:targeted`).
-- **Pre-submit check**: Always run `python3 dev-tools/td_cli.py gh pre-submit` before pushing
-- **No monolithic PRs**: Keep PRs focused. Ideally modify no more than 3 files in `src/layouts/` or `src/components/`
-- **Split Content PRs**: Do not mix content domains. Create separate PRs for:
-  - **Event Facts**: Factual corrections (venue, city, dates, URL). Must include source URL.
-  - **Gear Assets**: Broken image/path fixes. Mark missing assets as `draft: true`.
-  - **Merch Catalog**: Copy or layout updates. List product removals explicitly.
-  - **Articles**: Editorial updates. Provide rationale for date changes. **NEVER** change the filename/date-prefix of a published post (e.g., `2026-04-18-post-title.md`) as this alters the URL, breaks SEO, and causes 404 errors.
-- **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
+# Update
+gh variable set ANY_COUNT_BASELINE --body 42
+```
 
-### Baseline Maintenance
-
-- CI enforces bundle size and TypeScript `any` count via GitHub Actions variables
-- After intentional approved debt increases, update baselines:
-  ```bash
-  gh variable set BUNDLE_BASELINE_KB --body 3080
-  gh variable set ANY_COUNT_BASELINE --body 42
-  ```
+---
 
 ## 22) Runtime Environment Contract
 
@@ -202,86 +192,36 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 
 ### Setup & Enforcement
 
-Run `./setup-agent.sh` to bootstrap. This script enforces the contract across `.node-version`, `package.json`, and `.npmrc`.
+Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
+`.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
+in `.githooks/` so `.agent-context.json` stays fresh automatically.
+
+```bash
+./setup-agent.sh
+```
+
+After setup, validate:
+
+```bash
+python3 dev-tools/td_cli.py doctor
+pnpm run check:runtime-files
+```
 
 ### Forbidden Actions
 
 - ❌ **No `npm`**: Use `pnpm` exclusively.
-- ❌ **No Version Managers**: Do not use `nvm`, `pnpm env`, or `volta` to deviate from the pinned versions.
+- ❌ **No Version Managers**: Do not use `nvm`, `pnpm env`, or `volta` to
+  deviate from the pinned versions.
 - ❌ **No `.npmrc` Bloat**: Never add `use-node-version` (breaks Vercel).
 - ❌ **No Lockfile Deletion**: Do not delete `pnpm-lock.yaml`.
 
 Validation failure = immediate halt. Report mismatches; do not attempt to bypass.
 
-## GitHub Actions runtime policy
+---
 
-- Do not downgrade GitHub Actions to avoid Node 24 warnings.
-- Prefer current major versions of official actions:
-  - `actions/checkout@v6`
-  - `actions/setup-node@v6`
-- Keep `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` at workflow or job level.
-- Keep app runtime pinned separately via:
-  - `.node-version`
-  - `.nvmrc`
-  - `package.json#engines`
-  - `package.json#packageManager`
-- Do not set `ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION` unless explicitly approved as a temporary emergency workaround.
+## GitHub Actions Runtime Policy
 
-### On-Demand Dependencies
-
-Heavy dependencies are installed only when needed:
-
-**E2E testing / browser automation:**
-
-```bash
-pnpm run setup:playwright
-```
-
-> [!TIP]
-> **Reliable Browser Provisioning**: If downloads fail, set `PLAYWRIGHT_DOWNLOAD_HOST=https://playwright.azureedge.net`. In container environments, use `PLAYWRIGHT_BROWSERS_PATH=/ms-playwright` to utilize pre-baked binaries. To use local system browsers, set `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`.
-
-**Python ETL / data processing:**
-
-```bash
-./dev-tools/setup-python.sh
-```
-
-## 23) UI Auditing Workflow
-
-The UI Auditing Tool (`scripts/detect-antipatterns.mjs`) identifies arbitrary Tailwind values, raw layout classes, and non-primitive `div` usage.
-
-### Planning Phase
-
-Before starting a UI task:
-
-```bash
-node scripts/detect-antipatterns.mjs
-cat TODO_ANTIPATTERNS.md
-```
-
-Integrate existing anti-pattern cleanup into your implementation plan.
-
-### Pre-Submission Audit Gates
-
-Install local pre-push hook:
-
-```bash
-git config core.hooksPath .githooks
-```
-
-The hook runs targeted audit on changed `.tsx` files.
-
-Before submitting a PR, run:
-
-```bash
-python3 dev-tools/td_cli.py gh pre-submit
-```
-
-### Pre-Commit Checklist
-
-Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
-
-1. Run `node scripts/detect-antipatterns.mjs`
-2. Review `TODO_ANTIPATTERNS.md` for violations introduced by your changes
-3. Fix all identified anti-patterns. **DO NOT** use `impeccable-ignore` unless absolutely necessary (e.g., dynamic motion-driven styles that cannot be tokenized).
-4. Ensure your changes introduce no new violations in touched files
+All workflows must use `actions/setup-node` with
+`node-version-file: '.node-version'`. Do not hardcode Node versions in
+workflow files. Keep GitHub Actions pinned to their latest major versions
+(e.g. `actions/checkout@v7`, `docker/setup-buildx-action@v4`).

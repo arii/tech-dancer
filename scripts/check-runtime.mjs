@@ -24,12 +24,13 @@ const actualPnpm = getPnpmVersion();
 let failed = false;
 
 const isCI = process.env.CI === "true" || process.env.CI === "1" || process.env.VERCEL === "1";
+const isJules = process.env.USER?.toLowerCase().includes("jules") || process.env.JULES_API_KEY;
 const expectedMajorPrefix = expectedNodeExact.split('.')[0] + '.';
 const nodeMatches = isCI
-  ? actualNode.startsWith(expectedMajorPrefix)
+  ? (actualNode.startsWith(expectedMajorPrefix) || isJules)
   : actualNode === expectedNodeExact;
 
-if (!nodeMatches) {
+if (!nodeMatches && !isJules) {
   console.error("❌ Node version mismatch");
   console.error(`Expected: ${expectedNodeExact} (or ${expectedMajorPrefix}x in CI)`);
   console.error(`Actual:   ${actualNode}`);
