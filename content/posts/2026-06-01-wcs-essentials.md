@@ -7,7 +7,6 @@ category: "Gear"
 excerpt: "High-priority essentials to bring to any West Coast Swing event, whether local or out-of-town."
 image: "/images/gear/sketches/loop-earplugs.webp"
 imageAlt: "A hand-drawn sketch of a pair of blue Loop earplugs on a sketchbook page, showing their circular design and silicone tips."
-imageFit: "contain"
 affiliateIds:
   - "rave-fan"
   - "loop-experience"
