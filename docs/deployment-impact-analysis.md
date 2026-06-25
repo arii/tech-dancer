@@ -14,11 +14,11 @@ The analysis works by generating a dependency graph of the application and ident
 
 ## Dependency Graph
 
-The tool uses `dependency-cruiser` to generate the initial dependency graph. To ensure comprehensive coverage, especially for style changes, the graph is augmented with CSS-to-CSS dependencies.
+The tool uses `dependency-cruiser` to generate the initial dependency graph. To ensure comprehensive coverage, especially for style changes, the graph incorporates CSS-to-CSS dependencies natively.
 
 ### Style Dependency Graph
 
-The `augmentGraphWithCSS` function in `scripts/lib/impact-analysis-utils.ts` scans CSS files for `@import` statements. These dependencies are merged into the main graph, ensuring that changes to low-level style tokens (e.g., `src/styles/tokens.css`) correctly propagate up to the components and pages that depend on them.
+`dependency-cruiser` is configured to natively resolve and track CSS `@import` statements via its enhanced resolution options. These dependencies are directly included in the main graph, ensuring that changes to low-level style tokens (e.g., `src/styles/tokens.css`) correctly propagate up to the components and pages that depend on them without needing manual graph augmentation.
 
 ## Impact Levels
 
