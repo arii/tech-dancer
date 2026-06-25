@@ -190,26 +190,28 @@ class AIClient:
 
         # ── Diagnostics header ────────────────────────────────────────────────
         ai_ok = self.is_ai_available()
-        print(f"\n{'='*60}", file=sys.stderr)
-        print(f"🔍 PR #{pr_num} – Piecemeal Review Diagnostics", file=sys.stderr)
-        print(f"{'='*60}", file=sys.stderr)
-        print(f"  AI available : {'✅ YES' if ai_ok else '❌ NO'}", file=sys.stderr)
-        print(f"  Review model     : {_REVIEW_MODEL}", file=sys.stderr)
-        print(f"  Synthesis model  : {_SYNTHESIS_MODEL}", file=sys.stderr)
-        print(f"  Diff size        : {len(diff):,} chars", file=sys.stderr)
-        print(f"  CI failures      : {failing_names}\n", file=sys.stderr)
-
         # ── Phase A: per-file-chunk reviews ───────────────────────────────────
         chunks = parse_diff_into_file_chunks(diff)
         skipped = [c for c in chunks if c['skip']]
         reviewable = [c for c in chunks if not c['skip']]
 
-        print(f"📂 Files in diff   : {len(chunks)} total", file=sys.stderr)
-        print(f"   Reviewable      : {len(reviewable)} chunks across {len(set(c['file'] for c in reviewable))} files", file=sys.stderr)
         _skipped_names = sorted(set(c['file'] for c in skipped))
         _skipped_preview = ', '.join(_skipped_names[:5]) + ('...' if len(_skipped_names) > 5 else '')
-        print(f"   Skipped         : {len(skipped)} ({_skipped_preview})", file=sys.stderr)
-        print(file=sys.stderr)
+
+        print(f"""
+{'='*60}
+🔍 PR #{pr_num} – Piecemeal Review Diagnostics
+{'='*60}
+  AI available : {'✅ YES' if ai_ok else '❌ NO'}
+  Review model     : {_REVIEW_MODEL}
+  Synthesis model  : {_SYNTHESIS_MODEL}
+  Diff size        : {len(diff):,} chars
+  CI failures      : {failing_names}
+
+📂 Files in diff   : {len(chunks)} total
+   Reviewable      : {len(reviewable)} chunks across {len(set(c['file'] for c in reviewable))} files
+   Skipped         : {len(skipped)} ({_skipped_preview})
+""", file=sys.stderr)
 
         file_reviews: List[Dict] = []
         cache_dir = f"/tmp/pr_review_{pr_num}"

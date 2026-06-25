@@ -449,9 +449,9 @@ def review(ctx, pr_number, no_cache):
     # Surface errors clearly
     if isinstance(res, dict) and res.get('recommendation') == 'Not Approved' and not res.get('reviewComment', '').strip().startswith('CI'):
         # Likely an error result – dump full dict to stderr for diagnosis
-        print(f"⚠️  Review returned 'Not Approved' (may indicate an error).", file=_sys.stderr)
-        print(f"    recommendation : {res.get('recommendation')}", file=_sys.stderr)
-        print(f"    reviewComment  : {res.get('reviewComment', '')[:500]}", file=_sys.stderr)
+        print(f"""⚠️  Review returned 'Not Approved' (may indicate an error).
+    recommendation : {res.get('recommendation')}
+    reviewComment  : {res.get('reviewComment', '')[:500]}""", file=_sys.stderr)
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 

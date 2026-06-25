@@ -89,12 +89,13 @@ try:
             event=getattr(args, 'event', None)
         )
 except ImportError as e:
-    print(f"Error: Could not import tdw_services or its dependencies.", file=sys.stderr)
-    print(f"Details: {e}", file=sys.stderr)
-    print("\nTroubleshooting:", file=sys.stderr)
-    print("1. Ensure dependencies are installed: pip install -e dev-tools/", file=sys.stderr)
-    print("2. Ensure PYTHONPATH includes the dev-tools directory.", file=sys.stderr)
-    print("   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools", file=sys.stderr)
+    print(f"""Error: Could not import tdw_services or its dependencies.
+Details: {e}
+
+Troubleshooting:
+1. Ensure dependencies are installed: pip install -e dev-tools/
+2. Ensure PYTHONPATH includes the dev-tools directory.
+   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools""", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)
 
