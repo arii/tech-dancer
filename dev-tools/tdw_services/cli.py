@@ -1,5 +1,6 @@
 import sys
 import os
+from tdw_services.utils import log_info
 import json
 from datetime import datetime, timezone
 from typing import List, Dict, Any
@@ -14,11 +15,13 @@ from utils import get_github_client, get_repo_name, CLIError, run_command, set_g
 
 # CLI Group
 @click.group()
-@click.option('--json', 'json_output', is_flag=True, help='Output results in JSON format')
+@click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
 @click.pass_context
 def cli(ctx, json_output):
     """Unified Tech-Dancer DevTools CLI"""
     ctx.ensure_object(dict)
+    # If the user explicitly passed --no-json (if supported) or we want to detect if it's a TTY
+    # But for now, we follow the requirement to be JSON by default for machine consumption.
     ctx.obj['JSON'] = json_output
     ctx.obj['ORCHESTRATOR'] = Orchestrator()
 
@@ -417,7 +420,6 @@ def ai():
 @click.pass_context
 def review(ctx, pr_number, no_cache):
     import glob
-    import sys as _sys
 
     # Optionally bust the /tmp review cache so stale results are not silently returned
     if no_cache:
@@ -427,9 +429,9 @@ def review(ctx, pr_number, no_cache):
             import os as _os
             _os.remove(f)
         if removed:
-            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
+            log_info(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
         else:
-            print("ℹ️  No cache files found to remove.")
+            log_info("ℹ️  No cache files found to remove.")
 
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)
@@ -437,9 +439,9 @@ def review(ctx, pr_number, no_cache):
     # Surface errors clearly
     if isinstance(res, dict) and res.get('recommendation') == 'Not Approved' and not res.get('reviewComment', '').strip().startswith('CI'):
         # Likely an error result – dump full dict to stderr for diagnosis
-        print(f"⚠️  Review returned 'Not Approved' (may indicate an error).", file=_sys.stderr)
-        print(f"    recommendation : {res.get('recommendation')}", file=_sys.stderr)
-        print(f"    reviewComment  : {res.get('reviewComment', '')[:500]}", file=_sys.stderr)
+        log_info(f"""⚠️  Review returned 'Not Approved' (may indicate an error).
+    recommendation : {res.get('recommendation')}
+    reviewComment  : {res.get('reviewComment', '')[:500]}""")
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 

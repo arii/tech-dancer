@@ -66,7 +66,18 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
     ? 'This diff contains UI files (.tsx, .css, .scss) — you MUST audit them against the VISUAL & DESIGN GUIDELINES above.\n\n'
     : '';
 
-  const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.
+  let roleInstruction = '';
+  if (summary.role === 'SECURITY') {
+    roleInstruction = '\nROLE: SECURITY EXPERT. Focus on OWASP Top 10, data validation, sanitization, and secure communication. Flag any new untrusted input paths.';
+  } else if (summary.role === 'PERFORMANCE') {
+    roleInstruction = '\nROLE: PERFORMANCE ENGINEER. Focus on expensive computations, redundant re-renders, large bundle impacts, and inefficient data structures.';
+  } else if (summary.role === 'STYLE') {
+    roleInstruction = '\nROLE: STYLE & MAINTAINABILITY CRITIC. Focus on code readability, consistency with existing patterns, naming clarity, and adherence to design tokens.';
+  } else if (summary.role === 'ARCHITECTURE') {
+    roleInstruction = '\nROLE: SOFTWARE ARCHITECT. Focus on separation of concerns, feature isolation, dependency directions, and proper use of hooks vs. components.';
+  }
+
+  const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
 Review the following code diff for bugs, anti-patterns, missing types, performance issues, and visual quality defects.
 Provide actionable feedback. Focus on HIGH severity issues.
 

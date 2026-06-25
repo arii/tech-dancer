@@ -38,6 +38,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
 
 # ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
 ENV PNPM_VERSION=10.28.2
+# Use pre-installed browsers from the Playwright base image
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+
 RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
   && pnpm --version

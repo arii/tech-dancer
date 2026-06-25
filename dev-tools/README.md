@@ -25,8 +25,6 @@ This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools, Node
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
 | `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` | Optional | Enables `td_cli.py antigravity ...` / `td_cli.py jules ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
-| `OLLAMA_URL` | Optional | Override local Ollama endpoint (default shown by `snapshot.sh`). |
-| `OLLAMA_MODEL` | Optional | Override local Ollama model selection. |
 
 **Secret handling guidance**
 - GitHub Actions / agent runners: store `CODEX_GH_TOKEN` (preferred), plus `ANTIGRAVITY_API_KEY` / `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
@@ -53,7 +51,7 @@ export GEMINI_API_KEY="<key>"
 - `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
 
 
-### Non-Traditional Workflows (Deploy, Antigravity, Jules, Ollama)
+### Non-Traditional Workflows (Deploy, Antigravity, Jules)
 
 After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
@@ -73,16 +71,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
   - `python3 dev-tools/td_cli.py antigravity repair`
   - `python3 dev-tools/td_cli.py antigravity repair --worktree`
 
-#### 3) Ollama Local Review Workflows
-- Optional local runtime vars:
-  - `OLLAMA_URL` (default used by tooling: `http://localhost:11434/api/generate`)
-  - `OLLAMA_MODEL` (example: `qwen2.5-coder:7b`)
-- Verify local service before running Ollama-backed flows:
-  - `curl -fsS "$OLLAMA_URL" || true` (endpoint behavior varies by Ollama version)
-- Typical command:
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit`
-
-#### 4) Headless / Bot Auditing
+#### 3) Headless / Bot Auditing
 - For batch auditing open PRs:
   - `python3 dev-tools/td_cli.py gh audit`
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
@@ -162,9 +151,7 @@ python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
 python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup --execute
 ```
 
-#### 2. Local AI Code Reviewer (Ollama)
-
-#### 3. Pre-Submission Quality Gate
+#### 2. Pre-Submission Quality Gate
 Before pushing code or opening a PR, run the full suite of local checks:
 ```bash
 python3 dev-tools/td_cli.py pre-submit

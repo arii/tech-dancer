@@ -1,6 +1,10 @@
 import json
 import os
 import sys
+try:
+    from tdw_services.utils import log_info
+except ImportError:
+    def log_info(msg): print(msg, file=sys.stderr)
 from typing import List, Optional, Set
 
 # Import run_command from utils
@@ -90,6 +94,6 @@ if __name__ == "__main__":
         warning = verify_pr_scope(files)
 
     if warning:
-        print(warning)
-        sys.exit(0)
+        log_info(warning)
+        sys.exit(1)
     sys.exit(0)

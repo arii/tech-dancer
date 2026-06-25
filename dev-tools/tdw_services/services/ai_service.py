@@ -2,8 +2,8 @@ import os
 import sys
 import time
 import json
-import requests
 from typing import Optional, Dict, Any, List, Set
+from tdw_services.utils import log_info, log_error, log_warn
 from utils import (
     call_ai,
     is_ai_available,
@@ -107,7 +107,7 @@ class AIClient:
                 return content
             return None
         except Exception as e:
-            print(f"⚠️  Gemini API call failed: {e}")
+            log_warn(f"Gemini API call failed: {e}")
             return None
 
     def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
@@ -190,26 +190,28 @@ class AIClient:
 
         # ── Diagnostics header ────────────────────────────────────────────────
         ai_ok = self.is_ai_available()
-        print(f"\n{'='*60}")
-        print(f"🔍 PR #{pr_num} – Piecemeal Review Diagnostics")
-        print(f"{'='*60}")
-        print(f"  AI available : {'✅ YES' if ai_ok else '❌ NO'}")
-        print(f"  Review model     : {_REVIEW_MODEL}")
-        print(f"  Synthesis model  : {_SYNTHESIS_MODEL}")
-        print(f"  Diff size        : {len(diff):,} chars")
-        print(f"  CI failures      : {failing_names}\n")
-
         # ── Phase A: per-file-chunk reviews ───────────────────────────────────
         chunks = parse_diff_into_file_chunks(diff)
         skipped = [c for c in chunks if c['skip']]
         reviewable = [c for c in chunks if not c['skip']]
 
-        print(f"📂 Files in diff   : {len(chunks)} total")
-        print(f"   Reviewable      : {len(reviewable)} chunks across {len(set(c['file'] for c in reviewable))} files")
         _skipped_names = sorted(set(c['file'] for c in skipped))
         _skipped_preview = ', '.join(_skipped_names[:5]) + ('...' if len(_skipped_names) > 5 else '')
-        print(f"   Skipped         : {len(skipped)} ({_skipped_preview})")
-        print()
+
+        log_info(f"""
+{'='*60}
+🔍 PR #{pr_num} – Piecemeal Review Diagnostics
+{'='*60}
+  AI available : {'✅ YES' if ai_ok else '❌ NO'}
+  Review model     : {_REVIEW_MODEL}
+  Synthesis model  : {_SYNTHESIS_MODEL}
+  Diff size        : {len(diff):,} chars
+  CI failures      : {failing_names}
+
+📂 Files in diff   : {len(chunks)} total
+   Reviewable      : {len(reviewable)} chunks across {len(set(c['file'] for c in reviewable))} files
+   Skipped         : {len(skipped)} ({_skipped_preview})
+""")
 
         file_reviews: List[Dict] = []
         cache_dir = f"/tmp/pr_review_{pr_num}"
@@ -228,26 +230,28 @@ class AIClient:
                 try:
                     with open(cache_path) as f:
                         cached = json.load(f)
-                    print(f"  [{i:>2}/{len(reviewable)}] ♻️  {label} (cached)")
+                    log_info(f"  [{i:>2}/{len(reviewable)}] ♻️  {label} (cached)")
                     file_reviews.append(cached)
                     continue
                 except Exception:
                     pass  # cache corrupt, re-run
 
             t0 = time.time()
-            print(f"  [{i:>2}/{len(reviewable)}] 🤖 {label} ({chunk['added_lines']} added lines{', truncated' if chunk['truncated'] else ''}) …", end="", flush=True)
+            # print with end=""/flush=True is not easily wrapped by log_info,
+            # we keep it but redirect to stderr manually or just use print(..., file=sys.stderr)
+            print(f"  [{i:>2}/{len(reviewable)}] 🤖 {label} ({chunk['added_lines']} added lines{', truncated' if chunk['truncated'] else ''}) …", end="", flush=True, file=sys.stderr)
 
             prompt = self._build_chunk_prompt(chunk, pr_title, checks_summary)
             raw = None
             try:
                 raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_CHUNK_SCHEMA, max_retries=2)
             except Exception as e:
-                print(f" ❌ ERROR: {e}", flush=True)
+                print(f" ❌ ERROR: {e}", flush=True, file=sys.stderr)
 
             elapsed = time.time() - t0
 
             if not raw:
-                print(f" ❌ empty response ({elapsed:.1f}s)", flush=True)
+                print(f" ❌ empty response ({elapsed:.1f}s)", flush=True, file=sys.stderr)
                 fr = {"file": chunk['file'], "chunk_index": chunk['chunk_index'],
                       "issues": [], "verdict": "error", "error": "empty response"}
             else:
@@ -256,11 +260,11 @@ class AIClient:
                     parsed = json.loads(cleaned)
                     issue_count = len(parsed.get('issues', []))
                     verdict = parsed.get('verdict', '?')
-                    print(f" ✅ {issue_count} issue(s), verdict={verdict} ({elapsed:.1f}s)", flush=True)
+                    print(f" ✅ {issue_count} issue(s), verdict={verdict} ({elapsed:.1f}s)", flush=True, file=sys.stderr)
                     fr = {"file": chunk['file'], "chunk_index": chunk['chunk_index'], **parsed}
                 except Exception as e:
-                    print(f" ⚠️  parse error ({elapsed:.1f}s): {e}", flush=True)
-                    print(f"      raw (200 chars): {raw[:200]}", flush=True)
+                    print(f" ⚠️  parse error ({elapsed:.1f}s): {e}", flush=True, file=sys.stderr)
+                    print(f"      raw (200 chars): {raw[:200]}", flush=True, file=sys.stderr)
                     fr = {"file": chunk['file'], "chunk_index": chunk['chunk_index'],
                           "issues": [], "verdict": "parse_error", "raw": raw[:500]}
 
@@ -275,14 +279,14 @@ class AIClient:
             # ── Write live progress snapshot ──────────────────────────────────
             self._write_progress_snapshot(pr_num, reviewable, file_reviews, i, cache_dir)
 
-        print()
+        log_info("")
 
         # ── Phase B: synthesis ────────────────────────────────────────────────
-        print(f"🔗 Synthesising {len(file_reviews)} chunk review(s) → final verdict …", end="", flush=True)
+        print(f"🔗 Synthesising {len(file_reviews)} chunk review(s) → final verdict …", end="", flush=True, file=sys.stderr)
         t0 = time.time()
         final = self._synthesize_review(file_reviews, pr_num, pr_title, has_ci_failures, ci_failures)
         elapsed = time.time() - t0
-        print(f" done ({elapsed:.1f}s)\n", flush=True)
+        print(f" done ({elapsed:.1f}s)\n", flush=True, file=sys.stderr)
 
         # CI guard: never approve if checks are failing
         if has_ci_failures and final.get('recommendation') == 'Approved':
@@ -315,7 +319,11 @@ class AIClient:
             if not self.vector_store.is_available():
                 return "\n".join(context_parts)
 
-            semantic_results = self.vector_store.query(chunk['diff_text'], n_results=3)
+            diff_text = chunk.get('diff_text') or chunk.get('diff') or ""
+            if not diff_text:
+                return "\n".join(context_parts)
+
+            semantic_results = self.vector_store.query(diff_text, n_results=3)
             if semantic_results:
                 context_parts.append("\n### Semantically Related Code")
                 for res in semantic_results:
@@ -324,7 +332,7 @@ class AIClient:
                         context_parts.append(f"#### From {path}:")
                         context_parts.append(f"```\n{res['document'][:500]}\n```")
         except Exception as e:
-            pass # Silently fail vector search if not indexed
+            print(f"Error searching vector store: {e}", file=sys.stderr) # Log failure if not indexed
 
         return "\n".join(context_parts)
 
@@ -415,7 +423,7 @@ class AIClient:
             with open(progress_path, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(lines))
         except Exception as e:
-            print(f"⚠️  Could not write progress file: {e}", file=sys.stderr)
+            log_warn(f"Could not write progress file: {e}")
 
     def _synthesize_review(
         self,
@@ -467,7 +475,7 @@ class AIClient:
         try:
             raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
         except Exception as e:
-            print(f"\n❌ Synthesis call failed: {e}", file=sys.stderr)
+            log_error(f"Synthesis call failed: {e}")
 
         if not raw:
             # Fallback: construct a minimal result from the structured data
@@ -492,7 +500,7 @@ class AIClient:
         try:
             return json.loads(clean_llm_output(raw))
         except Exception as e:
-            print(f"⚠️  Synthesis JSON parse error: {e} | raw: {raw[:300]}", file=sys.stderr)
+            log_warn(f"Synthesis JSON parse error: {e} | raw: {raw[:300]}")
             return {
                 "reviewComment": f"Review complete. {total_issues} issue(s) found. (Synthesis parse error: {e})\n\nRaw: {raw[:800]}",
                 "labels": [],
@@ -627,4 +635,4 @@ DO NOT REMOVE THE BACKTICKS.
         output_path = os.path.join(output_dir, f'pr-review-{pr_num}.md')
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        print(f"📝 Review written to: {output_path}")
+        log_info(f"📝 Review written to: {output_path}")

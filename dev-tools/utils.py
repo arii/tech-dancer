@@ -9,6 +9,12 @@ import urllib.parse
 import re
 import random
 from typing import Optional, Union, List, Dict
+try:
+    from tdw_services.utils import log_info, log_error, log_warn
+except ImportError:
+    def log_info(msg): print(msg, file=sys.stderr)
+    def log_error(msg): print(f"❌ Error: {msg}", file=sys.stderr)
+    def log_warn(msg): print(f"⚠️  Warning: {msg}", file=sys.stderr)
 
 class CLIError(Exception):
     def __init__(self, message, code=1, data=None):
@@ -91,7 +97,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         from langchain_openai import ChatOpenAI
         from langchain_core.messages import HumanMessage
     except ImportError:
-        print("langchain_openai or langchain_core is not installed.", file=sys.stderr)
+        log_info("langchain_openai or langchain_core is not installed.")
         return None
 
     token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
@@ -114,7 +120,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         response = llm.invoke([HumanMessage(content=prompt)])
         return response.content
     except Exception as e:
-        print(f"AI Call failed: {e}", file=sys.stderr)
+        log_error(f"AI Call failed: {e}")
         return None
 
 
@@ -128,7 +134,7 @@ def log_ai_run(entry: dict):
         with open(log_file, "a") as f:
             f.write(json.dumps(entry) + "\n")
     except Exception as e:
-        print(f"Failed to append to AI run log: {e}", file=sys.stderr)
+        log_error(f"Failed to append to AI run log: {e}")
 
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
@@ -179,7 +185,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         from langchain_google_genai import ChatGoogleGenerativeAI
         from langchain_core.messages import HumanMessage
     except ImportError:
-        print("langchain_google_genai or langchain_core is not installed.", file=sys.stderr)
+        log_info("langchain_google_genai or langchain_core is not installed.")
         return None
 
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -202,7 +208,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         response = llm.invoke([HumanMessage(content=prompt)])
         return response.content
     except Exception as e:
-        print(f"Gemini Call failed: {e}", file=sys.stderr)
+        log_error(f"Gemini Call failed: {e}")
         return None
 
 def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[str]:
@@ -234,11 +240,11 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
         check=False
     )
     if proc.returncode != 0 and log_on_error:
-        print(f"❌ Command failed (exit {proc.returncode}): {proc.args}", file=sys.stderr)
+        log_error(f"Command failed (exit {proc.returncode}): {proc.args}")
         if proc.stdout:
-            print(f"--- stdout ---\n{proc.stdout.strip()}", file=sys.stderr)
+            log_info(f"--- stdout ---\n{proc.stdout.strip()}")
         if proc.stderr:
-            print(f"--- stderr ---\n{proc.stderr.strip()}", file=sys.stderr)
+            log_info(f"--- stderr ---\n{proc.stderr.strip()}")
 
     if check:
         if proc.returncode != 0:
@@ -352,22 +358,22 @@ class GHAConfigManager:
             stderr = result.stderr.lower()
             if "not authenticated" in stderr or "not logged in" in stderr or "gh_token" in stderr:
                 if not self.warned_auth:
-                    print(f"⚠️  Warning: 'gh' CLI not authenticated. Run 'gh auth login' to fetch baselines.", file=sys.stderr)
+                    log_warn("'gh' CLI not authenticated. Run 'gh auth login' to fetch baselines.")
                     self.warned_auth = True
             elif "could not find" in stderr:
                 return None
             elif "no git repository" in stderr:
                 if not self.warned_repo:
-                    print(f"⚠️  Warning: Not a git repository or no remote configured for 'gh' CLI.", file=sys.stderr)
+                    log_warn("Not a git repository or no remote configured for 'gh' CLI.")
                     self.warned_repo = True
             elif "resource not accessible by integration" in stderr:
-                print(f"⚠️  Warning: Cannot fetch variable '{name}' due to permissions.", file=sys.stderr)
+                log_warn(f"Cannot fetch variable '{name}' due to permissions.")
                 return None
             else:
                 if result.stderr:
-                    print(f"❌ Error fetching GHA variable '{name}': {result.stderr.strip()}", file=sys.stderr)
+                    log_error(f"fetching GHA variable '{name}': {result.stderr.strip()}")
         except Exception as e:
-            print(f"❌ Unexpected error calling 'gh' CLI: {e}", file=sys.stderr)
+            log_error(f"Unexpected error calling 'gh' CLI: {e}")
 
         return None
 
@@ -396,7 +402,7 @@ class GHAConfigManager:
             )
             return True
         except Exception as e:
-            print(f"❌ Error setting GHA variable '{name}': {e}", file=sys.stderr)
+            log_error(f"setting GHA variable '{name}': {e}")
             return False
 
 def get_gha_variable(name: str) -> Optional[str]:
