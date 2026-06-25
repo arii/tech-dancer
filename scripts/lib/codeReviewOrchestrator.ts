@@ -527,12 +527,14 @@ export async function orchestrateCodeReview(
   const newCache: Record<string, CodeReviewResult> = {};
 
   const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();
-  const getMemoizedBatchSummary = (batch: string[]) => {
+  const getMemoizedBatchSummary = async (batch: string[]) => {
     const key = batch.join(',');
-    if (!batchSummaryCache.has(key)) {
-      batchSummaryCache.set(key, getCodeDiffSummary(batch));
-    }
-    return batchSummaryCache.get(key)!;
+    const cached = batchSummaryCache.get(key);
+    if (cached) return cached;
+
+    const promise = getCodeDiffSummary(batch);
+    batchSummaryCache.set(key, promise);
+    return promise;
   };
 
   const taskQueue: (() => Promise<void>)[] = [];
@@ -552,7 +554,7 @@ export async function orchestrateCodeReview(
 
           // Semantic Cache Check
           if (prevState?.cache?.[hash]) {
-            console.log(`✨ Cache hit for ${role} on batch ${batch.join(', ')} — skipping API call.`);
+            console.log(`✨ Cache hit for ${role} (hash: ${hash.slice(0, 8)}) on batch ${batch.join(', ')} — skipping API call.`);
             const cachedResult = prevState.cache[hash];
             allResults.push(cachedResult);
             newCache[hash] = cachedResult;
