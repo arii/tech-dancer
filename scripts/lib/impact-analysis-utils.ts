@@ -21,7 +21,45 @@ export interface Module {
 
 export interface DependencyGraph {
   modules: Module[];
-  summary?: any;
+  summary?: Record<string, unknown>;
+}
+
+/**
+ * Resolves a CSS @import path to a relative project path.
+ */
+function resolveCssImport(cssFile: string, importPath: string): string | null {
+  if (!importPath.startsWith('.')) return null;
+
+  let resolved = path.join(path.dirname(cssFile), importPath);
+  if (!resolved.endsWith('.css') && fs.existsSync(`${resolved}.css`)) {
+    resolved += '.css';
+  }
+
+  return fs.existsSync(resolved) ? resolved : null;
+}
+
+/**
+ * Extracts dependencies from a CSS file by scanning for @import statements.
+ */
+function getCssDependencies(cssFile: string): Dependency[] {
+  const content = fs.readFileSync(cssFile, 'utf-8');
+  const importRegex = /@import\s+['"]([^'"]+)['"]/g;
+  const dependencies: Dependency[] = [];
+  let match;
+
+  while ((match = importRegex.exec(content)) !== null) {
+    const importPath = match[1];
+    const resolvedPath = resolveCssImport(cssFile, importPath);
+
+    if (resolvedPath) {
+      dependencies.push({
+        resolved: resolvedPath,
+        dynamic: false,
+        module: importPath
+      });
+    }
+  }
+  return dependencies;
 }
 
 /**
@@ -33,43 +71,16 @@ export function augmentGraphWithCSS(graph: DependencyGraph): DependencyGraph {
   const modulesBySource = new Map(graph.modules.map(m => [m.source, m]));
 
   allCssFiles.forEach(cssFile => {
-    if (!fs.existsSync(cssFile)) return;
+    const module = modulesBySource.get(cssFile) || { source: cssFile, dependencies: [] };
+    const newDeps = getCssDependencies(cssFile);
 
-    let module = modulesBySource.get(cssFile);
-    if (!module) {
-      module = { source: cssFile, dependencies: [] };
-      modulesBySource.set(cssFile, module);
-    }
-
-    const content = fs.readFileSync(cssFile, 'utf-8');
-    const importRegex = /@import\s+['"]([^'"]+)['"]/g;
-    let match;
-
-    while ((match = importRegex.exec(content)) !== null) {
-      const importPath = match[1];
-      let resolvedPath: string | null = null;
-
-      if (importPath.startsWith('.')) {
-        resolvedPath = path.join(path.dirname(cssFile), importPath);
+    newDeps.forEach(dep => {
+      if (!module.dependencies.some(d => d.resolved === dep.resolved)) {
+        module.dependencies.push(dep);
       }
+    });
 
-      if (resolvedPath) {
-        // Ensure it's relative to the project root and exists
-        if (!resolvedPath.endsWith('.css') && fs.existsSync(resolvedPath + '.css')) {
-          resolvedPath += '.css';
-        }
-
-        if (fs.existsSync(resolvedPath)) {
-          if (!module.dependencies.some(d => d.resolved === resolvedPath)) {
-            module.dependencies.push({
-              resolved: resolvedPath,
-              dynamic: false,
-              module: importPath
-            });
-          }
-        }
-      }
-    }
+    modulesBySource.set(cssFile, module);
   });
 
   return {
