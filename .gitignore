@@ -85,10 +85,6 @@ workflow_overlaps.txt
 dev-tools/logs/reviews/*.md
 /product-mockups/
 
-# Antigravity
-.antigravity/
-.antigravity/cli/
-.antigravitycli/
 
 # Runtime audit reports
 # [Sensitive] Ensure these are never indexed
