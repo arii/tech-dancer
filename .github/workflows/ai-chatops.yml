@@ -22,7 +22,6 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     env:
-      PYTHONPATH: dev-tools
       AI_MODEL: gpt-4o-mini
       AI_SYNTHESIS_MODEL: gpt-4o-mini
       GITHUB_MODELS_BASE_URL: https://models.inference.ai.azure.com
@@ -39,6 +38,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
@@ -46,8 +48,8 @@ jobs:
 
       - name: Validate CLI
         run: |
-          python3 dev-tools/td_cli.py doctor
-          python3 dev-tools/td_cli.py gh status-board
+          td-cli doctor
+          td-cli gh status-board
 
       - name: Resolve PR Branch
         env:
