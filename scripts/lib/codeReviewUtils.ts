@@ -1,4 +1,45 @@
-import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult } from './codeReviewTypes';
+import * as crypto from 'crypto';
+import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeReviewResult } from './codeReviewTypes';
+
+/**
+ * Generates a stable SHA-256 hash for a code review batch.
+ * Includes diff context, role, goal, and all relevant semantic/external context.
+ * Explicitly handles undefined values to ensure stable serialization.
+ */
+export function calculateReviewHash(summary: CodeReviewSummary): string {
+  const hash = crypto.createHash('sha256');
+  const data = JSON.stringify({
+    role: summary.role || '',
+    diff: summary.diffContext || '',
+    goal: summary.prGoal || '',
+    external: summary.externalContext || '',
+    semantic: summary.impactSemanticContext || '',
+  });
+  return hash.update(data).digest('hex');
+}
+
+/**
+ * Prunes a cache object to maintain a maximum number of entries.
+ * Since GitHub comments have a 65,536 character limit, we must cap the state.
+ * This implementation keeps the most recently added N entries (insertion order).
+ */
+export function pruneCache(
+  cache: Record<string, CodeReviewResult>,
+  maxEntries: number = 15
+): Record<string, CodeReviewResult> {
+  const safeMax = Math.max(0, Math.floor(maxEntries));
+  if (safeMax === 0) return {};
+  const keys = Object.keys(cache);
+  if (keys.length <= safeMax) return cache;
+
+  const newCache: Record<string, CodeReviewResult> = {};
+  // Keep the most recently added entries (the end of the keys array)
+  // String keys in JS objects follow insertion order for slice/iteration.
+  keys.slice(-safeMax).forEach(key => {
+    newCache[key] = cache[key];
+  });
+  return newCache;
+}
 
 /**
  * Normalizes a verdict string from the LLM into a standard 'pass', 'fail', or 'warn' status.

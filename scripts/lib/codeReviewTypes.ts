@@ -10,6 +10,7 @@ export interface ReviewFinding {
 
 export interface CodeReviewState {
   findings: ReviewFinding[];
+  cache?: Record<string, CodeReviewResult>;
 }
 
 export type CodeReviewRole = 'SECURITY' | 'PERFORMANCE' | 'STYLE' | 'ARCHITECTURE';

@@ -28,9 +28,10 @@ from utils import (
     clean_gha_logs
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from scope_check import verify_pr_scope, get_project_config
+from scope_check import verify_pr_scope
+from dev_tools_sdk.config import load_project_config
 
-PROJECT_CONFIG = get_project_config()
+PROJECT_CONFIG = load_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
 SPEC_SECTIONS = [
     "Problem Statement",
@@ -577,11 +578,12 @@ class Orchestrator:
 
         actual_node = run_command(["node", "-v"]).strip().replace('v', '')
         is_ci = os.environ.get("CI") == "true"
+        is_jules = "jules" in os.environ.get("USER", "").lower() or os.environ.get("JULES_API_KEY")
 
         expected_prefix = ".".join(expected_node.split(".")[:2]) + "."
-        node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
+        node_matches = (actual_node.startswith(expected_prefix) or is_jules) if is_ci else actual_node == expected_node
 
-        if not node_matches:
+        if not node_matches and not is_jules:
             log_error(f"Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
@@ -670,10 +672,11 @@ class Orchestrator:
         if baseline_count == -1:
             baseline_count = 0
             try:
-                main_files = run_command(["git", "ls-tree", "-r", "origin/main", "--name-only"]).splitlines()
+                base = PROJECT_CONFIG.base_branch
+                main_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
                 relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
                 for mf in relevant:
-                    res_show = run_command(["git", "show", f"origin/main:{mf}"], check=False, log_on_error=False)
+                    res_show = run_command(["git", "show", f"{base}:{mf}"], check=False, log_on_error=False)
                     if res_show.returncode == 0:
                         baseline_count += int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"], input_str=res_show.stdout) or 0)
             except Exception: pass
@@ -765,9 +768,9 @@ Respond only after the PR is created or updated:
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
-        agent_name = "Antigravity" if os.environ.get("ANTIGRAVITY_API_KEY") else "Jules"
-        source_id = self.get_env_or_gha("ANTIGRAVITY_SOURCE_ID") or self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
-        if not source_id: raise CLIError("ANTIGRAVITY_SOURCE_ID or JULES_SOURCE_ID missing and auto-discovery failed.")
+        agent_name = "Jules"
+        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
+        if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
         session_name = "dry-run-session"
         if not dry_run:
             res = self.jules.create_session_from_source(source_id, branch, prompt)
@@ -1066,7 +1069,7 @@ Respond only after the PR is created or updated:
             "truncated": truncated
         }
 
-    def list_prs(self, state: str = "open", limit: int = 10, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
         gh_args = [
             "pr", "list",

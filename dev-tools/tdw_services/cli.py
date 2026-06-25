@@ -78,7 +78,7 @@ def gh():
 
 @gh.command()
 @click.option('--state', default='open')
-@click.option('--limit', type=int, default=10)
+@click.option('--limit', type=int, default=100)
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
@@ -642,12 +642,7 @@ def jules_group():
     """Agent Operations (alias for agent)"""
     pass
 
-@cli.group(name='antigravity')
-def antigravity_group():
-    """Agent Operations (alias for agent)"""
-    pass
-
-for group in [jules_group, antigravity_group]:
+for group in [jules_group]:
     group.add_command(dispatch)
     group.add_command(sync)
     group.add_command(fix_ci)
