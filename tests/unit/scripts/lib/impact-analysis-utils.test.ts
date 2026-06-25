@@ -11,13 +11,13 @@ describe('impact-analysis-utils tests', () => {
                 {
                     source: 'src/components/Button.tsx',
                     dependencies: [
-                        { resolved: 'src/styles/tokens.css', module: '', moduleSystem: 'es6', dynamic: false }
+                        { resolved: 'src/styles/tokens.css', module: '', dynamic: false }
                     ]
                 },
                 {
                     source: 'src/styles/tokens.css',
                     dependencies: [
-                        { resolved: 'src/styles/colors.css', module: '', moduleSystem: 'es6', dynamic: false }
+                        { resolved: 'src/styles/colors.css', module: '', dynamic: false }
                     ]
                 },
                 {
