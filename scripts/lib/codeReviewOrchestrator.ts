@@ -1,10 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { IMPACT_CONFIG } from '../impact-analysis.config';
-import { filterLowImpactFiles } from './fileUtils';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
-import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache } from './codeReviewUtils';
+import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache, filterLowImpactFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
 import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
