@@ -13,6 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
+from tdw_services.utils import log_error
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -71,6 +72,22 @@ class Orchestrator:
 
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
+
+    def _cleanup_worktree(self, worktree_path: str):
+        """Robustly cleans up a git worktree and its directory."""
+        # Unregister and attempt to remove the worktree via git
+        run_command(["git", "worktree", "remove", "-f", worktree_path], check=False, log_on_error=False)
+
+        # Forcefully delete the directory if it still exists
+        if os.path.exists(worktree_path):
+            shutil.rmtree(worktree_path, ignore_errors=True)
+
+        # Prune stale worktree metadata
+        run_command(["git", "worktree", "prune"], check=False, log_on_error=False)
+
+        # Final safety check
+        if os.path.exists(worktree_path):
+            raise CLIError(f"Failed to clean up worktree directory: {worktree_path}")
 
     def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
@@ -258,6 +275,45 @@ class Orchestrator:
         list_pattern = rf"^\s*\d+\.\s*{re.escape(section_name)}\b"
         return bool(re.search(header_pattern, text, re.IGNORECASE | re.MULTILINE) or
                     re.search(list_pattern, text, re.IGNORECASE | re.MULTILINE))
+
+    def _read_safe_file(self, file_path: str, max_size: int = 1024 * 1024) -> str:
+        """
+        Validates and reads a file from within the repository root.
+        """
+        abs_path = os.path.abspath(file_path)
+        repo_root = os.path.abspath(os.getcwd())
+        try:
+            if os.path.commonpath([repo_root, abs_path]) != repo_root:
+                raise CLIError(f"Security Error: Path {file_path} is outside of repository root.")
+        except ValueError:
+            raise CLIError(f"Security Error: Path {file_path} is invalid or outside of repository root.")
+
+        if not os.path.exists(abs_path):
+            raise CLIError(f"File not found: {file_path}")
+
+        if os.path.getsize(abs_path) > max_size:
+            raise CLIError(f"File size exceeds limit of {max_size} bytes.")
+
+        with open(abs_path, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    def create_issue(self, title: str, file_path: str) -> Dict[str, Any]:
+        """
+        Creates a new GitHub issue from a file, with validation.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Issue body cannot be empty.")
+        return self.github.create_issue(title, body)
+
+    def post_comment(self, pr_number: int, file_path: str) -> Dict[str, Any]:
+        """
+        Posts a comment to a PR from a file, with validation.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Comment body cannot be empty.")
+        return self.github.create_issue_comment(pr_number, body)
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
@@ -526,7 +582,7 @@ class Orchestrator:
         node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
 
         if not node_matches:
-            print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
+            log_error(f"Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
         with open("package.json", "r") as f:
@@ -539,7 +595,7 @@ class Orchestrator:
             actual_pnpm = None
 
         if not actual_pnpm or actual_pnpm != expected_pnpm:
-            print(f"❌ pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
+            log_error(f"pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
             raise CLIError(f"Run: corepack enable && corepack prepare pnpm@{expected_pnpm} --activate")
 
         return {"node": actual_node, "pnpm": actual_pnpm}
@@ -842,6 +898,194 @@ Respond only after the PR is created or updated:
         generate_report()
         return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
 
+    def run_playwright(self, grep: Optional[str] = None, worktree_path: Optional[str] = None) -> Dict[str, Any]:
+        """Runs Playwright tests and parses the JSON report."""
+        playwright_args = ["playwright", "test", "--reporter=json"]
+        if grep:
+            playwright_args.extend(["--grep", grep])
+
+        res = run_command(["pnpm"] + playwright_args, cwd=worktree_path, check=False)
+
+        failed_tests = []
+        try:
+            if "{" in res.stdout:
+                json_data = res.stdout[res.stdout.find("{"):]
+                report = json.loads(json_data)
+                for suite in report.get("suites", []):
+                    for spec in suite.get("specs", []):
+                        if not spec.get("ok"):
+                            error = "Unknown error"
+                            if spec.get("tests") and spec["tests"][0].get("results") and spec["tests"][0]["results"][0].get("error"):
+                                error = spec["tests"][0]["results"][0]["error"].get("message", "Unknown error")
+
+                            failed_tests.append({
+                                "title": spec.get("title"),
+                                "file": spec.get("file"),
+                                "error": error
+                            })
+        except Exception:
+            pass
+
+        return {
+            "success": res.returncode == 0,
+            "command": " ".join(["pnpm"] + playwright_args),
+            "failedTests": failed_tests
+        }
+
+    def get_ci_logs(self, pr_number: int) -> Dict[str, Any]:
+        """Fetches CI logs for failing check runs in a PR."""
+        # Get PR head SHA
+        stdout_pr = self.github.run_authenticated_gh([
+            "pr", "view", str(pr_number), "--json", "headRefOid"
+        ])
+        pr_data = json.loads(stdout_pr)
+        head_sha = pr_data.get("headRefOid")
+
+        if not head_sha:
+            raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
+
+        # Get check runs
+        stdout_checks = self.github.run_authenticated_gh([
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs",
+            "--jq", ".check_runs[] | {id, name, status, conclusion, html_url}"
+        ])
+        checks = [json.loads(l) for l in stdout_checks.splitlines() if l.strip()]
+        failed_checks = [c for c in checks if c.get("conclusion") == "failure"]
+
+        logs = {}
+        # Get check suites to find workflow runs
+        stdout_suites = self.github.run_authenticated_gh([
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-suites"
+        ])
+        check_suites = json.loads(stdout_suites).get("check_suites", [])
+
+        for suite in check_suites:
+            stdout_runs = self.github.run_authenticated_gh([
+                "api", f"/repos/:owner/:repo/check-suites/{suite['id']}/check-runs"
+            ])
+            runs = json.loads(stdout_runs).get("check_runs", [])
+            for run in runs:
+                if run.get("conclusion") == "failure":
+                    try:
+                        log_content = self.github.run_authenticated_gh([
+                            "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
+                        ])
+                        logs[run["name"]] = log_content[:10000]
+                    except Exception:
+                        pass
+
+        return {
+            "checks": checks,
+            "failedChecks": failed_checks,
+            "logs": logs
+        }
+
+    def get_merge_conflicts(self, pr_number: int, base_branch: str = "main") -> Dict[str, Any]:
+        """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
+        # Get PR head ref
+        stdout_pr = self.github.run_authenticated_gh([
+            "pr", "view", str(pr_number), "--json", "headRefName"
+        ])
+        pr_data = json.loads(stdout_pr)
+        head_ref = pr_data.get("headRefName")
+
+        if not head_ref:
+            raise CLIError(f"Could not determine head ref for PR #{pr_number}")
+
+        # Ensure we have the latest
+        run_command(["git", "fetch", "origin", head_ref])
+        run_command(["git", "fetch", "origin", base_branch])
+
+        worktree_path = os.path.join(os.getcwd(), f"worktree-conflict-{pr_number}.tmp")
+        self._cleanup_worktree(worktree_path)
+
+        run_command(["git", "worktree", "add", worktree_path, f"origin/{head_ref}"])
+
+        conflict_files = []
+        command_log = ""
+        try:
+            res = run_command(
+                ["git", "merge", "--no-commit", "--no-ff", f"origin/{base_branch}"],
+                cwd=worktree_path,
+                check=False
+            )
+            command_log = res.stdout + res.stderr
+
+            if res.returncode != 0:
+                res_diff = run_command(
+                    ["git", "diff", "--name-only", "--diff-filter=U"],
+                    cwd=worktree_path,
+                    check=False
+                )
+                conflict_files = [f.strip() for f in res_diff.stdout.splitlines() if f.strip()]
+                run_command(["git", "merge", "--abort"], cwd=worktree_path, check=False)
+        finally:
+            run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
+            if os.path.exists(worktree_path):
+                shutil.rmtree(worktree_path, ignore_errors=True)
+
+        return {
+            "prNumber": pr_number,
+            "baseBranch": base_branch,
+            "headRef": head_ref,
+            "conflictFiles": conflict_files,
+            "commandLog": command_log
+        }
+
+    def get_pr_diff_shapen(self, pr_number: int) -> Dict[str, Any]:
+        """Fetches PR diff, applies truncation and shapes file info."""
+        # Get files list
+        stdout_files = self.github.run_authenticated_gh([
+            "pr", "view", str(pr_number), "--json", "files"
+        ])
+        files_data = json.loads(stdout_files)
+        files = files_data.get("files", [])
+
+        # Get diff text
+        diff_text = self.github.run_authenticated_gh([
+            "pr", "diff", str(pr_number)
+        ])
+
+        MAX_DIFF_SIZE = 50000
+        truncated = False
+        if len(diff_text) > MAX_DIFF_SIZE:
+            diff_text = diff_text[:MAX_DIFF_SIZE] + "\n\n... [Diff truncated due to size] ..."
+            truncated = True
+
+        return {
+            "prNumber": pr_number,
+            "files": [
+                {
+                    "path": f.get("path"),
+                    "status": f.get("status") or "modified",
+                    "additions": f.get("additions"),
+                    "deletions": f.get("deletions")
+                } for f in files
+            ],
+            "diffText": diff_text,
+            "truncated": truncated
+        }
+
+    def list_prs(self, state: str = "open", limit: int = 10, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+        """Lists PRs with optional filtering."""
+        gh_args = [
+            "pr", "list",
+            "--state", state,
+            "--limit", str(limit),
+            "--json", "number,title,author,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,updatedAt,url"
+        ]
+
+        if labels:
+            gh_args.extend(["--label", ",".join(labels)])
+
+        stdout = self.github.run_authenticated_gh(gh_args)
+        prs = json.loads(stdout)
+
+        if not include_drafts:
+            prs = [pr for pr in prs if not pr.get("isDraft")]
+
+        return {"prs": prs}
+
     def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
         """
         Aggregates multiple PRs into a single target branch and creates a consolidated PR.
@@ -936,12 +1180,7 @@ Respond only after the PR is created or updated:
                 raise CLIError(f"Could not determine head ref for PR #{pr_number}")
 
             # 2. Clean up existing worktree if present
-            if os.path.exists(worktree_path):
-                run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
-                if os.path.exists(worktree_path):
-                    shutil.rmtree(worktree_path, ignore_errors=True)
-                if os.path.exists(worktree_path):
-                    raise CLIError(f"Failed to clean up existing worktree directory: {worktree_path}")
+            self._cleanup_worktree(worktree_path)
 
             # 3. Fetch PR branch and create worktree directly on it
             run_command(["git", "fetch", "origin", f"+pull/{pr_number}/head:{head_ref}"], check=True)
@@ -950,11 +1189,6 @@ Respond only after the PR is created or updated:
             # 4. Switch to worktree and perform git operations
             changed_dir = True
             os.chdir(worktree_path)
-            changed_dir = True
-
-            # Checkout the PR branch using git
-            run_command(["git", "fetch", "origin", f"pull/{pr_number}/head:{head_ref}"], check=True)
-            run_command(["git", "checkout", head_ref], check=True)
 
             # Ensure origin/base_branch is up-to-date
             run_command(["git", "fetch", "origin", base_branch], check=True)

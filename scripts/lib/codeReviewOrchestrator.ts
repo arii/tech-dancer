@@ -2,10 +2,32 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
-import { calculateEstimatedTokens, cleanupFeedback } from './codeReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
-import { execSync, spawnSync } from 'child_process';
+import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
+import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
+import { execFile as execFileCb, spawn } from 'child_process';
+import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
+
+const execFile = promisify(execFileCb);
+
+/**
+ * Loads project configuration from dev-tools/project_config.json.
+ * Gracefully handles missing or malformed configuration files.
+ */
+function loadProjectConfig(): Record<string, unknown> {
+  try {
+    const configPath = path.join(process.cwd(), 'dev-tools/project_config.json');
+    if (!fs.existsSync(configPath)) return {};
+    return JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, unknown>;
+  } catch (err) {
+    console.warn('⚠️  Failed to load project_config.json, using defaults.', err);
+    return {};
+  }
+}
+
+const projectConfig = loadProjectConfig();
+const DEFAULT_MAX_DIFF_CHARS = 40000;
+const MAX_DIFF_CHARS = (projectConfig.max_diff_chars as number) ?? DEFAULT_MAX_DIFF_CHARS;
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -17,7 +39,13 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
+function getInputComplexity(summary: CodeReviewSummary): number {
+  return (summary.diffContext?.length ?? 0) + (summary.externalContext?.length ?? 0);
+}
+
+let cachedPRGoal: string | undefined | null = null;
 async function fetchPRGoal(): Promise<string | undefined> {
+  if (cachedPRGoal !== null) return cachedPRGoal;
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
@@ -30,8 +58,10 @@ async function fetchPRGoal(): Promise<string | undefined> {
     if (!res.ok) return undefined;
     const pr = await res.json() as { title: string; body: string | null };
     const body = pr.body?.trim() ? `\n\n${pr.body.trim()}` : '';
-    return `${pr.title}${body}`;
+    cachedPRGoal = `${pr.title}${body}`;
+    return cachedPRGoal;
   } catch {
+    cachedPRGoal = undefined;
     return undefined;
   }
 }
@@ -119,59 +149,130 @@ function resolveImportPath(importPath: string, currentFile: string): string | un
   return undefined;
 }
 
-export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
-  try {
-    let diffCommand = 'git diff -U10 HEAD~1 HEAD';
-    let nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+let cachedGitArgs: { diffArgs: string[], nameOnlyArgs: string[], contextBaseRef: string } | null = null;
 
-    // Verify if origin/main exists, fallback to git history for CI if needed
+async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[], contextBaseRef: string }> {
+  if (cachedGitArgs) return cachedGitArgs;
+
+  const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
+  let diffArgs = ['diff', '-U10', `${baseRef}...HEAD`];
+  let nameOnlyArgs = ['diff', '--name-only', `${baseRef}...HEAD`];
+  let contextBaseRef = baseRef;
+
+  try {
+    await execFile('git', ['rev-parse', '--verify', baseRef]);
+  } catch {
     try {
-      execSync('git rev-parse origin/main', { stdio: 'ignore' });
-      diffCommand = 'git diff -U10 origin/main...HEAD';
-      nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
+      await execFile('git', ['rev-parse', '--verify', 'main']);
+      diffArgs = ['diff', '-U10', 'main...HEAD'];
+      nameOnlyArgs = ['diff', '--name-only', 'main...HEAD'];
+      contextBaseRef = 'main';
     } catch {
-      try {
-        execSync('git rev-parse main', { stdio: 'ignore' });
-        diffCommand = 'git diff -U10 main...HEAD';
-        nameOnlyCommand = 'git diff --name-only main...HEAD';
-      } catch {
-        diffCommand = 'git diff -U10 HEAD~1 HEAD';
-        nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
-      }
+      diffArgs = ['diff', '-U10', 'HEAD~1', 'HEAD'];
+      nameOnlyArgs = ['diff', '--name-only', 'HEAD~1', 'HEAD'];
+      contextBaseRef = 'HEAD~1';
     }
-    const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+  }
+
+  cachedGitArgs = { diffArgs, nameOnlyArgs, contextBaseRef };
+  return cachedGitArgs;
+}
+
+async function getAIContext(inputData: string): Promise<Record<string, unknown>[]> {
+  return new Promise((resolve, reject) => {
+    const child = spawn('python3', ['dev-tools/get_ai_context.py']);
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (data) => { stdout += data; });
+    child.stderr.on('data', (data) => { stderr += data; });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        try {
+          resolve(JSON.parse(stdout));
+        } catch (e) {
+          reject(new Error(`Failed to parse AI context: ${e instanceof Error ? e.message : String(e)}`));
+        }
+      } else {
+        reject(new Error(`AI context error (code ${code}): ${stderr}`));
+      }
+    });
+
+    child.on('error', (err) => {
+      reject(err);
+    });
+
+    child.stdin.write(inputData);
+    child.stdin.end();
+  });
+}
+
+export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {
+  try {
+    const { diffArgs, nameOnlyArgs, contextBaseRef } = await getGitArgs();
+
+    let rawDiff: string;
+    if (targetFiles && targetFiles.length > 0) {
+      const specificDiffArgs = [...diffArgs, '--', ...targetFiles];
+      const res = await execFile('git', specificDiffArgs, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      rawDiff = (res.stdout as string) || '';
+    } else {
+      const res = await execFile('git', diffArgs, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+      rawDiff = (res.stdout as string) || '';
+    }
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
-    const maxChars = 60000;
-    const diffContext = rawDiff.length > maxChars
-      ? rawDiff.slice(0, maxChars) + '\n\n...[TRUNCATED FOR LLM — diff continues beyond this point, do not assume missing context means missing code]'
-      : rawDiff;
+    let diffContext = rawDiff;
+    let isTruncated = false;
+    let diffStat: string | undefined = undefined;
 
+    if (rawDiff.length > MAX_DIFF_CHARS) {
+      isTruncated = true;
+      // Build robust stat arguments by replacing the diff mode with --stat
+      const statArgs = ['diff', '--stat', ...diffArgs.slice(1).filter(arg => arg !== '-U10')];
+
+      const specificStatArgs = (targetFiles && targetFiles.length > 0)
+        ? [...statArgs, '--', ...targetFiles]
+        : statArgs;
+
+      try {
+        const statRes = await execFile('git', specificStatArgs, {
+          encoding: 'utf-8',
+          maxBuffer: 1024 * 1024 * 10 // Use 10MB buffer for safety on large PRs
+        });
+        diffStat = (statRes.stdout as string) || '';
+      } catch (err) {
+        console.warn('⚠️  Failed to fetch git diff --stat for large PR:', err);
+        diffStat = '[Error fetching diff stat summary]';
+      }
+
+      diffContext = rawDiff.slice(0, MAX_DIFF_CHARS) +
+        `\n\n...[TRUNCATED FOR LLM]\n\nDIFF STAT SUMMARY:\n${diffStat}\n\n[The diff was truncated at ${MAX_DIFF_CHARS} characters. AI analysis may be incomplete.]`;
+    }
 
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
-    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
-      .split('\n')
-      .filter(Boolean);
+    let files: string[];
+    if (targetFiles) {
+      files = targetFiles;
+    } else {
+      const res = await execFile('git', nameOnlyArgs, { encoding: 'utf-8' });
+      files = (res.stdout as string || '').split('\n').filter(Boolean);
+    }
 
 
     // Context gathering
     const externalFilePaths = new Set<string>();
     let localDefinitions = '';
 
-    // Extract baseRef for git diff <baseRef> -- <file>
-    // diffCommand examples: 'git diff origin/main...HEAD', 'git diff main...HEAD', 'git diff HEAD~1 HEAD'
-    const diffParts = diffCommand.split(' ');
-    const diffSpec = diffParts[2] || 'HEAD~1';
-    const baseRef = diffSpec.split('...')[0] || 'HEAD~1';
-
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
 
       try {
-        const diffResult = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' });
+        const diffResult = await execFile('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
         const fileDiff = diffResult.stdout || '';
-        const fileContent = fs.readFileSync(file, 'utf-8');
+        const fileContent = await fs.promises.readFile(file, 'utf-8');
         const imports = parseImports(fileContent);
 
         // Identify which imported symbols are used in the diff
@@ -222,7 +323,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     for (const extPath of externalFilePaths) {
       if (externalContext.length >= maxExternalChars) break;
       if (fs.existsSync(extPath)) {
-        const content = fs.readFileSync(extPath, 'utf-8');
+        const content = await fs.promises.readFile(extPath, 'utf-8');
         externalContext += `\n\n--- FILE: ${extPath} ---\n${content}`;
       }
     }
@@ -239,22 +340,22 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       const batchFiles = [];
       for (const file of files) {
         if (!fs.existsSync(file)) continue;
-        const fileDiff = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' }).stdout || '';
-        if (fileDiff) {
-          batchFiles.push({ path: file, diff: fileDiff });
+        try {
+          const diffResult = await execFile('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
+          const fileDiff = (diffResult.stdout as string) || '';
+          if (fileDiff) {
+            batchFiles.push({ path: file, diff: fileDiff });
+          }
+        } catch (err) {
+          console.warn(`Could not gather diff context for ${file}:`, err);
         }
       }
 
       if (batchFiles.length > 0) {
         const inputData = JSON.stringify({ files: batchFiles });
-        const res = spawnSync('python3', ['dev-tools/get_ai_context.py'], {
-          input: inputData,
-          encoding: 'utf-8',
-          maxBuffer: 1024 * 1024 * 50 // 50MB buffer for large diffs
-        });
+        const contextResults = await getAIContext(inputData);
 
-        if (res.status === 0 && res.stdout) {
-          const contextResults = JSON.parse(res.stdout);
+        if (contextResults) {
           for (const ctx of contextResults) {
             if (ctx.dependencies?.length || ctx.dependents?.length || ctx.semantic?.length) {
               impactSemanticContext += `\n\n### Context for ${ctx.path}\n`;
@@ -281,6 +382,8 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       changedFiles: files,
       externalContext: hasRealContent ? externalContext.trim() : undefined,
       impactSemanticContext: impactSemanticContext.trim() || undefined,
+      isTruncated,
+      diffStat,
     };
 
     summary.estimatedInputTokens = calculateEstimatedTokens([
@@ -293,6 +396,33 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     console.warn('Could not generate code diff:', error);
     return { diffContext: '' };
   }
+}
+
+export function generateTruncatedReviewMarkdown(
+  summary: CodeReviewSummary,
+  client: CodeReviewClientStrategy
+): string {
+  console.warn(`⚠️  Diff is too large (${summary.fullDiff?.length} chars) — skipping AI review and requesting human review.`);
+  const prNumber = process.env.PR_NUMBER;
+  const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
+
+  const statSummary = summary.diffStat ? `\n\nDIFF STAT SUMMARY:\n${summary.diffStat}` : '';
+
+  return `## ${client.reportTitle}
+
+> ${client.botTagline}
+
+**Reviewing:** ${prLink}
+
+### ⚠️ Review Skipped: Large Diff Detected
+The diff for this PR exceeds the maximum character limit for automated AI review. To ensure accuracy and prevent incomplete analysis, the AI review has been skipped for this round.
+
+**Please perform a manual human review of these changes.**
+${statSummary}
+
+---
+*Generated by ${client.botName}*
+`;
 }
 
 export function generateCodeReviewMarkdown(
@@ -355,109 +485,231 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const summary = await getCodeDiffSummary();
-
-  // Load previous state and auto-resolve findings that are no longer in the diff
-  const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
-  if (prevState?.findings && Array.isArray(prevState.findings)) {
-    for (const finding of prevState.findings) {
-      if (finding.status === 'open' && finding.snippet) {
-        // Use fullDiff for auto-resolution check to avoid truncation issues
-        const diffToCheck = summary.fullDiff || summary.diffContext;
-        if (!diffToCheck.includes(finding.snippet)) {
-          finding.status = 'resolved';
-          finding.fixSummary = 'Jules response: snippet no longer present in diff.';
-          console.log(`✅ Auto-resolved finding: ${finding.issue}`);
-        }
-      }
-    }
-    summary.previousState = prevState;
-  }
-
-  if (!summary.diffContext) {
+  // Get initial summary to find changed files
+  const initialSummary = await getCodeDiffSummary();
+  if (!initialSummary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo code changes detected.\n`);
     fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
-  console.log(`🤖 Reviewing code diff with ${client.botName}...`);
+  const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
 
-  const startTime = Date.now();
-  let reviewResult = await client.invokeReview(summary);
+  if (initialSummary.isTruncated) {
+    const report = generateTruncatedReviewMarkdown(initialSummary, client);
+    fs.writeFileSync(agentReportPath, report);
+    await postPRComment(report, client.reportTitle, prevState);
 
-  if (reviewResult.truncated) {
-    console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
-    logReviewExecution('code-review', reviewResult, reviewResult.durationMs ?? (Date.now() - startTime));
-    const retryStartTime = Date.now();
-    reviewResult = await client.invokeReview(summary, 8192);
-    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - retryStartTime);
-  } else {
-    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - startTime);
-  }
-
-  logReviewExecution('code-review', reviewResult, reviewResult.durationMs); // Captured telemetry from client
-
-  // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
-  // A cut-off <findings> block, or a verdict tag that got chopped off the end,
-  // both currently degrade to the parser's default ('pass', undefined state) —
-  // which would let real bugs slip through with zero signal anyone is missing.
-  if (reviewResult.truncated || reviewResult.parseError) {
-    const reason = reviewResult.truncated 
-      ? "was truncated before completion (likely an output token limit)"
-      : `had a malformed findings block (parse error: ${reviewResult.parseError})`;
-    console.error(
-      `❌ ${client.botName} output ${reason} — treating as inconclusive, not PASS.`
-    );
-    reviewResult = {
-      ...reviewResult,
+    const verdictPath = path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`);
+    fs.writeFileSync(verdictPath, JSON.stringify({
+      passed: true,
+      highCount: 0,
+      routes: [],
       llmVerdict: 'warn',
-      feedback: `${reviewResult.feedback}\n\n---\n⚠️ **Review incomplete:** the model's response ${reason}. This review could not verify all findings and should not be treated as a clean pass. Consider re-running.`,
-    };
+      isTruncated: true,
+      state: prevState
+    }, null, 2));
+    return;
   }
 
-  reviewResult = reconcileVerdict(reviewResult, summary.fullDiff || summary.diffContext);
+  const changedFiles = initialSummary.changedFiles || [];
 
+  // Batch files (max 10 per batch)
+  const fileBatches = batchFiles(changedFiles, 10);
+  const roles: CodeReviewRole[] = ['SECURITY', 'PERFORMANCE', 'STYLE', 'ARCHITECTURE'];
 
-  // Merge findings in orchestrator instead of relying solely on LLM
-  // This prevents data loss if LLM forgets to echo back some findings
-  if (reviewResult.state && summary.previousState) {
-    const existingIds = new Set(reviewResult.state.findings.map(f => f.id));
-    const missingFindings = summary.previousState.findings.filter(f => !existingIds.has(f.id));
-    if (missingFindings.length > 0) {
-      console.log(`♻️  Restoring ${missingFindings.length} findings omitted by LLM.`);
-      reviewResult.state.findings.push(...missingFindings);
+  console.log(`🤖 Reviewing ${changedFiles.length} files in ${fileBatches.length} batches with ${roles.length} specialized agents...`);
+
+  const orchestratorStartTime = Date.now();
+  const allResults: CodeReviewResult[] = [];
+  const CONCURRENCY_LIMIT = 4;
+
+  const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();
+  const getMemoizedBatchSummary = (batch: string[]) => {
+    const key = batch.join(',');
+    if (!batchSummaryCache.has(key)) {
+      batchSummaryCache.set(key, getCodeDiffSummary(batch));
+    }
+    return batchSummaryCache.get(key)!;
+  };
+
+  const taskQueue: (() => Promise<void>)[] = [];
+
+  for (const batch of fileBatches) {
+    for (const role of roles) {
+      taskQueue.push(async () => {
+        try {
+          const batchSummary = await getMemoizedBatchSummary(batch);
+          if (!batchSummary.diffContext) {
+            console.warn(`⚠️  Empty diff for batch ${batch.join(', ')} — skipping ${role} review.`);
+            return;
+          }
+
+          const summary = { ...batchSummary, role, previousState: prevState };
+
+          const invokeWithTelemetry = async (forceMaxTokens?: number): Promise<CodeReviewResult> => {
+            const start = Date.now();
+            const result = await client.invokeReview(summary, forceMaxTokens);
+            const durationMs = Date.now() - start;
+            logReviewExecution('code-review', result, durationMs, {
+              inputChars: getInputComplexity(summary)
+            });
+            return result;
+          };
+
+          let result = await invokeWithTelemetry();
+
+          if (result.truncated) {
+            console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
+            result = await invokeWithTelemetry(8192);
+          }
+
+          // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
+          // A cut-off <findings> block, or a verdict tag that got chopped off the end,
+          // both currently degrade to the parser's default ('pass', undefined state) —
+          // which would let real bugs slip through with zero signal anyone is missing.
+          if (result.truncated || result.parseError) {
+            const reason = result.truncated 
+              ? "was truncated before completion (likely an output token limit)"
+              : `had a malformed findings block (parse error: ${result.parseError})`;
+            console.error(
+              `❌ ${client.botName} output ${reason} — treating as inconclusive, not PASS.`
+            );
+            result = {
+              ...result,
+              llmVerdict: 'warn',
+              feedback: `${result.feedback}\n\n---\n⚠️ **Review incomplete:** the model's response ${reason}. This review could not verify all findings and should not be treated as a clean pass. Consider re-running.`,
+            };
+          }
+
+          // Final verification/reconciliation
+          result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
+          allResults.push(result);
+        } catch (err) {
+          const errorMsg = err instanceof Error ? err.message : String(err);
+          console.error(`❌ Error in ${role} review task:`, err);
+          allResults.push({
+            feedback: `Error: failed to execute ${role} review. Details: ${errorMsg}`,
+            role,
+            tokens: 0,
+            cost: 0,
+            llmVerdict: 'warn',
+          });
+        }
+      });
     }
   }
 
-  const report = generateCodeReviewMarkdown(reviewResult, client);
+  // Execute with concurrency limit
+  const workers = Array.from({ length: Math.min(CONCURRENCY_LIMIT, taskQueue.length) }, async () => {
+    while (taskQueue.length > 0) {
+      const task = taskQueue.shift();
+      if (task) await task();
+    }
+  });
+
+  await Promise.all(workers);
+  const orchestratorDurationMs = Date.now() - orchestratorStartTime;
+
+  // Aggregation logic - Sort results for deterministic output
+  allResults.sort((a, b) => (a.role || '').localeCompare(b.role || ''));
+
+  let aggregatedFeedback = '';
+  const aggregatedFindings = [];
+  let totalTokens = 0;
+  let totalInputTokens = 0;
+  let totalOutputTokens = 0;
+  let totalCacheTokens = 0;
+  let totalCost = 0;
+  let finalVerdict: 'pass' | 'fail' | 'warn' = 'pass';
+  const modelNames = new Set<string>();
+
+  for (const res of allResults) {
+    if (res.feedback) {
+      aggregatedFeedback += `\n\n#### [${res.role}] Review\n${res.feedback}`;
+    }
+    if (res.state?.findings) {
+      aggregatedFindings.push(...res.state.findings);
+    }
+    totalTokens += res.tokens;
+    totalInputTokens += res.inputTokens ?? 0;
+    totalOutputTokens += res.outputTokens ?? 0;
+    totalCacheTokens += res.cacheTokens ?? 0;
+    totalCost += res.cost;
+
+    if (res.llmVerdict === 'fail') finalVerdict = 'fail';
+    else if (res.llmVerdict === 'warn' && finalVerdict !== 'fail') finalVerdict = 'warn';
+
+    if (res.modelName) modelNames.add(res.modelName);
+  }
+
+  // Restore findings omitted by LLM if we have previous state
+  if (prevState?.findings) {
+    const currentIds = new Set(aggregatedFindings.map(f => f.id));
+    const missingFindings = prevState.findings.filter(f => !currentIds.has(f.id));
+
+    if (missingFindings.length > 0) {
+      const diffToVerify = initialSummary.fullDiff || initialSummary.diffContext;
+      const restored = [];
+
+      for (const finding of missingFindings) {
+        if (finding.status === 'open' && finding.snippet) {
+          if (!diffToVerify.includes(finding.snippet)) {
+            finding.status = 'resolved';
+            finding.fixSummary = 'Jules response: snippet no longer present in diff.';
+            console.log(`✅ Auto-resolved finding: ${finding.issue}`);
+          }
+        }
+        restored.push(finding);
+      }
+
+      if (restored.length > 0) {
+        console.log(`♻️  Restoring ${restored.length} findings omitted by LLM agents.`);
+        aggregatedFindings.push(...restored);
+      }
+    }
+  }
+
+  const finalResult: CodeReviewResult = {
+    feedback: aggregatedFeedback.trim(),
+    tokens: totalTokens,
+    inputTokens: totalInputTokens,
+    outputTokens: totalOutputTokens,
+    cacheTokens: totalCacheTokens,
+    cost: totalCost,
+    llmVerdict: finalVerdict,
+    state: { findings: aggregatedFindings },
+    modelName: Array.from(modelNames).join(', '),
+    durationMs: orchestratorDurationMs,
+  };
+
+  const report = generateCodeReviewMarkdown(finalResult, client);
 
   // Write local report
   fs.writeFileSync(agentReportPath, report);
   console.log(`✅ Local report written to ${agentReportPath}`);
 
   // Post to GitHub PR
-  await postPRComment(report, client.reportTitle, reviewResult.state);
+  await postPRComment(report, client.reportTitle, finalResult.state);
 
   // Also alert Jules if this PR is from a Jules session
   const julesSessionId = await getJulesSessionIdFromPR();
   if (julesSessionId) {
-    const isFail = reviewResult.llmVerdict === 'fail';
+    const isFail = finalResult.llmVerdict === 'fail';
     const passFailMsg = isFail ? "FAIL ❌" : "PASS ✅";
-    const julesMessage = `[${client.reportTitle}] posted a code review (${passFailMsg}). Please read the review comments on the PR, analyze the diff context provided, and fix any failed or warned areas.`;
+    const julesMessage = `[${client.reportTitle}] posted an aggregated code review (${passFailMsg}). Please read the review comments on the PR, analyze the diff context provided, and fix any failed or warned areas.`;
     await sendJulesMessage(julesSessionId, julesMessage);
   }
 
-  // Write a structured result file alongside the markdown
-  const isFail = reviewResult.llmVerdict === 'fail';
-
+  const isFail = finalResult.llmVerdict === 'fail';
   const verdictPath = path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`);
   fs.writeFileSync(verdictPath, JSON.stringify({
     passed: !isFail,
     highCount: isFail ? 1 : 0,
-    routes: [], // To maintain schema compatibility with visual-review if needed
-    llmVerdict: reviewResult.llmVerdict,
-    state: reviewResult.state
+    routes: [],
+    llmVerdict: finalResult.llmVerdict,
+    state: finalResult.state
   }, null, 2));
 
   if (isFail) {

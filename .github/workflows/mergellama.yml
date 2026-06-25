@@ -37,6 +37,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
@@ -45,9 +48,7 @@ jobs:
       - name: Find and Resolve Conflicts
         run: |
           # Use our unified CLI for resolution
-          # Setting PYTHONPATH ensures modules can find each other without sys.path hacks
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"; export PYTHONPATH
-          python3 dev-tools/td_cli.py gh resolve
+          td-cli gh resolve
 
       - name: Validate Resolution
         run: |

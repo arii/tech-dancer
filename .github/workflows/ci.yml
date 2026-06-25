@@ -81,6 +81,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Validate Runtime
         shell: bash
         run: |
@@ -126,7 +129,7 @@ jobs:
         run: |
           echo "::group::Pytest"
           trap 'echo "::endgroup::"' EXIT
-          PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
+          python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
         run: pnpm run knip
@@ -136,11 +139,11 @@ jobs:
         run: |
           echo "::group::Ratchet Any"
           trap 'echo "::endgroup::"' EXIT
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
-          python3 dev-tools/td_cli.py gh ratchet-any
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td-cli gh ratchet-any
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
@@ -155,11 +158,12 @@ jobs:
 
       # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Install dependencies
         shell: bash
@@ -171,14 +175,14 @@ jobs:
       - name: UI Anti-Pattern Audit - Gate
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::group::Audit"
           trap 'echo "::endgroup::"' EXIT
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
-          python3 dev-tools/td_cli.py gh audit-gate
+          td-cli gh audit-gate
 
       - name: Design Token Compliance
         run: |
@@ -211,6 +215,13 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
       - run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build App
@@ -223,15 +234,14 @@ jobs:
 
       - name: Bundle Size Check
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-          export PYTHONPATH
-          python3 dev-tools/td_cli.py gh bundle-size
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td-cli gh bundle-size
 
       - name: Run Playwright Smoke Test
         run: |
-          pnpm exec playwright install chromium
           VITE_BASE_PATH=/ pnpm run test:e2e
 
       - name: Run Lighthouse CI
@@ -288,6 +298,9 @@ jobs:
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
@@ -441,8 +454,13 @@ jobs:
       - name: Merge AI Logs into Artifacts
         if: always()
         run: |
-          # Safely clean legacy logs
-          rm -f dev-tools/logs/ai/review-run.json artifacts/review-run.json || true
+          # Safely backup legacy logs
+          if [ -f dev-tools/logs/ai/review-run.json ]; then
+            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          fi
+          if [ -f artifacts/review-run.json ]; then
+            mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          fi
           mkdir -p artifacts/logs/ai
           cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
 
@@ -453,4 +471,3 @@ jobs:
           name: deployment-review
           path: |
             artifacts/
-            dev-tools/logs/ai/

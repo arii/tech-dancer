@@ -6,7 +6,7 @@ export interface GeminiModel {
   maxOutputTokens: number;
 }
 
-export const GEMINI_MODELS: GeminiModel[] = [
+export const GEMINI_MODELS_METADATA: GeminiModel[] = [
   {
     id: 'gemini-3.1-pro-preview',
     name: 'Gemini 3.1 Pro (Preview)',
@@ -39,29 +39,75 @@ export const DEPRECATED_MODELS = [
   'gemini-2.0-flash-thinking'
 ];
 
+let cachedModels: string[] | null = null;
+
 /**
- * Selects an optimal Gemini model based on the requested tier.
- * Explicitly avoids deprecated models.
+ * Fetches available Gemini models from the API.
  */
-export function pickGeminiModel(
-  preferredTier: 'pro' | 'flash' | 'lite' = 'flash',
-  estimatedInputTokens: number = 0
-): string {
-  // Always filter out deprecated models just in case
-  const activeModels = GEMINI_MODELS.filter(m => !DEPRECATED_MODELS.includes(m.id));
+export async function resolveAvailableGeminiModels(): Promise<string[]> {
+  if (cachedModels) return cachedModels;
 
-  // If we have an extreme token count, prefer Pro regardless of preferredTier if budget allows?
-  // Actually, let's stick to the requested tier but fallback if needed.
-  let selected = activeModels.find(m => m.tier === preferredTier);
-
-  if (!selected) {
-    selected = activeModels.find(m => m.tier === 'flash') || activeModels[0];
+  const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY;
+  if (!apiKey) {
+    console.warn("⚠️ No API key found for Gemini model resolution.");
+    return [];
   }
 
-  // If we have an estimate, ensure it fits
-  if (estimatedInputTokens > 0 && selected.maxInputTokens < estimatedInputTokens) {
-    const betterModel = activeModels.find(m => m.maxInputTokens >= estimatedInputTokens);
-    if (betterModel) selected = betterModel;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      console.warn(`⚠️ Failed to fetch Gemini models: ${res.status} ${res.statusText}`);
+      return [];
+    }
+
+    const data = await res.json() as { models?: { name: string }[] };
+    if (!data || !Array.isArray(data.models)) {
+      console.warn("⚠️ Invalid format returned from Gemini models endpoint.");
+      return [];
+    }
+
+    cachedModels = data.models.map(m => m.name.replace('models/', ''));
+    return cachedModels;
+  } catch (error) {
+    console.warn(`⚠️ Error resolving available Gemini models: ${error}`);
+    return [];
+  }
+}
+
+/**
+ * Selects an optimal Gemini model based on the requested tier.
+ * Explicitly avoids deprecated models and prioritizes the Gemini 3.x suite.
+ */
+export async function pickGeminiModel(
+  preferredTier: 'pro' | 'flash' | 'lite' = 'flash',
+  estimatedInputTokens: number = 0
+): Promise<string> {
+  if (process.env.GEMINI_MODEL) return process.env.GEMINI_MODEL;
+
+  const availableIds = await resolveAvailableGeminiModels();
+  const activeModels = GEMINI_MODELS_METADATA.filter(m =>
+    availableIds.includes(m.id) && !DEPRECATED_MODELS.includes(m.id)
+  );
+
+  if (activeModels.length === 0) {
+    return availableIds.find(id => id.includes('3.1') || id.includes('3.5')) ||
+           GEMINI_MODELS_METADATA.find(m => m.tier === preferredTier)?.id ||
+           GEMINI_MODELS_METADATA[1].id;
+  }
+
+  let selected = activeModels.find(m => m.tier === preferredTier) ||
+                 activeModels.find(m => m.tier === 'flash') ||
+                 activeModels[0];
+
+  if (estimatedInputTokens > selected.maxInputTokens) {
+    selected = activeModels.find(m => m.maxInputTokens >= estimatedInputTokens) || selected;
   }
 
   return selected.id;
@@ -73,11 +119,9 @@ export function pickGeminiModel(
  */
 export function getGeminiPricing(modelId: string): { inputCostPerM: number; outputCostPerM: number } {
   if (modelId.includes('pro')) {
-    // Pro is usually ~10x-20x Flash
     return { inputCostPerM: 1.25, outputCostPerM: 5.00 };
   }
   if (modelId.includes('lite')) {
-    // Lite is usually half of Flash
     return { inputCostPerM: 0.0375, outputCostPerM: 0.15 };
   }
   // Default to Flash pricing

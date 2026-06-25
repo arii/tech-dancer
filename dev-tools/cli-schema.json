@@ -16,6 +16,48 @@
       "exact_usage": "python3 dev-tools/td_cli.py doctor",
       "required_flags": []
     },
+    "gh search-prs": {
+      "description": "Lists open Pull Requests with optional filtering by state, limit, draft status, and labels.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh search-prs [--state <STATE>] [--limit <LIMIT>] [--no-include-drafts] [--labels <LABELS>]",
+      "optional_flags": [
+        { "flag": "--state", "type": "string", "description": "PR state (open, closed, all)." },
+        { "flag": "--limit", "type": "integer", "description": "Maximum results." },
+        { "flag": "--no-include-drafts", "type": "boolean", "description": "Exclude draft PRs." },
+        { "flag": "--labels", "type": "string", "description": "Comma-separated labels." }
+      ]
+    },
+    "gh pr-diff": {
+      "description": "Fetches PR diff and file list, applying truncation and shaping.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh pr-diff <PR_NUMBER>",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ]
+    },
+    "gh merge-conflicts": {
+      "description": "Detects merge conflicts for a PR against a base branch.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh merge-conflicts <PR_NUMBER> [--base <BASE_BRANCH>]",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ],
+      "optional_flags": [
+        { "flag": "--base", "type": "string", "description": "Base branch (default: main)." }
+      ]
+    },
+    "repo ci-logs": {
+      "description": "Fetches CI logs for failing check runs in a PR.",
+      "exact_usage": "python3 dev-tools/td_cli.py repo ci-logs <PR_NUMBER>",
+      "required_arguments": [
+        { "name": "pr_number", "type": "integer", "description": "PR ID." }
+      ]
+    },
+    "repo run-playwright": {
+      "description": "Runs Playwright tests and returns failed tests in JSON.",
+      "exact_usage": "python3 dev-tools/td_cli.py repo run-playwright [--grep <PATTERN>] [--worktree <PATH>]",
+      "optional_flags": [
+        { "flag": "--grep", "type": "string", "description": "Grep pattern for tests." },
+        { "flag": "--worktree", "type": "string", "description": "Path to worktree." }
+      ]
+    },
     "gh conflicts": {
       "description": "Runs a global check across the repository to detect any active PR merge conflicts.",
       "exact_usage": "python3 dev-tools/td_cli.py gh conflicts",
@@ -138,6 +180,14 @@
       "exact_usage": "python3 dev-tools/td_cli.py gh pre-submit",
       "required_flags": []
     },
+    "gh create-issue": {
+      "description": "Creates a new GitHub issue using a title and a markdown file for the body.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh create-issue --title <TITLE> --file <PATH_TO_BODY_FILE>",
+      "required_flags": [
+        { "flag": "--title", "type": "string", "description": "The title of the issue." },
+        { "flag": "--file", "type": "string", "description": "Path to the Markdown file containing the issue body." }
+      ]
+    },
     "gh validate-issue": {
       "description": "Validates that a GitHub issue follows the Spec-Driven Issue Template.",
       "exact_usage": "python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",
@@ -182,6 +232,22 @@
           "flag": "--execute",
           "type": "boolean",
           "description": "Run without dry-run mode (default is --dry-run)."
+        }
+      ]
+    },
+    "agent dispatch": {
+      "description": "Initialize a Jules session for a specific branch and task.",
+      "exact_usage": "python3 dev-tools/td_cli.py agent dispatch <BRANCH> <TASK>",
+      "required_arguments": [
+        {
+          "name": "branch",
+          "type": "string",
+          "description": "The target branch for the task."
+        },
+        {
+          "name": "task",
+          "type": "string",
+          "description": "The task description for Jules."
         }
       ]
     },

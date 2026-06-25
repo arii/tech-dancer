@@ -12,8 +12,11 @@ export interface CodeReviewState {
   findings: ReviewFinding[];
 }
 
+export type CodeReviewRole = 'SECURITY' | 'PERFORMANCE' | 'STYLE' | 'ARCHITECTURE';
+
 export interface CodeReviewSummary {
   diffContext: string;
+  role?: CodeReviewRole;
   fullDiff?: string;
   prGoal?: string;
   changedFiles?: string[];
@@ -21,15 +24,18 @@ export interface CodeReviewSummary {
   impactSemanticContext?: string;
   previousState?: CodeReviewState;
   estimatedInputTokens?: number;
+  isTruncated?: boolean;
+  diffStat?: string;
 }
 
 export interface ParsedFindingsResult {
   state?: CodeReviewState;
-  parseError?: 'missing_closing_tag' | 'invalid_json';
+  parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
 }
 
 export interface CodeReviewResult {
   feedback: string;
+  role?: CodeReviewRole;
   tokens: number;
   inputTokens?: number;
   outputTokens?: number;
@@ -39,6 +45,5 @@ export interface CodeReviewResult {
   state?: CodeReviewState;
   modelName?: string;
   truncated?: boolean;
-  parseError?: 'missing_closing_tag' | 'invalid_json';
-  durationMs?: number;
+  parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
 }

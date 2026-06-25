@@ -45,6 +45,16 @@ if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
   mkdir -p "$NPM_CONFIG_PREFIX/bin"
 fi
 
+# Ensure local python bin is on path for td-cli
+# We add these unconditionally so that even if the directories don't exist yet,
+# they are present on the PATH for when pip later creates them during installation.
+for bin_dir in "$HOME/.local/bin" "/github/home/.local/bin"; do
+  case ":$PATH:" in
+    *":$bin_dir:"*) ;;
+    *) export PATH="$bin_dir:$PATH" ;;
+  esac
+done
+
 # -------- helpers --------
 log() { echo "[setup-agent] $*"; }
 warn() { echo "[setup-agent] WARNING: $*" >&2; }
@@ -91,11 +101,12 @@ install_apt_tools() {
 
   if ! have gh; then
     log "Installing GitHub CLI (gh)..."
-    if run_sudo install -d -m 0755 /etc/apt/keyrings; then
+    # Ensure /usr/share/keyrings exists as a standard location for system keyrings
+    if run_sudo mkdir -p /usr/share/keyrings; then
       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-        | run_sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null || true
-      run_sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg || true
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+        | run_sudo tee /usr/share/keyrings/githubcli-archive-keyring.gpg >/dev/null || true
+      run_sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg || true
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
         | run_sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null || true
       run_sudo apt-get update -y || true
       run_sudo apt-get install -y gh || warn "Unable to install gh; continuing."
@@ -175,6 +186,7 @@ install_python_deps() {
 
   if [ -f "dev-tools/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .)
+    have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
   else
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
   fi

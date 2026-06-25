@@ -6,49 +6,24 @@ export const GetPrDiffInputSchema = z.object({
 });
 
 export async function getPrDiffHandler(args: z.infer<typeof GetPrDiffInputSchema>) {
-  // Get files list
-  const filesResult = await runCommand("gh", [
-    "pr",
-    "view",
-    args.prNumber.toString(),
-    "--json", "files"
+  const result = await runCommand("td-cli", [
+    "gh", "pr-diff", args.prNumber.toString()
   ]);
 
-  if (filesResult.exitCode !== 0) {
-    throw new Error(`Failed to get PR files: ${filesResult.stderr}`);
+  if (result.exitCode !== 0) {
+    throw new Error(`Failed to get PR diff: ${result.stderr}`);
   }
 
-  const { files } = JSON.parse(filesResult.stdout);
-
-  // Get diff text
-  const diffResult = await runCommand("gh", [
-    "pr",
-    "diff",
-    args.prNumber.toString()
-  ]);
-
-  if (diffResult.exitCode !== 0) {
-    throw new Error(`Failed to get PR diff: ${diffResult.stderr}`);
+  const output = JSON.parse(result.stdout);
+  if (output.status === "error") {
+    throw new Error(`Failed to get PR diff: ${output.message}`);
   }
 
-  let diffText = diffResult.stdout;
-  const MAX_DIFF_SIZE = 50000; // 50KB limit for now
-  let truncated = false;
-
-  if (diffText.length > MAX_DIFF_SIZE) {
-    diffText = diffText.substring(0, MAX_DIFF_SIZE) + "\n\n... [Diff truncated due to size] ...";
-    truncated = true;
-  }
-
+  // Every TypeScript tool file must be a pure routing shim
   return {
-    prNumber: args.prNumber,
-    files: files.map((f: any) => ({
-      path: f.path,
-      status: f.status || "modified", // gh pr view --json files doesn't always provide status in same way as API
-      additions: f.additions,
-      deletions: f.deletions
-    })),
-    diffText,
-    truncated
+    prNumber: output.prNumber,
+    files: output.files,
+    diffText: output.diffText,
+    truncated: output.truncated
   };
 }

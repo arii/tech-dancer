@@ -1,3 +1,9 @@
+# Relationship to Layered Workflows:
+# This workflow is the primary self-healing entry point for general CI failures.
+# If future layered workflows (ci-validate.yml, ai-heal.yml) are introduced,
+# this workflow should either be retired or its triggers scoped to non-overlapping events
+# to prevent duplicate AI repair runs and noisy PR comments.
+
 name: 'Self-Healing CI'
 
 on:
@@ -18,10 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/arii/tech-dancer:latest
     env:
-      PYTHONPATH: dev-tools
       AI_MODEL: gpt-4o
       AI_SYNTHESIS_MODEL: gpt-4o
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Git Safe Directory
@@ -76,8 +80,8 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Check active runtime
         run: |
@@ -94,8 +98,8 @@ jobs:
 
       - name: Validate CLI
         run: |
-          python3 dev-tools/td_cli.py doctor
-          python3 dev-tools/td_cli.py gh status-board
+          td-cli doctor
+          td-cli gh status-board
 
       - name: Resolve PR Number
         env:

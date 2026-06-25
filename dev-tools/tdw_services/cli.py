@@ -1,5 +1,6 @@
 import sys
 import os
+from tdw_services.utils import log_info
 import json
 from datetime import datetime, timezone
 from typing import List, Dict, Any
@@ -14,11 +15,13 @@ from utils import get_github_client, get_repo_name, CLIError, run_command, set_g
 
 # CLI Group
 @click.group()
-@click.option('--json', 'json_output', is_flag=True, help='Output results in JSON format')
+@click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
 @click.pass_context
 def cli(ctx, json_output):
     """Unified Tech-Dancer DevTools CLI"""
     ctx.ensure_object(dict)
+    # If the user explicitly passed --no-json (if supported) or we want to detect if it's a TTY
+    # But for now, we follow the requirement to be JSON by default for machine consumption.
     ctx.obj['JSON'] = json_output
     ctx.obj['ORCHESTRATOR'] = Orchestrator()
 
@@ -41,12 +44,66 @@ def err(ctx, msg, code=1, data=None):
     sys.exit(code)
 
 # ==========================================
+# REPO COMMAND GROUP
+# ==========================================
+@cli.group()
+def repo():
+    """Repository Operations"""
+    pass
+
+@repo.command()
+@click.option('--grep')
+@click.option('--worktree')
+@click.pass_context
+def run_playwright(ctx, grep, worktree):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.run_playwright(grep=grep, worktree_path=worktree)
+    out(ctx, f"Playwright run complete.", data=res)
+
+@repo.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def ci_logs(ctx, pr_number):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_ci_logs(pr_number)
+    out(ctx, f"Fetched CI logs for PR #{pr_number}", data=res)
+
+# ==========================================
 # GH COMMAND GROUP
 # ==========================================
 @cli.group()
 def gh():
     """GitHub Operations"""
     pass
+
+@gh.command()
+@click.option('--state', default='open')
+@click.option('--limit', type=int, default=10)
+@click.option('--include-drafts/--no-include-drafts', default=True)
+@click.option('--labels')
+@click.pass_context
+def search_prs(ctx, state, limit, include_drafts, labels):
+    orch = ctx.obj['ORCHESTRATOR']
+    label_list = labels.split(',') if labels else None
+    res = orch.list_prs(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
+    out(ctx, f"Found {len(res['prs'])} PRs.", data=res)
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.option('--base', default='main')
+@click.pass_context
+def merge_conflicts(ctx, pr_number, base):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_merge_conflicts(pr_number, base_branch=base)
+    out(ctx, f"Checked merge conflicts for PR #{pr_number}", data=res)
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def pr_diff(ctx, pr_number):
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_pr_diff_shapen(pr_number)
+    out(ctx, f"Fetched diff for PR #{pr_number}", data=res)
 
 @gh.command()
 @click.argument('pr_number', type=int)
@@ -97,6 +154,21 @@ def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, e
         out(ctx, f"✅ Audit PR #{pr_number} action complete.", data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
+
+@gh.command()
+@click.option('--title', required=True, help='Issue title')
+@click.option('--file', required=True, help='Path to file containing issue body')
+@click.pass_context
+def create_issue(ctx, title, file):
+    """Create a new GitHub issue from a file."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.create_issue(title, file)
+        out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+    except Exception as e:
+        err(ctx, str(e))
 
 @gh.command()
 @click.option('--issue-number', type=int)
@@ -180,16 +252,13 @@ def detect_conflicts(ctx, pr):
 def post_comment(ctx, pr, file):
     """Post a comment to a PR from a file."""
     orch = ctx.obj['ORCHESTRATOR']
-    import os
-    if not os.path.exists(file):
-        err(ctx, f"File {file} does not exist.", data={"status": "error", "file": file})
-        return
-
-    with open(file, 'r') as f:
-        body = f.read()
-
-    res = orch.github.create_issue_comment(pr, body)
-    out(ctx, f"✅ Successfully posted comment to PR #{pr}", data={"status": "success"})
+    try:
+        res = orch.post_comment(pr, file)
+        out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+    except Exception as e:
+        err(ctx, str(e))
 
 @gh.command()
 @click.pass_context
@@ -417,7 +486,6 @@ def ai():
 @click.pass_context
 def review(ctx, pr_number, no_cache):
     import glob
-    import sys as _sys
 
     # Optionally bust the /tmp review cache so stale results are not silently returned
     if no_cache:
@@ -427,9 +495,9 @@ def review(ctx, pr_number, no_cache):
             import os as _os
             _os.remove(f)
         if removed:
-            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
+            log_info(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
         else:
-            print("ℹ️  No cache files found to remove.")
+            log_info("ℹ️  No cache files found to remove.")
 
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)
@@ -437,9 +505,9 @@ def review(ctx, pr_number, no_cache):
     # Surface errors clearly
     if isinstance(res, dict) and res.get('recommendation') == 'Not Approved' and not res.get('reviewComment', '').strip().startswith('CI'):
         # Likely an error result – dump full dict to stderr for diagnosis
-        print(f"⚠️  Review returned 'Not Approved' (may indicate an error).", file=_sys.stderr)
-        print(f"    recommendation : {res.get('recommendation')}", file=_sys.stderr)
-        print(f"    reviewComment  : {res.get('reviewComment', '')[:500]}", file=_sys.stderr)
+        log_info(f"""⚠️  Review returned 'Not Approved' (may indicate an error).
+    recommendation : {res.get('recommendation')}
+    reviewComment  : {res.get('reviewComment', '')[:500]}""")
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 
