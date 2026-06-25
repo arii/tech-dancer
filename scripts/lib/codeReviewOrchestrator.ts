@@ -398,6 +398,11 @@ export async function orchestrateCodeReview(
 
   const agentReportPath = path.join(ARTIFACTS_DIR, client.reportFileName);
 
+  // Guarantee artifacts directory exists before any check or early return
+  if (!fs.existsSync(ARTIFACTS_DIR)) {
+    fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
+  }
+
   const existing = await countExistingReviews(allReportTitles);
   if (existing >= MAX_REVIEWS_PER_PR) {
     console.log(`⏭️  Skipping ${client.botName} — ${existing}/${MAX_REVIEWS_PER_PR} reviews already posted.`);
@@ -429,9 +434,15 @@ export async function orchestrateCodeReview(
   const rawChangedFiles = initialSummary.changedFiles || [];
 
   // Filter out low-value paths (lockfiles, snapshots, etc.)
-  const changedFiles = rawChangedFiles.filter(f =>
-    !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => f.startsWith(p))
-  );
+  const changedFiles = rawChangedFiles.filter(f => {
+    return !IMPACT_CONFIG.LOW_IMPACT_PATHS.some(p => {
+      // Exact match for files
+      if (f === p) return true;
+      // Directory match (must end with / to be a dir prefix)
+      if (p.endsWith('/') && f.startsWith(p)) return true;
+      return false;
+    });
+  });
 
   if (changedFiles.length === 0) {
     console.log(`✅ No reviewable code changes detected after filtering — skipping agent review.`);
