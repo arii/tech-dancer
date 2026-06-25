@@ -41,8 +41,8 @@ try:
         if not get_github_token():
              raise CLIError("Missing GITHUB_TOKEN", code=401)
 
-        # Support legacy test expectation for JULES_API_KEY / ANTIGRAVITY_API_KEY
-        if not getattr(args, 'api_key', None) and not os.environ.get("ANTIGRAVITY_API_KEY") and not os.environ.get("JULES_API_KEY"):
+        # Support test expectation for JULES_API_KEY
+        if not getattr(args, 'api_key', None) and not os.environ.get("JULES_API_KEY"):
             raise CLIError("Missing JULES_API_KEY", code=401)
 
         # Support legacy test expectation for repo name

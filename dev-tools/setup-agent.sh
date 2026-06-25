@@ -139,7 +139,7 @@ normalize_nvmrc_for_snapshot() {
   # dev-tools/snapshot.sh currently compares .nvmrc literally against `node --version`.
   # Agent runtimes often pin only a major version such as `v22`, while Node reports
   # a full version such as `v24.16.0`. Normalize major-only pins so validation
-  # does not report a false mismatch in Codex/Jules.
+  # does not report a false mismatch in Agent/Jules.
   [ -f ".nvmrc" ] || return 0
   have node || return 0
 

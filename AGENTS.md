@@ -1,10 +1,10 @@
-# TSX File System Checklist (For Coding Agents)
+# Agent Rules & Runtime Contract
 
-These are **rules for writing clean `.tsx` files** so UI code consistently follows the design system, architecture, and modern frontend best practices.
+This document defines the rules for writing clean code and the strictly pinned runtime environment used in this repository.
 
 ## 🧠 Core Principle
 
-> **A `.tsx` file should build UI using standard pieces.**
+> **UI code should build UI using standard pieces, and the runtime environment must remain consistent.**
 
 ---
 
@@ -196,50 +196,22 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always co
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 
-## 22) Setup (Jules Environment)
+## 22) Runtime Environment Contract
 
-To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright), run the consolidated setup script:
+Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 
-```bash
-./setup-agent.sh
-```
+### Setup & Enforcement
 
-This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`) and installs all necessary dependencies. For detailed instructions, see [CODEX.md](./CODEX.md).
+Run `./setup-agent.sh` to bootstrap. This script enforces the contract across `.node-version`, `package.json`, and `.npmrc`.
 
-# Codex / Agent Runtime Rules
+### Forbidden Actions
 
-This repository enforces a strict runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`). For detailed instructions, see [CODEX.md](./CODEX.md). **DO NOT** add `use-node-version` to `.npmrc` as it breaks Vercel deployments.
+- ❌ **No `npm`**: Use `pnpm` exclusively.
+- ❌ **No Version Managers**: Do not use `nvm`, `pnpm env`, or `volta` to deviate from the pinned versions.
+- ❌ **No `.npmrc` Bloat**: Never add `use-node-version` (breaks Vercel).
+- ❌ **No Lockfile Deletion**: Do not delete `pnpm-lock.yaml`.
 
-Before installing, testing, building, or editing dependencies, run:
-
-```bash
-corepack enable
-corepack prepare pnpm@10.28.2 --activate
-pnpm run check:runtime-files
-pnpm run doctor
-```
-
-Use:
-
-```bash
-pnpm install --frozen-lockfile
-pnpm run lint
-pnpm run build
-```
-
-Do not run:
-
-```bash
-npm install
-npm install -g pnpm
-pnpm env use
-nvm install
-nvm use
-volta pin
-asdf local nodejs
-```
-
-If Node or pnpm mismatches, stop and report the mismatch. Do not change runtime versions unless the user explicitly asks to update the runtime contract.
+Validation failure = immediate halt. Report mismatches; do not attempt to bypass.
 
 ## GitHub Actions runtime policy
 

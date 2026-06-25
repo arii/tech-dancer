@@ -22,7 +22,7 @@ repair_origin() {
   if git remote get-url origin >/dev/null 2>&1; then
     return 0
   fi
-  local slug="${GITHUB_REPOSITORY:-${REPO_SLUG:-${CODEX_REPOSITORY:-}}}"
+  local slug="${GITHUB_REPOSITORY:-${REPO_SLUG:-}}"
   if [ -n "$slug" ]; then
     git remote add origin "https://github.com/${slug}.git" >/dev/null 2>&1 || true
   fi
