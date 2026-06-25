@@ -2,7 +2,10 @@ import os
 import sys
 import time
 import json
-from typing import Optional, Dict, Any, List
+import logging
+
+logger = logging.getLogger(__name__)
+from typing import Optional, Dict, Any, List, Set
 from utils import (
     call_ai,
     is_ai_available,
@@ -11,6 +14,8 @@ from utils import (
     get_ai_review_model,
     get_ai_synthesis_model
 )
+from tdw_services.services.dependency_graph import DependencyGraph
+from tdw_services.services.vector_store import VectorStore
 
 # Model used for per-file chunk review (code-aware, focused)
 _REVIEW_MODEL = get_ai_review_model()
@@ -53,6 +58,24 @@ _SYNTHESIS_SCHEMA = {
 class AIClient:
     def __init__(self, ai_model: str = None):
         self.ai_model = ai_model or get_ai_model()
+        # Default models for backward compatibility/internal calls
+        self.ollama_model = self.ai_model
+        self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
+
+        self._dependency_graph = None
+        self._vector_store = None
+
+    @property
+    def dependency_graph(self) -> DependencyGraph:
+        if self._dependency_graph is None:
+            self._dependency_graph = DependencyGraph()
+        return self._dependency_graph
+
+    @property
+    def vector_store(self) -> VectorStore:
+        if self._vector_store is None:
+            self._vector_store = VectorStore()
+        return self._vector_store
 
     def is_ai_available(self) -> bool:
         return is_ai_available()
@@ -274,12 +297,50 @@ class AIClient:
         self._write_review_file(pr_num, pr, final, chunks, file_reviews)
         return final
 
+    def _get_context_for_chunk(self, chunk: Dict) -> str:
+        """Retrieves dependency and semantic context for a code chunk."""
+        filepath = chunk.get('file')
+        context_parts = []
+
+        # 1. Dependency Context
+        deps = self.dependency_graph.get_dependencies(filepath)
+        dependents = self.dependency_graph.get_dependents(filepath)
+        if deps or dependents:
+            context_parts.append("### Dependency Context")
+            if deps:
+                context_parts.append(f"- Dependencies: {', '.join(deps[:10])}")
+            if dependents:
+                context_parts.append(f"- Impacted files (dependents): {', '.join(dependents[:10])}")
+
+        # 2. Semantic Context
+        try:
+            if not self.vector_store.is_available():
+                return "\n".join(context_parts)
+
+            semantic_results = self.vector_store.query(chunk['diff_text'], n_results=3)
+            if semantic_results:
+                context_parts.append("\n### Semantically Related Code")
+                for res in semantic_results:
+                    path = res['metadata'].get('path', 'unknown')
+                    if path != filepath:
+                        context_parts.append(f"#### From {path}:")
+                        context_parts.append(f"```\n{res['document'][:500]}\n```")
+        except Exception as e:
+            logger.warning("Vector search failed: %s", e) # Silently fail vector search if not indexed
+
+        return "\n".join(context_parts)
+
     def _build_chunk_prompt(self, chunk: Dict, pr_title: str, checks_summary: str) -> str:
         trunc_note = "\n(Note: diff was truncated to fit context window)" if chunk.get('truncated') else ""
+
+        context = self._get_context_for_chunk(chunk)
+        context_section = f"\n\n## Repository Context\n{context}" if context else ""
+
         return (
             f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
             f'PR title: {pr_title}\n'
-            f'CI status: {checks_summary}\n\n'
+            f'CI status: {checks_summary}\n'
+            f'{context_section}\n\n'
             f'Rules:\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
