@@ -207,6 +207,8 @@ jobs:
     env:
       NODE_ENV: production
       REPO_NAME: ${{ github.event.repository.name }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"

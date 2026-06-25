@@ -2,9 +2,9 @@ import json
 import sys
 
 try:
-    from ddgs import DDGS
+    from duckduckgo_search import DDGS
 except ImportError:
-    print(json.dumps({"error": "ddgs package not found. Please install it using 'pip install ddgs' (preferably in a virtual environment)."}), file=sys.stderr)
+    print(json.dumps({"error": "duckduckgo_search package not found. Please install it using 'pip install duckduckgo-search' (preferably in a virtual environment)."}), file=sys.stderr)
     sys.exit(1)
 
 try:
