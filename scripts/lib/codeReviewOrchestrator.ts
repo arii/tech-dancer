@@ -155,7 +155,7 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
   return cachedGitArgs;
 }
 
-async function getAIContext(inputData: string): Promise<any[]> {
+async function getAIContext(inputData: string): Promise<Record<string, unknown>[]> {
   return new Promise((resolve, reject) => {
     const child = spawn('python3', ['dev-tools/get_ai_context.py']);
     let stdout = '';
