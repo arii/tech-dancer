@@ -8,25 +8,31 @@ sys.path.append(os.path.join(os.getcwd(), "dev-tools"))
 from tdw_services.services.dependency_graph import DependencyGraph
 from tdw_services.services.vector_store import VectorStore
 
-def get_context(filepath: str, diff_text: str, graph: DependencyGraph, store: VectorStore):
+def get_context(filepath: str, diff_text: str, graph: DependencyGraph, store: VectorStore, n_results: int = 3):
     context = {
         "path": filepath,
-        "dependencies": graph.get_dependencies(filepath),
-        "dependents": graph.get_dependents(filepath),
+        "dependencies": [],
+        "dependents": [],
         "semantic": []
     }
 
+    if not isinstance(filepath, str) or not isinstance(diff_text, str) or not filepath.strip() or not diff_text.strip():
+        return context
+
+    context["dependencies"] = graph.get_dependencies(filepath)
+    context["dependents"] = graph.get_dependents(filepath)
+
     try:
         # Use diff_text for semantic search
-        results = store.query(diff_text, n_results=3)
+        results = store.query(diff_text, n_results=n_results)
         for res in results:
             if res['metadata'].get('path') != filepath:
                 context["semantic"].append({
                     "path": res['metadata'].get('path'),
                     "document": res['document']
                 })
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Error querying vector store: {e}", file=sys.stderr)
 
     return context
 

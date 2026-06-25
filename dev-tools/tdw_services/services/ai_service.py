@@ -2,7 +2,6 @@ import os
 import sys
 import time
 import json
-import requests
 from typing import Optional, Dict, Any, List, Set
 from utils import (
     call_ai,
@@ -324,7 +323,7 @@ class AIClient:
                         context_parts.append(f"#### From {path}:")
                         context_parts.append(f"```\n{res['document'][:500]}\n```")
         except Exception as e:
-            pass # Silently fail vector search if not indexed
+            print(f"Error searching vector store: {e}", file=sys.stderr) # Log failure if not indexed
 
         return "\n".join(context_parts)
 
