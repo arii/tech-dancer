@@ -252,16 +252,13 @@ def detect_conflicts(ctx, pr):
 def post_comment(ctx, pr, file):
     """Post a comment to a PR from a file."""
     orch = ctx.obj['ORCHESTRATOR']
-    import os
-    if not os.path.exists(file):
-        err(ctx, f"File {file} does not exist.", data={"status": "error", "file": file})
-        return
-
-    with open(file, 'r') as f:
-        body = f.read()
-
-    res = orch.github.create_issue_comment(pr, body)
-    out(ctx, f"✅ Successfully posted comment to PR #{pr}", data={"status": "success"})
+    try:
+        res = orch.post_comment(pr, file)
+        out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+    except Exception as e:
+        err(ctx, str(e))
 
 @gh.command()
 @click.pass_context
