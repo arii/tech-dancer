@@ -260,11 +260,11 @@ importers:
         version: 4.4.3
     devDependencies:
       '@types/node':
-        specifier: ^24.13.2
+        specifier: ^24.x
         version: 24.13.2
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^5.x
+        version: 5.8.3
       vitest:
         specifier: ^4.1.9
         version: 4.1.9(@types/node@24.13.2)(jsdom@29.1.1)(vite@6.4.2(@types/node@24.13.2)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.2)(tsx@4.21.0)(yaml@2.9.0))
@@ -6313,11 +6313,6 @@ packages:
 
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -13526,8 +13521,6 @@ snapshots:
       - supports-color
 
   typescript@5.8.3: {}
-
-  typescript@5.9.3: {}
 
   unbash@3.0.0: {}
 

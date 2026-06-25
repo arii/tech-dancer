@@ -50,9 +50,8 @@ RUN corepack enable \
   && pnpm config set store-dir /pnpm/store
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
-RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
-
 WORKDIR /workspace
+RUN chown -R pwuser:pwuser /workspace
 
 # ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
