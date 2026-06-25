@@ -42,13 +42,13 @@ jobs:
           PR_COUNT: ${{ inputs.pr_count || '5' }}
         run: |
           # Fetch recent open PRs
-          PRS=$(gh pr list --state open --limit $PR_COUNT --json number -q '.[].number')
+          PRS=$(gh pr list --state open --limit "$PR_COUNT" --json number -q '.[].number')
 
           for PR in $PRS; do
             echo "::group::Auditing PR #$PR"
             # We use the td_cli to audit PRs. This will trigger the underlying scripts
             # which now have structured logging.
-            PYTHONPATH=dev-tools python3 dev-tools/td_cli.py gh audit-pr $PR --fetch --audit --execute || true
+            PYTHONPATH=dev-tools python3 dev-tools/td_cli.py gh audit-pr "$PR" --fetch --audit --execute || true
             echo "::endgroup::"
           done
 
