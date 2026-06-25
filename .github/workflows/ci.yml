@@ -160,6 +160,9 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
       - name: Install dependencies
         shell: bash
         run: |

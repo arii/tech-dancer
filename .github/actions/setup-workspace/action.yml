@@ -8,7 +8,12 @@ runs:
       run: |
         echo "::group::Install dev-tools"
         pip install -e dev-tools/ --break-system-packages
+
+        # Add multiple potential local bin paths to GITHUB_PATH to ensure td-cli resolution
+        # across different GHA runner configurations and container users.
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        echo "/github/home/.local/bin" >> "$GITHUB_PATH"
+
         echo "::endgroup::"
 
     - name: Verify td-cli on PATH
@@ -23,5 +28,7 @@ runs:
     - name: Export PYTHONPATH
       shell: bash
       run: |
-        echo "PYTHONPATH=$PYTHONPATH:${{ github.workspace }}/dev-tools" >> "$GITHUB_ENV"
-        echo "✅ PYTHONPATH exported."
+        # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
+        REPO_DIR=$(pwd)
+        echo "PYTHONPATH=$PYTHONPATH:$REPO_DIR/dev-tools" >> "$GITHUB_ENV"
+        echo "✅ PYTHONPATH exported as $REPO_DIR/dev-tools"

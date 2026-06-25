@@ -39,6 +39,7 @@ import { triggerJulesFeedbackHandler, TriggerJulesFeedbackInputSchema } from "..
 
 import fs from "fs/promises";
 import path from "path";
+import { spawnSync } from "child_process";
 
 export class BoomtickMCPServer {
   private server: Server;
@@ -566,7 +567,6 @@ export class BoomtickMCPServer {
   async run() {
     // Pre-flight check for td-cli
     try {
-      const { spawnSync } = await import("child_process");
       const result = spawnSync("td-cli", ["--version"], { encoding: "utf-8" });
       if (result.status !== 0) {
         throw new Error("td-cli --version returned non-zero exit code");

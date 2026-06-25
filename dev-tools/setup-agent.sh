@@ -46,12 +46,14 @@ if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
 fi
 
 # Ensure local python bin is on path for td-cli
-if [ -d "$HOME/.local/bin" ]; then
-  case ":$PATH:" in
-    *":$HOME/.local/bin:"*) ;;
-    *) export PATH="$HOME/.local/bin:$PATH" ;;
-  esac
-fi
+for bin_dir in "$HOME/.local/bin" "/github/home/.local/bin"; do
+  if [ -d "$bin_dir" ]; then
+    case ":$PATH:" in
+      *":$bin_dir:"*) ;;
+      *) export PATH="$bin_dir:$PATH" ;;
+    esac
+  fi
+done
 
 # -------- helpers --------
 log() { echo "[setup-agent] $*"; }
