@@ -946,10 +946,23 @@ Respond only after the PR is created or updated:
 
         # Get check runs
         stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs",
-            "--jq", ".check_runs[] | {id, name, status, conclusion, html_url}"
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
         ])
-        checks = [json.loads(l) for l in stdout_checks.splitlines() if l.strip()]
+        try:
+            data = json.loads(stdout_checks)
+            checks = []
+            for run in data.get("check_runs", []):
+                checks.append({
+                    'id': run.get('id'),
+                    'name': run.get('name'),
+                    'status': run.get('status'),
+                    'conclusion': run.get('conclusion'),
+                    'url': run.get('html_url'),
+                    'external_id': run.get('external_id')
+                })
+        except json.JSONDecodeError:
+            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
+
         failed_checks = [c for c in checks if c.get("conclusion") == "failure"]
 
         logs = {}
@@ -993,14 +1006,19 @@ Respond only after the PR is created or updated:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get all check runs for this SHA
+        # Use full API response to be more robust
         stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs",
-            "--jq", ".check_runs[] | {id, name}"
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
         ])
-        check_runs = [json.loads(l) for l in stdout_checks.splitlines() if l.strip()]
+        try:
+            data = json.loads(stdout_checks)
+            check_runs = data.get("check_runs", [])
+        except json.JSONDecodeError:
+            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
 
         all_logs = []
-        for run in check_runs:
+        # Limit to latest 20 jobs to avoid extreme memory usage
+        for run in check_runs[:20]:
             try:
                 # Fetch logs via API to avoid terminal paging/buffering issues
                 log_content = self.github.run_authenticated_gh([
@@ -1008,9 +1026,11 @@ Respond only after the PR is created or updated:
                 ])
                 header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
                 all_logs.append(header)
-                all_logs.append(log_content)
+                # Truncate each log to 20k chars to balance detail vs memory
+                all_logs.append(log_content[-20000:])
                 all_logs.append("\n")
             except Exception as e:
+                log_error(f"Failed to fetch logs for job {run.get('id')} ({run.get('name')}): {e}")
                 all_logs.append(f"--- FAILED TO FETCH LOGS FOR JOB: {run['name']} ({str(e)}) ---")
 
         combined_logs = "\n".join(all_logs)

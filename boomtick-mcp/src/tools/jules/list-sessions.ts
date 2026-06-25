@@ -12,12 +12,23 @@ export async function listJulesSessionsHandler(input: z.infer<typeof ListJulesSe
     throw new Error("JULES_API_KEY environment variable is not set.");
   }
 
-  const response = await fetch("https://jules.googleapis.com/v1alpha/sessions?pageSize=100", {
-    method: "GET",
-    headers: {
-      "x-goog-api-key": apiKey,
-    },
-  });
+  const url = new URL("https://jules.googleapis.com/v1alpha/sessions");
+  url.searchParams.set("pageSize", (input.pageSize ?? 100).toString());
+  if (input.pageToken) {
+    url.searchParams.set("pageToken", input.pageToken);
+  }
+
+  let response;
+  try {
+    response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "x-goog-api-key": apiKey,
+      },
+    });
+  } catch (e) {
+    throw new Error(`Network error fetching sessions: ${e instanceof Error ? e.message : String(e)}`);
+  }
 
   if (!response.ok) {
     const errText = await response.text();

@@ -233,6 +233,7 @@ export class BoomtickMCPServer {
               properties: {
                 checkDeep: { type: "boolean", description: "Whether to perform a deep health check including external dependencies." }
               },
+              required: []
             },
           },
           {
@@ -302,6 +303,7 @@ export class BoomtickMCPServer {
               properties: {
                 filter: { type: "string", description: "Optional glob pattern to filter script names." }
               },
+              required: []
             },
           },
           {
@@ -312,6 +314,7 @@ export class BoomtickMCPServer {
               properties: {
                 includeStatic: { type: "boolean", description: "Whether to include static assets in the route map." }
               },
+              required: []
             },
           },
           {
@@ -485,6 +488,7 @@ export class BoomtickMCPServer {
                 pageSize: { type: "number", description: "Maximum number of sessions to return." },
                 pageToken: { type: "string", description: "Token for pagination." }
               },
+              required: []
             },
           },
           {

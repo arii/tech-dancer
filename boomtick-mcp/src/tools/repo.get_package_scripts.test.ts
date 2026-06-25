@@ -29,4 +29,23 @@ describe("repo.get_package_scripts", () => {
 
     await expect(getPackageScriptsHandler({})).rejects.toThrow("Failed to read package.json: File not found");
   });
+
+  it("should filter scripts by pattern", async () => {
+    const mockPkg = {
+      scripts: {
+        test: "vitest",
+        build: "vite build",
+        "test:ui": "vitest --ui"
+      }
+    };
+
+    vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(mockPkg));
+
+    const result = await getPackageScriptsHandler({ filter: "test" });
+    expect(result.scripts).toEqual({
+      test: "vitest",
+      "test:ui": "vitest --ui"
+    });
+    expect(result.scripts.build).toBeUndefined();
+  });
 });

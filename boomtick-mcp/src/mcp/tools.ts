@@ -6,6 +6,7 @@ export const HealthCheckInputSchema = z.object({
 });
 
 export async function healthHandler(args: z.infer<typeof HealthCheckInputSchema>) {
+  HealthCheckInputSchema.parse(args);
   return {
     status: "ok",
     config: {

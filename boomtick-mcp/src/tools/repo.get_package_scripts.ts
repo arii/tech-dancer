@@ -9,10 +9,16 @@ export const GetPackageScriptsInputSchema = z.object({
 });
 
 export async function getPackageScriptsHandler(args: z.infer<typeof GetPackageScriptsInputSchema>) {
+  GetPackageScriptsInputSchema.parse(args);
   const packageJsonPath = path.join(config.repoPath, "package.json");
   try {
     const content = await fs.readFile(packageJsonPath, "utf-8");
-    const pkg = JSON.parse(content);
+    let pkg;
+    try {
+      pkg = JSON.parse(content);
+    } catch (e) {
+      throw new Error(`Malformed package.json: ${e instanceof Error ? e.message : String(e)}`);
+    }
     let scripts = pkg.scripts || {};
     if (args.filter) {
       const filtered: Record<string, string> = {};

@@ -1,17 +1,17 @@
-import { healthHandler } from "../mcp/tools.js";
-import { searchOpenPrsHandler } from "../tools/github.search_open_prs.js";
-import { getPackageScriptsHandler } from "../tools/repo.get_package_scripts.js";
+import { healthHandler, HealthCheckInputSchema } from "../mcp/tools.js";
+import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
+import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
 
 async function runEvals() {
   console.log("Starting Boomtick MCP Evaluations...");
 
   try {
     console.log("\n1. Health Check:");
-    const health = await healthHandler({});
+    const health = await healthHandler(HealthCheckInputSchema.parse({}));
     console.log(JSON.stringify(health, null, 2));
 
     console.log("\n2. Repository Scripts:");
-    const scripts = await getPackageScriptsHandler({});
+    const scripts = await getPackageScriptsHandler(GetPackageScriptsInputSchema.parse({}));
     console.log(`Found ${Object.keys(scripts.scripts).length} scripts.`);
 
     console.log("\n3. GitHub PR Search (Dry Run):");
