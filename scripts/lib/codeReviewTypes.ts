@@ -24,6 +24,7 @@ export interface CodeReviewSummary {
   impactSemanticContext?: string;
   previousState?: CodeReviewState;
   estimatedInputTokens?: number;
+  isTruncated?: boolean;
 }
 
 export interface ParsedFindingsResult {
