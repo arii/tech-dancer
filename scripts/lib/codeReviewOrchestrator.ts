@@ -21,7 +21,9 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
+let cachedPRGoal: string | undefined | null = null;
 async function fetchPRGoal(): Promise<string | undefined> {
+  if (cachedPRGoal !== null) return cachedPRGoal;
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
   const prNumber = process.env.PR_NUMBER;
@@ -34,8 +36,10 @@ async function fetchPRGoal(): Promise<string | undefined> {
     if (!res.ok) return undefined;
     const pr = await res.json() as { title: string; body: string | null };
     const body = pr.body?.trim() ? `\n\n${pr.body.trim()}` : '';
-    return `${pr.title}${body}`;
+    cachedPRGoal = `${pr.title}${body}`;
+    return cachedPRGoal;
   } catch {
+    cachedPRGoal = undefined;
     return undefined;
   }
 }
@@ -123,25 +127,38 @@ function resolveImportPath(importPath: string, currentFile: string): string | un
   return undefined;
 }
 
+let cachedGitArgs: { diffArgs: string[], nameOnlyArgs: string[], contextBaseRef: string } | null = null;
+
+async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[], contextBaseRef: string }> {
+  if (cachedGitArgs) return cachedGitArgs;
+
+  const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
+  let diffArgs = ['diff', '-U10', `${baseRef}...HEAD`];
+  let nameOnlyArgs = ['diff', '--name-only', `${baseRef}...HEAD`];
+  let contextBaseRef = baseRef;
+
+  try {
+    await exec(`git rev-parse ${baseRef}`);
+  } catch {
+    try {
+      await exec('git rev-parse main');
+      diffArgs = ['diff', '-U10', 'main...HEAD'];
+      nameOnlyArgs = ['diff', '--name-only', 'main...HEAD'];
+      contextBaseRef = 'main';
+    } catch {
+      diffArgs = ['diff', '-U10', 'HEAD~1', 'HEAD'];
+      nameOnlyArgs = ['diff', '--name-only', 'HEAD~1', 'HEAD'];
+      contextBaseRef = 'HEAD~1';
+    }
+  }
+
+  cachedGitArgs = { diffArgs, nameOnlyArgs, contextBaseRef };
+  return cachedGitArgs;
+}
+
 export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {
   try {
-    const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
-    let diffArgs = ['diff', '-U10', `${baseRef}...HEAD`];
-    let nameOnlyArgs = ['diff', '--name-only', `${baseRef}...HEAD`];
-
-    // Verify if baseRef exists, fallback to git history for CI if needed
-    try {
-      await exec(`git rev-parse ${baseRef}`);
-    } catch {
-      try {
-        await exec('git rev-parse main');
-        diffArgs = ['diff', '-U10', 'main...HEAD'];
-        nameOnlyArgs = ['diff', '--name-only', 'main...HEAD'];
-      } catch {
-        diffArgs = ['diff', '-U10', 'HEAD~1', 'HEAD'];
-        nameOnlyArgs = ['diff', '--name-only', 'HEAD~1', 'HEAD'];
-      }
-    }
+    const { diffArgs, nameOnlyArgs, contextBaseRef } = await getGitArgs();
 
     let rawDiff: string;
     if (targetFiles && targetFiles.length > 0) {
@@ -174,9 +191,6 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
     // Context gathering
     const externalFilePaths = new Set<string>();
     let localDefinitions = '';
-
-    // Extract baseRef for git diff <baseRef> -- <file>
-    const contextBaseRef = diffArgs[diffArgs.length - 1].split('...')[0] || 'HEAD~1';
 
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
@@ -389,8 +403,6 @@ export async function orchestrateCodeReview(
 
   const orchestratorStartTime = Date.now();
   const allResults: CodeReviewResult[] = [];
-  const rolesPerBatch = roles.length;
-  const totalTasks = fileBatches.length * rolesPerBatch;
   const CONCURRENCY_LIMIT = 4;
 
   const taskQueue: (() => Promise<void>)[] = [];
@@ -400,25 +412,36 @@ export async function orchestrateCodeReview(
 
     for (const role of roles) {
       taskQueue.push(async () => {
-        const summary = { ...(await batchSummaryPromise), role, previousState: prevState };
+        try {
+          const summary = { ...(await batchSummaryPromise), role, previousState: prevState };
 
-        const startTime = Date.now();
-        let result = await client.invokeReview(summary);
+          const startTime = Date.now();
+          let result = await client.invokeReview(summary);
 
-        if (result.truncated) {
-          logReviewExecution('code-review', result, result.durationMs ?? (Date.now() - startTime));
-          const retryStartTime = Date.now();
-          result = await client.invokeReview(summary, 8192);
-          result.durationMs = result.durationMs ?? (Date.now() - retryStartTime);
-        } else {
-          result.durationMs = result.durationMs ?? (Date.now() - startTime);
+          if (result.truncated) {
+            logReviewExecution('code-review', result, result.durationMs ?? (Date.now() - startTime));
+            const retryStartTime = Date.now();
+            result = await client.invokeReview(summary, 8192);
+            result.durationMs = result.durationMs ?? (Date.now() - retryStartTime);
+          } else {
+            result.durationMs = result.durationMs ?? (Date.now() - startTime);
+          }
+
+          logReviewExecution('code-review', result, result.durationMs);
+
+          // Final verification/reconciliation
+          result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
+          allResults.push(result);
+        } catch (err) {
+          console.error(`❌ Error in ${role} review task:`, err);
+          allResults.push({
+            feedback: `Error: failed to execute ${role} review.`,
+            role,
+            tokens: 0,
+            cost: 0,
+            llmVerdict: 'warn',
+          });
         }
-
-        logReviewExecution('code-review', result, result.durationMs);
-
-        // Final verification/reconciliation
-        result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
-        allResults.push(result);
       });
     }
   }
