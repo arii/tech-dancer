@@ -3,6 +3,11 @@
 # .githooks/update-env.sh
 # Shared logic to update environment dependencies and tools
 
+# Allow users to opt-out via environment variable
+if [ "${SKIP_GIT_HOOKS:-0}" = "1" ] || [ "${CI:-false}" = "true" ]; then
+    exit 0
+fi
+
 changed_files="$1"
 
 check_run() {
