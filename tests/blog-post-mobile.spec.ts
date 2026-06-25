@@ -1,6 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/visual';
 
-test('visual comparison for event-travel-packing mobile', async ({ page }) => {
+test('visual comparison for event-travel-packing mobile', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'Mobile-only test');
   await page.goto('./blog/2026-06-01-event-travel-packing');
   await expect(page.locator('main')).toBeVisible({ timeout: 30000 });
   await page.evaluate(() => document.fonts.ready);

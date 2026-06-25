@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
 const tools = [
@@ -8,6 +8,8 @@ const tools = [
 ];
 
 test.describe('Research Tools Mobile UX', () => {
+  test.skip(({ isMobile }) => !isMobile, 'Mobile-only tests');
+
   for (const tool of tools) {
     test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page }) => {
       // Increase timeout for slow CI environments
