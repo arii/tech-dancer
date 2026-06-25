@@ -44,8 +44,8 @@ describe('filtering logic', () => {
     expect(filterLowImpactFiles(files, [])).toEqual(files);
 
     // Test validation
-    expect(() => filterLowImpactFiles(files, null as any)).toThrow(TypeError);
-    expect(() => filterLowImpactFiles(undefined as any, [])).toThrow(TypeError);
+    expect(() => filterLowImpactFiles(files, null as unknown as string[])).toThrow(TypeError);
+    expect(() => filterLowImpactFiles(undefined as unknown as string[], [])).toThrow(TypeError);
   });
 
   it('does not filter out exact file matches with suffixes', () => {
