@@ -1,16 +1,15 @@
-import { HumanMessage } from '@langchain/core/messages';
 import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
   calculateEstimatedTokens,
-  extractFeedbackText
+  parseStructuredReviewResponse
 } from '../lib/codeReviewUtils';
 
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy, splitPayloadForGemini } from '../lib/geminiUtils';
 
 import { CODE_REVIEW_SCHEMA, type CodeReviewSummary, type CodeReviewResult, type ReviewFinding } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
@@ -41,10 +40,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
     const payload = buildReviewPayload(systemPrompt, diffText, externalText);
-    const systemInstruction = payload.find(msg => msg.role === 'system')?.content;
-    const userMessages = payload
-      .filter(msg => msg.role !== 'system')
-      .map(msg => new HumanMessage({ content: msg.content }));
+    const { systemInstruction, userMessages } = splitPayloadForGemini(payload);
 
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json', systemInstruction);
     let response = await model.invoke(userMessages);
@@ -113,37 +109,17 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
-    // typically in @langchain response.content is a string, but if we extract only text it's better
-    const rawFeedback = extractFeedbackText(response.content);
-    let feedback: string;
-    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
-    let findings: ReviewFinding[] = [];
-    let parseError: CodeReviewResult['parseError'] = undefined;
-
-    try {
-      if (!rawFeedback || rawFeedback.trim() === '') {
-        throw new Error('Empty response from LLM');
-      }
-      const parsed = JSON.parse(rawFeedback);
-      feedback = parsed.feedback || rawFeedback;
-      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
-      findings = parsed.findings || [];
-    } catch (e) {
-      console.warn('Failed to parse structured Gemini response:', e, 'Raw content:', rawFeedback.slice(0, 200));
-      parseError = 'invalid_json';
-      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
-    }
+    const { feedback, verdict, findings, parseError } = parseStructuredReviewResponse<ReviewFinding>(response.content as string);
 
     return {
-      feedback: feedback,
+      feedback,
       role: summary.role,
       tokens: totalTokens,
       inputTokens,
       outputTokens,
       cacheTokens,
-      cost: cost,
-      modelName: modelName,
+      cost,
+      modelName,
       llmVerdict: verdict,
       state: { findings },
       truncated: isTruncated,

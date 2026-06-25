@@ -15,6 +15,27 @@ export function extractFinishReason(res: any): string {
 
 
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { HumanMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
+
+/**
+ * Splits a standard payload into a system instruction string and a list of user messages.
+ * This is optimized for Gemini's constructor-based system instruction.
+ */
+export function splitPayloadForGemini(payload: { role: string; content: any }[]): { systemInstruction?: string; userMessages: HumanMessage[] } {
+  const systemInstruction = payload
+    .filter(msg => msg.role === 'system')
+    .map(msg => msg.content)
+    .join('\n\n');
+
+  const userMessages = payload
+    .filter(msg => msg.role !== 'system')
+    .map(msg => new HumanMessage({ content: msg.content }));
+
+  return {
+    systemInstruction: systemInstruction || undefined,
+    userMessages
+  };
+}
 
 export function createGeminiModel(
   modelName: string,

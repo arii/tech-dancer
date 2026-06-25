@@ -1,4 +1,58 @@
-import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult } from './codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, ReviewFinding } from './codeReviewTypes';
+
+/**
+ * Normalizes a verdict string from the LLM into a standard 'pass', 'fail', or 'warn' status.
+ */
+export function normalizeVerdict(verdict?: string): 'pass' | 'fail' | 'warn' {
+  const v = verdict?.toLowerCase().trim();
+  if (v === 'fail') return 'fail';
+  if (v === 'warn') return 'warn';
+  return 'pass';
+}
+
+/**
+ * Shared logic to parse structured JSON responses from review agents.
+ */
+export function parseStructuredReviewResponse<T extends { id: string; file?: string; route?: string; status: string; issue: string }>(
+  rawContent: string,
+  findingsKey: string = 'findings'
+): {
+  feedback: string;
+  verdict: 'pass' | 'fail' | 'warn';
+  findings: T[];
+  parseError?: 'invalid_json' | 'empty_response';
+} {
+  const rawFeedback = extractFeedbackText(rawContent);
+
+  if (!rawFeedback || rawFeedback.trim() === '') {
+    return {
+      feedback: 'Error: Empty response from LLM',
+      verdict: 'warn',
+      findings: [],
+      parseError: 'empty_response'
+    };
+  }
+
+  try {
+    const parsed = JSON.parse(rawFeedback);
+    const findings = (parsed[findingsKey] || []) as T[];
+    const verdict = normalizeVerdict(parsed.verdict);
+
+    const feedback = parsed.feedback || (findings.length > 0
+      ? findings.map(f => `### ${f.status === 'open' ? '🔴' : '✅'} [${f.id}] ${f.file || f.route || ''}\n${f.issue}`).join('\n\n')
+      : rawFeedback);
+
+    return { feedback, verdict, findings };
+  } catch (e) {
+    console.warn('Failed to parse structured LLM response:', e, 'Raw content:', rawFeedback.slice(0, 200));
+    return {
+      feedback: `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`,
+      verdict: 'warn',
+      findings: [],
+      parseError: 'invalid_json'
+    };
+  }
+}
 
 export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
   const matches = [...feedback.matchAll(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi)];

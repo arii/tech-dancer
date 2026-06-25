@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
-import { extractFeedbackText } from '../lib/codeReviewUtils';
+import { parseStructuredReviewResponse } from '../lib/codeReviewUtils';
 import type { LLMClientStrategy } from '../lib/visualReviewOrchestrator';
 import { type RouteReview, type VisualRouteSummary, type VisualReviewFinding } from '../lib/visualReviewTypes';
 import { pickOptimalModel } from '../lib/modelPicker';
@@ -93,42 +93,21 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
 
     const firstChoice = data.choices && data.choices[0];
     const rawContent = firstChoice?.message?.content || '';
-    const rawFeedback = extractFeedbackText(rawContent);
-
-    let feedback: string;
-    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
-    let findings: VisualReviewFinding[] = [];
-    let parseError: RouteReview['parseError'] = undefined;
-
-    try {
-      if (!rawFeedback || rawFeedback.trim() === '') {
-        throw new Error('Empty response from LLM');
-      }
-      const parsed = JSON.parse(rawFeedback);
-      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
-      findings = parsed.findings || [];
-      feedback = parsed.feedback || (findings.length > 0
-        ? findings.map(f => `### ${f.status === 'open' ? '🔴' : '✅'} [${f.id}] ${summary.route}\n${f.issue}`).join('\n\n')
-        : rawFeedback);
-    } catch (e) {
-      console.warn('Failed to parse structured GitHub Models visual response:', e, 'Raw content:', rawFeedback.slice(0, 200));
-      parseError = 'invalid_json';
-      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
-    }
+    const { feedback, verdict, findings, parseError } = parseStructuredReviewResponse<VisualReviewFinding>(rawContent);
 
     return {
       route: summary.route,
       severity: summary.severity,
       differencePercent: summary.differencePercent,
-      feedback: feedback,
+      feedback,
       tokens: totalTokens,
       inputTokens,
       outputTokens,
       cacheTokens,
-      cost: cost,
-      modelName: modelName,
+      cost,
+      modelName,
       llmVerdict: verdict,
-      findings: findings,
+      findings,
       parseError,
     };
   }

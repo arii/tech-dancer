@@ -1,8 +1,7 @@
-import { HumanMessage } from '@langchain/core/messages';
 import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
-import { extractFeedbackText } from '../lib/codeReviewUtils';
+import { parseStructuredReviewResponse } from '../lib/codeReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
-import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
+import { extractFinishReason, createGeminiModel, applyRetryStrategy, splitPayloadForGemini } from '../lib/geminiUtils';
 import type { LLMClientStrategy, AgentRole } from '../lib/visualReviewOrchestrator';
 
 import { VISUAL_REVIEW_SCHEMA, type RouteReview, type VisualRouteSummary, type VisualReviewFinding } from '../lib/visualReviewTypes';
@@ -62,15 +61,14 @@ Your job:
       });
     }
 
-    const systemInstruction = baseContent.filter(p => p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))).map(p => p.text).join('\n\n');
-    const otherParts = baseContent.filter(p => !(p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))));
+    const payload = baseContent.map(p => {
+      if (p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))) {
+        return { role: 'system', content: p.text };
+      }
+      return { role: 'user', content: [p] };
+    });
 
-    const userMessages = [
-      new HumanMessage({ content: otherParts.map(p => {
-        if (p.type === 'text') return { type: 'text', text: p.text };
-        return { type: 'image_url', image_url: p.image_url };
-      })})
-    ];
+    const { systemInstruction, userMessages } = splitPayloadForGemini(payload);
 
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json', systemInstruction);
     let response = await model.invoke(userMessages);
@@ -139,39 +137,21 @@ Your job:
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const rawFeedback = extractFeedbackText(response.content);
-    let feedback: string;
-    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
-    let findings: VisualReviewFinding[] = [];
-    let parseError: RouteReview['parseError'] = undefined;
-
-    try {
-      if (!rawFeedback || rawFeedback.trim() === '') {
-        throw new Error('Empty response from LLM');
-      }
-      const parsed = JSON.parse(rawFeedback);
-      feedback = parsed.feedback || rawFeedback;
-      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
-      findings = parsed.findings || [];
-    } catch (e) {
-      console.warn('Failed to parse structured Gemini visual response:', e, 'Raw content:', rawFeedback.slice(0, 200));
-      parseError = 'invalid_json';
-      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
-    }
+    const { feedback, verdict, findings, parseError } = parseStructuredReviewResponse<VisualReviewFinding>(response.content as string);
 
     return {
       route: summary.route,
       severity: summary.severity,
       differencePercent: summary.differencePercent,
-      feedback: feedback,
+      feedback,
       tokens: totalTokens,
       inputTokens,
       outputTokens,
       cacheTokens,
-      cost: cost,
-      modelName: modelName,
+      cost,
+      modelName,
       llmVerdict: verdict,
-      findings: findings,
+      findings,
       truncated: isTruncated,
       parseError,
     };

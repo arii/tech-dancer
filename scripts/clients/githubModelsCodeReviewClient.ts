@@ -2,8 +2,8 @@ import {
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
-  extractFeedbackText,
-  calculateEstimatedTokens
+  calculateEstimatedTokens,
+  parseStructuredReviewResponse
 } from '../lib/codeReviewUtils';
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { type CodeReviewSummary, type CodeReviewResult, type ReviewFinding } from '../lib/codeReviewTypes';
@@ -111,40 +111,19 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     }
 
     const rawContent = firstChoice?.message?.content || '';
-    const rawFeedback = extractFeedbackText(rawContent);
-
-    let feedback: string;
-    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
-    let findings: ReviewFinding[] = [];
-    let parseError: CodeReviewResult['parseError'] = undefined;
-
-    try {
-      if (!rawFeedback || rawFeedback.trim() === '') {
-        throw new Error('Empty response from LLM');
-      }
-      const parsed = JSON.parse(rawFeedback);
-      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
-      findings = parsed.findings || [];
-      feedback = parsed.feedback || (findings.length > 0
-        ? findings.map(f => `### ${f.status === 'open' ? '🔴' : '✅'} [${f.id}] ${f.file}\n${f.issue}`).join('\n\n')
-        : rawFeedback);
-    } catch (e) {
-      console.warn('Failed to parse structured GitHub Models response:', e, 'Raw content:', rawFeedback.slice(0, 200));
-      parseError = 'invalid_json';
-      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
-    }
+    const { feedback, verdict, findings, parseError } = parseStructuredReviewResponse<ReviewFinding>(rawContent);
 
     return {
-      feedback: feedback,
+      feedback,
       role: summary.role,
       tokens: totalTokens,
       inputTokens,
       outputTokens,
       cacheTokens,
-      cost: cost,
+      cost,
       llmVerdict: verdict,
       state: { findings },
-      modelName: modelName,
+      modelName,
       truncated: isTruncated,
       parseError,
     };
