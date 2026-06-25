@@ -58,9 +58,9 @@ class JulesClient:
             ctx = s.get("githubRepo", {})
             owner, repo = ctx.get("owner"), ctx.get("repo")
             if owner and repo and f"{owner}/{repo}" == repo_full_name:
-                return self._get_clean_id(s.get("name"), "sources")
+                return self._get_clean_id(s.get("name") or "", "sources")
             if repo_full_name in s.get("displayName", ""):
-                return self._get_clean_id(s.get("name"), "sources")
+                return self._get_clean_id(s.get("name") or "", "sources")
         return None
 
     def create_session_from_source(self, source_id: str, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
