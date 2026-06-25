@@ -13,7 +13,7 @@ check_tool() {
 }
 
 echo "--- 1. Checking Environment Variables ---"
-if [ -z "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ]; then
+if [ -z "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ] && [ -z "$CODEX_GH_TOKEN" ]; then
     echo "⚠️ Warning: GITHUB_TOKEN or GH_TOKEN is not set. GitHub Operations will fail."
 else
     echo "✅ GitHub token is present."

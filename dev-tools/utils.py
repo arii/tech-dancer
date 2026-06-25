@@ -67,7 +67,7 @@ def clean_llm_output(text: str) -> str:
 
 def is_ai_available() -> bool:
     """Checks if AI API token is present."""
-    return bool(os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN"))
+    return bool(os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("CODEX_GH_TOKEN"))
 
 def to_standard_schema(schema, uppercase: bool = False):
     """Recursively prepares a standard JSON schema.
@@ -100,7 +100,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         log_info("langchain_openai or langchain_core is not installed.")
         return None
 
-    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("CODEX_GH_TOKEN")
     if not token:
         return None
 
@@ -255,7 +255,7 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
 
 def get_github_token() -> Optional[str]:
     """Retrieves the GitHub token from environment (prioritizing CODEX_GH_TOKEN) or via gh CLI."""
-    token = os.getenv("CODEX_GH_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("GITHUB_TOKEN") or os.getenv("PAT_TOKEN")
+    token = os.getenv("CODEX_GH_TOKEN") or os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or os.getenv("PAT_TOKEN")
     if token:
         return token
     try:

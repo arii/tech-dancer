@@ -20,7 +20,6 @@ jobs:
     env:
       AI_MODEL: gpt-4o
       AI_SYNTHESIS_MODEL: gpt-4o
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Git Safe Directory
