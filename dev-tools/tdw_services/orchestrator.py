@@ -28,9 +28,10 @@ from utils import (
     clean_gha_logs
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from scope_check import verify_pr_scope, get_project_config
+from scope_check import verify_pr_scope
+from dev_tools_sdk.config import load_project_config
 
-PROJECT_CONFIG = get_project_config()
+PROJECT_CONFIG = load_project_config()
 AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
 SPEC_SECTIONS = [
     "Problem Statement",
