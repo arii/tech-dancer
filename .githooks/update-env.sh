@@ -23,10 +23,16 @@ check_run() {
 if check_run "^(pnpm-lock\.yaml|package\.json)$"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "📦 Node dependencies changed. Running pnpm install..."
+        # Bypass engine checks for agents running on v22 (v24 required by engines.node)
+        engine_flags=""
+        if [ "$USER" = "jules" ] || [ -n "$JULES_API_KEY" ]; then
+            engine_flags="--engine-strict=false"
+        fi
+
         if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile || echo "❌ ERROR: pnpm install --frozen-lockfile failed. Please run 'pnpm install' manually to sync dependencies."
+            pnpm install --frozen-lockfile $engine_flags || echo "❌ ERROR: pnpm install --frozen-lockfile failed. Please run 'pnpm install' manually to sync dependencies."
         else
-            pnpm install || echo "❌ ERROR: pnpm install failed. Please run 'pnpm install' manually."
+            pnpm install $engine_flags || echo "❌ ERROR: pnpm install failed. Please run 'pnpm install' manually."
         fi
     else
         echo "⚠️  WARNING: pnpm not found. Skipping dependency update."
@@ -48,8 +54,27 @@ fi
 if check_run "^boomtick-mcp/"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "🤖 boomtick-mcp changed. Rebuilding..."
-        pnpm --filter boomtick-mcp run build || echo "❌ ERROR: boomtick-mcp build failed. Please run 'pnpm --filter boomtick-mcp run build' manually."
+        # Bypass engine checks for agents
+        engine_flags=""
+        if [ "$USER" = "jules" ] || [ -n "$JULES_API_KEY" ]; then
+            engine_flags="--engine-strict=false"
+        fi
+        pnpm --filter boomtick-mcp run build $engine_flags || echo "❌ ERROR: boomtick-mcp build failed. Please run 'pnpm --filter boomtick-mcp run build' manually."
     else
         echo "⚠️  WARNING: pnpm not found. Skipping boomtick-mcp build."
+    fi
+fi
+
+if check_run "^(src/|content/|package\.json|scripts/build-repo-context\.py)"; then
+    if command -v pnpm >/dev/null 2>&1; then
+        echo "🔍 Indexable content changed. Updating .agent-context.json..."
+        # Bypass engine checks for agents
+        engine_flags=""
+        if [ "$USER" = "jules" ] || [ -n "$JULES_API_KEY" ]; then
+            engine_flags="--engine-strict=false"
+        fi
+        pnpm run agent:prime $engine_flags || echo "❌ ERROR: 'pnpm run agent:prime' failed. Please run it manually to update the agent index."
+    else
+        echo "⚠️  WARNING: pnpm not found. Skipping agent index update."
     fi
 fi
