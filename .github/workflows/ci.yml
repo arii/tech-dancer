@@ -139,6 +139,8 @@ jobs:
         run: |
           echo "::group::Ratchet Any"
           trap 'echo "::endgroup::"' EXIT
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           td-cli gh ratchet-any
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -177,6 +179,8 @@ jobs:
         run: |
           echo "::group::Audit"
           trap 'echo "::endgroup::"' EXIT
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
           td-cli gh audit-gate
 
@@ -232,6 +236,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
           td-cli gh bundle-size
 
       - name: Run Playwright Smoke Test

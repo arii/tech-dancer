@@ -46,13 +46,13 @@ if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
 fi
 
 # Ensure local python bin is on path for td-cli
+# We add these unconditionally so that even if the directories don't exist yet,
+# they are present on the PATH for when pip later creates them during installation.
 for bin_dir in "$HOME/.local/bin" "/github/home/.local/bin"; do
-  if [ -d "$bin_dir" ]; then
-    case ":$PATH:" in
-      *":$bin_dir:"*) ;;
-      *) export PATH="$bin_dir:$PATH" ;;
-    esac
-  fi
+  case ":$PATH:" in
+    *":$bin_dir:"*) ;;
+    *) export PATH="$bin_dir:$PATH" ;;
+  esac
 done
 
 # -------- helpers --------
