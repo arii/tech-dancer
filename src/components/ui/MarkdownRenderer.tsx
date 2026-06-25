@@ -56,7 +56,9 @@ function parseProp<T>(val: unknown): T {
       // Safely parse JSON strings by converting non-quoted keys to quoted
       // e.g. { base: 1, md: 3 } -> { "base": 1, "md": 3 }
       let jsonStr = inner;
-      if (inner.startsWith('{')) {
+      if (!inner.startsWith('{') && inner.startsWith("'") && inner.endsWith("'")) {
+        jsonStr = `"${inner.slice(1, -1)}"`;
+      } else if (inner.startsWith('{')) {
         jsonStr = inner
           .replace(/(?:^|[{,]\s*)([a-zA-Z0-9_]+)\s*:/g, (match, key) => match.replace(key, `"${key}"`))
           .replace(/(?<![a-zA-Z])'|'(?![a-zA-Z])/g, '"');
