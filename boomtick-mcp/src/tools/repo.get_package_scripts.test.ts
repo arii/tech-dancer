@@ -13,20 +13,20 @@ describe("repo.get_package_scripts", () => {
 
     vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(mockPkg));
 
-    const result = await getPackageScriptsHandler();
+    const result = await getPackageScriptsHandler({});
     expect(result.scripts.test).toBe("vitest");
   });
 
   it("should handle missing scripts", async () => {
     vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify({}));
 
-    const result = await getPackageScriptsHandler();
+    const result = await getPackageScriptsHandler({});
     expect(result.scripts).toEqual({});
   });
 
   it("should throw error when file not found", async () => {
     vi.mocked(fs.readFile).mockRejectedValue(new Error("File not found"));
 
-    await expect(getPackageScriptsHandler()).rejects.toThrow("Failed to read package.json: File not found");
+    await expect(getPackageScriptsHandler({})).rejects.toThrow("Failed to read package.json: File not found");
   });
 });

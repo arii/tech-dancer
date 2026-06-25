@@ -7,11 +7,11 @@ async function runEvals() {
 
   try {
     console.log("\n1. Health Check:");
-    const health = await healthHandler();
+    const health = await healthHandler({});
     console.log(JSON.stringify(health, null, 2));
 
     console.log("\n2. Repository Scripts:");
-    const scripts = await getPackageScriptsHandler();
+    const scripts = await getPackageScriptsHandler({});
     console.log(`Found ${Object.keys(scripts.scripts).length} scripts.`);
 
     console.log("\n3. GitHub PR Search (Dry Run):");

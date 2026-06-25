@@ -932,8 +932,8 @@ Respond only after the PR is created or updated:
             "failedTests": failed_tests
         }
 
-    def get_ci_logs(self, pr_number: int) -> Dict[str, Any]:
-        """Fetches CI logs for failing check runs in a PR."""
+    def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
+        """Fetches CI logs for failing (or all) check runs in a PR."""
         # Get PR head SHA
         stdout_pr = self.github.run_authenticated_gh([
             "pr", "view", str(pr_number), "--json", "headRefOid"
@@ -965,7 +965,7 @@ Respond only after the PR is created or updated:
             ])
             runs = json.loads(stdout_runs).get("check_runs", [])
             for run in runs:
-                if run.get("conclusion") == "failure":
+                if include_all or run.get("conclusion") == "failure":
                     try:
                         log_content = self.github.run_authenticated_gh([
                             "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
@@ -979,6 +979,49 @@ Respond only after the PR is created or updated:
             "failedChecks": failed_checks,
             "logs": logs
         }
+
+    def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
+        """Fetches and combines all CI logs for the latest workflow run of a PR."""
+        # Get PR head SHA
+        stdout_pr = self.github.run_authenticated_gh([
+            "pr", "view", str(pr_number), "--json", "headRefOid"
+        ])
+        pr_data = json.loads(stdout_pr)
+        head_sha = pr_data.get("headRefOid")
+
+        if not head_sha:
+            raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
+
+        # Get all check runs for this SHA
+        stdout_checks = self.github.run_authenticated_gh([
+            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs",
+            "--jq", ".check_runs[] | {id, name}"
+        ])
+        check_runs = [json.loads(l) for l in stdout_checks.splitlines() if l.strip()]
+
+        all_logs = []
+        for run in check_runs:
+            try:
+                # Fetch logs via API to avoid terminal paging/buffering issues
+                log_content = self.github.run_authenticated_gh([
+                    "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
+                ])
+                header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
+                all_logs.append(header)
+                all_logs.append(log_content)
+                all_logs.append("\n")
+            except Exception as e:
+                all_logs.append(f"--- FAILED TO FETCH LOGS FOR JOB: {run['name']} ({str(e)}) ---")
+
+        combined_logs = "\n".join(all_logs)
+
+        if grep:
+            grep_pattern = grep.lower()
+            lines = combined_logs.splitlines()
+            filtered_lines = [line for line in lines if grep_pattern in line.lower()]
+            return "\n".join(filtered_lines)
+
+        return combined_logs
 
     def get_merge_conflicts(self, pr_number: int, base_branch: str = "main") -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""

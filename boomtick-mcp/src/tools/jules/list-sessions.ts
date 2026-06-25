@@ -1,7 +1,10 @@
 import { z } from "zod";
 import { JulesSession, JulesStatus } from "../types.js";
 
-export const ListJulesSessionsInputSchema = z.object({});
+export const ListJulesSessionsInputSchema = z.object({
+  pageSize: z.number().optional(),
+  pageToken: z.string().optional(),
+});
 
 export async function listJulesSessionsHandler(input: z.infer<typeof ListJulesSessionsInputSchema>): Promise<JulesSession[]> {
   const apiKey = process.env.JULES_API_KEY;

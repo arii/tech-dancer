@@ -1,9 +1,11 @@
 import { z } from "zod";
 import { config } from "../config.js";
 
-export const HealthInputSchema = z.object({});
+export const HealthCheckInputSchema = z.object({
+  checkDeep: z.boolean().optional(),
+});
 
-export async function healthHandler() {
+export async function healthHandler(args: z.infer<typeof HealthCheckInputSchema>) {
   return {
     status: "ok",
     config: {
