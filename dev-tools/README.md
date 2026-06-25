@@ -1,38 +1,39 @@
-# Dev Tools & Workflows
+# dev-tools
 
-This directory contains repository automation scripts and quality gate configurations.
+Developer tooling for the BoomTick repository. The primary entry point is
+`td_cli.py`, but agents should always call `boomtick-mcp` Tier 1 tools first —
+`td_cli.py` is the Tier 2 fallback. See `.agents/AGENTS.md` for the full
+tool hierarchy.
 
-> [!IMPORTANT]
-> The Repository CLI requires the `PyGithub` Python library. Install it with: `pip install PyGithub`.
-> It also requires the `gh` CLI to be authenticated for many operations.
+---
 
-## 🤖 Agent Context Index
-
-The repository maintains an automated index in `.agent-context.json` for agent grounding.
-- **Freshness**: Updated automatically via `.githooks/update-env.sh` on merge and branch checkout.
-- **Manual Update**: Run `pnpm run agent:prime` to refresh the index manually.
-
-## 🧰 One-Step Agent Environment Bootstrap
-
-Use the root-level `./setup-agent.sh` to fully bootstrap a fresh environment in one command.
+## 🚀 One-Step Setup
 
 ```bash
 ./setup-agent.sh
 ```
 
-This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools, Node/pnpm activation, Python dependencies, Playwright provisioning, and runtime verification (`pnpm run doctor`).
+This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools,
+Node.js, pnpm, Python dependencies, Playwright, remote origin configuration,
+and git hook registration.
 
-### Required / Recommended Environment Variables & Secrets
+---
 
-| Variable | Required? | Purpose |
-|---|---|---|
+## 🔑 Environment Variables
+
+| Variable | Required | Purpose |
+| :--- | :--- | :--- |
 | `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
-| `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration when missing (or falls back to an existing non-origin remote URL). |
-| `JULES_API_KEY` | Optional | Enables `td_cli.py jules ...` cloud workflows. |
+| `GH_TOKEN` (string) | Optional fallback | Legacy authentication variable, deprecated in favor of `GITHUB_TOKEN`. |
+| `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration. |
+| `JULES_API_KEY` | Optional | Enables `td_cli.py agent ...` / `td_cli.py jules ...` cloud workflows. |
+| `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 
 **Secret handling guidance**
-- GitHub Actions / agent runners: store `GITHUB_TOKEN`, plus `JULES_API_KEY` and `GEMINI_API_KEY` in repository or org Secrets.
-- Dev containers/local shells: export secrets before running setup/CLI, for example:
+
+- GitHub Actions / agent runners: store `GITHUB_TOKEN`, `JULES_API_KEY`, and
+  `GEMINI_API_KEY` in repository or org Secrets.
+- Dev containers / local shells: export secrets before running setup/CLI:
 
 ```bash
 export GITHUB_TOKEN="<token>"
@@ -42,128 +43,156 @@ export JULES_API_KEY="<key>"
 export GEMINI_API_KEY="<key>"
 ```
 
+**Optional tuning variables**
 
-### Setup Script Toggles
-
-`dev-tools/setup-agent.sh` supports optional environment toggles:
-
-- `SKIP_APT=1` — skip OS package installation.
-- `SKIP_PLAYWRIGHT=1` — skip Playwright browser installation.
-- `SKIP_VALIDATION=1` — skip post-install validation checks.
-- `SKIP_REMOTE_CONFIG=1` — skip `origin` remote auto-configuration.
-- `PNPM_VERSION` — override pnpm version (default `10.28.2`).
+- `SKIP_GIT_HOOKS=1` — skip git hook execution (e.g. in CI).
+- `SKIP_VALIDATION=1` — skip post-setup runtime validation.
 - `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
 
+---
 
-### Non-Traditional Workflows (Deploy, Jules)
+## 🧩 Workflow-Specific Setup
 
 After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
-#### 1) Deploy / GitHub Automation Workflows
-- Ensure GitHub auth is present in env: `GITHUB_TOKEN`.
-- Verify CLI auth and repo context:
-  - `gh auth status`
-  - `gh repo view`
+#### 1) Standard PR / Review Workflows
+
+- Audit a PR (dry-run by default):
+  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit`
+- Submit audit results:
+  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
 - Pre-submit quality gate before push/merge:
   - `python3 dev-tools/td_cli.py gh pre-submit`
 
 #### 2) Jules Workflows
+
 - Required secret: `JULES_API_KEY`.
+- Optional context env var: `JULES_SOURCE_ID` (if your environment already
+  knows the source mapping).
 - Typical commands:
-  - `python3 dev-tools/td_cli.py jules repair-context`
+  - `python3 dev-tools/td_cli.py agent dispatch <BRANCH> "<TASK>"`
+  - `python3 dev-tools/td_cli.py agent fix-ci --pr-number <PR> --execute`
+  - `python3 dev-tools/td_cli.py agent sync`
 
 #### 3) Headless / Bot Auditing
+
 - For batch auditing open PRs:
-  - `python3 dev-tools/td_cli.py gh audit`
-- Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by setup script).
+  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute`
+- Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by
+  setup script).
 
+---
 
-### Agent / Jules GitHub Command Pattern
+## 🗂️ Agent Context Index
 
-**PRIORITIZE SPECIALIZED TOOLING.** Consult the Tooling and MCP Protocol in `.agents/AGENTS.md` before executing any commands.
+`.agent-context.json` (repository root) is the pre-built index that
+`boomtick-mcp` reads on every tool call. It contains `file_tree`, `cli_schema`,
+and `package_json` metadata — built by `scripts/build-repo-context.py`.
 
-1. **Tier 1**: Call Boomtick MCP tools.
-2. **Tier 2**: Use `python3 dev-tools/td_cli.py` (refer to `cli-schema.json`).
-3. **Tier 3**: Raw `gh` as fallback.
+**The index is kept fresh automatically** by the git hooks registered during
+`./setup-agent.sh`:
 
-If auth fails, do not run `gh auth login`. Instead, set an environment secret named `GITHUB_TOKEN`.
+- `.githooks/post-checkout` — refreshes on branch switch
+- `.githooks/post-merge` — refreshes on pull/merge
 
-
-### Verification Commands (Post-Setup)
-
-Run these commands after setup to verify GitHub/dev-tools workflows:
-
-```bash
-python3 dev-tools/td_cli.py gh status-board
-python3 dev-tools/td_cli.py gh conflicts
-```
-
-For PR review flow (example PR number):
+To manually refresh:
 
 ```bash
-python3 dev-tools/td_cli.py gh audit-pr 123 --fetch --audit
+pnpm run agent:prime
 ```
 
-For issue workflow checks:
+If the index is stale, MCP tools fall back to raw filesystem calls, bypassing
+the index and increasing token usage. Always refresh before running reviews or
+dispatching Jules sessions.
+
+---
+
+## 🤖 Agent / Jules GitHub Command Pattern
+
+Always use `boomtick-mcp` Tier 1 tools first. `td_cli.py` is the fallback
+when MCP is unavailable — not the default. See `.agents/AGENTS.md` for the
+full tool mapping table.
+
+When `td_cli.py` must be called directly, read the CLI schema from
+`.agent-context.json` rather than guessing flags or running `--help`:
 
 ```bash
-python3 dev-tools/td_cli.py gh validate-issue --issue-number 123
+# Extract schema for a specific subcommand before calling it
+cat .agent-context.json | python3 -c "
+import json, sys
+schema = json.load(sys.stdin)
+print(json.dumps(schema['cli_schema']['subcommands']['gh pr-diff'], indent=2))
+"
 ```
+
+Prefer repository CLI commands over raw `gh`:
+
+```bash
+# ✅ Preferred
+python3 dev-tools/td_cli.py gh <repo-command>
+
+# ⚠️ Only if td_cli.py does not expose the operation
+gh <command>
+```
+
+If auth fails, do not run `gh auth login`. Instead, set an environment secret
+named `GITHUB_TOKEN`.
+
+---
+
+## ✅ Verification Commands (Post-Setup)
+
+```bash
+node --version         # should match .node-version
+pnpm --version         # should be 10.28.2
+python3 dev-tools/td_cli.py doctor
+pnpm run check:runtime-files
+gh auth status
+```
+
+---
+
+## 🆘 Troubleshooting
+
+### GitHub CLI not authenticated
+
+```bash
+gh issue create --title "<title>" --body "<details>"
+```
+
+If auth fails, report this exact issue (do not run interactive auth):
+
+> GitHub CLI is not authenticated. Please add an environment secret named
+> `GITHUB_TOKEN` with a repo-scoped GitHub token.
+
+### `.agent-context.json` stale or missing
+
+```bash
+pnpm run agent:prime
+```
+
+Then re-read before proceeding with any agent operation.
+
+### pnpm / Node mismatch
+
+Stop and report the mismatch. Do not attempt to change runtime versions unless
+explicitly instructed to update the runtime contract.
+
+---
 
 ## 🚀 Repository CLI (`td_cli.py`)
 
-The unified entry point for all repository automation. It supports both human-readable terminal output and structured JSON for tool integration.
+`dev-tools/td_cli.py` is the Tier 2 unified entry point for local repository
+automation. All available subcommands and flags are defined in
+`dev-tools/cli-schema.json` (also embedded in `.agent-context.json` under
+`cli_schema`). That file is the single source of truth — never use `--help`
+to discover flags.
 
-### Usage and Context
-- **CLI Entry Point**: `dev-tools/td_cli.py`
-- **Read Context**: `dev-tools/logs/reviews/pr-context-{PR}.md` (Diffs, stats, and valid line ranges).
-- **Write Review**: `dev-tools/logs/reviews/pr-review-{PR}.md` (Checklist and JSON output block).
+Key subcommand groups:
 
-### Core Commands
-
-#### 1. Single PR Audit
-The recommended way to review a single PR:
-```bash
-# Step 1: Fetch metadata and generate context
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --fetch
-
-# Step 2: Run automated audit and (optionally) AI review
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --audit
-
-# Step 3: Submit the review to GitHub and clean up logs
-python3 dev-tools/td_cli.py audit-pr <PR_NUMBER> --submit --cleanup --execute
-```
-
-#### 2. Pre-Submission Quality Gate
-Before pushing code or opening a PR, run the full suite of local checks:
-```bash
-python3 dev-tools/td_cli.py pre-submit
-```
-
-### Global Options
-- `--json`: Output results in structured JSON format.
-
----
-
-## 📊 CI Gate Baselines
-
-Technical debt is tracked using **GitHub Actions Variables** instead of local files.
-
-### Tracked Metrics
-- `BUNDLE_BASELINE_KB`: Max allowed size of the production JS bundle (in KB).
-- `ANY_COUNT_BASELINE`: Max allowed number of TypeScript `any` usages.
-
-### How to Update
-When a PR intentionally increases one of these metrics, an admin must update the baseline in GitHub after merge:
-```bash
-gh variable set BUNDLE_BASELINE_KB --body 3080
-gh variable set ANY_COUNT_BASELINE --body 50
-```
-
----
-
-## 🧱 Design System and Quality Gates
-- **UI Anti-Patterns**: Centralized in `scripts/detect-antipatterns.mjs`.
-- **Design System Enforcement**: All code must adhere to `AGENTS.md`. Layout primitives in `src/layouts/` must be used.
-- **Failure Prevention**: The system provides explicit ranges in context files to prevent GitHub API 422 errors.
-- **Dry Run Default**: Most mutating CLI commands require `--execute`.
+| Group | Description |
+| :--- | :--- |
+| `doctor` | Runtime consistency check |
+| `gh` | GitHub operations (PRs, issues, audits, conflicts) |
+| `repo` | Repository operations (CI logs, Playwright) |
+| `agent` / `jules` | Jules agent session management |

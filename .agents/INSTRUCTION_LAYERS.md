@@ -1,25 +1,27 @@
-## Instruction Layer Map
+# Instruction Layers
 
-| File                             | Responsibility                 | Must NOT do             |
-| -------------------------------- | ------------------------------ | ----------------------- |
-| .agents/AGENT_CONTRACT.md        | Invariant rules (always wins)  | Specify CLI flags       |
-| .agents/AGENTS.md                | Tooling & MCP Protocol         | Define UI style rules   |
-| dev-tools/cli-schema.json        | Canonical CLI authority        | Define UI style rules   |
-| AGENTS.md                        | TSX, PR lifecycle, runtime rules| Duplicate CLI schema    |
-| .agents/workflows/               | Task-specific protocols        | Redefine core rules     |
-| audit.config.yaml                | Define what is bad             | Suggest fixes or report |
-| docs/agent/issue-audit-rules.md  | Issue audit rules              | Implementation details  |
-| workflows/ai-slop-audit.md       | Execute + report               | Define new rules        |
-| workflows/REVIEW_INSTRUCTIONS.md | AI auditor protocol            | Human review concerns   |
+| File | Use For | Never Use For |
+| -------------------------------- | ------------------------------- | ----------------------- |
+| `.agents/AGENT_CONTRACT.md` | Invariant rules (always wins) | Specify CLI flags |
+| `dev-tools/cli-schema.json` | Canonical CLI authority | Define UI style rules |
+| `AGENTS.md` | TSX, PR lifecycle, runtime rules | Duplicate CLI schema |
+| `.agents/AGENTS.md` | MCP tool hierarchy, tool mapping | Redefine contract rules |
+| `.agents/workflows/` | Task-specific protocols | Redefine core rules |
+| `audit.config.yaml` | Define what is bad | Suggest fixes or report |
+| `docs/agent/issue-audit-rules.md` | Issue audit rules | Implementation details |
 
-### Resolution Order and Hierarchy
+## Resolution Order
 
-When resolving instructions, agents MUST follow this precedence:
-1. **AGENT_CONTRACT.md** (Core behavior invariants)
-2. **.agents/AGENTS.md** (Specific tool execution protocol)
-3. **AGENTS.md** (Domain-specific styling and workflow rules)
+When two layers conflict, the higher row wins. `AGENT_CONTRACT.md` always
+takes precedence. `cli-schema.json` always wins over any example in `AGENTS.md`
+or a workflow file.
 
-### Tool Grounding Chain
-1. Read **.agent-context.json** to understand project structure.
-2. Read **dev-tools/cli-schema.json** for local tool syntax.
-3. Call **Boomtick MCP** tools for repository and GitHub operations.
+## Key Relationships
+
+- `.agent-context.json` embeds `cli_schema` and `file_tree` — a single read
+  covers both `cli-schema.json` and repository structure. Use
+  `repo.read_agent_context` (Tier 1 MCP) to get it.
+- `.agents/AGENTS.md` defines the MCP → `td_cli.py` → bash escalation path
+  for every task category. Consult it before any GitHub or repo operation.
+- `CODEX.md` has been removed — its runtime contract is now in `AGENTS.md`
+  section 22 and enforced by `dev-tools/setup-agent.sh`.

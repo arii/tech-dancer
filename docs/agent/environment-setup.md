@@ -2,72 +2,95 @@
 
 This guide details how to bootstrap and configure the agent environment.
 
-## 🧰 One-Step Agent Environment Bootstrap
+---
 
-Use `setup-agent.sh` to fully bootstrap a fresh agent or devcontainer environment.
+## 🧰 One-Step Agent Environment Bootstrap
 
 ```bash
 ./setup-agent.sh
 ```
 
 This script installs and configures:
-- **System tools**: `git`, `curl`, `jq`, `gh`, Python toolchain, Node.js prerequisites.
-- **Node.js & pnpm**: Installs `pnpm` via Corepack and runs `pnpm install --frozen-lockfile`.
-- **Python**: Installs Python dependencies for `dev-tools`.
-- **Playwright**: Installs browser binaries and system dependencies (`npx playwright install --with-deps chromium`).
-- **Git Remote**: Automatically configures the `origin` remote.
-- **Agent Index**: Initializes `.agent-context.json` via `pnpm run agent:prime`.
 
-## 🤖 Agent Context Freshness
+- System tools (`git`, `jq`, `gh`, `curl`)
+- Node.js (pinned via `.node-version`) + pnpm (pinned via `package.json`)
+- Python dependencies (`dev-tools/` package in editable mode)
+- Playwright browsers
+- Remote `origin` git configuration
+- Git hooks (`.githooks/`) for automatic index freshness
 
-The repository uses an automated indexing system (`.agent-context.json`) to provide agents with high-precision grounding without recursive filesystem crawling.
+---
 
-- **Content**: Contains the project manifest (`package.json`), design tokens, and active project configuration.
-- **Automation**: Git hooks in `.githooks/` automatically refresh this file after `git pull`, `git merge`, or `git checkout`.
-- **Manual Sync**: If you suspect the index is stale, run:
-  ```bash
-  pnpm run agent:prime
-  ```
+## 🔑 Required Environment Variables
 
-## 🔐 Required & Recommended Secrets
-
-| Variable | Required? | Purpose |
-|---|---|---|
+| Variable | Required | Purpose |
+| :--- | :--- | :--- |
 | `GITHUB_TOKEN` | **Required** | Auth for GitHub CLI and PR audits. |
-| `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g., `owner/repo`). |
+| `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g. `owner/repo`). |
 | `JULES_API_KEY` | Optional | Enables Jules cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed audit and review workflows. |
+| `OLLAMA_URL` | Optional | Override the default local Ollama endpoint. |
 
-### Secret Handling
-- **CI / Agent Runners**: Store these as repository or organization secrets.
-- **Local Development**: Export them in your shell before running setup:
-  ```bash
-  export GITHUB_TOKEN="your_token"
-  export GITHUB_REPOSITORY="arii/tech-dancer"
-  ```
+---
 
-## ⚙️ Setup Script Toggles
+## 🗂️ Agent Context Freshness
 
-You can customize the `setup-agent.sh` behavior using environment variables:
+`.agent-context.json` is the indexed snapshot of the repository consumed by
+`boomtick-mcp` on every tool call. It contains:
 
-- `SKIP_APT=1`: Skip OS package installation (useful if already provisioned).
-- `SKIP_PLAYWRIGHT=1`: Skip Playwright browser installation.
-- `SKIP_VALIDATION=1`: Skip post-install validation checks.
-- `SKIP_REMOTE_CONFIG=1`: Skip automatic `origin` remote configuration.
-- `PNPM_VERSION`: Override the default pnpm version (pinned to `10.28.2`).
-- `NODE_MAJOR`: Override the Node.js major version (defaults to `22`).
+- `file_tree` — repository structure, used for role gating in code review
+- `cli_schema` — full `td_cli.py` command/flag reference, used by MCP tools
+  to call `td_cli.py` correctly without guessing flags
+- `package_json` — dependency and script metadata
 
-## 🚀 Verification
+**Automatic refresh** — the git hooks registered by `./setup-agent.sh` keep
+the index current:
 
-After setup, verify your environment with:
+- `.githooks/post-checkout` — runs after `git checkout` or `git switch`
+- `.githooks/post-merge` — runs after `git merge` or `git pull`
+
+**Manual refresh:**
 
 ```bash
-python3 dev-tools/td_cli.py gh status-board
-python3 dev-tools/td_cli.py gh conflicts
+pnpm run agent:prime
 ```
 
-### Index Verification
-Ensure the index is present and valid:
+Run this before any agent operation if the index may be stale (e.g. after
+pulling changes without the hooks installed, or after modifying `src/`,
+`content/`, or `scripts/build-repo-context.py`).
+
+If `.agent-context.json` is missing or stale, `boomtick-mcp` falls back to
+raw filesystem calls, bypassing the index and significantly increasing token
+usage across all review and audit operations.
+
+---
+
+## 🧬 Tool Hierarchy
+
+After setup, all agent operations follow the three-tier tool hierarchy defined
+in `.agents/AGENTS.md`:
+
+1. **Tier 1: `boomtick-mcp`** — required first call; auto-injects
+   `.agent-context.json` context on every operation
+2. **Tier 2: `dev-tools/td_cli.py`** — fallback when MCP unavailable;
+   read `cli_schema` from `.agent-context.json` before calling
+3. **Tier 3: raw bash / `gh`** — last resort only
+
+See `.agents/AGENTS.md` for the full tool mapping table.
+
+---
+
+## ✅ Post-Setup Verification
+
 ```bash
-jq -e '.repo.name' .agent-context.json
+node --version                          # must match .node-version
+pnpm --version                          # must be 10.28.2
+python3 dev-tools/td_cli.py doctor      # runtime contract check
+pnpm run check:runtime-files            # lockfile and config consistency
+gh auth status                          # GitHub CLI authentication
+cat .agent-context.json | python3 -c \
+  "import json,sys; d=json.load(sys.stdin); print('Index OK:', list(d.keys()))"
 ```
+
+The last command confirms `.agent-context.json` is present and contains the
+expected keys (`file_tree`, `cli_schema`, `package_json`).
