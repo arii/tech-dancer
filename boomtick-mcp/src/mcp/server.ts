@@ -230,6 +230,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -240,9 +241,10 @@ export class BoomtickMCPServer {
               properties: {
                 state: { type: "string", enum: ["open", "closed", "all"], description: "The state of the PRs to search for (open, closed, all)." },
                 includeDrafts: { type: "boolean", description: "Whether to include draft PRs in the results." },
-                limit: { type: "number", description: "The maximum number of PRs to return (default: 100)." },
+                limit: { type: "number", minimum: 1, maximum: 1000, description: "The maximum number of PRs to return (default: 100, range: 1-1000)." },
                 labels: { type: "array", items: { type: "string" }, description: "Filter PRs by labels." },
               },
+              required: [],
             },
           },
           {
@@ -289,6 +291,7 @@ export class BoomtickMCPServer {
                 base: { type: "string", description: "The base ref to compare from (default: 'main')." },
                 head: { type: "string", description: "The head ref to compare to (default: 'HEAD')." },
               },
+              required: [],
             },
           },
           {
@@ -297,6 +300,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -305,6 +309,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
@@ -326,9 +331,9 @@ export class BoomtickMCPServer {
               properties: {
                 prNumber: { type: "number", description: "The original pull request number." },
                 repairBranchName: { type: "string", description: "Optional name for the new repair branch." },
-                writeMode: { type: "boolean", description: "Must be true to perform the branch creation." },
+                writeMode: { type: "boolean", const: true, description: "Must be true to perform the branch creation." },
               },
-              required: ["prNumber"],
+              required: ["prNumber", "writeMode"],
             },
           },
           {
@@ -341,6 +346,7 @@ export class BoomtickMCPServer {
                 timeoutSeconds: { type: "number", description: "Maximum time in seconds to wait for tests (default: 300)." },
                 worktreePath: { type: "string", description: "Optional path to the worktree to run tests in." },
               },
+              required: [],
             },
           },
           {
@@ -352,6 +358,7 @@ export class BoomtickMCPServer {
                 route: { type: "string", description: "The route to audit (default: '/')." },
                 worktreePath: { type: "string", description: "Optional path to the worktree to run the audit in." },
               },
+              required: [],
             },
           },
           {
@@ -363,6 +370,7 @@ export class BoomtickMCPServer {
                 grep: { type: "string", description: "Optional pattern to filter tests by name." },
                 worktreePath: { type: "string", description: "Optional path to the worktree to run tests in." },
               },
+              required: [],
             },
           },
           {
@@ -374,9 +382,9 @@ export class BoomtickMCPServer {
                 worktreePath: { type: "string", description: "Path to the worktree where changes are made." },
                 message: { type: "string", description: "Commit message." },
                 allowedFiles: { type: "array", items: { type: "string" }, description: "List of files that are allowed to be committed." },
-                writeMode: { type: "boolean", description: "Must be true to perform the commit." },
+                writeMode: { type: "boolean", const: true, description: "Must be true to perform the commit." },
               },
-              required: ["worktreePath", "message", "allowedFiles"],
+              required: ["worktreePath", "message", "allowedFiles", "writeMode"],
             },
           },
           {
@@ -392,9 +400,9 @@ export class BoomtickMCPServer {
                 body: { type: "string", description: "The body/description of the new PR." },
                 draft: { type: "boolean", description: "Whether to create the PR as a draft (default: true)." },
                 worktreePath: { type: "string", description: "Optional path to the worktree where the PR is created from." },
-                pushMode: { type: "boolean", description: "Must be true to push the branch and open the PR." },
+                pushMode: { type: "boolean", const: true, description: "Must be true to push the branch and open the PR." },
               },
-              required: ["originalPrNumber", "repairBranch", "baseBranch", "title", "body"],
+              required: ["originalPrNumber", "repairBranch", "baseBranch", "title", "body", "pushMode"],
             },
           },
           {
@@ -462,6 +470,7 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+              required: [],
             },
           },
           {
