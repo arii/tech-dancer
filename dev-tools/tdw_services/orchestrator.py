@@ -819,6 +819,51 @@ Respond only after the PR is created or updated:
 
         return {"status": "success", "results": results}
 
+    def run_playwright(self, grep: Optional[str] = None, worktree_path: Optional[str] = None) -> Dict[str, Any]:
+        """Runs Playwright tests and shapes the output for failed tests."""
+        cmd = ["pnpm", "playwright", "test", "--reporter=json"]
+        if grep:
+            cmd.extend(["--grep", grep])
+
+        kwargs = {"check": False}
+        if worktree_path:
+            kwargs["cwd"] = worktree_path
+
+        res = run_command(cmd, **kwargs)
+
+        failed_tests = []
+        try:
+            if res.stdout and "{" in res.stdout:
+                # Find the first { which should start the json report
+                json_str = res.stdout[res.stdout.find("{"):]
+                report = json.loads(json_str)
+
+                for suite in report.get("suites", []):
+                    for spec in suite.get("specs", []):
+                        if not spec.get("ok"):
+                            error_msg = "Unknown error"
+                            if spec.get("tests"):
+                                for t in spec.get("tests"):
+                                    if t.get("results"):
+                                        for r in t.get("results"):
+                                            if r.get("error") and r["error"].get("message"):
+                                                error_msg = r["error"]["message"]
+                                                break
+
+                            failed_tests.append({
+                                "title": spec.get("title"),
+                                "file": spec.get("file"),
+                                "error": error_msg
+                            })
+        except Exception:
+            pass
+
+        return {
+            "success": res.returncode == 0,
+            "command": " ".join(cmd),
+            "failedTests": failed_tests
+        }
+
     def run_lighthouse(self, route=None):
         """
         Runs Lighthouse audits.
@@ -911,6 +956,60 @@ Respond only after the PR is created or updated:
             "pr_url": pr_url,
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
+
+    def get_merge_conflict_files(self, pr_number: int, base_branch: str = "main") -> Dict[str, Any]:
+        """Sets up a worktree, attempts a merge, lists conflict files, and aborts."""
+        original_cwd = os.getcwd()
+        worktree_path = os.path.join(original_cwd, f"worktree-pr-{pr_number}.tmp")
+        changed_dir = False
+
+        try:
+            pr_data = self.github.fetch_pr_details(pr_number)
+            head_ref = pr_data.get('head', {}).get('ref')
+
+            if not head_ref:
+                raise CLIError(f"Could not determine head ref for PR #{pr_number}")
+
+            if os.path.exists(worktree_path):
+                run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
+                if os.path.exists(worktree_path):
+                    shutil.rmtree(worktree_path, ignore_errors=True)
+
+            run_command(["git", "fetch", "origin", head_ref], check=True)
+            run_command(["git", "fetch", "origin", base_branch], check=True)
+
+            # create worktree
+            run_command(["git", "worktree", "add", worktree_path, f"origin/{head_ref}"], check=True)
+
+            changed_dir = True
+            os.chdir(worktree_path)
+
+            merge_res = run_command(["git", "merge", "--no-commit", "--no-ff", f"origin/{base_branch}"], check=False)
+            command_log = (merge_res.stdout or "") + (merge_res.stderr or "")
+            conflict_files = []
+
+            if merge_res.returncode != 0:
+                diff_res = run_command(["git", "diff", "--name-only", "--diff-filter=U"], check=False)
+                if diff_res.stdout:
+                    conflict_files = [f for f in diff_res.stdout.strip().split("\n") if f]
+
+                run_command(["git", "merge", "--abort"], check=False)
+
+            return {
+                "prNumber": pr_number,
+                "baseBranch": base_branch,
+                "headRef": head_ref,
+                "conflictFiles": conflict_files,
+                "commandLog": command_log
+            }
+
+        except Exception as e:
+            raise CLIError(f"Failed to get merge conflict files: {str(e)}")
+        finally:
+            if changed_dir:
+                os.chdir(original_cwd)
+            if os.path.exists(worktree_path):
+                run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
 
     def resolve_pr_conflicts(self, pr_number: int, allow_unrelated: bool = False, strategy: Optional[str] = None, push: bool = False) -> Dict[str, Any]:
         """

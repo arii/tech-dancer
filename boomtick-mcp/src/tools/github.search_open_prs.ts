@@ -10,29 +10,29 @@ export const SearchOpenPrsInputSchema = z.object({
 
 export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInputSchema>) {
   const params = SearchOpenPrsInputSchema.parse(args);
-  const ghArgs = [
-    "pr",
-    "list",
+  const cliArgs = [
+    "gh",
+    "search-open-prs",
     "--state", params.state,
-    "--limit", params.maxResults.toString(),
-    "--json", "number,title,author,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,updatedAt,url"
+    "--max-results", params.maxResults.toString()
   ];
 
-  if (params.labels && params.labels.length > 0) {
-    ghArgs.push("--label", params.labels.join(","));
+  if (params.includeDrafts) {
+    cliArgs.push("--include-drafts");
+  } else {
+    cliArgs.push("--no-include-drafts");
   }
 
-  const result = await runCommand("gh", ghArgs);
+  if (params.labels && params.labels.length > 0) {
+    cliArgs.push("--labels", params.labels.join(","));
+  }
+
+  const result = await runCommand("td-cli", cliArgs);
 
   if (result.exitCode !== 0) {
     throw new Error(`Failed to list PRs: ${result.stderr}`);
   }
 
-  let prs = JSON.parse(result.stdout);
-
-  if (!params.includeDrafts) {
-    prs = prs.filter((pr: any) => !pr.isDraft);
-  }
-
-  return { prs };
+  const parsed = JSON.parse(result.stdout);
+  return { prs: parsed.prs || parsed };
 }

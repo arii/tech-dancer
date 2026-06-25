@@ -54,6 +54,18 @@ def gh():
 @gh.command()
 @click.argument('pr_number', type=int)
 @click.pass_context
+def read_ci_logs(ctx, pr_number):
+    orch = ctx.obj['ORCHESTRATOR']
+    client = orch.get_github_client()
+    try:
+        data = client.read_ci_logs(pr_number)
+        out(ctx, "Fetched CI logs.", data=data)
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
 def view(ctx, pr_number):
     orch = ctx.obj['ORCHESTRATOR']
     pr = orch.github.fetch_pr_details(pr_number)
@@ -159,6 +171,48 @@ def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
     try:
         res = orch.resolve_pr_conflicts(pr, allow_unrelated=allow_unrelated, strategy=strategy, push=push)
         out(ctx, res['message'], data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
+@gh.command()
+@click.option('--state', default='open')
+@click.option('--include-drafts/--no-include-drafts', default=True)
+@click.option('--max-results', type=int, default=10)
+@click.option('--labels', default=None)
+@click.pass_context
+def search_open_prs(ctx, state, include_drafts, max_results, labels):
+    orch = ctx.obj['ORCHESTRATOR']
+    client = orch.get_github_client()
+    label_list = labels.split(',') if labels else None
+
+    try:
+        prs = client.search_open_prs(state=state, include_drafts=include_drafts, max_results=max_results, labels=label_list)
+        out(ctx, "Fetched open PRs.", data={"prs": prs})
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.pass_context
+def get_pr_diff(ctx, pr_number):
+    orch = ctx.obj['ORCHESTRATOR']
+    client = orch.get_github_client()
+    try:
+        data = client.get_pr_diff_with_files(pr_number)
+        # Note: the output is exactly the shape we want to return directly
+        out(ctx, "Fetched PR diff.", data=data)
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
+@click.argument('pr_number', type=int)
+@click.option('--base-branch', default='main')
+@click.pass_context
+def get_merge_conflict_files(ctx, pr_number, base_branch):
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        data = orch.get_merge_conflict_files(pr_number, base_branch)
+        out(ctx, "Fetched merge conflict files.", data=data)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
 
@@ -321,6 +375,26 @@ def overlaps(ctx, limit, no_cache):
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
         err(ctx, f"pr_overlap.py failed with exit code {e.returncode}")
+
+# ==========================================
+# TEST COMMAND GROUP
+# ==========================================
+@cli.group()
+def test():
+    """Testing Operations"""
+    pass
+
+@test.command()
+@click.option('--grep', default=None)
+@click.option('--worktree-path', default=None)
+@click.pass_context
+def run_playwright(ctx, grep, worktree_path):
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        data = orch.run_playwright(grep=grep, worktree_path=worktree_path)
+        out(ctx, "Playwright tests complete.", data=data)
+    except Exception as e:
+        err(ctx, str(e))
 
 # ==========================================
 # UX COMMAND GROUP

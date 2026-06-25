@@ -7,30 +7,21 @@ export const RunPlaywrightInputSchema = z.object({
 });
 
 export async function runPlaywrightHandler(args: z.infer<typeof RunPlaywrightInputSchema>) {
-  const playwrightArgs = ["playwright", "test", "--reporter=json"];
+  const cliArgs = ["test", "run-playwright"];
+
   if (args.grep) {
-    playwrightArgs.push("--grep", args.grep);
+    cliArgs.push("--grep", args.grep);
   }
 
-  const results = await runCommand("pnpm", playwrightArgs, { cwd: args.worktreePath });
+  if (args.worktreePath) {
+    cliArgs.push("--worktree-path", args.worktreePath);
+  }
 
-  let failedTests = [];
-  try {
-    if (results.stdout.includes("{")) {
-      const report = JSON.parse(results.stdout.substring(results.stdout.indexOf("{")));
-      failedTests = report.suites.flatMap((s: any) =>
-        s.specs.filter((spec: any) => !spec.ok).map((spec: any) => ({
-          title: spec.title,
-          file: spec.file,
-          error: spec.tests?.[0]?.results?.[0]?.error?.message || "Unknown error"
-        }))
-      );
-    }
-  } catch (e) {}
+  const results = await runCommand("td-cli", cliArgs);
 
-  return {
-    success: results.exitCode === 0,
-    command: results.command,
-    failedTests
-  };
+  if (results.exitCode !== 0 && !results.stdout) {
+    throw new Error(`Failed to run Playwright: ${results.stderr}`);
+  }
+
+  return JSON.parse(results.stdout);
 }

@@ -9,7 +9,8 @@ export const ALLOWED_COMMANDS = {
   ls: "ls",
   rm: "rm",
   mkdir: "mkdir",
-  cp: "cp"
+  cp: "cp",
+  "td-cli": "td-cli"
 } as const;
 
 export type AllowedCommand = keyof typeof ALLOWED_COMMANDS;
