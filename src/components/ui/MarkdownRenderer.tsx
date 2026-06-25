@@ -1,4 +1,5 @@
 
+import { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -81,6 +82,7 @@ const RenderCode = ({ className, children, ...props }: { className?: string; chi
   const codeString = String(children).replace(/\n$/, '');
 
   if (isMermaid) {
+    let diagramUrl: string | null = null;
     try {
       const bytes = new TextEncoder().encode(codeString);
       let binary = '';
@@ -89,7 +91,12 @@ const RenderCode = ({ className, children, ...props }: { className?: string; chi
         binary += String.fromCharCode(bytes[i]);
       }
       const base64 = window.btoa(binary);
-      const diagramUrl = `https://mermaid.ink/svg/${base64}`;
+      diagramUrl = `https://mermaid.ink/svg/${base64}`;
+    } catch (e) {
+      console.error('Failed to render mermaid diagram', e);
+    }
+
+    if (diagramUrl) {
       return (
         <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
           <Box
@@ -104,8 +111,6 @@ const RenderCode = ({ className, children, ...props }: { className?: string; chi
           />
         </Box>
       );
-    } catch (e) {
-      console.error('Failed to render mermaid diagram', e);
     }
   }
 
@@ -171,7 +176,7 @@ const RenderCode = ({ className, children, ...props }: { className?: string; chi
 };
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  const processedContent = preprocessMarkdown(content);
+  const processedContent = useMemo(() => preprocessMarkdown(content), [content]);
 
   return (
     <Box className="prose-counters">

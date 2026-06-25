@@ -25,14 +25,6 @@ export function Notice({ type = 'info', children }: NoticeProps) {
       position="relative"
       className="overflow-hidden"
     >
-      <Box
-        position="absolute"
-        top={0}
-        left={0}
-        width={0.5}
-        height="full"
-        className={type === 'warning' ? "bg-accent-purple" : "bg-accent"}
-      />
       <Text
         variant="mono"
         size="tiny"
