@@ -122,6 +122,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     logAIRun({
       type: 'code-review',
       model: modelName,
+      role: summary.role,
       inputTokens,
       outputTokens,
       cacheTokens,
@@ -135,6 +136,7 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     return {
       feedback: feedback,
+      role: summary.role,
       tokens: totalTokens,
       inputTokens,
       outputTokens,

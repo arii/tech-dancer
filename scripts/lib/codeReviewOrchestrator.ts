@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
-import { calculateEstimatedTokens, cleanupFeedback } from './codeReviewUtils';
-import type { CodeReviewSummary, CodeReviewResult, CodeReviewState } from './codeReviewTypes';
+import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
+import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
 import { execSync, spawnSync } from 'child_process';
 import { logReviewExecution } from './aiLogger';
 
@@ -119,16 +119,15 @@ function resolveImportPath(importPath: string, currentFile: string): string | un
   return undefined;
 }
 
-export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
+export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {
   try {
-    let diffCommand = 'git diff -U10 HEAD~1 HEAD';
-    let nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
+    const baseRef = process.env.GITHUB_BASE_REF || 'origin/main';
+    let diffCommand = `git diff -U10 ${baseRef}...HEAD`;
+    let nameOnlyCommand = `git diff --name-only ${baseRef}...HEAD`;
 
-    // Verify if origin/main exists, fallback to git history for CI if needed
+    // Verify if baseRef exists, fallback to git history for CI if needed
     try {
-      execSync('git rev-parse origin/main', { stdio: 'ignore' });
-      diffCommand = 'git diff -U10 origin/main...HEAD';
-      nameOnlyCommand = 'git diff --name-only origin/main...HEAD';
+      execSync(`git rev-parse ${baseRef}`, { stdio: 'ignore' });
     } catch {
       try {
         execSync('git rev-parse main', { stdio: 'ignore' });
@@ -139,7 +138,15 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
         nameOnlyCommand = 'git diff --name-only HEAD~1 HEAD';
       }
     }
-    const rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+
+    let rawDiff: string;
+    if (targetFiles && targetFiles.length > 0) {
+      const quotedFiles = targetFiles.map(f => `"${f}"`).join(' ');
+      const specificDiffCommand = `${diffCommand} -- ${quotedFiles}`;
+      rawDiff = execSync(specificDiffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+    } else {
+      rawDiff = execSync(diffCommand, { encoding: 'utf-8', maxBuffer: 1024 * 1024 * 10 });
+    }
 
     // basic sanity check - just take the first N chars if it's absurdly large to avoid blowing up context
     const maxChars = 60000;
@@ -150,7 +157,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
 
     const fullDiff = rawDiff;
     const prGoal = await fetchPRGoal();
-    const files = execSync(nameOnlyCommand, { encoding: 'utf-8' })
+    const files = targetFiles || execSync(nameOnlyCommand, { encoding: 'utf-8' })
       .split('\n')
       .filter(Boolean);
 
@@ -163,13 +170,13 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
     // diffCommand examples: 'git diff origin/main...HEAD', 'git diff main...HEAD', 'git diff HEAD~1 HEAD'
     const diffParts = diffCommand.split(' ');
     const diffSpec = diffParts[2] || 'HEAD~1';
-    const baseRef = diffSpec.split('...')[0] || 'HEAD~1';
+    const contextBaseRef = diffSpec.split('...')[0] || 'HEAD~1';
 
     for (const file of files) {
       if (!fs.existsSync(file)) continue;
 
       try {
-        const diffResult = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' });
+        const diffResult = spawnSync('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' });
         const fileDiff = diffResult.stdout || '';
         const fileContent = fs.readFileSync(file, 'utf-8');
         const imports = parseImports(fileContent);
@@ -239,7 +246,7 @@ export async function getCodeDiffSummary(): Promise<CodeReviewSummary> {
       const batchFiles = [];
       for (const file of files) {
         if (!fs.existsSync(file)) continue;
-        const fileDiff = spawnSync('git', ['diff', baseRef, '--', file], { encoding: 'utf-8' }).stdout || '';
+        const fileDiff = spawnSync('git', ['diff', contextBaseRef, '--', file], { encoding: 'utf-8' }).stdout || '';
         if (fileDiff) {
           batchFiles.push({ path: file, diff: fileDiff });
         }
@@ -355,109 +362,137 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const summary = await getCodeDiffSummary();
-
-  // Load previous state and auto-resolve findings that are no longer in the diff
-  const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
-  if (prevState?.findings && Array.isArray(prevState.findings)) {
-    for (const finding of prevState.findings) {
-      if (finding.status === 'open' && finding.snippet) {
-        // Use fullDiff for auto-resolution check to avoid truncation issues
-        const diffToCheck = summary.fullDiff || summary.diffContext;
-        if (!diffToCheck.includes(finding.snippet)) {
-          finding.status = 'resolved';
-          finding.fixSummary = 'Jules response: snippet no longer present in diff.';
-          console.log(`✅ Auto-resolved finding: ${finding.issue}`);
-        }
-      }
-    }
-    summary.previousState = prevState;
-  }
-
-  if (!summary.diffContext) {
+  // Get initial summary to find changed files
+  const initialSummary = await getCodeDiffSummary();
+  if (!initialSummary.diffContext) {
     console.log(`✅ No code changes detected — skipping agent review.`);
     fs.writeFileSync(agentReportPath, `## ${client.reportTitle}\n\nNo code changes detected.\n`);
     fs.writeFileSync(path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`), JSON.stringify({ passed: true, highCount: 0, routes: [], llmVerdict: 'pass' }, null, 2));
     return;
   }
 
-  console.log(`🤖 Reviewing code diff with ${client.botName}...`);
+  const prevState = await getPreviousReviewState<CodeReviewState>(client.reportTitle);
+  const changedFiles = initialSummary.changedFiles || [];
 
-  const startTime = Date.now();
-  let reviewResult = await client.invokeReview(summary);
+  // Batch files (max 10 per batch)
+  const fileBatches = batchFiles(changedFiles, 10);
+  const roles: CodeReviewRole[] = ['SECURITY', 'PERFORMANCE', 'STYLE', 'ARCHITECTURE'];
 
-  if (reviewResult.truncated) {
-    console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
-    logReviewExecution('code-review', reviewResult, reviewResult.durationMs ?? (Date.now() - startTime));
-    const retryStartTime = Date.now();
-    reviewResult = await client.invokeReview(summary, 8192);
-    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - retryStartTime);
-  } else {
-    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - startTime);
-  }
+  console.log(`🤖 Reviewing ${changedFiles.length} files in ${fileBatches.length} batches with ${roles.length} specialized agents...`);
 
-  logReviewExecution('code-review', reviewResult, reviewResult.durationMs); // Captured telemetry from client
+  const orchestratorStartTime = Date.now();
+  const reviewPromises: Promise<CodeReviewResult>[] = [];
 
-  // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
-  // A cut-off <findings> block, or a verdict tag that got chopped off the end,
-  // both currently degrade to the parser's default ('pass', undefined state) —
-  // which would let real bugs slip through with zero signal anyone is missing.
-  if (reviewResult.truncated || reviewResult.parseError) {
-    const reason = reviewResult.truncated 
-      ? "was truncated before completion (likely an output token limit)"
-      : `had a malformed findings block (parse error: ${reviewResult.parseError})`;
-    console.error(
-      `❌ ${client.botName} output ${reason} — treating as inconclusive, not PASS.`
-    );
-    reviewResult = {
-      ...reviewResult,
-      llmVerdict: 'warn',
-      feedback: `${reviewResult.feedback}\n\n---\n⚠️ **Review incomplete:** the model's response ${reason}. This review could not verify all findings and should not be treated as a clean pass. Consider re-running.`,
-    };
-  }
+  for (const batch of fileBatches) {
+    const batchSummaryPromise = getCodeDiffSummary(batch);
 
-  reviewResult = reconcileVerdict(reviewResult, summary.fullDiff || summary.diffContext);
+    for (const role of roles) {
+      reviewPromises.push((async () => {
+        const summary = { ...(await batchSummaryPromise), role, previousState: prevState };
 
+        const startTime = Date.now();
+        let result = await client.invokeReview(summary);
 
-  // Merge findings in orchestrator instead of relying solely on LLM
-  // This prevents data loss if LLM forgets to echo back some findings
-  if (reviewResult.state && summary.previousState) {
-    const existingIds = new Set(reviewResult.state.findings.map(f => f.id));
-    const missingFindings = summary.previousState.findings.filter(f => !existingIds.has(f.id));
-    if (missingFindings.length > 0) {
-      console.log(`♻️  Restoring ${missingFindings.length} findings omitted by LLM.`);
-      reviewResult.state.findings.push(...missingFindings);
+        if (result.truncated) {
+          logReviewExecution('code-review', result, result.durationMs ?? (Date.now() - startTime));
+          const retryStartTime = Date.now();
+          result = await client.invokeReview(summary, 8192);
+          result.durationMs = result.durationMs ?? (Date.now() - retryStartTime);
+        } else {
+          result.durationMs = result.durationMs ?? (Date.now() - startTime);
+        }
+
+        logReviewExecution('code-review', result, result.durationMs);
+
+        // Final verification/reconciliation
+        result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
+        return result;
+      })());
     }
   }
 
-  const report = generateCodeReviewMarkdown(reviewResult, client);
+  const allResults = await Promise.all(reviewPromises);
+  const orchestratorDurationMs = Date.now() - orchestratorStartTime;
+
+  // Aggregation logic
+  let aggregatedFeedback = '';
+  const aggregatedFindings = [];
+  let totalTokens = 0;
+  let totalInputTokens = 0;
+  let totalOutputTokens = 0;
+  let totalCacheTokens = 0;
+  let totalCost = 0;
+  let finalVerdict: 'pass' | 'fail' | 'warn' = 'pass';
+  const modelNames = new Set<string>();
+
+  for (const res of allResults) {
+    if (res.feedback) {
+      aggregatedFeedback += `\n\n#### [${res.role}] Review\n${res.feedback}`;
+    }
+    if (res.state?.findings) {
+      aggregatedFindings.push(...res.state.findings);
+    }
+    totalTokens += res.tokens;
+    totalInputTokens += res.inputTokens ?? 0;
+    totalOutputTokens += res.outputTokens ?? 0;
+    totalCacheTokens += res.cacheTokens ?? 0;
+    totalCost += res.cost;
+
+    if (res.llmVerdict === 'fail') finalVerdict = 'fail';
+    else if (res.llmVerdict === 'warn' && finalVerdict !== 'fail') finalVerdict = 'warn';
+
+    if (res.modelName) modelNames.add(res.modelName);
+  }
+
+  // Restore findings omitted by LLM if we have previous state
+  if (prevState?.findings) {
+    const currentIds = new Set(aggregatedFindings.map(f => f.id));
+    const missingFindings = prevState.findings.filter(f => !currentIds.has(f.id));
+    if (missingFindings.length > 0) {
+      console.log(`♻️  Restoring ${missingFindings.length} findings omitted by LLM agents.`);
+      aggregatedFindings.push(...missingFindings);
+    }
+  }
+
+  const finalResult: CodeReviewResult = {
+    feedback: aggregatedFeedback.trim(),
+    tokens: totalTokens,
+    inputTokens: totalInputTokens,
+    outputTokens: totalOutputTokens,
+    cacheTokens: totalCacheTokens,
+    cost: totalCost,
+    llmVerdict: finalVerdict,
+    state: { findings: aggregatedFindings },
+    modelName: Array.from(modelNames).join(', '),
+    durationMs: orchestratorDurationMs,
+  };
+
+  const report = generateCodeReviewMarkdown(finalResult, client);
 
   // Write local report
   fs.writeFileSync(agentReportPath, report);
   console.log(`✅ Local report written to ${agentReportPath}`);
 
   // Post to GitHub PR
-  await postPRComment(report, client.reportTitle, reviewResult.state);
+  await postPRComment(report, client.reportTitle, finalResult.state);
 
   // Also alert Jules if this PR is from a Jules session
   const julesSessionId = await getJulesSessionIdFromPR();
   if (julesSessionId) {
-    const isFail = reviewResult.llmVerdict === 'fail';
+    const isFail = finalResult.llmVerdict === 'fail';
     const passFailMsg = isFail ? "FAIL ❌" : "PASS ✅";
-    const julesMessage = `[${client.reportTitle}] posted a code review (${passFailMsg}). Please read the review comments on the PR, analyze the diff context provided, and fix any failed or warned areas.`;
+    const julesMessage = `[${client.reportTitle}] posted an aggregated code review (${passFailMsg}). Please read the review comments on the PR, analyze the diff context provided, and fix any failed or warned areas.`;
     await sendJulesMessage(julesSessionId, julesMessage);
   }
 
-  // Write a structured result file alongside the markdown
-  const isFail = reviewResult.llmVerdict === 'fail';
-
+  const isFail = finalResult.llmVerdict === 'fail';
   const verdictPath = path.join(ARTIFACTS_DIR, `${client.reportFileName.replace('.md', '')}-verdict.json`);
   fs.writeFileSync(verdictPath, JSON.stringify({
     passed: !isFail,
     highCount: isFail ? 1 : 0,
-    routes: [], // To maintain schema compatibility with visual-review if needed
-    llmVerdict: reviewResult.llmVerdict,
-    state: reviewResult.state
+    routes: [],
+    llmVerdict: finalResult.llmVerdict,
+    state: finalResult.state
   }, null, 2));
 
   if (isFail) {

@@ -12,8 +12,11 @@ export interface CodeReviewState {
   findings: ReviewFinding[];
 }
 
+export type CodeReviewRole = 'SECURITY' | 'PERFORMANCE' | 'STYLE' | 'ARCHITECTURE';
+
 export interface CodeReviewSummary {
   diffContext: string;
+  role?: CodeReviewRole;
   fullDiff?: string;
   prGoal?: string;
   changedFiles?: string[];
@@ -30,6 +33,7 @@ export interface ParsedFindingsResult {
 
 export interface CodeReviewResult {
   feedback: string;
+  role?: CodeReviewRole;
   tokens: number;
   inputTokens?: number;
   outputTokens?: number;

@@ -158,6 +158,17 @@ export function cleanupFeedback(feedback: string): string {
   return cleaned.replace(/\n{3,}/g, '\n\n').trim();
 }
 
+/**
+ * Split a list of files into batches of a certain size.
+ */
+export function batchFiles(files: string[], maxBatchSize: number): string[][] {
+  const batches: string[][] = [];
+  for (let i = 0; i < files.length; i += maxBatchSize) {
+    batches.push(files.slice(i, i + maxBatchSize));
+  }
+  return batches;
+}
+
 export type ReviewPayloadItem = { role: string; content: string };
 
 export interface PayloadConfig {
