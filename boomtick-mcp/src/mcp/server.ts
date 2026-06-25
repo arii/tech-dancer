@@ -36,6 +36,7 @@ import { listJulesSessionsHandler, ListJulesSessionsInputSchema } from "../tools
 import { cancelJulesSessionHandler, CancelJulesSessionInputSchema } from "../tools/jules/cancel-session.js";
 import { getJulesPullRequestHandler, GetJulesPullRequestInputSchema } from "../tools/jules/get-pr.js";
 import { triggerJulesFeedbackHandler, TriggerJulesFeedbackInputSchema } from "../tools/jules/trigger-feedback.js";
+import { ddgsSearchHandler, DdgsSearchInputSchema } from "../tools/ddgs.search.js";
 
 import fs from "fs/promises";
 import path from "path";
@@ -496,6 +497,18 @@ export class BoomtickMCPServer {
               required: ["sessionId"],
             },
           },
+          {
+            name: "agent.search_ddgs",
+            description: "Search the web using DuckDuckGo (via ddgs python library).",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: { type: "string" },
+                maxResults: { type: "number" },
+              },
+              required: ["query"],
+            },
+          },
         ],
       };
     });
@@ -554,6 +567,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await getJulesPullRequestHandler(GetJulesPullRequestInputSchema.parse(request.params.arguments)));
           case "jules.trigger_feedback":
             return createSuccessResult(await triggerJulesFeedbackHandler(TriggerJulesFeedbackInputSchema.parse(request.params.arguments)));
+          case "agent.search_ddgs":
+            return createSuccessResult(await ddgsSearchHandler(DdgsSearchInputSchema.parse(request.params.arguments)));
           default:
             return createErrorResult(`Tool not found: ${request.params.name}`);
         }
