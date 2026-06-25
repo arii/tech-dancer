@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
-import { calculateEstimatedTokens, cleanupFeedback, batchFiles } from './codeReviewUtils';
+import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
 import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
@@ -513,7 +513,7 @@ export async function orchestrateCodeReview(
     return;
   }
 
-  const changedFiles = initialSummary.changedFiles || [];
+  const changedFiles = (initialSummary.changedFiles || []).sort();
 
   // Batch files (max 10 per batch)
   const fileBatches = batchFiles(changedFiles, 10);
@@ -524,6 +524,7 @@ export async function orchestrateCodeReview(
   const orchestratorStartTime = Date.now();
   const allResults: CodeReviewResult[] = [];
   const CONCURRENCY_LIMIT = 4;
+  const newCache: Record<string, CodeReviewResult> = {};
 
   const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();
   const getMemoizedBatchSummary = (batch: string[]) => {
@@ -547,6 +548,16 @@ export async function orchestrateCodeReview(
           }
 
           const summary = { ...batchSummary, role, previousState: prevState };
+          const hash = calculateReviewHash(summary);
+
+          // Semantic Cache Check
+          if (prevState?.cache?.[hash]) {
+            console.log(`✨ Cache hit for ${role} on batch ${batch.join(', ')} — skipping API call.`);
+            const cachedResult = prevState.cache[hash];
+            allResults.push(cachedResult);
+            newCache[hash] = cachedResult;
+            return;
+          }
 
           const invokeWithTelemetry = async (forceMaxTokens?: number): Promise<CodeReviewResult> => {
             const start = Date.now();
@@ -586,6 +597,7 @@ export async function orchestrateCodeReview(
           // Final verification/reconciliation
           result = reconcileVerdict(result, summary.fullDiff || summary.diffContext);
           allResults.push(result);
+          newCache[hash] = result;
         } catch (err) {
           const errorMsg = err instanceof Error ? err.message : String(err);
           console.error(`❌ Error in ${role} review task:`, err);
@@ -679,7 +691,10 @@ export async function orchestrateCodeReview(
     cacheTokens: totalCacheTokens,
     cost: totalCost,
     llmVerdict: finalVerdict,
-    state: { findings: aggregatedFindings },
+    state: {
+      findings: aggregatedFindings,
+      cache: pruneCache({ ...prevState?.cache, ...newCache }),
+    },
     modelName: Array.from(modelNames).join(', '),
     durationMs: orchestratorDurationMs,
   };

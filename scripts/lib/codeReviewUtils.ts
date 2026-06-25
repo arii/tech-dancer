@@ -1,4 +1,40 @@
-import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult } from './codeReviewTypes';
+import * as crypto from 'crypto';
+import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeReviewResult } from './codeReviewTypes';
+
+/**
+ * Generates a stable SHA-256 hash for a code review batch.
+ * Includes diff context, role, goal, and all relevant semantic/external context.
+ */
+export function calculateReviewHash(summary: CodeReviewSummary): string {
+  const hash = crypto.createHash('sha256');
+  const data = JSON.stringify({
+    role: summary.role,
+    diff: summary.diffContext,
+    goal: summary.prGoal,
+    external: summary.externalContext,
+    semantic: summary.impactSemanticContext,
+  });
+  return hash.update(data).digest('hex');
+}
+
+/**
+ * prunes a cache object to maintain a maximum number of entries, preventing
+ * the serialized state from exceeding GitHub's 65k comment character limit.
+ */
+export function pruneCache(
+  cache: Record<string, CodeReviewResult>,
+  maxEntries: number = 15
+): Record<string, CodeReviewResult> {
+  const keys = Object.keys(cache);
+  if (keys.length <= maxEntries) return cache;
+
+  // We don't have timestamps, so we'll just prune the oldest keys (by insertion order)
+  const newCache: Record<string, CodeReviewResult> = {};
+  keys.slice(-maxEntries).forEach(key => {
+    newCache[key] = cache[key];
+  });
+  return newCache;
+}
 
 export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
   const matches = [...feedback.matchAll(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi)];
