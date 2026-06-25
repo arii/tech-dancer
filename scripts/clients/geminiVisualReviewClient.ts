@@ -22,7 +22,13 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary, role: AgentRole = 'UX'): Promise<RouteReview> => {
-    const modelName = pickGeminiModel('flash', 0);
+    let modelName: string;
+    try {
+      modelName = await pickGeminiModel('flash', 0);
+    } catch (err) {
+      console.error('Failed to pick Gemini model, falling back to gemini-3.5-flash:', err);
+      modelName = 'gemini-3.5-flash';
+    }
 
     let maxOutputTokens = 4096;
     let thinkingBudget = 1024;

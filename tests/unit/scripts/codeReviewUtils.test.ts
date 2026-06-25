@@ -111,7 +111,7 @@ describe('codeReviewUtils', () => {
 
   describe('parseCodeReviewStateDetailed and parseCodeReviewState', () => {
     it('parses valid JSON findings', () => {
-      const json = JSON.stringify({ findings: [{ id: '1', issue: 'test' }] });
+      const json = JSON.stringify({ findings: [{ id: '1', file: 'test.ts', issue: 'test', status: 'open' }] });
       const feedback = `Some text\n<findings>\n${json}\n</findings>\nMore text`;
       const result = parseCodeReviewStateDetailed(feedback);
       expect(result.state?.findings.length).toBe(1);

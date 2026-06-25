@@ -96,6 +96,12 @@ Snippet and verification rules:
 - STRICT SNIPPET RULE: When citing an error or anti-pattern, you MUST quote the entire, exact line from the diff in the "snippet" field. Do not truncate the line.
 - Before flagging a "syntax error" or "missing property/method", re-read the diff to confirm the code isn't simply continued on the next line or truncated in the diff chunk. Hallucinating errors due to chunk truncation is a severe failure.
 - If a line appears truncated in the diff (e.g. at the edge of a chunk), DO NOT assume it is a syntax error. Assume it is valid code that continues outside the visible context.
+
+Design System Compliance:
+- Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
+- Mandate Primitives: You MUST insist on using standard layout primitives: \`<Stack>\`, \`<Grid>\`, and \`<Box>\`.
+- Any usage of raw CSS/Tailwind for structural layout (flex/grid) in \`.tsx\` files should be flagged as a STYLE or ARCHITECTURE violation.
+
 ${dynamicGuidance}
 Scope and security rules:
 - STRICT SCOPE: Only review the lines present in the diff or the provided external context.
@@ -137,7 +143,11 @@ The JSON must follow this schema:
   ]
 }
 </findings>
-Ensure 'snippet' is a unique string from the diff that identifies the issue.`;
+Strict JSON Verification:
+- You MUST self-verify the completeness and validity of the JSON block before finishing your response.
+- Every finding MUST have an \`id\`, \`file\`, \`issue\`, and \`status\`.
+- Ensure the JSON is well-formed and contained entirely within the \`<findings>\` tags.
+- Ensure 'snippet' is a unique string from the diff that identifies the issue.`;
 
   return basePrompt;
 }

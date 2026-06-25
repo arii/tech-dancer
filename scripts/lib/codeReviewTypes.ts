@@ -24,11 +24,13 @@ export interface CodeReviewSummary {
   impactSemanticContext?: string;
   previousState?: CodeReviewState;
   estimatedInputTokens?: number;
+  isTruncated?: boolean;
+  diffStat?: string;
 }
 
 export interface ParsedFindingsResult {
   state?: CodeReviewState;
-  parseError?: 'missing_closing_tag' | 'invalid_json';
+  parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
 }
 
 export interface CodeReviewResult {
@@ -43,5 +45,5 @@ export interface CodeReviewResult {
   state?: CodeReviewState;
   modelName?: string;
   truncated?: boolean;
-  parseError?: 'missing_closing_tag' | 'invalid_json';
+  parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
 }
