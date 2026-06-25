@@ -3,7 +3,10 @@ import { getCodeDiffSummary } from '../../../scripts/lib/codeReviewOrchestrator'
 
 const { mockExecFile, mockSpawn } = vi.hoisted(() => {
   const me = vi.fn();
-  (me as any)[Symbol.for('nodejs.util.promisify.custom')] = me;
+  Object.defineProperty(me, Symbol.for('nodejs.util.promisify.custom'), {
+    value: me,
+    configurable: true,
+  });
   return { mockExecFile: me, mockSpawn: vi.fn() };
 });
 
