@@ -1066,7 +1066,7 @@ Respond only after the PR is created or updated:
             "truncated": truncated
         }
 
-    def list_prs(self, state: str = "open", limit: int = 10, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
         gh_args = [
             "pr", "list",
