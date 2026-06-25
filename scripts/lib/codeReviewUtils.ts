@@ -204,19 +204,18 @@ export function buildReviewPayload(
   const diffPrefix = config.diffPrefix ?? 'DIFF:\n\n';
   const externalPrefix = config.externalPrefix ?? 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\n';
 
-  const payload: ReviewPayloadItem[] = [
-    { role: 'system', content: systemPrompt },
-    { role: 'user', content: `${diffPrefix}${diffText}` },
-  ];
+  let combinedSystemPrompt = systemPrompt;
 
   if (externalText) {
     const formattedExternal = externalText === EXTERNAL_CONTEXT_TRUNCATED_MESSAGE
       ? externalText
       : `${externalPrefix}${externalText}`;
-    // Using a separate system message for symbol resolution context ensures it's treated
-    // as context mapping rather than part of the user's diff input
-    payload.push({ role: 'system', content: formattedExternal });
+
+    combinedSystemPrompt += `\n\n${formattedExternal}`;
   }
 
-  return payload;
+  return [
+    { role: 'system', content: combinedSystemPrompt },
+    { role: 'user', content: `${diffPrefix}${diffText}` },
+  ];
 }

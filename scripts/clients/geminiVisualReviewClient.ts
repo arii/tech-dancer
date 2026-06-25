@@ -68,8 +68,8 @@ Your job:
     // with separate SystemMessages is model-dependent.
     // However, the core request was to separate system instructions.
 
-    const systemInstruction = baseContent.filter(p => p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE'))).map(p => p.text).join('\n\n');
-    const otherParts = baseContent.filter(p => !(p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE'))));
+    const systemInstruction = baseContent.filter(p => p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))).map(p => p.text).join('\n\n');
+    const otherParts = baseContent.filter(p => !(p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE') || p.text.includes('PREVIOUS REVIEW ROUND'))));
 
     const finalMessages = [
       new SystemMessage({ content: systemInstruction }),
@@ -152,6 +152,9 @@ Your job:
     let parseError: RouteReview['parseError'] = undefined;
 
     try {
+      if (!rawFeedback || rawFeedback.trim() === '') {
+        throw new Error('Empty response from LLM');
+      }
       const parsed = JSON.parse(rawFeedback);
       feedback = parsed.feedback || rawFeedback;
       verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';

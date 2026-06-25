@@ -122,6 +122,9 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     let parseError: CodeReviewResult['parseError'] = undefined;
 
     try {
+      if (!rawFeedback || rawFeedback.trim() === '') {
+        throw new Error('Empty response from LLM');
+      }
       const parsed = JSON.parse(rawFeedback);
       feedback = parsed.feedback || rawFeedback;
       verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';

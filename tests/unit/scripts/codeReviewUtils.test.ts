@@ -229,25 +229,34 @@ describe('codeReviewUtils', () => {
   });
 
   describe('buildReviewPayload', () => {
-    it('applies prefixes to payload texts', () => {
+    it('applies prefixes and combines system prompts', () => {
       const payload = buildReviewPayload('Prompt', 'Diff content', 'External content');
-      expect(payload[0]).toEqual({ role: 'system', content: 'Prompt' });
+      expect(payload[0]).toEqual({
+        role: 'system',
+        content: 'Prompt\n\nEXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\nExternal content'
+      });
       expect(payload[1]).toEqual({ role: 'user', content: 'DIFF:\n\nDiff content' });
-      expect(payload[2]).toEqual({ role: 'system', content: 'EXTERNAL CONTEXT (Types/Interfaces/Constants referenced in the diff):\n\nExternal content' });
     });
 
-    it('applies custom prefixes to payload texts', () => {
+    it('applies custom prefixes and combines system prompts', () => {
       const payload = buildReviewPayload('Prompt', 'Diff content', 'External content', {
         diffPrefix: 'CustomDiff:\n',
         externalPrefix: 'CustomExt:\n',
       });
+      expect(payload[0]).toEqual({
+        role: 'system',
+        content: 'Prompt\n\nCustomExt:\nExternal content'
+      });
       expect(payload[1]).toEqual({ role: 'user', content: 'CustomDiff:\nDiff content' });
-      expect(payload[2]).toEqual({ role: 'system', content: 'CustomExt:\nExternal content' });
     });
 
-    it('does not apply prefix if external text is fully truncated', () => {
+    it('handles truncated external text by combining it into system prompt', () => {
       const payload = buildReviewPayload('Prompt', 'Diff content', EXTERNAL_CONTEXT_TRUNCATED_MESSAGE);
-      expect(payload[2]).toEqual({ role: 'system', content: EXTERNAL_CONTEXT_TRUNCATED_MESSAGE });
+      expect(payload[0]).toEqual({
+        role: 'system',
+        content: `Prompt\n\n${EXTERNAL_CONTEXT_TRUNCATED_MESSAGE}`
+      });
+      expect(payload[1]).toEqual({ role: 'user', content: 'DIFF:\n\nDiff content' });
     });
   });
 });
