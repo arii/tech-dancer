@@ -262,8 +262,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           p: ({node: _node, children, ...props}) => {
             // Always render as div to safely contain any children (block or inline)
             // while preserving paragraph-like styling. This prevents hydration errors.
-            // Spacing is standardized to tokens (8px units). marginY={8} is 32px.
-            return <Text as="div" color="dim" leading="relaxed" marginY={8} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
+            return <Text as="div" color="dim" leading="relaxed" marginBottom={6} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
           },
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />
