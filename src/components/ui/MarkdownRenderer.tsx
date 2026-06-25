@@ -53,6 +53,12 @@ function parseProp<T>(val: unknown): T {
     const inner = trimmed.slice(1, -1).trim();
 
     try {
+      // Handle primitive values directly to ensure robust parsing
+      if (inner === 'true') return true as T;
+      if (inner === 'false') return false as T;
+      if (inner === 'null') return null as T;
+      if (!Number.isNaN(Number(inner)) && inner !== '') return Number(inner) as T;
+
       let jsonString = inner;
       if (jsonString.startsWith('{') && jsonString.endsWith('}')) {
         jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
