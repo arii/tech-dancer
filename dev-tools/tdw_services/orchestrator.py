@@ -13,6 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
+from tdw_services.utils import log_error
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -526,7 +527,7 @@ class Orchestrator:
         node_matches = actual_node.startswith(expected_prefix) if is_ci else actual_node == expected_node
 
         if not node_matches:
-            print(f"❌ Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}", file=sys.stderr)
+            log_error(f"Node version mismatch\nExpected: {expected_node}\nActual:   {actual_node}")
             raise CLIError("Node version mismatch. Do not switch versions manually.")
 
         with open("package.json", "r") as f:
@@ -539,7 +540,7 @@ class Orchestrator:
             actual_pnpm = None
 
         if not actual_pnpm or actual_pnpm != expected_pnpm:
-            print(f"❌ pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}", file=sys.stderr)
+            log_error(f"pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
             raise CLIError(f"Run: corepack enable && corepack prepare pnpm@{expected_pnpm} --activate")
 
         return {"node": actual_node, "pnpm": actual_pnpm}

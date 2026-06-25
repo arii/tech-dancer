@@ -10,6 +10,7 @@ import sys
 import os
 
 if "-h" in sys.argv or "--help" in sys.argv:
+    # Need to be careful with imports here as tdw_services might not be available yet
     print("FATAL: --help is disabled for agent workflows. Read dev-tools/cli-schema.json for command syntax.", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)
@@ -123,7 +124,12 @@ def main():
             # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
             print(json.dumps(error_payload, indent=2))
         else:
-            print(f"Error: {e}", file=sys.stderr)
+            try:
+                from tdw_services.utils import log_error
+                log_error(str(e))
+            except (ImportError, ModuleNotFoundError):
+                # Fallback if tdw_services is not in path yet
+                print(f"❌ Error: {e}", file=sys.stderr)
             code = getattr(e, 'code', 1)
 
         if "pytest" not in sys.modules:

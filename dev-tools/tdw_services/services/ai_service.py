@@ -4,6 +4,7 @@ import time
 import json
 import requests
 from typing import Optional, Dict, Any, List, Set
+from tdw_services.utils import log_info, log_error, log_warn
 from utils import (
     call_ai,
     is_ai_available,
@@ -107,7 +108,7 @@ class AIClient:
                 return content
             return None
         except Exception as e:
-            print(f"⚠️  Gemini API call failed: {e}", file=sys.stderr)
+            log_warn(f"Gemini API call failed: {e}")
             return None
 
     def generate(self, prompt: str, schema: Optional[Dict] = None, model: str = None) -> str:
@@ -198,7 +199,7 @@ class AIClient:
         _skipped_names = sorted(set(c['file'] for c in skipped))
         _skipped_preview = ', '.join(_skipped_names[:5]) + ('...' if len(_skipped_names) > 5 else '')
 
-        print(f"""
+        log_info(f"""
 {'='*60}
 🔍 PR #{pr_num} – Piecemeal Review Diagnostics
 {'='*60}
@@ -211,7 +212,7 @@ class AIClient:
 📂 Files in diff   : {len(chunks)} total
    Reviewable      : {len(reviewable)} chunks across {len(set(c['file'] for c in reviewable))} files
    Skipped         : {len(skipped)} ({_skipped_preview})
-""", file=sys.stderr)
+""")
 
         file_reviews: List[Dict] = []
         cache_dir = f"/tmp/pr_review_{pr_num}"
@@ -230,13 +231,15 @@ class AIClient:
                 try:
                     with open(cache_path) as f:
                         cached = json.load(f)
-                    print(f"  [{i:>2}/{len(reviewable)}] ♻️  {label} (cached)", file=sys.stderr)
+                    log_info(f"  [{i:>2}/{len(reviewable)}] ♻️  {label} (cached)")
                     file_reviews.append(cached)
                     continue
                 except Exception:
                     pass  # cache corrupt, re-run
 
             t0 = time.time()
+            # print with end=""/flush=True is not easily wrapped by log_info,
+            # we keep it but redirect to stderr manually or just use print(..., file=sys.stderr)
             print(f"  [{i:>2}/{len(reviewable)}] 🤖 {label} ({chunk['added_lines']} added lines{', truncated' if chunk['truncated'] else ''}) …", end="", flush=True, file=sys.stderr)
 
             prompt = self._build_chunk_prompt(chunk, pr_title, checks_summary)
@@ -277,7 +280,7 @@ class AIClient:
             # ── Write live progress snapshot ──────────────────────────────────
             self._write_progress_snapshot(pr_num, reviewable, file_reviews, i, cache_dir)
 
-        print(file=sys.stderr)
+        log_info("")
 
         # ── Phase B: synthesis ────────────────────────────────────────────────
         print(f"🔗 Synthesising {len(file_reviews)} chunk review(s) → final verdict …", end="", flush=True, file=sys.stderr)
@@ -417,7 +420,7 @@ class AIClient:
             with open(progress_path, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(lines))
         except Exception as e:
-            print(f"⚠️  Could not write progress file: {e}", file=sys.stderr)
+            log_warn(f"Could not write progress file: {e}")
 
     def _synthesize_review(
         self,
@@ -469,7 +472,7 @@ class AIClient:
         try:
             raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
         except Exception as e:
-            print(f"\n❌ Synthesis call failed: {e}", file=sys.stderr)
+            log_error(f"Synthesis call failed: {e}")
 
         if not raw:
             # Fallback: construct a minimal result from the structured data
@@ -494,7 +497,7 @@ class AIClient:
         try:
             return json.loads(clean_llm_output(raw))
         except Exception as e:
-            print(f"⚠️  Synthesis JSON parse error: {e} | raw: {raw[:300]}", file=sys.stderr)
+            log_warn(f"Synthesis JSON parse error: {e} | raw: {raw[:300]}")
             return {
                 "reviewComment": f"Review complete. {total_issues} issue(s) found. (Synthesis parse error: {e})\n\nRaw: {raw[:800]}",
                 "labels": [],
@@ -629,4 +632,4 @@ DO NOT REMOVE THE BACKTICKS.
         output_path = os.path.join(output_dir, f'pr-review-{pr_num}.md')
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        print(f"📝 Review written to: {output_path}", file=sys.stderr)
+        log_info(f"📝 Review written to: {output_path}")

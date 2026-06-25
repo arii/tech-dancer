@@ -2,6 +2,7 @@ import os
 import subprocess
 import json
 import sys
+from tdw_services.utils import log_info
 import base64
 import requests
 import time
@@ -46,7 +47,7 @@ class GitHubClient:
             try:
                 return self.run_authenticated_gh(command_args)
             except Exception as e:
-                print(f"Attempt {attempt+1} failed: {e}", file=sys.stderr)
+                log_info(f"Attempt {attempt+1} failed: {e}")
                 if attempt < max_retries - 1:
                     time.sleep(delay)
                 else:

@@ -3,6 +3,7 @@ import sys
 import json
 import re
 from typing import Dict, Any, List
+from tdw_services.utils import log_info, log_warn
 from utils import get_github_token, get_github_client, get_repo_name, CLIError
 
 def validate_review_payload(payload: Dict[str, Any]):
@@ -123,11 +124,11 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
                 if e.status == 422:
                     error_msg = json.dumps(e.data) if getattr(e, 'data', None) else str(e)
                     if "Can not approve your own pull request" in error_msg and review_event != "COMMENT":
-                        print("⚠️  Cannot approve own PR. Retrying as COMMENT...", file=sys.stderr)
+                        log_warn("Cannot approve own PR. Retrying as COMMENT...")
                         try_create_review(review_body, review_comments, "COMMENT")
                         return
                     if review_comments:
-                        print("⚠️  Failed to post inline comments due to line resolution error. Retrying with body comments...", file=sys.stderr)
+                        log_warn("Failed to post inline comments due to line resolution error. Retrying with body comments...")
                         fallback_body = review_body
                         fallback_body += "\n\n### Inline Comments (Fallback due to Github line resolution errors)\n"
                         for comment in review_comments:
@@ -143,7 +144,7 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
                 pr.add_to_labels("needs-design-system-fix")
 
         if not is_json:
-            print(f"✅ Submitted {event} for PR #{pr_number}", file=sys.stderr)
+            log_info(f"✅ Submitted {event} for PR #{pr_number}")
 
         if cleanup:
             if os.path.exists(filepath):
@@ -153,6 +154,6 @@ def submit_review(pr_number, filepath, cleanup=False, dry_run=True, event_overri
                 os.remove(ctx)
     else:
         if not is_json:
-            print(f"[DRY-RUN] Would submit {event} for PR #{pr_number}", file=sys.stderr)
+            log_info(f"[DRY-RUN] Would submit {event} for PR #{pr_number}")
 
     return {"status": "success", "event": event, "pr": pr_number}

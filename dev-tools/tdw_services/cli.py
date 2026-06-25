@@ -1,5 +1,6 @@
 import sys
 import os
+from tdw_services.utils import log_info
 import json
 from datetime import datetime, timezone
 from typing import List, Dict, Any
@@ -428,9 +429,9 @@ def review(ctx, pr_number, no_cache):
             import os as _os
             _os.remove(f)
         if removed:
-            print(f"🗑  Removed {len(removed)} cached diff file(s): {removed}", file=sys.stderr)
+            log_info(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
         else:
-            print("ℹ️  No cache files found to remove.", file=sys.stderr)
+            log_info("ℹ️  No cache files found to remove.")
 
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.review_pr(pr_number)
@@ -438,9 +439,9 @@ def review(ctx, pr_number, no_cache):
     # Surface errors clearly
     if isinstance(res, dict) and res.get('recommendation') == 'Not Approved' and not res.get('reviewComment', '').strip().startswith('CI'):
         # Likely an error result – dump full dict to stderr for diagnosis
-        print(f"""⚠️  Review returned 'Not Approved' (may indicate an error).
+        log_info(f"""⚠️  Review returned 'Not Approved' (may indicate an error).
     recommendation : {res.get('recommendation')}
-    reviewComment  : {res.get('reviewComment', '')[:500]}""", file=sys.stderr)
+    reviewComment  : {res.get('reviewComment', '')[:500]}""")
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 
