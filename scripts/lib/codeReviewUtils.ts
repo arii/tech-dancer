@@ -18,10 +18,18 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
 
 /**
  * Validates the findings schema to ensure all required fields are present.
+ * Performs deep type checking to avoid runtime crashes on malformed LLM output.
  */
 function validateFindingsSchema(state: CodeReviewState): boolean {
   if (!state.findings || !Array.isArray(state.findings)) return false;
-  return state.findings.every(f => f.id && f.file && f.issue && f.status);
+  return state.findings.every(f =>
+    f &&
+    typeof f === 'object' &&
+    typeof f.id === 'string' && f.id.trim() !== '' &&
+    typeof f.file === 'string' && f.file.trim() !== '' &&
+    typeof f.issue === 'string' && f.issue.trim() !== '' &&
+    (f.status === 'open' || f.status === 'resolved')
+  );
 }
 
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {

@@ -30,7 +30,14 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
     // For code review, we prefer Pro if the diff is complex/large, otherwise Flash.
     const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
-    const modelName = await pickGeminiModel(preferredTier, estimatedInputTokens);
+
+    let modelName: string;
+    try {
+      modelName = await pickGeminiModel(preferredTier, estimatedInputTokens);
+    } catch (err) {
+      console.error('Failed to pick Gemini model, falling back to gemini-3.5-flash:', err);
+      modelName = 'gemini-3.5-flash';
+    }
 
     let thinkingBudget = 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);

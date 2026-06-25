@@ -39,10 +39,14 @@ export const DEPRECATED_MODELS = [
   'gemini-2.0-flash-thinking'
 ];
 
+let cachedModels: string[] | null = null;
+
 /**
  * Fetches available Gemini models from the API.
  */
 export async function resolveAvailableGeminiModels(): Promise<string[]> {
+  if (cachedModels) return cachedModels;
+
   const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY;
   if (!apiKey) {
     console.warn("⚠️ No API key found for Gemini model resolution.");
@@ -50,7 +54,14 @@ export async function resolveAvailableGeminiModels(): Promise<string[]> {
   }
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
     if (!res.ok) {
       console.warn(`⚠️ Failed to fetch Gemini models: ${res.status} ${res.statusText}`);
       return [];
@@ -62,7 +73,8 @@ export async function resolveAvailableGeminiModels(): Promise<string[]> {
       return [];
     }
 
-    return data.models.map(m => m.name.replace('models/', ''));
+    cachedModels = data.models.map(m => m.name.replace('models/', ''));
+    return cachedModels;
   } catch (error) {
     console.warn(`⚠️ Error resolving available Gemini models: ${error}`);
     return [];
