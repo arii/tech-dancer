@@ -12,13 +12,14 @@ Read the matching workflow before starting these task types:
 
 - Read all referenced files before taking any action.
 - **Index & Schema First**: **MUST** prioritize consulting `.agent-context.json` for repository state and `dev-tools/cli-schema.json` for CLI authority over manual exploration or guessing.
-- **MCP Tool Priority**: **MUST** follow the tool hierarchy in `.agents/AGENTS.md`. Specialized MCP tools (Tier 1) take precedence over local scripts (Tier 2) and raw shell commands (Tier 3).
+- **MCP Tool Priority**: **MUST** follow the tool hierarchy in `.agents/AGENTS.md`. Specialized MCP tools take precedence over local scripts and raw shell commands.
 - Update the workflow state machine header before proceeding past each step.
 - Produce output only to the specified output files.
 - Never write to `pr-context-*.md` files (read-only by convention).
 
 ## What You Will Never Do
 
+- **MCP Bypass**: Never use raw terminal commands (e.g., `gh pr diff`) when an equivalent Tier 1 MCP tool exists. This is a critical safety and structured-output violation.
 - Fabricate line numbers, PR numbers, or file paths.
 - Create ad-hoc JSON files outside the review directory.
 - Submit a review with placeholder text in the body or comments.

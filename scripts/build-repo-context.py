@@ -20,16 +20,7 @@ def build_repo_context():
         print(f"Error reading package.json: {e}", file=sys.stderr)
         package_summary = {}
 
-    # 2. CLI Schema
-    cli_schema = {}
-    try:
-        cli_schema_path = pathlib.Path("dev-tools/cli-schema.json")
-        if cli_schema_path.exists():
-            cli_schema = json.loads(cli_schema_path.read_text())
-    except Exception as e:
-        print(f"Error reading cli-schema.json: {e}", file=sys.stderr)
-
-    # 2b. Project Config
+    # 2. Project Config
     project_config = {}
     try:
         project_config_path = pathlib.Path("dev-tools/project_config.json")
@@ -38,35 +29,13 @@ def build_repo_context():
     except Exception as e:
         print(f"Error reading project_config.json: {e}", file=sys.stderr)
 
-    # 3. File Tree (Top level and key directories)
-    file_tree = {}
-    def get_dir_structure(path, max_depth=2, current_depth=0):
-        if current_depth >= max_depth:
-            return "..."
-        structure = {}
-        try:
-            for item in sorted(path.iterdir()):
-                if item.name.startswith('.') or item.name == 'node_modules' or item.name == '__pycache__':
-                    continue
-                if item.is_dir():
-                    structure[item.name + '/'] = get_dir_structure(item, max_depth, current_depth + 1)
-                else:
-                    structure[item.name] = None
-        except Exception:
-            pass
-        return structure
-
-    file_tree = get_dir_structure(pathlib.Path("."))
-
     # Assemble context
     return {
         "repo": {
              "name": package_summary.get("name", "Unknown Repo"),
         },
         "package_json": package_summary,
-        "cli_schema": cli_schema,
         "project_config": project_config,
-        "file_tree": file_tree,
     }
 
 if __name__ == "__main__":

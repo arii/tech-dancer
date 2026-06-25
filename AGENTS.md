@@ -49,6 +49,44 @@ pnpm build
 
 ---
 
+## 🧬 Hierarchy of Tooling
+
+Agents must prioritize specialized tools and structured metadata over general-purpose shell commands. Direct shell execution for common Git/GitHub tasks (e.g., `gh pr diff`, `git diff`) is considered a **Contract Violation**.
+
+### Tool Mapping Table
+
+| Category | Task | Tier 1: MCP Tool (Primary) | Tier 2: Local Dev-Tools (`td_cli.py`) | Tier 3: Raw Bash (Fallback) |
+| :--- | :--- | :--- | :--- | :--- |
+| **GitHub** | Search PRs | `github.search_open_prs` | `gh search-prs` | `gh pr list` |
+| **GitHub** | Get PR Diff | `github.get_pr_diff` | `gh pr-diff <PR>` | `gh pr diff <PR>` |
+| **GitHub** | Check Conflicts | `github.get_merge_conflict_files` | `gh merge-conflicts <PR>` | `git merge-tree` |
+| **GitHub** | Global Conflicts | - | `gh conflicts` | - |
+| **GitHub** | Audit PR | - | `gh audit-pr <PR>` | - |
+| **GitHub** | Manage Reviews | - | `gh manage-reviews` | - |
+| **GitHub** | Status Board | - | `gh status-board` | - |
+| **GitHub** | PR Overlaps | - | `gh overlaps` | - |
+| **GitHub** | Comment on PR | `github.comment_triage_summary` | - | `gh pr comment` |
+| **GitHub** | Create Issue | - | `gh create-issue` | `gh issue create` |
+| **GitHub** | Validate Issue | - | `gh validate-issue` | - |
+| **GitHub** | Checkout | `github.checkout_branch` | - | `git checkout` |
+| **GitHub** | Open PR | `github.open_replacement_pr` | - | `gh pr create` |
+| **Repository** | List Changed Files | `repo.get_changed_files` | - | `git diff --name-only` |
+| **Repository** | Read CI Logs | `repo.read_ci_logs` | `repo ci-logs <PR>` | `gh run view` |
+| **Repository** | Commit changes | `repo.commit_patch` | - | `git commit` |
+| **Repository** | Repair Branch | `repo.create_repair_branch` | - | `git checkout -b` |
+| **Repository** | Package Scripts | `repo.get_package_scripts` | - | `cat package.json` |
+| **Repository** | Route Map | `repo.get_route_map` | - | - |
+| **Testing** | Run Vitest | `repo.run_tests` | - | `pnpm test` |
+| **Testing** | Run Playwright | `repo.run_playwright` | `repo run-playwright` | `npx playwright test` |
+| **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
+| **Automation** | Create Jules | `jules.create_session` | `agent dispatch` | - |
+| **Automation** | Fix CI (Jules) | - | `agent fix-ci` | - |
+| **Automation** | Sync Jules | `jules.list_sessions` | `agent sync` | - |
+
+*Note: For Tier 2, always prefix with `python3 dev-tools/td_cli.py`.*
+
+---
+
 ## 1) ❌ No Raw Tailwind in App/Feature Layers
 
 - No arbitrary values (`text-[11px]`, `tracking-[3px]`, `shadow-[...]`)
@@ -189,6 +227,11 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always co
   - **Merch Catalog**: Copy or layout updates. List product removals explicitly.
   - **Articles**: Editorial updates. Provide rationale for date changes. **NEVER** change the filename/date-prefix of a published post (e.g., `2026-04-18-post-title.md`) as this alters the URL, breaks SEO, and causes 404 errors.
 - **Code review standards**: Evaluate dead abstractions, unnecessary indirection, responsibility creep, and token compliance
+
+### Code Review Token Budget
+When using AI reviewers, respect the following token limits per PR:
+- **Small (< 10 files)**: 128k context (Standard Gemini Flash)
+- **Large (> 10 files)**: Sort changed files by impact and review only core logic.
 
 ### Baseline Maintenance
 

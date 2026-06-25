@@ -2,16 +2,28 @@
 
 This protocol defines the tool selection hierarchy to ensure fast, reliable, and asynchronous operations. Agents must prioritize specialized tools and structured metadata over general-purpose shell commands.
 
+## 🛑 MCP is Not Optional
+
+Direct shell execution for common Git/GitHub tasks (e.g., `gh pr diff`, `git diff`) is considered a **Contract Violation**. MCP tools provide necessary safety guards, token redaction, and structured output that raw commands lack.
+
+**Violation Pattern Example:**
+> ❌ *Bad: "I will now run `gh pr diff 123` to see the changes."*
+> ✅ *Good: "I will use `github.get_pr_diff({ prNumber: 123 })` to retrieve the structured diff."*
+
+---
+
 ## 🧐 Intelligence First: Index and Schema
 
 Before executing any command or searching the filesystem, agents **MUST** consult the following ground-truth files. This is the primary way to understand the repository state without redundant exploration.
 
-1.  **`.agent-context.json`**: The canonical repository index. Contains the file tree, package manifests, and active project configurations.
+1.  **`.agent-context.json`**: The canonical repository index. Contains package manifests and active project configurations.
 2.  **`dev-tools/cli-schema.json`**: The single source of truth for all local developer tools (`td_cli.py`). Never use `--help`.
+
+---
 
 ## 🧬 Hierarchy of Tooling
 
-Agents must follow this hierarchy for every task:
+Consult the detailed **Tool Mapping Table** in the root `AGENTS.md` for tier-based command selection.
 
 1.  **Tier 1: Boomtick MCP Tools** (Primary) - Optimized for repository-specific tasks. Asynchronous and structured.
 2.  **Tier 2: Local Dev-Tools** (`dev-tools/td_cli.py`) - Specialized repository logic for auditing and lifecycle management.
@@ -19,24 +31,16 @@ Agents must follow this hierarchy for every task:
 
 ---
 
-## 🗺️ Tool Mapping Table
+## 🤖 Code Review Input Chain
 
-| Category | Task | Tier 1: MCP Tool (Primary) | Tier 2: Local Dev-Tools (`td_cli.py`) | Tier 3: Raw Bash/CLI (Fallback) |
-| :--- | :--- | :--- | :--- | :--- |
-| **GitHub** | Search PRs | `github.search_open_prs` | `gh search-prs` | `gh pr list` |
-| **GitHub** | Get PR Diff | `github.get_pr_diff` | `gh pr-diff <PR>` | `gh pr diff <PR>` |
-| **GitHub** | Check Conflicts | `github.get_merge_conflict_files` | `gh merge-conflicts <PR>` | `git merge-tree` |
-| **GitHub** | Audit PR | - | `gh audit-pr <PR>` | - |
-| **GitHub** | Comment on PR | `github.comment_triage_summary` | - | `gh pr comment` |
-| **Repository** | List Changed Files | `repo.get_changed_files` | - | `git diff --name-only` |
-| **Repository** | Read CI Logs | `repo.read_ci_logs` | `repo ci-logs <PR>` | `gh run view` |
-| **Testing** | Run Vitest | `repo.run_tests` | - | `pnpm test` |
-| **Testing** | Run Playwright | `repo.run_playwright` | `repo run-playwright` | `npx playwright test` |
-| **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
-| **Automation** | Create Jules Session | `jules.create_session` | `agent dispatch` | - |
-| **Audit** | UI Anti-patterns | - | - | `pnpm run audit:anti-patterns` |
+When performing a code review, the following input chain **MUST** be respected to avoid hallucination:
 
-*Note: For Tier 2, always prefix with `python3 dev-tools/td_cli.py`.*
+| Role | Primary Input Source | Fallback / Context |
+| :--- | :--- | :--- |
+| **Architect** | `repo://diff/{PR}` | `repo://routes` |
+| **Security** | `repo://diff/{PR}` | `repo://package-json` |
+| **Style/UX** | `repo://diff/{PR}` | `repo://design-tokens` |
+| **Verifier** | `repo://ci/{PR}` | `repo://playwright/{branch}` |
 
 ---
 

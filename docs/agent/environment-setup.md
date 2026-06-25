@@ -16,6 +16,18 @@ This script installs and configures:
 - **Python**: Installs Python dependencies for `dev-tools`.
 - **Playwright**: Installs browser binaries and system dependencies (`npx playwright install --with-deps chromium`).
 - **Git Remote**: Automatically configures the `origin` remote.
+- **Agent Index**: Initializes `.agent-context.json` via `pnpm run agent:prime`.
+
+## 🤖 Agent Context Freshness
+
+The repository uses an automated indexing system (`.agent-context.json`) to provide agents with high-precision grounding without recursive filesystem crawling.
+
+- **Content**: Contains the project manifest (`package.json`), design tokens, and active project configuration.
+- **Automation**: Git hooks in `.githooks/` automatically refresh this file after `git pull`, `git merge`, or `git checkout`.
+- **Manual Sync**: If you suspect the index is stale, run:
+  ```bash
+  pnpm run agent:prime
+  ```
 
 ## 🔐 Required & Recommended Secrets
 
@@ -25,7 +37,6 @@ This script installs and configures:
 | `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g., `owner/repo`). |
 | `JULES_API_KEY` | Optional | Enables Jules cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed audit and review workflows. |
-| `OLLAMA_URL` | Optional | Override the default local Ollama endpoint. |
 
 ### Secret Handling
 - **CI / Agent Runners**: Store these as repository or organization secrets.
@@ -53,4 +64,10 @@ After setup, verify your environment with:
 ```bash
 python3 dev-tools/td_cli.py gh status-board
 python3 dev-tools/td_cli.py gh conflicts
+```
+
+### Index Verification
+Ensure the index is present and valid:
+```bash
+jq -e '.repo.name' .agent-context.json
 ```
