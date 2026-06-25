@@ -1,23 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getCodeDiffSummary } from '../../../scripts/lib/codeReviewOrchestrator';
 
-const mockExecFile = vi.fn();
-const mockSpawn = vi.fn();
+const { mockExecFile, mockSpawn } = vi.hoisted(() => {
+  const me = vi.fn();
+  (me as any)[Symbol.for('nodejs.util.promisify.custom')] = me;
+  return { mockExecFile: me, mockSpawn: vi.fn() };
+});
 
 vi.mock('child_process', () => ({
   default: {
-    execFile: (...args: any[]) => mockExecFile(...args),
-    spawn: (...args: any[]) => mockSpawn(...args),
+    execFile: mockExecFile,
+    spawn: mockSpawn,
   },
-  execFile: (...args: any[]) => mockExecFile(...args),
-  spawn: (...args: any[]) => mockSpawn(...args),
-}));
-
-vi.mock('util', () => ({
-  default: {
-    promisify: (fn: any) => fn
-  },
-  promisify: (fn: any) => fn
+  execFile: mockExecFile,
+  spawn: mockSpawn,
 }));
 
 describe('getCodeDiffSummary truncation', () => {
@@ -54,6 +50,7 @@ describe('getCodeDiffSummary truncation', () => {
     expect(summary.diffContext).toContain('DIFF STAT SUMMARY:');
     expect(summary.diffContext).toContain(mockStat);
     expect(summary.fullDiff).toBe(largeDiff);
+    expect(summary.diffStat).toBe(mockStat);
   });
 
   it('does not truncate small diffs', async () => {

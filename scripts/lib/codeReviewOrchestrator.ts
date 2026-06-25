@@ -212,7 +212,9 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
 
     if (rawDiff.length > MAX_DIFF_CHARS) {
       isTruncated = true;
-      const statArgs = diffArgs.map(arg => arg === '-U10' ? '--stat' : arg);
+      const statArgs = diffArgs.filter(arg => arg !== '-U10');
+      statArgs.splice(1, 0, '--stat');
+
       const specificStatArgs = (targetFiles && targetFiles.length > 0)
         ? [...statArgs, '--', ...targetFiles]
         : statArgs;
@@ -379,9 +381,7 @@ export function generateTruncatedReviewMarkdown(
   const prNumber = process.env.PR_NUMBER;
   const prLink = prNumber ? `[PR #${prNumber}](https://github.com/${process.env.GITHUB_REPOSITORY}/pull/${prNumber})` : 'this PR';
 
-  const statSummary = summary.diffStat
-    ? `\n\nDIFF STAT SUMMARY:\n${summary.diffStat}`
-    : (summary.diffContext.split('\n\n...[TRUNCATED FOR LLM]')[1] || '');
+  const statSummary = summary.diffStat ? `\n\nDIFF STAT SUMMARY:\n${summary.diffStat}` : '';
 
   return `## ${client.reportTitle}
 
