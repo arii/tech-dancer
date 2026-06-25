@@ -28,6 +28,29 @@ export interface VisualSummary {
   routes: VisualRouteSummary[];
 }
 
+export const VISUAL_REVIEW_SCHEMA = {
+  type: "OBJECT",
+  properties: {
+    verdict: { type: "STRING", enum: ["PASS", "WARN", "FAIL"] },
+    feedback: { type: "STRING" },
+    findings: {
+      type: "ARRAY",
+      items: {
+        type: "OBJECT",
+        properties: {
+          id: { type: "STRING" },
+          route: { type: "STRING" },
+          issue: { type: "STRING" },
+          status: { type: "STRING", enum: ["open", "resolved"] },
+          fixSummary: { type: "STRING" }
+        },
+        required: ["id", "route", "issue", "status"]
+      }
+    }
+  },
+  required: ["verdict", "feedback", "findings"]
+};
+
 export interface RouteReview {
   route: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -43,4 +66,5 @@ export interface RouteReview {
   findings?: VisualReviewFinding[];
   truncated?: boolean;
   role?: string;
+  parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
 }

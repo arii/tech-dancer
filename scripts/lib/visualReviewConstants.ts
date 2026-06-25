@@ -63,25 +63,4 @@ YOUR RULES:
 - Provide actionable feedback.
 - If the change is intentional, evaluate its visual quality and provide recommendations for further improvement.
 
-RESPONSE FORMAT:
-1. Screenshot Assessment:
-   For every provided viewport (Desktop, Laptop, Tablet, Mobile, Ultrawide):
-   - [Pass/Fail] explaining visually what is broken if it fails. Include approximate coordinates if possible.
-2. Detailed Findings:
-   - Categorized by the rubric above.
-3. Recommendations for Improvement.
-
-You MUST end your response with a structured JSON summary of the findings inside a <findings> tag.
-The JSON must follow this schema:
-{
-  "findings": [
-    {
-      "id": "unique-id",
-      "route": "string",
-      "issue": "string",
-      "status": "open" | "resolved",
-      "fixSummary": "string (optional)"
-    }
-  ]
-}
-`;
+Your response must be a structured JSON object. Focus on audit rules and evidence-backed findings.`;

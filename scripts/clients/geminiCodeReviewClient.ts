@@ -1,7 +1,5 @@
-import { HumanMessage } from '@langchain/core/messages';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import {
-  parseCodeReviewVerdict,
-  parseCodeReviewStateDetailed,
   estimateMaxOutputTokens,
   budgetInputContext,
   buildReviewPayload,
@@ -14,7 +12,7 @@ import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 
-import type { CodeReviewSummary, CodeReviewResult } from '../lib/codeReviewTypes';
+import { CODE_REVIEW_SCHEMA, type CodeReviewSummary, type CodeReviewResult, type ReviewFinding } from '../lib/codeReviewTypes';
 import type { CodeReviewClientStrategy } from '../lib/codeReviewOrchestrator';
 
 export const geminiCodeReviewClient: CodeReviewClientStrategy = {
@@ -42,11 +40,14 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     let thinkingBudget = 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-    const baseContent = buildReviewPayload(systemPrompt, diffText, externalText).map(msg => msg.content).join('\n\n');
-    const message = new HumanMessage({ content: baseContent });
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json');
+    const payload = buildReviewPayload(systemPrompt, diffText, externalText);
+    const messages = payload.map(msg => {
+      if (msg.role === 'system') return new SystemMessage({ content: msg.content });
+      return new HumanMessage({ content: msg.content });
+    });
 
-    let response = await model.invoke([message]);
+    let response = await model.invoke(messages);
 
     let finishReason = extractFinishReason(response);
 
@@ -58,8 +59,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       const { newMax, newThinking } = applyRetryStrategy(maxOutputTokens, thinkingBudget);
       thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, newMax, thinkingBudget);
-      response = await model.invoke([message]);
+      model = createGeminiModel(modelName, newMax, thinkingBudget, CODE_REVIEW_SCHEMA, 'application/json');
+      response = await model.invoke(messages);
 
       finishReason = extractFinishReason(response);
     }
@@ -114,11 +115,22 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
 
     // Safe to parse from here. The response.content.parts structure isn't exposed properly via Langchain here
     // typically in @langchain response.content is a string, but if we extract only text it's better
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
+    const rawFeedback = extractFeedbackText(response.content);
+    let feedback = rawFeedback;
+    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
+    let findings: ReviewFinding[] = [];
+    let parseError: CodeReviewResult['parseError'] = undefined;
 
-    const parsedState = parseCodeReviewStateDetailed(feedback);
+    try {
+      const parsed = JSON.parse(rawFeedback);
+      feedback = parsed.feedback || rawFeedback;
+      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
+      findings = parsed.findings || [];
+    } catch (e) {
+      console.warn('Failed to parse structured Gemini response:', e, 'Raw content:', rawFeedback.slice(0, 200));
+      parseError = 'invalid_json';
+      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
+    }
 
     return {
       feedback: feedback,
@@ -129,10 +141,10 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       cacheTokens,
       cost: cost,
       modelName: modelName,
-      llmVerdict: parseCodeReviewVerdict(feedback),
-      state: parsedState.state,
+      llmVerdict: verdict,
+      state: { findings },
       truncated: isTruncated,
-      parseError: parsedState.parseError,
+      parseError,
     };
   }
 };

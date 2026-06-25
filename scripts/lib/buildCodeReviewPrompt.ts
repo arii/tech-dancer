@@ -118,36 +118,7 @@ Scope and security rules:
   newly introduced module or utility. Instead, provide a WARN or PASS verdict based on
   what you CAN see, and explicitly state what remains unverified due to truncation.
 
-You MUST end your review with exactly one of the following strings indicating your final verdict:
-[VERDICT: PASS]
-[VERDICT: WARN]
-[VERDICT: FAIL]
-
-Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
-demonstrate with evidence from the diff.
-
-You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag.
-The JSON must follow this schema:
-<findings>
-{
-  "findings": [
-    {
-      "id": "finding-1",
-      "file": "src/App.tsx",
-      "line": 10,
-      "snippet": "const x = 1;",
-      "issue": "Brief description of the issue",
-      "status": "open",
-      "fixSummary": "Brief summary of how it was addressed"
-    }
-  ]
-}
-</findings>
-Strict JSON Verification:
-- You MUST self-verify the completeness and validity of the JSON block before finishing your response.
-- Every finding MUST have an \`id\`, \`file\`, \`issue\`, and \`status\`.
-- Ensure the JSON is well-formed and contained entirely within the \`<findings>\` tags.
-- Ensure 'snippet' is a unique string from the diff that identifies the issue.`;
+Your response must be a structured JSON object. Focus on audit rules and evidence-backed findings.`;
 
   return basePrompt;
 }

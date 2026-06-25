@@ -33,6 +33,31 @@ export interface ParsedFindingsResult {
   parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
 }
 
+export const CODE_REVIEW_SCHEMA = {
+  type: "OBJECT",
+  properties: {
+    verdict: { type: "STRING", enum: ["PASS", "WARN", "FAIL"] },
+    feedback: { type: "STRING" },
+    findings: {
+      type: "ARRAY",
+      items: {
+        type: "OBJECT",
+        properties: {
+          id: { type: "STRING" },
+          file: { type: "STRING" },
+          line: { type: "NUMBER" },
+          snippet: { type: "STRING" },
+          issue: { type: "STRING" },
+          status: { type: "STRING", enum: ["open", "resolved"] },
+          fixSummary: { type: "STRING" }
+        },
+        required: ["id", "file", "issue", "status"]
+      }
+    }
+  },
+  required: ["verdict", "feedback", "findings"]
+};
+
 export interface CodeReviewResult {
   feedback: string;
   role?: CodeReviewRole;

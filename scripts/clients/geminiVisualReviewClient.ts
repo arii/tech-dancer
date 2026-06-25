@@ -1,11 +1,11 @@
-import { HumanMessage } from '@langchain/core/messages';
-import { buildVisualReviewPayload, parseLLMVerdict, parseVisualReviewFindings } from '../lib/visualReviewUtils';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { buildVisualReviewPayload } from '../lib/visualReviewUtils';
 import { extractFeedbackText } from '../lib/codeReviewUtils';
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 import type { LLMClientStrategy, AgentRole } from '../lib/visualReviewOrchestrator';
 
-import type { RouteReview, VisualRouteSummary } from '../lib/visualReviewTypes';
+import { VISUAL_REVIEW_SCHEMA, type RouteReview, type VisualRouteSummary, type VisualReviewFinding } from '../lib/visualReviewTypes';
 
 const ROLE_PROMPTS: Record<AgentRole, string> = {
   CODE_REVIEW: "You are a Senior Software Engineer. Focus on the impact of code changes on the rendered output. Verify that the DOM diff aligns with the visual changes.",
@@ -32,7 +32,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
 
     let maxOutputTokens = 4096;
     let thinkingBudget = 1024;
-    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
+    let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json');
     const baseContent = buildVisualReviewPayload(summary);
 
     baseContent.push({
@@ -63,26 +63,23 @@ Your job:
       });
     }
 
-    baseContent.push({
-      type: 'text',
-      text: `You MUST also provide a structured JSON summary of the findings (both old and new) for this route at the end of your response, inside a <findings> tag:
-<findings>
-{
-  "findings": [
-    {
-      "id": "finding-1",
-      "route": "${summary.route}",
-      "issue": "Brief description of the issue",
-      "status": "resolved",
-      "fixSummary": "Brief summary of how it was addressed"
-    }
-  ]
-}
-</findings>`
-    });
+    // Actually, ChatGoogleGenerativeAI expects a list of messages, where each message can have parts.
+    // Let's bundle them into a single HumanMessage for now as building multi-message vision payloads
+    // with separate SystemMessages is model-dependent.
+    // However, the core request was to separate system instructions.
 
-    const message = new HumanMessage({ content: baseContent });
-    let response = await model.invoke([message]);
+    const systemInstruction = baseContent.filter(p => p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE'))).map(p => p.text).join('\n\n');
+    const otherParts = baseContent.filter(p => !(p.type === 'text' && (p.text.includes('You are a senior UX') || p.text.includes('YOUR SPECIFIC ROLE'))));
+
+    const finalMessages = [
+      new SystemMessage({ content: systemInstruction }),
+      new HumanMessage({ content: otherParts.map(p => {
+        if (p.type === 'text') return { type: 'text', text: p.text };
+        return { type: 'image_url', image_url: p.image_url };
+      })})
+    ];
+
+    let response = await model.invoke(finalMessages);
 
     let finishReason = extractFinishReason(response);
 
@@ -95,8 +92,8 @@ Your job:
       maxOutputTokens = newMax;
       thinkingBudget = newThinking;
 
-      model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
-      response = await model.invoke([message]);
+      model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget, VISUAL_REVIEW_SCHEMA, 'application/json');
+      response = await model.invoke(finalMessages);
 
       finishReason = extractFinishReason(response);
     }
@@ -148,9 +145,22 @@ Your job:
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
 
-    const feedback = extractFeedbackText(response.content) || (
-      typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-    );
+    const rawFeedback = extractFeedbackText(response.content);
+    let feedback = rawFeedback;
+    let verdict: 'pass' | 'fail' | 'warn' = 'warn';
+    let findings: VisualReviewFinding[] = [];
+    let parseError: RouteReview['parseError'] = undefined;
+
+    try {
+      const parsed = JSON.parse(rawFeedback);
+      feedback = parsed.feedback || rawFeedback;
+      verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
+      findings = parsed.findings || [];
+    } catch (e) {
+      console.warn('Failed to parse structured Gemini visual response:', e, 'Raw content:', rawFeedback.slice(0, 200));
+      parseError = 'invalid_json';
+      feedback = `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`;
+    }
 
     return {
       route: summary.route,
@@ -163,9 +173,10 @@ Your job:
       cacheTokens,
       cost: cost,
       modelName: modelName,
-      llmVerdict: parseLLMVerdict(feedback),
-      findings: parseVisualReviewFindings(feedback),
+      llmVerdict: verdict,
+      findings: findings,
       truncated: isTruncated,
+      parseError,
     };
   }
 };
