@@ -8,6 +8,11 @@ from collections import defaultdict
 
 # Import run_command from utils
 from utils import run_command, CLIError
+try:
+    from tdw_services.utils import log_error, log_warn
+except ImportError:
+    def log_error(msg): print(f"❌ Error: {msg}", file=sys.stderr)
+    def log_warn(msg): print(f"⚠️  Warning: {msg}", file=sys.stderr)
 
 # Use existing github_utils if possible, but we'll add common repo walking/matching logic here
 def walk_tsx(root_dir='src'):
@@ -35,7 +40,7 @@ def find_patterns_in_file(filepath, patterns):
 def get_bundle_size(dist_dir='dist/assets'):
     """Returns bundle size in KB."""
     if not os.path.isdir(dist_dir):
-        print(f"⚠️ Warning: Bundle directory {dist_dir} not found.", file=sys.stderr)
+        log_warn(f"Bundle directory {dist_dir} not found.")
         return 0
 
     js_files = glob.glob(os.path.join(dist_dir, "*.js"))
@@ -47,7 +52,7 @@ def get_bundle_size(dist_dir='dist/assets'):
         try:
             total_bytes += os.path.getsize(js_file)
         except OSError as e:
-            print(f"❌ Error getting size for {js_file}: {e}", file=sys.stderr)
+            log_error(f"getting size for {js_file}: {e}")
             raise CLIError(f"Failed to calculate bundle size: {e}")
 
     # Return size in KB (rounded up to match du -k behavior roughly)
@@ -56,7 +61,7 @@ def get_bundle_size(dist_dir='dist/assets'):
 def get_any_count(search_dir='src'):
     """Returns count of 'any' usages in TS/TSX files."""
     if not os.path.isdir(search_dir):
-        print(f"⚠️ Warning: Search directory {search_dir} not found.", file=sys.stderr)
+        log_warn(f"Search directory {search_dir} not found.")
         return 0
 
     safe_dir = shlex.quote(search_dir)
@@ -69,5 +74,5 @@ def get_any_count(search_dir='src'):
     elif res.returncode == 1:
         return 0
     else:
-        print(f"❌ Error running grep: {res.stderr.strip()}", file=sys.stderr)
+        log_error(f"running grep: {res.stderr.strip()}")
         raise CLIError(f"Grep failed with exit code {res.returncode}")

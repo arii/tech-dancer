@@ -1,4 +1,6 @@
 import os
+import sys
+from tdw_services.utils import log_info
 import json
 import glob
 from datetime import datetime
@@ -195,8 +197,8 @@ def generate_report():
     with open(report_path, 'w') as f:
         f.write("\n".join(report_lines))
 
-    print(f"Report generated: {report_path}")
-    print(f"Issue drafts generated in: {issues_dir}")
+    log_info(f"Report generated: {report_path}")
+    log_info(f"Issue drafts generated in: {issues_dir}")
 
 if __name__ == "__main__":
     generate_report()

@@ -1,6 +1,8 @@
 import json
+import sys
 import os
 import subprocess
+from tdw_services.utils import log_warn, log_error
 from typing import Dict, List, Set, Optional
 
 class DependencyGraph:
@@ -33,12 +35,12 @@ class DependencyGraph:
                     result = subprocess.run(cmd, capture_output=True, text=True, cwd=self.root_dir)
                     if result.returncode != 0:
                         # Fallback or error
-                        print(f"Warning: dependency-cruiser failed: {result.stderr}")
+                        log_warn(f"dependency-cruiser failed: {result.stderr}")
                         data = {"modules": []}
                     else:
                         data = json.loads(result.stdout)
                 except (FileNotFoundError, subprocess.CalledProcessError):
-                    print("Warning: npx or depcruise not found. Ensure dependencies are installed.")
+                    log_warn("npx or depcruise not found. Ensure dependencies are installed.")
                     data = {"modules": []}
 
                 if data.get("modules"):
@@ -49,7 +51,7 @@ class DependencyGraph:
 
             self._parse_modules(data.get("modules", []))
         except Exception as e:
-            print(f"Error loading dependency graph: {e}")
+            log_error(f"loading dependency graph: {e}")
             self.graph = {}
             self.reverse_graph = {}
 
