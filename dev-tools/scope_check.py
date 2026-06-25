@@ -1,36 +1,30 @@
-import json
 import os
 import sys
+from typing import List, Optional, Set
+
+# Add current directory to path to allow dev_tools_sdk import if not in PYTHONPATH
+sys.path.append(os.path.dirname(__file__))
+
 try:
     from tdw_services.utils import log_info
 except ImportError:
     def log_info(msg): print(msg, file=sys.stderr)
-from typing import List, Optional, Set
+
+# Import load_project_config from SDK
+try:
+    from dev_tools_sdk.config import load_project_config
+except ImportError:
+    # Fallback for direct script execution if SDK is not installed in environment
+    sys.path.append(os.path.join(os.path.dirname(__file__), "dev_tools_sdk"))
+    from config import load_project_config
 
 # Import run_command from utils
 from utils import run_command
 
-def get_project_config():
-    config_path = os.path.join(os.path.dirname(__file__), "project_config.json")
-    if not os.path.exists(config_path):
-        return {
-            "core_dirs": ["src/layouts/", "src/components/"],
-            "monolithic_pr_threshold": 3,
-            "base_branch": "origin/main",
-            "content_scopes": {
-                "resources": "content/resources/",
-                "posts": "content/posts/",
-                "blog": "content/blog/",
-                "studies": "content/studies/"
-            }
-        }
-    with open(config_path) as f:
-        return json.load(f)
-
 def get_changed_files():
     """Returns the list of files changed in the current branch."""
-    config = get_project_config()
-    base = config.get("base_branch", "origin/main")
+    config = load_project_config()
+    base = config.base_branch
     # Use check=False to manually handle fallback
     res = run_command(["git", "diff", "--name-only", base], check=False, log_on_error=False)
     if res.returncode == 0:
@@ -47,21 +41,16 @@ def verify_pr_scope(file_list=None):
     if file_list is None:
         file_list = get_changed_files()
 
-    config = get_project_config()
-    core_dirs = config.get("core_dirs", [])
-    threshold = config.get("monolithic_pr_threshold", 3)
+    config = load_project_config()
+    core_dirs = config.core_dirs
+    threshold = config.monolithic_pr_threshold
 
     core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]
     if len(core_files) > threshold:
         return f"PR scope warning: Touching {len(core_files)} core files in {core_dirs}. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23)."
 
     # Content Scope Check
-    content_scopes = config.get("content_scopes", {
-        "resources": "content/resources/",
-        "posts": "content/posts/",
-        "blog": "content/blog/",
-        "studies": "content/studies/"
-    })
+    content_scopes = config.content_scopes
 
     active_scopes: Set[str] = set()
     for f in file_list:
