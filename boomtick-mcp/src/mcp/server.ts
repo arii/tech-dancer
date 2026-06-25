@@ -582,9 +582,9 @@ export class BoomtickMCPServer {
   async run() {
     // Pre-flight check for td-cli
     try {
-      const result = spawnSync("td-cli", ["--version"], { encoding: "utf-8" });
+      const result = spawnSync("td-cli", ["doctor"], { encoding: "utf-8" });
       if (result.status !== 0) {
-        throw new Error("td-cli --version returned non-zero exit code");
+        throw new Error("td-cli doctor returned non-zero exit code");
       }
       console.error("✅ td-cli verified on PATH");
     } catch (error) {
