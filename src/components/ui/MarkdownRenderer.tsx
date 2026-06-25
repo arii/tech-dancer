@@ -63,6 +63,11 @@ function parseProp<T>(val: unknown): T {
       if (jsonString.startsWith('{') && jsonString.endsWith('}')) {
         jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
         jsonString = jsonString.replace(/'/g, '"');
+      } else if (jsonString.includes(':')) {
+        // handle the case of "{base: 1}" getting sliced to "base: 1"
+        jsonString = '{' + jsonString + '}';
+        jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
+        jsonString = jsonString.replace(/'/g, '"');
       }
       return JSON.parse(jsonString);
     } catch (e) {
