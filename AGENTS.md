@@ -311,8 +311,5 @@ Before submitting any PR that modifies `.tsx`, `.ts`, `.css`, or `.scss`:
 
 1. Run `node scripts/detect-antipatterns.mjs`
 2. Review `TODO_ANTIPATTERNS.md` for violations introduced by your changes
-3. Fix all identified anti-patterns
-4. For intentional deviations:
-   - TSX/TS: `// impeccable-ignore` (line) or `// impeccable-ignore-file` (file)
-   - CSS/SCSS: `/* impeccable-ignore */` (line) or `/* impeccable-ignore-file */` (file)
-5. Ensure your changes introduce no new violations in touched files
+3. Fix all identified anti-patterns. **DO NOT** use `impeccable-ignore` unless absolutely necessary (e.g., dynamic motion-driven styles that cannot be tokenized).
+4. Ensure your changes introduce no new violations in touched files
