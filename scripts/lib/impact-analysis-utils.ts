@@ -25,9 +25,21 @@ export interface DependencyGraph {
 }
 
 /**
+ * Normalizes a path to POSIX format (forward slashes).
+ */
+function normalizePath(p: string): string {
+  return p.replace(/\\/g, '/');
+}
+
+/**
  * Resolves a CSS @import path to a relative project path.
  */
 function resolveCssImport(cssFile: string, importPath: string): string | null {
+  // Support relative sibling imports without leading ./
+  if (!importPath.startsWith('.') && !importPath.startsWith('/') && !path.isAbsolute(importPath)) {
+    importPath = './' + importPath;
+  }
+
   if (!importPath.startsWith('.')) return null;
 
   let resolved = path.join(path.dirname(cssFile), importPath);
@@ -35,6 +47,7 @@ function resolveCssImport(cssFile: string, importPath: string): string | null {
     resolved += '.css';
   }
 
+  resolved = normalizePath(resolved);
   return fs.existsSync(resolved) ? resolved : null;
 }
 
@@ -42,24 +55,30 @@ function resolveCssImport(cssFile: string, importPath: string): string | null {
  * Extracts dependencies from a CSS file by scanning for @import statements.
  */
 function getCssDependencies(cssFile: string): Dependency[] {
-  const content = fs.readFileSync(cssFile, 'utf-8');
-  const importRegex = /@import\s+['"]([^'"]+)['"]/g;
-  const dependencies: Dependency[] = [];
-  let match;
+  try {
+    const content = fs.readFileSync(cssFile, 'utf-8');
+    // Broadened regex to support url() wrappers
+    const importRegex = /@import\s+(?:url\()?['"]([^'"]+)['"]\)?/g;
+    const dependencies: Dependency[] = [];
+    let match;
 
-  while ((match = importRegex.exec(content)) !== null) {
-    const importPath = match[1];
-    const resolvedPath = resolveCssImport(cssFile, importPath);
+    while ((match = importRegex.exec(content)) !== null) {
+      const importPath = match[1];
+      const resolvedPath = resolveCssImport(cssFile, importPath);
 
-    if (resolvedPath) {
-      dependencies.push({
-        resolved: resolvedPath,
-        dynamic: false,
-        module: importPath
-      });
+      if (resolvedPath) {
+        dependencies.push({
+          resolved: resolvedPath,
+          dynamic: false,
+          module: importPath
+        });
+      }
     }
+    return dependencies;
+  } catch (error) {
+    console.error(`⚠️ Error reading CSS file ${cssFile}:`, error);
+    return [];
   }
-  return dependencies;
 }
 
 /**
@@ -67,10 +86,14 @@ function getCssDependencies(cssFile: string): Dependency[] {
  * This is necessary because dependency-cruiser may skip deep CSS dependencies in some configurations.
  */
 export function augmentGraphWithCSS(graph: DependencyGraph): DependencyGraph {
-  const allCssFiles = globSync('src/**/*.css');
-  const modulesBySource = new Map(graph.modules.map(m => [m.source, m]));
+  const allCssFiles = globSync('src/**/*.css').map(normalizePath);
+  const modulesBySource = new Map(graph.modules.map(m => [normalizePath(m.source), m]));
+  const visited = new Set<string>();
 
-  allCssFiles.forEach(cssFile => {
+  const processCss = (cssFile: string) => {
+    if (visited.has(cssFile)) return;
+    visited.add(cssFile);
+
     const module = modulesBySource.get(cssFile) || { source: cssFile, dependencies: [] };
     const newDeps = getCssDependencies(cssFile);
 
@@ -81,7 +104,9 @@ export function augmentGraphWithCSS(graph: DependencyGraph): DependencyGraph {
     });
 
     modulesBySource.set(cssFile, module);
-  });
+  };
+
+  allCssFiles.forEach(processCss);
 
   return {
     ...graph,
