@@ -196,71 +196,22 @@ Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always co
   gh variable set ANY_COUNT_BASELINE --body 42
   ```
 
-## 22) Setup (Agent Environment)
+## 22) Runtime Environment Contract
 
-To fully bootstrap and verify the environment (Node.js, pnpm, Python, Playwright), run the consolidated setup script:
+Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 
-```bash
-./setup-agent.sh
-```
+### Setup & Enforcement
 
-This script (symlinked to `dev-tools/setup-agent.sh`) enforces the runtime contract (`Node.js 24.16.0`, `pnpm 10.28.2`) and installs all necessary dependencies.
-
-## Runtime Environment Contract
-
-This repository uses a strictly pinned runtime environment to prevent build inconsistencies and dependency drift.
-
-### Runtime Contract
-
-- **Node.js**: `24.16.0`
-- **pnpm**: `10.28.2`
-
-### Implementation Files
-
-The following files define and enforce the contract:
-
-- `.node-version`: Primary source for Node.js version.
-- `.nvmrc`: Compatibility file for NVM users.
-- `.npmrc`: Development environment configuration (must **not** contain `use-node-version`).
-- `package.json`:
-    - `engines.node`: Set to `24.x` for Vercel compatibility.
-    - `engines.pnpm`: Set to `10.28.2`.
-    - `packageManager`: Set to `pnpm@10.28.2`.
-- `vercel.json`: Ensures Corepack and the pinned pnpm version are used during deployment.
-- `.devcontainer/Dockerfile`: Uses `node:24.16.0-bookworm` as the base image.
-- `.github/workflows/*.yml`: All workflows use `actions/setup-node` with `node-version-file: '.node-version'`.
-
-### Mandatory Protocol for Agents
-
-Before performing any tasks involving dependencies, builds, or tests, you **must** ensure the environment is correctly configured using the consolidated setup script:
-
-```bash
-./setup-agent.sh
-```
-
-This script handles environment activation, runtime verification, and dependency installation in a single step.
-
-Alternatively, you can run the individual check commands:
-
-```bash
-corepack enable
-corepack prepare pnpm@10.28.2 --activate
-pnpm run check:runtime-files
-pnpm run doctor
-```
+Run `./setup-agent.sh` to bootstrap. This script enforces the contract across `.node-version`, `package.json`, and `.npmrc`.
 
 ### Forbidden Actions
 
-- ❌ Do **not** run `npm install`.
-- ❌ Do **not** run `npm install -g pnpm`.
-- ❌ Do **not** run `pnpm env use`.
-- ❌ Do **not** run `nvm install` or `nvm use`.
-- ❌ Do **not** run `volta pin` or `asdf local nodejs`.
-- ❌ Do **not** change the Node.js version in any configuration file unless explicitly instructed to update the runtime contract.
-- ❌ Do **not** add `use-node-version` to `.npmrc` (this breaks Vercel deployments).
-- ❌ Do **not** delete `pnpm-lock.yaml`.
+- ❌ **No `npm`**: Use `pnpm` exclusively.
+- ❌ **No Version Managers**: Do not use `nvm`, `pnpm env`, or `volta` to deviate from the pinned versions.
+- ❌ **No `.npmrc` Bloat**: Never add `use-node-version` (breaks Vercel).
+- ❌ **No Lockfile Deletion**: Do not delete `pnpm-lock.yaml`.
 
-If the environment validation fails, stop and report the mismatch immediately.
+Validation failure = immediate halt. Report mismatches; do not attempt to bypass.
 
 ## GitHub Actions runtime policy
 
