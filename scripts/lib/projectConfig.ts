@@ -33,9 +33,9 @@ export function loadProjectConfig(explicitPath?: string): ProjectConfig {
     const configPath = explicitPath || path.join(process.cwd(), 'dev-tools/project_config.json');
     if (!fs.existsSync(configPath)) return DEFAULT_CONFIG;
 
-    const raw = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+    const raw = JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, unknown>;
 
-    const getInt = (val: any, fallback: number): number => {
+    const getInt = (val: unknown, fallback: number): number => {
       if (typeof val === 'number') return val;
       if (typeof val === 'string') {
         const parsed = parseInt(val, 10);
