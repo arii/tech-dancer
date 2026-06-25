@@ -35,11 +35,11 @@ async function runTests() {
 
   // False Positive Tests
   console.log('- should NOT detect ID selectors as raw hex colors');
-  const cssIdSelector = checkContent('#header { color: red; }');
+  const cssIdSelector = checkContent('#header { color: red; }', 'test.css');
   assert(!cssIdSelector.some(v => v.pattern === 'Raw Hex Color (CSS)'));
 
   console.log('- should NOT detect hex colors in comments');
-  const cssComment = checkContent('/* Fix for issue #123456 */');
+  const cssComment = checkContent('/* Fix for issue #123456 */', 'test.css');
   assert(!cssComment.some(v => v.pattern === 'Raw Hex Color (CSS)'));
 
   // Ignore Tests
