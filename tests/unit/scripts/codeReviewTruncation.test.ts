@@ -7,7 +7,10 @@ const { mockExecFile, mockSpawn } = vi.hoisted(() => {
     value: me,
     configurable: true,
   });
-  return { mockExecFile: me, mockSpawn: vi.fn() };
+  return {
+    mockExecFile: me as unknown as (command: string, args: string[], options: object) => Promise<{ stdout: string }>,
+    mockSpawn: vi.fn()
+  };
 });
 
 vi.mock('child_process', () => ({

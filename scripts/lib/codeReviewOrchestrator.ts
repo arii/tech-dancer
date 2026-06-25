@@ -10,8 +10,24 @@ import { logReviewExecution } from './aiLogger';
 
 const execFile = promisify(execFileCb);
 
-const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'dev-tools/project_config.json'), 'utf-8'));
-const MAX_DIFF_CHARS = config.max_diff_chars ?? 40000;
+/**
+ * Loads project configuration from dev-tools/project_config.json.
+ * Gracefully handles missing or malformed configuration files.
+ */
+function loadProjectConfig(): Record<string, unknown> {
+  try {
+    const configPath = path.join(process.cwd(), 'dev-tools/project_config.json');
+    if (!fs.existsSync(configPath)) return {};
+    return JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, unknown>;
+  } catch (err) {
+    console.warn('⚠️  Failed to load project_config.json, using defaults.', err);
+    return {};
+  }
+}
+
+const projectConfig = loadProjectConfig();
+const DEFAULT_MAX_DIFF_CHARS = 40000;
+const MAX_DIFF_CHARS = (projectConfig.max_diff_chars as number) ?? DEFAULT_MAX_DIFF_CHARS;
 
 export interface CodeReviewClientStrategy {
   botName: string;
@@ -213,15 +229,23 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
 
     if (rawDiff.length > MAX_DIFF_CHARS) {
       isTruncated = true;
-      const statArgs = diffArgs.filter(arg => arg !== '-U10');
-      statArgs.splice(1, 0, '--stat');
+      // Build robust stat arguments by replacing the diff mode with --stat
+      const statArgs = ['diff', '--stat', ...diffArgs.slice(1).filter(arg => arg !== '-U10')];
 
       const specificStatArgs = (targetFiles && targetFiles.length > 0)
         ? [...statArgs, '--', ...targetFiles]
         : statArgs;
 
-      const statRes = await execFile('git', specificStatArgs, { encoding: 'utf-8' });
-      diffStat = (statRes.stdout as string) || '';
+      try {
+        const statRes = await execFile('git', specificStatArgs, {
+          encoding: 'utf-8',
+          maxBuffer: 1024 * 1024 * 10 // Use 10MB buffer for safety on large PRs
+        });
+        diffStat = (statRes.stdout as string) || '';
+      } catch (err) {
+        console.warn('⚠️  Failed to fetch git diff --stat for large PR:', err);
+        diffStat = '[Error fetching diff stat summary]';
+      }
 
       diffContext = rawDiff.slice(0, MAX_DIFF_CHARS) +
         `\n\n...[TRUNCATED FOR LLM]\n\nDIFF STAT SUMMARY:\n${diffStat}\n\n[The diff was truncated at ${MAX_DIFF_CHARS} characters. AI analysis may be incomplete.]`;
