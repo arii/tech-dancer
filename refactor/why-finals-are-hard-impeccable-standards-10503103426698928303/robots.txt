@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/refactor/why-finals-are-hard-impeccable-standards-10503103426698928303/sitemap.xml
