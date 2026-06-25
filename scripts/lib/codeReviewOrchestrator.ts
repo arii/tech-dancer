@@ -17,6 +17,10 @@ export interface CodeReviewClientStrategy {
 
 const MAX_REVIEWS_PER_PR = parseInt(process.env.MAX_AI_REVIEWS ?? '10', 10);
 
+function getInputComplexity(summary: CodeReviewSummary): number {
+  return (summary.diffContext?.length ?? 0) + (summary.externalContext?.length ?? 0);
+}
+
 async function fetchPRGoal(): Promise<string | undefined> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPOSITORY;
@@ -383,24 +387,22 @@ export async function orchestrateCodeReview(
 
   console.log(`🤖 Reviewing code diff with ${client.botName}...`);
 
-  const startTime = Date.now();
-  let reviewResult = await client.invokeReview(summary);
+  const invokeWithTelemetry = async (forceMaxTokens?: number): Promise<CodeReviewResult> => {
+    const start = Date.now();
+    const result = await client.invokeReview(summary, forceMaxTokens);
+    const durationMs = Date.now() - start;
+    logReviewExecution('code-review', result, durationMs, {
+      inputChars: getInputComplexity(summary)
+    });
+    return result;
+  };
+
+  let reviewResult = await invokeWithTelemetry();
 
   if (reviewResult.truncated) {
     console.warn(`⚠️  Initial review truncated — retrying once with a larger output budget.`);
-    logReviewExecution('code-review', reviewResult, reviewResult.durationMs ?? (Date.now() - startTime), {
-      inputChars: (summary.diffContext?.length ?? 0) + (summary.externalContext?.length ?? 0)
-    });
-    const retryStartTime = Date.now();
-    reviewResult = await client.invokeReview(summary, 8192);
-    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - retryStartTime);
-  } else {
-    reviewResult.durationMs = reviewResult.durationMs ?? (Date.now() - startTime);
+    reviewResult = await invokeWithTelemetry(8192);
   }
-
-  logReviewExecution('code-review', reviewResult, reviewResult.durationMs, {
-    inputChars: (summary.diffContext?.length ?? 0) + (summary.externalContext?.length ?? 0)
-  }); // Captured telemetry from client
 
   // HARD GATE: a truncated/malformed response must never silently resolve to PASS.
   // A cut-off <findings> block, or a verdict tag that got chopped off the end,

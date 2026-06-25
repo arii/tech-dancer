@@ -45,7 +45,6 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'github-models-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
-    const startTime = Date.now();
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
@@ -116,7 +115,6 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const feedback = extractFeedbackText(rawContent);
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
-    const durationMs = Date.now() - startTime;
 
     return {
       feedback: feedback,
@@ -130,7 +128,6 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
       modelName: modelName,
       truncated: isTruncated,
       parseError: parsedState.parseError,
-      durationMs,
     };
   }
 };

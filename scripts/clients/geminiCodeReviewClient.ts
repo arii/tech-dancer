@@ -24,7 +24,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
   reportFileName: 'gemini-code-review.md',
 
   invokeReview: async (summary: CodeReviewSummary, forceMaxOutputTokens?: number): Promise<CodeReviewResult> => {
-    const startTime = Date.now();
     const systemPrompt = buildSystemPrompt(summary);
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
@@ -100,11 +99,8 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
         modelName,
         llmVerdict: 'warn',
         truncated: true,
-        durationMs: Date.now() - startTime,
       };
     }
-
-    const durationMs = Date.now() - startTime;
 
     const pricing = getGeminiPricing(modelName);
     const cost = pricing ? (inputTokens / 1_000_000) * pricing.inputCostPerM + (outputTokens / 1_000_000) * pricing.outputCostPerM : 0;
@@ -129,7 +125,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
       state: parsedState.state,
       truncated: isTruncated,
       parseError: parsedState.parseError,
-      durationMs,
     };
   }
 };

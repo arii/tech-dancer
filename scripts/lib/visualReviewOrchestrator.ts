@@ -107,9 +107,9 @@ export async function orchestrateVisualReview(
     // Execute all specialized agents for this route
     const routeReviews = await Promise.all(roles.map(async (role) => {
       console.log(`    → Agent: ${role}`);
-      const startTime = Date.now();
+      const start = Date.now();
       const review = await client.invokeReview(route, role);
-      const durationMs = review.durationMs ?? (Date.now() - startTime);
+      const durationMs = Date.now() - start;
       logReviewExecution('visual-review', review, durationMs, { route: route.route });
       return { ...review, role };
     }));

@@ -32,7 +32,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
@@ -89,7 +89,7 @@ jobs:
           jq -n --arg b "$REF_NAME" --arg s "$GITHUB_SHA" --argjson t "$(date +%s)" '{"branch":$b,"sha":$s,"deployedAt":$t}' > dist/.deploy.json
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: dist-assets
           path: dist/
@@ -104,7 +104,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 

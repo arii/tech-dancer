@@ -43,5 +43,4 @@ export interface RouteReview {
   findings?: VisualReviewFinding[];
   truncated?: boolean;
   role?: string;
-  durationMs?: number;
 }
