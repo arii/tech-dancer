@@ -109,7 +109,7 @@ export async function orchestrateVisualReview(
       console.log(`    → Agent: ${role}`);
       const startTime = Date.now();
       const review = await client.invokeReview(route, role);
-      const durationMs = Date.now() - startTime;
+      const durationMs = review.durationMs ?? (Date.now() - startTime);
       logReviewExecution('visual-review', review, durationMs, { route: route.route });
       return { ...review, role };
     }));

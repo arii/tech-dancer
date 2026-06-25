@@ -11,8 +11,6 @@ import {
 
 import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
 
-import { logAIRun } from '../lib/aiLogger';
-
 import { pickGeminiModel, getGeminiPricing } from '../lib/geminiModelPicker';
 import { extractFinishReason, createGeminiModel, applyRetryStrategy } from '../lib/geminiUtils';
 
@@ -118,20 +116,6 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     );
 
     const parsedState = parseCodeReviewStateDetailed(feedback);
-
-    logAIRun({
-      type: 'code-review',
-      model: modelName,
-      inputTokens,
-      outputTokens,
-      cacheTokens,
-      totalTokens,
-      cost,
-      durationMs,
-      verdict: feedback ? parseCodeReviewVerdict(feedback) : 'unknown',
-      truncated: isTruncated,
-      parseError: parsedState.parseError,
-    });
 
     return {
       feedback: feedback,

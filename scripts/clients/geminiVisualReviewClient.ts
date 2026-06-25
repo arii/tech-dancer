@@ -22,6 +22,7 @@ export const geminiVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'gemini-review.md',
 
   invokeReview: async (summary: VisualRouteSummary, role: AgentRole = 'UX'): Promise<RouteReview> => {
+    const startTime = Date.now();
     const modelName = pickGeminiModel('flash', 0);
 
     let maxOutputTokens = 4096;
@@ -160,6 +161,7 @@ Your job:
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
       truncated: isTruncated,
+      durationMs: Date.now() - startTime,
     };
   }
 };

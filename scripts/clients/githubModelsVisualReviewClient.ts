@@ -24,6 +24,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
   reportFileName: 'github-models-review.md',
 
   invokeReview: async (summary: VisualRouteSummary): Promise<RouteReview> => {
+    const startTime = Date.now();
     const domDiffPath = path.join(DOM_REVIEW_DIR, summary.slug, 'diff.txt');
     let domDiffLength = 0;
     if (fs.existsSync(domDiffPath)) {
@@ -107,6 +108,7 @@ export const githubModelsVisualReviewClient: LLMClientStrategy = {
       modelName: modelName,
       llmVerdict: parseLLMVerdict(feedback),
       findings: parseVisualReviewFindings(feedback),
+      durationMs: Date.now() - startTime,
     };
   }
 };
