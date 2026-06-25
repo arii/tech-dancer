@@ -314,7 +314,11 @@ class AIClient:
             if not self.vector_store.is_available():
                 return "\n".join(context_parts)
 
-            semantic_results = self.vector_store.query(chunk['diff_text'], n_results=3)
+            diff_text = chunk.get('diff_text') or chunk.get('diff') or ""
+            if not diff_text:
+                return "\n".join(context_parts)
+
+            semantic_results = self.vector_store.query(diff_text, n_results=3)
             if semantic_results:
                 context_parts.append("\n### Semantically Related Code")
                 for res in semantic_results:

@@ -18,7 +18,7 @@ class TestAIService(unittest.TestCase):
 
     @patch("sys.stderr")
     def test_get_context_for_chunk_exception_handling(self, mock_stderr):
-        chunk = {"file": "test_file.py", "diff": "test diff"}
+        chunk = {"file": "test_file.py", "diff_text": "test diff"}
 
         self.ai_service._dependency_graph.get_dependencies.return_value = ["dep1"]
         self.ai_service._dependency_graph.get_dependents.return_value = []
