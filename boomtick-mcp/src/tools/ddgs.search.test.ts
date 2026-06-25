@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ddgsSearchHandler } from "./ddgs.search.js";
 import { runCommand } from "../lib/shell.js";
-import path from "path";
 
 vi.mock("../lib/shell.js");
 

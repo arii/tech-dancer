@@ -16,6 +16,7 @@ export async function ddgsSearchHandler(args: z.infer<typeof DdgsSearchInputSche
   const scriptPath = path.join(__dirname, "ddgs_search.py");
 
   // Sanitize query by removing control characters, newlines, and null bytes
+  // eslint-disable-next-line no-control-regex
   const safeQuery = args.query.replace(/[\x00-\x1F\x7F-\x9F]/g, " ").trim();
 
   const result = await runCommand("python3", [scriptPath, safeQuery, (args.maxResults ?? 5).toString()]);
