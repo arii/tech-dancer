@@ -259,6 +259,16 @@ configure_remote_origin() {
   log "Configured remote.origin => https://github.com/${repo_slug}.git"
 }
 
+configure_git_hooks() {
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    warn "Not a git repository; skipping git hooks configuration."
+    return 0
+  fi
+
+  log "Configuring git hooks path to .githooks..."
+  git config core.hooksPath .githooks
+}
+
 run_validation() {
   if [ "$SKIP_VALIDATION" = "1" ]; then
     warn "SKIP_VALIDATION=1; skipping validation."
@@ -287,9 +297,10 @@ main() {
   install_apt_tools
   ensure_corepack_pnpm
   install_python_deps
+  configure_remote_origin
+  configure_git_hooks
   install_node_deps
   install_playwright
-  configure_remote_origin
   run_validation
 }
 
