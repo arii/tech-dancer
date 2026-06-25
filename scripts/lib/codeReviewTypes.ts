@@ -25,6 +25,7 @@ export interface CodeReviewSummary {
   previousState?: CodeReviewState;
   estimatedInputTokens?: number;
   isTruncated?: boolean;
+  diffStat?: string;
 }
 
 export interface ParsedFindingsResult {

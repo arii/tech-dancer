@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getCodeDiffSummary } from '../../../scripts/lib/codeReviewOrchestrator';
-import { promisify } from 'util';
-import * as child_process from 'child_process';
 
 const mockExecFile = vi.fn();
 const mockSpawn = vi.fn();
