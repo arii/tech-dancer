@@ -70,6 +70,37 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
   else if (data.state === "FAILED" || data.state === "CANCELLED" || data.state === "TERMINATED") status = "FAILED";
   else if (data.state === "IN_PROGRESS") status = "IN_PROGRESS";
 
+  // Auto-bootstrap: If session is PENDING, send a trigger message to start it
+  if (status === "PENDING") {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
+      const bootstrapResponse = await fetch(`https://jules.googleapis.com/v1alpha/sessions/${id}:sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          prompt: input.task,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (bootstrapResponse.ok) {
+        status = "IN_PROGRESS";
+      } else {
+        const errText = await bootstrapResponse.text();
+        console.error(`Failed to auto-bootstrap session ${id} (HTTP ${bootstrapResponse.status}): ${errText}`);
+      }
+    } catch (e) {
+      console.error(`Failed to auto-bootstrap session ${id}:`, e);
+    }
+  }
+
   return {
     id,
     status,

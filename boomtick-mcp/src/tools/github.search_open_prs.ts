@@ -4,7 +4,7 @@ import { runCommand } from "../lib/shell.js";
 export const SearchOpenPrsInputSchema = z.object({
   state: z.enum(["open", "closed", "all"]).optional().default("open"),
   includeDrafts: z.boolean().optional().default(true),
-  maxResults: z.number().optional().default(10),
+  limit: z.number().min(1).max(100).optional().default(100),
   labels: z.array(z.string()).optional(),
 });
 
@@ -14,7 +14,7 @@ export async function searchOpenPrsHandler(args: z.infer<typeof SearchOpenPrsInp
   const tdArgs = [
     "gh", "search-prs",
     "--state", params.state,
-    "--limit", params.maxResults.toString(),
+    "--limit", params.limit.toString(),
   ];
 
   if (!params.includeDrafts) {

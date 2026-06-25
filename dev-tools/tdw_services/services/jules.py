@@ -30,7 +30,7 @@ class JulesClient:
             log_warn(f"Jules API list_sources failed: {e}")
             return []
 
-    def list_sessions(self, pageSize: int = 10) -> List[Dict[str, Any]]:
+    def list_sessions(self, pageSize: int = 100) -> List[Dict[str, Any]]:
         url = f"{self.base_url}/sessions"
         params = {"pageSize": pageSize}
         try:
