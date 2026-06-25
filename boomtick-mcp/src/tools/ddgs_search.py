@@ -1,9 +1,6 @@
 import json
 import sys
 
-import warnings
-warnings.filterwarnings("ignore", category=RuntimeWarning, message=".*has been renamed to `ddgs`.*")
-
 try:
     from duckduckgo_search import DDGS
 except ImportError:
@@ -13,9 +10,7 @@ except ImportError:
 try:
     query = sys.argv[1]
     max_results = int(sys.argv[2])
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=RuntimeWarning)
-        results = DDGS().text(query, max_results=max_results)
+    results = DDGS().text(query, max_results=max_results)
     print(json.dumps(list(results)))
 except Exception as e:
     print(json.dumps({"error": str(e)}), file=sys.stderr)

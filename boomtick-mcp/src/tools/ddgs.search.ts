@@ -17,7 +17,7 @@ export async function ddgsSearchHandler(args: z.infer<typeof DdgsSearchInputSche
 
   const result = await runCommand("python3", [scriptPath, args.query, (args.maxResults ?? 5).toString()]);
 
-  // duckduckgo-search logs annoying deprecation warnings to stderr we want to ignore
+  // duckduckgo_search logs annoying deprecation warnings to stderr we want to ignore
   // if it really failed, exitCode will be non-zero and we'll have stdout/stderr
   if (result.exitCode !== 0) {
     throw new Error(`Failed to search ddgs: ${result.stderr || result.stdout}`);
