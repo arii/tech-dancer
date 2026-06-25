@@ -13,6 +13,14 @@ import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
 
+const ALLOWED_PROPS = new Set([
+  'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
+  'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'marginX', 'marginY',
+  'width', 'height', 'display', 'border', 'radius', 'surface', 'shadow', 'maxWidth', 'minWidth',
+  'overflow', 'gap', 'span', 'cols', 'rows', 'direction', 'align', 'justify',
+  'variant', 'size', 'weight', 'color', 'uppercase', 'intent', 'tracking', 'leading', 'as'
+]);
+
 interface MarkdownRendererProps {
   content: string;
 }
@@ -31,29 +39,14 @@ function parseProp<T>(val: unknown): T {
   if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
     const inner = trimmed.slice(1, -1).trim();
 
-    // If it's another level of braces, it's likely an object: {{ base: 1 }}
-    if (inner.startsWith('{') && inner.endsWith('}')) {
-      try {
-        // Conversion of JS-like object literal string to JSON
-        const jsonStr = inner
-          .replace(/(['"])?([a-z0-9_]+)(['"])?\s*:/gi, '"$2":') // Ensure keys are double-quoted
-          .replace(/'/g, '"') // Standardize to double quotes for JSON
-          .replace(/,\s*([}\]])/g, '$1'); // Remove trailing commas
-        return JSON.parse(jsonStr);
-      } catch (e) {
-        // Fallback to original string if parsing fails
-        console.warn('MarkdownRenderer: Failed to parse prop object:', inner, e);
-        return inner as T;
-      }
+    try {
+      // Use Function to safely evaluate simple JS expressions like {6} or {{base: 1}}
+      // This is preferred over manual regex string-to-json conversion.
+      return new Function(`return ${inner}`)();
+    } catch (e) {
+      console.warn('MarkdownRenderer: Failed to parse prop expression:', inner, e);
+      return inner as T;
     }
-
-    // Handle booleans and numbers inside braces
-    if (inner === 'true') return true as T;
-    if (inner === 'false') return false as T;
-    const num = Number(inner);
-    if (inner !== '' && !Number.isNaN(num)) return num as T;
-
-    return inner as T;
   }
 
   // Auto-convert plain numeric strings (e.g. margin="4")
@@ -80,7 +73,7 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
 /**
  * Processes all incoming markdown attributes through parseProp to ensure
  * numbers, booleans, and objects are correctly converted.
- * Filters out internal markdown metadata.
+ * Filters out internal markdown metadata and validates against a whitelist.
  */
 function propMap<T>(props: Record<string, unknown>): T {
   const result: Record<string, unknown> = {};
@@ -91,7 +84,11 @@ function propMap<T>(props: Record<string, unknown>): T {
       result[key] = value;
       return;
     }
-    result[key] = parseProp(value);
+
+    // Strictly validate against whitelist of allowed props
+    if (ALLOWED_PROPS.has(key)) {
+      result[key] = parseProp(value);
+    }
   });
   return result as T;
 }
