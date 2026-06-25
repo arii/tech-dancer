@@ -34,7 +34,20 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
 
   try {
-    return { state: JSON.parse(jsonText) as CodeReviewState };
+    const state = JSON.parse(jsonText) as CodeReviewState;
+
+    // Strict schema verification
+    if (!state.findings || !Array.isArray(state.findings)) {
+      return { state, parseError: 'incomplete_findings' };
+    }
+
+    for (const finding of state.findings) {
+      if (!finding.id || !finding.file || !finding.issue || !finding.status) {
+        return { state, parseError: 'incomplete_findings' };
+      }
+    }
+
+    return { state };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
       console.warn('Failed to parse findings JSON from LLM response:', e);

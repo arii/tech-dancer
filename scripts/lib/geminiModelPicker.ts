@@ -6,7 +6,7 @@ export interface GeminiModel {
   maxOutputTokens: number;
 }
 
-export const GEMINI_MODELS: GeminiModel[] = [
+export const GEMINI_MODELS_METADATA: GeminiModel[] = [
   {
     id: 'gemini-3.1-pro-preview',
     name: 'Gemini 3.1 Pro (Preview)',
@@ -40,18 +40,65 @@ export const DEPRECATED_MODELS = [
 ];
 
 /**
- * Selects an optimal Gemini model based on the requested tier.
- * Explicitly avoids deprecated models.
+ * Fetches available Gemini models from the API.
  */
-export function pickGeminiModel(
+export async function resolveAvailableGeminiModels(): Promise<string[]> {
+  const apiKey = process.env.GEMINI_API_KEY || process.env.JULES_API_KEY;
+  if (!apiKey) {
+    console.warn("⚠️ No API key found for Gemini model resolution.");
+    return [];
+  }
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+    if (!res.ok) {
+      console.warn(`⚠️ Failed to fetch Gemini models: ${res.status} ${res.statusText}`);
+      return [];
+    }
+
+    const data = await res.json() as { models?: { name: string }[] };
+    if (!data || !Array.isArray(data.models)) {
+      console.warn("⚠️ Invalid format returned from Gemini models endpoint.");
+      return [];
+    }
+
+    return data.models.map(m => m.name.replace('models/', ''));
+  } catch (error) {
+    console.warn(`⚠️ Error resolving available Gemini models: ${error}`);
+    return [];
+  }
+}
+
+/**
+ * Selects an optimal Gemini model based on the requested tier.
+ * Explicitly avoids deprecated models and prioritizes the Gemini 3.x suite.
+ */
+export async function pickGeminiModel(
   preferredTier: 'pro' | 'flash' | 'lite' = 'flash',
   estimatedInputTokens: number = 0
-): string {
-  // Always filter out deprecated models just in case
-  const activeModels = GEMINI_MODELS.filter(m => !DEPRECATED_MODELS.includes(m.id));
+): Promise<string> {
+  // Respect explicit user override if present
+  if (process.env.GEMINI_MODEL) {
+    return process.env.GEMINI_MODEL;
+  }
 
-  // If we have an extreme token count, prefer Pro regardless of preferredTier if budget allows?
-  // Actually, let's stick to the requested tier but fallback if needed.
+  const availableModelIds = await resolveAvailableGeminiModels();
+
+  // Filter models that are both in our metadata list and actually available
+  const activeModels = GEMINI_MODELS_METADATA.filter(m =>
+    availableModelIds.includes(m.id) && !DEPRECATED_MODELS.includes(m.id)
+  );
+
+  // If no tracked 3.x models are found, fallback to any available 3.x model
+  if (activeModels.length === 0) {
+    const fallback3x = availableModelIds.find(id => id.includes('3.1') || id.includes('3.5'));
+    if (fallback3x) return fallback3x;
+
+    // Last resort fallback from our known list (even if API didn't list it, it might still work)
+    const knownDefault = GEMINI_MODELS_METADATA.find(m => m.tier === preferredTier) || GEMINI_MODELS_METADATA[1];
+    return knownDefault.id;
+  }
+
   let selected = activeModels.find(m => m.tier === preferredTier);
 
   if (!selected) {
@@ -73,11 +120,9 @@ export function pickGeminiModel(
  */
 export function getGeminiPricing(modelId: string): { inputCostPerM: number; outputCostPerM: number } {
   if (modelId.includes('pro')) {
-    // Pro is usually ~10x-20x Flash
     return { inputCostPerM: 1.25, outputCostPerM: 5.00 };
   }
   if (modelId.includes('lite')) {
-    // Lite is usually half of Flash
     return { inputCostPerM: 0.0375, outputCostPerM: 0.15 };
   }
   // Default to Flash pricing
