@@ -7,30 +7,29 @@ export const RunPlaywrightInputSchema = z.object({
 });
 
 export async function runPlaywrightHandler(args: z.infer<typeof RunPlaywrightInputSchema>) {
-  const playwrightArgs = ["playwright", "test", "--reporter=json"];
+  const tdArgs = ["repo", "run-playwright"];
   if (args.grep) {
-    playwrightArgs.push("--grep", args.grep);
+    tdArgs.push("--grep", args.grep);
+  }
+  if (args.worktreePath) {
+    tdArgs.push("--worktree", args.worktreePath);
   }
 
-  const results = await runCommand("pnpm", playwrightArgs, { cwd: args.worktreePath });
+  const result = await runCommand("td-cli", tdArgs);
 
-  let failedTests = [];
-  try {
-    if (results.stdout.includes("{")) {
-      const report = JSON.parse(results.stdout.substring(results.stdout.indexOf("{")));
-      failedTests = report.suites.flatMap((s: any) =>
-        s.specs.filter((spec: any) => !spec.ok).map((spec: any) => ({
-          title: spec.title,
-          file: spec.file,
-          error: spec.tests?.[0]?.results?.[0]?.error?.message || "Unknown error"
-        }))
-      );
-    }
-  } catch (e) {}
+  if (result.exitCode !== 0) {
+    // Playwright might exit with non-zero if tests fail, but our td-cli should ideally handle it
+    // and return a JSON with success: false.
+  }
+
+  const output = JSON.parse(result.stdout);
+  if (output.status === "error") {
+     throw new Error(`Failed to run Playwright: ${output.message}`);
+  }
 
   return {
-    success: results.exitCode === 0,
-    command: results.command,
-    failedTests
+    success: output.success,
+    command: output.command,
+    failedTests: output.failedTests
   };
 }
