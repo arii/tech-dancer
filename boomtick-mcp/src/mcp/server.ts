@@ -10,7 +10,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
-import { healthHandler } from "./tools.js";
+import { healthHandler, HealthCheckInputSchema } from "./tools.js";
 import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
 import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
@@ -19,6 +19,7 @@ import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/rep
 import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
 import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
+import { repoLogsHandler, RepoLogsInputSchema } from "../tools/repo.logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
 import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
 import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
@@ -176,7 +177,7 @@ export class BoomtickMCPServer {
         };
       }
       if (uri === "repo://routes") {
-        const routeMap = await getRouteMapHandler();
+        const routeMap = await getRouteMapHandler({});
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(routeMap, null, 2) }],
         };
@@ -229,8 +230,10 @@ export class BoomtickMCPServer {
             description: "Check the health and configuration of the MCP server.",
             inputSchema: {
               type: "object",
-              properties: {},
-              required: [],
+              properties: {
+                checkDeep: { type: "boolean", description: "Whether to perform a deep health check including external dependencies." }
+              },
+              required: []
             },
           },
           {
@@ -299,8 +302,10 @@ export class BoomtickMCPServer {
             description: "Get the scripts defined in package.json.",
             inputSchema: {
               type: "object",
-              properties: {},
-              required: [],
+              properties: {
+                filter: { type: "string", description: "Optional glob pattern to filter script names." }
+              },
+              required: []
             },
           },
           {
@@ -308,8 +313,10 @@ export class BoomtickMCPServer {
             description: "Get the mapping of routes to content files.",
             inputSchema: {
               type: "object",
-              properties: {},
-              required: [],
+              properties: {
+                includeStatic: { type: "boolean", description: "Whether to include static assets in the route map." }
+              },
+              required: []
             },
           },
           {
@@ -318,7 +325,20 @@ export class BoomtickMCPServer {
             inputSchema: {
               type: "object",
               properties: {
-                prNumber: { type: "number", description: "The number of the pull request to read logs for." },
+                prNumber: { type: "number" },
+                all: { type: "boolean", description: "Include logs for successful runs (default: false)." },
+              },
+              required: ["prNumber"],
+            },
+          },
+          {
+            name: "repo.logs",
+            description: "Stream or grep combined CI logs for all jobs in a pull request.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                prNumber: { type: "number" },
+                grep: { type: "string", description: "Optional pattern to filter log lines." },
               },
               required: ["prNumber"],
             },
@@ -469,8 +489,11 @@ export class BoomtickMCPServer {
             description: "List all Jules sessions.",
             inputSchema: {
               type: "object",
-              properties: {},
-              required: [],
+              properties: {
+                pageSize: { type: "number", description: "Maximum number of sessions to return." },
+                pageToken: { type: "string", description: "Token for pagination." }
+              },
+              required: []
             },
           },
           {
@@ -514,7 +537,7 @@ export class BoomtickMCPServer {
       try {
         switch (request.params.name) {
           case "boomtick.health":
-            return createSuccessResult(await healthHandler());
+            return createSuccessResult(await healthHandler(HealthCheckInputSchema.parse(request.params.arguments || {})));
           case "github.search_open_prs":
             return createSuccessResult(await searchOpenPrsHandler(SearchOpenPrsInputSchema.parse(request.params.arguments || {})));
           case "github.get_pr_diff":
@@ -526,11 +549,13 @@ export class BoomtickMCPServer {
           case "repo.get_changed_files":
             return createSuccessResult(await getChangedFilesHandler(GetChangedFilesInputSchema.parse(request.params.arguments || {})));
           case "repo.get_package_scripts":
-            return createSuccessResult(await getPackageScriptsHandler());
+            return createSuccessResult(await getPackageScriptsHandler(GetPackageScriptsInputSchema.parse(request.params.arguments || {})));
           case "repo.get_route_map":
-            return createSuccessResult(await getRouteMapHandler());
+            return createSuccessResult(await getRouteMapHandler(GetRouteMapInputSchema.parse(request.params.arguments || {})));
           case "repo.read_ci_logs":
             return createSuccessResult(await readCiLogsHandler(ReadCiLogsInputSchema.parse(request.params.arguments)));
+          case "repo.logs":
+            return createSuccessResult(await repoLogsHandler(RepoLogsInputSchema.parse(request.params.arguments)));
           case "repo.create_repair_branch":
             return createSuccessResult(await createRepairBranchHandler(CreateRepairBranchInputSchema.parse(request.params.arguments)));
           case "repo.run_tests":

@@ -1,20 +1,39 @@
 import { z } from "zod";
 import { JulesSession, JulesStatus } from "../types.js";
 
-export const ListJulesSessionsInputSchema = z.object({});
+export const ListJulesSessionsInputSchema = z.object({
+  pageSize: z.number().optional(),
+  pageToken: z.string().optional(),
+});
 
 export async function listJulesSessionsHandler(input: z.infer<typeof ListJulesSessionsInputSchema>): Promise<JulesSession[]> {
+  ListJulesSessionsInputSchema.parse(input);
   const apiKey = process.env.JULES_API_KEY;
   if (!apiKey) {
     throw new Error("JULES_API_KEY environment variable is not set.");
   }
 
-  const response = await fetch("https://jules.googleapis.com/v1alpha/sessions?pageSize=100", {
-    method: "GET",
-    headers: {
-      "x-goog-api-key": apiKey,
-    },
-  });
+  if (apiKey.length < 20) {
+    throw new Error("JULES_API_KEY appears to be invalid (too short).");
+  }
+
+  const url = new URL("https://jules.googleapis.com/v1alpha/sessions");
+  url.searchParams.set("pageSize", (input.pageSize ?? 100).toString());
+  if (input.pageToken) {
+    url.searchParams.set("pageToken", input.pageToken);
+  }
+
+  let response;
+  try {
+    response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "x-goog-api-key": apiKey,
+      },
+    });
+  } catch (e) {
+    throw new Error(`Network error fetching sessions: ${e instanceof Error ? e.message : String(e)}`);
+  }
 
   if (!response.ok) {
     const errText = await response.text();
