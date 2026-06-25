@@ -15,10 +15,12 @@ const __dirname = path.dirname(__filename);
 export async function ddgsSearchHandler(args: z.infer<typeof DdgsSearchInputSchema>) {
   const scriptPath = path.join(__dirname, "ddgs_search.py");
 
-  const result = await runCommand("python", [scriptPath, args.query, args.maxResults.toString()]);
+  const result = await runCommand("python3", [scriptPath, args.query, (args.maxResults ?? 5).toString()]);
 
+  // duckduckgo-search logs annoying deprecation warnings to stderr we want to ignore
+  // if it really failed, exitCode will be non-zero and we'll have stdout/stderr
   if (result.exitCode !== 0) {
-    throw new Error(`Failed to search ddgs: ${result.stderr}`);
+    throw new Error(`Failed to search ddgs: ${result.stderr || result.stdout}`);
   }
 
   try {
