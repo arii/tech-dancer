@@ -1,9 +1,11 @@
 import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
-test('verify homepage and guide visual consistency', async ({ page }) => {
+test('verify homepage and guide visual consistency', async ({ page, isMobile }) => {
   // 1. Homepage Mobile
-  await page.setViewportSize({ width: 375, height: 812 });
+  if (isMobile) {
+    await page.setViewportSize({ width: 375, height: 812 });
+  }
   await page.goto('./');
   const homeUrl = page.url();
   await page.waitForLoadState('networkidle');
@@ -17,26 +19,22 @@ test('verify homepage and guide visual consistency', async ({ page }) => {
     mask: getVisualTestMasks(page)
   };
 
-  await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//homepage_mobile_v2.png', ...screenshotOptions });
+  if (isMobile) {
+    await expect(page).toHaveScreenshot('homepage_mobile_v2.png', screenshotOptions);
+  } else {
+    await expect(page).toHaveScreenshot('homepage_desktop_v2.png', screenshotOptions);
+  }
 
-  // 2. WCS Travel Pack Guide Mobile
+  // 2. WCS Travel Pack Guide
   const guideUrl = new URL('blog/2026-04-19-practical-tools-essentials', homeUrl).toString();
   await page.goto(guideUrl);
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/.*2026-04-19-practical-tools-essentials/);
   await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
-  await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//detail_page_mobile_v2.png', ...screenshotOptions });
 
-  // 3. Homepage Desktop
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto(homeUrl);
-  await page.waitForLoadState('networkidle');
-  await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//homepage_desktop_v2.png', ...screenshotOptions });
-
-  // 4. WCS Travel Pack Guide Desktop
-  await page.goto(guideUrl);
-  await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(/.*2026-04-19-practical-tools-essentials/);
-  await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
-  await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//detail_page_desktop_v2.png', ...screenshotOptions });
+  if (isMobile) {
+    await expect(page).toHaveScreenshot('detail_page_mobile_v2.png', screenshotOptions);
+  } else {
+    await expect(page).toHaveScreenshot('detail_page_desktop_v2.png', screenshotOptions);
+  }
 });

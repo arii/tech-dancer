@@ -1,6 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
-
-test.use({ ...devices['Pixel 7'] });
+import { test, expect } from '@playwright/test';
 
 test.describe('Global Search Modal - Mobile', () => {
   test.beforeEach(async ({ page }) => {
