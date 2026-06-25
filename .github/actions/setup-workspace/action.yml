@@ -1,0 +1,56 @@
+name: 'Setup Workspace'
+description: 'Bootstraps the workspace by installing dev-tools and configuring the environment'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install dev-tools
+      shell: bash
+      run: |
+        echo "::group::Install dev-tools"
+        pip install -e dev-tools/ --break-system-packages
+
+        # Add multiple potential local bin paths to GITHUB_PATH immediately after install
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        echo "/github/home/.local/bin" >> "$GITHUB_PATH"
+
+        echo "::endgroup::"
+
+    - name: Verify td-cli on PATH
+      shell: bash
+      run: |
+        # Force a refresh of the path in the current shell context if possible,
+        # though GITHUB_PATH updates usually apply to subsequent steps.
+        export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+
+        if ! command -v td-cli >/dev/null 2>&1; then
+          # Fallback check if it is in the known local bin but not on path yet
+          if [ -x "$HOME/.local/bin/td-cli" ] || [ -x "/github/home/.local/bin/td-cli" ]; then
+            echo "::warning::td-cli found in local bin but not yet on PATH. PATH updates will apply in next step."
+          else
+            echo "::error::td-cli not found on PATH or in known local bin directories after installation."
+            echo "Current PATH: $PATH"
+            exit 1
+          fi
+        fi
+        echo "✅ td-cli is resolvable on PATH (or confirmed available in local bin)."
+
+    - name: Export Environment Variables
+      shell: bash
+      run: |
+        # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
+        REPO_DIR=$(pwd)
+
+        # 1. Update PYTHONPATH for subsequent steps
+        # Ensure it works even if PYTHONPATH is initially empty
+        if [ -z "$PYTHONPATH" ]; then
+          echo "PYTHONPATH=$REPO_DIR/dev-tools" >> "$GITHUB_ENV"
+        else
+          echo "PYTHONPATH=$REPO_DIR/dev-tools:$PYTHONPATH" >> "$GITHUB_ENV"
+        fi
+
+        # 2. Update PATH for subsequent steps to include local bin directories
+        # Note: GITHUB_PATH is the canonical way to update PATH in GHA.
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        echo "/github/home/.local/bin" >> "$GITHUB_PATH"
+
+        echo "✅ Environment configured: PYTHONPATH includes $REPO_DIR/dev-tools"

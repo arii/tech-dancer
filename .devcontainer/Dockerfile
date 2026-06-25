@@ -41,6 +41,7 @@ ENV PNPM_VERSION=10.28.2
 # Use pre-installed browsers from the Playwright base image
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV PYTHONPATH=/workspace/dev-tools
 
 RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
@@ -62,6 +63,12 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     tqdm==4.68.3 \
     langchain-openai \
     langchain-core
+
+# ── Dev Tools ──────────────────────────────────────────────────────────────────
+# We copy the full dev-tools directory so that pip install -e can create the
+# necessary metadata/links during the image build.
+COPY dev-tools/ /workspace/dev-tools/
+RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/dev-tools/
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
 RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
