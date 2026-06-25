@@ -8,7 +8,7 @@ async function runEvals() {
   try {
     console.log("\n1. Health Check:");
     try {
-      const health = await healthHandler();
+      const health = await healthHandler({ checkDeep: false });
       console.log(JSON.stringify(health, null, 2));
     } catch (e) {
       console.log("Health check failed:", e instanceof Error ? e.message : String(e));
@@ -16,7 +16,7 @@ async function runEvals() {
 
     console.log("\n2. Repository Scripts:");
     try {
-      const scripts = await getPackageScriptsHandler();
+      const scripts = await getPackageScriptsHandler({});
       console.log(`Found ${Object.keys(scripts.scripts).length} scripts.`);
     } catch (e) {
       console.log("Repository scripts fetch failed:", e instanceof Error ? e.message : String(e));
@@ -24,7 +24,7 @@ async function runEvals() {
 
     console.log("\n3. GitHub PR Search (Dry Run):");
     try {
-      const prs = await searchOpenPrsHandler({ state: "open", includeDrafts: true });
+      const prs = await searchOpenPrsHandler({ state: "open", includeDrafts: true, limit: 100 });
       console.log(`Found ${prs.prs.length} open PRs.`);
     } catch (e) {
       console.log("GitHub search failed (likely due to environment/auth):", e instanceof Error ? e.message : String(e));
