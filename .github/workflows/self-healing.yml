@@ -76,9 +76,6 @@ jobs:
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
 
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
-
       - name: Check active runtime
         run: |
           pnpm run check:runtime-files
