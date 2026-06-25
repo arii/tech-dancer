@@ -57,8 +57,7 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                       variant="mono"
                       size="xs"
                       weight="font-bold"
-                      truncate
-                      className="hover:text-accent transition-colors cursor-pointer min-w-0"
+                      className="hover:text-accent transition-colors cursor-pointer min-w-0 break-all sm:truncate"
                       title={asset.path}
                     >
                       {asset.path}

@@ -46,19 +46,19 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
   {
     path: 'dev-tools/ai_reviewer.py',
     label: 'Auditor',
-    description: 'AI review.',
+    description: 'Executes automated repository-wide code and style auditing.',
     toolId: TOOL_ID_REPO_AUDITOR
   },
   {
     path: 'dev-tools/jules_feedback_loop.py',
     label: 'Jules',
-    description: 'Agent.',
+    description: 'Autonomous AI agent coordinating multi-step feedback and fix loops.',
     toolId: TOOL_ID_REPO_AUDITOR
   },
   {
     path: 'dev-tools/get_ai_context.py',
     label: 'Context',
-    description: 'RAG.',
+    description: 'RAG-powered engine for gathering deep architectural project context.',
     toolId: TOOL_ID_REPO_AUDITOR
   }
 ];
