@@ -123,9 +123,11 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
         throw new Error('Empty response from LLM');
       }
       const parsed = JSON.parse(rawFeedback);
-      feedback = parsed.feedback || rawFeedback;
       verdict = (parsed.verdict?.toLowerCase() as 'pass' | 'fail' | 'warn') || 'pass';
       findings = parsed.findings || [];
+      feedback = parsed.feedback || (findings.length > 0
+        ? findings.map(f => `### ${f.status === 'open' ? '🔴' : '✅'} [${f.id}] ${f.file}\n${f.issue}`).join('\n\n')
+        : rawFeedback);
     } catch (e) {
       console.warn('Failed to parse structured GitHub Models response:', e, 'Raw content:', rawFeedback.slice(0, 200));
       parseError = 'invalid_json';
