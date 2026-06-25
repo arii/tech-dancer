@@ -38,13 +38,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
 
 # ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
 ENV PNPM_VERSION=10.28.2
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 # Use pre-installed browsers from the Playwright base image
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
-  && pnpm --version
+  && pnpm config set store-dir /pnpm/store
 
 # ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
@@ -64,8 +66,17 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     langchain-core
 
 # ── Workspace ──────────────────────────────────────────────────────────────────
-RUN mkdir -p /workspace && chown -R pwuser:pwuser /workspace
+RUN mkdir -p /workspace /pnpm && chown -R pwuser:pwuser /workspace /pnpm
 
 USER pwuser
 
 WORKDIR /workspace
+
+# ── Dependencies ──────────────────────────────────────────────────────────────
+# Copy only the files needed for installation to leverage Docker cache
+COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --chown=pwuser:pwuser boomtick-mcp/package.json ./boomtick-mcp/
+
+# Install dependencies using BuildKit cache mount for pnpm store
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store,uid=1001 \
+    pnpm install --frozen-lockfile
