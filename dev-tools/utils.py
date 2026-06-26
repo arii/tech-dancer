@@ -8,8 +8,6 @@ import urllib.error
 import urllib.parse
 import re
 import random
-import requests
-from packaging import version
 from typing import Optional, Union, List, Dict
 try:
     from tdw_services.utils import log_info, log_error, log_warn
@@ -486,137 +484,22 @@ def get_github_client():
         raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
 
-# Registry Cache
-_NPM_CACHE = {}
-_GITHUB_CACHE = {}
-
-def fetch_latest_npm(package_name: str) -> Optional[str]:
-    if package_name in _NPM_CACHE:
-        return _NPM_CACHE[package_name]
-    try:
-        url = f"https://registry.npmjs.org/{package_name}/latest"
-        res = requests.get(url, timeout=5)
-        if res.status_code == 200:
-            ver = res.json().get("version")
-            _NPM_CACHE[package_name] = ver
-            return ver
-    except Exception as e:
-        log_warn(f"Failed to fetch latest npm version for {package_name}: {e}")
-    return None
-
-def fetch_latest_gh_action(action_path: str) -> Optional[str]:
-    if action_path in _GITHUB_CACHE:
-        return _GITHUB_CACHE[action_path]
-    try:
-        url = f"https://api.github.com/repos/{action_path}/releases/latest"
-        headers = {}
-        token = get_github_token()
-        if token:
-            headers["Authorization"] = f"token {token}"
-
-        res = requests.get(url, headers=headers, timeout=5)
-        if res.status_code == 200:
-            tag = res.json().get("tag_name")
-            _GITHUB_CACHE[action_path] = tag
-            return tag
-    except Exception as e:
-        log_warn(f"Failed to fetch latest GitHub Action version for {action_path}: {e}")
-    return None
+def get_stack_versions(fetch_latest: bool = False) -> Dict[str, str]:
+    from version_utils import get_stack_versions as _get
+    return _get(fetch_latest=fetch_latest)
 
 def compare_versions(v1: str, v2: str) -> int:
-    """Returns 1 if v1 > v2, -1 if v1 < v2, 0 if v1 == v2."""
-    try:
-        # Strip 'v' prefix
-        v1_clean = v1.lstrip('v')
-        v2_clean = v2.lstrip('v')
+    from version_utils import compare_versions as _cmp
+    return _cmp(v1, v2)
 
-        # Handle '24.x' style versions by normalizing to '24.0.0' for comparison
-        if '.x' in v1_clean: v1_clean = v1_clean.replace('.x', '.0')
-        if '.x' in v2_clean: v2_clean = v2_clean.replace('.x', '.0')
+def fetch_latest_npm(package_name: str) -> Optional[str]:
+    from version_utils import fetch_latest_npm as _fetch
+    return _fetch(package_name)
 
-        pv1 = version.parse(v1_clean)
-        pv2 = version.parse(v2_clean)
-        if pv1 > pv2: return 1
-        if pv1 < pv2: return -1
-        return 0
-    except Exception:
-        # Fallback to string comparison if parse fails
-        if v1 > v2: return 1
-        if v1 < v2: return -1
-        return 0
+def fetch_latest_gh_action(action_path: str) -> Optional[str]:
+    from version_utils import fetch_latest_gh_action as _fetch
+    return _fetch(action_path)
 
-def get_stack_versions(fetch_latest: bool = False) -> Dict[str, str]:
-    """Extracts core versions (Node, pnpm, GHA) from the repository.
-    If fetch_latest is True, it will also query registries for the absolute latest versions.
-    """
-    versions = {
-        "node": "24.16.0", # Fallback
-        "pnpm": "10.28.2", # Fallback
-        "actions/checkout": "v4",
-        "actions/setup-node": "v4",
-        "actions/upload-artifact": "v4",
-    }
-
-    try:
-        # Resolve Repo Source of Truth
-        if os.path.exists(".node-version"):
-            try:
-                with open(".node-version", "r") as f:
-                    v = f.read().strip().lstrip('v')
-                    if v: versions["node"] = v
-            except Exception: pass
-        elif os.path.exists(".nvmrc"):
-            try:
-                with open(".nvmrc", "r") as f:
-                    v = f.read().strip().lstrip('v')
-                    if v: versions["node"] = v
-            except Exception: pass
-
-        if os.path.exists("package.json"):
-            try:
-                with open("package.json", "r") as f:
-                    pkg = json.load(f)
-                    if "packageManager" in pkg:
-                        versions["pnpm"] = pkg["packageManager"].replace("pnpm@", "")
-                    elif "engines" in pkg and "pnpm" in pkg["engines"]:
-                        versions["pnpm"] = pkg["engines"]["pnpm"]
-
-                    if "engines" in pkg and "node" in pkg["engines"] and not os.path.exists(".node-version"):
-                         versions["node"] = pkg["engines"]["node"]
-            except Exception: pass
-
-        # Scan for common GHA versions in workflows
-        workflow_dir = ".github/workflows"
-        if os.path.exists(workflow_dir):
-            for filename in os.listdir(workflow_dir):
-                if not (filename.endswith(".yml") or filename.endswith(".yaml")):
-                    continue
-                try:
-                    with open(os.path.join(workflow_dir, filename), "r") as f:
-                        content = f.read()
-                        matches = re.findall(r"uses:\s+([\w\-/]+)@([\w\.]+)", content)
-                        for action, v_str in matches:
-                            if not action.startswith("actions/"): continue
-
-                            current_v = versions.get(action)
-                            if not current_v:
-                                versions[action] = v_str
-                                continue
-
-                            if compare_versions(v_str, current_v) > 0:
-                                versions[action] = v_str
-                except Exception: pass
-
-        if fetch_latest:
-            latest_pnpm = fetch_latest_npm("pnpm")
-            if latest_pnpm: versions["latest_pnpm"] = latest_pnpm
-
-            # Check key actions
-            for action in ["actions/checkout", "actions/setup-node"]:
-                latest_a = fetch_latest_gh_action(action)
-                if latest_a: versions[f"latest_{action}"] = latest_a
-
-    except Exception as e:
-        log_warn(f"Failed to extract stack versions: {e}")
-
-    return versions
+def fetch_latest_node() -> Optional[str]:
+    from version_utils import fetch_latest_node as _fetch
+    return _fetch()

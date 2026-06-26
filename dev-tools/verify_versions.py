@@ -27,7 +27,8 @@ def parse_diff(diff_text: str) -> List[Dict]:
     PM_PATTERN = re.compile(r'"packageManager":\s*"pnpm@([\d\.]+)"')
 
     # Files we care about
-    SENSITIVE_FILES = [".nvmrc", ".node-version", "package.json", ".github/workflows/"]
+    SENSITIVE_FILES = [".nvmrc", ".node-version", "package.json"]
+    SENSITIVE_DIRS = [".github/workflows/"]
 
     hunks = re.split(r"^(?=--- )", diff_text, flags=re.MULTILINE)
     for hunk in hunks:
@@ -43,7 +44,12 @@ def parse_diff(diff_text: str) -> List[Dict]:
                 current_file = line[6:]
                 break
 
-        if not current_file or not any(sf in current_file for sf in SENSITIVE_FILES):
+        if not current_file:
+            continue
+
+        is_sensitive = (current_file in SENSITIVE_FILES or
+                        any(current_file.startswith(sd) for sd in SENSITIVE_DIRS))
+        if not is_sensitive:
             continue
 
         removals = {} # name -> version
@@ -116,8 +122,11 @@ def verify_changes(changes: List[Dict]) -> List[Dict]:
                 })
 
         # 2. Compare against Latest (Outdated detection - optional warning)
+        from utils import fetch_latest_node # Import node fetcher
         latest = None
-        if c["type"] == "action":
+        if c["name"] == "node":
+            latest = fetch_latest_node()
+        elif c["type"] == "action":
             latest = fetch_latest_gh_action(c["name"])
         elif c["name"] in ["pnpm"] or c["type"] == "dependency":
              latest = fetch_latest_npm(c["name"])
