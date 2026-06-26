@@ -5,8 +5,6 @@ on:
     - cron: '0 10 * * 3'
   workflow_dispatch:
 
-
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.issue.number || github.ref }}
   cancel-in-progress: true

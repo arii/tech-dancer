@@ -17,7 +17,6 @@ env:
   REPO_NAME: ${{ github.event.repository.name }}
   VITE_BASE_PATH: /${{ github.event.repository.name }}/
 
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.issue.number || github.ref }}
   cancel-in-progress: true
