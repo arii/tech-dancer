@@ -4,23 +4,16 @@ import { test, expect } from './fixtures/visual';
 test('verify homepage featured guide link', async ({ page }) => {
   await page.goto('./');
 
-  // Find the WCS Travel Pack card
-   const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
-   await expect(guideLink).toBeVisible();
+  // The whole card is a link.
+  const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
+  await expect(guideLink).toBeVisible();
 
-   // Click the link or Read Guide CTA
-   const cta = page.getByRole('link', { name: /Read Guide/i }).first();
-   await cta.click();
+  // We can also find it by the "Read Guide" text which is inside the link
+  const cta = page.getByRole('link').filter({ hasText: /Read Guide/i }).first();
+  await expect(cta).toBeVisible();
+
+  await cta.click();
 
   // Verify it lands on the correct page
-  // The gear page was decommissioned; the guide now lives under "practical-tools-essentials".
-  await expect(page).toHaveURL(/\/blog\/(2026-04-19-practical-tools-essentials|2026-04-19-practical-tools-essentials)/);
-// The WCS Travel Pack heading check removed – page content updated
-
-  // Verify checklist landmarks or sections
-  // Footwear & Shoe Care heading check removed – content updated
-  // Ballroom Bag heading check removed – content updated
-
-  // Verify shoppable section exists with accessible heading
-  // Shop selected items heading check removed – content updated
+  await expect(page).toHaveURL(/\/blog\/2026-04-19-practical-tools-essentials/);
 });
