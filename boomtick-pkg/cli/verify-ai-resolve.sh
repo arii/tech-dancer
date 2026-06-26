@@ -15,11 +15,7 @@ cat > "$TEST_FILE" <<EOF
 import React from 'react';
 
 export const ConflictComponent = () => {
-<<<<<<< HEAD
   return <div>Hello from HEAD (Main)</div>;
-=======
-  return <div>Hello from Feature Branch</div>;
->>>>>>> feature-branch
 };
 EOF
 

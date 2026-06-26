@@ -197,12 +197,13 @@ class Orchestrator:
         try:
             res = run_command([
                 "grep", "-lrE", "^<<<<<<<|^=======|^>>>>>>>", ".",
-                "--exclude-dir=dev-tools",
+                "--exclude-dir=boomtick-pkg",
                 "--exclude-dir=node_modules",
                 "--exclude-dir=dist",
                 "--exclude-dir=.git",
                 "--exclude-dir=build",
-                "--exclude-dir=target"
+                "--exclude-dir=target",
+                "--exclude-dir=.venv"
             ], check=False, log_on_error=False)
             if res.returncode == 0 and res.stdout:
                 return [f.strip() for f in res.stdout.splitlines() if f.strip()]
