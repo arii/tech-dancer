@@ -354,11 +354,8 @@ jobs:
         id: cache-main
         uses: actions/cache@v4
         with:
-          path: .tmp-main/dist
+          path: artifacts/main-dist
           key: ${{ runner.os }}-main-build-${{ steps.main_sha.outputs.sha }}
-
-      - name: Ensure .tmp-main directory exists
-        run: mkdir -p .tmp-main
 
       - name: Build Main
         env:
