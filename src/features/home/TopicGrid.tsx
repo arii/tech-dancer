@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { Shirt, Plane, VenetianMask as Mask, Heart } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
