@@ -181,7 +181,9 @@ def create_issue(ctx, title, file):
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        err(ctx, str(e))
+        from tdw_services.utils import log_error
+        log_error(f"Unexpected error in issue-view: {e}")
+        err(ctx, "An unexpected error occurred while fetching issue details.")
 
 @gh.command()
 @click.argument('issue_number', type=int)
@@ -196,7 +198,9 @@ def issue_view(ctx, issue_number):
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        err(ctx, str(e))
+        from tdw_services.utils import log_error
+        log_error(f"Unexpected error in issue-update: {e}")
+        err(ctx, "An unexpected error occurred while updating the issue.")
 
 @gh.command()
 @click.argument('issue_number', type=int)
@@ -211,7 +215,9 @@ def issue_update(ctx, issue_number, file):
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        err(ctx, str(e))
+        from tdw_services.utils import log_error
+        log_error(f"Unexpected error in issue-comment: {e}")
+        err(ctx, "An unexpected error occurred while posting the comment.")
 
 @gh.command()
 @click.argument('issue_number', type=int)
