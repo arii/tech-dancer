@@ -20,7 +20,7 @@ function ensureWorktree(): void {
       console.log(`✅ Worktree already exists at ${worktreePath}`);
       return;
     }
-  } catch (e) {
+  } catch (_e) {
     // Ignore and proceed with creation
   }
 
