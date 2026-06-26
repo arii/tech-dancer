@@ -52,8 +52,8 @@ def _handle_unexpected_error(ctx, command_name, e):
     err(ctx, f"An unexpected error occurred in {command_name}.")
 
 def _get_body_content(ctx, orch, file, body):
-    content = body or (orch._read_safe_file(file) if file else None)
-    if not content:
+    content = body if body is not None else (orch._read_safe_file(file) if file else None)
+    if content is None:
         err(ctx, "Provide --file or --body")
     return content
 
@@ -190,7 +190,7 @@ def create_issue(ctx, title, file, body):
     try:
         content = _get_body_content(ctx, orch, file, body)
         res = orch.create_issue(title, content)
-        out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data=res)
+        out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data={"issue": res})
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:

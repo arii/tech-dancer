@@ -295,23 +295,23 @@ class Orchestrator:
         """
         Creates a new GitHub issue.
         """
-        if not body or not body.strip():
+        if body is None or not body.strip():
             raise CLIError("Issue body cannot be empty.")
         return self.github.create_issue(title, body)
 
-    def get_issue_details(self, number: int) -> Dict[str, Any]:
+    def get_issue_details(self, issue_number: int) -> Dict[str, Any]:
         """
         Fetches details of a GitHub issue.
         """
-        return self.github.fetch_issue_details(number)
+        return self.github.fetch_issue_details(issue_number)
 
-    def update_issue_body(self, number: int, body: str) -> Dict[str, Any]:
+    def update_issue_body(self, issue_number: int, body: str) -> Dict[str, Any]:
         """
         Updates an issue's body.
         """
-        if not body or not body.strip():
+        if body is None or not body.strip():
             raise CLIError("Issue body cannot be empty.")
-        return self.github.update_issue(number, body)
+        return self.github.update_issue(issue_number, body)
 
     def post_comment(self, entity_number: int, body: str) -> Dict[str, Any]:
         """
