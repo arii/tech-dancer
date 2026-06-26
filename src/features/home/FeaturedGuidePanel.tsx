@@ -43,7 +43,7 @@ export function FeaturedGuidePanel() {
           <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
             {FEATURED.eyebrow}
           </Text>
-          <Text variant="headline" size="2xl" weight="font-black" color="main" leading="tight">
+          <Text as="h2" variant="headline" size="2xl" weight="font-black" color="main" leading="tight">
             {FEATURED.title}
           </Text>
         </Stack>
@@ -79,7 +79,7 @@ export function FeaturedGuidePanel() {
               <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
                 {FEATURED.eyebrow}
               </Text>
-              <Text variant="headline" size="4xl" weight="font-black" color="main" leading="tight">
+              <Text as="h2" variant="headline" size="4xl" weight="font-black" color="main" leading="tight">
                 {FEATURED.title}
               </Text>
             </Stack>
