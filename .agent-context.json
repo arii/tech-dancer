@@ -364,10 +364,6 @@
     "CONTRIBUTING.md": null,
     "LICENSE": null,
     "README.md": null,
-    "amazon-link-audit-report.md": null,
-    "artifacts/": {
-      "visual-review/": "..."
-    },
     "audit-baseline.json": null,
     "boomtick-mcp/": {
       "README.md": null,
@@ -430,25 +426,6 @@
       "vision_audit.py": null,
       "visual_guidelines.json": null,
       "workflow_summary.py": null
-    },
-    "dev_server.log": null,
-    "dist/": {
-      "404.html": null,
-      "apple-touch-icon.png": null,
-      "assets/": "...",
-      "boomtick_logo.svg": null,
-      "favicon.ico": null,
-      "favicon.svg": null,
-      "icon.svg": null,
-      "images/": "...",
-      "index.html": null,
-      "manifest.webmanifest": null,
-      "maskable-icon-512x512.png": null,
-      "previews/": "...",
-      "pwa-192x192.png": null,
-      "pwa-512x512.png": null,
-      "robots.txt": null,
-      "sitemap.xml": null
     },
     "docs/": {
       "affiliate-tooling.md": null,
@@ -606,8 +583,7 @@
     "tsconfig.json": null,
     "tsconfig.node.json": null,
     "vercel.json": null,
-    "vite.config.ts": null,
-    "vite.log": null
+    "vite.config.ts": null
   },
   "package_json": {
     "dependencies": [
