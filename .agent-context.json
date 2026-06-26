@@ -364,6 +364,10 @@
     "CONTRIBUTING.md": null,
     "LICENSE": null,
     "README.md": null,
+    "artifacts/": {
+      "dom-review/": "...",
+      "impact-analysis/": "..."
+    },
     "audit-baseline.json": null,
     "boomtick-mcp/": {
       "README.md": null,
@@ -377,6 +381,7 @@
       "tsconfig.json": null,
       "vitest.config.ts": null
     },
+    "ci_job_fail.log": null,
     "content/": {
       "blog/": "...",
       "posts/": "...",
@@ -426,6 +431,25 @@
       "vision_audit.py": null,
       "visual_guidelines.json": null,
       "workflow_summary.py": null
+    },
+    "dist/": {
+      "404.html": null,
+      "apple-touch-icon.png": null,
+      "assets/": "...",
+      "boomtick_logo.svg": null,
+      "data/": "...",
+      "favicon.ico": null,
+      "favicon.svg": null,
+      "icon.svg": null,
+      "images/": "...",
+      "index.html": null,
+      "manifest.webmanifest": null,
+      "maskable-icon-512x512.png": null,
+      "previews/": "...",
+      "pwa-192x192.png": null,
+      "pwa-512x512.png": null,
+      "robots.txt": null,
+      "sitemap.xml": null
     },
     "docs/": {
       "affiliate-tooling.md": null,

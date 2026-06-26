@@ -55,7 +55,8 @@ function normalizeHtml(html: string): string {
   });
 
   const rawHtml = document.body ? document.body.innerHTML : dom.serialize();
-  
+  dom.window.close();
+
   return rawHtml
     .replace(/\s+/g, ' ')       // Collapse duplicate spaces/newlines into single spaces
     .replace(/>\s*</g, '>\n<')   // Insert a clean newline between every tag boundary
@@ -64,7 +65,9 @@ function normalizeHtml(html: string): string {
 
 function countElements(html: string, selector = '*'): number {
   const dom = new JSDOM(html);
-  return dom.window.document.querySelectorAll(selector).length;
+  const count = dom.window.document.querySelectorAll(selector).length;
+  dom.window.close();
+  return count;
 }
 
 function summarizeDom(beforeHtml: string, afterHtml: string): DomRouteSummary['metrics'] {
@@ -127,7 +130,10 @@ function extractStructure(html: string): string {
   if (document.body) {
     walk(document.body, 0);
   }
-  return structure.join('\n');
+
+  const result = structure.join('\n');
+  dom.window.close();
+  return result;
 }
 
 function writeStructureDiff(beforeHtml: string, afterHtml: string, outputPath: string): void {
