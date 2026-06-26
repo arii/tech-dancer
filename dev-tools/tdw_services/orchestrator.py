@@ -291,12 +291,11 @@ class Orchestrator:
         with open(abs_path, 'r', encoding='utf-8') as f:
             return f.read()
 
-    def create_issue(self, title: str, file_path: str) -> Dict[str, Any]:
+    def create_issue(self, title: str, body: str) -> Dict[str, Any]:
         """
-        Creates a new GitHub issue from a file, with validation.
+        Creates a new GitHub issue.
         """
-        body = self._read_safe_file(file_path)
-        if not body.strip():
+        if not body or not body.strip():
             raise CLIError("Issue body cannot be empty.")
         return self.github.create_issue(title, body)
 
@@ -306,23 +305,21 @@ class Orchestrator:
         """
         return self.github.fetch_issue_details(number)
 
-    def update_issue_body(self, number: int, file_path: str) -> Dict[str, Any]:
+    def update_issue_body(self, number: int, body: str) -> Dict[str, Any]:
         """
-        Updates an issue's body from a file.
+        Updates an issue's body.
         """
-        body = self._read_safe_file(file_path)
-        if not body.strip():
+        if not body or not body.strip():
             raise CLIError("Issue body cannot be empty.")
         return self.github.update_issue(number, body)
 
-    def post_comment(self, pr_number: int, file_path: str) -> Dict[str, Any]:
+    def post_comment(self, number: int, body: str) -> Dict[str, Any]:
         """
-        Posts a comment to a Pull Request or Issue from a file, with validation.
+        Posts a comment to a Pull Request or Issue.
         """
-        body = self._read_safe_file(file_path)
-        if not body.strip():
+        if not body or not body.strip():
             raise CLIError("Comment body cannot be empty.")
-        return self.github.create_issue_comment(pr_number, body)
+        return self.github.create_issue_comment(number, body)
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())

@@ -46,6 +46,11 @@ def err(ctx, msg, code=1, data=None):
         click.echo(f"❌ Error: {msg}", err=True)
     sys.exit(code)
 
+def _handle_unexpected_error(ctx, command_name, e):
+    from tdw_services.utils import log_error
+    log_error(f"Unexpected error in {command_name}: {e}")
+    err(ctx, f"An unexpected error occurred in {command_name}.")
+
 # ==========================================
 # REPO COMMAND GROUP
 # ==========================================
@@ -170,20 +175,22 @@ def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, e
 
 @gh.command()
 @click.option('--title', required=True, help='Issue title')
-@click.option('--file', required=True, help='Path to file containing issue body')
+@click.option('--file', help='Path to file containing issue body')
+@click.option('--body', help='Literal body text')
 @click.pass_context
-def create_issue(ctx, title, file):
-    """Create a new GitHub issue from a file."""
+def create_issue(ctx, title, file, body):
+    """Create a new GitHub issue."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.create_issue(title, file)
+        content = body or (orch._read_safe_file(file) if file else None)
+        if not content:
+            err(ctx, "Provide --file or --body")
+        res = orch.create_issue(title, content)
         out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        from tdw_services.utils import log_error
-        log_error(f"Unexpected error in issue-view: {e}")
-        err(ctx, "An unexpected error occurred while fetching issue details.")
+        _handle_unexpected_error(ctx, "create-issue", e)
 
 @gh.command()
 @click.argument('issue_number', type=int)
@@ -198,41 +205,45 @@ def issue_view(ctx, issue_number):
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        from tdw_services.utils import log_error
-        log_error(f"Unexpected error in issue-update: {e}")
-        err(ctx, "An unexpected error occurred while updating the issue.")
+        _handle_unexpected_error(ctx, "issue-view", e)
 
 @gh.command()
 @click.argument('issue_number', type=int)
-@click.option('--file', required=True, help='Path to file containing new issue body')
+@click.option('--file', help='Path to file containing new issue body')
+@click.option('--body', help='Literal body text')
 @click.pass_context
-def issue_update(ctx, issue_number, file):
-    """Update a GitHub issue's body from a file."""
+def issue_update(ctx, issue_number, file, body):
+    """Update a GitHub issue's body."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.update_issue_body(issue_number, file)
+        content = body or (orch._read_safe_file(file) if file else None)
+        if not content:
+            err(ctx, "Provide --file or --body")
+        res = orch.update_issue_body(issue_number, content)
         out(ctx, f"✅ Successfully updated issue #{issue_number}", data={"issue": res})
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        from tdw_services.utils import log_error
-        log_error(f"Unexpected error in issue-comment: {e}")
-        err(ctx, "An unexpected error occurred while posting the comment.")
+        _handle_unexpected_error(ctx, "issue-update", e)
 
 @gh.command()
 @click.argument('issue_number', type=int)
-@click.option('--file', required=True, help='Path to file containing comment body')
+@click.option('--file', help='Path to file containing comment body')
+@click.option('--body', help='Literal body text')
 @click.pass_context
-def issue_comment(ctx, issue_number, file):
-    """Post a comment to a GitHub issue from a file."""
+def issue_comment(ctx, issue_number, file, body):
+    """Post a comment to a GitHub issue."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.post_comment(issue_number, file)
+        content = body or (orch._read_safe_file(file) if file else None)
+        if not content:
+            err(ctx, "Provide --file or --body")
+        res = orch.post_comment(issue_number, content)
         out(ctx, f"✅ Successfully posted comment to issue #{issue_number}", data={"comment": res})
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        err(ctx, str(e))
+        _handle_unexpected_error(ctx, "issue-comment", e)
 
 @gh.command()
 @click.option('--issue-number', type=int)
@@ -317,12 +328,13 @@ def post_comment(ctx, pr, file):
     """Post a comment to a PR from a file."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.post_comment(pr, file)
+        body = orch._read_safe_file(file)
+        res = orch.post_comment(pr, body)
         out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
     except Exception as e:
-        err(ctx, str(e))
+        _handle_unexpected_error(ctx, "post-comment", e)
 
 @gh.command()
 @click.pass_context
