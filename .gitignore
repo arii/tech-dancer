@@ -48,7 +48,7 @@ eslint-errors.json
 open_prs.txt
 
 # Tools
-dev-tools/config.json
+boomtick-pkg/cli/dev_tools/config.json
 .lighthouseci/*
 !.lighthouseci/assertion-results.json
 
@@ -82,7 +82,7 @@ link-validation-report.md
 # Dynamically generated analysis artifacts
 pr_overlaps.txt
 workflow_overlaps.txt
-dev-tools/logs/reviews/*.md
+boomtick-pkg/cli/logs/reviews/*.md
 /product-mockups/
 
 
@@ -90,10 +90,10 @@ dev-tools/logs/reviews/*.md
 # [Sensitive] Ensure these are never indexed
 .agents/workflows/ai-slop-audit-*.md
 .venv
-dev-tools/logs/audits/
+boomtick-pkg/cli/logs/audits/
 .pr_cache.pkl
 gh_2.54.0_linux_amd64/
 gh_2.54.0_linux_amd64.tar.gz
 .tmp-main
 amazon-link-audit-report.md
-dev-tools/logs/workflows/*.md
+boomtick-pkg/cli/logs/workflows/*.md

@@ -3,8 +3,8 @@ import type { KnipConfig } from 'knip';
 const config: KnipConfig = {
   workspaces: {
     ".": {
-      entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'dev-tools/*.{ts,mjs}'],
-      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'dev-tools/**/*.{ts,mjs}'],
+      entry: ['scripts/*.ts', 'scripts/**/*.mjs', 'boomtick-pkg/cli/*.{ts,mjs}'],
+      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'boomtick-pkg/cli/**/*.{ts,mjs}'],
       ignore: [
         'src/components/Equalizer.tsx'
       ],
@@ -17,7 +17,7 @@ const config: KnipConfig = {
         '@google/genai'
       ],
     },
-    "boomtick-mcp": {
+    "boomtick-pkg/mcp": {
       entry: ["src/evals/run-evals.ts"],
       project: ["src/**/*.ts"],
       ignoreDependencies: ["node-fetch"]
