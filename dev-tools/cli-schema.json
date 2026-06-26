@@ -201,6 +201,33 @@
         { "flag": "--file", "type": "string", "description": "Path to the Markdown file containing the issue body." }
       ]
     },
+    "gh issue-view": {
+      "description": "Fetches details of a GitHub issue including title, body, and state.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh issue-view <ISSUE_NUMBER>",
+      "required_arguments": [
+        { "name": "issue_number", "type": "integer", "description": "The GitHub issue number." }
+      ]
+    },
+    "gh issue-update": {
+      "description": "Updates the body of a GitHub issue from a file.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh issue-update <ISSUE_NUMBER> --file <PATH_TO_BODY_FILE>",
+      "required_arguments": [
+        { "name": "issue_number", "type": "integer", "description": "The GitHub issue number." }
+      ],
+      "required_flags": [
+        { "flag": "--file", "type": "string", "description": "Path to the Markdown file containing the new issue body." }
+      ]
+    },
+    "gh issue-comment": {
+      "description": "Adds a new comment to a GitHub issue from a file.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh issue-comment <ISSUE_NUMBER> --file <PATH_TO_COMMENT_FILE>",
+      "required_arguments": [
+        { "name": "issue_number", "type": "integer", "description": "The GitHub issue number." }
+      ],
+      "required_flags": [
+        { "flag": "--file", "type": "string", "description": "Path to the Markdown file containing the comment body." }
+      ]
+    },
     "gh validate-issue": {
       "description": "Validates that a GitHub issue follows the Spec-Driven Issue Template.",
       "exact_usage": "python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",

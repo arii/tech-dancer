@@ -184,6 +184,51 @@ def create_issue(ctx, title, file):
         err(ctx, str(e))
 
 @gh.command()
+@click.argument('issue_number', type=int)
+@click.pass_context
+def issue_view(ctx, issue_number):
+    """View details of a GitHub issue."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        issue = orch.get_issue_details(issue_number)
+        msg = f"Issue #{issue.get('number')}: {issue.get('title')}\nState: {issue.get('state')}\n\n{issue.get('body')}"
+        out(ctx, msg, data={"issue": issue})
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
+@click.argument('issue_number', type=int)
+@click.option('--file', required=True, help='Path to file containing new issue body')
+@click.pass_context
+def issue_update(ctx, issue_number, file):
+    """Update a GitHub issue's body from a file."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.update_issue_body(issue_number, file)
+        out(ctx, f"✅ Successfully updated issue #{issue_number}", data={"issue": res})
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
+@click.argument('issue_number', type=int)
+@click.option('--file', required=True, help='Path to file containing comment body')
+@click.pass_context
+def issue_comment(ctx, issue_number, file):
+    """Post a comment to a GitHub issue from a file."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.post_comment(issue_number, file)
+        out(ctx, f"✅ Successfully posted comment to issue #{issue_number}", data={"comment": res})
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+    except Exception as e:
+        err(ctx, str(e))
+
+@gh.command()
 @click.option('--issue-number', type=int)
 @click.option('--all-open', is_flag=True)
 @click.option('--post-comments', is_flag=True)

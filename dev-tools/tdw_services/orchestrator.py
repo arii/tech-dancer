@@ -300,9 +300,24 @@ class Orchestrator:
             raise CLIError("Issue body cannot be empty.")
         return self.github.create_issue(title, body)
 
+    def get_issue_details(self, number: int) -> Dict[str, Any]:
+        """
+        Fetches details of a GitHub issue.
+        """
+        return self.github.fetch_issue_details(number)
+
+    def update_issue_body(self, number: int, file_path: str) -> Dict[str, Any]:
+        """
+        Updates an issue's body from a file.
+        """
+        body = self._read_safe_file(file_path)
+        if not body.strip():
+            raise CLIError("Issue body cannot be empty.")
+        return self.github.update_issue(number, body)
+
     def post_comment(self, pr_number: int, file_path: str) -> Dict[str, Any]:
         """
-        Posts a comment to a PR from a file, with validation.
+        Posts a comment to a Pull Request or Issue from a file, with validation.
         """
         body = self._read_safe_file(file_path)
         if not body.strip():
