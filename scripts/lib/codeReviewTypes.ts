@@ -29,11 +29,6 @@ export interface CodeReviewSummary {
   diffStat?: string;
 }
 
-export interface ParsedFindingsResult {
-  state?: CodeReviewState;
-  parseError?: 'missing_closing_tag' | 'invalid_json' | 'incomplete_findings';
-}
-
 export const CODE_REVIEW_SCHEMA = {
   type: "OBJECT",
   properties: {

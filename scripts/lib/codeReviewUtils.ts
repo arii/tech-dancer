@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as crypto from 'crypto';
-import type { CodeReviewSummary, CodeReviewState, ParsedFindingsResult, CodeReviewResult } from './codeReviewTypes';
+import type { CodeReviewSummary, CodeReviewResult } from './codeReviewTypes';
 
 /**
  * Generates a stable SHA-256 hash for a code review batch.
@@ -117,6 +117,7 @@ export function parseStructuredReviewResponse<T extends { id: string; file?: str
 
     return { feedback, verdict, findings };
   } catch (e) {
+    console.error('Failed to parse structured LLM response. Raw un-truncated response below:\n', rawContent);
     console.warn('Failed to parse structured LLM response:', e, 'Raw content:', rawFeedback.slice(0, 200));
     return {
       feedback: `Error parsing LLM response: ${e instanceof Error ? e.message : String(e)}\n\nOriginal response: ${rawFeedback}`,
@@ -124,67 +125,6 @@ export function parseStructuredReviewResponse<T extends { id: string; file?: str
       findings: [],
       parseError: 'invalid_json'
     };
-  }
-}
-
-export function parseCodeReviewVerdict(feedback: string): 'pass' | 'fail' | 'warn' {
-  const matches = [...feedback.matchAll(/\[VERDICT:\s*(PASS|WARN|FAIL)\]/gi)];
-  if (matches.length > 0) {
-    const lastMatch = matches[matches.length - 1][1].toUpperCase();
-    if (lastMatch === 'FAIL') return 'fail';
-    if (lastMatch === 'WARN') return 'warn';
-    return 'pass';
-  }
-
-  return 'pass';
-}
-
-export function parseCodeReviewState(feedback: string): CodeReviewState | undefined {
-  return parseCodeReviewStateDetailed(feedback).state;
-}
-
-/**
- * Validates the findings schema to ensure all required fields are present.
- * Performs deep type checking to avoid runtime crashes on malformed LLM output.
- */
-function validateFindingsSchema(state: CodeReviewState): boolean {
-  if (!state.findings || !Array.isArray(state.findings)) return false;
-  return state.findings.every(f =>
-    f &&
-    typeof f === 'object' &&
-    typeof f.id === 'string' && f.id.trim() !== '' &&
-    typeof f.file === 'string' && f.file.trim() !== '' &&
-    typeof f.issue === 'string' && f.issue.trim() !== '' &&
-    (f.status === 'open' || f.status === 'resolved')
-  );
-}
-
-export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
-  const openTag = '<findings>';
-  const closeTag = '</findings>';
-
-  const openIdx = feedback.lastIndexOf(openTag);
-  const closeIdx = feedback.lastIndexOf(closeTag);
-
-  if (openIdx === -1 || closeIdx === -1 || closeIdx < openIdx) {
-    const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
-    return { state: undefined, parseError: openedButNeverClosed ? 'missing_closing_tag' : undefined };
-  }
-
-  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
-  jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
-
-  try {
-    const state = JSON.parse(jsonText) as CodeReviewState;
-    if (!validateFindingsSchema(state)) {
-      return { state, parseError: 'incomplete_findings' };
-    }
-    return { state };
-  } catch (e) {
-    if (process.env.NODE_ENV !== 'test') {
-      console.warn('Failed to parse findings JSON:', e, 'JSON snippet:', jsonText.slice(0, 100));
-    }
-    return { state: undefined, parseError: 'invalid_json' };
   }
 }
 
@@ -262,7 +202,14 @@ export function extractFeedbackText(content: unknown): string {
   let feedback: string;
 
   if (typeof content === 'string') {
-    feedback = content.replace(/^\s*```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```\s*$/i, '');
+    feedback = content;
+    const firstBrace = feedback.indexOf('{');
+    const lastBrace = feedback.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace >= firstBrace) {
+      feedback = feedback.slice(firstBrace, lastBrace + 1);
+    } else {
+      feedback = feedback.replace(/^\s*```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```\s*$/i, '');
+    }
   } else if (Array.isArray(content)) {
     const textParts = content
       .filter((p: unknown) => {
