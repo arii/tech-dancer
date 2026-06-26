@@ -33,12 +33,12 @@ if [ ! -d ".venv" ]; then
       echo "Using uv for high-speed setup..."
       uv venv .venv
       source .venv/bin/activate
-      uv pip install -e dev-tools/
+      uv pip install -e ./cli/
     elif check_tool python3; then
       echo "Falling back to python3 -m venv..."
       python3 -m venv .venv
       source .venv/bin/activate
-      pip install -e dev-tools/
+      pip install -e ./cli/
     else
       echo "❌ Error: Cannot set up Python environment."
       return 1
@@ -50,7 +50,7 @@ fi
 
 echo "--- 4. Checking CLI Tooling ---"
 # Just test if the CLI runs
-if PYTHONPATH=dev-tools python dev-tools/tdw_services/cli.py --help > /dev/null; then
+if PYTHONPATH=./cli:./cli/dev_tools python3 ./cli/tdw_services/cli.py --help > /dev/null; then
     echo "✅ tdw_services CLI is functional."
 else
     echo "❌ Error: tdw_services CLI failed to execute."

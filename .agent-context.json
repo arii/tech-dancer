@@ -364,16 +364,48 @@
     "CONTRIBUTING.md": null,
     "LICENSE": null,
     "README.md": null,
+    "artifacts/": {
+      "visual-review/": "..."
+    },
     "audit-baseline.json": null,
     "boomtick-pkg/": {
       "AGENTS.md": null,
       "cli/": "...",
-      "mcp/": "..."
+      "install.sh": null,
+      "mcp/": "...",
+      "project_config.json": null,
+      "workspace-schema.json": null,
+      "workspace.json": null
     },
     "content/": {
       "blog/": "...",
       "posts/": "...",
       "studies/": "..."
+    },
+    "dist/": {
+      "404.html": null,
+      "about/": "...",
+      "apple-touch-icon.png": null,
+      "assets/": "...",
+      "blog/": "...",
+      "boomtick_logo.svg": null,
+      "data/": "...",
+      "favicon.ico": null,
+      "favicon.svg": null,
+      "icon.svg": null,
+      "images/": "...",
+      "index.html": null,
+      "manifest.webmanifest": null,
+      "maskable-icon-512x512.png": null,
+      "merch/": "...",
+      "preview/": "...",
+      "previews/": "...",
+      "pwa-192x192.png": null,
+      "pwa-512x512.png": null,
+      "research/": "...",
+      "robots.txt": null,
+      "sitemap.xml": null,
+      "ux-auditor/": "..."
     },
     "docs/": {
       "affiliate-tooling.md": null,
@@ -403,15 +435,18 @@
     "knip.ts": null,
     "lighthouserc.json": null,
     "package.json": null,
+    "plan.md": null,
     "playwright.config.ts": null,
     "pnpm-lock.yaml": null,
     "pnpm-workspace.yaml": null,
+    "progress_and_next_steps.md": null,
     "project_config.json": null,
     "public/": {
       "404.html": null,
       "apple-touch-icon.png": null,
       "assets/": "...",
       "boomtick_logo.svg": null,
+      "data/": "...",
       "favicon.ico": null,
       "favicon.svg": null,
       "icon.svg": null,
