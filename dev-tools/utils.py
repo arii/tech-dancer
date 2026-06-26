@@ -484,8 +484,10 @@ def get_github_client():
         raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
 
-def get_stack_versions() -> Dict[str, str]:
-    """Extracts core versions (Node, pnpm, GHA) from the repository."""
+def get_stack_versions(fetch_latest: bool = False) -> Dict[str, str]:
+    """Extracts core versions (Node, pnpm, GHA) from the repository.
+    If fetch_latest is True, it will also query registries for the absolute latest versions.
+    """
     versions = {
         "node": "24.16.0", # Fallback
         "pnpm": "10.28.2", # Fallback
@@ -525,7 +527,6 @@ def get_stack_versions() -> Dict[str, str]:
         # Scan for common GHA versions in workflows
         workflow_dir = ".github/workflows"
         if os.path.exists(workflow_dir):
-            # Use packaging.version for robust comparison
             try:
                 from packaging import version as pv
             except ImportError:
@@ -555,6 +556,19 @@ def get_stack_versions() -> Dict[str, str]:
                             elif v_str > current_v:
                                 versions[action] = v_str
                 except Exception: pass
+
+        if fetch_latest:
+            # We use verify_versions helpers if available to avoid duplication
+            try:
+                from verify_versions import fetch_latest_npm, fetch_latest_gh_action
+                latest_pnpm = fetch_latest_npm("pnpm")
+                if latest_pnpm: versions["latest_pnpm"] = latest_pnpm
+
+                # Check key actions
+                for action in ["actions/checkout", "actions/setup-node"]:
+                    latest_a = fetch_latest_gh_action(action)
+                    if latest_a: versions[f"latest_{action}"] = latest_a
+            except ImportError: pass
 
     except Exception as e:
         log_warn(f"Failed to extract stack versions: {e}")

@@ -46,7 +46,7 @@ def review_file(file_path, silent=False):
         sys.exit(1)
 
     try:
-        stack_versions = get_stack_versions()
+        stack_versions = get_stack_versions(fetch_latest=True)
     except Exception as e:
         print(f"Warning: Failed to extract stack versions: {e}", file=sys.stderr)
         stack_versions = {}

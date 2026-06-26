@@ -372,7 +372,7 @@ class AIClient:
         context = self._get_context_for_chunk(chunk)
         context_section = f"\n\n## Repository Context\n{context}" if context else ""
 
-        stack_versions = get_stack_versions()
+        stack_versions = get_stack_versions(fetch_latest=True)
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
         return (
