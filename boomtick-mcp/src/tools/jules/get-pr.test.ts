@@ -5,6 +5,7 @@ describe("getJulesPullRequestHandler", () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
+    process.env.JULES_API_KEY = "test-key";
     global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
