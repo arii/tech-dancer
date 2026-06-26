@@ -20,8 +20,8 @@ export function Notice({ type = 'info', children }: NoticeProps) {
     <Box
       surface={surface}
       border
-      padding={6}
-      marginY={8}
+      padding={{ base: 4, md: 6 }}
+      marginY={{ base: 6, md: 8 }}
       radius="none"
       position="relative"
       className="overflow-hidden"

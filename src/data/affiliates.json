@@ -634,10 +634,11 @@
   "hypervolt": {
     "id": "hypervolt",
     "name": "Hypervolt Percussion Massager",
-    "url": "https://www.amazon.com/hypervolt/s?tag=onasafari04-20",
+    "url": "https://www.amazon.com/hypervolt/s?k=hypervolt&tag=onasafari04-20",
     "category": "recovery",
     "description": "Professional-grade percussive therapy device to relieve muscle soreness and stiffness.",
-    "draft": true
+    "image": "",
+    "imageMode": "contain"
   },
   "pedialyte": {
     "id": "pedialyte",
@@ -645,6 +646,7 @@
     "url": "https://www.amazon.com/dp/B079YBMT2G?tag=onasafari04-20",
     "category": "recovery",
     "description": "Fast-acting rehydration solution to replenish electrolytes lost during intense dance sessions.",
-    "draft": true
+    "image": "",
+    "imageMode": "contain"
   }
 }
