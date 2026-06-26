@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { sendJulesMessageHandler } from "./send-message.js";
+import { setupTestEnv } from "../../lib/test-utils.js";
 
 describe("sendJulesMessageHandler", () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
-    process.env.JULES_API_KEY = "test-key";
+    setupTestEnv();
     global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,

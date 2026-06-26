@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getJulesPullRequestHandler } from "./get-pr.js";
+import { setupTestEnv } from "../../lib/test-utils.js";
 
 describe("getJulesPullRequestHandler", () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
-    process.env.JULES_API_KEY = "test-key";
+    setupTestEnv();
     global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
