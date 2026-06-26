@@ -451,7 +451,7 @@ class Orchestrator:
         return updates
 
     def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event=None):
-        review_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "reviews")
+        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
         res = {"pr": pr_number, "files": {}}
         if fetch:

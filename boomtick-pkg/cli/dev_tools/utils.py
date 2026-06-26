@@ -123,7 +123,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
 
 def log_ai_run(entry: dict):
     try:
-        log_dir = os.path.join(os.getcwd(), "dev-tools", "logs", "ai")
+        log_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "ai")
         log_file = os.path.join(log_dir, "review-run.jsonl")
         os.makedirs(log_dir, exist_ok=True)
         from datetime import datetime

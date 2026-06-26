@@ -4,8 +4,8 @@ set -u
 cd "$(dirname "$0")/.."
 source ./.agent-env.sh 2>/dev/null || true
 
-REPORT="dev-tools/logs/workflow-verification.md"
-mkdir -p dev-tools/logs
+REPORT="cli/logs/workflow-verification.md"
+mkdir -p cli/logs
 
 echo "# Workflow Verification" > "$REPORT"
 echo >> "$REPORT"

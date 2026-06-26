@@ -37,7 +37,7 @@ def main():
     # 4. PR Context Generation
     run_command(["td-cli", "gh", "audit-pr", pr_number, "--fetch"])
 
-    pr_context_file = f"dev-tools/logs/reviews/pr-context-{pr_number}.md"
+    pr_context_file = f"boomtick-pkg/cli/logs/reviews/pr-context-{pr_number}.md"
     pr_summary = ""
     ci_status = ""
     failure_logs = ""
@@ -85,7 +85,7 @@ def main():
     # Fix: Ensure all {pr_number} template variables in markdown are resolved
 
     # Generate workflow plan
-    plan_path = f"dev-tools/logs/workflows/workflow-plan-pr-{pr_number}.md"
+    plan_path = f"boomtick-pkg/cli/logs/workflows/workflow-plan-pr-{pr_number}.md"
     os.makedirs(os.path.dirname(plan_path), exist_ok=True)
 
     with open(plan_path, "w") as f:
@@ -175,14 +175,14 @@ Relevant excerpts:
 
 Agent may read:
 `.agents/workflows/REVIEW_INSTRUCTIONS.md`
-`dev-tools/logs/reviews/pr-review-{pr_number}.md`
+`boomtick-pkg/cli/logs/reviews/pr-review-{pr_number}.md`
 
 ---
 
 ## Writable Files
 
 Agent may modify:
-`dev-tools/logs/reviews/pr-review-{pr_number}.md`
+`boomtick-pkg/cli/logs/reviews/pr-review-{pr_number}.md`
 
 ---
 

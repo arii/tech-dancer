@@ -17,13 +17,13 @@ def main():
     print("Generating workflow plan for Aggregate PRs...")
 
     # 1. Environment Validation
-    env_output = run_command(["bash", "dev-tools/verify.sh"])
+    env_output = run_command(["bash", "boomtick-pkg/cli/verify.sh"])
 
     # 2. Get Open PRs (Limit 100 per conventions)
     prs_output = run_command(["td-cli", "gh", "overlaps", "--limit", "100"])
 
     # Generate workflow plan
-    plan_path = "dev-tools/logs/workflows/workflow-plan-aggregate-prs.md"
+    plan_path = "boomtick-pkg/cli/logs/workflows/workflow-plan-aggregate-prs.md"
     os.makedirs(os.path.dirname(plan_path), exist_ok=True)
 
     with open(plan_path, "w") as f:
