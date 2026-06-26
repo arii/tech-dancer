@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
+# Check for required tools
+if ! command -v jq &> /dev/null; then
+    echo "❌ Error: 'jq' is not installed. Please install it to use this script."
+    exit 1
+fi
+
 # WARNING: Destructive operation - Modifies local git tracking state, pushes upstream branches, and generates remote Pull Requests.
 if [ "$#" -lt 2 ]; then echo "Usage: $0 <new-branch-name> <pr1> <pr2> ..."; exit 1; fi
 

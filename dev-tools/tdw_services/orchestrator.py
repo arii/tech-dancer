@@ -35,6 +35,9 @@ PROJECT_CONFIG = load_project_config()
 AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
 SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
 
+# Pre-compute UI indicators for heuristic checks
+UI_INDICATORS = PROJECT_CONFIG.ui_indicators
+
 class Orchestrator:
     def __init__(self):
         self._github = None
@@ -80,12 +83,7 @@ class Orchestrator:
 
     def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
-        ui_indicators = PROJECT_CONFIG.ui_indicators.copy()
-        # Use core_dirs if they seem more accurate for the current project
-        if hasattr(PROJECT_CONFIG, 'core_dirs') and PROJECT_CONFIG.core_dirs:
-            ui_indicators.extend([d.rstrip('/') for d in PROJECT_CONFIG.core_dirs])
-
-        is_ui = any(indicator in diff for indicator in ui_indicators)
+        is_ui = any(indicator in diff for indicator in UI_INDICATORS)
         is_python = ".py" in diff
 
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
@@ -1213,7 +1211,7 @@ Respond only after the PR is created or updated:
 
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
-        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base main
+        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base {base_branch}
         create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", base_branch]
         pr_url = self.github.run_authenticated_gh(create_args).strip()
 

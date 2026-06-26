@@ -27,4 +27,7 @@ td-cli = "tdw_services.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["tdw_services*"]
+include = ["tdw_services*", "dev_tools_sdk*"]
+
+[tool.setuptools.package-data]
+"*" = ["project_config.json", "cli-schema.json"]
