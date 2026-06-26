@@ -59,7 +59,7 @@ export function getAllRoutes() {
   // 1. Static routes from configuration (excluding parameterized and catch-all)
   // Use canonicalPath if available
   const allStaticRoutes = routes
-    .filter(r => r.path !== '*' && !r.path.includes(':') && !r.path.startsWith('/gear') && !r.path.startsWith('/events'))
+    .filter(r => r.path !== '*' && !r.path.includes(':') && !r.path.includes('?') && !r.path.startsWith('/gear') && !r.path.startsWith('/events'))
     .map(r => {
       let lastmod;
       if (contentLastModMap[r.path]) {

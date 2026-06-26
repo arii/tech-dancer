@@ -5,11 +5,11 @@ test('verify homepage featured guide link', async ({ page }) => {
   await page.goto('./');
 
   // Find the WCS Travel Pack card
-   const guideLink = page.getByRole('link', { name: /The WCS Travel Pack/i }).first();
+   const guideLink = page.getByRole('link', { name: /Featured Guide/i }).first();
    await expect(guideLink).toBeVisible();
 
    // Click the link or Read the guide CTA
-   const cta = page.getByRole('link', { name: /Read the guide/i }).first();
+   const cta = page.getByRole('link', { name: /Featured Guide/i }).first();
    await cta.click();
 
   // Verify it lands on the correct page

@@ -29,7 +29,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        paddingX={{ base: 4, md: 8, lg: 0 }}
+        paddingX={{ base: 4, md: 8, lg: 4 }}
         paddingTop={{ base: 4, lg: 8 }}
         paddingBottom={{ base: 12, lg: 16 }}
         width="full"
