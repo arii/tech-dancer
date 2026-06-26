@@ -1,0 +1,96 @@
+name: "Run Project Gate"
+description: "Abstracted logic for building and testing monorepo sub-projects"
+inputs:
+  target:
+    description: "Target project to validate (e.g., 'root', 'boomtick-mcp')"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate Runtime
+      if: inputs.target == 'root'
+      shell: bash
+      run: |
+        echo "::group::Validate Runtime"
+        trap 'echo "::endgroup::"' EXIT
+        pnpm run check:runtime-files
+        pnpm run doctor
+
+    - name: pnpm install
+      shell: bash
+      run: |
+        echo "::group::pnpm install"
+        trap 'echo "::endgroup::"' EXIT
+        if [ "${{ inputs.target }}" = "root" ]; then
+          pnpm install --frozen-lockfile
+        else
+          pnpm install --frozen-lockfile --filter ${{ inputs.target }}
+        fi
+
+    - name: Verify lockfile integrity (root only)
+      if: inputs.target == 'root'
+      shell: bash
+      run: |
+        if ! git diff --quiet pnpm-lock.yaml; then
+          echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
+          exit 1
+        fi
+
+    - name: Verify Agent Context
+      if: inputs.target == 'root'
+      shell: bash
+      run: |
+        pnpm run agent:prime
+        if ! git diff --quiet .agent-context.json; then
+          echo "::warning::.agent-context.json is out of date. Run 'pnpm run agent:prime' and commit the changes."
+          git diff .agent-context.json
+        fi
+
+    - name: Lint
+      if: inputs.target == 'root'
+      shell: bash
+      run: pnpm run lint
+
+    - name: Type-check / Build
+      shell: bash
+      run: |
+        if [ "${{ inputs.target }}" = "root" ]; then
+          pnpm run type-check
+        else
+          pnpm --filter ${{ inputs.target }} run build
+        fi
+
+    - name: Run Unit Tests
+      shell: bash
+      run: |
+        if [ "${{ inputs.target }}" = "root" ]; then
+          pnpm test
+        else
+          pnpm --filter ${{ inputs.target }} run test
+        fi
+
+    - name: Run CLI Unit Tests
+      if: inputs.target == 'root'
+      shell: bash
+      run: |
+        echo "::group::Pytest"
+        trap 'echo "::endgroup::"' EXIT
+        python3 -m pytest tests/dev-tools/test_modern_cli.py
+
+    - name: Check for dead code
+      if: inputs.target == 'root'
+      shell: bash
+      run: pnpm run knip
+
+    - name: TypeScript 'any' Ratchet
+      if: inputs.target == 'root'
+      shell: bash
+      run: |
+        echo "::group::Ratchet Any"
+        trap 'echo "::endgroup::"' EXIT
+        # Ensure local python bin is on path for td-cli
+        export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+        td-cli gh ratchet-any
+      env:
+        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
