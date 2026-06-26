@@ -1,4 +1,3 @@
 packages:
   - "."
-  - "boomtick-mcp"
-enableGlobalVirtualStore: true
+  - "boomtick-pkg/mcp"
