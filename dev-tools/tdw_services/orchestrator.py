@@ -220,11 +220,11 @@ class Orchestrator:
 
     # --- Helper methods ported from td_cli ---
 
-    def get_env_or_gha(self, env_var: str) -> str | None:
+    def get_env_or_gha(self, env_var: str) -> Optional[str]:
         if env_var in os.environ: return os.environ[env_var]
         return get_gha_variable(env_var)
 
-    def resolve_baseline(self, file_path: str | None, env_var: str, fallback_value: int) -> int:
+    def resolve_baseline(self, file_path: Optional[str], env_var: str, fallback_value: int) -> int:
         if file_path and os.path.exists(file_path):
             with open(file_path, 'r') as f: return int(f.read().strip() or fallback_value)
         val = self.get_env_or_gha(env_var)

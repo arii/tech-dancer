@@ -4,7 +4,7 @@ import json
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 @dataclass(frozen=True)
@@ -77,7 +77,7 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
     except (json.JSONDecodeError, IOError):
         return ProjectConfig()
 
-    def get_list(key: str) -> List[str] | None:
+    def get_list(key: str) -> Optional[List[str]]:
         val = raw.get(key)
         if val is None:
             return None
@@ -87,7 +87,7 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
             return [str(item) for item in val]
         return None
 
-    def get_dict(key: str) -> Dict[str, str] | None:
+    def get_dict(key: str) -> Optional[Dict[str, str]]:
         val = raw.get(key)
         if isinstance(val, dict):
             return {str(k): str(v) for k, v in val.items()}
