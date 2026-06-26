@@ -86,7 +86,7 @@ export async function resolveAvailableGeminiModels(): Promise<string[]> {
  * Explicitly avoids deprecated models and prioritizes the Gemini 3.x suite.
  */
 export async function pickGeminiModel(
-  preferredTier: 'pro' | 'flash' | 'lite' = 'flash',
+  preferredTier: 'pro' | 'flash' | 'lite' = 'lite',
   estimatedInputTokens: number = 0
 ): Promise<string> {
   if (process.env.GEMINI_MODEL) return process.env.GEMINI_MODEL;
@@ -103,7 +103,7 @@ export async function pickGeminiModel(
   }
 
   let selected = activeModels.find(m => m.tier === preferredTier) ||
-                 activeModels.find(m => m.tier === 'flash') ||
+                 activeModels.find(m => m.tier === 'lite') ||
                  activeModels[0];
 
   if (estimatedInputTokens > selected.maxInputTokens) {

@@ -28,15 +28,15 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     const { diffText, externalText } = budgetInputContext(systemPrompt, summary);
 
     const estimatedInputTokens = summary.estimatedInputTokens || calculateEstimatedTokens([systemPrompt, diffText, externalText || '']);
-    // For code review, we prefer Pro if the diff is complex/large, otherwise Flash.
-    const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'pro' : 'flash';
+    // For code review, we prefer Flash if the diff is complex/large, otherwise Lite.
+    const preferredTier = (estimatedInputTokens > 15000 || (summary.previousState?.findings.length ?? 0) > 5) ? 'flash' : 'lite';
 
     let modelName: string;
     try {
       modelName = await pickGeminiModel(preferredTier, estimatedInputTokens);
     } catch (err) {
-      console.error('Failed to pick Gemini model, falling back to gemini-3.5-flash:', err);
-      modelName = 'gemini-3.5-flash';
+      console.error('Failed to pick Gemini model, falling back to gemini-3.1-flash-lite:', err);
+      modelName = 'gemini-3.1-flash-lite';
     }
 
     let thinkingBudget = 2048;

@@ -116,9 +116,9 @@ export async function pickOptimalModel(
 
 export async function pickOptimalGeminiModel(
   estimatedInputTokens: number = 0,
-  _fallback: string = 'gemini-3.5-flash'
+  _fallback: string = 'gemini-3.1-flash-lite'
 ): Promise<string> {
   // Delegate to the new dynamic gemini model picker
-  const tier = estimatedInputTokens > 200000 ? 'pro' : 'flash';
+  const tier = estimatedInputTokens > 200000 ? 'flash' : 'lite';
   return pickGeminiModel(tier, estimatedInputTokens);
 }
