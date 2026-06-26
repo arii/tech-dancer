@@ -202,7 +202,14 @@ export function extractFeedbackText(content: unknown): string {
   let feedback: string;
 
   if (typeof content === 'string') {
-    feedback = content.replace(/^\s*```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```\s*$/i, '');
+    feedback = content;
+    const firstBrace = feedback.indexOf('{');
+    const lastBrace = feedback.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace >= firstBrace) {
+      feedback = feedback.slice(firstBrace, lastBrace + 1);
+    } else {
+      feedback = feedback.replace(/^\s*```(?:json|xml)?\s*\n/i, '').replace(/\n\s*```\s*$/i, '');
+    }
   } else if (Array.isArray(content)) {
     const textParts = content
       .filter((p: unknown) => {
