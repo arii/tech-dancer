@@ -42,7 +42,7 @@ def load_project_config(path: str | Path = None) -> ProjectConfig:
 
     if not p.exists():
         # Only try fallback if we are using the default path and it doesn't exist
-        if path == "dev-tools/project_config.json":
+        if str(path) == "dev-tools/project_config.json":
             alt_path = Path(__file__).parent.parent / "project_config.json"
             if alt_path.exists():
                 p = alt_path

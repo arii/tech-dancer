@@ -159,7 +159,13 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
                                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
 
     start_time = time.time()
-    res = _call_api_with_retry(req, max_retries=max_retries)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            res = json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        log_error(f"GitHub Models call failed: {e}")
+        return None
+
     duration_ms = int((time.time() - start_time) * 1000)
 
     if res and "usage" in res:
@@ -177,20 +183,6 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
         })
 
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
-
-def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3) -> Optional[Dict]:
-    """Internal helper for API calls with exponential backoff."""
-    for attempt in range(max_retries):
-        try:
-            with urllib.request.urlopen(req, timeout=30) as response:
-                return json.loads(response.read().decode("utf-8"))
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
-            if attempt == max_retries - 1:
-                log_error(f"API Call failed after {max_retries} attempts: {e}")
-                return None
-            wait_time = (2 ** attempt) + (random.random() * 0.1)
-            time.sleep(wait_time)
-    return None
 
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call Gemini API using LangChain."""
