@@ -33,7 +33,7 @@ export function GitOpsReviewerTool() {
               <Text variant="display" size="lg" weight="font-bold">Model Agnostic</Text>
             </Box>
             <Text variant="body" size="sm" color="dim">
-              Built on a flexible orchestration layer supporting both high-performance cloud LLMs (Gemini) and local privacy-first models (Ollama/Llama).
+              Built on a flexible orchestration layer supporting multiple high-performance LLM providers, including Gemini and OpenAI-compatible models.
             </Text>
           </Stack>
         </Grid>

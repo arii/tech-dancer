@@ -29,7 +29,6 @@ This script installs and configures:
 | `GITHUB_REPOSITORY` | Recommended | Ensures deterministic `origin` remote configuration (e.g. `owner/repo`). |
 | `JULES_API_KEY` | Optional | Enables Jules cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed audit and review workflows. |
-| `OLLAMA_URL` | Optional | Override the default local Ollama endpoint. |
 
 ---
 

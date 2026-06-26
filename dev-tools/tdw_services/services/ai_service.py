@@ -135,7 +135,7 @@ class AIClient:
                 return True
 
             # Backward compatibility for mock mode in tests
-            if os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true":
+            if os.environ.get("AI_RESOLVE_MOCK", "false").lower() == "true" or os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true":
                 import re
                 mock_pattern = r"<<<<<<<.*?\n(.*?)\n=======.*?\n>>>>>>>.*?\n"
                 resolved = re.sub(mock_pattern, r"\1\n", content, flags=re.DOTALL)
