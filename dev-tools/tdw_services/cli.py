@@ -322,13 +322,14 @@ def detect_conflicts(ctx, pr):
 
 @gh.command()
 @click.option('--pr', required=True, type=int, help="The PR number to comment on.")
-@click.option('--file', required=True, type=str, help="Path to the file containing the comment body.")
+@click.option('--file', type=str, help="Path to the file containing the comment body.")
+@click.option('--body', type=str, help="Literal comment text.")
 @click.pass_context
-def post_comment(ctx, pr, file):
-    """Post a comment to a PR from a file."""
+def post_comment(ctx, pr, file, body):
+    """Post a comment to a PR."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        content = orch._read_safe_file(file)
+        content = _get_body_content(ctx, orch, file, body)
         res = orch.post_comment(pr, content)
         out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
     except CLIError as e:

@@ -88,6 +88,21 @@
         }
       ]
     },
+    "gh post-comment": {
+      "description": "Adds a new comment to a Pull Request from a file or literal text.",
+      "exact_usage": "python3 dev-tools/td_cli.py gh post-comment --pr <PR_NUMBER> [--file <PATH> | --body <TEXT>]",
+      "required_flags": [
+        {
+          "flag": "--pr",
+          "type": "integer",
+          "description": "The GitHub Pull Request ID."
+        }
+      ],
+      "optional_flags": [
+        { "flag": "--file", "type": "string", "description": "Path to the Markdown file containing the comment body." },
+        { "flag": "--body", "type": "string", "description": "The literal body text for the comment." }
+      ]
+    },
     "gh detect-conflicts": {
       "description": "Detects conflicts for a single, specific Pull Request.",
       "exact_usage": "python3 dev-tools/td_cli.py gh detect-conflicts --pr <PR_NUMBER>",

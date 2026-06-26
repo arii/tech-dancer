@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
+import { sanitizeError } from "../lib/error_utils.js";
 
 export const IssueCommentInputSchema = z.object({
   issueNumber: z.number().describe("The number of the issue to comment on."),
@@ -11,10 +12,6 @@ const IssueCommentOutputSchema = z.object({
   comment: z.any().optional(),
   message: z.string().optional(),
 });
-
-function sanitizeError(stderr: string): string {
-  return (stderr.split("\n")[0] || "Unknown error").slice(0, 200);
-}
 
 export async function issueCommentHandler(args: z.infer<typeof IssueCommentInputSchema>) {
   const params = IssueCommentInputSchema.parse(args);
