@@ -44,7 +44,7 @@ ENV PATH=$PNPM_HOME:$PATH
 # Use pre-installed browsers from the Playwright base image
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-ENV PYTHONPATH=/workspace/dev-tools
+ENV PYTHONPATH=/workspace/boomtick-pkg/cli
 
 RUN corepack enable \
   && corepack prepare pnpm@${PNPM_VERSION} --activate \
@@ -73,15 +73,15 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     duckduckgo-search>=6.0.0
 
 # ── Dev Tools ──────────────────────────────────────────────────────────────────
-# We copy the full dev-tools directory so that pip install -e can create the
+# We copy the full boomtick-pkg/cli directory so that pip install -e can create the
 # necessary metadata/links during the image build.
-COPY dev-tools/ /workspace/dev-tools/
-RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/dev-tools/
+COPY boomtick-pkg/cli/ /workspace/boomtick-pkg/cli/
+RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-pkg/cli/
 
 # ── pnpm Dependencies (Pre-bake) ──────────────────────────────────────────────
 # Copy lockfile and workspace config to pre-install dependencies
 COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY --chown=pwuser:pwuser boomtick-mcp/package.json ./boomtick-mcp/
+COPY --chown=pwuser:pwuser boomtick-pkg/mcp/package.json ./boomtick-pkg/mcp/
 
 USER pwuser
 
