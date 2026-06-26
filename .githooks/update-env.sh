@@ -54,12 +54,7 @@ fi
 if check_run "^boomtick-mcp/"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "🤖 boomtick-mcp changed. Rebuilding..."
-        # Bypass engine checks for agents
-        engine_flags=""
-        if [ "$USER" = "jules" ] || [ -n "$JULES_API_KEY" ]; then
-            engine_flags="--engine-strict=false"
-        fi
-        pnpm --filter boomtick-mcp run build $engine_flags || echo "❌ ERROR: boomtick-mcp build failed. Please run 'pnpm --filter boomtick-mcp run build' manually."
+        pnpm --filter boomtick-mcp run build || echo "❌ ERROR: boomtick-mcp build failed. Please run 'pnpm --filter boomtick-mcp run build' manually."
     else
         echo "⚠️  WARNING: pnpm not found. Skipping boomtick-mcp build."
     fi

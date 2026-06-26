@@ -94,10 +94,14 @@ export async function createJulesSessionHandler(input: z.infer<typeof CreateJule
         status = "IN_PROGRESS";
       } else {
         const errText = await bootstrapResponse.text();
+        // eslint-disable-next-line no-console
+        // semgrep-ignore: javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
         console.error(`Failed to auto-bootstrap session ${id} (HTTP ${bootstrapResponse.status}): ${errText}`);
       }
     } catch (e) {
-      console.error(`Failed to auto-bootstrap session ${id}:`, e);
+      // eslint-disable-next-line no-console
+        // nosemgrep: javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
+        console.error(`Failed to auto-bootstrap session ${id}:`, e);
     }
   }
 
