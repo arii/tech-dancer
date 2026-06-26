@@ -8,9 +8,14 @@ def test_load_default_config(tmp_path):
     # Test loading when file doesn't exist
     config = load_project_config(tmp_path / "non_existent.json")
     assert isinstance(config, ProjectConfig)
-    assert config.base_branch == "origin/main"
+    assert config.base_branch == "main"
     assert config.monolithic_pr_threshold == 3
-    assert "src/layouts/" in config.core_dirs
+    assert config.core_dirs == []
+    assert config.ai_review_model == "gpt-4o"
+    assert config.audit_check_dirs == []
+    assert config.spec_sections == []
+    assert config.worktree_prefix == "repair-"
+    assert "github-actions[bot]" in config.allowed_bots
 
 def test_load_custom_config(tmp_path):
     config_file = tmp_path / "project_config.json"
@@ -19,7 +24,13 @@ def test_load_custom_config(tmp_path):
         "monolithic_pr_threshold": 5,
         "core_dirs": ["custom/"],
         "max_diff_chars": 50000,
-        "ai_synthesis_model": "gpt-4o"
+        "ai_synthesis_model": "gpt-4o",
+        "ai_review_model": "claude-3-opus",
+        "ai_vision_model": "claude-3-vision",
+        "audit_check_dirs": ["src/ui"],
+        "spec_sections": ["Background"],
+        "worktree_prefix": "custom-repair-",
+        "allowed_bots": ["custom-bot"]
     }
     config_file.write_text(json.dumps(data))
 
@@ -29,6 +40,12 @@ def test_load_custom_config(tmp_path):
     assert config.core_dirs == ["custom/"]
     assert config.max_diff_chars == 50000
     assert config.ai_synthesis_model == "gpt-4o"
+    assert config.ai_review_model == "claude-3-opus"
+    assert config.ai_vision_model == "claude-3-vision"
+    assert config.audit_check_dirs == ["src/ui"]
+    assert config.spec_sections == ["Background"]
+    assert config.worktree_prefix == "custom-repair-"
+    assert config.allowed_bots == ["custom-bot"]
 
 def test_type_coercion(tmp_path):
     config_file = tmp_path / "project_config.json"
@@ -48,7 +65,7 @@ def test_invalid_json(tmp_path):
 
     config = load_project_config(config_file)
     # Should fallback to defaults
-    assert config.base_branch == "origin/main"
+    assert config.base_branch == "main"
 
 def test_legacy_repo_name(tmp_path):
     config_file = tmp_path / "project_config.json"

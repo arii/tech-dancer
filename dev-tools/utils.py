@@ -30,7 +30,15 @@ class APIConnectionError(Exception):
 def get_ai_review_model() -> str:
     """Dynamic getter for the dedicated Code Reviewer model.
     """
-    return os.environ.get("AI_REVIEW_MODEL", "gpt-4o")
+    env_val = os.environ.get("AI_REVIEW_MODEL")
+    if env_val:
+        return env_val
+    try:
+        from dev_tools_sdk.config import load_project_config
+        config = load_project_config()
+        return config.ai_review_model
+    except Exception:
+        return "gpt-4o"
 
 def get_ai_synthesis_model() -> str:
     """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
@@ -47,7 +55,7 @@ def get_ai_synthesis_model() -> str:
 
 def get_ai_model() -> str:
     """Dynamic getter for the primary AI model."""
-    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
+    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or get_ai_synthesis_model()
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
@@ -170,6 +178,20 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
+def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3) -> Optional[Dict]:
+    """Internal helper for API calls with exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            if attempt == max_retries - 1:
+                log_error(f"API Call failed after {max_retries} attempts: {e}")
+                return None
+            wait_time = (2 ** attempt) + (random.random() * 0.1)
+            time.sleep(wait_time)
+    return None
+
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call Gemini API using LangChain."""
     try:
@@ -216,7 +238,7 @@ def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[s
 
     return None
 
-def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True) -> Union[str, subprocess.CompletedProcess]:
+def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True, cwd: Optional[str] = None) -> Union[str, subprocess.CompletedProcess]:
     """
     Unified command execution helper.
     - If check=True (default): returns stripped stdout string, raises CLIError on non-zero exit.
@@ -228,7 +250,8 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
         input=input_str,
         capture_output=True,
         text=True,
-        check=False
+        check=False,
+        cwd=cwd
     )
     if proc.returncode != 0 and log_on_error:
         log_error(f"Command failed (exit {proc.returncode}): {proc.args}")

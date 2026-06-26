@@ -437,7 +437,7 @@ class AIClient:
         has_ci_failures: bool,
         ci_failures: List[Dict],
     ) -> Dict:
-        """Call the lighter gpt-4o model to produce the final verdict from structured per-chunk data."""
+        """Call the AI model to produce the final verdict from structured per-chunk data."""
         total_issues = sum(len(fr.get('issues', [])) for fr in file_reviews)
         blocking_files = [fr['file'] for fr in file_reviews if fr.get('verdict') == 'blocking']
         error_files    = [fr['file'] for fr in file_reviews if fr.get('verdict') in ('error', 'parse_error')]

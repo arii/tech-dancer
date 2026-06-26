@@ -7,8 +7,10 @@ import os
 import sys
 import argparse
 from utils import call_ai
+from dev_tools_sdk.config import load_project_config
 
-MODEL = "gpt-4o"
+PROJECT_CONFIG = load_project_config()
+MODEL = PROJECT_CONFIG.ai_review_model
 MAX_FILE_SIZE_KB = 50
 
 def is_binary(file_path):

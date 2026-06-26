@@ -12,6 +12,9 @@ from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any
 from scope_check import verify_pr_scope
 import os
 from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
+from dev_tools_sdk.config import load_project_config
+
+PROJECT_CONFIG = load_project_config()
 
 # CLI Group
 @click.group()
@@ -100,7 +103,7 @@ def search_prs(ctx, state, limit, include_drafts, labels):
 
 @gh.command()
 @click.argument('pr_number', type=int)
-@click.option('--base', default='main')
+@click.option('--base')
 @click.pass_context
 def merge_conflicts(ctx, pr_number, base):
     orch = ctx.obj['ORCHESTRATOR']
@@ -139,7 +142,7 @@ def resolve(ctx, file, base):
         out(ctx, f"✅ Resolved {len(resolved)} files.", data={"resolved": resolved})
 
 @gh.command()
-@click.option('--check-dirs', default=os.environ.get('AUDIT_CHECK_DIRS', 'src/features,src/pages,src/components,src/layouts,src/App.tsx'), help='Comma-separated list of directories to audit')
+@click.option('--check-dirs', default=os.environ.get('AUDIT_CHECK_DIRS', ','.join(PROJECT_CONFIG.audit_check_dirs)), help='Comma-separated list of directories to audit')
 @click.pass_context
 def audit(ctx, check_dirs):
     """Run a headless UI audit on the codebase."""

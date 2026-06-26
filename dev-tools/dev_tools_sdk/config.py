@@ -13,27 +13,34 @@ class ProjectConfig:
     github_token_env: str = "GITHUB_TOKEN"
     gh_token_env: str = "GH_TOKEN"
     jules_api_url: str | None = None
-    core_dirs: List[str] = field(default_factory=lambda: ["src/layouts/", "src/components/"])
+    core_dirs: List[str] = field(default_factory=list)
     monolithic_pr_threshold: int = 3
-    base_branch: str = "origin/main"
+    base_branch: str = "main"
     max_diff_chars: int = 40000
-    content_scopes: Dict[str, str] = field(default_factory=lambda: {
-        "resources": "content/resources/",
-        "posts": "content/posts/",
-        "blog": "content/blog/",
-        "studies": "content/studies/"
-    })
+    content_scopes: Dict[str, str] = field(default_factory=dict)
     ai_synthesis_model: str = "gpt-4o-mini"
+    ai_review_model: str = "gpt-4o"
+    ai_vision_model: str = "gpt-4o"
+    audit_check_dirs: List[str] = field(default_factory=list)
+    spec_sections: List[str] = field(default_factory=list)
+    worktree_prefix: str = "repair-"
+    allowed_bots: List[str] = field(default_factory=lambda: ["github-actions[bot]"])
 
 
-def load_project_config(path: str | Path = "dev-tools/project_config.json") -> ProjectConfig:
+def load_project_config(path: str | Path = None) -> ProjectConfig:
+    if path is None:
+        path = "dev-tools/project_config.json"
+
     p = Path(path)
 
     if not p.exists():
-        # Try to find it relative to this file if not found at path
-        alt_path = Path(__file__).parent.parent / "project_config.json"
-        if alt_path.exists():
-            p = alt_path
+        # Only try fallback if we are using the default path and it doesn't exist
+        if path == "dev-tools/project_config.json":
+            alt_path = Path(__file__).parent.parent / "project_config.json"
+            if alt_path.exists():
+                p = alt_path
+            else:
+                return ProjectConfig()
         else:
             return ProjectConfig()
 
@@ -61,15 +68,16 @@ def load_project_config(path: str | Path = "dev-tools/project_config.json") -> P
         github_token_env=raw.get("github_token_env", "GITHUB_TOKEN"),
         gh_token_env=raw.get("gh_token_env", "GH_TOKEN"),
         jules_api_url=raw.get("jules_api_url"),
-        core_dirs=get_list("core_dirs", ["src/layouts/", "src/components/"]),
+        core_dirs=get_list("core_dirs", []),
         monolithic_pr_threshold=int(raw.get("monolithic_pr_threshold", 3)),
-        base_branch=raw.get("base_branch", "origin/main"),
+        base_branch=raw.get("base_branch", "main"),
         max_diff_chars=int(raw.get("max_diff_chars", 40000)),
-        content_scopes=get_dict("content_scopes", {
-            "resources": "content/resources/",
-            "posts": "content/posts/",
-            "blog": "content/blog/",
-            "studies": "content/studies/"
-        }),
+        content_scopes=get_dict("content_scopes", {}),
         ai_synthesis_model=raw.get("ai_synthesis_model", "gpt-4o-mini"),
+        ai_review_model=raw.get("ai_review_model", "gpt-4o"),
+        ai_vision_model=raw.get("ai_vision_model", "gpt-4o"),
+        audit_check_dirs=get_list("audit_check_dirs", []),
+        spec_sections=get_list("spec_sections", []),
+        worktree_prefix=raw.get("worktree_prefix", "repair-"),
+        allowed_bots=get_list("allowed_bots", ["github-actions[bot]"]),
     )

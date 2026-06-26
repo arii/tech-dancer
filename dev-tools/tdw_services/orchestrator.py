@@ -32,20 +32,8 @@ from scope_check import verify_pr_scope
 from dev_tools_sdk.config import load_project_config
 
 PROJECT_CONFIG = load_project_config()
-AUDIT_CHECK_DIRS = ['src/features', 'src/pages', 'src/components', 'src/layouts', 'src/App.tsx']
-SPEC_SECTIONS = [
-    "Problem Statement",
-    "Goal",
-    "Non-Goals",
-    "Proposed Approach",
-    "Alternatives Considered",
-    "Architectural Impact",
-    "Scope",
-    "UNDERSTAND THE ISSUE",
-    "DETERMINE APPROACH",
-    "SPECIFY SCOPE",
-    "DEFINITION OF DONE"
-]
+AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
+SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
 
 class Orchestrator:
     def __init__(self):
@@ -92,7 +80,8 @@ class Orchestrator:
 
     def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
-        is_ui = "src/components" in diff or "src/pages" in diff or "src/layouts" in diff or "src/index.css" in diff or "tailwind" in diff
+        core_dirs = PROJECT_CONFIG.core_dirs
+        is_ui = any(d in diff for d in core_dirs) or "src/index.css" in diff or "tailwind" in diff
         is_python = ".py" in diff
 
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
@@ -127,12 +116,13 @@ class Orchestrator:
             feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td_cli.py` or equivalent test files if extending `dev-tools`.\n"
 
         if pr.get('mergeable') is False:
-            feedback += "- **Merge Conflicts:** This PR has conflicts with the `main` base branch.\n"
-            feedback += "  - *Fix:* Pull `main` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
+            base_branch = PROJECT_CONFIG.base_branch.replace('origin/', '')
+            feedback += f"- **Merge Conflicts:** This PR has conflicts with the `{base_branch}` base branch.\n"
+            feedback += f"  - *Fix:* Pull `{base_branch}` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
 
         if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
             feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
-            feedback += "  - *Fix:* Ensure this is rebased against recent changes in #2076 or #2070 to avoid overlapping functionality.\n"
+            feedback += "  - *Fix:* Ensure this is rebased against recent changes to avoid overlapping functionality.\n"
 
         # Default if no specific issues caught by heuristics
         if feedback.endswith("**Specific Issues & Actionable Fixes:**\n"):
@@ -652,7 +642,7 @@ class Orchestrator:
         try:
             if worktree:
                 branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
-                worktree_path = tempfile.mkdtemp(prefix="tech-dancer-repair-")
+                worktree_path = tempfile.mkdtemp(prefix=PROJECT_CONFIG.worktree_prefix)
                 run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
                 os.chdir(worktree_path)
                 if os.path.exists(os.path.join(original_cwd, "node_modules")):
@@ -725,11 +715,12 @@ class Orchestrator:
                 for f in findings:
                     structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
 
-        prompt = """# Agent Prompt: Self-Review, Fix, and Publish PR
+        base_branch = PROJECT_CONFIG.base_branch
+        prompt = f"""# Agent Prompt: Self-Review, Fix, and Publish PR
 
 You are a senior engineering agent reviewing your own branch before publishing.
 
-Compare the current branch against `main`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
+Compare the current branch against `{base_branch}`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
 
 ## Rules
 
@@ -743,13 +734,13 @@ Compare the current branch against `main`, identify issues, fix them directly, v
 ## Steps
 
 1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin main`.
-2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, and `git diff --cached`.
+2. Review the full diff with `git diff {base_branch}...HEAD`, `git diff --stat {base_branch}...HEAD`, `git log --oneline {base_branch}..HEAD`, and `git diff --cached`.
 3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
 4. Fix the issues directly.
 5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
    - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) and represent failures using the structured schema described in `docs/agent/ci-remediation.md`.
 6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
-7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
+7. Final review with `git status`, `git diff {base_branch}...HEAD`, `git diff --stat {base_branch}...HEAD`, and a search for TODO/FIXME/debug leftovers.
 8. Commit, push, and create or update the PR with a clear summary and validation notes.
 
 ## Final response
@@ -1046,8 +1037,10 @@ Respond only after the PR is created or updated:
 
         return combined_logs
 
-    def get_merge_conflicts(self, pr_number: int, base_branch: str = "main") -> Dict[str, Any]:
+    def get_merge_conflicts(self, pr_number: int, base_branch: str = None) -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
+        if base_branch is None:
+            base_branch = PROJECT_CONFIG.base_branch
         # Get PR head ref
         stdout_pr = self.github.run_authenticated_gh([
             "pr", "view", str(pr_number), "--json", "headRefName"
@@ -1060,7 +1053,7 @@ Respond only after the PR is created or updated:
 
         # Ensure we have the latest
         run_command(["git", "fetch", "origin", head_ref])
-        run_command(["git", "fetch", "origin", base_branch])
+        run_command(["git", "fetch", "origin", base_branch.replace('origin/', '') if base_branch.startswith('origin/') else base_branch])
 
         worktree_path = os.path.join(os.getcwd(), f"worktree-conflict-{pr_number}.tmp")
         self._cleanup_worktree(worktree_path)
@@ -1071,7 +1064,7 @@ Respond only after the PR is created or updated:
         command_log = ""
         try:
             res = run_command(
-                ["git", "merge", "--no-commit", "--no-ff", f"origin/{base_branch}"],
+                ["git", "merge", "--no-commit", "--no-ff", base_branch],
                 cwd=worktree_path,
                 check=False
             )
@@ -1112,7 +1105,7 @@ Respond only after the PR is created or updated:
             "pr", "diff", str(pr_number)
         ])
 
-        MAX_DIFF_SIZE = 50000
+        MAX_DIFF_SIZE = PROJECT_CONFIG.max_diff_chars
         truncated = False
         if len(diff_text) > MAX_DIFF_SIZE:
             diff_text = diff_text[:MAX_DIFF_SIZE] + "\n\n... [Diff truncated due to size] ..."
@@ -1159,9 +1152,11 @@ Respond only after the PR is created or updated:
         def run(cmd, check=True):
             return run_command(cmd, check=check)
 
+        base_branch = PROJECT_CONFIG.base_branch.replace('origin/', '')
+
         # 1. Isolation & Cleanliness
-        run(["git", "checkout", "main"])
-        run(["git", "pull", "origin", "main"])
+        run(["git", "checkout", base_branch])
+        run(["git", "pull", "origin", base_branch])
         run(["git", "checkout", "-b", target_branch])
 
         aggregate_body = ""
@@ -1210,7 +1205,7 @@ Respond only after the PR is created or updated:
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
         # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base main
-        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", "main"]
+        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", base_branch]
         pr_url = self.github.run_authenticated_gh(create_args).strip()
 
         return {
@@ -1239,7 +1234,7 @@ Respond only after the PR is created or updated:
 
             # 1. Fetch PR details early to fail fast
             pr_data = self.github.fetch_pr_details(pr_number)
-            base_branch = pr_data.get('base', {}).get('ref', 'main')
+            base_branch = pr_data.get('base', {}).get('ref', PROJECT_CONFIG.base_branch.replace('origin/', ''))
             head_ref = pr_data.get('head', {}).get('ref')
 
             if not head_ref:
