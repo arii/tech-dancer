@@ -29,11 +29,20 @@ The following tools must be installed and available in the system `PATH`:
 - **`jq`**: Required by `aggregate-prs.sh` for JSON parsing.
 - **Node.js & `pnpm`**: Required to run the shared TypeScript/JavaScript helpers (e.g., anti-pattern audit) located in the repository root.
 
+## Required Environment Variables
+The following environment variables are required for the tools to function correctly:
+
+- **`GITHUB_TOKEN` or `GH_TOKEN`**: **Mandatory.** Required for all GitHub API interactions (PR listing, diffing, reviews, issue creation, etc.) and for authentication with the GitHub Models API.
+- **`GEMINI_API_KEY`**: Required if using Google Gemini models for reviews or synthesis.
+- **`JULES_API_KEY`**: Required for autonomous repair sessions and interactions with the Jules agent service.
+- **`AI_REVIEW_MODEL`** (Optional): Override the default model used for AI code reviews.
+- **`AI_SYNTHESIS_MODEL`** (Optional): Override the default model used for general AI synthesis.
+
 ## Remaining Blockers / Hardcoded Assumptions
 While most configuration is now parameterized, some assumptions remain:
-2. **Environment Variables**: AI model calls still depend on `GITHUB_TOKEN`, `GH_TOKEN`, or `GEMINI_API_KEY` being set in the environment.
-3. **Repository Structure**: Some tools assume a standard layout (e.g., `src/`, `node_modules/`) which might vary between projects.
-4. **Shell Scripts**: The `.sh` files in `dev-tools/` may still contain hardcoded paths to scripts outside of the `dev-tools/` directory.
+
+1. **Repository Structure**: Some tools assume a standard layout (e.g., `src/`, `node_modules/`) which might vary between projects.
+2. **Shell Scripts**: The `.sh` files in `dev-tools/` may still contain hardcoded paths to scripts outside of the `dev-tools/` directory.
 
 ## Next Steps for Standalone Packaging
 To fully decouple `dev-tools/` and publish it as a standalone package:

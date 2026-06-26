@@ -1,20 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Check for required tools
-if ! command -v jq &> /dev/null; then
-    echo "❌ Error: 'jq' is not installed. Please install it to use this script."
-    exit 1
-fi
-
 # WARNING: Destructive operation - Modifies local git tracking state, pushes upstream branches, and generates remote Pull Requests.
 if [ "$#" -lt 2 ]; then echo "Usage: $0 <new-branch-name> <pr1> <pr2> ..."; exit 1; fi
 
-# Load base branch from project_config.json if possible, fallback to main
+# Load base branch from project_config.json if possible, fallback to origin/main
 CONFIG_FILE="$(dirname "${BASH_SOURCE[0]}")/project_config.json"
 BASE_BRANCH="origin/main"
 if [ -f "$CONFIG_FILE" ]; then
-    BASE_BRANCH=$(jq -r '.base_branch // "origin/main"' "$CONFIG_FILE")
+    # Silently attempt to load base_branch using jq if available
+    if command -v jq &> /dev/null; then
+        if LOADED_BRANCH=$(jq -r '.base_branch' "$CONFIG_FILE" 2>/dev/null); then
+            if [ "$LOADED_BRANCH" != "null" ] && [ -n "$LOADED_BRANCH" ]; then
+                BASE_BRANCH="$LOADED_BRANCH"
+            fi
+        else
+            echo "⚠️ Warning: Failed to parse '$CONFIG_FILE'. Using default base branch '$BASE_BRANCH'." >&2
+        fi
+    else
+        echo "⚠️ Warning: 'jq' not found. Cannot parse '$CONFIG_FILE'. Using default base branch '$BASE_BRANCH'." >&2
+    fi
 fi
 # Extract name without remote prefix (handles origin/main, upstream/develop, etc)
 BASE_BRANCH_NAME=$(echo "$BASE_BRANCH" | sed 's/.*\///')
