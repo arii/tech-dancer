@@ -2,7 +2,6 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box, Button } from '@/layouts/Primitives';
-import { Wordmark } from './Wordmark';
 import { NavLink } from 'react-router-dom';
 
 export function HeroSection() {
@@ -45,7 +44,7 @@ export function HeroSection() {
           width="full"
           maxWidth="full"
           pointerEvents="auto"
-          className="mb-6"
+          marginBottom={6}
         >
           <Text
             as="span"
@@ -89,7 +88,9 @@ export function HeroSection() {
             to="/blog"
             variant="primary"
             size="lg"
-            className="px-8 py-4 text-lg"
+            paddingX={8}
+            paddingY={4}
+            className="text-lg"
           >
             Browse Guides
           </Button>
