@@ -77,6 +77,6 @@ export function FeaturedGuidePanel() {
           Read Guide →
         </Text>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
