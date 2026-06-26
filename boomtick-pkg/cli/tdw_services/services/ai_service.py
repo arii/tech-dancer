@@ -7,7 +7,7 @@ from tdw_services.utils import log_info, log_error, log_warn
 
 # Ensure dev-tools is at the front of sys.path so we import the global utils.py,
 # not the local tdw_services/utils.py
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'dev_tools')))
 from utils import (
     call_ai,
     is_ai_available,

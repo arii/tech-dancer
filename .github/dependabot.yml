@@ -7,7 +7,7 @@ updates:
       day: "monday"
 
   - package-ecosystem: "npm"
-    directory: "/boomtick-mcp"
+    directory: "/boomtick-pkg/mcp"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -19,7 +19,7 @@ updates:
       day: "wednesday"
 
   - package-ecosystem: "pip"
-    directory: "/dev-tools"
+    directory: "/boomtick-pkg/cli"
     schedule:
       interval: "weekly"
       day: "wednesday"
