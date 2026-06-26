@@ -76,3 +76,18 @@ def test_legacy_repo_name(tmp_path):
 
     config = load_project_config(config_file)
     assert config.github_repo == "owner/repo"
+
+def test_validation():
+    # Valid config
+    config = ProjectConfig(base_branch="main")
+    config.validate_config()
+
+    # Invalid base_branch
+    with pytest.raises(ValueError, match="base_branch"):
+        config = ProjectConfig(base_branch="")
+        config.validate_config()
+
+    # Invalid threshold
+    with pytest.raises(ValueError, match="monolithic_pr_threshold"):
+        config = ProjectConfig(base_branch="main", monolithic_pr_threshold=-1)
+        config.validate_config()

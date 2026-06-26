@@ -26,6 +26,13 @@ class ProjectConfig:
     worktree_prefix: str = "repair-"
     allowed_bots: List[str] = field(default_factory=lambda: ["github-actions[bot]"])
 
+    def validate_config(self) -> None:
+        """Ensures critical configuration fields are present and valid."""
+        if not self.base_branch:
+            raise ValueError("Configuration Error: 'base_branch' must not be empty.")
+        if not isinstance(self.monolithic_pr_threshold, int) or self.monolithic_pr_threshold < 0:
+            raise ValueError("Configuration Error: 'monolithic_pr_threshold' must be a non-negative integer.")
+
 
 def load_project_config(path: str | Path = None) -> ProjectConfig:
     if path is None:
@@ -63,7 +70,7 @@ def load_project_config(path: str | Path = None) -> ProjectConfig:
             return {str(k): str(v) for k, v in val.items()}
         return default
 
-    return ProjectConfig(
+    config = ProjectConfig(
         github_repo=raw.get("github_repo") or raw.get("repo_name"),
         github_token_env=raw.get("github_token_env", "GITHUB_TOKEN"),
         gh_token_env=raw.get("gh_token_env", "GH_TOKEN"),
@@ -81,3 +88,5 @@ def load_project_config(path: str | Path = None) -> ProjectConfig:
         worktree_prefix=raw.get("worktree_prefix", "repair-"),
         allowed_bots=get_list("allowed_bots", ["github-actions[bot]"]),
     )
+    config.validate_config()
+    return config

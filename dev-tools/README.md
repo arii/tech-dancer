@@ -17,6 +17,16 @@ This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools,
 Node.js, pnpm, Python dependencies, Playwright, remote origin configuration,
 and git hook registration.
 
+### Standalone Package Installation
+
+To use the `tdw_services` SDK and CLI in another repository or as a standalone package:
+
+```bash
+pip install -e dev-tools/
+```
+
+This ensures that the `dev_tools_sdk` modules are correctly resolvable in your Python environment.
+
 ---
 
 ## 🔑 Environment Variables
