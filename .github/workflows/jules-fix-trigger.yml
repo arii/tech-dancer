@@ -19,7 +19,7 @@ permissions:
   actions: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.issue.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.run_id || github.ref }}
   cancel-in-progress: true
 
 jobs:

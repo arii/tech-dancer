@@ -10,7 +10,7 @@
 - Long-running runs inspected: N/A
 - Artifact-heavy runs inspected: N/A
 - Findings created: 2
-- Fixes implemented: 2
+- Fixes implemented: 1
 - Follow-up issues recommended: 1
 
 ## Workflow checklist
@@ -109,4 +109,4 @@ File: `.github/workflows/wcs_etl.yml`
 - Run evidence: Static analysis
 - Severity: low
 - Recommendation: Change `if: always()` to `if: failure() && steps.check_report.outputs.exists == 'true'` for the artifact upload.
-- Status: Fixed
+- Status: Discarded per code review (loss of visibility)

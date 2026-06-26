@@ -220,7 +220,7 @@ jobs:
           fi
 
       - name: Upload Test Results
-        if: failure() && steps.check_report.outputs.exists == 'true'
+        if: always() && steps.check_report.outputs.exists == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ github.run_id }}

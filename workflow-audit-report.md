@@ -159,4 +159,5 @@ Change the `if` condition to `if: failure() && steps.check_report.outputs.exists
 - [x] Failure output is easier to understand
 - [x] Artifacts are smaller or better organized
 - [x] Required checks still pass
+- [ ] Note: Fix discarded after code review as it causes loss of test reports for successful runs, reducing traceability.
 - [x] No security regression
