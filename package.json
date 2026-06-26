@@ -98,7 +98,7 @@
     "yaml": "^2.9.0"
   },
   "engines": {
-    "node": ">=22.22.1",
+    "node": "22.x",
     "pnpm": "10.28.2"
   },
   "devDependencies": {
