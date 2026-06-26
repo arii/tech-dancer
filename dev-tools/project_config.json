@@ -22,6 +22,14 @@
     "src/index.css",
     "tailwind"
   ],
+  "tailwind_indicators": [
+    "px-",
+    "py-",
+    "mt-",
+    "flex",
+    "grid",
+    "text-["
+  ],
   "audit_check_dirs": [
     "src/features",
     "src/pages",

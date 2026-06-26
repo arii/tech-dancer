@@ -103,7 +103,7 @@ def search_prs(ctx, state, limit, include_drafts, labels):
 
 @gh.command()
 @click.argument('pr_number', type=int)
-@click.option('--base', default='main')
+@click.option('--base', default=PROJECT_CONFIG.base_branch_name)
 @click.pass_context
 def merge_conflicts(ctx, pr_number, base):
     orch = ctx.obj['ORCHESTRATOR']

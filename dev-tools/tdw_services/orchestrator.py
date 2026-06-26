@@ -108,7 +108,8 @@ class Orchestrator:
                 feedback += "  - *Fix:* Verify that the `dist` directory compiles correctly without TypeScript or Vite errors.\n"
 
         if is_ui:
-            if "px-" in diff or "py-" in diff or "mt-" in diff or "flex" in diff or "grid" in diff or "text-[" in diff:
+            tailwind_indicators = PROJECT_CONFIG.tailwind_indicators
+            if any(ind in diff for ind in tailwind_indicators):
                 feedback += "- **Design System Anti-patterns:** The diff contains raw Tailwind classes (e.g. padding/margin utility classes, arbitrary values).\n"
                 feedback += "  - *Fix:* Replace raw Tailwind layout classes with `Stack`, `Box`, or `Grid` primitives using design tokens (e.g., `gap={4}`, `paddingY={{ base: 4, md: 1.5 }}`). Verify by running `node scripts/detect-antipatterns.mjs`.\n"
 
@@ -120,12 +121,13 @@ class Orchestrator:
             feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td_cli.py` or equivalent test files if extending `dev-tools`.\n"
 
         if pr.get('mergeable') is False:
-            feedback += "- **Merge Conflicts:** This PR has conflicts with the `main` base branch.\n"
-            feedback += "  - *Fix:* Pull `main` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
+            base_branch_name = PROJECT_CONFIG.base_branch_name
+            feedback += f"- **Merge Conflicts:** This PR has conflicts with the `{base_branch_name}` base branch.\n"
+            feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
 
         if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
             feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
-            feedback += "  - *Fix:* Ensure this is rebased against recent changes in #2076 or #2070 to avoid overlapping functionality.\n"
+            feedback += f"  - *Fix:* Ensure this is rebased against recent changes in the `{PROJECT_CONFIG.base_branch_name}` branch to avoid overlapping functionality.\n"
 
         # Default if no specific issues caught by heuristics
         if feedback.endswith("**Specific Issues & Actionable Fixes:**\n"):
@@ -667,9 +669,9 @@ class Orchestrator:
             baseline_count = 0
             try:
                 base = PROJECT_CONFIG.base_branch
-                main_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
+                base_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
                 # Ensure AUDIT_CHECK_DIRS are handled as a list of prefixes
-                relevant = [mf for mf in main_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
+                relevant = [mf for mf in base_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
                 for mf in relevant:
                     res_show = run_command(["git", "show", f"{base}:{mf}"], check=False, log_on_error=False)
                     if res_show.returncode == 0:
@@ -720,11 +722,14 @@ class Orchestrator:
                 for f in findings:
                     structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
 
-        prompt = """# Agent Prompt: Self-Review, Fix, and Publish PR
+        base_branch = PROJECT_CONFIG.base_branch
+        base_branch_name = PROJECT_CONFIG.base_branch_name
+
+        prompt = f"""# Agent Prompt: Self-Review, Fix, and Publish PR
 
 You are a senior engineering agent reviewing your own branch before publishing.
 
-Compare the current branch against `main`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
+Compare the current branch against `{base_branch_name}`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
 
 ## Rules
 
@@ -737,14 +742,14 @@ Compare the current branch against `main`, identify issues, fix them directly, v
 
 ## Steps
 
-1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin main`.
-2. Review the full diff with `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, `git log --oneline origin/main..HEAD`, and `git diff --cached`.
+1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin {base_branch_name}`.
+2. Review the full diff with `git diff {base_branch}...HEAD`, `git diff --stat {base_branch}...HEAD`, `git log --oneline {base_branch}..HEAD`, and `git diff --cached`.
 3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
 4. Fix the issues directly.
 5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
    - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) and represent failures using the structured schema described in `docs/agent/ci-remediation.md`.
 6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
-7. Final review with `git status`, `git diff origin/main...HEAD`, `git diff --stat origin/main...HEAD`, and a search for TODO/FIXME/debug leftovers.
+7. Final review with `git status`, `git diff {base_branch}...HEAD`, `git diff --stat {base_branch}...HEAD`, and a search for TODO/FIXME/debug leftovers.
 8. Commit, push, and create or update the PR with a clear summary and validation notes.
 
 ## Final response
@@ -1041,8 +1046,10 @@ Respond only after the PR is created or updated:
 
         return combined_logs
 
-    def get_merge_conflicts(self, pr_number: int, base_branch: str = "main") -> Dict[str, Any]:
+    def get_merge_conflicts(self, pr_number: int, base_branch: str = None) -> Dict[str, Any]:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
+        if base_branch is None:
+            base_branch = PROJECT_CONFIG.base_branch_name
         # Get PR head ref
         stdout_pr = self.github.run_authenticated_gh([
             "pr", "view", str(pr_number), "--json", "headRefName"
@@ -1154,9 +1161,11 @@ Respond only after the PR is created or updated:
         def run(cmd, check=True):
             return run_command(cmd, check=check)
 
+        base_branch = PROJECT_CONFIG.base_branch_name
+
         # 1. Isolation & Cleanliness
-        run(["git", "checkout", "main"])
-        run(["git", "pull", "origin", "main"])
+        run(["git", "checkout", base_branch])
+        run(["git", "pull", "origin", base_branch])
         run(["git", "checkout", "-b", target_branch])
 
         aggregate_body = ""
@@ -1205,7 +1214,7 @@ Respond only after the PR is created or updated:
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
         # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base main
-        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", "main"]
+        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", base_branch]
         pr_url = self.github.run_authenticated_gh(create_args).strip()
 
         return {
@@ -1234,7 +1243,8 @@ Respond only after the PR is created or updated:
 
             # 1. Fetch PR details early to fail fast
             pr_data = self.github.fetch_pr_details(pr_number)
-            base_branch = pr_data.get('base', {}).get('ref', 'main')
+            default_base = PROJECT_CONFIG.base_branch_name
+            base_branch = pr_data.get('base', {}).get('ref', default_base)
             head_ref = pr_data.get('head', {}).get('ref')
 
             if not head_ref:

@@ -45,7 +45,7 @@ def filter_ai_comments(comments: List[Dict[str, Any]], pr_number: int, comment_t
 
                 # If the user is a human but it doesn't have a clear AI signature,
                 # we'll fallback to their username if it's unknown.
-                if source == "unknown" and user_login not in ['github-actions[bot]', 'tech-dancer-bot'] and 'bot' not in user_login.lower():
+                if source == "unknown" and user_login not in ALLOWED_AI_BOTS and 'bot' not in user_login.lower():
                     source = f"user-{user_login}"
                 elif source == "unknown":
                     source = "github-actions" # generic bot

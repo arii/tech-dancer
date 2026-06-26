@@ -25,7 +25,10 @@ The following values are now surfaced in `dev-tools/project_config.json`:
 ## Remaining Blockers / Hardcoded Assumptions
 While most configuration is now parameterized, some assumptions remain:
 
-1. **Tool Dependencies**: Several scripts rely on `node` and `pnpm` being available in the environment to run TypeScript/JavaScript helpers (e.g., `scripts/detect-antipatterns.mjs`). These helpers are currently located outside of `dev-tools/`.
+1. **Tool Dependencies**:
+   - `node` and `pnpm`: Several scripts rely on these being available to run TypeScript/JavaScript helpers (e.g., `scripts/detect-antipatterns.mjs`). These helpers are currently located outside of `dev-tools/`.
+   - `jq`: `aggregate-prs.sh` requires `jq` to parse `project_config.json` and GitHub CLI output.
+   - `gh`: Many scripts rely on the GitHub CLI (`gh`) being installed and authenticated.
 2. **Environment Variables**: AI model calls still depend on `GITHUB_TOKEN`, `GH_TOKEN`, or `GEMINI_API_KEY` being set in the environment.
 3. **Repository Structure**: Some tools assume a standard layout (e.g., `src/`, `node_modules/`) which might vary between projects.
 4. **Shell Scripts**: The `.sh` files in `dev-tools/` may still contain hardcoded paths to scripts outside of the `dev-tools/` directory.
