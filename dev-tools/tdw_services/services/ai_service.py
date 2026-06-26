@@ -157,38 +157,27 @@ class AIClient:
 
             # Post-processing: Prevent version downgrades in resolved conflict
             try:
-                # Get diff of the resolved file against the previous version to detect version changes
-                # But since we are resolving a conflict, it's easier to just run the validator
-                # on the resolved content if it's a version-sensitive file.
+                # Files that define runtime/dependency versions
                 sensitive_files = [".nvmrc", ".node-version", "package.json", ".github/workflows/"]
-                if any(file_path.endswith(sf) or sf in file_path for sf in sensitive_files):
+                if any(sf in file_path for sf in sensitive_files):
                     from verify_versions import parse_diff, verify_changes
-                    # Construct a dummy diff to check against HEAD
-                    with open(file_path, 'r') as f:
-                        old_content = f.read()
 
-                    dummy_diff = f"--- a/{file_path}\n+++ b/{file_path}\n"
-                    # Simple heuristic: if it was a conflict, we check the NEW content against HEAD
-                    # We can use a simpler approach: check if any version in 'resolved' is lower than HEAD
-                    # For now, let's just log a warning if verify_versions would fail.
-                    # A more robust way is to use verify_versions.verify_changes on a synthesized diff.
-
-                    lines_old = old_content.splitlines()
-                    lines_new = resolved.splitlines()
-
-                    # We only care about lines that look like version assignments
-                    diff_lines = []
-                    for line in lines_new:
-                        if any(kw in line for kw in ["node", "pnpm", "uses:", "@v"]):
+                    # Synthesize a diff representing the new content to validate it against HEAD versions.
+                    # We treat lines in the new file as additions to ensure the validator
+                    # catches any version mentioned in the file that might be a downgrade from HEAD.
+                    diff_lines = [f"+++ b/{file_path}"]
+                    for line in resolved.splitlines():
+                        line = line.strip()
+                        # We only care about lines that look like version assignments/usage
+                        if any(kw in line for kw in ["node", "pnpm", "uses:", "@v", "packageManager"]):
                              diff_lines.append(f"+{line}")
 
-                    if diff_lines:
-                        # This is a bit of a hack but it allows us to reuse the validation logic
+                    if len(diff_lines) > 1:
+                        # Re-use the validation logic on the synthesized diff
                         findings = verify_changes(parse_diff("\n".join(diff_lines)))
                         if any(f["severity"] == "error" for f in findings):
                              log_error(f"AI-generated resolution for {file_path} contains version violations: {findings}")
-                             # If it's a hard block or downgrade, we might want to reject it or strip it.
-                             # For now, we'll block it to be safe.
+                             # Re-try or block to prevent regression
                              return False
             except Exception as e:
                 log_warn(f"Failed to post-process AI resolution for {file_path}: {e}")
