@@ -495,38 +495,66 @@ def get_stack_versions() -> Dict[str, str]:
     }
 
     try:
+        # Resolve Repo Source of Truth
         if os.path.exists(".node-version"):
-            with open(".node-version", "r") as f:
-                versions["node"] = f.read().strip().replace("v", "")
+            try:
+                with open(".node-version", "r") as f:
+                    v = f.read().strip().lstrip('v')
+                    if v: versions["node"] = v
+            except Exception: pass
         elif os.path.exists(".nvmrc"):
-            with open(".nvmrc", "r") as f:
-                versions["node"] = f.read().strip().replace("v", "")
+            try:
+                with open(".nvmrc", "r") as f:
+                    v = f.read().strip().lstrip('v')
+                    if v: versions["node"] = v
+            except Exception: pass
 
         if os.path.exists("package.json"):
-            with open("package.json", "r") as f:
-                pkg = json.load(f)
-                if "packageManager" in pkg:
-                    versions["pnpm"] = pkg["packageManager"].replace("pnpm@", "")
-                elif "engines" in pkg and "pnpm" in pkg["engines"]:
-                    versions["pnpm"] = pkg["engines"]["pnpm"]
+            try:
+                with open("package.json", "r") as f:
+                    pkg = json.load(f)
+                    if "packageManager" in pkg:
+                        versions["pnpm"] = pkg["packageManager"].replace("pnpm@", "")
+                    elif "engines" in pkg and "pnpm" in pkg["engines"]:
+                        versions["pnpm"] = pkg["engines"]["pnpm"]
 
-                if "engines" in pkg and "node" in pkg["engines"] and not os.path.exists(".node-version"):
-                     # Only override if explicit files aren't there
-                     versions["node"] = pkg["engines"]["node"]
+                    if "engines" in pkg and "node" in pkg["engines"] and not os.path.exists(".node-version"):
+                         versions["node"] = pkg["engines"]["node"]
+            except Exception: pass
 
         # Scan for common GHA versions in workflows
         workflow_dir = ".github/workflows"
         if os.path.exists(workflow_dir):
+            # Use packaging.version for robust comparison
+            try:
+                from packaging import version as pv
+            except ImportError:
+                pv = None
+
             for filename in os.listdir(workflow_dir):
-                if filename.endswith(".yml") or filename.endswith(".yaml"):
+                if not (filename.endswith(".yml") or filename.endswith(".yaml")):
+                    continue
+                try:
                     with open(os.path.join(workflow_dir, filename), "r") as f:
                         content = f.read()
-                        # Simple regex for actions
                         matches = re.findall(r"uses:\s+([\w\-/]+)@([\w\.]+)", content)
-                        for action, version in matches:
-                            if action.startswith("actions/"):
-                                # We keep the latest one we find for each action as a heuristic
-                                versions[action] = version
+                        for action, v_str in matches:
+                            if not action.startswith("actions/"): continue
+
+                            current_v = versions.get(action)
+                            if not current_v:
+                                versions[action] = v_str
+                                continue
+
+                            if pv:
+                                try:
+                                    if pv.parse(v_str.lstrip('v')) > pv.parse(current_v.lstrip('v')):
+                                        versions[action] = v_str
+                                except Exception:
+                                    if v_str > current_v: versions[action] = v_str
+                            elif v_str > current_v:
+                                versions[action] = v_str
+                except Exception: pass
 
     except Exception as e:
         log_warn(f"Failed to extract stack versions: {e}")

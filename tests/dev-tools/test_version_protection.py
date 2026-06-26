@@ -87,5 +87,21 @@ class TestVersionProtection(unittest.TestCase):
         # Should NOT have hard_block because of override
         self.assertFalse(any(f["type"] == "hard_block" for f in findings))
 
+    def test_skip_non_sensitive_files(self):
+        diff = """--- a/src/App.tsx
++++ b/src/App.tsx
+-    const version = "1.0.0";
++    const version = "0.9.0";"""
+        changes = parse_diff(diff)
+        self.assertEqual(len(changes), 0)
+
+    def test_synthesized_diff(self):
+        diff = """+++ b/package.json
++ "pnpm": "9.0.0" """
+        changes = parse_diff(diff)
+        self.assertEqual(len(changes), 1)
+        self.assertEqual(changes[0]["name"], "pnpm")
+        self.assertEqual(changes[0]["new"], "9.0.0")
+
 if __name__ == "__main__":
     unittest.main()

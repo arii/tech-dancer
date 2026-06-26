@@ -250,6 +250,7 @@ def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
 def verify_versions(ctx, diff_input):
     """Verify version changes in a diff for downgrades or hard blocks."""
     import subprocess
+    import tempfile
     script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'verify_versions.py')
 
     if not diff_input:
@@ -259,9 +260,15 @@ def verify_versions(ctx, diff_input):
         except Exception as e:
             err(ctx, f"Failed to get git diff: {e}")
 
-    cmd = [sys.executable, script_path, diff_input]
+    # Use a temporary file to avoid E2BIG/ARG_MAX issues with large diffs
+    with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp:
+        tmp.write(diff_input)
+        tmp_path = tmp.name
+
+    cmd = [sys.executable, script_path, tmp_path]
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True)
+        os.unlink(tmp_path)
         if proc.stdout:
             try:
                 findings = json.loads(proc.stdout)

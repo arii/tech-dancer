@@ -80,108 +80,72 @@ def parse_diff(diff_text: str) -> List[Dict]:
     PKG_JSON_VERSION_PATTERN = re.compile(r'"(node|pnpm|[\w\-\./@]+)":\s*"([\d\.\^x~<>=\| v]+)"')
     PM_PATTERN = re.compile(r'"packageManager":\s*"pnpm@([\d\.]+)"')
 
-    lines = diff_text.splitlines()
-    for i, line in enumerate(lines):
-        if line.startswith("--- a/"):
-            current_file = line[6:]
+    # Files we care about
+    SENSITIVE_FILES = [".nvmrc", ".node-version", "package.json", ".github/workflows/"]
+
+    hunks = re.split(r"^(?=--- )", diff_text, flags=re.MULTILINE)
+    for hunk in hunks:
+        if not hunk.strip(): continue
+
+        lines = hunk.splitlines()
+        current_file = None
+        for line in lines:
+            if line.startswith("--- a/"):
+                current_file = line[6:]
+                break
+            elif line.startswith("+++ b/"):
+                current_file = line[6:]
+                break
+
+        if not current_file or not any(sf in current_file for sf in SENSITIVE_FILES):
             continue
-        elif line.startswith("+++ b/"):
-            current_file = line[6:]
-            continue
 
-        # Detect single-line additions (for synthesized diffs in post-processing)
-        if line.startswith("+") and not line.startswith("+++"):
-            added_line = line[1:].strip()
+        removals = {} # name -> version
+        additions = {} # name -> version
 
-            # Check if this is part of a -/+ pair handled below
-            if i > 0 and lines[i-1].startswith("-"):
-                 continue
+        for line in lines:
+            if line.startswith("--- ") or line.startswith("+++ ") or line.startswith("@@ "):
+                continue
 
-            m_add = ACTION_PATTERN.search(added_line)
-            if m_add:
-                changes.append({
-                    "file": current_file or "unknown",
-                    "type": "action",
-                    "name": m_add.group(1),
-                    "old": "unknown",
-                    "new": m_add.group(2)
-                })
-
-            m_add = PKG_JSON_VERSION_PATTERN.search(added_line)
-            if m_add:
-                changes.append({
-                    "file": current_file or "unknown",
-                    "type": "dependency",
-                    "name": m_add.group(1),
-                    "old": "unknown",
-                    "new": m_add.group(2)
-                })
-
-            m_add = PM_PATTERN.search(added_line)
-            if m_add:
-                changes.append({
-                    "file": current_file or "unknown",
-                    "type": "dependency",
-                    "name": "pnpm",
-                    "old": "unknown",
-                    "new": m_add.group(1)
-                })
-
-        # Detect removals
-        if line.startswith("-") and not line.startswith("---"):
-            removed_line = line[1:].strip()
-            # Look ahead for a corresponding '+' line
-            if i + 1 < len(lines) and lines[i+1].startswith("+"):
-                added_line = lines[i+1][1:].strip()
-
-                # Check for GitHub Action change
-                m_rem = ACTION_PATTERN.search(removed_line)
-                m_add = ACTION_PATTERN.search(added_line)
-                if m_rem and m_add and m_rem.group(1) == m_add.group(1):
-                    changes.append({
-                        "file": current_file,
-                        "type": "action",
-                        "name": m_rem.group(1),
-                        "old": m_rem.group(2),
-                        "new": m_add.group(2)
-                    })
-
-                # Check for package.json change
-                m_rem = PKG_JSON_VERSION_PATTERN.search(removed_line)
-                m_add = PKG_JSON_VERSION_PATTERN.search(added_line)
-                if m_rem and m_add and m_rem.group(1) == m_add.group(1):
-                     changes.append({
-                        "file": current_file,
-                        "type": "dependency",
-                        "name": m_rem.group(1),
-                        "old": m_rem.group(2),
-                        "new": m_add.group(2)
-                    })
-
-                # Check for packageManager
-                m_rem = PM_PATTERN.search(removed_line)
-                m_add = PM_PATTERN.search(added_line)
-                if m_rem and m_add:
-                     changes.append({
-                        "file": current_file,
-                        "type": "dependency",
-                        "name": "pnpm",
-                        "old": m_rem.group(1),
-                        "new": m_add.group(1)
-                    })
-
-                # Check for simple version files (.nvmrc, .node-version)
+            if line.startswith("-"):
+                content = line[1:].strip()
+                # Check Actions
+                m = ACTION_PATTERN.search(content)
+                if m: removals[m.group(1)] = m.group(2)
+                # Check Dependencies
+                m = PKG_JSON_VERSION_PATTERN.search(content)
+                if m: removals[m.group(1)] = m.group(2)
+                # Check pnpm
+                m = PM_PATTERN.search(content)
+                if m: removals["pnpm"] = m.group(1)
+                # Check node files
                 if current_file in [".nvmrc", ".node-version"]:
-                    old_v = removed_line.replace("v", "")
-                    new_v = added_line.replace("v", "")
-                    if old_v != new_v:
-                        changes.append({
-                            "file": current_file,
-                            "type": "runtime",
-                            "name": "node",
-                            "old": old_v,
-                            "new": new_v
-                        })
+                    removals["node"] = content.replace("v", "")
+
+            elif line.startswith("+"):
+                content = line[1:].strip()
+                m = ACTION_PATTERN.search(content)
+                if m: additions[m.group(1)] = m.group(2)
+                m = PKG_JSON_VERSION_PATTERN.search(content)
+                if m: additions[m.group(1)] = m.group(2)
+                m = PM_PATTERN.search(content)
+                if m: additions["pnpm"] = m.group(1)
+                if current_file in [".nvmrc", ".node-version"]:
+                    additions["node"] = content.replace("v", "")
+
+        # Correlate changes
+        for name, new_v in additions.items():
+            old_v = removals.get(name, "unknown")
+            type_val = "action" if "/" in name and "pnpm" not in name else "dependency"
+            if name == "node" or current_file in [".nvmrc", ".node-version"]: type_val = "runtime"
+
+            changes.append({
+                "file": current_file,
+                "type": type_val,
+                "name": name,
+                "old": old_v,
+                "new": new_v
+            })
 
     return changes
 
@@ -223,14 +187,15 @@ def verify_changes(changes: List[Dict]) -> List[Dict]:
 
         # 3. Node.js Hard Block
         if c["name"] == "node":
-             # Any modification to Node is a block unless overridden
-             if os.environ.get("ALLOW_NODE_VERSION_CHANGE") != "true":
-                 findings.append({
-                    "severity": "error",
-                    "file": c["file"],
-                    "message": f"Hard block: Node.js version modification detected ({c['old']} -> {c['new']}). Modification is forbidden unless ALLOW_NODE_VERSION_CHANGE=true.",
-                    "type": "hard_block"
-                })
+             # Only trigger hard block if the version is ACTUALLY changing from HEAD
+             if head_v and compare_versions(c["new"], head_v) != 0:
+                 if os.environ.get("ALLOW_NODE_VERSION_CHANGE") != "true":
+                     findings.append({
+                        "severity": "error",
+                        "file": c["file"],
+                        "message": f"Hard block: Node.js version modification detected ({head_v} -> {c['new']}). Modification is forbidden unless ALLOW_NODE_VERSION_CHANGE=true.",
+                        "type": "hard_block"
+                    })
 
     return findings
 
