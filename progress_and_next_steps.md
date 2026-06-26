@@ -63,3 +63,5 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 
 *Note: Any future failing `td` CLI commands will be logged here with their arguments, error output, and context for debugging.*
 
+*2026-06-26T14:40:56-07:00* **MCP tool call failure**: Attempted `github.get_pr_diff` via MCP with arguments `{\"pr_number\":3011}` which did not match expected schema (`prNumber`). Resulted in error `invalid tool call: invalid_args`.
+
