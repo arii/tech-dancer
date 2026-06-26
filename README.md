@@ -67,3 +67,19 @@ firebase deploy --only firestore:rules
 ```
 
 The rules are defined in `firestore.rules` and ensure that users can only access their own audit reports.
+
+## Testing
+
+Playwright is used for End-to-End testing.
+
+### Visual Regression Snapshots
+
+We use Playwright's `toHaveScreenshot` feature with a custom `snapshotPathTemplate` defined in `playwright.config.ts`.
+This ensures snapshots are structured cleanly into subfolders by the Playwright project name (e.g., `chromium/`, `mobile-chrome/`, `mobile-safari/`).
+
+Old snapshots that had suffixes like `-linux.png` inside the top-level snapshot directories are obsolete. Please don't check them in!
+
+To clean up any old, orphaned `-linux.png` snapshots locally, you can run:
+```bash
+find tests -type f -name "*-linux.png" -delete
+```
