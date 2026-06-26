@@ -56,16 +56,10 @@ env:
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
 jobs:
-  verify-changes:
-    uses: ./.github/workflows/reusable-gate.yml
-    permissions:
-      pull-requests: write
-      contents: write
-
   lint-typecheck:
     name: Lint & Type Check
-    needs: verify-changes
-    if: needs.verify-changes.outputs.has_changes == 'true'
+    outputs:
+      has_changes: ${{ steps.check_diff.outputs.has_changes }}
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -78,13 +72,45 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Verify Diff Composition
+        id: check_diff
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        shell: bash
+        run: |
+          # Define the diff range based on event type
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "$BASE_REF"
+            RANGE="origin/$BASE_REF...HEAD"
+          else
+            RANGE="$BEFORE_SHA"
+            # Fallback to parent if range is missing or null
+            if [ -z "$RANGE" ] || [ "$RANGE" = "0000000000000000000000000000000000000000" ]; then
+              RANGE="HEAD~1"
+              if ! git rev-parse --verify HEAD~1 >/dev/null 2>&1; then RANGE=""; fi
+            fi
+          fi
+
+          # Perform the diff check
+          if [ -n "$RANGE" ] && git diff --quiet "$RANGE" HEAD; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No relevant code changes detected. Skipping downstream steps."
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node and pnpm
+        if: steps.check_diff.outputs.has_changes == 'true'
         uses: ./.github/actions/setup-node-pnpm
 
       - name: Setup Workspace
+        if: steps.check_diff.outputs.has_changes == 'true'
         uses: ./.github/actions/setup-workspace
 
       - name: Validate Runtime
+        if: steps.check_diff.outputs.has_changes == 'true'
         shell: bash
         run: |
           echo "::group::Validate Runtime"
@@ -93,6 +119,7 @@ jobs:
           pnpm run doctor
 
       - name: Verify lockfile integrity
+        if: steps.check_diff.outputs.has_changes == 'true'
         shell: bash
         run: |
           echo "::group::pnpm install"
@@ -107,6 +134,7 @@ jobs:
           fi
 
       - name: Verify Agent Context
+        if: steps.check_diff.outputs.has_changes == 'true'
         continue-on-error: true
         run: |
           pnpm run agent:prime
@@ -116,15 +144,19 @@ jobs:
           fi
 
       - name: Lint
+        if: steps.check_diff.outputs.has_changes == 'true'
         run: pnpm run lint
 
       - name: Type-check
+        if: steps.check_diff.outputs.has_changes == 'true'
         run: pnpm run type-check
 
       - name: Run Unit Tests - Vitest
+        if: steps.check_diff.outputs.has_changes == 'true'
         run: pnpm test
 
       - name: Run CLI Unit Tests
+        if: steps.check_diff.outputs.has_changes == 'true'
         shell: bash
         run: |
           echo "::group::Pytest"
@@ -132,9 +164,11 @@ jobs:
           python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
+        if: steps.check_diff.outputs.has_changes == 'true'
         run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
+        if: steps.check_diff.outputs.has_changes == 'true'
         shell: bash
         run: |
           echo "::group::Ratchet Any"
@@ -147,8 +181,8 @@ jobs:
 
   audit:
     name: Anti-Pattern Audit
-    needs: verify-changes
-    if: needs.verify-changes.outputs.has_changes == 'true'
+    needs: lint-typecheck
+    if: needs.lint-typecheck.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -199,8 +233,8 @@ jobs:
 
   test-build:
     name: Build & E2E
-    needs: [verify-changes, lint-typecheck]
-    if: needs.verify-changes.outputs.has_changes == 'true'
+    needs: lint-typecheck
+    if: needs.lint-typecheck.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -247,6 +281,7 @@ jobs:
           VITE_BASE_PATH=/ pnpm run test:e2e
 
       - name: Run Lighthouse CI
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           set -eu
           VITE_BASE_PATH="/"
@@ -278,9 +313,9 @@ jobs:
           if-no-files-found: ignore
 
   impact-analysis:
-    needs: [verify-changes, lint-typecheck, audit, test-build]
+    needs: [lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
-    if: needs.verify-changes.outputs.has_changes == 'true'
+    if: needs.lint-typecheck.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -308,10 +343,28 @@ jobs:
 
       - name: Deployment Impact Analysis
         run: pnpm run impact:analysis
+
+      - name: Get Main branch SHA
+        id: main_sha
+        run: |
+          git fetch origin main
+          echo "sha=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Main build
+        id: cache-main
+        uses: actions/cache@v4
+        with:
+          path: .tmp-main/dist
+          key: ${{ runner.os }}-main-build-${{ steps.main_sha.outputs.sha }}
+
+      - name: Ensure .tmp-main directory exists
+        run: mkdir -p .tmp-main
+
       - name: Build Main
         env:
           DISABLE_MINIFY: true
         run: pnpm run impact:build-main
+
       - name: Build PR
         env:
           VITE_BASE_PATH: /

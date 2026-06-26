@@ -15,6 +15,8 @@ runs:
   steps:
     - name: Setup pnpm
       uses: pnpm/action-setup@v6
+      with:
+        version: ${{ inputs.pnpm-version }}
 
     - name: Setup Node.js
       uses: actions/setup-node@v6
@@ -22,13 +24,3 @@ runs:
         cache: 'pnpm'
         cache-dependency-path: pnpm-lock.yaml
         node-version-file: ${{ inputs.node-version-file }}
-
-    - name: Enable Corepack
-      run: corepack enable
-      shell: bash
-
-    - name: Activate pinned pnpm
-      env:
-        PNPM_VERSION: ${{ inputs.pnpm-version }}
-      run: corepack prepare pnpm@"$PNPM_VERSION" --activate
-      shell: bash

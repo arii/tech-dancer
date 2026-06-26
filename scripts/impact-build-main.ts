@@ -16,7 +16,10 @@ function removeExistingWorktree(): void {
   if (!fs.existsSync(worktreePath)) return;
 
   try {
-    run('git', ['worktree', 'remove', '--force', worktreePath]);
+    // If we're not using a cached build, remove the worktree to ensure a clean slate
+    if (!fs.existsSync(path.join(worktreePath, 'dist'))) {
+      run('git', ['worktree', 'remove', '--force', worktreePath]);
+    }
   } catch {
     fs.rmSync(worktreePath, { recursive: true, force: true });
     run('git', ['worktree', 'prune']);
@@ -31,8 +34,12 @@ try {
   run('git', ['fetch', 'origin', 'main']);
 }
 
-run('git', ['worktree', 'add', worktreePath, baseRef]);
-run('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], worktreePath);
-run('pnpm', ['run', 'build'], worktreePath);
+if (!fs.existsSync(path.join(worktreePath, 'dist'))) {
+  run('git', ['worktree', 'add', worktreePath, baseRef]);
+  run('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], worktreePath);
+  run('pnpm', ['run', 'build'], worktreePath);
+} else {
+  console.log('✅ Found existing dist in worktree (restored from cache). Skipping build.');
+}
 
 console.log(`✅ Built base branch worktree at ${worktreePath}`);
