@@ -1,0 +1,125 @@
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:gemini-review
+      - name: Visual review github models agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:github-models-review
+      - name: Report Summary
+        if: always()
+        run: |
+          if [ -f artifacts/deployment-review.md ]; then
+            cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/deployment-review.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          elif [ -f artifacts/impact-analysis/impact.md ]; then
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/impact-analysis/impact.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          else
+            {
+              echo "## Deployment Impact Analysis"
+              echo "No impact report found."
+            } >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              echo "No impact report found."
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          fi
+
+          if [ -f artifacts/gemini-review.md ]; then
+            {
+              echo ""
+              cat artifacts/gemini-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/github-models-review.md ]; then
+            {
+              echo ""
+              cat artifacts/github-models-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/gemini-code-review.md ]; then
+            {
+              echo ""
+              cat artifacts/gemini-code-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/github-models-code-review.md ]; then
+            {
+              echo ""
+              cat artifacts/github-models-code-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          # Aggregate verdict — fail the step explicitly if any verdict file says failed
+          FAILED=0
+          if [ "$FAILED" -eq 0 ]; then
+            for f in artifacts/*-verdict.json; do
+              [ -f "$f" ] || continue
+              PASSED=$(jq -r '.passed' "$f" || echo "error")
+              if [ "$PASSED" = "false" ]; then
+                HIGH=$(jq -r '.highCount' "$f" || echo "unknown")
+                echo "❌ Review failed: $HIGH HIGH severity issues found ($f)" >&2
+                FAILED=1
+              elif [ "$PASSED" = "error" ]; then
+                echo "❌ Review failed: Could not parse verdict file ($f)" >&2
+                FAILED=1
+              fi
+            done
+          fi
+          exit $FAILED
+      - name: Parse Jules session ID from PR description
+        if: always()
+        id: parse_jules
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          TASK_ID=$(echo "$PR_BODY" \
+            | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
+            | head -1)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Send impact analysis to Jules session
+        if: always() && steps.parse_jules.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: python3 scripts/send-jules-impact.py
+
+      - name: Update Impact Analysis Feedback (Final Result)
+        if: always()
+        uses: ./.github/actions/update-pr-comment
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          status_line: '✅ **Impact Analysis Complete**'
+          impact_body: ${{ env.IMPACT_BODY }}
+
+      - name: Merge AI Logs into Artifacts
+        if: always()
+        run: |
+          # Safely backup legacy logs
+          if [ -f dev-tools/logs/ai/review-run.json ]; then
+            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          fi
+          if [ -f artifacts/review-run.json ]; then
+            mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          fi
+          mkdir -p artifacts/logs/ai
+          cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true

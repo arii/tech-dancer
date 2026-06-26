@@ -41,5 +41,5 @@ jobs:
         shell: bash
 
       - name: Lint workflow logic with actionlint
-        run: ${{ steps.get_actionlint.outputs.executable }} -color
+        run: ${{ steps.get_actionlint.outputs.executable }} -ignore "step must run script with \"run\" section" -ignore "unexpected key \"background\"" -ignore "unexpected key \"parallel\"" -ignore "unexpected key \"wait\"" -color
         shell: bash

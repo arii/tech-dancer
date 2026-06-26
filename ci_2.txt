@@ -1,0 +1,100 @@
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      # Setup dependencies once and use caching for speedup.
+      - uses: actions/checkout@v7
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          echo "::group::pnpm install"
+          trap 'echo "::endgroup::"' EXIT
+          pnpm install --frozen-lockfile --prefer-offline
+
+      - parallel: # actionlint-disable syntax-check
+          - name: UI Anti-Pattern Audit - Gate
+            shell: bash
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              echo "::group::Audit"
+              trap 'echo "::endgroup::"' EXIT
+              # Ensure local python bin is on path for td-cli
+              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+              if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
+              td-cli gh audit-gate
+
+          - name: Design Token Compliance
+            run: |
+              # Check for raw hex colors not in tokens.css
+              VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
+                --include="*.tsx" \
+                | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
+              if [ "$VIOLATIONS" -gt 0 ]; then
+                echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
+                grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
+                exit 1
+              fi
+              echo "✅ Design token compliance passed."
+
+  test-build:
+    name: Build & E2E
+    needs: [verify-changes, lint-typecheck]
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    env:
+      NODE_ENV: production
+      REPO_NAME: ${{ github.event.repository.name }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      # Setup dependencies once and use caching for speedup.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Build App
+        run: |
+          # Build with root base path for Playwright preview tests.
+          # Playwright runs with VITE_BASE_PATH=/, so dist must use root-relative assets.
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+
+
+      - name: Bundle Size Check
+        id: bundle-size
+        background: true # actionlint-disable syntax-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td-cli gh bundle-size
+
+      - name: Run Playwright Smoke Test
+        run: |
