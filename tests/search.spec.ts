@@ -7,7 +7,9 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should open and close search modal via button', async ({ page }) => {
-    const searchButton = page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    const isMobile = await page.getByRole('button', { name: 'Open menu' }).isVisible();
+    if (isMobile) { await page.getByRole('button', { name: 'Open menu' }).click(); }
+    const searchButton = isMobile ? page.getByRole('dialog', { name: 'Navigation menu' }).locator('button:has-text("Search")') : page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
     await searchButton.click();
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
@@ -17,7 +19,10 @@ test.describe('Global Search Modal', () => {
   });
 
   test('should close search modal when pressing Escape', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    const isMobile = await page.getByRole('button', { name: 'Open menu' }).isVisible();
+    if (isMobile) { await page.getByRole('button', { name: 'Open menu' }).click(); }
+    const searchButton = isMobile ? page.getByRole('dialog', { name: 'Navigation menu' }).locator('button:has-text("Search")') : page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    await searchButton.click();
     await expect(page.getByPlaceholder('Search BoomTick guides, gear, and posts')).toBeVisible();
 
     await page.keyboard.press('Escape');
@@ -27,7 +32,10 @@ test.describe('Global Search Modal', () => {
 // Test removed due to gear page decommissioning
 
   test('should close search modal when a search result is clicked', async ({ page }) => {
-    await page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' }).click();
+    const isMobile = await page.getByRole('button', { name: 'Open menu' }).isVisible();
+    if (isMobile) { await page.getByRole('button', { name: 'Open menu' }).click(); }
+    const searchButton = isMobile ? page.getByRole('dialog', { name: 'Navigation menu' }).locator('button:has-text("Search")') : page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('button', { name: 'Search' });
+    await searchButton.click();
     const searchInput = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await searchInput.fill('ai');
 
@@ -45,7 +53,9 @@ test.describe('Search and Filter URL Persistence', () => {
     await page.goto('./');
     await expect(page.locator('main')).toBeVisible();
 
-    const searchButton = page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
+    const isMobileNav = await page.getByRole('button', { name: 'Open menu' }).isVisible();
+    if (isMobileNav) { await page.getByRole('button', { name: 'Open menu' }).click(); }
+    const searchButton = isMobileNav ? page.getByRole('dialog', { name: 'Navigation menu' }).locator('button:has-text("Search")') : page.locator('button').filter({ has: page.locator('svg.lucide-search') }).first();
     await searchButton.click();
 
     const searchInput = page.getByPlaceholder(/Search BoomTick/i);
