@@ -347,14 +347,18 @@ jobs:
       - name: Get Main branch SHA
         id: main_sha
         run: |
-          git fetch origin main
+          git fetch origin main --depth=1
           echo "sha=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
+
+      - name: Create Main worktree
+        run: |
+          git worktree add .tmp-main origin/main
 
       - name: Cache Main build
         id: cache-main
         uses: actions/cache@v4
         with:
-          path: artifacts/main-dist
+          path: .tmp-main/dist
           key: ${{ runner.os }}-main-build-${{ steps.main_sha.outputs.sha }}
 
       - name: Build Main

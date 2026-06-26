@@ -16,6 +16,8 @@ The CI pipeline was experiencing significant latency, with jobs taking over 15 m
 - **Gate Inlining:** Merged the `verify-changes` logic directly into the `lint-typecheck` job. This eliminates the overhead of spinning up a separate runner just to check for changes.
 - **Downstream Dependency Optimization:** Updated `audit`, `test-build`, and `impact-analysis` jobs to depend on the `has_changes` output from the inlined gate.
 - **Main Build Caching:** Implemented `actions/cache` in the `impact-analysis` job to store the `main` branch build artifact. This avoids rebuilding the base branch on every PR run, saving minutes of build time.
+    - **Strategy:** The cache is keyed on the `main` branch HEAD SHA. This ensures that the cache is invalidated whenever the base branch receives new commits.
+    - **Restoration:** To avoid `git worktree add` errors on non-empty directories, the worktree is created *before* the cache is restored. The `impact-build-main.ts` script checks for the existence of `dist/` and skips the heavy installation/build steps on cache hits.
 - **Lighthouse CI Optimization:** Restricted Lighthouse CI to run only on pushes to the `main` branch, removing it from the critical path for PR feedback.
 
 ### 3. Script Improvements
