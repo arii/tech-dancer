@@ -7,7 +7,7 @@ runs:
       run: pip install -e ./boomtick-pkg/cli --break-system-packages
       shell: bash
     - name: Build MCP server
-      run: pnpm --filter @boomtick/mcp build --engine-strict=false
+      run: cd boomtick-pkg/mcp && npx tsc
       shell: bash
     - name: Verify td CLI
       run: td doctor
