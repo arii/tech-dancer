@@ -60,6 +60,7 @@ const appId = typeof __app_id !== 'undefined' ? __app_id : 'ux-auditor-v2';
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
 
 import { VIEWPORTS } from '@/constants/visual-viewports';
+import { DEFAULT_GEMINI_MODEL } from '@/lib/geminiModelConfig';
 
 export { VIEWPORTS };
 
@@ -280,7 +281,7 @@ export function useUXAuditor() {
         }
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${DEFAULT_GEMINI_MODEL}:generateContent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

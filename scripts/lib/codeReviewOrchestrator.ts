@@ -649,7 +649,11 @@ export async function orchestrateCodeReview(
 
   for (const res of allResults) {
     if (res.feedback) {
-      aggregatedFeedback += `\n\n#### [${res.role}] Review\n${res.feedback}`;
+      if (res.feedback.startsWith('Error: failed to execute')) {
+        console.warn(`⚠️  Skipping failed review output for ${res.role}`);
+      } else {
+        aggregatedFeedback += `\n\n#### [${res.role}] Review\n${res.feedback}`;
+      }
     }
     if (res.state?.findings) {
       aggregatedFindings.push(...res.state.findings);

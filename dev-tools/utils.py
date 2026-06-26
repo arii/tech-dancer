@@ -55,6 +55,10 @@ def get_ai_model() -> str:
         return variant
     return _get_model_config("AI_MODEL", "ai_synthesis_model", "gpt-4o-mini")
 
+def get_gemini_model() -> str:
+    """Dynamic getter for the Gemini model."""
+    return _get_model_config("GEMINI_MODEL", "ai_synthesis_model", "gemini-2.5-flash-lite")
+
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
     match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
@@ -190,7 +194,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         return None
 
     llm = ChatGoogleGenerativeAI(
-        model=model or "gemini-2.5-flash-lite",
+        model=model or get_gemini_model(),
         google_api_key=api_key,
         temperature=0.7,
         max_retries=max_retries,
