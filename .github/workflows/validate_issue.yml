@@ -8,8 +8,6 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
     permissions:
       issues: write
       contents: read

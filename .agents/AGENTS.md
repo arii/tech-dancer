@@ -14,7 +14,7 @@ Before executing **any** command, agents MUST:
    `file_tree`, `cli_schema`, current feature flags, and metadata. This file is
    built by `scripts/build-repo-context.py` and kept fresh by the git hooks in
    `.githooks/`.
-2. **Consult `dev-tools/cli-schema.json`** — canonical authority for local CLI
+2. **Consult `boomtick-pkg/cli/dev_tools/cli-schema.json`** — canonical authority for local CLI
    commands. Never guess flags. Never run `--help`. The schema is also embedded
    in `.agent-context.json` under the `cli_schema` key, so a single read of that
    file covers both.
@@ -37,7 +37,7 @@ Calling raw bash (Tier 3) skips steps 1 and 2.
 
 ```bash
 # ❌ Wrong — bypasses MCP, no context injection, no index hydration
-python3 dev-tools/td_cli.py gh pr-diff 2280
+python3 boomtick-pkg/cli/dev_tools/td_cli.py gh pr-diff 2280
 
 # ✅ Correct — MCP hydrates .agent-context.json, calls td_cli.py internally
 github.get_pr_diff(pr_number=2280)
@@ -52,7 +52,7 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 | Tier | Tool | When to Use |
 | :--- | :--- | :--- |
 | **Tier 1** | `boomtick-mcp` tools | Always — primary entry point for all repo and GitHub operations |
-| **Tier 2** | `dev-tools/td_cli.py` | Only when a Tier 1 tool is unavailable or the CLI provides logic not yet exposed via MCP |
+| **Tier 2** | `boomtick-pkg/cli/dev_tools/td_cli.py` | Only when a Tier 1 tool is unavailable or the CLI provides logic not yet exposed via MCP |
 | **Tier 3** | Raw bash / `gh` CLI | Last resort — only when no Tier 1 or Tier 2 tool exists for the task |
 
 ---
