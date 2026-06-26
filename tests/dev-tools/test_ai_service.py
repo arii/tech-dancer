@@ -5,9 +5,6 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../dev-tools')))
 
-# Mock the entire utils module which is imported in ai_service
-sys.modules['utils'] = MagicMock()
-
 from tdw_services.services.ai_service import AIClient
 
 class TestAIService(unittest.TestCase):

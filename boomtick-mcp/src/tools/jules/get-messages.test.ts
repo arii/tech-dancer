@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getJulesMessagesHandler } from "./get-messages.js";
+import { setupTestEnv, teardownTestEnv } from "../../lib/test-utils.js";
 
 describe("getJulesMessagesHandler", () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
+    setupTestEnv();
     global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
@@ -32,6 +34,7 @@ describe("getJulesMessagesHandler", () => {
   });
 
   afterEach(() => {
+    teardownTestEnv();
     global.fetch = originalFetch;
   });
 

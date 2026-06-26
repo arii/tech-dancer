@@ -8,8 +8,10 @@ import json
 import base64
 import argparse
 from typing import Optional, List, Dict
+from dev_tools_sdk.config import load_project_config
 
-VISION_MODEL = os.environ.get("VISION_MODEL", "gpt-4o")
+PROJECT_CONFIG = load_project_config()
+VISION_MODEL = os.environ.get("VISION_MODEL", PROJECT_CONFIG.ai_vision_model)
 
 def call_ai(prompt: str, paths: List[str]) -> Optional[str]:
     images = []

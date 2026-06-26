@@ -1,8 +1,30 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
 # WARNING: Destructive operation - Modifies local git tracking state, pushes upstream branches, and generates remote Pull Requests.
 if [ "$#" -lt 2 ]; then echo "Usage: $0 <new-branch-name> <pr1> <pr2> ..."; exit 1; fi
-T_BR="$1"; shift; PRs=("$@"); git checkout main && git pull origin main && git checkout -b "$T_BR"
+
+# Load base branch from project_config.json if possible, fallback to origin/main
+CONFIG_FILE="$(dirname "${BASH_SOURCE[0]}")/project_config.json"
+BASE_BRANCH="origin/main"
+if [ -f "$CONFIG_FILE" ]; then
+    # Silently attempt to load base_branch using jq if available
+    if command -v jq &> /dev/null; then
+        if LOADED_BRANCH=$(jq -r '.base_branch' "$CONFIG_FILE" 2>/dev/null); then
+            if [ "$LOADED_BRANCH" != "null" ] && [ -n "$LOADED_BRANCH" ]; then
+                BASE_BRANCH="$LOADED_BRANCH"
+            fi
+        else
+            echo "⚠️ Warning: Failed to parse '$CONFIG_FILE'. Using default base branch '$BASE_BRANCH'." >&2
+        fi
+    else
+        echo "⚠️ Warning: 'jq' not found. Cannot parse '$CONFIG_FILE'. Using default base branch '$BASE_BRANCH'." >&2
+    fi
+fi
+# Extract name without remote prefix (handles origin/main, upstream/develop, etc)
+BASE_BRANCH_NAME=$(echo "$BASE_BRANCH" | sed 's/.*\///')
+
+T_BR="$1"; shift; PRs=("$@"); git checkout "$BASE_BRANCH_NAME" && git pull origin "$BASE_BRANCH_NAME" && git checkout -b "$T_BR"
 P_BODY=""
 for pr in "${PRs[@]}"; do
     DATA=$(gh pr view "$pr" --json headRefName,body,title --jq '.')
@@ -17,8 +39,7 @@ for pr in "${PRs[@]}"; do
             exit 1
         fi
 
-        # we can just use word splitting for the arguments
-        if ! python3 "$(dirname "${BASH_SOURCE[0]}")/mergellama.py" $CONFLICTED_FILES; then
+        if ! td-cli gh resolve; then
             echo "CRITICAL: Conflict resolution failed in PR #$pr"
             git merge --abort
             exit 1
@@ -33,4 +54,4 @@ for pr in "${PRs[@]}"; do
     fi
     P_BODY="${P_BODY}Closes #$pr"$'\n\n'"### Description from PR #$pr ($TITLE):"$'\n'"$BODY"$'\n\n'"---"$'\n'
 done
-git push -u origin "$T_BR" && gh pr create --title "Aggregated Feature: $T_BR" --body "$P_BODY" --head "$T_BR" --base main
+git push -u origin "$T_BR" && gh pr create --title "Aggregated Feature: $T_BR" --body "$P_BODY" --head "$T_BR" --base "$BASE_BRANCH_NAME"

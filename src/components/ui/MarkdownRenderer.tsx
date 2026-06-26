@@ -7,13 +7,20 @@ import rehypeSanitize from 'rehype-sanitize';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
-import type { TextProps, StackProps, GridProps } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { normalizeAsset } from '@/lib/content';
 import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
 import { MARKDOWN_SANITIZATION_SCHEMA } from '@/lib/constants/markdown-schema';
+
+const ALLOWED_PROPS = new Set([
+  'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
+  'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'marginX', 'marginY',
+  'width', 'height', 'display', 'border', 'radius', 'surface', 'shadow', 'maxWidth', 'minWidth',
+  'overflow', 'gap', 'span', 'cols', 'rows', 'direction', 'align', 'justify',
+  'variant', 'size', 'weight', 'color', 'uppercase', 'intent', 'tracking', 'leading', 'as'
+]);
 
 interface MarkdownRendererProps {
   content: string;
@@ -31,6 +38,45 @@ const preprocessMarkdown = (content: string): string => {
   );
 };
 
+/**
+ * Parses a prop value from a markdown tag.
+ * Markdown attributes are always strings when parsed via rehype-raw,
+ * but we want to support JSX-like syntax for numbers, booleans, and responsive objects.
+ * e.g. cols="{{ base: 1, md: 3 }}" or gap="{6}"
+ */
+function parseProp<T>(val: unknown): T {
+  if (typeof val !== 'string') return val as T;
+  const trimmed = val.trim();
+
+  // Handle JSX-style curly braces: {1} or {{base: 1}}
+  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    const inner = trimmed.slice(1, -1).trim();
+
+    try {
+      // Safely parse JSON strings by converting non-quoted keys to quoted
+      // e.g. { base: 1, md: 3 } -> { "base": 1, "md": 3 }
+      let jsonStr = inner;
+      if (!inner.startsWith('{') && inner.startsWith("'") && inner.endsWith("'")) {
+        jsonStr = `"${inner.slice(1, -1)}"`;
+      } else if (inner.startsWith('{')) {
+        jsonStr = inner
+          .replace(/(?:^|[{,]\s*)([a-zA-Z0-9_]+)\s*:/g, (match, key) => match.replace(key, `"${key}"`))
+          .replace(/(?<![a-zA-Z])'|'(?![a-zA-Z])/g, '"');
+      }
+      return JSON.parse(jsonStr) as T;
+    } catch (e) {
+      console.warn('MarkdownRenderer: Failed to parse prop expression:', inner, e);
+      return inner as T;
+    }
+  }
+
+  // Auto-convert plain numeric strings (e.g. margin="4")
+  const num = Number(trimmed);
+  if (trimmed !== '' && !Number.isNaN(num)) return num as T;
+
+  return val as T;
+}
+
 const RenderNotice = (props: { type?: string; id?: string; children?: React.ReactNode }) => {
   if (props.type === 'affiliate' && props.id) {
     const link = affiliateManager.getLink(props.id);
@@ -44,6 +90,29 @@ const RenderNotice = (props: { type?: string; id?: string; children?: React.Reac
   }
   return <Notice type={props.type as 'info' | 'warning'}>{props.children}</Notice>;
 };
+
+/**
+ * Processes all incoming markdown attributes through parseProp to ensure
+ * numbers, booleans, and objects are correctly converted.
+ * Filters out internal markdown metadata and validates against a whitelist.
+ */
+function propMap<T>(props: Record<string, unknown>): T {
+  const result: Record<string, unknown> = {};
+  Object.entries(props).forEach(([key, value]) => {
+    // node is internal metadata, children should remain untouched
+    if (key === 'node') return;
+    if (key === 'children') {
+      result[key] = value;
+      return;
+    }
+
+    // Strictly validate against whitelist of allowed props to prevent injection
+    if (ALLOWED_PROPS.has(key)) {
+      result[key] = parseProp(value);
+    }
+  });
+  return result as T;
+}
 
 const RenderBlockquote = ({ children, node: _node, ...props }: { children: React.ReactNode, node?: unknown }) => {
   // Extract bold prefix (e.g. **Implemented:** or **Pattern:**) as the label
@@ -66,7 +135,7 @@ const RenderBlockquote = ({ children, node: _node, ...props }: { children: React
     }
   }
   return (
-    <Box border surface="warning" padding={6} marginY={12} radius="md">
+    <Box border surface="warning" padding={6} marginY={12} radius="lg">
       <Text variant="mono" size="micro" weight="font-bold" intent="warning" tracking="widest" uppercase marginBottom={3} display="block">
         {label}
       </Text>
@@ -105,7 +174,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             as="img"
             src={diagramUrl}
             alt="Workflow Diagram"
-            radius="md"
+            radius="lg"
             maxWidth="full"
             maxHeight={96}
             className="object-contain"
@@ -189,9 +258,15 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           [rehypeSanitize, MARKDOWN_SANITIZATION_SCHEMA]
         ]}
         components={{
-          Grid: ({ node: _node, ...props }: GridProps & { node?: unknown }) => <Grid {...props} />,
-          Stack: ({ node: _node, ...props }: StackProps & { node?: unknown }) => <Stack {...props} />,
-          Text: ({ node: _node, ...props }: TextProps & { node?: unknown }) => <Text {...props} />,
+          // Explicitly map layout primitives for clarity and type safety
+          Grid: (props) => <Grid {...propMap(props)} />,
+          grid: (props) => <Grid {...propMap(props)} />,
+          Stack: (props) => <Stack {...propMap(props)} />,
+          stack: (props) => <Stack {...propMap(props)} />,
+          Box: (props) => <Box {...propMap(props)} />,
+          box: (props) => <Box {...propMap(props)} />,
+          Text: (props) => <Text {...propMap(props)} />,
+          text: (props) => <Text {...propMap(props)} />,
           input: ({node: _node, checked, disabled, type, ...props}: React.InputHTMLAttributes<HTMLInputElement> & { node?: unknown }) => {
             if (type === 'checkbox') {
               return (
@@ -293,8 +368,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           p: ({node: _node, children, ...props}) => {
             // Always render as div to safely contain any children (block or inline)
             // while preserving paragraph-like styling. This prevents hydration errors.
-            // Spacing is standardized to tokens (8px units). marginY={8} is 32px.
-            return <Text as="div" color="dim" leading="relaxed" marginY={8} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
+            return <Text as="div" color="dim" leading="relaxed" marginBottom={6} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
           },
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />

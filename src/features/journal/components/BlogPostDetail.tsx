@@ -140,7 +140,19 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
             <Text variant="mono" size="tiny" color="dim" uppercase tracking="widest">Tags</Text>
             <Stack direction="row" wrap gap={3}>
               {post.tags.map(tag => (
-                <Box key={tag} paddingX={5} paddingY={2} surface="muted" border className="hover:border-accent transition-colors">
+                <Box
+                  key={tag}
+                  paddingX={{ base: 5, sm: 5 }}
+                  paddingY={{ base: 3, sm: 2 }}
+                  minWidth={{ base: 11, sm: "auto" }}
+                  minHeight={{ base: 11, sm: "auto" }}
+                  display="flex"
+                  align="center"
+                  justify="center"
+                  surface="muted"
+                  border
+                  className="hover:border-accent transition-colors"
+                >
                   <Text variant="mono" size="micro">{tag.toUpperCase()}</Text>
                 </Box>
               ))}

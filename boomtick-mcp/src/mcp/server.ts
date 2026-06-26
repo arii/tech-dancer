@@ -37,10 +37,12 @@ import { listJulesSessionsHandler, ListJulesSessionsInputSchema } from "../tools
 import { cancelJulesSessionHandler, CancelJulesSessionInputSchema } from "../tools/jules/cancel-session.js";
 import { getJulesPullRequestHandler, GetJulesPullRequestInputSchema } from "../tools/jules/get-pr.js";
 import { triggerJulesFeedbackHandler, TriggerJulesFeedbackInputSchema } from "../tools/jules/trigger-feedback.js";
+import { ddgsSearchHandler, DdgsSearchInputSchema } from "../tools/ddgs.search.js";
 
 import fs from "fs/promises";
 import path from "path";
 import { spawnSync } from "child_process";
+import { fileURLToPath } from "url";
 
 export class BoomtickMCPServer {
   private server: Server;
@@ -529,6 +531,18 @@ export class BoomtickMCPServer {
               required: ["sessionId"],
             },
           },
+          {
+            name: "agent.search_ddgs",
+            description: "Search the web using DuckDuckGo (via ddgs python library).",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: { type: "string" },
+                maxResults: { type: "number" },
+              },
+              required: ["query"],
+            },
+          },
         ],
       };
     });
@@ -589,6 +603,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await getJulesPullRequestHandler(GetJulesPullRequestInputSchema.parse(request.params.arguments)));
           case "jules.trigger_feedback":
             return createSuccessResult(await triggerJulesFeedbackHandler(TriggerJulesFeedbackInputSchema.parse(request.params.arguments)));
+          case "agent.search_ddgs":
+            return createSuccessResult(await ddgsSearchHandler(DdgsSearchInputSchema.parse(request.params.arguments)));
           default:
             return createErrorResult(`Tool not found: ${request.params.name}`);
         }
@@ -609,6 +625,15 @@ export class BoomtickMCPServer {
     } catch (error) {
       console.error("❌ Fatal: td-cli is not resolvable on PATH. MCP tools will fail.");
       console.error("Please ensure dev-tools are installed: pip install -e dev-tools/");
+      process.exit(1);
+    }
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const ddgsScriptPath = path.join(__dirname, "..", "tools", "ddgs_search.py");
+    try {
+      await fs.access(ddgsScriptPath);
+    } catch (err) {
+      console.error(`❌ Fatal: ddgs_search.py not found at ${ddgsScriptPath}`);
       process.exit(1);
     }
 

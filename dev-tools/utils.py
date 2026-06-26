@@ -27,27 +27,33 @@ class APIConnectionError(Exception):
     """Custom exception for retriable API connection issues."""
     pass
 
-def get_ai_review_model() -> str:
-    """Dynamic getter for the dedicated Code Reviewer model.
-    """
-    return os.environ.get("AI_REVIEW_MODEL", "gpt-4o")
-
-def get_ai_synthesis_model() -> str:
-    """Dynamic getter for the Synthesis model, checking env, then config, then fallback."""
-    env_val = os.environ.get("AI_SYNTHESIS_MODEL")
+def _get_model_config(env_key: str, config_attr: str, fallback: str) -> str:
+    """Helper to resolve AI models from env, then project_config, then fallback."""
+    env_val = os.environ.get(env_key)
     if env_val:
         return env_val
     try:
-        # Standardize on SDK loader
         from dev_tools_sdk.config import load_project_config
         config = load_project_config()
-        return config.ai_synthesis_model
+        return getattr(config, config_attr)
     except Exception:
-        return "gpt-4o-mini"
+        return fallback
+
+def get_ai_review_model() -> str:
+    """Dynamic getter for the dedicated Code Reviewer model."""
+    return _get_model_config("AI_REVIEW_MODEL", "ai_review_model", "gpt-4o")
+
+def get_ai_synthesis_model() -> str:
+    """Dynamic getter for the Synthesis model."""
+    return _get_model_config("AI_SYNTHESIS_MODEL", "ai_synthesis_model", "gpt-4o-mini")
 
 def get_ai_model() -> str:
     """Dynamic getter for the primary AI model."""
-    return os.environ.get("AI_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
+    # Special case for legacy/variant env key
+    variant = os.environ.get("GITHUB_MODELS_MODEL")
+    if variant and not os.environ.get("AI_MODEL"):
+        return variant
+    return _get_model_config("AI_MODEL", "ai_synthesis_model", "gpt-4o-mini")
 
 def clean_llm_output(text: str) -> str:
     """Removes markdown code blocks if present."""
@@ -64,7 +70,7 @@ def to_standard_schema(schema, uppercase: bool = False):
     """Recursively prepares a standard JSON schema.
     - Ensures top-level 'type: object' if 'properties' is present.
     - Converts type names to uppercase if uppercase=True (Gemini requirement).
-    - Otherwise ensures lowercase (Ollama/OpenAI standard).
+    - Otherwise ensures lowercase (Standard AI model naming).
     """
     if isinstance(schema, dict):
         # Auto-inject object type if properties are defined without a type

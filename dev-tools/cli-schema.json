@@ -40,7 +40,7 @@
         { "name": "pr_number", "type": "integer", "description": "PR ID." }
       ],
       "optional_flags": [
-        { "flag": "--base", "type": "string", "description": "Base branch (default: main)." }
+        { "flag": "--base", "type": "string", "description": "Base branch (default: origin/main)." }
       ]
     },
     "repo ci-logs": {

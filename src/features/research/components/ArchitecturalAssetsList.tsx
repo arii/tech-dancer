@@ -28,14 +28,14 @@ function getIconForPath(path: string): LucideIcon {
 export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps) {
   return (
     <Stack gap={4}>
-      <Text variant="mono" size="micro" color="dim" uppercase tracking="widest" opacityVariant="muted">
+      <Text variant="mono" size="micro" color="main" uppercase tracking="widest">
         Core Architectural Assets
       </Text>
-      <Stack gap={3}>
+      <Stack as="ul" gap={3}>
         {assets.map((asset) => {
           const Icon = asset.icon || getIconForPath(asset.path);
           return (
-            <Box key={asset.path} border radius="md" surface="surface" padding={4} className="group hover:border-accent/30 transition-colors">
+            <Box as="li" key={asset.path} border radius="md" surface="surface" padding={4} className="group hover:border-accent/30 transition-colors">
               <Box display="flex" gap={4} align="start">
                 <Box className="shrink-0" paddingTop={0.5}>
                   <Icon size={18} className="text-accent opacity-80 group-hover:opacity-100 transition-opacity" />
@@ -66,15 +66,14 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
                     <Text
                       variant="mono"
                       size="micro"
-                      color="dim"
-                      opacityVariant="dim"
+                      color="body"
                       className="shrink-0 uppercase tracking-tighter whitespace-nowrap"
                     >
                       {asset.label}
                     </Text>
                   </Box>
                   {asset.description && (
-                    <Text variant="body" size="xs" color="dim" leading="relaxed">
+                    <Text variant="body" size="xs" color="body" leading="relaxed">
                       {asset.description}
                     </Text>
                   )}

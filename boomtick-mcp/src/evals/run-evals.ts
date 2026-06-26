@@ -16,7 +16,7 @@ async function runEvals() {
 
     console.log("\n2. Repository Scripts:");
     try {
-      const scripts = await getPackageScriptsHandler({});
+      const scripts = await getPackageScriptsHandler({ filter: "" });
       console.log(`Found ${Object.keys(scripts.scripts).length} scripts.`);
     } catch (e) {
       console.log("Repository scripts fetch failed:", e instanceof Error ? e.message : String(e));

@@ -124,7 +124,7 @@ class TestTDCliCrash(unittest.TestCase):
                     td_cli.handle_audit_pr(args)
                 self.assertIn(expected_msg, cm.exception.message)
 
-class TestOllamaSchemaConversion(unittest.TestCase):
+class TestAISchemaConversion(unittest.TestCase):
     def test_to_standard_schema(self):
         from utils import to_standard_schema
         gemini_schema = {

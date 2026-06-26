@@ -60,8 +60,6 @@ _SYNTHESIS_SCHEMA = {
 class AIClient:
     def __init__(self, ai_model: str = None):
         self.ai_model = ai_model or get_ai_model()
-        # Default models for backward compatibility/internal calls
-        self.ollama_model = self.ai_model
         self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
 
         self._dependency_graph = None
@@ -136,8 +134,8 @@ class AIClient:
             if "<<<<<<<" not in content:
                 return True
 
-            # Backward compatibility for mock mode in tests
-            if os.environ.get("MERGELLAMA_MOCK", "false").lower() == "true":
+            # AI resolution mock mode
+            if os.environ.get("AI_RESOLVE_MOCK", "false").lower() == "true":
                 import re
                 mock_pattern = r"<<<<<<<.*?\n(.*?)\n=======.*?\n>>>>>>>.*?\n"
                 resolved = re.sub(mock_pattern, r"\1\n", content, flags=re.DOTALL)

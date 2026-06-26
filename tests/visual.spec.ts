@@ -9,12 +9,16 @@ const routes = [
   { name: 'about', path: './about' },
   { name: 'ux-auditor', path: './ux-auditor' },
   { name: 'preview', path: './preview' },
-  { name: 'merch', path: './merch' }
+  { name: 'merch', path: './merch' },
+  { name: 'halloween-costumes-mobile', path: './blog/2026-04-18-halloween-costumes', viewport: { width: 390, height: 844 } }
 ];
 
 test.describe('Visual Regression Tests', () => {
   for (const route of routes) {
     test(`visual comparison for ${route.name}`, async ({ page }) => {
+      if (route.viewport) {
+        await page.setViewportSize(route.viewport);
+      }
       await page.goto(route.path);
 
       // Wait for the main content to be visible as a base stability measure

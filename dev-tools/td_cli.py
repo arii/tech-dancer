@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-td_cli.py - Tech-Dancer Developer CLI Shim
+td_cli.py - Project Developer CLI Shim
 
 This script is a thin wrapper around the unified tdw_services CLI.
 It maintains backward compatibility for existing scripts and CI workflows.
