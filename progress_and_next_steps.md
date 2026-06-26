@@ -38,6 +38,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 - [x] **Workspace Action and Configuration Path Fixes**:
   - Identified and fixed remaining hardcoded path references to `dev-tools` (relocating to `boomtick-pkg/cli`) and `boomtick-mcp` (relocating to `boomtick-pkg/mcp`).
   - Staged and committed updates to `.github/actions/setup-workspace/action.yml`, `.devcontainer/Dockerfile`, `.devcontainer/devcontainer.json`, `.githooks/update-env.sh`, `.github/PULL_REQUEST_REVIEW_TEMPLATE.md`, `.github/dependabot.yml`, `.gitignore`, and `ai_service.py` to prevent failing `pip install` commands in PR validation workflows.
+  - Audited the codebase and updated all remaining `dev-tools` and `boomtick-mcp` path references in active scripts and configuration tools, including `scripts/lib/codeReviewOrchestrator.ts`, `scripts/lib/projectConfig.ts`, `scripts/send-jules-impact.py`, `scripts/ux-audit-runner.ts`, `scripts/ux-lighthouse-runner.ts`, `eslint.config.mjs`, `knip.ts`, and the MCP Server's internal prompt directory mappings in `boomtick-pkg/mcp/src/mcp/server.ts`. Verified that `pnpm run lint`, `pnpm run knip`, and CLI tests all pass successfully.
 
 ---
 
