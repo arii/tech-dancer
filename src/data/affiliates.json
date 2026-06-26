@@ -637,7 +637,7 @@
     "url": "https://www.amazon.com/hypervolt/s?k=hypervolt&tag=onasafari04-20",
     "category": "recovery",
     "description": "Professional-grade percussive therapy device to relieve muscle soreness and stiffness.",
-    "image": "",
+    "image": "https://m.media-amazon.com/images/I/51pI-a6K9eL._AC_SL1500_.jpg",
     "imageMode": "contain"
   },
   "pedialyte": {
@@ -646,7 +646,7 @@
     "url": "https://www.amazon.com/dp/B079YBMT2G?tag=onasafari04-20",
     "category": "recovery",
     "description": "Fast-acting rehydration solution to replenish electrolytes lost during intense dance sessions.",
-    "image": "",
+    "image": "https://m.media-amazon.com/images/I/81vshXmX6DL._AC_SL1500_.jpg",
     "imageMode": "contain"
   }
 }
