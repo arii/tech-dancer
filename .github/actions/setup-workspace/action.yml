@@ -1,13 +1,13 @@
 name: 'Setup Workspace'
-description: 'Bootstraps the workspace by installing dev-tools and configuring the environment'
+description: 'Bootstraps the workspace by installing boomtick-pkg/cli and configuring the environment'
 runs:
   using: 'composite'
   steps:
-    - name: Install dev-tools
+    - name: Install boomtick-pkg/cli
       shell: bash
       run: |
-        echo "::group::Install dev-tools"
-        pip install -e dev-tools/ --break-system-packages
+        echo "::group::Install boomtick-pkg/cli"
+        pip install -e boomtick-pkg/cli/ --break-system-packages
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
@@ -43,9 +43,9 @@ runs:
         # 1. Update PYTHONPATH for subsequent steps
         # Ensure it works even if PYTHONPATH is initially empty
         if [ -z "$PYTHONPATH" ]; then
-          echo "PYTHONPATH=$REPO_DIR/dev-tools" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli" >> "$GITHUB_ENV"
         else
-          echo "PYTHONPATH=$REPO_DIR/dev-tools:$PYTHONPATH" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli:$PYTHONPATH" >> "$GITHUB_ENV"
         fi
 
         # 2. Update PATH for subsequent steps to include local bin directories
@@ -53,4 +53,4 @@ runs:
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
-        echo "✅ Environment configured: PYTHONPATH includes $REPO_DIR/dev-tools"
+        echo "✅ Environment configured: PYTHONPATH includes $REPO_DIR/boomtick-pkg/cli"
