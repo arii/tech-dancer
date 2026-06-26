@@ -30,7 +30,7 @@ export const DEFAULT_CONFIG: ProjectConfig = {
  */
 export function loadProjectConfig(explicitPath?: string): ProjectConfig {
   try {
-    const configPath = explicitPath || path.join(process.cwd(), 'dev-tools/project_config.json');
+    const configPath = explicitPath || path.join(process.cwd(), 'project_config.json');
     if (!fs.existsSync(configPath)) return DEFAULT_CONFIG;
 
     const fileContent = fs.readFileSync(configPath, 'utf-8');
