@@ -10,7 +10,7 @@ test('verify homepage and guide visual consistency', async ({ page }) => {
 
   // On mobile, the FeaturedGuidePanel is hidden (display: none for base)
   // Just wait for the hero section to be stable
-  await expect(page.locator('h1')).toContainText(/Look good/i);
+  await expect(page.locator('h1')).toContainText(/Pack smart/i);
 
   const screenshotOptions = {
     fullPage: true,
@@ -24,7 +24,7 @@ test('verify homepage and guide visual consistency', async ({ page }) => {
   await page.goto(guideUrl);
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/.*2026-04-19-practical-tools-essentials/);
-  await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Practical Tools & Essentials/i })).toBeVisible();
   await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//detail_page_mobile_v2.png', ...screenshotOptions });
 
   // 3. Homepage Desktop
@@ -37,6 +37,6 @@ test('verify homepage and guide visual consistency', async ({ page }) => {
   await page.goto(guideUrl);
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/.*2026-04-19-practical-tools-essentials/);
-  await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Practical Tools & Essentials/i })).toBeVisible();
   await page.screenshot({ path: 'tests/visual.spec.ts-snapshots//detail_page_desktop_v2.png', ...screenshotOptions });
 });
