@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/chore/prioritize-boomtick-mcp-tools-11686588105196105966/sitemap.xml

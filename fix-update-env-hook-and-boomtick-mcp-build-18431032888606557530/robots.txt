@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/fix-update-env-hook-and-boomtick-mcp-build-18431032888606557530/sitemap.xml
