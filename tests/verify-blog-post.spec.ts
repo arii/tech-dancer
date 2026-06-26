@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Verify General Health Post - Content and Layout', async ({ page, viewport }) => {
+test('Verify General Health Post - Content and Layout', async ({ page, viewport: _viewport }) => {
   // Use relative path as baseURL is configured in playwright.config.ts
   await page.goto('/posts/2026-06-01-general-health-home-care');
 

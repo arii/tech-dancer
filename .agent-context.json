@@ -191,7 +191,7 @@
         "exact_usage": "python3 dev-tools/td_cli.py gh merge-conflicts <PR_NUMBER> [--base <BASE_BRANCH>]",
         "optional_flags": [
           {
-            "description": "Base branch (default: main).",
+            "description": "Base branch (default: origin/main).",
             "flag": "--base",
             "type": "string"
           }
@@ -364,6 +364,7 @@
     "CONTRIBUTING.md": null,
     "LICENSE": null,
     "README.md": null,
+    "amazon-link-audit-report.md": null,
     "artifacts/": {
       "visual-review/": "..."
     },
@@ -430,6 +431,25 @@
       "visual_guidelines.json": null,
       "workflow_summary.py": null
     },
+    "dev_server.log": null,
+    "dist/": {
+      "404.html": null,
+      "apple-touch-icon.png": null,
+      "assets/": "...",
+      "boomtick_logo.svg": null,
+      "favicon.ico": null,
+      "favicon.svg": null,
+      "icon.svg": null,
+      "images/": "...",
+      "index.html": null,
+      "manifest.webmanifest": null,
+      "maskable-icon-512x512.png": null,
+      "previews/": "...",
+      "pwa-192x192.png": null,
+      "pwa-512x512.png": null,
+      "robots.txt": null,
+      "sitemap.xml": null
+    },
     "docs/": {
       "affiliate-tooling.md": null,
       "agent/": "...",
@@ -458,7 +478,11 @@
     "knip.ts": null,
     "lighthouserc.json": null,
     "package.json": null,
+    "playwright-report/": {
+      "index.html": null
+    },
     "playwright.config.ts": null,
+    "playwright.verification.config.ts": null,
     "pnpm-lock.yaml": null,
     "pnpm-workspace.yaml": null,
     "public/": {
@@ -548,6 +572,9 @@
     },
     "svgo.config.mjs": null,
     "tailwind.config.mjs": null,
+    "test-results/": {
+      "verify-blog-post-Verify-General-Health-Post---Mobile-Desktop-mobile/": "..."
+    },
     "test-sg.sh": null,
     "tests/": {
       "a11y.spec.ts": null,
@@ -571,6 +598,7 @@
       "test_error_rag.py": null,
       "unit/": "...",
       "utils/": "...",
+      "verify-blog-post.spec.ts": null,
       "verify_homepage_guide.spec.ts": null,
       "verify_ux_consistency.spec.ts": null,
       "visual-affiliate.spec.ts": null,
@@ -582,7 +610,8 @@
     "tsconfig.json": null,
     "tsconfig.node.json": null,
     "vercel.json": null,
-    "vite.config.ts": null
+    "vite.config.ts": null,
+    "vite.log": null
   },
   "package_json": {
     "dependencies": [
@@ -676,7 +705,7 @@
       "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json",
       "ai:index": "python3 scripts/index-codebase.py",
       "audit:anti-patterns": "node scripts/detect-antipatterns.mjs",
-      "audit:dead-code": "pnpm run knip",
+      "audit:dead-code": "pnpm exec knip --exclude exports",
       "audit:inventory": "node scripts/check-suppression-inventory.mjs",
       "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
       "audit:semgrep": "semgrep scan --config auto --error",
@@ -725,6 +754,21 @@
     }
   },
   "project_config": {
+    "ai_review_model": "gpt-4o",
+    "ai_synthesis_model": "gpt-4o-mini",
+    "ai_vision_model": "gpt-4o",
+    "allowed_bots": [
+      "github-actions[bot]",
+      "tech-dancer-bot",
+      "ariii"
+    ],
+    "audit_check_dirs": [
+      "src/features",
+      "src/pages",
+      "src/components",
+      "src/layouts",
+      "src/App.tsx"
+    ],
     "base_branch": "origin/main",
     "content_scopes": {
       "blog": "content/blog/",
@@ -737,7 +781,36 @@
       "src/components/"
     ],
     "max_diff_chars": 40000,
-    "monolithic_pr_threshold": 3
+    "monolithic_pr_threshold": 3,
+    "spec_sections": [
+      "Problem Statement",
+      "Goal",
+      "Non-Goals",
+      "Proposed Approach",
+      "Alternatives Considered",
+      "Architectural Impact",
+      "Scope",
+      "UNDERSTAND THE ISSUE",
+      "DETERMINE APPROACH",
+      "SPECIFY SCOPE",
+      "DEFINITION OF DONE"
+    ],
+    "tailwind_indicators": [
+      "px-",
+      "py-",
+      "mt-",
+      "flex",
+      "grid",
+      "text-["
+    ],
+    "ui_indicators": [
+      "src/components",
+      "src/pages",
+      "src/layouts",
+      "src/index.css",
+      "tailwind"
+    ],
+    "worktree_prefix": "tech-dancer-repair-"
   },
   "repo": {
     "name": "react-example"
