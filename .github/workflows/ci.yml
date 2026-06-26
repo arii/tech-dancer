@@ -356,7 +356,7 @@ jobs:
 
       - name: Cache Main build
         id: cache-main
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .tmp-main/dist
           key: ${{ runner.os }}-main-build-${{ steps.main_sha.outputs.sha }}
