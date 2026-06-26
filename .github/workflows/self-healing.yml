@@ -1,21 +1,180 @@
-name: Self Healing
+# Relationship to Layered Workflows:
+# This workflow is the primary self-healing entry point for general CI failures.
+# If future layered workflows (ci-validate.yml, ai-heal.yml) are introduced,
+# this workflow should either be retired or its triggers scoped to non-overlapping events
+# to prevent duplicate AI repair runs and noisy PR comments.
+
+name: 'Self-Healing CI'
+
 on:
-  schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
 jobs:
-  heal:
+  repair:
     runs-on: ubuntu-latest
+    container: ghcr.io/arii/tech-dancer:latest
+    env:
+      AI_MODEL: gpt-4o
+      AI_SYNTHESIS_MODEL: gpt-4o
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout Main (Trusted)
+        uses: actions/checkout@v4
         with:
-          node-version-file: .node-version
-      - uses: ./boomtick-pkg/mcp/actions/setup
-      - name: Run Self Healing
-        run: td agent dispatch main "Self Healing Routine"
+          fetch-depth: 0
+          persist-credentials: false
+          ref: main
+
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Fetch and Apply PR Patch
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GOOGLE_JULES_API_KEY: ${{ secrets.GOOGLE_JULES_API_KEY }}
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          if [ "$EVENT_NAME" == "workflow_run" ]; then
+            PR_NUMBER=$(gh pr list --head "$HEAD_SHA" --json number -q '.[0].number')
+          else
+            PR_NUMBER="$ISSUE_NUMBER"
+          fi
+
+          if [ -n "$PR_NUMBER" ]; then
+            PR_HEAD=$(gh pr view "$PR_NUMBER" --json headRefName --jq .headRefName)
+            git checkout -b "$PR_HEAD" || git checkout "$PR_HEAD"
+            gh pr diff "$PR_NUMBER" > pr.patch
+            git apply pr.patch || git apply pr.patch --3way || true
+            rm pr.patch
+          fi
+
+      - name: Fetch Trusted Dev-Tools
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: trusted-tools-temp
+          ref: main
+
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Restore Trusted Dev-Tools
+        run: |
+          rm -rf dev-tools
+          cp -r trusted-tools-temp/dev-tools dev-tools
+          rm -rf trusted-tools-temp
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Install dependencies (Safe)
+        run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+
+      - name: Native Auto-Fix
+        run: |
+          if ! pnpm eslint . --fix; then echo "eslint failed"; exit 1; fi
+          if ! pnpm oxlint --fix; then echo "oxlint failed"; exit 1; fi
+
+      - name: Validate CLI
+        run: |
+          td-cli doctor
+          td-cli gh status-board
+
+      - name: Resolve PR Number
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          if [ "$EVENT_NAME" == "workflow_run" ]; then
+            PR_NUMBER=$(gh pr list --head "$HEAD_BRANCH" --json number -q '.[0].number')
+          else
+            PR_NUMBER="$ISSUE_NUMBER"
+          fi
+          echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
+
+      - name: Execute Review
+        run: |
+          if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
+            ./dev-tools/low-compute-review.sh "$PR_NUMBER" --no-cache
+          else
+            echo "No PR found for this run. Skipping AI review."
+          fi
+
+      - name: Verify Fixes
+        id: verify
+        run: |
+          echo "Verifying repairs..."
+          if pnpm run lint:ox && pnpm run type-check; then
+            echo "Repair verified successfully!"
+            echo "success=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Repair failed verification or only partially fixed."
+            if [ -n "$(git status --porcelain)" ]; then
+               echo "success=partial" >> "$GITHUB_OUTPUT"
+            else
+               echo "success=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: Commit & Push Changes
+        if: steps.verify.outputs.success != 'false'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            NEW_BRANCH="ai-repair-$RUN_ID"
+            if [ "$EVENT_NAME" == "issue_comment" ]; then
+              NEW_BRANCH="ai-repair-pr-$PR_NUMBER"
+            fi
+
+            git checkout -b "$NEW_BRANCH"
+            git add .
+            git commit -m "🤖 AI-generated fix for CI failures"
+            git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git" "$NEW_BRANCH" --force
+
+            PR_MSG="Automated repair attempt for failed run."
+            if [ "${{ steps.verify.outputs.success }}" == "success" ]; then
+              PR_MSG="✅ $PR_MSG (Verified to pass lint/types)"
+            else
+              PR_MSG="⚠️ $PR_MSG (Partial fix, still has some issues)"
+            fi
+
+            if [ "$EVENT_NAME" == "workflow_run" ]; then
+              if [ "$HEAD_REPO" == "$REPO" ]; then
+                if ! gh pr create --title "🤖 AI Repair: Fix CI failures" --body "$PR_MSG" --head "$NEW_BRANCH" --base "$HEAD_BRANCH"; then echo "PR creation failed"; exit 1; fi
+              fi
+            else
+              gh pr comment "$PR_NUMBER" --body "🤖 I've attempted to fix the CI failures. $PR_MSG. See the proposed changes in branch \`$NEW_BRANCH\`."
+            fi
+          else
+            echo "No changes to commit."
+          fi
