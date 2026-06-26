@@ -30,19 +30,25 @@ class GitHubClient:
             return ""
 
     def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
-        url = f"{self.base_url}{path}"
+        # Prevent open redirects or SSRF by ensuring path starts with /
+        if not path.startswith('/'):
+            path = '/' + path
+
+        base_url = os.environ.get("GITHUB_API_URL", self.base_url)
+        url = f"{base_url}{path}"
         headers = {
             "Authorization": f"Bearer {self.token}",
             "Accept": accept or ("application/vnd.github.v3.diff" if is_text else "application/vnd.github.v3+json"),
         }
 
+        timeout = int(os.environ.get("GITHUB_API_TIMEOUT", 30))
         try:
             response = requests.request(
                 method,
                 url,
                 headers=headers,
                 json=json_data,
-                timeout=30,
+                timeout=timeout,
                 allow_redirects=allow_redirects
             )
             response.raise_for_status()
@@ -50,7 +56,8 @@ class GitHubClient:
                 return response.text
             return response.json()
         except requests.exceptions.RequestException as e:
-             raise Exception(f"GitHub API Error: {e}")
+             status_code = getattr(e.response, 'status_code', 'Unknown')
+             raise Exception(f"GitHub API Error {status_code} on {method} request.")
 
     def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the list of files changed in a PR."""

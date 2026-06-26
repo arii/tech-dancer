@@ -945,7 +945,6 @@ Respond only after the PR is created or updated:
         # Get check runs
         data = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-runs', accept='application/vnd.github.v3+json')
         try:
-            pass # Keep try block since data might not be parsable correctly downstream if schema changes, but json is already loaded
             checks = []
             for run in data.get("check_runs", []):
                 checks.append({
@@ -956,7 +955,7 @@ Respond only after the PR is created or updated:
                     'url': run.get('html_url'),
                     'external_id': run.get('external_id')
                 })
-        except json.JSONDecodeError:
+        except Exception:
             raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
 
         failed_checks = [c for c in checks if c.get("conclusion") == "failure"]

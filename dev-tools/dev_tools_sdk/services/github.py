@@ -30,22 +30,29 @@ class GitHubService:
             url = proc.stdout.strip()
             import re
             match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
-            return match.group(1) if match else url
+            if not match:
+                raise ValueError("Could not parse repository URL.")
+            return match.group(1)
         except Exception:
             return ""
 
     def _request(self, method: str, path: str) -> dict:
-        url = f"https://api.github.com{path}"
+        base_url = os.environ.get("GITHUB_API_URL", "https://api.github.com")
+        url = f"{base_url}{path}"
         headers = {
             "Authorization": f"Bearer {self.token}",
             "Accept": "application/vnd.github.v3+json",
         }
+        timeout = int(os.environ.get("GITHUB_API_TIMEOUT", 30))
         try:
-            response = requests.request(method, url, headers=headers, timeout=30)
+            response = requests.request(method, url, headers=headers, timeout=timeout)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
-            raise RuntimeError(f"GitHub API Error: {e}")
+            # We avoid logging the full exception which might contain sensitive URL parameters
+            # by relying on the safe requests stringification, but we can be extra careful.
+            status_code = getattr(e.response, 'status_code', 'Unknown')
+            raise RuntimeError(f"GitHub API Error {status_code} on {method} request.")
 
     def view_pr(self, number: int) -> PullRequestSummary:
         try:
