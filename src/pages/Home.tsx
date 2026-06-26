@@ -18,22 +18,22 @@ export default function Home() {
         schema={STATIC_SCHEMAS.HOME}
       />
 
-      {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
+      {/* Hero + Featured Guide: editorial 45/55 split for Option D */}
       <Grid
         as="section"
         cols={{ base: 1 }}
-        gap={{ base: 8, lg: 6 }}
+        gap={{ base: 12, lg: 12 }}
         width="full"
         maxWidth="full"
         minWidth={0}
-        align="center"
-        className="lg:grid-cols-[minmax(0,1fr)_420px]"
+        align="start"
+        className="lg:grid-cols-[45fr_55fr]"
       >
         <HeroSection />
         <FeaturedGuidePanel />
       </Grid>
 
-      <Box marginTop={{ base: 12, lg: 8 }}>
+      <Box marginTop={{ base: 12, lg: 16 }}>
         <PromoStrip
           imageSrc="/assets/gear/norcal-bestcal-front.webp"
           title="Shop NorCal pride merch"

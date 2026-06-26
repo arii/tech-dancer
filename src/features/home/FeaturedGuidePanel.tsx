@@ -1,6 +1,6 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { ASSET_PREFIX } from '@/config/constants';
 
 const FEATURED = {
@@ -14,57 +14,91 @@ const FEATURED = {
 
 export function FeaturedGuidePanel() {
   return (
-    <Stack
+    <Grid
       as={NavLink}
       to={FEATURED.href}
+      cols={{ base: 1, lg: 1 }}
       width="full"
-      aspect={{ base: '4/3', lg: 'auto' }}
-      direction="col"
-      justify="end"
       position="relative"
       overflow="hidden"
       border
-      radius="md"
-      className="group self-stretch"
+      radius="lg"
+      className="group self-stretch bg-surface/30 transition-all hover:border-accent/50"
     >
-      {/* Background image — fills the column height naturally */}
-      <img
-        src={`${ASSET_PREFIX}${FEATURED.image}`}
-        alt={FEATURED.imageAlt}
-        width={420}
-        height={600}
-        fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
-        aria-hidden="true"
-      />
-      {/* Gradient overlay for text legibility (bottom-up to protect bottom-aligned text) */}
-      <Box
-        position="absolute"
-        inset
-        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
-        aria-hidden="true"
-      />
-      {/* Content pinned to bottom */}
-      <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
-        <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
-          {FEATURED.eyebrow}
-        </Text>
-        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
-          {FEATURED.title}
-        </Text>
-        <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">
-          {FEATURED.subtitle}
-        </Text>
-        <Text
-          variant="mono"
-          size="xs"
-          color="accent"
-          weight="font-bold"
-          className="mt-1 group-hover:underline"
+      <Stack
+        direction={{ base: 'col', lg: 'row' }}
+        width="full"
+        height="full"
+        align="stretch"
+        gap={0}
+      >
+        {/* Mobile-only Header: Title above Image */}
+        <Stack
+          gap={2}
+          padding={6}
+          paddingBottom={2}
+          display={{ base: 'flex', lg: 'none' }}
+          className="order-1"
         >
-          Read the guide →
-        </Text>
+          <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
+            {FEATURED.eyebrow}
+          </Text>
+          <Text variant="headline" size="2xl" weight="font-black" color="main" leading="tight">
+            {FEATURED.title}
+          </Text>
+        </Stack>
+
+        {/* Image portion - 45% on desktop */}
+        <Box
+          width={{ base: 'full', lg: '45%' }}
+          position="relative"
+          overflow="hidden"
+          className="aspect-[4/3] lg:aspect-auto order-2 lg:order-none"
+        >
+          <img
+            src={`${ASSET_PREFIX}${FEATURED.image}`}
+            alt={FEATURED.imageAlt}
+            width={600}
+            height={600}
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+          />
+        </Box>
+
+        {/* Text portion - 55% on desktop */}
+        <Stack
+          gap={4}
+          padding={{ base: 6, lg: 8 }}
+          width={{ base: 'full', lg: '55%' }}
+          justify="center"
+          className="order-3 lg:order-none"
+        >
+          {/* Desktop-only Header: Title next to Image */}
+          <Box display={{ base: 'none', lg: 'block' }}>
+            <Stack gap={4} marginBottom={4}>
+              <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
+                {FEATURED.eyebrow}
+              </Text>
+              <Text variant="headline" size="4xl" weight="font-black" color="main" leading="tight">
+                {FEATURED.title}
+              </Text>
+            </Stack>
+          </Box>
+
+          <Text variant="body" size={{ base: 'lg', lg: 'xl' }} color="body">
+            {FEATURED.subtitle}
+          </Text>
+          <Text
+            variant="mono"
+            size="sm"
+            color="accent"
+            weight="font-bold"
+            className="mt-4 inline-flex items-center gap-2 group-hover:translate-x-1 transition-transform"
+          >
+            Read Guide →
+          </Text>
+        </Stack>
       </Stack>
-    </Stack>
+    </Grid>
   );
 }
