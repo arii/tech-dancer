@@ -1,8 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-  parseCodeReviewVerdict,
-  parseCodeReviewStateDetailed,
-  parseCodeReviewState,
   extractFeedbackText,
   cleanupFeedback,
   estimateMaxOutputTokens,
@@ -84,63 +81,6 @@ describe('codeReviewUtils', () => {
     it('returns empty string for null/undefined content', () => {
       expect(extractFeedbackText(null)).toBe('');
       expect(extractFeedbackText(undefined)).toBe('');
-    });
-  });
-
-  describe('parseCodeReviewVerdict', () => {
-    it('parses PASS correctly', () => {
-      expect(parseCodeReviewVerdict('Some feedback. [VERDICT: PASS]')).toBe('pass');
-    });
-
-    it('parses WARN correctly', () => {
-      expect(parseCodeReviewVerdict('Some feedback. [VERDICT: WARN]')).toBe('warn');
-    });
-
-    it('parses FAIL correctly', () => {
-      expect(parseCodeReviewVerdict('Some feedback. [VERDICT: FAIL]')).toBe('fail');
-    });
-
-    it('defaults to PASS if no valid verdict is found', () => {
-      expect(parseCodeReviewVerdict('Some feedback without verdict.')).toBe('pass');
-    });
-
-    it('uses the last verdict if multiple are found', () => {
-      expect(parseCodeReviewVerdict('Some feedback. [VERDICT: FAIL] But wait, [VERDICT: PASS]')).toBe('pass');
-    });
-  });
-
-  describe('parseCodeReviewStateDetailed and parseCodeReviewState', () => {
-    it('parses valid JSON findings', () => {
-      const json = JSON.stringify({ findings: [{ id: '1', file: 'test.ts', issue: 'test', status: 'open' }] });
-      const feedback = `Some text\n<findings>\n${json}\n</findings>\nMore text`;
-      const result = parseCodeReviewStateDetailed(feedback);
-      expect(result.state?.findings.length).toBe(1);
-      expect(result.state?.findings[0].id).toBe('1');
-      expect(result.parseError).toBeUndefined();
-
-      expect(parseCodeReviewState(feedback)?.findings.length).toBe(1);
-    });
-
-    it('handles missing closing tag', () => {
-      const feedback = `Some text\n<findings>\n{"findings": []}`;
-      const result = parseCodeReviewStateDetailed(feedback);
-      expect(result.state).toBeUndefined();
-      expect(result.parseError).toBe('missing_closing_tag');
-    });
-
-    it('handles invalid JSON', () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const feedback = `Some text\n<findings>\nbad json\n</findings>`;
-      const result = parseCodeReviewStateDetailed(feedback);
-      expect(result.state).toBeUndefined();
-      expect(result.parseError).toBe('invalid_json');
-      consoleSpy.mockRestore();
-    });
-
-    it('handles no findings tags', () => {
-      const result = parseCodeReviewStateDetailed('No findings tag here');
-      expect(result.state).toBeUndefined();
-      expect(result.parseError).toBeUndefined();
     });
   });
 

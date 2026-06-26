@@ -15,21 +15,25 @@ export function extractFinishReason(res: any): string {
 
 
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HumanMessage } from '@langchain/core/messages';
+import { HumanMessage, SystemMessage, BaseMessage } from '@langchain/core/messages';
 
 /**
- * Splits a standard payload into a system instruction string and a list of user messages.
- * This is optimized for Gemini's constructor-based system instruction.
+ * Splits a standard payload into a single messages array for Gemini,
+ * ensuring the system message is strictly the first element to avoid LangChain API ordering errors.
  */
-export function splitPayloadForGemini(payload: { role: string; content: unknown }[]): { systemInstruction?: string; userMessages: HumanMessage[] } {
+export function splitPayloadForGemini(payload: { role: string; content: unknown }[]): { systemInstruction?: string; userMessages: BaseMessage[] } {
   const systemInstruction = payload
     .filter(msg => msg.role === 'system')
     .map(msg => msg.content)
     .join('\n\n');
 
-  const userMessages = payload
+  const userMessages: BaseMessage[] = payload
     .filter(msg => msg.role !== 'system')
-    .map(msg => new HumanMessage({ content: msg.content }));
+    .map(msg => new HumanMessage({ content: msg.content as string | { type: string; text?: string; image_url?: string }[] }));
+
+  if (systemInstruction) {
+    userMessages.unshift(new SystemMessage({ content: systemInstruction }));
+  }
 
   return {
     systemInstruction: systemInstruction || undefined,
@@ -43,7 +47,7 @@ export function createGeminiModel(
   thinkingBudget: number,
   responseSchema?: object,
   responseMimeType?: string,
-  systemInstruction?: string
+  _systemInstruction?: string // Deprecated in favor of passing SystemMessage first in array
 ): ChatGoogleGenerativeAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY environment variable');
@@ -54,7 +58,6 @@ export function createGeminiModel(
     maxOutputTokens: maxOutputTokens,
     responseMimeType: responseMimeType,
     responseSchema: responseSchema,
-    systemInstruction: systemInstruction,
     thinkingConfig: {
       includeThoughts: true,
       thinkingBudget: thinkingBudget,
