@@ -298,14 +298,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           },
           blockquote: RenderBlockquote,
           h2: ({node: _node, ...props}) => (
-            <Box marginTop={{ base: 10, md: 16 }} marginBottom={{ base: 6, md: 10 }} className="prose-section group">
+            <Box marginTop={16} marginBottom={10} className="prose-section group">
               <Text
                 variant="mono"
                 display="block"
                 marginBottom={1}
                 className="editorial-section-number"
               />
-              <Text as="h2" variant="h2" size={{ base: '2xl', md: '3xl' }} color="brand" margin={0} leading="tight" {...props} />
+              <Text as="h2" variant="h2" size="3xl" color="brand" margin={0} leading="tight" {...props} />
               <Box height={0.5} width={12} marginTop={6} className="bg-accent transition-all group-hover:w-20" />
             </Box>
           ),
@@ -368,7 +368,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           p: ({node: _node, children, ...props}) => {
             // Always render as div to safely contain any children (block or inline)
             // while preserving paragraph-like styling. This prevents hydration errors.
-            return <Text as="div" color="dim" leading="relaxed" marginBottom={6} size={{ base: 'base', md: 'lg' }} className="markdown-paragraph" {...props}>{children}</Text>;
+            return <Text as="div" color="dim" leading="relaxed" marginBottom={6} size="lg" className="markdown-paragraph" {...props}>{children}</Text>;
           },
           ul: ({node: _node, ...props}) => (
             <Box as="ul" marginY={4} paddingLeft={6} className="list-disc space-y-1.5" {...props} />

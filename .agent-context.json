@@ -482,10 +482,8 @@
       "index.html": null
     },
     "playwright.config.ts": null,
-    "playwright.verification.config.ts": null,
     "pnpm-lock.yaml": null,
     "pnpm-workspace.yaml": null,
-    "preview.log": null,
     "public/": {
       "404.html": null,
       "apple-touch-icon.png": null,
@@ -597,7 +595,6 @@
       "test_error_rag.py": null,
       "unit/": "...",
       "utils/": "...",
-      "verify-blog-post.spec.ts": null,
       "verify_homepage_guide.spec.ts": null,
       "verify_ux_consistency.spec.ts": null,
       "visual-affiliate.spec.ts": null,
