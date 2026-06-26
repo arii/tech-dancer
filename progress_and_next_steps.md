@@ -35,6 +35,10 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
   - Aligned `.github/workflows/ai-chatops.yml` with the workflow dispatch trigger (`workflow_dispatch`) to integrate correctly with the repository's `issue-comment-dispatcher.yml` and avoid duplicate executions.
   - Synced `ci.yml` permissions and `GEMINI_API_KEY` configurations from PR 3010.
 
+- [x] **Workspace Action and Configuration Path Fixes**:
+  - Identified and fixed remaining hardcoded path references to `dev-tools` (relocating to `boomtick-pkg/cli`) and `boomtick-mcp` (relocating to `boomtick-pkg/mcp`).
+  - Staged and committed updates to `.github/actions/setup-workspace/action.yml`, `.devcontainer/Dockerfile`, `.devcontainer/devcontainer.json`, `.githooks/update-env.sh`, `.github/PULL_REQUEST_REVIEW_TEMPLATE.md`, `.github/dependabot.yml`, `.gitignore`, and `ai_service.py` to prevent failing `pip install` commands in PR validation workflows.
+
 ---
 
 ## 🚀 Next Steps
