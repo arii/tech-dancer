@@ -18,4 +18,6 @@ export function setupTestEnv() {
  */
 export function teardownTestEnv() {
   vi.unstubAllEnvs();
+  // Explicitly delete to satisfy strict isolation requirements if vi.unstubAllEnvs is not enough
+  delete process.env.JULES_API_KEY;
 }

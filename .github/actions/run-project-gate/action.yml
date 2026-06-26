@@ -4,6 +4,9 @@ inputs:
   target:
     description: "Target project to validate (e.g., 'root', 'boomtick-mcp')"
     required: true
+  github_token:
+    description: "GitHub token for API access (e.g., ratchet-any)"
+    required: false
 
 runs:
   using: "composite"
@@ -93,4 +96,4 @@ runs:
         export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
         td-cli gh ratchet-any
       env:
-        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}

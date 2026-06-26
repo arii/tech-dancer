@@ -94,8 +94,7 @@ jobs:
         uses: ./.github/actions/run-project-gate
         with:
           target: ${{ matrix.target }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
