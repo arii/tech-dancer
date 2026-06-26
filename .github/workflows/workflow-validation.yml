@@ -44,10 +44,8 @@ jobs:
 
       - name: Lint workflow logic with actionlint
         run: |
-          # We ignore 'background', 'parallel', and 'wait' keywords as they are part of
-          # the new 2026 GitHub Actions syntax which actionlint does not yet support.
-          # 'step must run script with "run" section' is ignored because actionlint
-          # incorrectly flags 'parallel' blocks as steps missing a 'run' or 'uses'.
+          # Ignore 'background', 'parallel', and 'wait' keywords as actionlint does
+          # not yet support these new GitHub Actions features.
           ./actionlint \
             -ignore 'step must run script with "run" section' \
             -ignore 'unexpected key "background"' \
