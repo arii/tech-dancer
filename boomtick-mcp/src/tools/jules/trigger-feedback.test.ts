@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { triggerJulesFeedbackHandler } from "./trigger-feedback.js";
 import * as shell from "../../lib/shell.js";
+import { setupTestEnv, teardownTestEnv } from "../../lib/test-utils.js";
 
 vi.mock("../../lib/shell.js", () => ({
   runCommand: vi.fn(),
@@ -10,7 +11,7 @@ describe("triggerJulesFeedbackHandler", () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
-    process.env.JULES_API_KEY = "test-key";
+    setupTestEnv();
     global.fetch = vi.fn().mockImplementation((url) => {
       if (url.includes("/sessions/123")) {
         return Promise.resolve({
@@ -29,6 +30,7 @@ describe("triggerJulesFeedbackHandler", () => {
   });
 
   afterEach(() => {
+    teardownTestEnv();
     global.fetch = originalFetch;
     vi.clearAllMocks();
   });

@@ -7,6 +7,7 @@ on:
       - 'src/**'
       - 'etl/**'
       - 'dev-tools/**'
+      - 'boomtick-mcp/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -23,6 +24,7 @@ on:
       - 'src/**'
       - 'etl/**'
       - 'dev-tools/**'
+      - 'boomtick-mcp/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -63,12 +65,16 @@ jobs:
       contents: write
 
   lint-typecheck:
-    name: Lint & Type Check
+    name: Lint & Type Check (${{ matrix.target }})
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [root, boomtick-mcp]
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -84,66 +90,11 @@ jobs:
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
 
-      - name: Validate Runtime
-        shell: bash
-        run: |
-          echo "::group::Validate Runtime"
-          trap 'echo "::endgroup::"' EXIT
-          pnpm run check:runtime-files
-          pnpm run doctor
-
-      - name: Verify lockfile integrity
-        shell: bash
-        run: |
-          echo "::group::pnpm install"
-          trap 'echo "::endgroup::"' EXIT
-          pnpm install --frozen-lockfile
-          echo "::endgroup::"
-          trap - EXIT
-
-          if ! git diff --quiet pnpm-lock.yaml; then
-            echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
-            exit 1
-          fi
-
-      - name: Verify Agent Context
-        continue-on-error: true
-        run: |
-          pnpm run agent:prime
-          if ! git diff --quiet .agent-context.json; then
-            echo "::warning::.agent-context.json is out of date. Run 'pnpm run agent:prime' and commit the changes."
-            git diff .agent-context.json
-          fi
-
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Type-check
-        run: pnpm run type-check
-
-      - name: Run Unit Tests - Vitest
-        run: pnpm test
-
-      - name: Run CLI Unit Tests
-        shell: bash
-        run: |
-          echo "::group::Pytest"
-          trap 'echo "::endgroup::"' EXIT
-          python3 -m pytest tests/dev-tools/test_modern_cli.py
-
-      - name: Check for dead code
-        run: pnpm run knip
-
-      - name: TypeScript `any` Ratchet
-        shell: bash
-        run: |
-          echo "::group::Ratchet Any"
-          trap 'echo "::endgroup::"' EXIT
-          # Ensure local python bin is on path for td-cli
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td-cli gh ratchet-any
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Project Gate
+        uses: ./.github/actions/run-project-gate
+        with:
+          target: ${{ matrix.target }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createJulesSessionHandler } from "./create-session.js";
 import * as shell from "../../lib/shell.js";
+import { setupTestEnv, teardownTestEnv } from "../../lib/test-utils.js";
 
 vi.mock("../../lib/shell.js", () => ({
   runCommand: vi.fn(),
@@ -10,7 +11,7 @@ describe("createJulesSessionHandler", () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
-    process.env.JULES_API_KEY = "test-key";
+    setupTestEnv();
     global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
@@ -25,6 +26,7 @@ describe("createJulesSessionHandler", () => {
   });
 
   afterEach(() => {
+    teardownTestEnv();
     global.fetch = originalFetch;
     vi.clearAllMocks();
   });
