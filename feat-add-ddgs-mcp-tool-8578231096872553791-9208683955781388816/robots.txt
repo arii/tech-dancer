@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feat-add-ddgs-mcp-tool-8578231096872553791-9208683955781388816/sitemap.xml
