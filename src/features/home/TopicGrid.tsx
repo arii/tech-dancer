@@ -48,10 +48,10 @@ const TOPICS = [
 export function TopicGrid() {
   return (
     <Box as="section" width="full" maxWidth="full" minWidth={0}>
-      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom={4} uppercase tracking="wider">
+      <Text as="h2" variant="headline" size="xl" weight="font-black" marginBottom="[1rem]" uppercase tracking="[0.05em]">
         Explore by topic
       </Text>
-      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={4}>
+      <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap="[1rem]">
         {TOPICS.map(({ id, label, icon: Icon, href, iconColorClass, iconBgClass, iconHoverBgClass, iconAnimClass }) => (
           <Stack
             key={label}
@@ -59,8 +59,8 @@ export function TopicGrid() {
             to={href}
             direction="row"
             align="center"
-            gap={4}
-            padding={4}
+            gap="[1rem]"
+            padding="[1rem]"
             radius="md"
             border
             className={`group cursor-pointer bg-surface/30 border-line/30 topic-card-${id}`}
