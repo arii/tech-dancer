@@ -20,10 +20,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: .node-version
-
       - uses: ./boomtick-pkg/mcp/actions/setup
 
       - name: Self-Heal

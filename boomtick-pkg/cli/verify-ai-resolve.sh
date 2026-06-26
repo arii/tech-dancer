@@ -4,7 +4,7 @@
 set -e
 
 # Ensure we are in the project root
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 
 TEST_FILE="src/test-ai-conflict.tsx"
 
@@ -28,8 +28,8 @@ echo "📝 Created test file: $TEST_FILE"
 # 2. Run resolution in mock mode
 echo "🏃 Running AI resolve in MOCK mode..."
 # Export PYTHONPATH to ensure dev-tools modules can find each other without sys.path hacks
-export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-AI_RESOLVE_MOCK=true python3 dev-tools/td_cli.py gh resolve
+export PYTHONPATH="$PYTHONPATH:$(pwd)/boomtick-pkg/cli:$(pwd)/boomtick-pkg/cli/dev_tools"
+AI_RESOLVE_MOCK=true python3 boomtick-pkg/cli/dev_tools/td_cli.py gh resolve
 
 # 3. Verify the result
 if grep -q "<<<<<<<" "$TEST_FILE"; then

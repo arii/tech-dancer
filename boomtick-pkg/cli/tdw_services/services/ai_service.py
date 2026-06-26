@@ -118,6 +118,10 @@ class AIClient:
             if res:
                 return res
 
+        res = self.call_gemini(prompt, schema=schema)
+        if res:
+            return res
+
         raise EnvironmentError("No AI service available (GitHub Models, and Gemini failed or are unavailable).")
 
     def clean_llm_output(self, text: str) -> str:

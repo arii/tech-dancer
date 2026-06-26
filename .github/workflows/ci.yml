@@ -21,10 +21,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: .node-version
-
       - uses: ./boomtick-pkg/mcp/actions/ci-validate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
