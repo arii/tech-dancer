@@ -4,7 +4,7 @@ runs:
   using: 'composite'
   steps:
     - name: Cache pip
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('dev-tools/pyproject.toml') }}
