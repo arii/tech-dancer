@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { getJulesMessagesHandler } from "./get-messages.js";
-import { setupTestEnv } from "../../lib/test-utils.js";
+import { setupTestEnv, teardownTestEnv } from "../../lib/test-utils.js";
 
 describe("getJulesMessagesHandler", () => {
   const originalFetch = global.fetch;
@@ -34,6 +34,7 @@ describe("getJulesMessagesHandler", () => {
   });
 
   afterEach(() => {
+    teardownTestEnv();
     global.fetch = originalFetch;
   });
 

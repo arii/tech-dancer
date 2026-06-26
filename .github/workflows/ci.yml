@@ -64,44 +64,17 @@ jobs:
       pull-requests: write
       contents: write
 
-  boomtick-mcp:
-    name: Boomtick MCP Build & Test
-    needs: verify-changes
-    if: needs.verify-changes.outputs.has_changes == 'true'
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/arii/tech-dancer:latest
-    steps:
-      - name: Configure Git Safe Directory
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
-
-      - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter boomtick-mcp
-
-      - name: Build
-        run: pnpm --filter boomtick-mcp run build
-
-      - name: Test
-        run: pnpm --filter boomtick-mcp run test
-
   lint-typecheck:
-    name: Lint & Type Check
+    name: Lint & Type Check (${{ matrix.target }})
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [root, boomtick-mcp]
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -118,6 +91,7 @@ jobs:
         uses: ./.github/actions/setup-workspace
 
       - name: Validate Runtime
+        if: matrix.target == 'root'
         shell: bash
         run: |
           echo "::group::Validate Runtime"
@@ -130,16 +104,21 @@ jobs:
         run: |
           echo "::group::pnpm install"
           trap 'echo "::endgroup::"' EXIT
-          pnpm install --frozen-lockfile
+          if [ "${{ matrix.target }}" = "root" ]; then
+            pnpm install --frozen-lockfile
+          else
+            pnpm install --frozen-lockfile --filter ${{ matrix.target }}
+          fi
           echo "::endgroup::"
           trap - EXIT
 
-          if ! git diff --quiet pnpm-lock.yaml; then
+          if [ "${{ matrix.target }}" = "root" ] && ! git diff --quiet pnpm-lock.yaml; then
             echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
             exit 1
           fi
 
       - name: Verify Agent Context
+        if: matrix.target == 'root'
         continue-on-error: true
         run: |
           pnpm run agent:prime
@@ -149,15 +128,27 @@ jobs:
           fi
 
       - name: Lint
+        if: matrix.target == 'root'
         run: pnpm run lint
 
       - name: Type-check
-        run: pnpm run type-check
+        run: |
+          if [ "${{ matrix.target }}" = "root" ]; then
+            pnpm run type-check
+          else
+            pnpm --filter ${{ matrix.target }} run build
+          fi
 
       - name: Run Unit Tests - Vitest
-        run: pnpm test
+        run: |
+          if [ "${{ matrix.target }}" = "root" ]; then
+            pnpm test
+          else
+            pnpm --filter ${{ matrix.target }} run test
+          fi
 
       - name: Run CLI Unit Tests
+        if: matrix.target == 'root'
         shell: bash
         run: |
           echo "::group::Pytest"
@@ -165,9 +156,11 @@ jobs:
           python3 -m pytest tests/dev-tools/test_modern_cli.py
 
       - name: Check for dead code
+        if: matrix.target == 'root'
         run: pnpm run knip
 
       - name: TypeScript `any` Ratchet
+        if: matrix.target == 'root'
         shell: bash
         run: |
           echo "::group::Ratchet Any"

@@ -1,3 +1,5 @@
+import { vi } from "vitest";
+
 /**
  * Shared test utilities for boomtick-mcp
  */
@@ -7,5 +9,13 @@
  * Should be called in beforeEach.
  */
 export function setupTestEnv() {
-  process.env.JULES_API_KEY = "test-key";
+  vi.stubEnv("JULES_API_KEY", "test-key");
+}
+
+/**
+ * Resets the test environment.
+ * Should be called in afterEach.
+ */
+export function teardownTestEnv() {
+  vi.unstubAllEnvs();
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { triggerJulesFeedbackHandler } from "./trigger-feedback.js";
 import * as shell from "../../lib/shell.js";
-import { setupTestEnv } from "../../lib/test-utils.js";
+import { setupTestEnv, teardownTestEnv } from "../../lib/test-utils.js";
 
 vi.mock("../../lib/shell.js", () => ({
   runCommand: vi.fn(),
@@ -30,6 +30,7 @@ describe("triggerJulesFeedbackHandler", () => {
   });
 
   afterEach(() => {
+    teardownTestEnv();
     global.fetch = originalFetch;
     vi.clearAllMocks();
   });
