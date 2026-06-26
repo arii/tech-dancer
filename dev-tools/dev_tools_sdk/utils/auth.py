@@ -23,9 +23,3 @@ def get_github_token(env_vars: Sequence[str] = ("GITHUB_TOKEN", "GH_TOKEN", "PAT
     raise AuthError("Missing GITHUB_TOKEN/GH_TOKEN.")
 
 
-def run_authenticated_gh(args: Sequence[str]) -> subprocess.CompletedProcess[str]:
-    env = os.environ.copy()
-    token = get_github_token()
-    env["GITHUB_TOKEN"] = token
-    env["GH_TOKEN"] = token
-    return subprocess.run(["gh", *args], env=env, capture_output=True, text=True, check=False)

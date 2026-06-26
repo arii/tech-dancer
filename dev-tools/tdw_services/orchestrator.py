@@ -936,21 +936,16 @@ Respond only after the PR is created or updated:
     def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
         """Fetches CI logs for failing (or all) check runs in a PR."""
         # Get PR head SHA
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefOid"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_sha = pr_data.get("headRefOid")
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_sha = pr_data.get('head', {}).get('sha')
 
         if not head_sha:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get check runs
-        stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
-        ])
+        data = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-runs', accept='application/vnd.github.v3+json')
         try:
-            data = json.loads(stdout_checks)
+            pass # Keep try block since data might not be parsable correctly downstream if schema changes, but json is already loaded
             checks = []
             for run in data.get("check_runs", []):
                 checks.append({
@@ -968,22 +963,16 @@ Respond only after the PR is created or updated:
 
         logs = {}
         # Get check suites to find workflow runs
-        stdout_suites = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-suites"
-        ])
-        check_suites = json.loads(stdout_suites).get("check_suites", [])
+        check_suites_data = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-suites')
+        check_suites = check_suites_data.get("check_suites", [])
 
         for suite in check_suites:
-            stdout_runs = self.github.run_authenticated_gh([
-                "api", f"/repos/:owner/:repo/check-suites/{suite['id']}/check-runs"
-            ])
-            runs = json.loads(stdout_runs).get("check_runs", [])
+            stdout_runs_data = self.github._request('GET', f'/repos/{self.github.repo}/check-suites/{suite["id"]}/check-runs')
+            runs = stdout_runs_data.get("check_runs", [])
             for run in runs:
                 if include_all or run.get("conclusion") == "failure":
                     try:
-                        log_content = self.github.run_authenticated_gh([
-                            "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
-                        ])
+                        log_content = self.github.fetch_check_run_logs(run['id'])
                         logs[run["name"]] = log_content[:10000]
                     except Exception:
                         pass
@@ -997,24 +986,18 @@ Respond only after the PR is created or updated:
     def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
         """Fetches and combines all CI logs for the latest workflow run of a PR."""
         # Get PR head SHA
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefOid"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_sha = pr_data.get("headRefOid")
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_sha = pr_data.get('head', {}).get('sha')
 
         if not head_sha:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get all check runs for this SHA
         # Use full API response to be more robust
-        stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
-        ])
         try:
-            data = json.loads(stdout_checks)
+            data = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-runs', accept='application/vnd.github.v3+json')
             check_runs = data.get("check_runs", [])
-        except json.JSONDecodeError:
+        except Exception:
             raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
 
         all_logs = []
@@ -1022,9 +1005,7 @@ Respond only after the PR is created or updated:
         for run in check_runs[:20]:
             try:
                 # Fetch logs via API to avoid terminal paging/buffering issues
-                log_content = self.github.run_authenticated_gh([
-                    "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
-                ])
+                log_content = self.github.fetch_check_run_logs(run['id'])
                 header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
                 all_logs.append(header)
                 # Truncate each log to 20k chars to balance detail vs memory
@@ -1049,11 +1030,8 @@ Respond only after the PR is created or updated:
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
         # Get PR head ref
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefName"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_ref = pr_data.get("headRefName")
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_ref = pr_data.get("head", {}).get("ref")
 
         if not head_ref:
             raise CLIError(f"Could not determine head ref for PR #{pr_number}")
@@ -1101,16 +1079,11 @@ Respond only after the PR is created or updated:
     def get_pr_diff_shapen(self, pr_number: int) -> Dict[str, Any]:
         """Fetches PR diff, applies truncation and shapes file info."""
         # Get files list
-        stdout_files = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "files"
-        ])
-        files_data = json.loads(stdout_files)
-        files = files_data.get("files", [])
+        files_data = self.github.fetch_pr_files(pr_number)
+        files = [{"path": f.get("filename"), "status": f.get("status"), "additions": f.get("additions"), "deletions": f.get("deletions")} for f in files_data]
 
         # Get diff text
-        diff_text = self.github.run_authenticated_gh([
-            "pr", "diff", str(pr_number)
-        ])
+        diff_text = self.github.fetch_pr_diff(pr_number)
 
         MAX_DIFF_SIZE = 50000
         truncated = False
@@ -1134,21 +1107,20 @@ Respond only after the PR is created or updated:
 
     def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
-        gh_args = [
-            "pr", "list",
-            "--state", state,
-            "--limit", str(limit),
-            "--json", "number,title,author,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,updatedAt,url"
-        ]
-
-        if labels:
-            gh_args.extend(["--label", ",".join(labels)])
-
-        stdout = self.github.run_authenticated_gh(gh_args)
-        prs = json.loads(stdout)
-
-        if not include_drafts:
-            prs = [pr for pr in prs if not pr.get("isDraft")]
+        response = self.github._request('GET', f'/repos/{self.github.repo}/pulls?state={state}&per_page={limit}&sort=updated&direction=desc')
+        prs = []
+        for pr in response:
+            if labels:
+                pr_labels = [l['name'] for l in pr.get('labels', [])]
+                if not any(label in pr_labels for label in labels):
+                    continue
+            pr['author'] = {'login': pr.get('user', {}).get('login')}
+            pr['headRefName'] = pr.get('head', {}).get('ref')
+            pr['baseRefName'] = pr.get('base', {}).get('ref')
+            pr['isDraft'] = pr.get('draft', False)
+            if not include_drafts and pr.get("isDraft"):
+                continue
+            prs.append(pr)
 
         return {"prs": prs}
 
@@ -1211,9 +1183,14 @@ Respond only after the PR is created or updated:
 
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
-        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base {base_branch}
-        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", base_branch]
-        pr_url = self.github.run_authenticated_gh(create_args).strip()
+
+        response = self.github._request('POST', f'/repos/{self.github.repo}/pulls', json_data={
+            'title': pr_title,
+            'head': target_branch,
+            'base': base_branch,
+            'body': aggregate_body
+        })
+        pr_url = response.get('html_url', '').strip()
 
         return {
             "status": "success",

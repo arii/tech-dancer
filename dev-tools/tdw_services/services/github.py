@@ -29,30 +29,6 @@ class GitHubClient:
         except Exception:
             return ""
 
-    def run_authenticated_gh(self, command_args: List[str]) -> str:
-        """Executes a GH CLI command using the PAT from environment."""
-        env = os.environ.copy()
-        # Forces GH to use the token without needing 'gh auth login'
-        env["GH_TOKEN"] = self.token
-        env["GITHUB_TOKEN"] = self.token
-
-        proc = subprocess.run(["gh"] + command_args, env=env, capture_output=True, text=True)
-        if proc.returncode != 0:
-            raise Exception(f"GH command failed: {proc.stderr}")
-        return proc.stdout
-
-    def run_authenticated_gh_with_retry(self, command_args: List[str], max_retries: int = 3, delay: int = 5) -> str:
-        """Executes a GH CLI command using the PAT with retry mechanism."""
-        for attempt in range(max_retries):
-            try:
-                return self.run_authenticated_gh(command_args)
-            except Exception as e:
-                log_info(f"Attempt {attempt+1} failed: {e}")
-                if attempt < max_retries - 1:
-                    time.sleep(delay)
-                else:
-                    raise
-
     def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
         headers = {
@@ -91,8 +67,7 @@ class GitHubClient:
 
     def fetch_check_runs(self, ref: str) -> List[Dict[str, Any]]:
         try:
-            res = self.run_authenticated_gh(['api', f'/repos/{self.repo}/commits/{ref}/check-runs'])
-            data = json.loads(res)
+            data = self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-runs', accept="application/vnd.github.v3+json")
             return [{
                 'id': run.get('id'),
                 'name': run.get('name'),
@@ -101,7 +76,9 @@ class GitHubClient:
                 'url': run.get('html_url'),
                 'external_id': run.get('external_id')
             } for run in data.get('check_runs', [])]
-        except Exception:
+        except Exception as e:
+            from tdw_services.utils import log_warn
+            log_warn(f"Failed to fetch check runs: {e}")
             return []
 
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:

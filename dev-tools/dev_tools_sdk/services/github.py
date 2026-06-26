@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import json
+import os
+import subprocess
+import requests
 from dataclasses import dataclass
 
-from ..utils.auth import run_authenticated_gh
+from ..utils.auth import get_github_token
 
 
 @dataclass
@@ -16,39 +19,62 @@ class PullRequestSummary:
 
 class GitHubService:
     def __init__(self, repo: str | None = None):
-        self.repo = repo
+        self.repo = repo or os.environ.get("GITHUB_REPOSITORY") or os.environ.get("GH_REPO")
+        if not self.repo:
+            self.repo = self._detect_repo()
+        self.token = get_github_token()
 
-    def _repo_args(self) -> list[str]:
-        return ["-R", self.repo] if self.repo else []
+    def _detect_repo(self) -> str:
+        try:
+            proc = subprocess.run(['git', 'config', '--get', 'remote.origin.url'], capture_output=True, text=True)
+            url = proc.stdout.strip()
+            import re
+            match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
+            return match.group(1) if match else url
+        except Exception:
+            return ""
 
-    def _gh_json(self, args: list[str], err: str) -> dict:
-        res = run_authenticated_gh([*args, *self._repo_args()])
-        if res.returncode != 0:
-            raise RuntimeError(res.stderr.strip() or err)
-        return json.loads(res.stdout)
+    def _request(self, method: str, path: str) -> dict:
+        url = f"https://api.github.com{path}"
+        headers = {
+            "Authorization": f"Bearer {self.token}",
+            "Accept": "application/vnd.github.v3+json",
+        }
+        try:
+            response = requests.request(method, url, headers=headers, timeout=30)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise RuntimeError(f"GitHub API Error: {e}")
 
     def view_pr(self, number: int) -> PullRequestSummary:
-        payload = self._gh_json(
-            ["pr", "view", str(number), "--json", "number,title,author,state"],
-            "Failed to view pull request.",
-        )
+        try:
+            payload = self._request('GET', f'/repos/{self.repo}/pulls/{number}')
+        except Exception as e:
+            raise RuntimeError(f"Failed to view pull request: {e}")
         return PullRequestSummary(
             number=payload["number"],
             title=payload["title"],
-            author=payload["author"]["login"],
+            author=payload.get("user", {}).get("login", ""),
             state=payload["state"],
         )
 
     def list_changed_files(self, number: int) -> list[str]:
-        payload = self._gh_json(["pr", "view", str(number), "--json", "files"], "Failed to read PR files.")
-        return [f["path"] for f in payload.get("files", [])]
+        try:
+            payload = self._request('GET', f'/repos/{self.repo}/pulls/{number}/files')
+        except Exception as e:
+            raise RuntimeError(f"Failed to read PR files: {e}")
+        return [f["filename"] for f in payload]
 
     def diff_stats(self, number: int) -> dict[str, int]:
-        payload = self._gh_json(["pr", "view", str(number), "--json", "additions,deletions,changedFiles"], "Failed to read PR stats.")
+        try:
+            payload = self._request('GET', f'/repos/{self.repo}/pulls/{number}')
+        except Exception as e:
+            raise RuntimeError(f"Failed to read PR stats: {e}")
         return {
             "additions": int(payload.get("additions", 0)),
             "deletions": int(payload.get("deletions", 0)),
-            "changed_files": int(payload.get("changedFiles", 0)),
+            "changed_files": int(payload.get("changed_files", 0)),
         }
 
     def resolve_conflicts(self, number: int, dry_run: bool = True) -> str:
