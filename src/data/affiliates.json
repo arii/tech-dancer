@@ -634,15 +634,17 @@
   "hypervolt": {
     "id": "hypervolt",
     "name": "Hypervolt Percussion Massager",
-    "url": "https://www.amazon.com/dp/B08W7N9S9X?tag=onasafari04-20",
+    "url": "https://www.amazon.com/hypervolt/s?k=hypervolt&linkCode=ll2&tag=onasafari04-20&linkId=0a71c5ebebe960d08ebec3389ff35513&language=en_US&ref_=as_li_ss_tl",
     "category": "recovery",
-    "description": "Professional-grade percussive therapy device to relieve muscle soreness and stiffness."
+    "description": "Professional-grade percussive therapy device to relieve muscle soreness and stiffness.",
+    "draft": true
   },
   "pedialyte": {
     "id": "pedialyte",
     "name": "Pedialyte Electrolyte Powder Packets",
-    "url": "https://www.amazon.com/dp/B004M1B7S6?tag=onasafari04-20",
+    "url": "https://www.amazon.com/dp/B079YBMT2G?linkCode=ll2&tag=onasafari04-20&linkId=6ef3b3272f3f35394de038463ffc2e6a&language=en_US&ref_=as_li_ss_tl",
     "category": "recovery",
-    "description": "Fast-acting rehydration solution to replenish electrolytes lost during intense dance sessions."
+    "description": "Fast-acting rehydration solution to replenish electrolytes lost during intense dance sessions.",
+    "draft": true
   }
 }
