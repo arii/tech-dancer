@@ -34,6 +34,14 @@ if (pkg.engines?.pnpm !== expectedPnpm) {
   errors.push(`engines.pnpm must be ${expectedPnpm}, found ${pkg.engines?.pnpm}`);
 }
 
+const allowNodeChange = process.env.ALLOW_NODE_VERSION_CHANGE === "true";
+if (!allowNodeChange) {
+    if (nvmrc !== expectedNodeExact || nodeVersionFile !== expectedNodeExact || pkg.engines?.node !== expectedNodeMajorForVercel) {
+        // This is a bit redundant with the individual checks above but ensures a clear "Hard block" message
+        errors.push("HARD BLOCK: Node.js version modification is forbidden unless ALLOW_NODE_VERSION_CHANGE=true.");
+    }
+}
+
 if (errors.length > 0) {
   console.error("❌ Runtime contract drift detected:");
   for (const error of errors) {

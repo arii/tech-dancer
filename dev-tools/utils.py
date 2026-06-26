@@ -483,3 +483,52 @@ def get_github_client():
     if not token:
         raise CLIError("GitHub token not found", code=401)
     return Github(auth=Auth.Token(token))
+
+def get_stack_versions() -> Dict[str, str]:
+    """Extracts core versions (Node, pnpm, GHA) from the repository."""
+    versions = {
+        "node": "24.16.0", # Fallback
+        "pnpm": "10.28.2", # Fallback
+        "actions/checkout": "v4",
+        "actions/setup-node": "v4",
+        "actions/upload-artifact": "v4",
+    }
+
+    try:
+        if os.path.exists(".node-version"):
+            with open(".node-version", "r") as f:
+                versions["node"] = f.read().strip().replace("v", "")
+        elif os.path.exists(".nvmrc"):
+            with open(".nvmrc", "r") as f:
+                versions["node"] = f.read().strip().replace("v", "")
+
+        if os.path.exists("package.json"):
+            with open("package.json", "r") as f:
+                pkg = json.load(f)
+                if "packageManager" in pkg:
+                    versions["pnpm"] = pkg["packageManager"].replace("pnpm@", "")
+                elif "engines" in pkg and "pnpm" in pkg["engines"]:
+                    versions["pnpm"] = pkg["engines"]["pnpm"]
+
+                if "engines" in pkg and "node" in pkg["engines"] and not os.path.exists(".node-version"):
+                     # Only override if explicit files aren't there
+                     versions["node"] = pkg["engines"]["node"]
+
+        # Scan for common GHA versions in workflows
+        workflow_dir = ".github/workflows"
+        if os.path.exists(workflow_dir):
+            for filename in os.listdir(workflow_dir):
+                if filename.endswith(".yml") or filename.endswith(".yaml"):
+                    with open(os.path.join(workflow_dir, filename), "r") as f:
+                        content = f.read()
+                        # Simple regex for actions
+                        matches = re.findall(r"uses:\s+([\w\-/]+)@([\w\.]+)", content)
+                        for action, version in matches:
+                            if action.startswith("actions/"):
+                                # We keep the latest one we find for each action as a heuristic
+                                versions[action] = version
+
+    except Exception as e:
+        log_warn(f"Failed to extract stack versions: {e}")
+
+    return versions

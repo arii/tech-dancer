@@ -14,7 +14,8 @@ from utils import (
     clean_llm_output,
     get_ai_model,
     get_ai_review_model,
-    get_ai_synthesis_model
+    get_ai_synthesis_model,
+    get_stack_versions
 )
 from tdw_services.services.dependency_graph import DependencyGraph
 from tdw_services.services.vector_store import VectorStore
@@ -153,6 +154,44 @@ class AIClient:
 
             if "<<<<<<<" in resolved:
                 return False
+
+            # Post-processing: Prevent version downgrades in resolved conflict
+            try:
+                # Get diff of the resolved file against the previous version to detect version changes
+                # But since we are resolving a conflict, it's easier to just run the validator
+                # on the resolved content if it's a version-sensitive file.
+                sensitive_files = [".nvmrc", ".node-version", "package.json", ".github/workflows/"]
+                if any(file_path.endswith(sf) or sf in file_path for sf in sensitive_files):
+                    from verify_versions import parse_diff, verify_changes
+                    # Construct a dummy diff to check against HEAD
+                    with open(file_path, 'r') as f:
+                        old_content = f.read()
+
+                    dummy_diff = f"--- a/{file_path}\n+++ b/{file_path}\n"
+                    # Simple heuristic: if it was a conflict, we check the NEW content against HEAD
+                    # We can use a simpler approach: check if any version in 'resolved' is lower than HEAD
+                    # For now, let's just log a warning if verify_versions would fail.
+                    # A more robust way is to use verify_versions.verify_changes on a synthesized diff.
+
+                    lines_old = old_content.splitlines()
+                    lines_new = resolved.splitlines()
+
+                    # We only care about lines that look like version assignments
+                    diff_lines = []
+                    for line in lines_new:
+                        if any(kw in line for kw in ["node", "pnpm", "uses:", "@v"]):
+                             diff_lines.append(f"+{line}")
+
+                    if diff_lines:
+                        # This is a bit of a hack but it allows us to reuse the validation logic
+                        findings = verify_changes(parse_diff("\n".join(diff_lines)))
+                        if any(f["severity"] == "error" for f in findings):
+                             log_error(f"AI-generated resolution for {file_path} contains version violations: {findings}")
+                             # If it's a hard block or downgrade, we might want to reject it or strip it.
+                             # For now, we'll block it to be safe.
+                             return False
+            except Exception as e:
+                log_warn(f"Failed to post-process AI resolution for {file_path}: {e}")
 
             with open(file_path, 'w') as f:
                 f.write(resolved)
@@ -344,12 +383,17 @@ class AIClient:
         context = self._get_context_for_chunk(chunk)
         context_section = f"\n\n## Repository Context\n{context}" if context else ""
 
+        stack_versions = get_stack_versions()
+        versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
+
         return (
             f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
             f'PR title: {pr_title}\n'
             f'CI status: {checks_summary}\n'
+            f'\n## Current Stack Versions (Source of Truth)\n{versions_block}\n'
             f'{context_section}\n\n'
             f'Rules:\n'
+            f'- DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'

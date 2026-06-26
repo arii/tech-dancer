@@ -245,6 +245,41 @@ def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
         err(ctx, str(e), code=e.code)
 
 @gh.command()
+@click.argument('diff_input', required=False)
+@click.pass_context
+def verify_versions(ctx, diff_input):
+    """Verify version changes in a diff for downgrades or hard blocks."""
+    import subprocess
+    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'verify_versions.py')
+
+    if not diff_input:
+        # If no input provided, try to get diff against main
+        try:
+            diff_input = run_command(["git", "diff", PROJECT_CONFIG.base_branch])
+        except Exception as e:
+            err(ctx, f"Failed to get git diff: {e}")
+
+    cmd = [sys.executable, script_path, diff_input]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+        if proc.stdout:
+            try:
+                findings = json.loads(proc.stdout)
+                if findings:
+                    status = "error" if any(f['severity'] == 'error' for f in findings) else "success"
+                    out(ctx, f"Found {len(findings)} version issues.", data={"status": status, "findings": findings})
+                    if status == "error":
+                        sys.exit(1)
+                else:
+                    out(ctx, "✅ No version issues detected.", data={"status": "success", "findings": []})
+            except json.JSONDecodeError:
+                err(ctx, f"Invalid validator output: {proc.stdout}")
+        else:
+            err(ctx, f"Validator failed: {proc.stderr}")
+    except Exception as e:
+        err(ctx, f"Error running validator: {e}")
+
+@gh.command()
 @click.option('--pr', type=int)
 @click.pass_context
 def detect_conflicts(ctx, pr):
