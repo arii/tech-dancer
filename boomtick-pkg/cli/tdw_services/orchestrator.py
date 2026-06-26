@@ -615,8 +615,8 @@ class Orchestrator:
                 results["steps"].append({"name": name, "status": "failure", "error": str(e)})
                 raise e
         run_step("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
-        run_step("TypeScript", ["pnpm", "run", "type-check"])
-        run_step("Lint", ["pnpm", "run", "lint"])
+        run_step("TypeScript", ["npx", "tsc", "--noEmit"])
+        run_step("Lint", ["npm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
         if missing_vars: results["steps"].append({"name": "Baseline Check", "status": "warning", "message": f"Missing GHA variables: {', '.join(missing_vars)}"})
         else: results["steps"].append({"name": "Baseline Check", "status": "success"})
@@ -636,8 +636,8 @@ class Orchestrator:
                 with open(logs_path, 'r') as f: logs_content = f.read()
             else: raise CLIError(f"Log file not found: {logs_path}")
         else:
-            res_lint = run_command(["pnpm", "run", "lint:ox"], check=False)
-            res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
+            res_lint = run_command(["npm", "run", "lint:ox"], check=False)
+            res_tsc = run_command(["npx", "tsc", "--noEmit"], check=False)
             logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
         if not logs_content.strip(): return {"status": "success", "message": "No errors found."}
         import tempfile, shutil

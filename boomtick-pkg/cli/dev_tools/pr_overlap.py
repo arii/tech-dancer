@@ -3,7 +3,7 @@ import json
 import argparse
 import sys
 import os
-import pickle
+import json
 from collections import defaultdict
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -16,8 +16,15 @@ def main():
     parser.add_argument("--no-cache", action="store_true", help="Bust the cache and force fetching data from GitHub")
     args = parser.parse_args()
 
-    CACHE_FILE = ".pr_cache.pkl"
+    CACHE_FILE = ".pr_cache.json"
     limit = args.limit
+
+    # Try removing old cache file
+    if os.path.exists(".pr_cache.pkl"):
+        try:
+            os.remove(".pr_cache.pkl")
+        except OSError:
+            pass
 
     def get_open_prs(limit):
         try:
@@ -44,8 +51,13 @@ def main():
             return set()
 
     if not args.no_cache and os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'rb') as f:
-            cache = pickle.load(f)
+        try:
+            with open(CACHE_FILE, 'r') as f:
+                cache = json.load(f)
+                for k in cache["files"]:
+                    cache["files"][k] = set(cache["files"][k])
+        except Exception:
+            cache = {"prs": {}, "files": {}}
     else:
         cache = {"prs": {}, "files": {}}
 
@@ -55,8 +67,14 @@ def main():
         cache["prs"][num] = pr['title']
         cache["files"][num] = get_pr_files(num)
 
-    with open(CACHE_FILE, 'wb') as f:
-        pickle.dump(cache, f)
+    for k in cache["files"]:
+        cache["files"][k] = list(cache["files"][k])
+
+    with open(CACHE_FILE, 'w') as f:
+        json.dump(cache, f)
+
+    for k in cache["files"]:
+        cache["files"][k] = set(cache["files"][k])
 
     # 1. Report specific exact-match overlap groups
     overlap_groups = defaultdict(list)

@@ -294,7 +294,7 @@ class GHAConfigManager:
         if getattr(self, "_initialized", False):
             return
         try:
-            from importlib.resources import files
+            from importlib_resources import files
             self.config_path = "config.json"
             self.config = json.loads(files("dev_tools").joinpath("config.json").read_text())
             return

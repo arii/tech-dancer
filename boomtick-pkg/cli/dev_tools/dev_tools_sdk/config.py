@@ -72,7 +72,7 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
             pass
     else:
         try:
-            from importlib.resources import files
+            from importlib_resources import files
             raw = json.loads(files("dev_tools").joinpath("project_config.json").read_text())
         except Exception:
             return ProjectConfig()

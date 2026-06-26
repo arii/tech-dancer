@@ -22,13 +22,15 @@ runs:
 
     - name: pnpm install
       shell: bash
+      env:
+        TARGET: ${{ inputs.target }}
       run: |
         echo "::group::pnpm install"
         trap 'echo "::endgroup::"' EXIT
-        if [ "${{ inputs.target }}" = "root" ]; then
+        if [ "$TARGET" = "root" ]; then
           pnpm install --frozen-lockfile
         else
-          pnpm install --frozen-lockfile --filter ${{ inputs.target }}
+          pnpm install --frozen-lockfile --filter "$TARGET"
         fi
 
     - name: Verify lockfile integrity (root only)
@@ -57,20 +59,24 @@ runs:
 
     - name: Type-check / Build
       shell: bash
+      env:
+        TARGET: ${{ inputs.target }}
       run: |
-        if [ "${{ inputs.target }}" = "root" ]; then
+        if [ "$TARGET" = "root" ]; then
           pnpm run type-check
         else
-          pnpm --filter ${{ inputs.target }} run build
+          pnpm --filter "$TARGET" run build
         fi
 
     - name: Run Unit Tests
       shell: bash
+      env:
+        TARGET: ${{ inputs.target }}
       run: |
-        if [ "${{ inputs.target }}" = "root" ]; then
+        if [ "$TARGET" = "root" ]; then
           pnpm test
         else
-          pnpm --filter ${{ inputs.target }} run test
+          pnpm --filter "$TARGET" run test
         fi
 
     - name: Run CLI Unit Tests
