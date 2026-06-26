@@ -630,5 +630,19 @@
     "description": "Stand out on the dance floor with these battery-operated LED light up suspenders.",
     "image": "/images/gear/sketches/glow_suspenders.webp",
     "imageMode": "contain"
+  },
+  "hypervolt": {
+    "id": "hypervolt",
+    "name": "Hypervolt Percussion Massager",
+    "url": "https://www.amazon.com/dp/B08W7N9S9X?tag=onasafari04-20",
+    "category": "recovery",
+    "description": "Professional-grade percussive therapy device to relieve muscle soreness and stiffness."
+  },
+  "pedialyte": {
+    "id": "pedialyte",
+    "name": "Pedialyte Electrolyte Powder Packets",
+    "url": "https://www.amazon.com/dp/B004M1B7S6?tag=onasafari04-20",
+    "category": "recovery",
+    "description": "Fast-acting rehydration solution to replenish electrolytes lost during intense dance sessions."
   }
 }
