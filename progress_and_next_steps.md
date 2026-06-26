@@ -40,12 +40,20 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
   - Staged and committed updates to `.github/actions/setup-workspace/action.yml`, `.devcontainer/Dockerfile`, `.devcontainer/devcontainer.json`, `.githooks/update-env.sh`, `.github/PULL_REQUEST_REVIEW_TEMPLATE.md`, `.github/dependabot.yml`, `.gitignore`, and `ai_service.py` to prevent failing `pip install` commands in PR validation workflows.
   - Audited the codebase and updated all remaining `dev-tools` and `boomtick-mcp` path references in active scripts and configuration tools, including `scripts/lib/codeReviewOrchestrator.ts`, `scripts/lib/projectConfig.ts`, `scripts/send-jules-impact.py`, `scripts/ux-audit-runner.ts`, `scripts/ux-lighthouse-runner.ts`, `eslint.config.mjs`, `knip.ts`, and the MCP Server's internal prompt directory mappings in `boomtick-pkg/mcp/src/mcp/server.ts`. Verified that `pnpm run lint`, `pnpm run knip`, and CLI tests all pass successfully.
 
+- [x] **Elimination of Legacy Token Fallbacks**:
+  - Standardized entirely on `GITHUB_TOKEN` for GitHub authentication.
+  - Eliminated deprecated `GH_TOKEN` and `PAT_TOKEN` fallbacks and references from `boomtick-pkg/mcp/src/config.ts`, `boomtick-pkg/cli/dev_tools/dev_tools_sdk/utils/auth.py`, `boomtick-pkg/cli/dev_tools/utils.py`, `boomtick-pkg/cli/dev_tools/vision_audit.py`, `boomtick-pkg/cli/snapshot.sh`, and `boomtick-pkg/cli/verify.sh`.
+
+- [x] **Agent Rules Enforcement Updates**:
+  - Updated all `AGENTS.md` and `.agents/AGENTS.md` protocol files to explicitly instruct agents that they must document any MCP or dev-tool failures in the CLI Failure Ledger (within `progress_and_next_steps.md`) instead of silently bypassing issues via raw bash/CLI fallbacks.
+
 ---
 
 ## 🚀 Next Steps
 
 1. **Verify PR Validation / ChatOps in CI**: Test workflow runs on GitHub side to confirm that composite actions execute successfully.
 2. **Subtree Push Preparation**: Once verified, prepare the final subtree push target if extraction to `arii/boomtick` is desired.
+3. **Internalize workflows inside package**: Further evolve the package design so that GitHub Workflows themselves are defined entirely inside the `boomtick-pkg` package directory, keeping `.github/workflows/` as extremely lightweight triggers pointing directly to the ones packaged under `boomtick-pkg/workflows/`.
 
 ---
 

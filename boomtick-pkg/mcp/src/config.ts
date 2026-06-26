@@ -10,7 +10,7 @@ dotenv.config({
 });
 
 export const config = {
-  githubToken: process.env.GITHUB_TOKEN || process.env.GH_TOKEN,
+  githubToken: process.env.GITHUB_TOKEN,
   githubOwner: process.env.GITHUB_OWNER || "arii",
   githubRepo: process.env.GITHUB_REPO || "tech-dancer",
   repoPath: process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../"),

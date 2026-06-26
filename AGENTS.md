@@ -138,7 +138,7 @@ call automatically:
 3. Returns structured output with repo context already attached
 
 Calling `td_cli.py` directly skips step 1. Calling raw bash skips steps 1–2.
-Only escalate to a lower tier if the MCP tool is **genuinely unavailable**.
+Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
 
 ### CLI Schema Authority
 

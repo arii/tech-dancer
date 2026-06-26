@@ -9,7 +9,7 @@ class AuthError(RuntimeError):
     pass
 
 
-def get_github_token(env_vars: Sequence[str] = ("GITHUB_TOKEN", "GH_TOKEN", "PAT_TOKEN")) -> str:
+def get_github_token(env_vars: Sequence[str] = ("GITHUB_TOKEN",)) -> str:
     for var in env_vars:
         value = os.getenv(var)
         if value:
@@ -20,7 +20,7 @@ def get_github_token(env_vars: Sequence[str] = ("GITHUB_TOKEN", "GH_TOKEN", "PAT
             return proc.stdout.strip()
     except Exception:
         pass
-    raise AuthError("Missing GITHUB_TOKEN/GH_TOKEN.")
+    raise AuthError("Missing GITHUB_TOKEN.")
 
 
 def run_authenticated_gh(args: Sequence[str]) -> subprocess.CompletedProcess[str]:
