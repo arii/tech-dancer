@@ -1,21 +1,38 @@
 name: AI ChatOps
+
 on:
-  issue_comment:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number'
+        required: true
+        type: string
+      comment_body:
+        description: 'Comment body'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  review:
-    if: contains(github.event.comment.body, '/review')
+  ai-review:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
+
       - uses: ./boomtick-pkg/mcp/actions/ai-review
         with:
-          pr_number: ${{ github.event.issue.number }}
+          pr_number: ${{ inputs.issue_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GOOGLE_JULES_API_KEY: ${{ secrets.GOOGLE_JULES_API_KEY }}
