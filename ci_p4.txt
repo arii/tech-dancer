@@ -1,11 +1,17 @@
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:gemini-review
-      - name: Visual review github models agent
-        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:github-models-review
+
+      - parallel: # actionlint-disable syntax-check
+          - name: Visual review agent
+            if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+            env:
+              GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: pnpm run impact:gemini-review
+          - name: Visual review github models agent
+            if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: pnpm run impact:github-models-review
+
       - name: Report Summary
         if: always()
         run: |

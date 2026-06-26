@@ -67,27 +67,20 @@
           - name: Deployment Impact Analysis
             run: pnpm run impact:analysis
           - name: Build Main
-        env:
-          DISABLE_MINIFY: true
-        run: pnpm run impact:build-main
-      - name: Build PR
-        env:
-          VITE_BASE_PATH: /
-          DISABLE_MINIFY: true
-        run: pnpm run build:review
-      - name: Visual Diff
-        run: pnpm run impact:visual-diff
-      - name: DOM Diff
-        run: pnpm run impact:dom-diff
-      - name: Check if visual changes exist
-        id: check_visuals
-        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
-      - name: Code review agent
-        if: always() && github.event_name == 'pull_request'
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            env:
+              DISABLE_MINIFY: true
+            run: pnpm run impact:build-main
+          - name: Build PR
+            env:
+              VITE_BASE_PATH: /
+              DISABLE_MINIFY: true
+            run: pnpm run build:review
+          - name: Code review agent
+            if: always() && github.event_name == 'pull_request'
+            continue-on-error: true
+            env:
+              GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             run: pnpm run impact:gemini-code-review
           - name: Code review github models agent
             if: always() && github.event_name == 'pull_request'
@@ -95,6 +88,13 @@
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             run: pnpm run impact:github-models-code-review
-      - name: Visual review agent
-        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
-        env:
+
+      - parallel: # actionlint-disable syntax-check
+          - name: Visual Diff
+            run: pnpm run impact:visual-diff
+          - name: DOM Diff
+            run: pnpm run impact:dom-diff
+
+      - name: Check if visual changes exist
+        id: check_visuals
+        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
