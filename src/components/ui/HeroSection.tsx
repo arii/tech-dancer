@@ -21,15 +21,14 @@ export function HeroSection() {
       className="hero-section"
       aria-label="Site hero"
     >
-      <HeroParticleCanvas />
+      <HeroParticleCanvas aria-label="Decorative background particles" />
 
-      {/* Content sits above the canvas via z-index. */}
       <Stack
         position="relative"
         zIndex={10}
         align="start"
         gap={0}
-        paddingX={{ base: 4, md: 8, lg: 4 }}
+        paddingX={{ base: 4, md: 8, lg: 8 }}
         paddingTop={{ base: 4, lg: 8 }}
         paddingBottom={{ base: 12, lg: 16 }}
         width="full"
@@ -80,7 +79,7 @@ export function HeroSection() {
           weight="font-medium"
           align="left"
           size={{ base: "lg", md: "xl" }}
-          maxWidth="[35ch]"
+          maxWidth="prose"
           className="hero-tagline-anim"
         >
           Gear, travel, and tips for better dance weekends.

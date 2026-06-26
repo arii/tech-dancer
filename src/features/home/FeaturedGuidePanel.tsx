@@ -14,11 +14,10 @@ const FEATURED = {
 
 export function FeaturedGuidePanel() {
   return (
-    <Box
+    <Stack
       as={NavLink}
       to={FEATURED.href}
       width="full"
-      display="flex"
       direction={{ base: 'col', lg: 'row' }}
       position="relative"
       overflow="hidden"

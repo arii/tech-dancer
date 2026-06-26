@@ -25,7 +25,7 @@ export default function Navigation() {
   return (
     <>
       <MobileBottomNav />
-      <Box as="nav" aria-label="Main Navigation" zIndex="nav" position="fixed" inset="top" height={16} width="full" border="b" isolation="isolate" className="bg-bg/95 backdrop-blur-xl">
+      <Box as="nav" aria-label="Main Navigation" zIndex="nav" position="fixed" inset="top" height={16} width="full" border="b" isolation="isolate" surface="bg" opacityVariant="solid" className="backdrop-blur-xl">
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} height={{ base: 8, md: 9 }} width="auto" className="group">
@@ -36,7 +36,7 @@ export default function Navigation() {
                 <Box as="li" key={item.path}>
                   <NavLink
                     to={item.path}
-                    className={({ isActive }) => cn('relative text-xs font-medium uppercase tracking-widest transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-dim/80')}
+                    className={({ isActive }) => cn('relative text-xs font-medium uppercase tracking-widest transition-colors hover:text-accent py-1', isActive ? 'text-accent' : 'text-text-body')}
                   >
                     {item.label}
                   </NavLink>
@@ -59,7 +59,7 @@ export default function Navigation() {
               padding={3}
               align="center"
               justify="center"
-              radius="full"
+              radius="lg"
               className="hover:bg-bg/50 active:bg-accent/10 transition-colors"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}

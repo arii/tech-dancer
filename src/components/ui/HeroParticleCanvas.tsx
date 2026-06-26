@@ -18,6 +18,7 @@ interface HeroParticleCanvasProps {
   alphaMax?: number;
   hues?: number[];
   seeds?: typeof HERO_CONFIG.SEEDS;
+  "aria-label"?: string;
 }
 
 export function HeroParticleCanvas({
@@ -29,6 +30,7 @@ export function HeroParticleCanvas({
   alphaMax = HERO_CONFIG.PARTICLE_ALPHA_MAX,
   hues = HERO_CONFIG.PARTICLE_HUES,
   seeds = HERO_CONFIG.SEEDS,
+    "aria-label": ariaLabel,
 }: HeroParticleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { elementRef: containerRef, width, height } = useResizeObserver<HTMLDivElement>(HERO_CONFIG.RESIZE_DEBOUNCE_MS);
@@ -107,7 +109,9 @@ export function HeroParticleCanvas({
     <div ref={containerRef} className="absolute inset-0 z-0">
       <canvas
         ref={canvasRef}
-        aria-hidden="true"
+        aria-label={ariaLabel}
+        role={ariaLabel ? "img" : undefined}
+        aria-hidden={!ariaLabel}
         className="block pointer-events-none"
       />
     </div>
