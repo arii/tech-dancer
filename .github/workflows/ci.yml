@@ -123,30 +123,31 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
 
-      - name: UI Anti-Pattern Audit - Gate
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "::group::Audit"
-          trap 'echo "::endgroup::"' EXIT
-          # Ensure local python bin is on path for td-cli
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
-          td-cli gh audit-gate
+      - parallel:
+          - name: UI Anti-Pattern Audit - Gate
+            shell: bash
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              echo "::group::Audit"
+              trap 'echo "::endgroup::"' EXIT
+              # Ensure local python bin is on path for td-cli
+              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+              if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
+              td-cli gh audit-gate
 
-      - name: Design Token Compliance
-        run: |
-          # Check for raw hex colors not in tokens.css
-          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
-            --include="*.tsx" \
-            | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
-          if [ "$VIOLATIONS" -gt 0 ]; then
-            echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
-            grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
-            exit 1
-          fi
-          echo "✅ Design token compliance passed."
+          - name: Design Token Compliance
+            run: |
+              # Check for raw hex colors not in tokens.css
+              VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
+                --include="*.tsx" \
+                | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
+              if [ "$VIOLATIONS" -gt 0 ]; then
+                echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
+                grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
+                exit 1
+              fi
+              echo "✅ Design token compliance passed."
 
   test-build:
     name: Build & E2E
@@ -186,6 +187,8 @@ jobs:
 
 
       - name: Bundle Size Check
+        id: bundle-size
+        background: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -228,6 +231,9 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      - name: Wait for Bundle Size Check
+        wait: bundle-size
+
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
@@ -257,48 +263,54 @@ jobs:
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Deployment Impact Analysis
-        run: pnpm run impact:analysis
-      - name: Build Main
-        env:
-          DISABLE_MINIFY: true
-        run: pnpm run impact:build-main
-      - name: Build PR
-        env:
-          VITE_BASE_PATH: /
-          DISABLE_MINIFY: true
-        run: pnpm run build:review
-      - name: Visual Diff
-        run: pnpm run impact:visual-diff
-      - name: DOM Diff
-        run: pnpm run impact:dom-diff
+      - parallel:
+          - name: Deployment Impact Analysis
+            run: pnpm run impact:analysis
+          - name: Build Main
+            env:
+              DISABLE_MINIFY: true
+            run: pnpm run impact:build-main
+          - name: Build PR
+            env:
+              VITE_BASE_PATH: /
+              DISABLE_MINIFY: true
+            run: pnpm run build:review
+          - name: Code review agent
+            if: always() && github.event_name == 'pull_request'
+            continue-on-error: true
+            env:
+              GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: pnpm run impact:gemini-code-review
+          - name: Code review github models agent
+            if: always() && github.event_name == 'pull_request'
+            continue-on-error: true
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: pnpm run impact:github-models-code-review
+
+      - parallel:
+          - name: Visual Diff
+            run: pnpm run impact:visual-diff
+          - name: DOM Diff
+            run: pnpm run impact:dom-diff
+
       - name: Check if visual changes exist
         id: check_visuals
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
-      - name: Code review agent
-        if: always() && github.event_name == 'pull_request'
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:gemini-code-review
-      - name: Code review github models agent
-        if: always() && github.event_name == 'pull_request'
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:github-models-code-review
-      - name: Visual review agent
-        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:gemini-review
-      - name: Visual review github models agent
-        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:github-models-review
+
+      - parallel:
+          - name: Visual review agent
+            if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+            env:
+              GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: pnpm run impact:gemini-review
+          - name: Visual review github models agent
+            if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: pnpm run impact:github-models-review
       - name: Report Summary
         if: always()
         run: |
