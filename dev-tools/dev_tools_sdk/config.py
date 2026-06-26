@@ -70,15 +70,22 @@ def load_project_config(path: str | Path = None) -> ProjectConfig:
             return {str(k): str(v) for k, v in val.items()}
         return default
 
+    def get_int(key: str, default: int) -> int:
+        val = raw.get(key, default)
+        try:
+            return int(val)
+        except (ValueError, TypeError):
+            return default
+
     config = ProjectConfig(
         github_repo=raw.get("github_repo") or raw.get("repo_name"),
         github_token_env=raw.get("github_token_env", "GITHUB_TOKEN"),
         gh_token_env=raw.get("gh_token_env", "GH_TOKEN"),
         jules_api_url=raw.get("jules_api_url"),
         core_dirs=get_list("core_dirs", []),
-        monolithic_pr_threshold=int(raw.get("monolithic_pr_threshold", 3)),
+        monolithic_pr_threshold=get_int("monolithic_pr_threshold", 3),
         base_branch=raw.get("base_branch", "main"),
-        max_diff_chars=int(raw.get("max_diff_chars", 40000)),
+        max_diff_chars=get_int("max_diff_chars", 40000),
         content_scopes=get_dict("content_scopes", {}),
         ai_synthesis_model=raw.get("ai_synthesis_model", "gpt-4o-mini"),
         ai_review_model=raw.get("ai_review_model", "gpt-4o"),

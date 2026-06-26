@@ -67,6 +67,19 @@ def test_invalid_json(tmp_path):
     # Should fallback to defaults
     assert config.base_branch == "main"
 
+def test_malformed_numeric_config(tmp_path):
+    config_file = tmp_path / "project_config.json"
+    data = {
+        "monolithic_pr_threshold": "not a number",
+        "max_diff_chars": [1, 2, 3]
+    }
+    config_file.write_text(json.dumps(data))
+
+    config = load_project_config(config_file)
+    # Should fallback to defaults for malformed numeric fields
+    assert config.monolithic_pr_threshold == 3
+    assert config.max_diff_chars == 40000
+
 def test_legacy_repo_name(tmp_path):
     config_file = tmp_path / "project_config.json"
     data = {
