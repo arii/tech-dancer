@@ -1,14 +1,14 @@
 #!/bin/bash
-# verify-mergellama.sh - Local verification script for MergeLlama resolution plumbing
+# verify-ai-resolve.sh - Local verification script for AI resolution plumbing
 
 set -e
 
 # Ensure we are in the project root
 cd "$(dirname "$0")/.."
 
-TEST_FILE="src/test-mergellama-conflict.tsx"
+TEST_FILE="src/test-ai-conflict.tsx"
 
-echo "🧪 Starting local MergeLlama verification..."
+echo "🧪 Starting local AI verification..."
 
 # 1. Create a test conflict file
 cat > "$TEST_FILE" <<EOF
@@ -26,10 +26,10 @@ EOF
 echo "📝 Created test file: $TEST_FILE"
 
 # 2. Run resolution in mock mode
-echo "🏃 Running MergeLlama in MOCK mode..."
+echo "🏃 Running AI resolve in MOCK mode..."
 # Export PYTHONPATH to ensure dev-tools modules can find each other without sys.path hacks
 export PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-MERGELLAMA_MOCK=true python3 dev-tools/td_cli.py gh resolve
+AI_RESOLVE_MOCK=true python3 dev-tools/td_cli.py gh resolve
 
 # 3. Verify the result
 if grep -q "<<<<<<<" "$TEST_FILE"; then
@@ -49,4 +49,4 @@ fi
 # 4. Cleanup
 rm "$TEST_FILE"
 echo "🧹 Cleaned up test files."
-echo "✨ MergeLlama is verified and ready for CI!"
+echo "✨ AI resolution is verified and ready for CI!"
