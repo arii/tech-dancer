@@ -4,6 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('accessibility', () => {
   test.beforeEach(async ({ page }) => {
      await page.goto('./');
+     await page.waitForLoadState('networkidle');
      await expect(page.locator('main')).toBeVisible();
   });
 
@@ -31,8 +32,10 @@ test.describe('accessibility', () => {
   });
 
   test('search modal should trap focus', async ({ page }) => {
+    // Ensure modal is closed from previous tests if any
+    await page.keyboard.press('Escape');
     // Open search modal
-    await page.keyboard.press('Control+k');
+    await page.keyboard.press('Control+k', { delay: 100 });
     const input = page.getByPlaceholder('Search BoomTick guides, gear, and posts');
     await expect(page.getByTestId("search-backdrop")).toBeVisible({ timeout: 15000 });
     await expect(input).toBeVisible();

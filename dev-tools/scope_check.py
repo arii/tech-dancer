@@ -50,7 +50,8 @@ def verify_pr_scope(file_list=None):
                 active_scopes.add(scope_name)
 
     if len(active_scopes) > 1:
-        return f"Content scope warning: Mixed content domains detected ({', '.join(active_scopes)}). PRs should be split by scope: Event Facts, Gear Assets, Merch Catalog, or Articles (AGENTS.md §21)."
+        scope_names = ", ".join(sorted(content_scopes.keys()))
+        return f"Content scope warning: Mixed content domains detected ({', '.join(active_scopes)}). PRs should be split by scope: {scope_names} (AGENTS.md §21)."
 
     # Mixed Content and Code Check
     has_content = len(active_scopes) > 0
