@@ -18,41 +18,53 @@ export function FeaturedGuidePanel() {
       as={NavLink}
       to={FEATURED.href}
       width="full"
-      aspect={{ base: '4/3', lg: 'auto' }}
-      direction="col"
-      justify="end"
+      direction={{ base: 'col', lg: 'row' }}
       position="relative"
       overflow="hidden"
       border
-      radius="md"
-      className="group self-stretch"
+      radius="lg"
+      className="group bg-surface/30 transition-all hover:border-accent/50"
     >
-      {/* Background image — fills the column height naturally */}
-      <img
-        src={`${ASSET_PREFIX}${FEATURED.image}`}
-        alt={FEATURED.imageAlt}
-        width={420}
-        height={600}
-        fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
-        aria-hidden="true"
-      />
-      {/* Gradient overlay for text legibility (bottom-up to protect bottom-aligned text) */}
+      {/* Image: 45% on desktop */}
       <Box
-        position="absolute"
-        inset
-        className="bg-gradient-to-t from-bg/95 via-bg/70 to-bg/30"
-        aria-hidden="true"
-      />
-      {/* Content pinned to bottom */}
-      <Stack gap={2} position="relative" zIndex={10} padding={6} width="full">
-        <Text variant="mono" size="xs" color="accent" weight="font-black" uppercase tracking="widest">
+        width={{ base: 'full', lg: '45%' }}
+        height={{ base: 64, lg: 'auto' }}
+        position="relative"
+        overflow="hidden"
+        className="shrink-0"
+      >
+        <img
+          src={`${ASSET_PREFIX}${FEATURED.image}`}
+          alt={FEATURED.imageAlt}
+          width={420}
+          height={600}
+          fetchPriority="high"
+          className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+        />
+        {/* Subtle dark overlay */}
+        <Box
+          position="absolute"
+          inset
+          className="bg-black/20"
+          aria-hidden="true"
+        />
+      </Box>
+
+      {/* Content: 55% on desktop */}
+      <Stack
+        gap={4}
+        padding={{ base: 6, lg: 10 }}
+        width={{ base: 'full', lg: '55%' }}
+        justify="center"
+        align="start"
+      >
+        <Text variant="mono" size="tiny" color="accent" weight="font-black" uppercase tracking="widest">
           {FEATURED.eyebrow}
         </Text>
-        <Text variant="headline" size={{ base: '2xl', md: 'xl' }} weight="font-black" color="main" leading="tight">
+        <Text variant="h2" size={{ base: '2xl', lg: '3xl' }} weight="font-black" color="main" leading="tight">
           {FEATURED.title}
         </Text>
-        <Text variant="body" size={{ base: 'base', md: 'sm' }} color="body">
+        <Text variant="body" size="base" color="body" className="max-w-md">
           {FEATURED.subtitle}
         </Text>
         <Text
@@ -60,9 +72,9 @@ export function FeaturedGuidePanel() {
           size="xs"
           color="accent"
           weight="font-bold"
-          className="mt-1 group-hover:underline"
+          className="mt-2 group-hover:translate-x-1 transition-transform"
         >
-          Read the guide →
+          Read Guide →
         </Text>
       </Stack>
     </Stack>

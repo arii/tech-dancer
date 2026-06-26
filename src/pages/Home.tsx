@@ -22,12 +22,12 @@ export default function Home() {
       <Grid
         as="section"
         cols={{ base: 1 }}
-        gap={{ base: 8, lg: 6 }}
+        gap={{ base: 12, lg: 16 }}
         width="full"
         maxWidth="full"
         minWidth={0}
         align="center"
-        className="lg:grid-cols-[minmax(0,1fr)_420px]"
+        className="lg:grid-cols-[45%_55%]"
       >
         <HeroSection />
         <FeaturedGuidePanel />

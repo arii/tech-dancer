@@ -16,10 +16,26 @@ export const routes: RouteConfig[] = [
   {
     path: '/blog',
     lazy: () => import('@/pages/Blog').then(m => ({ Component: m.default })),
-    label: 'Blog Posts',
+    label: 'Gear Guides',
     icon: BookOpen,
     skeleton: 'grid',
     isMobileVisible: true,
+    isTopNav: true
+  },
+  {
+    path: '/travel',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    label: 'Travel',
+    icon: Tag,
+    skeleton: 'simple',
+    isTopNav: true
+  },
+  {
+    path: '/diy',
+    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
+    label: 'DIY',
+    icon: Database,
+    skeleton: 'simple',
     isTopNav: true
   },
   {
