@@ -293,6 +293,13 @@ class GHAConfigManager:
     def __init__(self):
         if getattr(self, "_initialized", False):
             return
+        try:
+            from importlib.resources import files
+            self.config_path = "config.json"
+            self.config = json.loads(files("dev_tools").joinpath("config.json").read_text())
+            return
+        except Exception:
+            pass
         self.config_path = os.path.join(os.path.dirname(__file__), "config.json")
         self.gh_available = None
         self.warned_auth = False

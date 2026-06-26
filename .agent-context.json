@@ -1,6 +1,6 @@
 {
   "cli_schema": {
-    "base_command": "python3 dev-tools/td_cli.py",
+    "base_command": "python3 boomtick-pkg/cli/dev_tools/td_cli.py",
     "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
     "never_do": [
       "Do not chain subcommands in a single shell call",
@@ -13,7 +13,7 @@
     "subcommands": {
       "agent dispatch": {
         "description": "Initialize a Jules session for a specific branch and task.",
-        "exact_usage": "python3 dev-tools/td_cli.py agent dispatch <BRANCH> <TASK>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent dispatch <BRANCH> <TASK>",
         "required_arguments": [
           {
             "description": "The target branch for the task.",
@@ -29,7 +29,7 @@
       },
       "agent fix-ci": {
         "description": "Initialize an AI agent (Jules) session to fix CI failures for a PR or branch.",
-        "exact_usage": "python3 dev-tools/td_cli.py agent fix-ci --pr-number <PR_NUMBER> --execute",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent fix-ci --pr-number <PR_NUMBER> --execute",
         "optional_flags": [
           {
             "description": "The PR number to fix CI for.",
@@ -50,7 +50,7 @@
       },
       "agent messages": {
         "description": "Retrieve message history for a specific agent session.",
-        "exact_usage": "python3 dev-tools/td_cli.py agent messages <SESSION_ID>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent messages <SESSION_ID>",
         "required_arguments": [
           {
             "description": "The ID of the Jules session.",
@@ -61,7 +61,7 @@
       },
       "agent send": {
         "description": "Send a message to an active agent session.",
-        "exact_usage": "python3 dev-tools/td_cli.py agent send <SESSION_ID> <MESSAGE>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent send <SESSION_ID> <MESSAGE>",
         "required_arguments": [
           {
             "description": "The ID of the Jules session.",
@@ -77,20 +77,20 @@
       },
       "agent sync": {
         "description": "Sync and list active agent sessions.",
-        "exact_usage": "python3 dev-tools/td_cli.py agent sync",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent sync",
         "required_flags": []
       },
       "doctor": {
         "description": "Performs a runtime consistency check (Node.js and pnpm versions) to ensure the environment matches the project contract.",
-        "exact_usage": "python3 dev-tools/td_cli.py doctor",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py doctor",
         "required_flags": []
       },
       "gh audit-pr": {
         "description": "Perform an automated audit on a specific Pull Request.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute",
         "examples": [
-          "python3 dev-tools/td_cli.py gh audit-pr 2280 --fetch --audit --submit --execute",
-          "python3 dev-tools/td_cli.py gh audit-pr 2280 --fetch"
+          "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr 2280 --fetch --audit --submit --execute",
+          "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr 2280 --fetch"
         ],
         "optional_flags": [
           {
@@ -134,13 +134,13 @@
       },
       "gh conflicts": {
         "description": "Runs a global check across the repository to detect any active PR merge conflicts.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh conflicts",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh conflicts",
         "expected_output": "A list of conflicting files and branches. Does not resolve conflicts.",
         "required_flags": []
       },
       "gh create-issue": {
         "description": "Creates a new GitHub issue using a title and a markdown file for the body.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh create-issue --title <TITLE> --file <PATH_TO_BODY_FILE>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh create-issue --title <TITLE> --file <PATH_TO_BODY_FILE>",
         "required_flags": [
           {
             "description": "The title of the issue.",
@@ -156,7 +156,7 @@
       },
       "gh detect-conflicts": {
         "description": "Detects conflicts for a single, specific Pull Request.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh detect-conflicts --pr <PR_NUMBER>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh detect-conflicts --pr <PR_NUMBER>",
         "required_flags": [
           {
             "description": "The GitHub Pull Request ID (e.g., 2280)",
@@ -167,7 +167,7 @@
       },
       "gh manage-reviews": {
         "description": "Check and manage responses to automated PR reviews.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh manage-reviews --check-responses --execute",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh manage-reviews --check-responses --execute",
         "optional_flags": [
           {
             "description": "Verify if feedback responses have been addressed.",
@@ -188,10 +188,10 @@
       },
       "gh merge-conflicts": {
         "description": "Detects merge conflicts for a PR against a base branch.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh merge-conflicts <PR_NUMBER> [--base <BASE_BRANCH>]",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh merge-conflicts <PR_NUMBER> [--base <BASE_BRANCH>]",
         "optional_flags": [
           {
-            "description": "Base branch (default: main).",
+            "description": "Base branch (default: origin/main).",
             "flag": "--base",
             "type": "string"
           }
@@ -206,7 +206,7 @@
       },
       "gh overlaps": {
         "description": "Identify and propose consolidation of PRs with high functional or structural overlap.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh overlaps [--limit <LIMIT>]",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh overlaps [--limit <LIMIT>]",
         "optional_flags": [
           {
             "description": "Maximum number of open PRs to process (default: 50).",
@@ -222,7 +222,7 @@
       },
       "gh pr-diff": {
         "description": "Fetches PR diff and file list, applying truncation and shaping.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh pr-diff <PR_NUMBER>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh pr-diff <PR_NUMBER>",
         "required_arguments": [
           {
             "description": "PR ID.",
@@ -233,12 +233,12 @@
       },
       "gh pre-submit": {
         "description": "Run automated repository validation and quality gates prior to code submission.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh pre-submit",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh pre-submit",
         "required_flags": []
       },
       "gh resolve-conflicts": {
         "description": "Sets up a separate git worktree, checks out the PR branch, and attempts to merge the target branch to surface conflicts for resolution.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh resolve-conflicts --pr <PR_NUMBER>",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh resolve-conflicts --pr <PR_NUMBER>",
         "required_flags": [
           {
             "description": "The GitHub Pull Request ID.",
@@ -249,7 +249,7 @@
       },
       "gh search-prs": {
         "description": "Lists open Pull Requests with optional filtering by state, limit, draft status, and labels.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh search-prs [--state <STATE>] [--limit <LIMIT>] [--no-include-drafts] [--labels <LABELS>]",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh search-prs [--state <STATE>] [--limit <LIMIT>] [--no-include-drafts] [--labels <LABELS>]",
         "optional_flags": [
           {
             "description": "PR state (open, closed, all).",
@@ -275,12 +275,12 @@
       },
       "gh status-board": {
         "description": "Retrieves the current high-level status board for open PRs and background tasks.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh status-board",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh status-board",
         "required_flags": []
       },
       "gh validate-issue": {
         "description": "Validates that a GitHub issue follows the Spec-Driven Issue Template.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number <ISSUE_NUMBER> --execute",
         "optional_flags": [
           {
             "description": "The GitHub issue number to validate.",
@@ -306,7 +306,7 @@
       },
       "repo ci-logs": {
         "description": "Fetches CI logs for failing (or all) check runs in a PR.",
-        "exact_usage": "python3 dev-tools/td_cli.py repo ci-logs <PR_NUMBER> [--all]",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py repo ci-logs <PR_NUMBER> [--all]",
         "optional_flags": [
           {
             "description": "Include logs for successful runs.",
@@ -324,7 +324,7 @@
       },
       "repo logs": {
         "description": "Fetches and combines CI logs for all jobs in a PR, optionally filtered by grep.",
-        "exact_usage": "python3 dev-tools/td_cli.py repo logs <PR_NUMBER> [--grep <PATTERN>]",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py repo logs <PR_NUMBER> [--grep <PATTERN>]",
         "optional_flags": [
           {
             "description": "Filter logs by pattern.",
@@ -342,7 +342,7 @@
       },
       "repo run-playwright": {
         "description": "Runs Playwright tests and returns failed tests in JSON.",
-        "exact_usage": "python3 dev-tools/td_cli.py repo run-playwright [--grep <PATTERN>] [--worktree <PATH>]",
+        "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py repo run-playwright [--grep <PATTERN>] [--worktree <PATH>]",
         "optional_flags": [
           {
             "description": "Grep pattern for tests.",
@@ -364,71 +364,16 @@
     "CONTRIBUTING.md": null,
     "LICENSE": null,
     "README.md": null,
-    "artifacts/": {
-      "visual-review/": "..."
-    },
     "audit-baseline.json": null,
-    "boomtick-mcp/": {
-      "README.md": null,
-      "docs/": "...",
-      "package.json": null,
-      "pnpm-lock.yaml": null,
-      "scripts/": "...",
-      "src/": "...",
-      "start_browsermcp.sh": null,
-      "start_github_mcp.sh": null,
-      "tsconfig.json": null,
-      "vitest.config.ts": null
+    "boomtick-pkg/": {
+      "AGENTS.md": null,
+      "cli/": "...",
+      "mcp/": "..."
     },
     "content/": {
       "blog/": "...",
       "posts/": "...",
       "studies/": "..."
-    },
-    "dev-tools/": {
-      "README.md": null,
-      "__init__.py": null,
-      "aggregate-prs.sh": null,
-      "ai-debugger.mjs": null,
-      "ai_reviewer.py": null,
-      "analyze_overlaps.sh": null,
-      "analyze_workflows.sh": null,
-      "cli-schema.json": null,
-      "clients/": "...",
-      "collect_ai_reviews.py": null,
-      "dev_tools_sdk/": "...",
-      "error_rag.py": null,
-      "generate_aggregate_prs_workflow.py": null,
-      "generate_review_workflow.py": null,
-      "get_ai_context.py": null,
-      "instructions.txt": null,
-      "jules_feedback_loop.py": null,
-      "plan-template.md": null,
-      "pr_overlap.py": null,
-      "project_config.json": null,
-      "pyproject.toml": null,
-      "repair.py": null,
-      "repo_utils.py": null,
-      "review_read_pass.py": null,
-      "review_template.md": null,
-      "scope_check.py": null,
-      "setup-agent.sh": null,
-      "setup-python.sh": null,
-      "snapshot.sh": null,
-      "submit_review.py": null,
-      "td_cli.py": null,
-      "tdw_services.egg-info/": "...",
-      "tdw_services/": "...",
-      "tests/": "...",
-      "triage_failure.py": null,
-      "utils.py": null,
-      "ux-audit.config.json": null,
-      "verify-ai-resolve.sh": null,
-      "verify-workflows.sh": null,
-      "verify.sh": null,
-      "vision_audit.py": null,
-      "visual_guidelines.json": null,
-      "workflow_summary.py": null
     },
     "docs/": {
       "affiliate-tooling.md": null,
@@ -461,12 +406,12 @@
     "playwright.config.ts": null,
     "pnpm-lock.yaml": null,
     "pnpm-workspace.yaml": null,
+    "project_config.json": null,
     "public/": {
       "404.html": null,
       "apple-touch-icon.png": null,
       "assets/": "...",
       "boomtick_logo.svg": null,
-      "data/": "...",
       "favicon.ico": null,
       "favicon.svg": null,
       "icon.svg": null,
@@ -676,7 +621,7 @@
       "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json",
       "ai:index": "python3 scripts/index-codebase.py",
       "audit:anti-patterns": "node scripts/detect-antipatterns.mjs",
-      "audit:dead-code": "pnpm run knip",
+      "audit:dead-code": "pnpm exec knip --exclude exports",
       "audit:inventory": "node scripts/check-suppression-inventory.mjs",
       "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
       "audit:semgrep": "semgrep scan --config auto --error",
@@ -712,7 +657,7 @@
       "release:major": "pnpm version major",
       "release:minor": "pnpm version minor",
       "release:patch": "pnpm version patch",
-      "repair-context": "PYTHONPATH=$PYTHONPATH:dev-tools python3 dev-tools/td_cli.py repair-context",
+      "repair-context": "PYTHONPATH=$PYTHONPATH:boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/td_cli.py repair-context",
       "review:ux:desktop": "playwright open http://localhost:3000/ --device=\"Desktop Chrome\"",
       "review:ux:mobile": "playwright open http://localhost:3000/ --device=\"iPhone 12\"",
       "review:ux:prep": "pnpm run setup:playwright && node scripts/detect-antipatterns.mjs",
@@ -725,6 +670,21 @@
     }
   },
   "project_config": {
+    "ai_review_model": "gpt-4o",
+    "ai_synthesis_model": "gpt-4o-mini",
+    "ai_vision_model": "gpt-4o",
+    "allowed_bots": [
+      "github-actions[bot]",
+      "tech-dancer-bot",
+      "ariii"
+    ],
+    "audit_check_dirs": [
+      "src/features",
+      "src/pages",
+      "src/components",
+      "src/layouts",
+      "src/App.tsx"
+    ],
     "base_branch": "origin/main",
     "content_scopes": {
       "blog": "content/blog/",
@@ -737,7 +697,36 @@
       "src/components/"
     ],
     "max_diff_chars": 40000,
-    "monolithic_pr_threshold": 3
+    "monolithic_pr_threshold": 3,
+    "spec_sections": [
+      "Problem Statement",
+      "Goal",
+      "Non-Goals",
+      "Proposed Approach",
+      "Alternatives Considered",
+      "Architectural Impact",
+      "Scope",
+      "UNDERSTAND THE ISSUE",
+      "DETERMINE APPROACH",
+      "SPECIFY SCOPE",
+      "DEFINITION OF DONE"
+    ],
+    "tailwind_indicators": [
+      "px-",
+      "py-",
+      "mt-",
+      "flex",
+      "grid",
+      "text-["
+    ],
+    "ui_indicators": [
+      "src/components",
+      "src/pages",
+      "src/layouts",
+      "src/index.css",
+      "tailwind"
+    ],
+    "worktree_prefix": "tech-dancer-repair-"
   },
   "repo": {
     "name": "react-example"

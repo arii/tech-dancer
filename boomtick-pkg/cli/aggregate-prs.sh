@@ -5,7 +5,7 @@ set -euo pipefail
 if [ "$#" -lt 2 ]; then echo "Usage: $0 <new-branch-name> <pr1> <pr2> ..."; exit 1; fi
 
 # Load base branch from project_config.json if possible, fallback to origin/main
-CONFIG_FILE="$(dirname "${BASH_SOURCE[0]}")/project_config.json"
+CONFIG_FILE="project_config.json"
 BASE_BRANCH="origin/main"
 if [ -f "$CONFIG_FILE" ]; then
     # Silently attempt to load base_branch using jq if available

@@ -11,7 +11,7 @@ import os
 
 if "-h" in sys.argv or "--help" in sys.argv:
     # Need to be careful with imports here as tdw_services might not be available yet
-    print("FATAL: --help is disabled for agent workflows. Read dev-tools/cli-schema.json for command syntax.", file=sys.stderr)
+    print("FATAL: --help is disabled for agent workflows. Read cli-schema.json for command syntax.", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)
 
@@ -94,9 +94,9 @@ except ImportError as e:
 Details: {e}
 
 Troubleshooting:
-1. Ensure dependencies are installed: pip install -e dev-tools/
+1. Ensure dependencies are installed: pip install -e boomtick-pkg/cli
 2. Ensure PYTHONPATH includes the dev-tools directory.
-   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/dev-tools""", file=sys.stderr)
+   Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/boomtick-pkg/cli""", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)
 

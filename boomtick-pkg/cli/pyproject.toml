@@ -3,12 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tdw_services"
+name = "boomtick-cli"
 version = "0.1.0"
-description = "Tech-Dancer DevTools SDK"
-authors = [
-    { name="Tech-Dancer Team" }
-]
+description = "BoomTick CLI — agentic dev-tools for GitHub + AI workflows"
 requires-python = ">=3.8"
 dependencies = [
     "requests>=2.0.0",
@@ -23,11 +20,13 @@ dependencies = [
 ]
 
 [project.scripts]
-td-cli = "tdw_services.cli:cli"
+td = "dev_tools.td_cli:main"
+td-cli = "dev_tools.td_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["tdw_services*", "dev_tools_sdk*"]
+include = ["dev_tools*", "tdw_services*"]
 
 [tool.setuptools.package-data]
-"*" = ["project_config.json", "cli-schema.json"]
+"dev_tools" = ["cli-schema.json", "config.json", "project_config.json", "*.json"]
+"*" = ["*.json"]

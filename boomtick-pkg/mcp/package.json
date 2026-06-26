@@ -1,5 +1,5 @@
 {
-  "name": "boomtick-mcp",
+  "name": "@boomtick/mcp",
   "version": "0.1.0",
   "description": "Boomtick MCP Guide: PR Rescue + Merge Conflict Agent",
   "type": "module",

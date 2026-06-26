@@ -391,7 +391,7 @@ def overlaps(ctx, limit, no_cache):
     import sys
     import os
 
-    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'pr_overlap.py')
+    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dev_tools', 'pr_overlap.py')
     cmd = [sys.executable, script_path, '--limit', str(limit)]
     if no_cache:
         cmd.append('--no-cache')

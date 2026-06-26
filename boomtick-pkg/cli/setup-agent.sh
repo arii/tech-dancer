@@ -184,8 +184,8 @@ install_python_deps() {
   python3 -m pip --version || err "pip is required."
   pip_install --root-user-action=ignore --upgrade pip setuptools wheel
 
-  if [ -f "dev-tools/pyproject.toml" ]; then
-    (cd "${REPO_ROOT}/dev-tools" && pip_install --root-user-action=ignore --editable .)
+  if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
+    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
     have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
   else
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
@@ -287,7 +287,7 @@ run_validation() {
     pnpm run check:runtime-files || warn "Runtime file check failed."
     pnpm run doctor || warn "Runtime doctor check failed."
   fi
-  [ -f "dev-tools/td_cli.py" ] && python3 dev-tools/td_cli.py gh --help >/dev/null || warn "dev-tools/td_cli.py validation skipped."
+  command -v td && td gh --help > /dev/null
   log "Setup complete."
 }
 

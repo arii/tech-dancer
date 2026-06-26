@@ -61,21 +61,21 @@ class ProjectConfig:
         return self.base_branch.split('/')[-1]
 
 
-def load_project_config(path: str | Path = "dev-tools/project_config.json") -> ProjectConfig:
+def load_project_config(path: str | Path = "project_config.json") -> ProjectConfig:
     p = Path(path)
 
-    if not p.exists():
-        # Try to find it relative to this file if not found at path
-        alt_path = Path(__file__).parent.parent / "project_config.json"
-        if alt_path.exists():
-            p = alt_path
-        else:
+    raw = {}
+    if p.exists():
+        try:
+            raw = json.loads(p.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, IOError):
+            pass
+    else:
+        try:
+            from importlib.resources import files
+            raw = json.loads(files("dev_tools").joinpath("project_config.json").read_text())
+        except Exception:
             return ProjectConfig()
-
-    try:
-        raw = json.loads(p.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, IOError):
-        return ProjectConfig()
 
     def get_list(key: str) -> Optional[List[str]]:
         val = raw.get(key)
