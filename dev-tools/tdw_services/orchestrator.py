@@ -313,13 +313,13 @@ class Orchestrator:
             raise CLIError("Issue body cannot be empty.")
         return self.github.update_issue(number, body)
 
-    def post_comment(self, number: int, body: str) -> Dict[str, Any]:
+    def post_comment(self, entity_number: int, body: str) -> Dict[str, Any]:
         """
         Posts a comment to a Pull Request or Issue.
         """
         if not body or not body.strip():
             raise CLIError("Comment body cannot be empty.")
-        return self.github.create_issue_comment(number, body)
+        return self.github.create_issue_comment(entity_number, body)
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())

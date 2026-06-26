@@ -51,6 +51,12 @@ def _handle_unexpected_error(ctx, command_name, e):
     log_error(f"Unexpected error in {command_name}: {e}")
     err(ctx, f"An unexpected error occurred in {command_name}.")
 
+def _get_body_content(ctx, orch, file, body):
+    content = body or (orch._read_safe_file(file) if file else None)
+    if not content:
+        err(ctx, "Provide --file or --body")
+    return content
+
 # ==========================================
 # REPO COMMAND GROUP
 # ==========================================
@@ -182,9 +188,7 @@ def create_issue(ctx, title, file, body):
     """Create a new GitHub issue."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        content = body or (orch._read_safe_file(file) if file else None)
-        if not content:
-            err(ctx, "Provide --file or --body")
+        content = _get_body_content(ctx, orch, file, body)
         res = orch.create_issue(title, content)
         out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data=res)
     except CLIError as e:
@@ -216,9 +220,7 @@ def issue_update(ctx, issue_number, file, body):
     """Update a GitHub issue's body."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        content = body or (orch._read_safe_file(file) if file else None)
-        if not content:
-            err(ctx, "Provide --file or --body")
+        content = _get_body_content(ctx, orch, file, body)
         res = orch.update_issue_body(issue_number, content)
         out(ctx, f"✅ Successfully updated issue #{issue_number}", data={"issue": res})
     except CLIError as e:
@@ -235,9 +237,7 @@ def issue_comment(ctx, issue_number, file, body):
     """Post a comment to a GitHub issue."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        content = body or (orch._read_safe_file(file) if file else None)
-        if not content:
-            err(ctx, "Provide --file or --body")
+        content = _get_body_content(ctx, orch, file, body)
         res = orch.post_comment(issue_number, content)
         out(ctx, f"✅ Successfully posted comment to issue #{issue_number}", data={"comment": res})
     except CLIError as e:
@@ -328,8 +328,8 @@ def post_comment(ctx, pr, file):
     """Post a comment to a PR from a file."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        body = orch._read_safe_file(file)
-        res = orch.post_comment(pr, body)
+        content = orch._read_safe_file(file)
+        res = orch.post_comment(pr, content)
         out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
     except CLIError as e:
         err(ctx, str(e), code=e.code)
