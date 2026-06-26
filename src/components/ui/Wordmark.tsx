@@ -41,7 +41,6 @@ export function Wordmark({
       className={cn("leading-none", VARIANT_CLASSES[variant], className)}
       style={style}
       tracking="wordmark"
-      pointerEvents="none"
       {...props}
     >
       boom
