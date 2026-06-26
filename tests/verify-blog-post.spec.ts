@@ -5,9 +5,12 @@ test('Verify General Health Post - Content and Layout', async ({ page, viewport:
   await page.goto('/blog/2026-06-01-general-health-home-care');
 
   // Verify new sections are present
-  await expect(page.locator('h4')).toContainText(['Percussive Therapy', 'Hydration & Electrolytes']);
+  // The sections are h4 elements in the markdown
+  await expect(page.locator('h4').filter({ hasText: 'Percussive Therapy' })).toBeVisible();
+  await expect(page.locator('h4').filter({ hasText: 'Hydration & Electrolytes' })).toBeVisible();
 
   // Verify affiliate notices are present
-  await expect(page.locator('text=Hypervolt Percussion Massager')).toBeVisible();
-  await expect(page.locator('text=Pedialyte Electrolyte Powder Packets')).toBeVisible();
+  // They appear twice: once in the sidebar and once in the content (RenderNotice)
+  await expect(page.locator('text=Hypervolt Percussion Massager').first()).toBeVisible();
+  await expect(page.locator('text=Pedialyte Electrolyte Powder Packets').first()).toBeVisible();
 });
