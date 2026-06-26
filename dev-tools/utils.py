@@ -190,7 +190,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
         return None
 
     llm = ChatGoogleGenerativeAI(
-        model=model or "gemini-3.1-flash-lite",
+        model=model or "gemini-2.5-flash-lite",
         google_api_key=api_key,
         temperature=0.7,
         max_retries=max_retries,

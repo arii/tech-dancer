@@ -87,8 +87,11 @@ class AIClient:
         if not self.gemini_api_key:
             return None
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key={self.gemini_api_key}"
-        headers = {"Content-Type": "application/json"}
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": self.gemini_api_key
+        }
 
         payload = {
             "contents": [{"parts": [{"text": prompt}]}]

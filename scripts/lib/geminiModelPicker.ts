@@ -27,6 +27,20 @@ export const GEMINI_MODELS_METADATA: GeminiModel[] = [
     tier: 'lite',
     maxInputTokens: 1000000,
     maxOutputTokens: 8192
+  },
+  {
+    id: 'gemini-2.5-flash',
+    name: 'Gemini 2.5 Flash',
+    tier: 'flash',
+    maxInputTokens: 1000000,
+    maxOutputTokens: 8192
+  },
+  {
+    id: 'gemini-2.5-flash-lite',
+    name: 'Gemini 2.5 Flash Lite',
+    tier: 'lite',
+    maxInputTokens: 1000000,
+    maxOutputTokens: 8192
   }
 ];
 
@@ -118,12 +132,21 @@ export async function pickGeminiModel(
  * Values are based on Gemini 3.x estimates.
  */
 export function getGeminiPricing(modelId: string): { inputCostPerM: number; outputCostPerM: number } {
+  if (modelId.includes('gemini-3.5-flash')) {
+    return { inputCostPerM: 1.50, outputCostPerM: 9.00 };
+  }
+  if (modelId.includes('gemini-3.1-flash-lite')) {
+    return { inputCostPerM: 0.25, outputCostPerM: 1.50 };
+  }
+  if (modelId.includes('gemini-2.5-flash-lite')) {
+    return { inputCostPerM: 0.10, outputCostPerM: 0.40 };
+  }
+  if (modelId.includes('gemini-2.5-flash')) {
+    return { inputCostPerM: 0.30, outputCostPerM: 2.50 };
+  }
   if (modelId.includes('pro')) {
-    return { inputCostPerM: 1.25, outputCostPerM: 5.00 };
+    return { inputCostPerM: 2.00, outputCostPerM: 12.00 };
   }
-  if (modelId.includes('lite')) {
-    return { inputCostPerM: 0.0375, outputCostPerM: 0.15 };
-  }
-  // Default to Flash pricing
-  return { inputCostPerM: 0.075, outputCostPerM: 0.30 };
+  // Default fallback
+  return { inputCostPerM: 0.10, outputCostPerM: 0.40 };
 }

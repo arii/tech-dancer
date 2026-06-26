@@ -35,11 +35,11 @@ export const geminiCodeReviewClient: CodeReviewClientStrategy = {
     try {
       modelName = await pickGeminiModel(preferredTier, estimatedInputTokens);
     } catch (err) {
-      console.error('Failed to pick Gemini model, falling back to gemini-3.1-flash-lite:', err);
-      modelName = 'gemini-3.1-flash-lite';
+      console.error('Failed to pick Gemini model, falling back based on input tokens:', err);
+      modelName = estimatedInputTokens > 1000000 ? 'gemini-2.5-flash' : 'gemini-2.5-flash-lite';
     }
 
-    let thinkingBudget = 2048;
+    let thinkingBudget = estimatedInputTokens > 10000 ? 4096 : 2048;
     const maxOutputTokens = forceMaxOutputTokens ?? estimateMaxOutputTokens(summary, systemPrompt.length, thinkingBudget);
 
     let model = createGeminiModel(modelName, maxOutputTokens, thinkingBudget);
