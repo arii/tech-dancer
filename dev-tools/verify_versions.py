@@ -2,73 +2,19 @@ import os
 import sys
 import re
 import json
-import requests
-from packaging import version
 from typing import Dict, List, Optional, Tuple
 
 # Add dev-tools to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils import get_stack_versions, log_info, log_error, log_warn
-
-# Registry Cache
-_NPM_CACHE = {}
-_GITHUB_CACHE = {}
-
-def fetch_latest_npm(package_name: str) -> Optional[str]:
-    if package_name in _NPM_CACHE:
-        return _NPM_CACHE[package_name]
-    try:
-        url = f"https://registry.npmjs.org/{package_name}/latest"
-        res = requests.get(url, timeout=5)
-        if res.status_code == 200:
-            ver = res.json().get("version")
-            _NPM_CACHE[package_name] = ver
-            return ver
-    except Exception as e:
-        log_warn(f"Failed to fetch latest npm version for {package_name}: {e}")
-    return None
-
-def fetch_latest_gh_action(action_path: str) -> Optional[str]:
-    if action_path in _GITHUB_CACHE:
-        return _GITHUB_CACHE[action_path]
-    try:
-        # actions/checkout -> https://api.github.com/repos/actions/checkout/releases/latest
-        url = f"https://api.github.com/repos/{action_path}/releases/latest"
-        headers = {}
-        token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-        if token:
-            headers["Authorization"] = f"token {token}"
-
-        res = requests.get(url, headers=headers, timeout=5)
-        if res.status_code == 200:
-            tag = res.json().get("tag_name")
-            _GITHUB_CACHE[action_path] = tag
-            return tag
-    except Exception as e:
-        log_warn(f"Failed to fetch latest GitHub Action version for {action_path}: {e}")
-    return None
-
-def compare_versions(v1: str, v2: str) -> int:
-    """Returns 1 if v1 > v2, -1 if v1 < v2, 0 if v1 == v2."""
-    try:
-        # Strip 'v' prefix
-        v1_clean = v1.lstrip('v')
-        v2_clean = v2.lstrip('v')
-
-        # Handle '24.x' style versions by normalizing to '24.0.0' for comparison
-        if '.x' in v1_clean: v1_clean = v1_clean.replace('.x', '.0')
-        if '.x' in v2_clean: v2_clean = v2_clean.replace('.x', '.0')
-
-        pv1 = version.parse(v1_clean)
-        pv2 = version.parse(v2_clean)
-        if pv1 > pv2: return 1
-        if pv1 < pv2: return -1
-        return 0
-    except Exception:
-        # Fallback to string comparison if parse fails
-        if v1 > v2: return 1
-        if v1 < v2: return -1
-        return 0
+from utils import (
+    get_stack_versions,
+    log_info,
+    log_error,
+    log_warn,
+    fetch_latest_npm,
+    fetch_latest_gh_action,
+    compare_versions
+)
 
 def parse_diff(diff_text: str) -> List[Dict]:
     """Parses a git diff to find version changes."""
