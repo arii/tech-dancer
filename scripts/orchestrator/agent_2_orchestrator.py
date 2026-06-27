@@ -29,6 +29,7 @@ def run_cli(args):
     existing_path = env.get("PYTHONPATH", "")
     local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
     env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
+    env["CI"] = "true"
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         return result.stdout.strip()
@@ -44,10 +45,19 @@ def get_session_id():
     match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
     return match.group(1) if match else None
 
-def wait_for_agent(session_id, poll_interval=10):
+def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
     """Blocks execution until the agent reaches a terminal state or requests input."""
     print(f"Polling state for session {session_id}...")
+    start_time = time.time()
+    retries = 0
     while True:
+        if time.time() - start_time > timeout:
+            print(f"Timeout of {timeout}s exceeded while waiting for session {session_id}.")
+            break
+        if retries >= max_retries:
+            print(f"Max retries of {max_retries} exceeded while waiting for session {session_id}.")
+            break
+
         messages = run_cli(["agent", "messages", session_id])
         if messages:
             is_completed = "SUCCESS" in messages or "ABORTED_THROTTLED" in messages
@@ -55,6 +65,7 @@ def wait_for_agent(session_id, poll_interval=10):
             if is_completed or is_waiting:
                 print("Agent 1 is ready.")
                 break
+        retries += 1
         time.sleep(poll_interval)
 
 def execute_orchestrator_loop(existing_session_id=None):
