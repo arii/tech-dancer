@@ -8,8 +8,7 @@ This document outlines the GitHub Actions workflows, their triggers, and the var
 | -------------------- | -------------------------- | ------------------------- | -------------------------------------------------------------------------------------------- |
 | **CI**               | `ci.yml`                   | Push/PR to any branch     | Linting, type-checking, anti-pattern audit, unit tests, and E2E smoke tests.                 |
 | **Deploy**           | `deploy.yml`               | Push to any branch        | Builds and deploys to GitHub Pages (main and branch previews). Handles SEO assets on `main`. |
-| **Security**         | `security.yml`             | Push/PR to `main`         | Runs Oxlint, Gitleaks, and Semgrep scans.                                                    |
-| **CodeQL**           | `codeql.yml`               | Push/PR to `main`, Weekly | GitHub's static analysis for security vulnerabilities.                                       |
+| **Security**         | `security.yml`             | Push/PR to `main`, Weekly | Consolidated static analysis: Oxlint, Gitleaks, Semgrep, and CodeQL.                         |
 | **Conflict Check**   | `conflict-check.yml`       | PR synchronization        | Checks for merge conflicts with other open PRs.                                              |
 | **Issue Validation** | `validate_issue.yml`       | Issue opened/edited       | Ensures issues follow template standards and don't propose banned patterns.                  |
 | **Preview Pruning**  | `prune-stale-previews.yml` | Daily                     | Deletes branch previews from `gh-pages` for branches that no longer exist.                   |

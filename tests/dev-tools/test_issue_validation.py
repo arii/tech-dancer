@@ -13,8 +13,8 @@ class TestIssueValidation(unittest.TestCase):
     def setUp(self) -> None:
         self.orch = Orchestrator()
 
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('tdw_services.orchestrator.get_repo_name')
+    @patch('tdw_services.services.issue.get_github_client')
+    @patch('tdw_services.services.issue.get_repo_name')
     @patch('tdw_services.orchestrator.Orchestrator.get_audit_results')
     def test_validate_issue_spec_driven_success(self, mock_audit: MagicMock, mock_repo_name: MagicMock, mock_gh_client: MagicMock) -> None:
         mock_repo_name.return_value = "owner/repo"
@@ -52,10 +52,10 @@ None.
         mock_gh_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
         result: Dict[str, Any] = self.orch.validate_issue(issue_number=1)
-        self.assertEqual(result["total_findings"], 0)
+        self.assertEqual(result["total_findings"], 0, result)
 
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('tdw_services.orchestrator.get_repo_name')
+    @patch('tdw_services.services.issue.get_github_client')
+    @patch('tdw_services.services.issue.get_repo_name')
     @patch('tdw_services.orchestrator.Orchestrator.get_audit_results')
     def test_validate_issue_spec_driven_edge_cases(self, mock_audit: MagicMock, mock_repo_name: MagicMock, mock_gh_client: MagicMock) -> None:
         mock_repo_name.return_value = "owner/repo"
@@ -94,10 +94,10 @@ None.
         mock_gh_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
         result: Dict[str, Any] = self.orch.validate_issue(issue_number=1)
-        self.assertEqual(result["total_findings"], 0, f"Expected 0 findings but got {result['total_findings']}: {result['issues'][0]['findings']}")
+        self.assertEqual(result["total_findings"], 0, result)
 
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('tdw_services.orchestrator.get_repo_name')
+    @patch('tdw_services.services.issue.get_github_client')
+    @patch('tdw_services.services.issue.get_repo_name')
     @patch('tdw_services.orchestrator.Orchestrator.get_audit_results')
     def test_validate_issue_spec_driven_missing_sections(self, mock_audit: MagicMock, mock_repo_name: MagicMock, mock_gh_client: MagicMock) -> None:
         mock_repo_name.return_value = "owner/repo"
@@ -116,8 +116,8 @@ None.
         self.assertIn("Goal", findings[0])
         self.assertIn("Non-Goals", findings[0])
 
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('tdw_services.orchestrator.get_repo_name')
+    @patch('tdw_services.services.issue.get_github_client')
+    @patch('tdw_services.services.issue.get_repo_name')
     @patch('tdw_services.orchestrator.Orchestrator.get_audit_results')
     def test_validate_issue_empty_body(self, mock_audit: MagicMock, mock_repo_name: MagicMock, mock_gh_client: MagicMock) -> None:
         mock_repo_name.return_value = "owner/repo"
@@ -132,7 +132,7 @@ None.
         result: Dict[str, Any] = self.orch.validate_issue(issue_number=3)
         self.assertGreater(result["total_findings"], 0)
         findings: List[str] = result["issues"][0]["findings"]
-        self.assertIn("Issue body is empty.", findings)
+        self.assertTrue(any("Issue body is empty." in f for f in findings))
 
 if __name__ == '__main__':
     unittest.main()
