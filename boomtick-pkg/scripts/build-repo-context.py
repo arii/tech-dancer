@@ -2,13 +2,29 @@
 import json
 import pathlib
 import sys
+import os
 
 def build_repo_context():
     """Gathers static context about the repository."""
 
-    # 1. Package JSON
+    # Discovery: find the repo root and package root
+    script_path = pathlib.Path(__file__).resolve()
+    # boomtick-pkg/scripts/build-repo-context.py -> boomtick-pkg
+    package_root = script_path.parent.parent
+    # boomtick-pkg -> repo_root
+    # We assume we are installed as a subdirectory in the repo
+    repo_root = package_root.parent
+
+    # If we are running from a location that isn't boomtick-pkg/scripts,
+    # fallback to CWD as repo_root for compatibility
+    if package_root.name != "boomtick-pkg":
+        repo_root = pathlib.Path(".")
+        package_root = repo_root / "boomtick-pkg"
+
+    # 1. Package JSON (Repo Root)
     try:
-        package_json = json.loads(pathlib.Path("package.json").read_text())
+        package_json_path = repo_root / "package.json"
+        package_json = json.loads(package_json_path.read_text())
         # simplify package.json to the most important parts for context
         package_summary = {
             "name": package_json.get("name"),
@@ -20,29 +36,31 @@ def build_repo_context():
         print(f"Error reading package.json: {e}", file=sys.stderr)
         package_summary = {}
 
-    # 2. Project Config
+    # 2. Project Config (Repo Root)
     project_config = {}
     try:
         from importlib.resources import files
         try:
+            # Try to load from the dev_tools python package if available
             project_config = json.loads(files("dev_tools").joinpath("project_config.json").read_text())
         except Exception:
-            project_config_path = pathlib.Path("project_config.json")
+            project_config_path = repo_root / "project_config.json"
             if project_config_path.exists():
                 project_config = json.loads(project_config_path.read_text())
     except Exception as e:
         print(f"Error reading project_config.json: {e}", file=sys.stderr)
 
-    # 3. MCP Tools
+    # 3. MCP Tools (Package Internal)
     mcp_tools = []
     try:
         import subprocess
-        mcp_dir = pathlib.Path("boomtick-pkg/mcp")
+        mcp_dir = package_root / "mcp"
         if mcp_dir.exists():
             # Use npx tsx to run the export script without needing to compile it
+            # We run it from the mcp_dir to ensure it finds its own local config
             result = subprocess.run(
                 ["npx", "tsx", "scripts/export-mcp-schema.ts"],
-                cwd=mcp_dir,
+                cwd=str(mcp_dir),
                 capture_output=True,
                 text=True,
                 check=True
@@ -51,21 +69,20 @@ def build_repo_context():
     except Exception as e:
         print(f"Error gathering MCP tools: {e}", file=sys.stderr)
 
-    # 4. CLI Schema
+    # 4. CLI Schema (Package Internal)
     cli_schema = {}
     try:
         from importlib.resources import files
         try:
             cli_schema = json.loads(files("dev_tools").joinpath("cli-schema.json").read_text())
         except Exception:
-            cli_schema_path = pathlib.Path("boomtick-pkg/cli/dev_tools/cli-schema.json")
+            cli_schema_path = package_root / "cli" / "dev_tools" / "cli-schema.json"
             if cli_schema_path.exists():
                 cli_schema = json.loads(cli_schema_path.read_text())
     except Exception as e:
         print(f"Error reading cli-schema.json: {e}", file=sys.stderr)
 
-    # 4. File Tree (Top level and key directories)
-    file_tree = {}
+    # 5. File Tree (Repo Root)
     def get_dir_structure(path, max_depth=2, current_depth=0):
         if current_depth >= max_depth:
             return "..."
@@ -82,7 +99,7 @@ def build_repo_context():
             pass
         return structure
 
-    file_tree = get_dir_structure(pathlib.Path("."))
+    file_tree = get_dir_structure(repo_root)
 
     # Assemble context
     return {
