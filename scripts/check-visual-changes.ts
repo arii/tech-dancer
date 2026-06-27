@@ -32,7 +32,7 @@ async function getSignificantVisualChangeCount(): Promise<number> {
       return 0;
     }
 
-    const threshold = 1.5;
+    const threshold = Number(process.env.VISUAL_DIFF_THRESHOLD) || 1.5;
     const significantChanges = summary.routes.filter((route: VisualRouteSummary) => {
       if (!route || typeof route.differencePercent !== 'number') {
         console.warn(`[check-visual-changes] Warning: Skipping route entry with missing or non-numeric differencePercent: ${JSON.stringify(route)}`);
@@ -40,6 +40,13 @@ async function getSignificantVisualChangeCount(): Promise<number> {
       }
       return route.differencePercent > threshold;
     });
+
+    if (significantChanges.length > 0) {
+      console.error(`❌ [check-visual-changes] Found ${significantChanges.length} routes with visual changes exceeding the ${threshold}% threshold.`);
+      significantChanges.forEach(r => {
+        console.error(`   - ${r.route}: ${r.differencePercent.toFixed(2)}% difference`);
+      });
+    }
 
     return significantChanges.length;
   } catch (error) {
