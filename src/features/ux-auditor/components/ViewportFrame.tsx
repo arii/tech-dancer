@@ -9,7 +9,7 @@ export interface ViewportFrameProps {
   height: number;
 }
 
-export const ViewportFrame = ({ url, width, height }: ViewportFrameProps) => {
+const ViewportFrame = ({ url, width, height }: ViewportFrameProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -82,3 +82,5 @@ export const ViewportFrame = ({ url, width, height }: ViewportFrameProps) => {
     </Box>
   );
 };
+
+export default ViewportFrame;

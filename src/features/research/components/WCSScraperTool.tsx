@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   Search,
   Download,
@@ -203,7 +203,7 @@ function WCSScraperStats({ latency, totalEvents }: { latency: number | null, tot
   );
 }
 
-export function WCSScraperTool() {
+function WCSScraperTool() {
   const {
     filteredData,
     isLoading,
@@ -394,3 +394,5 @@ export function WCSScraperTool() {
     </Stack>
   );
 }
+
+export default WCSScraperTool;

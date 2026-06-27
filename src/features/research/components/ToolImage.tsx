@@ -1,8 +1,14 @@
-import React from 'react';
+import { Fragment, MouseEvent } from 'react';
 import { Cpu, Activity, Globe, Search, LucideIcon } from 'lucide-react';
 
 import { ResearchTool } from '@/config/research-tools';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+
+export interface ToolImageProps {
+  tool: ResearchTool;
+  baseUrl: string;
+  onImageClick?: (src: string) => void;
+}
 
 export const getToolIcon = (tool: ResearchTool): LucideIcon => {
   if (tool.category.includes('DevAI')) return Cpu;
@@ -11,13 +17,7 @@ export const getToolIcon = (tool: ResearchTool): LucideIcon => {
   return Search;
 };
 
-export interface ToolImageProps {
-  tool: ResearchTool;
-  baseUrl: string;
-  onImageClick?: (src: string) => void;
-}
-
-export const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
+const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
   if (tool.customPreview) {
     const { logo, headline, tagline } = tool.customPreview;
     return (
@@ -28,14 +28,14 @@ export const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
           </Text>
           <Text className="preview-headline">
             {headline.map((line, idx) => (
-              <React.Fragment key={idx}>
+              <Fragment key={idx}>
                 {line.accent ? (
                   <span className="headline-accent">{line.accent}</span>
                 ) : (
                   line.text
                 )}
                 {idx < headline.length - 1 && <br />}
-              </React.Fragment>
+              </Fragment>
             ))}
           </Text>
           <Text className="preview-tagline">
@@ -51,7 +51,7 @@ export const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
   const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
 
-  const handleImageClick = (e: React.MouseEvent) => {
+  const handleImageClick = (e: MouseEvent) => {
     if (onImageClick) {
       e.preventDefault();
       e.stopPropagation();

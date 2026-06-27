@@ -4,7 +4,7 @@ import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { DEVAI_ASSETS } from '@/config/devai-assets';
 import { TOOL_ID_GITOPS_PR_REVIEWER } from '@/config/devai-tool-ids';
 
-export function GitOpsReviewerTool() {
+function GitOpsReviewerTool() {
   const assets = DEVAI_ASSETS.filter(a => a.toolId === TOOL_ID_GITOPS_PR_REVIEWER);
 
   return (
@@ -43,3 +43,5 @@ export function GitOpsReviewerTool() {
     </Box>
   );
 }
+
+export default GitOpsReviewerTool;

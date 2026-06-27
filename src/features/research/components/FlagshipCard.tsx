@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ExternalLink, Github, FlaskConical } from 'lucide-react';
 
@@ -18,14 +18,14 @@ export interface FlagshipCardProps {
   onImageClick?: (src: string) => void;
 }
 
-export const FlagshipCard = ({
+const FlagshipCard = ({
   tool,
   baseUrl,
   onImageClick
 }: FlagshipCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleToggleExpand = (e: React.MouseEvent) => {
+  const handleToggleExpand = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);
@@ -78,12 +78,12 @@ export const FlagshipCard = ({
           )}
 
           {tool.inDevMessage && (
-            <div className="in-dev-banner">
+            <Box className="in-dev-banner">
               <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
-              <p>
-                <strong>{tool.inDevMessage.highlight}</strong>{tool.inDevMessage.rest}
-              </p>
-            </div>
+              <Text variant="sans" size="sm" color="dim" weight="font-medium">
+                <Text as="strong" color="main">{tool.inDevMessage.highlight}</Text>{tool.inDevMessage.rest}
+              </Text>
+            </Box>
           )}
 
           <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>

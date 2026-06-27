@@ -23,7 +23,7 @@ export interface ViewportAnalysisCardProps {
   activeReportUrl?: string;
 }
 
-export const ViewportAnalysisCard = ({ vp, data, activeReportUrl }: ViewportAnalysisCardProps) => {
+const ViewportAnalysisCard = ({ vp, data, activeReportUrl }: ViewportAnalysisCardProps) => {
   return (
     <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
@@ -125,3 +125,5 @@ export const ViewportAnalysisCard = ({ vp, data, activeReportUrl }: ViewportAnal
     </Box>
   );
 };
+
+export default ViewportAnalysisCard;

@@ -10,7 +10,7 @@ export interface ResearchArticlesProps {
   navigate: (path: string) => void;
 }
 
-export const ResearchArticles = ({ studies, navigate }: ResearchArticlesProps) => {
+const ResearchArticles = ({ studies, navigate }: ResearchArticlesProps) => {
   if (studies.length === 0) return null;
 
   return (
@@ -89,3 +89,5 @@ export const ResearchArticles = ({ studies, navigate }: ResearchArticlesProps) =
     </Stack>
   );
 };
+
+export default ResearchArticles;

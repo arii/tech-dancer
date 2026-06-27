@@ -8,7 +8,7 @@ export interface ToolSectionProps {
   navigate: (path: string) => void;
 }
 
-export const ToolSection = ({ title, tools, navigate }: ToolSectionProps) => {
+const ToolSection = ({ title, tools, navigate }: ToolSectionProps) => {
   if (tools.length === 0) return null;
   return (
     <Stack gap={12} width="full">
@@ -24,3 +24,5 @@ export const ToolSection = ({ title, tools, navigate }: ToolSectionProps) => {
     </Stack>
   );
 };
+
+export default ToolSection;

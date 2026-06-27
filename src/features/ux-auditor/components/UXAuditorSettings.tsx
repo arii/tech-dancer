@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FocusEvent } from 'react';
 import { Trash2 } from 'lucide-react';
 
 import { Icon } from '@/components/ui/Icon';
@@ -12,7 +12,7 @@ export interface UXAuditorSettingsProps {
   setSnapshotService: (url: string) => void;
 }
 
-export const UXAuditorSettings = ({
+const UXAuditorSettings = ({
   customApiKey,
   setCustomApiKey,
   snapshotService,
@@ -21,7 +21,7 @@ export const UXAuditorSettings = ({
   const handleApiKeyChange = (e: ChangeEvent<HTMLInputElement>) => setCustomApiKey(e.target.value);
   const handleApiKeyClear = () => setCustomApiKey("");
   const handleSnapshotUrlChange = (e: ChangeEvent<HTMLInputElement>) => setSnapshotService(e.target.value);
-  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => e.target.select();
+  const handleInputFocus = (e: FocusEvent<HTMLInputElement>) => e.target.select();
 
   return (
     <>

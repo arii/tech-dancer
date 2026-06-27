@@ -7,7 +7,7 @@ export interface CopyPromptButtonProps {
   suggestion: string;
 }
 
-export const CopyPromptButton = ({ suggestion }: CopyPromptButtonProps) => {
+const CopyPromptButton = ({ suggestion }: CopyPromptButtonProps) => {
   const [copied, setCopied] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
@@ -76,3 +76,5 @@ export const CopyPromptButton = ({ suggestion }: CopyPromptButtonProps) => {
     </Box>
   );
 };
+
+export default CopyPromptButton;

@@ -18,7 +18,7 @@ import { Icon } from '@/components/ui/Icon';
 import { SEO } from '@/components/SEO';
 import { BASE_URL, ASSET_PREFIX } from '@/config/constants';
 
-export function EcommerceAutomationTool() {
+function EcommerceAutomationTool() {
   const workflowItems = [
     {
       icon: CloudUpload,
@@ -229,3 +229,5 @@ export function EcommerceAutomationTool() {
     </Stack>
   );
 }
+
+export default EcommerceAutomationTool;

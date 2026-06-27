@@ -11,7 +11,7 @@ export interface UXAuditorHistoryProps {
   setActiveReport: (report: UXReport | null) => void;
 }
 
-export const UXAuditorHistory = ({ reports, activeReport, setActiveReport }: UXAuditorHistoryProps) => {
+const UXAuditorHistory = ({ reports, activeReport, setActiveReport }: UXAuditorHistoryProps) => {
   return (
     <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
       <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
@@ -59,3 +59,5 @@ export const UXAuditorHistory = ({ reports, activeReport, setActiveReport }: UXA
     </Stack>
   );
 };
+
+export default UXAuditorHistory;

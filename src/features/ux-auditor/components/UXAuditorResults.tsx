@@ -1,10 +1,12 @@
 import { CheckCircle, Copy, RefreshCw, Github, Camera } from 'lucide-react';
+
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Icon } from '@/components/ui/Icon';
 import { UXReport, ViewportAnalysis, VIEWPORTS } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
-import { EmptyState } from '@/components/ui/EmptyState';
 import { actionButtonVariants, cardVariants } from '@/lib/variants';
-import { ViewportAnalysisCard } from './ViewportAnalysisCard';
+
+import ViewportAnalysisCard from './ViewportAnalysisCard';
 
 export interface UXAuditorResultsProps {
   activeReport: UXReport | null;
@@ -14,15 +16,21 @@ export interface UXAuditorResultsProps {
   isExportingToGithub: boolean;
 }
 
-export const UXAuditorResults = ({
+const UXAuditorResults = ({
   activeReport,
   copyMarkdown,
   isCopiedMarkdown,
   exportToGithub,
   isExportingToGithub,
 }: UXAuditorResultsProps) => {
+  const handleCopyMarkdown = () => copyMarkdown();
+  const handleExportToGithub = () => exportToGithub();
+
   return (
-    <Stack gap={6} span={{ lg: 3 }} minWidth={0} width="full" style={{ gridColumn: 'span 3 / span 3' }}>
+    <Stack
+        gap={6} span={{ lg: 3 }} minWidth={0} width="full"
+        style={{ gridColumn: 'span 3 / span 3' }} // impeccable-ignore - Override browser grid collapse issues
+    >
       {activeReport ? (
         <>
           <Stack
@@ -42,7 +50,7 @@ export const UXAuditorResults = ({
             <Stack direction={{ base: 'col', sm: 'row' }} gap={3} shrink={0} width={{ base: 'full', sm: 'auto' }} align={{ base: 'stretch', sm: 'center' }}>
               <Box
                 as="button"
-                onClick={copyMarkdown}
+                onClick={handleCopyMarkdown}
                 display="flex"
                 align="center"
                 justify="center"
@@ -60,7 +68,7 @@ export const UXAuditorResults = ({
               </Box>
               <Box
                 as="button"
-                onClick={exportToGithub}
+                onClick={handleExportToGithub}
                 disabled={activeReport.status !== 'completed' || isExportingToGithub}
                 display="flex"
                 align="center"
@@ -100,3 +108,5 @@ export const UXAuditorResults = ({
     </Stack>
   );
 };
+
+export default UXAuditorResults;

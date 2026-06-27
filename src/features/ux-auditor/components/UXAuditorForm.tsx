@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, FocusEvent } from 'react';
 import { Camera, RefreshCw } from 'lucide-react';
 
 import { Icon } from '@/components/ui/Icon';
@@ -18,7 +18,7 @@ export interface UXAuditorFormProps {
   setSnapshotService: (url: string) => void;
 }
 
-export const UXAuditorForm = ({
+const UXAuditorForm = ({
   url,
   setUrl,
   isAnalyzing,
@@ -33,7 +33,7 @@ export const UXAuditorForm = ({
     e.preventDefault();
     runUXAudit(url);
   };
-  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => e.target.select();
+  const handleInputFocus = (e: FocusEvent<HTMLInputElement>) => e.target.select();
 
   return (
     <Stack gap={4} as="form" autoComplete="off" onSubmit={handleSubmit}>

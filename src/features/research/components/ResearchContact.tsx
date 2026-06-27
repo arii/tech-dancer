@@ -1,14 +1,17 @@
 import { X } from 'lucide-react';
-import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+
 import { Icon } from '@/components/ui/Icon';
 import { SOCIAL_LINKS } from '@/config/constants';
+import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 
 export interface ResearchContactProps {
   lightboxImage: string | null;
   setLightboxImage: (img: string | null) => void;
 }
 
-export const ResearchContact = ({ lightboxImage, setLightboxImage }: ResearchContactProps) => {
+const ResearchContact = ({ lightboxImage, setLightboxImage }: ResearchContactProps) => {
+  const handleLightboxClose = () => setLightboxImage(null);
+
   return (
     <>
       <Grid cols={{ base: 1, md: 12 }} gap={10} padding={8} surface="muted" radius="xl" className="border border-line/20" id="work-with-me" align="center" width="full">
@@ -54,18 +57,24 @@ export const ResearchContact = ({ lightboxImage, setLightboxImage }: ResearchCon
           align="center"
           justify="center"
           className="bg-black/90 cursor-zoom-out"
-          onClick={() => setLightboxImage(null)}
+          onClick={handleLightboxClose}
         >
-          <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
+          <Box position="absolute" top={4} right={4} className="text-white hover:text-accent" padding={2}>
             <Icon icon={X} size="lg" />
           </Box>
           <img
             src={lightboxImage}
             alt="Enlarged screenshot preview"
-            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl"
+            style={{ // impeccable-ignore - Arbitrary viewport units for lightbox constraints
+                maxWidth: '95vw',
+                maxHeight: '95vh'
+            }}
+            className="object-contain rounded-lg border border-white/10 shadow-2xl"
           />
         </Box>
       )}
     </>
   );
 };
+
+export default ResearchContact;

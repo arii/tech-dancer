@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 import { Icon } from '@/components/ui/Icon';
@@ -15,19 +15,19 @@ export interface ToolCardProps {
   navigate: (path: string) => void;
 }
 
-export const ToolCard = ({ tool, navigate }: ToolCardProps) => {
+const ToolCard = ({ tool, navigate }: ToolCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isLink = !!tool.sourceUrl;
   const href = tool.sourceUrl || tool.canonicalPath || `/research/${tool.id}`;
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (!isLink) {
       e.preventDefault();
       navigate(href);
     }
   };
 
-  const handleToggleExpand = (e: React.MouseEvent) => {
+  const handleToggleExpand = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);

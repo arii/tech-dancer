@@ -25,7 +25,7 @@ function getIconForPath(path: string): LucideIcon {
     return ICON_MAP[ext] || ICON_MAP.default;
 }
 
-export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps) {
+function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps) {
   return (
     <Stack gap={4}>
       <Text variant="mono" size="micro" color="main" uppercase tracking="widest">
@@ -86,3 +86,5 @@ export function ArchitecturalAssetsList({ assets }: ArchitecturalAssetsListProps
     </Stack>
   );
 }
+
+export default ArchitecturalAssetsList;

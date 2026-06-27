@@ -4,7 +4,7 @@ import { ArchitecturalAssetsList } from './ArchitecturalAssetsList';
 import { TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER, TOOL_ID_SDLC_PROFILER } from '@/config/devai-tool-ids';
 import { useResearchToolAssets } from '@/lib/hooks/useResearchToolAssets';
 
-export function DeploymentImpactAnalyzerTool() {
+function DeploymentImpactAnalyzerTool() {
   const assets = useResearchToolAssets([
     TOOL_ID_DEPLOYMENT_IMPACT_ANALYZER,
     TOOL_ID_SDLC_PROFILER
@@ -57,3 +57,5 @@ export function DeploymentImpactAnalyzerTool() {
     </Box>
   );
 }
+
+export default DeploymentImpactAnalyzerTool;
