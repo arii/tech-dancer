@@ -6,11 +6,14 @@ import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
+export const EDITORIAL_CLAMP = 0;
+export const DEFAULT_CLAMP = 2;
+
 export function ProductCard({
   item,
   isFeatured,
-  clampTitle = isFeatured ? 0 : 2,
-  clampDescription = isFeatured ? 0 : 2,
+  clampTitle = isFeatured ? EDITORIAL_CLAMP : DEFAULT_CLAMP,
+  clampDescription = isFeatured ? EDITORIAL_CLAMP : DEFAULT_CLAMP,
   className,
   ...props
 }: {

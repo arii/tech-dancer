@@ -4,7 +4,7 @@ import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
-import { ProductCard } from '@/components/products/ProductCard';
+import { ProductCard, EDITORIAL_CLAMP } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
 import { FilterButton } from '@/components/ui/FilterButton';
@@ -116,14 +116,15 @@ export default function Merch() {
                       item={section.products[0]}
                       isFeatured
                       span={{ base: 1, sm: 2, md: 2 }}
+                      className="md:row-span-1"
                     />
                     {section.products.slice(1, 3).map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
                         item={product}
                         span={{ base: 1, sm: 1, md: 1 }}
-                        clampTitle={0}
-                        clampDescription={0}
+                        clampTitle={EDITORIAL_CLAMP}
+                        clampDescription={EDITORIAL_CLAMP}
                       />
                     ))}
                   </Grid>
