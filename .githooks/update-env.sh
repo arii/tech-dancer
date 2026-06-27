@@ -39,24 +39,24 @@ if check_run "^(pnpm-lock\.yaml|package\.json)$"; then
     fi
 fi
 
-if check_run "^dev-tools/"; then
+if check_run "^boomtick-pkg/cli/"; then
     if command -v python3 >/dev/null 2>&1; then
         echo "🐍 dev-tools changed. Re-installing in editable mode..."
         # Try normal install first, then fallback for externally managed environments
-        if ! python3 -m pip install --root-user-action=ignore -e ./dev-tools; then
-            python3 -m pip install --root-user-action=ignore -e ./dev-tools --break-system-packages || echo "❌ ERROR: dev-tools re-installation failed. Please run 'pip install -e ./dev-tools' manually."
+        if ! python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli; then
+            python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli --break-system-packages || echo "❌ ERROR: dev-tools re-installation failed. Please run 'pip install -e ./boomtick-pkg/cli' manually."
         fi
     else
         echo "⚠️  WARNING: python3 not found. Skipping dev-tools update."
     fi
 fi
 
-if check_run "^boomtick-mcp/"; then
+if check_run "^boomtick-pkg/mcp/"; then
     if command -v pnpm >/dev/null 2>&1; then
-        echo "🤖 boomtick-mcp changed. Rebuilding..."
-        pnpm --filter boomtick-mcp run build || echo "❌ ERROR: boomtick-mcp build failed. Please run 'pnpm --filter boomtick-mcp run build' manually."
+        echo "🤖 boomtick-pkg/mcp changed. Rebuilding..."
+        pnpm --filter ./boomtick-pkg/mcp run build || echo "❌ ERROR: boomtick-pkg/mcp build failed. Please run 'pnpm --filter ./boomtick-pkg/mcp run build' manually."
     else
-        echo "⚠️  WARNING: pnpm not found. Skipping boomtick-mcp build."
+        echo "⚠️  WARNING: pnpm not found. Skipping boomtick-pkg/mcp build."
     fi
 fi
 
