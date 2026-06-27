@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ExternalLink, Github, FlaskConical } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Box, Stack, Text } from '@/layouts/Primitives';
-import { Icon } from '@/components/ui/Icon';
-import { BaseCard } from '@/components/ui/BaseCard';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+
 import { ActionButton } from '@/components/ui/ActionButton';
+import { BaseCard } from '@/components/ui/BaseCard';
+import { Icon } from '@/components/ui/Icon';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ResearchTool } from '@/config/research-tools';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
+
 import { ToolImage, getToolIcon } from './ToolImage';
 
 export interface FlagshipCardProps {
@@ -23,7 +25,7 @@ export const FlagshipCard = ({
 }: FlagshipCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpand = (e: React.MouseEvent) => {
+  const handleToggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);
@@ -70,7 +72,7 @@ export const FlagshipCard = ({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
+            <Box as="button" onClick={handleToggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -144,3 +146,5 @@ export const FlagshipCard = ({
     </BaseCard>
   );
 };
+
+export default FlagshipCard;

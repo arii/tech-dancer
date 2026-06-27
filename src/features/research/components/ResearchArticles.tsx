@@ -3,9 +3,10 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { cardVariants } from '@/lib/variants';
+import { Study } from '@/lib/content';
 
 export interface ResearchArticlesProps {
-  studies: any[];
+  studies: Study[];
   navigate: (path: string) => void;
 }
 

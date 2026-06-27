@@ -1,5 +1,6 @@
 import React from 'react';
 import { Cpu, Activity, Globe, Search, LucideIcon } from 'lucide-react';
+
 import { ResearchTool } from '@/config/research-tools';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 
@@ -68,3 +69,5 @@ export const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
     </Box>
   );
 };
+
+export default ToolImage;

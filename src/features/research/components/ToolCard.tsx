@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Box, Stack, Text } from '@/layouts/Primitives';
+
 import { Icon } from '@/components/ui/Icon';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { cardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
+import { Box, Stack, Text } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
+import { cardVariants } from '@/lib/variants';
+
 import { getToolIcon } from './ToolImage';
 
 export interface ToolCardProps {
@@ -25,7 +27,7 @@ export const ToolCard = ({ tool, navigate }: ToolCardProps) => {
     }
   };
 
-  const toggleExpand = (e: React.MouseEvent) => {
+  const handleToggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);
@@ -64,7 +66,7 @@ export const ToolCard = ({ tool, navigate }: ToolCardProps) => {
           {tool.description}
         </Text>
         {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
+          <Box as="button" onClick={handleToggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
             {isExpanded ? "Read Less" : "Read More"}
           </Box>
         )}
@@ -83,3 +85,5 @@ export const ToolCard = ({ tool, navigate }: ToolCardProps) => {
     </Stack>
   );
 };
+
+export default ToolCard;
