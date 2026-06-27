@@ -57,6 +57,8 @@ jobs:
 
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
+        with:
+          setup-node: 'false'
 
       - name: Initialize Jules Repair Session
         env:
