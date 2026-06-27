@@ -85,4 +85,4 @@ COPY --chown=pwuser:pwuser boomtick-pkg/mcp/package.json ./boomtick-pkg/mcp/
 
 USER pwuser
 
-RUN --mount=type=cache,id=pnpm,uid=1000,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,uid=1001,target=/pnpm/store pnpm install --frozen-lockfile
