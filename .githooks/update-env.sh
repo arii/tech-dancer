@@ -60,7 +60,7 @@ if check_run "^boomtick-pkg/mcp/"; then
     fi
 fi
 
-if check_run "^(src/|content/|package\.json|scripts/build-repo-context\.py)"; then
+if check_run "^(src/|content/|package\.json|boomtick-pkg/scripts/build-repo-context\.py)"; then
     if command -v pnpm >/dev/null 2>&1; then
         echo "🔍 Indexable content changed. Updating .agent-context.json..."
         # Bypass engine checks for agents

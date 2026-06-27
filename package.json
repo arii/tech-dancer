@@ -56,7 +56,7 @@
     "impact:github-models-review": "tsx scripts/impact-github-models-review.ts",
     "impact:gemini-code-review": "tsx scripts/impact-gemini-code-review.ts",
     "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts",
-    "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json"
+    "agent:prime": "python3 boomtick-pkg/scripts/build-repo-context.py > .agent-context.json"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",

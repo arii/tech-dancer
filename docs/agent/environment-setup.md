@@ -56,7 +56,7 @@ pnpm run agent:prime
 
 Run this before any agent operation if the index may be stale (e.g. after
 pulling changes without the hooks installed, or after modifying `src/`,
-`content/`, or `scripts/build-repo-context.py`).
+`content/`, or `boomtick-pkg/scripts/build-repo-context.py`).
 
 If `.agent-context.json` is missing or stale, `boomtick-mcp` falls back to
 raw filesystem calls, bypassing the index and significantly increasing token

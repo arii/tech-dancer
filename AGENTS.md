@@ -140,6 +140,10 @@ call automatically:
 Calling `td_cli.py` directly skips step 1. Calling raw bash skips steps 1–2.
 Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
 
+### 🚫 Zero-Fallback Policy
+
+Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td_cli.py) tool exists. If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
+
 ### CLI Schema Authority
 
 `boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
@@ -194,7 +198,8 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 
 Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
-in `.githooks/` so `.agent-context.json` stays fresh automatically.
+in .githooks/ so .agent-context.json stays fresh automatically by calling
+boomtick-pkg/scripts/build-repo-context.py.
 
 ```bash
 ./setup-agent.sh

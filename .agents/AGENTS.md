@@ -12,7 +12,7 @@ Before executing **any** command, agents MUST:
 
 1. **Consult `.agent-context.json`** — ground truth for repository structure,
    `file_tree`, `cli_schema`, current feature flags, and metadata. This file is
-   built by `scripts/build-repo-context.py` and kept fresh by the git hooks in
+   built by `boomtick-pkg/scripts/build-repo-context.py` and kept fresh by the git hooks in
    `.githooks/`.
 2. **Consult `boomtick-pkg/cli/dev_tools/cli-schema.json`** — canonical authority for local CLI
    commands. Never guess flags. Never run `--help`. The schema is also embedded
@@ -44,6 +44,10 @@ github.get_pr_diff(pr_number=2280)
 ```
 
 Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
+
+### 🚫 Zero-Fallback Policy
+
+Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td_cli.py) tool exists. If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
 
 ---
 
@@ -82,6 +86,7 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 | **Testing** | Run Vitest | `repo.run_tests` | - | `pnpm test` |
 | **Testing** | Run Playwright | `repo.run_playwright` | `td_cli.py repo run-playwright` | `npx playwright test` |
 | **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
+| **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |
 | **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch <BRANCH> <TASK>` | - |
 | **Agent** | Fix CI | `jules.fix_ci` | `td_cli.py agent fix-ci --pr-number <PR>` | - |
 | **Agent** | Sync Sessions | `jules.sync_sessions` | `td_cli.py agent sync` | - |
@@ -110,7 +115,7 @@ repo.read_agent_context
 ### Why This Matters
 
 `.agent-context.json` contains the full `file_tree` and `cli_schema` already
-indexed by `scripts/build-repo-context.py`. Using `repo.read_agent_context`
+indexed by `boomtick-pkg/scripts/build-repo-context.py`. Using `repo.read_agent_context`
 provides pre-indexed structure for free — no redundant filesystem traversal,
 no duplicate diff fetches, no re-indexing on every run.
 
