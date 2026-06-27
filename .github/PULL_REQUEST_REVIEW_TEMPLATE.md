@@ -134,5 +134,5 @@ After completing every file block above, fill in the body below and run the comm
 Command:
 
 ```bash
-python3 dev-tools/td_cli.py gh audit-pr {{NUMBER}} --submit --cleanup
+python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr {{NUMBER}} --submit --cleanup
 ```
