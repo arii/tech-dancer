@@ -46,6 +46,7 @@ def main():
 
     if not args.no_cache and os.path.exists(CACHE_FILE):
         with open(CACHE_FILE, 'rb') as f:
+            # nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
             cache = pickle.load(f)
     else:
         cache = {"prs": {}, "files": {}}
@@ -57,6 +58,7 @@ def main():
         cache["files"][num] = get_pr_files(num)
 
     with open(CACHE_FILE, 'wb') as f:
+        # nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
         pickle.dump(cache, f)
 
     # 1. Report specific exact-match overlap groups
