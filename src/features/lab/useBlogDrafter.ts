@@ -135,6 +135,19 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
 `;
   }, [data]);
 
+  const cleanPreview = useMemo(() => {
+    return `# ${data.title || 'Untitled Post'}
+
+**Author:** ${data.author} | **Date:** ${data.date} | **Category:** ${data.category}
+
+${data.excerpt ? `> ${data.excerpt}\n` : ''}
+
+${data.commentary || '[Your commentary/content goes here]'}
+
+${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
+`;
+  }, [data]);
+
   const issueInfo = useMemo(() => {
     const repoOwner = SITE_METADATA.repo.owner;
     const repoName = SITE_METADATA.repo.name;
@@ -215,6 +228,7 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     rollback,
     deleteHistoryEntry,
     markdownPreview,
+    cleanPreview,
     issueInfo
   };
 }

@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import { Github, FileText, Send, Terminal, ExternalLink, Info, Check, RotateCcw, Save, History, Trash2, Eye } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -9,17 +9,43 @@ import { Post } from '@/lib/content';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
-import { inputs } from '@/styles/design-tokens';
-import { cn } from '@/lib/utils';
 
-const Field = ({ label, value, onChange, placeholder, type = "text", height = 40, ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string, height?: number }) => {
+const Field = ({ label, value, onChange, placeholder, type = "text", height, ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string, height?: number }) => {
   return (
     <Stack gap={2}>
-      <Text variant="mono" size="micro" color="dim" className="tracking-wider uppercase font-bold" marginBottom={0}>{label}</Text>
+      <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>{label}</Text>
       {type === 'textarea' ? (
-        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={height} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-y" {...props} />
+        <Box
+          as="textarea"
+          value={value}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
+          placeholder={placeholder}
+          height={height || 40}
+          width="full"
+          surface="alt"
+          border
+          radius="lg"
+          paddingX={3}
+          paddingY={2}
+          className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-y"
+          {...props}
+        />
       ) : (
-        <Box as="input" type={type} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder={placeholder} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed" {...props} />
+        <Box
+          as="input"
+          type={type}
+          value={value}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+          placeholder={placeholder}
+          width="full"
+          surface="alt"
+          border
+          radius="lg"
+          paddingX={3}
+          paddingY={2}
+          className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          {...props}
+        />
       )}
     </Stack>
   );
@@ -35,10 +61,12 @@ export function BlogDrafter() {
     saveToHistory,
     rollback,
     deleteHistoryEntry,
+    cleanPreview,
     issueInfo
   } = useBlogDrafter();
 
   const [copied, setCopied] = useState(false);
+  const [showClipboardNotice, setShowClipboardNotice] = useState(false);
   const [aiInput, setAiInput] = useState('');
   const [showAppliedSuccess, setShowAppliedSuccess] = useState(false);
   const [previewMode, setPreviewMode] = useState<'compact' | 'full'>('compact');
@@ -55,6 +83,16 @@ export function BlogDrafter() {
     }
   };
 
+  const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const clipboardTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      if (clipboardTimeoutRef.current) clearTimeout(clipboardTimeoutRef.current);
+    };
+  }, []);
+
   const handleCopyPrompt = () => {
     const typeSpecificPrompt = `Ensure the JSON strictly matches the keys: title, author, excerpt, affiliateLink, commentary.`;
 
@@ -68,7 +106,8 @@ Requirements:
 Draft Data: ${JSON.stringify(data, null, 2)}`;
     navigator.clipboard.writeText(prompt);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+    copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
   };
 
   const handleSubmitDraft = () => {
@@ -76,7 +115,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
     if (url.length > 2000) {
       navigator.clipboard.writeText(issueBody);
-      alert("Draft content is too large for a direct URL. It has been copied to your clipboard. Please paste it into the issue body on GitHub.");
+      setShowClipboardNotice(true);
+      if (clipboardTimeoutRef.current) clearTimeout(clipboardTimeoutRef.current);
+      clipboardTimeoutRef.current = setTimeout(() => setShowClipboardNotice(false), 8000);
       const placeholderUrl = `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent('[PASTE_CLIPBOARD_HERE]')}`;
       window.open(placeholderUrl, '_blank', 'noopener,noreferrer');
     } else {
@@ -85,9 +126,15 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
   };
 
   if (previewMode === 'full') {
+    const postData: Post = {
+      ...data,
+      slug: 'preview',
+      content: data.commentary,
+    };
+
     return (
       <FullPreview
-        post={data as unknown as Post}
+        post={postData}
         onBack={() => setPreviewMode('compact')}
       />
     );
@@ -129,6 +176,19 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
         </Box>
       </Stack>
 
+      {showClipboardNotice && (
+        <Box border padding="compact" className="bg-accent-purple/5 border-accent-purple/20">
+           <Stack gap={2} display="flex" align="baseline" direction="row">
+              <Box as="span" className="shrink-0">
+                <Info className="w-4 h-4 text-accent-purple" />
+              </Box>
+              <Text variant="body" size="xs">
+                <strong>DRAFT COPIED TO CLIPBOARD.</strong> Due to content size, the GitHub Issue body was truncated. Please <strong>PASTE</strong> the clipboard content into the issue description on GitHub.
+              </Text>
+           </Stack>
+        </Box>
+      )}
+
       <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
         {/* Form Column */}
         <Stack gap={8}>
@@ -151,23 +211,35 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Grid cols={2} gap={4}>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Content Type</Text>
+                <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>Content Type</Text>
                 <Box
                   as="select"
                   value={data.type}
-                  className={cn(inputs.base, "appearance-none")}
+                  width="full"
+                  surface="alt"
+                  border
+                  radius="lg"
+                  paddingX={3}
+                  paddingY={2}
+                  className="appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled
                 >
                   <option value="post">Blog Post</option>
                 </Box>
               </Stack>
               <Stack gap={2}>
-                <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Category</Text>
+                <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>Category</Text>
                 <Box
                   as="select"
                   value={data.category}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) => updateField('category', e.target.value)}
-                  className={cn(inputs.base, "appearance-none")}
+                  width="full"
+                  surface="alt"
+                  border
+                  radius="lg"
+                  paddingX={3}
+                  paddingY={2}
+                  className="appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {CONTENT_CATEGORIES.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.label}</option>
@@ -184,14 +256,20 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Grid>
 
             <Stack gap={2}>
-              <Text variant="mono" size="micro" color="dim" className={inputs.label} marginBottom={0}>Excerpt</Text>
+              <Text variant="mono" size="micro" color="dim" weight="font-bold" tracking="wider" uppercase marginBottom={0}>Excerpt</Text>
               <Box
                 as="textarea"
                 value={data.excerpt}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the content..."
                 height={32}
-                className={cn(inputs.base, "resize-y")}
+                width="full"
+                surface="alt"
+                border
+                radius="lg"
+                paddingX={3}
+                paddingY={2}
+                className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-y"
               />
             </Stack>
 
@@ -278,7 +356,13 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setAiInput(e.target.value)}
               placeholder="Paste AI JSON response here..."
               height={32}
-              className={cn(inputs.base, "resize-none")}
+              width="full"
+              surface="alt"
+              border
+              radius="lg"
+              paddingX={3}
+              paddingY={2}
+              className="text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none"
             />
             <ActionButton
               onClick={handleApply}
@@ -319,9 +403,10 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             padding={6}
             overflow="y-auto"
             maxHeight="600px"
-            className="prose prose-sm prose-invert max-w-none bg-black/5"
+            maxWidth="full"
+            className="prose prose-sm prose-invert"
           >
-            <MarkdownRenderer content={data.commentary} />
+            <MarkdownRenderer content={cleanPreview} />
           </Box>
 
           <Grid cols={2} gap={4}>
@@ -345,6 +430,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
 
             <Box
               as="button"
+              type="button"
+              role="button"
               onClick={handleSubmitDraft}
               display="flex"
               align="center"
