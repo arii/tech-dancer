@@ -14,6 +14,12 @@ tags:
   - "maintenance"
   - "foam-rolling"
   - "self-care"
+affiliateIds:
+  - "foam-roller"
+  - "liquid-iv"
+  - "epsom-salt"
+  - "hypervolt"
+  - "pedialyte"
 ---
 
 Recovery is just as important as practice. After a long weekend of dancing on hard ballroom floors, your muscles need targeted attention to prevent injury, reduce soreness, and maintain the flexibility required for high-level West Coast Swing.
@@ -70,6 +76,12 @@ Lie face down with the roller under your thighs. Roll from the hips down to the 
 
 <notice type="affiliate" id="foam-roller"></notice>
 
+#### Percussive Therapy
+
+While foam rolling is excellent for large muscle groups, percussive therapy offers a more targeted approach. A massage gun like the Hypervolt uses rapid, concentrated pulses to reach deep into muscle tissue, improving range of motion and accelerating recovery after intense social dancing.
+
+<notice type="affiliate" id="hypervolt"></notice>
+
 ### The Post-Event Recovery Workflow
 
 Consistency is key to effective recovery. Following a structured workflow after a social dance or a full event weekend can significantly reduce your post-event fatigue.
@@ -90,6 +102,12 @@ During a convention, it's easy to fall into a cycle of caffeine and adrenaline. 
 <notice type="affiliate" id="liquid-iv"></notice>
 
 I recommend using a hydration multiplier like Liquid I.V. before bed and immediately upon waking. This helps combat the dehydration that leads to muscle cramping and the "swung over" feeling many dancers experience on Monday morning.
+
+#### Hydration & Electrolytes
+
+Water alone isn't always enough to recover from hours on the dance floor. Rehydration packets like Pedialyte are formulated with a precise balance of sugar and electrolytes to help you rehydrate faster than sports drinks or water alone, making them an essential part of your "Monday morning" recovery kit.
+
+<notice type="affiliate" id="pedialyte"></notice>
 
 ### Soothing the Inflammation
 
