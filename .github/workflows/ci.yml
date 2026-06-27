@@ -43,6 +43,7 @@ permissions:
   statuses: write
   pull-requests: write
   packages: read
+  models: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
