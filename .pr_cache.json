@@ -1,0 +1,11 @@
+{
+  "prs": {
+    "3067": "chore(audit): perform comprehensive github issue audit and cleanup recommendations"
+  },
+  "files": {
+    "3067": [
+      "issue-audit-2026-06-27.md",
+      "issue-audit-status.md"
+    ]
+  }
+}
