@@ -17,14 +17,37 @@ jobs:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
 
       - name: Validate Issue
+        id: validate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute
+          # Disable exit on error to allow manual exit code handling
+          set +e
+          # Redirect output to logs for better debugging if failure occurs
+          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute > validate_stdout.log 2> validate_stderr.log
+          EXIT_CODE=$?
+          set -e
+
+          # Cat outputs to console so they appear in standard logs
+          cat validate_stdout.log
+          cat validate_stderr.log >&2
+
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "### ❌ Validation Failed" >> $GITHUB_STEP_SUMMARY
+            echo "#### Standard Output" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat validate_stdout.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "#### Error Output" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat validate_stderr.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $EXIT_CODE
+          fi

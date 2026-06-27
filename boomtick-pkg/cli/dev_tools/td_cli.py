@@ -123,6 +123,14 @@ def main():
             # JSON errors remain on stdout to maintain the contract for piped machine consumers
             # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
             print(json.dumps(error_payload, indent=2))
+
+            # In CI environments, also log to stderr for better visibility in GHA logs
+            if os.environ.get("CI") == "true":
+                try:
+                    from tdw_services.utils import log_error
+                    log_error(str(e))
+                except (ImportError, ModuleNotFoundError):
+                    print(f"❌ Error: {e}", file=sys.stderr)
         else:
             try:
                 from tdw_services.utils import log_error
