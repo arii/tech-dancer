@@ -27,6 +27,7 @@ import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.ru
 import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
 import { openReplacementPrHandler, OpenReplacementPrInputSchema } from "../tools/github.open_replacement_pr.js";
 import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "../tools/github.comment_triage_summary.js";
+import { createPullRequestHandler, CreatePullRequestInputSchema } from "../tools/github.create_pull_request.js";
 
 
 import { createJulesSessionHandler, CreateJulesSessionInputSchema } from "../tools/jules/create-session.js";
@@ -428,6 +429,21 @@ export class BoomtickMCPServer {
             },
           },
           {
+            name: "github.create_pull_request",
+            description: "Creates a pull request on GitHub using the MCP server's integrated credentials. Bypasses terminal CLI constraints.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                title: { type: "string", description: "PR Title." },
+                body: { type: "string", description: "Description of changes." },
+                head: { type: "string", description: "The branch containing changes to merge." },
+                base: { type: "string", default: "main", description: "The target branch to merge into." },
+                draft: { type: "boolean", default: false, description: "Whether to create the PR as a draft." }
+              },
+              required: ["title", "body", "head", "base"]
+            }
+          },
+          {
             name: "github.comment_triage_summary",
             description: "Comment on the original PR with a diagnosis and replacement link.",
             inputSchema: {
@@ -584,6 +600,8 @@ export class BoomtickMCPServer {
             return createSuccessResult(await openReplacementPrHandler(OpenReplacementPrInputSchema.parse(request.params.arguments)));
           case "github.comment_triage_summary":
             return createSuccessResult(await commentTriageSummaryHandler(CommentTriageSummaryInputSchema.parse(request.params.arguments)));
+          case "github.create_pull_request":
+            return createSuccessResult(await createPullRequestHandler(CreatePullRequestInputSchema.parse(request.params.arguments)));
 
 
 

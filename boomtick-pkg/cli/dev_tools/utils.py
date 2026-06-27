@@ -222,7 +222,7 @@ def call_ai_service(prompt: str, model: str = None, schema = None) -> Optional[s
 
     return None
 
-def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True) -> Union[str, subprocess.CompletedProcess]:
+def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = True, input_str: Optional[str] = None, log_on_error: bool = True, **kwargs) -> Union[str, subprocess.CompletedProcess]:
     """
     Unified command execution helper.
     - If check=True (default): returns stripped stdout string, raises CLIError on non-zero exit.
@@ -234,7 +234,8 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
         input=input_str,
         capture_output=True,
         text=True,
-        check=False
+        check=False,
+        **kwargs
     )
     if proc.returncode != 0 and log_on_error:
         log_error(f"Command failed (exit {proc.returncode}): {proc.args}")
