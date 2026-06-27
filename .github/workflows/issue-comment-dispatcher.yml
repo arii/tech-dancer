@@ -13,33 +13,29 @@ jobs:
       pull-requests: write
       actions: write
     steps:
-      - name: Check commands
-        id: check
-        env:
-          COMMENT_BODY: ${{ github.event.comment.body }}
-        run: |
-          if [[ "$COMMENT_BODY" == *"@conflict-resolve"* ]]; then
-            echo "conflict_resolve=true" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [[ "$COMMENT_BODY" == *"@update-snapshots"* ]]; then
-            echo "update_snapshots=true" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [[ "$COMMENT_BODY" == *"/ai-fix"* ]] || [[ "$COMMENT_BODY" == *"/ai-review"* ]]; then
-            echo "ai_chatops=true" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [[ "$COMMENT_BODY" == *"@jules-fix-ci"* ]]; then
-             if [[ "${{ github.event.comment.author_association }}" == 'OWNER' ]] || [[ "${{ github.event.comment.author_association }}" == 'MEMBER' ]] || [[ "${{ github.event.comment.author_association }}" == 'COLLABORATOR' ]]; then
-               echo "jules_fix_ci=true" >> "$GITHUB_OUTPUT"
-             fi
-          fi
-
       - name: Checkout repository to dispatch workflows
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Setup Python
+        run: ./boomtick-pkg/cli/setup-python.sh
+
+      - name: Check commands
+        id: check
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          AUTHOR_ASSOC: ${{ github.event.comment.author_association }}
+          PYTHONPATH: "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+        run: |
+          # Pass COMMENT_BODY via env var to td_cli.py for secure parsing
+          RESULT=$(python3 boomtick-pkg/cli/dev_tools/td_cli.py gh parse-comment --author-association "$AUTHOR_ASSOC")
+
+          # Extract actions from the JSON result and set them as outputs
+          echo "conflict_resolve=$(echo "$RESULT" | jq -r '.actions.conflict_resolve')" >> "$GITHUB_OUTPUT"
+          echo "update_snapshots=$(echo "$RESULT" | jq -r '.actions.update_snapshots')" >> "$GITHUB_OUTPUT"
+          echo "ai_chatops=$(echo "$RESULT" | jq -r '.actions.ai_chatops')" >> "$GITHUB_OUTPUT"
+          echo "jules_fix_ci=$(echo "$RESULT" | jq -r '.actions.jules_fix_ci')" >> "$GITHUB_OUTPUT"
 
       - name: Resolve Branch Details
         if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'

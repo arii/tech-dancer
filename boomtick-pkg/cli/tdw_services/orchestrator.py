@@ -578,6 +578,23 @@ class Orchestrator:
         handler = CommandHandler(self)
         return handler.handle(pr_number, command, comment_id)
 
+    def parse_comment(self, body: str, author_association: str) -> Dict[str, Any]:
+        """
+        Parses a comment body and returns the intended actions.
+        """
+        actions = {
+            "conflict_resolve": "@conflict-resolve" in body,
+            "update_snapshots": "@update-snapshots" in body,
+            "ai_chatops": "/ai-fix" in body or "/ai-review" in body,
+            "jules_fix_ci": False
+        }
+
+        if "@jules-fix-ci" in body:
+            if author_association in ['OWNER', 'MEMBER', 'COLLABORATOR']:
+                actions["jules_fix_ci"] = True
+
+        return actions
+
     def runtime_check(self) -> Dict[str, str]:
         """Ensures the runtime environment matches the contract."""
         run_command(["corepack", "enable"], check=False)
