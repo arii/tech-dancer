@@ -4,7 +4,7 @@ import re
 def mask_sensitive_data(msg: str) -> str:
     """Redacts sensitive information like GitHub tokens from strings."""
     if not isinstance(msg, str):
-        return str(msg)
+        msg = str(msg)
 
     # Redact GitHub Tokens (Personal Access Tokens and Fine-grained Tokens)
     msg = re.sub(r'ghp_[a-zA-Z0-9]{36,}', 'ghp_***', msg)
