@@ -2,14 +2,17 @@ import subprocess
 import json
 import time
 import re
+import os
 from datetime import datetime
 
 CLI_BASE = ["python3", "boomtick-pkg/cli/dev_tools/td_cli.py"]
 
 def run_cli(args):
     cmd = CLI_BASE + args
+    env = os.environ.copy()
+    env["PYTHONPATH"] = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"CLI Error: {e.stderr}")
