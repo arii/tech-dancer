@@ -529,7 +529,6 @@ class Orchestrator:
                         elif line.startswith('-'): annotated.append(f"     |{line}")
                         else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
                 context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
-            os.makedirs(review_dir, exist_ok=True)
             with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
             template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
 
