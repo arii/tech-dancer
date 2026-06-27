@@ -35,11 +35,21 @@ jobs:
       - name: Download actionlint
         id: get_actionlint
         run: |
-          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash > download-actionlint.sh
-          bash download-actionlint.sh
+          # Pin to a specific version and commit for security
+          # Current commit for v1.7.12 as of 2026-06-26
+          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
+          bash download-actionlint.sh 1.7.12
           rm download-actionlint.sh
         shell: bash
 
       - name: Lint workflow logic with actionlint
-        run: ${{ steps.get_actionlint.outputs.executable }} -color
+        run: |
+          # Ignore 'background', 'parallel', and 'wait' keywords as actionlint does
+          # not yet support these new GitHub Actions features.
+          ./actionlint \
+            -ignore 'step must run script with "run" section' \
+            -ignore 'unexpected key "background"' \
+            -ignore 'unexpected key "parallel"' \
+            -ignore 'unexpected key "wait"' \
+            -color
         shell: bash
