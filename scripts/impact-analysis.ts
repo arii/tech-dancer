@@ -13,7 +13,7 @@ import {
 } from './lib/impact-analysis-utils';
 
 async function main() {
-  logHeartbeat('Starting Deployment Impact Analysis');
+  await logHeartbeat('Starting Deployment Impact Analysis');
   console.log('🚀 Running Deployment Impact Analysis...');
 
   try {
@@ -37,7 +37,7 @@ async function main() {
     console.log(`\nFound ${files.length} changed files.`);
 
     // Generate dependency graph
-    logHeartbeat('Generating dependency graph');
+    await logHeartbeat('Generating dependency graph');
     console.log('📊 Generating dependency graph...');
     let graphJson: string;
     try {
@@ -64,7 +64,7 @@ async function main() {
 
     // Resolve Dynamic Mapping and URLs
     const dynamicRouteMapping = getDynamicRouteMapping(graph);
-    logHeartbeat('Resolving affected URLs');
+    await logHeartbeat('Resolving affected URLs');
     const allUrls = resolveAffectedUrls(allAffected, files, dynamicRouteMapping, staticAffected);
 
     // Find all dynamic imports in the whole graph to identify dynamic boundaries
@@ -108,7 +108,7 @@ async function main() {
     console.log('\n' + '='.repeat(40));
 
     generateReports(report, files, affectedDynamicImportsSet);
-    logHeartbeat('Impact Analysis Complete');
+    await logHeartbeat('Impact Analysis Complete');
   } catch (error: unknown) {
     const err = error as Error;
     console.error(`❌ Error during impact analysis: ${err.message}`);

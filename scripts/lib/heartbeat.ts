@@ -6,38 +6,22 @@ const LOG_FILE = path.join(LOG_DIR, 'heartbeat.log');
 
 /**
  * Appends a heartbeat log entry to the heartbeat.log file.
- * Implements basic sanitization, error propagation, and a simple retry mechanism
- * to mitigate race conditions during concurrent writes.
+ * Refactored to be non-blocking and efficient using fs.promises.
  */
-export function logHeartbeat(status: string): void {
+export async function logHeartbeat(status: string): Promise<void> {
   const sanitizedStatus = status.replace(/[\r\n]/g, ' ').trim();
   const timestamp = new Date().toISOString();
   const logEntry = `[${timestamp}] ${sanitizedStatus}\n`;
 
-  if (!fs.existsSync(LOG_DIR)) {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
-  }
-
-  let attempts = 0;
-  const maxAttempts = 5;
-
-  while (attempts < maxAttempts) {
-    try {
-      fs.appendFileSync(LOG_FILE, logEntry);
-      console.log(`💓 Heartbeat: ${sanitizedStatus}`);
-      return;
-    } catch (error) {
-      attempts++;
-      if (attempts >= maxAttempts) {
-        console.error('❌ Failed to write heartbeat log after multiple attempts:', error);
-        throw error;
-      }
-      // Brief pause before retry
-      const delay = Math.floor(Math.random() * 50) + 10;
-      const start = Date.now();
-      while (Date.now() - start < delay) {
-        // block for a bit
-      }
+  try {
+    if (!fs.existsSync(LOG_DIR)) {
+      await fs.promises.mkdir(LOG_DIR, { recursive: true });
     }
+
+    await fs.promises.appendFile(LOG_FILE, logEntry);
+    console.log(`💓 Heartbeat: ${sanitizedStatus}`);
+  } catch (error) {
+    console.error('❌ Failed to write heartbeat log:', error);
+    throw error;
   }
 }
