@@ -33,6 +33,7 @@ describe("repo.create_branch", () => {
   it("should use default base branch 'main' if not provided", async () => {
     const args = {
       branchName: "another-feature",
+      baseBranch: "main",
     };
 
     (shell.runCommand as any).mockResolvedValue({ exitCode: 0, stdout: "", stderr: "" });
@@ -46,6 +47,7 @@ describe("repo.create_branch", () => {
   it("should throw error if git command fails", async () => {
     const args = {
       branchName: "fail-branch",
+      baseBranch: "main",
     };
 
     (shell.runCommand as any).mockResolvedValue({ exitCode: 1, stdout: "", stderr: "Error creating branch" });
