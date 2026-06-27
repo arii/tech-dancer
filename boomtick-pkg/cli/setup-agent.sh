@@ -180,20 +180,64 @@ ensure_corepack_pnpm() {
 
 install_python_deps() {
   have python3 || err "python3 is required."
-  log "Installing Python dependencies for dev tools..."
   python3 -m pip --version || err "pip is required."
-  pip_install --root-user-action=ignore --upgrade pip setuptools wheel
 
-  if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
-    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
-    have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
-  else
-    pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
+  # Check if td-cli is already installed and functional to avoid redundant setup
+  if have td-cli && td-cli --version >/dev/null 2>&1; then
+    log "td-cli already installed and functional; skipping Python dependency setup."
+    return 0
   fi
 
-  if [ -f "etl/requirements.txt" ]; then
+  log "Installing Python dependencies for dev tools..."
+
+  # Determine profiles from environment variable
+  local profiles="${BOOMTICK_PROFILES:-}"
+  local install_args="--no-mcp"
+
+  if [[ ",$profiles," == *",ai,"* ]]; then
+    install_args="$install_args --with-ai"
+  fi
+  if [[ ",$profiles," == *",audit,"* ]]; then
+    install_args="$install_args --with-audit"
+  fi
+
+  # Use uv if available for faster resolution
+  if have uv; then
+    log "Using uv for high-speed Python dependency setup..."
+    # Install core dependencies using locked file first for maximum speed
+    uv pip install --break-system-packages -r boomtick-pkg/cli/requirements-core.txt
+
+    if [[ ",$profiles," == *",ai,"* ]]; then
+        uv pip install --break-system-packages -r boomtick-pkg/cli/requirements-ai.txt
+    fi
+    if [[ ",$profiles," == *",audit,"* ]]; then
+        uv pip install --break-system-packages -r boomtick-pkg/cli/requirements-audit.txt
+    fi
+
+    # Still run install.sh to ensure editable install and script entrypoints
+    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
+  else
+    pip_install --root-user-action=ignore --upgrade pip setuptools wheel
+    if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
+      (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
+    else
+      # Fallback for legacy structure if any
+      pip_install --root-user-action=ignore requests python-dotenv pydantic click PyGithub
+    fi
+  fi
+
+  # ETL dependencies
+  if [ -f "etl/requirements-lock.txt" ]; then
+    if have uv; then
+      uv pip install --break-system-packages -r etl/requirements-lock.txt
+    else
+      pip_install --root-user-action=ignore -r etl/requirements-lock.txt
+    fi
+  elif [ -f "etl/requirements.txt" ]; then
     pip_install --root-user-action=ignore -r etl/requirements.txt
   fi
+
+  have td-cli || err "td-cli not found on PATH after installation."
 }
 
 install_node_deps() {

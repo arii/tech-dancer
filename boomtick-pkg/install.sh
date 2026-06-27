@@ -3,9 +3,14 @@ set -e
 
 # Support for --no-mcp and other flags
 BUILD_MCP=1
+EXTRAS=""
 for arg in "$@"; do
     if [ "$arg" == "--no-mcp" ]; then
         BUILD_MCP=0
+    elif [ "$arg" == "--with-ai" ]; then
+        if [ -z "$EXTRAS" ]; then EXTRAS="ai"; else EXTRAS="$EXTRAS,ai"; fi
+    elif [ "$arg" == "--with-audit" ]; then
+        if [ -z "$EXTRAS" ]; then EXTRAS="audit"; else EXTRAS="$EXTRAS,audit"; fi
     fi
 done
 
@@ -14,7 +19,11 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
 echo "Installing BoomTick CLI..."
-pip install -e ./cli --break-system-packages
+if [ -n "$EXTRAS" ]; then
+    pip install -e "./cli[$EXTRAS]" --break-system-packages
+else
+    pip install -e ./cli --break-system-packages
+fi
 
 if [ "$BUILD_MCP" -eq 1 ]; then
     echo "Building BoomTick MCP..."
