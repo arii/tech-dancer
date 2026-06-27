@@ -39,15 +39,17 @@ jobs:
           cat validate_stdout.log
           cat validate_stderr.log >&2
 
-          if [ $EXIT_CODE -ne 0 ]; then
-            echo "### ❌ Validation Failed" >> $GITHUB_STEP_SUMMARY
-            echo "#### Standard Output" >> $GITHUB_STEP_SUMMARY
-            echo '```json' >> $GITHUB_STEP_SUMMARY
-            cat validate_stdout.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            echo "#### Error Output" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            cat validate_stderr.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            exit $EXIT_CODE
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            {
+              echo "### ❌ Validation Failed"
+              echo "#### Standard Output"
+              echo '```json'
+              cat validate_stdout.log
+              echo '```'
+              echo "#### Error Output"
+              echo '```'
+              cat validate_stderr.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$EXIT_CODE"
           fi
