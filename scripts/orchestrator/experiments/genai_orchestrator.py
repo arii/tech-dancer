@@ -1,0 +1,86 @@
+import json
+import os
+import sys
+from datetime import datetime
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from orchestrator_utils import run_cli
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "boomtick-pkg", "cli", "dev_tools")))
+try:
+    from utils import call_ai, get_ai_synthesis_model, clean_llm_output
+except ImportError:
+    call_ai = None
+    get_ai_synthesis_model = lambda: "gpt-4o-mini"
+    clean_llm_output = lambda x: x
+
+
+def generate_text_ai(model, prompt):
+    """Calls the real AI integration if available, otherwise falls back to a mock routing payload."""
+    if call_ai:
+        schema = {
+            "type": "object",
+            "properties": {
+                "current_timestamp": {"type": "string"},
+                "target_id": {"type": "string"},
+                "task_objective": {"type": "string"},
+                "interaction_history": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {"type": "string"},
+                            "target_id": {"type": "string"},
+                            "status": {"type": "string"}
+                        }
+                    }
+                }
+            },
+            "required": ["current_timestamp", "target_id", "task_objective", "interaction_history"]
+        }
+        try:
+            res = call_ai(prompt, model=model, schema=schema)
+            if res:
+                return clean_llm_output(res)
+        except Exception as e:
+            print(f"AI call failed, falling back to mock: {e}")
+
+    # Fallback to mock routing decision
+    return json.dumps({
+        "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "target_id": "global-pr-review",
+        "task_objective": "Review open PRs to determine merge readiness. Check CI passing and enforce DRY.",
+        "interaction_history": []
+    })
+
+def get_repo_status():
+    stdout = run_cli(["gh", "status-board"])
+    return stdout if stdout else "No active PRs or status board available."
+
+def generate_dynamic_payload():
+    repo_status = get_repo_status()
+
+    prompt = f"""
+    You are the Orchestrator. Review this repo status:
+    {repo_status}
+
+    Decide the single most important task for an engineering agent.
+    Output ONLY a JSON payload matching the expected Jules schema.
+    """
+
+    model = get_ai_synthesis_model()
+    llm_response = generate_text_ai(model=model, prompt=prompt)
+    return json.loads(llm_response)
+
+def execute_genai_routing():
+    print("Evaluating repository state via GenAI...")
+    payload = generate_dynamic_payload()
+
+    print(f"Generated Payload for target: {payload.get('target_id')}")
+    print(f"Objective: {payload.get('task_objective')}")
+
+    print("Dispatching to Agent 1...")
+    run_cli(["agent", "dispatch", "main", json.dumps(payload)])
+
+if __name__ == "__main__":
+    execute_genai_routing()
