@@ -15,7 +15,8 @@ from utils import (
     get_ai_model,
     get_ai_review_model,
     get_ai_synthesis_model,
-    get_stack_versions
+    get_stack_versions,
+    get_gemini_model
 )
 from tdw_services.services.dependency_graph import DependencyGraph
 from tdw_services.services.vector_store import VectorStore
@@ -88,8 +89,12 @@ class AIClient:
         if not self.gemini_api_key:
             return None
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={self.gemini_api_key}"
-        headers = {"Content-Type": "application/json"}
+        model_name = get_gemini_model()
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": self.gemini_api_key
+        }
 
         payload = {
             "contents": [{"parts": [{"text": prompt}]}]
