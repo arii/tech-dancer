@@ -2,7 +2,6 @@
 set -e
 
 # Source shared utilities
-# Sourcing from absolute path if possible or relative to script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [ -f "${SCRIPT_DIR}/../scripts/env-utils.sh" ]; then
   source "${SCRIPT_DIR}/../scripts/env-utils.sh"
@@ -12,7 +11,6 @@ fi
 
 # Support for --no-mcp and other flags
 BUILD_MCP=1
-
 EXTRAS=""
 # Direct argument parsing for --with-* flags
 for arg in "$@"; do
@@ -29,8 +27,7 @@ for arg in "$@"; do
     esac
 done
 
-# If parse_profiles_list exists (from env-utils.sh), we can use it to augment EXTRAS
-# if the user relies on BOOMTICK_PROFILES instead of explicit flags.
+# If parse_profiles_list exists, augment EXTRAS from BOOMTICK_PROFILES
 if command -v parse_profiles_list &> /dev/null; then
     ACTIVE=$(parse_profiles_list)
     for p in $ACTIVE; do

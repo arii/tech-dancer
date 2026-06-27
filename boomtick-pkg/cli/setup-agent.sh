@@ -51,8 +51,6 @@ if [ "$(id -u)" -ne 0 ] && ! command -v sudo >/dev/null 2>&1; then
 fi
 
 # Ensure local python bin is on path for td-cli
-# We add these unconditionally so that even if the directories don't exist yet,
-# they are present on the PATH for when pip later creates them during installation.
 for bin_dir in "$HOME/.local/bin" "/github/home/.local/bin"; do
   case ":$PATH:" in
     *":$bin_dir:"*) ;;
@@ -122,7 +120,6 @@ install_apt_tools() {
 
   if ! have gh; then
     log "Installing GitHub CLI (gh)..."
-    # Ensure /usr/share/keyrings exists as a standard location for system keyrings
     if run_sudo mkdir -p /usr/share/keyrings; then
       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
         | run_sudo tee /usr/share/keyrings/githubcli-archive-keyring.gpg >/dev/null || true
@@ -131,14 +128,11 @@ install_apt_tools() {
         | run_sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null || true
       run_sudo apt-get update -y || true
       run_sudo apt-get install -y gh || warn "Unable to install gh; continuing."
-    else
-      warn "Unable to configure GitHub CLI apt repository; continuing."
     fi
   fi
 
   if ! have node; then
     log "Installing Node.js ${NODE_MAJOR}.x..."
-    # Semgrep-ignore: bash.curl.security.curl-pipe-bash.curl-pipe-bash
     if curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" > nodesource_setup.sh && run_sudo bash nodesource_setup.sh; then
       rm nodesource_setup.sh
       run_sudo apt-get install -y nodejs || warn "Unable to install nodejs via apt."
@@ -155,22 +149,14 @@ ensure_node() {
   log "Node: $(node --version); npm: $(npm --version)"
 }
 
-
 normalize_nvmrc_for_snapshot() {
-  # dev-tools/snapshot.sh currently compares .nvmrc literally against `node --version`.
-  # Agent runtimes often pin only a major version such as `v22`, while Node reports
-  # a full version such as `v24.16.0`. Normalize major-only pins so validation
-  # does not report a false mismatch in Agent/Jules.
   [ -f ".nvmrc" ] || return 0
   have node || return 0
-
   local desired actual
   desired="$(tr -d '[:space:]' < .nvmrc)"
   actual="$(node --version)"
-
   case "$desired" in
     v[0-9]*|[0-9]*)
-      # Only rewrite when .nvmrc is a major-only pin: v22 or 22.
       if printf '%s' "$desired" | grep -Eq '^v?[0-9]+$'; then
         local desired_major actual_major
         desired_major="${desired#v}"
@@ -179,8 +165,6 @@ normalize_nvmrc_for_snapshot() {
         if [ "$desired_major" = "$actual_major" ]; then
           log "Normalizing .nvmrc from ${desired} to ${actual} for repo validation."
           printf '%s\n' "$actual" > .nvmrc
-        else
-          warn ".nvmrc requests ${desired}, but active Node is ${actual}."
         fi
       fi
       ;;
@@ -192,8 +176,8 @@ ensure_corepack_pnpm() {
   normalize_nvmrc_for_snapshot
   log "Ensuring pnpm ${PNPM_VERSION} is available..."
   if have corepack; then
-    corepack enable || warn "corepack enable failed; falling back to npm global pnpm."
-    corepack prepare "pnpm@${PNPM_VERSION}" --activate || warn "corepack prepare failed; falling back to npm global pnpm."
+    corepack enable || true
+    corepack prepare "pnpm@${PNPM_VERSION}" --activate || true
   fi
   have pnpm || npm install -g "pnpm@${PNPM_VERSION}"
   log "pnpm: $(pnpm --version)"
@@ -205,7 +189,6 @@ install_python_deps() {
 
   verify_venv
 
-  # Detect if we should use --system flag with uv
   local uv_flags
   if command -v get_uv_flags &> /dev/null; then
     uv_flags=$(get_uv_flags)
@@ -248,7 +231,6 @@ install_python_deps() {
     install_args="--no-mcp"
   fi
 
-  # Construct req files list from profiles
   local req_files="-r boomtick-pkg/cli/requirements-core.txt"
   for p in $active_profiles; do
     if [ -f "boomtick-pkg/cli/requirements-$p.txt" ]; then
@@ -256,15 +238,10 @@ install_python_deps() {
     fi
   done
 
-  # Use uv if available for faster resolution
   if have uv; then
     log "Using uv for high-speed Python dependency setup..."
     uv pip install $uv_flags --break-system-packages $req_files
-
-    # Environment integrity check
     uv pip check $uv_flags || warn "uv pip check detected dependency inconsistencies."
-
-    # Still run install.sh to ensure editable install and script entrypoints
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
   else
     pip_install --root-user-action=ignore --upgrade pip setuptools wheel
@@ -273,7 +250,6 @@ install_python_deps() {
     if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
       (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
     else
-      # Fallback for legacy structure if any
       pip_install --root-user-action=ignore requests python-dotenv pydantic click PyGithub
     fi
     python3 -m pip check || warn "pip check detected dependency inconsistencies."
@@ -288,7 +264,6 @@ install_node_deps() {
     warn "package.json not found in ${REPO_ROOT}; skipping pnpm install."
     return 0
   fi
-
   log "Installing Node dependencies..."
   if [ -f "pnpm-lock.yaml" ]; then
     pnpm install --frozen-lockfile || pnpm install --no-frozen-lockfile
@@ -306,12 +281,10 @@ install_playwright() {
     warn "package.json not found; skipping Playwright install."
     return 0
   fi
-
   log "Installing Playwright system dependencies..."
   run_sudo env "PATH=$PATH" pnpm exec playwright install-deps || \
     run_sudo env "PATH=$PATH" npx --yes playwright install-deps || \
     warn "Playwright install-deps failed; continuing."
-
   log "Installing Playwright browsers (all)..."
   pnpm exec playwright install || \
     npx --yes playwright install || \
@@ -327,20 +300,17 @@ configure_remote_origin() {
     warn "Not a git repository; skipping remote origin configuration."
     return 0
   fi
-
   local current
   current="$(git remote get-url origin 2>/dev/null || true)"
   if [ -n "$current" ]; then
     log "remote.origin already configured: ${current}"
     return 0
   fi
-
   local repo_slug="${GITHUB_REPOSITORY:-}"
   if [ -z "$repo_slug" ]; then
     warn "GITHUB_REPOSITORY not set; skipping remote.origin configuration instead of guessing incorrectly."
     return 0
   fi
-
   git remote add origin "https://github.com/${repo_slug}.git"
   log "Configured remote.origin => https://github.com/${repo_slug}.git"
 }
@@ -350,7 +320,6 @@ configure_git_hooks() {
     warn "Not a git repository; skipping git hooks configuration."
     return 0
   fi
-
   log "Configuring git hooks path to .githooks..."
   git config core.hooksPath .githooks
 }
@@ -360,14 +329,12 @@ run_validation() {
     warn "SKIP_VALIDATION=1; skipping validation."
     return 0
   fi
-
   log "Validation snapshot"
   node --version
   npm --version
   pnpm --version
   python3 --version
   have gh && gh --version | head -n 1 || warn "gh not installed."
-
   [ -x "dev-tools/snapshot.sh" ] && bash dev-tools/snapshot.sh || warn "dev-tools/snapshot.sh not found/executable; skipped."
   if have pnpm; then
     pnpm run check:runtime-files || warn "Runtime file check failed."
