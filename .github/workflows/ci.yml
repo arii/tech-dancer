@@ -1,28 +1,246 @@
 name: CI
-
 on:
   push:
-    branches: [main]
+    branches:
+    - main
   pull_request:
-    branches: ['**']
-  workflow_dispatch:
-
+    branches:
+    - '**'
+  workflow_dispatch: null
 permissions:
   contents: write
   pull-requests: write
   statuses: write
   checks: write
   actions: read
-
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+    - uses: ./boomtick-pkg/mcp/actions/ci-validate
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  lint-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - name: Setup Node and pnpm
+      uses: ./.github/actions/setup-node-pnpm
+    - name: Validate Runtime
+      run: 'pnpm run check:runtime-files
 
-      - uses: ./boomtick-pkg/mcp/actions/ci-validate
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        pnpm run doctor
+
+        '
+    - name: Verify lockfile integrity
+      run: "pnpm install --frozen-lockfile\nif ! git diff --quiet pnpm-lock.yaml;\
+        \ then\n  echo \"\u274C pnpm-lock.yaml is out of date. Run pnpm install and\
+        \ commit.\"\n  exit 1\nfi\n"
+    - name: Lint
+      run: pnpm run lint
+    - name: Type-check
+      run: pnpm run type-check
+    - name: Run Unit Tests - Vitest
+      run: pnpm test
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Run CLI Unit Tests
+      run: 'python3 -m pip install PyGithub pytest click
+
+        PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
+
+        '
+    - name: Check for dead code
+      env:
+        CI: true
+      run: CI=true pnpm run knip
+    - name: TypeScript `any` Ratchet
+      run: 'PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+
+        export PYTHONPATH
+
+        python3 dev-tools/td_cli.py gh ratchet-any
+
+        '
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    needs: validate
+  audit:
+    name: Anti-Pattern Audit
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - uses: ./.github/actions/setup-node-pnpm
+    - run: pnpm install --frozen-lockfile --prefer-offline
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: UI Anti-Pattern Audit - Gate
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: 'python3 -m pip install PyGithub click
+
+        PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+
+        export PYTHONPATH
+
+        if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
+
+        python3 dev-tools/td_cli.py gh audit-gate
+
+        '
+    - name: Design Token Compliance
+      run: "# Check for raw hex colors not in tokens.css\nVIOLATIONS=$(grep -rn '#[0-9a-fA-F]\\\
+        {3,6\\}' src/features src/pages \\\n  --include=\"*.tsx\" \\\n  | grep -vc\
+        \ \"design-tokens\\|tokens.css\\|// impeccable-ignore\" || echo 0)\nif [ \"\
+        $VIOLATIONS\" -gt 0 ]; then\n  echo \"\u26A0\uFE0F Found $VIOLATIONS raw hex\
+        \ color(s) in tsx files. Use CSS variables instead.\"\n  grep -rn '#[0-9a-fA-F]\\\
+        {3,6\\}' src/features src/pages --include=\"*.tsx\" | grep -v \"design-tokens\\\
+        |tokens.css\"\n  exit 1\nfi\necho \"\u2705 Design token compliance passed.\"\
+        \n"
+    needs: validate
+  test-build:
+    name: Build & E2E
+    needs:
+    - lint-typecheck
+    - validate
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
+      env:
+        PLAYWRIGHT_BROWSWSERS_PATH: /ms-playwright
+        PLAYWRIGHT_DOWNLOAD_HOST: https://playwright.azureedge.net
+    steps:
+    - name: Install system utilities
+      run: 'apt-get update
+
+        apt-get install -y lsof gh
+
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+        '
+    - uses: actions/checkout@v6
+    - uses: ./.github/actions/setup-node-pnpm
+    - run: pnpm install --frozen-lockfile --prefer-offline
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Build App
+      env:
+        NODE_ENV: production
+        REPO_NAME: ${{ github.event.repository.name }}
+      run: '# Build with root base path for Playwright preview tests.
+
+        # Playwright runs with VITE_BASE_PATH=/, so dist must use root-relative assets.
+
+        VITE_BASE_PATH=/; export VITE_BASE_PATH
+
+        pnpm run build
+
+        '
+    - name: Bundle Size Check
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: 'python3 -m pip install PyGithub click
+
+        PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
+
+        export PYTHONPATH
+
+        python3 dev-tools/td_cli.py gh bundle-size
+
+        '
+    - name: Run Playwright Smoke Test
+      run: 'VITE_BASE_PATH=/ pnpm run test:e2e
+
+        '
+      env:
+        CI: true
+        NODE_ENV: production
+    - name: Run Lighthouse CI
+      run: 'set -eu
+
+        VITE_BASE_PATH="/"
+
+        CHROME_PATH="$(node -e "console.log(require(''playwright'').chromium.executablePath())")"
+
+        export VITE_BASE_PATH
+
+        export CHROME_PATH
+
+        echo "CHROME_PATH=$CHROME_PATH"
+
+        pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+
+        '
+      env:
+        LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO_NAME: ${{ github.event.repository.name }}
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report-${{ github.run_id }}
+        path: playwright-report/
+        retention-days: 7
+  impact-analysis:
+    name: Deployment Impact Analysis
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - uses: ./.github/actions/setup-node-pnpm
+    - run: pnpm install --frozen-lockfile --prefer-offline
+    - name: Install Playwright browser
+      run: pnpm run setup:playwright
+    - name: Deployment Impact Analysis
+      run: pnpm run impact:analysis
+    - name: Build Main
+      env:
+        DISABLE_MINIFY: true
+      run: pnpm run impact:build-main
+    - name: Build PR
+      env:
+        VITE_BASE_PATH: /
+        DISABLE_MINIFY: true
+      run: pnpm run build:review
+    - name: Visual Diff
+      run: pnpm run impact:visual-diff
+    - name: DOM Diff
+      run: pnpm run impact:dom-diff
+    - name: Report Summary
+      if: always()
+      run: "if [ -f artifacts/deployment-review.md ]; then\n  cat artifacts/deployment-review.md\
+        \ >> \"$GITHUB_STEP_SUMMARY\"\nelif [ -f artifacts/impact-analysis/impact.md\
+        \ ]; then\n  cat artifacts/impact-analysis/impact.md >> \"$GITHUB_STEP_SUMMARY\"\
+        \nelse\n  echo \"## Deployment Impact Analysis\" >> \"$GITHUB_STEP_SUMMARY\"\
+        \n  echo \"No impact report found.\" >> \"$GITHUB_STEP_SUMMARY\"\nfi\n"
+    - name: Upload Deployment Review Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-review
+        path: artifacts/
+      if: always()
+    needs: validate
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.run_id ||
+    github.ref }}
+  cancel-in-progress: true
+env:
+  ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
+  BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
+  AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
