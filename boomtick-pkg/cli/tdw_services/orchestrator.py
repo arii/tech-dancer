@@ -582,14 +582,15 @@ class Orchestrator:
         """
         Parses a comment body and returns the intended actions.
         """
+        # Use regex with boundaries to prevent false positives (e.g. foo@conflict-resolve)
         actions = {
-            "conflict_resolve": "@conflict-resolve" in body,
-            "update_snapshots": "@update-snapshots" in body,
-            "ai_chatops": "/ai-fix" in body or "/ai-review" in body,
+            "conflict_resolve": bool(re.search(r'(?<!\w)@conflict-resolve\b', body)),
+            "update_snapshots": bool(re.search(r'(?<!\w)@update-snapshots\b', body)),
+            "ai_chatops": bool(re.search(r'(?<!\w)/ai-fix\b', body)) or bool(re.search(r'(?<!\w)/ai-review\b', body)),
             "jules_fix_ci": False
         }
 
-        if "@jules-fix-ci" in body:
+        if re.search(r'(?<!\w)@jules-fix-ci\b', body):
             if author_association in ['OWNER', 'MEMBER', 'COLLABORATOR']:
                 actions["jules_fix_ci"] = True
 
