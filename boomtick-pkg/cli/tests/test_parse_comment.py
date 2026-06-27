@@ -19,30 +19,6 @@ def test_parse_comment_update_snapshots(orchestrator):
     assert res["ai_chatops"] is False
     assert res["jules_fix_ci"] is False
 
-def test_parse_comment_boundary_false_positive(orchestrator):
-    # Should NOT match when attached to a word
-    res = orchestrator.parse_comment("foo@conflict-resolve", "OWNER")
-    assert res["conflict_resolve"] is False
-
-    res = orchestrator.parse_comment("bar/ai-fix", "OWNER")
-    assert res["ai_chatops"] is False
-
-def test_parse_comment_boundary_start_end(orchestrator):
-    # Should match at start or end of string
-    res = orchestrator.parse_comment("@conflict-resolve", "OWNER")
-    assert res["conflict_resolve"] is True
-
-    res = orchestrator.parse_comment("/ai-review", "OWNER")
-    assert res["ai_chatops"] is True
-
-def test_parse_comment_boundary_punctuation(orchestrator):
-    # Should match when surrounded by punctuation
-    res = orchestrator.parse_comment("(@conflict-resolve)", "OWNER")
-    assert res["conflict_resolve"] is True
-
-    res = orchestrator.parse_comment("Done /ai-fix.", "OWNER")
-    assert res["ai_chatops"] is True
-
 def test_parse_comment_ai_fix(orchestrator):
     res = orchestrator.parse_comment("/ai-fix this", "CONTRIBUTOR")
     assert res["conflict_resolve"] is False
@@ -79,3 +55,27 @@ def test_parse_comment_multiple(orchestrator):
     assert res["update_snapshots"] is True
     assert res["ai_chatops"] is False
     assert res["jules_fix_ci"] is False
+
+def test_parse_comment_boundary_false_positive(orchestrator):
+    # Should NOT match when attached to a word
+    res = orchestrator.parse_comment("foo@conflict-resolve", "OWNER")
+    assert res["conflict_resolve"] is False
+
+    res = orchestrator.parse_comment("bar/ai-fix", "OWNER")
+    assert res["ai_chatops"] is False
+
+def test_parse_comment_boundary_start_end(orchestrator):
+    # Should match at start or end of string
+    res = orchestrator.parse_comment("@conflict-resolve", "OWNER")
+    assert res["conflict_resolve"] is True
+
+    res = orchestrator.parse_comment("/ai-review", "OWNER")
+    assert res["ai_chatops"] is True
+
+def test_parse_comment_boundary_punctuation(orchestrator):
+    # Should match when surrounded by punctuation
+    res = orchestrator.parse_comment("(@conflict-resolve)", "OWNER")
+    assert res["conflict_resolve"] is True
+
+    res = orchestrator.parse_comment("Done /ai-fix.", "OWNER")
+    assert res["ai_chatops"] is True
