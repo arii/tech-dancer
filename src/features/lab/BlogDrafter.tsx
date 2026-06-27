@@ -35,7 +35,6 @@ export function BlogDrafter() {
     saveToHistory,
     rollback,
     deleteHistoryEntry,
-    markdownPreview,
     issueInfo
   } = useBlogDrafter();
 
