@@ -136,9 +136,11 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   }, [data]);
 
   const cleanPreview = useMemo(() => {
-    return `# ${data.title || 'Untitled Post'}
+    return `### ${data.title || 'Untitled Post'}
 
-**Author:** ${data.author} | **Date:** ${data.date} | **Category:** ${data.category}
+**Author:** ${data.author}
+**Date:** ${data.date}
+**Category:** ${data.category}
 
 ${data.excerpt ? `> ${data.excerpt}\n` : ''}
 
