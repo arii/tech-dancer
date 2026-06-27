@@ -298,13 +298,19 @@ class Orchestrator:
         """
         if body is None or not body.strip():
             raise CLIError("Issue body cannot be empty.")
-        return self.github.create_issue(title, body)
+        try:
+            return self.github.create_issue(title, body)
+        except Exception as e:
+            raise CLIError(f"Failed to create GitHub issue: {str(e)}")
 
     def get_issue_details(self, issue_number: int) -> Dict[str, Any]:
         """
         Fetches details of a GitHub issue.
         """
-        return self.github.fetch_issue_details(issue_number)
+        try:
+            return self.github.fetch_issue_details(issue_number)
+        except Exception as e:
+            raise CLIError(f"Failed to fetch GitHub issue details: {str(e)}")
 
     def update_issue_body(self, issue_number: int, body: str) -> Dict[str, Any]:
         """
@@ -312,7 +318,10 @@ class Orchestrator:
         """
         if body is None or not body.strip():
             raise CLIError("Issue body cannot be empty.")
-        return self.github.update_issue(issue_number, body)
+        try:
+            return self.github.update_issue(issue_number, body)
+        except Exception as e:
+            raise CLIError(f"Failed to update GitHub issue body: {str(e)}")
 
     def post_comment(self, entity_number: int, body: str) -> Dict[str, Any]:
         """
@@ -320,7 +329,10 @@ class Orchestrator:
         """
         if not body or not body.strip():
             raise CLIError("Comment body cannot be empty.")
-        return self.github.create_issue_comment(entity_number, body)
+        try:
+            return self.github.create_issue_comment(entity_number, body)
+        except Exception as e:
+            raise CLIError(f"Failed to post GitHub comment: {str(e)}")
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
         repo = get_github_client().get_repo(get_repo_name())
