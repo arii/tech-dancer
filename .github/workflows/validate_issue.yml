@@ -24,32 +24,7 @@ jobs:
         uses: ./.github/actions/setup-workspace
 
       - name: Validate Issue
-        id: validate
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Disable exit on error to allow manual exit code handling
-          set +e
-          # Redirect output to logs for better debugging if failure occurs
-          td-cli gh validate-issue --issue-number "${{ github.event.issue.number }}" --post-comments --execute > validate_stdout.log 2> validate_stderr.log
-          EXIT_CODE=$?
-          set -e
-
-          # Cat outputs to console so they appear in standard logs
-          cat validate_stdout.log
-          cat validate_stderr.log >&2
-
-          if [ "$EXIT_CODE" -ne 0 ]; then
-            {
-              echo "### ❌ Validation Failed"
-              echo "#### Standard Output"
-              echo '```json'
-              cat validate_stdout.log
-              echo '```'
-              echo "#### Error Output"
-              echo '```'
-              cat validate_stderr.log
-              echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
-            exit "$EXIT_CODE"
-          fi
+        uses: ./.github/actions/validate-issue
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

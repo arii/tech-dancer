@@ -1,0 +1,41 @@
+name: 'Validate Issue'
+description: 'Runs td-cli issue validation and provides Markdown reporting'
+inputs:
+  issue-number:
+    description: 'The GitHub issue number'
+    required: true
+  github-token:
+    description: 'GITHUB_TOKEN for API access'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Execute Validation
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        # Disable exit on error to allow manual exit code handling
+        set +e
+
+        # Run validation and capture output
+        td-cli gh validate-issue --issue-number "${{ inputs.issue-number }}" --post-comments --execute > validate_stdout.log 2> validate_stderr.log
+        EXIT_CODE=$?
+
+        set -e
+
+        # Provide diagnostic feedback in Job Summary on failure
+        if [ "$EXIT_CODE" -ne 0 ]; then
+          {
+            echo "### ❌ Validation Failed"
+            echo "#### Standard Output"
+            echo '```json'
+            cat validate_stdout.log
+            echo '```'
+            echo "#### Error Output"
+            echo '```'
+            cat validate_stderr.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$EXIT_CODE"
+        fi
