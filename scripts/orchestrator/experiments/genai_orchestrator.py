@@ -18,13 +18,47 @@ def run_cli(args):
     except subprocess.CalledProcessError as e:
         print(f"CLI Error: {e.stderr}")
         return None
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "boomtick-pkg", "cli", "dev_tools")))
+try:
+    from utils import call_ai, get_ai_synthesis_model, clean_llm_output
+except ImportError:
+    call_ai = None
+    get_ai_synthesis_model = lambda: "gpt-4o-mini"
+    clean_llm_output = lambda x: x
 
-def mock_generate_text(model, prompt):
-    """
-    Mock function for an LLM call. Replace this with your actual @google/genai 
-    or LangChain python integration pointing to `ai_synthesis_model` in project_config.json.
-    """
-    # Mocking a dynamic routing decision
+
+def generate_text_ai(model, prompt):
+    """Calls the real AI integration if available, otherwise falls back to a mock routing payload."""
+    if call_ai:
+        schema = {
+            "type": "object",
+            "properties": {
+                "current_timestamp": {"type": "string"},
+                "target_id": {"type": "string"},
+                "task_objective": {"type": "string"},
+                "interaction_history": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {"type": "string"},
+                            "target_id": {"type": "string"},
+                            "status": {"type": "string"}
+                        }
+                    }
+                }
+            },
+            "required": ["current_timestamp", "target_id", "task_objective", "interaction_history"]
+        }
+        try:
+            res = call_ai(prompt, model=model, schema=schema)
+            if res:
+                return clean_llm_output(res)
+        except Exception as e:
+            print(f"AI call failed, falling back to mock: {e}")
+
+    # Fallback to mock routing decision
     return json.dumps({
         "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "target_id": "global-pr-review",
@@ -47,8 +81,8 @@ def generate_dynamic_payload():
     Output ONLY a JSON payload matching the expected Jules schema.
     """
     
-    # Lightweight GenAI call (e.g., gpt-4o-mini or gemini fallback)
-    llm_response = mock_generate_text(model="gpt-4o-mini", prompt=prompt)
+    model = get_ai_synthesis_model()
+    llm_response = generate_text_ai(model=model, prompt=prompt)
     return json.loads(llm_response)
 
 def execute_genai_routing():
@@ -63,3 +97,4 @@ def execute_genai_routing():
 
 if __name__ == "__main__":
     execute_genai_routing()
+
