@@ -1,0 +1,70 @@
+            done
+          fi
+          exit $FAILED
+      - name: Parse Jules session ID from PR description
+        if: always()
+        id: parse_jules
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          TASK_ID=$(echo "$PR_BODY" \
+            | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
+            | head -1)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Send impact analysis to Jules session
+        if: always() && steps.parse_jules.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: python3 scripts/send-jules-impact.py
+
+      - name: Update Impact Analysis Feedback (Final Result)
+        if: always()
+        uses: ./.github/actions/update-pr-comment
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          status_line: '✅ **Impact Analysis Complete**'
+          impact_body: ${{ env.IMPACT_BODY }}
+
+      - name: Merge AI Logs into Artifacts
+        if: always()
+        run: |
+          # Safely backup legacy logs
+          if [ -f boomtick-pkg/cli/logs/ai/review-run.json ]; then
+            mv boomtick-pkg/cli/logs/ai/review-run.json boomtick-pkg/cli/logs/ai/review-run.json.bak || true
+          fi
+          if [ -f artifacts/review-run.json ]; then
+            mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          fi
+          mkdir -p artifacts/logs/ai
+          cp -r boomtick-pkg/cli/logs/ai/* artifacts/logs/ai/ || true
+
+      - name: Upload Deployment Review Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: deployment-review
+          path: |
+            artifacts/
+
+      - name: Verify CI Metrics
+        if: always() && needs.verify-changes.outputs.has_changes == 'true'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONPATH: boomtick-pkg/cli
+        run: |
+          # Generate the markdown report using the CLI
+          python3 boomtick-pkg/cli/dev_tools/td_cli.py gh summary-report >> "$GITHUB_STEP_SUMMARY"
+
+          # Perform the hard failure assertion
+          if ! python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics > /dev/null 2>&1; then
+            echo "❌ CI Metrics verification failed."
+            exit 1
+          fi
