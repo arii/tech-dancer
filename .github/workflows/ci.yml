@@ -75,6 +75,10 @@ jobs:
       matrix:
         target: [root, boomtick-mcp]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
         with:
           target: ${{ matrix.target }}
@@ -89,6 +93,10 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/mcp/actions/audit
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -113,6 +121,10 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/mcp/actions/test-build
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -133,6 +145,10 @@ jobs:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/mcp/actions/impact-analysis
 
         with:
