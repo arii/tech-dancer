@@ -161,29 +161,19 @@ class TestIssueCreation(unittest.TestCase):
         # Mock the github client on the orchestrator
         self.orch._github = self.mock_github
 
-    @patch('os.path.abspath')
-    @patch('os.getcwd')
-    @patch('os.path.exists')
-    @patch('os.path.getsize')
-    @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='Issue Body')
-    def test_create_issue_success(self, mock_file, mock_getsize, mock_exists, mock_getcwd, mock_abspath):
+    def test_create_issue_success(self):
         """Test successful issue creation"""
-        mock_getcwd.return_value = '/app'
-        # Simple abspath mock for testing
-        mock_abspath.side_effect = lambda p: p if p.startswith('/') else os.path.join('/app', p)
-        mock_exists.return_value = True
-        mock_getsize.return_value = 100
         self.mock_github.create_issue.return_value = {'html_url': 'http://github.com/issue/1'}
 
-        res = self.orch.create_issue('Title', 'body.md')
+        res = self.orch.create_issue('Title', 'Issue Body')
 
         self.assertEqual(res['html_url'], 'http://github.com/issue/1')
         self.mock_github.create_issue.assert_called_once_with('Title', 'Issue Body')
 
     @patch('os.path.abspath')
     @patch('os.getcwd')
-    def test_create_issue_path_traversal(self, mock_getcwd, mock_abspath):
-        """Test path traversal protection"""
+    def test_read_safe_file_path_traversal(self, mock_getcwd, mock_abspath):
+        """Test path traversal protection in _read_safe_file"""
         mock_getcwd.return_value = '/app'
         mock_abspath.side_effect = lambda p: p # Return path as is for simplicity
 
@@ -191,15 +181,15 @@ class TestIssueCreation(unittest.TestCase):
         with patch('os.path.commonpath') as mock_common:
             mock_common.return_value = '/' # Root is NOT /app
             with self.assertRaises(td_cli.CLIError) as cm:
-                self.orch.create_issue('Title', '/etc/passwd')
+                self.orch._read_safe_file('/etc/passwd')
             self.assertIn("outside of repository root", cm.exception.message)
 
     @patch('os.path.abspath')
     @patch('os.getcwd')
     @patch('os.path.exists')
     @patch('os.path.getsize')
-    def test_create_issue_too_big(self, mock_getsize, mock_exists, mock_getcwd, mock_abspath):
-        """Test file size limit validation"""
+    def test_read_safe_file_too_big(self, mock_getsize, mock_exists, mock_getcwd, mock_abspath):
+        """Test file size limit validation in _read_safe_file"""
         # Ensure abspath returns a consistent root for validation
         mock_abspath.side_effect = lambda p: '/app/big.md' if 'big.md' in p else '/app'
         mock_exists.return_value = True
@@ -208,7 +198,7 @@ class TestIssueCreation(unittest.TestCase):
         with patch('os.path.commonpath') as mock_common:
             mock_common.return_value = '/app'
             with self.assertRaises(td_cli.CLIError) as cm:
-                self.orch.create_issue('Title', 'big.md')
+                self.orch._read_safe_file('big.md')
             self.assertIn("exceeds limit of", cm.exception.message)
 
 if __name__ == '__main__':
