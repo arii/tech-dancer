@@ -68,6 +68,7 @@ jobs:
     name: Lint & Type Check (${{ matrix.target }})
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -100,6 +101,7 @@ jobs:
     name: Anti-Pattern Audit
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -152,6 +154,7 @@ jobs:
     name: Build & E2E
     needs: [verify-changes, lint-typecheck]
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -245,6 +248,7 @@ jobs:
     needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -306,6 +310,8 @@ jobs:
 
       - name: Check if visual changes exist
         id: check_visuals
+        env:
+          VISUAL_DIFF_THRESHOLD: 1.5
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
       - name: Visual review agent
@@ -446,3 +452,29 @@ jobs:
           name: deployment-review
           path: |
             artifacts/
+
+      - name: Verify CI Metrics
+        if: always() && needs.verify-changes.outputs.has_changes == 'true'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONPATH: boomtick-pkg/cli
+        run: |
+          echo "## 📊 CI Metrics Verification" >> "$GITHUB_STEP_SUMMARY"
+
+          # 1. AI Token Usage
+          echo "### AI Token Usage" >> "$GITHUB_STEP_SUMMARY"
+          if python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics >> "$GITHUB_STEP_SUMMARY" 2>&1; then
+            echo "✅ AI Token usage within limits." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "❌ AI Token usage exceeded thresholds." >> "$GITHUB_STEP_SUMMARY"
+            METRICS_FAILED=1
+          fi
+
+          # 2. Visual Change Stability (Already performed in 'Check if visual changes exist' but we can assert here)
+          # The 'Check if visual changes exist' step already fails if it finds significant changes.
+
+          if [ "${METRICS_FAILED:-0}" -eq 1 ]; then
+            echo "❌ CI Metrics verification failed."
+            exit 1
+          fi

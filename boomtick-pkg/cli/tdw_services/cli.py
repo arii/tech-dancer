@@ -452,6 +452,17 @@ def doctor(ctx):
 
 @gh.command()
 @click.pass_context
+def verify_metrics(ctx):
+    """Verify CI metrics against established thresholds."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.verify_ci_metrics()
+    if res['status'] == 'error':
+        err(ctx, res['message'], data=res)
+    else:
+        out(ctx, res['message'], data=res)
+
+@gh.command()
+@click.pass_context
 def pre_submit(ctx):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.pre_submit_checks()

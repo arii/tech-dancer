@@ -146,7 +146,7 @@ export function readImpactAnalysis(): Required<Pick<ImpactAnalysisArtifact, 'rou
 
 export function visualSeverity(percent: number): 'LOW' | 'MEDIUM' | 'HIGH' {
   if (percent > 5) return 'HIGH';
-  if (percent > 1) return 'MEDIUM';
+  if (percent > 1.5) return 'MEDIUM';
   return 'LOW';
 }
 

@@ -620,6 +620,11 @@ class Orchestrator:
 
         return {"node": actual_node, "pnpm": actual_pnpm}
 
+    def verify_ci_metrics(self):
+        """Verifies CI metrics against predefined thresholds."""
+        from dev_tools.utils import verify_ci_metrics
+        return verify_ci_metrics()
+
     def pre_submit_checks(self):
         results = {"steps": []}
 

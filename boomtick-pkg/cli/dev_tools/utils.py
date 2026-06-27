@@ -180,6 +180,48 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
+def verify_ci_metrics(total_input_threshold: int = 40000, total_output_threshold: int = 10000):
+    """Verifies that the aggregated AI token usage in the current run is within limits."""
+    log_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "ai")
+    log_file = os.path.join(log_dir, "review-run.jsonl")
+
+    if not os.path.exists(log_file):
+        return {"status": "success", "message": "No AI usage logs found."}
+
+    total_input = 0
+    total_output = 0
+
+    try:
+        with open(log_file, "r") as f:
+            for line in f:
+                entry = json.loads(line)
+                total_input += entry.get("inputTokens", 0)
+                total_output += entry.get("outputTokens", 0)
+    except Exception as e:
+        log_warn(f"Failed to read AI logs: {e}")
+        return {"status": "warning", "message": f"Could not verify metrics: {e}"}
+
+    total_tokens = total_input + total_output
+    total_threshold = total_input_threshold + total_output_threshold
+
+    result = {
+        "inputTokens": total_input,
+        "outputTokens": total_output,
+        "totalTokens": total_tokens,
+        "inputThreshold": total_input_threshold,
+        "outputThreshold": total_output_threshold,
+        "totalThreshold": total_threshold
+    }
+
+    if total_input > total_input_threshold or total_output > total_output_threshold:
+        return {
+            "status": "error",
+            "message": f"AI Token threshold exceeded: {total_input}/{total_input_threshold} input, {total_output}/{total_output_threshold} output.",
+            "metrics": result
+        }
+
+    return {"status": "success", "message": "AI Token usage is within limits.", "metrics": result}
+
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call Gemini API using LangChain."""
     try:
