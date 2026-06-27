@@ -42,8 +42,8 @@ permissions:
   actions: read
   statuses: write
   pull-requests: write
-  models: read
   packages: read
+  models: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -68,6 +68,7 @@ jobs:
     name: Lint & Type Check (${{ matrix.target }})
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -100,6 +101,7 @@ jobs:
     name: Anti-Pattern Audit
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -152,6 +154,7 @@ jobs:
     name: Build & E2E
     needs: [verify-changes, lint-typecheck]
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -245,6 +248,7 @@ jobs:
     needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
     if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
@@ -306,6 +310,8 @@ jobs:
 
       - name: Check if visual changes exist
         id: check_visuals
+        env:
+          VISUAL_DIFF_THRESHOLD: 1.5
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
       - name: Visual review agent
@@ -430,14 +436,14 @@ jobs:
         if: always()
         run: |
           # Safely backup legacy logs
-          if [ -f dev-tools/logs/ai/review-run.json ]; then
-            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          if [ -f boomtick-pkg/cli/logs/ai/review-run.json ]; then
+            mv boomtick-pkg/cli/logs/ai/review-run.json boomtick-pkg/cli/logs/ai/review-run.json.bak || true
           fi
           if [ -f artifacts/review-run.json ]; then
             mv artifacts/review-run.json artifacts/review-run.json.bak || true
           fi
           mkdir -p artifacts/logs/ai
-          cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
+          cp -r boomtick-pkg/cli/logs/ai/* artifacts/logs/ai/ || true
 
       - name: Upload Deployment Review Artifacts
         if: always()
@@ -446,3 +452,19 @@ jobs:
           name: deployment-review
           path: |
             artifacts/
+
+      - name: Verify CI Metrics
+        if: always() && needs.verify-changes.outputs.has_changes == 'true'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONPATH: boomtick-pkg/cli
+        run: |
+          # Generate the markdown report using the CLI
+          python3 boomtick-pkg/cli/dev_tools/td_cli.py gh summary-report >> "$GITHUB_STEP_SUMMARY"
+
+          # Perform the hard failure assertion
+          if ! python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics > /dev/null 2>&1; then
+            echo "❌ CI Metrics verification failed."
+            exit 1
+          fi

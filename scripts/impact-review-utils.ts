@@ -145,8 +145,13 @@ export function readImpactAnalysis(): Required<Pick<ImpactAnalysisArtifact, 'rou
 }
 
 export function visualSeverity(percent: number): 'LOW' | 'MEDIUM' | 'HIGH' {
+  // Threshold should align with VISUAL_DIFF_THRESHOLD env var.
+  // Default failure is 1.5%. We set MEDIUM to start at 2/3 of failure threshold.
+  const failThreshold = Number(process.env.VISUAL_DIFF_THRESHOLD) || 1.5;
+  const mediumThreshold = failThreshold * 0.66;
+
   if (percent > 5) return 'HIGH';
-  if (percent > 1) return 'MEDIUM';
+  if (percent > mediumThreshold) return 'MEDIUM';
   return 'LOW';
 }
 

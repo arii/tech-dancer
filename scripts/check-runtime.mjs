@@ -30,13 +30,20 @@ const nodeMatches = isCI
   ? (actualNode.startsWith(expectedMajorPrefix) || isJules)
   : actualNode === expectedNodeExact;
 
+const allowNodeChange = process.env.ALLOW_NODE_VERSION_CHANGE === "true";
+
 if (!nodeMatches && !isJules) {
   console.error("❌ Node version mismatch");
   console.error(`Expected: ${expectedNodeExact} (or ${expectedMajorPrefix}x in CI)`);
   console.error(`Actual:   ${actualNode}`);
   console.error("");
-  console.error("Do not switch versions manually unless the task explicitly updates the runtime contract.");
+  console.error("Hard block: Node.js version modification is forbidden unless ALLOW_NODE_VERSION_CHANGE=true.");
   console.error("Use the repo-pinned version from .node-version / .nvmrc.");
+  failed = true;
+} else if (actualNode !== expectedNodeExact && !isCI && !isJules && !allowNodeChange) {
+  console.error("❌ Node version drift detected");
+  console.error(`Local: ${actualNode}, Contract: ${expectedNodeExact}`);
+  console.error("Hard block: Node.js version modification is forbidden unless ALLOW_NODE_VERSION_CHANGE=true.");
   failed = true;
 }
 
