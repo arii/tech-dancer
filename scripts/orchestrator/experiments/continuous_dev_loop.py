@@ -1,52 +1,10 @@
-import subprocess
 import json
-import time
-import re
 import os
+import sys
 from datetime import datetime
 
-CLI_BASE = ["python3", "boomtick-pkg/cli/dev_tools/td_cli.py"]
-
-def run_cli(args):
-    cmd = CLI_BASE + args
-    env = os.environ.copy()
-    existing_path = env.get("PYTHONPATH", "")
-    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
-    env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
-    env["CI"] = "true"
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        print(f"CLI Error: {e.stderr}")
-        return None
-
-def get_session_id():
-    stdout = run_cli(["agent", "sync"])
-    if not stdout:
-        return None
-    match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
-    return match.group(1) if match else None
-
-def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
-    print(f"Polling state for session {session_id}...")
-    start_time = time.time()
-    retries = 0
-    while True:
-        if time.time() - start_time > timeout:
-            raise TimeoutError(f"Timeout of {timeout}s exceeded while waiting for session {session_id}.")
-        if retries >= max_retries:
-            raise RuntimeError(f"Max retries of {max_retries} exceeded while waiting for session {session_id}.")
-
-        messages = run_cli(["agent", "messages", session_id])
-        if messages:
-            is_completed = "SUCCESS" in messages or "ABORTED_THROTTLED" in messages
-            is_waiting = "waiting for input" in messages.lower() or "failed" in messages.lower()
-            if is_completed or is_waiting:
-                print("Agent 1 is ready.")
-                break
-        retries += 1
-        time.sleep(poll_interval)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from utils import run_cli, get_session_id, wait_for_agent
 
 def execute_continuous_dev_loop(issue_queue):
     """
