@@ -14,7 +14,7 @@ jobs:
       actions: write
     steps:
       - name: Checkout repository to dispatch workflows
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -43,8 +43,9 @@ jobs:
         if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          PR_JSON=$(gh pr view "${{ github.event.issue.number }}" --json headRefName,baseRefName || echo '{}')
+          PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,baseRefName || echo '{}')
           HEAD_REF=$(echo "$PR_JSON" | jq -r '.headRefName // empty')
           BASE_REF=$(echo "$PR_JSON" | jq -r '.baseRefName // "main"')
           {
