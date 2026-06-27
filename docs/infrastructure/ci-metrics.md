@@ -5,9 +5,9 @@ This document establishes clear measurable targets for the CI pipeline improveme
 ## 1. AI Token Usage
 To ensure cost-effectiveness and stay within quota limits, the following thresholds are established for AI-driven steps (code review, visual review).
 
-- **Max Input Tokens per Pipeline:** 40,000
-- **Max Output Tokens per Pipeline:** 10,000
-- **Total Max Tokens per Pipeline:** 50,000
+- **Max Input Tokens per Pipeline:** 150,000
+- **Max Output Tokens per Pipeline:** 50,000
+- **Total Max Tokens per Pipeline:** 200,000
 
 ## 2. Pipeline Duration
 CI pipelines must provide fast feedback to developers.

@@ -38,11 +38,11 @@ def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
     log_file = log_dir / "review-run.jsonl"
 
     with open(log_file, "w") as f:
-        f.write(json.dumps({"inputTokens": 500, "outputTokens": 10}) + "\n")
+        f.write(json.dumps({"inputTokens": 160000, "outputTokens": 10}) + "\n")
 
-    result = verify_ci_metrics(input_threshold=400)
+    result = verify_ci_metrics(input_threshold=150000)
     assert result["status"] == "error"
-    assert "Input tokens (500) exceeded limit (400)" in result["message"]
+    assert "Input tokens (160000) exceeded limit (150000)" in result["message"]
 
 def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)

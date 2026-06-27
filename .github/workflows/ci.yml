@@ -436,14 +436,14 @@ jobs:
         if: always()
         run: |
           # Safely backup legacy logs
-          if [ -f dev-tools/logs/ai/review-run.json ]; then
-            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          if [ -f boomtick-pkg/cli/logs/ai/review-run.json ]; then
+            mv boomtick-pkg/cli/logs/ai/review-run.json boomtick-pkg/cli/logs/ai/review-run.json.bak || true
           fi
           if [ -f artifacts/review-run.json ]; then
             mv artifacts/review-run.json artifacts/review-run.json.bak || true
           fi
           mkdir -p artifacts/logs/ai
-          cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
+          cp -r boomtick-pkg/cli/logs/ai/* artifacts/logs/ai/ || true
 
       - name: Upload Deployment Review Artifacts
         if: always()
@@ -465,11 +465,18 @@ jobs:
 
           # 1. AI Token Usage
           echo "### AI Token Usage" >> "$GITHUB_STEP_SUMMARY"
-          if python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics >> "$GITHUB_STEP_SUMMARY" 2>&1; then
-            echo "✅ AI Token usage within limits." >> "$GITHUB_STEP_SUMMARY"
+          METRICS_JSON=$(python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics 2>/dev/null)
+          if [ $? -eq 0 ]; then
+             echo "✅ AI Token usage within limits." >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "❌ AI Token usage exceeded thresholds." >> "$GITHUB_STEP_SUMMARY"
-            METRICS_FAILED=1
+             echo "❌ AI Token usage exceeded thresholds." >> "$GITHUB_STEP_SUMMARY"
+             METRICS_FAILED=1
+          fi
+
+          if [ -n "$METRICS_JSON" ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            echo "$METRICS_JSON" | jq '.' >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi
 
           # 2. Visual Change Stability (Already performed in 'Check if visual changes exist' but we can assert here)

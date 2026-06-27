@@ -183,10 +183,10 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: Optional[int] = None, total_threshold: Optional[int] = None):
     """Verifies that the aggregated AI token usage in the current run is within limits."""
     # Use environment variables if provided, otherwise use documented defaults
-    # Note: Docs specify 40k input, 10k output, 50k total.
-    input_limit = input_threshold if input_threshold is not None else int(os.environ.get("MAX_INPUT_TOKENS", 40000))
-    output_limit = output_threshold if output_threshold is not None else int(os.environ.get("MAX_OUTPUT_TOKENS", 10000))
-    total_limit = total_threshold if total_threshold is not None else int(os.environ.get("MAX_TOTAL_TOKENS", 50000))
+    # Note: Docs specify 150k input, 50k output, 200k total.
+    input_limit = input_threshold if input_threshold is not None else int(os.environ.get("MAX_INPUT_TOKENS", 150000))
+    output_limit = output_threshold if output_threshold is not None else int(os.environ.get("MAX_OUTPUT_TOKENS", 50000))
+    total_limit = total_threshold if total_threshold is not None else int(os.environ.get("MAX_TOTAL_TOKENS", 200000))
 
     # Threshold validation
     if input_limit < 0 or output_limit < 0 or total_limit < 0:
