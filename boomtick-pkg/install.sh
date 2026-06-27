@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
+# Source shared utilities
+# Sourcing from absolute path if possible or relative to script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+if [ -f "${SCRIPT_DIR}/../scripts/env-utils.sh" ]; then
+  source "${SCRIPT_DIR}/../scripts/env-utils.sh"
+elif [ -f "${SCRIPT_DIR}/scripts/env-utils.sh" ]; then
+  source "${SCRIPT_DIR}/scripts/env-utils.sh"
+fi
+
 # Support for --no-mcp and other flags
 BUILD_MCP=1
-EXTRAS=""
 
-# Centralized profile detection
+EXTRAS=""
+# Direct argument parsing for --with-* flags
 for arg in "$@"; do
     case "$arg" in
         --no-mcp)
@@ -20,14 +29,27 @@ for arg in "$@"; do
     esac
 done
 
+# If parse_profiles_list exists (from env-utils.sh), we can use it to augment EXTRAS
+# if the user relies on BOOMTICK_PROFILES instead of explicit flags.
+if command -v parse_profiles_list &> /dev/null; then
+    ACTIVE=$(parse_profiles_list)
+    for p in $ACTIVE; do
+        if [[ ",$EXTRAS," != *",$p,"* ]]; then
+            if [ -z "$EXTRAS" ]; then EXTRAS="$p"; else EXTRAS="$EXTRAS,$p"; fi
+        fi
+    done
+fi
+
 # Check if we are inside the boomtick-pkg dir or root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR"
 
 # Detect if we should use --system flag with uv
 uv_flags=""
-if [ -z "${VIRTUAL_ENV:-}" ]; then
-  uv_flags="--system"
+if command -v get_uv_flags &> /dev/null; then
+  uv_flags=$(get_uv_flags)
+else
+  if [ -z "${VIRTUAL_ENV:-}" ]; then uv_flags="--system"; fi
 fi
 
 echo "Installing BoomTick CLI..."

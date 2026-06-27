@@ -27,6 +27,11 @@ find_repo_root() {
 REPO_ROOT="$(find_repo_root "$START_DIR" || find_repo_root "$SCRIPT_DIR" || pwd -P)"
 cd "$REPO_ROOT"
 
+# Source shared utilities
+if [ -f "scripts/env-utils.sh" ]; then
+  source scripts/env-utils.sh
+fi
+
 # -------- configuration --------
 PNPM_VERSION="${PNPM_VERSION:-10.28.2}"
 NODE_MAJOR="${NODE_MAJOR:-24}"
@@ -81,7 +86,7 @@ pip_install() {
   python3 -m pip install --disable-pip-version-check --break-system-packages "$@"
 }
 
-# -------- Profile parsing & Venv helpers --------
+# -------- Venv verification helper --------
 
 verify_venv() {
   if [ -z "${VIRTUAL_ENV:-}" ]; then
@@ -95,30 +100,6 @@ verify_venv() {
   else
     log "Using virtual environment: $VIRTUAL_ENV"
   fi
-}
-
-get_active_profiles() {
-  echo "${BOOMTICK_PROFILES:-}"
-}
-
-parse_profiles_list() {
-  local profiles
-  profiles=$(get_active_profiles)
-  local active=""
-  if [[ ",$profiles," == *",ai,"* ]]; then active="$active ai"; fi
-  if [[ ",$profiles," == *",audit,"* ]]; then active="$active audit"; fi
-  echo $active
-}
-
-construct_install_args() {
-  local active_profiles
-  active_profiles=$(parse_profiles_list)
-  local args="--no-mcp"
-
-  for p in $active_profiles; do
-    args="$args --with-$p"
-  done
-  echo "$args"
 }
 
 # -------- install steps --------
@@ -225,9 +206,12 @@ install_python_deps() {
   verify_venv
 
   # Detect if we should use --system flag with uv
-  local uv_flags=""
-  if [ -z "${VIRTUAL_ENV:-}" ]; then
-    uv_flags="--system"
+  local uv_flags
+  if command -v get_uv_flags &> /dev/null; then
+    uv_flags=$(get_uv_flags)
+  else
+    uv_flags=""
+    if [ -z "${VIRTUAL_ENV:-}" ]; then uv_flags="--system"; fi
   fi
 
   # ETL dependencies - always check and sync
@@ -251,31 +235,48 @@ install_python_deps() {
   log "Installing Python dependencies for dev tools..."
 
   local active_profiles
-  active_profiles=$(parse_profiles_list)
+  if command -v parse_profiles_list &> /dev/null; then
+    active_profiles=$(parse_profiles_list)
+  else
+    active_profiles=""
+  fi
+
   local install_args
-  install_args=$(construct_install_args)
+  if command -v construct_install_args &> /dev/null; then
+    install_args=$(construct_install_args)
+  else
+    install_args="--no-mcp"
+  fi
+
+  # Construct req files list from profiles
+  local req_files="-r boomtick-pkg/cli/requirements-core.txt"
+  for p in $active_profiles; do
+    if [ -f "boomtick-pkg/cli/requirements-$p.txt" ]; then
+      req_files="$req_files -r boomtick-pkg/cli/requirements-$p.txt"
+    fi
+  done
 
   # Use uv if available for faster resolution
   if have uv; then
     log "Using uv for high-speed Python dependency setup..."
-    local req_files="-r boomtick-pkg/cli/requirements-core.txt"
-    for p in $active_profiles; do
-      if [ -f "boomtick-pkg/cli/requirements-$p.txt" ]; then
-        req_files="$req_files -r boomtick-pkg/cli/requirements-$p.txt"
-      fi
-    done
     uv pip install $uv_flags --break-system-packages $req_files
+
+    # Environment integrity check
+    uv pip check $uv_flags || warn "uv pip check detected dependency inconsistencies."
 
     # Still run install.sh to ensure editable install and script entrypoints
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
   else
     pip_install --root-user-action=ignore --upgrade pip setuptools wheel
+    log "Installing locked dependencies with pip..."
+    pip_install --root-user-action=ignore $req_files
     if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
       (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
     else
       # Fallback for legacy structure if any
       pip_install --root-user-action=ignore requests python-dotenv pydantic click PyGithub
     fi
+    python3 -m pip check || warn "pip check detected dependency inconsistencies."
   fi
 
   have td-cli || err "td-cli not found on PATH after installation."
