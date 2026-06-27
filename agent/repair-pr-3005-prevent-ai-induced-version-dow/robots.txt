@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/agent/repair-pr-3005-prevent-ai-induced-version-dow/sitemap.xml
