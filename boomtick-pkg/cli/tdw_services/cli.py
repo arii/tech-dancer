@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from typing import List, Dict, Any
 import click
 from tdw_services.orchestrator import Orchestrator
+from tdw_services.utils import get_or_create_log_dir
 
 # Import legacy utils for backwards compatibility during migration
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
@@ -368,6 +369,24 @@ def detect_conflicts(ctx, pr):
 
 
 @gh.command()
+@click.option('--body', help="The comment body text.")
+@click.option('--author-association', required=True, help="The author association (e.g. OWNER, MEMBER).")
+@click.pass_context
+def parse_comment(ctx, body, author_association):
+    """Parse a comment body and return intended actions."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        # Security: Allow reading body from COMMENT_BODY env var to avoid shell injection in CI
+        content = body if body else os.environ.get("COMMENT_BODY")
+        if not content:
+            err(ctx, "Comment body is required (use --body or COMMENT_BODY env var)")
+
+        actions = orch.parse_comment(content, author_association)
+        out(ctx, "Comment parsed successfully.", data={"actions": actions})
+    except Exception as e:
+        _handle_unexpected_error(ctx, "parse-comment", e)
+
+@gh.command()
 @click.option('--pr', required=True, type=int, help="The PR number to comment on.")
 @click.option('--file', type=str, help="Path to the file containing the comment body.")
 @click.option('--body', type=str, help="Literal comment text.")
@@ -631,9 +650,10 @@ def ai():
 def review(ctx, pr_number, no_cache):
     import glob
 
-    # Optionally bust the /tmp review cache so stale results are not silently returned
+    # Optionally bust the review cache so stale results are not silently returned
     if no_cache:
-        pattern = f"/tmp/review_cache_{pr_number}_*.json"
+        review_dir = get_or_create_log_dir("reviews")
+        pattern = os.path.join(review_dir, f"review_cache_{pr_number}_*.json")
         removed = glob.glob(pattern)
         for f in removed:
             import os as _os
@@ -692,6 +712,14 @@ def dispatch(ctx, branch, task):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.dispatch_jules_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
+
+@agent_group.command()
+@click.pass_context
+def feedback(ctx):
+    """Run the agent feedback loop."""
+    orch = ctx.obj['ORCHESTRATOR']
+    orch.run_feedback_loop()
+    out(ctx, "Agent feedback loop complete.")
 
 @agent_group.command()
 @click.pass_context
@@ -788,6 +816,7 @@ def jules_group():
 
 for group in [jules_group]:
     group.add_command(dispatch)
+    group.add_command(feedback)
     group.add_command(sync)
     group.add_command(fix_ci)
     group.add_command(repair_context)

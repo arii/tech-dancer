@@ -13,44 +13,45 @@ jobs:
       pull-requests: write
       actions: write
     steps:
-      - name: Check commands
-        id: check
-        env:
-          COMMENT_BODY: ${{ github.event.comment.body }}
-        run: |
-          if [[ "$COMMENT_BODY" == *"@conflict-resolve"* ]]; then
-            echo "conflict_resolve=true" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [[ "$COMMENT_BODY" == *"@update-snapshots"* ]]; then
-            echo "update_snapshots=true" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [[ "$COMMENT_BODY" == *"/ai-fix"* ]] || [[ "$COMMENT_BODY" == *"/ai-review"* ]]; then
-            echo "ai_chatops=true" >> "$GITHUB_OUTPUT"
-          fi
-
-          if [[ "$COMMENT_BODY" == *"@jules-fix-ci"* ]]; then
-             if [[ "${{ github.event.comment.author_association }}" == 'OWNER' ]] || [[ "${{ github.event.comment.author_association }}" == 'MEMBER' ]] || [[ "${{ github.event.comment.author_association }}" == 'COLLABORATOR' ]]; then
-               echo "jules_fix_ci=true" >> "$GITHUB_OUTPUT"
-             fi
-          fi
-
       - name: Checkout repository to dispatch workflows
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Check commands
+        id: check
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          AUTHOR_ASSOC: ${{ github.event.comment.author_association }}
+          PYTHONPATH: "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+        run: |
+          # Pass COMMENT_BODY via env var to td-cli for secure parsing
+          RESULT=$(td-cli gh parse-comment --author-association "$AUTHOR_ASSOC")
+
+          # Extract actions from the JSON result and set them as outputs
+          {
+            echo "conflict_resolve=$(echo "$RESULT" | jq -r '.actions.conflict_resolve')"
+            echo "update_snapshots=$(echo "$RESULT" | jq -r '.actions.update_snapshots')"
+            echo "ai_chatops=$(echo "$RESULT" | jq -r '.actions.ai_chatops')"
+            echo "jules_fix_ci=$(echo "$RESULT" | jq -r '.actions.jules_fix_ci')"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Resolve Branch Details
         if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          PR_JSON=$(gh pr view ${{ github.event.issue.number }} --json headRefName,baseRefName || echo '{}')
+          PR_JSON=$(gh pr view "$ISSUE_NUMBER" --json headRefName,baseRefName || echo '{}')
           HEAD_REF=$(echo "$PR_JSON" | jq -r '.headRefName // empty')
           BASE_REF=$(echo "$PR_JSON" | jq -r '.baseRefName // "main"')
-          echo "HEAD_REF=$HEAD_REF" >> "$GITHUB_ENV"
-          echo "BASE_REF=$BASE_REF" >> "$GITHUB_ENV"
+          {
+            echo "HEAD_REF=$HEAD_REF"
+            echo "BASE_REF=$BASE_REF"
+          } >> "$GITHUB_ENV"
 
       - name: Trigger Conflict Resolver
         if: steps.check.outputs.conflict_resolve == 'true'
@@ -87,3 +88,15 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           gh workflow run jules-fix-trigger.yml --ref "$BASE_REF" -f issue_number="$ISSUE_NUMBER" -f comment_body="$COMMENT_BODY" || true
+
+      - name: Setup Workspace for Feedback
+        if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
+        uses: ./.github/actions/setup-workspace
+
+      - name: Unified Feedback Sync
+        if: success() && (steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: |
+          td-cli jules feedback || echo "::warning::Feedback loop sync failed."

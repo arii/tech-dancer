@@ -13,7 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
-from tdw_services.utils import log_error
+from tdw_services.utils import log_error, get_or_create_log_dir
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -23,9 +23,7 @@ from utils import (
     set_gha_variable,
     CLIError,
     run_command,
-    is_ai_available,
-    extract_failing_info,
-    clean_gha_logs
+    is_ai_available
 )
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
@@ -39,6 +37,15 @@ SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
 UI_INDICATORS = PROJECT_CONFIG.ui_indicators
 
 class Orchestrator:
+    # Command detection patterns with word boundaries to avoid false positives
+    _CMD_PATTERNS = {
+        "conflict_resolve": r"(?<!\w)@conflict-resolve\b",
+        "update_snapshots": r"(?<!\w)@update-snapshots\b",
+        "ai_fix": r"(?<!\w)/ai-fix\b",
+        "ai_review": r"(?<!\w)/ai-review\b",
+        "jules_fix_ci": r"(?<!\w)@jules-fix-ci\b",
+    }
+
     def __init__(self) -> None:
         self._github: Optional[GitHubClient] = None
         self._ai: Optional[AIClient] = None
@@ -166,7 +173,9 @@ class Orchestrator:
 
         pr_diff = self.github.fetch_pr_diff(pr_number)
         diff_hash = self._hash_content(pr_diff)
-        cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
+        # Store cache in local logs directory to avoid /tmp Security Error
+        review_dir = get_or_create_log_dir("reviews")
+        cache_file = os.path.join(review_dir, f"review_cache_{pr_number}_{diff_hash}.json")
         if os.path.exists(cache_file):
             with open(cache_file, 'r') as f: return json.load(f)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
@@ -210,14 +219,141 @@ class Orchestrator:
         except Exception: pass
         return []
 
-    def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
+    def dispatch_jules_review(self: 'Orchestrator', branch: str, prompt: str) -> Optional[Dict[str, Any]]:
         """
         Automates the creation of Jules sessions.
         """
         source_id = self.jules.discover_source_id(self.github.repo)
-        if not source_id: raise ValueError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
+        if not source_id:
+            raise CLIError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
         session = self.jules.create_session_from_source(source_id, branch, prompt)
+        # Immediate macro-state reconciliation
+        self.run_feedback_loop()
         return session
+
+    def run_feedback_loop(self: 'Orchestrator') -> None:
+        """
+        Polls active Jules sessions and provides feedback based on CI status.
+        """
+        try:
+            log_info("🚀 Starting Jules Auto-Feedback Loop...")
+
+            sessions = self.jules.list_sessions(pageSize=50)
+            log_info(f"Found {len(sessions)} sessions.")
+
+            repo = self.github.repo
+            log_info(f"Fetching open PRs for repo {repo}...")
+            try:
+                # Using private _request as used in the original script or public methods if available
+                open_prs = self.github._request('GET', f'/repos/{repo}/pulls?state=open')
+                log_info(f"Found {len(open_prs)} open PRs.")
+            except Exception as e:
+                log_error(f"❌ Error fetching PRs: {e}")
+                return
+
+            for session in sessions:
+                session_id = session.get('name')
+                if not session_id:
+                    continue
+
+                # Try to match session to a PR
+                matched_pr = None
+                for pr in open_prs:
+                    title = pr.get('title', '')
+                    body = pr.get('body', '')
+                    branch = pr.get('head', {}).get('ref', '')
+
+                    clean_sid = session_id.replace("sessions/", "")
+
+                    if clean_sid in title or clean_sid in body:
+                        matched_pr = pr
+                        break
+
+                    prompt = session.get("prompt", "")
+                    if branch and branch in prompt:
+                        matched_pr = pr
+                        break
+
+                if not matched_pr:
+                    continue
+
+                log_info(f"🔗 Matched Session {session_id} to PR #{matched_pr.get('number')} ({matched_pr.get('title')})")
+
+                # Check message history to ensure the agent is waiting for feedback
+                messages = self.jules.get_messages(session_id)
+                if not messages:
+                    log_info(f"  No messages found for session {session_id}, skipping.")
+                    continue
+
+                last_message = messages[-1]
+                if last_message.get("role") != "jules":
+                    log_info(f"  Last message is from '{last_message.get('role')}' (not jules), skipping to avoid loop.")
+                    continue
+
+                log_info(f"  Agent is waiting for feedback. Checking CI status...")
+
+                commit_sha = matched_pr.get('head', {}).get('sha')
+                if not commit_sha:
+                    log_info(f"  No head SHA found for PR #{matched_pr.get('number')}, skipping.")
+                    continue
+
+                check_runs = self.github.fetch_check_runs(commit_sha)
+
+                if not check_runs:
+                    log_info(f"  No check runs found for PR #{matched_pr.get('number')}.")
+                    continue
+
+                all_passed = True
+                failed_checks = []
+
+                for run in check_runs:
+                    status = run.get('status')
+                    conclusion = run.get('conclusion')
+
+                    if status != 'completed':
+                        log_info(f"  Check '{run.get('name')}' is still {status}, skipping feedback for now.")
+                        all_passed = False
+                        break
+
+                    if conclusion == 'failure':
+                        all_passed = False
+                        failed_checks.append(run)
+
+                # If checks are still running, we skip (handled above)
+                # If checks failed, we send failure logs
+                if failed_checks:
+                    feedback = "The CI pipeline reported failures. Here are the details:\n\n"
+                    for run in failed_checks:
+                        run_id = run.get('id')
+                        name = run.get('name')
+                        external_id = run.get('external_id')
+
+                        log_info(f"  Fetching logs for failed check: {name} (ID: {run_id})")
+                        logs = self.github.fetch_check_run_logs(run_id, external_id)
+
+                        clean_logs = clean_gha_logs(logs)
+                        extracted_info = extract_failing_info(clean_logs)
+
+                        feedback += f"### Failed Check: {name}\n"
+                        if extracted_info:
+                            for info in extracted_info:
+                                feedback += f"- File: `{info['file']}:{info['line']}` ({info['type']})\n  Message: {info['message']}\n"
+                        else:
+                            # Provide snippet of cleaned logs if extraction didn't catch it
+                            lines = clean_logs.splitlines()
+                            snippet = "\n".join(lines[-30:]) if lines else "No logs found."
+                            feedback += f"```\n{snippet}\n```\n"
+
+                    log_info(f"  Sending failure feedback to session {session_id}...")
+                    self.jules.send_message(session_id, feedback)
+                    log_info("  Feedback sent.")
+
+                elif all_passed and check_runs:
+                    log_info(f"  All checks passed for session {session_id}. Sending success feedback...")
+                    self.jules.send_message(session_id, "All checks passed successfully. You may proceed.")
+                    log_info("  Success feedback sent.")
+        except Exception as e:
+            log_error(f"Error in feedback loop: {e}")
 
     # --- Helper methods ported from td_cli ---
 
@@ -475,7 +611,7 @@ class Orchestrator:
         return updates
 
     def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event: Optional[str] = None) -> Dict[str, Any]:
-        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
+        review_dir = get_or_create_log_dir("reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
         res = {"pr": pr_number, "files": {}}
         if fetch:
@@ -527,7 +663,6 @@ class Orchestrator:
                         elif line.startswith('-'): annotated.append(f"     |{line}")
                         else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
                 context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
-            os.makedirs(review_dir, exist_ok=True)
             with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
             template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
 
@@ -577,6 +712,20 @@ class Orchestrator:
         """
         handler = CommandHandler(self)
         return handler.handle(pr_number, command, comment_id)
+
+    def parse_comment(self, body: str, author_association: str) -> Dict[str, Any]:
+        """
+        Parses a comment body and returns the intended actions.
+        Consolidates detection logic using regex patterns with word boundaries.
+        """
+        results = {k: bool(re.search(v, body)) for k, v in self._CMD_PATTERNS.items()}
+
+        return {
+            "conflict_resolve": results["conflict_resolve"],
+            "update_snapshots": results["update_snapshots"],
+            "ai_chatops": results["ai_fix"] or results["ai_review"],
+            "jules_fix_ci": results["jules_fix_ci"] and author_association in ['OWNER', 'MEMBER', 'COLLABORATOR']
+        }
 
     def runtime_check(self) -> Dict[str, str]:
         """Ensures the runtime environment matches the contract."""
@@ -672,7 +821,7 @@ class Orchestrator:
                 results["steps"].append({"name": name, "status": "failure", "error": str(e)})
                 raise e
         run_step("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
-        run_step("Version Downgrade Check", [sys.executable, os.path.join(os.path.dirname(os.path.dirname(__file__)), "td_cli.py"), "gh", "verify-versions"])
+        run_step("Version Downgrade Check", [sys.executable, os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev_tools", "td_cli.py"), "gh", "verify-versions"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
@@ -705,12 +854,16 @@ class Orchestrator:
             if worktree:
                 branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
                 prefix = PROJECT_CONFIG.worktree_prefix
-                worktree_path = tempfile.mkdtemp(prefix=prefix)
+                # Create temporary worktree within repo root to avoid Security Error
+                worktree_path = os.path.join(original_cwd, f"{prefix}{datetime.now().strftime('%H%M%S')}")
+                os.makedirs(worktree_path, exist_ok=True)
                 run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
                 os.chdir(worktree_path)
                 if os.path.exists(os.path.join(original_cwd, "node_modules")):
                     os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
-            with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False) as tmp_log:
+            # Create temporary log file within repo root logs/
+            log_dir = get_or_create_log_dir("repair")
+            with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False, dir=log_dir) as tmp_log:
                 tmp_log.write(logs_content); tmp_log_path = tmp_log.name
             cmd = [sys.executable, repair_script, tmp_log_path]
             proc = run_command(cmd, check=False)
@@ -834,7 +987,10 @@ Respond only after the PR is created or updated:
             if res: session_name = res.get("name")
             else: raise CLIError(f"{agent_name} API session creation failed")
         feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
-        if pr and not dry_run: pr.create_issue_comment(feedback)
+        if pr and not dry_run:
+            pr.create_issue_comment(feedback)
+            # Immediate macro-state reconciliation
+            self.run_feedback_loop()
         return {"session": session_name, "branch": branch, "feedback": feedback, "agent_name": agent_name}
 
     def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True) -> List[Dict[str, Any]]:
@@ -995,54 +1151,26 @@ Respond only after the PR is created or updated:
     def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
         """Fetches CI logs for failing (or all) check runs in a PR."""
         # Get PR head SHA
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefOid"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_sha = pr_data.get("headRefOid")
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_sha = pr_data.get("head", {}).get("sha")
 
         if not head_sha:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get check runs
-        stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
-        ])
-        try:
-            data = json.loads(stdout_checks)
-            checks = []
-            for run in data.get("check_runs", []):
-                checks.append({
-                    'id': run.get('id'),
-                    'name': run.get('name'),
-                    'status': run.get('status'),
-                    'conclusion': run.get('conclusion'),
-                    'url': run.get('html_url'),
-                    'external_id': run.get('external_id')
-                })
-        except json.JSONDecodeError:
-            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
-
+        checks = self.github.fetch_check_runs(head_sha)
         failed_checks = [c for c in checks if c.get("conclusion") == "failure"]
 
         logs = {}
         # Get check suites to find workflow runs
-        stdout_suites = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-suites"
-        ])
-        check_suites = json.loads(stdout_suites).get("check_suites", [])
+        check_suites = self.github.fetch_check_suites(head_sha)
 
         for suite in check_suites:
-            stdout_runs = self.github.run_authenticated_gh([
-                "api", f"/repos/:owner/:repo/check-suites/{suite['id']}/check-runs"
-            ])
-            runs = json.loads(stdout_runs).get("check_runs", [])
+            runs = self.github.fetch_check_runs_for_suite(suite['id'])
             for run in runs:
                 if include_all or run.get("conclusion") == "failure":
                     try:
-                        log_content = self.github.run_authenticated_gh([
-                            "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
-                        ])
+                        log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
                         logs[run["name"]] = log_content[:10000]
                     except Exception:
                         pass
@@ -1056,34 +1184,21 @@ Respond only after the PR is created or updated:
     def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
         """Fetches and combines all CI logs for the latest workflow run of a PR."""
         # Get PR head SHA
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefOid"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_sha = pr_data.get("headRefOid")
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_sha = pr_data.get("head", {}).get("sha")
 
         if not head_sha:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get all check runs for this SHA
-        # Use full API response to be more robust
-        stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
-        ])
-        try:
-            data = json.loads(stdout_checks)
-            check_runs = data.get("check_runs", [])
-        except json.JSONDecodeError:
-            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
+        check_runs = self.github.fetch_check_runs(head_sha)
 
         all_logs = []
         # Limit to latest 20 jobs to avoid extreme memory usage
         for run in check_runs[:20]:
             try:
                 # Fetch logs via API to avoid terminal paging/buffering issues
-                log_content = self.github.run_authenticated_gh([
-                    "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
-                ])
+                log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
                 header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
                 all_logs.append(header)
                 # Truncate each log to 20k chars to balance detail vs memory
@@ -1108,11 +1223,8 @@ Respond only after the PR is created or updated:
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
         # Get PR head ref
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefName"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_ref = pr_data.get("headRefName")
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_ref = pr_data.get("head", {}).get("ref")
 
         if not head_ref:
             raise CLIError(f"Could not determine head ref for PR #{pr_number}")
@@ -1160,16 +1272,10 @@ Respond only after the PR is created or updated:
     def get_pr_diff_shapen(self, pr_number: int) -> Dict[str, Any]:
         """Fetches PR diff, applies truncation and shapes file info."""
         # Get files list
-        stdout_files = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "files"
-        ])
-        files_data = json.loads(stdout_files)
-        files = files_data.get("files", [])
+        files = self.github.fetch_pr_files(pr_number)
 
         # Get diff text
-        diff_text = self.github.run_authenticated_gh([
-            "pr", "diff", str(pr_number)
-        ])
+        diff_text = self.github.fetch_pr_diff(pr_number)
 
         MAX_DIFF_SIZE = 50000
         truncated = False
@@ -1181,7 +1287,7 @@ Respond only after the PR is created or updated:
             "prNumber": pr_number,
             "files": [
                 {
-                    "path": f.get("path"),
+                    "path": f.get("filename"),
                     "status": f.get("status") or "modified",
                     "additions": f.get("additions"),
                     "deletions": f.get("deletions")
@@ -1193,18 +1299,7 @@ Respond only after the PR is created or updated:
 
     def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
-        gh_args = [
-            "pr", "list",
-            "--state", state,
-            "--limit", str(limit),
-            "--json", "number,title,author,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,updatedAt,url"
-        ]
-
-        if labels:
-            gh_args.extend(["--label", ",".join(labels)])
-
-        stdout = self.github.run_authenticated_gh(gh_args)
-        prs = json.loads(stdout)
+        prs = self.github.list_pull_requests(state=state, limit=limit, labels=labels)
 
         if not include_drafts:
             prs = [pr for pr in prs if not pr.get("isDraft")]
@@ -1239,9 +1334,9 @@ Respond only after the PR is created or updated:
                 if not head_ref:
                     raise CLIError(f"Could not determine head ref for PR #{pr_num}")
 
-                # 2.5 Handle forks by using gh pr checkout
+                # 2.5 Handle forks by using git fetch
                 # This ensures the branch is available locally and handles forks correctly
-                run(["gh", "pr", "checkout", str(pr_num)])
+                run(["git", "fetch", "origin", f"pull/{pr_num}/head:{head_ref}"])
 
                 # Switch back to the target branch
                 run(["git", "checkout", target_branch])
@@ -1270,9 +1365,8 @@ Respond only after the PR is created or updated:
 
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
-        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base {base_branch}
-        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", base_branch]
-        pr_url = self.github.run_authenticated_gh(create_args).strip()
+        pr_res = self.github.create_pull_request(pr_title, aggregate_body, target_branch, base_branch)
+        pr_url = pr_res.get("html_url")
 
         return {
             "status": "success",
@@ -1292,12 +1386,6 @@ Respond only after the PR is created or updated:
         changed_dir = False
 
         try:
-            # 0. Pre-flight check for 'gh' CLI
-            try:
-                run_command(["gh", "--version"], check=False)
-            except Exception:
-                raise CLIError("The 'gh' CLI is required but was not found in your PATH. Please install it first.")
-
             # 1. Fetch PR details early to fail fast
             pr_data = self.github.fetch_pr_details(pr_number)
             default_base = PROJECT_CONFIG.base_branch_name

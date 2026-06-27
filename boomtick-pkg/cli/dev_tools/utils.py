@@ -325,14 +325,8 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
     return proc
 
 def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN) or via gh CLI."""
-    token = os.getenv("GITHUB_TOKEN")
-    if token:
-        return token
-    try:
-        return run_command(["gh", "auth", "token"], log_on_error=False)
-    except (CLIError, FileNotFoundError):
-        return None
+    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN)."""
+    return os.getenv("GITHUB_TOKEN")
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from environment variables or git remote."""
@@ -398,90 +392,86 @@ class GHAConfigManager:
         except Exception:
             pass
 
+    def _get_github_client_and_repo(self):
+        """Helper to get GitHub client and repo name."""
+        try:
+            client = get_github_client()
+            repo = get_repo_name()
+            return client, repo
+        except Exception:
+            return None, None
+
     def get_variable(self, name: str) -> Optional[str]:
-        """Retrieves a variable, checking local cache first, then the gh CLI."""
+        """Retrieves a variable, checking local cache first, then the GitHub API."""
         # 1. Check local cache
         if name in self.cache:
             return str(self.cache[name])
 
-        # 2. Check gh CLI availability
-        if self.gh_available is None:
-            try:
-                run_command(["gh", "--version"], log_on_error=False)
-                self.gh_available = True
-            except (CLIError, FileNotFoundError):
-                self.gh_available = False
-
-        if not self.gh_available:
+        # 2. Fetch from GitHub API
+        import requests
+        token = get_github_token()
+        _, repo_name = self._get_github_client_and_repo()
+        if not token or not repo_name:
             return None
 
-        # 3. Fetch from gh CLI
         try:
-            # First fetch all variables since 'gh variable get' is not a valid command
-            result = run_command(
-                ["gh", "variable", "list"],
-                check=False,
-                log_on_error=False
-            )
-
-            if result.returncode == 0:
-                for line in result.stdout.splitlines():
-                    parts = line.split('\t')
-                    if len(parts) >= 2 and parts[0] == name:
-                        val = parts[1].strip()
-                        self.cache[name] = val
-                        self._save_cache()
-                        return val
-                return None
-
-            stderr = result.stderr.lower()
-            if "not authenticated" in stderr or "not logged in" in stderr or "gh_token" in stderr:
-                if not self.warned_auth:
-                    log_warn("'gh' CLI not authenticated. Run 'gh auth login' to fetch baselines.")
-                    self.warned_auth = True
-            elif "could not find" in stderr:
-                return None
-            elif "no git repository" in stderr:
-                if not self.warned_repo:
-                    log_warn("Not a git repository or no remote configured for 'gh' CLI.")
-                    self.warned_repo = True
-            elif "resource not accessible by integration" in stderr:
-                log_warn(f"Cannot fetch variable '{name}' due to permissions.")
-                return None
-            else:
-                if result.stderr:
-                    log_error(f"fetching GHA variable '{name}': {result.stderr.strip()}")
+            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28"
+            }
+            response = requests.get(url, headers=headers, timeout=10)
+            if response.status_code == 200:
+                val = response.json().get("value")
+                self.cache[name] = val
+                self._save_cache()
+                return val
+            elif response.status_code != 404:
+                log_error(f"fetching GHA variable '{name}' via API: {response.status_code} {response.text}")
         except Exception as e:
-            log_error(f"Unexpected error calling 'gh' CLI: {e}")
+            log_error(f"Unexpected error fetching GHA variable '{name}': {e}")
 
         return None
 
     def set_variable(self, name: str, value: str) -> bool:
-        """Sets a variable using the gh CLI and updates local cache."""
+        """Sets a variable using the GitHub API and updates local cache."""
         # 1. Update local cache
         self.cache[name] = value
         self._save_cache()
 
-        # 2. Check gh CLI availability
-        if self.gh_available is None:
-            try:
-                run_command(["gh", "--version"], log_on_error=False)
-                self.gh_available = True
-            except (CLIError, FileNotFoundError):
-                self.gh_available = False
-
-        if not self.gh_available:
+        # 2. Set via GitHub API
+        import requests
+        token = get_github_token()
+        _, repo_name = self._get_github_client_and_repo()
+        if not token or not repo_name:
             return False
 
-        # 3. Set via gh CLI
         try:
-            run_command(
-                ["gh", "variable", "set", name, "--body", str(value)],
-                log_on_error=True
-            )
-            return True
+            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28"
+            }
+
+            # Check if variable exists first to decide between POST (create) and PATCH (update)
+            response = requests.get(url, headers=headers, timeout=10)
+            exists = (response.status_code == 200)
+
+            if exists:
+                res = requests.patch(url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
+            else:
+                create_url = f"https://api.github.com/repos/{repo_name}/actions/variables"
+                res = requests.post(create_url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
+
+            if res.status_code in [201, 204]:
+                return True
+            else:
+                log_error(f"setting GHA variable '{name}' via API: {res.status_code} {res.text}")
+                return False
         except Exception as e:
-            log_error(f"setting GHA variable '{name}': {e}")
+            log_error(f"setting GHA variable '{name}' via API: {e}")
             return False
 
 def get_gha_variable(name: str) -> Optional[str]:
@@ -492,72 +482,6 @@ def set_gha_variable(name: str, value: str) -> bool:
     """Helper function to set a GHA variable via the global manager."""
     return GHAConfigManager().set_variable(name, value)
 
-def extract_failing_info(logs: str) -> List[dict]:
-    """Extracts failing test and build information from logs."""
-    findings = []
-    # TS Errors
-    ts_errors = re.findall(r"([a-zA-Z0-9_\-\./]+\.[tj]sx?):(\d+):(\d+) - error (TS\d+): (.*)", logs)
-    for file_path, line, col, code, msg in ts_errors:
-        findings.append({"file": file_path, "line": line, "message": f"{code}: {msg}", "type": "typescript"})
-
-    # Vitest Errors (Robust)
-    # Matches FAIL followed by the test file, then non-greedily finds the first ❯ trace
-    # (?!FAIL) ensures we don't skip over another FAIL block
-    vitest_matches = re.finditer(r"FAIL\s+([^\n]+)(?:(?!FAIL).)*?❯\s+([^\n:]+):(\d+):(\d+)", logs, re.DOTALL)
-    for m in vitest_matches:
-        findings.append({
-            "file": m.group(2),
-            "line": m.group(3),
-            "message": f"Test Failure in {m.group(1)}",
-            "type": "vitest"
-        })
-
-    # Playwright Errors
-    playwright_matches = re.finditer(r"\s*\d+\)\s+\[([^\]]+)\]\s+›\s+([^\s:]+):(\d+):(\d+)\s+›\s+(.*)", logs)
-    for m in playwright_matches:
-        findings.append({
-            "file": m.group(2),
-            "line": m.group(3),
-            "message": f"Playwright [{m.group(1)}] › {m.group(5)}",
-            "type": "playwright"
-        })
-
-    return findings
-
-def clean_gha_logs(logs: str) -> str:
-    """Removes GitHub Action noise from logs while preserving actual error messages."""
-    if not logs:
-        return ""
-
-    lines = logs.splitlines()
-    cleaned = []
-
-    # Patterns to filter out after timestamp removal
-    noise_patterns = [
-        r'^\[command\].*',
-        r'^##\[command\].*',
-        r'^##\[warning\].*',
-        r'^##\[error\]Process completed with exit code.*',
-        r'^Removing credentials config.*',
-        r'^Stop and remove container.*',
-        r'^Remove container network.*',
-        r'^Cleaning up orphan processes.*',
-        r'^/usr/bin/docker.*',
-    ]
-    combined_noise = re.compile('|'.join(noise_patterns), re.IGNORECASE)
-
-    for line in lines:
-        # 1. Strip ANSI escape codes
-        line = re.sub(r'\x1b\[[0-9;]*[mGKF]', '', line)
-
-        # 2. Strip GHA timestamps
-        line = re.sub(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z\s+', '', line)
-
-        # 3. Filter noise
-        if not combined_noise.search(line) and line.strip():
-            cleaned.append(line)
-
-    return "\n".join(cleaned)
 
 def get_github_client():
     from github import Github, Auth

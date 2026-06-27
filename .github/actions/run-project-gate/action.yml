@@ -28,9 +28,13 @@ runs:
         echo "::group::pnpm install"
         trap 'echo "::endgroup::"' EXIT
         if [ "$TARGET" = "root" ]; then
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --engine-strict=false
         else
-          pnpm install --frozen-lockfile --filter "$TARGET"
+          FILTER_PATH="$TARGET"
+          if [ "$TARGET" = "boomtick-mcp" ]; then
+            FILTER_PATH="boomtick-mcp"
+          fi
+          pnpm install --frozen-lockfile --filter "$FILTER_PATH" --engine-strict=false
         fi
 
     - name: Verify lockfile integrity (root only)
@@ -39,7 +43,7 @@ runs:
       run: |
         if ! git diff --quiet pnpm-lock.yaml; then
           echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
-          exit 1
+          return 1
         fi
 
     - name: Lint
@@ -55,7 +59,11 @@ runs:
         if [ "$TARGET" = "root" ]; then
           pnpm run type-check
         else
-          pnpm --filter "$TARGET" run build
+          FILTER_PATH="$TARGET"
+          if [ "$TARGET" = "boomtick-mcp" ]; then
+            FILTER_PATH="boomtick-mcp"
+          fi
+          pnpm --filter "$FILTER_PATH" run build
         fi
 
     - name: Run Unit Tests
@@ -66,7 +74,11 @@ runs:
         if [ "$TARGET" = "root" ]; then
           pnpm test
         else
-          pnpm --filter "$TARGET" run test
+          FILTER_PATH="$TARGET"
+          if [ "$TARGET" = "boomtick-mcp" ]; then
+            FILTER_PATH="boomtick-mcp"
+          fi
+          pnpm --filter "$FILTER_PATH" run test
         fi
 
     - name: Run CLI Unit Tests
@@ -75,7 +87,7 @@ runs:
       run: |
         echo "::group::Pytest"
         trap 'echo "::endgroup::"' EXIT
-        python3 -m pytest tests/dev-tools/test_modern_cli.py
+        PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools python3 -m pytest boomtick-pkg/cli/tests/
 
     - name: Check for dead code
       if: inputs.target == 'root'

@@ -1,22 +1,18 @@
 name: BoomTick Setup
-description: Installs node/pnpm, workspace dependencies, td CLI and builds MCP server
+description: Comprehensive setup including checkout, node/pnpm, workspace, and MCP build
 runs:
   using: composite
   steps:
-    - uses: ./.github/actions/setup-node-pnpm
-
-    - name: Install workspace dependencies
-      run: pnpm install --frozen-lockfile
+    - name: Configure Git Safe Directory
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       shell: bash
 
-    - name: Install td CLI
-      run: pip install -e ./boomtick-pkg/cli --break-system-packages
-      shell: bash
+    - name: Setup Node and pnpm
+      uses: ./.github/actions/setup-node-pnpm
 
-    - name: Build MCP server
-      run: pnpm --filter ./boomtick-pkg/mcp build
-      shell: bash
+    - name: Setup Workspace
+      uses: ./.github/actions/setup-workspace
 
-    - name: Verify td CLI
+    - name: Verify setup
       run: td doctor
       shell: bash

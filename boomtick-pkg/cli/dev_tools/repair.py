@@ -6,11 +6,10 @@ Part of the Tech-Dancer 'Self-Healing' CI pipeline.
 
 import os
 import sys
-import json
 import re
 
 from tdw_services.orchestrator import Orchestrator
-from utils import extract_failing_info
+from tdw_services.utils import extract_failing_info
 
 MAX_RETRIES = 3
 
