@@ -1,4 +1,4 @@
-import { Shirt, Plane, VenetianMask as Mask, Heart, Bot as Robot } from 'lucide-react';
+import { Shirt, Plane, VenetianMask as Mask, Heart } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Box, Grid, Stack, Text } from '@/layouts/Primitives';
 
@@ -42,16 +42,6 @@ const TOPICS = [
     iconBgClass: "bg-error/10",
     iconHoverBgClass: "group-hover:bg-error/20",
     iconAnimClass: "group-hover:scale-110",
-  },
-  {
-    id: "agents",
-    label: "Agents & CI/CD",
-    icon: Robot,
-    href: "/research",
-    iconColorClass: "text-accent-purple",
-    iconBgClass: "bg-accent-purple/10",
-    iconHoverBgClass: "group-hover:bg-accent-purple/20",
-    iconAnimClass: "group-hover:-translate-y-1",
   },
 ];
 
