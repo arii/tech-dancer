@@ -33,7 +33,25 @@ def build_repo_context():
     except Exception as e:
         print(f"Error reading project_config.json: {e}", file=sys.stderr)
 
-    # 3. CLI Schema
+    # 3. MCP Tools
+    mcp_tools = []
+    try:
+        import subprocess
+        mcp_dir = pathlib.Path("boomtick-pkg/mcp")
+        if mcp_dir.exists():
+            # Use npx tsx to run the export script without needing to compile it
+            result = subprocess.run(
+                ["npx", "tsx", "scripts/export-mcp-schema.ts"],
+                cwd=mcp_dir,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            mcp_tools = json.loads(result.stdout)
+    except Exception as e:
+        print(f"Error gathering MCP tools: {e}", file=sys.stderr)
+
+    # 4. CLI Schema
     cli_schema = {}
     try:
         from importlib.resources import files
@@ -73,6 +91,7 @@ def build_repo_context():
         },
         "package_json": package_summary,
         "project_config": project_config,
+        "mcp_tools": mcp_tools,
         "cli_schema": cli_schema,
         "file_tree": file_tree,
     }
