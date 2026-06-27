@@ -148,15 +148,15 @@ class GitHubClient:
         job_id = str(external_id) if external_id is not None else str(check_run_id)
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
-            # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
-            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
+            # Using 'application/vnd.github.v3.raw' ensures we get the plain text logs
+            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3.raw", allow_redirects=True)
         except Exception as e:
             error_msg = str(e)
             if external_id is not None and "404" in error_msg:
                 # Fallback to query by raw check_run_id
                 job_id = str(check_run_id)
                 try:
-                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3.raw")
                 except Exception as fallback_e:
                     return f"Failed to fetch logs for job {job_id} after fallback: {str(fallback_e)}"
             return f"Failed to fetch logs for job {job_id}: {error_msg}"

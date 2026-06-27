@@ -166,7 +166,10 @@ class Orchestrator:
 
         pr_diff = self.github.fetch_pr_diff(pr_number)
         diff_hash = self._hash_content(pr_diff)
-        cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
+        # Store cache in boomtick-pkg/cli/logs/reviews/ to avoid /tmp Security Error
+        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
+        os.makedirs(review_dir, exist_ok=True)
+        cache_file = os.path.join(review_dir, f"review_cache_{pr_number}_{diff_hash}.json")
         if os.path.exists(cache_file):
             with open(cache_file, 'r') as f: return json.load(f)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
@@ -705,12 +708,17 @@ class Orchestrator:
             if worktree:
                 branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
                 prefix = PROJECT_CONFIG.worktree_prefix
-                worktree_path = tempfile.mkdtemp(prefix=prefix)
+                # Create temporary worktree within repo root to avoid Security Error
+                worktree_path = os.path.join(original_cwd, f"{prefix}{datetime.now().strftime('%H%M%S')}")
+                os.makedirs(worktree_path, exist_ok=True)
                 run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
                 os.chdir(worktree_path)
                 if os.path.exists(os.path.join(original_cwd, "node_modules")):
                     os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
-            with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False) as tmp_log:
+            # Create temporary log file within repo root logs/
+            log_dir = os.path.join(original_cwd, "boomtick-pkg", "cli", "logs", "repair")
+            os.makedirs(log_dir, exist_ok=True)
+            with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False, dir=log_dir) as tmp_log:
                 tmp_log.write(logs_content); tmp_log_path = tmp_log.name
             cmd = [sys.executable, repair_script, tmp_log_path]
             proc = run_command(cmd, check=False)
@@ -1131,7 +1139,7 @@ Respond only after the PR is created or updated:
             "prNumber": pr_number,
             "files": [
                 {
-                    "path": f.get("path"),
+                    "path": f.get("filename"),
                     "status": f.get("status") or "modified",
                     "additions": f.get("additions"),
                     "deletions": f.get("deletions")

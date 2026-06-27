@@ -631,9 +631,10 @@ def ai():
 def review(ctx, pr_number, no_cache):
     import glob
 
-    # Optionally bust the /tmp review cache so stale results are not silently returned
+    # Optionally bust the review cache so stale results are not silently returned
     if no_cache:
-        pattern = f"/tmp/review_cache_{pr_number}_*.json"
+        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
+        pattern = os.path.join(review_dir, f"review_cache_{pr_number}_*.json")
         removed = glob.glob(pattern)
         for f in removed:
             import os as _os
