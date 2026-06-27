@@ -180,13 +180,25 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 
     return res["choices"][0]["message"]["content"] if res and "choices" in res else None
 
-def verify_ci_metrics(total_input_threshold: int = 40000, total_output_threshold: int = 10000):
+def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: Optional[int] = None, total_threshold: Optional[int] = None):
     """Verifies that the aggregated AI token usage in the current run is within limits."""
+    # Use environment variables if provided, otherwise use documented defaults
+    # Note: Docs specify 40k input, 10k output, 50k total.
+    input_limit = input_threshold if input_threshold is not None else int(os.environ.get("MAX_INPUT_TOKENS", 40000))
+    output_limit = output_threshold if output_threshold is not None else int(os.environ.get("MAX_OUTPUT_TOKENS", 10000))
+    total_limit = total_threshold if total_threshold is not None else int(os.environ.get("MAX_TOTAL_TOKENS", 50000))
+
+    # Threshold validation
+    if input_limit < 0 or output_limit < 0 or total_limit < 0:
+        raise CLIError("Thresholds must be non-negative integers.")
+
     log_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "ai")
     log_file = os.path.join(log_dir, "review-run.jsonl")
 
     if not os.path.exists(log_file):
-        return {"status": "success", "message": "No AI usage logs found."}
+        # In multi-job CI, this might happen if logs weren't shared.
+        # We treat it as a warning since we can't verify what we don't have.
+        return {"status": "warning", "message": "No AI usage logs found. Ensure logs are shared between jobs."}
 
     total_input = 0
     total_output = 0
@@ -194,29 +206,37 @@ def verify_ci_metrics(total_input_threshold: int = 40000, total_output_threshold
     try:
         with open(log_file, "r") as f:
             for line in f:
+                if not line.strip(): continue
                 entry = json.loads(line)
                 total_input += entry.get("inputTokens", 0)
                 total_output += entry.get("outputTokens", 0)
     except Exception as e:
-        log_warn(f"Failed to read AI logs: {e}")
-        return {"status": "warning", "message": f"Could not verify metrics: {e}"}
+        log_error(f"Failed to read AI logs: {e}")
+        return {"status": "error", "message": f"Could not verify metrics: {e}"}
 
     total_tokens = total_input + total_output
-    total_threshold = total_input_threshold + total_output_threshold
 
     result = {
         "inputTokens": total_input,
         "outputTokens": total_output,
         "totalTokens": total_tokens,
-        "inputThreshold": total_input_threshold,
-        "outputThreshold": total_output_threshold,
-        "totalThreshold": total_threshold
+        "inputThreshold": input_limit,
+        "outputThreshold": output_limit,
+        "totalThreshold": total_limit
     }
 
-    if total_input > total_input_threshold or total_output > total_output_threshold:
+    errors = []
+    if total_input > input_limit:
+        errors.append(f"Input tokens ({total_input}) exceeded limit ({input_limit})")
+    if total_output > output_limit:
+        errors.append(f"Output tokens ({total_output}) exceeded limit ({output_limit})")
+    if total_tokens > total_limit:
+        errors.append(f"Total tokens ({total_tokens}) exceeded limit ({total_limit})")
+
+    if errors:
         return {
             "status": "error",
-            "message": f"AI Token threshold exceeded: {total_input}/{total_input_threshold} input, {total_output}/{total_output_threshold} output.",
+            "message": "AI Token threshold exceeded: " + "; ".join(errors),
             "metrics": result
         }
 

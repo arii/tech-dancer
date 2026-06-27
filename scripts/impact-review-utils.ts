@@ -145,8 +145,10 @@ export function readImpactAnalysis(): Required<Pick<ImpactAnalysisArtifact, 'rou
 }
 
 export function visualSeverity(percent: number): 'LOW' | 'MEDIUM' | 'HIGH' {
+  // Threshold should ideally match VISUAL_DIFF_THRESHOLD env var used in check-visual-changes.ts
+  // Default is 1.5%. We set MEDIUM to > 1.0% to provide a warning buffer.
   if (percent > 5) return 'HIGH';
-  if (percent > 1.5) return 'MEDIUM';
+  if (percent > 1.0) return 'MEDIUM';
   return 'LOW';
 }
 

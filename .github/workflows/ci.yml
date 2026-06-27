@@ -461,6 +461,7 @@ jobs:
           PYTHONPATH: boomtick-pkg/cli
         run: |
           echo "## 📊 CI Metrics Verification" >> "$GITHUB_STEP_SUMMARY"
+          METRICS_FAILED=0
 
           # 1. AI Token Usage
           echo "### AI Token Usage" >> "$GITHUB_STEP_SUMMARY"
@@ -474,7 +475,7 @@ jobs:
           # 2. Visual Change Stability (Already performed in 'Check if visual changes exist' but we can assert here)
           # The 'Check if visual changes exist' step already fails if it finds significant changes.
 
-          if [ "${METRICS_FAILED:-0}" -eq 1 ]; then
+          if [ "$METRICS_FAILED" -eq 1 ]; then
             echo "❌ CI Metrics verification failed."
             exit 1
           fi
