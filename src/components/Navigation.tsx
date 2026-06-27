@@ -1,18 +1,25 @@
 import { Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Logo } from '@/components/ui/Logo';
 import { TOP_NAV_ROUTES } from '@/config/routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
+import { useScrollThreshold } from '@/hooks/useScrollThreshold';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileMenuOverlay } from './navigation/MobileMenuOverlay';
 import { cn } from '@/lib/utils';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
+  const isScrolled = useScrollThreshold(20);
   const { open: openSearch, close: closeSearch, isOpen: isSearchOpen } = useGlobalSearch();
+
+  // Navigation is transparent only on homepage before scroll
+  const isTransparent = isHomePage && !isScrolled;
 
   const handleSearchClick = () => {
     setIsOpen(false);
@@ -25,7 +32,21 @@ export default function Navigation() {
   return (
     <>
       <MobileBottomNav />
-      <Box as="nav" aria-label="Main Navigation" zIndex="nav" position="fixed" inset="top" height={16} width="full" border="b" isolation="isolate" className="bg-bg/95 backdrop-blur-xl">
+      <Box
+        as="nav"
+        aria-label="Main Navigation"
+        zIndex="nav"
+        position="fixed"
+        inset="top"
+        height={16}
+        width="full"
+        border={isTransparent ? false : "b"}
+        isolation="isolate"
+        className={cn(
+          "transition-nav",
+          isTransparent ? "bg-transparent" : "bg-bg/95 backdrop-blur-xl"
+        )}
+      >
         <Box display="flex" align="center" justify="between" paddingX={{ base: 4, lg: 8 }} width="full" maxWidth="full" minWidth={0} height="full">
           <Stack direction="row" align="center" gap={8}>
             <Box as={NavLink} to="/" onClick={() => setIsOpen(false)} height={{ base: 8, md: 9 }} width="auto" className="group">

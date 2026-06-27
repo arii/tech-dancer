@@ -1,5 +1,6 @@
 import { useRef, lazy, Suspense } from 'react';
 import { ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Box, Stack } from '@/layouts/Primitives';
 import Navigation from '@/components/Navigation';
 import { Footer } from '@/layouts/Footer';
@@ -15,6 +16,8 @@ const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({
 export function MainLayout({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLElement | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
   const { isOpen: isSearchOpen, open: openSearch } = useGlobalSearch();
 
   useCommandKey('k', (e) => {
@@ -71,7 +74,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
           position="relative"
           zIndex={0}
           isolation="isolate"
-          paddingTop={{ base: 16, lg: 16 }}
+          paddingTop={isHomePage ? 0 : { base: 16, lg: 16 }}
           maxWidth="full"
           width="full"
           minWidth={0}

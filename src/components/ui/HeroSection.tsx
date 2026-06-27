@@ -2,7 +2,6 @@
 
 import { HeroParticleCanvas } from './HeroParticleCanvas';
 import { Stack, Text, Box } from '@/layouts/Primitives';
-import { Wordmark } from './Wordmark';
 import { HERO_CONFIG } from '@/config/hero';
 
 // Generate deterministic bar data based on index to prevent visual regression flakiness
@@ -54,17 +53,10 @@ export function HeroSection() {
       >
 
 
-        <Wordmark
-          variant="hero"
-          opacity={0}
-          pointerEvents="none"
-          className="hero-logo-anim"
-        />
-
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 5, lg: 6 }}
+          marginTop={{ base: 24, lg: 32 }}
           align="start"
           gap={0}
           width="full"

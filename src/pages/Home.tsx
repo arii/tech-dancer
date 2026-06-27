@@ -30,6 +30,10 @@ export default function Home() {
         className="lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
+        {/* On mobile, TopicGrid comes before the FeaturedGuidePanel */}
+        <Box display={{ base: 'block', lg: 'none' }}>
+          <TopicGrid />
+        </Box>
         <FeaturedGuidePanel />
       </Grid>
 
@@ -61,7 +65,9 @@ export default function Home() {
           <LatestPosts />
           <DevLabCallout />
         </Grid>
+      <Box display={{ base: 'none', lg: 'block' }}>
         <TopicGrid />
+      </Box>
       </Stack>
     </Box>
   );
