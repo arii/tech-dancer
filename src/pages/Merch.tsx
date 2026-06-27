@@ -112,12 +112,12 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
-                    <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
+                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} width="full">
+                    <Box span={{ base: 1, sm: 2, md: 2 }} width="full" height="full">
                       <ProductCard item={section.products[0]} isFeatured />
                     </Box>
                     {section.products.slice(1, 3).map((product) => (
-                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full">
+                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full" height="full">
                         <ProductCard
                           item={product}
                           clampTitle={0}
