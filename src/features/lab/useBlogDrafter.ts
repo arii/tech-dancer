@@ -135,14 +135,20 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
 `;
   }, [data]);
 
-  const githubIssueUrl = useMemo(() => {
-    const repoOwner = SITE_METADATA.repo.owner; 
+  const issueInfo = useMemo(() => {
+    const repoOwner = SITE_METADATA.repo.owner;
     const repoName = SITE_METADATA.repo.name;
     const typeLabel = data.type.toUpperCase();
     const issueTitle = `Draft [${typeLabel}]: ${data.title || 'New Item'}`;
     const issueBody = `### New ${data.type} Submission\n\n**JSON Data for Pipeline:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\`\n\n**Markdown Preview:**\n\`\`\`markdown\n${markdownPreview}\n\`\`\``;
-    
-    return `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+
+    return {
+      url: `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`,
+      issueTitle,
+      issueBody,
+      repoOwner,
+      repoName
+    };
   }, [data, markdownPreview]);
 
   const updateField = <K extends keyof DraftData>(field: K, value: DraftData[K]) => {
@@ -209,6 +215,6 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
     rollback,
     deleteHistoryEntry,
     markdownPreview,
-    githubIssueUrl
+    issueInfo
   };
 }

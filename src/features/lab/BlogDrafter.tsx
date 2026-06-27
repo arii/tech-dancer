@@ -12,12 +12,12 @@ import { FullPreview } from './components/FullPreview';
 import { inputs } from '@/styles/design-tokens';
 import { cn } from '@/lib/utils';
 
-const Field = ({ label, value, onChange, placeholder, type = "text", ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string }) => {
+const Field = ({ label, value, onChange, placeholder, type = "text", height = 40, ...props }: { label: string, value: string | number | undefined, onChange: (v: string) => void, placeholder?: string, type?: string, step?: string, height?: number }) => {
   return (
     <Stack gap={2}>
       <Text variant="mono" size="micro" color="dim" className="tracking-wider uppercase font-bold" marginBottom={0}>{label}</Text>
       {type === 'textarea' ? (
-        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={40} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-none" {...props} />
+        <Box as="textarea" value={value} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} placeholder={placeholder} height={height} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed resize-y" {...props} />
       ) : (
         <Box as="input" type={type} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)} placeholder={placeholder} className="w-full bg-surface-alt border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed" {...props} />
       )}
@@ -36,7 +36,7 @@ export function BlogDrafter() {
     rollback,
     deleteHistoryEntry,
     markdownPreview,
-    githubIssueUrl
+    issueInfo
   } = useBlogDrafter();
 
   const [copied, setCopied] = useState(false);
@@ -70,6 +70,19 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
     navigator.clipboard.writeText(prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSubmitDraft = () => {
+    const { url, issueTitle, issueBody, repoOwner, repoName } = issueInfo;
+
+    if (url.length > 2000) {
+      navigator.clipboard.writeText(issueBody);
+      alert("Draft content is too large for a direct URL. It has been copied to your clipboard. Please paste it into the issue body on GitHub.");
+      const placeholderUrl = `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent('[PASTE_CLIPBOARD_HERE]')}`;
+      window.open(placeholderUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   if (previewMode === 'full') {
@@ -178,14 +191,14 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
                 value={data.excerpt}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updateField('excerpt', e.target.value)}
                 placeholder="A brief overview of the content..."
-                height={20}
-                className={cn(inputs.base, "resize-none")}
+                height={32}
+                className={cn(inputs.base, "resize-y")}
               />
             </Stack>
 
             <Field label="Amazon Link (Optional)" value={data.affiliateLink} onChange={(v: string) => updateField('affiliateLink', v)} type="url" placeholder="https://amazon.com/..." />
 
-            <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" placeholder="Write your main content here..." />
+            <Field label="Content" value={data.commentary} onChange={(v: string) => updateField('commentary', v)} type="textarea" height={96} placeholder="Write your main content here..." />
 
           </Stack>
 
@@ -309,7 +322,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             maxHeight="600px"
             className="prose prose-sm prose-invert max-w-none bg-black/5"
           >
-            <MarkdownRenderer content={markdownPreview} />
+            <MarkdownRenderer content={data.commentary} />
           </Box>
 
           <Grid cols={2} gap={4}>
@@ -332,10 +345,8 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             </Box>
 
             <Box
-              as="a"
-              href={githubIssueUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              as="button"
+              onClick={handleSubmitDraft}
               display="flex"
               align="center"
               justify="center"
