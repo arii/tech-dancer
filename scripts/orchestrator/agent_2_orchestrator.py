@@ -26,7 +26,9 @@ def run_cli(args):
     """Executes a BoomTick CLI command and returns the standard output."""
     cmd = CLI_BASE + args
     env = os.environ.copy()
-    env["PYTHONPATH"] = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+    existing_path = env.get("PYTHONPATH", "")
+    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+    env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         return result.stdout.strip()
