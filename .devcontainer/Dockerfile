@@ -31,10 +31,11 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # ── Node.js 24.16.0 (matches .node-version / runtime contract) ────────────────
-ENV NODE_MAJOR=24
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
-  && apt-get install -y nodejs \
-  && node --version
+# ── Node.js 24.16.0 (pinned) ────────────────────────────────────────────────
+ENV NODE_VERSION=24.16.0
+RUN curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz \
+  | tar -xJ -C /usr/local --strip-components=1 && \
+  node --version
 
 # ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
 ENV PNPM_VERSION=10.28.2
