@@ -2,6 +2,7 @@ import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { loadProjectConfig } from './lib/projectConfig';
+import { logHeartbeat } from './lib/heartbeat';
 
 const worktreePath = path.join(process.cwd(), '.tmp-main');
 const config = loadProjectConfig();
@@ -31,8 +32,14 @@ try {
   run('git', ['fetch', 'origin', 'main']);
 }
 
+logHeartbeat(`Creating worktree for ${baseRef}`);
 run('git', ['worktree', 'add', worktreePath, baseRef]);
+
+logHeartbeat('PNPM Install (Base Worktree)');
 run('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], worktreePath);
+
+logHeartbeat('Building Base Branch');
 run('pnpm', ['run', 'build'], worktreePath);
 
 console.log(`✅ Built base branch worktree at ${worktreePath}`);
+logHeartbeat('Base Build Complete');

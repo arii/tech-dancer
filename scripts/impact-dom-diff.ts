@@ -3,6 +3,7 @@ import { diffLines } from 'diff';
 import fs from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';
+import { logHeartbeat } from './lib/heartbeat';
 import {
   ARTIFACTS_DIR,
   DOM_REVIEW_DIR,
@@ -225,6 +226,7 @@ ${routeSections.length > 0 ? routeSections.join('\n\n') : '_No concrete routes r
 }
 
 function main(): void {
+  logHeartbeat('Starting DOM Diff');
   const visualSummaries = readVisualSummaries();
   const domSummaries: DomRouteSummary[] = [];
 
@@ -275,6 +277,7 @@ function main(): void {
   generateDeploymentReport(domSummaries, visualSummaries);
   console.log(`✅ DOM diffs generated in ${DOM_REVIEW_DIR}`);
   console.log(`✅ Deployment review report generated at ${deploymentReviewPath}`);
+  logHeartbeat('DOM Diff Complete');
 }
 
 try {
