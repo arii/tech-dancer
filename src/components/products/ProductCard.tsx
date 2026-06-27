@@ -1,12 +1,27 @@
 import { ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Button } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button, type TextProps, type BoxProps } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
 
-export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; isFeatured?: boolean }) {
+export const EDITORIAL_CLAMP = 0;
+export const DEFAULT_CLAMP = 2;
+
+export function ProductCard({
+  item,
+  isFeatured,
+  clampTitle = isFeatured ? EDITORIAL_CLAMP : DEFAULT_CLAMP,
+  clampDescription = isFeatured ? EDITORIAL_CLAMP : DEFAULT_CLAMP,
+  className,
+  ...props
+}: {
+  item: ProductCatalogItem;
+  isFeatured?: boolean;
+  clampTitle?: TextProps['clamp'];
+  clampDescription?: TextProps['clamp'];
+} & Omit<BoxProps, 'children'>) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
     ? 'SEE OPTIONS'
@@ -22,9 +37,11 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
       maxWidth="full"
       className={cn(
         "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
-        isFeatured && "border-accent/20 bg-accent/5"
+        isFeatured && "border-accent/20 bg-accent/5",
+        className
       )}
       data-testid="product-card"
+      {...props}
     >
       <MerchImageDisplay
         title={item.title}
@@ -46,13 +63,13 @@ export function ProductCard({ item, isFeatured }: { item: ProductCatalogItem; is
           weight="font-bold"
           color="main"
           leading="tight"
-          clamp={isFeatured ? 0 : 2}
+          clamp={clampTitle}
           className="transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {item.title}
         </Text>
 
-        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={isFeatured ? 0 : 2}>
+        <Text variant="body" size={isFeatured ? 'base' : 'sm'} color="dim" leading="relaxed" clamp={clampDescription}>
           {item.description}
         </Text>
 

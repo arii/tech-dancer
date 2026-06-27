@@ -75,7 +75,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'war-eagle-oversized',
     title: 'Rainbow War Eagle - Pride Back Print Organic Oversized Tee',
-    description: 'Turn around and make a statement. A soaring rainbow war eagle, organic oversized cut, and the kind of back print that starts conversations.',
+    description: 'Turn around and make a statement with this premium organic oversized tee. Featuring a soaring rainbow war eagle back print, this piece combines sustainable streetwear style with a bold message of pride and freedom. Perfect for the social floor or making an impression wherever you go.',
     price: '22.00',
     imageUrl: gearImage('war-eagle-oversized-high-neck-t-shirt-front.webp'),
     images: [
@@ -90,7 +90,7 @@ export const MERCH_PRODUCTS: MerchProduct[] = [
   {
     id: 'norcal-bestcal-golden-gate-pride',
     title: 'NorCal Best Cal - Golden Gate Rainbow Pride T-Shirt',
-    description: 'Bold Bay Area energy. The Golden Gate, a rainbow sky, and proof that NorCal is Best Cal.',
+    description: 'Bold Bay Area energy captured in a single design. Featuring the iconic Golden Gate Bridge set against a vibrant rainbow sky, this tee is definitive proof that NorCal is Best Cal. High-quality print on a soft, comfortable fabric that\'s ready for festival season or everyday wear.',
     price: '23.00',
     imageUrl: gearImage('norcal-bestcal-golden-gate-rainbow-pride-shirt-front.webp'),
     images: [

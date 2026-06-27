@@ -4,7 +4,7 @@ import { SEO } from '@/components/SEO';
 import { ReferralBanner } from '@/components/ReferralBanner';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { COLLECTIONS } from '@/data/merch';
-import { ProductCard } from '@/components/products/ProductCard';
+import { ProductCard, EDITORIAL_CLAMP } from '@/components/products/ProductCard';
 import { getAllMerchProducts, getMerchByCollection } from '@/lib/productCatalog';
 import { generateMerchSchema } from '@/utils/schema';
 import { FilterButton } from '@/components/ui/FilterButton';
@@ -61,12 +61,11 @@ export default function Merch() {
         jsonLd={generateMerchSchema(allProducts)}
       />
 
-      <Stack gap={{ base: 5, md: 6 }} width="full" maxWidth="screen-xl">
+      <Stack gap="section-spacing" width="full" maxWidth="screen-xl">
         <PageHeader
           label="STOREFRONT"
           title="West Coast Swing Dance Merch"
           description="Apparel for social dancers, NorCal pride, rainbow pride, and role-fluid dance floor energy. BoomTick merch links go to the BoomTick Printful storefront. Printful handles fulfillment, shipping, and checkout."
-          paddingBottom={4}
           cta={
             <Stack direction={{ base: 'col', sm: 'row' }} gap={4} align={{ base: 'stretch', sm: 'center' }}>
               <Button as="a" href="https://boomtick.printful.me/" target="_blank" rel="sponsored noopener noreferrer" variant="primary" width={{ base: 'full', sm: 'auto' }}>
@@ -100,9 +99,9 @@ export default function Merch() {
 
         {/* Product Sections or Grid */}
         {activeCollection === 'all' && sections ? (
-          <Stack gap={8}>
+          <Stack gap="section-spacing">
             {sections.map((section) => (
-              <Stack key={section.id} gap={5}>
+              <Stack key={section.id} gap={6}>
                 <Stack gap={1}>
                   <Text as="h2" variant="headline" size="2xl" weight="font-bold" tracking="tight">
                     {section.title}
@@ -112,20 +111,25 @@ export default function Merch() {
                   </Text>
                 </Stack>
                 {section.id === 'featured' ? (
-                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={{ base: 6, md: 8 }} minWidth="0" width="full">
-                    <Box span={{ base: 1, sm: 2, md: 2 }} width="full">
-                      <ProductCard item={section.products[0]} isFeatured />
-                    </Box>
+                  <Grid cols={{ base: 1, sm: 2, md: 4 }} gap={6} width="full" align="stretch">
+                    <ProductCard
+                      item={section.products[0]}
+                      isFeatured
+                      span={{ base: 1, sm: 2, md: 2 }}
+                      className="md:row-span-1"
+                    />
                     {section.products.slice(1, 3).map((product) => (
-                      <Box key={`${section.id}-${product.id}`} span={{ base: 1, sm: 1, md: 1 }} width="full">
-                        <ProductCard
-                          item={product}
-                        />
-                      </Box>
+                      <ProductCard
+                        key={`${section.id}-${product.id}`}
+                        item={product}
+                        span={{ base: 1, sm: 1, md: 1 }}
+                        clampTitle={EDITORIAL_CLAMP}
+                        clampDescription={EDITORIAL_CLAMP}
+                      />
                     ))}
                   </Grid>
                 ) : (
-                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
+                  <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={6} width="full" minWidth="0" align="stretch">
                     {section.products.map((product) => (
                       <ProductCard
                         key={`${section.id}-${product.id}`}
@@ -138,7 +142,7 @@ export default function Merch() {
             ))}
           </Stack>
         ) : (
-          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={{ base: 5, md: 8 }} width="full" minWidth="0">
+          <Grid cols={{ base: 1, sm: 2, md: 3 }} gap={6} width="full" minWidth="0" align="stretch">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} item={product} />
             ))}
@@ -146,7 +150,7 @@ export default function Merch() {
         )}
 
         {/* Footer Callouts */}
-        <Box padding={8} radius="md" border surface="card" marginTop={8} width="full">
+        <Box padding={{ base: 6, md: 8 }} radius="md" border surface="card" width="full">
            <Stack gap={6}>
               <Text variant="headline" size="xl" weight="font-bold" uppercase tracking="tight">
                 Referral Discount
