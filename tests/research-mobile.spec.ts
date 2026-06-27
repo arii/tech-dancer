@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures/visual';
 import { getVisualTestMasks } from './utils/playwright-helpers';
 
 const tools = [
@@ -8,7 +8,7 @@ const tools = [
 ];
 
 test.describe('Research Tools Mobile UX', () => {
-  test.use({ viewport: { width: 390, height: 844 } }); // iPhone 12
+  test.skip(({ isMobile }) => !isMobile, 'Mobile-only tests');
 
   for (const tool of tools) {
     test(`should render ${tool.name} on mobile without horizontal overflow`, async ({ page }) => {
@@ -41,9 +41,8 @@ test.describe('Research Tools Mobile UX', () => {
 
       expect(overflowX).toBe(false);
 
-      // Take a screenshot for visual verification
-      await page.screenshot({
-        path: `tests/visual.spec.ts-snapshots/mobile-${tool.path.replace(/\//g, '-')}.png`,
+      // Use toHaveScreenshot for automated snapshot management across environments
+      await expect(page).toHaveScreenshot(`mobile-${tool.path.replace(/\//g, '-')}.png`, {
         fullPage: true,
         mask: getVisualTestMasks(page)
       });

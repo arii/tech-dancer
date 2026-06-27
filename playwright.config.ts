@@ -18,6 +18,7 @@ export default defineConfig({
   /* Stop immediately on CI failure */
   maxFailures: process.env.CI ? 1 : 0,
   /* Reporter to use. Keep CI output streaming while preserving HTML artifacts. */
+  snapshotPathTemplate: '{testDir}/{testFileDir}{testFileName}-snapshots/{projectName}/{arg}{ext}',
   reporter: process.env.CI
     ? [['line'], ['html', { open: 'never' }]]
     : 'html',
@@ -44,6 +45,14 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 12'] },
     },
   ],
   webServer: {

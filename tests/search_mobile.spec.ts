@@ -1,8 +1,8 @@
-import { test, expect, devices } from '@playwright/test';
-
-test.use({ ...devices['Pixel 7'] });
+import { test, expect } from './fixtures/visual';
 
 test.describe('Global Search Modal - Mobile', () => {
+  test.skip(({ isMobile }) => !isMobile, 'Mobile-only tests');
+
   test.beforeEach(async ({ page }) => {
     await page.goto('./');
   });

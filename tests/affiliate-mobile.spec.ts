@@ -1,8 +1,7 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, expect } from './fixtures/visual';
 
-test.use({ ...devices['Pixel 5'] });
-
-test('Capture affiliate card on mobile', async ({ page }) => {
+test('Capture affiliate card on mobile', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'Mobile-only test');
   // Go directly to the known post
   await page.goto('./blog/2026-06-01-shoe-care-modification');
 

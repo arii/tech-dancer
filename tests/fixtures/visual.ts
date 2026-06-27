@@ -18,6 +18,9 @@ export const test = base.extend<{ pageErrors: ErrorMonitor }>({
     // Control CSS Animations and Transitions to prevent visual flakiness
     await disableAnimations(page);
 
+    // Wait for fonts to be ready globally to prevent text-rendering drift
+    await page.evaluate(() => document.fonts.ready);
+
     await use(page);
   },
 });
