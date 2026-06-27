@@ -3,40 +3,475 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'dev-tools/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
+      - '.github/actions/**'
+      - 'AGENTS.md'
+      - 'docs/github-workflows.md'
+      - '*.config.ts'
+      - 'tsconfig*.json'
   pull_request:
     branches: ['**']
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'dev-tools/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
+      - '.github/actions/**'
+      - 'AGENTS.md'
+      - 'docs/github-workflows.md'
+      - '*.config.ts'
+      - 'tsconfig*.json'
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
-  statuses: write
-  checks: write
+  contents: read
   actions: read
+  statuses: write
+  pull-requests: write
+  models: read
+  packages: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+  GITHUB_MODELS_MODEL: gpt-4o-mini
+  ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
+  BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
+  AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
 jobs:
-  validate:
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
+  lint-typecheck:
+    name: Lint & Type Check
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Validate Runtime
+        shell: bash
+        run: |
+          echo "::group::Validate Runtime"
+          trap 'echo "::endgroup::"' EXIT
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Verify lockfile integrity
+        shell: bash
+        run: |
+          echo "::group::pnpm install"
+          trap 'echo "::endgroup::"' EXIT
+          pnpm install --frozen-lockfile
+          echo "::endgroup::"
+          trap - EXIT
+
+          if ! git diff --quiet pnpm-lock.yaml; then
+            echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
+            exit 1
+          fi
+
+      - name: Verify Agent Context
+        continue-on-error: true
+        run: |
+          pnpm run agent:prime
+          if ! git diff --quiet .agent-context.json; then
+            echo "::warning::.agent-context.json is out of date. Run 'pnpm run agent:prime' and commit the changes."
+            git diff .agent-context.json
+          fi
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Type-check
+        run: pnpm run type-check
+
+      - name: Run Unit Tests - Vitest
+        run: pnpm test
+
+      - name: Run CLI Unit Tests
+        shell: bash
+        run: |
+          echo "::group::Pytest"
+          trap 'echo "::endgroup::"' EXIT
+          python3 -m pytest tests/dev-tools/test_modern_cli.py
+
+      - name: Check for dead code
+        run: pnpm run knip
+
+      - name: TypeScript `any` Ratchet
+        shell: bash
+        run: |
+          echo "::group::Ratchet Any"
+          trap 'echo "::endgroup::"' EXIT
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td-cli gh ratchet-any
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  audit:
+    name: Anti-Pattern Audit
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      # Setup dependencies once and use caching for speedup.
+      - uses: actions/checkout@v7
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          echo "::group::pnpm install"
+          trap 'echo "::endgroup::"' EXIT
+          pnpm install --frozen-lockfile --prefer-offline
+
+      - name: UI Anti-Pattern Audit - Gate
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "::group::Audit"
+          trap 'echo "::endgroup::"' EXIT
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
+          td-cli gh audit-gate
+
+      - name: Design Token Compliance
+        run: |
+          # Check for raw hex colors not in tokens.css
+          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
+            --include="*.tsx" \
+            | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
+          if [ "$VIOLATIONS" -gt 0 ]; then
+            echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
+            grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
+            exit 1
+          fi
+          echo "✅ Design token compliance passed."
+
+  test-build:
+    name: Build & E2E
+    needs: [verify-changes, lint-typecheck]
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    env:
+      NODE_ENV: production
+      REPO_NAME: ${{ github.event.repository.name }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      # Setup dependencies once and use caching for speedup.
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: ./boomtick-pkg/mcp/actions/ci-validate
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Build App
+        run: |
+          # Build with root base path for Playwright preview tests.
+          # Playwright runs with VITE_BASE_PATH=/, so dist must use root-relative assets.
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+
+
+      - name: Bundle Size Check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Ensure local python bin is on path for td-cli
+          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+          td-cli gh bundle-size
+
+      - name: Run Playwright Smoke Test
+        run: |
+          VITE_BASE_PATH=/ pnpm run test:e2e
+
+      - name: Run Lighthouse CI
+        run: |
+          set -eu
+          VITE_BASE_PATH="/"
+          CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          export VITE_BASE_PATH
+          export CHROME_PATH
+          echo "CHROME_PATH=$CHROME_PATH"
+          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+        env:
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check Playwright Report Exists
+        id: check_report
+        if: always()
+        run: |
+          if [ -d "playwright-report/" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload Test Results
+        if: always() && steps.check_report.outputs.exists == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  impact-analysis:
+    needs: [verify-changes, lint-typecheck, audit, test-build]
+    name: Deployment Impact Analysis
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    env:
+      DISABLE_MINIFY: true
+      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_MODELS_MODEL: gpt-4o-mini
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Deployment Impact Analysis
+        run: pnpm run impact:analysis
+      - name: Build Main
+        env:
+          DISABLE_MINIFY: true
+        run: pnpm run impact:build-main
+      - name: Build PR
+        env:
+          VITE_BASE_PATH: /
+          DISABLE_MINIFY: true
+        run: pnpm run build:review
+      - name: Visual Diff
+        run: pnpm run impact:visual-diff
+      - name: DOM Diff
+        run: pnpm run impact:dom-diff
+      - name: Check if visual changes exist
+        id: check_visuals
+        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+      - name: Code review agent
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:gemini-code-review
+      - name: Code review github models agent
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:github-models-code-review
+      - name: Visual review agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:gemini-review
+      - name: Visual review github models agent
+        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run impact:github-models-review
+      - name: Report Summary
+        if: always()
+        run: |
+          if [ -f artifacts/deployment-review.md ]; then
+            cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/deployment-review.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          elif [ -f artifacts/impact-analysis/impact.md ]; then
+            cat artifacts/impact-analysis/impact.md >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              cat artifacts/impact-analysis/impact.md
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          else
+            {
+              echo "## Deployment Impact Analysis"
+              echo "No impact report found."
+            } >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo "IMPACT_BODY<<EOF"
+              echo "No impact report found."
+              echo "EOF"
+            } >> "$GITHUB_ENV"
+          fi
 
-  anti-pattern-audit:
-    name: Anti-Pattern Audit
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Satisfying branch protection rules"
+          if [ -f artifacts/gemini-review.md ]; then
+            {
+              echo ""
+              cat artifacts/gemini-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
-  build-e2e:
-    name: Build & E2E
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Satisfying branch protection rules"
+          if [ -f artifacts/github-models-review.md ]; then
+            {
+              echo ""
+              cat artifacts/github-models-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/gemini-code-review.md ]; then
+            {
+              echo ""
+              cat artifacts/gemini-code-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f artifacts/github-models-code-review.md ]; then
+            {
+              echo ""
+              cat artifacts/github-models-code-review.md
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          # Aggregate verdict — fail the step explicitly if any verdict file says failed
+          FAILED=0
+          if [ "$FAILED" -eq 0 ]; then
+            for f in artifacts/*-verdict.json; do
+              [ -f "$f" ] || continue
+              PASSED=$(jq -r '.passed' "$f" || echo "error")
+              if [ "$PASSED" = "false" ]; then
+                HIGH=$(jq -r '.highCount' "$f" || echo "unknown")
+                echo "❌ Review failed: $HIGH HIGH severity issues found ($f)" >&2
+                FAILED=1
+              elif [ "$PASSED" = "error" ]; then
+                echo "❌ Review failed: Could not parse verdict file ($f)" >&2
+                FAILED=1
+              fi
+            done
+          fi
+          if [ "$FAILED" -ne 0 ]; then
+            exit 1
+          fi
+      - name: Parse Jules session ID from PR description
+        if: always()
+        id: parse_jules
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          TASK_ID=$(echo "$PR_BODY" \
+            | grep -oP 'jules\.google\.com/task/\K[0-9]+' \
+            | head -1)
+          if [ -z "$TASK_ID" ]; then
+            echo "No Jules task ID found in PR description. Skipping."
+            exit 0
+          fi
+          echo "Found Jules task ID: $TASK_ID"
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Send impact analysis to Jules session
+        if: always() && steps.parse_jules.outputs.task_id != ''
+        env:
+          TASK_ID: ${{ steps.parse_jules.outputs.task_id }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+        run: python3 scripts/send-jules-impact.py
+
+      - name: Update Impact Analysis Feedback (Final Result)
+        if: always()
+        uses: ./.github/actions/update-pr-comment
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          status_line: '✅ **Impact Analysis Complete**'
+          impact_body: ${{ env.IMPACT_BODY }}
+
+      - name: Merge AI Logs into Artifacts
+        if: always()
+        run: |
+          # Safely backup legacy logs
+          if [ -f dev-tools/logs/ai/review-run.json ]; then
+            mv dev-tools/logs/ai/review-run.json dev-tools/logs/ai/review-run.json.bak || true
+          fi
+          if [ -f artifacts/review-run.json ]; then
+            mv artifacts/review-run.json artifacts/review-run.json.bak || true
+          fi
+          mkdir -p artifacts/logs/ai
+          cp -r dev-tools/logs/ai/* artifacts/logs/ai/ || true
+
+      - name: Upload Deployment Review Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: deployment-review
+          path: |
+            artifacts/
