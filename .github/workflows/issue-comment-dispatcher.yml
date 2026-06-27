@@ -32,10 +32,12 @@ jobs:
           RESULT=$(python3 boomtick-pkg/cli/dev_tools/td_cli.py gh parse-comment --author-association "$AUTHOR_ASSOC")
 
           # Extract actions from the JSON result and set them as outputs
-          echo "conflict_resolve=$(echo "$RESULT" | jq -r '.actions.conflict_resolve')" >> "$GITHUB_OUTPUT"
-          echo "update_snapshots=$(echo "$RESULT" | jq -r '.actions.update_snapshots')" >> "$GITHUB_OUTPUT"
-          echo "ai_chatops=$(echo "$RESULT" | jq -r '.actions.ai_chatops')" >> "$GITHUB_OUTPUT"
-          echo "jules_fix_ci=$(echo "$RESULT" | jq -r '.actions.jules_fix_ci')" >> "$GITHUB_OUTPUT"
+          {
+            echo "conflict_resolve=$(echo "$RESULT" | jq -r '.actions.conflict_resolve')"
+            echo "update_snapshots=$(echo "$RESULT" | jq -r '.actions.update_snapshots')"
+            echo "ai_chatops=$(echo "$RESULT" | jq -r '.actions.ai_chatops')"
+            echo "jules_fix_ci=$(echo "$RESULT" | jq -r '.actions.jules_fix_ci')"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Resolve Branch Details
         if: steps.check.outputs.conflict_resolve == 'true' || steps.check.outputs.update_snapshots == 'true' || steps.check.outputs.ai_chatops == 'true' || steps.check.outputs.jules_fix_ci == 'true'
