@@ -365,7 +365,6 @@
     "LICENSE": null,
     "README.md": null,
     "artifacts/": {
-      "semantic-duplicates/": "...",
       "visual-review/": "..."
     },
     "audit-baseline.json": null,
@@ -382,6 +381,31 @@
       "blog/": "...",
       "posts/": "...",
       "studies/": "..."
+    },
+    "dist/": {
+      "404.html": null,
+      "about/": "...",
+      "apple-touch-icon.png": null,
+      "assets/": "...",
+      "blog/": "...",
+      "boomtick_logo.svg": null,
+      "data/": "...",
+      "favicon.ico": null,
+      "favicon.svg": null,
+      "icon.svg": null,
+      "images/": "...",
+      "index.html": null,
+      "manifest.webmanifest": null,
+      "maskable-icon-512x512.png": null,
+      "merch/": "...",
+      "preview/": "...",
+      "previews/": "...",
+      "pwa-192x192.png": null,
+      "pwa-512x512.png": null,
+      "research/": "...",
+      "robots.txt": null,
+      "sitemap.xml": null,
+      "ux-auditor/": "..."
     },
     "docs/": {
       "affiliate-tooling.md": null,
@@ -422,6 +446,7 @@
       "apple-touch-icon.png": null,
       "assets/": "...",
       "boomtick_logo.svg": null,
+      "data/": "...",
       "favicon.ico": null,
       "favicon.svg": null,
       "icon.svg": null,
