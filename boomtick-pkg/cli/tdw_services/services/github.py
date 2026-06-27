@@ -53,7 +53,7 @@ class GitHubClient:
                 else:
                     raise
 
-    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
+    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, params: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
         headers = {
             "Authorization": f"Bearer {self.token}",
@@ -66,6 +66,7 @@ class GitHubClient:
                 url,
                 headers=headers,
                 json=json_data,
+                params=params,
                 timeout=30,
                 allow_redirects=allow_redirects
             )
@@ -91,8 +92,7 @@ class GitHubClient:
 
     def fetch_check_runs(self, ref: str) -> List[Dict[str, Any]]:
         try:
-            res = self.run_authenticated_gh(['api', f'/repos/{self.repo}/commits/{ref}/check-runs'])
-            data = json.loads(res)
+            data = self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-runs')
             return [{
                 'id': run.get('id'),
                 'name': run.get('name'),
@@ -103,6 +103,33 @@ class GitHubClient:
             } for run in data.get('check_runs', [])]
         except Exception:
             return []
+
+    def fetch_check_suites(self, ref: str) -> Dict[str, Any]:
+        return self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-suites')
+
+    def fetch_check_runs_for_suite(self, suite_id: int) -> Dict[str, Any]:
+        return self._request('GET', f'/repos/{self.repo}/check-suites/{suite_id}/check-runs')
+
+    def list_pull_requests(self, state: str = 'open', limit: int = 100, labels: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+        all_prs = []
+        page = 1
+        per_page = min(limit, 100)
+        while len(all_prs) < limit:
+            params = {'state': state, 'per_page': per_page, 'page': page}
+            if labels:
+                params['labels'] = ','.join(labels)
+            batch = self._request('GET', f'/repos/{self.repo}/pulls', params=params)
+            if not batch:
+                break
+            all_prs.extend(batch)
+            if len(batch) < per_page:
+                break
+            page += 1
+        return all_prs[:limit]
+
+    def create_pull_request(self, title: str, body: str, head: str, base: str) -> Dict[str, Any]:
+        data = {'title': title, 'body': body, 'head': head, 'base': base}
+        return self._request('POST', f'/repos/{self.repo}/pulls', json_data=data)
 
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
         """Fetches logs for a specific check run, using external_id (job_id) if available. Gracefully fallback to check_run_id if external_id 404s."""
