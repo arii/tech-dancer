@@ -1,0 +1,104 @@
+name: Security & Quality Scan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'dev-tools/**'
+      - 'boomtick-mcp/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/security.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'etl/**'
+      - 'dev-tools/**'
+      - 'boomtick-mcp/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/security.yml'
+  schedule:
+    - cron: '45 4 * * 6'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
+  codeql-analysis:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'actions', 'javascript-typescript' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{matrix.language}}"
+
+  static-tools:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
+    name: Static Tools
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - parallel:
+          - name: Gitleaks Secret Detection
+            uses: gitleaks/gitleaks-action@v2
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          - name: Semgrep Static Analysis
+            run: pnpm run audit:semgrep
+
+          - name: Oxlint Scan
+            run: pnpm run lint:ox
