@@ -1,4 +1,70 @@
-import { Tool } from "@modelcontextprotocol/sdk/types.js";
+import { Tool, Prompt, Resource } from "@modelcontextprotocol/sdk/types.js";
+
+export const MCP_PROMPTS: Prompt[] = [
+  {
+    name: "conflict-scout",
+    description: "Find PRs worth rescuing.",
+  },
+  {
+    name: "pr-consolidation",
+    description: "Guidelines for analyzing and proposing consolidation of overlapping PRs.",
+  },
+  {
+    name: "repo-context",
+    description: "Gather repository context for a PR.",
+  },
+  {
+    name: "repair-agent",
+    description: "Apply the smallest safe fix for a PR.",
+  },
+  {
+    name: "verifier-agent",
+    description: "Verify that a repair works.",
+  },
+  {
+    name: "pr-writer",
+    description: "Write a summary for a replacement PR.",
+  },
+];
+
+export const MCP_RESOURCES: Resource[] = [
+  {
+    uri: "repo://package-json",
+    name: "package.json",
+    mimeType: "application/json",
+    description: "The root package.json file of the repository.",
+  },
+  {
+    uri: "repo://routes",
+    name: "Route Map",
+    mimeType: "application/json",
+    description: "The mapping of application routes to content files.",
+  },
+  {
+    uri: "repo://design-tokens",
+    name: "Design Tokens",
+    mimeType: "application/json",
+    description: "The design tokens used in the repository.",
+  },
+  {
+    uri: "repo://repair-report/{branch}",
+    name: "Repair Report",
+    mimeType: "application/json",
+    description: "The validation report for a specific repair branch.",
+  },
+  {
+    uri: "repo://lighthouse/{branch}",
+    name: "Lighthouse Report",
+    mimeType: "application/json",
+    description: "Lighthouse CI report for a specific branch.",
+  },
+  {
+    uri: "repo://playwright/{branch}",
+    name: "Playwright Report",
+    mimeType: "application/json",
+    description: "Playwright test report for a specific branch.",
+  },
+];
 
 export const MCP_TOOLS: Tool[] = [
   {

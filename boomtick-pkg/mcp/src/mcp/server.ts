@@ -10,7 +10,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
-import { MCP_TOOLS } from "./definitions.js";
+import { MCP_TOOLS, MCP_PROMPTS, MCP_RESOURCES } from "./definitions.js";
 import { healthHandler, HealthCheckInputSchema } from "./tools.js";
 import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
 import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
@@ -76,32 +76,7 @@ export class BoomtickMCPServer {
   private setupPromptHandlers() {
     this.server.setRequestHandler(ListPromptsRequestSchema, async () => {
       return {
-        prompts: [
-          {
-            name: "conflict-scout",
-            description: "Find PRs worth rescuing.",
-          },
-          {
-            name: "pr-consolidation",
-            description: "Guidelines for analyzing and proposing consolidation of overlapping PRs.",
-          },
-          {
-            name: "repo-context",
-            description: "Gather repository context for a PR.",
-          },
-          {
-            name: "repair-agent",
-            description: "Apply the smallest safe fix for a PR.",
-          },
-          {
-            name: "verifier-agent",
-            description: "Verify that a repair works.",
-          },
-          {
-            name: "pr-writer",
-            description: "Write a summary for a replacement PR.",
-          },
-        ],
+        prompts: MCP_PROMPTS,
       };
     });
 
@@ -135,44 +110,7 @@ export class BoomtickMCPServer {
   private setupResourceHandlers() {
     this.server.setRequestHandler(ListResourcesRequestSchema, async () => {
       return {
-        resources: [
-          {
-            uri: "repo://package-json",
-            name: "package.json",
-            mimeType: "application/json",
-            description: "The root package.json file of the repository.",
-          },
-          {
-            uri: "repo://routes",
-            name: "Route Map",
-            mimeType: "application/json",
-            description: "The mapping of application routes to content files.",
-          },
-          {
-            uri: "repo://design-tokens",
-            name: "Design Tokens",
-            mimeType: "application/json",
-            description: "The design tokens used in the repository.",
-          },
-          {
-            uri: "repo://repair-report/{branch}",
-            name: "Repair Report",
-            mimeType: "application/json",
-            description: "The validation report for a specific repair branch.",
-          },
-          {
-            uri: "repo://lighthouse/{branch}",
-            name: "Lighthouse Report",
-            mimeType: "application/json",
-            description: "Lighthouse CI report for a specific branch.",
-          },
-          {
-            uri: "repo://playwright/{branch}",
-            name: "Playwright Report",
-            mimeType: "application/json",
-            description: "Playwright test report for a specific branch.",
-          },
-        ],
+        resources: MCP_RESOURCES,
       };
     });
 

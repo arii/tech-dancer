@@ -50,8 +50,8 @@ def build_repo_context():
     except Exception as e:
         print(f"Error reading project_config.json: {e}", file=sys.stderr)
 
-    # 3. MCP Tools (Package Internal)
-    mcp_tools = []
+    # 3. MCP Schema (Package Internal)
+    mcp_schema = {"tools": [], "prompts": [], "resources": []}
     try:
         import subprocess
         mcp_dir = package_root / "mcp"
@@ -65,9 +65,9 @@ def build_repo_context():
                 text=True,
                 check=True
             )
-            mcp_tools = json.loads(result.stdout)
+            mcp_schema = json.loads(result.stdout)
     except Exception as e:
-        print(f"Error gathering MCP tools: {e}", file=sys.stderr)
+        print(f"Error gathering MCP schema: {e}", file=sys.stderr)
 
     # 4. CLI Schema (Package Internal)
     cli_schema = {}
@@ -108,7 +108,7 @@ def build_repo_context():
         },
         "package_json": package_summary,
         "project_config": project_config,
-        "mcp_tools": mcp_tools,
+        "mcp_schema": mcp_schema,
         "cli_schema": cli_schema,
         "file_tree": file_tree,
     }

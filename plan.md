@@ -378,7 +378,7 @@ command -v td && td gh --help > /dev/null
 {
   "scripts": {
     "repair-context": "PYTHONPATH=$PYTHONPATH:boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/td_cli.py repair-context",
-    "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json"
+    "agent:prime": "python3 boomtick-pkg/scripts/build-repo-context.py > .agent-context.json"
   }
 }
 ```
