@@ -460,27 +460,34 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYTHONPATH: boomtick-pkg/cli
         run: |
-          echo "## 📊 CI Metrics Verification" >> "$GITHUB_STEP_SUMMARY"
           METRICS_FAILED=0
+          # Use temporary file to avoid multiple individual redirects (SC2129)
+          SUMMARY_FILE=$(mktemp)
+
+          echo "## 📊 CI Metrics Verification" >> "$SUMMARY_FILE"
 
           # 1. AI Token Usage
-          echo "### AI Token Usage" >> "$GITHUB_STEP_SUMMARY"
-          METRICS_JSON=$(python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics 2>/dev/null)
-          if [ $? -eq 0 ]; then
-             echo "✅ AI Token usage within limits." >> "$GITHUB_STEP_SUMMARY"
+          echo "### AI Token Usage" >> "$SUMMARY_FILE"
+
+          # Capture output and check exit code directly (SC2181)
+          if METRICS_JSON=$(python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics 2>/dev/null); then
+             echo "✅ AI Token usage within limits." >> "$SUMMARY_FILE"
           else
-             echo "❌ AI Token usage exceeded thresholds." >> "$GITHUB_STEP_SUMMARY"
+             echo "❌ AI Token usage exceeded thresholds." >> "$SUMMARY_FILE"
              METRICS_FAILED=1
           fi
 
           if [ -n "$METRICS_JSON" ]; then
-            echo '```json' >> "$GITHUB_STEP_SUMMARY"
-            echo "$METRICS_JSON" | jq '.' >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            {
+              echo '```json'
+              echo "$METRICS_JSON" | jq '.'
+              echo '```'
+            } >> "$SUMMARY_FILE"
           fi
 
-          # 2. Visual Change Stability (Already performed in 'Check if visual changes exist' but we can assert here)
-          # The 'Check if visual changes exist' step already fails if it finds significant changes.
+          # Append temporary summary to the official one
+          cat "$SUMMARY_FILE" >> "$GITHUB_STEP_SUMMARY"
+          rm "$SUMMARY_FILE"
 
           if [ "$METRICS_FAILED" -eq 1 ]; then
             echo "❌ CI Metrics verification failed."
