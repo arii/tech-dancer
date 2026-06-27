@@ -7,6 +7,7 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { useBlogDrafter } from './useBlogDrafter';
 import { Post } from '@/lib/content';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { Notice } from '@/components/ui/Notice';
 import { CONTENT_CATEGORIES } from '@/config/content';
 import { FullPreview } from './components/FullPreview';
 
@@ -177,16 +178,9 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
       </Stack>
 
       {showClipboardNotice && (
-        <Box border padding="compact" className="bg-accent-purple/5 border-accent-purple/20">
-           <Stack gap={2} display="flex" align="baseline" direction="row">
-              <Box as="span" className="shrink-0">
-                <Info className="w-4 h-4 text-accent-purple" />
-              </Box>
-              <Text variant="body" size="xs">
-                <strong>DRAFT COPIED TO CLIPBOARD.</strong> Due to content size, the GitHub Issue body was truncated. Please <strong>PASTE</strong> the clipboard content into the issue description on GitHub.
-              </Text>
-           </Stack>
-        </Box>
+        <Notice type="info">
+          <strong>DRAFT COPIED TO CLIPBOARD.</strong> Due to content size, the GitHub Issue body was truncated. Please <strong>PASTE</strong> the clipboard content into the issue description on GitHub.
+        </Notice>
       )}
 
       <Grid cols={{ base: 1, lg: 2 }} gap={{ base: 8, lg: 12 }}>
@@ -404,6 +398,7 @@ Draft Data: ${JSON.stringify(data, null, 2)}`;
             overflow="y-auto"
             maxHeight="600px"
             maxWidth="full"
+            aria-live="polite"
             className="prose prose-sm prose-invert"
           >
             <MarkdownRenderer content={cleanPreview} />

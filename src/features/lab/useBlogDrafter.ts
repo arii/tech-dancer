@@ -136,13 +136,17 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
   }, [data]);
 
   const cleanPreview = useMemo(() => {
-    return `### ${data.title || 'Untitled Post'}
+    return `## DRAFT PREVIEW
 
-**Author:** ${data.author}
-**Date:** ${data.date}
-**Category:** ${data.category}
+### ${data.title || 'Untitled Post'}
 
-${data.excerpt ? `> ${data.excerpt}\n` : ''}
+<Stack gap={1}>
+<Text color="main" weight="bold">AUTHOR:</Text> <Text color="dim">${data.author}</Text>
+<Text color="main" weight="bold">DATE:</Text> <Text color="dim">${data.date}</Text>
+<Text color="main" weight="bold">CATEGORY:</Text> <Text color="dim">${data.category}</Text>
+</Stack>
+
+${data.excerpt ? `\n> ${data.excerpt}\n` : ''}
 
 ${data.commentary || '[Your commentary/content goes here]'}
 
