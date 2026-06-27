@@ -196,7 +196,6 @@ runs:
 
     - name: Verify CI Metrics
       if: always()
-      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         PYTHONPATH: boomtick-pkg/cli
@@ -206,3 +205,4 @@ runs:
           echo "❌ CI Metrics verification failed."
           exit 1
         fi
+      shell: bash
