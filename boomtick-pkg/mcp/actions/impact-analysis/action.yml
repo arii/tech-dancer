@@ -21,21 +21,22 @@ runs:
     - run: pnpm install --frozen-lockfile --prefer-offline
       shell: bash
 
-    - parallel:
-        - name: Deployment Impact Analysis
-          run: pnpm run impact:analysis
-          shell: bash
-        - name: Build Main
-          env:
-            DISABLE_MINIFY: true
-          run: pnpm run impact:build-main
-          shell: bash
-        - name: Build PR
-          env:
-            VITE_BASE_PATH: /
-            DISABLE_MINIFY: true
-          run: pnpm run build:review
-          shell: bash
+    - name: Deployment Impact Analysis
+      run: pnpm run impact:analysis
+      shell: bash
+
+    - name: Build Main
+      env:
+        DISABLE_MINIFY: true
+      run: pnpm run impact:build-main
+      shell: bash
+
+    - name: Build PR
+      env:
+        VITE_BASE_PATH: /
+        DISABLE_MINIFY: true
+      run: pnpm run build:review
+      shell: bash
 
     - name: Code review agent
       if: always() && github.event_name == 'pull_request'
@@ -54,13 +55,13 @@ runs:
       run: pnpm run impact:github-models-code-review
       shell: bash
 
-    - parallel:
-        - name: Visual Diff
-          run: pnpm run impact:visual-diff
-          shell: bash
-        - name: DOM Diff
-          run: pnpm run impact:dom-diff
-          shell: bash
+    - name: Visual Diff
+      run: pnpm run impact:visual-diff
+      shell: bash
+
+    - name: DOM Diff
+      run: pnpm run impact:dom-diff
+      shell: bash
 
     - name: Check if visual changes exist
       id: check_visuals

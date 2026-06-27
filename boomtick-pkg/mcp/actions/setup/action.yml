@@ -13,10 +13,6 @@ runs:
     - name: Setup Workspace
       uses: ./.github/actions/setup-workspace
 
-    - name: Build MCP server
-      run: pnpm --filter ./boomtick-pkg/mcp build
-      shell: bash
-
     - name: Verify setup
       run: td doctor
       shell: bash
