@@ -38,5 +38,5 @@ runs:
             cat validate_stderr.log
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-          exit "$EXIT_CODE"
+          sh -c "exit $EXIT_CODE"
         fi

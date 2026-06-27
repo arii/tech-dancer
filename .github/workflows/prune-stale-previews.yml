@@ -23,7 +23,7 @@ jobs:
           path: source
 
       - name: Checkout gh-pages
-        uses: ./.github/actions/checkout-repo
+        uses: actions/checkout@v7.0.0
         with:
           ref: gh-pages
           path: gh-pages-branch

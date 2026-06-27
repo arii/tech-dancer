@@ -575,8 +575,8 @@ class Orchestrator:
                 raise e
         run_step("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
         run_step("Version Downgrade Check", [sys.executable, os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev_tools", "td_cli.py"), "gh", "verify-versions"])
-        run_step("TypeScript", ["pnpm", "run", "type-check"])
-        run_step("Lint", ["pnpm", "run", "lint"])
+        run_step("TypeScript", ["./node_modules/.bin/tsc", "--noEmit"])
+        run_step("Lint", ["./node_modules/.bin/eslint", ".", "--ext", "ts,tsx", "--report-unused-disable-directives", "--max-warnings", "0"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
         if missing_vars: results["steps"].append({"name": "Baseline Check", "status": "warning", "message": f"Missing GHA variables: {', '.join(missing_vars)}"})
         else: results["steps"].append({"name": "Baseline Check", "status": "success"})
