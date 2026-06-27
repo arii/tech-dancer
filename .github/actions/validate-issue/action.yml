@@ -14,12 +14,13 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
+        ISSUE_NUMBER: ${{ inputs.issue-number }}
       run: |
         # Disable exit on error to allow manual exit code handling
         set +e
 
         # Run validation and capture output
-        td-cli gh validate-issue --issue-number "${{ inputs.issue-number }}" --post-comments --execute > validate_stdout.log 2> validate_stderr.log
+        td-cli gh validate-issue --issue-number "$ISSUE_NUMBER" --post-comments --execute > validate_stdout.log 2> validate_stderr.log
         EXIT_CODE=$?
 
         set -e

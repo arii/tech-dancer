@@ -104,7 +104,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7.0.0
+        uses: ./.github/actions/checkout-repo
         with:
           fetch-depth: 0
 

@@ -1,0 +1,36 @@
+name: 'Checkout Repository'
+description: 'Centralized wrapper for actions/checkout with pinned version'
+inputs:
+  fetch-depth:
+    description: 'Number of commits to fetch. 0 indicates all history for all branches and tags.'
+    required: false
+    default: '1'
+  token:
+    description: 'Personal access token (PAT) used to fetch the repository.'
+    required: false
+    default: ${{ github.token }}
+  repository:
+    description: 'Repository name with owner.'
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: 'The branch, tag or SHA to checkout.'
+    required: false
+  path:
+    description: 'Relative path under $GITHUB_WORKSPACE to place the repository.'
+    required: false
+  lfs:
+    description: 'Whether to download Git LFS files.'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v7.0.0
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        token: ${{ inputs.token }}
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        path: ${{ inputs.path }}
+        lfs: ${{ inputs.lfs }}
