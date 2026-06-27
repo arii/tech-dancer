@@ -318,11 +318,9 @@ def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
     retries = 0
     while True:
         if time.time() - start_time > timeout:
-            print(f"Timeout of {timeout}s exceeded while waiting for session {session_id}.")
-            break
+            raise TimeoutError(f"Timeout of {timeout}s exceeded while waiting for session {session_id}.")
         if retries >= max_retries:
-            print(f"Max retries of {max_retries} exceeded while waiting for session {session_id}.")
-            break
+            raise RuntimeError(f"Max retries of {max_retries} exceeded while waiting for session {session_id}.")
 
         messages = run_cli(["agent", "messages", session_id])
         if messages:
