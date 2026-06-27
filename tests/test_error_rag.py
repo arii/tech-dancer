@@ -5,7 +5,7 @@ import importlib.util
 import sys
 
 # Handle the hyphen in 'dev-tools'
-spec = importlib.util.spec_from_file_location("error_rag", "dev-tools/error_rag.py")
+spec = importlib.util.spec_from_file_location("error_rag", "boomtick-pkg/cli/dev_tools/error_rag.py")
 error_rag = importlib.util.module_from_spec(spec)
 sys.modules["error_rag"] = error_rag
 spec.loader.exec_module(error_rag)
