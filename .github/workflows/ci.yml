@@ -55,9 +55,8 @@ jobs:
       with:
         python-version: '3.11'
     - name: Run CLI Unit Tests
-      run: 'python3 -m pip install PyGithub pytest click
-
-        PYTHONPATH=dev-tools python3 -m pytest tests/dev-tools/test_modern_cli.py
+      run: 'pip install -e boomtick-pkg/cli pytest
+        PYTHONPATH=$PYTHONPATH:$(pwd)/boomtick-pkg/cli python3 -m pytest tests/dev-tools/test_modern_cli.py
 
         '
     - name: Check for dead code
@@ -65,11 +64,8 @@ jobs:
         CI: true
       run: CI=true pnpm run knip
     - name: TypeScript `any` Ratchet
-      run: 'PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-
-        export PYTHONPATH
-
-        python3 dev-tools/td_cli.py gh ratchet-any
+      run: 'pip install -e boomtick-pkg/cli
+        td gh ratchet-any
 
         '
       env:
@@ -90,15 +86,9 @@ jobs:
     - name: UI Anti-Pattern Audit - Gate
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: 'python3 -m pip install PyGithub click
-
-        PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-
-        export PYTHONPATH
-
-        if ! pnpm run audit; then echo "Audit failed"; exit 1; fi
-
-        python3 dev-tools/td_cli.py gh audit-gate
+      run: 'pip install -e boomtick-pkg/cli
+        if ! pnpm run audit; then echo "Audit failed"; false; fi
+        td gh audit-gate
 
         '
     - name: Design Token Compliance
@@ -153,13 +143,8 @@ jobs:
     - name: Bundle Size Check
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: 'python3 -m pip install PyGithub click
-
-        PYTHONPATH="$PYTHONPATH:$(pwd)/dev-tools"
-
-        export PYTHONPATH
-
-        python3 dev-tools/td_cli.py gh bundle-size
+      run: 'pip install -e boomtick-pkg/cli
+        td gh bundle-size
 
         '
     - name: Run Playwright Smoke Test
