@@ -139,17 +139,24 @@
         "required_flags": []
       },
       "gh create-issue": {
-        "description": "Creates a new GitHub issue using a title and a markdown file for the body.",
-        "exact_usage": "python3 dev-tools/td_cli.py gh create-issue --title <TITLE> --file <PATH_TO_BODY_FILE>",
+        "description": "Creates a new GitHub issue using a title and either a markdown file or literal text for the body.",
+        "exact_usage": "python3 dev-tools/td_cli.py gh create-issue --title <TITLE> [--file <PATH> | --body <TEXT>]",
+        "optional_flags": [
+          {
+            "description": "Path to the Markdown file containing the issue body.",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "The literal body text for the issue.",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
         "required_flags": [
           {
             "description": "The title of the issue.",
             "flag": "--title",
-            "type": "string"
-          },
-          {
-            "description": "Path to the Markdown file containing the issue body.",
-            "flag": "--file",
             "type": "string"
           }
         ]
@@ -161,6 +168,63 @@
           {
             "description": "The GitHub Pull Request ID (e.g., 2280)",
             "flag": "--pr",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh issue-comment": {
+        "description": "Adds a new comment to a GitHub issue from a file or literal text.",
+        "exact_usage": "python3 dev-tools/td_cli.py gh issue-comment <ISSUE_NUMBER> [--file <PATH> | --body <TEXT>]",
+        "optional_flags": [
+          {
+            "description": "Path to the Markdown file containing the comment body.",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "The literal body text for the comment.",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "The GitHub issue number.",
+            "name": "issue_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh issue-update": {
+        "description": "Updates the body of a GitHub issue from a file or literal text.",
+        "exact_usage": "python3 dev-tools/td_cli.py gh issue-update <ISSUE_NUMBER> [--file <PATH> | --body <TEXT>]",
+        "optional_flags": [
+          {
+            "description": "Path to the Markdown file containing the new issue body.",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "The literal body text for the issue.",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_arguments": [
+          {
+            "description": "The GitHub issue number.",
+            "name": "issue_number",
+            "type": "integer"
+          }
+        ]
+      },
+      "gh issue-view": {
+        "description": "Fetches details of a GitHub issue including title, body, and state.",
+        "exact_usage": "python3 dev-tools/td_cli.py gh issue-view <ISSUE_NUMBER>",
+        "required_arguments": [
+          {
+            "description": "The GitHub issue number.",
+            "name": "issue_number",
             "type": "integer"
           }
         ]
@@ -191,7 +255,7 @@
         "exact_usage": "python3 dev-tools/td_cli.py gh merge-conflicts <PR_NUMBER> [--base <BASE_BRANCH>]",
         "optional_flags": [
           {
-            "description": "Base branch (default: main).",
+            "description": "Base branch (default: origin/main).",
             "flag": "--base",
             "type": "string"
           }
@@ -217,6 +281,29 @@
             "description": "Bust the cache and force fetching data from GitHub.",
             "flag": "--no-cache",
             "type": "boolean"
+          }
+        ]
+      },
+      "gh post-comment": {
+        "description": "Adds a new comment to a Pull Request from a file or literal text.",
+        "exact_usage": "python3 dev-tools/td_cli.py gh post-comment --pr <PR_NUMBER> [--file <PATH> | --body <TEXT>]",
+        "optional_flags": [
+          {
+            "description": "Path to the Markdown file containing the comment body.",
+            "flag": "--file",
+            "type": "string"
+          },
+          {
+            "description": "The literal body text for the comment.",
+            "flag": "--body",
+            "type": "string"
+          }
+        ],
+        "required_flags": [
+          {
+            "description": "The GitHub Pull Request ID.",
+            "flag": "--pr",
+            "type": "integer"
           }
         ]
       },
@@ -417,7 +504,6 @@
       "snapshot.sh": null,
       "submit_review.py": null,
       "td_cli.py": null,
-      "tdw_services.egg-info/": "...",
       "tdw_services/": "...",
       "tests/": "...",
       "triage_failure.py": null,
@@ -429,6 +515,31 @@
       "vision_audit.py": null,
       "visual_guidelines.json": null,
       "workflow_summary.py": null
+    },
+    "dist/": {
+      "404.html": null,
+      "about/": "...",
+      "apple-touch-icon.png": null,
+      "assets/": "...",
+      "blog/": "...",
+      "boomtick_logo.svg": null,
+      "data/": "...",
+      "favicon.ico": null,
+      "favicon.svg": null,
+      "icon.svg": null,
+      "images/": "...",
+      "index.html": null,
+      "manifest.webmanifest": null,
+      "maskable-icon-512x512.png": null,
+      "merch/": "...",
+      "preview/": "...",
+      "previews/": "...",
+      "pwa-192x192.png": null,
+      "pwa-512x512.png": null,
+      "research/": "...",
+      "robots.txt": null,
+      "sitemap.xml": null,
+      "ux-auditor/": "..."
     },
     "docs/": {
       "affiliate-tooling.md": null,
@@ -676,7 +787,7 @@
       "agent:prime": "python3 scripts/build-repo-context.py > .agent-context.json",
       "ai:index": "python3 scripts/index-codebase.py",
       "audit:anti-patterns": "node scripts/detect-antipatterns.mjs",
-      "audit:dead-code": "pnpm run knip",
+      "audit:dead-code": "pnpm exec knip --exclude exports",
       "audit:inventory": "node scripts/check-suppression-inventory.mjs",
       "audit:semantic": "node scripts/detect-semantic-duplicates.mjs",
       "audit:semgrep": "semgrep scan --config auto --error",
@@ -725,6 +836,21 @@
     }
   },
   "project_config": {
+    "ai_review_model": "gpt-4o",
+    "ai_synthesis_model": "gpt-4o-mini",
+    "ai_vision_model": "gpt-4o",
+    "allowed_bots": [
+      "github-actions[bot]",
+      "tech-dancer-bot",
+      "ariii"
+    ],
+    "audit_check_dirs": [
+      "src/features",
+      "src/pages",
+      "src/components",
+      "src/layouts",
+      "src/App.tsx"
+    ],
     "base_branch": "origin/main",
     "content_scopes": {
       "blog": "content/blog/",
@@ -737,7 +863,36 @@
       "src/components/"
     ],
     "max_diff_chars": 40000,
-    "monolithic_pr_threshold": 3
+    "monolithic_pr_threshold": 3,
+    "spec_sections": [
+      "Problem Statement",
+      "Goal",
+      "Non-Goals",
+      "Proposed Approach",
+      "Alternatives Considered",
+      "Architectural Impact",
+      "Scope",
+      "UNDERSTAND THE ISSUE",
+      "DETERMINE APPROACH",
+      "SPECIFY SCOPE",
+      "DEFINITION OF DONE"
+    ],
+    "tailwind_indicators": [
+      "px-",
+      "py-",
+      "mt-",
+      "flex",
+      "grid",
+      "text-["
+    ],
+    "ui_indicators": [
+      "src/components",
+      "src/pages",
+      "src/layouts",
+      "src/index.css",
+      "tailwind"
+    ],
+    "worktree_prefix": "tech-dancer-repair-"
   },
   "repo": {
     "name": "react-example"
