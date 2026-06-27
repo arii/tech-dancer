@@ -111,25 +111,48 @@ class GitHubClient:
         return self._request('GET', f'/repos/{self.repo}/check-suites/{suite_id}/check-runs')
 
     def list_pull_requests(self, state: str = 'open', limit: int = 100, labels: Optional[List[str]] = None) -> List[Dict[str, Any]]:
-        all_prs = []
-        page = 1
-        per_page = min(limit, 100)
-        while len(all_prs) < limit:
-            params = {'state': state, 'per_page': per_page, 'page': page}
-            if labels:
-                params['labels'] = ','.join(labels)
-            batch = self._request('GET', f'/repos/{self.repo}/pulls', params=params)
-            if not batch:
-                break
-            all_prs.extend(batch)
-            if len(batch) < per_page:
-                break
-            page += 1
-        return all_prs[:limit]
+        if labels:
+            # If labels are provided, use Search API as /repos/:owner/:repo/pulls does not support label filtering
+            all_results = []
+            page = 1
+            per_page = min(limit, 100)
+            while len(all_results) < limit:
+                q = f"repo:{self.repo} is:pr state:{state}"
+                for label in labels:
+                    q += f' label:"{label}"'
+                params = {'q': q, 'per_page': per_page, 'page': page}
+                data = self._request('GET', '/search/issues', params=params)
+                batch = data.get('items', [])
+                if not batch:
+                    break
+                all_results.extend(batch)
+                if len(batch) < per_page:
+                    break
+                page += 1
+            return all_results[:limit]
+        else:
+            all_prs = []
+            page = 1
+            per_page = min(limit, 100)
+            while len(all_prs) < limit:
+                params = {'state': state, 'per_page': per_page, 'page': page}
+                batch = self._request('GET', f'/repos/{self.repo}/pulls', params=params)
+                if not batch:
+                    break
+                all_prs.extend(batch)
+                if len(batch) < per_page:
+                    break
+                page += 1
+            return all_prs[:limit]
 
     def create_pull_request(self, title: str, body: str, head: str, base: str) -> Dict[str, Any]:
         data = {'title': title, 'body': body, 'head': head, 'base': base}
         return self._request('POST', f'/repos/{self.repo}/pulls', json_data=data)
+
+    def fetch_comments(self, number: int, endpoint: str = 'issues') -> List[Dict[str, Any]]:
+        """Fetches comments for an issue or pull request."""
+        # endpoint can be 'issues' or 'pulls' (for review comments)
+        return self._request('GET', f'/repos/{self.repo}/{endpoint}/{number}/comments')
 
     def fetch_check_run_logs(self, check_run_id: int, external_id: Optional[str] = None) -> str:
         """Fetches logs for a specific check run, using external_id (job_id) if available. Gracefully fallback to check_run_id if external_id 404s."""

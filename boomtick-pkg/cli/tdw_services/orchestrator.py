@@ -1039,8 +1039,7 @@ Respond only after the PR is created or updated:
         # Get all check runs for this SHA
         # Use full API response to be more robust
         try:
-            data = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-runs')
-            check_runs = data.get("check_runs", [])
+            check_runs = self.github.fetch_check_runs(head_sha)
         except Exception as e:
             raise CLIError(f"Failed to fetch check runs for PR #{pr_number}: {e}")
 
@@ -1138,7 +1137,7 @@ Respond only after the PR is created or updated:
             "prNumber": pr_number,
             "files": [
                 {
-                    "path": f.get("path"),
+                    "path": f.get("filename"),
                     "status": f.get("status") or "modified",
                     "additions": f.get("additions"),
                     "deletions": f.get("deletions")
