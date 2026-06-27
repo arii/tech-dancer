@@ -52,6 +52,11 @@ def _handle_unexpected_error(ctx, command_name, e):
     err(ctx, f"An unexpected error occurred in {command_name}.")
 
 def _get_body_content(ctx, orch, file, body):
+    if file and body:
+        err(ctx, "Provide --file or --body, not both")
+    if not file and not body:
+        err(ctx, "Provide either --file or --body")
+
     content = body if body is not None else (orch._read_safe_file(file) if file else None)
     if content is None:
         err(ctx, "Provide --file or --body")
@@ -186,10 +191,6 @@ def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, e
 @click.pass_context
 def create_issue(ctx, title, file, body):
     """Create a new GitHub issue."""
-    if file and body:
-        err(ctx, "Provide --file or --body, not both")
-    if not file and not body:
-        err(ctx, "Provide either --file or --body")
     orch = ctx.obj['ORCHESTRATOR']
     try:
         content = _get_body_content(ctx, orch, file, body)
@@ -222,10 +223,6 @@ def issue_view(ctx, issue_number):
 @click.pass_context
 def issue_update(ctx, issue_number, file, body):
     """Update a GitHub issue's body."""
-    if file and body:
-        err(ctx, "Provide --file or --body, not both")
-    if not file and not body:
-        err(ctx, "Provide either --file or --body")
     orch = ctx.obj['ORCHESTRATOR']
     try:
         content = _get_body_content(ctx, orch, file, body)
@@ -243,10 +240,6 @@ def issue_update(ctx, issue_number, file, body):
 @click.pass_context
 def issue_comment(ctx, issue_number, file, body):
     """Post a comment to a GitHub issue."""
-    if file and body:
-        err(ctx, "Provide --file or --body, not both")
-    if not file and not body:
-        err(ctx, "Provide either --file or --body")
     orch = ctx.obj['ORCHESTRATOR']
     try:
         content = _get_body_content(ctx, orch, file, body)
