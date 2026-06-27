@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/feat/stabilize-mobile-snapshots-5203909596431698698-9308420098351201281/sitemap.xml
