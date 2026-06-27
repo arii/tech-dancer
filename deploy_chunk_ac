@@ -1,0 +1,100 @@
+
+            # 6. Commit and Push
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            if git commit -m "deploy: $GITHUB_SHA [skip ci]"; then
+              if git push origin gh-pages; then
+                echo "Push successful! Deployment is in progress."
+                echo "PUSH_COMPLETE=true" >> "$GITHUB_ENV"
+                echo "VERIFIED=true" >> "$GITHUB_ENV"
+                exit 0
+              fi
+            else
+              echo "No changes to commit."
+              exit 0
+            fi
+
+            # Use exponential backoff with jitter to reduce collisions
+            RETRY_DELAY=$(( (i * 5) + (RANDOM % 10) ))
+            echo "Attempt $i failed. Retrying in ${RETRY_DELAY}s..."
+            sleep $RETRY_DELAY
+            cd - || exit
+          done
+
+          echo "Failed to deploy after $MAX_RETRIES attempts."
+          exit 1
+
+      - name: Update Deployment Feedback
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branchName = context.ref.replace('refs/heads/', '');
+            const baseUrl = `https://${owner}.github.io/${repo}/`;
+            const previewUrl = branchName === 'main' ? baseUrl : `https://${owner}.github.io/${repo}/${branchName}/`;
+            const dashboardUrl = `https://${owner}.github.io/${repo}/previews/index.html`;
+            const markerUrl = branchName === 'main'
+              ? `${baseUrl}.deploy.json`
+              : `${baseUrl}${branchName}/.deploy.json`;
+
+            const pstTime = new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            });
+
+            // Update Job Summary
+            await core.summary
+              .addHeading('🚀 Deployment Pushed!')
+              .addTable([
+                ['Site', 'URL'],
+                ['Main Site', `<a href="${baseUrl}">${baseUrl}</a>`],
+                ['Preview URL', `<a href="${previewUrl}">${previewUrl}</a>`],
+                ['Preview Dashboard', `<a href="${dashboardUrl}">${dashboardUrl}</a>`]
+              ])
+              .addRaw(`**Last updated:** ${pstTime} PST`)
+              .write();
+
+            if (branchName === 'main') return;
+
+            console.log(`Searching for open PRs for branch: ${branchName}`);
+            const pullRequests = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open'
+            });
+
+            const matchingPRs = pullRequests.filter(pr => pr.head.ref === branchName);
+            console.log(`Found ${matchingPRs.length} matching PRs`);
+
+            for (const pr of matchingPRs) {
+              console.log(`Updating feedback for PR #${pr.number}`);
+              const commentTag = `<!-- preview-url-comment-${branchName} -->`;
+              const statusLine = `🚀 **Pushed to gh-pages; publish in progress**`;
+
+              const body = [
+                `🚀 **Deployment Details** (Last updated: ${pstTime} PST)`,
+                '',
+                statusLine,
+                `- **Preview URL:** ${previewUrl}`,
+                `- **Preview Dashboard:** ${dashboardUrl}`,
+                `- **Commit SHA:** \`${process.env.GITHUB_SHA.slice(0, 7)}\``,
+                `- **Marker File:** [verify here](${markerUrl})`,
+                '',
+                commentTag
+              ].join('\n');
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: pr.number,
+              });
+
+              const existingComment = comments.find(c => c.body.includes(commentTag));
+
+              try {
+                if (existingComment) {
+                  console.log(`Updating existing comment ${existingComment.id}`);
