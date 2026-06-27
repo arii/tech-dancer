@@ -244,6 +244,51 @@ def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
     except CLIError as e:
         err(ctx, str(e), code=e.code)
 
+@gh.command('verify-versions')
+@click.argument('diff_input', required=False)
+@click.pass_context
+def verify_versions(ctx, diff_input):
+    """Verify version changes in a diff for downgrades or hard blocks."""
+    import subprocess
+    import tempfile
+    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dev_tools', 'verify_versions.py')
+
+    if diff_input and os.path.exists(diff_input):
+         with open(diff_input, "r") as f:
+             diff_input = f.read()
+    elif not diff_input:
+        # If no input provided, try to get diff against main
+        try:
+            diff_input = run_command(["git", "diff", "origin/main"])
+        except Exception as e:
+            err(ctx, f"Failed to get git diff: {e}")
+
+    # Use a temporary file to avoid E2BIG/ARG_MAX issues with large diffs
+    with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp:
+        tmp.write(diff_input)
+        tmp_path = tmp.name
+
+    cmd = [sys.executable, script_path, tmp_path]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+        os.unlink(tmp_path)
+        if proc.stdout:
+            try:
+                findings = json.loads(proc.stdout)
+                if findings:
+                    status = "error" if any(f['severity'] == 'error' for f in findings) else "success"
+                    out(ctx, f"Found {len(findings)} version issues.", data={"status": status, "findings": findings})
+                    if status == "error":
+                        sys.exit(1)
+                else:
+                    out(ctx, "✅ No version issues detected.", data={"status": "success", "findings": []})
+            except json.JSONDecodeError:
+                err(ctx, f"Invalid validator output: {proc.stdout}")
+        else:
+            err(ctx, f"Validator failed: {proc.stderr}")
+    except Exception as e:
+        err(ctx, f"Error running validator: {e}")
+
 @gh.command()
 @click.option('--pr', type=int)
 @click.pass_context

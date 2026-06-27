@@ -16,7 +16,8 @@ dependencies = [
     "PyGithub",
     "semgrep",
     "chromadb>=1.5.9",
-    "sentence-transformers>=5.6.0"
+    "sentence-transformers>=5.6.0",
+    "packaging"
 ]
 
 [project.scripts]
