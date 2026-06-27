@@ -1,10 +1,7 @@
-import subprocess
-import json
 import argparse
 import sys
 import os
-# nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
-import pickle
+import json
 from collections import defaultdict
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -17,7 +14,7 @@ def main():
     parser.add_argument("--no-cache", action="store_true", help="Bust the cache and force fetching data from GitHub")
     args = parser.parse_args()
 
-    CACHE_FILE = ".pr_cache.pkl"
+    CACHE_FILE = ".pr_cache.json"
     limit = args.limit
 
     def get_open_prs(limit):
@@ -39,15 +36,14 @@ def main():
             repo = client.get_repo(get_repo_name())
             pr = repo.get_pull(int(pr_number))
             files = pr.get_files()
-            return {f.filename for f in files if not f.filename.startswith("tests/visual.spec.ts-snapshots/")}
+            return [f.filename for f in files if not f.filename.startswith("tests/visual.spec.ts-snapshots/")]
         except Exception as e:
             print(f"Error fetching files for PR #{pr_number}: {e}", file=sys.stderr)
-            return set()
+            return []
 
     if not args.no_cache and os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'rb') as f:
-            # nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
-            cache = pickle.load(f)
+        with open(CACHE_FILE, 'r') as f:
+            cache = json.load(f)
     else:
         cache = {"prs": {}, "files": {}}
 
@@ -57,20 +53,32 @@ def main():
         cache["prs"][num] = pr['title']
         cache["files"][num] = get_pr_files(num)
 
-    with open(CACHE_FILE, 'wb') as f:
-        # nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
-        pickle.dump(cache, f)
+    with open(CACHE_FILE, 'w') as f:
+        json.dump(cache, f, indent=2)
+
+    # Convert lists to sets for calculations
+    pr_files_sets = {num: set(files) for num, files in cache["files"].items()}
 
     # 1. Report specific exact-match overlap groups
     overlap_groups = defaultdict(list)
-    for pr_num, files in cache["files"].items():
+    all_prs_nums = list(pr_files_sets.keys())
+
+    # We want to group PRs that share any file
+    # This logic is slightly different from original which grouped by frozenset of PRs
+    # but original only did exact frozenset matches. Let's stick to files.
+
+    file_to_prs = defaultdict(list)
+    for pr_num, files in pr_files_sets.items():
         for file in files:
-            touching_prs = [p for p, fs in cache["files"].items() if file in fs]
-            if len(touching_prs) > 1:
-                overlap_groups[frozenset(touching_prs)].append(file)
+            file_to_prs[file].append(pr_num)
+
+    exact_match_groups = defaultdict(list)
+    for file, pr_nums in file_to_prs.items():
+        if len(pr_nums) > 1:
+            exact_match_groups[frozenset(pr_nums)].append(file)
 
     print("--- EXACT OVERLAP GROUPS ---")
-    for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
+    for pr_set, files in sorted(exact_match_groups.items(), key=lambda x: len(x[1]), reverse=True):
         pr_list = sorted(list(pr_set), key=int)
         print(f"PRs {', '.join(pr_list)} overlap on {len(files)} files:")
         for pr in pr_list:
@@ -81,15 +89,14 @@ def main():
     # 2. Report connected clusters
     print("\n--- CONNECTED CLUSTERS ---")
     graph = defaultdict(set)
-    all_prs = list(cache["files"].keys())
-    for i, pr1 in enumerate(all_prs):
-        for pr2 in all_prs[i+1:]:
-            if cache["files"][pr1] & cache["files"][pr2]:
+    for i, pr1 in enumerate(all_prs_nums):
+        for pr2 in all_prs_nums[i+1:]:
+            if pr_files_sets[pr1] & pr_files_sets[pr2]:
                 graph[pr1].add(pr2)
                 graph[pr2].add(pr1)
 
     visited = set()
-    for pr in all_prs:
+    for pr in all_prs_nums:
         if pr not in visited and pr in graph:
             component = {pr}
             stack = [pr]
@@ -105,7 +112,7 @@ def main():
             comp_list = sorted(list(component), key=int)
             involved_files = set()
             for p in component:
-                involved_files |= cache["files"][p]
+                involved_files |= pr_files_sets[p]
 
             print(f"Cluster PRs {', '.join(comp_list)}:")
             for p in comp_list:

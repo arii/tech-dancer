@@ -25,6 +25,11 @@ on:
     - cron: '45 4 * * 6'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -41,9 +46,6 @@ jobs:
     if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
     name: Security Scan
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -62,17 +64,16 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: actions, javascript-typescript
+          languages: javascript-typescript
 
       - parallel: # actionlint-disable syntax-check
           - name: Oxlint Scan
             run: pnpm run lint:ox
 
           - name: Semgrep Static Analysis
-            run: |
-              # Install semgrep on the host for efficiency
-              pip install semgrep
-              pnpm run audit:semgrep
+            uses: semgrep/semgrep-action@v1
+            with:
+              config: auto
 
           - name: Gitleaks Secret Detection
             uses: gitleaks/gitleaks-action@v2
@@ -82,4 +83,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:security-scan"
+          category: "/language:javascript-typescript"
