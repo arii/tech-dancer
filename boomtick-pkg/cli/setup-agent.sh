@@ -81,6 +81,46 @@ pip_install() {
   python3 -m pip install --disable-pip-version-check --break-system-packages "$@"
 }
 
+# -------- Profile parsing & Venv helpers --------
+
+verify_venv() {
+  if [ -z "${VIRTUAL_ENV:-}" ]; then
+    warn "No active virtual environment detected (VIRTUAL_ENV is unset)."
+    warn "Python packages will be installed with --break-system-packages if needed."
+    warn "It is highly recommended to use a virtual environment for development."
+    if [ "${CI:-0}" != "1" ]; then
+        log "Continuing in 3 seconds... (Set VIRTUAL_ENV or use a venv to suppress this)"
+        sleep 3
+    fi
+  else
+    log "Using virtual environment: $VIRTUAL_ENV"
+  fi
+}
+
+get_active_profiles() {
+  echo "${BOOMTICK_PROFILES:-}"
+}
+
+parse_profiles_list() {
+  local profiles
+  profiles=$(get_active_profiles)
+  local active=""
+  if [[ ",$profiles," == *",ai,"* ]]; then active="$active ai"; fi
+  if [[ ",$profiles," == *",audit,"* ]]; then active="$active audit"; fi
+  echo $active
+}
+
+construct_install_args() {
+  local active_profiles
+  active_profiles=$(parse_profiles_list)
+  local args="--no-mcp"
+
+  for p in $active_profiles; do
+    args="$args --with-$p"
+  done
+  echo "$args"
+}
+
 # -------- install steps --------
 install_apt_tools() {
   if [ "$SKIP_APT" = "1" ]; then
@@ -182,37 +222,49 @@ install_python_deps() {
   have python3 || err "python3 is required."
   python3 -m pip --version || err "pip is required."
 
-  # Check if td-cli is already installed and functional to avoid redundant setup
-  if have td-cli && td-cli --version >/dev/null 2>&1; then
-    log "td-cli already installed and functional; skipping Python dependency setup."
+  verify_venv
+
+  # Detect if we should use --system flag with uv
+  local uv_flags=""
+  if [ -z "${VIRTUAL_ENV:-}" ]; then
+    uv_flags="--system"
+  fi
+
+  # ETL dependencies - always check and sync
+  log "Checking ETL dependencies..."
+  if [ -f "etl/requirements-lock.txt" ]; then
+    if have uv; then
+      uv pip install $uv_flags --break-system-packages -r etl/requirements-lock.txt
+    else
+      pip_install --root-user-action=ignore -r etl/requirements-lock.txt
+    fi
+  elif [ -f "etl/requirements.txt" ]; then
+    pip_install --root-user-action=ignore -r etl/requirements.txt
+  fi
+
+  # Check if td-cli is already installed and functional
+  if have td-cli && td doctor >/dev/null 2>&1 && [ "${FORCE_SETUP:-0}" != "1" ]; then
+    log "td-cli already installed and functional; skipping CLI dependency setup."
     return 0
   fi
 
   log "Installing Python dependencies for dev tools..."
 
-  # Determine profiles from environment variable
-  local profiles="${BOOMTICK_PROFILES:-}"
-  local install_args="--no-mcp"
-
-  if [[ ",$profiles," == *",ai,"* ]]; then
-    install_args="$install_args --with-ai"
-  fi
-  if [[ ",$profiles," == *",audit,"* ]]; then
-    install_args="$install_args --with-audit"
-  fi
+  local active_profiles
+  active_profiles=$(parse_profiles_list)
+  local install_args
+  install_args=$(construct_install_args)
 
   # Use uv if available for faster resolution
   if have uv; then
     log "Using uv for high-speed Python dependency setup..."
-    # Install core dependencies using locked file first for maximum speed
-    uv pip install --break-system-packages -r boomtick-pkg/cli/requirements-core.txt
-
-    if [[ ",$profiles," == *",ai,"* ]]; then
-        uv pip install --break-system-packages -r boomtick-pkg/cli/requirements-ai.txt
-    fi
-    if [[ ",$profiles," == *",audit,"* ]]; then
-        uv pip install --break-system-packages -r boomtick-pkg/cli/requirements-audit.txt
-    fi
+    local req_files="-r boomtick-pkg/cli/requirements-core.txt"
+    for p in $active_profiles; do
+      if [ -f "boomtick-pkg/cli/requirements-$p.txt" ]; then
+        req_files="$req_files -r boomtick-pkg/cli/requirements-$p.txt"
+      fi
+    done
+    uv pip install $uv_flags --break-system-packages $req_files
 
     # Still run install.sh to ensure editable install and script entrypoints
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh $install_args)
@@ -224,17 +276,6 @@ install_python_deps() {
       # Fallback for legacy structure if any
       pip_install --root-user-action=ignore requests python-dotenv pydantic click PyGithub
     fi
-  fi
-
-  # ETL dependencies
-  if [ -f "etl/requirements-lock.txt" ]; then
-    if have uv; then
-      uv pip install --break-system-packages -r etl/requirements-lock.txt
-    else
-      pip_install --root-user-action=ignore -r etl/requirements-lock.txt
-    fi
-  elif [ -f "etl/requirements.txt" ]; then
-    pip_install --root-user-action=ignore -r etl/requirements.txt
   fi
 
   have td-cli || err "td-cli not found on PATH after installation."
@@ -331,7 +372,7 @@ run_validation() {
     pnpm run check:runtime-files || warn "Runtime file check failed."
     pnpm run doctor || warn "Runtime doctor check failed."
   fi
-  command -v td && td gh --help > /dev/null
+  command -v td && td doctor > /dev/null
   log "Setup complete."
 }
 
