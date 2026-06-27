@@ -44,7 +44,7 @@ async function main() {
       graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
     } catch (err: unknown) {
       const error = err as Error;
-      throw new Error(`Failed to execute dependency-cruiser: ${error.message}`, { cause: error });
+      throw new Error(`Failed to execute dependency-cruiser: ${error.message}`, { cause: err });
     }
 
     let graph: DependencyGraph;
@@ -52,7 +52,7 @@ async function main() {
       graph = JSON.parse(graphJson);
     } catch (err: unknown) {
       const error = err as Error;
-      throw new Error(`Failed to parse dependency-cruiser output as JSON. Output: ${graphJson.slice(0, 500)}... Error: ${error.message}`, { cause: error });
+      throw new Error(`Failed to parse dependency-cruiser output as JSON. Output: ${graphJson.slice(0, 500)}... Error: ${error.message}`, { cause: err });
     }
 
     const reverseMap = buildReverseMap(graph);
