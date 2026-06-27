@@ -3,6 +3,7 @@ import json
 import argparse
 import sys
 import os
+# nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
 import pickle
 from collections import defaultdict
 

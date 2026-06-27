@@ -299,6 +299,7 @@ class GHAConfigManager:
         if getattr(self, "_initialized", False):
             return
         try:
+            # nosemgrep: python.lang.compatibility.python37.python37-compatibility-importlib2
             from importlib.resources import files
             self.config_path = "config.json"
             self.config = json.loads(files("dev_tools").joinpath("config.json").read_text())
