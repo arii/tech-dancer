@@ -7,6 +7,7 @@ on:
       - 'src/**'
       - 'etl/**'
       - 'dev-tools/**'
+      - 'boomtick-mcp/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -23,6 +24,7 @@ on:
       - 'src/**'
       - 'etl/**'
       - 'dev-tools/**'
+      - 'boomtick-mcp/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -63,12 +65,16 @@ jobs:
       contents: write
 
   lint-typecheck:
-    name: Lint & Type Check
+    name: Lint & Type Check (${{ matrix.target }})
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/arii/tech-dancer:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [root, boomtick-mcp]
     steps:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -84,66 +90,11 @@ jobs:
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
 
-      - name: Validate Runtime
-        shell: bash
-        run: |
-          echo "::group::Validate Runtime"
-          trap 'echo "::endgroup::"' EXIT
-          pnpm run check:runtime-files
-          pnpm run doctor
-
-      - name: Verify lockfile integrity
-        shell: bash
-        run: |
-          echo "::group::pnpm install"
-          trap 'echo "::endgroup::"' EXIT
-          pnpm install --frozen-lockfile
-          echo "::endgroup::"
-          trap - EXIT
-
-          if ! git diff --quiet pnpm-lock.yaml; then
-            echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
-            exit 1
-          fi
-
-      - name: Verify Agent Context
-        continue-on-error: true
-        run: |
-          pnpm run agent:prime
-          if ! git diff --quiet .agent-context.json; then
-            echo "::warning::.agent-context.json is out of date. Run 'pnpm run agent:prime' and commit the changes."
-            git diff .agent-context.json
-          fi
-
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Type-check
-        run: pnpm run type-check
-
-      - name: Run Unit Tests - Vitest
-        run: pnpm test
-
-      - name: Run CLI Unit Tests
-        shell: bash
-        run: |
-          echo "::group::Pytest"
-          trap 'echo "::endgroup::"' EXIT
-          python3 -m pytest tests/dev-tools/test_modern_cli.py
-
-      - name: Check for dead code
-        run: pnpm run knip
-
-      - name: TypeScript `any` Ratchet
-        shell: bash
-        run: |
-          echo "::group::Ratchet Any"
-          trap 'echo "::endgroup::"' EXIT
-          # Ensure local python bin is on path for td-cli
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td-cli gh ratchet-any
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Project Gate
+        uses: ./.github/actions/run-project-gate
+        with:
+          target: ${{ matrix.target }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   audit:
     name: Anti-Pattern Audit
@@ -172,30 +123,30 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
 
-      - name: UI Anti-Pattern Audit - Gate
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "::group::Audit"
-          trap 'echo "::endgroup::"' EXIT
-          # Ensure local python bin is on path for td-cli
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
-          td-cli gh audit-gate
+      - parallel:
+          - name: UI Anti-Pattern Audit - Gate
+            shell: bash
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              echo "::group::Audit"
+              trap 'echo "::endgroup::"' EXIT
+              # Ensure local python bin is on path for td
+              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+              if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
+              td gh audit-gate
 
-      - name: Design Token Compliance
-        run: |
-          # Check for raw hex colors not in tokens.css
-          VIOLATIONS=$(grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages \
-            --include="*.tsx" \
-            | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
-          if [ "$VIOLATIONS" -gt 0 ]; then
-            echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
-            grep -rn '#[0-9a-fA-F]\{3,6\}' src/features src/pages --include="*.tsx" | grep -v "design-tokens\|tokens.css"
-            exit 1
-          fi
-          echo "✅ Design token compliance passed."
+          - name: Design Token Compliance
+            run: |
+              # Dynamic search for TSX files to avoid hardcoded paths.
+              VIOLATIONS=$(find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -h '#[0-9a-fA-F]\{3,6\}' \
+                | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
+              if [ "$VIOLATIONS" -gt 0 ]; then
+                echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
+                find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -rn '#[0-9a-fA-F]\{3,6\}' | grep -v "design-tokens\|tokens.css"
+                exit 1
+              fi
+              echo "✅ Design token compliance passed."
 
   test-build:
     name: Build & E2E
@@ -235,12 +186,14 @@ jobs:
 
 
       - name: Bundle Size Check
+        id: bundle-size
+        background: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Ensure local python bin is on path for td-cli
+          # Ensure local python bin is on path for td
           export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td-cli gh bundle-size
+          td gh bundle-size
 
       - name: Run Playwright Smoke Test
         run: |
@@ -277,6 +230,17 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      - name: Wait for Bundle Size Check
+        wait: bundle-size
+
+      - name: Verify Bundle Size Check
+        if: always()
+        run: |
+          if [ "${{ steps.bundle-size.outcome }}" = "failure" ]; then
+            echo "Bundle Size Check failed in background"
+            exit 1
+          fi
+
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
@@ -306,24 +270,19 @@ jobs:
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Deployment Impact Analysis
-        run: pnpm run impact:analysis
-      - name: Build Main
-        env:
-          DISABLE_MINIFY: true
-        run: pnpm run impact:build-main
-      - name: Build PR
-        env:
-          VITE_BASE_PATH: /
-          DISABLE_MINIFY: true
-        run: pnpm run build:review
-      - name: Visual Diff
-        run: pnpm run impact:visual-diff
-      - name: DOM Diff
-        run: pnpm run impact:dom-diff
-      - name: Check if visual changes exist
-        id: check_visuals
-        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+      - parallel:
+          - name: Deployment Impact Analysis
+            run: pnpm run impact:analysis
+          - name: Build Main
+            env:
+              DISABLE_MINIFY: true
+            run: pnpm run impact:build-main
+          - name: Build PR
+            env:
+              VITE_BASE_PATH: /
+              DISABLE_MINIFY: true
+            run: pnpm run build:review
+
       - name: Code review agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
@@ -331,23 +290,37 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run impact:gemini-code-review
+
       - name: Code review github models agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run impact:github-models-code-review
+
+      - parallel:
+          - name: Visual Diff
+            run: pnpm run impact:visual-diff
+          - name: DOM Diff
+            run: pnpm run impact:dom-diff
+
+      - name: Check if visual changes exist
+        id: check_visuals
+        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+
       - name: Visual review agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run impact:gemini-review
+
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run impact:github-models-review
+
       - name: Report Summary
         if: always()
         run: |
@@ -421,9 +394,7 @@ jobs:
               fi
             done
           fi
-          if [ "$FAILED" -ne 0 ]; then
-            exit 1
-          fi
+          exit $FAILED
       - name: Parse Jules session ID from PR description
         if: always()
         id: parse_jules

@@ -31,10 +31,11 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # ── Node.js 24.16.0 (matches .node-version / runtime contract) ────────────────
-ENV NODE_MAJOR=24
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
-  && apt-get install -y nodejs \
-  && node --version
+# ── Node.js 24.16.0 (pinned) ────────────────────────────────────────────────
+ENV NODE_VERSION=24.16.0
+RUN curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz \
+  | tar -xJ -C /usr/local --strip-components=1 && \
+  node --version
 
 # ── pnpm 10.28.2 via corepack (matches AGENTS.md runtime contract) ─────────────
 ENV PNPM_VERSION=10.28.2
@@ -80,9 +81,10 @@ RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-p
 
 # ── pnpm Dependencies (Pre-bake) ──────────────────────────────────────────────
 # Copy lockfile and workspace config to pre-install dependencies
-COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --chown=pwuser:pwuser package.json pnpm-lock.yaml pnpm-workspace.yaml .node-version ./
 COPY --chown=pwuser:pwuser boomtick-pkg/mcp/package.json ./boomtick-pkg/mcp/
+COPY --chown=pwuser:pwuser scripts/ ./scripts/
 
 USER pwuser
 
-RUN --mount=type=cache,id=pnpm,uid=1000,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,uid=1001,target=/pnpm/store pnpm install --frozen-lockfile
