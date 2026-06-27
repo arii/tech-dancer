@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import { Box, Stack, Text, Button, type TextProps } from '@/layouts/Primitives';
+import { Box, Stack, Text, Button, type TextProps, type BoxProps } from '@/layouts/Primitives';
 import { BaseCard } from '@/components/ui/BaseCard';
 import { MerchImageDisplay } from '@/components/products/MerchImageDisplay';
 import type { ProductCatalogItem } from '@/data/products/catalog';
@@ -10,13 +10,15 @@ export function ProductCard({
   item,
   isFeatured,
   clampTitle = isFeatured ? 0 : 2,
-  clampDescription = isFeatured ? 0 : 2
+  clampDescription = isFeatured ? 0 : 2,
+  className,
+  ...props
 }: {
   item: ProductCatalogItem;
   isFeatured?: boolean;
   clampTitle?: TextProps['clamp'];
   clampDescription?: TextProps['clamp'];
-}) {
+} & Omit<BoxProps, 'children'>) {
   // Use "SEE OPTIONS" if there might be multiple configurations, otherwise "VIEW ON PRINTFUL"
   const ctaText = item.imageDisplayMode === 'both-equal' || (item.images && item.images.length > 1)
     ? 'SEE OPTIONS'
@@ -32,9 +34,11 @@ export function ProductCard({
       maxWidth="full"
       className={cn(
         "hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow",
-        isFeatured && "border-accent/20 bg-accent/5"
+        isFeatured && "border-accent/20 bg-accent/5",
+        className
       )}
       data-testid="product-card"
+      {...props}
     >
       <MerchImageDisplay
         title={item.title}
