@@ -620,10 +620,37 @@ class Orchestrator:
 
         return {"node": actual_node, "pnpm": actual_pnpm}
 
-    def verify_ci_metrics(self):
+    def verify_ci_metrics(self, **kwargs):
         """Verifies CI metrics against predefined thresholds."""
         from dev_tools.utils import verify_ci_metrics
-        return verify_ci_metrics()
+        return verify_ci_metrics(**kwargs)
+
+    def generate_ci_summary_report(self):
+        """Generates a markdown summary of CI metrics."""
+        metrics_res = self.verify_ci_metrics()
+
+        report = ["## 📊 CI Metrics Verification"]
+
+        if metrics_res['status'] == 'error':
+            report.append(f"❌ **FAILED**: {metrics_res['message']}")
+        elif metrics_res['status'] == 'warning':
+            report.append(f"⚠️  **WARNING**: {metrics_res['message']}")
+        else:
+            report.append("✅ **PASSED**: All metrics within limits.")
+
+        if 'metrics' in metrics_res:
+            m = metrics_res['metrics']
+            report.append("\n### AI Token Usage")
+            report.append(f"- **Input:** {m['inputTokens']} / {m['inputThreshold']}")
+            report.append(f"- **Output:** {m['outputTokens']} / {m['outputThreshold']}")
+            report.append(f"- **Total:** {m['totalTokens']} / {m['totalThreshold']}")
+
+            report.append("\n<details><summary>Raw Metrics JSON</summary>\n")
+            report.append("```json")
+            report.append(json.dumps(metrics_res, indent=2))
+            report.append("```\n</details>")
+
+        return "\n".join(report)
 
     def pre_submit_checks(self):
         results = {"steps": []}

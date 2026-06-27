@@ -8,6 +8,7 @@ import urllib.error
 import urllib.parse
 import re
 import random
+from pathlib import Path
 from typing import Optional, Union, List, Dict
 try:
     from tdw_services.utils import log_info, log_error, log_warn
@@ -184,27 +185,33 @@ def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: O
     """Verifies that the aggregated AI token usage in the current run is within limits."""
     # Use environment variables if provided, otherwise use documented defaults
     # Note: Docs specify 150k input, 50k output, 200k total.
-    input_limit = input_threshold if input_threshold is not None else int(os.environ.get("MAX_INPUT_TOKENS", 150000))
-    output_limit = output_threshold if output_threshold is not None else int(os.environ.get("MAX_OUTPUT_TOKENS", 50000))
-    total_limit = total_threshold if total_threshold is not None else int(os.environ.get("MAX_TOTAL_TOKENS", 200000))
+    def get_limit(val, env_key, default):
+        if val is not None: return int(val)
+        try:
+            return int(os.environ.get(env_key, default))
+        except (ValueError, TypeError):
+            return default
+
+    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", 150000)
+    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", 50000)
+    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", 200000)
 
     # Threshold validation
     if input_limit < 0 or output_limit < 0 or total_limit < 0:
         raise CLIError("Thresholds must be non-negative integers.")
 
-    log_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "ai")
-    log_file = os.path.join(log_dir, "review-run.jsonl")
+    # Use Path for robust path resolution
+    log_file = Path(os.getcwd()) / "boomtick-pkg" / "cli" / "logs" / "ai" / "review-run.jsonl"
 
-    if not os.path.exists(log_file):
+    if not log_file.exists():
         # In multi-job CI, this might happen if logs weren't shared.
-        # We treat it as a warning since we can't verify what we don't have.
-        return {"status": "warning", "message": "No AI usage logs found. Ensure logs are shared between jobs."}
+        return {"status": "warning", "message": f"No AI usage logs found at {log_file}. Ensure logs are shared between jobs."}
 
     total_input = 0
     total_output = 0
 
     try:
-        with open(log_file, "r") as f:
+        with log_file.open("r") as f:
             for line in f:
                 if not line.strip(): continue
                 entry = json.loads(line)

@@ -460,36 +460,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYTHONPATH: boomtick-pkg/cli
         run: |
-          METRICS_FAILED=0
-          # Use temporary file to avoid multiple individual redirects (SC2129)
-          SUMMARY_FILE=$(mktemp)
+          # Generate the markdown report using the CLI
+          python3 boomtick-pkg/cli/dev_tools/td_cli.py gh summary-report >> "$GITHUB_STEP_SUMMARY"
 
-          echo "## 📊 CI Metrics Verification" >> "$SUMMARY_FILE"
-
-          # 1. AI Token Usage
-          echo "### AI Token Usage" >> "$SUMMARY_FILE"
-
-          # Capture output and check exit code directly (SC2181)
-          if METRICS_JSON=$(python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics 2>/dev/null); then
-             echo "✅ AI Token usage within limits." >> "$SUMMARY_FILE"
-          else
-             echo "❌ AI Token usage exceeded thresholds." >> "$SUMMARY_FILE"
-             METRICS_FAILED=1
-          fi
-
-          if [ -n "$METRICS_JSON" ]; then
-            {
-              echo '```json'
-              echo "$METRICS_JSON" | jq '.'
-              echo '```'
-            } >> "$SUMMARY_FILE"
-          fi
-
-          # Append temporary summary to the official one
-          cat "$SUMMARY_FILE" >> "$GITHUB_STEP_SUMMARY"
-          rm "$SUMMARY_FILE"
-
-          if [ "$METRICS_FAILED" -eq 1 ]; then
+          # Perform the hard failure assertion
+          if ! python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics > /dev/null 2>&1; then
             echo "❌ CI Metrics verification failed."
             exit 1
           fi

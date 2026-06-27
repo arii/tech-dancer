@@ -463,6 +463,15 @@ def verify_metrics(ctx):
 
 @gh.command()
 @click.pass_context
+def summary_report(ctx):
+    """Generate a markdown report of CI metrics for GHA Step Summary."""
+    orch = ctx.obj['ORCHESTRATOR']
+    report = orch.generate_ci_summary_report()
+    # Always print as raw text to stdout for GHA redirection
+    click.echo(report)
+
+@gh.command()
+@click.pass_context
 def pre_submit(ctx):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.pre_submit_checks()
