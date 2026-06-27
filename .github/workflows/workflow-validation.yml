@@ -48,8 +48,5 @@ jobs:
           # not yet support these new GitHub Actions features.
           ./actionlint \
             -ignore 'step must run script with "run" section' \
-            -ignore 'unexpected key "background"' \
-            -ignore 'unexpected key "parallel"' \
-            -ignore 'unexpected key "wait"' \
             -color
         shell: bash
