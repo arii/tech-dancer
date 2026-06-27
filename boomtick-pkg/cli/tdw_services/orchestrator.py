@@ -13,7 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
-from tdw_services.utils import log_error
+from tdw_services.utils import log_error, get_or_create_log_dir
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -166,9 +166,8 @@ class Orchestrator:
 
         pr_diff = self.github.fetch_pr_diff(pr_number)
         diff_hash = self._hash_content(pr_diff)
-        # Store cache in boomtick-pkg/cli/logs/reviews/ to avoid /tmp Security Error
-        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
-        os.makedirs(review_dir, exist_ok=True)
+        # Store cache in local logs directory to avoid /tmp Security Error
+        review_dir = get_or_create_log_dir("reviews")
         cache_file = os.path.join(review_dir, f"review_cache_{pr_number}_{diff_hash}.json")
         if os.path.exists(cache_file):
             with open(cache_file, 'r') as f: return json.load(f)
@@ -478,7 +477,7 @@ class Orchestrator:
         return updates
 
     def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event: Optional[str] = None) -> Dict[str, Any]:
-        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
+        review_dir = get_or_create_log_dir("reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
         res = {"pr": pr_number, "files": {}}
         if fetch:
@@ -716,8 +715,7 @@ class Orchestrator:
                 if os.path.exists(os.path.join(original_cwd, "node_modules")):
                     os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
             # Create temporary log file within repo root logs/
-            log_dir = os.path.join(original_cwd, "boomtick-pkg", "cli", "logs", "repair")
-            os.makedirs(log_dir, exist_ok=True)
+            log_dir = get_or_create_log_dir("repair")
             with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False, dir=log_dir) as tmp_log:
                 tmp_log.write(logs_content); tmp_log_path = tmp_log.name
             cmd = [sys.executable, repair_script, tmp_log_path]
