@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath("boomtick-pkg/cli/dev_tools"))
 from tdw_services.services.github import GitHubClient
 
 class TestGitHubClientNoGH(unittest.TestCase):
-    @patch('tdw_services.services.github.requests.request')
+    @patch('tdw_services.services.github.requests.Session.request')
     @patch('tdw_services.services.github.subprocess.run')
     def test_fetch_check_runs_no_gh(self, mock_run, mock_request):
         # Mock requests response
@@ -28,7 +28,55 @@ class TestGitHubClientNoGH(unittest.TestCase):
             if isinstance(args, list) and args[0] == "gh":
                 self.fail(f"gh was called with {args}")
 
-    @patch('tdw_services.services.github.requests.request')
+    @patch('tdw_services.services.github.requests.Session.request')
+    def test_list_pull_requests_pagination(self, mock_request):
+        mock_response1 = MagicMock()
+        mock_response1.json.return_value = [{"number": i} for i in range(1, 101)]
+        mock_response1.status_code = 200
+
+        mock_response2 = MagicMock()
+        mock_response2.json.return_value = [{"number": 101}]
+        mock_response2.status_code = 200
+
+        mock_request.side_effect = [mock_response1, mock_response2]
+
+        client = GitHubClient(token="fake_token", repo="owner/repo")
+        prs = client.list_pull_requests(limit=105)
+
+        self.assertEqual(len(prs), 101)
+        self.assertEqual(mock_request.call_count, 2)
+
+        # Verify params
+        call1_params = mock_request.call_args_list[0][1]['params']
+        self.assertEqual(call1_params['page'], 1)
+        self.assertEqual(call1_params['per_page'], 100)
+
+        call2_params = mock_request.call_args_list[1][1]['params']
+        self.assertEqual(call2_params['page'], 2)
+
+    @patch('tdw_services.services.github.requests.Session.request')
+    def test_list_pull_requests_labels_search(self, mock_request):
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"items": [{"number": 123}]}
+        mock_response.status_code = 200
+        mock_request.return_value = mock_response
+
+        client = GitHubClient(token="fake_token", repo="owner/repo")
+        prs = client.list_pull_requests(labels=["bug", "ui"])
+
+        self.assertEqual(len(prs), 1)
+        self.assertEqual(prs[0]['number'], 123)
+
+        # Verify search query
+        call_args = mock_request.call_args
+        self.assertEqual(call_args[0][1], "https://api.github.com/search/issues")
+        q = call_args[1]['params']['q']
+        self.assertIn("repo:owner/repo", q)
+        self.assertIn("is:pr", q)
+        self.assertIn('label:"bug"', q)
+        self.assertIn('label:"ui"', q)
+
+    @patch('tdw_services.services.github.requests.Session.request')
     @patch('tdw_services.services.github.subprocess.run')
     def test_list_pull_requests_no_gh(self, mock_run, mock_request):
         mock_response = MagicMock()

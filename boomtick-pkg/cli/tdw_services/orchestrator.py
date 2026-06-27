@@ -13,7 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
-from tdw_services.utils import log_error
+from tdw_services.utils import log_error, ensure_dir
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -166,7 +166,8 @@ class Orchestrator:
 
         pr_diff = self.github.fetch_pr_diff(pr_number)
         diff_hash = self._hash_content(pr_diff)
-        cache_file = f"/tmp/review_cache_{pr_number}_{diff_hash}.json"
+        cache_dir = ensure_dir("logs", "cache")
+        cache_file = os.path.join(cache_dir, f"review_cache_{pr_number}_{diff_hash}.json")
         if os.path.exists(cache_file):
             with open(cache_file, 'r') as f: return json.load(f)
         review_result = self.ai.generate_code_review(pr_details, pr_diff)
@@ -475,7 +476,7 @@ class Orchestrator:
         return updates
 
     def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event: Optional[str] = None) -> Dict[str, Any]:
-        review_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "reviews")
+        review_dir = ensure_dir("logs", "reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
         res = {"pr": pr_number, "files": {}}
         if fetch:
@@ -527,7 +528,6 @@ class Orchestrator:
                         elif line.startswith('-'): annotated.append(f"     |{line}")
                         else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
                 context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
-            os.makedirs(review_dir, exist_ok=True)
             with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
             template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
 

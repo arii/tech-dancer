@@ -18,6 +18,11 @@ class GitHubClient:
         if not self.repo:
             self.repo = self._detect_repo()
         self.base_url = "https://api.github.com"
+        self._session = requests.Session()
+        self._session.headers.update({
+            "Authorization": f"Bearer {self.token}",
+            "Accept": "application/vnd.github.v3+json",
+        })
 
     def _detect_repo(self) -> str:
         try:
@@ -55,13 +60,14 @@ class GitHubClient:
 
     def _request(self, method: str, path: str, json_data: Optional[Dict] = None, params: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
-        headers = {
-            "Authorization": f"Bearer {self.token}",
-            "Accept": accept or ("application/vnd.github.v3.diff" if is_text else "application/vnd.github.v3+json"),
-        }
+        headers = {}
+        if accept:
+            headers["Accept"] = accept
+        elif is_text:
+            headers["Accept"] = "application/vnd.github.v3.diff"
 
         try:
-            response = requests.request(
+            response = self._session.request(
                 method,
                 url,
                 headers=headers,
@@ -125,8 +131,15 @@ class GitHubClient:
                 batch = data.get('items', [])
                 if not batch:
                     break
-                all_results.extend(batch)
-                if len(batch) < per_page:
+
+                # Fetch full PR details for each search result to ensure head/base fields are populated
+                for item in batch:
+                    full_pr = self.fetch_pr_details(item['number'])
+                    all_results.append(full_pr)
+                    if len(all_results) >= limit:
+                        break
+
+                if len(batch) < per_page or len(all_results) >= limit:
                     break
                 page += 1
             return all_results[:limit]
@@ -160,15 +173,15 @@ class GitHubClient:
         job_id = str(external_id) if external_id is not None else str(check_run_id)
         try:
             # GitHub API returns a 302 redirect to a URL that expires after a few minutes
-            # We explicitly set Accept to None or a generic type to avoid the .diff default in _request
-            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json", allow_redirects=True)
+            # Using 'application/vnd.github.v3.raw' ensures we get the plain text logs
+            return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3.raw", allow_redirects=True)
         except Exception as e:
             error_msg = str(e)
             if external_id is not None and "404" in error_msg:
                 # Fallback to query by raw check_run_id
                 job_id = str(check_run_id)
                 try:
-                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3+json")
+                    return self._request('GET', f'/repos/{self.repo}/actions/jobs/{job_id}/logs', is_text=True, accept="application/vnd.github.v3.raw")
                 except Exception as fallback_e:
                     return f"Failed to fetch logs for job {job_id} after fallback: {str(fallback_e)}"
             return f"Failed to fetch logs for job {job_id}: {error_msg}"
