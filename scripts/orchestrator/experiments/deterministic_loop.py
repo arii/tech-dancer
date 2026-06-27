@@ -2,14 +2,19 @@ import subprocess
 import json
 import time
 import re
+import os
 from datetime import datetime
 
 CLI_BASE = ["python3", "boomtick-pkg/cli/dev_tools/td_cli.py"]
 
 def run_cli(args):
     cmd = CLI_BASE + args
+    env = os.environ.copy()
+    existing_path = env.get("PYTHONPATH", "")
+    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+    env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         return "" # Suppress for deterministic looping checks
@@ -40,7 +45,7 @@ def dispatch_payload(task_type, target_id):
         payload["task_objective"] = f"Review Pull Request #{target_id}. Ensure CI tests pass and no deprecations are introduced."
         
     print(f"Dispatching {task_type} for target {payload['target_id']}")
-    subprocess.run(CLI_BASE + ["agent", "dispatch", "main", json.dumps(payload)])
+    run_cli(["agent", "dispatch", "main", json.dumps(payload)])
 
 def deterministic_routing_loop(poll_interval=3600):
     print("Starting Deterministic Orchestrator Loop...")
