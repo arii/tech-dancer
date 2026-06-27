@@ -22,16 +22,10 @@ runs:
 
     - name: pnpm install
       shell: bash
-      env:
-        TARGET: ${{ inputs.target }}
       run: |
         echo "::group::pnpm install"
         trap 'echo "::endgroup::"' EXIT
-        if [ "$TARGET" = "root" ]; then
-          pnpm install --frozen-lockfile
-        else
-          pnpm install --frozen-lockfile --filter "$TARGET"
-        fi
+        pnpm install --frozen-lockfile
 
     - name: Verify lockfile integrity (root only)
       if: inputs.target == 'root'
