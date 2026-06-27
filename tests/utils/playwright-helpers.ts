@@ -4,6 +4,21 @@ import type { Page } from '@playwright/test';
  * Disables all CSS animations and transitions on the page to ensure
  * visual snapshot consistency.
  */
+export async function disableAnimations(page: Page) {
+  await page.addStyleTag({
+    content: `
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        animation-duration: 0s !important;
+        transition-duration: 0s !important;
+        view-transition-name: none !important;
+        scroll-behavior: auto !important;
+      }
+    `
+  });
+}
+
 /**
  * Returns a standard array of locators to mask during visual regression testing.
  * This prevents dynamic content (dates, timers, commit hashes) from causing
@@ -27,15 +42,37 @@ export function getVisualTestMasks(page: Page) {
   ];
 }
 
-export async function disableAnimations(page: Page) {
-  await page.addStyleTag({
-    content: `
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-        animation-duration: 0s !important;
-        transition-duration: 0s !important;
+/**
+ * Scrolls the page to the bottom to trigger any lazy loaded content,
+ * then scrolls back to the top to ensure a stable layout before a full page snapshot.
+ */
+export async function scrollToSettle(page: Page) {
+  await page.evaluate(async () => {
+    const scrollable = document.querySelector('main') || document.documentElement;
+
+    const waitForScrollHeightToSettle = async () => {
+      let lastHeight = -1;
+      let unchangedCount = 0;
+
+      while (unchangedCount < 3) {
+        scrollable.scrollTo(0, scrollable.scrollHeight);
+        const currentHeight = scrollable.scrollHeight;
+
+        if (currentHeight === lastHeight) {
+          unchangedCount++;
+        } else {
+          unchangedCount = 0;
+          lastHeight = currentHeight;
+        }
+
+        // Minimal task yield to allow for layout/lazy-loading triggers
+        await new Promise(requestAnimationFrame);
       }
-    `
+    };
+
+    await waitForScrollHeightToSettle();
+    scrollable.scrollTo(0, 0);
+    // Ensure paint settlement
+    await new Promise(requestAnimationFrame);
   });
 }
