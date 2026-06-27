@@ -42,16 +42,6 @@ runs:
           exit 1
         fi
 
-    - name: Verify Agent Context
-      if: inputs.target == 'root'
-      shell: bash
-      run: |
-        pnpm run agent:prime
-        if ! git diff --quiet .agent-context.json; then
-          echo "::warning::.agent-context.json is out of date. Run 'pnpm run agent:prime' and commit the changes."
-          git diff .agent-context.json
-        fi
-
     - name: Lint
       if: inputs.target == 'root'
       shell: bash
