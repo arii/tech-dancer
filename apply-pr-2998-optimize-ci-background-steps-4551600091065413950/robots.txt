@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/apply-pr-2998-optimize-ci-background-steps-4551600091065413950/sitemap.xml
