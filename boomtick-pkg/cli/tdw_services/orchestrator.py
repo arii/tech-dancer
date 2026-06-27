@@ -10,7 +10,7 @@ from typing import Dict, Any, List, Optional, Tuple, TypeVar, Protocol
 from urllib.parse import quote, urlparse
 from collections import defaultdict
 
-from tdw_services.entity_types import PullRequestDetails, IssueDetails, PullRequestProtocol
+from tdw_services.entity_types import PullRequestDetails, IssueDetails, PullRequestProtocol, CheckResults
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
@@ -88,7 +88,7 @@ class Orchestrator:
         if os.path.exists(worktree_path):
             raise CLIError(f"Failed to clean up worktree directory: {worktree_path}")
 
-    def evaluate_pr_heuristics(self, pr: PullRequestDetails, diff: str, checks: Dict[str, Any]) -> str:
+    def evaluate_pr_heuristics(self, pr: PullRequestDetails, diff: str, checks: CheckResults) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
         is_ui = any(indicator in diff for indicator in UI_INDICATORS)
         is_python = ".py" in diff
@@ -663,55 +663,29 @@ class Orchestrator:
 
     def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
         """Fetches CI logs for failing (or all) check runs in a PR."""
-        # Get PR head SHA
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefOid"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_sha = pr_data.get("headRefOid")
+        # Get PR details to get head SHA
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_sha = pr_data.get("head", {}).get("sha")
 
         if not head_sha:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get check runs
-        stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
-        ])
-        try:
-            data = json.loads(stdout_checks)
-            checks = []
-            for run in data.get("check_runs", []):
-                checks.append({
-                    'id': run.get('id'),
-                    'name': run.get('name'),
-                    'status': run.get('status'),
-                    'conclusion': run.get('conclusion'),
-                    'url': run.get('html_url'),
-                    'external_id': run.get('external_id')
-                })
-        except json.JSONDecodeError:
-            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
-
+        checks = self.github.fetch_check_runs(head_sha)
         failed_checks = [c for c in checks if c.get("conclusion") == "failure"]
 
         logs = {}
         # Get check suites to find workflow runs
-        stdout_suites = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-suites"
-        ])
-        check_suites = json.loads(stdout_suites).get("check_suites", [])
+        res_suites = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-suites')
+        check_suites = res_suites.get("check_suites", [])
 
         for suite in check_suites:
-            stdout_runs = self.github.run_authenticated_gh([
-                "api", f"/repos/:owner/:repo/check-suites/{suite['id']}/check-runs"
-            ])
-            runs = json.loads(stdout_runs).get("check_runs", [])
+            res_runs = self.github._request('GET', f'/repos/{self.github.repo}/check-suites/{suite["id"]}/check-runs')
+            runs = res_runs.get("check_runs", [])
             for run in runs:
                 if include_all or run.get("conclusion") == "failure":
                     try:
-                        log_content = self.github.run_authenticated_gh([
-                            "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
-                        ])
+                        log_content = self.github.fetch_check_run_logs(run["id"], external_id=run.get("external_id"))
                         logs[run["name"]] = log_content[:10000]
                     except Exception:
                         pass
@@ -724,35 +698,24 @@ class Orchestrator:
 
     def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
         """Fetches and combines all CI logs for the latest workflow run of a PR."""
-        # Get PR head SHA
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefOid"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_sha = pr_data.get("headRefOid")
+        # Get PR details to get head SHA
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_sha = pr_data.get("head", {}).get("sha")
 
         if not head_sha:
             raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
         # Get all check runs for this SHA
         # Use full API response to be more robust
-        stdout_checks = self.github.run_authenticated_gh([
-            "api", f"/repos/:owner/:repo/commits/{head_sha}/check-runs"
-        ])
-        try:
-            data = json.loads(stdout_checks)
-            check_runs = data.get("check_runs", [])
-        except json.JSONDecodeError:
-            raise CLIError(f"Failed to parse check runs for PR #{pr_number}")
+        res_checks = self.github._request('GET', f'/repos/{self.github.repo}/commits/{head_sha}/check-runs')
+        check_runs = res_checks.get("check_runs", [])
 
         all_logs = []
         # Limit to latest 20 jobs to avoid extreme memory usage
         for run in check_runs[:20]:
             try:
                 # Fetch logs via API to avoid terminal paging/buffering issues
-                log_content = self.github.run_authenticated_gh([
-                    "api", f"/repos/:owner/:repo/actions/jobs/{run['id']}/logs"
-                ])
+                log_content = self.github.fetch_check_run_logs(run["id"], external_id=run.get('external_id'))
                 header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
                 all_logs.append(header)
                 # Truncate each log to 20k chars to balance detail vs memory
@@ -776,12 +739,9 @@ class Orchestrator:
         """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
-        # Get PR head ref
-        stdout_pr = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "headRefName"
-        ])
-        pr_data = json.loads(stdout_pr)
-        head_ref = pr_data.get("headRefName")
+        # Get PR details to get head ref
+        pr_data = self.github.fetch_pr_details(pr_number)
+        head_ref = pr_data.get("head", {}).get("ref")
 
         if not head_ref:
             raise CLIError(f"Could not determine head ref for PR #{pr_number}")
@@ -829,16 +789,10 @@ class Orchestrator:
     def get_pr_diff_shapen(self, pr_number: int) -> Dict[str, Any]:
         """Fetches PR diff, applies truncation and shapes file info."""
         # Get files list
-        stdout_files = self.github.run_authenticated_gh([
-            "pr", "view", str(pr_number), "--json", "files"
-        ])
-        files_data = json.loads(stdout_files)
-        files = files_data.get("files", [])
+        files = self.github.fetch_pr_files(pr_number)
 
         # Get diff text
-        diff_text = self.github.run_authenticated_gh([
-            "pr", "diff", str(pr_number)
-        ])
+        diff_text = self.github.fetch_pr_diff(pr_number)
 
         MAX_DIFF_SIZE = 50000
         truncated = False
@@ -862,21 +816,25 @@ class Orchestrator:
 
     def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
-        gh_args = [
-            "pr", "list",
-            "--state", state,
-            "--limit", str(limit),
-            "--json", "number,title,author,headRefName,baseRefName,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,updatedAt,url"
-        ]
+        prs_raw = self.github.fetch_pr_list(state=state, limit=limit, labels=labels)
 
-        if labels:
-            gh_args.extend(["--label", ",".join(labels)])
+        prs = []
+        for pr in prs_raw:
+            if not include_drafts and pr.get("draft"):
+                continue
 
-        stdout = self.github.run_authenticated_gh(gh_args)
-        prs = json.loads(stdout)
-
-        if not include_drafts:
-            prs = [pr for pr in prs if not pr.get("isDraft")]
+            # Map API fields to the internal schema used by the CLI (which mirrors GH CLI JSON)
+            prs.append({
+                "number": pr.get("number"),
+                "title": pr.get("title"),
+                "author": {"login": pr.get("user", {}).get("login")},
+                "headRefName": pr.get("head", {}).get("ref"),
+                "baseRefName": pr.get("base", {}).get("ref"),
+                "isDraft": pr.get("draft"),
+                "mergeStateStatus": pr.get("mergeable_state"),
+                "updatedAt": pr.get("updated_at"),
+                "url": pr.get("html_url")
+            })
 
         return {"prs": prs}
 
@@ -908,12 +866,8 @@ class Orchestrator:
                 if not head_ref:
                     raise CLIError(f"Could not determine head ref for PR #{pr_num}")
 
-                # 2.5 Handle forks by using gh pr checkout
-                # This ensures the branch is available locally and handles forks correctly
-                run(["gh", "pr", "checkout", str(pr_num)])
-
-                # Switch back to the target branch
-                run(["git", "checkout", target_branch])
+                # 2.5 Ensure the branch is available locally
+                run(["git", "fetch", "origin", f"+pull/{pr_num}/head:{head_ref}"])
 
                 # 3. Safety First: Attempt automated integration merge
                 # Use 'ort' strategy implicitly by standard merge if git version supports it,
@@ -939,9 +893,8 @@ class Orchestrator:
 
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
-        # gh pr create --title "$TITLE" --body "$BODY" --head "$HEAD" --base {base_branch}
-        create_args = ["pr", "create", "--title", pr_title, "--body", aggregate_body, "--head", target_branch, "--base", base_branch]
-        pr_url = self.github.run_authenticated_gh(create_args).strip()
+        pr_res = self.github.create_pr(title=pr_title, body=aggregate_body, head=target_branch, base=base_branch)
+        pr_url = pr_res.get("html_url")
 
         return {
             "status": "success",
@@ -961,12 +914,6 @@ class Orchestrator:
         changed_dir = False
 
         try:
-            # 0. Pre-flight check for 'gh' CLI
-            try:
-                run_command(["gh", "--version"], check=False)
-            except Exception:
-                raise CLIError("The 'gh' CLI is required but was not found in your PATH. Please install it first.")
-
             # 1. Fetch PR details early to fail fast
             pr_data = self.github.fetch_pr_details(pr_number)
             default_base = PROJECT_CONFIG.base_branch_name

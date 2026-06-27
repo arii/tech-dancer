@@ -19,11 +19,11 @@ class PullRequestProtocol(Protocol):
     title: str
     body: Optional[str]
     user: GitHubUserProtocol
-    head: Any
-    base: Any
+    head: Dict[str, Any]
+    base: Dict[str, Any]
     draft: bool
     def get_files(self) -> Iterable[GitHubFile]: ...
-    def get_reviews(self) -> Any: ...
+    def get_reviews(self) -> Iterable[Any]: ...
     def get_review_comments(self) -> Iterable[Any]: ...
     def get_issue_comments(self) -> Iterable[Any]: ...
     def create_issue_comment(self, body: str) -> Any: ...
@@ -68,3 +68,6 @@ class CheckRun(TypedDict):
     conclusion: Optional[str]
     url: str
     external_id: Optional[str]
+
+class CheckResults(TypedDict):
+    check_runs: List[CheckRun]

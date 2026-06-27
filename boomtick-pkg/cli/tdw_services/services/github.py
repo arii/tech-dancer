@@ -91,8 +91,7 @@ class GitHubClient:
 
     def fetch_check_runs(self, ref: str) -> List[Dict[str, Any]]:
         try:
-            res = self.run_authenticated_gh(['api', f'/repos/{self.repo}/commits/{ref}/check-runs'])
-            data = json.loads(res)
+            data = self._request('GET', f'/repos/{self.repo}/commits/{ref}/check-runs')
             return [{
                 'id': run.get('id'),
                 'name': run.get('name'),
@@ -137,6 +136,23 @@ class GitHubClient:
     def update_issue(self, number: int, body: str) -> Dict[str, Any]:
         """Updates the body of a GitHub issue."""
         return self._request('PATCH', f'/repos/{self.repo}/issues/{number}', json_data={'body': body})
+
+    def fetch_pr_list(self, state: str = "open", limit: int = 100, labels: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+        """Lists PRs using the GitHub API."""
+        params = f'state={state}&per_page={limit}'
+        if labels:
+            params += f'&labels={",".join(labels)}'
+        return self._request('GET', f'/repos/{self.repo}/pulls?{params}')
+
+    def create_pr(self, title: str, body: str, head: str, base: str) -> Dict[str, Any]:
+        """Creates a new Pull Request."""
+        data = {
+            "title": title,
+            "body": body,
+            "head": head,
+            "base": base
+        }
+        return self._request('POST', f'/repos/{self.repo}/pulls', json_data=data)
 
     def create_review(self, number: int, body: str, comments: List[Dict[str, Any]], event: str) -> Dict[str, Any]:
         data = {
