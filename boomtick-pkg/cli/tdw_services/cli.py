@@ -455,20 +455,26 @@ def doctor(ctx):
 def verify_metrics(ctx):
     """Verify CI metrics against established thresholds."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.verify_ci_metrics()
-    if res['status'] == 'error':
-        err(ctx, res['message'], data=res)
-    else:
-        out(ctx, res['message'], data=res)
+    try:
+        res = orch.verify_ci_metrics()
+        if res['status'] == 'error':
+            err(ctx, res['message'], data=res)
+        else:
+            out(ctx, res['message'], data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
 
 @gh.command()
 @click.pass_context
 def summary_report(ctx):
     """Generate a markdown report of CI metrics for GHA Step Summary."""
     orch = ctx.obj['ORCHESTRATOR']
-    report = orch.generate_ci_summary_report()
-    # Always print as raw text to stdout for GHA redirection
-    click.echo(report)
+    try:
+        report = orch.generate_ci_summary_report()
+        # Always print as raw text to stdout for GHA redirection
+        click.echo(report)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
 
 @gh.command()
 @click.pass_context

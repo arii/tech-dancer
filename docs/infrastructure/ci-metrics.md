@@ -18,7 +18,7 @@ CI pipelines must provide fast feedback to developers.
 ## 3. Visual Snapshot Stability
 Visual regression tests must be stable and only fail on significant unintended changes.
 
-- **Maximum Allowed Difference Percent:** 1.5%
+- **Maximum Allowed Difference Percent:** 1.5% (Configurable via `VISUAL_DIFF_THRESHOLD`)
 - **Threshold for 'HIGH' Severity Visual Change:** 5.0%
 
 ## 4. Related Issues

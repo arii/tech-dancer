@@ -24,6 +24,9 @@ def test_verify_metrics_success(tmp_path, monkeypatch):
         f.write(json.dumps({"inputTokens": 100, "outputTokens": 50}) + "\n")
         f.write(json.dumps({"inputTokens": 200, "outputTokens": 100}) + "\n")
 
+    # Use environment variable to point to the correct log path during test
+    monkeypatch.setenv("AI_LOG_PATH", str(log_file))
+
     result = verify_ci_metrics(input_threshold=1000, output_threshold=500, total_threshold=2000)
     assert result["status"] == "success"
     assert result["metrics"]["inputTokens"] == 300
@@ -40,6 +43,8 @@ def test_verify_metrics_input_exceeded(tmp_path, monkeypatch):
     with open(log_file, "w") as f:
         f.write(json.dumps({"inputTokens": 160000, "outputTokens": 10}) + "\n")
 
+    monkeypatch.setenv("AI_LOG_PATH", str(log_file))
+
     result = verify_ci_metrics(input_threshold=150000)
     assert result["status"] == "error"
     assert "Input tokens (160000) exceeded limit (150000)" in result["message"]
@@ -54,6 +59,8 @@ def test_verify_metrics_total_exceeded(tmp_path, monkeypatch):
     with open(log_file, "w") as f:
         f.write(json.dumps({"inputTokens": 300, "outputTokens": 300}) + "\n")
 
+    monkeypatch.setenv("AI_LOG_PATH", str(log_file))
+
     result = verify_ci_metrics(input_threshold=400, output_threshold=400, total_threshold=500)
     assert result["status"] == "error"
     assert "Total tokens (600) exceeded limit (500)" in result["message"]
@@ -67,6 +74,8 @@ def test_verify_metrics_malformed_json(tmp_path, monkeypatch):
 
     with open(log_file, "w") as f:
         f.write("not json\n")
+
+    monkeypatch.setenv("AI_LOG_PATH", str(log_file))
 
     result = verify_ci_metrics()
     assert result["status"] == "error"

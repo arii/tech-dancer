@@ -126,17 +126,27 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         return None
 
 
+def _get_ai_log_path() -> Path:
+    """Helper for path-agnostic AI log resolution."""
+    # Try environment variable override first
+    env_path = os.environ.get("AI_LOG_PATH")
+    if env_path:
+        return Path(env_path)
+    # Default: boomtick-pkg/cli/logs/ai/review-run.jsonl
+    # Note: utils.py is in boomtick-pkg/cli/dev_tools/
+    return Path(__file__).resolve().parent.parent / "logs" / "ai" / "review-run.jsonl"
+
 def log_ai_run(entry: dict):
     try:
-        log_dir = os.path.join(os.getcwd(), "boomtick-pkg", "cli", "logs", "ai")
-        log_file = os.path.join(log_dir, "review-run.jsonl")
-        os.makedirs(log_dir, exist_ok=True)
+        log_file = _get_ai_log_path()
+        log_dir = log_file.parent
+        log_dir.mkdir(parents=True, exist_ok=True)
         from datetime import datetime
         entry["timestamp"] = datetime.utcnow().isoformat() + "Z"
-        with open(log_file, "a") as f:
+        with log_file.open("a") as f:
             f.write(json.dumps(entry) + "\n")
     except Exception as e:
-        log_error(f"Failed to append to AI run log: {e}")
+        log_error(f"Failed to append to AI log at {log_file}: {e}")
 
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
@@ -200,8 +210,7 @@ def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: O
     if input_limit < 0 or output_limit < 0 or total_limit < 0:
         raise CLIError("Thresholds must be non-negative integers.")
 
-    # Use Path for robust path resolution
-    log_file = Path(os.getcwd()) / "boomtick-pkg" / "cli" / "logs" / "ai" / "review-run.jsonl"
+    log_file = _get_ai_log_path()
 
     if not log_file.exists():
         # In multi-job CI, this might happen if logs weren't shared.
