@@ -19,8 +19,6 @@ runs:
       shell: bash
 
     - name: Bundle Size Check
-      id: bundle-size
-      background: true
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
@@ -54,7 +52,7 @@ runs:
           echo "exists=true" >> "$GITHUB_OUTPUT"
         else
           echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
+        fi
       shell: bash
 
     - name: Upload Test Results
@@ -65,15 +63,3 @@ runs:
         path: playwright-report/
         retention-days: 7
         if-no-files-found: ignore
-
-    - name: Wait for Bundle Size Check
-      wait: bundle-size
-
-    - name: Verify Bundle Size Check
-      if: always()
-      run: |
-        if [ "${{ steps.bundle-size.outcome }}" = "failure" ]; then
-          echo "Bundle Size Check failed in background"
-          exit 1
-        fi
-      shell: bash
