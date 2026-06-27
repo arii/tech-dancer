@@ -31,7 +31,7 @@ jobs:
           # Disable exit on error to allow manual exit code handling
           set +e
           # Redirect output to logs for better debugging if failure occurs
-          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute > validate_stdout.log 2> validate_stderr.log
+          td-cli gh validate-issue --issue-number "${{ github.event.issue.number }}" --post-comments --execute > validate_stdout.log 2> validate_stderr.log
           EXIT_CODE=$?
           set -e
 

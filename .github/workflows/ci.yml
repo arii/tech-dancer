@@ -80,7 +80,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
@@ -108,7 +108,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
@@ -165,7 +165,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
@@ -258,7 +258,7 @@ jobs:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
