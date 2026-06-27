@@ -368,6 +368,9 @@
       "visual-review/": "..."
     },
     "audit-baseline.json": null,
+    "boomtick-mcp/": {
+      "dist/": "..."
+    },
     "boomtick-pkg/": {
       "AGENTS.md": null,
       "cli/": "...",
@@ -381,6 +384,9 @@
       "blog/": "...",
       "posts/": "...",
       "studies/": "..."
+    },
+    "dev-tools/": {
+      "tdw_services.egg-info/": "..."
     },
     "dist/": {
       "404.html": null,
