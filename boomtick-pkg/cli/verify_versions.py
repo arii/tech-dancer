@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import json
+import argparse
 from typing import Dict, List, Optional, Tuple
 
 # Add dev-tools to path
@@ -19,22 +20,23 @@ from utils import (
 def parse_diff(diff_text: str) -> List[Dict]:
     """Parses a git diff to find version changes."""
     changes = []
-    current_file = None
 
     # Regex patterns
     ACTION_PATTERN = re.compile(r"uses:\s+([\w\-/]+)@([\w\.]+)")
-    PKG_JSON_VERSION_PATTERN = re.compile(r'"(node|pnpm|[\w\-\./@]+)":\s*"([\d\.\^x~<>=\| v]+)"')
+    PKG_JSON_VERSION_PATTERN = re.compile(r'"(node|pnpm|[\w\-\./@]+)":\s*"([\d\.\^x~<>=\| v\*\+]+)"')
     PM_PATTERN = re.compile(r'"packageManager":\s*"pnpm@([\d\.]+)"')
 
     # Files we care about
     SENSITIVE_FILES = [".nvmrc", ".node-version", "package.json"]
     SENSITIVE_DIRS = [".github/workflows/"]
 
-    hunks = re.split(r"^(?=--- )", diff_text, flags=re.MULTILINE)
-    for hunk in hunks:
-        if not hunk.strip(): continue
+    # Split by standard git diff file markers
+    files_diffs = re.split(r"^diff --git ", diff_text, flags=re.MULTILINE)
 
-        lines = hunk.splitlines()
+    for file_diff in files_diffs:
+        if not file_diff.strip(): continue
+
+        lines = file_diff.splitlines()
         current_file = None
         for line in lines:
             if line.startswith("--- a/"):
@@ -43,6 +45,12 @@ def parse_diff(diff_text: str) -> List[Dict]:
             elif line.startswith("+++ b/"):
                 current_file = line[6:]
                 break
+
+        # Fallback for diffs that don't start with --- a/
+        if not current_file:
+            m = re.search(r"^\+\+\+ (?:b/)?([^\s]+)", file_diff, re.MULTILINE)
+            if m:
+                current_file = m.group(1)
 
         if not current_file:
             continue
@@ -71,8 +79,10 @@ def parse_diff(diff_text: str) -> List[Dict]:
                 m = PM_PATTERN.search(content)
                 if m: removals["pnpm"] = m.group(1)
                 # Check node files
-                if current_file in [".nvmrc", ".node-version"]:
-                    removals["node"] = content.replace("v", "")
+                if current_file and (current_file.endswith(".nvmrc") or current_file.endswith(".node-version")):
+                    ver_match = re.search(r"([\d\.]+)", content)
+                    if ver_match:
+                        removals["node"] = ver_match.group(1)
 
             elif line.startswith("+"):
                 content = line[1:].strip()
@@ -82,8 +92,10 @@ def parse_diff(diff_text: str) -> List[Dict]:
                 if m: additions[m.group(1)] = m.group(2)
                 m = PM_PATTERN.search(content)
                 if m: additions["pnpm"] = m.group(1)
-                if current_file in [".nvmrc", ".node-version"]:
-                    additions["node"] = content.replace("v", "")
+                if current_file and (current_file.endswith(".nvmrc") or current_file.endswith(".node-version")):
+                    ver_match = re.search(r"([\d\.]+)", content)
+                    if ver_match:
+                        additions["node"] = ver_match.group(1)
 
         # Correlate changes
         for name, new_v in additions.items():
@@ -117,6 +129,9 @@ def verify_changes(changes: List[Dict]) -> List[Dict]:
                 findings.append({
                     "severity": "error",
                     "file": c["file"],
+                    "name": c["name"],
+                    "head_version": head_v,
+                    "proposed_version": c["new"],
                     "message": f"Version downgrade detected for {c['name']}: {head_v} -> {c['new']}",
                     "type": "downgrade"
                 })
@@ -136,6 +151,9 @@ def verify_changes(changes: List[Dict]) -> List[Dict]:
                 findings.append({
                     "severity": "warn",
                     "file": c["file"],
+                    "name": c["name"],
+                    "latest_version": latest,
+                    "proposed_version": c["new"],
                     "message": f"Proposed version for {c['name']} ({c['new']}) is outdated. Latest is {latest}.",
                     "type": "outdated"
                 })
@@ -148,30 +166,84 @@ def verify_changes(changes: List[Dict]) -> List[Dict]:
                      findings.append({
                         "severity": "error",
                         "file": c["file"],
+                        "name": c["name"],
                         "message": f"Hard block: Node.js version modification detected ({head_v} -> {c['new']}). Modification is forbidden unless ALLOW_NODE_VERSION_CHANGE=true.",
                         "type": "hard_block"
                     })
 
     return findings
 
+def fix_content(filepath: str, content: str, findings: List[Dict]) -> str:
+    """Automatically reverts downgrades in the given content string."""
+    new_content = content
+    relevant_findings = [f for f in findings if f["file"] == filepath and f["type"] == "downgrade"]
+
+    for f in relevant_findings:
+        name = f["name"]
+        old_v = f["head_version"]
+        new_v = f["proposed_version"]
+
+        if name == "node" and (filepath.endswith(".nvmrc") or filepath.endswith(".node-version")):
+            # Entire file is likely the version
+            if new_v in new_content:
+                 new_content = new_content.replace(new_v, old_v)
+        elif name == "pnpm" and '"packageManager":' in new_content:
+             new_content = new_content.replace(f"pnpm@{new_v}", f"pnpm@{old_v}")
+        else:
+             # Standard "name": "version" or uses: name@version
+             patterns = [
+                 (rf'"{re.escape(name)}":\s*"{re.escape(new_v)}"', f'"{name}": "{old_v}"'),
+                 (rf'uses:\s+{re.escape(name)}@{re.escape(new_v)}', f'uses: {name}@{old_v}')
+             ]
+             for pattern, replacement in patterns:
+                 new_content = re.sub(pattern, replacement, new_content)
+
+    return new_content
+
+def verify_file_content(filepath: str, content: str) -> List[Dict]:
+    """Validates a file's content without a diff by synthesizing a 'mock' diff against empty."""
+    mock_diff = f"--- a/{filepath}\n+++ b/{filepath}\n"
+    for line in content.splitlines():
+        mock_diff += f"+{line}\n"
+
+    changes = parse_diff(mock_diff)
+    return verify_changes(changes)
+
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python3 verify_versions.py <diff_file_or_text>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Verify version changes for downgrades or hard blocks.")
+    parser.add_argument("input", help="Path to diff file, file to check, or raw diff text.")
+    parser.add_argument("--fix", action="store_true", help="Automatically revert detected downgrades.")
+    args = parser.parse_args()
 
-    input_val = sys.argv[1]
-    if os.path.exists(input_val):
+    input_val = args.input
+    is_file = os.path.isfile(input_val)
+
+    if is_file:
         with open(input_val, "r") as f:
-            diff_text = f.read()
-    else:
-        diff_text = input_val
+            content = f.read()
 
-    changes = parse_diff(diff_text)
-    findings = verify_changes(changes)
+        if "diff --git" in content or "--- a/" in content:
+            # It's a diff file
+            changes = parse_diff(content)
+            findings = verify_changes(changes)
+        else:
+            # It's a single file to validate
+            findings = verify_file_content(input_val, content)
+            if args.fix and any(f["type"] == "downgrade" for f in findings):
+                fixed = fix_content(input_val, content, findings)
+                if fixed != content:
+                    with open(input_val, "w") as f:
+                        f.write(fixed)
+                    log_info(f"✅ Reverted downgrades in {input_val}")
+                    # Re-verify after fix
+                    findings = verify_file_content(input_val, fixed)
+    else:
+        # It's raw text (likely a diff)
+        changes = parse_diff(input_val)
+        findings = verify_changes(changes)
 
     if findings:
         print(json.dumps(findings, indent=2))
-        # Exit with error code if any 'error' severity exists
         if any(f["severity"] == "error" for f in findings):
             sys.exit(1)
     else:

@@ -169,25 +169,18 @@ class AIClient:
                 # Files that define runtime/dependency versions
                 sensitive_files = [".nvmrc", ".node-version", "package.json", ".github/workflows/"]
                 if any(sf in file_path for sf in sensitive_files):
-                    from verify_versions import parse_diff, verify_changes
+                    from verify_versions import verify_file_content, fix_content
 
-                    # Synthesize a diff representing the new content to validate it against HEAD versions.
-                    # We treat lines in the new file as additions to ensure the validator
-                    # catches any version mentioned in the file that might be a downgrade from HEAD.
-                    diff_lines = [f"+++ b/{file_path}"]
-                    for line in resolved.splitlines():
-                        line = line.strip()
-                        # We only care about lines that look like version assignments/usage
-                        if any(kw in line for kw in ["node", "pnpm", "uses:", "@v", "packageManager"]):
-                             diff_lines.append(f"+{line}")
+                    findings = verify_file_content(file_path, resolved)
+                    if any(f["type"] == "downgrade" for f in findings):
+                        log_warn(f"AI suggested a version downgrade in {file_path}. Automatically reverting...")
+                        resolved = fix_content(file_path, resolved, findings)
 
-                    if len(diff_lines) > 1:
-                        # Re-use the validation logic on the synthesized diff
-                        findings = verify_changes(parse_diff("\n".join(diff_lines)))
-                        if any(f["severity"] == "error" for f in findings):
-                             log_error(f"AI-generated resolution for {file_path} contains version violations: {findings}")
-                             # Re-try or block to prevent regression
-                             return False
+                    # If after fixing it still has errors (like hard blocks), we fail
+                    remaining_findings = verify_file_content(file_path, resolved)
+                    if any(f["severity"] == "error" for f in remaining_findings):
+                         log_error(f"AI-generated resolution for {file_path} contains unfixable version violations: {remaining_findings}")
+                         return False
             except Exception as e:
                 log_warn(f"Failed to post-process AI resolution for {file_path}: {e}")
 

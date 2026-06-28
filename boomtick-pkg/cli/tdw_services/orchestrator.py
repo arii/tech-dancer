@@ -21,6 +21,7 @@ from utils import (
     get_repo_name,
     get_gha_variable,
     set_gha_variable,
+    get_stack_versions,
     CLIError,
     run_command,
     is_ai_available,
@@ -779,6 +780,13 @@ class Orchestrator:
 
         if api_key: self.jules.api_key = api_key
 
+        try:
+            stack_versions = get_stack_versions(fetch_latest=True)
+        except Exception:
+            stack_versions = {}
+
+        versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()]) if stack_versions else "Unknown"
+
         # Analyze failing check runs
         check_runs = self.github.fetch_check_runs(pr.head.sha)
         failing_logs = []
@@ -814,10 +822,14 @@ class Orchestrator:
 
 You are a senior engineering agent reviewing your own branch before publishing.
 
+## Current Stack Versions (Source of Truth)
+{versions_block}
+
 Compare the current branch against `{base_branch_name}`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
 
 ## Rules
 
+- DO NOT suggest or implement downgrades of any versions listed in the 'Current Stack Versions' section.
 - Do not ask for confirmation before making fixes.
 - Do not ask the user to run commands.
 - Do not stop until you have opened or updated a PR.
