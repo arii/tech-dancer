@@ -30,10 +30,8 @@ class GitHubClient:
             self._request('GET', f'/repos/{self.repo}/branches/{branch_name}')
             return True
         except requests.exceptions.RequestException as e:
-            # Catch base exception for requests, which will have a .response attribute for HTTP errors.
             if e.response is not None and e.response.status_code == 404:
                 return False
-            # Re-raise any other RequestException (e.g., network error, other HTTP status codes).
             raise e
 
     def _detect_repo(self) -> str:
@@ -120,8 +118,8 @@ class GitHubClient:
         per_page = min(limit, 100)
 
         while len(prs) < limit:
-            params = f"?state={state}&per_page={per_page}&page={page}"
-            data = self._request('GET', f'/repos/{self.repo}/pulls{params}')
+            params = {"state": state, "per_page": per_page, "page": page}
+            data = self._request('GET', f'/repos/{self.repo}/pulls', params=params)
 
             if not data:
                 break
