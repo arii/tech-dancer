@@ -56,15 +56,12 @@ class TestGitHubClientNoGH(unittest.TestCase):
 
     @patch('tdw_services.services.github.requests.Session.request')
     def test_list_pull_requests_labels_search(self, mock_request):
-        # standard pulls response
-        mock_res = MagicMock()
-        mock_res.json.return_value = [
-            {"number": 123, "title": "Bug PR", "labels": [{"name": "bug"}, {"name": "ui"}]},
-            {"number": 456, "title": "Feat PR", "labels": [{"name": "feat"}]}
-        ]
-        mock_res.status_code = 200
+        # Search response
+        mock_search_res = MagicMock()
+        mock_search_res.json.return_value = {"items": [{"number": 123, "title": "Bug PR", "user": {"login": "user"}, "html_url": "url"}]}
+        mock_search_res.status_code = 200
 
-        mock_request.return_value = mock_res
+        mock_request.return_value = mock_search_res
 
         client = GitHubClient(token="fake_token", repo="owner/repo")
         prs = client.list_pull_requests(labels=["bug", "ui"])
@@ -72,9 +69,14 @@ class TestGitHubClientNoGH(unittest.TestCase):
         self.assertEqual(len(prs), 1)
         self.assertEqual(prs[0]['number'], 123)
 
-        # Verify standard pulls endpoint was used
+        # Verify search query
         call_args_list = mock_request.call_args_list
-        self.assertEqual(call_args_list[0][1]['params']['page'], 1)
+        self.assertIn("/search/issues", call_args_list[0][0][1])
+        q = call_args_list[0][1]['params']['q']
+        self.assertIn("repo:owner/repo", q)
+        self.assertIn("is:pr", q)
+        self.assertIn('label:"bug"', q)
+        self.assertIn('label:"ui"', q)
 
     @patch('tdw_services.services.github.requests.Session.request')
     @patch('tdw_services.services.github.subprocess.run')

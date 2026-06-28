@@ -119,7 +119,29 @@ class GitHubClient:
             return []
 
     def list_pull_requests(self, state: str = 'open', limit: int = 100, labels: Optional[List[str]] = None) -> List[Dict[str, Any]]:
-        """Lists pull requests with internal pagination and optional local label filtering."""
+        """Lists pull requests with optional server-side label filtering or standard Pulls API."""
+        if labels:
+            # Use Search API for efficient server-side label filtering
+            query = f"repo:{self.repo} is:pr state:{state}"
+            for label in labels:
+                query += f' label:"{label}"'
+
+            data = self._request('GET', '/search/issues', params={"q": query, "per_page": limit})
+            # Search API returns { "items": [...] }
+            items = data.get('items', []) if isinstance(data, dict) else []
+
+            # Map search items to the unified internal format
+            return [{
+                "number": pr.get("number"),
+                "title": pr.get("title"),
+                "author": {"login": pr.get("user", {}).get("login")},
+                "isDraft": pr.get("draft"),
+                "updatedAt": pr.get("updated_at"),
+                "url": pr.get("html_url")
+                # Note: Search items lack 'headRefName' and 'baseRefName' without extra API calls
+            } for pr in items[:limit]]
+
+        # Fallback to standard Pulls API if no labels, using internal pagination
         prs = []
         page = 1
         per_page = min(limit, 100)
@@ -132,11 +154,6 @@ class GitHubClient:
                 break
 
             for pr in data:
-                if labels:
-                    pr_labels = [l.get('name') for l in pr.get('labels', [])]
-                    if not all(label in pr_labels for label in labels):
-                        continue
-
                 # Map REST API response to GH CLI compatible format
                 prs.append({
                     "number": pr.get("number"),
