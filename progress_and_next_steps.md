@@ -6,7 +6,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 
 ### Completed Tasks
 1. **Skeleton and Structure**: Created `boomtick-pkg/` containing `cli/` (renamed from `dev-tools/`) and `mcp/` (renamed from `boomtick-mcp/`).
-2. **Python Package Refactoring**: Flat `.py` files inside `cli/` restructured into a proper `dev_tools` package. Loaded schemas and config files dynamically using `importlib.resources`.
+2. **Python Package Refactoring**: Flat `.py` files inside `cli/` restructured into a proper `dev_tools` package.
 3. **MCP Re-routing**: Updated ESM config files, imports, and self-relative pathways to account for the new directory structure.
 4. **Workspace Configs**: Created `workspace.json`, `workspace-schema.json`, `install.sh`, `.env.example`, and copied rules (`.agents/` and `AGENTS.md`) into `boomtick-pkg/`.
 5. **Workflow Slimming**: Refactored `.github/workflows/` (specifically `ci.yml`, `ai-chatops.yml`, and `self-healing.yml`) into composite GitHub Actions in `boomtick-pkg/mcp/actions/`.
