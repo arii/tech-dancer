@@ -13,7 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
-from tdw_services.utils import log_error, get_or_create_log_dir
+from tdw_services.utils import log_error, get_or_create_log_dir, CLIError
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -21,7 +21,6 @@ from utils import (
     get_repo_name,
     get_gha_variable,
     set_gha_variable,
-    CLIError,
     run_command,
     is_ai_available,
     extract_failing_info,
