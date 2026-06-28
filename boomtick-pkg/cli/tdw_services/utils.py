@@ -24,7 +24,7 @@ def mask_sensitive_data(msg: str) -> str:
     msg = re.sub(r'(?i)(token|auth|key|secret|password|access_token)([:=])[a-zA-Z0-9._-]{10,}', r'\1\2***', msg)
 
     # Redact Bearer tokens in headers
-    msg = re.sub(r'(?i)(Bearer\s+)\S+', r'\1***', msg)
+    msg = re.sub(r"(?i)(Bearer\s+)[^\s\"'`]+", r'\1***', msg)
 
     return msg
 
