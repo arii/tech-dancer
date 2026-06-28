@@ -410,11 +410,11 @@ class GHAConfigManager:
         # 2. Fetch from GitHub API
         import requests
         token = get_github_token()
-        repo = get_repo_name()
-        if token and repo:
+        repo_name = get_repo_name()
+        if token and repo_name:
             try:
                 import requests
-                url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
+                url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
                 headers = {
                     "Authorization": f"Bearer {token}",
                     "Accept": "application/vnd.github+json"
@@ -441,7 +441,7 @@ class GHAConfigManager:
             return None
 
         try:
-            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
+            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github+json",
@@ -469,11 +469,11 @@ class GHAConfigManager:
         # 2. Set via GitHub API
         import requests
         token = get_github_token()
-        repo = get_repo_name()
-        if token and repo:
+        repo_name = get_repo_name()
+        if token and repo_name:
             try:
                 import requests
-                url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
+                url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
                 payload = {"name": name, "value": str(value)}
                 headers = {
                     "Authorization": f"Bearer {token}",
@@ -485,7 +485,7 @@ class GHAConfigManager:
                     return True
                 elif response.status_code == 404:
                     # Create instead of update
-                    create_url = f"https://api.github.com/repos/{repo}/actions/variables"
+                    create_url = f"https://api.github.com/repos/{repo_name}/actions/variables"
                     create_response = requests.post(create_url, json=payload, headers=headers, timeout=10)
                     if create_response.status_code in [201, 204]:
                         return True
@@ -504,7 +504,7 @@ class GHAConfigManager:
             return False
 
         try:
-            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
+            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github+json",
@@ -518,7 +518,7 @@ class GHAConfigManager:
             if exists:
                 res = requests.patch(url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
             else:
-                create_url = f"https://api.github.com/repos/{repo}/actions/variables"
+                create_url = f"https://api.github.com/repos/{repo_name}/actions/variables"
                 res = requests.post(create_url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
 
             if res.status_code in [201, 204]:
