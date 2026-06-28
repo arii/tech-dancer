@@ -33,10 +33,12 @@ class TestGitHubClientNoGH(unittest.TestCase):
         mock_response1 = MagicMock()
         mock_response1.json.return_value = [{"number": i, "user": {"login": "u"}, "head": {"ref": "h"}, "base": {"ref": "b"}} for i in range(1, 101)]
         mock_response1.status_code = 200
+        mock_response1.raise_for_status.return_value = None
 
         mock_response2 = MagicMock()
         mock_response2.json.return_value = [{"number": 101, "user": {"login": "u"}, "head": {"ref": "h"}, "base": {"ref": "b"}}]
         mock_response2.status_code = 200
+        mock_response2.raise_for_status.return_value = None
 
         mock_request.side_effect = [mock_response1, mock_response2]
 
@@ -47,12 +49,12 @@ class TestGitHubClientNoGH(unittest.TestCase):
         self.assertEqual(mock_request.call_count, 2)
 
         # Verify params
-        call1_params = mock_request.call_args_list[0][1]['params']
-        self.assertEqual(call1_params['page'], 1)
-        self.assertEqual(call1_params['per_page'], 100)
+        call1_url = mock_request.call_args_list[0][0][1]
+        self.assertIn("page=1", call1_url)
+        self.assertIn("per_page=100", call1_url)
 
-        call2_params = mock_request.call_args_list[1][1]['params']
-        self.assertEqual(call2_params['page'], 2)
+        call2_url = mock_request.call_args_list[1][0][1]
+        self.assertIn("page=2", call2_url)
 
     @patch('tdw_services.services.github.requests.Session.request')
     def test_list_pull_requests_labels_search(self, mock_request):

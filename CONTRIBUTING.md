@@ -1,22 +1,43 @@
-# BoomTick.blog — Content Contributor Guide
+# Contributing to BoomTick
 
-This guide explains how to add new content to the site using GitHub Issues and the automated PR workflow. For instructions on setting up the developer/agent environment, see [docs/agent/environment-setup.md](docs/agent/environment-setup.md).
+Thank you for your interest in contributing! This project follows a strict protocol-driven development model to ensure consistency between human developers and AI agents.
 
-## How It Works
+## 🧠 Developer Protocols
 
-**You write the issue** → **Bot extracts markdown** → **PR opens** → **You merge**
+This project follows a strict protocol-driven development model. Detailed guidelines for AI agents, including the **Zero-Fallback Mandate** and **CLI Failure Ledger**, are defined in [AGENTS.md](AGENTS.md).
 
-## Submitting Content via GitHub Issue
+### 1. Schema Verification
+All modifications to CLI tools or workspace configurations must be validated against their respective schemas:
+- **CLI Commands**: `boomtick-pkg/cli/dev_tools/cli-schema.json`
+- **Workspace Config**: `boomtick-pkg/workspace-schema.json`
 
-1. **New Issue**: Title it `Draft: <Your Post Title Here>`.
-2. **Body**: Paste a fenced markdown block:
-   \```markdown
-   <content>
-   \```
+### 2. Local Test Runners
+Before submitting any changes, ensure all tests pass:
 
-## Checklist
+- **CLI Package**:
+  ```bash
+  td --no-json test cli
+  ```
+- **MCP Package**:
+  ```bash
+  pnpm --filter ./boomtick-pkg/mcp test
+  ```
+- **Root Workspace**:
+  ```bash
+  pnpm run ci:local
+  ```
+- **Runtime Check**:
+  ```bash
+  td doctor
+  ```
 
-- [ ] Issue title starts with `Draft:`
-- [ ] Body contains a single `\```markdown` block
-- [ ] Frontmatter includes required fields (see root README.md)
-- [ ] Affiliate disclosure included if product links appear
+## 🛠 Development Workflow
+
+1. **Setup**: Run `bash boomtick-pkg/install.sh` to initialize your environment.
+2. **Branching**: Create a descriptive branch for your changes.
+3. **Coding**: Follow the React and TypeScript guidelines defined in `AGENTS.md`.
+4. **Testing**: Run the relevant test runners listed above.
+5. **PR**: Open a Pull Request. Ensure CI passes before requesting a review.
+
+## ⚖️ License
+By contributing to BoomTick, you agree that your contributions will be licensed under the project's Apache License 2.0.

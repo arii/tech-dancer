@@ -144,6 +144,8 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 
 Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td_cli.py) tool exists. If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
 
+If a tool failure occurs, you **must** document the failure in `progress_and_next_steps.md` (CLI Failure Ledger) before proceeding with a manual fallback. This ensures that the failure is tracked and resolved.
+
 ### CLI Schema Authority
 
 `boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
