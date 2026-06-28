@@ -1,4 +1,5 @@
 import { IMPACT_CONFIG } from './impact-analysis.config';
+import { logHeartbeat } from './lib/heartbeat';
 import {
   exec,
   getChangedFiles,
@@ -12,6 +13,7 @@ import {
 } from './lib/impact-analysis-utils';
 
 async function main() {
+  await logHeartbeat('Starting Deployment Impact Analysis');
   console.log('🚀 Running Deployment Impact Analysis...');
 
   try {
@@ -35,14 +37,22 @@ async function main() {
     console.log(`\nFound ${files.length} changed files.`);
 
     // Generate dependency graph
+    await logHeartbeat('Generating dependency graph');
     console.log('📊 Generating dependency graph...');
-    const graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
+    let graphJson: string;
+    try {
+      graphJson = exec('npx depcruise src --config .dependency-cruiser.config.mjs --ts-config tsconfig.app.json --output-type json');
+    } catch (err: unknown) {
+      const error = err as Error;
+      throw new Error(`Failed to execute dependency-cruiser: ${error.message}`, { cause: err });
+    }
 
     let graph: DependencyGraph;
     try {
       graph = JSON.parse(graphJson);
     } catch (err: unknown) {
-      throw new Error(`Failed to parse dependency-cruiser output as JSON. The tool output might be malformed or it failed silently. Error: ${(err as Error).message}`, { cause: err });
+      const error = err as Error;
+      throw new Error(`Failed to parse dependency-cruiser output as JSON. Output: ${graphJson.slice(0, 500)}... Error: ${error.message}`, { cause: err });
     }
 
     const reverseMap = buildReverseMap(graph);
@@ -54,6 +64,7 @@ async function main() {
 
     // Resolve Dynamic Mapping and URLs
     const dynamicRouteMapping = getDynamicRouteMapping(graph);
+    await logHeartbeat('Resolving affected URLs');
     const allUrls = resolveAffectedUrls(allAffected, files, dynamicRouteMapping, staticAffected);
 
     // Find all dynamic imports in the whole graph to identify dynamic boundaries
@@ -97,6 +108,7 @@ async function main() {
     console.log('\n' + '='.repeat(40));
 
     generateReports(report, files, affectedDynamicImportsSet);
+    await logHeartbeat('Impact Analysis Complete');
   } catch (error: unknown) {
     const err = error as Error;
     console.error(`❌ Error during impact analysis: ${err.message}`);
