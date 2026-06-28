@@ -8,6 +8,9 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    concurrency:
+      group: validate-issue-${{ github.event.issue.number }}
+      cancel-in-progress: true
     container:
       image: ghcr.io/arii/tech-dancer:latest
     permissions:
@@ -29,4 +32,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute
+          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute || { echo "::error ::Issue validation failed. Check logs."; exit 1; }
