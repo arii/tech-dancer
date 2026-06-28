@@ -13,7 +13,7 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
-from tdw_services.utils import log_error, get_or_create_log_dir
+from tdw_services.utils import log_error, get_or_create_log_dir, mask_sensitive_data
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -684,7 +684,6 @@ class Orchestrator:
 
             report.append("\n<details><summary>Raw Metrics JSON</summary>\n")
             report.append("```json")
-            from tdw_services.utils import mask_sensitive_data
             report.append(mask_sensitive_data(json.dumps(metrics_res, indent=2)))
             report.append("```\n</details>")
 

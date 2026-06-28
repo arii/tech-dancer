@@ -1,6 +1,6 @@
 import sys
 import os
-from tdw_services.utils import log_info
+from tdw_services.utils import log_info, log_error, mask_sensitive_data
 import json
 from datetime import datetime, timezone
 from typing import List, Dict, Any
@@ -31,7 +31,6 @@ def cli(ctx, json_output):
 
 # --- Utility Helpers ---
 def out(ctx, msg, data=None):
-    from tdw_services.utils import mask_sensitive_data
     if ctx.obj['JSON']:
         payload = {"status": "success"}
         if data: payload.update(data)
@@ -40,7 +39,6 @@ def out(ctx, msg, data=None):
         click.echo(mask_sensitive_data(msg))
 
 def err(ctx, msg, code=1, data=None):
-    from tdw_services.utils import mask_sensitive_data
     if ctx.obj['JSON']:
         payload = {"status": "error", "message": msg, "code": code}
         if data: payload.update({"data": data})
@@ -50,7 +48,6 @@ def err(ctx, msg, code=1, data=None):
     sys.exit(code)
 
 def _handle_unexpected_error(ctx, command_name, e):
-    from tdw_services.utils import log_error
     log_error(f"Unexpected error in {command_name}: {e}")
     err(ctx, f"An unexpected error occurred in {command_name}.")
 
