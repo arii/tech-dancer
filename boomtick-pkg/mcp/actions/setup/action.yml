@@ -7,9 +7,6 @@ runs:
       run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       shell: bash
 
-    - name: Setup Node and pnpm
-      uses: ./.github/actions/setup-node-pnpm
-
     - name: Setup Workspace
       uses: ./.github/actions/setup-workspace
 
