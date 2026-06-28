@@ -34,7 +34,6 @@ try:
 
     from tdw_services.orchestrator import Orchestrator
     _orch = Orchestrator()
-    resolve_baseline = _orch.resolve_baseline
 
     def handle_fix_ci(args):
         # Support legacy test expectation for GITHUB_TOKEN
@@ -65,9 +64,6 @@ try:
         )
 
     def resolve_baseline(file_path, env_var, fallback):
-        # Match legacy test which mocks td_cli.get_gha_variable
-        val = get_gha_variable(env_var)
-        if val: return int(val)
         return _orch.resolve_baseline(file_path, env_var, fallback)
 
     def handle_audit_pr(args):
