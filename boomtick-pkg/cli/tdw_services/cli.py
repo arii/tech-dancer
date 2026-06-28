@@ -18,14 +18,7 @@ from dev_tools_sdk.config import load_project_config
 PROJECT_CONFIG = load_project_config()
 
 
-
-
-
-
-
-
 # CLI Group
-
 
 
 class DynamicHelpGroup(click.Group):
@@ -763,7 +756,6 @@ def dispatch(ctx, branch, task):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.dispatch_jules_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
-
 
 
 @agent_group.command()
