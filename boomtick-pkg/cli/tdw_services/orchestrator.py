@@ -684,7 +684,8 @@ class Orchestrator:
 
             report.append("\n<details><summary>Raw Metrics JSON</summary>\n")
             report.append("```json")
-            report.append(json.dumps(metrics_res, indent=2))
+            from tdw_services.utils import mask_sensitive_data
+            report.append(mask_sensitive_data(json.dumps(metrics_res, indent=2)))
             report.append("```\n</details>")
 
         return "\n".join(report)

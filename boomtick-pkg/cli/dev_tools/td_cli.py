@@ -120,9 +120,17 @@ def main():
             # CLIError and some others might have a custom 'code' attribute
             code = getattr(e, 'code', 1)
             error_payload["code"] = code
+
+            # Mask sensitive data in JSON error output
+            try:
+                from tdw_services.utils import mask_sensitive_data
+                error_json = mask_sensitive_data(json.dumps(error_payload, indent=2))
+            except (ImportError, ModuleNotFoundError):
+                error_json = json.dumps(error_payload, indent=2)
+
             # JSON errors remain on stdout to maintain the contract for piped machine consumers
             # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
-            print(json.dumps(error_payload, indent=2))
+            print(error_json)
         else:
             try:
                 from tdw_services.utils import log_error

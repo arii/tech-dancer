@@ -60,7 +60,10 @@ def _get_body_content(ctx, orch, file, body):
     if not file and not body:
         err(ctx, "Provide either --file or --body")
 
-    return body if body is not None else orch._read_safe_file(file)
+    if body is not None:
+        return body
+
+    return orch._read_safe_file(file)
 
 # ==========================================
 # REPO COMMAND GROUP
