@@ -4,22 +4,19 @@ Thank you for your interest in contributing! This project follows a strict proto
 
 ## 🧠 Developer Protocols
 
-### 1. Zero-Fallback Mandate
-AI agents working on this repository must use the provided Tier 1 (`boomtick-mcp`) or Tier 2 (`td` CLI) tools. Bypassing these tools with raw bash commands or manual Git operations is strictly prohibited unless the tool is genuinely unavailable.
+This project follows a strict protocol-driven development model. Detailed guidelines for AI agents, including the **Zero-Fallback Mandate** and **CLI Failure Ledger**, are defined in [AGENTS.md](AGENTS.md).
 
-If a tool failure occurs, you **must** document the failure in `progress_and_next_steps.md` (CLI Failure Ledger) before proceeding with a manual fallback.
-
-### 2. Schema Verification
+### 1. Schema Verification
 All modifications to CLI tools or workspace configurations must be validated against their respective schemas:
 - **CLI Commands**: `boomtick-pkg/cli/dev_tools/cli-schema.json`
 - **Workspace Config**: `boomtick-pkg/workspace-schema.json`
 
-### 3. Local Test Runners
+### 2. Local Test Runners
 Before submitting any changes, ensure all tests pass:
 
 - **CLI Package**:
   ```bash
-  PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools python3 -m pytest boomtick-pkg/cli/tests/
+  td --no-json test cli
   ```
 - **MCP Package**:
   ```bash

@@ -117,30 +117,14 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
 
-      - parallel:
-          - name: UI Anti-Pattern Audit - Gate
-            shell: bash
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            run: |
-              echo "::group::Audit"
-              trap 'echo "::endgroup::"' EXIT
-              # Ensure local python bin is on path for td
-              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-              if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
-              td gh audit-gate
-
-          - name: Design Token Compliance
-            run: |
-              # Dynamic search for TSX files to avoid hardcoded paths.
-              VIOLATIONS=$(find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -h '#[0-9a-fA-F]\{3,6\}' \
-                | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
-              if [ "$VIOLATIONS" -gt 0 ]; then
-                echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
-                find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -rn '#[0-9a-fA-F]\{3,6\}' | grep -v "design-tokens\|tokens.css"
-                exit 1
-              fi
-              echo "✅ Design token compliance passed."
+      - name: Run Audit Checks in Parallel
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./scripts/run-parallel.sh \
+            "export PATH=\$HOME/.local/bin:/github/home/.local/bin:\$PATH && if ! node scripts/detect-antipatterns.mjs; then echo 'Audit failed'; exit 1; fi && td gh audit-gate" \
+            "VIOLATIONS=\$(find . -name '*.tsx' -not -path '*/node_modules/*' -type f | xargs grep -h '#[0-9a-fA-F]\{3,6\}' | grep -vc 'design-tokens\|tokens.css\|// impeccable-ignore' || echo 0) && if [ \"\$VIOLATIONS\" -gt 0 ]; then echo \"⚠️ Found \$VIOLATIONS raw hex color(s) in tsx files.\"; exit 1; fi && echo '✅ Design token compliance passed.'"
 
   test-build:
     name: Build & E2E
@@ -177,31 +161,16 @@ jobs:
           pnpm run build
 
 
-      - name: Bundle Size Check
-        id: bundle-size
-        background: true
+      - name: Run Tests and Bundle Check
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Ensure local python bin is on path for td
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td gh bundle-size
-
-      - name: Run Playwright Smoke Test
-        run: |
-          VITE_BASE_PATH=/ pnpm run test:e2e
-
-      - name: Run Lighthouse CI
-        run: |
-          set -eu
-          VITE_BASE_PATH="/"
-          CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
-          export VITE_BASE_PATH
-          export CHROME_PATH
-          echo "CHROME_PATH=$CHROME_PATH"
-          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
-        env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./scripts/run-parallel.sh \
+            "export PATH=\$HOME/.local/bin:/github/home/.local/bin:\$PATH && td gh bundle-size" \
+            "VITE_BASE_PATH=/ pnpm run test:e2e" \
+            "export VITE_BASE_PATH=/ && export CHROME_PATH=\$(node -e \"console.log(require('playwright').chromium.executablePath())\") && pnpm run lighthouse --collect.url='http://localhost:4173/'"
 
       - name: Check Playwright Report Exists
         id: check_report
@@ -221,17 +190,6 @@ jobs:
           path: playwright-report/
           retention-days: 7
           if-no-files-found: ignore
-
-      - name: Wait for Bundle Size Check
-        wait: bundle-size
-
-      - name: Verify Bundle Size Check
-        if: always()
-        run: |
-          if [ "${{ steps.bundle-size.outcome }}" = "failure" ]; then
-            echo "Bundle Size Check failed in background"
-            exit 1
-          fi
 
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
@@ -260,20 +218,13 @@ jobs:
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
-      - parallel:
-          - name: Deployment Impact Analysis
-            run: pnpm run impact:analysis
-          - name: Build Main
-            env:
-              DISABLE_MINIFY: true
-            run: pnpm run impact:build-main
-          - name: Build PR
-            env:
-              VITE_BASE_PATH: /
-              DISABLE_MINIFY: true
-            run: |
-              pnpm exec tsx scripts/heartbeat.ts "Starting Build Review (PR)"
-              pnpm run build:review
+      - name: Run Impact Builds in Parallel
+        shell: bash
+        run: |
+          ./scripts/run-parallel.sh \
+            "pnpm run impact:analysis" \
+            "export DISABLE_MINIFY=true && pnpm run impact:build-main" \
+            "export VITE_BASE_PATH=/ && export DISABLE_MINIFY=true && pnpm exec tsx scripts/heartbeat.ts 'Starting Build Review (PR)' && pnpm run build:review"
 
       - name: Code review agent
         if: always() && github.event_name == 'pull_request'
@@ -294,11 +245,12 @@ jobs:
           pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Code Review"
           pnpm run impact:github-models-code-review
 
-      - parallel:
-          - name: Visual Diff
-            run: pnpm run impact:visual-diff
-          - name: DOM Diff
-            run: pnpm run impact:dom-diff
+      - name: Run Diffs in Parallel
+        shell: bash
+        run: |
+          ./scripts/run-parallel.sh \
+            "pnpm run impact:visual-diff" \
+            "pnpm run impact:dom-diff"
 
       - name: Check if visual changes exist
         id: check_visuals

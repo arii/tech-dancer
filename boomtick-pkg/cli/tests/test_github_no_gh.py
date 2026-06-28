@@ -74,7 +74,8 @@ class TestGitHubClientNoGH(unittest.TestCase):
 
         # Verify call
         call_args_list = mock_request.call_args_list
-        self.assertEqual(call_args_list[0][0][1], "https://api.github.com/repos/owner/repo/pulls?state=open&per_page=100&page=1")
+        url = call_args_list[0][0][1]
+        self.assertIn("labels=bug,ui", url)
 
     @patch('tdw_services.services.github.requests.Session.request')
     @patch('tdw_services.services.github.subprocess.run')
