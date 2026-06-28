@@ -288,18 +288,18 @@ jobs:
               pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Code Review"
               pnpm run impact:github-models-code-review
 
-      - parallel:
-          - name: Visual Diff
-            run: pnpm run impact:visual-diff
+      - name: Visual Diff
+        run: pnpm run impact:visual-diff
 
+      - parallel:
           - name: DOM Diff
             run: pnpm run impact:dom-diff
 
-      - name: Check if visual changes exist
-        id: check_visuals
-        env:
-          VISUAL_DIFF_THRESHOLD: 1.5
-        run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
+          - name: Check if visual changes exist
+            id: check_visuals
+            env:
+              VISUAL_DIFF_THRESHOLD: 1.5
+            run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
       - parallel:
           - name: Visual review agent

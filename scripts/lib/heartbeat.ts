@@ -4,9 +4,13 @@ import * as path from 'path';
 const LOG_DIR = path.join(process.cwd(), 'boomtick-pkg', 'cli', 'logs', 'ai');
 const LOG_FILE = path.join(LOG_DIR, 'heartbeat.log');
 
+interface NodeError extends Error {
+  code?: string;
+}
+
 /**
  * Appends a heartbeat log entry to the heartbeat.log file.
- * Refactored to be non-blocking and efficient using fs.promises.
+ * Implements a retry mechanism to handle concurrent writes in parallel steps.
  */
 export async function logHeartbeat(status: string): Promise<void> {
   const sanitizedStatus = status.replace(/[\r\n]/g, ' ').trim();
@@ -15,13 +19,36 @@ export async function logHeartbeat(status: string): Promise<void> {
 
   try {
     if (!fs.existsSync(LOG_DIR)) {
-      await fs.promises.mkdir(LOG_DIR, { recursive: true });
+      fs.mkdirSync(LOG_DIR, { recursive: true });
     }
-
-    await fs.promises.appendFile(LOG_FILE, logEntry);
-    console.log(`💓 Heartbeat: ${sanitizedStatus}`);
-  } catch (error) {
-    console.error('❌ Failed to write heartbeat log:', error);
-    throw error;
+  } catch (err) {
+    // Ignore EEXIST if created between check and call
+    if ((err as NodeError).code !== 'EEXIST') throw err;
   }
+
+  const MAX_RETRIES = 5;
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      fs.appendFileSync(LOG_FILE, logEntry);
+      console.log(`💓 Heartbeat: ${sanitizedStatus}`);
+      return;
+    } catch (error) {
+      lastError = error;
+      const errCode = (error as NodeError).code;
+      const isLockError = errCode === 'EBUSY' || errCode === 'EAGAIN' || errCode === 'EMFILE';
+
+      if (!isLockError || attempt === MAX_RETRIES) {
+        break;
+      }
+
+      // Jittered exponential backoff
+      const delay = Math.pow(2, attempt) * 25 + Math.random() * 50;
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+
+  console.error('❌ Failed to write heartbeat log after retries:', lastError);
+  throw lastError;
 }
