@@ -83,11 +83,13 @@ def run_playwright(ctx, grep, worktree):
 @repo.command()
 @click.argument('pr_number', type=int)
 @click.option('--all', 'include_all', is_flag=True, help='Include logs for successful runs')
+@click.option('--clean', is_flag=True, help='Clean and extract failing details from logs')
 @click.pass_context
-def ci_logs(ctx, pr_number, include_all):
+def ci_logs(ctx, pr_number, include_all, clean):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.get_ci_logs(pr_number, include_all=include_all)
+    res = orch.get_ci_logs(pr_number, include_all=include_all, clean=clean)
     out(ctx, f"Fetched CI logs for PR #{pr_number}", data=res)
+
 
 @repo.command()
 @click.argument('pr_number', type=int)
@@ -635,6 +637,28 @@ def lint(ctx):
     run_command(["pnpm", "run", "lint"])
     out(ctx, "✅ Lint complete")
 
+@cli.group()
+def test():
+    """Testing Operations"""
+    pass
+
+@test.command(name='cli')
+@click.pass_context
+def test_cli(ctx):
+    """Run CLI package tests"""
+    orch = ctx.obj['ORCHESTRATOR']
+    orch.runtime_check()
+    # pytest options are now in pyproject.toml
+    import subprocess
+    import sys
+    # Get the directory of the current file to find the cli package root
+    cli_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    try:
+        subprocess.run([sys.executable, "-m", "pytest", "tests/"], cwd=cli_dir, check=True)
+        out(ctx, "✅ CLI tests passed")
+    except subprocess.CalledProcessError as e:
+        err(ctx, f"CLI tests failed with exit code {e.returncode}")
+
 # ==========================================
 # AI COMMAND GROUP
 # ==========================================
@@ -712,6 +736,8 @@ def dispatch(ctx, branch, task):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.dispatch_jules_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
+
+
 
 @agent_group.command()
 @click.pass_context
@@ -814,6 +840,7 @@ for group in [jules_group]:
     group.add_command(repair)
     group.add_command(messages)
     group.add_command(send)
+
 
 if __name__ == "__main__":
     cli(obj={})
