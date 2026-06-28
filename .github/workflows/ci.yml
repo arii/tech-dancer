@@ -203,17 +203,6 @@ jobs:
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Wait for Bundle Size Check
-        wait: bundle-size
-
-      - name: Verify Bundle Size Check
-        if: always()
-        run: |
-          if [ "${{ steps.bundle-size.outcome }}" = "failure" ]; then
-            echo "Bundle Size Check failed in background"
-            exit 1
-          fi
-
       - name: Check Playwright Report Exists
         id: check_report
         if: always()
@@ -232,6 +221,17 @@ jobs:
           path: playwright-report/
           retention-days: 7
           if-no-files-found: ignore
+
+      - name: Wait for Bundle Size Check
+        wait: bundle-size
+
+      - name: Verify Bundle Size Check
+        if: always()
+        run: |
+          if [ "${{ steps.bundle-size.outcome }}" = "failure" ]; then
+            echo "Bundle Size Check failed in background"
+            exit 1
+          fi
 
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
