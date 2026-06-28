@@ -378,6 +378,24 @@ function generateTodoFile(allViolations) {
 }
 
 const args = process.argv.slice(2);
+
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(`
+Usage: node scripts/detect-antipatterns.mjs [options] [targets...]
+
+Options:
+  --json        Output results in JSON format
+  --count-only  Output only the number of violations
+  --todo        Generate TODO_ANTIPATTERNS.md file
+  --help, -h    Show this help message
+
+Targets:
+  List of directories or files to audit. Defaults to internal CHECK_PATHS.
+  Use '-' to read from stdin.
+  `);
+  process.exit(0);
+}
+
 const isJson = args.includes('--json');
 const isCountOnly = args.includes('--count-only');
 const shouldGenerateTodo = args.includes('--todo');
