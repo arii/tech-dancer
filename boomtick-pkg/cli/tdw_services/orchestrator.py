@@ -1299,15 +1299,16 @@ Respond only after the PR is created or updated:
 
     def analyze_pr_overlaps(self, limit: int = 50, use_cache: bool = True) -> Dict[str, Any]:
         """Identify and propose consolidation of PRs with high functional or structural overlap."""
-        # nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
-        import pickle
-        cache_file = os.path.join(get_or_create_log_dir("cache"), ".pr_cache.pkl")
+        cache_file = os.path.join(get_or_create_log_dir("cache"), "pr_cache.json")
 
         cache = {"prs": {}, "files": {}}
         if use_cache and os.path.exists(cache_file):
             try:
-                with open(cache_file, 'rb') as f:
-                    cache = pickle.load(f)
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    cache = json.load(f)
+                    # Convert file lists back to sets for efficient overlap calculation
+                    for k in cache["files"]:
+                        cache["files"][k] = set(cache["files"][k])
             except Exception:
                 pass
 
@@ -1322,8 +1323,13 @@ Respond only after the PR is created or updated:
                 cache["files"][num] = {f.get('filename') for f in files if not f.get('filename', '').startswith("tests/visual.spec.ts-snapshots/")}
 
         try:
-            with open(cache_file, 'wb') as f:
-                pickle.dump(cache, f)
+            # Convert sets to lists for JSON serialization
+            serializable_cache = {
+                "prs": cache["prs"],
+                "files": {k: list(v) for k, v in cache["files"].items()}
+            }
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                json.dump(serializable_cache, f, indent=2)
         except Exception:
             pass
 

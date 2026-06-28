@@ -16,12 +16,14 @@ class VersionService:
         try:
             url = f"https://registry.npmjs.org/{package_name}/latest"
             res = requests.get(url, timeout=5)
-            if res.status_code == 200:
-                ver = res.json().get("version")
+            res.raise_for_status()
+            ver = res.json().get("version")
+            if ver:
                 self._NPM_CACHE[package_name] = ver
                 return ver
-        except Exception:
-            pass
+        except Exception as e:
+            from tdw_services.utils import log_warn
+            log_warn(f"Failed to fetch latest NPM version for {package_name}: {e}")
         return None
 
     def fetch_latest_node(self) -> Optional[str]:
@@ -30,13 +32,17 @@ class VersionService:
         try:
             url = "https://nodejs.org/dist/index.json"
             res = requests.get(url, timeout=5)
-            if res.status_code == 200:
-                # Latest is the first one
-                ver = res.json()[0].get("version").lstrip('v')
-                self._NPM_CACHE["node"] = ver
-                return ver
-        except Exception:
-            pass
+            res.raise_for_status()
+            data = res.json()
+            if data and isinstance(data, list) and len(data) > 0:
+                # Latest is typically the first one in the list
+                ver = data[0].get("version", "").lstrip('v')
+                if ver:
+                    self._NPM_CACHE["node"] = ver
+                    return ver
+        except Exception as e:
+            from tdw_services.utils import log_warn
+            log_warn(f"Failed to fetch latest Node.js version: {e}")
         return None
 
     def fetch_latest_gh_action(self, action_path: str) -> Optional[str]:
@@ -44,19 +50,21 @@ class VersionService:
             return self._GITHUB_CACHE[action_path]
         try:
             url = f"https://api.github.com/repos/{action_path}/releases/latest"
-            headers = {}
+            headers = {"Accept": "application/vnd.github+json"}
             # Try to use token if available
             token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
             if token:
-                headers["Authorization"] = f"token {token}"
+                headers["Authorization"] = f"Bearer {token}"
 
             res = requests.get(url, headers=headers, timeout=5)
-            if res.status_code == 200:
-                tag = res.json().get("tag_name")
+            res.raise_for_status()
+            tag = res.json().get("tag_name")
+            if tag:
                 self._GITHUB_CACHE[action_path] = tag
                 return tag
-        except Exception:
-            pass
+        except Exception as e:
+            from tdw_services.utils import log_warn
+            log_warn(f"Failed to fetch latest GitHub Action version for {action_path}: {e}")
         return None
 
     def compare_versions(self, v1: str, v2: str) -> int:
