@@ -125,12 +125,12 @@ class Orchestrator:
 
         if is_python:
             feedback += "- **Python Scripting:** Python changes detected.\n"
-            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td_cli.py` or equivalent test files if extending `dev-tools`.\n"
+            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td` or equivalent test files if extending `dev-tools`.\n"
 
         if pr.get('mergeable') is False:
             base_branch_name = PROJECT_CONFIG.base_branch_name
             feedback += f"- **Merge Conflicts:** This PR has conflicts with the `{base_branch_name}` base branch.\n"
-            feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
+            feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `td gh conflicts`), and force push.\n"
 
         if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
             feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
@@ -696,7 +696,7 @@ class Orchestrator:
                 results["steps"].append({"name": name, "status": "failure", "error": str(e)})
                 raise e
         run_step("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
-        run_step("Version Downgrade Check", [sys.executable, os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev_tools", "td_cli.py"), "gh", "verify-versions"])
+        run_step("Version Downgrade Check", [sys.executable, os.path.join(os.path.dirname(os.path.dirname(__file__)), "dev_tools", "td"), "gh", "verify-versions"])
         run_step("TypeScript", ["pnpm", "run", "type-check"])
         run_step("Lint", ["pnpm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]

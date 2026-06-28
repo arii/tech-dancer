@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-td_cli.py - Project Developer CLI Shim
+td - Project Developer CLI Shim
 
 This script is a thin wrapper around the unified tdw_services CLI.
 It maintains backward compatibility for existing scripts and CI workflows.
@@ -107,7 +107,7 @@ def main():
     except Exception as e:
         # If we are in JSON mode, we should ideally output JSON error.
         # Detecting JSON mode from sys.argv since click context isn't available here yet if it failed early.
-        # Note: td_cli.py subcommands are JSON by default.
+        # Note: td subcommands are JSON by default.
         is_json = "--no-json" not in sys.argv
 
         if is_json:

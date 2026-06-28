@@ -45,16 +45,16 @@ repair_origin
 
 run_check "shared" "python3 --version"
 run_check "shared" "pnpm --version"
-run_check "shared" "python3 dev-tools/td_cli.py gh --help"
-run_check "shared" "python3 dev-tools/td_cli.py jules --help"
+run_check "shared" "td gh --help"
+run_check "shared" "td jules --help"
 
 run_check "ai-slop-audit.md" "python3 .agents/scripts/audit-ai-slop.py"
 
-run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh pre-submit --help"
-run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh audit-pr --help"
-run_check "dev-tools-cli-guide.md" "python3 dev-tools/td_cli.py gh validate-issue --help"
+run_check "dev-tools-cli-guide.md" "td gh pre-submit --help"
+run_check "dev-tools-cli-guide.md" "td gh audit-pr --help"
+run_check "dev-tools-cli-guide.md" "td gh validate-issue --help"
 
-run_check "review-pr.md" "python3 dev-tools/td_cli.py gh audit-pr 2821 --fetch"
+run_check "review-pr.md" "td gh audit-pr 2821 --fetch"
 
 run_check "review-ux.md" "npx playwright --version"
 run_check "review-ux.md" "node scripts/detect-antipatterns.mjs --help"

@@ -435,10 +435,10 @@ jobs:
           PYTHONPATH: boomtick-pkg/cli
         run: |
           # Generate the markdown report using the CLI
-          python3 boomtick-pkg/cli/dev_tools/td_cli.py gh summary-report >> "$GITHUB_STEP_SUMMARY"
+          td gh summary-report >> "$GITHUB_STEP_SUMMARY"
 
           # Perform the hard failure assertion
-          if ! python3 boomtick-pkg/cli/dev_tools/td_cli.py gh verify-metrics > /dev/null 2>&1; then
+          if ! td gh verify-metrics > /dev/null 2>&1; then
             echo "❌ CI Metrics verification failed."
             exit 1
           fi
