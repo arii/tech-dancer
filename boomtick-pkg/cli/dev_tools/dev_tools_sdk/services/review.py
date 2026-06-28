@@ -3,12 +3,14 @@ from __future__ import annotations
 import sys
 import os
 
-# Ensure dev_tools is in path to import utils
-# Using absolute path for robustness
+# Standardize pathing for robust imports
 _current_dir = os.path.dirname(os.path.abspath(__file__))
-_dev_tools_dir = os.path.abspath(os.path.join(_current_dir, "..", ".."))
-if _dev_tools_dir not in sys.path:
-    sys.path.insert(0, _dev_tools_dir)
+_cli_root = os.path.abspath(os.path.join(_current_dir, "..", "..", ".."))
+_dev_tools_dir = os.path.join(_cli_root, "dev_tools")
+
+for _path in [_cli_root, _dev_tools_dir]:
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
 
 try:
     from utils import get_stack_versions
