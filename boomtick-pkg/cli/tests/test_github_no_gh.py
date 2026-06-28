@@ -61,21 +61,22 @@ class TestGitHubClientNoGH(unittest.TestCase):
         self.assertIn("page=2", url2)
 
     @patch('tdw_services.services.github.requests.Session.request')
-    def test_list_pull_requests_labels_search(self, mock_request):
-        # Search response
-        # Search response - not what the actual code does though, it calls `/pulls`
-        # The test expects a search response, but `list_pull_requests` hits `/pulls` and filters locally
-        mock_search_res = MagicMock()
-        # list_pull_requests calls `/pulls` directly, so we should mock that instead
-        mock_search_res.json.return_value = [{"number": 123, "labels": [{"name": "bug"}, {"name": "ui"}]}]
-        mock_search_res.status_code = 200
+    def test_list_pull_requests_label_filtering_pulls_endpoint(self, mock_request):
+        """
+        Tests that list_pull_requests correctly calls the /pulls endpoint and
+        filters PRs locally based on labels.
+        """
+        # Page 1 response containing one matching PR
+        mock_pulls_res = MagicMock()
+        mock_pulls_res.json.return_value = [{"number": 123, "labels": [{"name": "bug"}, {"name": "ui"}]}]
+        mock_pulls_res.status_code = 200
 
-        # Next page empty
+        # Page 2 empty
         mock_empty_res = MagicMock()
         mock_empty_res.json.return_value = []
         mock_empty_res.status_code = 200
 
-        mock_request.side_effect = [mock_search_res, mock_empty_res]
+        mock_request.side_effect = [mock_pulls_res, mock_empty_res]
 
         client = GitHubClient(token="fake_token", repo="owner/repo")
         prs = client.list_pull_requests(labels=["bug", "ui"])
