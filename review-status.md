@@ -6,12 +6,12 @@
 | 3125 | [x] Completed | | issue-audit-2026-06-28-3305426199774325228 |
 | 3124 | [x] Completed | | refactor-cli-entrypoints-16986242964918706359 |
 | 3123 | [x] Completed | | chore/boomtick-pkg-extraction-verification-863920397594546624 |
-| 3122 | [x] Completed | | ci-jscpd-internalization-10725461850331724882 |
+| 3122 | [x] Rejected | | ci-jscpd-internalization-10725461850331724882 (Over-engineered workflows, broke CI) |
 | 3121 | [x] Completed | | refactor/cli-entrypoint-standardization-1240173349803879074 |
 | 3120 | [x] Completed | | workflow-audit-fix-15675175790991782635 |
 | 3119 | [x] Completed | | optimize-ci-background-steps-9080205089441332148 |
-| 3118 | [x] Completed | | refactor/task-2-config-flattening-11088732507633299709 |
-| 3117 | [x] Completed | | prevent-version-downgrades-16540995878123730172 |
+| 3118 | [x] Blocked | | refactor/task-2-config-flattening-11088732507633299709 (Missing CI tests) |
+| 3117 | [x] Rejected | | prevent-version-downgrades-16540995878123730172 (Redundant codebase churn, supersedes #3118) |
 | 3116 | [x] Completed | | refactor/cli-issue-commands-2564008830973489750 |
 | 3115 | [x] Completed | | fix-setup-anomalies-17409433692174222464 |
 | 3114 | [x] Completed | | implement-github-create-issue-mcp-3985094494030064141 |

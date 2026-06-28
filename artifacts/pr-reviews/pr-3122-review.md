@@ -1,20 +1,17 @@
 ## Comprehensive PR Review: #3122
 
 ### Summary
-This PR integrates `jscpd` into the main `package.json` and updates the `ci:local` script to run duplicate code audits (`audit:dupes`) alongside existing checks. It updates the lockfile appropriately and removes the external `npx jscpd` usage from GitHub Actions by using the internalized version. It also introduces an ETL workflow validation config.
+This PR integrates `jscpd` for duplicate code detection into `package.json` and significantly refactors GitHub workflows by attempting to internalize them into `boomtick-pkg/workflows/` as reusable composite workflows.
 
-### Observations
-* **File Changes:**
-  * `package.json` correctly adds `jscpd` (v5.0.11) as a dependency, and the scripts section now includes `audit:dupes` utilizing it. `ci:local` correctly chains this new check.
-  * `pnpm-lock.yaml` correctly reflects the `jscpd` addition and its platform-specific bindings.
-  * `.github/workflows/ci.yml` updates correctly swap `npx jscpd .` for `pnpm run audit:dupes`, reducing dependency installation overhead in CI.
-  * ETL and workflow validation additions (`workflow-validation.yml`, `etl.yml`) look standard for maintaining ETL pipelines and validating workflows via `actionlint`.
-* **CI Status:** The PR passes all CI checks (`deploy`, `build`, `resolve-conflicts`, `verify-changes`).
-* **Adherence to Repository Standards:** The integration directly addresses internalizing duplicate code detection correctly.
+### Observations & Critical Findings
+* **CI Validation Missing:** ❌ *Critical Failure.* The CI pipeline status explicitly reads `_No check runs found._`. This means the workflow refactoring fundamentally broke GitHub Actions execution for this branch.
+* **Codebase Churn / Over-engineering:** The decision to replace all `.github/workflows/` with lightweight wrapper files that just `uses:` another local file inside `boomtick-pkg/workflows/` is a massive over-engineering anti-pattern. GitHub Actions does not cleanly support local composite workflow resolution for `workflow_call` across complex monorepos without significant pathing overhead. This introduces unnecessary indirection and breaks the native CI trigger mechanisms.
+* **JSCPD Integration:** While adding `jscpd` to `package.json` is a good step to avoid `npx` overhead, bundling it with this massive workflow breakage obscures the useful change.
 
 ### Recommendations
-* The changes are complete and correct. Internalizing `jscpd` will slightly speed up CI runs.
-* Note: The `workflow-validation.yml` contains a `-ignore 'unexpected key "parallel"'` which correctly supports the experimental GitHub actions features used in this project.
+* **REJECTED.** The workflow internalization pattern introduced here is harmful codebase churn that immediately broke the CI pipeline.
+* Do not merge this PR. The `jscpd` configuration should be extracted into a separate, focused PR.
+* The changes to `.github/workflows` must be reverted immediately as they mask underlying problems and create redundant wrapper files.
 
 ### Conclusion
-Code changes look excellent. The `jscpd` integration is sound and standardizes the toolset. Ready for merge.
+This PR introduces severe regressions by over-engineering the CI pipeline and breaking the execution context. Do not merge.

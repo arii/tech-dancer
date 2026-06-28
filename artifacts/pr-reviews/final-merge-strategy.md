@@ -6,11 +6,11 @@ Based on the 16 comprehensive PR reviews conducted, we strongly recommend mergin
 * **PR #3123**: chore/boomtick-pkg-extraction-verification. Implements core monolithic/standalone CI setup mode.
 * **PR #3081**: feat/modularize-ci-and-install. Extracts CI logic into composite actions (relies on setup from #3123).
 * **PR #3119**: optimize-ci-background-steps. Integrates `parallel:` executing the newly modularized actions without wait conditions.
-* **PR #3122**: ci-jscpd-internalization. A simple addition to the pipeline established in previous CI refactors.
+* **PR #3122**: **[REJECTED]** ci-jscpd-internalization. This PR over-engineered the workflow files, breaking the CI pipeline (`_No check runs found._`). The jscpd changes should be extracted and the workflow changes reverted.
 
 ## Phase 2: Configuration & Validation Consolidation
-* **PR #3118**: refactor/task-2-config-flattening. Deletes redundant validation scripts and centralizes versions via Orchestrator.
-* **PR #3117**: prevent-version-downgrades. **WARNING:** This PR modifies scripts that #3118 deletes. If the logic from #3117 is not already present in the new services created by #3118, the auto-fix logic should be ported. *Recommendation: Review #3117, port the auto-fix logic, and close it rather than merging it directly to avoid massive conflicts.*
+* **PR #3118**: **[BLOCKED]** refactor/task-2-config-flattening. Deletes redundant validation scripts and centralizes versions. Blocked pending full CI test validation.
+* **PR #3117**: **[REJECTED]** prevent-version-downgrades. This PR modifies deprecated files that #3118 deletes. The logic is redundant codebase churn and should be ported manually to #3118 if missing. Do not merge.
 * **PR #3120**: workflow-audit-fix. Validates issues cleanly and captures CLI exceptions.
 * **PR #3116**: refactor/cli-issue-commands. Cleans up commands with `TypedDict` and masking.
 * **PR #3102**: fix/branch-validation-on-dispatch. Improves API search efficiency.
