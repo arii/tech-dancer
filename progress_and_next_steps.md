@@ -2,7 +2,7 @@
 
 ## 📊 Consolidation Epic: Status Overview
 
-The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the self-contained `boomtick-pkg/` directory is complete. This consolidation enables proper Python/TypeScript packaging, streamlines repository-wide automation, and provides a foundation for progressive context discovery.
+The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the self-contained `boomtick-pkg/` directory is complete. This consolidation enables proper Python/TypeScript packaging, streamlines repository-wide automation, and provides a foundation for progressive context discovery and standardized architectural entry points.
 
 ---
 
@@ -14,6 +14,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 - [x] **Architecture Alignment**: Standardized on a unified project structure, ensuring **separation of business logic** from configuration by utilizing `importlib.resources` and ESM-safe path resolutions.
 - [x] **Dynamic Configuration**: Swapped hardcoded paths for dynamic loading in `dev_tools_sdk` and `mcp/src/config.ts`.
 - [x] **Progressive Context Discovery**: Implemented `build-repo-context.py` to index repository structure, JSON schemas, and MCP tools into `.agent-context.json`. This solves the **"cold-start" problem** where agents initially lack repository context to provide efficient feedback.
+- [ ] **Native Argument Refactoring**: Transition manual `sys.argv` help interceptors to standard `argparse`/`click` configurations (e.g., `add_help=False`).
 
 ### Task 1.2: Package Extraction & CI
 - [x] **Composite Action Migration**: Local GitHub Action workflows refactored into composite actions under `boomtick-pkg/mcp/actions/`.
@@ -35,6 +36,27 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 - [ ] **Redundant Schema Cleanup**: Remove legacy `cli-schema.json` fragments and ensure the unified schema in `boomtick-pkg/cli/dev_tools` is the sole authority.
 - [ ] **Legacy Reference Cleanup**: Scrub remaining documentation and code comments for legacy names (`boomtick-mcp`, `dev-tools/`) to ensure the transition to `boomtick-pkg` is absolute.
 - [ ] **Failover Behavior Simplification**: Replace complex multi-layered fallbacks for tokens and paths with a "fail-fast" configuration pattern.
+- [ ] **Import Hardening**: Eliminate all instances of `sys.path` hacking in favor of absolute package imports and editable installations.
+- [ ] **Test Leakage Elimination**: Remove all production logic that branches based on the presence of `pytest` in `sys.modules`.
+
+---
+
+## 🏗️ Architectural Review & Resolution Guide
+
+### 1. Identified Anti-Patterns & Security Risks
+
+#### Anti-Pattern 1: Brittle, Redundant `sys.argv` Hacking
+Legacy entrypoints used raw `sys.argv` string matching to intercept `-h` and `--help` flags, often leading to unreachable dead code and brittle test-aware logic.
+*   **Fix:** Use `argparse(add_help=False)` or `click` native configurations.
+
+#### Anti-Pattern 2: Dynamic Path Mutation (`sys.path` Hacking)
+Manual resolution of relative service dependencies via `sys.path.append` introduces **Path Injection Risks** and environment instability.
+*   **Fix:** Structure code as absolute subpackages and utilize `pyproject.toml` console scripts.
+
+### 2. Standardized Packaging Standards (Mandated)
+- **Deterministic Imports**: No runtime mutations of `sys.path`.
+- **No Test Leakage**: Production logic must never check for `pytest` in `sys.modules`.
+- **Native Argument Handling**: Use structural parsers (`argparse`, `click`) instead of manual `sys.argv` slicing.
 
 ---
 
@@ -57,6 +79,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 - [x] **Path Fixes & Legacy Cleanup**:
   - Audited and updated all remaining `dev-tools` and `boomtick-mcp` path references.
   - Eliminated legacy token fallbacks (`GH_TOKEN`, `PAT_TOKEN`) in favor of standardized `GITHUB_TOKEN`.
+  - **Migration Verification**: Confirmed no active runtime dependencies remain on legacy root directories; all operations transitioned to `boomtick-pkg`.
 
 ---
 
