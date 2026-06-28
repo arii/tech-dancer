@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copy/Paste Detector Report</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f7fafc; color: #2d3748; }
+    a { color: #3182ce; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .header { background: #fff; box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06); padding: 1rem 0; }
+    .header-inner { max-width: 80rem; margin: 0 auto; padding: 0 1rem; }
+    .header h1 { font-size: 1.875rem; font-weight: 600; color: #2d3748; margin: 0; }
+    .main { max-width: 80rem; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: #fff; box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06); border-radius: 0.25rem; padding: 1.5rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.5rem; font-weight: 600; color: #4a5568; margin: 0 0 1rem 0; }
+    .dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .stat-card { padding: 1rem; border-radius: 0.25rem; text-align: center; }
+    .stat-card h3 { font-size: 1.125rem; font-weight: 600; margin: 0 0 0.5rem 0; }
+    .stat-card .val { font-size: 2.25rem; font-weight: 700; }
+    .stat-blue { background: #bee3f8; color: #2a4365; }
+    .stat-green { background: #c6f6d5; color: #276749; }
+    .stat-yellow { background: #fefcbf; color: #975a16; }
+    .stat-red { background: #fed7d7; color: #9b2c2c; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { background: #edf2f7; color: #718096; text-transform: uppercase; font-size: 0.75rem; font-weight: 600; padding: 0.75rem 1.5rem; text-align: left; }
+    tbody td { padding: 0.75rem 1.5rem; border-bottom: 1px solid #edf2f7; font-size: 0.875rem; }
+    tbody tr:hover { background: #f7fafc; }
+    .clone-section { margin-bottom: 2rem; }
+    .clone-section h2 { border-bottom: 2px solid #edf2f7; padding-bottom: 0.5rem; }
+    .clone-item { padding: 1rem 0; border-bottom: 1px solid #edf2f7; }
+    .clone-item:last-child { border-bottom: none; }
+    .clone-info { color: #718096; font-size: 0.875rem; margin-bottom: 0.25rem; }
+    .toggle-btn { background: #a0aec0; color: #fff; border: none; padding: 0.125rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; cursor: pointer; margin-left: 0.5rem; }
+    .toggle-btn:focus { outline: none; }
+    .code-block { background: #f7fafc; border: 1px solid #edf2f7; border-radius: 0.25rem; padding: 1rem; margin-top: 0.5rem; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 0.875rem; color: #2d3748; white-space: pre-wrap; overflow-x: auto; display: none; }
+    .code-block.visible { display: block; }
+    .no-dupes { color: #27ae60; font-weight: 700; font-size: 1.125rem; }
+    .footer { margin-top: 3rem; padding: 2rem 0; border-top: 1px solid #e0e0e0; text-align: center; font-family: -apple-system, sans-serif; color: #666; }
+    .footer p { margin: 0.5rem 0; font-size: 0.875rem; }
+    .footer a { color: #0066cc; }
+    .footer .small { font-size: 0.75rem; color: #999; }
+    @media (max-width: 768px) { .dashboard { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <h1>jscpd - copy/paste report</h1>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="card">
+      <section>
+        <h2>Dashboard</h2>
+        <div class="dashboard">
+          <div class="stat-card stat-blue">
+            <h3>Total Files</h3>
+            <div class="val">265</div>
+          </div>
+          <div class="stat-card stat-green">
+            <h3>Total Lines of Code</h3>
+            <div class="val">55654</div>
+          </div>
+          <div class="stat-card stat-yellow">
+            <h3>Number of Clones</h3>
+            <div class="val">24</div>
+          </div>
+          <div class="stat-card stat-red">
+            <h3>Duplicated Lines</h3>
+            <div class="val">1189 (2.14%)</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="card">
+      <section>
+        <h2>Formats with Duplications</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Files</th>
+              <th>Lines</th>
+              <th>Clones</th>
+              <th>Duplicated Lines</th>
+              <th>Duplicated Tokens</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td><a href="#bash-clones">bash</a></td>
+              <td>20</td>
+              <td>2239</td>
+              <td>1</td>
+              <td>76 (3.39%)</td>
+              <td>189 (2.94%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#css-clones">css</a></td>
+              <td>2</td>
+              <td>691</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#javascript-clones">javascript</a></td>
+              <td>4</td>
+              <td>729</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#json-clones">json</a></td>
+              <td>10</td>
+              <td>2372</td>
+              <td>2</td>
+              <td>115 (4.85%)</td>
+              <td>273 (4.01%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#markdown-clones">markdown</a></td>
+              <td>15</td>
+              <td>4190</td>
+              <td>8</td>
+              <td>578 (13.79%)</td>
+              <td>5254 (41.73%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#markup-clones">markup</a></td>
+              <td>24</td>
+              <td>1277</td>
+              <td>6</td>
+              <td>199 (15.58%)</td>
+              <td>2607 (16.45%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#mermaid-clones">mermaid</a></td>
+              <td>4</td>
+              <td>491</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#perl-clones">perl</a></td>
+              <td>1</td>
+              <td>174</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#python-clones">python</a></td>
+              <td>45</td>
+              <td>8482</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#text-clones">text</a></td>
+              <td>2</td>
+              <td>1743</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#toml-clones">toml</a></td>
+              <td>2</td>
+              <td>213</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#tsx-clones">tsx</a></td>
+              <td>37</td>
+              <td>7053</td>
+              <td>0</td>
+              <td>0 (0.00%)</td>
+              <td>0 (0.00%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#typescript-clones">typescript</a></td>
+              <td>82</td>
+              <td>8537</td>
+              <td>2</td>
+              <td>34 (0.40%)</td>
+              <td>252 (0.69%)</td>
+            </tr>
+
+            <tr>
+              <td><a href="#yaml-clones">yaml</a></td>
+              <td>17</td>
+              <td>17463</td>
+              <td>5</td>
+              <td>187 (1.07%)</td>
+              <td>776 (0.90%)</td>
+            </tr>
+
+            <tr style="font-weight: 700;">
+              <td>Total</td>
+              <td>265</td>
+              <td>55654</td>
+              <td>24</td>
+              <td>1189 (2.14%)</td>
+              <td>9351 (3.41%)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+
+
+    <div class="card">
+      <section class="clone-section">
+        <a name="bash-clones"></a>
+        <h2>bash</h2>
+        <div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/workflows/review-ux.md:bash (Line 21:1 - Line 97:45),
+              boomtick-pkg/.agents/workflows/review-ux.md:bash (Line 21:1 - Line 97:45)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-bash-1')">Show code</button>
+            </div>
+            <pre id="code-bash-1" class="code-block">pnpm install
+npm install -g @playwright/cli@latest
+playwright-cli install --skills
+```
+
+1. **Pre-flight validation**:
+
+```bash
+node scripts/detect-antipatterns.mjs
+```
+
+2. **Start the Application**:
+
+**Interactive (Headed)**:
+```bash
+pnpm run dev &amp;
+```
+
+**Automation-Safe (Headless)**:
+```bash
+# Start with output piped to logs for process lifecycle management
+pnpm run dev &gt; dev-server.log 2&gt;&amp;1 &amp;
+
+# Mandatory health check
+curl --silent --fail --retry 5 --retry-connrefused http://localhost:3000/ || exit 1
+```
+
+3. **Desktop Visual Audit (1440x900)**:
+
+```bash
+playwright-cli open http://localhost:3000/ --headed --viewport-size=1440,900
+```
+
+Verify the following routes and features:
+
+- `/`
+- `/about`
+- `/blog`
+- `/gear`
+- `/research`
+- Search modal
+  Verify: Design consistency, typography, Recharts rendering, and ContentCard/GearCard 16:9 aspect ratio.
+
+```bash
+playwright-cli snapshot
+playwright-cli screenshot --filename=desktop-home.png
+```
+
+4. **Mobile Visual Audit (390x844)**:
+
+```bash
+playwright-cli open http://localhost:3000/ --headed --viewport-size=390,844
+```
+
+Verify the same routes and features, plus:
+
+- Mobile navigation bar (`pb-[safe-area-inset-bottom]`)
+- Mobile spacing and tap targets
+- Search modal overlay and Z-index collisions (ensure no overlap with header/hamburger menu)
+
+```bash
+playwright-cli snapshot
+playwright-cli screenshot --filename=mobile-home.png
+```
+
+5. **Cleanup**:
+
+**Interactive**:
+```bash
+playwright-cli close-all
+npx kill-port 3000
+```
+
+**Automation-Safe (Graceful Shutdown)**:
+```bash
+# Stop the process gracefully in headless scenarios
+kill $(lsof -t -i :3000) 2&gt;/dev/null || true</pre>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="card">
+      <section class="clone-section">
+        <a name="json-clones"></a>
+        <h2>json</h2>
+        <div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/cli/project_config.json (Line 1:1 - Line 59:2),
+              boomtick-pkg/project_config.json (Line 1:1 - Line 59:2)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-json-1')">Show code</button>
+            </div>
+            <pre id="code-json-1" class="code-block">{
+  &quot;core_dirs&quot;: [
+    &quot;src/layouts/&quot;,
+    &quot;src/components/&quot;
+  ],
+  &quot;monolithic_pr_threshold&quot;: 3,
+  &quot;base_branch&quot;: &quot;origin/main&quot;,
+  &quot;max_diff_chars&quot;: 40000,
+  &quot;content_scopes&quot;: {
+    &quot;resources&quot;: &quot;content/resources/&quot;,
+    &quot;posts&quot;: &quot;content/posts/&quot;,
+    &quot;blog&quot;: &quot;content/blog/&quot;,
+    &quot;studies&quot;: &quot;content/studies/&quot;
+  },
+  &quot;ai_synthesis_model&quot;: &quot;gpt-4o-mini&quot;,
+  &quot;ai_review_model&quot;: &quot;gpt-4o&quot;,
+  &quot;ai_vision_model&quot;: &quot;gpt-4o&quot;,
+  &quot;ui_indicators&quot;: [
+    &quot;src/components&quot;,
+    &quot;src/pages&quot;,
+    &quot;src/layouts&quot;,
+    &quot;src/index.css&quot;,
+    &quot;tailwind&quot;
+  ],
+  &quot;tailwind_indicators&quot;: [
+    &quot;px-&quot;,
+    &quot;py-&quot;,
+    &quot;mt-&quot;,
+    &quot;flex&quot;,
+    &quot;grid&quot;,
+    &quot;text-[&quot;
+  ],
+  &quot;audit_check_dirs&quot;: [
+    &quot;src/features&quot;,
+    &quot;src/pages&quot;,
+    &quot;src/components&quot;,
+    &quot;src/layouts&quot;,
+    &quot;src/App.tsx&quot;
+  ],
+  &quot;allowed_bots&quot;: [
+    &quot;github-actions[bot]&quot;,
+    &quot;tech-dancer-bot&quot;,
+    &quot;ariii&quot;
+  ],
+  &quot;worktree_prefix&quot;: &quot;tech-dancer-repair-&quot;,
+  &quot;spec_sections&quot;: [
+    &quot;Problem Statement&quot;,
+    &quot;Goal&quot;,
+    &quot;Non-Goals&quot;,
+    &quot;Proposed Approach&quot;,
+    &quot;Alternatives Considered&quot;,
+    &quot;Architectural Impact&quot;,
+    &quot;Scope&quot;,
+    &quot;UNDERSTAND THE ISSUE&quot;,
+    &quot;DETERMINE APPROACH&quot;,
+    &quot;SPECIFY SCOPE&quot;,
+    &quot;DEFINITION OF DONE&quot;
+  ]
+}</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/cli/project_config.json (Line 1:1 - Line 58:4),
+              project_config.json (Line 1:1 - Line 58:4)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-json-2')">Show code</button>
+            </div>
+            <pre id="code-json-2" class="code-block">{
+  &quot;core_dirs&quot;: [
+    &quot;src/layouts/&quot;,
+    &quot;src/components/&quot;
+  ],
+  &quot;monolithic_pr_threshold&quot;: 3,
+  &quot;base_branch&quot;: &quot;origin/main&quot;,
+  &quot;max_diff_chars&quot;: 40000,
+  &quot;content_scopes&quot;: {
+    &quot;resources&quot;: &quot;content/resources/&quot;,
+    &quot;posts&quot;: &quot;content/posts/&quot;,
+    &quot;blog&quot;: &quot;content/blog/&quot;,
+    &quot;studies&quot;: &quot;content/studies/&quot;
+  },
+  &quot;ai_synthesis_model&quot;: &quot;gpt-4o-mini&quot;,
+  &quot;ai_review_model&quot;: &quot;gpt-4o&quot;,
+  &quot;ai_vision_model&quot;: &quot;gpt-4o&quot;,
+  &quot;ui_indicators&quot;: [
+    &quot;src/components&quot;,
+    &quot;src/pages&quot;,
+    &quot;src/layouts&quot;,
+    &quot;src/index.css&quot;,
+    &quot;tailwind&quot;
+  ],
+  &quot;tailwind_indicators&quot;: [
+    &quot;px-&quot;,
+    &quot;py-&quot;,
+    &quot;mt-&quot;,
+    &quot;flex&quot;,
+    &quot;grid&quot;,
+    &quot;text-[&quot;
+  ],
+  &quot;audit_check_dirs&quot;: [
+    &quot;src/features&quot;,
+    &quot;src/pages&quot;,
+    &quot;src/components&quot;,
+    &quot;src/layouts&quot;,
+    &quot;src/App.tsx&quot;
+  ],
+  &quot;allowed_bots&quot;: [
+    &quot;github-actions[bot]&quot;,
+    &quot;tech-dancer-bot&quot;,
+    &quot;ariii&quot;
+  ],
+  &quot;worktree_prefix&quot;: &quot;tech-dancer-repair-&quot;,
+  &quot;spec_sections&quot;: [
+    &quot;Problem Statement&quot;,
+    &quot;Goal&quot;,
+    &quot;Non-Goals&quot;,
+    &quot;Proposed Approach&quot;,
+    &quot;Alternatives Considered&quot;,
+    &quot;Architectural Impact&quot;,
+    &quot;Scope&quot;,
+    &quot;UNDERSTAND THE ISSUE&quot;,
+    &quot;DETERMINE APPROACH&quot;,
+    &quot;SPECIFY SCOPE&quot;,
+    &quot;DEFINITION OF DONE&quot;
+  ]</pre>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="card">
+      <section class="clone-section">
+        <a name="markdown-clones"></a>
+        <h2>markdown</h2>
+        <div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/AGENTS.md:markdown (Line 1:1 - Line 46:282),
+              boomtick-pkg/.agents/AGENTS.md:markdown (Line 1:1 - Line 46:282)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-1')">Show code</button>
+            </div>
+            <pre id="code-markdown-1" class="code-block"># Tooling and MCP Protocol
+
+This protocol defines the tool selection hierarchy to ensure fast, reliable, and
+context-aware operations. Agents **must** prioritize specialized tools over
+general-purpose shell commands.
+
+---
+
+## 🧠 Intelligence First: Index and Schema
+
+Before executing **any** command, agents MUST:
+
+1. **Consult `.agent-context.json`** — ground truth for repository structure,
+   `file_tree`, `cli_schema`, current feature flags, and metadata. This file is
+   built by `boomtick-pkg/scripts/build-repo-context.py` and kept fresh by the git hooks in
+   `.githooks/`.
+2. **Consult `boomtick-pkg/cli/dev_tools/cli-schema.json`** — canonical authority for local CLI
+   commands. Never guess flags. Never run `--help`. The schema is also embedded
+   in `.agent-context.json` under the `cli_schema` key, so a single read of that
+   file covers both.
+
+---
+
+## ⚠️ Enforcement: MCP is Not Optional
+
+Tier 1 MCP tools are the **required first call** — not a preference.
+
+Every `boomtick-mcp` tool automatically:
+1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema` into context
+2. Calls the appropriate `td_cli.py` subcommand internally
+3. Returns structured output with repo context already attached
+
+Calling `td_cli.py` directly (Tier 2) skips step 1.
+Calling raw bash (Tier 3) skips steps 1 and 2.
+
+**Violation pattern to avoid:**
+
+```bash
+# ❌ Wrong — bypasses MCP, no context injection, no index hydration
+python3 boomtick-pkg/cli/dev_tools/td_cli.py gh pr-diff 2280
+
+# ✅ Correct — MCP hydrates .agent-context.json, calls td_cli.py internally
+github.get_pr_diff(pr_number=2280)
+```
+
+Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/AGENTS.md:markdown (Line 52:1 - Line 89:5),
+              boomtick-pkg/.agents/AGENTS.md:markdown (Line 48:1 - Line 85:5)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-2')">Show code</button>
+            </div>
+            <pre id="code-markdown-2" class="code-block">---
+
+## 🧬 Hierarchy of Tooling
+
+| Tier | Tool | When to Use |
+| :--- | :--- | :--- |
+| **Tier 1** | `boomtick-mcp` tools | Always — primary entry point for all repo and GitHub operations |
+| **Tier 2** | `boomtick-pkg/cli/dev_tools/td_cli.py` | Only when a Tier 1 tool is unavailable or the CLI provides logic not yet exposed via MCP |
+| **Tier 3** | Raw bash / `gh` CLI | Last resort — only when no Tier 1 or Tier 2 tool exists for the task |
+
+---
+
+## 🗺️ Tool Mapping Table
+
+| Category | Task | Tier 1: MCP (required first) | Tier 2: `td_cli.py` (fallback) | Tier 3: Bash (last resort) |
+| :--- | :--- | :--- | :--- | :--- |
+| **GitHub** | Search PRs | `github.search_open_prs` | `td_cli.py gh search-prs` | `gh pr list` |
+| **GitHub** | Get PR Diff | `github.get_pr_diff` | `td_cli.py gh pr-diff &lt;PR&gt;` | `gh pr diff &lt;PR&gt;` |
+| **GitHub** | Check Conflicts (global) | `github.get_merge_conflict_files` | `td_cli.py gh conflicts` | - |
+| **GitHub** | Detect Conflicts (single PR) | `github.get_merge_conflict_files` | `td_cli.py gh detect-conflicts --pr &lt;PR&gt;` | `git merge-tree` |
+| **GitHub** | Merge Conflicts (PR vs base) | `github.get_merge_conflict_files` | `td_cli.py gh merge-conflicts &lt;PR&gt;` | - |
+| **GitHub** | Resolve Conflicts | `github.create_repair_branch` | `td_cli.py gh resolve-conflicts --pr &lt;PR&gt;` | - |
+| **GitHub** | Comment on PR | `github.comment_triage_summary` | `td_cli.py gh audit-pr &lt;PR&gt; --submit` | `gh pr comment` |
+| **GitHub** | Status Board | `github.get_status_board` | `td_cli.py gh status-board` | - |
+| **GitHub** | PR Overlaps | `github.analyze_overlaps` | `td_cli.py gh overlaps` | - |
+| **GitHub** | Audit PR | `github.audit_pr` | `td_cli.py gh audit-pr &lt;PR&gt; --fetch --audit` | - |
+| **GitHub** | Manage Reviews | `github.manage_reviews` | `td_cli.py gh manage-reviews` | - |
+| **GitHub** | Validate Issue | `github.validate_issue` | `td_cli.py gh validate-issue` | - |
+| **GitHub** | Create Issue | `github.create_issue` | `td_cli.py gh create-issue` | `gh issue create` |
+| **GitHub** | Pre-submit Gate | `github.pre_submit` | `td_cli.py gh pre-submit` | - |
+| **Repository** | Read Repo Index | `repo.read_agent_context` | `cat .agent-context.json` | - |
+| **Repository** | List Changed Files | `repo.get_changed_files` | - | `git diff --name-only` |
+| **Repository** | Read CI Logs | `repo.read_ci_logs` | `td_cli.py repo ci-logs &lt;PR&gt;` | `gh run view` |
+| **Repository** | Runtime Check | `repo.doctor` | `td_cli.py doctor` | - |
+| **Testing** | Run Vitest | `repo.run_tests` | - | `pnpm test` |
+| **Testing** | Run Playwright | `repo.run_playwright` | `td_cli.py repo run-playwright` | `npx playwright test` |
+| **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
+| **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/AGENTS.md:markdown (Line 90:148 - Line 185:283),
+              boomtick-pkg/.agents/AGENTS.md:markdown (Line 85:100 - Line 180:283)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-3')">Show code</button>
+            </div>
+            <pre id="code-markdown-3" class="code-block">| **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch &lt;BRANCH&gt; &lt;TASK&gt;` (Note: Use `main` branch for PR consolidations) | - |
+| **Agent** | Fix CI | `jules.fix_ci` | `td_cli.py agent fix-ci --pr-number &lt;PR&gt;` | - |
+| **Agent** | Sync Sessions | `jules.sync_sessions` | `td_cli.py agent sync` | - |
+| **Agent** | Send Message | `jules.send_message` | `td_cli.py agent send &lt;ID&gt; &lt;MSG&gt;` | - |
+| **Agent** | Get Messages | `jules.get_messages` | `td_cli.py agent messages &lt;ID&gt;` | - |
+
+---
+
+## 🔍 Code Review Orchestration
+
+The `orchestrateCodeReview` pipeline must source all inputs from MCP tools.
+Internal diff-fetching functions (`getCodeDiffSummary`, direct filesystem reads)
+must not be called directly — they bypass context injection.
+
+### Required Input Chain (in order)
+
+```
+repo.read_agent_context
+  → github.get_pr_diff
+    → repo.get_changed_files
+      → cache check (prevState.cache hash)
+        → role gate (file surface check)
+          → LLM call (only if no cache hit and role matches surface)
+```
+
+### Why This Matters
+
+`.agent-context.json` contains the full `file_tree` and `cli_schema` already
+indexed by `boomtick-pkg/scripts/build-repo-context.py`. Using `repo.read_agent_context`
+provides pre-indexed structure for free — no redundant filesystem traversal,
+no duplicate diff fetches, no re-indexing on every run.
+
+### Role Gating (Token Optimization)
+
+Before dispatching an LLM call, check the changed file surface against the role:
+
+| Role | Only run if changed files include... |
+| :--- | :--- |
+| `SECURITY` | auth, token, secret, key, crypto, jwt, `.env`, `.pem` surface |
+| `PERFORMANCE` | `.ts`, `.tsx`, `.js` files (skip for doc/config-only PRs) |
+| `STYLE` | any `src/` files |
+| `ARCHITECTURE` | structural files: `package.json`, `vite.config`, `tsconfig`, `src/` |
+
+Early exit: if 2+ roles return `fail`, skip remaining roles — the PR is already
+blocked and further LLM calls add no value.
+
+---
+
+## 🛠️ MCP Tool Usage Guidelines
+
+### Asynchronous Operations
+Always prefer MCP tools for heavy operations (running tests, fetching large
+diffs) to avoid blocking the main execution thread and to leverage built-in
+timeouts and safety guards.
+
+### Safety and Isolation
+Boomtick MCP tools automatically handle isolated worktrees for mutating
+operations. Do **not** manually create worktrees via bash if a corresponding
+MCP tool (e.g. `repo.create_repair_branch`) is available.
+
+### Redaction and Tokens
+MCP tools automatically handle token redaction and authentication. Avoid
+passing raw `GITHUB_TOKEN` values in bash commands if an MCP tool can perform
+the same action.
+
+### CLI Schema Fallback
+If calling Tier 2 directly, read the CLI schema from `.agent-context.json`
+rather than guessing flags or running `--help`:
+
+```bash
+# Extract schema for a specific subcommand before calling it
+cat .agent-context.json | python3 -c &quot;
+import json, sys
+schema = json.load(sys.stdin)
+print(json.dumps(schema[&#x27;cli_schema&#x27;][&#x27;subcommands&#x27;][&#x27;gh pr-diff&#x27;], indent=2))
+&quot;
+```
+
+This is what `boomtick-mcp` does automatically on every call.
+
+## Appendix: CLI Entrypoint &amp; Packaging Standards
+
+### 1. Deterministic Imports over sys.path Manipulation
+* **Rule:** Runtime mutations of the system path (sys.path.append, sys.path.insert) are strictly prohibited.
+* **Reasoning:** Dynamic path manipulation opens up vectors for local path injection exploits, breaks static analysis tools, and causes unpredictable module resolution failures during containerized execution.
+* **Remediation:** All internal utilities, engines, and sidecar components must be structured as absolute subpackages or declared as explicit project dependencies in pyproject.toml. Developers must install the package locally using editable installations (pip install -e .) during development.
+
+### 2. Elimination of Test Leakage in Production
+* **Rule:** Production logic must never be conditionally executed based on the presence of testing modules or frameworks (e.g., checking &quot;pytest&quot; in sys.modules).
+* **Reasoning:** Infiltrating production blocks with test logic obscures code flow, complicates static typing, and creates brittle runtime behaviors that differ wildly between execution environments.
+* **Remediation:** Rely entirely on testing framework idioms—such as pytest&#x27;s monkeypatch and mocking libraries—to mimic runtime state, override environment attributes, and assert execution constraints cleanly.
+
+### 3. Native Argument Handling
+* **Rule:** Raw iteration or evaluation of sys.argv to emulate validation constraints is banned.
+* **Reasoning:** Manual slicing and string matching bypass standard syntax verification engines, leading to redundant checks, unreachable dead code, and unhandled edge-case flag configurations.
+* **Remediation:** Utilize concrete structural definition classes (argparse, click). If default features (such as standard help banners) must be suppressed for machine-to-machine integrations, explicitly pass configuration attributes (add_help=False) directly to the parser factory.</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/AGENTS.md:markdown (Line 168:61 - Line 185:283),
+              AGENTS.md:markdown (Line 234:62 - Line 251:283)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-4')">Show code</button>
+            </div>
+            <pre id="code-markdown-4" class="code-block">This is what `boomtick-mcp` does automatically on every call.
+
+## Appendix: CLI Entrypoint &amp; Packaging Standards
+
+### 1. Deterministic Imports over sys.path Manipulation
+* **Rule:** Runtime mutations of the system path (sys.path.append, sys.path.insert) are strictly prohibited.
+* **Reasoning:** Dynamic path manipulation opens up vectors for local path injection exploits, breaks static analysis tools, and causes unpredictable module resolution failures during containerized execution.
+* **Remediation:** All internal utilities, engines, and sidecar components must be structured as absolute subpackages or declared as explicit project dependencies in pyproject.toml. Developers must install the package locally using editable installations (pip install -e .) during development.
+
+### 2. Elimination of Test Leakage in Production
+* **Rule:** Production logic must never be conditionally executed based on the presence of testing modules or frameworks (e.g., checking &quot;pytest&quot; in sys.modules).
+* **Reasoning:** Infiltrating production blocks with test logic obscures code flow, complicates static typing, and creates brittle runtime behaviors that differ wildly between execution environments.
+* **Remediation:** Rely entirely on testing framework idioms—such as pytest&#x27;s monkeypatch and mocking libraries—to mimic runtime state, override environment attributes, and assert execution constraints cleanly.
+
+### 3. Native Argument Handling
+* **Rule:** Raw iteration or evaluation of sys.argv to emulate validation constraints is banned.
+* **Reasoning:** Manual slicing and string matching bypass standard syntax verification engines, leading to redundant checks, unreachable dead code, and unhandled edge-case flag configurations.
+* **Remediation:** Utilize concrete structural definition classes (argparse, click). If default features (such as standard help banners) must be suppressed for machine-to-machine integrations, explicitly pass configuration attributes (add_help=False) directly to the parser factory.</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/workflows/review-ux.md:markdown (Line 1:1 - Line 140:77),
+              boomtick-pkg/.agents/workflows/review-ux.md:markdown (Line 1:1 - Line 140:77)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-5')">Show code</button>
+            </div>
+            <pre id="code-markdown-5" class="code-block">&gt; Follow `.agents/AGENT_CONTRACT.md` before reading anything else.
+
+## Failure Modes (Read Before Starting)
+
+- **DO NOT** read context from any source other than the files specified below.
+- **DO NOT** create new files unless this workflow explicitly says so.
+- **DO NOT** skip steps because an earlier step produced no output.
+- **DO NOT** submit partial JSON — all placeholder values must be replaced.
+- If you are uncertain about a line number, re-read the diff. Never guess.
+
+---
+
+## description: Systematically review and test UI/UX changes interactively using playwright-cli
+
+# Review UX Changes
+
+0. **Prerequisites**:
+   Ensure project dependencies and `playwright-cli` are installed, and its skills are available.
+
+```bash
+pnpm install
+npm install -g @playwright/cli@latest
+playwright-cli install --skills
+```
+
+1. **Pre-flight validation**:
+
+```bash
+node scripts/detect-antipatterns.mjs
+```
+
+2. **Start the Application**:
+
+**Interactive (Headed)**:
+```bash
+pnpm run dev &amp;
+```
+
+**Automation-Safe (Headless)**:
+```bash
+# Start with output piped to logs for process lifecycle management
+pnpm run dev &gt; dev-server.log 2&gt;&amp;1 &amp;
+
+# Mandatory health check
+curl --silent --fail --retry 5 --retry-connrefused http://localhost:3000/ || exit 1
+```
+
+3. **Desktop Visual Audit (1440x900)**:
+
+```bash
+playwright-cli open http://localhost:3000/ --headed --viewport-size=1440,900
+```
+
+Verify the following routes and features:
+
+- `/`
+- `/about`
+- `/blog`
+- `/gear`
+- `/research`
+- Search modal
+  Verify: Design consistency, typography, Recharts rendering, and ContentCard/GearCard 16:9 aspect ratio.
+
+```bash
+playwright-cli snapshot
+playwright-cli screenshot --filename=desktop-home.png
+```
+
+4. **Mobile Visual Audit (390x844)**:
+
+```bash
+playwright-cli open http://localhost:3000/ --headed --viewport-size=390,844
+```
+
+Verify the same routes and features, plus:
+
+- Mobile navigation bar (`pb-[safe-area-inset-bottom]`)
+- Mobile spacing and tap targets
+- Search modal overlay and Z-index collisions (ensure no overlap with header/hamburger menu)
+
+```bash
+playwright-cli snapshot
+playwright-cli screenshot --filename=mobile-home.png
+```
+
+5. **Cleanup**:
+
+**Interactive**:
+```bash
+playwright-cli close-all
+npx kill-port 3000
+```
+
+**Automation-Safe (Graceful Shutdown)**:
+```bash
+# Stop the process gracefully in headless scenarios
+kill $(lsof -t -i :3000) 2&gt;/dev/null || true
+```
+
+6. **Evaluate Against Core Design Principles**:
+   Systematically review your screenshots and interactive sessions against these heuristics:
+
+- **Spatial Design &amp; Layout**: Grouping, whitespace, consistent padding.
+- **Typography**: Visual hierarchy, line heights, font weights.
+- **Color &amp; Contrast**: Accessibility, interactive states, minimum 4.5:1 contrast ratio.
+- **Interaction &amp; Motion**: Hover/focus states, purposeful transitions.
+- **Cognitive Load &amp; UX Writing**: Choice architecture, action-oriented labels, empty states.
+
+7. **Structure Your UX Feedback**:
+   When logging UX issues from your Playwright snapshots, always use a standardized format:
+
+- **Observation**: What is currently happening in the UI?
+- **Heuristic / Principle Violated**: Why is this a problem?
+- **Impact**: How does this affect the user experience?
+- **Recommendation**: Actionable steps to fix the issue.
+
+_Example Feedback Format_:
+
+&gt; **[Medium] Contrast ratio failure on /blog read-more buttons**
+&gt;
+&gt; - **Observation**: The &quot;Read More&quot; text is `text-gray-400` on a `bg-gray-50` background.
+&gt; - **Principle**: Accessibility (Color &amp; Contrast).
+&gt; - **Impact**: Fails WCAG AA standards; difficult for visually impaired users to read.
+&gt; - **Recommendation**: Change the text class to `text-gray-600` or darker.
+
+8. **Assign Severity Scores**:
+   Categorize your UX feedback so the engineering team knows what to prioritize:
+
+- **Critical (P0)**: Broken functionality, blocking overlap, severe accessibility failures.
+- **High (P1)**: Major visual bugs, confusing navigation, high cognitive load.
+- **Medium (P2)**: Inconsistent design tokens, missing hover states, minor responsive quirks.
+- **Low/Polish (P3)**: Micro-interaction tweaks, slight spacing adjustments.
+
+9. **Consolidate and Share Results**:
+   Compile the Playwright artifacts into a comprehensive UX report:
+
+- Create a PR comment or markdown document titled `UX Audit: [Feature Name]`.
+- Embed the relevant Playwright screenshots.
+- List the structured feedback categorized by severity.
+- Provide a checklist of actionable recommendations to address the findings.</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              AGENTS.md:markdown (Line 1:1 - Line 143:4),
+              boomtick-pkg/AGENTS.md:markdown (Line 1:1 - Line 143:4)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-6')">Show code</button>
+            </div>
+            <pre id="code-markdown-6" class="code-block"># Agent Rules &amp; Runtime Contract
+
+This document defines the rules for writing clean code and the strictly pinned
+runtime environment used in this repository.
+
+## 🧠 Core Principle
+
+&gt; **UI code should build UI using standard pieces, and the runtime environment
+&gt; must remain consistent.**
+
+---
+
+## 1) Import Order
+
+Always sort imports: React → third-party → internal (`@/`) → relative.
+
+## 2) No Inline Styles
+
+Use Tailwind utility classes. Never use `style={{}}` except for dynamic values
+that cannot be expressed as utilities (e.g. CSS custom property injection).
+
+## 3) Component File Structure
+
+```
+imports
+↓
+types / interfaces
+↓
+component function
+↓
+export default
+```
+
+## 4) Props Interface Naming
+
+Name prop interfaces `&lt;ComponentName&gt;Props`. Export them.
+
+## 5) No `any`
+
+Use `unknown` and narrow, or define a proper type. `any` is a lint error.
+
+## 6) Prefer `const` Arrow Functions for Components
+
+```tsx
+// ✅
+const MyComponent = ({ title }: MyComponentProps) =&gt; { ... }
+
+// ❌
+function MyComponent({ title }) { ... }
+```
+
+## 7) Event Handler Naming
+
+Prefix with `handle`: `handleClick`, `handleSubmit`, `handleChange`.
+
+## 8) Conditional Rendering
+
+Use ternary or `&amp;&amp;` inline. Do not use `if` statements inside JSX return.
+
+## 9) Key Props
+
+Always provide stable, unique `key` props on mapped elements. Never use array
+index as key when the list can reorder.
+
+## 10) No Hardcoded Colors
+
+Use design token classes (`text-primary`, `bg-surface`, etc.) from the Tailwind
+config. Never use `text-blue-500` directly.
+
+## 11) Component Size Limit
+
+If a component exceeds ~150 lines, split it. Extract sub-components or hooks.
+
+## 12) Custom Hooks
+
+Extract stateful logic into `use&lt;Name&gt;` hooks in `src/hooks/`. Hooks must not
+contain JSX.
+
+## 13) Async in Components
+
+Use `useEffect` + `useState` or a data-fetching hook. Never `async` the
+component function itself.
+
+## 14) Error Boundaries
+
+Wrap page-level and async-heavy components in an error boundary.
+
+## 15) Accessibility
+
+- All interactive elements must be keyboard-accessible.
+- Images require meaningful `alt` text (or `alt=&quot;&quot;` for decorative).
+- Use semantic HTML (`&lt;button&gt;`, `&lt;nav&gt;`, `&lt;main&gt;`) over `&lt;div onClick&gt;`.
+
+## 16) Test Coverage
+
+New components require at least a smoke test. New utility functions require
+unit tests covering the happy path and one edge case.
+
+## 17) No Direct DOM Manipulation
+
+Do not use `document.querySelector` or `element.style` in React components.
+Use refs (`useRef`) when direct DOM access is unavoidable.
+
+## 18) Environment Variables
+
+Access via `import.meta.env.VITE_*`. Never hardcode secrets or API keys.
+New env vars must be added to `.env.example`.
+
+## 19) Path Aliases
+
+Use `@/` for `src/` imports. Never use deep relative paths (`../../../`).
+
+## 20) Multi-Agent Coordination
+
+When multiple agents work simultaneously:
+
+- Each agent works on its own branch.
+- No agent merges to `main` without CI passing.
+- Conflicts are resolved via `td_cli.py gh resolve-conflicts` (Tier 2) or
+  the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
+  tool mapping.
+- All agents read `.agent-context.json` before starting work to get current
+  repository state.
+
+---
+
+## 21) 🤝 Collaborative GitHub Workflows
+
+Consult `.agents/AGENTS.md` for the **Tooling and MCP Protocol** before
+executing any GitHub or repository operation.
+
+### The Execution Chain
+
+`boomtick-mcp` is a thin gateway over `boomtick-pkg/cli/dev_tools/td_cli.py`. Every MCP tool
+call automatically:
+1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
+2. Calls the appropriate `td_cli.py` subcommand internally
+3. Returns structured output with repo context already attached
+
+Calling `td_cli.py` directly skips step 1. Calling raw bash skips steps 1–2.
+Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
+
+### 🚫 Zero-Fallback Policy</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              AGENTS.md:markdown (Line 147:209 - Line 203:3),
+              boomtick-pkg/AGENTS.md:markdown (Line 141:281 - Line 197:3)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-7')">Show code</button>
+            </div>
+            <pre id="code-markdown-7" class="code-block">If a tool failure occurs, you **must** document the failure in `progress_and_next_steps.md` (CLI Failure Ledger) before proceeding with a manual fallback. This ensures that the failure is tracked and resolved.
+
+### CLI Schema Authority
+
+`boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
+`cli_schema`) is the single source of truth for all `td_cli.py` flags.
+MCP tools read this automatically. If calling Tier 2 directly, always
+read `cli_schema` from `.agent-context.json` first — never guess flags,
+never use `--help`.
+
+### Code Review Token Budget
+
+Agents invoking `orchestrateCodeReview` must respect the optimization pipeline:
+
+- Follow the input chain: `repo.read_agent_context` → `github.get_pr_diff` →
+  `repo.get_changed_files` → cache check → role gate → LLM call
+- Do not dispatch all 4 roles unconditionally — check changed file surface
+  first (see role gating table in `.agents/AGENTS.md`)
+- Max ~8,000 estimated tokens per batch; split earlier if diff sizes warrant
+- A `fail` from SECURITY or ARCHITECTURE is sufficient to block a PR — skip
+  STYLE/PERFORMANCE after 2+ failures
+- Cache hits (`prevState.cache` hash match) skip the LLM call entirely
+
+### Issue Lifecycle
+
+Before auditing GitHub issues, read `docs/agent/issue-audit-rules.md`. Always
+validate issues against the Spec-Driven Issue Template before dispatching Jules.
+
+```bash
+# Validate a single issue (dry-run by default)
+python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number &lt;N&gt;
+
+# Validate and post results
+python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number &lt;N&gt; --post-comments --execute
+```
+
+### Setting GitHub Variables
+
+```bash
+# Read current value
+gh variable get ANY_COUNT_BASELINE
+
+# Update
+gh variable set ANY_COUNT_BASELINE --body 42
+```
+
+---
+
+## 22) Runtime Environment Contract
+
+Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
+
+### Setup &amp; Enforcement
+
+Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
+`.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
+in .githooks/ so .agent-context.json stays fresh automatically by calling</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              AGENTS.md:markdown (Line 204:43 - Line 251:283),
+              boomtick-pkg/AGENTS.md:markdown (Line 197:67 - Line 244:283)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markdown-8')">Show code</button>
+            </div>
+            <pre id="code-markdown-8" class="code-block">boomtick-pkg/scripts/build-repo-context.py.
+
+```bash
+./setup-agent.sh
+```
+
+After setup, validate:
+
+```bash
+python3 boomtick-pkg/cli/dev_tools/td_cli.py doctor
+pnpm run check:runtime-files
+```
+
+### Forbidden Actions
+
+- ❌ **No `npm`**: Use `pnpm` exclusively.
+- ❌ **No Version Managers**: Do not use `nvm`, `pnpm env`, or `volta` to
+  deviate from the pinned versions.
+- ❌ **No `.npmrc` Bloat**: Never add `use-node-version` (breaks Vercel).
+- ❌ **No Lockfile Deletion**: Do not delete `pnpm-lock.yaml`.
+
+Validation failure = immediate halt. Report mismatches; do not attempt to bypass.
+
+---
+
+## GitHub Actions Runtime Policy
+
+All workflows must use `actions/setup-node` with
+`node-version-file: &#x27;.node-version&#x27;`. Do not hardcode Node versions in
+workflow files. Keep GitHub Actions pinned to their latest major versions
+(e.g. `actions/checkout@v7`, `docker/setup-buildx-action@v4`).
+
+## Appendix: CLI Entrypoint &amp; Packaging Standards
+
+### 1. Deterministic Imports over sys.path Manipulation
+* **Rule:** Runtime mutations of the system path (sys.path.append, sys.path.insert) are strictly prohibited.
+* **Reasoning:** Dynamic path manipulation opens up vectors for local path injection exploits, breaks static analysis tools, and causes unpredictable module resolution failures during containerized execution.
+* **Remediation:** All internal utilities, engines, and sidecar components must be structured as absolute subpackages or declared as explicit project dependencies in pyproject.toml. Developers must install the package locally using editable installations (pip install -e .) during development.
+
+### 2. Elimination of Test Leakage in Production
+* **Rule:** Production logic must never be conditionally executed based on the presence of testing modules or frameworks (e.g., checking &quot;pytest&quot; in sys.modules).
+* **Reasoning:** Infiltrating production blocks with test logic obscures code flow, complicates static typing, and creates brittle runtime behaviors that differ wildly between execution environments.
+* **Remediation:** Rely entirely on testing framework idioms—such as pytest&#x27;s monkeypatch and mocking libraries—to mimic runtime state, override environment attributes, and assert execution constraints cleanly.
+
+### 3. Native Argument Handling
+* **Rule:** Raw iteration or evaluation of sys.argv to emulate validation constraints is banned.
+* **Reasoning:** Manual slicing and string matching bypass standard syntax verification engines, leading to redundant checks, unreachable dead code, and unhandled edge-case flag configurations.
+* **Remediation:** Utilize concrete structural definition classes (argparse, click). If default features (such as standard help banners) must be suppressed for machine-to-machine integrations, explicitly pass configuration attributes (add_help=False) directly to the parser factory.</pre>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="card">
+      <section class="clone-section">
+        <a name="markup-clones"></a>
+        <h2>markup</h2>
+        <div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              public/assets/events/jjo-hero.svg (Line 1:1 - Line 66:121),
+              public/assets/events/phoenix-4th-of-july-hero.svg (Line 1:1 - Line 66:121)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markup-1')">Show code</button>
+            </div>
+            <pre id="code-markup-1" class="code-block">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 800 450&quot;&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id=&quot;pride&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;0&quot;&gt;
+      &lt;stop offset=&quot;0%&quot; stop-color=&quot;#E40303&quot;/&gt;
+      &lt;stop offset=&quot;20%&quot; stop-color=&quot;#FF8C00&quot;/&gt;
+      &lt;stop offset=&quot;40%&quot; stop-color=&quot;#FFED00&quot;/&gt;
+      &lt;stop offset=&quot;60%&quot; stop-color=&quot;#008026&quot;/&gt;
+      &lt;stop offset=&quot;80%&quot; stop-color=&quot;#004DFF&quot;/&gt;
+      &lt;stop offset=&quot;100%&quot; stop-color=&quot;#750787&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;linearGradient id=&quot;bg&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;1&quot;&gt;
+      &lt;stop offset=&quot;0%&quot; stop-color=&quot;#0a0a14&quot;/&gt;
+      &lt;stop offset=&quot;100%&quot; stop-color=&quot;#14082a&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;filter id=&quot;glow2&quot;&gt;
+      &lt;feGaussianBlur stdDeviation=&quot;4&quot; result=&quot;blur&quot;/&gt;
+      &lt;feMerge&gt;&lt;feMergeNode in=&quot;blur&quot;/&gt;&lt;feMergeNode in=&quot;SourceGraphic&quot;/&gt;&lt;/feMerge&gt;
+    &lt;/filter&gt;
+  &lt;/defs&gt;
+
+  &lt;rect width=&quot;800&quot; height=&quot;450&quot; fill=&quot;url(#bg)&quot;/&gt;
+
+  &lt;!-- Rainbow arc --&gt;
+  &lt;g filter=&quot;url(#glow2)&quot; opacity=&quot;0.85&quot;&gt;
+    &lt;path d=&quot;M 50 420 Q 400 -60 750 420&quot; fill=&quot;none&quot; stroke=&quot;#E40303&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 80 420 Q 400 -20 720 420&quot; fill=&quot;none&quot; stroke=&quot;#FF8C00&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 110 420 Q 400 20 690 420&quot; fill=&quot;none&quot; stroke=&quot;#FFED00&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 140 420 Q 400 55 660 420&quot; fill=&quot;none&quot; stroke=&quot;#008026&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 170 420 Q 400 85 630 420&quot; fill=&quot;none&quot; stroke=&quot;#004DFF&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 200 420 Q 400 110 600 420&quot; fill=&quot;none&quot; stroke=&quot;#750787&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Scattered sparkles --&gt;
+  &lt;g fill=&quot;white&quot; filter=&quot;url(#glow2)&quot;&gt;
+    &lt;polygon points=&quot;200,120 205,135 220,135 208,144 213,158 200,149 187,158 192,144 180,135 195,135&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;polygon points=&quot;580,90 584,102 596,102 586,110 590,122 580,115 570,122 574,110 564,102 576,102&quot; opacity=&quot;0.65&quot;/&gt;
+    &lt;polygon points=&quot;380,50 383,60 393,60 385,66 388,76 380,70 372,76 375,66 367,60 377,60&quot; opacity=&quot;0.6&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Disco dots scattered --&gt;
+  &lt;g opacity=&quot;0.6&quot;&gt;
+    &lt;circle cx=&quot;120&quot; cy=&quot;200&quot; r=&quot;5&quot; fill=&quot;#E40303&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;180&quot; cy=&quot;160&quot; r=&quot;4&quot; fill=&quot;#FF8C00&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;250&quot; cy=&quot;220&quot; r=&quot;5&quot; fill=&quot;#FFED00&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;560&quot; cy=&quot;190&quot; r=&quot;5&quot; fill=&quot;#008026&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;630&quot; cy=&quot;150&quot; r=&quot;4&quot; fill=&quot;#004DFF&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;680&quot; cy=&quot;210&quot; r=&quot;5&quot; fill=&quot;#750787&quot; filter=&quot;url(#glow2)&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Dance floor tiles suggestion --&gt;
+  &lt;g opacity=&quot;0.12&quot; stroke=&quot;#ffffff&quot; stroke-width=&quot;0.5&quot; fill=&quot;none&quot;&gt;
+    &lt;line x1=&quot;0&quot; y1=&quot;350&quot; x2=&quot;800&quot; y2=&quot;350&quot;/&gt;
+    &lt;line x1=&quot;0&quot; y1=&quot;390&quot; x2=&quot;800&quot; y2=&quot;390&quot;/&gt;
+    &lt;line x1=&quot;0&quot; y1=&quot;430&quot; x2=&quot;800&quot; y2=&quot;430&quot;/&gt;
+    &lt;line x1=&quot;100&quot; y1=&quot;340&quot; x2=&quot;100&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;200&quot; y1=&quot;340&quot; x2=&quot;200&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;300&quot; y1=&quot;340&quot; x2=&quot;300&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;400&quot; y1=&quot;340&quot; x2=&quot;400&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;500&quot; y1=&quot;340&quot; x2=&quot;500&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;600&quot; y1=&quot;340&quot; x2=&quot;600&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;700&quot; y1=&quot;340&quot; x2=&quot;700&quot; y2=&quot;450&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Label --&gt;
+  &lt;rect x=&quot;0&quot; y=&quot;375&quot; width=&quot;800&quot; height=&quot;75&quot; fill=&quot;url(#bg)&quot; opacity=&quot;0.7&quot;/&gt;
+  &lt;text x=&quot;32&quot; y=&quot;408&quot; font-family=&quot;Georgia, serif&quot; font-size=&quot;22&quot; font-weight=&quot;bold&quot; fill=&quot;#FFED00&quot; letter-spacing=&quot;2&quot;&gt;JACK &amp;amp; JILL O&#x27;RAMA&lt;/text&gt;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              public/assets/events/jjo-hero.svg (Line 1:1 - Line 66:121),
+              public/assets/events/soswing-hero.svg (Line 1:1 - Line 66:121)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markup-2')">Show code</button>
+            </div>
+            <pre id="code-markup-2" class="code-block">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 800 450&quot;&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id=&quot;pride&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;0&quot;&gt;
+      &lt;stop offset=&quot;0%&quot; stop-color=&quot;#E40303&quot;/&gt;
+      &lt;stop offset=&quot;20%&quot; stop-color=&quot;#FF8C00&quot;/&gt;
+      &lt;stop offset=&quot;40%&quot; stop-color=&quot;#FFED00&quot;/&gt;
+      &lt;stop offset=&quot;60%&quot; stop-color=&quot;#008026&quot;/&gt;
+      &lt;stop offset=&quot;80%&quot; stop-color=&quot;#004DFF&quot;/&gt;
+      &lt;stop offset=&quot;100%&quot; stop-color=&quot;#750787&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;linearGradient id=&quot;bg&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;1&quot;&gt;
+      &lt;stop offset=&quot;0%&quot; stop-color=&quot;#0a0a14&quot;/&gt;
+      &lt;stop offset=&quot;100%&quot; stop-color=&quot;#14082a&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;filter id=&quot;glow2&quot;&gt;
+      &lt;feGaussianBlur stdDeviation=&quot;4&quot; result=&quot;blur&quot;/&gt;
+      &lt;feMerge&gt;&lt;feMergeNode in=&quot;blur&quot;/&gt;&lt;feMergeNode in=&quot;SourceGraphic&quot;/&gt;&lt;/feMerge&gt;
+    &lt;/filter&gt;
+  &lt;/defs&gt;
+
+  &lt;rect width=&quot;800&quot; height=&quot;450&quot; fill=&quot;url(#bg)&quot;/&gt;
+
+  &lt;!-- Rainbow arc --&gt;
+  &lt;g filter=&quot;url(#glow2)&quot; opacity=&quot;0.85&quot;&gt;
+    &lt;path d=&quot;M 50 420 Q 400 -60 750 420&quot; fill=&quot;none&quot; stroke=&quot;#E40303&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 80 420 Q 400 -20 720 420&quot; fill=&quot;none&quot; stroke=&quot;#FF8C00&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 110 420 Q 400 20 690 420&quot; fill=&quot;none&quot; stroke=&quot;#FFED00&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 140 420 Q 400 55 660 420&quot; fill=&quot;none&quot; stroke=&quot;#008026&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 170 420 Q 400 85 630 420&quot; fill=&quot;none&quot; stroke=&quot;#004DFF&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;path d=&quot;M 200 420 Q 400 110 600 420&quot; fill=&quot;none&quot; stroke=&quot;#750787&quot; stroke-width=&quot;18&quot; opacity=&quot;0.7&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Scattered sparkles --&gt;
+  &lt;g fill=&quot;white&quot; filter=&quot;url(#glow2)&quot;&gt;
+    &lt;polygon points=&quot;200,120 205,135 220,135 208,144 213,158 200,149 187,158 192,144 180,135 195,135&quot; opacity=&quot;0.7&quot;/&gt;
+    &lt;polygon points=&quot;580,90 584,102 596,102 586,110 590,122 580,115 570,122 574,110 564,102 576,102&quot; opacity=&quot;0.65&quot;/&gt;
+    &lt;polygon points=&quot;380,50 383,60 393,60 385,66 388,76 380,70 372,76 375,66 367,60 377,60&quot; opacity=&quot;0.6&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Disco dots scattered --&gt;
+  &lt;g opacity=&quot;0.6&quot;&gt;
+    &lt;circle cx=&quot;120&quot; cy=&quot;200&quot; r=&quot;5&quot; fill=&quot;#E40303&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;180&quot; cy=&quot;160&quot; r=&quot;4&quot; fill=&quot;#FF8C00&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;250&quot; cy=&quot;220&quot; r=&quot;5&quot; fill=&quot;#FFED00&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;560&quot; cy=&quot;190&quot; r=&quot;5&quot; fill=&quot;#008026&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;630&quot; cy=&quot;150&quot; r=&quot;4&quot; fill=&quot;#004DFF&quot; filter=&quot;url(#glow2)&quot;/&gt;
+    &lt;circle cx=&quot;680&quot; cy=&quot;210&quot; r=&quot;5&quot; fill=&quot;#750787&quot; filter=&quot;url(#glow2)&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Dance floor tiles suggestion --&gt;
+  &lt;g opacity=&quot;0.12&quot; stroke=&quot;#ffffff&quot; stroke-width=&quot;0.5&quot; fill=&quot;none&quot;&gt;
+    &lt;line x1=&quot;0&quot; y1=&quot;350&quot; x2=&quot;800&quot; y2=&quot;350&quot;/&gt;
+    &lt;line x1=&quot;0&quot; y1=&quot;390&quot; x2=&quot;800&quot; y2=&quot;390&quot;/&gt;
+    &lt;line x1=&quot;0&quot; y1=&quot;430&quot; x2=&quot;800&quot; y2=&quot;430&quot;/&gt;
+    &lt;line x1=&quot;100&quot; y1=&quot;340&quot; x2=&quot;100&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;200&quot; y1=&quot;340&quot; x2=&quot;200&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;300&quot; y1=&quot;340&quot; x2=&quot;300&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;400&quot; y1=&quot;340&quot; x2=&quot;400&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;500&quot; y1=&quot;340&quot; x2=&quot;500&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;600&quot; y1=&quot;340&quot; x2=&quot;600&quot; y2=&quot;450&quot;/&gt;
+    &lt;line x1=&quot;700&quot; y1=&quot;340&quot; x2=&quot;700&quot; y2=&quot;450&quot;/&gt;
+  &lt;/g&gt;
+
+  &lt;!-- Label --&gt;
+  &lt;rect x=&quot;0&quot; y=&quot;375&quot; width=&quot;800&quot; height=&quot;75&quot; fill=&quot;url(#bg)&quot; opacity=&quot;0.7&quot;/&gt;
+  &lt;text x=&quot;32&quot; y=&quot;408&quot; font-family=&quot;Georgia, serif&quot; font-size=&quot;22&quot; font-weight=&quot;bold&quot; fill=&quot;#FFED00&quot; letter-spacing=&quot;2&quot;&gt;JACK &amp;amp; JILL O&#x27;RAMA&lt;/text&gt;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              public/favicon.svg (Line 1:1 - Line 24:7),
+              public/icon.svg (Line 1:1 - Line 24:7)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markup-3')">Show code</button>
+            </div>
+            <pre id="code-markup-3" class="code-block">&lt;svg width=&quot;512&quot; height=&quot;512&quot; viewBox=&quot;0 0 512 512&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;style&gt;
+    .brand-stop-accent { stop-color: #22d3ee; }
+    .brand-stop-purple { stop-color: #a78bfa; }
+    .brand-text-accent { fill: #22d3ee; }
+    .brand-text-muted { fill: rgba(241, 245, 249, 0.6); }
+    .brand-wordmark {
+      font-family: &#x27;Bricolage Grotesque&#x27;, sans-serif;
+      font-weight: 800;
+    }
+  &lt;/style&gt;
+  &lt;rect width=&quot;512&quot; height=&quot;512&quot; rx=&quot;108&quot; fill=&quot;#020617&quot;/&gt;
+  &lt;text
+    x=&quot;50%&quot;
+    y=&quot;53%&quot;
+    text-anchor=&quot;middle&quot;
+    dominant-baseline=&quot;middle&quot;
+    font-size=&quot;440&quot;
+    letter-spacing=&quot;-38&quot;
+    class=&quot;brand-wordmark&quot;
+  &gt;
+    &lt;tspan fill=&quot;#ffffff&quot;&gt;b&lt;/tspan&gt;&lt;tspan class=&quot;brand-text-accent&quot; fill=&quot;#22d3ee&quot;&gt;t&lt;/tspan&gt;
+  &lt;/text&gt;
+&lt;/svg&gt;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              public/images/gear/diy/step1-clean.svg (Line 1:1 - Line 16:6),
+              public/images/gear/diy/step2-trace.svg (Line 1:1 - Line 16:6)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markup-4')">Show code</button>
+            </div>
+            <pre id="code-markup-4" class="code-block">&lt;svg viewBox=&quot;0 0 400 400&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;rect class=&quot;bg&quot; width=&quot;400&quot; height=&quot;400&quot; rx=&quot;8&quot; /&gt;
+  &lt;style&gt;
+    .bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: &#x27;Albert Sans&#x27;, system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: &#x27;Albert Sans&#x27;, system-ui, sans-serif; font-size: 12px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+&lt;/style&gt;
+
+  &lt;g transform=&quot;translate(125, 40) scale(0.75)&quot;&gt;
+    &lt;path class=&quot;shoe&quot; d=&quot;M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z&quot; /&gt;
+    &lt;g transform=&quot;translate(140, 80)&quot;&gt;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              public/images/gear/diy/step1-clean.svg (Line 1:1 - Line 16:18),
+              public/images/gear/diy/step4-apply.svg (Line 1:1 - Line 16:17)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markup-5')">Show code</button>
+            </div>
+            <pre id="code-markup-5" class="code-block">&lt;svg viewBox=&quot;0 0 400 400&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;rect class=&quot;bg&quot; width=&quot;400&quot; height=&quot;400&quot; rx=&quot;8&quot; /&gt;
+  &lt;style&gt;
+    .bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: &#x27;Albert Sans&#x27;, system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: &#x27;Albert Sans&#x27;, system-ui, sans-serif; font-size: 12px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+&lt;/style&gt;
+
+  &lt;g transform=&quot;translate(125, 40) scale(0.75)&quot;&gt;
+    &lt;path class=&quot;shoe&quot; d=&quot;M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z&quot; /&gt;
+    &lt;g transform=&quot;translate(140, 80)&quot;&gt;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              public/images/gear/diy/step1-clean.svg (Line 1:1 - Line 17:28),
+              public/images/gear/diy/step5-finished.svg (Line 1:1 - Line 17:6)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-markup-6')">Show code</button>
+            </div>
+            <pre id="code-markup-6" class="code-block">&lt;svg viewBox=&quot;0 0 400 400&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;rect class=&quot;bg&quot; width=&quot;400&quot; height=&quot;400&quot; rx=&quot;8&quot; /&gt;
+  &lt;style&gt;
+    .bg { fill: #0f172a; }
+    .shoe { fill: #1e293b; stroke: #334155; stroke-width: 3; }
+    .suede { fill: #475569; stroke: #64748b; stroke-width: 2; }
+    .accent-line { stroke: #22d3ee; stroke-width: 2.5; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: &#x27;Albert Sans&#x27;, system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; fill: #f1f5f9; }
+    .label { font-family: &#x27;Albert Sans&#x27;, system-ui, sans-serif; font-size: 12px; font-weight: 600; fill: #22d3ee; text-anchor: middle; }
+    .tool { fill: #94a3b8; stroke: #f1f5f9; stroke-width: 1.5; }
+    .checkmark { stroke: #22d3ee; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+&lt;/style&gt;
+
+  &lt;g transform=&quot;translate(125, 40) scale(0.75)&quot;&gt;
+    &lt;path class=&quot;shoe&quot; d=&quot;M30,20 Q80,0 120,20 Q150,50 140,150 Q130,250 110,300 Q90,340 75,340 Q60,340 40,300 Q20,250 10,150 Q0,50 30,20 Z&quot; /&gt;
+    &lt;g transform=&quot;translate(140, 80)&quot;&gt;
+       &lt;rect fill=&quot;#f8fafc&quot; stroke=&quot;#cbd5e1&quot; stroke-width=&quot;2&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;30&quot; height=&quot;30&quot; rx=&quot;4&quot; transform=&quot;rotate(-20)&quot; /&gt;</pre>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="card">
+      <section class="clone-section">
+        <a name="typescript-clones"></a>
+        <h2>typescript</h2>
+        <div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/mcp/src/tools/jules/create-session.ts (Line 56:7 - Line 71:65),
+              boomtick-pkg/mcp/src/tools/jules/get-session.ts (Line 19:6 - Line 34:65)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-typescript-1')">Show code</button>
+            </div>
+            <pre id="code-typescript-1" class="code-block">    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Jules API error (${response.status}): ${errText}`);
+  }
+
+  const data = (await response.json()) as any;
+  const name = data.name || &quot;&quot;;
+  const id = name.startsWith(&quot;sessions/&quot;) ? name.substring(9) : name;
+
+  let status: JulesStatus = &quot;PENDING&quot;;
+  if (data.state === &quot;SUCCEEDED&quot; || data.state === &quot;COMPLETED&quot;) status = &quot;COMPLETED&quot;;
+  else if (data.state === &quot;FAILED&quot; || data.state === &quot;CANCELLED&quot; || data.state === &quot;TERMINATED&quot;) status = &quot;FAILED&quot;;
+  else if (data.state === &quot;IN_PROGRESS&quot;) status = &quot;IN_PROGRESS&quot;;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/mcp/src/tools/jules/get-pr.ts (Line 7:105 - Line 26:47),
+              boomtick-pkg/mcp/src/tools/jules/get-session.ts (Line 8:120 - Line 27:47)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-typescript-2')">Show code</button>
+            </div>
+            <pre id="code-typescript-2" class="code-block">export async function getJulesPullRequestHandler(input: z.infer&lt;typeof GetJulesPullRequestInputSchema&gt;) {
+  const apiKey = process.env.JULES_API_KEY;
+  if (!apiKey) {
+    throw new Error(&quot;JULES_API_KEY environment variable is not set.&quot;);
+  }
+
+  const cleanId = input.id.replace(&quot;sessions/&quot;, &quot;&quot;);
+  const response = await fetch(`https://jules.googleapis.com/v1alpha/sessions/${cleanId}`, {
+    method: &quot;GET&quot;,
+    headers: {
+      &quot;x-goog-api-key&quot;: apiKey,
+    },
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Jules API error (${response.status}): ${errText}`);
+  }
+
+  const data = (await response.json()) as any;</pre>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="card">
+      <section class="clone-section">
+        <a name="yaml-clones"></a>
+        <h2>yaml</h2>
+        <div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              .agents/audit.config.yaml (Line 1:1 - Line 87:30),
+              boomtick-pkg/.agents/audit.config.yaml (Line 1:1 - Line 87:30)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-yaml-1')">Show code</button>
+            </div>
+            <pre id="code-yaml-1" class="code-block">categories:
+  weak_intensifiers:
+    terms:
+      - actually
+      - really
+      - basically
+      - kind of
+      - sort of
+    priority: high
+    fix: &quot;Delete or replace with direct statement&quot;
+  corporate_speak:
+    terms:
+      - curated
+      - synergy
+      - next-level
+      - cutting-edge
+      - empower
+      - industry-leading
+    priority: high
+    fix: &quot;Replace with specific, active verbs (e.g. selected, tested, chosen)&quot;
+  credential_crutch:
+    terms:
+      - As a PhD
+      - In my research
+      - Given my robotics
+      - My analysis suggests
+    priority: high
+    fix: &quot;Delete or provide specific examples instead&quot;
+  academic_scaffolding:
+    terms:
+      - Utilize
+      - Facilitate
+      - Methodology
+      - Pedagogical
+      - It was observed
+    priority: high
+    fix: &quot;Replace with active verbs (Use, Fix, Help, Method, Teaching, etc.)&quot;
+  wcs_conflicts:
+    terms:
+      - The Circuit
+      - Circuit Points
+      - Point Chasing
+    priority: high
+    fix: &quot;Use approved terminology (WCS Events, WSDC Database, Registry Standing, etc.)&quot;
+  robotics_jargon:
+    terms:
+      - Kinetics
+      - Signal Latency
+      - Actuate
+      - Interface
+    priority: high
+    fix: &quot;Use dance terminology (Momentum, Connection Delay, Move, Communication)&quot;
+  passive_voice:
+    terms:
+      - can be
+      - will be
+      - is seen
+      - is applied
+      - is facilitated
+    priority: high
+    fix: &quot;Convert to active voice&quot;
+  false_authority:
+    terms:
+      - Studies show
+      - Everyone agrees
+      - As we can see
+      - It&#x27;s important to note
+    priority: high
+    fix: &quot;Delete or provide specific evidence&quot;
+  ai_cliches:
+    terms:
+      - Tapestry
+      - Vibrant
+      - Testament
+      - Unlock your potential
+      - Game-changing
+      - Unprecedented
+      - Journey
+      - Heartbeat
+      - Quintessential
+      - Strategic Vulnerability
+      - Narrative Grounding
+      - In the world of
+      - But the reality is
+      - Picture this
+    priority: high
+    fix: &quot;Delete immediately&quot;</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/mcp/pnpm-lock.yaml (Line 427:27 - Line 444:20),
+              pnpm-lock.yaml (Line 3326:29 - Line 3343:20)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-yaml-2')">Show code</button>
+            </div>
+            <pre id="code-yaml-2" class="code-block">    engines: {node: &#x27;&gt;=18&#x27;}
+
+  content-disposition@1.1.0:
+    resolution: {integrity: sha512-5jRCH9Z/+DRP7rkvY83B+yGIGX96OYdJmzngqnw2SBSxqCFPd0w2km3s5iawpGX8krnwSGmF0FW5Nhr0Hfai3g==}
+    engines: {node: &#x27;&gt;=18&#x27;}
+
+  content-type@1.0.5:
+    resolution: {integrity: sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==}
+    engines: {node: &#x27;&gt;= 0.6&#x27;}
+
+  content-type@2.0.0:
+    resolution: {integrity: sha512-j/O/d7GcZCyNl7/hwZAb606rzqkyvaDctLmckbxLzHvFBzTJHuGEdodATcP3yIRoDrLHkIATJuvzbFlp/ki2cQ==}
+    engines: {node: &#x27;&gt;=18&#x27;}
+
+  convert-source-map@2.0.0:
+    resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  cookie-signature@1.2.2:</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/mcp/pnpm-lock.yaml (Line 767:3 - Line 783:10),
+              pnpm-lock.yaml (Line 5926:3 - Line 5942:7)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-yaml-3')">Show code</button>
+            </div>
+            <pre id="code-yaml-3" class="code-block">  side-channel-list@1.0.1:
+    resolution: {integrity: sha512-mjn/0bi/oUURjc5Xl7IaWi/OJJJumuoJFQJfDDyO46+hBWsfaVM65TBHq2eoZBhzl9EchxOijpkbRC8SVBQU0w==}
+    engines: {node: &#x27;&gt;= 0.4&#x27;}
+
+  side-channel-map@1.0.1:
+    resolution: {integrity: sha512-VCjCNfgMsby3tTdo02nbjtM/ewra6jPHmpThenkTYh8pG9ucZ/1P8So4u4FGBek/BjpOVsDCMoLA/iuBKIFXRA==}
+    engines: {node: &#x27;&gt;= 0.4&#x27;}
+
+  side-channel-weakmap@1.0.2:
+    resolution: {integrity: sha512-WPS/HvHQTYnHisLo9McqBHOJk2FkHO/tlpvldyrnem4aeQp4hai3gythswg6p01oSoTl58rcpiFAjF2br2Ak2A==}
+    engines: {node: &#x27;&gt;= 0.4&#x27;}
+
+  side-channel@1.1.0:
+    resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
+    engines: {node: &#x27;&gt;= 0.4&#x27;}
+
+  siginfo@2.0.0:</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/mcp/pnpm-lock.yaml (Line 876:11 - Line 918:23),
+              pnpm-lock.yaml (Line 6604:12 - Line 6646:23)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-yaml-4')">Show code</button>
+            </div>
+            <pre id="code-yaml-4" class="code-block">      yaml:
+        optional: true
+
+  vitest@4.1.9:
+    resolution: {integrity: sha512-nE3/LEyc0z87uHYLZebqCUOaJr2hdtuPp7BQ4BosVFnfltxgAvMG08NyrSGlPpOUWvR27c5flSmYFTNr78L9GQ==}
+    engines: {node: ^20.0.0 || ^22.0.0 || &gt;=24.0.0}
+    hasBin: true
+    peerDependencies:
+      &#x27;@edge-runtime/vm&#x27;: &#x27;*&#x27;
+      &#x27;@opentelemetry/api&#x27;: ^1.9.0
+      &#x27;@types/node&#x27;: ^20.0.0 || ^22.0.0 || &gt;=24.0.0
+      &#x27;@vitest/browser-playwright&#x27;: 4.1.9
+      &#x27;@vitest/browser-preview&#x27;: 4.1.9
+      &#x27;@vitest/browser-webdriverio&#x27;: 4.1.9
+      &#x27;@vitest/coverage-istanbul&#x27;: 4.1.9
+      &#x27;@vitest/coverage-v8&#x27;: 4.1.9
+      &#x27;@vitest/ui&#x27;: 4.1.9
+      happy-dom: &#x27;*&#x27;
+      jsdom: &#x27;*&#x27;
+      vite: ^6.0.0 || ^7.0.0 || ^8.0.0
+    peerDependenciesMeta:
+      &#x27;@edge-runtime/vm&#x27;:
+        optional: true
+      &#x27;@opentelemetry/api&#x27;:
+        optional: true
+      &#x27;@types/node&#x27;:
+        optional: true
+      &#x27;@vitest/browser-playwright&#x27;:
+        optional: true
+      &#x27;@vitest/browser-preview&#x27;:
+        optional: true
+      &#x27;@vitest/browser-webdriverio&#x27;:
+        optional: true
+      &#x27;@vitest/coverage-istanbul&#x27;:
+        optional: true
+      &#x27;@vitest/coverage-v8&#x27;:
+        optional: true
+      &#x27;@vitest/ui&#x27;:
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true</pre>
+          </div>
+
+          <div class="clone-item">
+            <div class="clone-info">
+              boomtick-pkg/mcp/pnpm-lock.yaml (Line 1596:3 - Line 1622:34),
+              pnpm-lock.yaml (Line 13099:3 - Line 13125:34)
+            </div>
+            <div>
+              <button class="toggle-btn" onclick="toggle('code-yaml-5')">Show code</button>
+            </div>
+            <pre id="code-yaml-5" class="code-block">  side-channel-list@1.0.1:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-map@1.0.1:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-weakmap@1.0.2:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-map: 1.0.1
+
+  side-channel@1.1.0:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-list: 1.0.1
+      side-channel-map: 1.0.1
+      side-channel-weakmap: 1.0.2</pre>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+
+  </div>
+
+  <div class="footer">
+    <p>Generated by <a href="https://jscpd.dev" target="_blank">jscpd</a> v0.1.7 by <a href="https://github.com/kucherenko" target="_blank">Andrey Kucherenko</a></p>
+    <p><a href="https://www.npmjs.com/package/jscpd" target="_blank"><img src="https://img.shields.io/npm/dw/jscpd.svg?style=flat-square" alt="npm weekly downloads" style="vertical-align: middle;"></a></p>
+  </div>
+
+  <script>
+    function toggle(id) {
+      var el = document.getElementById(id);
+      if (el) { el.classList.toggle('visible'); }
+    }
+  </script>
+</body>
+</html>
