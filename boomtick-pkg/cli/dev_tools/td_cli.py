@@ -8,6 +8,8 @@ It maintains backward compatibility for existing scripts and CI workflows.
 
 import sys
 import os
+# Add the dev-tools directory to sys.path so we can import tdw_services
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from tdw_services.cli import cli
