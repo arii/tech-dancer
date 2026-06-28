@@ -117,7 +117,7 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
 
-      - parallel: # actionlint-disable syntax-check
+      - parallel:
           - name: UI Anti-Pattern Audit - Gate
             shell: bash
             env:
@@ -183,7 +183,7 @@ jobs:
           pnpm run build
 
 
-      - parallel: # actionlint-disable syntax-check
+      - parallel:
           - name: Bundle Size Check
             id: bundle-size
             env:
@@ -257,7 +257,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
-      - parallel: # actionlint-disable syntax-check
+      - parallel:
           - name: Deployment Impact Analysis
             run: pnpm run impact:analysis
 
@@ -296,7 +296,7 @@ jobs:
       - name: Visual Diff
         run: pnpm run impact:visual-diff
 
-      - parallel: # actionlint-disable syntax-check
+      - parallel:
           - name: DOM Diff
             run: pnpm run impact:dom-diff
 
@@ -306,7 +306,7 @@ jobs:
               VISUAL_DIFF_THRESHOLD: 1.5
             run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
-      - parallel: # actionlint-disable syntax-check
+      - parallel:
           - name: Visual review agent
             if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
             env:
