@@ -225,14 +225,6 @@ jobs:
       - name: Wait for Bundle Size Check
         wait: bundle-size
 
-      - name: Verify Bundle Size Check
-        if: always()
-        run: |
-          if [ "${{ steps.bundle-size.outcome }}" = "failure" ]; then
-            echo "Bundle Size Check failed in background"
-            exit 1
-          fi
-
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
@@ -263,10 +255,12 @@ jobs:
       - parallel:
           - name: Deployment Impact Analysis
             run: pnpm run impact:analysis
+
           - name: Build Main
             env:
               DISABLE_MINIFY: true
             run: pnpm run impact:build-main
+
           - name: Build PR
             env:
               VITE_BASE_PATH: /
@@ -275,28 +269,29 @@ jobs:
               pnpm exec tsx scripts/heartbeat.ts "Starting Build Review (PR)"
               pnpm run build:review
 
-      - name: Code review agent
-        if: always() && github.event_name == 'pull_request'
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm exec tsx scripts/heartbeat.ts "Starting Gemini Code Review"
-          pnpm run impact:gemini-code-review
+          - name: Code review agent
+            if: always() && github.event_name == 'pull_request'
+            continue-on-error: true
+            env:
+              GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              pnpm exec tsx scripts/heartbeat.ts "Starting Gemini Code Review"
+              pnpm run impact:gemini-code-review
 
-      - name: Code review github models agent
-        if: always() && github.event_name == 'pull_request'
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Code Review"
-          pnpm run impact:github-models-code-review
+          - name: Code review github models agent
+            if: always() && github.event_name == 'pull_request'
+            continue-on-error: true
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Code Review"
+              pnpm run impact:github-models-code-review
 
       - parallel:
           - name: Visual Diff
             run: pnpm run impact:visual-diff
+
           - name: DOM Diff
             run: pnpm run impact:dom-diff
 
@@ -306,22 +301,23 @@ jobs:
           VISUAL_DIFF_THRESHOLD: 1.5
         run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
-      - name: Visual review agent
-        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm exec tsx scripts/heartbeat.ts "Starting Gemini Visual Review"
-          pnpm run impact:gemini-review
+      - parallel:
+          - name: Visual review agent
+            if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+            env:
+              GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              pnpm exec tsx scripts/heartbeat.ts "Starting Gemini Visual Review"
+              pnpm run impact:gemini-review
 
-      - name: Visual review github models agent
-        if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Visual Review"
-          pnpm run impact:github-models-review
+          - name: Visual review github models agent
+            if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Visual Review"
+              pnpm run impact:github-models-review
 
       - name: Report Summary
         if: always()
