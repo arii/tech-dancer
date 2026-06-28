@@ -18,6 +18,11 @@ class GitHubClient:
         if not self.repo:
             self.repo = self._detect_repo()
         self.base_url = "https://api.github.com"
+        self._session = requests.Session()
+        self._session.headers.update({
+            "Authorization": f"Bearer {self.token}",
+            "Accept": "application/vnd.github.v3+json",
+        })
 
     def _detect_repo(self) -> str:
         try:
@@ -30,19 +35,21 @@ class GitHubClient:
             return ""
 
 
-    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
+    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, params: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
-        headers = {
-            "Authorization": f"Bearer {self.token}",
-            "Accept": accept or ("application/vnd.github.v3.diff" if is_text else "application/vnd.github.v3+json"),
-        }
+        headers = {}
+        if accept:
+            headers["Accept"] = accept
+        elif is_text:
+            headers["Accept"] = "application/vnd.github.v3.diff"
 
         try:
-            response = requests.request(
+            response = self._session.request(
                 method,
                 url,
                 headers=headers,
                 json=json_data,
+                params=params,
                 timeout=30,
                 allow_redirects=allow_redirects
             )

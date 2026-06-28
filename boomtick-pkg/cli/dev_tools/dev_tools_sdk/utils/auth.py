@@ -9,7 +9,7 @@ class AuthError(RuntimeError):
     pass
 
 
-def get_github_token(env_vars: Sequence[str] = ("GITHUB_TOKEN",)) -> str:
+def get_github_token(env_vars: Sequence[str] = ("GITHUB_TOKEN", "GH_TOKEN")) -> str:
     for var in env_vars:
         value = os.getenv(var)
         if value:
