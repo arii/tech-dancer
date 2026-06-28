@@ -6,12 +6,15 @@ import argparse
 from typing import Dict, List, Optional, Tuple
 
 # Standardize pathing for robust imports
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_dev_tools_dir = os.path.join(_current_dir, "dev_tools")
-
-for _path in [_current_dir, _dev_tools_dir]:
-    if _path not in sys.path:
-        sys.path.insert(0, _path)
+try:
+    from utils.path import setup_cli_paths
+    setup_cli_paths()
+except ImportError:
+    _current_dir = os.path.dirname(os.path.abspath(__file__))
+    _dev_tools_dir = os.path.join(_current_dir, "dev_tools")
+    for _path in [_current_dir, _dev_tools_dir]:
+        if _path not in sys.path:
+            sys.path.insert(0, _path)
 
 from utils import (
     get_stack_versions,

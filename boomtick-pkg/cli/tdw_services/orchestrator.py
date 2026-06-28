@@ -8,13 +8,16 @@ import subprocess
 from datetime import datetime, timezone
 
 # Standardize pathing for robust imports
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_cli_root = os.path.abspath(os.path.join(_current_dir, '..'))
-_dev_tools_dir = os.path.join(_cli_root, 'dev_tools')
-
-for _path in [_cli_root, _dev_tools_dir]:
-    if _path not in sys.path:
-        sys.path.insert(0, _path)
+try:
+    from utils.path import setup_cli_paths
+    setup_cli_paths()
+except ImportError:
+    _current_dir = os.path.dirname(os.path.abspath(__file__))
+    _cli_root = os.path.abspath(os.path.join(_current_dir, '..'))
+    _dev_tools_dir = os.path.join(_cli_root, 'dev_tools')
+    for _path in [_cli_root, _dev_tools_dir]:
+        if _path not in sys.path:
+            sys.path.insert(0, _path)
 from typing import Dict, Any, List, Optional, Tuple
 from urllib.parse import quote, urlparse
 from collections import defaultdict
