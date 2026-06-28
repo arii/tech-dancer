@@ -58,7 +58,7 @@ env:
 
 jobs:
   verify-changes:
-    uses: ./.github/workflows/reusable-gate.yml
+    uses: ./boomtick-pkg/workflows/reusable-gate.yml
     permissions:
       pull-requests: write
       contents: write
@@ -136,7 +136,7 @@ jobs:
             run: |
               echo "::group::JSCPD"
               trap 'echo "::endgroup::"' EXIT
-              pnpm run audit:dupes
+              pnpm run audit:jscpd
 
           - name: Design Token Compliance
             run: |

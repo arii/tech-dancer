@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   verify-changes:
-    uses: ./.github/workflows/reusable-gate.yml
+    uses: ./boomtick-pkg/workflows/reusable-gate.yml
     permissions:
       pull-requests: write
       contents: write
