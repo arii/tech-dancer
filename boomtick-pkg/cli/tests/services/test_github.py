@@ -10,12 +10,14 @@ sys.path.append(os.path.join(os.getcwd(), "boomtick-pkg", "cli", "dev_tools"))
 from tdw_services.services.github import GitHubClient
 
 class TestGitHubClientPagination(unittest.TestCase):
-    @patch('utils.get_github_token')
-    def setUp(self, mock_token):
-        mock_token.return_value = "dummy_token"
+    def setUp(self):
+        patcher = patch('utils.get_github_token')
+        self.mock_token = patcher.start()
+        self.mock_token.return_value = "dummy_token"
+        self.addCleanup(patcher.stop)
         self.client = GitHubClient(repo="owner/repo")
 
-    @patch('requests.request')
+    @patch('tdw_services.services.github.requests.Session.request')
     def test_list_pull_requests_pagination_and_filtering(self, mock_request):
         # Mocking 2 pages of PRs
         # Page 1: 100 PRs, none with 'bug' label

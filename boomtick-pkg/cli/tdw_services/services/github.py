@@ -115,7 +115,9 @@ class GitHubClient:
 
             for pr in data:
                 if labels:
-                    pr_labels = [l.get('name') for l in pr.get('labels', [])]
+                    # Depending on API endpoint (pulls vs search), labels might be strings or dicts
+                    raw_labels = pr.get('labels', [])
+                    pr_labels = [l.get('name') if isinstance(l, dict) else (l if isinstance(l, str) else "") for l in raw_labels]
                     if not all(label in pr_labels for label in labels):
                         continue
 
