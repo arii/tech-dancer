@@ -117,7 +117,7 @@ jobs:
           trap 'echo "::endgroup::"' EXIT
           pnpm install --frozen-lockfile --prefer-offline
 
-      - parallel:
+      - parallel: # actionlint-disable syntax-check
           - name: UI Anti-Pattern Audit - Gate
             shell: bash
             env:
@@ -141,6 +141,12 @@ jobs:
                 exit 1
               fi
               echo "✅ Design token compliance passed."
+
+          - name: Semantic Duplicate Audit
+            run: pnpm run audit:semantic
+
+          - name: Audit Suppression Inventory
+            run: pnpm run audit:inventory
 
   test-build:
     name: Build & E2E
@@ -177,31 +183,33 @@ jobs:
           pnpm run build
 
 
-      - name: Bundle Size Check
-        id: bundle-size
-        background: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Ensure local python bin is on path for td
-          export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
-          td gh bundle-size
+      - parallel: # actionlint-disable syntax-check
+          - name: Bundle Size Check
+            id: bundle-size
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              # Ensure local python bin is on path for td
+              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+              td gh bundle-size
 
-      - name: Run Playwright Smoke Test
-        run: |
-          VITE_BASE_PATH=/ pnpm run test:e2e
+          - name: Run Playwright Smoke Test
+            env:
+              PORT: 4174
+            run: |
+              VITE_BASE_PATH=/ pnpm run test:e2e
 
-      - name: Run Lighthouse CI
-        run: |
-          set -eu
-          VITE_BASE_PATH="/"
-          CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
-          export VITE_BASE_PATH
-          export CHROME_PATH
-          echo "CHROME_PATH=$CHROME_PATH"
-          pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
-        env:
-          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          - name: Run Lighthouse CI
+            run: |
+              set -eu
+              VITE_BASE_PATH="/"
+              CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+              export VITE_BASE_PATH
+              export CHROME_PATH
+              echo "CHROME_PATH=$CHROME_PATH"
+              pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+            env:
+              LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check Playwright Report Exists
         id: check_report
@@ -221,9 +229,6 @@ jobs:
           path: playwright-report/
           retention-days: 7
           if-no-files-found: ignore
-
-      - name: Wait for Bundle Size Check
-        wait: bundle-size
 
   impact-analysis:
     needs: [verify-changes, lint-typecheck, audit, test-build]
@@ -252,7 +257,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile --prefer-offline
 
-      - parallel:
+      - parallel: # actionlint-disable syntax-check
           - name: Deployment Impact Analysis
             run: pnpm run impact:analysis
 
@@ -291,7 +296,7 @@ jobs:
       - name: Visual Diff
         run: pnpm run impact:visual-diff
 
-      - parallel:
+      - parallel: # actionlint-disable syntax-check
           - name: DOM Diff
             run: pnpm run impact:dom-diff
 
@@ -301,7 +306,7 @@ jobs:
               VISUAL_DIFF_THRESHOLD: 1.5
             run: pnpm exec tsx scripts/check-visual-changes.ts >> "$GITHUB_OUTPUT"
 
-      - parallel:
+      - parallel: # actionlint-disable syntax-check
           - name: Visual review agent
             if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
             env:
