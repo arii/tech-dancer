@@ -409,14 +409,15 @@ class GHAConfigManager:
         repo = get_repo_name()
         if token and repo:
             try:
-                # Use urllib since we might not want to depend on 'requests' here if it's a core util
-                # But 'requests' is already used in other parts of the monorepo
+                import requests
                 url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-                req = urllib.request.Request(url)
-                req.add_header("Authorization", f"Bearer {token}")
-                req.add_header("Accept", "application/vnd.github+json")
-                with urllib.request.urlopen(req, timeout=10) as response:
-                    data = json.loads(response.read().decode())
+                headers = {
+                    "Authorization": f"Bearer {token}",
+                    "Accept": "application/vnd.github+json"
+                }
+                response = requests.get(url, headers=headers, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
                     val = str(data.get("value", ""))
                     self.cache[name] = val
                     self._save_cache()
@@ -487,27 +488,23 @@ class GHAConfigManager:
         repo = get_repo_name()
         if token and repo:
             try:
+                import requests
                 url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-                data = json.dumps({"name": name, "value": str(value)}).encode("utf-8")
-                req = urllib.request.Request(url, data=data, method="PATCH")
-                req.add_header("Authorization", f"Bearer {token}")
-                req.add_header("Accept", "application/vnd.github+json")
-                req.add_header("Content-Type", "application/json")
-                try:
-                    with urllib.request.urlopen(req, timeout=10) as response:
-                        if response.status in [200, 204]:
-                            return True
-                except urllib.error.HTTPError as e:
-                    if e.code == 404:
-                        # Create instead of update
-                        url = f"https://api.github.com/repos/{repo}/actions/variables"
-                        req = urllib.request.Request(url, data=data, method="POST")
-                        req.add_header("Authorization", f"Bearer {token}")
-                        req.add_header("Accept", "application/vnd.github+json")
-                        req.add_header("Content-Type", "application/json")
-                        with urllib.request.urlopen(req, timeout=10) as response:
-                            if response.status in [201, 204]:
-                                return True
+                payload = {"name": name, "value": str(value)}
+                headers = {
+                    "Authorization": f"Bearer {token}",
+                    "Accept": "application/vnd.github+json",
+                    "Content-Type": "application/json"
+                }
+                response = requests.patch(url, json=payload, headers=headers, timeout=10)
+                if response.status_code in [200, 204]:
+                    return True
+                elif response.status_code == 404:
+                    # Create instead of update
+                    create_url = f"https://api.github.com/repos/{repo}/actions/variables"
+                    create_response = requests.post(create_url, json=payload, headers=headers, timeout=10)
+                    if create_response.status_code in [201, 204]:
+                        return True
             except Exception:
                 pass
 
