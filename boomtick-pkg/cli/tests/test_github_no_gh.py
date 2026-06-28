@@ -31,11 +31,11 @@ class TestGitHubClientNoGH(unittest.TestCase):
     @patch('tdw_services.services.github.requests.Session.request')
     def test_list_pull_requests_pagination(self, mock_request):
         mock_response1 = MagicMock()
-        mock_response1.json.return_value = [{"number": i} for i in range(1, 101)]
+        mock_response1.json.return_value = [{"number": i, "user": {"login": "u"}, "head": {"ref": "h"}, "base": {"ref": "b"}} for i in range(1, 101)]
         mock_response1.status_code = 200
 
         mock_response2 = MagicMock()
-        mock_response2.json.return_value = [{"number": 101}]
+        mock_response2.json.return_value = [{"number": 101, "user": {"login": "u"}, "head": {"ref": "h"}, "base": {"ref": "b"}}]
         mock_response2.status_code = 200
 
         mock_request.side_effect = [mock_response1, mock_response2]
@@ -56,17 +56,18 @@ class TestGitHubClientNoGH(unittest.TestCase):
 
     @patch('tdw_services.services.github.requests.Session.request')
     def test_list_pull_requests_labels_search(self, mock_request):
-        # Search response
-        mock_search_res = MagicMock()
-        mock_search_res.json.return_value = {"items": [{"number": 123}]}
-        mock_search_res.status_code = 200
+        # GitHubClient.list_pull_requests performs local filtering on labels,
+        # so it doesn't use the /search/issues endpoint but rather /repos/.../pulls.
 
-        # Details response
-        mock_details_res = MagicMock()
-        mock_details_res.json.return_value = {"number": 123, "title": "Bug PR"}
-        mock_details_res.status_code = 200
+        # Details response with labels
+        mock_response = MagicMock()
+        mock_response.json.return_value = [
+            {"number": 123, "title": "Bug PR", "labels": [{"name": "bug"}, {"name": "ui"}], "user": {"login": "u"}, "head": {"ref": "h"}, "base": {"ref": "b"}},
+            {"number": 456, "title": "Other PR", "labels": [{"name": "feat"}], "user": {"login": "u"}, "head": {"ref": "h"}, "base": {"ref": "b"}}
+        ]
+        mock_response.status_code = 200
 
-        mock_request.side_effect = [mock_search_res, mock_details_res]
+        mock_request.return_value = mock_response
 
         client = GitHubClient(token="fake_token", repo="owner/repo")
         prs = client.list_pull_requests(labels=["bug", "ui"])
@@ -74,14 +75,9 @@ class TestGitHubClientNoGH(unittest.TestCase):
         self.assertEqual(len(prs), 1)
         self.assertEqual(prs[0]['number'], 123)
 
-        # Verify search query
+        # Verify endpoint
         call_args_list = mock_request.call_args_list
-        self.assertEqual(call_args_list[0][0][1], "https://api.github.com/search/issues")
-        q = call_args_list[0][1]['params']['q']
-        self.assertIn("repo:owner/repo", q)
-        self.assertIn("is:pr", q)
-        self.assertIn('label:"bug"', q)
-        self.assertIn('label:"ui"', q)
+        self.assertIn("/repos/owner/repo/pulls", call_args_list[0][0][1])
 
     @patch('tdw_services.services.github.requests.Session.request')
     @patch('tdw_services.services.github.subprocess.run')

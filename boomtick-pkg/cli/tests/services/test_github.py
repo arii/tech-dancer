@@ -15,7 +15,7 @@ class TestGitHubClientPagination(unittest.TestCase):
         mock_token.return_value = "dummy_token"
         self.client = GitHubClient(repo="owner/repo")
 
-    @patch('requests.request')
+    @patch('tdw_services.services.github.requests.Session.request')
     def test_list_pull_requests_pagination_and_filtering(self, mock_request):
         # Mocking 2 pages of PRs
         # Page 1: 100 PRs, none with 'bug' label
