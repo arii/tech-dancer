@@ -34,7 +34,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 - [ ] **Logic Flattening**: Eliminate script-calling-script chains; consolidate orchestration logic directly into `tdw_services` handlers.
 - [ ] **Redundant Schema Cleanup**: Remove legacy `cli-schema.json` fragments and ensure the unified schema in `boomtick-pkg/cli/dev_tools` is the sole authority.
 - [ ] **Legacy Reference Cleanup**: Scrub remaining documentation and code comments for legacy names (`boomtick-mcp`, `dev-tools/`) to ensure the transition to `boomtick-pkg` is absolute.
-- [ ] **Fallover Behavior Simplification**: Replace complex multi-layered fallbacks for tokens and paths with a "fail-fast" configuration pattern.
+- [ ] **Failover Behavior Simplification**: Replace complex multi-layered fallbacks for tokens and paths with a "fail-fast" configuration pattern.
 
 ---
 
@@ -63,9 +63,9 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 ## 🚀 Next Steps
 
 1. **Audit Defaults**: Search for and remove redundant hardcoded values in `ProjectConfig.py`.
-2. **Consolidate Workflows**: Further simplify composite actions to remove redundant setup steps.
-3. **JSCPD Integration**: Add a dedicated CI step to run `jscpd` against the codebase.
-4. **Subtree Push Preparation**: Prepare the final subtree push target.
+2. **Internalize workflows inside package**: Evolve the package design so that GitHub Workflows themselves are defined entirely inside the `boomtick-pkg` package directory, keeping `.github/workflows/` as extremely lightweight triggers pointing directly to the ones packaged under `boomtick-pkg/workflows/`.
+3. **JSCPD Integration**: Add a dedicated CI step to run `jscpd` against the codebase using the existing `.jscpd.json` configuration.
+4. **Subtree Push Preparation**: Once verified, prepare the final subtree push target if extraction to `arii/boomtick` is desired.
 
 ---
 
