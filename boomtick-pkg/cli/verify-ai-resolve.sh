@@ -24,8 +24,8 @@ echo "📝 Created test file: $TEST_FILE"
 # 2. Run resolution in mock mode
 echo "🏃 Running AI resolve in MOCK mode..."
 # Export PYTHONPATH to ensure dev-tools modules can find each other without sys.path hacks
-export PYTHONPATH="$PYTHONPATH:$(pwd)/boomtick-pkg/cli:$(pwd)/boomtick-pkg/cli/dev_tools"
-AI_RESOLVE_MOCK=true python3 boomtick-pkg/cli/dev_tools/td_cli.py gh resolve
+export PYTHONPATH="$PYTHONPATH:$(pwd)/boomtick-pkg/cli:$(pwd)/$(dirname "$0")/dev_tools"
+AI_RESOLVE_MOCK=true python3 $(dirname "$0")/dev_tools/td_cli.py gh resolve
 
 # 3. Verify the result
 if grep -q "<<<<<<<" "$TEST_FILE"; then

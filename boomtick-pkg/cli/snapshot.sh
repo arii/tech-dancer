@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 
 echo "=== DevTools Snapshot & Debug Utility ==="
 
-CONFIG_FILE="boomtick-pkg/project_config.json"
+CONFIG_FILE="$(dirname "$0")/../project_config.json"
 
 if [ -f "$CONFIG_FILE" ]; then
     echo "Using configuration from $CONFIG_FILE"

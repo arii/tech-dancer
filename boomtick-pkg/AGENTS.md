@@ -192,12 +192,12 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 
 ### Setup & Enforcement
 
-Run `./setup-agent.sh` to bootstrap. This script enforces the contract across
+Run `boomtick-pkg/cli/setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
 in `.githooks/` so `.agent-context.json` stays fresh automatically.
 
 ```bash
-./setup-agent.sh
+boomtick-pkg/cli/setup-agent.sh
 ```
 
 After setup, validate:

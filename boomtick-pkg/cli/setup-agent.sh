@@ -184,7 +184,7 @@ install_python_deps() {
   python3 -m pip --version || err "pip is required."
   pip_install --root-user-action=ignore --upgrade pip setuptools wheel
 
-  if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
+  if [ -f "$(dirname "$0")/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
     have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
   else
