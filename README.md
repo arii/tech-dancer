@@ -1,17 +1,31 @@
 # BoomTick
 
-BoomTick is a consolidated developer toolkit designed to empower AI agents and developers with structured access to GitHub Pull Requests, repository state, CI logs, and validation tools.
+BoomTick is a consolidated developer toolkit and a high-performance content platform (`boomtick.blog`).
 
-## 📦 Project Architecture
+## 🌐 Content Platform (`boomtick.blog`)
 
-The project is organized into a single extractable unit under the `boomtick-pkg/` directory:
+The core of this repository is a Vite-powered React application that serves as the `boomtick.blog` platform.
+
+- **Source Code**: Located in the `src/` directory.
+- **Development**:
+  ```bash
+  pnpm dev
+  ```
+- **Build**:
+  ```bash
+  pnpm build
+  ```
+
+## 📦 Developer Toolkit (`boomtick-pkg`)
+
+The repository also includes a self-contained developer unit under the `boomtick-pkg/` directory:
 
 - **`boomtick-pkg/cli/`**: A Python-based CLI (`td`) that serves as the unified entry point for repository automation, GitHub operations, and agent coordination.
 - **`boomtick-pkg/mcp/`**: A Model Context Protocol (MCP) server that provides a structured interface for AI agents to interact with the repository.
 
 ## 🚀 Quick Start
 
-To bootstrap the developer environment and install all necessary dependencies, run:
+To bootstrap the developer environment, install all dependencies, and initialize the toolkit, run:
 
 ```bash
 bash boomtick-pkg/install.sh
