@@ -4,6 +4,7 @@
 # Usage: ./run-parallel.sh "command1" "command2" ...
 
 set -u
+set -o pipefail
 
 # Ensure log directory exists within the safe workspace
 LOG_DIR="boomtick-pkg/cli/logs/parallel"
