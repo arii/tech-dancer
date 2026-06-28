@@ -709,6 +709,10 @@ def agent_group():
 @click.argument('task')
 @click.pass_context
 def dispatch(ctx, branch, task):
+    """
+    Initialize a Jules session for a specific branch and task.
+    Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.
+    """
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.dispatch_jules_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)

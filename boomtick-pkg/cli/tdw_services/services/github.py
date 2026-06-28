@@ -24,6 +24,21 @@ class GitHubClient:
             "Accept": "application/vnd.github.v3+json",
         })
 
+    def branch_exists(self, branch_name: str) -> bool:
+        """Checks if a branch exists in the repository."""
+        try:
+            self._request('GET', f'/repos/{self.repo}/branches/{branch_name}')
+            return True
+        except Exception as e:
+            # Check for 404 Not Found explicitly
+            if hasattr(e, 'response') and e.response is not None:
+                if e.response.status_code == 404:
+                    return False
+            # Fallback to string check if response object is not attached to Exception
+            if "404" in str(e):
+                return False
+            raise e
+
     def _detect_repo(self) -> str:
         try:
             proc = subprocess.run(['git', 'config', '--get', 'remote.origin.url'], capture_output=True, text=True)
