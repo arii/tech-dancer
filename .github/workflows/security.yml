@@ -6,8 +6,7 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'dev-tools/**'
-      - 'boomtick-mcp/**'
+      - 'boomtick-pkg/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/security.yml'
@@ -16,8 +15,7 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'dev-tools/**'
-      - 'boomtick-mcp/**'
+      - 'boomtick-pkg/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/security.yml'

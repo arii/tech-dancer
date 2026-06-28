@@ -6,8 +6,7 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'dev-tools/**'
-      - 'boomtick-mcp/**'
+      - 'boomtick-pkg/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
@@ -23,8 +22,7 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'dev-tools/**'
-      - 'boomtick-mcp/**'
+      - 'boomtick-pkg/**'
       - 'tests/**'
       - 'scripts/**'
       - 'package.json'
