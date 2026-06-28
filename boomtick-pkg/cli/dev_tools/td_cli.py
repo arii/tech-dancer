@@ -11,11 +11,11 @@ import os
 
 if ("-h" in sys.argv or "--help" in sys.argv) and os.environ.get("ALLOW_HELP") != "1":
     # Need to be careful with imports here as tdw_services might not be available yet
-    print("FATAL: --help is disabled for agent workflows. Read cli-schema.json for command syntax.", file=sys.stderr)
-    if "pytest" not in sys.modules:
-        sys.exit(1)
+    print("FATAL: --help is disabled for agent workflows. Set ALLOW_HELP=1 to bypass. Read cli-schema.json for command syntax.", file=sys.stderr)
+    sys.exit(1)
 
-# Add the dev-tools directory to sys.path so we can import tdw_services
+# Ensure the package directory is in sys.path for direct script execution
+# When installed via pip -e, this is handled by the entry point.
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
