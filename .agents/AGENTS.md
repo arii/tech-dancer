@@ -87,7 +87,7 @@ Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly
 | **Testing** | Run Playwright | `repo.run_playwright` | `td_cli.py repo run-playwright` | `npx playwright test` |
 | **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
 | **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |
-| **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch <BRANCH> <TASK>` | - |
+| **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch <BRANCH> <TASK>` (Note: Use `main` branch for PR consolidations) | - |
 | **Agent** | Fix CI | `jules.fix_ci` | `td_cli.py agent fix-ci --pr-number <PR>` | - |
 | **Agent** | Sync Sessions | `jules.sync_sessions` | `td_cli.py agent sync` | - |
 | **Agent** | Send Message | `jules.send_message` | `td_cli.py agent send <ID> <MSG>` | - |

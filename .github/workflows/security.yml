@@ -6,8 +6,7 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'dev-tools/**'
-      - 'boomtick-mcp/**'
+      - 'boomtick-pkg/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/security.yml'
@@ -16,8 +15,7 @@ on:
     paths:
       - 'src/**'
       - 'etl/**'
-      - 'dev-tools/**'
-      - 'boomtick-mcp/**'
+      - 'boomtick-pkg/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/security.yml'
@@ -49,9 +47,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
 
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace

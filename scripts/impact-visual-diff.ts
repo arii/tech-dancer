@@ -3,6 +3,7 @@ import { chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { logHeartbeat } from './lib/heartbeat';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import sharp from 'sharp';
@@ -246,6 +247,7 @@ function createVisualDiff(beforePath: string, afterPath: string, diffPath: strin
 }
 
 async function main(): Promise<void> {
+  await logHeartbeat('Starting Visual Diff');
   const impact = readImpactAnalysis();
   const routes = impact.routes.filter(route => !route.includes(':'));
 
@@ -294,6 +296,7 @@ async function main(): Promise<void> {
 
     fs.writeFileSync(VISUAL_SUMMARY_PATH, JSON.stringify({ routes: summaries }, null, 2));
     console.log(`✅ Visual diffs generated in ${VISUAL_REVIEW_DIR}`);
+    await logHeartbeat('Visual Diff Complete');
 
     const failedLayouts = summaries.filter(s => s.validation && !s.validation.passed);
     if (failedLayouts.length > 0) {
