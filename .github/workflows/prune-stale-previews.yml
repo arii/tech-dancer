@@ -50,7 +50,7 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "chore: prune stale previews and update metadata"
 
-            MAX_RETRIES=5
+            export MAX_RETRIES=5
             for i in $(seq 1 "$MAX_RETRIES"); do
               if git push origin gh-pages; then
                 echo "Push successful!"
