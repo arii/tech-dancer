@@ -97,8 +97,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node and pnpm
-        uses: ./.github/actions/setup-node-pnpm
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          setup-python: 'false'
 
       - name: Check active runtime
         run: |
