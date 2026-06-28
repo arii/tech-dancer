@@ -273,7 +273,9 @@ jobs:
             env:
               VITE_BASE_PATH: /
               DISABLE_MINIFY: true
-            run: pnpm run build:review
+            run: |
+              pnpm exec tsx scripts/heartbeat.ts "Starting Build Review (PR)"
+              pnpm run build:review
 
       - name: Code review agent
         if: always() && github.event_name == 'pull_request'
@@ -281,14 +283,18 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:gemini-code-review
+        run: |
+          pnpm exec tsx scripts/heartbeat.ts "Starting Gemini Code Review"
+          pnpm run impact:gemini-code-review
 
       - name: Code review github models agent
         if: always() && github.event_name == 'pull_request'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:github-models-code-review
+        run: |
+          pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Code Review"
+          pnpm run impact:github-models-code-review
 
       - parallel:
           - name: Visual Diff
@@ -307,17 +313,22 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:gemini-review
+        run: |
+          pnpm exec tsx scripts/heartbeat.ts "Starting Gemini Visual Review"
+          pnpm run impact:gemini-review
 
       - name: Visual review github models agent
         if: always() && steps.check_visuals.outputs.changed_routes != '0' && steps.check_visuals.outputs.changed_routes != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run impact:github-models-review
+        run: |
+          pnpm exec tsx scripts/heartbeat.ts "Starting GitHub Models Visual Review"
+          pnpm run impact:github-models-review
 
       - name: Report Summary
         if: always()
         run: |
+          pnpm exec tsx scripts/heartbeat.ts "Generating Final Impact Report"
           if [ -f artifacts/deployment-review.md ]; then
             cat artifacts/deployment-review.md >> "$GITHUB_STEP_SUMMARY"
             {
