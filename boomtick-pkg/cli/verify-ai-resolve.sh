@@ -6,6 +6,13 @@ set -e
 # Ensure we are in the project root
 cd "$(dirname "$0")/../.."
 
+# Detect if we are in monolith or standalone
+if [ -d "boomtick-pkg" ]; then
+  CLI_DIR="$(pwd)/boomtick-pkg/cli"
+else
+  CLI_DIR="$(pwd)/cli"
+fi
+
 TEST_FILE="src/test-ai-conflict.tsx"
 
 echo "🧪 Starting local AI verification..."
@@ -24,8 +31,8 @@ echo "📝 Created test file: $TEST_FILE"
 # 2. Run resolution in mock mode
 echo "🏃 Running AI resolve in MOCK mode..."
 # Export PYTHONPATH to ensure dev-tools modules can find each other without sys.path hacks
-export PYTHONPATH="$PYTHONPATH:$(pwd)/boomtick-pkg/cli:$(pwd)/$(dirname "$0")/dev_tools"
-AI_RESOLVE_MOCK=true python3 $(dirname "$0")/dev_tools/td_cli.py gh resolve
+export PYTHONPATH="$PYTHONPATH:$CLI_DIR:$CLI_DIR/dev_tools"
+python3 "$CLI_DIR/dev_tools/td_cli.py" gh resolve
 
 # 3. Verify the result
 if grep -q "<<<<<<<" "$TEST_FILE"; then

@@ -131,7 +131,7 @@ executing any GitHub or repository operation.
 
 ### The Execution Chain
 
-`boomtick-mcp` is a thin gateway over `boomtick-pkg/cli/dev_tools/td_cli.py`. Every MCP tool
+`boomtick-mcp` is a thin gateway over `cli/dev_tools/td_cli.py`. Every MCP tool
 call automatically:
 1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
 2. Calls the appropriate `td_cli.py` subcommand internally
@@ -142,7 +142,7 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 
 ### CLI Schema Authority
 
-`boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
+`cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
 `cli_schema`) is the single source of truth for all `td_cli.py` flags.
 MCP tools read this automatically. If calling Tier 2 directly, always
 read `cli_schema` from `.agent-context.json` first — never guess flags,
@@ -168,10 +168,10 @@ validate issues against the Spec-Driven Issue Template before dispatching Jules.
 
 ```bash
 # Validate a single issue (dry-run by default)
-python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number <N>
+python3 cli/dev_tools/td_cli.py gh validate-issue --issue-number <N>
 
 # Validate and post results
-python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number <N> --post-comments --execute
+python3 cli/dev_tools/td_cli.py gh validate-issue --issue-number <N> --post-comments --execute
 ```
 
 ### Setting GitHub Variables
@@ -192,18 +192,18 @@ Strictly pinned: **Node.js 24.16.0** and **pnpm 10.28.2**.
 
 ### Setup & Enforcement
 
-Run `boomtick-pkg/cli/setup-agent.sh` to bootstrap. This script enforces the contract across
+Run `cli/setup-agent.sh` to bootstrap. This script enforces the contract across
 `.node-version`, `package.json`, and `.npmrc`, and configures the git hooks
 in `.githooks/` so `.agent-context.json` stays fresh automatically.
 
 ```bash
-boomtick-pkg/cli/setup-agent.sh
+cli/setup-agent.sh
 ```
 
 After setup, validate:
 
 ```bash
-python3 boomtick-pkg/cli/dev_tools/td_cli.py doctor
+python3 cli/dev_tools/td_cli.py doctor
 pnpm run check:runtime-files
 ```
 

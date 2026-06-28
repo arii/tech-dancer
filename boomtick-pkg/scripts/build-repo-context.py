@@ -12,17 +12,15 @@ def build_repo_context():
     # scripts/build-repo-context.py -> package_root
     package_root = script_path.parent.parent
 
-    # In monolith: repo_root is parent of boomtick-pkg
-    # In standalone: repo_root IS boomtick-pkg
-    if package_root.name == "boomtick-pkg":
+    # Environment Detection
+    # Monolith has a 'src' directory in the parent (boomtick.blog)
+    is_monolith = (package_root.parent / "src").exists()
+
+    if is_monolith:
         repo_root = package_root.parent
     else:
         # We are likely at the root of the extracted repo
         repo_root = package_root
-        # Adjust package_root if it's actually the repo root
-        if not (package_root / "cli").exists() and (package_root.parent / "boomtick-pkg").exists():
-             package_root = package_root.parent / "boomtick-pkg"
-             repo_root = package_root.parent
 
     # 1. Package JSON (Repo Root)
     try:
@@ -45,13 +43,18 @@ def build_repo_context():
     # 2. Project Config (Repo Root)
     project_config = {}
     try:
-        # Try local first
-        project_config_path = repo_root / "project_config.json"
-        if not project_config_path.exists() and (repo_root / "boomtick-pkg" / "project_config.json").exists():
-            project_config_path = repo_root / "boomtick-pkg" / "project_config.json"
+        from importlib.resources import files
+        try:
+            # Try to load from the dev_tools python package if available
+            project_config = json.loads(files("dev_tools").joinpath("project_config.json").read_text())
+        except Exception:
+            # Try root first, then look into boomtick-pkg if in monolith
+            project_config_path = repo_root / "project_config.json"
+            if not project_config_path.exists() and (repo_root / "boomtick-pkg" / "project_config.json").exists():
+                project_config_path = repo_root / "boomtick-pkg" / "project_config.json"
 
-        if project_config_path.exists():
-            project_config = json.loads(project_config_path.read_text())
+            if project_config_path.exists():
+                project_config = json.loads(project_config_path.read_text())
     except Exception as e:
         print(f"Error reading project_config.json: {e}", file=sys.stderr)
 
@@ -115,9 +118,6 @@ def build_repo_context():
 if __name__ == "__main__":
     try:
         context = build_repo_context()
-        if not context.get("package_json"):
-            # If we couldn't find package.json, we might be in a weird state, but let's try to output what we have
-            pass
         print(json.dumps(context, indent=2, sort_keys=True))
     except Exception as e:
         print(f"FATAL: Context generation failed: {e}", file=sys.stderr)
