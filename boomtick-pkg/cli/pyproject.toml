@@ -15,6 +15,7 @@ dependencies = [
     "pydantic",
     "click",
     "PyGithub",
+    "PyYAML",
     "semgrep",
     "chromadb>=1.5.9",
     "sentence-transformers>=5.6.0"
