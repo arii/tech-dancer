@@ -8,23 +8,25 @@ LOG_DIR="boomtick-pkg/cli/logs/parallel"
 mkdir -p "$LOG_DIR"
 
 PIDS=()
-for i in "${!@}"; do
-  cmd="${!i}"
-  log_file="$LOG_DIR/job_$i.log"
-  echo "Running job $i: $cmd (logging to $log_file)"
+INDEX=1
+for cmd in "$@"; do
+  log_file="$LOG_DIR/job_$INDEX.log"
+  echo "Running job $INDEX: $cmd (logging to $log_file)"
   eval "$cmd" > "$log_file" 2>&1 &
   PIDS+=($!)
+  ((INDEX++))
 done
 
 RET=0
-for i in "${!PIDS[@]}"; do
-  pid="${PIDS[$i]}"
+INDEX=1
+for pid in "${PIDS[@]}"; do
   if ! wait "$pid"; then
-    echo "Job $i (PID $pid) failed. See $LOG_DIR/job_$((i+1)).log"
+    echo "Job $INDEX (PID $pid) failed. See $LOG_DIR/job_$INDEX.log"
     RET=1
   else
-    echo "Job $i (PID $pid) succeeded."
+    echo "Job $INDEX (PID $pid) succeeded."
   fi
+  ((INDEX++))
 done
 
 exit $RET
