@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/consolidate-overlapping-prs-4113862660408246932-8153657058288353186/sitemap.xml
