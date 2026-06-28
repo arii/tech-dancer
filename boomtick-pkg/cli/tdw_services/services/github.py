@@ -29,14 +29,11 @@ class GitHubClient:
         try:
             self._request('GET', f'/repos/{self.repo}/branches/{branch_name}')
             return True
-        except Exception as e:
-            # Check for 404 Not Found explicitly
-            if hasattr(e, 'response') and e.response is not None:
-                if e.response.status_code == 404:
-                    return False
-            # Fallback to string check if response object is not attached to Exception
-            if "404" in str(e):
+        except requests.exceptions.RequestException as e:
+            # Catch base exception for requests, which will have a .response attribute for HTTP errors.
+            if e.response is not None and e.response.status_code == 404:
                 return False
+            # Re-raise any other RequestException (e.g., network error, other HTTP status codes).
             raise e
 
     def _detect_repo(self) -> str:
@@ -72,8 +69,9 @@ class GitHubClient:
             if is_text:
                 return response.text
             return response.json()
-        except requests.exceptions.RequestException as e:
-             raise Exception(f"GitHub API Error: {e}")
+        except requests.exceptions.RequestException:
+             # Preserve the original requests exception for specific status code handling in callers
+             raise
 
     def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the list of files changed in a PR."""
