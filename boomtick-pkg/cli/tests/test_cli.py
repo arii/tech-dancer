@@ -15,7 +15,7 @@ def test_help_disabled_exits_cleanly(monkeypatch, capsys):
     with pytest.raises(SystemExit) as exit_info:
         main()
 
-    assert exit_info.value.code == 2
+    assert exit_info.value.code == 1
 
     # Note: main() swallows stdout/stderr in the click entry point unless we read from sys directly
     # since we mock sys.argv, click prints its internal exit to stderr if it fails, but here
@@ -24,7 +24,7 @@ def test_help_disabled_exits_cleanly(monkeypatch, capsys):
     # Wait, main() catches Exception. SystemExit inherits from BaseException.
     # So SystemExit propagates directly!
     stderr = capsys.readouterr().err
-    assert "No such option \'--help\'" in stderr
+    assert "FATAL: --help is disabled" in stderr
 
 def test_help_enabled_does_not_exit_fatally(monkeypatch, capsys):
     """Ensure the CLI allows help when ALLOW_HELP is set."""

@@ -26,6 +26,8 @@ PROJECT_CONFIG = load_project_config()
 
 # CLI Group
 
+
+
 class DynamicHelpGroup(click.Group):
     def make_context(self, info_name, args, parent=None, **extra):
         if not os.environ.get("ALLOW_HELP"):
@@ -34,7 +36,16 @@ class DynamicHelpGroup(click.Group):
             extra["help_option_names"] = ['-h', '--help']
         return super().make_context(info_name, args, parent, **extra)
 
+    def parse_args(self, ctx, args):
+        if not os.environ.get("ALLOW_HELP"):
+            if "-h" in args or "--help" in args:
+                import sys
+                print("FATAL: --help is disabled for agent workflows. Read cli-schema.json for command syntax.", file=sys.stderr)
+                sys.exit(1)
+        return super().parse_args(ctx, args)
+
 @click.group(cls=DynamicHelpGroup)
+
 @click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
 @click.pass_context
 def cli(ctx, json_output):
