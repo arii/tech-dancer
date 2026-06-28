@@ -44,15 +44,17 @@ jobs:
           # Perform the diff check
           if [ -n "$RANGE" ]; then
             if [[ "$RANGE" == *"..."* ]]; then
-              DIFF_CMD="git diff --quiet $RANGE"
+              if git diff --quiet "$RANGE"; then
+                echo "has_changes=false" >> "$GITHUB_OUTPUT"
+              else
+                echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              fi
             else
-              DIFF_CMD="git diff --quiet $RANGE HEAD"
-            fi
-
-            if eval "$DIFF_CMD"; then
-              echo "has_changes=false" >> "$GITHUB_OUTPUT"
-            else
-              echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              if git diff --quiet "$RANGE" HEAD; then
+                echo "has_changes=false" >> "$GITHUB_OUTPUT"
+              else
+                echo "has_changes=true" >> "$GITHUB_OUTPUT"
+              fi
             fi
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
