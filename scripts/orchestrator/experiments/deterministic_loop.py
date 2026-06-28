@@ -1,23 +1,15 @@
-import subprocess
 import json
 import time
 import re
 import os
+import sys
 from datetime import datetime
 
-CLI_BASE = ["python3", "boomtick-pkg/cli/dev_tools/td_cli.py"]
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from utils import run_cli as base_run_cli
 
 def run_cli(args):
-    cmd = CLI_BASE + args
-    env = os.environ.copy()
-    existing_path = env.get("PYTHONPATH", "")
-    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
-    env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        return "" # Suppress for deterministic looping checks
+    return base_run_cli(args, suppress_errors=True)
 
 def extract_pr_from_conflicts(conflict_output):
     # Dummy regex to pull a PR number out of gh conflicts output
