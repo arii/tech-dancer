@@ -9,7 +9,7 @@ It maintains backward compatibility for existing scripts and CI workflows.
 import sys
 import os
 
-if "-h" in sys.argv or "--help" in sys.argv:
+if ("-h" in sys.argv or "--help" in sys.argv) and os.environ.get("ALLOW_HELP") != "1":
     # Need to be careful with imports here as tdw_services might not be available yet
     print("FATAL: --help is disabled for agent workflows. Read cli-schema.json for command syntax.", file=sys.stderr)
     if "pytest" not in sys.modules:

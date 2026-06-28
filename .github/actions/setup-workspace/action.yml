@@ -23,7 +23,7 @@ runs:
   steps:
     - name: Setup pnpm
       if: inputs.setup-node == 'true'
-      uses: pnpm/action-setup@v6
+      uses: pnpm/action-setup@v6.0.9
 
     - name: Setup Node.js
       if: inputs.setup-node == 'true'
