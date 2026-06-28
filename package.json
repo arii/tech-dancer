@@ -28,7 +28,7 @@
     "lint:eslint": "eslint . --max-warnings 0",
     "lint:types": "tsc --noEmit",
     "audit:semgrep": "semgrep scan --config auto --error",
-    "audit:anti-patterns": "node scripts/detect-antipatterns.mjs",
+    "audit:anti-patterns": "PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools node scripts/detect-antipatterns.mjs",
     "audit:dead-code": "pnpm exec knip --exclude exports",
     "ci:local": "run-s lint type-check test audit:anti-patterns audit:dead-code audit:semgrep",
     "knip": "knip --exclude exports",
