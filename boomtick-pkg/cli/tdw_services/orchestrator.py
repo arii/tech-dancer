@@ -346,67 +346,76 @@ class Orchestrator:
             raise CLIError(f"Failed to post GitHub comment: {str(e)}")
 
     def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
-        repo = get_github_client().get_repo(get_repo_name())
-        issues = []
-        if all_open:
-            issues = list(repo.get_issues(state='open'))
-        elif issue_number:
-            issues = [repo.get_issue(issue_number)]
-        else:
-            raise CLIError("Provide --issue-number or --all-open")
+        try:
+            repo = get_github_client().get_repo(get_repo_name())
+            issues = []
+            if all_open:
+                issues = list(repo.get_issues(state='open'))
+            elif issue_number:
+                issues = [repo.get_issue(issue_number)]
+            else:
+                raise CLIError("Provide --issue-number or --all-open")
 
-        results = []
-        total_findings = 0
-        audit_base = self.get_audit_results(content="")
-        config = audit_base.get("config", {})
+            results = []
+            total_findings = 0
+            audit_base = self.get_audit_results(content="")
+            config = audit_base.get("config", {})
 
-        for issue in issues:
-            findings = []
-            warnings = []
-            body = issue.body or ''
-            title = issue.title or ''
+            for issue in issues:
+                findings = []
+                warnings = []
+                body = issue.body or ''
+                title = issue.title or ''
 
-            if not body.strip():
-                findings.append("Issue body is empty.")
+                if not body.strip():
+                    findings.append("Issue body is empty.")
 
-            for i, block in enumerate(self.extract_code_blocks(body)):
-                res = self.get_audit_results(content=block)
-                violations = res.get("violations", {}).get("stdin", [])
-                for v in violations:
-                    val = v.get('value', 'N/A')
-                    findings.append(f"Code block {i+1}: {v['message']} (value: {val})")
+                for i, block in enumerate(self.extract_code_blocks(body)):
+                    res = self.get_audit_results(content=block)
+                    violations = res.get("violations", {}).get("stdin", [])
+                    for v in violations:
+                        val = v.get('value', 'N/A')
+                        findings.append(f"Code block {i+1}: {v['message']} (value: {val})")
+                    for comp, path in config.get('existingComponents', {}).items():
+                        if re.search(rf'(create|build|make|add|new)\s+.*{comp}', block, re.IGNORECASE):
+                            warnings.append(f"Code block {i+1}: Suggests `{comp}` (exists at `{path}`)")
                 for comp, path in config.get('existingComponents', {}).items():
-                    if re.search(rf'(create|build|make|add|new)\s+.*{comp}', block, re.IGNORECASE):
-                        warnings.append(f"Code block {i+1}: Suggests `{comp}` (exists at `{path}`)")
-            for comp, path in config.get('existingComponents', {}).items():
-                if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
-                    warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
-            if re.match(r'^Draft.*:', title) and '```markdown' in body:
-                md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
-                if md_match:
-                    for field in config.get('requiredContentFields', []):
-                        if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE):
-                            findings.append(f"Missing frontmatter: `{field}`")
-            if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
-                warnings.append("No acceptance criteria.")
-            if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
-                warnings.append("Mentions Tailwind but not layout primitives.")
+                    if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
+                        warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
+                if re.match(r'^Draft.*:', title) and '```markdown' in body:
+                    md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
+                    if md_match:
+                        for field in config.get('requiredContentFields', []):
+                            if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE):
+                                findings.append(f"Missing frontmatter: `{field}`")
+                if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
+                    warnings.append("No acceptance criteria.")
+                if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
+                    warnings.append("Mentions Tailwind but not layout primitives.")
 
-            # Spec-Driven Issue Validation
-            missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
-            if missing_spec_sections:
-                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
+                # Spec-Driven Issue Validation
+                missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
+                if missing_spec_sections:
+                    findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
-            issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
-            results.append(issue_result)
-            total_findings += len(findings)
-            if post_comments and (findings or warnings):
-                comment = "## 🤖 Issue Quality Review\n\n"
-                if findings: comment += "### ❌ Violations\n" + "\n".join(f"- {f}" for f in findings) + "\n\n"
-                if warnings: comment += "### ⚠️ Warnings\n" + "\n".join(f"- {w}" for w in warnings) + "\n"
-                if not dry_run: issue.create_comment(comment + "\n---\n*Generated by `td_cli validate-issue`*")
+                issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
+                results.append(issue_result)
+                total_findings += len(findings)
+                if post_comments and (findings or warnings):
+                    comment = "## 🤖 Issue Quality Review\n\n"
+                    if findings: comment += "### ❌ Violations\n" + "\n".join(f"- {f}" for f in findings) + "\n\n"
+                    if warnings: comment += "### ⚠️ Warnings\n" + "\n".join(f"- {w}" for w in warnings) + "\n"
+                    if not dry_run: issue.create_comment(comment + "\n---\n*Generated by `td_cli validate-issue`*")
 
-        return {"status": "success" if total_findings == 0 else "error", "issues": results, "total_findings": total_findings}
+            return {"status": "success" if total_findings == 0 else "error", "issues": results, "total_findings": total_findings}
+        except Exception as e:
+            log_error(f"Failed to validate issue: {e}")
+            return {
+                "status": "error",
+                "message": f"Unexpected error during issue validation: {str(e)}",
+                "issues": [],
+                "total_findings": 1
+            }
 
     def handle_detect_conflicts(self, pr_num: Optional[int] = None) -> List[Dict[str, Any]]:
         conflicts = self.detect_conflicts(pr_num)

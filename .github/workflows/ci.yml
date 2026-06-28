@@ -79,7 +79,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
@@ -105,7 +105,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
 
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
@@ -160,7 +160,7 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       # Setup dependencies once and use caching for speedup.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
@@ -215,7 +215,7 @@ jobs:
 
       - name: Upload Test Results
         if: always() && steps.check_report.outputs.exists == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: playwright-report-${{ github.run_id }}
           path: playwright-report/
@@ -251,7 +251,7 @@ jobs:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
@@ -444,7 +444,7 @@ jobs:
 
       - name: Upload Deployment Review Artifacts
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: deployment-review
           path: |

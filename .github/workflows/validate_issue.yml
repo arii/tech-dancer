@@ -17,7 +17,7 @@ jobs:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
       - name: Setup Workspace
@@ -29,4 +29,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute
+          td-cli gh validate-issue --issue-number ${{ github.event.issue.number }} --post-comments --execute || { echo "::error ::Issue validation failed. Please check the findings above and the job logs for details."; exit 1; }
