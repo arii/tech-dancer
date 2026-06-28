@@ -9,15 +9,6 @@ It maintains backward compatibility for existing scripts and CI workflows.
 import sys
 import os
 
-if "-h" in sys.argv or "--help" in sys.argv:
-    # Need to be careful with imports here as tdw_services might not be available yet
-    print("FATAL: --help is disabled for agent workflows. Read cli-schema.json for command syntax.", file=sys.stderr)
-    if "pytest" not in sys.modules:
-        sys.exit(1)
-
-# Add the dev-tools directory to sys.path so we can import tdw_services
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 try:
     from tdw_services.cli import cli
     # Expose utilities for legacy tests
@@ -97,8 +88,7 @@ Troubleshooting:
 1. Ensure dependencies are installed: pip install -e boomtick-pkg/cli
 2. Ensure PYTHONPATH includes the dev-tools directory.
    Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/boomtick-pkg/cli""", file=sys.stderr)
-    if "pytest" not in sys.modules:
-        sys.exit(1)
+    sys.exit(1)
 
 def main():
     # click entry point automatically handles sys.argv
@@ -132,8 +122,7 @@ def main():
                 print(f"❌ Error: {e}", file=sys.stderr)
             code = getattr(e, 'code', 1)
 
-        if "pytest" not in sys.modules:
-            sys.exit(code)
+        sys.exit(code)
 
 if __name__ == "__main__":
     main()

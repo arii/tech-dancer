@@ -17,8 +17,24 @@ from dev_tools_sdk.config import load_project_config
 
 PROJECT_CONFIG = load_project_config()
 
+
+
+
+
+
+
+
 # CLI Group
-@click.group()
+
+class DynamicHelpGroup(click.Group):
+    def make_context(self, info_name, args, parent=None, **extra):
+        if not os.environ.get("ALLOW_HELP"):
+            extra["help_option_names"] = []
+        else:
+            extra["help_option_names"] = ['-h', '--help']
+        return super().make_context(info_name, args, parent, **extra)
+
+@click.group(cls=DynamicHelpGroup)
 @click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
 @click.pass_context
 def cli(ctx, json_output):
