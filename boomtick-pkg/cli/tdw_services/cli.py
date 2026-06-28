@@ -87,7 +87,7 @@ def run_playwright(ctx, grep, worktree):
 @click.pass_context
 def ci_logs(ctx, pr_number, include_all, clean):
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.get_ci_logs(pr_number, include_all=include_all, clean=clean)
+    res = orch.get_ci_logs(pr_number, include_all=include_all)
     out(ctx, f"Fetched CI logs for PR #{pr_number}", data=res)
 
 

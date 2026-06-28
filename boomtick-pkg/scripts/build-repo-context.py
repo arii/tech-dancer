@@ -12,15 +12,22 @@ def build_repo_context():
     # scripts/build-repo-context.py -> package_root
     package_root = script_path.parent.parent
 
-    # Environment Detection
-    # Monolith has a 'src' directory in the parent (boomtick.blog)
-    is_monolith = (package_root.parent / "src").exists()
-
-    if is_monolith:
-        repo_root = package_root.parent
+    # Declarative Environment Detection using marker file
+    # Standalone root has workspace.json.
+    # Monolith root has workspace.json but it's one level up from boomtick-pkg.
+    if (package_root / "workspace.json").exists() and not (package_root.parent / "workspace.json").exists():
+        is_standalone = True
     else:
-        # We are likely at the root of the extracted repo
+        is_standalone = False
+
+    if is_standalone:
         repo_root = package_root
+    else:
+        # We are in monolith or some other nested structure
+        # Ensure we point to the correct package root if we're not already there
+        if package_root.name != "boomtick-pkg" and (package_root.parent / "boomtick-pkg").exists():
+            package_root = package_root.parent / "boomtick-pkg"
+        repo_root = package_root.parent
 
     # 1. Package JSON (Repo Root)
     try:
