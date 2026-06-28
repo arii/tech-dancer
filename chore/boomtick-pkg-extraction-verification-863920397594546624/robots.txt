@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/chore/boomtick-pkg-extraction-verification-863920397594546624/sitemap.xml
