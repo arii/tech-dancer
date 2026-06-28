@@ -10,7 +10,8 @@ on:
 jobs:
   call-workflow:
     uses: ./boomtick-pkg/workflows/reusable-gate.yml
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       pull-requests: write
       contents: write

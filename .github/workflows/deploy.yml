@@ -9,7 +9,8 @@ on:
 jobs:
   call-workflow:
     uses: ./boomtick-pkg/workflows/deploy.yml
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       pages: write

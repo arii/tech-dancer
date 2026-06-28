@@ -50,7 +50,11 @@ env:
 jobs:
   call-workflow:
     uses: ./boomtick-pkg/workflows/ci.yml
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      LHCI_GITHUB_TOKEN: ${{ secrets.LHCI_GITHUB_TOKEN }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
     permissions:
       contents: read
       actions: read

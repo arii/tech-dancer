@@ -12,7 +12,8 @@ concurrency:
 jobs:
   call-workflow:
     uses: ./boomtick-pkg/workflows/mergellama.yml
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       pull-requests: write

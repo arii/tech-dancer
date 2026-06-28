@@ -7,7 +7,8 @@ on:
 jobs:
   call-workflow:
     uses: ./boomtick-pkg/workflows/auto-conflict-resolver.yml
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       pull-requests: write

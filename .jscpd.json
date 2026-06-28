@@ -10,6 +10,7 @@
     "src/providers/**",
     "scripts/**",
     "dev-tools/**",
+    "// TODO: Re-evaluate duplication exclusion once workflow migration is finalized",
     "boomtick-pkg/workflows/**", "report/**",
     "**/*.spec.ts",
     "**/*.spec.tsx",

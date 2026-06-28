@@ -18,7 +18,8 @@ jobs:
     with:
       issue_number: ${{ inputs.issue_number }}
       comment_body: ${{ inputs.comment_body }}
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       pull-requests: write

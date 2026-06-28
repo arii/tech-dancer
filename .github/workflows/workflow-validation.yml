@@ -21,6 +21,7 @@ concurrency:
 jobs:
   call-workflow:
     uses: ./boomtick-pkg/workflows/workflow-validation.yml
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: read
