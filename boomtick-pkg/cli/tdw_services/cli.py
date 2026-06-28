@@ -31,20 +31,22 @@ def cli(ctx, json_output):
 
 # --- Utility Helpers ---
 def out(ctx, msg, data=None):
+    from tdw_services.utils import mask_sensitive_data
     if ctx.obj['JSON']:
         payload = {"status": "success"}
         if data: payload.update(data)
-        click.echo(json.dumps(payload, indent=2))
+        click.echo(mask_sensitive_data(json.dumps(payload, indent=2)))
     else:
-        click.echo(msg)
+        click.echo(mask_sensitive_data(msg))
 
 def err(ctx, msg, code=1, data=None):
+    from tdw_services.utils import mask_sensitive_data
     if ctx.obj['JSON']:
         payload = {"status": "error", "message": msg, "code": code}
         if data: payload.update({"data": data})
-        click.echo(json.dumps(payload, indent=2))
+        click.echo(mask_sensitive_data(json.dumps(payload, indent=2)))
     else:
-        click.echo(f"❌ Error: {msg}", err=True)
+        click.echo(f"❌ Error: {mask_sensitive_data(msg)}", err=True)
     sys.exit(code)
 
 def _handle_unexpected_error(ctx, command_name, e):
@@ -58,10 +60,7 @@ def _get_body_content(ctx, orch, file, body):
     if not file and not body:
         err(ctx, "Provide either --file or --body")
 
-    content = body if body is not None else (orch._read_safe_file(file) if file else None)
-    if content is None:
-        err(ctx, "Provide --file or --body")
-    return content
+    return body if body is not None else orch._read_safe_file(file)
 
 # ==========================================
 # REPO COMMAND GROUP

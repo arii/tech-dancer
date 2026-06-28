@@ -17,8 +17,14 @@ def mask_sensitive_data(msg: str) -> str:
     msg = re.sub(r'ghp_[a-zA-Z0-9]{36,}', 'ghp_***', msg)
     msg = re.sub(r'github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59,}', 'github_pat_***', msg)
 
+    # Redact Jules API Keys
+    msg = re.sub(r'jules_[a-zA-Z0-9]{32,}', 'jules_***', msg)
+
     # Generic token redaction for URLs or assignments (e.g., token=ABC123xyz)
     msg = re.sub(r'(?i)(token|auth|key|secret|password|access_token)([:=])[a-zA-Z0-9._-]{10,}', r'\1\2***', msg)
+
+    # Redact Bearer tokens in headers
+    msg = re.sub(r'(?i)(Bearer\s+)[a-zA-Z0-9._-]+', r'\1***', msg)
 
     return msg
 

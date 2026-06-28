@@ -6,7 +6,7 @@ import sys
 import shutil
 import subprocess
 from datetime import datetime, timezone
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional, Tuple, TypedDict
 from urllib.parse import quote, urlparse
 from collections import defaultdict
 
@@ -37,6 +37,18 @@ SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
 
 # Pre-compute UI indicators for heuristic checks
 UI_INDICATORS = PROJECT_CONFIG.ui_indicators
+
+class GitHubIssue(TypedDict):
+    number: int
+    title: str
+    body: str
+    state: str
+    html_url: str
+
+class GitHubComment(TypedDict):
+    id: int
+    body: str
+    html_url: str
 
 class Orchestrator:
     # Command detection patterns with word boundaries to avoid false positives
@@ -303,7 +315,7 @@ class Orchestrator:
         with open(abs_path, 'r', encoding='utf-8') as f:
             return f.read()
 
-    def create_issue(self, title: str, body: Optional[str]) -> Dict[str, Any]:
+    def create_issue(self, title: str, body: Optional[str]) -> GitHubIssue:
         """
         Creates a new GitHub issue.
         """
@@ -314,7 +326,7 @@ class Orchestrator:
         except Exception as e:
             raise CLIError(f"Failed to create GitHub issue: {str(e)}")
 
-    def get_issue_details(self, issue_number: int) -> Dict[str, Any]:
+    def get_issue_details(self, issue_number: int) -> GitHubIssue:
         """
         Fetches details of a GitHub issue.
         """
@@ -323,7 +335,7 @@ class Orchestrator:
         except Exception as e:
             raise CLIError(f"Failed to fetch GitHub issue details: {str(e)}")
 
-    def update_issue_body(self, issue_number: int, body: Optional[str]) -> Dict[str, Any]:
+    def update_issue_body(self, issue_number: int, body: Optional[str]) -> GitHubIssue:
         """
         Updates an issue's body.
         """
@@ -334,7 +346,7 @@ class Orchestrator:
         except Exception as e:
             raise CLIError(f"Failed to update GitHub issue body: {str(e)}")
 
-    def post_comment(self, entity_number: int, body: Optional[str]) -> Dict[str, Any]:
+    def post_comment(self, entity_number: int, body: Optional[str]) -> GitHubComment:
         """
         Posts a comment to a Pull Request or Issue.
         """
