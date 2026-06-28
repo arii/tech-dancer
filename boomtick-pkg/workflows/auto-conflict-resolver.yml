@@ -1,0 +1,271 @@
+name: 'Auto Conflict Resolver'
+
+env:
+  TARGET: ${{ inputs.target_branch || 'main' }}
+  SOURCE: ${{ inputs.source_branch }}
+  PR_NUMBER: ${{ inputs.pr_number || inputs.issue_number || '0' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number'
+        required: false
+        type: string
+      comment_body:
+        description: 'Comment body'
+        required: false
+        type: string
+      target_branch:
+        description: 'The branch to merge into'
+        required: true
+        default: 'main'
+      source_branch:
+        description: 'The branch to merge from'
+        required: true
+      pr_number:
+        description: 'The PR number to comment on (optional)'
+        required: false
+        default: '0'
+  workflow_call:
+    inputs:
+      target_branch:
+        description: 'The branch to merge into'
+        required: false
+        type: string
+        default: 'main'
+      source_branch:
+        description: 'The branch to merge from'
+        required: true
+        type: string
+      pr_number:
+        description: 'The PR number to comment on (required for feedback)'
+        required: true
+        type: string
+
+jobs:
+  merge_and_resolve:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Resolve PR details
+        if: env.PR_NUMBER && env.PR_NUMBER != '0'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          PR_INFO=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/${GH_REPO}/pulls/${{ env.PR_NUMBER }}")
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+
+          # Read cleanly via jq and write to environment file securely using randomized EOF
+          {
+            echo "SOURCE<<$EOF"
+            echo "$PR_INFO" | jq -r '.head.ref'
+            echo "$EOF"
+            echo "TARGET<<$EOF"
+            echo "$PR_INFO" | jq -r '.base.ref'
+            echo "$EOF"
+            echo "HEAD_REPO<<$EOF"
+            echo "$PR_INFO" | jq -r '.head.repo.full_name'
+            echo "$EOF"
+            echo "ORIGINAL_TITLE<<$EOF"
+            echo "$PR_INFO" | jq -r '.title'
+            echo "$EOF"
+            echo "ORIGINAL_BODY<<$EOF"
+            echo "$PR_INFO" | jq -r '.body'
+            echo "$EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Create or update comment
+        if: env.PR_NUMBER && env.PR_NUMBER != '0'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: |
+            ⏳ Attempting to automatically resolve conflicts for branch `${{ env.SOURCE }}`...
+            <!-- id: conflict-resolver-bot -->
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout base repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          setup-python: 'false'
+
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Validate and fetch branches
+        id: validate_branches
+        shell: bash
+        run: |
+          if ! git ls-remote --exit-code --heads origin "$TARGET" > /dev/null 2>&1; then
+            echo "::warning::Target branch $TARGET missing. Skipping resolver."
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            echo "error_msg=❌ Error: Target branch \`$TARGET\` not found. Please ensure the target branch exists and the bot has permissions to access it." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git remote add fork "https://github.com/${{ env.HEAD_REPO || github.repository }}.git"
+
+          if ! git ls-remote --exit-code --heads fork "$SOURCE" > /dev/null 2>&1; then
+            echo "::warning::Source branch $SOURCE missing in fork. Skipping resolver."
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            echo "error_msg=❌ Error: Source branch \`$SOURCE\` not found in the source repository. It may have been deleted or renamed." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Fetch and checkout the source branch from the fork
+          git fetch fork "$SOURCE"
+          git checkout -b "$SOURCE" FETCH_HEAD
+
+          # Fetch the target branch from origin
+          git fetch origin "$TARGET"
+          echo "base_sha=$(git rev-parse "origin/$TARGET")" >> "$GITHUB_OUTPUT"
+          echo "skipped=false" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on validation failure
+        if: steps.validate_branches.outputs.skipped == 'true' && env.PR_NUMBER && env.PR_NUMBER != '0'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: |
+            ${{ steps.validate_branches.outputs.error_msg }}
+            <!-- id: conflict-resolver-bot -->
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge target branch
+        id: merge
+        if: steps.validate_branches.outputs.skipped != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$TARGET"
+
+          # Attempt merge
+          if ! git merge "origin/$TARGET" --no-commit --no-ff; then
+            # Check if it failed due to a real error or just a conflict
+            if git status | grep -q "Unmerged paths"; then
+              echo "Merge resulted in conflicts. Proceeding to resolver."
+              echo "merge_failed=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "::error::Merge failed due to a non-conflict error."
+              echo "merge_failed=true" >> "$GITHUB_OUTPUT"
+              git merge --abort || true
+              # Will fail workflow later
+            fi
+          else
+            echo "Merge succeeded cleanly. No conflicts to resolve."
+            echo "merge_failed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve conflicts
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true'
+        id: resolve
+        uses: VeyronSakai/conflict-resolver@v0.5
+
+      - name: Commit and create PR
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files == ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add .
+          git commit -m "Auto-resolve merge conflicts by merging $TARGET"
+
+          # Create a new branch and push it to the base repository (origin)
+          RESOLVE_BRANCH="auto-resolve/${SOURCE}"
+          git checkout -b "$RESOLVE_BRANCH"
+
+          # Push to the base repository
+          git push -u origin "$RESOLVE_BRANCH" --force
+
+          echo "resolved_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+          # Create a pull request in the base repository against the target branch to suggest the fix
+          if [ "$ORIGINAL_BODY" = "null" ] || [ -z "$ORIGINAL_BODY" ]; then
+            ORIGINAL_BODY="This PR suggests a resolution for the merge conflicts."
+          fi
+
+          PR_TITLE="[Auto-Resolved] ${ORIGINAL_TITLE:-"Auto-resolve merge conflicts from ${TARGET} for ${SOURCE}"}"
+          PR_BODY="$ORIGINAL_BODY
+
+          ---
+          *Note: This PR was automatically generated to resolve merge conflicts from ${TARGET}.*"
+
+          PR_URL=$(gh pr create \
+            --repo "${{ github.repository }}" \
+            --head "$RESOLVE_BRANCH" \
+            --base "$TARGET" \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY")
+
+          echo "pr_url=${PR_URL}" >> "$GITHUB_OUTPUT"
+
+          # Manually trigger workflows to run on the new PR
+          gh workflow run ci.yml --ref "$RESOLVE_BRANCH" || true
+          gh workflow run codeql.yml --ref "$RESOLVE_BRANCH" || true
+          gh workflow run conflict-check.yml --ref "$RESOLVE_BRANCH" || true
+
+        id: commit_push
+
+      - name: Update comment on success
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && success() && steps.resolve.outputs.unresolved-files == '' && env.PR_NUMBER && env.PR_NUMBER != '0'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: |
+            ✅ Successfully resolved conflicts! I have opened a pull request with the suggested fixes: ${{ steps.commit_push.outputs.pr_url }}
+            Please review and merge it to resolve the conflicts.
+            <!-- id: conflict-resolver-bot -->
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update comment on failure
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != '' && env.PR_NUMBER && env.PR_NUMBER != '0'
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: |
+            ❌ **Error: Unable to automatically resolve all conflicts.**
+            The following files have unresolved conflicts:
+            ```
+            ${{ steps.resolve.outputs.unresolved-files }}
+            ```
+            Please resolve these conflicts manually.
+            <!-- id: conflict-resolver-bot -->
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail on merge error
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed == 'true'
+        run: |
+          echo "::error::Merge failed due to a non-conflict error. Manual intervention required."
+          exit 1
+
+      - name: Notify partial resolution
+        if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != ''
+        run: |
+          UNRESOLVED="${{ steps.resolve.outputs.unresolved-files }}"
+          # Count lines by counting characters then removing everything except newlines, or use wc -l
+          # If it's comma separated, we can count commas.
+          # Based on the bot comment usage, it's in a code block, likely one per line.
+          COUNT=$(echo "$UNRESOLVED" | grep -c '^' || echo 0)
+          echo "::warning::$COUNT files still have conflicts and require manual resolution. Auto-resolver could not fully resolve all conflicts."
+          {
+            echo "### Conflict Resolution Summary"
+            echo "⚠️ $COUNT files require manual attention:"
+            echo '```'
+            echo "$UNRESOLVED"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0

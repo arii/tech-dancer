@@ -1,0 +1,86 @@
+name: WCS Data Pipeline - Wednesday Build
+
+on:
+  workflow_call:
+  schedule:
+    - cron: '0 10 * * 3'
+  workflow_dispatch:
+
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Run Pytest - Data Validation
+        run: |
+          PYTHONPATH=. pytest etl/tests/
+
+      - name: Execute Extraction Script - Incremental Batching
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          # Configure Git for intermediate commits
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Run scraper in batches of 10 events
+          for i in {1..10}; do
+            echo "Starting Batch ${i}..."
+            PYTHONPATH=. python etl/scraper.py --years 1 --limit 10 --ledger etl/data/wcs_prelims.parquet
+            EXIT_CODE=$?
+
+            if [ $EXIT_CODE -eq 100 ]; then
+              echo "✅ No new events to process. Finishing."
+              break
+            elif [ $EXIT_CODE -eq 0 ]; then
+              echo "📦 Batch ${i} completed. Committing locally..."
+              git add etl/data/wcs_prelims.parquet etl/data/event_queue.json
+              if ! git commit -m "chore(etl): update wcs ledger and queue (batch ${i})"; then echo "No changes to commit"; fi
+              echo "✅ Local batch commit created."
+            else
+              echo "❌ Scraper failed with exit code $EXIT_CODE. Stopping."
+              exit 1
+            fi
+          done
+
+      - name: Validate Output
+        run: |
+          python -c "import pandas as pd; df=pd.read_parquet('etl/data/wcs_prelims.parquet'); assert len(df) > 0"
+
+      - name: Commit via Git LFS
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs track "*.parquet"
+          git add etl/data/wcs_prelims.parquet etl/data/event_queue.json .gitattributes
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(etl): finalize automated WCS data refresh"
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(etl): automated WCS data refresh"
+          branch: "automation/wcs-etl-refresh"
+          delete-branch: true
+          title: "chore(etl): automated WCS data refresh"
+          body: |
+            ## Summary
+            - runs weekly WCS ETL scraping batches
+            - updates `etl/data/wcs_prelims.parquet` and `etl/data/event_queue.json`
+            - opens/updates a PR instead of pushing directly to `main`
