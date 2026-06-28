@@ -36,9 +36,9 @@ class ProjectConfig:
         "src/features", "src/pages", "src/components", "src/layouts", "src/App.tsx"
     ])
     allowed_bots: List[str] = field(default_factory=lambda: [
-        "github-actions[bot]", "tech-dancer-bot", "ariii"
+        "github-actions[bot]"
     ])
-    worktree_prefix: str = "tech-dancer-repair-"
+    worktree_prefix: str = "bt-repair-"
     spec_sections: List[str] = field(default_factory=lambda: [
         "Problem Statement",
         "Goal",
