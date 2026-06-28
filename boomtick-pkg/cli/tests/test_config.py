@@ -10,7 +10,8 @@ def test_load_default_config(tmp_path):
     assert isinstance(config, ProjectConfig)
     assert config.base_branch == "origin/main"
     assert config.monolithic_pr_threshold == 3
-    assert "src/layouts/" in config.core_dirs
+    # core_dirs now defaults to empty list in code, loaded from json at runtime
+    assert config.core_dirs == []
 
 def test_load_custom_config(tmp_path):
     config_file = tmp_path / "project_config.json"

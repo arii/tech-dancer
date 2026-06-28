@@ -327,29 +327,35 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
 
     return proc
 
-def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN)."""
-    return os.getenv("GITHUB_TOKEN")
+def get_github_token() -> str:
+    """Retrieves the GitHub token from environment. Fails fast in CI."""
+    token = os.getenv("GITHUB_TOKEN")
+    if not token and os.environ.get("CI") == "true":
+        raise CLIError("GITHUB_TOKEN is missing. This is required for operation in CI.", code=401)
+    return token or ""
 
-def get_repo_name() -> Optional[str]:
-    """Auto-detect repo from environment variables or git remote."""
+def get_repo_name() -> str:
+    """Auto-detect repo from environment variables. Fails fast in CI."""
     repo = os.getenv("GITHUB_REPOSITORY") or os.getenv("GH_REPO")
     if repo:
         return repo
 
+    if os.environ.get("CI") == "true":
+        raise CLIError("GITHUB_REPOSITORY is missing. This is required for operation in CI.", code=400)
+
     try:
-        # Using check=False here to avoid noisy logs for a common discovery step
+        # Local discovery as fallback only
         res = run_command(['git', 'config', '--get', 'remote.origin.url'], check=False, log_on_error=False)
-        if res.returncode != 0:
-            return os.getenv("GH_REPO")
-        url = res.stdout.strip()
-        if not url:
-            return os.getenv("GH_REPO")
-        import re
-        match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
-        return match.group(1) if match else url
+        if res.returncode == 0 and res.stdout:
+            url = res.stdout.strip()
+            import re
+            match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
+            if match:
+                return match.group(1)
     except Exception:
-        return None
+        pass
+
+    return ""
 
 class GHAConfigManager:
     """Manages GitHub Actions variables with local caching and robust error handling."""
@@ -406,37 +412,11 @@ class GHAConfigManager:
         import requests
         token = get_github_token()
         repo = get_repo_name()
-        if token and repo:
-            try:
-                import requests
-                url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-                headers = {
-                    "Authorization": f"Bearer {token}",
-                    "Accept": "application/vnd.github+json"
-                }
-                response = requests.get(url, headers=headers, timeout=10)
-                if response.status_code == 200:
-                    data = response.json()
-                    val = str(data.get("value", ""))
-                    self.cache[name] = val
-                    self._save_cache()
-                    return val
-            except Exception:
-                pass
-
-        # 3. Check gh CLI availability
-        if self.gh_available is None:
-            try:
-                run_command(["gh", "--version"], log_on_error=False)
-                self.gh_available = True
-            except (CLIError, FileNotFoundError):
-                self.gh_available = False
-
-        if not self.gh_available:
+        if not (token and repo):
             return None
 
         try:
-            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
+            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github+json",
@@ -444,12 +424,10 @@ class GHAConfigManager:
             }
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
-                val = response.json().get("value")
+                val = str(response.json().get("value", ""))
                 self.cache[name] = val
                 self._save_cache()
                 return val
-            elif response.status_code != 404:
-                log_error(f"fetching GHA variable '{name}' via API: {response.status_code} {response.text}")
         except Exception as e:
             log_error(f"Unexpected error fetching GHA variable '{name}': {e}")
 

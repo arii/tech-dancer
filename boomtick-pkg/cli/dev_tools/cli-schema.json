@@ -746,7 +746,7 @@
       ]
     },
     "agent dispatch": {
-      "description": "",
+      "description": "\nInitialize a Jules session for a specific branch and task.\nNote: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n",
       "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent dispatch <BRANCH> <TASK>",
       "required_arguments": [
         {
@@ -861,7 +861,7 @@
       ]
     },
     "jules dispatch": {
-      "description": "",
+      "description": "\nInitialize a Jules session for a specific branch and task.\nNote: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n",
       "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py jules dispatch <BRANCH> <TASK>",
       "required_arguments": [
         {

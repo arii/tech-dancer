@@ -11,10 +11,16 @@ dotenv.config({
 
 export const config = {
   githubToken: process.env.GITHUB_TOKEN,
-  githubOwner: process.env.GITHUB_OWNER || "arii",
-  githubRepo: process.env.GITHUB_REPO || "tech-dancer",
+  githubOwner: process.env.GITHUB_OWNER,
+  githubRepo: process.env.GITHUB_REPO,
   repoPath: process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../"),
   defaultBaseBranch: process.env.DEFAULT_BASE_BRANCH || "main",
   viteBasePath: process.env.VITE_BASE_PATH || "/tech-dancer/",
   ghPath: process.env.GH_PATH || "gh"
 };
+
+if (process.env.CI === "true") {
+  if (!config.githubToken) throw new Error("GITHUB_TOKEN is required in CI");
+  if (!config.githubOwner) throw new Error("GITHUB_OWNER is required in CI");
+  if (!config.githubRepo) throw new Error("GITHUB_REPO is required in CI");
+}

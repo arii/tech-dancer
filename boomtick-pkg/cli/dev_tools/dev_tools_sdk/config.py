@@ -13,45 +13,21 @@ class ProjectConfig:
     github_token_env: str = "GITHUB_TOKEN"
     gh_token_env: str = "GH_TOKEN"
     jules_api_url: str | None = None
-    core_dirs: List[str] = field(default_factory=lambda: ["src/layouts/", "src/components/"])
+    core_dirs: List[str] = field(default_factory=list)
     monolithic_pr_threshold: int = 3
     base_branch: str = "origin/main"
     max_diff_chars: int = 40000
-    content_scopes: Dict[str, str] = field(default_factory=lambda: {
-        "resources": "content/resources/",
-        "posts": "content/posts/",
-        "blog": "content/blog/",
-        "studies": "content/studies/"
-    })
+    content_scopes: Dict[str, str] = field(default_factory=dict)
     ai_synthesis_model: str = "gpt-4o-mini"
     ai_review_model: str = "gpt-4o"
     ai_vision_model: str = "gpt-4o"
-    ui_indicators: List[str] = field(default_factory=lambda: [
-        "src/components", "src/pages", "src/layouts", "src/index.css", "tailwind"
-    ])
-    tailwind_indicators: List[str] = field(default_factory=lambda: [
-        "px-", "py-", "mt-", "flex", "grid", "text-["
-    ])
-    audit_check_dirs: List[str] = field(default_factory=lambda: [
-        "src/features", "src/pages", "src/components", "src/layouts", "src/App.tsx"
-    ])
-    allowed_bots: List[str] = field(default_factory=lambda: [
-        "github-actions[bot]"
-    ])
+    ui_indicators: List[str] = field(default_factory=list)
+    tailwind_indicators: List[str] = field(default_factory=list)
+    audit_check_dirs: List[str] = field(default_factory=list)
+    allowed_bots: List[str] = field(default_factory=lambda: ["github-actions[bot]"])
     worktree_prefix: str = "bt-repair-"
-    spec_sections: List[str] = field(default_factory=lambda: [
-        "Problem Statement",
-        "Goal",
-        "Non-Goals",
-        "Proposed Approach",
-        "Alternatives Considered",
-        "Architectural Impact",
-        "Scope",
-        "UNDERSTAND THE ISSUE",
-        "DETERMINE APPROACH",
-        "SPECIFY SCOPE",
-        "DEFINITION OF DONE"
-    ])
+    spec_sections: List[str] = field(default_factory=list)
+
 
     @property
     def base_branch_name(self) -> str:
@@ -70,8 +46,7 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
             raw = json.loads(p.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, IOError):
             pass
-    else:
-        return ProjectConfig()
+
 
     def get_list(key: str) -> Optional[List[str]]:
         val = raw.get(key)
@@ -90,8 +65,15 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         return None
 
     kwargs: Dict[str, Any] = {}
-    if "github_repo" in raw or "repo_name" in raw:
-        kwargs["github_repo"] = raw.get("github_repo") or raw.get("repo_name")
+
+    # Critical Field Resolution (Fail-Fast Pattern)
+    github_repo = raw.get("github_repo") or raw.get("repo_name") or os.environ.get("GITHUB_REPOSITORY") or os.environ.get("GH_REPO")
+    if not github_repo and os.environ.get("CI") == "true":
+        raise RuntimeError("Configuration Error: 'github_repo' must be defined in project_config.json or environment (GITHUB_REPOSITORY) in CI.")
+
+    if github_repo:
+        kwargs["github_repo"] = github_repo
+
     if "github_token_env" in raw:
         kwargs["github_token_env"] = raw["github_token_env"]
     if "gh_token_env" in raw:

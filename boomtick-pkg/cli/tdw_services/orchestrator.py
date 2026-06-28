@@ -651,7 +651,14 @@ class Orchestrator:
             log_error(f"pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
             raise CLIError(f"Run: corepack enable && corepack prepare pnpm@{expected_pnpm} --activate")
 
-        return {"node": actual_node, "pnpm": actual_pnpm}
+        # Consolidated token check from snapshot.sh
+        tokens = {
+            "GITHUB_TOKEN": bool(os.environ.get("GITHUB_TOKEN")),
+            "JULES_API_KEY": bool(os.environ.get("JULES_API_KEY")),
+            "GEMINI_API_KEY": bool(os.environ.get("GEMINI_API_KEY"))
+        }
+
+        return {"node": actual_node, "pnpm": actual_pnpm, "tokens": tokens}
 
 
     def verify_ci_metrics(self, **kwargs):
@@ -719,42 +726,131 @@ class Orchestrator:
         except Exception: pass
         return results
 
-    def repair_local(self, logs_path: Optional[str] = None, stdin: bool = False, worktree: bool = False) -> Dict[str, Any]:
+    def repair_ci(self, file_path: str, errors: List[str]) -> bool:
+        """Uses AI to attempt to repair a file based on CI error messages."""
+        if not os.path.exists(file_path):
+            return False
+
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        error_block = "\n".join([f"- {e}" for e in errors])
+        prompt = f"""Repair the following file to resolve these CI errors:
+
+ERRORS:
+{error_block}
+
+FILE CONTENT:
+{content}
+
+Provide the complete repaired file content. Output ONLY the code without markdown markers."""
+
+        try:
+            repaired = self.ai.generate(prompt)
+            repaired = self.ai.clean_llm_output(repaired)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(repaired)
+            return True
+        except Exception as e:
+            log_error(f"AI repair failed for {file_path}: {e}")
+            return False
+
+    def repair_local(self, logs_path: Optional[str] = None, stdin: bool = False, worktree: bool = False, eslint_json_path: Optional[str] = None) -> Dict[str, Any]:
         logs_content = ""
-        if stdin: logs_content = sys.stdin.read()
+        if stdin:
+            logs_content = sys.stdin.read()
         elif logs_path:
             if os.path.exists(logs_path):
-                with open(logs_path, 'r') as f: logs_content = f.read()
-            else: raise CLIError(f"Log file not found: {logs_path}")
+                with open(logs_path, 'r', encoding='utf-8') as f:
+                    logs_content = f.read()
+            else:
+                raise CLIError(f"Log file not found: {logs_path}")
         else:
             res_lint = run_command(["pnpm", "run", "lint:ox"], check=False)
             res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
             logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
-        if not logs_content.strip(): return {"status": "success", "message": "No errors found."}
-        import tempfile, shutil
-        original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "dev-tools", "repair.py"))
-        worktree_path = None; branch_name = None
+
+        findings = extract_failing_info(logs_content)
+
+        if eslint_json_path and os.path.exists(eslint_json_path):
+            try:
+                with open(eslint_json_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                for file_entry in data:
+                    file_path = file_entry['filePath']
+                    if file_path.startswith(os.getcwd()):
+                        file_path = os.path.relpath(file_path, os.getcwd())
+                    for msg in file_entry.get('messages', []):
+                        if msg.get('severity') >= 2: # Error
+                            findings.append({
+                                "file": file_path,
+                                "line": msg.get('line'),
+                                "message": f"{msg.get('message')} ({msg.get('ruleId')})",
+                                "type": "eslint"
+                            })
+            except Exception as e:
+                log_error(f"Failed to parse ESLint JSON: {e}")
+
+        if not findings:
+            return {"status": "success", "message": "No actionable errors found."}
+
+        original_cwd = os.getcwd()
+        worktree_path = None
+        branch_name = None
+
         try:
             if worktree:
                 branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"
                 prefix = PROJECT_CONFIG.worktree_prefix
-                # Create temporary worktree within repo root to avoid Security Error
                 worktree_path = os.path.join(original_cwd, f"{prefix}{datetime.now().strftime('%H%M%S')}")
                 os.makedirs(worktree_path, exist_ok=True)
                 run_command(["git", "worktree", "add", "-b", branch_name, worktree_path, "HEAD"])
                 os.chdir(worktree_path)
                 if os.path.exists(os.path.join(original_cwd, "node_modules")):
                     os.symlink(os.path.join(original_cwd, "node_modules"), os.path.join(worktree_path, "node_modules"))
-            # Create temporary log file within repo root logs/
-            log_dir = get_or_create_log_dir("repair")
-            with tempfile.NamedTemporaryFile(mode='w', suffix=".log", delete=False, dir=log_dir) as tmp_log:
-                tmp_log.write(logs_content); tmp_log_path = tmp_log.name
-            cmd = [sys.executable, repair_script, tmp_log_path]
-            proc = run_command(cmd, check=False)
-            os.unlink(tmp_log_path)
-            if proc.returncode == 0: return {"status": "success", "message": "Repair completed.", "worktree": worktree_path, "branch": branch_name}
-            else: return {"status": "error", "message": f"Repair failed with code {proc.returncode}"}
-        finally: os.chdir(original_cwd)
+
+            files_to_fix = {}
+            for f in findings:
+                if f["file"] not in files_to_fix:
+                    files_to_fix[f["file"]] = []
+                files_to_fix[f["file"]].append(f["message"])
+
+            results = {}
+            for file_path, errors in files_to_fix.items():
+                if not os.path.exists(file_path):
+                    continue
+
+                # Agentic Loop
+                success = False
+                current_errors = errors
+                for attempt in range(3): # MAX_RETRIES = 3
+                    from tdw_services.utils import log_info
+                    log_info(f"Attempt {attempt + 1} for {file_path}")
+                    if self.repair_ci(file_path, current_errors):
+                        # Verify
+                        res = run_command(["pnpm", "run", "type-check"], check=False)
+                        new_findings = extract_failing_info(res.stdout + res.stderr)
+                        new_errors = [f["message"] for f in new_findings if f["file"] == file_path]
+                        if not new_errors:
+                            log_error(f"✅ Fixed all identified errors in {file_path}")
+                            success = True
+                            break
+                        else:
+                            log_error(f"⚠️ Still has {len(new_errors)} errors in {file_path}. Retrying...")
+                            current_errors = new_errors
+                    else:
+                        break
+                results[file_path] = success
+
+            return {
+                "status": "success",
+                "message": "Repair triage completed.",
+                "results": results,
+                "worktree": worktree_path,
+                "branch": branch_name
+            }
+        finally:
+            os.chdir(original_cwd)
 
     def handle_audit_gate(self) -> Dict[str, Any]:
         current_count = int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only"]) or 0)
