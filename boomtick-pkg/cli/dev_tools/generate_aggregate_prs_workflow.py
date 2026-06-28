@@ -17,7 +17,7 @@ def main():
     print("Generating workflow plan for Aggregate PRs...")
 
     # 1. Environment Validation
-    env_output = run_command(["bash", "boomtick-pkg/cli/verify.sh"])
+    env_output = run_command(["td-cli", "doctor"])
 
     # 2. Get Open PRs (Limit 100 per conventions)
     prs_output = run_command(["td-cli", "gh", "overlaps", "--limit", "100"])

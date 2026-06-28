@@ -319,9 +319,7 @@ def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
 @click.pass_context
 def verify_versions(ctx, diff_input):
     """Verify version changes in a diff for downgrades or hard blocks."""
-    import subprocess
-    import tempfile
-    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'verify_versions.py')
+    orch = ctx.obj['ORCHESTRATOR']
 
     if not diff_input:
         # If no input provided, try to get diff against main
@@ -330,31 +328,20 @@ def verify_versions(ctx, diff_input):
         except Exception as e:
             err(ctx, f"Failed to get git diff: {e}")
 
-    # Use a temporary file to avoid E2BIG/ARG_MAX issues with large diffs
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp:
-        tmp.write(diff_input)
-        tmp_path = tmp.name
+    findings = orch.verify_versions(diff_input)
 
-    cmd = [sys.executable, script_path, tmp_path]
-    try:
-        proc = subprocess.run(cmd, capture_output=True, text=True)
-        os.unlink(tmp_path)
-        if proc.stdout:
-            try:
-                findings = json.loads(proc.stdout)
-                if findings:
-                    status = "error" if any(f['severity'] == 'error' for f in findings) else "success"
-                    out(ctx, f"Found {len(findings)} version issues.", data={"status": status, "findings": findings})
-                    if status == "error":
-                        sys.exit(1)
-                else:
-                    out(ctx, "✅ No version issues detected.", data={"status": "success", "findings": []})
-            except json.JSONDecodeError:
-                err(ctx, f"Invalid validator output: {proc.stdout}")
-        else:
-            err(ctx, f"Validator failed: {proc.stderr}")
-    except Exception as e:
-        err(ctx, f"Error running validator: {e}")
+    if findings:
+        status = "error" if any(f['severity'] == 'error' for f in findings) else "success"
+        if not ctx.obj['JSON']:
+            for f in findings:
+                icon = "❌" if f['severity'] == "error" else "⚠️"
+                click.echo(f"{icon} {f['message']} ({f['file']})")
+
+        out(ctx, f"Found {len(findings)} version issues.", data={"status": status, "findings": findings})
+        if status == "error":
+            sys.exit(1)
+    else:
+        out(ctx, "✅ No version issues detected.", data={"status": "success", "findings": []})
 
 @gh.command()
 @click.option('--pr', type=int)
@@ -539,19 +526,31 @@ def pre_submit(ctx):
 @click.pass_context
 def overlaps(ctx, limit, no_cache):
     """Identify and propose consolidation of PRs with high functional or structural overlap."""
-    import subprocess
-    import sys
-    import os
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.analyze_pr_overlaps(limit=limit, use_cache=not no_cache)
 
-    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dev_tools', 'pr_overlap.py')
-    cmd = [sys.executable, script_path, '--limit', str(limit)]
-    if no_cache:
-        cmd.append('--no-cache')
+    if not ctx.obj['JSON']:
+        click.echo("--- EXACT OVERLAP GROUPS ---")
+        for group in res['exact_overlaps']:
+            pr_info = ", ".join([f"#{p['number']}" for p in group['prs']])
+            click.echo(f"PRs {pr_info} overlap on {len(group['files'])} files:")
+            for pr in group['prs']:
+                click.echo(f"  [{pr['number']}] {pr['title']}")
+            for f in group['files']:
+                click.echo(f"    - {f}")
 
-    try:
-        subprocess.run(cmd, check=True)
-    except subprocess.CalledProcessError as e:
-        err(ctx, f"pr_overlap.py failed with exit code {e.returncode}")
+        click.echo("\n--- CONNECTED CLUSTERS ---")
+        for cluster in res['clusters']:
+            pr_info = ", ".join([f"#{p['number']}" for p in cluster['prs']])
+            click.echo(f"Cluster PRs {pr_info}:")
+            for pr in cluster['prs']:
+                click.echo(f"  [{pr['number']}] {pr['title']}")
+            click.echo("  All files touched by this cluster:")
+            for f in cluster['all_files']:
+                click.echo(f"    - {f}")
+            click.echo("-" * 40)
+
+    out(ctx, "PR overlap analysis complete.", data=res)
 
 # ==========================================
 # UX COMMAND GROUP

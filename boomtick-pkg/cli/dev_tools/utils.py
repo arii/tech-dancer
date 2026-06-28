@@ -96,6 +96,21 @@ def to_standard_schema(schema, uppercase: bool = False):
         return [to_standard_schema(item, uppercase=uppercase) for item in schema]
     return schema
 
+def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3) -> Optional[dict]:
+    """Helper to perform urllib requests with retries and exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                if response.status == 200:
+                    return json.loads(response.read().decode("utf-8"))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            if attempt == max_retries - 1:
+                log_error(f"API call failed after {max_retries} attempts: {e}")
+                return None
+            wait_time = (2 ** attempt) + (random.random() * 0.1)
+            time.sleep(wait_time)
+    return None
+
 def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
     try:
@@ -348,7 +363,6 @@ def get_repo_name() -> str:
         res = run_command(['git', 'config', '--get', 'remote.origin.url'], check=False, log_on_error=False)
         if res.returncode == 0 and res.stdout:
             url = res.stdout.strip()
-            import re
             match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
             if match:
                 return match.group(1)

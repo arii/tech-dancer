@@ -24,7 +24,7 @@ def main():
     print(f"Generating workflow plan for PR #{pr_number}...")
 
     # 1. Environment Validation
-    env_output = run_command(["bash", "dev-tools/verify.sh"])
+    env_output = run_command(["td-cli", "doctor"])
 
     # 2. Issue Validation
     issue_output = "No issue number provided."

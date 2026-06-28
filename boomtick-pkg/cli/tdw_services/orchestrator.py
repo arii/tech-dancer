@@ -13,7 +13,9 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
+from tdw_services.services.version_service import VersionService
 from tdw_services.utils import log_error, get_or_create_log_dir, CLIError
+
 from tdw_services.handlers.command_handler import CommandHandler
 from utils import (
     get_github_token,
@@ -51,6 +53,7 @@ class Orchestrator:
         self._github: Optional[GitHubClient] = None
         self._ai: Optional[AIClient] = None
         self._jules: Optional[JulesClient] = None
+        self._version: Optional[VersionService] = None
 
     @property
     def github(self) -> GitHubClient:
@@ -69,6 +72,12 @@ class Orchestrator:
         if self._jules is None:
             self._jules = JulesClient()
         return self._jules
+
+    @property
+    def version_service(self) -> VersionService:
+        if self._version is None:
+            self._version = VersionService()
+        return self._version
 
     def _hash_content(self, content: str) -> str:
         return hashlib.md5(content.encode('utf-8')).hexdigest()
@@ -251,6 +260,11 @@ class Orchestrator:
         val = self.get_env_or_gha(env_var)
         if val is not None and str(val).strip() != "": return int(val)
         return fallback_value
+
+    def verify_versions(self, diff_text: str) -> List[Dict[str, Any]]:
+        """Verifies version changes in a diff for downgrades or hard blocks."""
+        changes = self.version_service.parse_diff(diff_text)
+        return self.version_service.verify_changes(changes)
 
     def get_audit_results(self, content: Optional[str] = None, targets: Optional[List[str]] = None) -> Dict[str, Any]:
         cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
@@ -832,11 +846,11 @@ Provide the complete repaired file content. Output ONLY the code without markdow
                         new_findings = extract_failing_info(res.stdout + res.stderr)
                         new_errors = [f["message"] for f in new_findings if f["file"] == file_path]
                         if not new_errors:
-                            log_error(f"✅ Fixed all identified errors in {file_path}")
+                            log_info(f"✅ Fixed all identified errors in {file_path}")
                             success = True
                             break
                         else:
-                            log_error(f"⚠️ Still has {len(new_errors)} errors in {file_path}. Retrying...")
+                            log_info(f"⚠️ Still has {len(new_errors)} errors in {file_path}. Retrying...")
                             current_errors = new_errors
                     else:
                         break
@@ -1282,6 +1296,89 @@ Respond only after the PR is created or updated:
             prs = [pr for pr in prs if not pr.get("isDraft")]
 
         return {"prs": prs}
+
+    def analyze_pr_overlaps(self, limit: int = 50, use_cache: bool = True) -> Dict[str, Any]:
+        """Identify and propose consolidation of PRs with high functional or structural overlap."""
+        # nosemgrep: python.lang.security.deserialization.pickle.avoid-pickle
+        import pickle
+        cache_file = os.path.join(get_or_create_log_dir("cache"), ".pr_cache.pkl")
+
+        cache = {"prs": {}, "files": {}}
+        if use_cache and os.path.exists(cache_file):
+            try:
+                with open(cache_file, 'rb') as f:
+                    cache = pickle.load(f)
+            except Exception:
+                pass
+
+        repo_name = get_repo_name()
+        prs = self.github.list_pull_requests(state='open', limit=limit)
+
+        for pr in prs:
+            num = str(pr['number'])
+            if num not in cache["prs"] or not use_cache:
+                cache["prs"][num] = pr['title']
+                files = self.github.fetch_pr_files(pr['number'])
+                cache["files"][num] = {f.get('filename') for f in files if not f.get('filename', '').startswith("tests/visual.spec.ts-snapshots/")}
+
+        try:
+            with open(cache_file, 'wb') as f:
+                pickle.dump(cache, f)
+        except Exception:
+            pass
+
+        overlap_groups = defaultdict(list)
+        for pr_num, files in cache["files"].items():
+            for file in files:
+                touching_prs = [p for p, fs in cache["files"].items() if file in fs]
+                if len(touching_prs) > 1:
+                    overlap_groups[frozenset(touching_prs)].append(file)
+
+        exact_overlaps = []
+        for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
+            pr_list = sorted(list(pr_set), key=int)
+            exact_overlaps.append({
+                "prs": [{"number": p, "title": cache["prs"].get(p, "Unknown PR")} for p in pr_list],
+                "files": sorted(files)
+            })
+
+        graph = defaultdict(set)
+        all_prs = list(cache["files"].keys())
+        for i, pr1 in enumerate(all_prs):
+            for pr2 in all_prs[i+1:]:
+                if cache["files"][pr1] & cache["files"][pr2]:
+                    graph[pr1].add(pr2)
+                    graph[pr2].add(pr1)
+
+        clusters = []
+        visited = set()
+        for pr in all_prs:
+            if pr not in visited and pr in graph:
+                component = {pr}
+                stack = [pr]
+                while stack:
+                    curr = stack.pop()
+                    for neighbor in graph[curr]:
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            component.add(neighbor)
+                            stack.append(neighbor)
+                visited.add(pr)
+
+                comp_list = sorted(list(component), key=int)
+                involved_files = set()
+                for p in component:
+                    involved_files |= cache["files"][p]
+
+                clusters.append({
+                    "prs": [{"number": p, "title": cache["prs"].get(p, "Unknown PR")} for p in comp_list],
+                    "all_files": sorted(list(involved_files))
+                })
+
+        return {
+            "exact_overlaps": exact_overlaps,
+            "clusters": clusters
+        }
 
     def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
         """
