@@ -47,7 +47,6 @@ runs:
 
     - name: Install dev-tools
       if: inputs.setup-python == 'true'
-      shell: bash
       run: |
         echo "::group::Install dev-tools"
         pip install -e boomtick-pkg/cli/ --break-system-packages
@@ -57,10 +56,10 @@ runs:
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
         echo "::endgroup::"
+      shell: bash
 
     - name: Verify td-cli on PATH
       if: inputs.setup-python == 'true'
-      shell: bash
       run: |
         # Force a refresh of the path in the current shell context if possible,
         # though GITHUB_PATH updates usually apply to subsequent steps.
@@ -77,10 +76,10 @@ runs:
           fi
         fi
         echo "✅ td-cli is resolvable on PATH (or confirmed available in local bin)."
+      shell: bash
 
     - name: Export Environment Variables
       if: inputs.setup-python == 'true'
-      shell: bash
       run: |
         # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
         REPO_DIR=$(pwd)
@@ -99,3 +98,4 @@ runs:
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
         echo "✅ Environment configured: PYTHONPATH includes $REPO_DIR/boomtick-pkg/cli"
+      shell: bash

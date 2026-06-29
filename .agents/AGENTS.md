@@ -78,6 +78,7 @@ Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly
 | **GitHub** | Manage Reviews | `github.manage_reviews` | `td_cli.py gh manage-reviews` | - |
 | **GitHub** | Validate Issue | `github.validate_issue` | `td_cli.py gh validate-issue` | - |
 | **GitHub** | Create Issue | `github.create_issue` | `td_cli.py gh create-issue` | `gh issue create` |
+| **GitHub** | Aggregate PRs / Consolidate | - | `td_cli.py gh aggregate <TARGET_BRANCH> <PR_NUMBERS...>` (Note: Use `main` branch as base) | - |
 | **GitHub** | Pre-submit Gate | `github.pre_submit` | `td_cli.py gh pre-submit` | - |
 | **Repository** | Read Repo Index | `repo.read_agent_context` | `cat .agent-context.json` | - |
 | **Repository** | List Changed Files | `repo.get_changed_files` | - | `git diff --name-only` |
@@ -87,7 +88,7 @@ Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly
 | **Testing** | Run Playwright | `repo.run_playwright` | `td_cli.py repo run-playwright` | `npx playwright test` |
 | **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
 | **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |
-| **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch <BRANCH> <TASK>` (Note: Use `main` branch for PR consolidations) | - |
+| **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch <BRANCH> <TASK>` | - |
 | **Agent** | Fix CI | `jules.fix_ci` | `td_cli.py agent fix-ci --pr-number <PR>` | - |
 | **Agent** | Sync Sessions | `jules.sync_sessions` | `td_cli.py agent sync` | - |
 | **Agent** | Send Message | `jules.send_message` | `td_cli.py agent send <ID> <MSG>` | - |

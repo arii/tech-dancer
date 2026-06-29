@@ -5,14 +5,14 @@ from datetime import datetime, timezone
 from typing import List, Dict, Any
 import click
 
-from tdw_services.utils import log_info, log_error, mask_sensitive_data, get_or_create_log_dir
+from tdw_services.utils import log_info, log_error, mask_sensitive_data, get_or_create_log_dir, CLIError
 from tdw_services.orchestrator import Orchestrator
 
 # Import legacy utils for backwards compatibility during migration
 from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
 from scope_check import verify_pr_scope
 import os
-from utils import get_github_client, get_repo_name, CLIError, run_command, set_gha_variable, get_gha_variable
+from utils import get_github_client, get_repo_name, run_command, set_gha_variable, get_gha_variable
 from dev_tools_sdk.config import load_project_config
 
 PROJECT_CONFIG = load_project_config()
@@ -732,6 +732,10 @@ def agent_group():
 @click.argument('task')
 @click.pass_context
 def dispatch(ctx, branch, task):
+    """
+    Initialize a Jules session for a specific branch and task.
+    Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.
+    """
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.dispatch_jules_review(branch, task)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
