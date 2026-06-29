@@ -907,6 +907,8 @@ Respond only after the PR is created or updated:
         if failing_logs:
             prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
 
+        prompt += "\n\n> **IMPORTANT: Do not spawn child agent sessions to solve meta-tasks (like branch merging or PR consolidation) that are covered by deterministic CLI commands.**\n"
+
         agent_name = "Jules"
         source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
         if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
