@@ -4,6 +4,7 @@ import os
 import json
 import time
 import subprocess
+import re
 
 # Ensure imports work regardless of execution directory
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -134,14 +135,19 @@ def main():
             feedback = ""
 
         # Perform full dev-tools pipeline: Audit, AI Review, UX Report
-        print(f"  Running dev-tools pipeline for PR #{matched_pr.get('number')}...")
+        pr_num = matched_pr.get('number')
+        if not isinstance(pr_num, int) or pr_num <= 0:
+            print(f"  Invalid PR number {pr_num}, skipping.")
+            continue
+
+        print(f"  Running dev-tools pipeline for PR #{pr_num}...")
         try:
             env = os.environ.copy()
             # Ensure PYTHONPATH includes the cli root for td_cli.py
             cli_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             env["PYTHONPATH"] = f"{cli_root}:{env.get('PYTHONPATH', '')}"
             td_cli_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "td_cli.py")
-            pr_num_str = str(matched_pr.get('number'))
+            pr_num_str = str(pr_num)
 
             # 1. Heuristic Code Audit
             print(f"    - Running Heuristic Audit...")
@@ -158,8 +164,8 @@ def main():
                         for finding in auto_findings:
                             feedback += f"- **{finding.get('severity', 'info')}** ({finding.get('path')}): {finding.get('issue')}\n"
                         feedback += "\n"
-                except json.JSONDecodeError:
-                    pass
+                except json.JSONDecodeError as e:
+                    feedback += f"## Heuristic Audit Findings\nFailed to parse JSON output: {e}\n\n"
 
             # 2. AI Code Review
             print(f"    - Running AI Code Review...")
@@ -192,22 +198,26 @@ def main():
                         with open(report_path, "r") as f:
                             report_content = f.read()
                         # Extract the key findings summary to avoid spamming the PR
-                        import re
                         match = re.search(r'## Key Findings\n(.*?)(?=\n##|$)', report_content, re.DOTALL)
                         if match:
                             feedback += f"## UX Impact Analysis\n{match.group(1).strip()}\n\n"
                         else:
                             feedback += f"## UX Impact Analysis\nReport generated but no key findings extracted.\n\n"
-                except json.JSONDecodeError:
-                    pass
+                except json.JSONDecodeError as e:
+                    feedback += f"## UX Impact Analysis\nFailed to parse JSON output: {e}\n\n"
 
         except Exception as e:
             feedback += f"## Dev-Tools Pipeline Error\nFailed to execute pipeline tasks: {e}\n\n"
-
-        if feedback:
-            print(f"  Sending feedback to session {session_id}...")
+            print(f"  Sending error feedback to session {session_id}...")
             jules_client.send_message(session_id, feedback)
-            print("  Feedback sent.")
+            sys.exit(1)
+
+        if not feedback:
+            feedback = "No diagnostic information could be generated for this PR."
+
+        print(f"  Sending feedback to session {session_id}...")
+        jules_client.send_message(session_id, feedback)
+        print("  Feedback sent.")
 
 if __name__ == "__main__":
     main()
