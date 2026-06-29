@@ -97,15 +97,45 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/audit
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - parallel:
+          - uses: ./boomtick-pkg/mcp/actions/audit
+            with:
+              github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Semantic Duplicate Audit
-        run: pnpm run audit:semantic
+          - name: Semantic Duplicate Audit
+            run: pnpm run audit:semantic
 
-      - name: Audit Suppression Inventory
-        run: pnpm run audit:inventory
+          - name: Audit Suppression Inventory
+            run: pnpm run audit:inventory
+
+          - name: Download actionlint
+            id: get_actionlint
+            run: |
+              curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
+              bash download-actionlint.sh 1.7.12
+              rm download-actionlint.sh
+            shell: bash
+
+          - name: Lint workflow logic with actionlint
+            wait: get_actionlint
+            run: |
+              ./actionlint \
+                -ignore 'step must run script with "run" section' \
+                -ignore 'unexpected key "background"' \
+                -ignore 'unexpected key "parallel"' \
+                -ignore 'unexpected key "wait"' \
+                -color
+            shell: bash
+
+          - name: Semgrep Static Analysis
+            run: |
+              pip install semgrep
+              pnpm run audit:semgrep
+
+          - name: Gitleaks Secret Detection
+            uses: gitleaks/gitleaks-action@v2
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   test-build:
