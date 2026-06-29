@@ -253,18 +253,36 @@ export class BoomtickMCPServer {
       }
     });
   }
-
   async run() {
+    // Ensure standard user binary paths are in PATH for editor/IDE integration
+    const extraPaths = [
+      "/home/ari/miniforge3/bin",
+
+      "/home/ari/.local/bin",
+      "/home/ari/.nvm/versions/node/v24.16.0/bin",
+      path.join(process.env.HOME || "", ".local", "bin"),
+      path.join(process.env.HOME || "", "miniforge3", "bin")
+    ];
+    const currentPath = process.env.PATH || "";
+    const updatedPaths = [...extraPaths, ...currentPath.split(path.delimiter)];
+    process.env.PATH = Array.from(new Set(updatedPaths)).join(path.delimiter);
+
     // Pre-flight check for td-cli
     try {
-      const result = spawnSync("td-cli", ["doctor"], { encoding: "utf-8" });
+      const result = spawnSync("td-cli", ["doctor"], { encoding: "utf-8", cwd: config.repoPath });
+
+      if (result.error) {
+        console.error("spawnSync error:", result.error);
+      }
       if (result.status !== 0) {
-        throw new Error("td-cli doctor returned non-zero exit code");
+        console.error("status:", result.status);
+        console.error("stdout:", result.stdout);
+        console.error("stderr:", result.stderr);
+        throw new Error(`td-cli doctor returned exit code: ${result.status}`);
       }
       console.error("✅ td-cli verified on PATH");
     } catch (error) {
-      console.error("❌ Fatal: td-cli is not resolvable on PATH. MCP tools will fail.");
-      console.error("Please ensure dev-tools are installed: pip install -e dev-tools/");
+      console.error("❌ Fatal: td-cli pre-flight check failed:", error);
       process.exit(1);
     }
 
