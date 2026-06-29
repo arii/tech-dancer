@@ -13,78 +13,89 @@ runs:
   steps:
     - name: Validate Runtime
       if: inputs.target == 'root'
-      shell: bash
       run: |
         echo "::group::Validate Runtime"
         trap 'echo "::endgroup::"' EXIT
         pnpm run check:runtime-files
         pnpm run doctor
+      shell: bash
 
     - name: pnpm install
-      shell: bash
       env:
         TARGET: ${{ inputs.target }}
       run: |
         echo "::group::pnpm install"
         trap 'echo "::endgroup::"' EXIT
         if [ "$TARGET" = "root" ]; then
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --engine-strict=false
         else
-          pnpm install --frozen-lockfile --filter "$TARGET"
+          FILTER_PATH="$TARGET"
+          if [ "$TARGET" = "boomtick-mcp" ]; then
+            FILTER_PATH="./boomtick-pkg/mcp"
+          fi
+          pnpm install --frozen-lockfile --filter "$FILTER_PATH" --engine-strict=false
         fi
+      shell: bash
 
     - name: Verify lockfile integrity (root only)
       if: inputs.target == 'root'
-      shell: bash
       run: |
         if ! git diff --quiet pnpm-lock.yaml; then
           echo "::error::pnpm-lock.yaml is out of date. Run pnpm install and commit."
           exit 1
         fi
+      shell: bash
 
     - name: Lint
       if: inputs.target == 'root'
-      shell: bash
       run: pnpm run lint
+      shell: bash
 
     - name: Type-check / Build
-      shell: bash
       env:
         TARGET: ${{ inputs.target }}
       run: |
         if [ "$TARGET" = "root" ]; then
           pnpm run type-check
         else
-          pnpm --filter "$TARGET" run build
+          FILTER_PATH="$TARGET"
+          if [ "$TARGET" = "boomtick-mcp" ]; then
+            FILTER_PATH="./boomtick-pkg/mcp"
+          fi
+          pnpm --filter "$FILTER_PATH" run build
         fi
+      shell: bash
 
     - name: Run Unit Tests
-      shell: bash
       env:
         TARGET: ${{ inputs.target }}
       run: |
         if [ "$TARGET" = "root" ]; then
           pnpm test
         else
-          pnpm --filter "$TARGET" run test
+          FILTER_PATH="$TARGET"
+          if [ "$TARGET" = "boomtick-mcp" ]; then
+            FILTER_PATH="./boomtick-pkg/mcp"
+          fi
+          pnpm --filter "$FILTER_PATH" run test
         fi
+      shell: bash
 
     - name: Run CLI Unit Tests
       if: inputs.target == 'root'
-      shell: bash
       run: |
         echo "::group::Pytest"
         trap 'echo "::endgroup::"' EXIT
-        python3 -m pytest tests/dev-tools/test_modern_cli.py
+        PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools python3 -m pytest boomtick-pkg/cli/tests/
+      shell: bash
 
     - name: Check for dead code
       if: inputs.target == 'root'
-      shell: bash
       run: pnpm run knip
+      shell: bash
 
     - name: TypeScript 'any' Ratchet
       if: inputs.target == 'root'
-      shell: bash
       run: |
         echo "::group::Ratchet Any"
         trap 'echo "::endgroup::"' EXIT
@@ -93,3 +104,4 @@ runs:
         td-cli gh ratchet-any
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
+      shell: bash
