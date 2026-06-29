@@ -22,9 +22,20 @@ class TestGitHubClientPagination(unittest.TestCase):
         search_data = [
             {"number": 101, "title": "Bug PR", "user": {"login": "user"}, "draft": False, "updated_at": "2023", "html_url": "url", "labels": [{"name": "bug"}]}
         ]
-        mock_response = MagicMock()
-        mock_response.json.return_value = {"items": search_data}
-        mock_response.status_code = 200
+        mock_response_p1 = MagicMock()
+        mock_response_p1.json.return_value = page1_data
+        mock_response_p1.status_code = 200
+        mock_response_p1.raise_for_status.return_value = None
+
+        # Page 2: 50 PRs, one with 'bug' label
+        page2_data = [
+            {"number": i, "title": f"PR {i}", "user": {"login": "user"}, "head": {"ref": "b"}, "base": {"ref": "m"}, "draft": False, "mergeable_state": "clean", "updated_at": "2023", "html_url": "url", "labels": [{"name": "bug"} if i == 101 else {"name": "feat"}]}
+            for i in range(101, 151)
+        ]
+        mock_response_p2 = MagicMock()
+        mock_response_p2.json.return_value = page2_data
+        mock_response_p2.status_code = 200
+        mock_response_p2.raise_for_status.return_value = None
 
         mock_request.return_value = mock_response
 

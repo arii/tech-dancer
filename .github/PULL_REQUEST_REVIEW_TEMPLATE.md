@@ -2,7 +2,7 @@
 
 <!-- PR_NUMBER: {{NUMBER}} -->
 
-**Repo:** arii/tech-dancer — https://github.com/arii/tech-dancer/pull/{{NUMBER}}
+**Repo:** {{REPO_FULL_NAME}} — https://github.com/{{REPO_FULL_NAME}}/pull/{{NUMBER}}
 **Stats:** {{STATS}}
 
 ---

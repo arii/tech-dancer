@@ -147,7 +147,11 @@ class GitHubClient:
         per_page = min(limit, 100)
 
         while len(prs) < limit:
-            params = {"state": state, "per_page": per_page, "page": page}
+            params = {
+                "state": state,
+                "per_page": per_page,
+                "page": page
+            }
             data = self._request('GET', f'/repos/{self.repo}/pulls', params=params)
 
             if not data:
