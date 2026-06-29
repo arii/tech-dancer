@@ -1261,7 +1261,7 @@ Respond only after the PR is created or updated:
             "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
         }
 
-    def generate_review_workflow_plan(self, pr_number: int, issue_number: Optional[int] = None) -> Dict[str, Any]:
+    def generate_review_workflow(self, pr_number: int, issue_number: Optional[int] = None) -> Dict[str, Any]:
         """Generates a deterministic review workflow plan for an agent."""
         # 1. Environment Validation
         try:
@@ -1469,7 +1469,7 @@ Only after successful completion.
 """)
         return {"status": "success", "plan_path": plan_path}
 
-    def generate_aggregation_workflow_plan(self) -> Dict[str, Any]:
+    def generate_aggregate_prs_workflow(self) -> Dict[str, Any]:
         """Generates a deterministic aggregation workflow plan for an agent."""
         # 1. Environment Validation
         try:

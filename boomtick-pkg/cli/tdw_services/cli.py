@@ -838,7 +838,7 @@ def plan_review(ctx, pr_number, issue_number):
     """Generate a deterministic review workflow plan for an agent."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.generate_review_workflow_plan(pr_number, issue_number)
+        res = orch.generate_review_workflow(pr_number, issue_number)
         out(ctx, f"Workflow plan generated: {res['plan_path']}", data=res)
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-review", e)
@@ -849,7 +849,7 @@ def plan_aggregation(ctx):
     """Generate a deterministic aggregation workflow plan for an agent."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.generate_aggregation_workflow_plan()
+        res = orch.generate_aggregate_prs_workflow()
         out(ctx, f"Workflow plan generated: {res['plan_path']}", data=res)
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
