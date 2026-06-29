@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 
 # Standardize pathing for robust imports
 try:
-    from utils.path import setup_cli_paths
+    from cli_utils.path import setup_cli_paths
     setup_cli_paths()
 except ImportError:
     _current_dir = os.path.dirname(os.path.abspath(__file__))

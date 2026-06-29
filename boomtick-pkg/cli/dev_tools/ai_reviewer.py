@@ -6,6 +6,19 @@ ai_reviewer.py - Standalone AI Code Reviewer CLI
 import os
 import sys
 import argparse
+
+# Standardize pathing for robust imports
+try:
+    from cli_utils.path import setup_cli_paths
+    setup_cli_paths()
+except ImportError:
+    _current_dir = os.path.dirname(os.path.abspath(__file__))
+    _cli_root = os.path.abspath(os.path.join(_current_dir, '..'))
+    _dev_tools_dir = _current_dir
+    for _path in [_cli_root, _dev_tools_dir]:
+        if _path not in sys.path:
+            sys.path.insert(0, _path)
+
 from utils import call_ai, get_stack_versions
 from dev_tools_sdk.config import load_project_config
 
