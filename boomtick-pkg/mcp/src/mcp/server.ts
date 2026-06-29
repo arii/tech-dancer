@@ -47,7 +47,9 @@ import { triggerJulesFeedbackHandler, TriggerJulesFeedbackInputSchema } from "..
 import { ddgsSearchHandler, DdgsSearchInputSchema } from "../tools/ddgs.search.js";
 
 import fs from "fs/promises";
+import { existsSync, readFileSync } from "fs";
 import path from "path";
+
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
@@ -254,35 +256,81 @@ export class BoomtickMCPServer {
     });
   }
   async run() {
-    // Ensure standard user binary paths are in PATH for editor/IDE integration
-    const extraPaths = [
-      "/home/ari/miniforge3/bin",
+    const projectRoot = config.repoPath || process.cwd();
+    const homeDir = process.env.HOME || "";
+    const extraPaths = [];
 
-      "/home/ari/.local/bin",
-      "/home/ari/.nvm/versions/node/v24.16.0/bin",
-      path.join(process.env.HOME || "", ".local", "bin"),
-      path.join(process.env.HOME || "", "miniforge3", "bin")
-    ];
+    // 1. DYNAMIC PYTHON PATH (pip / virtualenv discovery)
+    const venvDirs = [".venv", "venv", "env"];
+    for (const venvDir of venvDirs) {
+      const venvBin = path.join(projectRoot, venvDir, "bin");
+      if (existsSync(venvBin)) {
+        extraPaths.push(venvBin);
+        break;
+      }
+    }
+
+    // 2. DYNAMIC NODE PATH (.nvmrc parsing)
+    const nvmrcPath = path.join(projectRoot, ".nvmrc");
+    let targetNodeVersion = "";
+
+    if (existsSync(nvmrcPath)) {
+      const rawVersion = readFileSync(nvmrcPath, "utf-8").trim();
+      targetNodeVersion = rawVersion.startsWith("v") ? rawVersion : `v${rawVersion}`;
+    }
+
+    if (homeDir) {
+      extraPaths.push(
+        path.join(homeDir, ".local", "bin"),
+        path.join(homeDir, "miniforge3", "bin"),
+        path.join(homeDir, "anaconda3", "bin"),
+        path.join(homeDir, "miniconda3", "bin")
+      );
+
+      if (process.env.NVM_BIN) {
+        extraPaths.push(process.env.NVM_BIN);
+      } else if (targetNodeVersion) {
+        extraPaths.push(path.join(homeDir, ".nvm", "versions", "node", targetNodeVersion, "bin"));
+      } else {
+        extraPaths.push(path.join(homeDir, ".nvm", "versions", "node", process.version, "bin"));
+      }
+    }
+
+    extraPaths.push(path.dirname(process.execPath));
+
     const currentPath = process.env.PATH || "";
     const updatedPaths = [...extraPaths, ...currentPath.split(path.delimiter)];
-    process.env.PATH = Array.from(new Set(updatedPaths)).join(path.delimiter);
+    process.env.PATH = Array.from(new Set(updatedPaths))
+      .filter(Boolean)
+      .join(path.delimiter);
 
-    // Pre-flight check for td-cli
+    // 3. SAFE REPOSITORY RESOLUTION
+    const repoPath = config.repoPath || projectRoot;
+
+    // 4. SECURE, UNIX-ONLY PRE-FLIGHT CHECK FOR TD-CLI
     try {
-      const result = spawnSync("td-cli", ["doctor"], { encoding: "utf-8", cwd: config.repoPath });
+      const result = spawnSync("td-cli", ["doctor"], { 
+        encoding: "utf-8", 
+        cwd: repoPath,
+        shell: false // Explicitly disabled to clear Semgrep rules
+      });
 
       if (result.error) {
-        console.error("spawnSync error:", result.error);
+        throw result.error;
       }
+
       if (result.status !== 0) {
         console.error("status:", result.status);
         console.error("stdout:", result.stdout);
         console.error("stderr:", result.stderr);
         throw new Error(`td-cli doctor returned exit code: ${result.status}`);
       }
-      console.error("✅ td-cli verified on PATH");
+
+      console.error("✅ td-cli verified on PATH securely");
     } catch (error) {
-      console.error("❌ Fatal: td-cli pre-flight check failed:", error);
+      console.error("❌ Fatal: td-cli is not resolvable on PATH. MCP tools will fail.");
+      console.error("Please ensure the project is installed: pip install -e .");
+      console.error("❌ Fatal: td-cli pre-flight check failed:", error instanceof Error ? error.message : String(error));
       process.exit(1);
     }
 
