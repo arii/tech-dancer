@@ -396,7 +396,7 @@ class GHAConfigManager:
         """Helper to get GitHub client and repo name."""
         try:
             client = get_github_client()
-            repo = get_repo_name()
+            repo = get_repo_name() or ""
             return client, repo
         except Exception:
             return None, None
@@ -410,7 +410,7 @@ class GHAConfigManager:
         # 2. Fetch from GitHub API
         import requests
         token = get_github_token()
-        repo = get_repo_name()
+        repo = get_repo_name() or ""
         if token and repo:
             try:
                 import requests
@@ -469,7 +469,7 @@ class GHAConfigManager:
         # 2. Set via GitHub API
         import requests
         token = get_github_token()
-        repo = get_repo_name()
+        repo = get_repo_name() or ""
         if token and repo:
             try:
                 import requests
