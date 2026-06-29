@@ -90,7 +90,17 @@ Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If a
 
 ---
 
+## 🚫 Autonomous Agent Dispatch Constraints
+
+Agents MUST NOT autonomously dispatch child agents (e.g., using `jules.create_session` or calling `td_cli.py agent dispatch`) to perform code reviews, fix CI errors, or complete tasks, UNLESS explicitly requested by the USER using the exact phrase:
+"dispatch a jules session to do..." or "dispatch jules task to do...".
+
+Automatic triggers or autonomous cascades of child agents are strictly forbidden to prevent infinite agent recursive loops.
+
+---
+
 ## 🔍 Code Review Orchestration
+
 
 The `orchestrateCodeReview` pipeline must source all inputs from MCP tools.
 Internal diff-fetching functions (`getCodeDiffSummary`, direct filesystem reads)
