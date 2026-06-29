@@ -225,7 +225,10 @@ class Orchestrator:
         Automates the creation of Jules sessions.
         """
         # Depth Control
-        depth = int(os.environ.get("AGENT_DISPATCH_DEPTH", "0"))
+        try:
+            depth = int(os.environ.get("AGENT_DISPATCH_DEPTH", "0"))
+        except ValueError:
+            raise CLIError("AGENT_DISPATCH_DEPTH must be a valid integer.")
         if depth >= 2:
             raise CLIError("Hard limit reached: AGENT_DISPATCH_DEPTH >= 2. Cannot dispatch child session to prevent infinite loop.")
 
@@ -253,6 +256,8 @@ class Orchestrator:
             raise CLIError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
 
         if pr_number is not None:
+            if not isinstance(pr_number, int) or pr_number <= 0:
+                 raise CLIError(f"Invalid PR number: {pr_number}")
             script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "dev_tools", "generate_review_workflow.py")
             from tdw_services.utils import run_command, log_warn
             import sys

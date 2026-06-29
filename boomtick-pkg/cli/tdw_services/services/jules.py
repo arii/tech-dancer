@@ -74,7 +74,7 @@ class JulesClient:
             },
             "automationMode": "AUTO_CREATE_PR",
             "environmentVariables": {
-                "AGENT_DISPATCH_DEPTH": str(int(os.environ.get("AGENT_DISPATCH_DEPTH", "0")) + 1)
+                "AGENT_DISPATCH_DEPTH": str(int(os.environ.get("AGENT_DISPATCH_DEPTH", "0")) + 1) if os.environ.get("AGENT_DISPATCH_DEPTH", "0").isdigit() else "1"
             }
         }
 
@@ -101,7 +101,7 @@ class JulesClient:
             "owner": owner,
             "repo_name": repo_name,
             "environmentVariables": {
-                "AGENT_DISPATCH_DEPTH": str(int(os.environ.get("AGENT_DISPATCH_DEPTH", "0")) + 1)
+                "AGENT_DISPATCH_DEPTH": str(int(os.environ.get("AGENT_DISPATCH_DEPTH", "0")) + 1) if os.environ.get("AGENT_DISPATCH_DEPTH", "0").isdigit() else "1"
             }
         }
         try:
