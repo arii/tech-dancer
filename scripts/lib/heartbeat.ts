@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { randomUUID } from 'node:crypto';
 
 const LOG_DIR = path.join(process.cwd(), 'boomtick-pkg', 'cli', 'logs', 'ai');
-const LOG_FILE = path.join(LOG_DIR, 'heartbeat.log');
 
 /**
- * Appends a heartbeat log entry to the heartbeat.log file.
- * Refactored to be non-blocking and efficient using fs.promises.
+ * Writes a heartbeat log entry to a unique file.
+ * This prevents race conditions during concurrent writes from parallel steps.
  */
 export async function logHeartbeat(status: string): Promise<void> {
   const sanitizedStatus = status.replace(/[\r\n]/g, ' ').trim();
@@ -18,7 +18,9 @@ export async function logHeartbeat(status: string): Promise<void> {
       await fs.promises.mkdir(LOG_DIR, { recursive: true });
     }
 
-    await fs.promises.appendFile(LOG_FILE, logEntry);
+    const logFile = path.join(LOG_DIR, `heartbeat-${randomUUID()}.log`);
+    await fs.promises.writeFile(logFile, logEntry);
+
     console.log(`💓 Heartbeat: ${sanitizedStatus}`);
   } catch (error) {
     console.error('❌ Failed to write heartbeat log:', error);
