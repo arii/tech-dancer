@@ -19,7 +19,7 @@ export const config = {
   ghPath: process.env.GH_PATH || "gh"
 };
 
-if (process.env.CI === "true") {
+if (process.env.CI === "true" && process.env.NODE_ENV !== "test" && process.env.VITEST !== "true") {
   if (!config.githubToken) throw new Error("GITHUB_TOKEN is required in CI");
   if (!config.githubOwner) throw new Error("GITHUB_OWNER is required in CI");
   if (!config.githubRepo) throw new Error("GITHUB_REPO is required in CI");

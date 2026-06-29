@@ -3,9 +3,7 @@ import sys
 import subprocess
 import json
 import time
-import urllib.request
-import urllib.error
-import urllib.parse
+import requests
 import re
 import random
 from pathlib import Path
@@ -96,14 +94,14 @@ def to_standard_schema(schema, uppercase: bool = False):
         return [to_standard_schema(item, uppercase=uppercase) for item in schema]
     return schema
 
-def _call_api_with_retry(req: urllib.request.Request, max_retries: int = 3) -> Optional[dict]:
-    """Helper to perform urllib requests with retries and exponential backoff."""
+def _call_api_with_retry(method: str, url: str, headers: dict = None, json_data: dict = None, max_retries: int = 3) -> Optional[dict]:
+    """Helper to perform requests with retries and exponential backoff."""
     for attempt in range(max_retries):
         try:
-            with urllib.request.urlopen(req, timeout=30) as response:
-                if response.status == 200:
-                    return json.loads(response.read().decode("utf-8"))
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            response = requests.request(method, url, headers=headers, json=json_data, timeout=30)
+            response.raise_for_status()
+            return response.json()
+        except (requests.exceptions.RequestException, TimeoutError) as e:
             if attempt == max_retries - 1:
                 log_error(f"API call failed after {max_retries} attempts: {e}")
                 return None
@@ -164,7 +162,7 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 
     base_url = os.environ.get("GITHUB_MODELS_BASE_URL", "https://models.inference.ai.azure.com")
     if not base_url.endswith("/"): base_url += "/"
-    target_url = urllib.parse.urljoin(base_url, "chat/completions")
+    target_url = f"{base_url}chat/completions"
 
     data = {"model": model or get_ai_model(), "messages": [{"role": "user", "content": prompt}], "stream": False}
     if schema:
@@ -176,11 +174,10 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
             "content": f"Output MUST be valid JSON matching this schema: {json.dumps(norm_schema)}"
         })
 
-    req = urllib.request.Request(target_url, data=json.dumps(data).encode("utf-8"),
-                                headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
 
     start_time = time.time()
-    res = _call_api_with_retry(req, max_retries=max_retries)
+    res = _call_api_with_retry("POST", target_url, headers=headers, json_data=data, max_retries=max_retries)
     duration_ms = int((time.time() - start_time) * 1000)
 
     if res and "usage" in res:
