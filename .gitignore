@@ -61,10 +61,10 @@ boomtick-pkg/cli/dev_tools/config.json
 *.swo
 
 # Python / ETL
-__pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
-*.egg-info/
+**/*.egg-info/
 .venv/
 venv/
 ENV/
@@ -82,7 +82,7 @@ link-validation-report.md
 # Dynamically generated analysis artifacts
 pr_overlaps.txt
 workflow_overlaps.txt
-boomtick-pkg/cli/logs/reviews/*.md
+boomtick-pkg/cli/logs/
 /product-mockups/
 
 
