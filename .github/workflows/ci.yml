@@ -110,7 +110,7 @@ jobs:
 
   test-build:
     name: Build & E2E
-    needs: [verify-changes, lint-typecheck]
+    needs: [verify-changes]
     if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 15
     runs-on: ubuntu-latest
