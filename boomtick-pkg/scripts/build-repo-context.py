@@ -44,18 +44,9 @@ def build_repo_context():
     # 3. Project Config (Repo Root)
     project_config = {}
     try:
-        from importlib.resources import files
-        try:
-            # Try to load from the dev_tools python package if available
-            project_config = json.loads(files("dev_tools").joinpath("project_config.json").read_text())
-        except Exception:
-            # Manual fallback logic
-            config_path = repo_root / "project_config.json"
-            if not config_path.exists() and not is_standalone:
-                config_path = package_root / "project_config.json"
-
-            if config_path.exists():
-                project_config = json.loads(config_path.read_text())
+        project_config_path = repo_root / "project_config.json"
+        if project_config_path.exists():
+            project_config = json.loads(project_config_path.read_text())
     except Exception as e:
         print(f"Error reading project_config.json: {e}", file=sys.stderr)
 
