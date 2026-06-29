@@ -27,7 +27,7 @@ runs:
     - name: Design Token Compliance
       run: |
         VIOLATIONS=$(find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -h '#[0-9a-fA-F]\{3,6\}' \
-          | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || echo 0)
+          | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || true)
         if [ "$VIOLATIONS" -gt 0 ]; then
           echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
           find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -rn '#[0-9a-fA-F]\{3,6\}' | grep -v "design-tokens\|tokens.css"

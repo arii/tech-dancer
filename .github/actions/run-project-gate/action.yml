@@ -69,7 +69,6 @@ runs:
     - name: Run Unit Tests
       env:
         TARGET: ${{ inputs.target }}
-        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         if [ "$TARGET" = "root" ]; then
           pnpm test
