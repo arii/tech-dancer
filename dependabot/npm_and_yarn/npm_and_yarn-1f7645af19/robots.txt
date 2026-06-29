@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/dependabot/npm_and_yarn/npm_and_yarn-1f7645af19/sitemap.xml
