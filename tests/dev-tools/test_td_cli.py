@@ -12,15 +12,19 @@ from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
+    @patch.dict(os.environ, {}, clear=True)
+    def test_help_disabled_exits_cleanly(self):
+        """Ensure the CLI exits when help is called and ALLOW_HELP is not set"""
+        with patch('sys.argv', ['td_cli.py', '--help']):
+            with self.assertRaises(SystemExit) as cm:
+                td_cli.main()
+            self.assertEqual(cm.exception.code, 1)
+
     @patch('tdw_services.orchestrator.get_github_token')
     @patch('tdw_services.orchestrator.get_github_client')
     @patch('tdw_services.orchestrator.get_repo_name')
-    @patch('td_cli.get_github_token')
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('td_cli.get_repo_name')
-    def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token, mock_orch_repo, mock_orch_get_client, mock_orch_token):
+    def test_validate_issue_dry_run_default(self, mock_orch_repo, mock_orch_get_client, mock_orch_token):
         """Test that validate-issue defaults to dry-run True"""
-        mock_repo.return_value = "owner/repo"
         mock_orch_repo.return_value = "owner/repo"
 
         mock_issue = MagicMock()
@@ -28,7 +32,6 @@ class TestTDCLI(unittest.TestCase):
         mock_issue.title = "Test Issue"
         mock_issue.body = "Test Body"
 
-        mock_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
         mock_orch_get_client.return_value.get_repo.return_value.get_issue.return_value = mock_issue
 
         args = MagicMock()
@@ -100,8 +103,8 @@ class TestTDCLI(unittest.TestCase):
         mock_gha_get.assert_called_with("FAKE_VAR")
 
 class TestTDCliCrash(unittest.TestCase):
-    @patch('td_cli.get_github_client')
-    @patch('td_cli.get_repo_name')
+    @patch('utils.get_github_client')
+    @patch('utils.get_repo_name')
     def test_handle_audit_pr_invalid_inputs(self, mock_repo, mock_client):
         """Test handle_audit_pr raises CLIError for various invalid PR numbers"""
         cases = [

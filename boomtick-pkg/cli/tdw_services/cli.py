@@ -17,8 +17,16 @@ from dev_tools_sdk.config import load_project_config
 
 PROJECT_CONFIG = load_project_config()
 
+class AgentGroup(click.Group):
+    def parse_args(self, ctx, args):
+        if not os.environ.get("ALLOW_HELP"):
+            if "-h" in args or "--help" in args:
+                print("FATAL: --help is disabled for agent workflows. Read cli-schema.json for command syntax.", file=sys.stderr)
+                sys.exit(1)
+        return super().parse_args(ctx, args)
+
 # CLI Group
-@click.group()
+@click.group(cls=AgentGroup)
 @click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
 @click.pass_context
 def cli(ctx, json_output):

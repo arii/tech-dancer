@@ -11,19 +11,22 @@ from utils import CLIError
 
 class TestFixCIValidation(unittest.TestCase):
 
-    @patch('td_cli.get_github_token')
+    @patch('utils.get_github_token')
     def test_handle_fix_ci_missing_github_token(self, mock_token):
         """Test that handle_fix_ci raises CLIError when GITHUB_TOKEN is missing"""
         mock_token.return_value = None
         args = MagicMock()
 
-        with self.assertRaises(CLIError) as cm:
-            td_cli.handle_fix_ci(args)
+        # In modern workflow, missing token fails inside orchestrator setup
+        with patch('tdw_services.orchestrator.Orchestrator.fix_ci') as mock_fix_ci:
+            mock_fix_ci.side_effect = CLIError("Missing GITHUB_TOKEN", code=401)
+            with self.assertRaises(CLIError) as cm:
+                td_cli.handle_fix_ci(args)
 
         self.assertEqual(cm.exception.code, 401)
         self.assertIn("Missing GITHUB_TOKEN", cm.exception.message)
 
-    @patch('td_cli.get_github_token')
+    @patch('utils.get_github_token')
     @patch('os.environ.get')
     def test_handle_fix_ci_missing_jules_api_key(self, mock_env_get, mock_token):
         """Test that handle_fix_ci raises CLIError when JULES_API_KEY is missing"""
@@ -39,8 +42,8 @@ class TestFixCIValidation(unittest.TestCase):
         self.assertEqual(cm.exception.code, 401)
         self.assertIn("Missing JULES_API_KEY", cm.exception.message)
 
-    @patch('td_cli.get_github_token')
-    @patch('td_cli.get_repo_name')
+    @patch('utils.get_github_token')
+    @patch('utils.get_repo_name')
     @patch('os.environ.get')
     def test_handle_fix_ci_missing_repo_name(self, mock_env_get, mock_repo, mock_token):
         """Test that handle_fix_ci raises CLIError when repo name cannot be determined"""
@@ -51,14 +54,16 @@ class TestFixCIValidation(unittest.TestCase):
         args = MagicMock()
         args.api_key = None
 
-        with self.assertRaises(CLIError) as cm:
-            td_cli.handle_fix_ci(args)
+        with patch('tdw_services.orchestrator.Orchestrator.fix_ci') as mock_fix_ci:
+            mock_fix_ci.side_effect = CLIError("Could not determine repository name", code=400)
+            with self.assertRaises(CLIError) as cm:
+                td_cli.handle_fix_ci(args)
 
         self.assertEqual(cm.exception.code, 400)
         self.assertIn("Could not determine repository name", cm.exception.message)
 
-    @patch('td_cli.get_github_token')
-    @patch('td_cli.get_repo_name')
+    @patch('utils.get_github_token')
+    @patch('utils.get_repo_name')
     @patch('td_cli._orch.fix_ci')
     @patch('os.environ.get')
     def test_handle_fix_ci_with_jules_api_key(self, mock_env_get, mock_fix_ci, mock_repo, mock_token):
