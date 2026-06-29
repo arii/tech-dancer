@@ -14,9 +14,13 @@ if ("-h" in sys.argv or "--help" in sys.argv) and os.environ.get("ALLOW_HELP") !
     print("FATAL: --help is disabled for agent workflows. Set ALLOW_HELP=1 to bypass. Read cli-schema.json for command syntax.", file=sys.stderr)
     sys.exit(1)
 
-# Ensure the package directory is in sys.path for direct script execution
-# When installed via pip -e, this is handled by the entry point.
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add the CLI package root and dev-tools directory to sys.path so we can import tdw_services and its dependencies
+current_dir = os.path.dirname(os.path.abspath(__file__))
+package_root = os.path.dirname(current_dir)
+if package_root not in sys.path:
+    sys.path.append(package_root)
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
 
 try:
     from tdw_services.cli import cli
