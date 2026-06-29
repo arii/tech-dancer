@@ -71,7 +71,7 @@
     "firebase": "^12.12.1",
     "fuse.js": "^7.3.0",
     "glob": "^13.0.6",
-    "hyparquet": "^1.25.6",
+    "hyparquet": "^1.26.1",
     "jspdf": "2.5.2",
     "jspdf-autotable": "3.8.4",
     "lucide-react": "^0.546.0",
