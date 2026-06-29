@@ -88,25 +88,10 @@ Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly
 | **Testing** | Run Playwright | `repo.run_playwright` | `td_cli.py repo run-playwright` | `npx playwright test` |
 | **Testing** | Run Lighthouse | `repo.run_lighthouse` | - | `npx lhci autorun` |
 | **Repository** | Create Branch | `repo.create_branch` | - | `git checkout -b` |
-| **Agent** | Dispatch Jules | `jules.create_session` | `td_cli.py agent dispatch <BRANCH> <TASK>` | - |
-| **Agent** | Fix CI | `jules.fix_ci` | `td_cli.py agent fix-ci --pr-number <PR>` | - |
-| **Agent** | Sync Sessions | `jules.sync_sessions` | `td_cli.py agent sync` | - |
-| **Agent** | Send Message | `jules.send_message` | `td_cli.py agent send <ID> <MSG>` | - |
-| **Agent** | Get Messages | `jules.get_messages` | `td_cli.py agent messages <ID>` | - |
-
----
-
-## 🚫 Autonomous Agent Dispatch Constraints
-
-Agents MUST NOT autonomously dispatch child agents (e.g., using `jules.create_session` or calling `td_cli.py agent dispatch`) to perform code reviews, fix CI errors, or complete tasks, UNLESS explicitly requested by the USER using the exact phrase:
-"dispatch a jules session to do..." or "dispatch jules task to do...".
-
-Automatic triggers or autonomous cascades of child agents are strictly forbidden to prevent infinite agent recursive loops.
 
 ---
 
 ## 🔍 Code Review Orchestration
-
 
 The `orchestrateCodeReview` pipeline must source all inputs from MCP tools.
 Internal diff-fetching functions (`getCodeDiffSummary`, direct filesystem reads)

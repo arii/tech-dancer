@@ -119,8 +119,7 @@ When multiple agents work simultaneously:
 - Conflicts are resolved via `td_cli.py gh resolve-conflicts` (Tier 2) or
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
-- **Autonomous Dispatch Prohibition**: Agents MUST NOT autonomously dispatch child agents (e.g., by executing `jules.create_session` or calling `td_cli.py agent dispatch`) to perform code reviews, fix CI errors, or complete tasks, UNLESS explicitly requested by the USER using the exact phrase: "dispatch a jules session to do..." or "dispatch jules task to do...". Spawning child sessions autonomously is strictly prohibited to prevent recursive agent loops.
-- **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands, and MUST NOT be delegated to a child agent session.
+- **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
 - All agents read `.agent-context.json` before starting work to get current
   repository state.
 
