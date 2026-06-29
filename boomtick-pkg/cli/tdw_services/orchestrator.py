@@ -13,9 +13,9 @@ from collections import defaultdict
 from tdw_services.services.github import GitHubClient
 from tdw_services.services.ai_service import AIClient
 from tdw_services.services.jules import JulesClient
-from tdw_services.utils import log_error, get_or_create_log_dir, CLIError
+from tdw_services.utils import log_error, log_warn, get_or_create_log_dir, CLIError
 from tdw_services.handlers.command_handler import CommandHandler
-from utils import (
+from dev_tools.utils import (
     get_github_token,
     get_github_client,
     get_repo_name,
@@ -26,9 +26,9 @@ from utils import (
     extract_failing_info,
     clean_gha_logs
 )
-from repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from scope_check import verify_pr_scope
-from dev_tools_sdk.config import load_project_config
+from dev_tools.repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
+from dev_tools.scope_check import verify_pr_scope
+from dev_tools.dev_tools_sdk.config import load_project_config
 
 PROJECT_CONFIG = load_project_config()
 AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
@@ -568,7 +568,7 @@ class Orchestrator:
                             auto_findings.append({"path": filepath, "issue": f"{v['pattern']}: {v['message']} (value: {v.get('value', 'N/A')})", "severity": v.get('severity', 'minor')})
             res["auto_findings"] = auto_findings
         if submit:
-            from submit_review import submit_review
+            from dev_tools.submit_review import submit_review
             submit_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
         return res
 
@@ -739,7 +739,18 @@ class Orchestrator:
     def handle_audit_gate(self) -> Dict[str, Any]:
         current_count = int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only"]) or 0)
         baseline_count = self.resolve_baseline(None, 'AUDIT_BASELINE', -1)
-        if baseline_count == -1:
+
+        is_shallow = run_command(["git", "rev-parse", "--is-shallow-repository"], check=False).stdout.strip() == "true"
+
+        if baseline_count == -1 or is_shallow:
+            if is_shallow:
+                 # In a shallow clone, git ls-tree/show on base branch will fail or be incomplete.
+                 # Fall back to GHA variable if possible.
+                 val = self.get_env_or_gha('AUDIT_BASELINE')
+                 if val: return {"current": current_count, "baseline": int(val), "status": "success" if current_count <= int(val) else "error"}
+                 # If no GHA variable, we cannot determine baseline accurately in shallow clone.
+                 log_warn("Shallow repository detected and no AUDIT_BASELINE variable found. Falling back to 0.")
+
             baseline_count = 0
             base = PROJECT_CONFIG.base_branch
             base_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
