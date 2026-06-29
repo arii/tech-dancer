@@ -32,7 +32,7 @@ echo "📝 Created test file: $TEST_FILE"
 echo "🏃 Running AI resolve in MOCK mode..."
 # Export PYTHONPATH to ensure dev-tools modules can find each other without sys.path hacks
 export PYTHONPATH="$PYTHONPATH:$CLI_DIR:$CLI_DIR/dev_tools"
-python3 "$CLI_DIR/dev_tools/td_cli.py" gh resolve
+AI_RESOLVE_MOCK=true python3 "$CLI_DIR/dev_tools/td_cli.py" gh resolve
 
 # 3. Verify the result
 if grep -q "<<<<<<<" "$TEST_FILE"; then

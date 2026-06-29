@@ -24,17 +24,21 @@ runs:
     - name: Configure Environment
       shell: bash
       run: |
-        # Set expected bin paths immediately
+        # Set canonical bin paths for pip-installed tools
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
-        # Determine CLI directory for PYTHONPATH
+        # Determine CLI root directory
         REPO_DIR=$(pwd)
-        if [ -d "boomtick-pkg/cli" ]; then
-          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli" >> "$GITHUB_ENV"
+        if [ -d "$REPO_DIR/boomtick-pkg/cli" ]; then
+          CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
         else
-          echo "PYTHONPATH=$REPO_DIR/cli" >> "$GITHUB_ENV"
+          CLI_DIR="$REPO_DIR/cli"
         fi
+
+        echo "CLI_DIR=$CLI_DIR" >> "$GITHUB_ENV"
+        echo "PYTHONPATH=$CLI_DIR" >> "$GITHUB_ENV"
+        echo "✅ Environment configured: CLI_DIR=$CLI_DIR"
 
     - name: Setup pnpm
       if: inputs.setup-node == 'true'
@@ -65,20 +69,16 @@ runs:
       shell: bash
       run: |
         echo "::group::Install dev-tools"
-        if [ -d "boomtick-pkg/cli" ]; then
-          pip install -e boomtick-pkg/cli/ --break-system-packages
-        else
-          pip install -e cli/ --break-system-packages
-        fi
+        # Uses $CLI_DIR set in the environment step
+        pip install -e "$CLI_DIR" --break-system-packages
         echo "::endgroup::"
 
     - name: Verify td-cli
       if: inputs.setup-python == 'true'
       shell: bash
       run: |
-        # Use the configured PATH
         if ! command -v td-cli >/dev/null 2>&1; then
-          echo "::error::td-cli not found on PATH after installation."
+          echo "::error::td-cli not found on PATH. Expected bin directory in: $HOME/.local/bin"
           exit 1
         fi
         echo "✅ td-cli is resolvable."
