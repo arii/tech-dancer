@@ -72,7 +72,10 @@ class JulesClient:
                 "source": f"sources/{clean_source_id}",
                 "githubRepoContext": { "startingBranch": branch }
             },
-            "automationMode": "AUTO_CREATE_PR"
+            "automationMode": "AUTO_CREATE_PR",
+            "environmentVariables": {
+                "AGENT_DISPATCH_DEPTH": str(int(os.environ.get("AGENT_DISPATCH_DEPTH", "0")) + 1)
+            }
         }
 
         log_debug(f"Creating Jules session at {url}")
@@ -91,7 +94,16 @@ class JulesClient:
     def create_session(self, prompt: str, branch: str, title: str, owner: str, repo_name: str) -> str:
         """Creates a new Jules session via the legacy API."""
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
-        payload = {"prompt": prompt, "branch": branch, "title": title, "owner": owner, "repo_name": repo_name}
+        payload = {
+            "prompt": prompt,
+            "branch": branch,
+            "title": title,
+            "owner": owner,
+            "repo_name": repo_name,
+            "environmentVariables": {
+                "AGENT_DISPATCH_DEPTH": str(int(os.environ.get("AGENT_DISPATCH_DEPTH", "0")) + 1)
+            }
+        }
         try:
             response = requests.post(self.legacy_url, headers=headers, json=payload)
             response.raise_for_status()

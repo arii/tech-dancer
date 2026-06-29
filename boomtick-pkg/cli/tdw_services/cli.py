@@ -729,16 +729,21 @@ def agent_group():
     pass
 
 @agent_group.command()
-@click.argument('branch')
-@click.argument('task')
+@click.argument("branch")
+@click.argument("task", required=False)
+@click.option("--pr", type=int, help="PR number for automated plan generation")
 @click.pass_context
-def dispatch(ctx, branch, task):
+def dispatch(ctx, branch, task, pr):
     """
     Initialize a Jules session for a specific branch and task.
     Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.
     """
+    if not task and not pr:
+        from tdw_services.utils import CLIError
+        raise CLIError("Either a 'task' description or a '--pr' number must be provided.")
+
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.dispatch_jules_review(branch, task)
+    res = orch.dispatch_jules_review(branch, task or "", pr_number=pr)
     out(ctx, f"✅ Dispatched task on branch {branch}", data=res)
 
 

@@ -220,12 +220,28 @@ class Orchestrator:
         except Exception: pass
         return []
 
-    def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
+    def dispatch_jules_review(self, branch: str, prompt: str, pr_number: Optional[int] = None) -> Optional[Dict[str, Any]]:
         """
         Automates the creation of Jules sessions.
         """
+        # Depth Control
+        depth = int(os.environ.get("AGENT_DISPATCH_DEPTH", "0"))
+        if depth >= 2:
+            raise CLIError("Hard limit reached: AGENT_DISPATCH_DEPTH >= 2. Cannot dispatch child session to prevent infinite loop.")
+
         if not self.github.branch_exists(branch):
             raise CLIError(f"Branch '{branch}' does not exist in the repository.")
+
+        # Idempotency Check
+        sessions = self.jules.list_sessions(pageSize=50)
+        for session in sessions:
+            state = session.get("state")
+            if state in ["RUNNING", "PENDING", "CREATED", "ACTIVE"]:
+                source_context = session.get("sourceContext") or {}
+                repo_context = source_context.get("githubRepoContext") or {}
+                s_branch = repo_context.get("startingBranch") or ""
+                if branch == s_branch:
+                    raise CLIError(f"An active session for branch '{branch}' already exists. Idempotency rule blocks duplicate dispatches.")
 
         # Prevent dispatching Jules for consolidation/aggregation tasks
         import re
@@ -235,6 +251,30 @@ class Orchestrator:
         source_id = self.jules.discover_source_id(self.github.repo)
         if not source_id:
             raise CLIError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
+
+        if pr_number is not None:
+            script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "dev_tools", "generate_review_workflow.py")
+            from tdw_services.utils import run_command, log_warn
+            import sys
+            res = run_command([sys.executable, script_path, "--pr", str(pr_number)], check=False)
+            if res.returncode != 0:
+                 log_warn(f"Failed to generate review workflow for PR #{pr_number}. Output: {res.stdout} {res.stderr}")
+            else:
+                 cli_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                 plan_path = os.path.join(cli_root, "logs", "workflows", f"workflow-plan-pr-{pr_number}.md")
+                 if os.path.exists(plan_path):
+                     with open(plan_path, "r") as f:
+                         generated_plan = f.read()
+                     if not prompt:
+                         prompt = generated_plan
+                     else:
+                         prompt += "\n\n" + generated_plan
+                 else:
+                     log_warn(f"Plan file {plan_path} not found after generation.")
+
+        if prompt is None:
+            prompt = ""
+        prompt += "\n\n> **IMPORTANT: Do not spawn child agent sessions to solve meta-tasks (like branch merging or PR consolidation) that are covered by deterministic CLI commands.**\n"
 
         session = self.jules.create_session_from_source(source_id, branch, prompt)
         return session

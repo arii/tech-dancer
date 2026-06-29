@@ -747,17 +747,27 @@
     },
     "agent dispatch": {
       "description": "",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent dispatch <BRANCH> <TASK>",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent dispatch <BRANCH> [TASK] [--pr <N>]",
       "required_arguments": [
         {
           "name": "branch",
           "type": "text",
           "description": ""
-        },
+        }
+      ],
+      "optional_arguments": [
         {
           "name": "task",
           "type": "text",
-          "description": ""
+          "description": "The task description (required if --pr is not given)"
+        }
+      ],
+      "options": [
+        {
+          "name": "--pr",
+          "type": "int",
+          "description": "PR number for automated plan generation",
+          "required": false
         }
       ]
     },
