@@ -1,421 +1,103 @@
 {
   "chore/boomtick-pkg-extraction-verification-863920397594546624": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "feat/ci-parallelism-17084185938634517914": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782631682,
+    "deployTimestamp": 1782631682,
     "sha": "unknown"
   }
 ,
   "feat/modularize-ci-and-install-11176944189815184521": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/about": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/blog": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782631682,
+    "deployTimestamp": 1782631682,
     "sha": "unknown"
   }
 ,
   "fix-setup-anomalies-17409433692174222464": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/merch": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/preview": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/previews": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/blog-drafter": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/boomtick-blog": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/ecommerce-automation": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/hrm-flagship": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/repo-auditor-ai": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/research/wcs-scraper": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix-setup-anomalies-17409433692174222464/ux-auditor": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782671119,
+    "deployTimestamp": 1782671119,
     "sha": "unknown"
   }
 ,
   "fix/branch-validation-on-dispatch-11418840643681257776": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/about": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/blog": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782631682,
+    "deployTimestamp": 1782631682,
     "sha": "unknown"
   }
 ,
   "fix/workflow-audit-9564769357526882536": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/merch": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/preview": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/previews": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/research": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "fix/workflow-audit-9564769357526882536/ux-auditor": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782679311,
+    "deployTimestamp": 1782679311,
     "sha": "unknown"
   }
 ,
   "implement-github-create-issue-mcp-3985094494030064141": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782631682,
+    "deployTimestamp": 1782631682,
     "sha": "unknown"
   }
 ,
   "issue-audit-2026-06-28-3305426199774325228": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "jules-15398392914752072490-c2a38543": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/about": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/blog": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782670208,
+    "deployTimestamp": 1782670208,
     "sha": "unknown"
   }
 ,
   "jules/daemon-feedback-11126475540576462791": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/merch": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/preview": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/previews": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/research": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "jules/daemon-feedback-11126475540576462791/ux-auditor": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782671373,
+    "deployTimestamp": 1782671373,
     "sha": "unknown"
   }
 ,
   "optimize-ci-background-steps-9080205089441332148": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "prevent-version-downgrades-16540995878123730172": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "refactor-cli-entrypoints-16986242964918706359": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "refactor/cli-entrypoint-standardization-1240173349803879074": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/about": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/blog": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "refactor/cli-issue-commands-2564008830973489750": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/merch": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/preview": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/previews": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/research": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
-    "sha": "unknown"
-  }
-,
-  "refactor/cli-issue-commands-2564008830973489750/ux-auditor": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782671988,
+    "deployTimestamp": 1782671988,
     "sha": "unknown"
   }
 ,
   "refactor/task-2-config-flattening-11088732507633299709": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 ,
   "workflow-audit-fix-15675175790991782635": {
-    "commitTimestamp": 1782677141,
-    "deployTimestamp": 1782677141,
+    "commitTimestamp": 1782650092,
+    "deployTimestamp": 1782650092,
     "sha": "unknown"
   }
 }
