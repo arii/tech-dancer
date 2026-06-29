@@ -59,7 +59,7 @@ jobs:
         with:
           languages: actions, javascript-typescript
 
-      - parallel: # actionlint-disable syntax-check
+      - parallel:
           - name: Oxlint Scan
             run: pnpm run lint:ox
 
