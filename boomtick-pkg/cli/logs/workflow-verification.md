@@ -1,6 +1,6 @@
 # Workflow Verification
 
-Generated: 2026-06-28T04:13:56Z
+Generated: 2026-06-29T16:40:24Z
 
 | Workflow | Command | Result |
 |---|---|---|
@@ -12,6 +12,6 @@ Generated: 2026-06-28T04:13:56Z
 | dev-tools-cli-guide.md | `PYTHONPATH="boomtick-pkg/cli:boomtick-pkg/cli/dev_tools" python3 boomtick-pkg/cli/dev_tools/td_cli.py gh pre-submit --help` | ✅ pass |
 | dev-tools-cli-guide.md | `PYTHONPATH="boomtick-pkg/cli:boomtick-pkg/cli/dev_tools" python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr --help` | ✅ pass |
 | dev-tools-cli-guide.md | `PYTHONPATH="boomtick-pkg/cli:boomtick-pkg/cli/dev_tools" python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --help` | ✅ pass |
-| review-pr.md | `PYTHONPATH="boomtick-pkg/cli:boomtick-pkg/cli/dev_tools" python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr 2821 --fetch` | ✅ pass |
+| review-pr.md | `PYTHONPATH="boomtick-pkg/cli:boomtick-pkg/cli/dev_tools" python3 boomtick-pkg/cli/dev_tools/td_cli.py gh audit-pr 2821 --fetch` | ⚠️ warn |
 | review-ux.md | `npx playwright --version` | ✅ pass |
 | review-ux.md | `node scripts/detect-antipatterns.mjs --help` | ✅ pass |

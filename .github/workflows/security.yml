@@ -37,11 +37,15 @@ jobs:
   security-scan:
     needs: verify-changes
     if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
-    name: Security Scan
+    name: Security Scan (${{ matrix.scanner }})
     runs-on: ubuntu-latest
     permissions:
       security-events: write
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -55,26 +59,31 @@ jobs:
         run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Initialize CodeQL
+        if: matrix.scanner == 'semgrep'
         uses: github/codeql-action/init@v4
         with:
           languages: actions, javascript-typescript
 
-      - parallel:
-          - name: Oxlint Scan
-            run: pnpm run lint:ox
+      - name: Oxlint Scan
+        if: matrix.scanner == 'oxlint'
+        run: pnpm run lint:ox
 
-          - name: Semgrep Static Analysis
-            run: |
-              # Install semgrep on the host for efficiency
-              pip install semgrep
-              pnpm run audit:semgrep
+      - name: Semgrep Static Analysis
+        if: matrix.scanner == 'semgrep'
+        run: |
+          # Install semgrep on the host for efficiency
+          pip install semgrep
+          pnpm run audit:semgrep
 
-          - name: Gitleaks Secret Detection
-            uses: gitleaks/gitleaks-action@v2
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Gitleaks Secret Detection
+        if: matrix.scanner == 'gitleaks'
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Perform CodeQL Analysis
+        if: matrix.scanner == 'semgrep'
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:security-scan"
+
