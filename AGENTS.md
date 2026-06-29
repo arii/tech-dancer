@@ -119,11 +119,10 @@ When multiple agents work simultaneously:
 - Conflicts are resolved via `td_cli.py gh resolve-conflicts` (Tier 2) or
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
-- **PR Consolidation:** When consolidating multiple PRs, always dispatch tasks
-  against the `main` branch (e.g. `agent dispatch main "Consolidate PRs..."`)
-  to avoid common rebasing issues associated with newly created, untracked branches.
+- **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
 - All agents read `.agent-context.json` before starting work to get current
   repository state.
+
 
 ---
 
