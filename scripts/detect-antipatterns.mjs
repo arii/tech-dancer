@@ -347,7 +347,7 @@ function checkFile(filepath) {
 function checkPRScope() {
   try {
     const scopeCheckScript = path.join(__dirname, "../boomtick-pkg/cli/dev_tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8", stdio: ['inherit', 'pipe', 'pipe'] }).trim();
+    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8", stdio: ['inherit', 'pipe', 'pipe'], env: { ...process.env, PYTHONPATH: 'boomtick-pkg/cli:boomtick-pkg/cli/dev_tools' } }).trim();
     if (output) {
       console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
     }
