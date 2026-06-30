@@ -116,7 +116,7 @@ When multiple agents work simultaneously:
 
 - Each agent works on its own branch.
 - No agent merges to `main` without CI passing.
-- Conflicts are resolved via `td_cli.py gh resolve-conflicts` (Tier 2) or
+- Conflicts are resolved via `td-cli gh resolve-conflicts` (Tier 2) or
   the equivalent MCP tool (Tier 1). See `.agents/AGENTS.md` for the full
   tool mapping.
 - **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
@@ -133,25 +133,25 @@ executing any GitHub or repository operation.
 
 ### The Execution Chain
 
-`boomtick-mcp` is a thin gateway over `boomtick-pkg/cli/dev_tools/td_cli.py`. Every MCP tool
+`boomtick-mcp` is a thin gateway over `td-cli`. Every MCP tool
 call automatically:
 1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
-2. Calls the appropriate `td_cli.py` subcommand internally
+2. Calls the appropriate `td-cli` subcommand internally
 3. Returns structured output with repo context already attached
 
-Calling `td_cli.py` directly skips step 1. Calling raw bash skips steps 1–2.
+Calling `td-cli` directly skips step 1. Calling raw bash skips steps 1–2.
 Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
 
 ### 🚫 Zero-Fallback Policy
 
-Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td_cli.py) tool exists. If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
+Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists. If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
 
 If a tool failure occurs, you **must** document the failure in `progress_and_next_steps.md` (CLI Failure Ledger) before proceeding with a manual fallback. This ensures that the failure is tracked and resolved.
 
 ### CLI Schema Authority
 
 `boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
-`cli_schema`) is the single source of truth for all `td_cli.py` flags.
+`cli_schema`) is the single source of truth for all `td-cli` flags.
 MCP tools read this automatically. If calling Tier 2 directly, always
 read `cli_schema` from `.agent-context.json` first — never guess flags,
 never use `--help`.
@@ -176,10 +176,10 @@ validate issues against the Spec-Driven Issue Template before dispatching Jules.
 
 ```bash
 # Validate a single issue (dry-run by default)
-python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number <N>
+td-cli gh validate-issue --issue-number <N>
 
 # Validate and post results
-python3 boomtick-pkg/cli/dev_tools/td_cli.py gh validate-issue --issue-number <N> --post-comments --execute
+td-cli gh validate-issue --issue-number <N> --post-comments --execute
 ```
 
 ### Setting GitHub Variables
@@ -212,7 +212,7 @@ boomtick-pkg/scripts/build-repo-context.py.
 After setup, validate:
 
 ```bash
-python3 boomtick-pkg/cli/dev_tools/td_cli.py doctor
+td-cli doctor
 pnpm run check:runtime-files
 ```
 

@@ -32,7 +32,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 *Goal: Remove complexity that makes the repository difficult to diagnose and update.*
 
 - [ ] **Redundant Default Removal**: Audit `ProjectConfig` (Python) and `config.ts` (TypeScript) to remove hardcoded fallbacks that shadow configuration.
-- [ ] **Logic Flattening**: Eliminate script-calling-script chains; consolidate orchestration logic directly into `tdw_services` handlers.
+- [ ] **Logic Flattening**: Eliminate script-calling-script chains; consolidate orchestration logic directly into `dev_tools` handlers.
 - [ ] **Redundant Schema Cleanup**: Remove legacy `cli-schema.json` fragments and ensure the unified schema in `boomtick-pkg/cli/dev_tools` is the sole authority.
 - [ ] **Legacy Reference Cleanup**: Scrub remaining documentation and code comments for legacy names (`boomtick-mcp`, `dev-tools/`) to ensure the transition to `boomtick-pkg` is absolute.
 - [ ] **Failover Behavior Simplification**: Replace complex multi-layered fallbacks for tokens and paths with a "fail-fast" configuration pattern.

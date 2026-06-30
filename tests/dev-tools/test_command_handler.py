@@ -1,12 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-import sys
-import os
-
-# Add dev-tools to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../dev-tools')))
-
-from tdw_services.handlers.command_handler import CommandHandler
+from dev_tools.handlers.command_handler import CommandHandler
 
 class TestCommandHandler(unittest.TestCase):
     def setUp(self):

@@ -3,9 +3,7 @@ import os
 import sys
 import json
 
-# Add dev-tools to path
-sys.path.append("dev-tools")
-from verify_versions import parse_diff, verify_changes, compare_versions
+from dev_tools.verify_versions import parse_diff, verify_changes, compare_versions
 
 class TestVersionProtection(unittest.TestCase):
     def test_compare_versions(self):
