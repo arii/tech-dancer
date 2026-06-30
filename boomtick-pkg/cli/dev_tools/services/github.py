@@ -2,7 +2,8 @@ import os
 import subprocess
 import json
 import sys
-from dev_tools.utils import log_info
+import re
+from dev_tools.utils import log_info, log_warn, get_github_token, CLIError
 import base64
 import requests
 import time
@@ -11,7 +12,6 @@ from urllib.parse import quote
 
 class GitHubClient:
     def __init__(self, token: Optional[str] = None, repo: Optional[str] = None):
-        from dev_tools.utils import get_github_token
         self.token = token or get_github_token()
         if not self.token:
             raise ValueError("Missing GITHUB_TOKEN environment variable.")
@@ -45,7 +45,6 @@ class GitHubClient:
         try:
             proc = subprocess.run(['git', 'config', '--get', 'remote.origin.url'], capture_output=True, text=True)
             url = proc.stdout.strip()
-            import re
             match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
             return match.group(1) if match else url
         except Exception:
@@ -246,8 +245,6 @@ class GitHubClient:
         """
         Validates that the review payload is not just boilerplate or empty.
         """
-        from dev_tools.utils import CLIError
-        import re
         if not isinstance(payload, dict):
             raise CLIError("Review rejected: Invalid payload format (expected dict).")
 
@@ -309,9 +306,6 @@ class GitHubClient:
         """
         Submits a PR review from a markdown file containing a JSON payload.
         """
-        from dev_tools.utils import CLIError, log_info, log_warn
-        import re
-        import json
 
         if not os.path.exists(filepath):
             raise CLIError(f"Review file missing: {filepath}")
