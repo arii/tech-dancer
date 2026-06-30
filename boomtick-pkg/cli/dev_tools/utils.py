@@ -363,8 +363,21 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
     return proc
 
 def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN)."""
-    return os.getenv("GITHUB_TOKEN")
+    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN) or falls back to gh auth token."""
+    token = os.getenv("GITHUB_TOKEN")
+    if token:
+        return token
+    # Fallback to local gh CLI auth token
+    try:
+        proc = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
+        if proc.returncode == 0:
+            token = proc.stdout.strip()
+            if token:
+                return token
+    except Exception:
+        pass
+    return None
+
 
 def get_repo_name() -> Optional[str]:
     """Auto-detect repo from environment variables or git remote."""
