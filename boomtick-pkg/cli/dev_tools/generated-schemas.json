@@ -39,15 +39,11 @@
         "description": "Filter PRs by labels."
       }
     },
-    "title": "SearchPrsRequest",
-    "type": "object"
+    "type": "object",
+    "title": "SearchPrsRequest"
   },
   "github.create_issue": {
     "properties": {
-      "title": {
-        "description": "The title of the issue.",
-        "type": "string"
-      },
       "body": {
         "description": "The body/description of the issue.",
         "type": "string"
@@ -57,8 +53,8 @@
       "title",
       "body"
     ],
-    "title": "CreateIssueRequest",
-    "type": "object"
+    "type": "object",
+    "title": "CreateIssueRequest"
   },
   "github.get_pr_diff": {
     "properties": {
@@ -70,8 +66,8 @@
     "required": [
       "prNumber"
     ],
-    "title": "GetPrDiffRequest",
-    "type": "object"
+    "type": "object",
+    "title": "GetPrDiffRequest"
   },
   "repo.read_ci_logs": {
     "properties": {
@@ -87,8 +83,8 @@
     "required": [
       "prNumber"
     ],
-    "title": "ReadCiLogsRequest",
-    "type": "object"
+    "type": "object",
+    "title": "ReadCiLogsRequest"
   },
   "jules.create_session": {
     "properties": {
@@ -124,8 +120,8 @@
     "required": [
       "task"
     ],
-    "title": "CreateJulesSessionRequest",
-    "type": "object"
+    "type": "object",
+    "title": "CreateJulesSessionRequest"
   },
   "github.checkout_branch": {
     "properties": {
@@ -149,8 +145,8 @@
     "required": [
       "branch"
     ],
-    "title": "CheckoutBranchRequest",
-    "type": "object"
+    "type": "object",
+    "title": "CheckoutBranchRequest"
   },
   "github.get_merge_conflict_files": {
     "properties": {
@@ -167,8 +163,8 @@
     "required": [
       "prNumber"
     ],
-    "title": "GetMergeConflictFilesRequest",
-    "type": "object"
+    "type": "object",
+    "title": "GetMergeConflictFilesRequest"
   },
   "repo.run_tests": {
     "properties": {
@@ -205,15 +201,11 @@
         "description": "Optional path to the worktree to run tests in."
       }
     },
-    "title": "RunTestsRequest",
-    "type": "object"
+    "type": "object",
+    "title": "RunTestsRequest"
   },
   "github.create_pull_request": {
     "properties": {
-      "title": {
-        "description": "PR Title.",
-        "type": "string"
-      },
       "body": {
         "description": "Description of changes.",
         "type": "string"
@@ -238,8 +230,8 @@
       "body",
       "head"
     ],
-    "title": "CreatePullRequestRequest",
-    "type": "object"
+    "type": "object",
+    "title": "CreatePullRequestRequest"
   },
   "github.issue_view": {
     "properties": {
@@ -251,8 +243,8 @@
     "required": [
       "issueNumber"
     ],
-    "title": "IssueViewRequest",
-    "type": "object"
+    "type": "object",
+    "title": "IssueViewRequest"
   },
   "github.issue_update": {
     "properties": {
@@ -269,8 +261,8 @@
       "issueNumber",
       "body"
     ],
-    "title": "IssueUpdateRequest",
-    "type": "object"
+    "type": "object",
+    "title": "IssueUpdateRequest"
   },
   "github.issue_comment": {
     "properties": {
@@ -287,7 +279,7 @@
       "issueNumber",
       "body"
     ],
-    "title": "IssueCommentRequest",
-    "type": "object"
+    "type": "object",
+    "title": "IssueCommentRequest"
   }
 }

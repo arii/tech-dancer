@@ -4,21 +4,6 @@ import pathlib
 import sys
 import os
 
-def fix_types(obj):
-    """Recursively replaces 'integer' with 'number' in JSON schema."""
-    if isinstance(obj, dict):
-        new_obj = {}
-        for k, v in obj.items():
-            if k == "type" and v == "integer":
-                new_obj[k] = "number"
-            else:
-                new_obj[k] = fix_types(v)
-        return new_obj
-    elif isinstance(obj, list):
-        return [fix_types(item) for item in obj]
-    else:
-        return obj
-
 def build_repo_context():
     """Gathers static context about the repository."""
 
@@ -63,12 +48,8 @@ def build_repo_context():
         }
 
         for name, model in models.items():
-            schema = fix_types(model.model_json_schema())
-            if "properties" in schema:
-                for prop in schema["properties"].values():
-                    if "title" in prop:
-                        del prop["title"]
-            generated_tool_schemas[name] = schema
+            # models now handle their own compatibility fixes via custom Pydantic generator
+            generated_tool_schemas[name] = model.model_json_schema()
 
         output_path = cli_root / "dev_tools" / "generated-schemas.json"
         output_path.write_text(json.dumps(generated_tool_schemas, indent=2))
@@ -123,15 +104,11 @@ def build_repo_context():
 
         def get_type_name(param):
             t = param.type
-            if isinstance(t, click.Choice):
-                return "choice"
-            if hasattr(t, "name"):
-                return t.name
+            if isinstance(t, click.Choice): return "choice"
+            if hasattr(t, "name"): return t.name
             t_str = str(t).lower()
-            if "int" in t_str:
-                return "integer"
-            if "bool" in t_str:
-                return "boolean"
+            if "int" in t_str: return "integer"
+            if "bool" in t_str: return "boolean"
             return "string"
 
         def collect_commands(cmd, prefix=""):
