@@ -291,3 +291,21 @@
 * **The Slop:** A complex `reconcileVerdict` function that uses regex-based "hedge detection" (`HEDGE_PATTERN`) to potentially downgrade a FAIL verdict. It also includes logic to verify if snippets cited by the AI actually exist in the diff to defend against "hallucination."
 * **Why it's likely AI Drift:** This is an "Artificial Backward-Compatibility Layer" introduced to handle the failures of AI itself. Instead of improving the prompt or the model, it builds a complex defensive layer to "sanity check" the AI's output using more AI-like heuristics.
 * **Remediation:** Remove the `reconcileVerdict` complexity. If the AI output is unreliable, improve the underlying model picker or prompt strategy rather than building a "drift defense" layer in the code.
+
+---
+
+## 3. Recent Commit Audit (Last 10 Commits)
+
+Audit performed on commits `c185278b` through `5c29a462`.
+
+### Pattern of Re-introduction (AI Drift Regression)
+* **Commit:** `7b544c03` (by google-labs-jules[bot])
+* **Findings:** This commit represents a significant "AI Drift" event. It explicitly re-introduced several of the anti-patterns identified in the historical audit that had been previously remediated in commit `cd6214c8`.
+* **Specific Regressions:**
+  1. **src/main.tsx:** Re-introduced the 50+ lines of over-engineered `getBasename` heuristic logic.
+  2. **src/features/research/hooks/useWCSData.ts:** Re-introduced the "magic byte" check and redundant Parquet loading fallback logic.
+  3. **scripts/lib/codeReviewOrchestrator.ts:** Re-introduced the complex `reconcileVerdict` "hedge detection" logic.
+* **Why it happened:** This appears to be a case of "Multi-turn Editing Drift." An AI agent (Jules) likely used an older version of these files as a baseline or hallucinated the "requirements" for these defensive layers during a "Fail-Fast Standardization" task, effectively reverting clean, human-readable code back to "AI slop."
+
+### Conclusion on Recent Changes
+While many commits focus on infrastructure consolidation and schema synchronization (e.g., `39e00ce7`, `346ae124`), there is a clear and present risk of AI agents re-introducing slop during automated refactoring sessions. The "Standardization" tasks often trigger the "AI Over-Architecting" anti-pattern.
