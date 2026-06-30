@@ -310,7 +310,7 @@ changes from `./boomtick-pkg/mcp/actions/setup` to
 jobs:
   validate:
     steps:
-      - run: python3 dev-tools/td-cli gh pre-submit ...
+      - run: td-cli gh pre-submit ...
       # ... many inline steps
 ```
 
@@ -361,7 +361,7 @@ packages:
 if [ -f "dev-tools/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/dev-tools" && pip install --editable .)
 fi
-[ -f "dev-tools/td-cli" ] && python3 dev-tools/td-cli gh --help
+[ -f "dev-tools/td-cli" ] && td-cli gh --help
 
 # AFTER
 if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then

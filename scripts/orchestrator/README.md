@@ -53,7 +53,7 @@ import os
 from some_llm_library import generate_text 
 
 def get_repo_status():
-    result = subprocess.run(["python3", "td-cli", "gh", "status-board"], capture_output=True, text=True)
+    result = subprocess.run(["td-cli", "gh", "status-board"], capture_output=True, text=True)
     return result.stdout
 
 def generate_dynamic_payload():

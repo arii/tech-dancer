@@ -3,7 +3,7 @@ import subprocess
 import re
 import time
 
-CLI_BASE = ["python3", "td-cli"]
+CLI_BASE = ["td-cli"]
 
 def run_cli(args, suppress_errors=False):
     """Executes a BoomTick CLI command and returns the standard output."""

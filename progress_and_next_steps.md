@@ -10,7 +10,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 
 ### Task 1.1: Packaging & Entry Points
 - [x] **Directory Restructuring**: Legacy directories moved into a proper package structure under `boomtick-pkg/cli/dev_tools` and `boomtick-pkg/mcp/`.
-- [x] **Console Entry Points**: Defined `td` and `td-cli` entry points in `pyproject.toml` based on `cli-schema.json`. Enables agents to use the **compiled entry points** (`td` / `td-cli`) instead of hardcoding `python3 boomtick-pkg/cli/dev_tools/td-cli`.
+- [x] **Console Entry Points**: Defined `td` and `td-cli` entry points in `pyproject.toml` based on `cli-schema.json`. Enables agents to use the **compiled entry points** (`td` / `td-cli`) instead of hardcoding `td-cli`.
 - [x] **Architecture Alignment**: Standardized on a unified project structure, ensuring **separation of business logic** from configuration by utilizing `importlib.resources` and ESM-safe path resolutions.
 - [x] **Dynamic Configuration**: Swapped hardcoded paths for dynamic loading in `dev_tools_sdk` and `mcp/src/config.ts`.
 - [x] **Progressive Context Discovery**: Implemented `build-repo-context.py` to index repository structure, JSON schemas, and MCP tools into `.agent-context.json`. This solves the **"cold-start" problem** where agents initially lack repository context to provide efficient feedback.
