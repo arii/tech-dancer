@@ -69,6 +69,7 @@ def get_config(path: str | Path = "project_config.json") -> ProjectConfig:
     return load_project_config(path)
 
 
+@functools.lru_cache()
 def _detect_repo_name() -> str | None:
     """Safely detects repository name from git remote."""
     import subprocess

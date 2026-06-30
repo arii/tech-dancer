@@ -25,7 +25,11 @@ function getGithubToken(): string | undefined {
 
 let cachedDynamicConfig: any = null;
 
-function getDynamicConfig() {
+/**
+ * Explicitly initializes dynamic configuration from the Python CLI.
+ * Should be called once during server startup.
+ */
+export function initializeConfig() {
   if (cachedDynamicConfig !== null) {
     return cachedDynamicConfig;
   }
@@ -50,36 +54,33 @@ function getDynamicConfig() {
     } else {
       console.warn(errorPrefix);
     }
+    // Set an empty object to prevent repeated attempts if initialization fails in non-blocking mode
+    cachedDynamicConfig = {};
   }
-  return null;
+  return cachedDynamicConfig;
 }
 
 export const config = {
   get githubToken() { return getGithubToken(); },
   get githubOwner() {
-    const dynamicConfig = getDynamicConfig();
-    const [defaultOwner] = (dynamicConfig?.github_repo || "arii/tech-dancer").split("/");
+    const [defaultOwner] = (cachedDynamicConfig?.github_repo || "arii/tech-dancer").split("/");
     return process.env.GITHUB_OWNER || defaultOwner;
   },
   get githubRepo() {
-    const dynamicConfig = getDynamicConfig();
-    const [, defaultRepo] = (dynamicConfig?.github_repo || "arii/tech-dancer").split("/");
+    const [, defaultRepo] = (cachedDynamicConfig?.github_repo || "arii/tech-dancer").split("/");
     return process.env.GITHUB_REPO || defaultRepo;
   },
   get repoPath() {
     return process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../");
   },
   get defaultBaseBranch() {
-    const dynamicConfig = getDynamicConfig();
-    return process.env.DEFAULT_BASE_BRANCH || dynamicConfig?.base_branch?.split("/").pop() || "main";
+    return process.env.DEFAULT_BASE_BRANCH || cachedDynamicConfig?.base_branch?.split("/").pop() || "main";
   },
   get viteBasePath() {
-    const dynamicConfig = getDynamicConfig();
-    return process.env.VITE_BASE_PATH || dynamicConfig?.vite_base_path || "/tech-dancer/";
+    return process.env.VITE_BASE_PATH || cachedDynamicConfig?.vite_base_path || "/tech-dancer/";
   },
   get ghPath() {
-    const dynamicConfig = getDynamicConfig();
-    return process.env.GH_PATH || dynamicConfig?.gh_path || "gh";
+    return process.env.GH_PATH || cachedDynamicConfig?.gh_path || "gh";
   }
 };
 
