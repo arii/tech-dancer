@@ -357,13 +357,6 @@ class GitHubClient:
                         if "Can not approve your own pull request" in error_msg and review_event != "COMMENT":
                             log_warn("Cannot approve own PR. Retrying as COMMENT...")
                             return try_create_review(review_body, review_comments, "COMMENT")
-                        if review_comments:
-                            log_warn("Failed to post inline comments due to line resolution error. Retrying with body comments...")
-                            fallback_body = review_body
-                            fallback_body += "\n\n### Inline Comments (Fallback due to Github line resolution errors)\n"
-                            for comment in review_comments:
-                                fallback_body += f"- **{comment.get('path')}:{comment.get('line')}**: {comment.get('body')}\n"
-                            return try_create_review(fallback_body, [], review_event)
                     raise e
 
             try_create_review(payload.get("body",""), payload.get("comments",[]), event)

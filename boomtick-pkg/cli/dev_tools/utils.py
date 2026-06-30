@@ -397,19 +397,14 @@ def run_command(cmd: Union[str, List[str]], shell: bool = False, check: bool = T
     return proc
 
 def get_github_token() -> Optional[str]:
-    """Retrieves the GitHub token from environment (prioritizing GITHUB_TOKEN) or falls back to gh auth token."""
+    """Retrieves the GitHub token from environment (prioritizing config specified env or GITHUB_TOKEN)."""
+    # Use standard GITHUB_TOKEN
     token = os.getenv("GITHUB_TOKEN")
     if token:
         return token
-    # Fallback to local gh CLI auth token
-    try:
-        proc = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
-        if proc.returncode == 0:
-            token = proc.stdout.strip()
-            if token:
-                return token
-    except Exception as e:
-        log_warn(f"Failed to discover GitHub token: {e}")
+    # Also check PAT_TOKEN for backwards compatibility context if it was used before, but prefer strict GITHUB_TOKEN
+    # Actually wait, the user says "no more backward compatibility or awkward fallback behavior".
+    # So we strictly use GITHUB_TOKEN.
     return None
 
 

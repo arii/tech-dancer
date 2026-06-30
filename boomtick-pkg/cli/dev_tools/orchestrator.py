@@ -254,12 +254,16 @@ class Orchestrator:
         if env_var in os.environ: return os.environ[env_var]
         return get_gha_variable(env_var)
 
-    def resolve_baseline(self, file_path: Optional[str], env_var: str, fallback_value: int) -> int:
+    def resolve_baseline(self, file_path: Optional[str], env_var: str) -> int:
         if file_path and os.path.exists(file_path):
-            with open(file_path, 'r') as f: return int(f.read().strip() or fallback_value)
+            with open(file_path, 'r') as f:
+                val = f.read().strip()
+                if val:
+                    return int(val)
         val = self.get_env_or_gha(env_var)
-        if val is not None and str(val).strip() != "": return int(val)
-        return fallback_value
+        if val is not None and str(val).strip() != "":
+            return int(val)
+        raise CLIError(f"Failed to resolve baseline. Missing file '{file_path}' and env var '{env_var}'.", exit_code=1)
 
     def get_audit_results(self, content: Optional[str] = None, targets: Optional[List[str]] = None) -> Dict[str, Any]:
         cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
@@ -468,7 +472,7 @@ class Orchestrator:
 
     def check_bundle_size(self, update: bool = False, baseline_file: Optional[str] = None, threshold: int = 50, dry_run: bool = True) -> Dict[str, Any]:
         size = get_bundle_size()
-        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3080)
+        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB')
         threshold_kb = baseline + threshold
         res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": threshold_kb, "status": "success" if size <= threshold_kb else "error"}
         if size > threshold_kb: res["message"] = f"Bundle size exceeds threshold ({size}KB > {threshold_kb}KB)."
