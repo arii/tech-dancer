@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execFileSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -344,23 +343,6 @@ function checkFile(filepath) {
   return checkContent(content, filepath);
 }
 
-function checkPRScope() {
-  try {
-    const scopeCheckScript = path.join(__dirname, "../boomtick-pkg/cli/dev_tools/scope_check.py");
-    const output = execFileSync("python3", [scopeCheckScript], { encoding: "utf8", stdio: ['inherit', 'pipe', 'pipe'], env: { ...process.env, PYTHONPATH: 'boomtick-pkg/cli:boomtick-pkg/cli/dev_tools' } }).trim();
-    if (output) {
-      console.log(`\x1b[33m⚠️  ${output}\x1b[0m\n`);
-    }
-  } catch (error) {
-    // If the error message itself is present and is not just a standard shell error, report it
-    if (error.stderr && error.stderr.trim()) {
-      console.error(`\x1b[31m❌ Scope check failed:\x1b[0m\n${error.stderr}`);
-    } else if (error.message) {
-      console.error(`\x1b[31m❌ Scope check error:\x1b[0m ${error.message}`);
-    }
-    // Don't exit here as scope check is usually a non-blocking warning
-  }
-}
 
 function generateTodoFile(allViolations) {
   let todoContent = "# UI Anti-Pattern TODO List\n\n";
@@ -393,7 +375,6 @@ async function runAudit() {
 
   if (!isJson && !isCountOnly) {
     console.log('\x1b[34m🔍 Scanning for UI anti-patterns...\x1b[0m\n');
-    checkPRScope();
   }
 
   if (targets.includes('-')) {

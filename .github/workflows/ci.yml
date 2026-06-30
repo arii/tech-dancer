@@ -76,7 +76,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
       - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
@@ -94,7 +94,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
       - uses: ./boomtick-pkg/mcp/actions/audit
@@ -121,7 +121,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
       - uses: ./boomtick-pkg/mcp/actions/test-build
