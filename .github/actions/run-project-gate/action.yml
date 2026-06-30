@@ -86,7 +86,9 @@ runs:
       run: |
         echo "::group::Pytest"
         trap 'echo "::endgroup::"' EXIT
-        PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools python3 -m pytest boomtick-pkg/cli/tests/
+        # Ensure absolute PYTHONPATH is used
+        CLI_DIR_VAL="${CLI_DIR:-$(pwd)/boomtick-pkg/cli}"
+        PYTHONPATH="$CLI_DIR_VAL:$CLI_DIR_VAL/dev_tools" python3 -m pytest "$CLI_DIR_VAL/tests/"
       shell: bash
 
     - name: Check for dead code

@@ -58,8 +58,12 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         echo "::group::Install dev-tools"
-        pip install -e boomtick-pkg/cli/ --break-system-packages
-        pip install requests requests-mock PyGithub PyYAML google-genai langchain-openai langchain-google-genai pytest pytest-mock chromadb sentence-transformers semgrep --break-system-packages
+        python3 -m pip install --break-system-packages -e boomtick-pkg/cli/
+        python3 -m pip install --break-system-packages \
+          requests requests-mock PyGithub PyYAML google-genai langchain-openai \
+          langchain-google-genai pytest pytest-mock chromadb sentence-transformers \
+          semgrep packaging pydantic pydantic-settings click tenacity tqdm \
+          beautifulsoup4 pandas pyarrow duckduckgo-search
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
@@ -92,7 +96,7 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         # Use absolute paths for host-based execution
-        REPO_DIR="$GITHUB_WORKSPACE"
+        REPO_DIR=$(pwd)
         CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
 
         echo "CLI_DIR=$CLI_DIR" >> "$GITHUB_ENV"
