@@ -1,8 +1,8 @@
 # dev-tools
 
 Developer tooling for the BoomTick repository. The primary entry point is
-`td_cli.py`, but agents should always call `boomtick-mcp` Tier 1 tools first —
-`td_cli.py` is the Tier 2 fallback. See `.agents/AGENTS.md` for the full
+the `td_cli` (invoked via `python3 -m dev_tools.cli`), but agents should always
+call `boomtick-mcp` Tier 1 tools first. See `.agents/AGENTS.md` for the full
 tool hierarchy.
 
 ---
@@ -23,10 +23,10 @@ and git hook registration.
 
 | Variable | Required | Purpose |
 | :--- | :--- | :--- |
-| `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
+| `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and CLI commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
 | `GH_TOKEN` (string) | Optional fallback | Legacy authentication variable, deprecated in favor of `GITHUB_TOKEN`. |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration. |
-| `JULES_API_KEY` | Optional | Enables `td_cli.py agent ...` / `td_cli.py jules ...` cloud workflows. |
+| `JULES_API_KEY` | Optional | Enables `td agent` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 
 **Secret handling guidance**
@@ -58,11 +58,11 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 #### 1) Standard PR / Review Workflows
 
 - Audit a PR (dry-run by default):
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit`
+  - `python3 -m dev_tools.cli gh audit-pr <PR_NUMBER> --fetch --audit`
 - Submit audit results:
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
+  - `python3 -m dev_tools.cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
 - Pre-submit quality gate before push/merge:
-  - `python3 dev-tools/td_cli.py gh pre-submit`
+  - `python3 -m dev_tools.cli gh pre-submit`
 
 #### 2) Jules Workflows
 
@@ -70,14 +70,14 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Optional context env var: `JULES_SOURCE_ID` (if your environment already
   knows the source mapping).
 - Typical commands:
-  - `python3 dev-tools/td_cli.py agent dispatch <BRANCH> "<TASK>"`
-  - `python3 dev-tools/td_cli.py agent fix-ci --pr-number <PR> --execute`
-  - `python3 dev-tools/td_cli.py agent sync`
+  - `python3 -m dev_tools.cli agent dispatch <BRANCH> "<TASK>"`
+  - `python3 -m dev_tools.cli agent fix-ci --pr-number <PR> --execute`
+  - `python3 -m dev_tools.cli agent sync`
 
 #### 3) Headless / Bot Auditing
 
 - For batch auditing open PRs:
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute`
+  - `python3 -m dev_tools.cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute`
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by
   setup script).
 
@@ -109,11 +109,11 @@ dispatching Jules sessions.
 
 ## 🤖 Agent / Jules GitHub Command Pattern
 
-Always use `boomtick-mcp` Tier 1 tools first. `td_cli.py` is the fallback
-when MCP is unavailable — not the default. See `.agents/AGENTS.md` for the
-full tool mapping table.
+Always use `boomtick-mcp` Tier 1 tools first. The CLI (`python3 -m dev_tools.cli`)
+is the fallback when MCP is unavailable. See `.agents/AGENTS.md` for the full
+tool mapping table.
 
-When `td_cli.py` must be called directly, read the CLI schema from
+When the CLI must be called directly, read the CLI schema from
 `.agent-context.json` rather than guessing flags or running `--help`:
 
 ```bash
@@ -129,9 +129,9 @@ Prefer repository CLI commands over raw `gh`:
 
 ```bash
 # ✅ Preferred
-python3 dev-tools/td_cli.py gh <repo-command>
+python3 -m dev_tools.cli gh <repo-command>
 
-# ⚠️ Only if td_cli.py does not expose the operation
+# ⚠️ Only if the CLI does not expose the operation
 gh <command>
 ```
 
@@ -145,7 +145,7 @@ named `GITHUB_TOKEN`.
 ```bash
 node --version         # should match .node-version
 pnpm --version         # should be 10.28.2
-python3 dev-tools/td_cli.py doctor
+python3 -m dev_tools.cli doctor
 pnpm run check:runtime-files
 gh auth status
 ```
@@ -180,13 +180,12 @@ explicitly instructed to update the runtime contract.
 
 ---
 
-## 🚀 Repository CLI (`td_cli.py`)
+## 🚀 Repository CLI (`td_cli`)
 
-`dev-tools/td_cli.py` is the Tier 2 unified entry point for local repository
-automation. All available subcommands and flags are defined in
-`dev-tools/cli-schema.json` (also embedded in `.agent-context.json` under
-`cli_schema`). That file is the single source of truth — never use `--help`
-to discover flags.
+The CLI (`python3 -m dev_tools.cli`) is the Tier 2 unified entry point for local
+repository automation. All available subcommands and flags are defined in
+`cli-schema.json` (also embedded in `.agent-context.json` under `cli_schema`).
+That file is the single source of truth — never use `--help` to discover flags.
 
 Key subcommand groups:
 
@@ -195,4 +194,4 @@ Key subcommand groups:
 | `doctor` | Runtime consistency check |
 | `gh` | GitHub operations (PRs, issues, audits, conflicts) |
 | `repo` | Repository operations (CI logs, Playwright) |
-| `agent` / `jules` | Jules agent session management |
+| `agent` | Agent session management |

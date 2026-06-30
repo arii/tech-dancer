@@ -3,14 +3,14 @@ import subprocess
 import re
 import time
 
-CLI_BASE = ["python3", "boomtick-pkg/cli/dev_tools/td_cli.py"]
+CLI_BASE = ["python3", "-m", "dev_tools.cli"]
 
 def run_cli(args, suppress_errors=False):
     """Executes a BoomTick CLI command and returns the standard output."""
     cmd = CLI_BASE + args
     env = os.environ.copy()
     existing_path = env.get("PYTHONPATH", "")
-    local_paths = "boomtick-pkg/cli:boomtick-pkg/cli/dev_tools"
+    local_paths = "boomtick-pkg/cli"
     env["PYTHONPATH"] = f"{local_paths}:{existing_path}" if existing_path else local_paths
     env["CI"] = "true"
     try:

@@ -21,7 +21,7 @@ export const DEVAI_ASSETS: DevAIAsset[] = [
     toolId: TOOL_ID_SDLC_PROFILER
   },
   {
-    path: 'dev-tools/td_cli.py',
+    path: 'boomtick-pkg/cli/dev_tools/cli.py',
     label: 'CLI Manager',
     description: 'Unified command-line interface for DevAI operations.',
     toolId: TOOL_ID_GITOPS_PR_REVIEWER
