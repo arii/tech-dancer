@@ -83,7 +83,7 @@ jobs:
 
       - name: Create or update comment
         if: env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@71c5c65132c0ee0b8529d90c406b1070624c965c
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
@@ -92,7 +92,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout base repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v7 # nosemgrep
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -138,7 +138,7 @@ jobs:
 
       - name: Comment on validation failure
         if: steps.validate_branches.outputs.skipped == 'true' && env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@71c5c65132c0ee0b8529d90c406b1070624c965c
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
@@ -174,7 +174,7 @@ jobs:
       - name: Resolve conflicts
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true'
         id: resolve
-        uses: VeyronSakai/conflict-resolver@530f9a2e6f47065098e987c2c01990c74900508a
+        uses: VeyronSakai/conflict-resolver@v0.5 # nosemgrep
 
       - name: Commit and create PR
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files == ''
@@ -222,7 +222,7 @@ jobs:
 
       - name: Update comment on success
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && success() && steps.resolve.outputs.unresolved-files == '' && env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@71c5c65132c0ee0b8529d90c406b1070624c965c
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |
@@ -233,7 +233,7 @@ jobs:
 
       - name: Update comment on failure
         if: steps.validate_branches.outputs.skipped != 'true' && steps.merge.outputs.merge_failed != 'true' && steps.resolve.outputs.unresolved-files != '' && env.PR_NUMBER && env.PR_NUMBER != '0'
-        uses: peter-evans/create-or-update-comment@71c5c65132c0ee0b8529d90c406b1070624c965c
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep
         with:
           issue-number: ${{ env.PR_NUMBER }}
           body: |

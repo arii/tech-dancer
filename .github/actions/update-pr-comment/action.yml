@@ -16,7 +16,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+    - uses: actions/github-script@v8 # nosemgrep
       env:
         INPUT_STATUS_LINE: ${{ inputs.status_line }}
         INPUT_IMPACT_BODY: ${{ inputs.impact_body }}

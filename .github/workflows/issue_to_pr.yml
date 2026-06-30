@@ -16,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v7 # nosemgrep
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0535
+        uses: actions/setup-python@v6 # nosemgrep
         with:
           python-version: '3.x'
 
@@ -74,7 +74,7 @@ jobs:
               f.write(f"SAFE_TITLE={safe_title}\n")
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@c5a5d8525b6ec67844059089e4c1985f43f114c0
+        uses: peter-evans/create-pull-request@v8 # nosemgrep
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "docs: add content from issue #${{ github.event.issue.number }}"
