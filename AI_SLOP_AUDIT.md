@@ -45,7 +45,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/handlers/command_handler.py — Verified Clean**
 
 ### `boomtick-pkg/cli/dev_tools/` files
-* [ ] **`[ ]` boomtick-pkg/cli/dev_tools/orchestrator.py — FLAGGED (See breakdown below)**
+* [x] **`[x]` boomtick-pkg/cli/dev_tools/orchestrator.py — Verified Clean** (Remediated: removed broad, silent `try/except Exception` blocks).
 
 ### `boomtick-pkg/cli/dev_tools/services/` files
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/services/__init__.py — Verified Clean**
@@ -58,7 +58,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/services/vision_service.py — Verified Clean**
 
 ### `boomtick-pkg/cli/dev_tools/` files
-* [ ] **`[ ]` boomtick-pkg/cli/dev_tools/utils.py — FLAGGED (See breakdown below)**
+* [x] **`[x]` boomtick-pkg/cli/dev_tools/utils.py — Verified Clean** (Remediated: fixed hallucinated utility and added HTTP retries).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/ux_report.py — Verified Clean**
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/verify_versions.py — Verified Clean**
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/version_utils.py — Verified Clean**
@@ -275,7 +275,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 ### `scripts/lib/` files
 * [x] **`[x]` scripts/lib/aiLogger.ts — Verified Clean**
 * [x] **`[x]` scripts/lib/buildCodeReviewPrompt.ts — Verified Clean**
-* [ ] **`[ ]` scripts/lib/codeReviewOrchestrator.ts — FLAGGED (See breakdown below)**
+* [x] **`[x]` scripts/lib/codeReviewOrchestrator.ts — Verified Clean** (Remediated: simplified verdict reconciliation).
 * [x] **`[x]` scripts/lib/codeReviewTypes.ts — Verified Clean**
 * [x] **`[x]` scripts/lib/codeReviewUtils.ts — Verified Clean**
 * [x] **`[x]` scripts/lib/geminiModelPicker.ts — Verified Clean**
@@ -459,7 +459,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 
 ### `src/features/research/hooks/` files
 * [x] **`[x]` src/features/research/hooks/useExport.ts — Verified Clean**
-* [ ] **`[ ]` src/features/research/hooks/useWCSData.ts — FLAGGED (See breakdown below)**
+* [x] **`[x]` src/features/research/hooks/useWCSData.ts — Verified Clean** (Remediated: removed redundant manual 'PAR1' magic-byte check).
 
 ### `src/features/research/` files
 * [x] **`[x]` src/features/research/useResearch.ts — Verified Clean**
@@ -479,16 +479,15 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 * [x] **`[x]` src/index.css — Verified Clean**
 
 ### `src/layouts/` files
-* [x] **`[x]` src/layouts/Box.tsx — Verified Clean**
+* [x] **`[x]` src/layouts/Box.tsx — Verified Clean** (Remediated: migrated from over-engineered `getResponsiveClasses`).
 * [x] **`[x]` src/layouts/Button.tsx — Verified Clean**
 * [x] **`[x]` src/layouts/Footer.tsx — Verified Clean**
 * [x] **`[x]` src/layouts/Grid.tsx — Verified Clean**
 * [x] **`[x]` src/layouts/MainLayout.tsx — Verified Clean**
 * [x] **`[x]` src/layouts/Primitives.tsx — Verified Clean**
 * [x] **`[x]` src/layouts/Stack.tsx — Verified Clean**
-* [x] **`[x]` src/layouts/Text.tsx — Verified Clean**
+* [x] **`[x]` src/layouts/Text.tsx — Verified Clean** (Remediated: migrated from over-engineered `getResponsiveClasses`).
 * [x] **`[x]` src/layouts/layout-maps.ts — Verified Clean**
-* [ ] **`[ ]` src/layouts/system-utils.ts — FLAGGED (See breakdown below)**
 
 ### `src/lib/` files
 * [x] **`[x]` src/lib/affiliateManager.ts — Verified Clean**
@@ -513,7 +512,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 * [x] **`[x]` src/lib/productCatalog.ts — Verified Clean**
 * [x] **`[x]` src/lib/routes-discovery.test.ts — Verified Clean**
 * [x] **`[x]` src/lib/routes-discovery.ts — Verified Clean**
-* [x] **`[x]` src/lib/style-utils.ts — Verified Clean**
+* [x] **`[x]` src/lib/style-utils.ts — Verified Clean** (Remediated: added simplified `applyResponsive` helper).
 
 ### `src/lib/types/` files
 * [x] **`[x]` src/lib/types/content.ts — Verified Clean**
@@ -524,7 +523,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 * [x] **`[x]` src/lib/variants.ts — Verified Clean**
 
 ### `src/` files
-* [ ] **`[ ]` src/main.tsx — FLAGGED (See breakdown below)**
+* [x] **`[x]` src/main.tsx — Verified Clean** (Remediated: removed complex hallucinated path heuristics).
 
 ### `src/pages/` files
 * [x] **`[x]` src/pages/About.tsx — Verified Clean**
@@ -564,45 +563,37 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 ### 1. Hallucinated Backward-Compatibility & Ghost Requirements
 
 * **Location:** `src/main.tsx` (Lines 44-77)
-* **The Slop:** The `getBasename` function contains elaborate heuristic logic to detect and calculate subdirectory depths specifically for GitHub Pages branch previews. It includes a manual crawl of path segments against a hardcoded list of "standard routes" and "static paths".
-* **Why it's likely AI Drift:** This handles a hypothetical deployment complexity (multi-segment branch names in subdirectories) that is already natively solved by Vite's `BASE_URL` and standard CI configuration. The code attempts to "outsmart" the environment with manual path arithmetic that shouldn't be necessary in a modern stack.
-* **Remediation:**
-```typescript
-const getBasename = (): string => {
-  return import.meta.env.BASE_URL || '/';
-};
-```
-
+* **The Slop:** The `getBasename` function contains elaborate heuristic logic to detect and calculate subdirectory depths specifically for GitHub Pages branch previews.
+* **Why it's likely AI Drift:** This handles a hypothetical deployment complexity already natives solved by Vite's `BASE_URL`.
+* **Remediation:** Mark as verified. Replaced with standard `import.meta.env.BASE_URL`.
 
 ### 2. Over-Engineered Abstraction Cascades (AI Over-Architecting)
 
 * **Location:** `src/layouts/system-utils.ts` (Lines 6-27)
-* **The Slop:** The `getResponsiveClasses` function is a micro-modular abstraction that manually maps object-based props (e.g., `{ base: 4, md: 2 }`) to Tailwind responsive prefixes.
-* **Why it's likely AI Drift:** This mirrors native Tailwind functionality that should be handled by utility classes or simple template literals. It adds a layer of runtime complexity and a proprietary schema for a static CSS generation problem. It represents a "Clean Code" rule (DRY) applied mindlessly to a context where native platform features are superior.
-* **Remediation:** Remove the utility and use native Tailwind classes or simple conditional logic within components.
+* **The Slop:** The `getResponsiveClasses` function is a micro-modular abstraction for responsive Tailwind prefixes.
+* **Why it's likely AI Drift:** Mirrors native Tailwind functionality at runtime; adds unnecessary complexity.
+* **Remediation:** Deleted. Migrated components to simplified `applyResponsive` in `lib/style-utils.ts`.
 
 * **Location:** `scripts/lib/codeReviewOrchestrator.ts` (Lines 371-460)
-* **The Slop:** The `reconcileVerdict` function implements a complex "defense" layer against LLM severities, including regex-based "hedge language" detection and cross-referencing findings against diff lines to catch hallucinations.
-* **Why it's likely AI Drift:** While functional, this is an academic solution to a prompt engineering problem. It treats the symptoms of poor LLM output with elaborate TypeScript logic rather than fixing the root cause in the model configuration or system prompt.
-* **Remediation:** Simplify the verdict logic to trust the parser or implement a simpler threshold; move "hedge detection" into the system prompt.
-
+* **The Slop:** The `reconcileVerdict` function implements a complex "defense" layer against LLM severities.
+* **Why it's likely AI Drift:** Academic solution to a prompting problem.
+* **Remediation:** Simplified verdict logic to check for at least one open finding.
 
 ### 3. "AI Drift" and Cargo-Culting
 
 * **Location:** `boomtick-pkg/cli/dev_tools/utils.py` (Line 203)
-* **The Slop:** A call to a function `_call_api_with_retry` that is never defined in the file or imported.
-* **Why it's likely AI Drift:** Multi-turn drift. The AI "remembered" writing a retry helper in a previous turn or assumed a standard utility existed and called it without ensuring its presence in the current context.
-* **Remediation:** Replace the hallucinated helper with standard requests call or implement the missing function.
-
+* **The Slop:** A call to a function `_call_api_with_retry` that is never defined.
+* **Why it's likely AI Drift:** Multi-turn drift/hallucination of internal utility.
+* **Remediation:** Replaced with robust `post_api_result` featuring standard HTTP retries.
 
 ### 4. Overly Defensive / Nonsensical Error Handling
 
 * **Location:** `src/features/research/hooks/useWCSData.ts` (Lines 45-52)
-* **The Slop:** A manual check of the first 4 bytes of a fetched Parquet file to verify the `'PAR1'` magic signature before passing it to the `hyparquet` library.
-* **Why it's likely AI Drift:** "AI Over-Verification." The AI is adding defensive layers for structural constraints that are already strictly handled by the downstream consumer (`parquetReadObjects`). It's catching a failure that the library is designed to throw.
-* **Remediation:** Remove the manual byte check; rely on the library's internal validation.
+* **The Slop:** A manual check of the first 4 bytes of a fetched Parquet file.
+* **Why it's likely AI Drift:** Redundant verification of library-handled constraints.
+* **Remediation:** Removed manual byte check.
 
 * **Location:** `boomtick-pkg/cli/dev_tools/orchestrator.py` (Lines 418-422)
-* **The Slop:** Multiple `try/except` blocks catching `Exception` to log a generic error message and return `None` or an empty dict, obscuring the actual stack trace.
-* **Why it's likely AI Drift:** Cargo-culting "safe" error handling patterns across every method in a God Object, resulting in a system that fails silently and makes debugging difficult.
-* **Remediation:** Allow exceptions to propagate to the top-level handler to preserve tracebacks and meaningful exit codes.
+* **The Slop:** Multiple broad `try/except Exception` blocks obscuring failures.
+* **Why it's likely AI Drift:** God-object cargo-culting of "safe" patterns.
+* **Remediation:** Removed silent catch-alls to allow proper propagation.

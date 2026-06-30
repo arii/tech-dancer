@@ -38,6 +38,25 @@ def log_debug(msg: str):
     """Logs a debug message to stderr."""
     print(f"DEBUG: {mask_sensitive_data(msg)}", file=sys.stderr)
 
+def post_api_result(url: str, payload: Dict[str, Any]):
+    """Standardizes API results back to a provided webhook or service."""
+    import requests
+    from requests.adapters import HTTPAdapter
+    from urllib3.util import Retry
+
+    session = requests.Session()
+    retries = Retry(
+        total=5,
+        backoff_factor=1,
+        status_forcelist=[500, 502, 503, 504],
+        raise_on_status=True
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retries))
+    session.mount("http://", HTTPAdapter(max_retries=retries))
+
+    response = session.post(url, json=payload, timeout=10)
+    response.raise_for_status()
+
 class CLIError(Exception):
     """Base class for CLI errors with optional exit code and data."""
     def __init__(self, message, code=1, data=None):
