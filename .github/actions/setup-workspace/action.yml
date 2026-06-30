@@ -59,6 +59,7 @@ runs:
       run: |
         echo "::group::Install dev-tools"
         pip install -e boomtick-pkg/cli/ --break-system-packages
+        pip install pytest pytest-mock requests-mock PyYAML google-genai langchain-openai langchain-google-genai chromadb sentence-transformers --break-system-packages
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
