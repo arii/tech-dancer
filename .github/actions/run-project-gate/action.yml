@@ -48,7 +48,9 @@ runs:
 
     - name: Lint
       if: inputs.target == 'root'
-      run: pnpm run lint
+      run: |
+        pnpm run verify:schemas
+        pnpm run lint
       shell: bash
 
     - name: Type-check / Build
