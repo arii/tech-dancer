@@ -1,6 +1,8 @@
 import os
 import sys
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from dev_tools.utils import log_warn, log_debug
 from typing import Optional, List, Dict, Any
 
@@ -19,15 +21,10 @@ class JulesClient:
         }
 
         self._session = requests.Session()
-        try:
-            from requests.adapters import HTTPAdapter
-            from urllib3.util.retry import Retry
-            retry_strategy = Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
-            adapter = HTTPAdapter(max_retries=retry_strategy)
-            self._session.mount("https://", adapter)
-            self._session.mount("http://", adapter)
-        except ImportError:
-            pass
+        retry_strategy = Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        self._session.mount("https://", adapter)
+        self._session.mount("http://", adapter)
 
 
     def _get_clean_id(self, res_id: str, prefix: str) -> str:

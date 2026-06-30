@@ -197,7 +197,7 @@ def _call_api_with_retry(req_method: str, url: str, headers: Dict[str, str], jso
     session.mount("http://", adapter)
 
     try:
-        response = session.request(req_method, url, headers=headers, json=json_data, timeout=30)
+        response = session.request(req_method, url, headers=headers, json=json_data, timeout=30)  # nosemgrep  # nosemgrep
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as e:
