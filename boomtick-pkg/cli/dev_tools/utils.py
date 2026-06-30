@@ -3,8 +3,6 @@ import sys
 import subprocess
 import json
 import time
-import urllib.request
-import urllib.error
 import urllib.parse
 import requests
 import re
@@ -38,15 +36,17 @@ def log_debug(msg: str):
     """Logs a debug message to stderr."""
     print(f"DEBUG: {mask_sensitive_data(msg)}", file=sys.stderr)
 
-def post_api_result(url: str, payload: Dict[str, Any]):
-    """Standardizes API results back to a provided webhook or service."""
-    import requests
+def _call_api_with_retry(method: str, url: str, **kwargs) -> requests.Response:
+    """Internal helper for making API calls with standard retry logic."""
     from requests.adapters import HTTPAdapter
     from urllib3.util import Retry
 
+    timeout = kwargs.pop('timeout', 30)
+    max_retries = kwargs.pop('max_retries', 3)
+
     session = requests.Session()
     retries = Retry(
-        total=5,
+        total=max_retries,
         backoff_factor=1,
         status_forcelist=[500, 502, 503, 504],
         raise_on_status=True
@@ -54,8 +54,13 @@ def post_api_result(url: str, payload: Dict[str, Any]):
     session.mount("https://", HTTPAdapter(max_retries=retries))
     session.mount("http://", HTTPAdapter(max_retries=retries))
 
-    response = session.post(url, json=payload, timeout=10)
+    response = session.request(method, url, timeout=timeout, **kwargs)
     response.raise_for_status()
+    return response
+
+def post_api_result(url: str, payload: Dict[str, Any]):
+    """Standardizes API results back to a provided webhook or service."""
+    _call_api_with_retry("POST", url, json=payload, timeout=10, max_retries=5)
 
 class CLIError(Exception):
     """Base class for CLI errors with optional exit code and data."""
@@ -218,8 +223,13 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
 
     start_time = time.time()
     try:
-        response = requests.post(target_url, json=data, headers={"Authorization": f"Bearer {token}"}, timeout=30)
-        response.raise_for_status()
+        response = _call_api_with_retry(
+            "POST",
+            target_url,
+            json=data,
+            headers={"Authorization": f"Bearer {token}"},
+            max_retries=max_retries
+        )
         res = response.json()
     except Exception as e:
         log_error(f"GitHub Models call failed: {e}")

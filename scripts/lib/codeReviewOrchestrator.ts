@@ -5,7 +5,7 @@ import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache, filterLowImpactFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
-import { execFile as execFileCb, spawn } from 'child_process';
+import { execFile as execFileCb } from 'child_process';
 import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
 import { loadProjectConfig } from './projectConfig';
@@ -164,34 +164,9 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
   return cachedGitArgs;
 }
 
-async function getAIContext(inputData: string): Promise<Record<string, unknown>[]> {
-  return new Promise((resolve, reject) => {
-    const child = spawn('python3', ['boomtick-pkg/cli/dev_tools/get_ai_context.py']);
-    let stdout = '';
-    let stderr = '';
-
-    child.stdout.on('data', (data) => { stdout += data; });
-    child.stderr.on('data', (data) => { stderr += data; });
-
-    child.on('close', (code) => {
-      if (code === 0) {
-        try {
-          resolve(JSON.parse(stdout));
-        } catch (e) {
-          reject(new Error(`Failed to parse AI context: ${e instanceof Error ? e.message : String(e)}`));
-        }
-      } else {
-        reject(new Error(`AI context error (code ${code}): ${stderr}`));
-      }
-    });
-
-    child.on('error', (err) => {
-      reject(err);
-    });
-
-    child.stdin.write(inputData);
-    child.stdin.end();
-  });
+async function getAIContext(_inputData: string): Promise<Record<string, unknown>[]> {
+  // get_ai_context.py has been removed. Context enrichment is now handled by the 'td' CLI or higher-level agents.
+  return [];
 }
 
 export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {

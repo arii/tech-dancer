@@ -217,7 +217,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           applyResponsive(display, (v) => v === "none" ? "hidden" : (v as string)),
           applyResponsive(aspect, (v) => {
             if (v === "square" || v === "video") return `aspect-${v}`;
-            return v ? `aspect-[${v}]` : "";
+            return v ? `aspect-[${v}]` : ""; // impeccable-ignore - Arbitrary aspect ratios are supported via props.
           }),
           shrink === true && "shrink",
           shrink === false && "shrink-0",

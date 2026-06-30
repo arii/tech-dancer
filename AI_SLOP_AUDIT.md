@@ -58,7 +58,7 @@ This report documents the findings of a systematic audit for AI-generated slop, 
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/services/vision_service.py — Verified Clean**
 
 ### `boomtick-pkg/cli/dev_tools/` files
-* [x] **`[x]` boomtick-pkg/cli/dev_tools/utils.py — Verified Clean** (Remediated: fixed hallucinated utility and added HTTP retries).
+* [x] **`[x]` boomtick-pkg/cli/dev_tools/utils.py — Verified Clean** (Remediated: replaced hallucinated `_call_api_with_retry` with a robust implementation and added HTTP retries to all API call sites).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/ux_report.py — Verified Clean**
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/verify_versions.py — Verified Clean**
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/version_utils.py — Verified Clean**
