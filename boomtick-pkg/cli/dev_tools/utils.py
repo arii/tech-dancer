@@ -6,6 +6,7 @@ import time
 import urllib.request
 import urllib.error
 import urllib.parse
+import requests
 import re
 import random
 from pathlib import Path
@@ -196,11 +197,15 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
             "content": f"Output MUST be valid JSON matching this schema: {json.dumps(norm_schema)}"
         })
 
-    req = urllib.request.Request(target_url, data=json.dumps(data).encode("utf-8"),
-                                headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
-
     start_time = time.time()
-    res = _call_api_with_retry(req, max_retries=max_retries)
+    try:
+        response = requests.post(target_url, json=data, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+        response.raise_for_status()
+        res = response.json()
+    except Exception as e:
+        log_error(f"GitHub Models call failed: {e}")
+        return None
+
     duration_ms = int((time.time() - start_time) * 1000)
 
     if res and "usage" in res:

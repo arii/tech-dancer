@@ -658,10 +658,7 @@ class Orchestrator:
             pkg = json.load(f)
         expected_pnpm = pkg.get("packageManager", "").replace("pnpm@", "") or "10.28.2"
 
-        try:
-            actual_pnpm = run_command(["pnpm", "--version"]).strip()
-        except Exception:
-            actual_pnpm = None
+        actual_pnpm = run_command(["pnpm", "--version"]).strip()
 
         if not actual_pnpm or actual_pnpm != expected_pnpm:
             log_error(f"pnpm version mismatch\nExpected: {expected_pnpm}\nActual:   {actual_pnpm}")
@@ -1336,34 +1333,22 @@ Respond only after the PR is created or updated:
     def generate_review_workflow(self, pr_number: int, issue_number: Optional[int] = None) -> Dict[str, Any]:
         """Generates a deterministic review workflow plan for an agent."""
         # 1. Environment Validation
-        try:
-            env_res = self.runtime_check()
-            env_output = f"Runtime OK: node {env_res['node']}, pnpm {env_res['pnpm']}"
-        except Exception as e:
-            env_output = f"Runtime Check Failed: {e}"
+        env_res = self.runtime_check()
+        env_output = f"Runtime OK: node {env_res['node']}, pnpm {env_res['pnpm']}"
 
         # 2. Issue Validation
         issue_output = "No issue number provided."
         if issue_number:
-            try:
-                res = self.validate_issue(issue_number=issue_number)
-                issue_output = json.dumps(res, indent=2)
-            except Exception as e:
-                issue_output = f"Issue validation failed: {e}"
+            res = self.validate_issue(issue_number=issue_number)
+            issue_output = json.dumps(res, indent=2)
 
         # 3. Conflict Detection
-        try:
-            conflicts = self.handle_detect_conflicts(pr_num=pr_number)
-            conflict_output = json.dumps(conflicts, indent=2)
-        except Exception as e:
-            conflict_output = f"Conflict detection failed: {e}"
+        conflicts = self.handle_detect_conflicts(pr_num=pr_number)
+        conflict_output = json.dumps(conflicts, indent=2)
 
         # 4. PR Context Generation
-        try:
-            audit_res = self.audit_pr(pr_number, fetch=True)
-            pr_context_file = audit_res["files"]["context"]
-        except Exception as e:
-            raise CLIError(f"Failed to fetch PR context: {e}")
+        audit_res = self.audit_pr(pr_number, fetch=True)
+        pr_context_file = audit_res["files"]["context"]
 
         pr_summary = ""
         ci_status = ""
@@ -1544,17 +1529,13 @@ Only after successful completion.
     def generate_aggregate_prs_workflow(self) -> Dict[str, Any]:
         """Generates a deterministic aggregation workflow plan for an agent."""
         # 1. Environment Validation
-        try:
-            env_res = self.runtime_check()
-            env_output = f"Runtime OK: node {env_res['node']}, pnpm {env_res['pnpm']}"
-        except Exception as e:
-            env_output = f"Runtime Check Failed: {e}"
+        env_res = self.runtime_check()
+        env_output = f"Runtime OK: node {env_res['node']}, pnpm {env_res['pnpm']}"
 
         # 2. Get Open PRs and Overlaps
         prs_output = "No data."
-        try:
-            # Re-implement minimal overlap logic without pickle
-            repo = get_github_client().get_repo(get_repo_name())
+        # Re-implement minimal overlap logic without pickle
+        repo = get_github_client().get_repo(get_repo_name())
             pulls = list(repo.get_pulls(state='open'))[:50]
 
             file_to_prs = defaultdict(list)
@@ -1580,8 +1561,6 @@ Only after successful completion.
                     report.append(f"  [{pr_num}] {pr_titles.get(pr_num)}")
 
             prs_output = "\n".join(report)
-        except Exception as e:
-            prs_output = f"Overlap analysis failed: {e}"
 
         # Generate workflow plan
         plan_dir = get_or_create_log_dir("workflows")

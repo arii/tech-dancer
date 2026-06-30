@@ -139,10 +139,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
       borderColor && resolveJIT(borderColor, "border"),
-      getResponsiveClasses(smBorder, "sm:border-"),
-      getResponsiveClasses(mdBorder, "md:border-"),
-      getResponsiveClasses(lgBorder, "lg:border-"),
-      getResponsiveClasses(xlBorder, "xl:border-")
+      smBorder && `sm:border-${smBorder}`,
+      mdBorder && `md:border-${mdBorder}`,
+      lgBorder && `lg:border-${lgBorder}`,
+      xlBorder && `xl:border-${xlBorder}`
     )
 
     // Remove props that shouldn't be spread to DOM elements
