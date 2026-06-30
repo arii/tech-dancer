@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.append(os.path.join(os.getcwd(), "boomtick-pkg/cli"))
 sys.path.append(os.path.join(os.getcwd(), "boomtick-pkg/cli/dev_tools"))
 
-from tdw_services.services.vector_store import VectorStore
+from dev_tools.services.vector_store import VectorStore
 
 def chunk_file(filepath: str, content: str, chunk_size: int = 1000):
     """Simple chunking by character count (approximate)."""

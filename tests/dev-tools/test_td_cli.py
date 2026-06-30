@@ -12,11 +12,11 @@ from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
-    @patch('tdw_services.orchestrator.get_github_token')
-    @patch('tdw_services.orchestrator.get_github_client')
-    @patch('tdw_services.orchestrator.get_repo_name')
+    @patch('dev_tools.orchestrator.get_github_token')
+    @patch('dev_tools.orchestrator.get_github_client')
+    @patch('dev_tools.orchestrator.get_repo_name')
     @patch('td_cli.get_github_token')
-    @patch('tdw_services.orchestrator.get_github_client')
+    @patch('dev_tools.orchestrator.get_github_client')
     @patch('td_cli.get_repo_name')
     def test_validate_issue_dry_run_default(self, mock_repo, mock_get_client, mock_token, mock_orch_repo, mock_orch_get_client, mock_orch_token):
         """Test that validate-issue defaults to dry-run True"""
@@ -43,7 +43,7 @@ class TestTDCLI(unittest.TestCase):
         # Verify comment was NOT created
         mock_issue.create_comment.assert_not_called()
 
-    @patch('tdw_services.services.github.GitHubClient.fetch_check_runs')
+    @patch('dev_tools.services.github.GitHubClient.fetch_check_runs')
     @patch('submit_review.get_github_token')
     @patch('submit_review.get_repo_name')
     @patch('submit_review.get_github_client')
@@ -64,7 +64,7 @@ class TestTDCLI(unittest.TestCase):
         # Verify review was NOT created
         mock_pr.create_review.assert_not_called()
 
-    @patch('tdw_services.services.github.GitHubClient.fetch_check_runs')
+    @patch('dev_tools.services.github.GitHubClient.fetch_check_runs')
     @patch('submit_review.get_github_token')
     @patch('submit_review.get_repo_name')
     @patch('submit_review.get_github_client')

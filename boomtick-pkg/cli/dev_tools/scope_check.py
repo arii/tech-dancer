@@ -3,11 +3,12 @@ import sys
 from typing import List, Optional, Set
 
 try:
-    from tdw_services.utils import log_info
+    from dev_tools.utils import log_info
 except ImportError:
     def log_info(msg): print(msg, file=sys.stderr)
 
-from dev_tools.dev_tools_sdk.config import load_project_config
+from dev_tools.config import load_project_config
+
 
 # Import run_command from utils
 from dev_tools.utils import run_command

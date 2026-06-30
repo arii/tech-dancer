@@ -2,7 +2,7 @@
 import argparse
 import sys
 import os
-from tdw_services.orchestrator import Orchestrator
+from dev_tools.orchestrator import Orchestrator
 
 def main():
     parser = argparse.ArgumentParser(description="Generate deterministic review workflow plan.")

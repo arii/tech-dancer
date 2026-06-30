@@ -2,8 +2,8 @@ import os
 import sys
 import json
 
-from tdw_services.services.dependency_graph import DependencyGraph
-from tdw_services.services.vector_store import VectorStore
+from dev_tools.services.dependency_graph import DependencyGraph
+from dev_tools.services.vector_store import VectorStore
 
 def get_context(filepath: str, diff_text: str, graph: DependencyGraph, store: VectorStore, n_results: int = 3):
     context = {

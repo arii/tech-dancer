@@ -9,7 +9,7 @@ from collections import defaultdict
 # Import run_command from utils
 from dev_tools.utils import run_command, CLIError
 try:
-    from tdw_services.utils import log_error, log_warn
+    from dev_tools.utils import log_error, log_warn
 except ImportError:
     def log_error(msg): print(f"❌ Error: {msg}", file=sys.stderr)
     def log_warn(msg): print(f"⚠️  Warning: {msg}", file=sys.stderr)

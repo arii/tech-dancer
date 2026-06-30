@@ -3,7 +3,7 @@ import sys
 import time
 import json
 from typing import Optional, Dict, Any, List, Set
-from tdw_services.utils import log_info, log_error, log_warn, ensure_dir
+from dev_tools.utils import log_info, log_error, log_warn, ensure_dir
 
 from dev_tools.utils import (
     call_ai,
@@ -15,8 +15,8 @@ from dev_tools.utils import (
     get_stack_versions,
     get_gemini_model
 )
-from tdw_services.services.dependency_graph import DependencyGraph
-from tdw_services.services.vector_store import VectorStore
+from dev_tools.services.dependency_graph import DependencyGraph
+from dev_tools.services.vector_store import VectorStore
 
 # Model used for per-file chunk review (code-aware, focused)
 _REVIEW_MODEL = get_ai_review_model()

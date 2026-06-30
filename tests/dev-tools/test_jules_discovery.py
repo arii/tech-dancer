@@ -1,6 +1,6 @@
 from unittest.mock import patch
 import pytest
-from tdw_services.services.jules import JulesClient
+from dev_tools.services.jules import JulesClient
 
 @pytest.fixture
 def client(monkeypatch):

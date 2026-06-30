@@ -10,22 +10,57 @@ import re
 import random
 from pathlib import Path
 from typing import Optional, Union, List, Dict
-try:
-    from tdw_services.utils import log_info, log_error, log_warn
-except ImportError:
-    def log_info(msg): print(msg, file=sys.stderr)
-    def log_error(msg): print(f"❌ Error: {msg}", file=sys.stderr)
-    def log_warn(msg): print(f"⚠️  Warning: {msg}", file=sys.stderr)
+def mask_sensitive_data(msg: str) -> str:
+    """Redacts sensitive information like GitHub tokens from strings."""
+    if not isinstance(msg, str):
+        msg = str(msg)
+    # Redact GitHub Tokens (Personal Access Tokens and Fine-grained Tokens)
+    msg = re.sub(r'ghp_[a-zA-Z0-9]{36,}', 'ghp_***', msg)
+    msg = re.sub(r'github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59,}', 'github_pat_***', msg)
+    # Generic token redaction for URLs or assignments (e.g., token=ABC123xyz)
+    msg = re.sub(r'(?i)(token|auth|key|secret|password|access_token)([:=])[a-zA-Z0-9._-]{10,}', r'\1\2***', msg)
+    return msg
 
-try:
-    from tdw_services.utils import CLIError
-except ImportError:
-    class CLIError(Exception):
-        def __init__(self, message, code=1, data=None):
-            self.message = message
-            self.code = code
-            self.data = data
-            super().__init__(self.message)
+def log_info(msg: str):
+    """Logs an informational message to stderr."""
+    print(mask_sensitive_data(msg), file=sys.stderr)
+
+def log_error(msg: str):
+    """Logs an error message to stderr."""
+    print(f"❌ Error: {mask_sensitive_data(msg)}", file=sys.stderr)
+
+def log_warn(msg: str):
+    """Logs a warning message to stderr."""
+    print(f"⚠️  Warning: {mask_sensitive_data(msg)}", file=sys.stderr)
+
+def log_debug(msg: str):
+    """Logs a debug message to stderr."""
+    print(f"DEBUG: {mask_sensitive_data(msg)}", file=sys.stderr)
+
+class CLIError(Exception):
+    """Base class for CLI errors with optional exit code and data."""
+    def __init__(self, message, code=1, data=None):
+        self.message = message
+        self.code = code
+        self.data = data
+        super().__init__(self.message)
+
+def get_base_dir() -> str:
+    """Returns the absolute path to the CLI package root."""
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+def ensure_dir(*parts: str) -> str:
+    """Joins path parts, ensures the directory exists, and returns the absolute path."""
+    path = os.path.join(get_base_dir(), *parts)
+    os.makedirs(path, exist_ok=True)
+    return path
+
+def get_or_create_log_dir(subdir: str) -> str:
+    """Returns the path to a specific log subdirectory and ensures it exists."""
+    log_dir = os.path.join(get_base_dir(), "logs", subdir)
+    os.makedirs(log_dir, exist_ok=True)
+    return log_dir
+
 
 class APIConnectionError(Exception):
     """Custom exception for retriable API connection issues."""
@@ -37,7 +72,7 @@ def _get_model_config(env_key: str, config_attr: str, fallback: str) -> str:
     if env_val:
         return env_val
     try:
-        from dev_tools.dev_tools_sdk.config import load_project_config
+        from dev_tools.config import load_project_config
         config = load_project_config()
         return getattr(config, config_attr)
     except Exception:

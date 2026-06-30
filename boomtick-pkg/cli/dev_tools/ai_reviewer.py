@@ -7,7 +7,8 @@ import os
 import sys
 import argparse
 from dev_tools.utils import call_ai, get_stack_versions
-from dev_tools.dev_tools_sdk.config import load_project_config
+from dev_tools.config import load_project_config
+
 
 PROJECT_CONFIG = load_project_config()
 MODEL = PROJECT_CONFIG.ai_review_model

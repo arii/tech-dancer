@@ -76,7 +76,7 @@ def build_repo_context():
         if dev_tools_dir not in sys.path:
             sys.path.append(dev_tools_dir)
 
-        from tdw_services.cli import cli
+        from dev_tools.cli import cli
 
         def get_type_name(param):
             t = param.type
