@@ -1,12 +1,14 @@
-import sys
+import glob
 import json
 import os
-import tempfile
-import glob
 import subprocess
-import click
-from typing import List, Dict, Any
+import sys
+import tempfile
+from dataclasses import asdict
 from datetime import datetime, timezone
+from typing import Any, Dict, List
+
+import click
 
 from dev_tools.orchestrator import Orchestrator
 from dev_tools.utils import (
@@ -26,10 +28,10 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope
 )
-from dev_tools.config import load_project_config
+from dev_tools.config import get_config
 
 
-PROJECT_CONFIG = load_project_config()
+PROJECT_CONFIG = get_config()
 
 # CLI Group
 @click.group()
@@ -71,6 +73,27 @@ def _get_body_content(ctx, orch, file, body):
     if content is None:
         err(ctx, "Provide --file or --body")
     return content
+
+# ==========================================
+# CONFIG COMMAND GROUP
+# ==========================================
+@cli.group()
+def config():
+    """Configuration Operations"""
+    pass
+
+@config.command(name='view')
+@click.pass_context
+def config_view(ctx):
+    """View the current project configuration as JSON."""
+    # ctx.obj might be None if the command is called directly or during unit tests
+    is_json = ctx.obj.get('JSON', True) if ctx.obj is not None else True
+
+    if is_json:
+        click.echo(json.dumps(asdict(PROJECT_CONFIG), indent=2))
+    else:
+        click.echo("Current configuration:")
+        click.echo(json.dumps(asdict(PROJECT_CONFIG), indent=2))
 
 # ==========================================
 # REPO COMMAND GROUP

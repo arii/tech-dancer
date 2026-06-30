@@ -1,5 +1,5 @@
 {
-  "tool_name": "td-cli" /* synchronized with config.py */ ,
+  "tool_name": "td-cli",
   "schema_authority": "This file is the single source of truth for td-cli. Consult before every CLI call. Takes precedence over examples in AGENTS.md or any agent-specific instruction file.",
   "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
   "base_command": "td-cli",
@@ -27,53 +27,9 @@
         }
       ]
     },
-    "gh create-pr": {
-      "description": "Create a new pull request.",
-      "exact_usage": "td-cli gh create-pr --title <TITLE> --body <BODY> --head <HEAD> [--base <BASE>] [--draft]",
-      "required_flags": [
-        {
-          "flag": "--title",
-          "type": "text",
-          "description": ""
-        },
-        {
-          "flag": "--body",
-          "type": "text",
-          "description": ""
-        },
-        {
-          "flag": "--head",
-          "type": "text",
-          "description": ""
-        }
-      ],
-      "optional_flags": [
-        {
-          "flag": "--base",
-          "type": "text",
-          "description": ""
-        },
-        {
-          "flag": "--draft",
-          "type": "boolean",
-          "description": ""
-        }
-      ]
-    },
-    "gh checkout": {
-      "description": "Checkout a branch.",
-      "exact_usage": "td-cli gh checkout <BRANCH>",
-      "required_arguments": [
-        {
-          "name": "branch",
-          "type": "text",
-          "description": ""
-        }
-      ]
-    },
     "repo ci-logs": {
       "description": "",
-      "exact_usage": "td-cli repo ci-logs [--all] [--clean] <PR_NUMBER>",
+      "exact_usage": "td-cli repo ci-logs [--all] <PR_NUMBER>",
       "required_arguments": [
         {
           "name": "pr_number",
@@ -86,44 +42,6 @@
           "flag": "--all",
           "type": "boolean",
           "description": "Include logs for successful runs"
-        },
-        {
-          "flag": "--clean",
-          "type": "boolean",
-          "description": "Clean and extract failing details from logs"
-        }
-      ]
-    },
-    "agent cancel": {
-      "description": "Cancel a Jules session.",
-      "exact_usage": "td-cli agent cancel <SESSION_ID>",
-      "required_arguments": [
-        {
-          "name": "session_id",
-          "type": "text",
-          "description": ""
-        }
-      ]
-    },
-    "agent get-session": {
-      "description": "Get details of a Jules session.",
-      "exact_usage": "td-cli agent get-session <SESSION_ID>",
-      "required_arguments": [
-        {
-          "name": "session_id",
-          "type": "text",
-          "description": ""
-        }
-      ]
-    },
-    "agent trigger-feedback": {
-      "description": "Trigger CI feedback for a Jules session.",
-      "exact_usage": "td-cli agent trigger-feedback <SESSION_ID>",
-      "required_arguments": [
-        {
-          "name": "session_id",
-          "type": "text",
-          "description": ""
         }
       ]
     },
@@ -323,8 +241,8 @@
       ]
     },
     "gh issue-update": {
-      "description": "Update a GitHub issue's body.",
-      "exact_usage": "td-cli gh issue-update [--file <FILE>] [--body <BODY>] <ISSUE_NUMBER>",
+      "description": "Update a GitHub issue's body and/or labels.",
+      "exact_usage": "td-cli gh issue-update [--file <FILE>] [--body <BODY>] [--labels <LABELS>] [--add-labels <ADD-LABELS>] [--remove-labels <REMOVE-LABELS>] <ISSUE_NUMBER>",
       "required_arguments": [
         {
           "name": "issue_number",
@@ -342,6 +260,21 @@
           "flag": "--body",
           "type": "text",
           "description": "Literal body text"
+        },
+        {
+          "flag": "--labels",
+          "type": "text",
+          "description": "Comma-separated list of labels to set (replaces existing labels)"
+        },
+        {
+          "flag": "--add-labels",
+          "type": "text",
+          "description": "Comma-separated list of labels to add"
+        },
+        {
+          "flag": "--remove-labels",
+          "type": "text",
+          "description": "Comma-separated list of labels to remove"
         }
       ]
     },
@@ -390,6 +323,50 @@
         {
           "flag": "--dry-run",
           "type": "boolean",
+          "description": ""
+        }
+      ]
+    },
+    "gh create-pr": {
+      "description": "Create a new pull request.",
+      "exact_usage": "td-cli gh create-pr --title <TITLE> --body <BODY> --head <HEAD> [--base <BASE>] [--draft]",
+      "required_flags": [
+        {
+          "flag": "--title",
+          "type": "text",
+          "description": ""
+        },
+        {
+          "flag": "--body",
+          "type": "text",
+          "description": ""
+        },
+        {
+          "flag": "--head",
+          "type": "text",
+          "description": ""
+        }
+      ],
+      "optional_flags": [
+        {
+          "flag": "--base",
+          "type": "text",
+          "description": ""
+        },
+        {
+          "flag": "--draft",
+          "type": "boolean",
+          "description": ""
+        }
+      ]
+    },
+    "gh checkout": {
+      "description": "Checkout a branch.",
+      "exact_usage": "td-cli gh checkout <BRANCH>",
+      "required_arguments": [
+        {
+          "name": "branch",
+          "type": "text",
           "description": ""
         }
       ]
@@ -788,6 +765,10 @@
         }
       ]
     },
+    "ai get-context": {
+      "description": "Retrieve dependency and semantic context for a set of changed files.",
+      "exact_usage": "td-cli ai get-context"
+    },
     "ai analyze": {
       "description": "",
       "exact_usage": "td-cli ai analyze <FILE>",
@@ -823,7 +804,7 @@
       ]
     },
     "agent dispatch": {
-      "description": "",
+      "description": "\nInitialize a Jules session for a specific branch and task.\nNote: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n",
       "exact_usage": "td-cli agent dispatch <BRANCH> <TASK>",
       "required_arguments": [
         {
@@ -910,6 +891,39 @@
         }
       ]
     },
+    "agent cancel": {
+      "description": "Cancel a Jules session.",
+      "exact_usage": "td-cli agent cancel <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "agent get-session": {
+      "description": "Get details of a Jules session.",
+      "exact_usage": "td-cli agent get-session <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "agent trigger-feedback": {
+      "description": "Trigger CI feedback for a Jules session.",
+      "exact_usage": "td-cli agent trigger-feedback <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
     "agent messages": {
       "description": "Get message history for a Jules session.",
       "exact_usage": "td-cli agent messages <SESSION_ID>",
@@ -960,7 +974,7 @@
       "exact_usage": "td-cli agent plan-aggregation"
     },
     "jules dispatch": {
-      "description": "",
+      "description": "\nInitialize a Jules session for a specific branch and task.\nNote: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n",
       "exact_usage": "td-cli jules dispatch <BRANCH> <TASK>",
       "required_arguments": [
         {
@@ -1043,6 +1057,39 @@
         {
           "flag": "--worktree",
           "type": "boolean",
+          "description": ""
+        }
+      ]
+    },
+    "jules cancel": {
+      "description": "Cancel a Jules session.",
+      "exact_usage": "td-cli jules cancel <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "jules get-session": {
+      "description": "Get details of a Jules session.",
+      "exact_usage": "td-cli jules get-session <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "jules trigger-feedback": {
+      "description": "Trigger CI feedback for a Jules session.",
+      "exact_usage": "td-cli jules trigger-feedback <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
           "description": ""
         }
       ]
