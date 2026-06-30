@@ -176,25 +176,34 @@ def log_ai_run(entry: dict):
     except Exception as e:
         log_error(f"Failed to append to AI run log: {e}")
 
-def _call_api_with_retry(req, max_retries=3):
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+from typing import Optional, Union, List, Dict, Any
+
+def _call_api_with_retry(req_method: str, url: str, headers: Dict[str, str], json_data: Dict[str, Any], max_retries: int = 3) -> Optional[Dict[str, Any]]:
     """
-    Helper to execute an HTTP request using urllib with retries and backoff.
+    Helper to execute an HTTP request using requests with retries and backoff.
     """
-    for attempt in range(max_retries):
-        try:
-            with urllib.request.urlopen(req, timeout=30) as response:  # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
-                if response.status == 200:
-                    return json.loads(response.read().decode("utf-8"))
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                log_warn(f"Rate limited (429). Retrying in {2**attempt}s...")
-                time.sleep(2**attempt)
-            else:
-                log_error(f"HTTP Error {e.code}: {e.read().decode('utf-8')}")
-                break
-        except Exception as e:
-            log_warn(f"API Connection error: {e}. Retrying in {2**attempt}s...")
-            time.sleep(2**attempt)
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=max_retries,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["HEAD", "GET", "OPTIONS", "POST"]
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+
+    try:
+        response = session.request(req_method, url, headers=headers, json=json_data, timeout=30)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as e:
+        log_error(f"HTTP Error: {e.response.status_code} - {e.response.text}")
+    except Exception as e:
+        log_error(f"API Connection error: {e}")
     return None
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
@@ -216,11 +225,8 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
             "content": f"Output MUST be valid JSON matching this schema: {json.dumps(norm_schema)}"
         })
 
-    req = urllib.request.Request(target_url, data=json.dumps(data).encode("utf-8"),
-                                headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
-
     start_time = time.time()
-    res = _call_api_with_retry(req, max_retries=max_retries)
+    res = _call_api_with_retry("POST", target_url, headers={"Authorization": f"Bearer {token}"}, json_data=data, max_retries=max_retries)
     duration_ms = int((time.time() - start_time) * 1000)
 
     if res and "usage" in res:
