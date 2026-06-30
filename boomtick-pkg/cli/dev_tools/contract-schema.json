@@ -1,4 +1,5 @@
 {
+  "_warning": "AUTO-GENERATED: DO NOT EDIT MANUALLY. Update models.py instead.",
   "CreateIssueInput": {
     "properties": {
       "title": {

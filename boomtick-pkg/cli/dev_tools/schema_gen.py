@@ -7,6 +7,7 @@ from dev_tools.models import (
 
 def generate_schema():
     schemas = {
+        "_warning": "AUTO-GENERATED: DO NOT EDIT MANUALLY. Update models.py instead.",
         "CreateIssueInput": CreateIssueInput.model_json_schema(),
         "SearchPRsInput": SearchPRsInput.model_json_schema(),
         "IssueUpdateInput": IssueUpdateInput.model_json_schema(),

@@ -17,16 +17,22 @@ async function syncContracts() {
   tsContent += `import { z } from "zod";\n\n`;
 
   for (const [name, schema] of Object.entries(rawSchema)) {
-    let zodCode = jsonSchemaToZod(schema as any, { name, module: 'esm' });
+    if (name.startsWith('_')) continue; // Skip metadata fields
 
-    // Manual cleaning if regex is too brittle
-    let lines = zodCode.split('\n');
-    let definitionLine = lines.find(l => l.startsWith('export const '));
-    if (definitionLine) {
-        // Replace the variable name with ${name}Schema
-        let cleanedDefinition = definitionLine.replace(/export const \w+ = /, `export const ${name}Schema = `);
-        tsContent += `${cleanedDefinition}\n\n`;
+    const zodCode = jsonSchemaToZod(schema as any, { name, module: 'esm' });
+
+    // Use regex to capture the variable assignment part, allowing for multiline
+    const match = zodCode.match(/export const \w+ = ([\s\S]*?);?\s*$/m);
+
+    if (match) {
+        let definition = match[1].trim();
+        // Ensure it ends clean
+        if (definition.endsWith(';')) definition = definition.slice(0, -1);
+
+        tsContent += `export const ${name}Schema = ${definition}\n\n`;
         tsContent += `export type ${name} = z.infer<typeof ${name}Schema>;\n\n`;
+    } else {
+        console.warn(`Could not extract Zod definition for ${name}`);
     }
   }
 
