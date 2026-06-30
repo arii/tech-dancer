@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/cleanup-and-decommission-legacy-scripts-13147170258934983941/sitemap.xml
