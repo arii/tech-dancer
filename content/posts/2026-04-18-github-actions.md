@@ -63,7 +63,7 @@ audit:
     - name: UI Anti-Pattern Audit
       run: |
         node scripts/detect-antipatterns.mjs || true
-        python3 dev-tools/td_cli.py audit-gate
+        td-cli audit-gate
 ```
 
 #### 3. Build & E2E Testing

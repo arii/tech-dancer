@@ -58,11 +58,11 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 #### 1) Standard PR / Review Workflows
 
 - Audit a PR (dry-run by default):
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit`
+  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit`
 - Submit audit results:
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
+  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
 - Pre-submit quality gate before push/merge:
-  - `python3 dev-tools/td_cli.py gh pre-submit`
+  - `td-cli gh pre-submit`
 
 #### 2) Jules Workflows
 
@@ -70,14 +70,14 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 - Optional context env var: `JULES_SOURCE_ID` (if your environment already
   knows the source mapping).
 - Typical commands:
-  - `python3 dev-tools/td_cli.py agent dispatch <BRANCH> "<TASK>"`
-  - `python3 dev-tools/td_cli.py agent fix-ci --pr-number <PR> --execute`
-  - `python3 dev-tools/td_cli.py agent sync`
+  - `td-cli agent dispatch <BRANCH> "<TASK>"`
+  - `td-cli agent fix-ci --pr-number <PR> --execute`
+  - `td-cli agent sync`
 
 #### 3) Headless / Bot Auditing
 
 - For batch auditing open PRs:
-  - `python3 dev-tools/td_cli.py gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute`
+  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute`
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by
   setup script).
 
@@ -129,7 +129,7 @@ Prefer repository CLI commands over raw `gh`:
 
 ```bash
 # ✅ Preferred
-python3 dev-tools/td_cli.py gh <repo-command>
+td-cli gh <repo-command>
 
 # ⚠️ Only if td_cli.py does not expose the operation
 gh <command>
@@ -145,7 +145,7 @@ named `GITHUB_TOKEN`.
 ```bash
 node --version         # should match .node-version
 pnpm --version         # should be 10.28.2
-python3 dev-tools/td_cli.py doctor
+td-cli doctor
 pnpm run check:runtime-files
 gh auth status
 ```

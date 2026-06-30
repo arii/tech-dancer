@@ -57,6 +57,8 @@ class DependencyGraph:
             raise
         except Exception as e:
             log_error(f"loading dependency graph: {e}")
+            self.graph = {}
+            self.reverse_graph = {}
             raise CLIError(f"Unexpected error loading dependency graph: {e}")
 
     def _parse_modules(self, modules: List[Dict]):

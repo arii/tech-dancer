@@ -114,7 +114,9 @@ class ASTContextualizer:
         try:
             with open(filepath, 'r') as f:
                 lines = f.readlines()
-        except Exception:
+        except Exception as e:
+            from dev_tools.utils import log_warn
+            log_warn(f"Failed to read file {filepath} for context extraction: {e}")
             return None
 
         if not lines:

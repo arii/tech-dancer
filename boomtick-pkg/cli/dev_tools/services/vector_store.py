@@ -78,6 +78,7 @@ class VectorStore:
 
     def reset(self):
         """Resets the collection."""
+        from dev_tools.utils import log_info, log_error
         client = self.client
         embedding_fn = self.embedding_fn
         if not client or not embedding_fn:
@@ -85,9 +86,14 @@ class VectorStore:
 
         try:
             client.delete_collection(self.collection_name)
-        except Exception:
-            pass
-        self._collection = client.create_collection(
-            name=self.collection_name,
-            embedding_function=embedding_fn
-        )
+        except Exception as e:
+            log_info(f"Note: collection {self.collection_name} did not exist or could not be deleted during reset: {e}")
+
+        try:
+            self._collection = client.create_collection(
+                name=self.collection_name,
+                embedding_function=embedding_fn
+            )
+        except Exception as e:
+            log_error(f"Failed to create collection {self.collection_name} during reset: {e}")
+            raise

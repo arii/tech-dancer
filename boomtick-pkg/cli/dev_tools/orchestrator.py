@@ -140,7 +140,7 @@ class Orchestrator:
         if pr.get('mergeable') is False:
             base_branch_name = PROJECT_CONFIG.base_branch_name
             feedback += f"- **Merge Conflicts:** This PR has conflicts with the `{base_branch_name}` base branch.\n"
-            feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `python3 dev-tools/td_cli.py gh conflicts`), and force push.\n"
+            feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `td-cli gh conflicts`), and force push.\n"
 
         if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
             feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"

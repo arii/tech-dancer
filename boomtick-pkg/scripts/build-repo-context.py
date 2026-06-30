@@ -126,7 +126,7 @@ def build_repo_context():
                         else:
                             opt_flags.append(option_dict)
 
-                usage = f"python3 boomtick-pkg/cli/dev_tools/td_cli.py {cmd_name}"
+                usage = f"python3 td-cli {cmd_name}"
                 if req_flags:
                     usage += " " + " ".join([f"{f['flag']} <{f['flag'].lstrip('-').upper()}>" for f in req_flags])
                 if opt_flags:
@@ -161,7 +161,7 @@ def build_repo_context():
             "tool_name": "td_cli.py",
             "schema_authority": "This file is the single source of truth for td_cli.py. Consult before every CLI call. Takes precedence over examples in AGENTS.md or any agent-specific instruction file.",
             "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
-            "base_command": "python3 boomtick-pkg/cli/dev_tools/td_cli.py",
+            "base_command": "python3 td-cli",
             "never_do": [
                 "Do not chain subcommands in a single shell call",
                 "Do not use --help or -h to discover flags — use this schema",

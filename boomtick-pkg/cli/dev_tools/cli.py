@@ -714,6 +714,61 @@ def review(ctx, pr_number, no_cache):
 
     out(ctx, f"✅ Generated review for PR #{pr_number}", data=res)
 
+@ai.command(name='get-context')
+@click.pass_context
+def ai_get_context(ctx):
+    """Retrieve dependency and semantic context for a set of changed files."""
+    import sys
+    import json
+    from dev_tools.utils import log_warn
+
+    try:
+        input_data = json.load(sys.stdin)
+    except Exception as e:
+        err(ctx, f"Failed to parse input JSON: {e}")
+
+    files_data = input_data.get("files", [])
+    if not files_data:
+        click.echo(json.dumps([]))
+        return
+
+    orch = ctx.obj['ORCHESTRATOR']
+    results = []
+
+    ai_client = orch.ai
+    graph = ai_client.dependency_graph
+    store = ai_client.vector_store
+
+    for item in files_data:
+        filepath = item.get("path")
+        diff_text = item.get("diff")
+        if not filepath:
+            continue
+
+        context = {
+            "path": filepath,
+            "dependencies": graph.get_dependencies(filepath),
+            "dependents": graph.get_dependents(filepath),
+            "semantic": []
+        }
+
+        if diff_text and store.is_available():
+            try:
+                semantic_results = store.query(diff_text, n_results=3)
+                for res in semantic_results:
+                    if res['metadata'].get('path') != filepath:
+                        context["semantic"].append({
+                            "path": res['metadata'].get('path'),
+                            "document": res['document']
+                        })
+            except Exception as e:
+                log_warn(f"Error querying vector store for {filepath}: {e}")
+
+        results.append(context)
+
+    # Output raw JSON list for compatibility with existing consumers
+    click.echo(json.dumps(results))
+
 @ai.command()
 @click.argument('file')
 @click.pass_context

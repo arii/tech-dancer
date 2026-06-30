@@ -53,7 +53,7 @@ import os
 from some_llm_library import generate_text 
 
 def get_repo_status():
-    result = subprocess.run(["python3", "boomtick-pkg/cli/dev_tools/td_cli.py", "gh", "status-board"], capture_output=True, text=True)
+    result = subprocess.run(["python3", "td-cli", "gh", "status-board"], capture_output=True, text=True)
     return result.stdout
 
 def generate_dynamic_payload():
@@ -224,7 +224,7 @@ Two-Agent System Architecture: Jules & The Orchestrator
 
 Overview
 
-A continuous, dual-agent system leveraging the boomtick-pkg/cli/dev_tools/td_cli.py CLI.
+A continuous, dual-agent system leveraging the td-cli CLI.
 
 Agent 1 (Jules): An autonomous software engineering agent that executes tasks on demand via MCP tools.
 
