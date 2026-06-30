@@ -9,10 +9,18 @@ from dev_tools.orchestrator import Orchestrator
 from dev_tools.utils import get_or_create_log_dir, CLIError
 
 # Import legacy utils for backwards compatibility during migration
-from dev_tools.repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from dev_tools.scope_check import verify_pr_scope
-import os
-from dev_tools.utils import get_github_client, get_repo_name, run_command, set_gha_variable, get_gha_variable
+from dev_tools.utils import (
+    get_github_client,
+    get_repo_name,
+    run_command,
+    set_gha_variable,
+    get_gha_variable,
+    walk_tsx,
+    find_patterns_in_file,
+    get_bundle_size,
+    get_any_count,
+    verify_pr_scope
+)
 from dev_tools.config import load_project_config
 
 

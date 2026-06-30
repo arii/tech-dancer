@@ -26,11 +26,15 @@ from dev_tools.utils import (
     run_command,
     is_ai_available,
     extract_failing_info,
-    clean_gha_logs
+    clean_gha_logs,
+    walk_tsx,
+    find_patterns_in_file,
+    get_bundle_size,
+    get_any_count,
+    verify_pr_scope
 )
-from dev_tools.repo_utils import walk_tsx, find_patterns_in_file, get_bundle_size, get_any_count
-from dev_tools.scope_check import verify_pr_scope
 from dev_tools.config import load_project_config
+
 
 
 PROJECT_CONFIG = load_project_config()

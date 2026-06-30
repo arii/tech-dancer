@@ -674,3 +674,93 @@ def fetch_latest_gh_action(action_path: str) -> Optional[str]:
 def fetch_latest_node() -> Optional[str]:
     from version_utils import fetch_latest_node as _fetch
     return _fetch()
+
+def walk_tsx(root_dir='src'):
+    for root, dirs, files in os.walk(root_dir):
+        for file in files:
+            if file.endswith('.tsx'):
+                yield os.path.join(root, file)
+
+def find_patterns_in_file(filepath, patterns):
+    findings = []
+    with open(filepath, 'r') as f:
+        content = f.read()
+        lines = content.split('\n')
+        for i, line in enumerate(lines):
+            for pattern, message in patterns:
+                match = re.search(pattern, line)
+                if match:
+                    findings.append((i + 1, message, match.group()))
+    return findings
+
+def get_bundle_size(dist_dir='dist/assets'):
+    import glob
+    if not os.path.isdir(dist_dir):
+        log_warn(f"Bundle directory {dist_dir} not found.")
+        return 0
+    js_files = glob.glob(os.path.join(dist_dir, "*.js"))
+    if not js_files:
+        return 0
+    total_bytes = 0
+    for js_file in js_files:
+        try:
+            total_bytes += os.path.getsize(js_file)
+        except OSError as e:
+            log_error(f"getting size for {js_file}: {e}")
+            raise CLIError(f"Failed to calculate bundle size: {e}")
+    return (total_bytes + 1023) // 1024
+
+def get_any_count(search_dir='src'):
+    import shlex
+    if not os.path.isdir(search_dir):
+        log_warn(f"Search directory {search_dir} not found.")
+        return 0
+    safe_dir = shlex.quote(search_dir)
+    cmd = f"grep -rn ': any\\b\\|as any\\b' {safe_dir} --include='*.tsx' --include='*.ts'"
+    res = run_command(cmd, check=False, shell=True, log_on_error=False)
+    if res.returncode == 0:
+        return len(res.stdout.strip().split('\n')) if res.stdout.strip() else 0
+    elif res.returncode == 1:
+        return 0
+    else:
+        log_error(f"running grep: {res.stderr.strip()}")
+        raise CLIError(f"Grep failed with exit code {res.returncode}")
+
+def get_changed_files():
+    from dev_tools.config import load_project_config
+    config = load_project_config()
+    base = config.base_branch
+    res = run_command(["git", "diff", "--name-only", base], check=False, log_on_error=False)
+    if res.returncode == 0:
+        return res.stdout.strip().splitlines()
+    res = run_command(["git", "diff", "--name-only", "HEAD"], check=False, log_on_error=False)
+    if res.returncode == 0:
+        return res.stdout.strip().splitlines()
+    return []
+
+def verify_pr_scope(file_list=None):
+    from dev_tools.config import load_project_config
+    if file_list is None:
+        file_list = get_changed_files()
+    config = load_project_config()
+    core_dirs = config.core_dirs
+    threshold = config.monolithic_pr_threshold
+    core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]
+    if len(core_files) > threshold:
+        return f"PR scope warning: Touching {len(core_files)} core files in {core_dirs}. Consider splitting this monolithic PR to avoid merge conflicts (AGENTS.md §23)."
+    content_scopes = config.content_scopes
+    from typing import Set
+    active_scopes: Set[str] = set()
+    for f in file_list:
+        for scope_name, prefix in content_scopes.items():
+            if f.startswith(prefix):
+                active_scopes.add(scope_name)
+    if len(active_scopes) > 1:
+        scope_names = ", ".join(sorted(content_scopes.keys()))
+        return f"Content scope warning: Mixed content domains detected ({', '.join(active_scopes)}). PRs should be split by scope: {scope_names} (AGENTS.md §21)."
+    has_content = len(active_scopes) > 0
+    code_files = [f for f in file_list if f.startswith("src/") and not any(f.startswith(d) for d in core_dirs)]
+    if has_content and len(code_files) > 2:
+        return "PR scope warning: Mixing significant code changes with content updates. Consider splitting content corrections from feature development."
+    return None
+
