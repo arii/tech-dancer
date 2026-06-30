@@ -10,7 +10,7 @@ import requests
 import re
 import random
 from pathlib import Path
-from typing import Optional, Union, List, Dict
+from typing import Optional, Union, List, Dict, Any
 def mask_sensitive_data(msg: str) -> str:
     """Redacts sensitive information like GitHub tokens from strings."""
     if not isinstance(msg, str):
