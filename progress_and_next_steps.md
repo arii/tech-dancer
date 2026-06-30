@@ -59,4 +59,8 @@ We systematically reviewed the findings reported by the tester:
 ---
 
 ## 📓 CLI Failure Ledger
-*No `td` or CLI command failures have been encountered in this session.*
+
+- **2026-06-30T15:59:39-07:00** **MCP tool validation failure**: Attempted `github.issue_update` via MCP which returned validation error: `issueNumber required, received undefined` due to schema drift between the host (expecting camelCase `issueNumber`) and the compiled contract (expecting snake_case `issue_number`).
+  - *Fix/Remediation:* Implemented a translation wrapper in [github.issue_update.ts](file:///home/ari/tech-dancer/boomtick-pkg/mcp/src/tools/github.issue_update.ts) to map `issueNumber` to `issue_number` fallback.
+- **2026-06-30T15:57:47-07:00** **Missing CLI State Update option**: Attempted to close GitHub issues but discovered `td-cli gh issue-update` and the MCP tool lacked support for updating issue states (`--state`).
+  - *Fix/Remediation:* Added `--state` (open/closed) parameters to the Python client, orchestrator models, Click options, and TS tool handler.
