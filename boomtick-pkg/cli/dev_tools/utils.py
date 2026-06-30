@@ -486,7 +486,7 @@ class GHAConfigManager:
             return None
 
         try:
-            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
+            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github+json",
@@ -549,7 +549,7 @@ class GHAConfigManager:
             return False
 
         try:
-            url = f"https://api.github.com/repos/{repo_name}/actions/variables/{name}"
+            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github+json",
@@ -563,7 +563,7 @@ class GHAConfigManager:
             if exists:
                 res = requests.patch(url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
             else:
-                create_url = f"https://api.github.com/repos/{repo_name}/actions/variables"
+                create_url = f"https://api.github.com/repos/{repo}/actions/variables"
                 res = requests.post(create_url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
 
             if res.status_code in [201, 204]:
