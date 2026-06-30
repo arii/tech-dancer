@@ -165,11 +165,8 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
 }
 
 async function getAIContext(inputData: string): Promise<Record<string, unknown>[]> {
-  const cliDir = process.env.CLI_DIR || 'boomtick-pkg/cli';
-  const scriptPath = path.isAbsolute(cliDir) ? path.join(cliDir, 'dev_tools/get_ai_context.py') : path.join(process.cwd(), cliDir, 'dev_tools/get_ai_context.py');
-
   return new Promise((resolve, reject) => {
-    const child = spawn('python3', [scriptPath]);
+    const child = spawn('python3', ['-m', 'dev_tools.get_ai_context']);
     let stdout = '';
     let stderr = '';
 
@@ -531,7 +528,7 @@ export async function orchestrateCodeReview(
 
   const orchestratorStartTime = Date.now();
   const allResults: CodeReviewResult[] = [];
-  const CONCURRENCY_LIMIT = 2;
+  const CONCURRENCY_LIMIT = 1;
   const newCache: Record<string, CodeReviewResult> = {};
 
   const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();

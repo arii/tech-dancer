@@ -96,6 +96,7 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         # Use absolute paths for host-based execution
+        # Use $(pwd) as fallback if GITHUB_WORKSPACE is not set or relative
         REPO_DIR=$(pwd)
         CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
 
@@ -104,9 +105,9 @@ runs:
         # 1. Update PYTHONPATH for subsequent steps
         # Ensure it works even if PYTHONPATH is initially empty
         if [ -z "$PYTHONPATH" ]; then
-          echo "PYTHONPATH=$CLI_DIR:$CLI_DIR/dev_tools" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$CLI_DIR" >> "$GITHUB_ENV"
         else
-          echo "PYTHONPATH=$CLI_DIR:$CLI_DIR/dev_tools:$PYTHONPATH" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$CLI_DIR:$PYTHONPATH" >> "$GITHUB_ENV"
         fi
 
         # 2. Update PATH for subsequent steps to include local bin directories
