@@ -175,12 +175,13 @@ def build_repo_context():
         cli_schema_path.write_text(json.dumps(schema_authority_payload, indent=2))
         cli_schema = schema_authority_payload
 
-        # Also trigger Pydantic contract-schema.json generation
+        # Also trigger Pydantic model contract generation
         try:
             from dev_tools.schema_gen import generate_schema
             generate_schema()
+            # Note: sync-contracts.ts is run via pnpm run verify:schemas or manually
         except Exception as schema_err:
-            print(f"Error generating contract-schema.json: {schema_err}", file=sys.stderr)
+            print(f"Error generating model schemas: {schema_err}", file=sys.stderr)
 
     except Exception as e:
         print(f"Error generating cli-schema.json dynamically: {e}", file=sys.stderr)
