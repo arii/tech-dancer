@@ -12,6 +12,23 @@ runs:
     - run: pnpm install --frozen-lockfile --prefer-offline
       shell: bash
 
+    - name: Get Playwright version
+      id: playwright-version
+      run: echo "version=$(pnpm list playwright --depth 0 | grep playwright | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Cache Playwright Browsers
+      id: cache-playwright
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+    - name: Install Playwright Browsers
+      if: steps.cache-playwright.outputs.cache-hit != 'true'
+      run: pnpm exec playwright install --with-deps chromium
+      shell: bash
+
     - name: Build App
       run: |
         VITE_BASE_PATH=/; export VITE_BASE_PATH
