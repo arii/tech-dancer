@@ -2,42 +2,49 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "monday"
 
   - package-ecosystem: "npm"
     directory: "/boomtick-pkg/mcp"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "monday"
 
   - package-ecosystem: "pip"
     directory: "/etl"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "wednesday"
 
   - package-ecosystem: "pip"
     directory: "/boomtick-pkg/cli"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "wednesday"
 
   - package-ecosystem: "pip"
     directory: "/"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "wednesday"
 
   - package-ecosystem: "docker"
     directory: "/.devcontainer"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "friday"
 
   - package-ecosystem: "github-actions"
     directory: "/"
+    cooldown: { default-days: 7 }
     schedule:
       interval: "weekly"
       day: "friday"
