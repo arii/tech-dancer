@@ -1,7 +1,7 @@
 {
   "threshold": 5,
   "minLines": 15,
-  "minTokens": 100, 
+  "minTokens": 100,
   "ignore": [
     "src/layouts/**",
     "src/components/ui/**",
@@ -15,7 +15,10 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "report/**",
-    "artifacts/**"
+    "artifacts/**",
+    "**/pnpm-lock.yaml",
+    "public/assets/**",
+    ".agents/**"
   ],
-  "reporters": ["console", "html"]
+  "reporters": ["console"]
 }
