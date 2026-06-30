@@ -18,62 +18,11 @@ const queryClient = new QueryClient({
 });
 
 /**
- * Pre-calculate valid top-level paths from the route configuration.
- */
-const VALID_TOP_LEVEL_PATHS = (() => {
-  const children = routes[0].children || [];
-  const paths = new Set<string>();
-  for (const route of children) {
-    if (route.path && route.path !== '*' && route.path !== '/') {
-      paths.add(route.path.split('/')[0]);
-    }
-  }
-  return paths;
-})();
-
-/**
  * Function to calculate the actual basename at runtime.
- * This ensures correct routing regardless of deployment depth (e.g. GitHub Pages branch previews).
+ * This ensures correct routing regardless of deployment depth.
  */
 const getBasename = (): string => {
-  // 1. Priority: Use the basename detected by index.html during a 404 restoration
-  if (window.__ROUTER_BASENAME__) {
-    return window.__ROUTER_BASENAME__;
-  }
-
-  const fullPath = window.location.pathname;
-  const buildBase = import.meta.env.BASE_URL || '/';
-  const buildBaseClean = buildBase.replace(/\/$/, '');
-
-  const segments = fullPath.split('/').filter(Boolean);
-  const baseSegments = buildBaseClean.split('/').filter(Boolean);
-
-  // 2. Heuristic: If we are on GitHub Pages (e.g. *.github.io) and in a subdirectory deeper than buildBase,
-  // find the last segment that is NOT a known route. This allows for
-  // multi-segment branch names (e.g. fix/ux-nav-errors).
-  const isGithubPages = window.location.hostname.endsWith('.github.io');
-  if (isGithubPages && segments.length > baseSegments.length) {
-    let lastBaseSegmentIndex = baseSegments.length - 1;
-
-    for (let i = baseSegments.length; i < segments.length; i++) {
-      const segment = segments[i];
-      const isStandardRoute = VALID_TOP_LEVEL_PATHS.has(segment);
-      const isIndexHtml = segment === 'index.html';
-      const isStaticPath = ['previews', 'assets', 'public', 'dist'].includes(segment);
-
-      if (isStandardRoute || isIndexHtml || isStaticPath) {
-        break;
-      }
-      lastBaseSegmentIndex = i;
-    }
-
-    if (lastBaseSegmentIndex >= baseSegments.length) {
-      return '/' + segments.slice(0, lastBaseSegmentIndex + 1).join('/') + '/';
-    }
-  }
-
-  // 3. Fallback: Use the build-time BASE_URL
-  return buildBase;
+  return import.meta.env.BASE_URL || '/';
 };
 
 // Restore GitHub Pages SPA redirect

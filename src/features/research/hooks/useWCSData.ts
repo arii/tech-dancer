@@ -43,14 +43,6 @@ export function useWCSData() {
           const res = await fetch(parquetUrl);
           if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`, { cause: lazyErr });
           const buffer = await res.arrayBuffer();
-
-          // Verify magic bytes before parsing
-          const header = new Uint8Array(buffer.slice(0, 4));
-          const magic = String.fromCharCode(...header);
-          if (magic !== 'PAR1') {
-            throw new Error("Invalid Parquet signature (not PAR1). Data source may be returning an error page.", { cause: lazyErr });
-          }
-
           objects = await parquetReadObjects({ file: buffer });
         }
 

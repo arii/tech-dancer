@@ -5,8 +5,7 @@ import { composeStyles } from "@/lib/utils"
 import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
-import { getResponsiveClasses, type ResponsiveProp } from "./system-utils"
-import { resolveJIT } from "@/lib/style-utils"
+import { resolveJIT, applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 
 export interface TextProps extends Omit<BaseProps, "align">, Omit<HTMLAttributes<HTMLElement>, "color"> {
   as?: ElementType
@@ -56,16 +55,16 @@ export const Text = forwardRef<HTMLElement, TextProps>(
           !intent && color === "white" && "text-white",
           !intent && color === "bg" && "text-bg",
           !intent && color === "error" && "text-error",
-          size && getResponsiveClasses(size, "", (s) => typeSizes[s as keyof typeof typeSizes]),
-          getResponsiveClasses(weight, ""),
-          getResponsiveClasses(align, "text-"),
-          getResponsiveClasses(tracking, "", (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v as string | number, "tracking")),
-          getResponsiveClasses(uppercase, "", (v) => v ? "uppercase" : "normal-case"),
-          getResponsiveClasses(lowercase, "", (v) => v ? "lowercase" : "normal-case"),
-          getResponsiveClasses(capitalize, "", (v) => v ? "capitalize" : "normal-case"),
-          getResponsiveClasses(clamp, "", (v) => (typeof v === "number" ? (v === 0 ? "line-clamp-none" : `line-clamp-${v}`) : (v ? "line-clamp-none" : ""))),
-          getResponsiveClasses(truncate, "", (v) => v ? "truncate" : ""),
-          getResponsiveClasses(leading, "", (v) => resolveJIT(v as string | number, "leading")),
+          applyResponsive(size, (s) => typeSizes[s as keyof typeof typeSizes] || ""),
+          applyResponsive(weight, (v) => v || ""),
+          applyResponsive(align, (v) => resolveJIT(v, "text")),
+          applyResponsive(tracking, (v) => trackingTokens[v as keyof typeof trackingTokens] || resolveJIT(v as string | number, "tracking")),
+          applyResponsive(uppercase, (v) => v ? "uppercase" : "normal-case"),
+          applyResponsive(lowercase, (v) => v ? "lowercase" : "normal-case"),
+          applyResponsive(capitalize, (v) => v ? "capitalize" : "normal-case"),
+          applyResponsive(clamp, (v) => (typeof v === "number" ? (v === 0 ? "line-clamp-none" : `line-clamp-${v}`) : (v ? "line-clamp-none" : ""))),
+          applyResponsive(truncate, (v) => v ? "truncate" : ""),
+          applyResponsive(leading, (v) => resolveJIT(v as string | number, "leading")),
           italic && "italic",
           hoverColor === "accent" && "transition-colors group-hover:text-accent",
           hoverColor === "main" && "transition-colors group-hover:text-text-main",
