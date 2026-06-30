@@ -50,7 +50,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('boomtick-pkg/cli/pyproject.toml') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('boomtick-pkg/cli/pyproject.toml', 'etl/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
@@ -59,7 +59,7 @@ runs:
       run: |
         echo "::group::Install dev-tools"
         pip install -e boomtick-pkg/cli/ --break-system-packages
-        pip install pytest pytest-mock requests-mock PyYAML google-genai langchain-openai langchain-google-genai chromadb sentence-transformers --break-system-packages
+        pip install requests requests-mock PyGithub PyYAML google-genai langchain-openai langchain-google-genai pytest pytest-mock chromadb sentence-transformers semgrep --break-system-packages
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
@@ -91,15 +91,18 @@ runs:
     - name: Export Environment Variables
       if: inputs.setup-python == 'true'
       run: |
-        # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
-        REPO_DIR=$(pwd)
+        # Use absolute paths for host-based execution
+        REPO_DIR="$GITHUB_WORKSPACE"
+        CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
+
+        echo "CLI_DIR=$CLI_DIR" >> "$GITHUB_ENV"
 
         # 1. Update PYTHONPATH for subsequent steps
         # Ensure it works even if PYTHONPATH is initially empty
         if [ -z "$PYTHONPATH" ]; then
-          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$CLI_DIR:$CLI_DIR/dev_tools" >> "$GITHUB_ENV"
         else
-          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli:$PYTHONPATH" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$CLI_DIR:$CLI_DIR/dev_tools:$PYTHONPATH" >> "$GITHUB_ENV"
         fi
 
         # 2. Update PATH for subsequent steps to include local bin directories
@@ -107,5 +110,5 @@ runs:
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
-        echo "✅ Environment configured: PYTHONPATH includes $REPO_DIR/boomtick-pkg/cli"
+        echo "✅ Environment configured: PYTHONPATH includes $CLI_DIR"
       shell: bash
