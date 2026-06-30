@@ -23,7 +23,13 @@ function getGithubToken(): string | undefined {
   return undefined;
 }
 
+let cachedDynamicConfig: any = null;
+
 function getDynamicConfig() {
+  if (cachedDynamicConfig !== null) {
+    return cachedDynamicConfig;
+  }
+
   try {
     // Attempt to load core properties from the Python CLI to avoid duplication
     const pythonPath = process.env.PYTHONPATH ? `PYTHONPATH=${process.env.PYTHONPATH} ` : "";
@@ -33,30 +39,47 @@ function getDynamicConfig() {
       stdio: ["ignore", "pipe", "ignore"],
       cwd: path.resolve(__dirname, "../../cli")
     });
-    return JSON.parse(output);
+    cachedDynamicConfig = JSON.parse(output);
+    return cachedDynamicConfig;
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
-    // Throw error in dev/CI to prevent silent duplication drift,
-    // but in production we might want a fail-safe.
+    const errorPrefix = `CRITICAL: Failed to load dynamic config from Python CLI. Ensure Python 3 is installed and boomtick-pkg/cli is in your PYTHONPATH. Details: ${message}`;
+
     if (process.env.NODE_ENV === "development" || process.env.CI === "true") {
-      throw new Error(`CRITICAL: Failed to load dynamic config from Python CLI: ${message}`);
+      throw new Error(errorPrefix);
+    } else {
+      console.warn(errorPrefix);
     }
   }
   return null;
 }
 
-const dynamicConfig = getDynamicConfig();
-
-// Helper to safely extract owner/repo from dynamic config
-const [defaultOwner, defaultRepo] = (dynamicConfig?.github_repo || "arii/tech-dancer").split("/");
-
 export const config = {
-  githubToken: getGithubToken(),
-  githubOwner: process.env.GITHUB_OWNER || defaultOwner,
-  githubRepo: process.env.GITHUB_REPO || defaultRepo,
-  repoPath: process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../"),
-  defaultBaseBranch: process.env.DEFAULT_BASE_BRANCH || dynamicConfig?.base_branch?.split("/").pop() || "main",
-  viteBasePath: process.env.VITE_BASE_PATH || dynamicConfig?.vite_base_path || "/tech-dancer/",
-  ghPath: process.env.GH_PATH || dynamicConfig?.gh_path || "gh"
+  get githubToken() { return getGithubToken(); },
+  get githubOwner() {
+    const dynamicConfig = getDynamicConfig();
+    const [defaultOwner] = (dynamicConfig?.github_repo || "arii/tech-dancer").split("/");
+    return process.env.GITHUB_OWNER || defaultOwner;
+  },
+  get githubRepo() {
+    const dynamicConfig = getDynamicConfig();
+    const [, defaultRepo] = (dynamicConfig?.github_repo || "arii/tech-dancer").split("/");
+    return process.env.GITHUB_REPO || defaultRepo;
+  },
+  get repoPath() {
+    return process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../");
+  },
+  get defaultBaseBranch() {
+    const dynamicConfig = getDynamicConfig();
+    return process.env.DEFAULT_BASE_BRANCH || dynamicConfig?.base_branch?.split("/").pop() || "main";
+  },
+  get viteBasePath() {
+    const dynamicConfig = getDynamicConfig();
+    return process.env.VITE_BASE_PATH || dynamicConfig?.vite_base_path || "/tech-dancer/";
+  },
+  get ghPath() {
+    const dynamicConfig = getDynamicConfig();
+    return process.env.GH_PATH || dynamicConfig?.gh_path || "gh";
+  }
 };
 
