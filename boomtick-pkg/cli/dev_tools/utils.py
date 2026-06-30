@@ -656,23 +656,23 @@ def get_github_client():
     return Github(auth=Auth.Token(token))
 
 def get_stack_versions(fetch_latest: bool = False) -> Dict[str, str]:
-    from version_utils import get_stack_versions as _get
+    from dev_tools.version_utils import get_stack_versions as _get
     return _get(fetch_latest=fetch_latest)
 
 def compare_versions(v1: str, v2: str) -> int:
-    from version_utils import compare_versions as _cmp
+    from dev_tools.version_utils import compare_versions as _cmp
     return _cmp(v1, v2)
 
 def fetch_latest_npm(package_name: str) -> Optional[str]:
-    from version_utils import fetch_latest_npm as _fetch
+    from dev_tools.version_utils import fetch_latest_npm as _fetch
     return _fetch(package_name)
 
 def fetch_latest_gh_action(action_path: str) -> Optional[str]:
-    from version_utils import fetch_latest_gh_action as _fetch
+    from dev_tools.version_utils import fetch_latest_gh_action as _fetch
     return _fetch(action_path)
 
 def fetch_latest_node() -> Optional[str]:
-    from version_utils import fetch_latest_node as _fetch
+    from dev_tools.version_utils import fetch_latest_node as _fetch
     return _fetch()
 
 def walk_tsx(root_dir='src'):

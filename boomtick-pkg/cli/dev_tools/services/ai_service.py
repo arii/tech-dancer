@@ -161,12 +161,11 @@ class AIClient:
             if "<<<<<<<" in resolved:
                 return False
 
-            # Post-processing: Prevent version downgrades in resolved conflict
             try:
                 # Files that define runtime/dependency versions
                 sensitive_files = [".nvmrc", ".node-version", "package.json", ".github/workflows/"]
                 if any(sf in file_path for sf in sensitive_files):
-                    from verify_versions import parse_diff, verify_changes
+                    from dev_tools.verify_versions import parse_diff, verify_changes
 
                     # Synthesize a diff representing the new content to validate it against HEAD versions.
                     # We treat lines in the new file as additions to ensure the validator

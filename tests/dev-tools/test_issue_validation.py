@@ -4,9 +4,6 @@ import sys
 import os
 from typing import Dict, Any, List
 
-# Add dev-tools to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli/dev_tools')))
-
 from dev_tools.orchestrator import Orchestrator
 
 class TestIssueValidation(unittest.TestCase):

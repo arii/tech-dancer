@@ -347,7 +347,7 @@ def verify_versions(ctx, diff_input):
     """Verify version changes in a diff for downgrades or hard blocks."""
     import subprocess
     import tempfile
-    script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'verify_versions.py')
+    script_path = os.path.join(os.path.dirname(__file__), 'verify_versions.py')
 
     if not diff_input:
         # If no input provided, try to get diff against main

@@ -1,11 +1,5 @@
 import unittest
 from unittest.mock import MagicMock, patch
-import sys
-import os
-
-# Add dev-tools to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli/dev_tools')))
-
 from dev_tools.handlers.command_handler import CommandHandler
 
 class TestCommandHandler(unittest.TestCase):

@@ -7,9 +7,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Add dev-tools to the python path since scripts might run from root
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'boomtick-pkg/cli')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'boomtick-pkg/cli/dev_tools')))
 from dev_tools.services.jules import JulesClient
 
 def is_skipped_review(content: str) -> bool:

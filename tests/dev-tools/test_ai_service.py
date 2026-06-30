@@ -1,10 +1,5 @@
 import unittest
 from unittest.mock import MagicMock, patch
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli/dev_tools')))
-
 from dev_tools.services.ai_service import AIClient
 
 class TestAIService(unittest.TestCase):

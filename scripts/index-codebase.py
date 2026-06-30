@@ -1,10 +1,5 @@
 import os
-import sys
 from pathlib import Path
-
-# Add dev-tools to path
-sys.path.append(os.path.join(os.getcwd(), "boomtick-pkg/cli"))
-sys.path.append(os.path.join(os.getcwd(), "boomtick-pkg/cli/dev_tools"))
 
 from dev_tools.services.vector_store import VectorStore
 

@@ -6,9 +6,8 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils import run_cli
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "boomtick-pkg", "cli", "dev_tools")))
 try:
-    from utils import call_ai, get_ai_synthesis_model, clean_llm_output
+    from dev_tools.utils import call_ai, get_ai_synthesis_model, clean_llm_output
 except ImportError:
     call_ai = None
     get_ai_synthesis_model = lambda: "gpt-4o-mini"

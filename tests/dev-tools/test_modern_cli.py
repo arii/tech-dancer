@@ -4,10 +4,6 @@ import sys
 import os
 import json
 
-# Add dev-tools to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli/dev_tools')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli')))
-
 from dev_tools.cli import cli
 from click.testing import CliRunner
 
