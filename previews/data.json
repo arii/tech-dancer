@@ -1,733 +1,739 @@
 {
   "audit-ai-slop-15778445124984324922": {
-    "commitTimestamp": 1782831647,
-    "deployTimestamp": 1782831647,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480/about": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480/blog": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480/merch": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480/preview": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480/research": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "audit/ai-slop-detection-18113507400774077480/ux-auditor": {
-    "commitTimestamp": 1782838018,
-    "deployTimestamp": 1782838018,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "config-cache-singleton-3155-9072544144278906993": {
-    "commitTimestamp": 1782831435,
-    "deployTimestamp": 1782831435,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat-fail-fast-standardization-11942843263466740518": {
-    "commitTimestamp": 1782823839,
-    "deployTimestamp": 1782823839,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726/about": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726/blog": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726/merch": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726/preview": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726/research": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-driven-contract-pipeline-1361182657858111726/ux-auditor": {
-    "commitTimestamp": 1782844732,
-    "deployTimestamp": 1782844732,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434/about": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434/blog": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434/merch": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434/preview": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434/research": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "feat/schema-sync-17489324669849067434/ux-auditor": {
-    "commitTimestamp": 1782842041,
-    "deployTimestamp": 1782842041,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "issue-audit-130101148519739972": {
-    "commitTimestamp": 1782823839,
-    "deployTimestamp": 1782823839,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/about": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/blog": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/merch": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/preview": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/blog-drafter": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/boomtick-blog": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/ecommerce-automation": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/hrm-flagship": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/repo-auditor-ai": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/research/wcs-scraper": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-18098421484266671160-0cb5d557/ux-auditor": {
-    "commitTimestamp": 1782838392,
-    "deployTimestamp": 1782838392,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/about": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/blog": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/merch": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/preview": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
+    "sha": "unknown"
+  }
+,
+  "jules-daemon-trigger-feedback-6812589296158471220/previews": {
+    "commitTimestamp": ,
+    "deployTimestamp": ,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/blog-drafter": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/boomtick-blog": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/ecommerce-automation": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/hrm-flagship": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/repo-auditor-ai": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/research/wcs-scraper": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "jules-daemon-trigger-feedback-6812589296158471220/ux-auditor": {
-    "commitTimestamp": 1782838143,
-    "deployTimestamp": 1782838143,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-12749277599881758031": {
-    "commitTimestamp": 1782823839,
-    "deployTimestamp": 1782823839,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/about": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-04-18-halloween-costumes": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-04-18-make-shoe-dance": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-04-18-why-finals-are-hard": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-04-19-practical-tools-essentials": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-event-travel-packing": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-general-health-home-care": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-outdoor-dancing": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-power-charging": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-practice-review-tech": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-practice-social-dance-apparel": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-shoe-care-modification": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-theme-wear-costumes-accessories": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-01-wcs-essentials": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog/2026-06-14-the-story-behind-the-merch-page": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/blog": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/merch": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/preview": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/ai-devops-pipeline": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/blog-drafter": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/boomtick-blog": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/confidently-incorrect-v4": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/deployment-impact-analyzer": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/ecommerce-automation": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/gitops-pr-reviewer": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/hrm-flagship": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/repo-auditor-ai": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/wcs-scraper-initial-sync": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/research/wcs-scraper": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 ,
   "optimize-ci-pipeline-8431639673174025894/ux-auditor": {
-    "commitTimestamp": 1782839061,
-    "deployTimestamp": 1782839061,
+    "commitTimestamp": 1782845017,
+    "deployTimestamp": 1782845017,
     "sha": "unknown"
   }
 }
