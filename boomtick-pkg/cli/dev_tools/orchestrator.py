@@ -33,11 +33,11 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope
 )
-from dev_tools.config import load_project_config
+from dev_tools.config import get_config
 
 
 
-PROJECT_CONFIG = load_project_config()
+PROJECT_CONFIG = get_config()
 AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
 SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
 

@@ -21,10 +21,10 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope
 )
-from dev_tools.config import load_project_config
+from dev_tools.config import get_config
 
 
-PROJECT_CONFIG = load_project_config()
+PROJECT_CONFIG = get_config()
 
 # CLI Group
 @click.group()
@@ -66,6 +66,28 @@ def _get_body_content(ctx, orch, file, body):
     if content is None:
         err(ctx, "Provide --file or --body")
     return content
+
+# ==========================================
+# CONFIG COMMAND GROUP
+# ==========================================
+@cli.group()
+def config():
+    """Configuration Operations"""
+    pass
+
+@config.command(name='view')
+@click.pass_context
+def config_view(ctx):
+    """View the current project configuration as JSON."""
+    from dataclasses import asdict
+    # Use get_config() via the module to ensure we get the latest singleton
+    from dev_tools.config import get_config
+    cfg = get_config()
+    if ctx.obj.get('JSON'):
+        click.echo(json.dumps(asdict(cfg), indent=2))
+    else:
+        click.echo("Current configuration:")
+        click.echo(json.dumps(asdict(cfg), indent=2))
 
 # ==========================================
 # REPO COMMAND GROUP

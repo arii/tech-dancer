@@ -23,12 +23,35 @@ function getGithubToken(): string | undefined {
   return undefined;
 }
 
+function getDynamicConfig() {
+  try {
+    // Attempt to load core properties from the Python CLI to avoid duplication
+    const pythonPath = process.env.PYTHONPATH ? `PYTHONPATH=${process.env.PYTHONPATH} ` : "";
+    const cmd = `${pythonPath}python3 -m dev_tools.cli config view`;
+    const output = execSync(cmd, {
+      encoding: "utf-8",
+      stdio: ["ignore", "pipe", "ignore"],
+      cwd: path.resolve(__dirname, "../../cli")
+    });
+    return JSON.parse(output);
+  } catch (e) {
+    // Throw error in dev/CI to prevent silent duplication drift,
+    // but in production we might want a fail-safe.
+    if (process.env.NODE_ENV === 'development' || process.env.CI === 'true') {
+      throw new Error(`CRITICAL: Failed to load dynamic config from Python CLI: ${e.message}`);
+    }
+  }
+  return null;
+}
+
+const dynamicConfig = getDynamicConfig();
+
 export const config = {
   githubToken: getGithubToken(),
-  githubOwner: process.env.GITHUB_OWNER || "arii",
-  githubRepo: process.env.GITHUB_REPO || "tech-dancer",
+  githubOwner: process.env.GITHUB_OWNER || dynamicConfig?.github_repo?.split("/")[0] || "arii",
+  githubRepo: process.env.GITHUB_REPO || dynamicConfig?.github_repo?.split("/")[1] || "tech-dancer",
   repoPath: process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../"),
-  defaultBaseBranch: process.env.DEFAULT_BASE_BRANCH || "main",
+  defaultBaseBranch: process.env.DEFAULT_BASE_BRANCH || dynamicConfig?.base_branch?.split("/").pop() || "main",
   viteBasePath: process.env.VITE_BASE_PATH || "/tech-dancer/",
   ghPath: process.env.GH_PATH || "gh"
 };

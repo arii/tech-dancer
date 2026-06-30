@@ -72,8 +72,8 @@ def _get_model_config(env_key: str, config_attr: str, fallback: str) -> str:
     if env_val:
         return env_val
     try:
-        from dev_tools.config import load_project_config
-        config = load_project_config()
+        from dev_tools.config import get_config
+        config = get_config()
         return getattr(config, config_attr)
     except Exception:
         return fallback
@@ -727,8 +727,8 @@ def get_any_count(search_dir='src'):
         raise CLIError(f"Grep failed with exit code {res.returncode}")
 
 def get_changed_files():
-    from dev_tools.config import load_project_config
-    config = load_project_config()
+    from dev_tools.config import get_config
+    config = get_config()
     base = config.base_branch
     res = run_command(["git", "diff", "--name-only", base], check=False, log_on_error=False)
     if res.returncode == 0:
@@ -739,10 +739,10 @@ def get_changed_files():
     return []
 
 def verify_pr_scope(file_list=None):
-    from dev_tools.config import load_project_config
+    from dev_tools.config import get_config
     if file_list is None:
         file_list = get_changed_files()
-    config = load_project_config()
+    config = get_config()
     core_dirs = config.core_dirs
     threshold = config.monolithic_pr_threshold
     core_files = [f for f in file_list if any(f.startswith(d) for d in core_dirs)]

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import functools
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -61,6 +62,12 @@ class ProjectConfig:
         return self.base_branch.split('/')[-1]
 
 
+@functools.lru_cache()
+def get_config(path: str | Path = "project_config.json") -> ProjectConfig:
+    """Returns a cached singleton instance of ProjectConfig."""
+    return load_project_config(path)
+
+
 def load_project_config(path: str | Path = "project_config.json") -> ProjectConfig:
     p = Path(path)
 
@@ -70,8 +77,23 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
             raw = json.loads(p.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, IOError):
             pass
-    else:
+    elif path != "project_config.json":
+        # If a specific path was requested but doesn't exist, return default
         return ProjectConfig()
+    else:
+        # Check parent directories for project_config.json if not in CWD
+        # This helps when running from subdirectories
+        current = Path.cwd()
+        for parent in [current] + list(current.parents):
+            check_path = parent / "project_config.json"
+            if check_path.exists():
+                try:
+                    raw = json.loads(check_path.read_text(encoding="utf-8"))
+                    break
+                except (json.JSONDecodeError, IOError):
+                    pass
+        else:
+            return ProjectConfig()
 
     def get_list(key: str) -> Optional[List[str]]:
         val = raw.get(key)
