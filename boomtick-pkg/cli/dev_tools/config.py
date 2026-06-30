@@ -10,13 +10,15 @@ from typing import Any, Dict, List, Optional
 
 @dataclass(frozen=True)
 class ProjectConfig:
-    github_repo: str | None = None
+    github_repo: str = "arii/tech-dancer"
     github_token_env: str = "GITHUB_TOKEN"
     gh_token_env: str = "GH_TOKEN"
     jules_api_url: str | None = None
     core_dirs: List[str] = field(default_factory=lambda: ["src/layouts/", "src/components/"])
     monolithic_pr_threshold: int = 3
     base_branch: str = "origin/main"
+    vite_base_path: str = "/tech-dancer/"
+    gh_path: str = "gh"
     max_diff_chars: int = 40000
     content_scopes: Dict[str, str] = field(default_factory=lambda: {
         "resources": "content/resources/",
@@ -114,6 +116,10 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
     kwargs: Dict[str, Any] = {}
     if "github_repo" in raw or "repo_name" in raw:
         kwargs["github_repo"] = raw.get("github_repo") or raw.get("repo_name")
+    if "vite_base_path" in raw:
+        kwargs["vite_base_path"] = raw["vite_base_path"]
+    if "gh_path" in raw:
+        kwargs["gh_path"] = raw["gh_path"]
     if "github_token_env" in raw:
         kwargs["github_token_env"] = raw["github_token_env"]
     if "gh_token_env" in raw:

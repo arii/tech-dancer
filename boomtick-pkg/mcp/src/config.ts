@@ -35,10 +35,11 @@ function getDynamicConfig() {
     });
     return JSON.parse(output);
   } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
     // Throw error in dev/CI to prevent silent duplication drift,
     // but in production we might want a fail-safe.
-    if (process.env.NODE_ENV === 'development' || process.env.CI === 'true') {
-      throw new Error(`CRITICAL: Failed to load dynamic config from Python CLI: ${e.message}`);
+    if (process.env.NODE_ENV === "development" || process.env.CI === "true") {
+      throw new Error(`CRITICAL: Failed to load dynamic config from Python CLI: ${message}`);
     }
   }
   return null;
@@ -46,13 +47,16 @@ function getDynamicConfig() {
 
 const dynamicConfig = getDynamicConfig();
 
+// Helper to safely extract owner/repo from dynamic config
+const [defaultOwner, defaultRepo] = (dynamicConfig?.github_repo || "arii/tech-dancer").split("/");
+
 export const config = {
   githubToken: getGithubToken(),
-  githubOwner: process.env.GITHUB_OWNER || dynamicConfig?.github_repo?.split("/")[0] || "arii",
-  githubRepo: process.env.GITHUB_REPO || dynamicConfig?.github_repo?.split("/")[1] || "tech-dancer",
+  githubOwner: process.env.GITHUB_OWNER || defaultOwner,
+  githubRepo: process.env.GITHUB_REPO || defaultRepo,
   repoPath: process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../../"),
   defaultBaseBranch: process.env.DEFAULT_BASE_BRANCH || dynamicConfig?.base_branch?.split("/").pop() || "main",
-  viteBasePath: process.env.VITE_BASE_PATH || "/tech-dancer/",
-  ghPath: process.env.GH_PATH || "gh"
+  viteBasePath: process.env.VITE_BASE_PATH || dynamicConfig?.vite_base_path || "/tech-dancer/",
+  ghPath: process.env.GH_PATH || dynamicConfig?.gh_path || "gh"
 };
 

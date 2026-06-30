@@ -83,7 +83,10 @@ def config_view(ctx):
     # Use get_config() via the module to ensure we get the latest singleton
     from dev_tools.config import get_config
     cfg = get_config()
-    if ctx.obj.get('JSON'):
+    # ctx.obj might be None if the command is called directly or during unit tests
+    is_json = ctx.obj.get('JSON', True) if ctx.obj is not None else True
+
+    if is_json:
         click.echo(json.dumps(asdict(cfg), indent=2))
     else:
         click.echo("Current configuration:")
