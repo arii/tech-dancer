@@ -10,9 +10,8 @@ from typing import Any, Dict, List, Optional
 
 @dataclass(frozen=True)
 class ProjectConfig:
-    github_repo: str = "arii/tech-dancer"
+    github_repo: str | None = None
     github_token_env: str = "GITHUB_TOKEN"
-    gh_token_env: str = "GH_TOKEN"
     jules_api_url: str | None = None
     core_dirs: List[str] = field(default_factory=lambda: ["src/layouts/", "src/components/"])
     monolithic_pr_threshold: int = 3
@@ -70,10 +69,28 @@ def get_config(path: str | Path = "project_config.json") -> ProjectConfig:
     return load_project_config(path)
 
 
+def _detect_repo_name() -> str | None:
+    """Safely detects repository name from git remote."""
+    import subprocess
+    import re
+    try:
+        res = subprocess.run(['git', 'config', '--get', 'remote.origin.url'],
+                           capture_output=True, text=True, check=False)
+        if res.returncode != 0:
+            return None
+        url = res.stdout.strip()
+        if not url:
+            return None
+        match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
+        return match.group(1) if match else url
+    except Exception:
+        return None
+
+
 def load_project_config(path: str | Path = "project_config.json") -> ProjectConfig:
     p = Path(path)
 
-    raw = {}
+    raw: Dict[str, Any] = {}
     if p.exists():
         try:
             raw = json.loads(p.read_text(encoding="utf-8"))
@@ -94,8 +111,6 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
                     break
                 except (json.JSONDecodeError, IOError):
                     pass
-        else:
-            return ProjectConfig()
 
     def get_list(key: str) -> Optional[List[str]]:
         val = raw.get(key)
@@ -116,14 +131,15 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
     kwargs: Dict[str, Any] = {}
     if "github_repo" in raw or "repo_name" in raw:
         kwargs["github_repo"] = raw.get("github_repo") or raw.get("repo_name")
+    else:
+        kwargs["github_repo"] = _detect_repo_name() or "arii/tech-dancer"
+
     if "vite_base_path" in raw:
         kwargs["vite_base_path"] = raw["vite_base_path"]
     if "gh_path" in raw:
         kwargs["gh_path"] = raw["gh_path"]
     if "github_token_env" in raw:
         kwargs["github_token_env"] = raw["github_token_env"]
-    if "gh_token_env" in raw:
-        kwargs["gh_token_env"] = raw["gh_token_env"]
     if "jules_api_url" in raw:
         kwargs["jules_api_url"] = raw["jules_api_url"]
     if "monolithic_pr_threshold" in raw:

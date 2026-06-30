@@ -1,15 +1,17 @@
 import sys
 import os
-from dev_tools.utils import log_info
 import json
 from datetime import datetime, timezone
 from typing import List, Dict, Any
-import click
-from dev_tools.orchestrator import Orchestrator
-from dev_tools.utils import get_or_create_log_dir, CLIError
+from dataclasses import asdict
 
-# Import legacy utils for backwards compatibility during migration
+import click
+
+from dev_tools.orchestrator import Orchestrator
 from dev_tools.utils import (
+    get_or_create_log_dir,
+    CLIError,
+    log_info,
     get_github_client,
     get_repo_name,
     run_command,
@@ -79,18 +81,14 @@ def config():
 @click.pass_context
 def config_view(ctx):
     """View the current project configuration as JSON."""
-    from dataclasses import asdict
-    # Use get_config() via the module to ensure we get the latest singleton
-    from dev_tools.config import get_config
-    cfg = get_config()
     # ctx.obj might be None if the command is called directly or during unit tests
     is_json = ctx.obj.get('JSON', True) if ctx.obj is not None else True
 
     if is_json:
-        click.echo(json.dumps(asdict(cfg), indent=2))
+        click.echo(json.dumps(asdict(PROJECT_CONFIG), indent=2))
     else:
         click.echo("Current configuration:")
-        click.echo(json.dumps(asdict(cfg), indent=2))
+        click.echo(json.dumps(asdict(PROJECT_CONFIG), indent=2))
 
 # ==========================================
 # REPO COMMAND GROUP
