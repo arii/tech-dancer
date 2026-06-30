@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execFileSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -369,6 +370,21 @@ const allViolations = {};
 
 export { checkContent, collectAuditFiles, checkFile };
 
+function checkPRScope(files) {
+  try {
+    const pythonPath = process.env.PYTHONPATH || 'boomtick-pkg/cli:boomtick-pkg/cli/dev_tools';
+    execFileSync('python3', [path.join(ROOT, 'boomtick-pkg/cli/dev_tools/scope_check.py')], {
+      input: files.join('\n'),
+      env: { ...process.env, PYTHONPATH: pythonPath },
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+  } catch (error) {
+    if (error.stderr) {
+      console.warn(`\x1b[33m${error.stderr.toString().trim()}\x1b[0m\n`);
+    }
+  }
+}
+
 async function runAudit() {
   // Prevent running the main logic when imported as a module in tests
   if (process.argv[1] !== fileURLToPath(import.meta.url)) return;
@@ -389,6 +405,9 @@ async function runAudit() {
     }
   } else {
     const files = collectAuditFiles(targets);
+    if (!isJson && !isCountOnly) {
+      checkPRScope(files.map(f => path.relative(ROOT, f)));
+    }
 
     files.forEach(filepath => {
       if (AUDIT_EXTENSIONS.some(ext => filepath.endsWith(ext))) {
