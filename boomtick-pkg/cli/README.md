@@ -1,8 +1,8 @@
 # dev-tools
 
 Developer tooling for the BoomTick repository. The primary entry point is
-`td_cli.py`, but agents should always call `boomtick-mcp` Tier 1 tools first —
-`td_cli.py` is the Tier 2 fallback. See `.agents/AGENTS.md` for the full
+`td-cli`, but agents should always call `boomtick-mcp` Tier 1 tools first —
+`td-cli` is the Tier 2 fallback. See `.agents/AGENTS.md` for the full
 tool hierarchy.
 
 ---
@@ -23,10 +23,10 @@ and git hook registration.
 
 | Variable | Required | Purpose |
 | :--- | :--- | :--- |
-| `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and `td_cli.py gh ...` commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
+| `GITHUB_TOKEN` (string) | **Required** | Auth for `gh` and `td-cli gh ...` commands (PR audits, comments, variables, status checks). Standard for GH Actions. |
 | `GH_TOKEN` (string) | Optional fallback | Legacy authentication variable, deprecated in favor of `GITHUB_TOKEN`. |
 | `GITHUB_REPOSITORY` (`owner/repo`) | Recommended | Ensures deterministic `origin` remote auto-configuration. |
-| `JULES_API_KEY` | Optional | Enables `td_cli.py agent ...` / `td_cli.py jules ...` cloud workflows. |
+| `JULES_API_KEY` | Optional | Enables `td-cli agent ...` / `td-cli jules ...` cloud workflows. |
 | `GEMINI_API_KEY` | Optional | Enables Gemini-backed review/audit workflows. |
 
 **Secret handling guidance**
@@ -109,11 +109,11 @@ dispatching Jules sessions.
 
 ## 🤖 Agent / Jules GitHub Command Pattern
 
-Always use `boomtick-mcp` Tier 1 tools first. `td_cli.py` is the fallback
+Always use `boomtick-mcp` Tier 1 tools first. `td-cli` is the fallback
 when MCP is unavailable — not the default. See `.agents/AGENTS.md` for the
 full tool mapping table.
 
-When `td_cli.py` must be called directly, read the CLI schema from
+When `td-cli` must be called directly, read the CLI schema from
 `.agent-context.json` rather than guessing flags or running `--help`:
 
 ```bash
@@ -131,7 +131,7 @@ Prefer repository CLI commands over raw `gh`:
 # ✅ Preferred
 td-cli gh <repo-command>
 
-# ⚠️ Only if td_cli.py does not expose the operation
+# ⚠️ Only if td-cli does not expose the operation
 gh <command>
 ```
 
@@ -180,9 +180,9 @@ explicitly instructed to update the runtime contract.
 
 ---
 
-## 🚀 Repository CLI (`td_cli.py`)
+## 🚀 Repository CLI (`td-cli`)
 
-`dev-tools/td_cli.py` is the Tier 2 unified entry point for local repository
+`dev-tools/td-cli` is the Tier 2 unified entry point for local repository
 automation. All available subcommands and flags are defined in
 `dev-tools/cli-schema.json` (also embedded in `.agent-context.json` under
 `cli_schema`). That file is the single source of truth — never use `--help`

@@ -24,7 +24,7 @@ From the Claude conversation (2026-06-25):
 
 The coupling between `boomtick-mcp` and `dev-tools` is **subprocess-only**:
 `boomtick-mcp/src/config.ts` resolves `BOOMTICK_REPO_PATH` and calls
-`td_cli.py` via shell. No Python imports cross the boundary — this is the
+`td-cli` via shell. No Python imports cross the boundary — this is the
 loosest possible coupling and packages cleanly together.
 
 ---
@@ -37,7 +37,7 @@ tech-dancer/
 │   ├── cli/                           ← renamed from dev-tools/
 │   │   ├── dev_tools/                 ← renamed from flat files → proper Python package
 │   │   │   ├── __init__.py            ← NEW
-│   │   │   ├── td_cli.py
+│   │   │   ├── td-cli
 │   │   │   ├── cli-schema.json        ← package_data (loaded via importlib.resources)
 │   │   │   ├── config.json
 │   │   │   ├── ai_reviewer.py
@@ -162,8 +162,8 @@ dependencies = [
 ]
 
 [project.scripts]
-td = "dev_tools.td_cli:main"        # `td gh status-board` etc.
-td-cli = "dev_tools.td_cli:main"    # backward compat alias
+td = "dev_tools.td-cli:main"        # `td gh status-board` etc.
+td-cli = "dev_tools.td-cli:main"    # backward compat alias
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -190,7 +190,7 @@ schema = json.loads(files("dev_tools").joinpath("cli-schema.json").read_text())
 ```
 
 Apply to all files that load `cli-schema.json`, `config.json`, or `project_config.json`:
-- `td_cli.py`
+- `td-cli`
 - `repo_utils.py`
 - `ai_reviewer.py`
 - Any other file using relative JSON paths
@@ -310,7 +310,7 @@ changes from `./boomtick-pkg/mcp/actions/setup` to
 jobs:
   validate:
     steps:
-      - run: python3 dev-tools/td_cli.py gh pre-submit ...
+      - run: python3 dev-tools/td-cli gh pre-submit ...
       # ... many inline steps
 ```
 
@@ -361,7 +361,7 @@ packages:
 if [ -f "dev-tools/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/dev-tools" && pip install --editable .)
 fi
-[ -f "dev-tools/td_cli.py" ] && python3 dev-tools/td_cli.py gh --help
+[ -f "dev-tools/td-cli" ] && python3 dev-tools/td-cli gh --help
 
 # AFTER
 if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
@@ -377,7 +377,7 @@ command -v td && td gh --help > /dev/null
 ```json
 {
   "scripts": {
-    "repair-context": "PYTHONPATH=$PYTHONPATH:boomtick-pkg/cli python3 td-cli repair-context",
+    "repair-context": "PYTHONPATH=$PYTHONPATH:boomtick-pkg/cli td-cli repair-context",
     "agent:prime": "python3 boomtick-pkg/scripts/build-repo-context.py > .agent-context.json"
   }
 }
