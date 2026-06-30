@@ -164,9 +164,34 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
   return cachedGitArgs;
 }
 
-async function getAIContext(_inputData: string): Promise<Record<string, unknown>[]> {
-  // get_ai_context.py has been removed. Context enrichment is now handled by the 'td' CLI or higher-level agents.
-  return [];
+async function getAIContext(inputData: string): Promise<Record<string, unknown>[]> {
+  return new Promise((resolve, reject) => {
+    const child = spawn('td-cli', ['ai', 'get-context']);
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (data) => { stdout += data; });
+    child.stderr.on('data', (data) => { stderr += data; });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        try {
+          resolve(JSON.parse(stdout));
+        } catch (e) {
+          reject(new Error(`Failed to parse AI context: ${e instanceof Error ? e.message : String(e)}`));
+        }
+      } else {
+        reject(new Error(`AI context error (code ${code}): ${stderr}`));
+      }
+    });
+
+    child.on('error', (err) => {
+      reject(err);
+    });
+
+    child.stdin.write(inputData);
+    child.stdin.end();
+  });
 }
 
 export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeReviewSummary> {
