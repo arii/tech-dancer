@@ -1,0 +1,142 @@
+{
+  "github.search_open_prs": {
+    "properties": {
+      "state": {
+        "default": "open",
+        "description": "The state of the PRs to search for (open, closed, all).",
+        "enum": [
+          "open",
+          "closed",
+          "all"
+        ],
+        "title": "State",
+        "type": "string"
+      },
+      "includeDrafts": {
+        "default": true,
+        "description": "Whether to include draft PRs in the results.",
+        "title": "Includedrafts",
+        "type": "boolean"
+      },
+      "limit": {
+        "default": 100,
+        "description": "The maximum number of PRs to return (default: 100, range: 1-100).",
+        "maximum": 100,
+        "minimum": 1,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "labels": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Filter PRs by labels.",
+        "title": "Labels"
+      }
+    },
+    "title": "SearchPrsRequest",
+    "type": "object"
+  },
+  "github.create_issue": {
+    "properties": {
+      "title": {
+        "description": "The title of the issue.",
+        "title": "Title",
+        "type": "string"
+      },
+      "body": {
+        "description": "The body/description of the issue.",
+        "title": "Body",
+        "type": "string"
+      }
+    },
+    "required": [
+      "title",
+      "body"
+    ],
+    "title": "CreateIssueRequest",
+    "type": "object"
+  },
+  "github.get_pr_diff": {
+    "properties": {
+      "prNumber": {
+        "description": "The number of the pull request to get the diff for.",
+        "title": "Prnumber",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "prNumber"
+    ],
+    "title": "GetPrDiffRequest",
+    "type": "object"
+  },
+  "repo.read_ci_logs": {
+    "properties": {
+      "prNumber": {
+        "title": "Prnumber",
+        "type": "integer"
+      },
+      "all": {
+        "default": false,
+        "description": "Include logs for successful runs (default: false).",
+        "title": "All",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "prNumber"
+    ],
+    "title": "ReadCiLogsRequest",
+    "type": "object"
+  },
+  "jules.create_session": {
+    "properties": {
+      "task": {
+        "description": "The instructions for Jules.",
+        "title": "Task",
+        "type": "string"
+      },
+      "branch": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "The base branch to start from (e.g., 'main').",
+        "title": "Branch"
+      },
+      "pr": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "The PR number to use as the base branch context.",
+        "title": "Pr"
+      }
+    },
+    "required": [
+      "task"
+    ],
+    "title": "CreateJulesSessionRequest",
+    "type": "object"
+  }
+}

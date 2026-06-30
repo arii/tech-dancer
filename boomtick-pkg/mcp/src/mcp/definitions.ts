@@ -1,4 +1,5 @@
 import { Tool, Prompt, Resource } from "@modelcontextprotocol/sdk/types.js";
+import schemas from "../../../cli/dev_tools/generated-schemas.json" with { type: "json" };
 
 export const MCP_PROMPTS: Prompt[] = [
   {
@@ -81,27 +82,12 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "github.search_open_prs",
     description: "Search for open pull requests in the repository.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        state: { type: "string", enum: ["open", "closed", "all"], default: "open", description: "The state of the PRs to search for (open, closed, all)." },
-        includeDrafts: { type: "boolean", default: true, description: "Whether to include draft PRs in the results." },
-        limit: { type: "number", minimum: 1, maximum: 100, default: 100, description: "The maximum number of PRs to return (default: 100, range: 1-100)." },
-        labels: { type: "array", items: { type: "string" }, description: "Filter PRs by labels." },
-      },
-      required: [],
-    },
+    inputSchema: schemas["github.search_open_prs"] as any,
   },
   {
     name: "github.get_pr_diff",
     description: "Get the diff and changed files for a pull request.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        prNumber: { type: "number", description: "The number of the pull request to get the diff for." },
-      },
-      required: ["prNumber"],
-    },
+    inputSchema: schemas["github.get_pr_diff"] as any,
   },
   {
     name: "github.checkout_branch",
@@ -164,14 +150,7 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "repo.read_ci_logs",
     description: "Read CI logs for a given pull request.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        prNumber: { type: "number" },
-        all: { type: "boolean", description: "Include logs for successful runs (default: false)." },
-      },
-      required: ["prNumber"],
-    },
+    inputSchema: schemas["repo.read_ci_logs"] as any,
   },
   {
     name: "repo.logs",
@@ -344,27 +323,12 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "github.create_issue",
     description: "Create a new GitHub issue.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        title: { type: "string", description: "The title of the issue." },
-        body: { type: "string", description: "The body/description of the issue." },
-      },
-      required: ["title", "body"],
-    },
+    inputSchema: schemas["github.create_issue"] as any,
   },
   {
     name: "jules.create_session",
     description: "Create a Jules session that performs work externally and may generate a GitHub pull request.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        task: { type: "string", description: "The instructions for Jules." },
-        branch: { type: "string", description: "The base branch to start from (e.g., 'main')." },
-        pr: { type: "number", description: "The PR number to use as the base branch context." },
-      },
-      required: ["task"],
-    },
+    inputSchema: schemas["jules.create_session"] as any,
   },
   {
     name: "jules.get_session",

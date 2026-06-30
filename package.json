@@ -56,6 +56,8 @@
     "impact:github-models-review": "tsx scripts/impact-github-models-review.ts",
     "impact:gemini-code-review": "tsx scripts/impact-gemini-code-review.ts",
     "impact:github-models-code-review": "tsx scripts/impact-github-models-code-review.ts",
+    "generate:schemas": "PYTHONPATH=boomtick-pkg/cli python3 boomtick-pkg/scripts/generate-tool-schemas.py",
+    "verify:schemas": "pnpm run generate:schemas && git diff --exit-code boomtick-pkg/cli/dev_tools/generated-schemas.json",
     "agent:prime": "python3 boomtick-pkg/scripts/build-repo-context.py > .agent-context.json"
   },
   "dependencies": {
