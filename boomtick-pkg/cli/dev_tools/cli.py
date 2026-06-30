@@ -1,15 +1,20 @@
 import sys
-import os
-from dev_tools.utils import log_info
 import json
-from datetime import datetime, timezone
-from typing import List, Dict, Any
+import os
+import tempfile
+import glob
+import subprocess
 import click
-from dev_tools.orchestrator import Orchestrator
-from dev_tools.utils import get_or_create_log_dir, CLIError
+from typing import List, Dict, Any
+from datetime import datetime, timezone
 
-# Import legacy utils for backwards compatibility during migration
+from dev_tools.orchestrator import Orchestrator
 from dev_tools.utils import (
+    get_or_create_log_dir,
+    CLIError,
+    log_info,
+    log_error,
+    log_warn,
     get_github_client,
     get_repo_name,
     run_command,
@@ -345,8 +350,6 @@ def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
 @click.pass_context
 def verify_versions(ctx, diff_input):
     """Verify version changes in a diff for downgrades or hard blocks."""
-    import subprocess
-    import tempfile
     script_path = os.path.join(os.path.dirname(__file__), 'verify_versions.py')
 
     if not diff_input:
@@ -554,10 +557,6 @@ def pre_submit(ctx):
 @click.pass_context
 def overlaps(ctx, limit, no_cache):
     """Identify and propose consolidation of PRs with high functional or structural overlap."""
-    import subprocess
-    import sys
-    import os
-
     script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dev_tools', 'pr_overlap.py')
     cmd = [sys.executable, script_path, '--limit', str(limit)]
     if no_cache:
@@ -664,8 +663,6 @@ def test_cli(ctx):
     orch = ctx.obj['ORCHESTRATOR']
     orch.runtime_check()
     # pytest options are now in pyproject.toml
-    import subprocess
-    import sys
     # Get the directory of the current file to find the cli package root
     cli_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     try:
@@ -687,16 +684,13 @@ def ai():
 @click.option('--no-cache', is_flag=True, default=False, help='Bust the diff cache and force a fresh review call')
 @click.pass_context
 def review(ctx, pr_number, no_cache):
-    import glob
-
     # Optionally bust the review cache so stale results are not silently returned
     if no_cache:
         review_dir = get_or_create_log_dir("reviews")
         pattern = os.path.join(review_dir, f"review_cache_{pr_number}_*.json")
         removed = glob.glob(pattern)
         for f in removed:
-            import os as _os
-            _os.remove(f)
+            os.remove(f)
         if removed:
             log_info(f"🗑  Removed {len(removed)} cached diff file(s): {removed}")
         else:
@@ -718,14 +712,11 @@ def review(ctx, pr_number, no_cache):
 @click.pass_context
 def ai_get_context(ctx):
     """Retrieve dependency and semantic context for a set of changed files."""
-    import sys
-    import json
-    from dev_tools.utils import log_warn
-
     try:
         input_data = json.load(sys.stdin)
     except Exception as e:
         err(ctx, f"Failed to parse input JSON: {e}")
+        sys.exit(1)
 
     files_data = input_data.get("files", [])
     if not files_data:
@@ -976,11 +967,10 @@ def main():
     except Exception as e:
         # If we are in JSON mode, we should ideally output JSON error.
         # Detecting JSON mode from sys.argv since click context isn't available here yet if it failed early.
-        # Note: td-cli subcommands are JSON by default.
+        # Note: {PROJECT_CONFIG.cli_alias} subcommands are JSON by default.
         is_json = "--no-json" not in sys.argv
 
         if is_json:
-            import json
             error_payload = {
                 "status": "error",
                 "message": str(e),
@@ -993,12 +983,7 @@ def main():
             # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
             print(json.dumps(error_payload, indent=2))
         else:
-            try:
-                from dev_tools.utils import log_error
-                log_error(str(e))
-            except (ImportError, ModuleNotFoundError):
-                # Fallback if dev_tools is not in path yet
-                print(f"❌ Error: {e}", file=sys.stderr)
+            log_error(str(e))
             code = getattr(e, 'code', 1)
 
         if "pytest" not in sys.modules:

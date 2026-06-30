@@ -35,6 +35,7 @@ class ProjectConfig:
     audit_check_dirs: List[str] = field(default_factory=lambda: [
         "src/features", "src/pages", "src/components", "src/layouts", "src/App.tsx"
     ])
+    cli_alias: str = "td-cli"
     allowed_bots: List[str] = field(default_factory=lambda: [
         "github-actions[bot]"
     ])

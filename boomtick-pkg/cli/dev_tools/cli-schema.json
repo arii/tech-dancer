@@ -1,5 +1,5 @@
 {
-  "tool_name": "td-cli",
+  "tool_name": "td-cli" /* synchronized with config.py */ ,
   "schema_authority": "This file is the single source of truth for td-cli. Consult before every CLI call. Takes precedence over examples in AGENTS.md or any agent-specific instruction file.",
   "description": "Custom developer CLI for BoomTick repository management. Do not use interactive menus, and NEVER use the -h or --help flags. Always reference this schema for valid commands.",
   "base_command": "td-cli",
