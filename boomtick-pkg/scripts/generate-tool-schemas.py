@@ -2,13 +2,13 @@ import json
 import os
 import sys
 
-# Ensure boomtick-pkg/cli is in the path so we can import tdw_services
+# Ensure boomtick-pkg/cli is in the path so we can import models
 repo_root = os.getcwd()
 cli_root = os.path.join(repo_root, "boomtick-pkg", "cli")
 if cli_root not in sys.path:
     sys.path.insert(0, cli_root)
 
-from tdw_services.models.cli_contracts import (
+from dev_tools.models.cli_contracts import (
     SearchPrsRequest,
     CreateIssueRequest,
     GetPrDiffRequest,
