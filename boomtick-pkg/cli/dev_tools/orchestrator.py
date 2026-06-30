@@ -1029,21 +1029,26 @@ Respond only after the PR is created or updated:
         try:
             if "{" in res.stdout:
                 json_data = res.stdout[res.stdout.find("{"):]
-                report = json.loads(json_data)
-                for suite in report.get("suites", []):
-                    for spec in suite.get("specs", []):
-                        if not spec.get("ok"):
-                            error = "Unknown error"
-                            if spec.get("tests") and spec["tests"][0].get("results") and spec["tests"][0]["results"][0].get("error"):
-                                error = spec["tests"][0]["results"][0]["error"].get("message", "Unknown error")
+                try:
+                    report = json.loads(json_data)
+                    for suite in report.get("suites", []):
+                        for spec in suite.get("specs", []):
+                            if not spec.get("ok"):
+                                error = "Unknown error"
+                                if spec.get("tests") and spec["tests"][0].get("results") and spec["tests"][0]["results"][0].get("error"):
+                                    error = spec["tests"][0]["results"][0]["error"].get("message", "Unknown error")
 
-                            failed_tests.append({
-                                "title": spec.get("title"),
-                                "file": spec.get("file"),
-                                "error": error
-                            })
-        except Exception:
-            pass
+                                failed_tests.append({
+                                    "title": spec.get("title"),
+                                    "file": spec.get("file"),
+                                    "error": error
+                                })
+                except json.JSONDecodeError as e:
+                    from dev_tools.utils import log_error
+                    log_error(f"Failed to parse Playwright JSON report: {e}\nRaw output: {res.stdout}")
+        except Exception as e:
+            from dev_tools.utils import log_error
+            log_error(f"Unexpected error parsing Playwright output: {e}")
 
         return {
             "success": res.returncode == 0,

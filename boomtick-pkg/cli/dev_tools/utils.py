@@ -374,8 +374,8 @@ def get_github_token() -> Optional[str]:
             token = proc.stdout.strip()
             if token:
                 return token
-    except Exception:
-        pass
+    except Exception as e:
+        log_warn(f"Failed to discover GitHub token: {e}")
     return None
 
 
@@ -396,7 +396,8 @@ def get_repo_name() -> Optional[str]:
         import re
         match = re.search(r'[:/]([^/]+/[^/.]+)(\.git)?$', url)
         return match.group(1) if match else url
-    except Exception:
+    except Exception as e:
+        log_warn(f"Failed to detect repository name: {e}")
         return None
 
 class GHAConfigManager:
@@ -424,7 +425,8 @@ class GHAConfigManager:
             try:
                 with open(self.config_path, "r") as f:
                     return json.load(f)
-            except Exception:
+            except Exception as e:
+                log_warn(f"Failed to load GHA cache: {e}")
                 return {}
         return {}
 
@@ -432,8 +434,8 @@ class GHAConfigManager:
         try:
             with open(self.config_path, "w") as f:
                 json.dump(self.cache, f, indent=2)
-        except Exception:
-            pass
+        except Exception as e:
+            log_warn(f"Failed to save GHA cache: {e}")
 
     def _get_github_client_and_repo(self):
         """Helper to get GitHub client and repo name."""
@@ -469,8 +471,8 @@ class GHAConfigManager:
                     self.cache[name] = val
                     self._save_cache()
                     return val
-            except Exception:
-                pass
+            except Exception as e:
+                log_warn(f"Failed to fetch GHA variable '{name}' via API: {e}")
 
         # 3. Check gh CLI availability
         if self.gh_available is None:
@@ -532,8 +534,8 @@ class GHAConfigManager:
                     create_response = requests.post(create_url, json=payload, headers=headers, timeout=10)
                     if create_response.status_code in [201, 204]:
                         return True
-            except Exception:
-                pass
+            except Exception as e:
+                log_error(f"Failed to set GHA variable '{name}' via API: {e}")
 
         # 3. Check gh CLI availability
         if self.gh_available is None:
