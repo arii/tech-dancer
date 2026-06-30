@@ -89,11 +89,11 @@ runs:
 
     - name: Export Environment Variables
       if: inputs.setup-python == 'true'
-      env:
-        WORKSPACE_ROOT: ${{ github.workspace }}
       run: |
-        # Use absolute paths for host-based execution
-        CLI_DIR="$WORKSPACE_ROOT/boomtick-pkg/cli"
+        # Use (pwd) to get the absolute path inside the current environment (host or container)
+        # This is more robust than GITHUB_WORKSPACE which might point to a host path
+        # that is not mapped inside the container.
+        CLI_DIR="$(pwd)/boomtick-pkg/cli"
 
         echo "CLI_DIR=$CLI_DIR" >> "$GITHUB_ENV"
 
@@ -106,6 +106,7 @@ runs:
 
         # 2. Update PATH for subsequent steps to include local bin directories
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
         echo "✅ Environment configured: CLI_DIR=$CLI_DIR"
       shell: bash

@@ -68,6 +68,8 @@ jobs:
     if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     strategy:
       fail-fast: false
       matrix:
@@ -88,20 +90,51 @@ jobs:
     if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/audit
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Semantic Duplicate Audit
-        run: pnpm run audit:semantic
+      - uses: ./boomtick-pkg/mcp/actions/setup
 
-      - name: Audit Suppression Inventory
-        run: pnpm run audit:inventory
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+        shell: bash
+
+      - parallel:
+          - name: UI Anti-Pattern Audit
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              echo "::group::Audit"
+              trap 'echo "::endgroup::"' EXIT
+              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+              if ! node scripts/detect-antipatterns.mjs; then echo "Audit failed"; exit 1; fi
+              td-cli gh audit-gate
+            shell: bash
+
+          - name: Design Token Compliance
+            run: |
+              VIOLATIONS=$(find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -h '#[0-9a-fA-F]\{3,6\}' \
+                | grep -vc "design-tokens\|tokens.css\|// impeccable-ignore" || true)
+              if [ -n "$VIOLATIONS" ] && [ "$VIOLATIONS" -gt 0 ]; then
+                echo "⚠️ Found $VIOLATIONS raw hex color(s) in tsx files. Use CSS variables instead."
+                find . -name "*.tsx" -not -path "*/node_modules/*" -type f | xargs grep -rn '#[0-9a-fA-F]\{3,6\}' | grep -v "design-tokens\|tokens.css"
+                exit 1
+              fi
+              echo "✅ Design token compliance passed."
+            shell: bash
+
+          - name: Semantic Duplicate Audit
+            run: pnpm run audit:semantic
+            shell: bash
+
+          - name: Audit Suppression Inventory
+            run: pnpm run audit:inventory
+            shell: bash
 
 
   test-build:
@@ -110,17 +143,77 @@ jobs:
     if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     env:
       NODE_ENV: production
       REPO_NAME: ${{ github.event.repository.name }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/test-build
+
+      - uses: ./boomtick-pkg/mcp/actions/setup
+
+      - run: pnpm install --frozen-lockfile --prefer-offline
+        shell: bash
+
+      - name: Build App
+        run: |
+          VITE_BASE_PATH=/; export VITE_BASE_PATH
+          pnpm run build
+        shell: bash
+
+      - parallel:
+          - name: Bundle Size Check
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            run: |
+              export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+              td-cli gh bundle-size
+            shell: bash
+
+          - name: Run Playwright Smoke Test
+            run: |
+              # Use different port to avoid contention with Lighthouse
+              VITE_BASE_PATH=/ PORT=4174 pnpm run test:e2e
+            shell: bash
+
+          - name: Run Lighthouse CI
+            run: |
+              set -eu
+              VITE_BASE_PATH="/"
+              CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+              export VITE_BASE_PATH
+              export CHROME_PATH
+              echo "CHROME_PATH=$CHROME_PATH"
+              pnpm run lighthouse --collect.url="http://localhost:4173${VITE_BASE_PATH}"
+            env:
+              LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            shell: bash
+
+      - name: Check Playwright Report Exists
+        id: check_report
+        if: always()
+        run: |
+          if [ -d "playwright-report/" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
+      - name: Upload Test Results
+        if: always() && steps.check_report.outputs.exists == 'true'
+        uses: actions/upload-artifact@v7
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
 
 
   impact-analysis:
@@ -129,6 +222,8 @@ jobs:
     if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
     env:
       DISABLE_MINIFY: true
       MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
