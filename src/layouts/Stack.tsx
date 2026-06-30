@@ -2,7 +2,7 @@ import * as React from "react"
 import { forwardRef } from "react"
 import { composeStyles } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
+import { applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 
 interface StackProps extends Omit<BoxProps, "align" | "justify"> {
   direction?: ResponsiveProp<"row" | "col">
@@ -40,9 +40,9 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
         ref={ref}
         display={display}
         className={composeStyles(
-          getResponsiveClasses(direction, "", directionMapper),
-          getResponsiveClasses(align, "", alignMapper),
-          getResponsiveClasses(justify, "", justifyMapper),
+          applyResponsive(direction, directionMapper),
+          applyResponsive(align, alignMapper),
+          applyResponsive(justify, justifyMapper),
           className
         )}
         gap={gap}

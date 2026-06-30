@@ -1,7 +1,6 @@
 import { Box } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
-
-import { ResponsiveProp } from '@/layouts/system-utils';
+import { type ResponsiveProp } from '@/lib/style-utils';
 
 interface ProductImageFrameProps {
   src: string;
