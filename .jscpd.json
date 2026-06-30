@@ -13,7 +13,9 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "report/**",
+    "artifacts/**"
   ],
   "reporters": ["console", "html"]
 }

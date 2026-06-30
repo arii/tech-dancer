@@ -107,6 +107,9 @@ jobs:
       - name: Audit Suppression Inventory
         run: pnpm run audit:inventory
 
+      - name: Duplicate Code Detection
+        run: pnpm run audit:duplication
+
 
   test-build:
     name: Build & E2E
