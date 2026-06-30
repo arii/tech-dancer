@@ -3,9 +3,8 @@ import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn, composeStyles } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
-import { ResponsiveProp, getResponsiveClasses } from "./system-utils"
 import { RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
-import { resolveJIT, resolveSpacing } from "@/lib/style-utils"
+import { resolveJIT, resolveSpacing, applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 
 export interface BaseProps {
   padding?: ResponsiveProp<keyof typeof spacing | number | string>
@@ -139,10 +138,10 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       border === "x" && "border-x border-line",
       border === "y" && "border-y border-line",
       borderColor && resolveJIT(borderColor, "border"),
-      getResponsiveClasses(smBorder, "sm:border-"),
-      getResponsiveClasses(mdBorder, "md:border-"),
-      getResponsiveClasses(lgBorder, "lg:border-"),
-      getResponsiveClasses(xlBorder, "xl:border-")
+      smBorder && `sm:border-${smBorder}`,
+      mdBorder && `md:border-${mdBorder}`,
+      lgBorder && `lg:border-${lgBorder}`,
+      xlBorder && `xl:border-${xlBorder}`
     )
 
     // Remove props that shouldn't be spread to DOM elements
@@ -164,24 +163,24 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           emphasis && variants.emphasis[emphasis],
           radiusProp && RADIUS_MAP[radiusProp],
           borderClasses,
-          getResponsiveClasses(gap, "", resolveSpacing("gap")),
-          getResponsiveClasses(gapX, "", resolveSpacing("gap-x")),
-          getResponsiveClasses(gapY, "", resolveSpacing("gap-y")),
-          getResponsiveClasses(padding, "", resolveSpacing("p")),
+          applyResponsive(gap, resolveSpacing("gap")),
+          applyResponsive(gapX, resolveSpacing("gap-x")),
+          applyResponsive(gapY, resolveSpacing("gap-y")),
+          applyResponsive(padding, resolveSpacing("p")),
           padding && typeof padding === "string" && spacing[padding as keyof typeof spacing],
-          getResponsiveClasses(paddingTop, "", resolveSpacing("pt")),
-          getResponsiveClasses(paddingBottom, "", resolveSpacing("pb")),
-          getResponsiveClasses(paddingLeft, "", resolveSpacing("pl")),
-          getResponsiveClasses(paddingRight, "", resolveSpacing("pr")),
-          getResponsiveClasses(paddingX, "", resolveSpacing("px")),
-          getResponsiveClasses(paddingY, "", resolveSpacing("py")),
-          getResponsiveClasses(margin, "", resolveSpacing("m")),
-          getResponsiveClasses(marginTop, "", resolveSpacing("mt")),
-          getResponsiveClasses(marginBottom, "", resolveSpacing("mb")),
-          getResponsiveClasses(marginLeft, "", resolveSpacing("ml")),
-          getResponsiveClasses(marginRight, "", resolveSpacing("mr")),
-          getResponsiveClasses(marginX, "", resolveSpacing("mx")),
-          getResponsiveClasses(marginY, "", resolveSpacing("my")),
+          applyResponsive(paddingTop, resolveSpacing("pt")),
+          applyResponsive(paddingBottom, resolveSpacing("pb")),
+          applyResponsive(paddingLeft, resolveSpacing("pl")),
+          applyResponsive(paddingRight, resolveSpacing("pr")),
+          applyResponsive(paddingX, resolveSpacing("px")),
+          applyResponsive(paddingY, resolveSpacing("py")),
+          applyResponsive(margin, resolveSpacing("m")),
+          applyResponsive(marginTop, resolveSpacing("mt")),
+          applyResponsive(marginBottom, resolveSpacing("mb")),
+          applyResponsive(marginLeft, resolveSpacing("ml")),
+          applyResponsive(marginRight, resolveSpacing("mr")),
+          applyResponsive(marginX, resolveSpacing("mx")),
+          applyResponsive(marginY, resolveSpacing("my")),
           flex === true && "flex-1",
           flex !== undefined && typeof flex !== "boolean" && (typeof flex === "number" ? `flex-${flex}` : flex),
           (wrap || flexWrap) && "flex-wrap",
@@ -193,12 +192,12 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           inset === "right" && "top-0 bottom-0 right-0",
           inset === "x" && "left-0 right-0",
           inset === "y" && "top-0 bottom-0",
-          getResponsiveClasses(height, "h-", (v) => resolveJIT(v, "")),
-          getResponsiveClasses(width, "w-", (v) => resolveJIT(v, "")),
-          getResponsiveClasses(maxWidth, "max-w-", (v) => resolveJIT(v, "")),
-          getResponsiveClasses(minHeight, "min-h-", (v) => resolveJIT(v, "")),
-          getResponsiveClasses(maxHeight, "max-h-", (v) => resolveJIT(v, "")),
-          getResponsiveClasses(minWidth, "min-w-", (v) => resolveJIT(v, "")),
+          applyResponsive(height, (v) => resolveJIT(v, "h")),
+          applyResponsive(width, (v) => resolveJIT(v, "w")),
+          applyResponsive(maxWidth, (v) => resolveJIT(v, "max-w")),
+          applyResponsive(minHeight, (v) => resolveJIT(v, "min-h")),
+          applyResponsive(maxHeight, (v) => resolveJIT(v, "max-h")),
+          applyResponsive(minWidth, (v) => resolveJIT(v, "min-w")),
           overflow && (overflow === "y-auto" ? "overflow-y-auto" : overflow === "x-auto" ? "overflow-x-auto" : overflow === "y-hidden" ? "overflow-y-hidden" : `overflow-${overflow}`),
           overflowX && `overflow-x-${overflowX}`,
           overflowY && `overflow-y-${overflowY}`,
@@ -215,25 +214,25 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
                   : opacity),
             "opacity"
           ),
-          getResponsiveClasses(display, "", (v) => v === "none" ? "hidden" : v as string),
-          getResponsiveClasses(aspect, "aspect-", (v) => {
-            if (v === "square" || v === "video") return v;
-            return v ? `[${v}]` : "";
+          applyResponsive(display, (v) => v === "none" ? "hidden" : (v as string)),
+          applyResponsive(aspect, (v) => {
+            if (v === "square" || v === "video") return `aspect-${v}`;
+            return v ? `aspect-[${v}]` : ""; // impeccable-ignore - Arbitrary aspect ratios are supported via props.
           }),
           shrink === true && "shrink",
           shrink === false && "shrink-0",
           shrink !== undefined && typeof shrink === "number" && `shrink-${shrink}`,
-          getResponsiveClasses(span, "", (v) => SPAN_MAP[v as keyof typeof SPAN_MAP] || ""),
+          applyResponsive(span, (v) => SPAN_MAP[v as keyof typeof SPAN_MAP] || ""),
           cursor && `cursor-${cursor}`,
           self && (self === "start" ? "self-start" : self === "center" ? "self-center" : self === "end" ? "self-end" : self === "stretch" ? "self-stretch" : "self-auto"),
-          getResponsiveClasses(textAlign, "text-"),
+          applyResponsive(textAlign, (v) => resolveJIT(v, "text")),
           justify && (justify === "start" ? "justify-start" : justify === "center" ? "justify-center" : justify === "end" ? "justify-end" : justify === "between" ? "justify-between" : justify === "around" ? "justify-around" : "justify-evenly"),
           align && (align === "start" ? "items-start" : align === "center" ? "items-center" : align === "end" ? "items-end" : align === "baseline" ? "items-baseline" : "items-stretch"),
-          getResponsiveClasses(top, "", resolveSpacing("top")),
-          getResponsiveClasses(right, "", resolveSpacing("right")),
-          getResponsiveClasses(bottom, "", resolveSpacing("bottom")),
-          getResponsiveClasses(left, "", resolveSpacing("left")),
-          getResponsiveClasses(scrollMarginTop, "scroll-mt-", (v) => resolveJIT(v, "")),
+          applyResponsive(top, resolveSpacing("top")),
+          applyResponsive(right, resolveSpacing("right")),
+          applyResponsive(bottom, resolveSpacing("bottom")),
+          applyResponsive(left, resolveSpacing("left")),
+          applyResponsive(scrollMarginTop, (v) => resolveJIT(v, "scroll-mt")),
           _scrollBehavior && `scroll-${_scrollBehavior}`,
           className
         )}

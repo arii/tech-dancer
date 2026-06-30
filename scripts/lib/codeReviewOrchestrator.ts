@@ -5,7 +5,7 @@ import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache, filterLowImpactFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
-import { execFile as execFileCb, spawn } from 'child_process';
+import { execFile as execFileCb } from 'child_process';
 import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
 import { loadProjectConfig } from './projectConfig';
@@ -748,106 +748,23 @@ export async function orchestrateCodeReview(
 }
 
 
-const HEDGE_PATTERN = /\b(may|might|could|possibly|unless|if not handled|potentially|likely)\b/i;
-
 /**
- * Defends against the LLM ignoring its own severity rules: downgrades a FAIL
- * verdict to WARN if every finding backing it either (a) contains hedge
- * language the prompt explicitly says is non-blocking, or (b) cites a
- * snippet that doesn't actually appear in the diff it was given.
+ * Simple verdict reconciliation: ensures that a FAIL verdict is backed by at least one
+ * open finding.
  */
 export function reconcileVerdict(
   result: CodeReviewResult,
-  diffForVerification: string
+  _diffForVerification: string
 ): CodeReviewResult {
-  // If we couldn't parse findings at all but the model's prose still claims
-  // a FAIL, that's a parsing/format failure, not evidence — don't trust it blind.
-  if (result.llmVerdict === 'fail' && !result.state) {
-    console.warn(`⚠️  FAIL verdict with no parseable findings — downgrading to WARN.`);
+  if (result.llmVerdict !== 'fail') {
+    return result;
+  }
+
+  const openFindings = result.state?.findings?.filter(f => f.status === 'open') || [];
+  if (openFindings.length === 0) {
+    console.warn(`⚠️  Downgrading FAIL→WARN: no open findings found to justify the FAIL verdict.`);
     return { ...result, llmVerdict: 'warn' };
   }
 
-  let reconciledState = result.state;
-
-  if (result.state?.findings?.length) {
-    // Pre-process lines for easier matching
-    const diffLines = diffForVerification.split('\n');
-    const cleanDiffLines = diffLines.map(l => l.replace(/^([ +-])/, '').trim());
-
-    // Scrub/Verify findings against hallucination
-    const verifiedFindings = result.state.findings.map(f => {
-      if (f.status === 'resolved' || !f.snippet) return f;
-
-      const snippet = f.snippet.trim();
-      if (!snippet) return f;
-
-      // A snippet is "verifiable" if it exists exactly or as a full line (minus diff markers/indentation)
-      const isExactMatch = diffForVerification.includes(f.snippet);
-      const isFullLineMatch = cleanDiffLines.some(line => line === snippet);
-
-      const verified = isExactMatch || isFullLineMatch;
-
-      if (!verified) {
-        console.warn(`🚫 Hallucinated snippet detected in ${f.file}: "${snippet}"`);
-        return {
-          ...f,
-          issue: `[UNVERIFIED] ${f.issue}`,
-          fixSummary: `Automatically invalidated: snippet not found in diff context.`,
-          status: 'resolved',
-        };
-      }
-
-      // STRICT SNIPPET RULE: It must be a full line. If it's only a substring, it might be truncated.
-      // We specifically target "syntax error" claims which are the classic hallucination pattern
-      // when a line is truncated in the LLM's reasoning.
-      const issueLower = f.issue.toLowerCase();
-      if (!isFullLineMatch && isExactMatch && (issueLower.includes('syntax error') || issueLower.includes('missing property') || issueLower.includes('missing method'))) {
-        console.warn(`⚠️  Suspicious truncated snippet claiming syntax error: "${snippet}"`);
-        return {
-          ...f,
-          issue: `[SUSPECTED TRUNCATION] ${f.issue}`,
-          fixSummary: `Automatically invalidated: cites a truncated line which often triggers false syntax errors.`,
-          status: 'resolved',
-        };
-      }
-
-      return f;
-    });
-
-    reconciledState = {
-      ...result.state,
-      findings: verifiedFindings,
-    };
-  }
-
-  const reconciledResult = {
-    ...result,
-    state: reconciledState,
-  };
-
-  if (reconciledResult.llmVerdict !== 'fail') {
-    return reconciledResult;
-  }
-
-  const newFindings = reconciledResult.state?.findings?.filter(f => f.status !== 'resolved') || [];
-  if (newFindings.length === 0) {
-    console.warn(`⚠️  Downgrading FAIL→WARN: all findings were invalidated or already resolved.`);
-    return { ...reconciledResult, llmVerdict: 'warn' };
-  }
-
-  const hasCredibleBlocker = newFindings.some(f => {
-    const text = `${f.issue} ${f.fixSummary ?? ''}`;
-    if (HEDGE_PATTERN.test(text)) return false;
-    // Verification already performed in the mapping step above
-    return true;
-  });
-
-  if (!hasCredibleBlocker) {
-    console.warn(
-      `⚠️  Downgrading FAIL→WARN: no finding had both verifiable evidence and non-hedged language.`
-    );
-    return { ...reconciledResult, llmVerdict: 'warn' };
-  }
-
-  return reconciledResult;
+  return result;
 }

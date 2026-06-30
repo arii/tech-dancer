@@ -1,5 +1,7 @@
 import { SPACING_MAP } from "@/layouts/layout-maps"
 
+export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
+
 /**
  * Resolves a value for use in a Tailwind class, handling negative values
  * and arbitrary strings correctly.
@@ -42,4 +44,26 @@ export function resolveSpacing(prefix: string) {
     if (token) return `${negPrefix}${prefix}-${token}`;
     return resolveJIT(v, prefix);
   }
+}
+
+/**
+ * Simple, non-recursive helper to apply responsive Tailwind prefixes to an object-based prop.
+ */
+export function applyResponsive<T>(
+  prop: ResponsiveProp<T> | undefined,
+  mapFn: (val: T) => string
+): string {
+  if (!prop) return ""
+  if (typeof prop !== "object" || (prop as Record<string, unknown>).$$typeof) {
+    return mapFn(prop as T)
+  }
+
+  return Object.entries(prop)
+    .map(([bp, val]) => {
+      const className = mapFn(val as T)
+      if (!className) return ""
+      return bp === "base" ? className : `${bp}:${className}`
+    })
+    .filter(Boolean)
+    .join(" ")
 }
