@@ -1,22 +1,9 @@
 import { z } from "zod";
 import { runCommand } from "../lib/shell.js";
 import { sanitizeError } from "../lib/error_utils.js";
+import { CreateIssueInputSchema, CreateIssueResponseSchema } from "./contract.js";
 
-export const CreateIssueInputSchema = z.object({
-  title: z.string().min(1, "Issue title cannot be empty").describe("The title of the issue."),
-  body: z.string().min(1, "Issue body cannot be empty").describe("The body/description of the issue."),
-});
-
-const CreateIssueOutputSchema = z.object({
-  status: z.string(),
-  issue: z.object({
-    number: z.number(),
-    title: z.string(),
-    html_url: z.string(),
-    state: z.string(),
-  }).optional(),
-  message: z.string().optional(),
-});
+export { CreateIssueInputSchema };
 
 export async function createIssueHandler(args: z.infer<typeof CreateIssueInputSchema>) {
   const params = CreateIssueInputSchema.parse(args);
@@ -34,7 +21,7 @@ export async function createIssueHandler(args: z.infer<typeof CreateIssueInputSc
     throw new Error(`Failed to parse CLI output: ${result.stdout}`);
   }
 
-  const parsedOutput = CreateIssueOutputSchema.parse(output);
+  const parsedOutput = CreateIssueResponseSchema.parse(output);
   if (parsedOutput.status === "error") {
     throw new Error(`Failed to create issue: ${parsedOutput.message}`);
   }

@@ -19,7 +19,8 @@ const config: KnipConfig = {
     },
     "boomtick-pkg/mcp": {
       entry: ["src/evals/run-evals.ts"],
-      project: ["src/**/*.ts"]
+      project: ["src/**/*.ts"],
+      ignore: ["src/tools/contract.ts"]
     }
   },
   ignoreBinaries: ['python3', 'semgrep'],

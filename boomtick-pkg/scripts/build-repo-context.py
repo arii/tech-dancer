@@ -174,6 +174,14 @@ def build_repo_context():
         
         cli_schema_path.write_text(json.dumps(schema_authority_payload, indent=2))
         cli_schema = schema_authority_payload
+
+        # Also trigger Pydantic contract-schema.json generation
+        try:
+            from dev_tools.schema_gen import generate_schema
+            generate_schema()
+        except Exception as schema_err:
+            print(f"Error generating contract-schema.json: {schema_err}", file=sys.stderr)
+
     except Exception as e:
         print(f"Error generating cli-schema.json dynamically: {e}", file=sys.stderr)
         # Fallback to reading file if generation failed

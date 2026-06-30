@@ -7,6 +7,7 @@ from typing import List, Dict, Any
 import click
 from dev_tools.orchestrator import Orchestrator
 from dev_tools.utils import get_or_create_log_dir, CLIError
+from dev_tools.models import CreateIssueInput, SearchPRsInput, IssueUpdateInput
 
 # Import legacy utils for backwards compatibility during migration
 from dev_tools.utils import (
@@ -119,7 +120,14 @@ def gh():
 @click.pass_context
 def search_prs(ctx, state, limit, include_drafts, labels):
     orch = ctx.obj['ORCHESTRATOR']
-    label_list = labels.split(',') if labels else None
+    label_list = [l.strip() for l in labels.split(',')] if labels else None
+
+    # Contract validation
+    try:
+        SearchPRsInput(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
+    except Exception as e:
+        err(ctx, str(e))
+
     res = orch.list_prs(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
     out(ctx, f"Found {len(res['prs'])} PRs.", data=res)
 
@@ -204,9 +212,16 @@ def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, e
 def create_issue(ctx, title, file, body):
     """Create a new GitHub issue."""
     orch = ctx.obj['ORCHESTRATOR']
+
+    # Contract validation
+    try:
+        CreateIssueInput(title=title, body=body, file=file)
+    except Exception as e:
+        err(ctx, str(e))
+
     content = _get_body_content(ctx, orch, file, body)
     res = orch.create_issue(title, content)
-    out(ctx, f"✅ Successfully created issue: {res.get('html_url')}", data={"issue": res})
+    out(ctx, f"✅ Successfully created issue: {res['issue'].get('html_url')}", data=res)
 
 @gh.command()
 @click.argument('issue_number', type=int)
@@ -229,15 +244,27 @@ def issue_view(ctx, issue_number):
 def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_labels):
     """Update a GitHub issue's body and/or labels."""
     orch = ctx.obj['ORCHESTRATOR']
-    content = None
-    if file or body:
-        content = _get_body_content(ctx, orch, file, body)
-    elif not any([labels, add_labels, remove_labels]):
-        err(ctx, "Provide --file, --body, --labels, --add-labels, or --remove-labels")
 
     label_list = [l.strip() for l in labels.split(',')] if labels else None
     add_label_list = [l.strip() for l in add_labels.split(',')] if add_labels else None
     remove_label_list = [l.strip() for l in remove_labels.split(',')] if remove_labels else None
+
+    # Contract validation
+    try:
+        IssueUpdateInput(
+            issue_number=issue_number,
+            body=body,
+            file=file,
+            labels=label_list,
+            add_labels=add_label_list,
+            remove_labels=remove_label_list
+        )
+    except Exception as e:
+        err(ctx, str(e))
+
+    content = None
+    if file or body:
+        content = _get_body_content(ctx, orch, file, body)
 
     res = orch.update_issue(
         issue_number,
@@ -246,7 +273,7 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
         add_labels=add_label_list,
         remove_labels=remove_label_list
     )
-    out(ctx, f"✅ Successfully updated issue #{issue_number}", data={"issue": res})
+    out(ctx, f"✅ Successfully updated issue #{issue_number}", data=res)
 
 @gh.command()
 @click.argument('issue_number', type=int)
