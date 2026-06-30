@@ -212,7 +212,7 @@
 * [x] `[x]` scripts/validate-links.ts — Verified Clean
 
 * [ ] `src/` files
-* [ ] `-[ ]` src/App.tsx
+* [x] `[x]` src/App.tsx — Verified Clean
 * [x] `[x]` src/affiliate-tool.test.ts — Verified Clean
 * [x] `[x]` src/components/Equalizer.tsx — Verified Clean
 * [x] `[x]` src/components/GlobalErrorBoundary.tsx — Verified Clean
@@ -245,7 +245,7 @@
 * [x] `[x]` src/components/ui/HeroParticleCanvas.tsx — Verified Clean
 * [x] `[x]` src/components/ui/HeroSection.tsx — Verified Clean
 * [x] `[x]` src/components/ui/Icon.tsx — Verified Clean
-* [ ] `-[ ]` src/components/ui/ListRow.tsx
+* [x] `[x]` src/components/ui/ListRow.tsx — Verified Clean
 * [x] `[x]` src/components/ui/Logo.tsx — Verified Clean
 * [x] `[x]` src/components/ui/MarkdownRenderer.tsx — Verified Clean
 * [x] `[x]` src/components/ui/Notice.tsx — Verified Clean
@@ -260,7 +260,7 @@
 * [x] `[x]` src/components/ui/StatusBadge.tsx — Verified Clean
 * [x] `[x]` src/components/ui/ViewToggle.tsx — Verified Clean
 * [x] `[x]` src/components/ui/Wordmark.tsx — Verified Clean
-* [x] =`[x]` src/config/constants.ts — Verified Clean
+* [x] `[x]` src/config/constants.ts — Verified Clean
 * [x] `[x]` src/config/content.ts — Verified Clean
 * [x] `[x]` src/config/devai-assets.ts — Verified Clean
 * [x] `[x]` src/config/devai-tool-ids.ts — Verified Clean
@@ -298,7 +298,7 @@
 * [x] `[x]` src/features/research/components/WCSChartContainers.tsx — Verified Clean
 * [x] `[x]` src/features/research/components/WCSScraperTool.tsx — Verified Clean
 * [x] `[x]` src/features/research/hooks/useExport.ts — Verified Clean
-* [ ] `-[ ]` src/features/research/hooks/useWCSData.ts
+* [x] `[x]` src/features/research/hooks/useWCSData.ts — Verified Clean
 * [x] `[x]` src/features/research/useResearch.ts — Verified Clean
 * [x] `[x]` src/features/ux-auditor/useSnapshotManager.ts — Verified Clean
 * [x] `[x]` src/features/ux-auditor/useUXAuditor.ts — Verified Clean
@@ -341,7 +341,7 @@
 * [x] `[x]` src/lib/types/routes.ts — Verified Clean
 * [x] `[x]` src/lib/utils.ts — Verified Clean
 * [x] `[x]` src/lib/variants.ts — Verified Clean
-* [ ] `-[ ]` src/main.tsx
+* [x] `[x]` src/main.tsx — Verified Clean
 * [x] `[x]` src/pages/About.tsx — Verified Clean
 * [x] `[x]` src/pages/Blog.tsx — Verified Clean
 * [x] `[x]` src/pages/BlogPost.tsx — Verified Clean
@@ -363,18 +363,6 @@
 
 ## 2. Identified AI Slop
 
-### src/main.tsx
-* **Location:** `src/main.tsx` (Lines 18-37)
-* **The Slop:** Manual runtime basename calculation (`getBasename`) and a complex `sessionStorage`-based redirect handler for GitHub Pages SPA.
-* **Why it's likely AI Drift:** LLMs often hallucinate that standard SPA routing requires complex manual history restoration for GitHub Pages, leading to brittle 'hack' logic instead of standard build-time configuration (`base` in Vite).
-* **Remediation:** Remove `getBasename`, `cleanBasename`, and the redirect restoration logic. Use a static `import.meta.env.BASE_URL` directly.
-
-### src/features/research/hooks/useWCSData.ts
-* **Location:** `src/features/research/hooks/useWCSData.ts` (Lines 31-45)
-* **The Slop:** Nested `try/catch` with a 'Lazy Load' attempt followed by a 'Full Fetch Fallback' for a Parquet file.
-* **Why it's likely AI Drift:** This is an overly defensive 'abstraction cascade' where the AI assumes the `hyparquet` library might fail on certain file systems or browsers and creates a redundant fallback fetch.
-* **Remediation:** Simplify to a single fetch or use `hyparquet` directly with the URL. If it fails, let the error propagate to the global boundary.
-
 ### src/layouts/Box.tsx & src/lib/style-utils.ts
 * **Location:** `src/layouts/Box.tsx` (The whole file) and `src/lib/style-utils.ts`
 * **The Slop:** A massive 200+ line mapping of React props to Tailwind classes, including a custom JIT resolver (`resolveJIT`) and responsive prop mapper (`applyResponsive`).
@@ -392,15 +380,3 @@
 * **The Slop:** A monolithic 'God Object' containing redundant methods like `evaluate_pr_heuristics` (hardcoded feedback), `fix_ci` (massive prompt strings), and `audit_pr` (manual diff annotation logic).
 * **Why it's likely AI Drift:** 'AI Drift and Cargo-Culting'. Logic from multiple 'chatops' and 'repair' tasks has been piled into one class without shared abstractions, leading to duplicated code for git operations and GitHub API calls.
 * **Remediation:** Break down the monolithic `Orchestrator` into specialized services (e.g., `PRService`, `AuditService`, `RemediationService`). Extract prompts to separate template files.
-
-### src/components/ui/ListRow.tsx
-* **Location:** `src/components/ui/ListRow.tsx` (Lines 44-46)
-* **The Slop:** Redundant and brittle URL normalization logic for images: `image = rawImage && rawImage.startsWith('/') && !rawImage.startsWith(import.meta.env.BASE_URL) ? ... : rawImage`.
-* **Why it's likely AI Drift:** The AI is trying to "fix" paths it thinks might be missing a basename, but this logic is fragile and assumes specific configurations that should be handled at the asset-loading or build level.
-* **Remediation:** Standardize asset paths at the data layer or use a simple helper function. Avoid inline manual prefixing.
-
-### src/App.tsx
-* **Location:** `src/App.tsx` (Lines 101-105)
-* **The Slop:** Over-engineered route path mapping: `path: route.path === '/' ? undefined : route.path.replace(/^\//, '')`.
-* **Why it's likely AI Drift:** The AI is hallucinating a need to convert absolute paths to relative paths for React Router v6 children, even though it already noted that "absolute paths work fine too". This adds unnecessary complexity to a simple route configuration.
-* **Remediation:** Use absolute paths directly in the route configuration and avoid manual string manipulation in the route mapper.
