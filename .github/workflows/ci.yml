@@ -75,9 +75,12 @@ jobs:
       matrix:
         target: [root, boomtick-mcp]
     steps:
-      - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
+        with:
           target: ${{ matrix.target }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -90,9 +93,12 @@ jobs:
     container:
       image: ghcr.io/arii/tech-dancer:latest
     steps:
-      - uses: ./boomtick-pkg/mcp/actions/audit
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/audit
+        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Semantic Duplicate Audit
@@ -116,9 +122,12 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
     steps:
-      - uses: ./boomtick-pkg/mcp/actions/test-build
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/test-build
+        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
@@ -137,9 +146,13 @@ jobs:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GITHUB_MODELS_MODEL: gpt-4o-mini
     steps:
-      - uses: ./boomtick-pkg/mcp/actions/impact-analysis
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/impact-analysis
+
+        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           pr_number: ${{ github.event.pull_request.number }}

@@ -1,10 +1,5 @@
 name: BoomTick Setup
 description: Comprehensive setup including checkout, node/pnpm, workspace, and MCP build
-inputs:
-  fetch-depth:
-    description: 'Fetch depth for checkout'
-    required: false
-    default: '1'
 runs:
   using: composite
   steps:
@@ -14,8 +9,6 @@ runs:
 
     - name: Setup Workspace
       uses: ./.github/actions/setup-workspace
-      with:
-        fetch-depth: ${{ inputs.fetch-depth }}
 
     - name: Verify setup
       run: td doctor

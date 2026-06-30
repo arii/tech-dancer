@@ -4,16 +4,10 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
-  fetch-depth:
-    description: 'Fetch depth for checkout'
-    required: false
-    default: '1'
 runs:
   using: composite
   steps:
     - uses: ./boomtick-pkg/mcp/actions/setup
-      with:
-        fetch-depth: ${{ inputs.fetch-depth }}
 
     - run: pnpm install --frozen-lockfile --prefer-offline
       shell: bash

@@ -9,22 +9,6 @@ inputs:
     description: "Install dev-tools (Python)"
     required: false
     default: 'true'
-  checkout:
-    description: "Whether to run actions/checkout"
-    required: false
-    default: 'true'
-  fetch-depth:
-    description: "Fetch depth for checkout"
-    required: false
-    default: '1'
-  lfs:
-    description: "Whether to download LFS files"
-    required: false
-    default: 'false'
-  token:
-    description: "Personal access token (PAT) used to fetch the repository"
-    required: false
-    default: ${{ github.token }}
   node-version-file:
     description: "Path to .node-version file"
     required: false

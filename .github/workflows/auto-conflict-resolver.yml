@@ -91,11 +91,15 @@ jobs:
             <!-- id: conflict-resolver-bot -->
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+      - name: Checkout base repository
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
           setup-python: 'false'
 
       - name: Check active runtime

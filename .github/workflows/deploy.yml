@@ -31,11 +31,15 @@ jobs:
       group: build-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+      - name: Checkout Branch
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
           lfs: true
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
           setup-python: 'false'
 
       - name: Check active runtime
