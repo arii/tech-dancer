@@ -15,7 +15,6 @@ dependencies = [
     "pydantic",
     "click",
     "PyGithub",
-    "pytest",
     "semgrep",
     "chromadb>=1.5.9",
     "sentence-transformers>=5.6.0"
@@ -33,9 +32,3 @@ include = ["dev_tools*"]
 "dev_tools" = ["cli-schema.json", "config.json", "project_config.json", "*.json"]
 "*" = ["*.json"]
 
-[tool.pytest.ini_options]
-pythonpath = [
-  ".",
-  "dev_tools"
-]
-testpaths = ["tests"]

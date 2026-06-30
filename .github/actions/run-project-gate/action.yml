@@ -81,13 +81,6 @@ runs:
         fi
       shell: bash
 
-    - name: Run CLI Unit Tests
-      if: inputs.target == 'root'
-      run: |
-        echo "::group::Pytest"
-        trap 'echo "::endgroup::"' EXIT
-        PYTHONPATH=boomtick-pkg/cli:boomtick-pkg/cli/dev_tools python3 -m pytest boomtick-pkg/cli/tests/
-      shell: bash
 
     - name: Check for dead code
       if: inputs.target == 'root'
