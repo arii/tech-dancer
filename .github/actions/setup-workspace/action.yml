@@ -89,16 +89,15 @@ runs:
 
     - name: Export Environment Variables
       if: inputs.setup-python == 'true'
+      env:
+        WORKSPACE_ROOT: ${{ github.workspace }}
       run: |
         # Use absolute paths for host-based execution
-        # Ensure CLI_DIR is an absolute path based on the runner workspace
-        REPO_DIR="$GITHUB_WORKSPACE"
-        CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
+        CLI_DIR="$WORKSPACE_ROOT/boomtick-pkg/cli"
 
         echo "CLI_DIR=$CLI_DIR" >> "$GITHUB_ENV"
 
         # 1. Update PYTHONPATH for subsequent steps
-        # Ensure it works even if PYTHONPATH is initially empty
         if [ -z "$PYTHONPATH" ]; then
           echo "PYTHONPATH=$CLI_DIR" >> "$GITHUB_ENV"
         else
@@ -106,8 +105,7 @@ runs:
         fi
 
         # 2. Update PATH for subsequent steps to include local bin directories
-        # Note: GITHUB_PATH is the canonical way to update PATH in GHA.
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-        echo "✅ Environment configured: PYTHONPATH includes $CLI_DIR"
+        echo "✅ Environment configured: CLI_DIR=$CLI_DIR"
       shell: bash
