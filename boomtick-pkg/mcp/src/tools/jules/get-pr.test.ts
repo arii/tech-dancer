@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getJulesPullRequestHandler } from "./get-pr.ts";
+import { getJulesPullRequestHandler } from "./get-pr.js";
 import * as shell from "../../lib/shell.js";
 import { setupTestEnv, teardownTestEnv } from "../../lib/test-utils.js";
 
