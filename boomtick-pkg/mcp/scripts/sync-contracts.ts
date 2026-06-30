@@ -19,21 +19,11 @@ async function syncContracts() {
   for (const [name, schema] of Object.entries(rawSchema)) {
     if (name.startsWith('_')) continue; // Skip metadata fields
 
-    const zodCode = jsonSchemaToZod(schema as any, { name, module: 'esm' });
+    // Get the raw Zod expression without any variable assignment or imports
+    const zodExpression = jsonSchemaToZod(schema as any, { module: 'none' });
 
-    // Use regex to capture the variable assignment part, allowing for multiline
-    const match = zodCode.match(/export const \w+ = ([\s\S]*?);?\s*$/m);
-
-    if (match) {
-        let definition = match[1].trim();
-        // Ensure it ends clean
-        if (definition.endsWith(';')) definition = definition.slice(0, -1);
-
-        tsContent += `export const ${name}Schema = ${definition}\n\n`;
-        tsContent += `export type ${name} = z.infer<typeof ${name}Schema>;\n\n`;
-    } else {
-        console.warn(`Could not extract Zod definition for ${name}`);
-    }
+    tsContent += `export const ${name}Schema = ${zodExpression};\n\n`;
+    tsContent += `export type ${name} = z.infer<typeof ${name}Schema>;\n\n`;
   }
 
   fs.writeFileSync(outputPath, tsContent);
