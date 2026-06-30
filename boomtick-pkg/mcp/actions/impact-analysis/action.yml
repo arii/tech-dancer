@@ -199,8 +199,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
-        CLI_DIR_VAL="${CLI_DIR:-$(pwd)/boomtick-pkg/cli}"
-        export PYTHONPATH="$CLI_DIR_VAL"
+        # PYTHONPATH and CLI_DIR are exported by setup-workspace
         python3 -m dev_tools.td_cli gh summary-report >> "$GITHUB_STEP_SUMMARY"
         if ! python3 -m dev_tools.td_cli gh verify-metrics > /dev/null 2>&1; then
           echo "❌ CI Metrics verification failed."

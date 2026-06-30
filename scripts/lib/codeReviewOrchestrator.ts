@@ -532,7 +532,7 @@ export async function orchestrateCodeReview(
 
   const orchestratorStartTime = Date.now();
   const allResults: CodeReviewResult[] = [];
-  const CONCURRENCY_LIMIT = 1;
+  const CONCURRENCY_LIMIT = 4;
   const newCache: Record<string, CodeReviewResult> = {};
 
   const batchSummaryCache = new Map<string, Promise<CodeReviewSummary>>();
