@@ -32,7 +32,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           fetch-depth: 0
           lfs: true
@@ -91,7 +91,7 @@ jobs:
           jq -n --arg b "$REF_NAME" --arg s "$GITHUB_SHA" --argjson t "$(date +%s)" '{"branch":$b,"sha":$s,"deployedAt":$t}' > dist/.deploy.json
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: dist-assets
           path: dist/
@@ -106,12 +106,12 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           fetch-depth: 0
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: dist-assets
           path: ../dist-assets
@@ -228,7 +228,7 @@ jobs:
           exit 1
 
       - name: Update Deployment Feedback
-        uses: actions/github-script@v9
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

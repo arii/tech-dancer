@@ -48,7 +48,7 @@ jobs:
         scanner: [oxlint, semgrep, gitleaks]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Initialize CodeQL
         if: matrix.scanner == 'semgrep'
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@411bbbe57033eedfc1a82d68c01345aa96c737d7
         with:
           languages: actions, javascript-typescript
 
@@ -77,13 +77,13 @@ jobs:
 
       - name: Gitleaks Secret Detection
         if: matrix.scanner == 'gitleaks'
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@dcedce43c6f43de0b836d1fe38946645c9c638dc
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Perform CodeQL Analysis
         if: matrix.scanner == 'semgrep'
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@411bbbe57033eedfc1a82d68c01345aa96c737d7
         with:
           category: "/language:security-scan"
 

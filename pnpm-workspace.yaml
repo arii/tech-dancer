@@ -2,3 +2,6 @@ packages:
   - "."
   - "boomtick-pkg/mcp"
 enableGlobalVirtualStore: true
+blockExoticSubdeps: true
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade

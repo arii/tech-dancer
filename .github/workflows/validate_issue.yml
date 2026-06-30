@@ -17,7 +17,7 @@ jobs:
       - name: Configure Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           fetch-depth: 0
       - name: Setup Workspace
