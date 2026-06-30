@@ -1,5 +1,12 @@
 import { Tool, Prompt, Resource } from "@modelcontextprotocol/sdk/types.js";
-import schemas from "../../../cli/dev_tools/generated-schemas.json" with { type: "json" };
+import schemas_raw from "../../../cli/dev_tools/generated-schemas.json" with { type: "json" };
+
+const schemas = schemas_raw as Record<string, {
+  type: "object";
+  properties: Record<string, any>;
+  required?: string[];
+  title?: string;
+}>;
 
 export const MCP_PROMPTS: Prompt[] = [
   {
@@ -82,36 +89,22 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "github.search_open_prs",
     description: "Search for open pull requests in the repository.",
-    inputSchema: schemas["github.search_open_prs"] as any,
+    inputSchema: schemas["github.search_open_prs"],
   },
   {
     name: "github.get_pr_diff",
     description: "Get the diff and changed files for a pull request.",
-    inputSchema: schemas["github.get_pr_diff"] as any,
+    inputSchema: schemas["github.get_pr_diff"],
   },
   {
     name: "github.checkout_branch",
     description: "Checkout a specific branch in the repository or worktree.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        branch: { type: "string", description: "The name of the branch to checkout." },
-        worktreePath: { type: "string", description: "Optional path to the worktree to perform the checkout in." },
-      },
-      required: ["branch"],
-    },
+    inputSchema: schemas["github.checkout_branch"],
   },
   {
     name: "github.get_merge_conflict_files",
     description: "Detect files that conflict when a PR is merged with the base branch.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        prNumber: { type: "number", description: "The number of the pull request to check for conflicts." },
-        baseBranch: { type: "string", default: "main", description: "The base branch to check against (default: 'main')." },
-      },
-      required: ["prNumber"],
-    },
+    inputSchema: schemas["github.get_merge_conflict_files"],
   },
   {
     name: "repo.get_changed_files",
@@ -150,7 +143,7 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "repo.read_ci_logs",
     description: "Read CI logs for a given pull request.",
-    inputSchema: schemas["repo.read_ci_logs"] as any,
+    inputSchema: schemas["repo.read_ci_logs"],
   },
   {
     name: "repo.logs",
@@ -192,15 +185,7 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "repo.run_tests",
     description: "Run repository tests and checks.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        commands: { type: "array", items: { type: "string" }, description: "Optional list of commands to run (default includes install, lint, test, build)." },
-        timeoutSeconds: { type: "number", default: 300, description: "Maximum time in seconds to wait for tests (default: 300)." },
-        worktreePath: { type: "string", description: "Optional path to the worktree to run tests in." },
-      },
-      required: [],
-    },
+    inputSchema: schemas["repo.run_tests"],
   },
   {
     name: "repo.run_lighthouse",
@@ -261,17 +246,7 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "github.create_pull_request",
     description: "Creates a pull request on GitHub using the MCP server's integrated credentials. Bypasses terminal CLI constraints.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        title: { type: "string", description: "PR Title." },
-        body: { type: "string", description: "Description of changes." },
-        head: { type: "string", description: "The branch containing changes to merge." },
-        base: { type: "string", default: "main", description: "The target branch to merge into." },
-        draft: { type: "boolean", default: false, description: "Whether to create the PR as a draft." }
-      },
-      required: ["title", "body", "head"]
-    }
+    inputSchema: schemas["github.create_pull_request"],
   },
   {
     name: "github.comment_triage_summary",
@@ -288,47 +263,27 @@ export const MCP_TOOLS: Tool[] = [
   {
     name: "github.issue_view",
     description: "View details of a GitHub issue including title, body, and state.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        issueNumber: { type: "number", description: "The number of the issue to view." },
-      },
-      required: ["issueNumber"],
-    },
+    inputSchema: schemas["github.issue_view"],
   },
   {
     name: "github.issue_update",
     description: "Update the body of a GitHub issue.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        issueNumber: { type: "number", description: "The number of the issue to update." },
-        body: { type: "string", description: "The new body content for the issue." },
-      },
-      required: ["issueNumber", "body"],
-    },
+    inputSchema: schemas["github.issue_update"],
   },
   {
     name: "github.issue_comment",
     description: "Add a new comment to a GitHub issue.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        issueNumber: { type: "number", description: "The number of the issue to comment on." },
-        body: { type: "string", description: "The content of the comment." },
-      },
-      required: ["issueNumber", "body"],
-    },
+    inputSchema: schemas["github.issue_comment"],
   },
   {
     name: "github.create_issue",
     description: "Create a new GitHub issue.",
-    inputSchema: schemas["github.create_issue"] as any,
+    inputSchema: schemas["github.create_issue"],
   },
   {
     name: "jules.create_session",
     description: "Create a Jules session that performs work externally and may generate a GitHub pull request.",
-    inputSchema: schemas["jules.create_session"] as any,
+    inputSchema: schemas["jules.create_session"],
   },
   {
     name: "jules.get_session",

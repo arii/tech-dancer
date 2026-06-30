@@ -9,13 +9,11 @@
           "closed",
           "all"
         ],
-        "title": "State",
         "type": "string"
       },
       "includeDrafts": {
         "default": true,
         "description": "Whether to include draft PRs in the results.",
-        "title": "Includedrafts",
         "type": "boolean"
       },
       "limit": {
@@ -23,8 +21,7 @@
         "description": "The maximum number of PRs to return (default: 100, range: 1-100).",
         "maximum": 100,
         "minimum": 1,
-        "title": "Limit",
-        "type": "integer"
+        "type": "number"
       },
       "labels": {
         "anyOf": [
@@ -39,8 +36,7 @@
           }
         ],
         "default": null,
-        "description": "Filter PRs by labels.",
-        "title": "Labels"
+        "description": "Filter PRs by labels."
       }
     },
     "title": "SearchPrsRequest",
@@ -50,12 +46,10 @@
     "properties": {
       "title": {
         "description": "The title of the issue.",
-        "title": "Title",
         "type": "string"
       },
       "body": {
         "description": "The body/description of the issue.",
-        "title": "Body",
         "type": "string"
       }
     },
@@ -70,8 +64,7 @@
     "properties": {
       "prNumber": {
         "description": "The number of the pull request to get the diff for.",
-        "title": "Prnumber",
-        "type": "integer"
+        "type": "number"
       }
     },
     "required": [
@@ -83,13 +76,11 @@
   "repo.read_ci_logs": {
     "properties": {
       "prNumber": {
-        "title": "Prnumber",
-        "type": "integer"
+        "type": "number"
       },
       "all": {
         "default": false,
         "description": "Include logs for successful runs (default: false).",
-        "title": "All",
         "type": "boolean"
       }
     },
@@ -103,7 +94,6 @@
     "properties": {
       "task": {
         "description": "The instructions for Jules.",
-        "title": "Task",
         "type": "string"
       },
       "branch": {
@@ -116,27 +106,188 @@
           }
         ],
         "default": null,
-        "description": "The base branch to start from (e.g., 'main').",
-        "title": "Branch"
+        "description": "The base branch to start from (e.g., 'main')."
       },
       "pr": {
         "anyOf": [
           {
-            "type": "integer"
+            "type": "number"
           },
           {
             "type": "null"
           }
         ],
         "default": null,
-        "description": "The PR number to use as the base branch context.",
-        "title": "Pr"
+        "description": "The PR number to use as the base branch context."
       }
     },
     "required": [
       "task"
     ],
     "title": "CreateJulesSessionRequest",
+    "type": "object"
+  },
+  "github.checkout_branch": {
+    "properties": {
+      "branch": {
+        "description": "The name of the branch to checkout.",
+        "type": "string"
+      },
+      "worktreePath": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Optional path to the worktree to perform the checkout in."
+      }
+    },
+    "required": [
+      "branch"
+    ],
+    "title": "CheckoutBranchRequest",
+    "type": "object"
+  },
+  "github.get_merge_conflict_files": {
+    "properties": {
+      "prNumber": {
+        "description": "The number of the pull request to check for conflicts.",
+        "type": "number"
+      },
+      "baseBranch": {
+        "default": "main",
+        "description": "The base branch to check against (default: 'main').",
+        "type": "string"
+      }
+    },
+    "required": [
+      "prNumber"
+    ],
+    "title": "GetMergeConflictFilesRequest",
+    "type": "object"
+  },
+  "repo.run_tests": {
+    "properties": {
+      "commands": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Optional list of commands to run (default includes install, lint, test, build)."
+      },
+      "timeoutSeconds": {
+        "default": 300,
+        "description": "Maximum time in seconds to wait for tests (default: 300).",
+        "type": "number"
+      },
+      "worktreePath": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Optional path to the worktree to run tests in."
+      }
+    },
+    "title": "RunTestsRequest",
+    "type": "object"
+  },
+  "github.create_pull_request": {
+    "properties": {
+      "title": {
+        "description": "PR Title.",
+        "type": "string"
+      },
+      "body": {
+        "description": "Description of changes.",
+        "type": "string"
+      },
+      "head": {
+        "description": "The branch containing changes to merge.",
+        "type": "string"
+      },
+      "base": {
+        "default": "main",
+        "description": "The target branch to merge into.",
+        "type": "string"
+      },
+      "draft": {
+        "default": false,
+        "description": "Whether to create the PR as a draft.",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "title",
+      "body",
+      "head"
+    ],
+    "title": "CreatePullRequestRequest",
+    "type": "object"
+  },
+  "github.issue_view": {
+    "properties": {
+      "issueNumber": {
+        "description": "The number of the issue to view.",
+        "type": "number"
+      }
+    },
+    "required": [
+      "issueNumber"
+    ],
+    "title": "IssueViewRequest",
+    "type": "object"
+  },
+  "github.issue_update": {
+    "properties": {
+      "issueNumber": {
+        "description": "The number of the issue to update.",
+        "type": "number"
+      },
+      "body": {
+        "description": "The new body content for the issue.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "issueNumber",
+      "body"
+    ],
+    "title": "IssueUpdateRequest",
+    "type": "object"
+  },
+  "github.issue_comment": {
+    "properties": {
+      "issueNumber": {
+        "description": "The number of the issue to comment on.",
+        "type": "number"
+      },
+      "body": {
+        "description": "The content of the comment.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "issueNumber",
+      "body"
+    ],
+    "title": "IssueCommentRequest",
     "type": "object"
   }
 }
