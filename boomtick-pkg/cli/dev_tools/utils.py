@@ -16,9 +16,6 @@ from pathlib import Path
 from typing import Optional, Union, List, Dict, Any, Set
 from dev_tools.config import get_config
 from github import Github, Auth
-from langchain_openai import ChatOpenAI
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage
 from dev_tools.version_utils import (
     get_stack_versions as _get_stack_versions,
     compare_versions as _compare_versions,
@@ -172,13 +169,39 @@ def to_standard_schema(schema, uppercase: bool = False):
     return schema
 
 def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
-    try:
-        from langchain_openai import ChatOpenAI
-        from langchain_core.messages import HumanMessage
-    except ImportError:
-        log_info("langchain_openai or langchain_core is not installed.")
+    """Unified helper to call AI API using requests with retries."""
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
         return None
+
+    if schema:
+        prompt += f"
+
+Output MUST be valid JSON matching this schema: {json.dumps(schema)}"
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    data = {
+        "model": model or get_config().ai_model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7
+    }
+
+    url = url or "https://api.openai.com/v1/chat/completions"
+
+    for _ in range(max_retries):
+        try:
+            response = requests.post(url, headers=headers, json=data, timeout=30)
+            response.raise_for_status()
+            return response.json()["choices"][0]["message"]["content"]
+        except Exception as e:
+            log_error(f"OpenAI Call failed: {e}")
+            time.sleep(1)
+
+    return None
 
     token = os.getenv("GITHUB_TOKEN")
     if not token:
@@ -336,13 +359,42 @@ def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: O
     return {"status": "success", "message": "AI Token usage is within limits.", "metrics": result}
 
 def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
-    """Unified helper to call Gemini API using LangChain."""
+    """Unified helper to call Gemini API using google-genai."""
     try:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        from langchain_core.messages import HumanMessage
+        from google import genai
+        from google.genai import types
     except ImportError:
-        log_info("langchain_google_genai or langchain_core is not installed.")
+        log_info("google-genai is not installed.")
         return None
+
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        return None
+
+    client = genai.Client(api_key=api_key)
+
+    if schema:
+        # Note: structured output handling varies by LangChain version/provider
+        # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
+        prompt += f"
+
+Output MUST be valid JSON matching this schema: {json.dumps(schema)}"
+
+    for _ in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model=model or get_gemini_model(),
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7,
+                ),
+            )
+            return response.text
+        except Exception as e:
+            log_error(f"Gemini Call failed: {e}")
+            time.sleep(1)
+
+    return None
 
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:

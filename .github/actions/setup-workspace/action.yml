@@ -49,11 +49,16 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         echo "::group::Install dev-tools"
+        # Make sure to install setuptools
+        pip install setuptools --break-system-packages
         pip install -e boomtick-pkg/cli/ --break-system-packages
 
-        # Add multiple potential local bin paths to GITHUB_PATH immediately after install
+        # Fallback directories where editable installs might put the binary
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
+
+        # also add /usr/local/bin to PATH for good measure in GitHub Actions root installs
+        echo "/usr/local/bin" >> "$GITHUB_PATH"
 
         echo "::endgroup::"
       shell: bash
@@ -63,15 +68,17 @@ runs:
       run: |
         # Force a refresh of the path in the current shell context if possible,
         # though GITHUB_PATH updates usually apply to subsequent steps.
-        export PATH="$HOME/.local/bin:/github/home/.local/bin:$PATH"
+        export PATH="$HOME/.local/bin:/github/home/.local/bin:/usr/local/bin:$PATH"
 
         if ! command -v td-cli >/dev/null 2>&1; then
           # Fallback check if it is in the known local bin but not on path yet
-          if [ -x "$HOME/.local/bin/td-cli" ] || [ -x "/github/home/.local/bin/td-cli" ]; then
+          if [ -x "$HOME/.local/bin/td-cli" ] || [ -x "/github/home/.local/bin/td-cli" ] || [ -x "/usr/local/bin/td-cli" ]; then
             echo "::warning::td-cli found in local bin but not yet on PATH. PATH updates will apply in next step."
           else
             echo "::error::td-cli not found on PATH or in known local bin directories after installation."
             echo "Current PATH: $PATH"
+            # In Github Actions runner image, Python scripts might be installed directly to /usr/local/bin
+            find /usr/local/bin -name "td*" -ls || true
             exit 1
           fi
         fi
