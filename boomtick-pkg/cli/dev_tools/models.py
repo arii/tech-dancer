@@ -20,13 +20,13 @@ class PRSummary(BaseModel):
 
 class CreateIssueInput(BaseModel):
     title: str = Field(..., min_length=1)
-    body: Optional[str] = None
-    file: Optional[str] = None
+    body: Optional[str] = Field(None, min_length=1)
+    file: Optional[str] = Field(None, min_length=1)
 
     @model_validator(mode='after')
     def check_body_or_file(self) -> 'CreateIssueInput':
-        if not self.body and not self.file:
-            raise ValueError("Provide either --file or --body")
+        if (self.body is None or not self.body.strip()) and (self.file is None or not self.file.strip()):
+            raise ValueError("Provide either --file or --body (cannot be empty)")
         if self.body and self.file:
             raise ValueError("Provide --file or --body, not both")
         return self
