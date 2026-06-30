@@ -1536,31 +1536,31 @@ Only after successful completion.
         prs_output = "No data."
         # Re-implement minimal overlap logic without pickle
         repo = get_github_client().get_repo(get_repo_name())
-            pulls = list(repo.get_pulls(state='open'))[:50]
+        pulls = list(repo.get_pulls(state='open'))[:50]
 
-            file_to_prs = defaultdict(list)
-            pr_titles = {}
-            for pr in pulls:
-                num = str(pr.number)
-                pr_titles[num] = pr.title
-                # Standardize file fetch to avoid visual snapshots
-                files = {f.filename for f in pr.get_files() if not f.filename.startswith("tests/visual.spec.ts-snapshots/")}
-                for f in files:
-                    file_to_prs[f].append(num)
+        file_to_prs = defaultdict(list)
+        pr_titles = {}
+        for pr in pulls:
+            num = str(pr.number)
+            pr_titles[num] = pr.title
+            # Standardize file fetch to avoid visual snapshots
+            files = {f.filename for f in pr.get_files() if not f.filename.startswith("tests/visual.spec.ts-snapshots/")}
+            for f in files:
+                file_to_prs[f].append(num)
 
-            overlap_groups = defaultdict(list)
-            for file, prs in file_to_prs.items():
-                if len(prs) > 1:
-                    overlap_groups[frozenset(prs)].append(file)
+        overlap_groups = defaultdict(list)
+        for file, prs in file_to_prs.items():
+            if len(prs) > 1:
+                overlap_groups[frozenset(prs)].append(file)
 
-            report = ["--- EXACT OVERLAP GROUPS ---"]
-            for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
-                pr_list = sorted(list(pr_set), key=int)
-                report.append(f"PRs {', '.join(pr_list)} overlap on {len(files)} files:")
-                for pr_num in pr_list:
-                    report.append(f"  [{pr_num}] {pr_titles.get(pr_num)}")
+        report = ["--- EXACT OVERLAP GROUPS ---"]
+        for pr_set, files in sorted(overlap_groups.items(), key=lambda x: len(x[1]), reverse=True):
+            pr_list = sorted(list(pr_set), key=int)
+            report.append(f"PRs {', '.join(pr_list)} overlap on {len(files)} files:")
+            for pr_num in pr_list:
+                report.append(f"  [{pr_num}] {pr_titles.get(pr_num)}")
 
-            prs_output = "\n".join(report)
+        prs_output = "\n".join(report)
 
         # Generate workflow plan
         plan_dir = get_or_create_log_dir("workflows")
