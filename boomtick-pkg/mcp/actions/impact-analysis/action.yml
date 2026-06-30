@@ -189,7 +189,7 @@ runs:
 
     - name: Upload Deployment Review Artifacts
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
       with:
         name: deployment-review
         path: artifacts/

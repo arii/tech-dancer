@@ -23,11 +23,11 @@ runs:
   steps:
     - name: Setup pnpm
       if: inputs.setup-node == 'true'
-      uses: pnpm/action-setup@v6
+      uses: pnpm/action-setup@feaa28b6d19ca7b57d62283ea4e116f1947b1129
 
     - name: Setup Node.js
       if: inputs.setup-node == 'true'
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@1d429da20d2c1969da6db196842958c2d3a8f096
       with:
         cache: 'pnpm'
         cache-dependency-path: pnpm-lock.yaml

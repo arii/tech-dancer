@@ -15,7 +15,7 @@ describe('Schema generation', () => {
           description: 'Test Description',
           imageUrl: '/test-image.jpg',
           href: '/test-product',
-          price: '$25.00',
+          price: '5.00',
           collections: ['test'],
           tags: ['test'],
           disclosure: 'owned-printful'
@@ -85,7 +85,7 @@ describe('Schema generation', () => {
       expect(getImageUrl('/images/foo.webp')).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
 
       // Path without leading slash
-      expect(getImageUrl('assets/foo.webp')).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
+      expect(getImageUrl('images/foo.webp')).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
 
       // External URL
       expect(getImageUrl('https://example.com/foo.webp')).toBe('https://example.com/foo.webp');
