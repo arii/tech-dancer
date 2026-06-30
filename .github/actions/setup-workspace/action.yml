@@ -96,8 +96,8 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         # Use absolute paths for host-based execution
-        # Use $(pwd) as fallback if GITHUB_WORKSPACE is not set or relative
-        REPO_DIR=$(pwd)
+        # Ensure CLI_DIR is an absolute path based on the runner workspace
+        REPO_DIR="${GITHUB_WORKSPACE:-$(pwd)}"
         CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
 
         echo "CLI_DIR=$CLI_DIR" >> "$GITHUB_ENV"

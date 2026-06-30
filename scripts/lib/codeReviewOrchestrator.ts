@@ -165,8 +165,12 @@ async function getGitArgs(): Promise<{ diffArgs: string[], nameOnlyArgs: string[
 }
 
 async function getAIContext(inputData: string): Promise<Record<string, unknown>[]> {
+  const cliDir = process.env.CLI_DIR || path.join(process.cwd(), 'boomtick-pkg/cli');
+
   return new Promise((resolve, reject) => {
-    const child = spawn('python3', ['-m', 'dev_tools.get_ai_context']);
+    const child = spawn('python3', ['-m', 'dev_tools.get_ai_context'], {
+      env: { ...process.env, PYTHONPATH: cliDir }
+    });
     let stdout = '';
     let stderr = '';
 
