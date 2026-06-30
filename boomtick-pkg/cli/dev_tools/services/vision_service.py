@@ -2,8 +2,7 @@ import os
 import json
 import base64
 from typing import Optional, List, Dict
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
+import requests
 from dev_tools.config import load_project_config
 from dev_tools.utils import log_error
 
@@ -32,14 +31,6 @@ class VisionService:
         if not self.token:
             return "No GITHUB_TOKEN found."
 
-        llm = ChatOpenAI(
-            base_url="https://models.inference.ai.azure.com",
-            api_key=self.token,
-            model=self.model,
-            temperature=0.7,
-            max_tokens=2048,
-        )
-
         message_content = [{"type": "text", "text": prompt}]
         for img in images:
             message_content.append({
@@ -47,9 +38,24 @@ class VisionService:
                 "image_url": {"url": f"data:image/jpeg;base64,{img}"}
             })
 
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.token}"
+        }
+
+        data = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": message_content}],
+            "temperature": 0.7,
+            "max_tokens": 2048,
+        }
+
+        url = "https://models.inference.ai.azure.com/chat/completions"
+
         try:
-            response = llm.invoke([HumanMessage(content=message_content)])
-            return response.content
+            response = requests.post(url, headers=headers, json=data, timeout=60)
+            response.raise_for_status()
+            return response.json()["choices"][0]["message"]["content"]
         except Exception as e:
             return f"❌ Vision call failed: {e}"
 

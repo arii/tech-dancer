@@ -175,9 +175,7 @@ def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retri
         return None
 
     if schema:
-        prompt += f"
-
-Output MUST be valid JSON matching this schema: {json.dumps(schema)}"
+        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
 
     headers = {
         "Content-Type": "application/json",
@@ -376,9 +374,7 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
     if schema:
         # Note: structured output handling varies by LangChain version/provider
         # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
-        prompt += f"
-
-Output MUST be valid JSON matching this schema: {json.dumps(schema)}"
+        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
 
     for _ in range(max_retries):
         try:
