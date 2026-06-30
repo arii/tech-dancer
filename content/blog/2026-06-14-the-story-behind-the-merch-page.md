@@ -5,7 +5,7 @@ date: "2026-06-14"
 author: "Ariel Anders, PhD"
 category: "Community"
 excerpt: "How a single T-shirt for a local event evolved into a full collection of West Coast Swing apparel celebrating NorCal roots and role-fluid energy."
-image: "/assets/events/jjo-hero.svg"
+image: "/images/events/jjo-hero.svg"
 imageAlt: "Dancers at Jack & Jill Orama wearing event t-shirts."
 tags: ["merch", "community", "NorCal", "WCS"]
 affiliateIds:
@@ -19,13 +19,13 @@ Every great project has a "Day Zero"—a moment where a specific problem needs a
 
 It started with a simple goal: we needed shirts for a specific event. Jack & Jill Orama (JJO) is a beloved local West Coast Swing event, and we wanted to create something that captured the fun, competitive, yet community-focused spirit of the weekend.
 
-![Jack & Jill Orama Hero](/assets/events/jjo-hero.svg)
+![Jack & Jill Orama Hero](/images/events/jjo-hero.svg)
 
 The initial designs were highly focused. We weren't thinking about a "store" or a "brand" yet. We just wanted the dancers at JJO to have a piece of the event they could take home. But the response was overwhelming. Dancers didn't just want event shirts; they wanted shirts that spoke to their identity as West Coast Swing dancers year-round.
 
 Here's the original T-shirt that's the one with a colorful NorCal Best Cal and the bear only. We forgot to get them printed on time!
 
-![Original Shirt](/assets/posts/original_shirt.jpg)
+![Original Shirt](/images/posts/original_shirt.webp)
 
 ## NorCal vs. SoCal: The "Best Cal" Backstory
 
@@ -35,9 +35,9 @@ Living in the Bay Area, we felt it was time to represent. The "Nor Cal Best Cal"
 
 So I created the print-on-demand options, which are the two items I'm wearing, plus a few other options we had for the event.
 
-![Me wearing new NorCal shirt (black)](/assets/posts/mewearing_new_norcal_shirt.jpg)
+![Me wearing new NorCal shirt (black)](/images/posts/mewearing_new_norcal_shirt.webp)
 
-![Me wearing new NorCal shirt (pink)](/assets/posts/me_wearing_new_norcalshirt.jpg)
+![Me wearing new NorCal shirt (pink)](/images/posts/mewearing_new_norcal_shirt.webp)
 
 <notice type="affiliate" id="norcal-bestcal-tshirt" />
 
@@ -59,7 +59,7 @@ From the intricate "War Eagle" back prints to the minimalist role checklists, ev
 
 And then I went on to create more BoomTick style merchandise like the slot era mug.
 
-![Boomtick Merch](/assets/posts/booomtick_merch.jpg)
+![Boomtick Merch](/images/posts/booomtick_merch.webp)
 
 The store is a living project. We’re constantly adding new designs based on community feedback and the latest events. Whether you're a NorCal local, a dedicated switch dancer, or just someone who loves a good graphic tee, there’s something for you.
 

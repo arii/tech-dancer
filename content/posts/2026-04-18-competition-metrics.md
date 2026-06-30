@@ -7,7 +7,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "Tech"
 excerpt: "Announcing a new tool for a clearer way to look at West Coast Swing competition results."
-image: "/assets/posts/competition-data-thumb.svg"
+image: "/images/posts/competition-data-thumb.svg"
 tags:
   - competition
   - metrics

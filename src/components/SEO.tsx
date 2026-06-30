@@ -33,7 +33,7 @@ export function SEO({
   const url = canonical || `${BASE_URL}${pathname}`;
   const displayTitle = `${title} | ${SITE_NAME}`;
 
-  const defaultImage = `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`;
+  const defaultImage = `${BASE_URL}${ASSET_PREFIX}/images/hero/comp_analysis_hero.webp`;
 
   // Use a dynamic OG image generator if no specific image is provided for articles
   // Removed Vercel logos to better align with TechDancer brand

@@ -8,10 +8,10 @@ const item: ProductCatalogItem = {
   source: 'owned-merch',
   title: 'Test Front Back Shirt',
   description: 'A shirt with separate front and back views.',
-  imageUrl: '/assets/gear/test-front.webp',
+  imageUrl: '/images/gear/test-front.webp',
   images: [
-    { src: '/assets/gear/test-front.webp', side: 'front', alt: 'Front view of test shirt' },
-    { src: '/assets/gear/test-back.webp', side: 'back', alt: 'Back view of test shirt' },
+    { src: '/images/gear/test-front.webp', side: 'front', alt: 'Front view of test shirt' },
+    { src: '/images/gear/test-back.webp', side: 'back', alt: 'Back view of test shirt' },
   ],
   imageDisplayMode: 'both-equal',
   href: 'https://boomtick.printful.me/product/test-shirt',

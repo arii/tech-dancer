@@ -192,7 +192,7 @@ export function EcommerceAutomationTool() {
           <Box border radius="md" overflow="hidden" surface="default">
             <Box padding={4} aspect="square" display="flex" align="center" justify="center">
               <img
-                src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-front.webp`}
+                src={`${ASSET_PREFIX}/images/gear/norcal-bestcal-front.webp`}
                 alt="NorCal BestCal Front Mockup"
                 className="max-w-full max-h-full object-contain"
               />
@@ -205,7 +205,7 @@ export function EcommerceAutomationTool() {
           <Box border radius="md" overflow="hidden" surface="default">
             <Box padding={4} aspect="square" display="flex" align="center" justify="center">
               <img
-                src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-back.webp`}
+                src={`${ASSET_PREFIX}/images/gear/norcal-bestcal-back.webp`}
                 alt="NorCal BestCal Back Mockup"
                 className="max-w-full max-h-full object-contain"
               />

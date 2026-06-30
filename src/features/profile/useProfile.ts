@@ -1,10 +1,5 @@
 import { ProfileData } from './types';
 import { SOCIAL_LINKS } from '@/config/constants';
-import firstComp from '@/assets/first_comp.jpg';
-import glowBunny from '@/assets/glow_bunny.jpg';
-import madJamAri from '@/assets/mad_jam_ari.jpg';
-import monterey from '@/assets/monterey.jpg';
-import wwwAri from '@/assets/www_ari.jpg';
 
 const PROFILE_DATA: ProfileData = {
   name: "Ariel Anders, PhD",
@@ -38,15 +33,15 @@ const PROFILE_DATA: ProfileData = {
       title: "My Dance Background",
       content: "I started in partner dance in 2019 with Lindy Hop and Fusion. After a pause from 2020 through 2022, I moved to San Francisco and got back into dancing at Lindy in the Park. A Mission City Swing series introduced me to West Coast Swing, and it clicked quickly — the music, the connection, and the creative feel of the dance made it easy to care deeply about. WCS became my main focus because it combines artistry, athleticism, and a genuinely welcoming community.",
       gallery: [
-        { src: monterey, alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" },
-        { src: firstComp, alt: "Ariel Anders performing a West Coast Swing extension during a competition" }
+        { src: "/images/profile/monterey.webp", alt: "Ariel Anders on stage at a West Coast Swing event in Monterey, California" },
+        { src: "/images/profile/first_comp.webp", alt: "Ariel Anders performing a West Coast Swing extension during a competition" }
       ]
     },
     {
       id: "wcs-love",
       title: "What I Love About WCS",
       gallery: [
-        { src: glowBunny, alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event" }
+        { src: "/images/profile/glow_bunny.webp", alt: "Ariel Anders wearing a creative LED light-up bunny costume at a dance event" }
       ],
       items: [
         {
@@ -71,7 +66,7 @@ const PROFILE_DATA: ProfileData = {
       title: "Why I Built This Site",
       content: "boomtick.blog is where I share the practical side of a WCS lifestyle: practical travel advice, practical tools, event notes, and the small choices that make a big difference over a season of dancing.",
       gallery: [
-        { src: madJamAri, alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
+        { src: "/images/profile/mad_jam_ari.webp", alt: "Ariel Anders social dancing at the MADjam West Coast Swing convention" }
       ]
     },
     {
@@ -79,7 +74,7 @@ const PROFILE_DATA: ProfileData = {
       title: "Financial Strategies for WCS",
       content: "I love maximizing credit card perks and hotel benefits, which helps me make the WCS event lifestyle both high-end and feasible. The goal is to spend more energy dancing and less energy stressing over the logistics.",
       gallery: [
-        { src: wwwAri, alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
+        { src: "/images/profile/www_ari.webp", alt: "Ariel Anders demonstrating athletic connection in a high-energy social dance session" }
       ]
     },
     {

@@ -46,7 +46,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     tags: ['React', 'Web Bluetooth', 'Spotify API', 'Product'],
     sourceUrl: 'https://github.com/arii/hrm',
     isFlagship: true,
-    image: '/assets/research/hrm-flagship.png',
+    image: '/images/research/hrm-flagship.webp',
     imageAlt: 'Screenshot of the HRM heart rate monitor training dashboard with real-time biometric telemetry and Spotify integration'
   },
   {
@@ -65,7 +65,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     externalLinkDisplayLabel: 'Open RepoAuditor AI',
     sourceUrl: 'https://github.com/arii/hrm-project-management',
     isFlagship: true,
-    image: '/assets/research/repo-auditor-ai.png',
+    image: '/images/research/repo-auditor-ai.webp',
     imageAlt: 'Screenshot of the RepoAuditor AI workflow console displaying multi-repo pull request audit findings and issue prioritization'
   },
   {

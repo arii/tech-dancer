@@ -116,15 +116,15 @@ When a PR is opened, the analyzer posts a summary directly to the GitHub convers
 <Grid cols={{ base: 1, md: 3 }} gap={6}>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Before</Text>
-    ![Baseline](/assets/studies/deployment-impact-analyzer/before.png)
+    ![Baseline](/images/studies/deployment-impact-analyzer/before.png)
   </Stack>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">After</Text>
-    ![Current](/assets/studies/deployment-impact-analyzer/after.png)
+    ![Current](/images/studies/deployment-impact-analyzer/after.png)
   </Stack>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">Diff</Text>
-    ![Visual Delta](/assets/studies/deployment-impact-analyzer/diff.png)
+    ![Visual Delta](/images/studies/deployment-impact-analyzer/diff.png)
   </Stack>
 </Grid>
 </Box>
@@ -147,15 +147,15 @@ We implemented a fix using Tailwind's `truncate` and `flex-wrap` utilities, ensu
 <Grid cols={{ base: 1, md: 3 }} gap={6}>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">1. Missing</Text>
-    ![404 Error](/assets/studies/deployment-impact-analyzer/before-mobile.png)
+    ![404 Error](/images/studies/deployment-impact-analyzer/before-mobile.png)
   </Stack>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">2. Diff</Text>
-    ![Regression Delta](/assets/studies/deployment-impact-analyzer/diff-mobile.png)
+    ![Regression Delta](/images/studies/deployment-impact-analyzer/diff-mobile.png)
   </Stack>
   <Stack gap={3}>
     <Text variant="mono" size="micro" weight="font-bold" uppercase color="dim" align="center">3. Fixed</Text>
-    ![Resolution](/assets/studies/deployment-impact-analyzer/after-mobile.png)
+    ![Resolution](/images/studies/deployment-impact-analyzer/after-mobile.png)
   </Stack>
 </Grid>
 </Box>

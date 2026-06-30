@@ -41,7 +41,7 @@ export const STATIC_SCHEMAS = {
       "@type": "Person",
       "name": bioName,
       "description": bioRole,
-      "image": `${BASE_URL}${ASSET_PREFIX}/assets/comp_analysis_hero.webp`,
+      "image": `${BASE_URL}${ASSET_PREFIX}/images/hero/comp_analysis_hero.webp`,
       "jobTitle": bioRole,
       "url": `${BASE_URL}/about`,
       "sameAs": [

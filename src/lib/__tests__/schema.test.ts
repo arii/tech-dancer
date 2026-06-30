@@ -82,20 +82,20 @@ describe('Schema generation', () => {
       const assetPrefix = ASSET_PREFIX;
 
       // Relative path
-      expect(getImageUrl('/assets/foo.webp')).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+      expect(getImageUrl('/images/foo.webp')).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
 
       // Path without leading slash
-      expect(getImageUrl('assets/foo.webp')).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+      expect(getImageUrl('assets/foo.webp')).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
 
       // External URL
       expect(getImageUrl('https://example.com/foo.webp')).toBe('https://example.com/foo.webp');
 
       // Already contains base URL
-      expect(getImageUrl(`${baseUrl}/assets/foo.webp`)).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+      expect(getImageUrl(`${baseUrl}/images/foo.webp`)).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
 
       // Already contains asset prefix (if prefix is not '/')
       if (assetPrefix !== '' && assetPrefix !== '/') {
-         expect(getImageUrl(`${assetPrefix}/assets/foo.webp`)).toBe(`${baseUrl}${assetPrefix}/assets/foo.webp`);
+         expect(getImageUrl(`${assetPrefix}/images/foo.webp`)).toBe(`${baseUrl}${assetPrefix}/images/foo.webp`);
       }
     });
 

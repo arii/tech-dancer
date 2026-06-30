@@ -68,4 +68,4 @@ The tool uses the following environment variables if available:
 ## Image Storage
 
 - Amazon images: `public/images/gear/amazon/`
-- General gear assets: `public/assets/gear/`
+- General gear assets: `public/images/gear/`

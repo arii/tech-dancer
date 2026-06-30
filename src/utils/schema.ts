@@ -69,7 +69,7 @@ export const AMAZON_AFFILIATE_DISCLOSURE = "As an Amazon Associate, BoomTick may
 /**
  * Ensures a valid image URL without duplicate prefixes.
  * Handles:
- * - /assets/foo.webp -> BASE_URL + ASSET_PREFIX + /assets/foo.webp (avoiding duplication)
+ * - /images/foo.webp -> BASE_URL + ASSET_PREFIX + /images/foo.webp (avoiding duplication)
  * - https://example.com/foo.webp -> unchanged
  */
 export function getImageUrl(url?: string, defaultUrl?: string): string {
@@ -133,7 +133,7 @@ export function generateGearCatalogSchema(resources: Resource[]): SchemaItemList
         "@type": "Product",
         "name": resource.title,
         "description": isAmazon ? `${resource.excerpt} ${AMAZON_AFFILIATE_DISCLOSURE}` : resource.excerpt,
-        "image": getImageUrl(resource.image, `/assets/comp_analysis_hero.webp`),
+        "image": getImageUrl(resource.image, `/images/hero/comp_analysis_hero.webp`),
         "brand": {
           "@type": "Brand",
           "name": "BoomTick"

@@ -7,7 +7,7 @@ date: "2026-04-18"
 author: "Ariel Anders, PhD"
 category: "WCS"
 excerpt: "A data-driven look at the WSDC points system, the 'Tier 3 Sweet Spot', and why survival math is the hardest part of West Coast Swing."
-image: "/assets/posts/competition-data-thumb.svg"
+image: "/images/posts/competition-data-thumb.svg"
 imageAlt: "A technical visualization showing the WSDC Tier structure and round requirements, illustrating why the jump from Tier 3 to Tier 4 is the biggest hurdle for competitive dancers."
 imageFit: "contain"
 tags:

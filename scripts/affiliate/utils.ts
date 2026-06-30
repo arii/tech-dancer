@@ -8,7 +8,7 @@ export function getAffiliateTag(): string {
 }
 export const AFFILIATES_JSON_PATH = path.join(process.cwd(), 'src/data/affiliates.json');
 export const AMAZON_IMAGE_DIR = path.join(process.cwd(), 'public/images/gear/amazon');
-export const GEAR_ASSET_DIR = path.join(process.cwd(), 'public/assets/gear');
+export const GEAR_ASSET_DIR = path.join(process.cwd(), 'public/images/gear');
 
 export interface AffiliateItem {
   id: string;

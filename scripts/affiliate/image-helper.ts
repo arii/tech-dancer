@@ -98,7 +98,7 @@ export async function captureImage(options: {
     const destPath = path.join(targetDir, filename);
     const relativePath = isAmazon
       ? `/images/gear/amazon/${filename}`
-      : `/assets/gear/${filename}`;
+      : `/images/gear/${filename}`;
 
     if (fs.existsSync(destPath) && !force) {
       console.log(`Image already exists: ${destPath}. Use --force to overwrite.`);

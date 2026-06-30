@@ -30,7 +30,7 @@ export default function BlogPost() {
         "url": `${BASE_URL}/about`
       },
       "datePublished": post.date,
-      "image": post.image || `${BASE_URL}/assets/comp_analysis_hero.webp`,
+      "image": post.image || `${BASE_URL}/images/hero/comp_analysis_hero.webp`,
       "publisher": {
         "@type": "Organization",
         "name": SITE_NAME,

@@ -35,7 +35,7 @@ export default function Home() {
 
       <Box marginTop={{ base: 12, lg: 8 }}>
         <PromoStrip
-          imageSrc="/assets/gear/norcal-bestcal-front.webp"
+          imageSrc="/images/gear/norcal-bestcal-front.webp"
           title="Shop NorCal pride merch"
           subtitle="Tees, hoodies, and tanks for the dance floor"
           ctaLabel="Shop now"

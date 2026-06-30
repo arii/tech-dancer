@@ -4,7 +4,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import { useProfile } from './useProfile';
 import { ProfileSection, ProfileDetail } from './types';
-import roboticistPhoto from '@/assets/roboticist.jpg';
 import {
   ExperienceCards,
   ProfileItems,
@@ -144,7 +143,7 @@ function ArielProfile() {
                   className="shadow-2xl border-line/10 relative"
                 >
                   <img
-                    src={roboticistPhoto}
+                    src="/images/profile/roboticist.webp"
                     alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
                     width={960}
                     height={949}

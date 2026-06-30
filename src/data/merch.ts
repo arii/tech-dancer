@@ -21,7 +21,7 @@ export const COLLECTIONS = [
   { id: 'rainbow-pride', label: 'Rainbow Pride' },
 ] as const;
 
-const gearImage = (fileName: string) => `/assets/gear/${fileName}`;
+const gearImage = (fileName: string) => `/images/gear/${fileName}`;
 
 export const MERCH_PRODUCTS: MerchProduct[] = [
   {

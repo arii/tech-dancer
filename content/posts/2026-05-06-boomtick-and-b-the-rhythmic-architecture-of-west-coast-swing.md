@@ -6,7 +6,7 @@ date: "2026-05-06"
 author: "Ariel Anders, PhD"
 category: "WCS"
 excerpt: "Exploring the legacy of Skippy Blair, the Universal Unit System, and why the B\\ logo represents the soul of syncopated movement."
-image: "/assets/posts/boomtick-and-b-thumb.svg"
+image: "/images/posts/boomtick-and-b-thumb.svg"
 ---
 
 ## Welcome to BoomTick.blog: The Pulse of the Music
