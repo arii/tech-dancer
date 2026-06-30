@@ -58,7 +58,7 @@ class TestModernCLI(unittest.TestCase):
 
     @patch('dev_tools.orchestrator.Orchestrator.resolve_pr_conflicts')
     def test_resolve_conflicts_handles_error(self, mock_resolve):
-        from utils import CLIError
+        from dev_tools.utils import CLIError
         mock_resolve.side_effect = CLIError("Failed setup", code=500)
         result = self.runner.invoke(cli, ['gh', 'resolve-conflicts', '--pr', '123'])
         self.assertNotEqual(result.exit_code, 0)

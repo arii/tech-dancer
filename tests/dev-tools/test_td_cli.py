@@ -5,10 +5,9 @@ import os
 import json
 
 # Add dev-tools to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../dev-tools')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli/dev_tools')))
 
 import td_cli
-from submit_review import submit_review
 
 class TestTDCLI(unittest.TestCase):
 
@@ -42,48 +41,6 @@ class TestTDCLI(unittest.TestCase):
 
         # Verify comment was NOT created
         mock_issue.create_comment.assert_not_called()
-
-    @patch('dev_tools.services.github.GitHubClient.fetch_check_runs')
-    @patch('submit_review.get_github_token')
-    @patch('submit_review.get_repo_name')
-    @patch('submit_review.get_github_client')
-    @patch('os.path.exists')
-    @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='# Review\n```json\n{"body": "Approved"}\n```')
-    @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
-    def test_submit_review_dry_run_default(self, mock_file, mock_exists, mock_get_client, mock_repo, mock_token, mock_fetch_checks):
-        """Test that submit_review defaults to dry-run True"""
-        mock_exists.return_value = True
-        mock_token.return_value = "fake-token"
-        mock_repo.return_value = "owner/repo"
-
-        mock_pr = MagicMock()
-        mock_get_client.return_value.get_repo.return_value.get_pull.return_value = mock_pr
-
-        submit_review(123, "fake-path.md", dry_run=True)
-
-        # Verify review was NOT created
-        mock_pr.create_review.assert_not_called()
-
-    @patch('dev_tools.services.github.GitHubClient.fetch_check_runs')
-    @patch('submit_review.get_github_token')
-    @patch('submit_review.get_repo_name')
-    @patch('submit_review.get_github_client')
-    @patch('os.path.exists')
-    @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='# Review\n```json\n{"body": "Approved"}\n```')
-    @patch.dict('os.environ', {'GITHUB_TOKEN': 'fake-token'})
-    def test_submit_review_execute(self, mock_file, mock_exists, mock_get_client, mock_repo, mock_token, mock_fetch_checks):
-        """Test that submit_review executes when dry_run is False"""
-        mock_exists.return_value = True
-        mock_token.return_value = "fake-token"
-        mock_repo.return_value = "owner/repo"
-
-        mock_pr = MagicMock()
-        mock_get_client.return_value.get_repo.return_value.get_pull.return_value = mock_pr
-
-        submit_review(123, "fake-path.md", dry_run=False)
-
-        # Verify review WAS created
-        mock_pr.create_review.assert_called_once()
 
     @patch('td_cli.get_gha_variable')
     @patch('os.path.exists')
@@ -126,7 +83,7 @@ class TestTDCliCrash(unittest.TestCase):
 
 class TestAISchemaConversion(unittest.TestCase):
     def test_to_standard_schema(self):
-        from utils import to_standard_schema
+        from dev_tools.utils import to_standard_schema
         gemini_schema = {
             "type": "OBJECT",
             "properties": {

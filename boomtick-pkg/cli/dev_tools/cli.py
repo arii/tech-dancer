@@ -325,8 +325,12 @@ def conflicts(ctx):
 def resolve_conflicts(ctx, pr, allow_unrelated, strategy, push):
     """Resolve merge conflicts for a PR in a separate worktree."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.resolve_pr_conflicts(pr, allow_unrelated=allow_unrelated, strategy=strategy, push=push)
-    out(ctx, res['message'], data=res)
+    try:
+        res = orch.resolve_pr_conflicts(pr, allow_unrelated=allow_unrelated, strategy=strategy, push=push)
+        out(ctx, res['message'], data=res)
+    except CLIError as e:
+        err(ctx, str(e), code=e.code)
+
 
 @gh.command()
 @click.argument('diff_input', required=False)

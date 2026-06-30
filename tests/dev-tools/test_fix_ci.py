@@ -4,10 +4,10 @@ import sys
 import os
 
 # Add dev-tools to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../dev-tools')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../boomtick-pkg/cli/dev_tools')))
 
 import td_cli
-from utils import CLIError
+from dev_tools.utils import CLIError
 
 class TestFixCIValidation(unittest.TestCase):
 
