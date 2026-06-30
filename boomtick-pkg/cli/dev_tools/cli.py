@@ -713,10 +713,19 @@ def review(ctx, pr_number, no_cache):
 def ai_get_context(ctx):
     """Retrieve dependency and semantic context for a set of changed files."""
     try:
-        input_data = json.load(sys.stdin)
+        raw_data = sys.stdin.read()
+        if not raw_data.strip():
+            err(ctx, "Empty input from stdin")
+        input_data = json.loads(raw_data)
     except Exception as e:
         err(ctx, f"Failed to parse input JSON: {e}")
         sys.exit(1)
+
+    if not isinstance(input_data, dict):
+        err(ctx, "Input JSON must be a dictionary")
+
+    if "files" not in input_data:
+        err(ctx, "Input JSON missing required 'files' key")
 
     files_data = input_data.get("files", [])
     if not files_data:
