@@ -176,6 +176,26 @@ def log_ai_run(entry: dict):
     except Exception as e:
         log_error(f"Failed to append to AI run log: {e}")
 
+def _call_api_with_retry(req, max_retries=3):
+    """
+    Helper to execute an HTTP request using urllib with retries and backoff.
+    """
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:  # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
+                if response.status == 200:
+                    return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                log_warn(f"Rate limited (429). Retrying in {2**attempt}s...")
+                time.sleep(2**attempt)
+            else:
+                log_error(f"HTTP Error {e.code}: {e.read().decode('utf-8')}")
+                break
+        except Exception as e:
+            log_warn(f"API Connection error: {e}. Retrying in {2**attempt}s...")
+            time.sleep(2**attempt)
+    return None
 
 def call_github_models(prompt: str, model: str = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call GitHub Models API (OpenAI-compatible)."""

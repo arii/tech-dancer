@@ -12,31 +12,44 @@ class JulesClient:
 
         self.base_url = "https://jules.googleapis.com/v1alpha"
         self.legacy_url = "https://api.jules.ai/v1/sessions"
+
         self.headers = {
             "Content-Type": "application/json",
             "x-goog-api-key": self.api_key
         }
+
+        self._session = requests.Session()
+        try:
+            from requests.adapters import HTTPAdapter
+            from urllib3.util.retry import Retry
+            retry_strategy = Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+            self._session.mount("https://", adapter)
+            self._session.mount("http://", adapter)
+        except ImportError:
+            pass
+
 
     def _get_clean_id(self, res_id: str, prefix: str) -> str:
         return res_id.replace(f"{prefix}/", "")
 
     def list_sources(self) -> List[Dict[str, Any]]:
         url = f"{self.base_url}/sources"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = self._session.get(url, headers=self.headers, timeout=60)
         response.raise_for_status()
         return response.json().get("sources", [])
 
     def list_sessions(self, pageSize: int = 100) -> List[Dict[str, Any]]:
         url = f"{self.base_url}/sessions"
         params = {"pageSize": pageSize}
-        response = requests.get(url, headers=self.headers, params=params, timeout=10)
+        response = self._session.get(url, headers=self.headers, params=params, timeout=60)
         response.raise_for_status()
         return response.json().get("sessions", [])
 
     def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
         clean_id = self._get_clean_id(session_id, "sessions")
         url = f"{self.base_url}/sessions/{clean_id}"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = self._session.get(url, headers=self.headers, timeout=60)
         response.raise_for_status()
         return response.json()
 
@@ -66,7 +79,7 @@ class JulesClient:
         log_debug(f"Creating Jules session at {url}")
         log_debug(f"Payload: {payload}")
 
-        response = requests.post(url, headers=self.headers, json=payload, timeout=15)
+        response = self._session.post(url, headers=self.headers, json=payload, timeout=15)
         response.raise_for_status()
         return response.json()
 
@@ -75,7 +88,7 @@ class JulesClient:
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
         payload = {"prompt": prompt, "branch": branch, "title": title, "owner": owner, "repo_name": repo_name}
         try:
-            response = requests.post(self.legacy_url, headers=headers, json=payload)
+            response = self._session.post(self.legacy_url, headers=headers, json=payload)
             response.raise_for_status()
             session_id = response.json().get("id")
             if not session_id:
@@ -107,7 +120,7 @@ class JulesClient:
     def get_messages(self, session_id: str) -> List[Dict[str, Any]]:
         clean_id = self._get_clean_id(session_id, "sessions")
         url = f"{self.base_url}/sessions/{clean_id}/activities"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = self._session.get(url, headers=self.headers, timeout=60)
         response.raise_for_status()
         activities = response.json().get("activities", [])
         messages = []
@@ -124,13 +137,13 @@ class JulesClient:
     def send_message(self, session_id: str, message: str) -> Dict[str, Any]:
         clean_id = self._get_clean_id(session_id, "sessions")
         url = f"{self.base_url}/sessions/{clean_id}:sendMessage"
-        response = requests.post(url, headers=self.headers, json={"prompt": message}, timeout=10)
+        response = self._session.post(url, headers=self.headers, json={"prompt": message}, timeout=60)
         response.raise_for_status()
         return {"status": "success", "message": "Message sent successfully"}
 
     def cancel_session(self, session_id: str) -> Dict[str, Any]:
         clean_id = self._get_clean_id(session_id, "sessions")
         url = f"{self.base_url}/sessions/{clean_id}"
-        response = requests.delete(url, headers=self.headers, timeout=10)
+        response = self._session.delete(url, headers=self.headers, timeout=60)
         response.raise_for_status()
         return {"status": "success", "message": "Session cancelled successfully"}
