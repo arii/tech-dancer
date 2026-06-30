@@ -4,6 +4,21 @@ import pathlib
 import sys
 import os
 
+def fix_types(obj):
+    """Recursively replaces 'integer' with 'number' in JSON schema."""
+    if isinstance(obj, dict):
+        new_obj = {}
+        for k, v in obj.items():
+            if k == "type" and v == "integer":
+                new_obj[k] = "number"
+            else:
+                new_obj[k] = fix_types(v)
+        return new_obj
+    elif isinstance(obj, list):
+        return [fix_types(item) for item in obj]
+    else:
+        return obj
+
 def build_repo_context():
     """Gathers static context about the repository."""
 
@@ -12,20 +27,58 @@ def build_repo_context():
     # boomtick-pkg/scripts/build-repo-context.py -> boomtick-pkg
     package_root = script_path.parent.parent
     # boomtick-pkg -> repo_root
-    # We assume we are installed as a subdirectory in the repo
     repo_root = package_root.parent
 
-    # If we are running from a location that isn't boomtick-pkg/scripts,
-    # fallback to CWD as repo_root for compatibility
     if package_root.name != "boomtick-pkg":
         repo_root = pathlib.Path(".")
         package_root = repo_root / "boomtick-pkg"
+
+    cli_root = package_root / "cli"
+    if str(cli_root) not in sys.path:
+        sys.path.insert(0, str(cli_root))
+
+    # 0. Generate Tool Schemas (Contract Sync)
+    generated_tool_schemas = {}
+    try:
+        from dev_tools.models.cli_contracts import (
+            SearchPrsRequest, CreateIssueRequest, GetPrDiffRequest,
+            ReadCiLogsRequest, CreateJulesSessionRequest, CheckoutBranchRequest,
+            GetMergeConflictFilesRequest, RunTestsRequest, CreatePullRequestRequest,
+            IssueViewRequest, IssueUpdateRequest, IssueCommentRequest
+        )
+
+        models = {
+            "github.search_open_prs": SearchPrsRequest,
+            "github.create_issue": CreateIssueRequest,
+            "github.get_pr_diff": GetPrDiffRequest,
+            "repo.read_ci_logs": ReadCiLogsRequest,
+            "jules.create_session": CreateJulesSessionRequest,
+            "github.checkout_branch": CheckoutBranchRequest,
+            "github.get_merge_conflict_files": GetMergeConflictFilesRequest,
+            "repo.run_tests": RunTestsRequest,
+            "github.create_pull_request": CreatePullRequestRequest,
+            "github.issue_view": IssueViewRequest,
+            "github.issue_update": IssueUpdateRequest,
+            "github.issue_comment": IssueCommentRequest
+        }
+
+        for name, model in models.items():
+            schema = fix_types(model.model_json_schema())
+            if "properties" in schema:
+                for prop in schema["properties"].values():
+                    if "title" in prop:
+                        del prop["title"]
+            generated_tool_schemas[name] = schema
+
+        output_path = cli_root / "dev_tools" / "generated-schemas.json"
+        output_path.write_text(json.dumps(generated_tool_schemas, indent=2))
+    except Exception as e:
+        print(f"Error generating tool schemas: {e}", file=sys.stderr)
 
     # 1. Package JSON (Repo Root)
     try:
         package_json_path = repo_root / "package.json"
         package_json = json.loads(package_json_path.read_text())
-        # simplify package.json to the most important parts for context
         package_summary = {
             "name": package_json.get("name"),
             "scripts": package_json.get("scripts", {}),
@@ -51,8 +104,6 @@ def build_repo_context():
         import subprocess
         mcp_dir = package_root / "mcp"
         if mcp_dir.exists():
-            # Use npx tsx to run the export script without needing to compile it
-            # We run it from the mcp_dir to ensure it finds its own local config
             result = subprocess.run(
                 ["npx", "tsx", "scripts/export-mcp-schema.ts"],
                 cwd=str(mcp_dir),
@@ -67,9 +118,7 @@ def build_repo_context():
     # 4. CLI Schema (Package Internal)
     cli_schema = {}
     try:
-        # Dynamically generate cli-schema.json from code
         import click
-
         from dev_tools.cli import cli
 
         def get_type_name(param):
@@ -94,69 +143,33 @@ def build_repo_context():
             else:
                 cmd_name = prefix
                 cmd_help = cmd.help or ""
-
-                args_str = []
-                req_args = []
-                opt_flags = []
-                req_flags = []
-
+                args_str = []; req_args = []; opt_flags = []; req_flags = []
                 for param in cmd.params:
                     param_type = get_type_name(param)
                     if isinstance(param, click.Argument):
                         arg_name = param.name.upper()
-                        if param.nargs == -1:
-                            args_str.append(f"<{arg_name}...>")
-                        else:
-                            args_str.append(f"<{arg_name}>")
-                        req_args.append({
-                            "name": param.name,
-                            "type": param_type,
-                            "description": getattr(param, "help", "") or ""
-                        })
+                        args_str.append(f"<{arg_name}...>" if param.nargs == -1 else f"<{arg_name}>")
+                        req_args.append({"name": param.name, "type": param_type, "description": getattr(param, "help", "") or ""})
                     elif isinstance(param, click.Option):
-                        flag_name = param.opts[0]
-                        flag_desc = param.help or ""
-                        option_dict = {
-                            "flag": flag_name,
-                            "type": param_type,
-                            "description": flag_desc
-                        }
-                        if param.required:
-                            req_flags.append(option_dict)
-                        else:
-                            opt_flags.append(option_dict)
-
+                        flag_name = param.opts[0]; flag_desc = param.help or ""
+                        option_dict = {"flag": flag_name, "type": param_type, "description": flag_desc}
+                        if param.required: req_flags.append(option_dict)
+                        else: opt_flags.append(option_dict)
                 usage = f"python3 boomtick-pkg/cli/dev_tools/td_cli.py {cmd_name}"
-                if req_flags:
-                    usage += " " + " ".join([f"{f['flag']} <{f['flag'].lstrip('-').upper()}>" for f in req_flags])
+                if req_flags: usage += " " + " ".join([f"{f['flag']} <{f['flag'].lstrip('-').upper()}>" for f in req_flags])
                 if opt_flags:
-                    usage_parts = []
-                    for f in opt_flags:
-                        if f['type'] == 'boolean':
-                            usage_parts.append(f"{f['flag']}")
-                        else:
-                            usage_parts.append(f"{f['flag']} <{f['flag'].lstrip('-').upper()}>")
-                    usage += " " + " ".join([f"[{u}]" for u in usage_parts])
-                if args_str:
-                    usage += " " + " ".join(args_str)
-
-                cmd_info = {
-                    "description": cmd_help,
-                    "exact_usage": usage
-                }
-                if req_args:
-                    cmd_info["required_arguments"] = req_args
-                if req_flags:
-                    cmd_info["required_flags"] = req_flags
-                if opt_flags:
-                    cmd_info["optional_flags"] = opt_flags
-
+                    parts = [f"{f['flag']}" if f['type'] == 'boolean' else f"{f['flag']} <{f['flag'].lstrip('-').upper()}>" for f in opt_flags]
+                    usage += " " + " ".join([f"[{u}]" for u in parts])
+                if args_str: usage += " " + " ".join(args_str)
+                cmd_info = {"description": cmd_help, "exact_usage": usage}
+                if req_args: cmd_info["required_arguments"] = req_args
+                if req_flags: cmd_info["required_flags"] = req_flags
+                if opt_flags: cmd_info["optional_flags"] = opt_flags
                 subcmds[cmd_name] = cmd_info
             return subcmds
 
         generated_subcommands = collect_commands(cli)
-        cli_schema_path = package_root / "cli" / "dev_tools" / "cli-schema.json"
-        
+        cli_schema_path = cli_root / "dev_tools" / "cli-schema.json"
         schema_authority_payload = {
             "tool_name": "td_cli.py",
             "schema_authority": "This file is the single source of truth for td_cli.py. Consult before every CLI call. Takes precedence over examples in AGENTS.md or any agent-specific instruction file.",
@@ -171,47 +184,37 @@ def build_repo_context():
             ],
             "subcommands": generated_subcommands
         }
-        
         cli_schema_path.write_text(json.dumps(schema_authority_payload, indent=2))
         cli_schema = schema_authority_payload
     except Exception as e:
         print(f"Error generating cli-schema.json dynamically: {e}", file=sys.stderr)
-        # Fallback to reading file if generation failed
         try:
-            cli_schema_path = package_root / "cli" / "dev_tools" / "cli-schema.json"
-            if cli_schema_path.exists():
-                cli_schema = json.loads(cli_schema_path.read_text())
-        except Exception as read_err:
-            print(f"Fallback read of cli-schema.json failed: {read_err}", file=sys.stderr)
+            cli_schema_path = cli_root / "dev_tools" / "cli-schema.json"
+            if cli_schema_path.exists(): cli_schema = json.loads(cli_schema_path.read_text())
+        except Exception: pass
 
     # 5. File Tree (Repo Root)
     def get_dir_structure(path, max_depth=2, current_depth=0):
-        if current_depth >= max_depth:
-            return "..."
+        if current_depth >= max_depth: return "..."
         structure = {}
         try:
             for item in sorted(path.iterdir()):
-                if item.name.startswith('.') or item.name == 'node_modules' or item.name == '__pycache__':
-                    continue
-                if item.is_dir():
-                    structure[item.name + '/'] = get_dir_structure(item, max_depth, current_depth + 1)
-                else:
-                    structure[item.name] = None
-        except Exception:
-            pass
+                if item.name.startswith('.') or item.name == 'node_modules' or item.name == '__pycache__': continue
+                if item.is_dir(): structure[item.name + '/'] = get_dir_structure(item, max_depth, current_depth + 1)
+                else: structure[item.name] = None
+        except Exception: pass
         return structure
 
     file_tree = get_dir_structure(repo_root)
 
     # Assemble context
     return {
-        "repo": {
-             "name": package_summary.get("name", "Unknown Repo"),
-        },
+        "repo": {"name": package_summary.get("name", "Unknown Repo")},
         "package_json": package_summary,
         "project_config": project_config,
         "mcp_schema": mcp_schema,
         "cli_schema": cli_schema,
+        "generated_tool_schemas": generated_tool_schemas,
         "file_tree": file_tree,
     }
 
@@ -220,7 +223,6 @@ if __name__ == "__main__":
         context = build_repo_context()
         if not context.get("package_json"):
             raise ValueError("Failed to gather basic repository context (package.json missing or invalid)")
-        # sort_keys=True ensures the output is deterministic for revision control
         print(json.dumps(context, indent=2, sort_keys=True))
     except Exception as e:
         print(f"FATAL: Context generation failed: {e}", file=sys.stderr)

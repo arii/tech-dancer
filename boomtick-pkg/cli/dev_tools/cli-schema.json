@@ -27,53 +27,9 @@
         }
       ]
     },
-    "gh create-pr": {
-      "description": "Create a new pull request.",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh create-pr --title <TITLE> --body <BODY> --head <HEAD> [--base <BASE>] [--draft]",
-      "required_flags": [
-        {
-          "flag": "--title",
-          "type": "text",
-          "description": ""
-        },
-        {
-          "flag": "--body",
-          "type": "text",
-          "description": ""
-        },
-        {
-          "flag": "--head",
-          "type": "text",
-          "description": ""
-        }
-      ],
-      "optional_flags": [
-        {
-          "flag": "--base",
-          "type": "text",
-          "description": ""
-        },
-        {
-          "flag": "--draft",
-          "type": "boolean",
-          "description": ""
-        }
-      ]
-    },
-    "gh checkout": {
-      "description": "Checkout a branch.",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh checkout <BRANCH>",
-      "required_arguments": [
-        {
-          "name": "branch",
-          "type": "text",
-          "description": ""
-        }
-      ]
-    },
     "repo ci-logs": {
       "description": "",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py repo ci-logs [--all] [--clean] <PR_NUMBER>",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py repo ci-logs [--all] <PR_NUMBER>",
       "required_arguments": [
         {
           "name": "pr_number",
@@ -86,44 +42,6 @@
           "flag": "--all",
           "type": "boolean",
           "description": "Include logs for successful runs"
-        },
-        {
-          "flag": "--clean",
-          "type": "boolean",
-          "description": "Clean and extract failing details from logs"
-        }
-      ]
-    },
-    "agent cancel": {
-      "description": "Cancel a Jules session.",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent cancel <SESSION_ID>",
-      "required_arguments": [
-        {
-          "name": "session_id",
-          "type": "text",
-          "description": ""
-        }
-      ]
-    },
-    "agent get-session": {
-      "description": "Get details of a Jules session.",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent get-session <SESSION_ID>",
-      "required_arguments": [
-        {
-          "name": "session_id",
-          "type": "text",
-          "description": ""
-        }
-      ]
-    },
-    "agent trigger-feedback": {
-      "description": "Trigger CI feedback for a Jules session.",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent trigger-feedback <SESSION_ID>",
-      "required_arguments": [
-        {
-          "name": "session_id",
-          "type": "text",
-          "description": ""
         }
       ]
     },
@@ -323,8 +241,8 @@
       ]
     },
     "gh issue-update": {
-      "description": "Update a GitHub issue's body.",
-      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh issue-update [--file <FILE>] [--body <BODY>] <ISSUE_NUMBER>",
+      "description": "Update a GitHub issue's body and/or labels.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh issue-update [--file <FILE>] [--body <BODY>] [--labels <LABELS>] [--add-labels <ADD-LABELS>] [--remove-labels <REMOVE-LABELS>] <ISSUE_NUMBER>",
       "required_arguments": [
         {
           "name": "issue_number",
@@ -342,6 +260,21 @@
           "flag": "--body",
           "type": "text",
           "description": "Literal body text"
+        },
+        {
+          "flag": "--labels",
+          "type": "text",
+          "description": "Comma-separated list of labels to set (replaces existing labels)"
+        },
+        {
+          "flag": "--add-labels",
+          "type": "text",
+          "description": "Comma-separated list of labels to add"
+        },
+        {
+          "flag": "--remove-labels",
+          "type": "text",
+          "description": "Comma-separated list of labels to remove"
         }
       ]
     },
@@ -390,6 +323,50 @@
         {
           "flag": "--dry-run",
           "type": "boolean",
+          "description": ""
+        }
+      ]
+    },
+    "gh create-pr": {
+      "description": "Create a new pull request.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh create-pr --title <TITLE> --body <BODY> --head <HEAD> [--base <BASE>] [--draft]",
+      "required_flags": [
+        {
+          "flag": "--title",
+          "type": "text",
+          "description": ""
+        },
+        {
+          "flag": "--body",
+          "type": "text",
+          "description": ""
+        },
+        {
+          "flag": "--head",
+          "type": "text",
+          "description": ""
+        }
+      ],
+      "optional_flags": [
+        {
+          "flag": "--base",
+          "type": "text",
+          "description": ""
+        },
+        {
+          "flag": "--draft",
+          "type": "boolean",
+          "description": ""
+        }
+      ]
+    },
+    "gh checkout": {
+      "description": "Checkout a branch.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py gh checkout <BRANCH>",
+      "required_arguments": [
+        {
+          "name": "branch",
+          "type": "text",
           "description": ""
         }
       ]
@@ -823,7 +800,7 @@
       ]
     },
     "agent dispatch": {
-      "description": "",
+      "description": "\n    Initialize a Jules session for a specific branch and task.\n    Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n    ",
       "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent dispatch <BRANCH> <TASK>",
       "required_arguments": [
         {
@@ -910,6 +887,39 @@
         }
       ]
     },
+    "agent cancel": {
+      "description": "Cancel a Jules session.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent cancel <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "agent get-session": {
+      "description": "Get details of a Jules session.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent get-session <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "agent trigger-feedback": {
+      "description": "Trigger CI feedback for a Jules session.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent trigger-feedback <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
     "agent messages": {
       "description": "Get message history for a Jules session.",
       "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent messages <SESSION_ID>",
@@ -960,7 +970,7 @@
       "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py agent plan-aggregation"
     },
     "jules dispatch": {
-      "description": "",
+      "description": "\n    Initialize a Jules session for a specific branch and task.\n    Note: Use 'main' branch for PR consolidation tasks to avoid rebasing issues.\n    ",
       "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py jules dispatch <BRANCH> <TASK>",
       "required_arguments": [
         {
@@ -1043,6 +1053,39 @@
         {
           "flag": "--worktree",
           "type": "boolean",
+          "description": ""
+        }
+      ]
+    },
+    "jules cancel": {
+      "description": "Cancel a Jules session.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py jules cancel <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "jules get-session": {
+      "description": "Get details of a Jules session.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py jules get-session <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
+          "description": ""
+        }
+      ]
+    },
+    "jules trigger-feedback": {
+      "description": "Trigger CI feedback for a Jules session.",
+      "exact_usage": "python3 boomtick-pkg/cli/dev_tools/td_cli.py jules trigger-feedback <SESSION_ID>",
+      "required_arguments": [
+        {
+          "name": "session_id",
+          "type": "text",
           "description": ""
         }
       ]
