@@ -26,11 +26,13 @@ export default function Home() {
         width="full"
         maxWidth="full"
         minWidth={0}
-        align="center"
+        align="start"
         className="lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
-        <FeaturedGuidePanel />
+        <Box marginTop={{ base: 0, lg: 16 }}>
+          <FeaturedGuidePanel />
+        </Box>
       </Grid>
 
       <Box marginTop={{ base: 12, lg: 8 }}>
@@ -45,7 +47,7 @@ export default function Home() {
 
       <Stack
         gap={{ base: 12, lg: 'section-spacing' }}
-        marginTop={{ base: 12, lg: 'section-spacing' }}
+        marginTop={{ base: 24, lg: '[120px]' }}
         width="full"
         maxWidth="full"
         minWidth={0}
