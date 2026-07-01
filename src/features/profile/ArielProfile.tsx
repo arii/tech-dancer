@@ -98,6 +98,13 @@ function ArielProfile() {
               {/* Professional Section (MIT PhD, Waymo, cards, availability) */}
               {professionalSection && renderSection(professionalSection)}
 
+              {/* Remaining Sections (Dance, Why, etc.) */}
+              {otherSections.map(s => {
+                // Ensure the 'connect' section links are rendered as intended instead of duplicated
+                if (s.id === 'connect') return null;
+                return renderSection(s);
+              })}
+
               {/* Sidebar content injected here for mobile viewports */}
               <Box className="lg:hidden">
                 <Stack gap={8}>
@@ -110,9 +117,6 @@ function ArielProfile() {
                   </Box>
                 </Stack>
               </Box>
-
-              {/* Remaining Sections (Dance, Why, etc.) */}
-              {otherSections.map(renderSection)}
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>
