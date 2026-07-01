@@ -1,0 +1,210 @@
+name: CI Reusable
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  actions: read
+  statuses: write
+  pull-requests: write
+  packages: read
+  models: read
+
+env:
+  CI: true
+  MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+  GITHUB_MODELS_MODEL: gpt-4o-mini
+  ANY_COUNT_BASELINE: ${{ vars.ANY_COUNT_BASELINE }}
+  BUNDLE_BASELINE_KB: ${{ vars.BUNDLE_BASELINE_KB }}
+  AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
+
+jobs:
+  verify-changes:
+    uses: ./boomtick-pkg/workflows/gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
+  lint-typecheck:
+    name: Lint & Type Check (${{ matrix.target }})
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [root, boomtick-mcp]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
+        with:
+          target: ${{ matrix.target }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  audit:
+    name: Anti-Pattern Audit
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/audit
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Semantic Duplicate Audit
+        run: pnpm run audit:semantic
+
+      - name: Audit Suppression Inventory
+        run: pnpm run audit:inventory
+
+
+  test-build:
+    name: Build & E2E
+    needs: [verify-changes]
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    env:
+      NODE_ENV: production
+      REPO_NAME: ${{ github.event.repository.name }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/test-build
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+  impact-analysis:
+    needs: [verify-changes, lint-typecheck, audit, test-build]
+    name: Deployment Impact Analysis
+    if: needs.verify-changes.outputs.has_changes == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/arii/tech-dancer:latest
+    env:
+      DISABLE_MINIFY: true
+      MAX_AI_REVIEWS: ${{ vars.MAX_AI_REVIEWS }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_MODELS_MODEL: gpt-4o-mini
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+      - uses: ./boomtick-pkg/mcp/actions/impact-analysis
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          pr_number: ${{ github.event.pull_request.number }}
+          jules_api_key: ${{ secrets.JULES_API_KEY }}
+
+  security-scan:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
+    name: Security Scan (${{ matrix.scanner }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        scanner: [oxlint, semgrep, gitleaks]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Initialize CodeQL
+        if: matrix.scanner == 'semgrep'
+        uses: github/codeql-action/init@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          languages: actions, javascript-typescript
+
+      - name: Oxlint Scan
+        if: matrix.scanner == 'oxlint'
+        run: pnpm run lint:ox
+
+      - name: Semgrep Static Analysis
+        if: matrix.scanner == 'semgrep'
+        run: |
+          # Install semgrep on the host for efficiency
+          pip install semgrep
+          pnpm run audit:semgrep
+
+      - name: Gitleaks Secret Detection
+        if: matrix.scanner == 'gitleaks'
+        uses: gitleaks/gitleaks-action@v2 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Perform CodeQL Analysis
+        if: matrix.scanner == 'semgrep'
+        uses: github/codeql-action/analyze@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          category: "/language:security-scan"
+
+
+  validate-workflows:
+    name: Validate all workflow files
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+
+      - name: Download actionlint
+        id: get_actionlint
+        run: |
+          # Pin to a specific version and commit for security
+          # Current commit for v1.7.12 as of 2026-06-26
+          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
+          bash download-actionlint.sh 1.7.12
+          rm download-actionlint.sh
+        shell: bash
+
+      - name: Lint workflow logic with actionlint
+        run: |
+          # Ignore 'background', 'parallel', and 'wait' keywords as actionlint does
+          # not yet support these new GitHub Actions features.
+          ./actionlint \
+            -ignore 'step must run script with "run" section' \
+            -ignore 'unexpected key "background"' \
+            -ignore 'unexpected key "parallel"' \
+            -ignore 'unexpected key "wait"' \
+            -color
+        shell: bash

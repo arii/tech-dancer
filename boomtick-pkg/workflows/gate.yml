@@ -1,4 +1,4 @@
-name: Reusable CI Gate
+name: Foundational CI Gate
 
 on:
   workflow_call:
