@@ -91,6 +91,34 @@ class Orchestrator:
         if self._remediation_service is None: self._remediation_service = RemediationService(self)
         return self._remediation_service
 
+
+    def ratchet_any(self, update: bool = False, baseline_file: Optional[str] = None, dry_run: bool = True) -> Dict[str, Any]:
+        current = get_any_count()
+        baseline = self.resolve_baseline(baseline_file, 'ANY_COUNT_BASELINE', 0)
+        res = {"current": current, "baseline": baseline, "status": "success" if current <= baseline else "error"}
+        if current > baseline: res["message"] = f"'any' count increased from {baseline} to {current}."
+        if update:
+            if not dry_run:
+                if baseline_file:
+                    with open(baseline_file, 'w') as f: f.write(str(current))
+                else: set_gha_variable('ANY_COUNT_BASELINE', str(current))
+            res["updated"] = not dry_run
+        return res
+
+    def check_bundle_size(self, update: bool = False, baseline_file: Optional[str] = None, threshold: int = 50, dry_run: bool = True) -> Dict[str, Any]:
+        size = get_bundle_size()
+        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3080)
+        threshold_kb = baseline + threshold
+        res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": threshold_kb, "status": "success" if size <= threshold_kb else "error"}
+        if size > threshold_kb: res["message"] = f"Bundle size exceeds threshold ({size}KB > {threshold_kb}KB)."
+        if update:
+            if not dry_run:
+                if baseline_file:
+                    with open(baseline_file, 'w') as f: f.write(str(size))
+                else: set_gha_variable('BUNDLE_BASELINE_KB', str(size))
+            res["updated"] = not dry_run
+        return res
+
     def get_env_or_gha(self, env_var: str) -> Optional[str]:
         if env_var in os.environ: return os.environ[env_var]
         return get_gha_variable(env_var)
@@ -569,48 +597,6 @@ Respond only after the PR is created or updated:
             return [f.strip() for f in res.stdout.splitlines() if f.strip()]
         return []
 
-
-    def _cleanup_worktree(self, worktree_path: str) -> None:
-        """Robustly cleans up a git worktree and its directory."""
-        # Unregister and attempt to remove the worktree via git
-        run_command(["git", "worktree", "remove", "-f", worktree_path], check=False, log_on_error=False)
-
-        # Forcefully delete the directory if it still exists
-        if os.path.exists(worktree_path):
-            shutil.rmtree(worktree_path, ignore_errors=True)
-
-        # Prune stale worktree metadata
-        run_command(["git", "worktree", "prune"], check=False, log_on_error=False)
-
-        # Final safety check
-        if os.path.exists(worktree_path):
-            raise CLIError(f"Failed to clean up worktree directory: {worktree_path}")
-
-    def find_conflict_files(self) -> List[str]:
-        """
-        Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.
-        """
-        res = run_command([
-            "grep", "-lrE", "^<<<<<<<|^=======|^>>>>>>>", ".",
-            "--exclude-dir=boomtick-pkg",
-            "--exclude-dir=node_modules",
-            "--exclude-dir=dist",
-            "--exclude-dir=.git",
-            "--exclude-dir=build",
-            "--exclude-dir=target",
-            "--exclude-dir=.venv"
-        ], check=False, log_on_error=False)
-        if res.returncode == 0 and res.stdout:
-            return [f.strip() for f in res.stdout.splitlines() if f.strip()]
-        return []
-
-    def resolve_conflicts_headless(self) -> List[str]:
-        files = self.find_conflict_files(); resolved, failed = [], []
-        for f in files:
-            if self.resolve_conflict(f): resolved.append(f)
-            else: failed.append(f)
-        if failed: raise CLIError(f"Failed to resolve: {', '.join(failed)}")
-        return resolved
 
     def repair_context(self, log: Optional[str] = None, log_file: Optional[str] = None, pr_number: Optional[int] = None) -> List[str]:
         pipeline = RepairService(); prompts = []
