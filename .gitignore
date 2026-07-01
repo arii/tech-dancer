@@ -4,6 +4,7 @@ node_modules/
 
 # Build and Analysis
 artifacts/
+report/
 dist/
 dist-ssr/
 build/

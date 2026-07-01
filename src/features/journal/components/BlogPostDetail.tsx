@@ -4,14 +4,12 @@ import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';
 import { AffiliateCard } from '@/components/ui/AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
-import { Post, readingTime, getPosts } from '@/lib/content';
-import { EditorialLayout } from '@/components/editorial/EditorialLayout';
-import { EditorialHeader } from '@/components/editorial/EditorialHeader';
+import { Post, getPosts } from '@/lib/content';
 import { EditorialHero } from '@/components/editorial/EditorialHero';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { EditorialRelated } from '@/components/editorial/EditorialRelated';
 import { ArticleNavigation } from '@/components/editorial/ArticleNavigation';
 import { useArticleNavigation } from '@/lib/hooks/useArticleNavigation';
+import { EditorialPostView } from '@/components/editorial/EditorialPostView';
 
 interface BlogPostDetailProps {
   post: Post;
@@ -20,7 +18,6 @@ interface BlogPostDetailProps {
 }
 
 export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps) {
-  const rt = `${readingTime(post.content)} min read`;
   const [isCopied, setIsCopied] = useState(false);
 
   const share = async () => {
@@ -65,75 +62,62 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
   const allPosts = getPosts();
   const { previous, next } = useArticleNavigation(allPosts, post.slug, '/blog');
 
+  const hero = post.image ? (
+    <Stack gap={4}>
+      {post.imageBack ? (
+        <Grid cols={{ base: 1, md: 2 }} gap={4}>
+          <Stack gap={2}>
+            <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
+            <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
+          </Stack>
+          <Stack gap={2}>
+            <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
+            <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
+          </Stack>
+        </Grid>
+      ) : (
+        <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
+      )}
+      {post.image?.includes('/sketches/') && (
+        <Text variant="mono" size="xs" color="dim" className="italic">
+          Illustration
+        </Text>
+      )}
+    </Stack>
+  ) : undefined;
+
+  const sidebar = affiliateLinks.length > 0 ? (
+    <Stack gap={8}>
+      <AffiliateDisclosure compact={true} />
+      <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
+        Shop selected items
+      </Text>
+      <Stack gap={6}>
+        {affiliateLinks.map(link => (
+          <AffiliateCard key={link.id} link={link} />
+        ))}
+      </Stack>
+    </Stack>
+  ) : undefined;
+
+  const footer = (
+    <Stack gap={12}>
+      <ArticleNavigation previous={previous} next={next} />
+      <EditorialRelated items={relatedItems} />
+    </Stack>
+  );
+
   return (
-    <EditorialLayout
+    <EditorialPostView
+      post={post}
       onBack={onBack}
       backLabel={backLabel}
-      header={
-        <EditorialHeader
-          category={post.category}
-          date={post.date}
-          readTime={rt}
-          title={post.title}
-          dek={post.excerpt}
-          author={post.author}
-          authorAvatarSrc={post.authorImage}
-          tags={post.tags}
-          onShare={share}
-          isShared={isCopied}
-          hero={
-            post.image ? (
-              <Stack gap={4}>
-                {post.imageBack ? (
-                  <Grid cols={{ base: 1, md: 2 }} gap={4}>
-                    <Stack gap={2}>
-                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Front</Text>
-                      <EditorialHero src={post.image} alt={post.imageAlt || `${post.title} - front`} aspectRatio="square" objectFit={post.imageFit} />
-                    </Stack>
-                    <Stack gap={2}>
-                      <Text variant="mono" size="xs" weight="font-bold" tracking="widest" uppercase color="dim">Back</Text>
-                      <EditorialHero src={post.imageBack} alt={`${post.title} - back`} aspectRatio="square" objectFit={post.imageFit} />
-                    </Stack>
-                  </Grid>
-                ) : (
-                  <EditorialHero src={post.image} alt={post.imageAlt || post.title} aspectRatio={{ base: "square", md: "video" }} objectFit={post.imageFit} />
-                )}
-                {post.image?.includes('/sketches/') && (
-                  <Text variant="mono" size="xs" color="dim" className="italic">
-                    Illustration
-                  </Text>
-                )}
-              </Stack>
-            ) : undefined
-          }
-        />
-      }
-      sidebar={
-        affiliateLinks.length > 0 ? (
-          <Stack gap={8}>
-            <AffiliateDisclosure compact={true} />
-            <Text as="h2" variant="mono" size="xs" weight="font-bold" color="dim" uppercase tracking="widest">
-              Shop selected items
-            </Text>
-            <Stack gap={6}>
-              {affiliateLinks.map(link => (
-                <AffiliateCard key={link.id} link={link} />
-              ))}
-            </Stack>
-          </Stack>
-        ) : undefined
-      }
-      footer={
-        <Stack gap={12}>
-          <ArticleNavigation previous={previous} next={next} />
-          <EditorialRelated items={relatedItems} />
-        </Stack>
-      }
+      hero={hero}
+      sidebar={sidebar}
+      footer={footer}
+      onShare={share}
+      isShared={isCopied}
     >
-      <Box className="prose-editorial">
-        <MarkdownRenderer content={post.content} />
-      </Box>
-
       {post.tags && post.tags.length > 0 && (
         <Box border="t" paddingTop={12} marginTop={12} className="border-line/30">
           <Stack gap={4}>
@@ -160,6 +144,6 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
           </Stack>
         </Box>
       )}
-    </EditorialLayout>
+    </EditorialPostView>
   );
 }
