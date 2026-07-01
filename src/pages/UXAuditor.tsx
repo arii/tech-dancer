@@ -30,9 +30,11 @@ interface AuditInputProps {
   helpText?: string;
   isPassword?: boolean;
   onClear?: () => void;
+  id?: string;
+  name?: string;
 }
 
-const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpText, isPassword, onClear }: AuditInputProps) => (
+const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpText, isPassword, onClear, id, name }: AuditInputProps) => (
   <Stack gap={1}>
     <Stack
       direction="row"
@@ -44,6 +46,8 @@ const AuditInput = ({ label, value, onChange, type = "text", placeholder, helpTe
       <Text variant="mono" size="xs" color="dim" paddingLeft={2} uppercase weight="font-bold">{label}</Text>
       <Box
         as="input"
+        id={id}
+        name={name}
         type={isPassword ? "password" : type}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
@@ -409,6 +413,8 @@ export default function UXAuditor() {
             </Box>
           </Stack>
           <AuditInput
+            id="audit-api-key"
+            name="audit-api-key"
             label="API KEY"
             value={customApiKey}
             onChange={setCustomApiKey}
@@ -419,6 +425,8 @@ export default function UXAuditor() {
           />
 
           <AuditInput
+            id="audit-snapshot-service"
+            name="audit-snapshot-service"
             label="SNAPSHOT SERVICE"
             value={snapshotService}
             onChange={setSnapshotService}
