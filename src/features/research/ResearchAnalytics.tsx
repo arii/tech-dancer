@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -20,6 +20,13 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   if (tool.id.includes('scraper') || tool.id.includes('pipeline')) return Activity;
   if (tool.id.includes('hrm')) return Globe;
   return Search;
+}
+
+function getToolLabel(tool: ResearchTool): string {
+  if (tool.externalUrl) return tool.externalLinkDisplayLabel || 'Open Tool';
+  if (tool.canonicalPath) return 'View Tool';
+  if (tool.sourceUrl) return 'View Source';
+  return 'View Assets';
 }
 
 function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUrl: string; onImageClick?: (src: string) => void }) {
@@ -104,12 +111,12 @@ function FlagshipCard({
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
-          <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
-            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
+          <Stack direction="row" justify="between" align="start" width="full" marginBottom={3}>
+            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" borderColor="white/8" border>
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
             <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
-          </Box>
+          </Stack>
 
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
             {tool.category}
@@ -133,7 +140,24 @@ function FlagshipCard({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
+            <Box
+              as="span"
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleExpand(e);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleExpand(e as unknown as React.MouseEvent);
+                }
+              }}
+              marginBottom={5} alignSelf="start"
+              className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30"
+              cursor="pointer"
+            >
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -147,13 +171,13 @@ function FlagshipCard({
             </div>
           )}
 
-          <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+          <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
             {tool.tags.map(tag => (
               <Text key={tag} className="flagship-tag">
                 {tag}
               </Text>
             ))}
-          </Box>
+          </Stack>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
             {tool.externalUrl ? (
@@ -208,9 +232,8 @@ function FlagshipCard({
   );
 }
 
-function ToolCard({ tool, navigate }: {
+function ToolCard({ tool }: {
   tool: ResearchTool;
-  navigate: (path: string) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -220,70 +243,84 @@ function ToolCard({ tool, navigate }: {
   // External if we're using externalUrl OR if we're falling back to sourceUrl without a canonical internal path
   const isExternal = !!tool.externalUrl || (!tool.canonicalPath && !!tool.sourceUrl);
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isExternal) {
-      e.preventDefault();
-      navigate(href);
-    }
-  };
-
   const toggleExpand = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsExpanded(!isExpanded);
   };
 
+  const Component = isExternal ? 'a' : Link;
+  const linkProps = isExternal
+    ? { href, target: "_blank", rel: "noopener noreferrer" }
+    : { to: href };
+
   return (
     <Stack
-      as="a"
-      href={href}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
-      onClick={handleClick}
+      as={Component}
+      {...linkProps}
       height="full" align="start" textAlign="left" gap={0}
       paddingTop={3.5} paddingX={4} paddingBottom={4}
-      className={cn(cardVariants({ interactive: true }), "no-underline")}
+      className={cn(cardVariants({ interactive: true }), "!no-underline")}
     >
-      <Stack gap={0} width="full">
-        <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
-          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
+      <Stack gap={3} width="full" flex={1}>
+        <Stack direction="row" justify="between" align="start" width="full">
+          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" borderColor="white/8" border>
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <StatusBadge label={tool.status} />
-        </Box>
-        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
-        <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
-        {tool.subtitle && (
-          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
-        )}
-        <Text
-          size="sm"
-          color="dim"
-          leading="relaxed"
-          marginBottom={3}
-          className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
-        >
-          {tool.description}
-        </Text>
-        {tool.description && tool.description.length > 120 && (
-          <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
-            {isExpanded ? "Read Less" : "Read More"}
-          </Box>
-        )}
-        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+        </Stack>
+
+        <Stack gap={0}>
+          <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
+          <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
+          {tool.subtitle && (
+            <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
+          )}
+          <Text
+            size="sm"
+            color="dim"
+            leading="relaxed"
+            marginBottom={3}
+            className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
+          >
+            {tool.description}
+          </Text>
+          {tool.description && tool.description.length > 120 && (
+            <Box
+              as="span"
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleExpand(e);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleExpand(e as unknown as React.MouseEvent);
+                }
+              }}
+              marginBottom={5} alignSelf="start"
+              className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30"
+              cursor="pointer"
+            >
+              {isExpanded ? "Read Less" : "Read More"}
+            </Box>
+          )}
+        </Stack>
+
+        <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
           {tool.tags.map(tag => (
             <Text key={tag} className="flagship-tag">{tag}</Text>
           ))}
-        </Box>
+        </Stack>
       </Stack>
-      <Box display="flex" align="center" gap={2} marginTop="auto">
+      <Stack direction="row" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {tool.externalUrl ? (tool.externalLinkDisplayLabel || 'Open Tool') :
-            tool.canonicalPath ? 'View Tool' :
-              tool.sourceUrl ? 'View Source' : 'View Assets'}
+          {getToolLabel(tool)}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
-      </Box>
+      </Stack>
     </Stack>
   );
 }
@@ -297,17 +334,17 @@ const STACK_CATEGORIES = [
   { label: 'AI', tags: ['LLM Workflows', 'Agentic CI/CD'], colorClass: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
 ];
 
-function ToolSection({ title, tools, navigate }: { title: string, tools: ResearchTool[], navigate: (path: string) => void }) {
+function ToolSection({ title, tools }: { title: string, tools: ResearchTool[] }) {
   if (tools.length === 0) return null;
   return (
     <Stack gap={12} width="full">
-      <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
+      <Stack direction="row" paddingBottom={4} justify="between" align="center" border="b" width="full">
         <Text variant="headline" size="2xl" weight="font-black">{title}</Text>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{tools.length} TOOLS</Text>
-      </Box>
+      </Stack>
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
         {tools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} navigate={navigate} />
+          <ToolCard key={tool.id} tool={tool} />
         ))}
       </Grid>
     </Stack>
@@ -315,7 +352,6 @@ function ToolSection({ title, tools, navigate }: { title: string, tools: Researc
 }
 
 export default function ResearchAnalytics() {
-  const navigate = useNavigate();
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -350,24 +386,24 @@ export default function ResearchAnalytics() {
             {/* Scrollable Focus Tags for Mobile */}
             <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
-              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+              <Stack direction="row" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
                 {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
                   <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
                 ))}
-              </Box>
+              </Stack>
             </Stack>
 
             {/* Categorized Stack Grid for Desktop */}
             <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
               {STACK_CATEGORIES.map(cat => (
-                <Box key={cat.label} display="flex" align="center" gap={2} width="full">
+                <Stack direction="row" key={cat.label} align="center" gap={2} width="full">
                   <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
-                  <Box display="flex" wrap="wrap" gap={2} width="full">
+                  <Stack direction="row" wrap="wrap" gap={2} width="full">
                     {cat.tags.map(tag => (
                       <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cat.colorClass}>{tag}</Text>
                     ))}
-                  </Box>
-                </Box>
+                  </Stack>
+                </Stack>
               ))}
             </Stack>
 
@@ -404,13 +440,13 @@ export default function ResearchAnalytics() {
         </Box>
 
         {/* Engineering Systems Section */}
-        <ToolSection title="Engineering Systems" tools={engineeringTools} navigate={navigate} />
+        <ToolSection title="Engineering Systems" tools={engineeringTools} />
 
         {/* Data & Content Systems Section */}
-        <ToolSection title="Data & Content Systems" tools={dataContentTools} navigate={navigate} />
+        <ToolSection title="Data & Content Systems" tools={dataContentTools} />
 
         {/* Ecommerce Experiments Section */}
-        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} navigate={navigate} />
+        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} />
 
         {/* Articles & Research Section */}
         {studies.length > 0 && (
@@ -424,16 +460,16 @@ export default function ResearchAnalytics() {
               {studies.map((study) => (
                 <Stack
                   key={study.slug}
-                  onClick={() => {
-                    if (study.status === 'published') {
-                      navigate(`/research/${study.slug}`);
-                    }
-                  }}
+                  as={study.status === 'published' ? Link : 'div'}
+                  to={study.status === 'published' ? `/research/${study.slug}` : undefined}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cardVariants({
-                    interactive: study.status === 'published'
-                  })}
+                  className={cn(
+                    cardVariants({
+                      interactive: study.status === 'published'
+                    }),
+                    study.status === 'published' && "!no-underline"
+                  )}
                   paddingTop={3.5}
                   paddingX={4}
                   paddingBottom={4}
@@ -441,39 +477,39 @@ export default function ResearchAnalytics() {
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
                 >
-                  <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
+                  <Stack direction="row" justify="between" align="center" marginBottom={3} width="full">
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
                     {study.status && <StatusBadge label={study.status} />}
-                  </Box>
+                  </Stack>
 
                   <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
                     {study.title}
                   </Text>
-                  <Box display="flex" align="center" gap={4} marginBottom={3}>
+                  <Stack direction="row" align="center" gap={4} marginBottom={3}>
                     <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
                     {study.readTime && (
-                      <Box display="flex" align="center" gap={1} opacityVariant="muted">
+                      <Stack direction="row" align="center" gap={1} opacityVariant="muted">
                         <Icon icon={Clock} size="xs" color="dim" />
                         <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
-                      </Box>
+                      </Stack>
                     )}
-                  </Box>
+                  </Stack>
 
                   <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
                     {study.excerpt}
                   </Text>
 
                   {study.tags && study.tags.length > 0 && (
-                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
+                    <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
                       {study.tags.map(tag => (
                         <Text key={tag} className="flagship-tag">
                           {tag}
                         </Text>
                       ))}
-                    </Box>
+                    </Stack>
                   )}
 
-                  <Box display="flex" align="center" gap={2} marginTop="auto">
+                  <Stack direction="row" align="center" gap={2} marginTop="auto">
                     <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
                       {study.status === 'planned'
                         ? 'Coming Soon'
@@ -482,7 +518,7 @@ export default function ResearchAnalytics() {
                           : 'Read Article'}
                     </Text>
                     <Icon icon={FileText} size="sm" color="accent" />
-                  </Box>
+                  </Stack>
                 </Stack>
               ))}
             </Grid>
@@ -507,19 +543,19 @@ export default function ResearchAnalytics() {
           {/* Contact Details Column (Right) */}
           <Stack gap={4} span={{ base: 1, md: 5 }} align={{ base: "start", md: "end" }} textAlign={{ base: "left", md: "right" }}>
             <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" weight="font-bold" opacityVariant="subtle">Get in touch</Text>
-            <Box display="flex" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
-              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
+            <Stack direction="row" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
+              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors cursor-pointer">
                 <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
               </Box>
               <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors cursor-pointer">
                 <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
               </Box>
               <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors cursor-pointer">
                 <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
               </Box>
-            </Box>
+            </Stack>
           </Stack>
         </Grid>
       </Stack>
