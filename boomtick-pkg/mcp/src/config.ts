@@ -63,18 +63,20 @@ export function initializeConfig() {
 export const config = {
   get githubToken() { return getGithubToken(); },
   get githubOwner() {
-    const owner = process.env.GITHUB_OWNER || cachedDynamicConfig?.github_repo?.split("/")[0];
-    if (!owner) {
+    if (process.env.GITHUB_OWNER) return process.env.GITHUB_OWNER;
+    const repoString = cachedDynamicConfig?.github_repo;
+    if (typeof repoString !== "string" || !repoString.includes("/")) {
       throw new Error("GITHUB_OWNER must be set via environment variable or project_config.json");
     }
-    return owner;
+    return repoString.split("/")[0];
   },
   get githubRepo() {
-    const repo = process.env.GITHUB_REPO || cachedDynamicConfig?.github_repo?.split("/")[1];
-    if (!repo) {
+    if (process.env.GITHUB_REPO) return process.env.GITHUB_REPO;
+    const repoString = cachedDynamicConfig?.github_repo;
+    if (typeof repoString !== "string" || !repoString.includes("/")) {
       throw new Error("GITHUB_REPO must be set via environment variable or project_config.json");
     }
-    return repo;
+    return repoString.split("/")[1];
   },
   get repoPath() {
     return process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../");
@@ -83,10 +85,13 @@ export const config = {
     return process.env.DEFAULT_BASE_BRANCH || cachedDynamicConfig?.base_branch?.split("/").pop() || "main";
   },
   get viteBasePath() {
-    return process.env.VITE_BASE_PATH || cachedDynamicConfig?.vite_base_path || "/tech-dancer/";
+    const path = process.env.VITE_BASE_PATH || cachedDynamicConfig?.vite_base_path;
+    if (!path) {
+      throw new Error("VITE_BASE_PATH must be set via environment variable or project_config.json");
+    }
+    return path;
   },
   get ghPath() {
     return process.env.GH_PATH || cachedDynamicConfig?.gh_path || "gh";
   }
 };
-
