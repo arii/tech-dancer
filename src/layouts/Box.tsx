@@ -2,6 +2,8 @@ import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
+import { resolveJIT } from "@/lib/style-utils"
+import { zIndex as zIndexTokens } from "@/styles/design-tokens"
 
 const boxVariants = cva("", {
   variants: {
@@ -44,10 +46,13 @@ export interface BoxProps extends HTMLAttributes<HTMLDivElement>, VariantProps<t
   position?: "relative" | "absolute" | "fixed" | "sticky"
   overflow?: "hidden" | "auto" | "scroll" | "visible"
   flex?: number | string | boolean
+  pointerEvents?: "auto" | "none" | "inherit" | "initial" | "revert" | "unset"
+  inset?: boolean | "top" | "bottom" | "left" | "right" | "x" | "y"
+  zIndex?: number | string
 }
 
 export const Box = forwardRef<HTMLDivElement, BoxProps>(
-  ({ className, as: Component = "div", surface, radius, shadow, display, align, justify, width, height, gap, padding, paddingX, paddingY, margin, position, overflow, flex, style, ...props }, ref) => {
+  ({ className, as: Component = "div", surface, radius, shadow, display, align, justify, width, height, gap, padding, paddingX, paddingY, margin, position, overflow, flex, pointerEvents, inset, zIndex, style, ...props }, ref) => {
     
     const layoutClasses = cn(
       display === "flex" && "flex",
@@ -61,7 +66,16 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       overflow && `overflow-${overflow}`,
       flex === true && "flex-1",
       typeof flex === "number" && `flex-${flex}`,
-      typeof flex === "string" && flex
+      typeof flex === "string" && flex,
+      pointerEvents && `pointer-events-${pointerEvents}`,
+      inset === true && "inset-0",
+      inset === "top" && "top-0 left-0 right-0",
+      inset === "bottom" && "bottom-0 left-0 right-0",
+      inset === "left" && "top-0 bottom-0 left-0",
+      inset === "right" && "top-0 bottom-0 right-0",
+      inset === "x" && "left-0 right-0",
+      inset === "y" && "top-0 bottom-0",
+      zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? resolveJIT(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : resolveJIT(zIndex, "z"))
     )
 
     const resolveValue = (v: number | string | undefined) => typeof v === "number" ? `${v * 0.25}rem` : v

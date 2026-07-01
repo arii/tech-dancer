@@ -115,16 +115,29 @@ class PRService:
         pr_res = self.github.create_pull_request(f"Aggregated Feature: {target_branch}", aggregate_body, target_branch, base_branch)
         return {"status": "success", "branch": target_branch, "merged_prs": successfully_merged, "pr_url": pr_res.get("html_url"), "message": f"Successfully aggregated {len(successfully_merged)} PRs"}
 
-    def update_issue(self, issue_number: int, body: Optional[str] = None, labels: Optional[List[str]] = None, add_labels: Optional[List[str]] = None, remove_labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def update_issue(self, issue_number: int, body: Optional[str] = None, labels: Optional[List[str]] = None, add_labels: Optional[List[str]] = None, remove_labels: Optional[List[str]] = None, state: Optional[str] = None) -> Dict[str, Any]:
         if body is not None and not body.strip(): raise CLIError("Issue body cannot be empty.")
         res = None
-        if labels is not None:
-            res = self.github.update_issue(issue_number, body=body, labels=labels)
-        else:
-            if add_labels: res = self.github.add_labels(issue_number, add_labels)
-            if remove_labels:
-                for label in remove_labels: self.github.remove_label(issue_number, label)
-                if res is None and body is None: res = self.github.fetch_issue_details(issue_number)
-            if body is not None: res = self.github.update_issue(issue_number, body=body)
-        if res is None: raise CLIError("Nothing to update.")
+        if labels is not None and (add_labels or remove_labels):
+            raise CLIError("Cannot combine full label replacement (--labels) with incremental changes (--add-labels, --remove-labels)")
+
+        update_kwargs = {}
+        if body is not None: update_kwargs['body'] = body
+        if labels is not None: update_kwargs['labels'] = labels
+        if state is not None: update_kwargs['state'] = state
+
+        if update_kwargs:
+            res = self.github.update_issue(issue_number, **update_kwargs)
+
+        if add_labels:
+            res = self.github.add_labels(issue_number, add_labels)
+
+        if remove_labels:
+            for label in remove_labels:
+                self.github.remove_label(issue_number, label)
+            if res is None and not update_kwargs:
+                res = self.github.fetch_issue_details(issue_number)
+
+        if res is None:
+            raise CLIError("Nothing to update.")
         return res
