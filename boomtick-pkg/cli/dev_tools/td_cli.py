@@ -6,11 +6,11 @@ This script is a thin wrapper around the unified dev_tools CLI.
 It maintains backward compatibility for existing scripts and CI workflows.
 """
 
-from dev_tools.cli import cli
+from dev_tools.cli import main as cli_main
 
 def main():
     """Entry point for the td-cli shim."""
-    cli(obj={})
+    cli_main()
 
 if __name__ == "__main__":
     main()

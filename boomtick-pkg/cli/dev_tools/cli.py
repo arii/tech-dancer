@@ -1023,8 +1023,28 @@ for group in [jules_group]:
 
 
 def main():
-    """Unified entry point for the Tech-Dancer CLI."""
-    cli(obj={})
+    """Unified entry point for the Tech-Dancer CLI with standardized error handling."""
+    try:
+        cli(obj={})
+    except Exception as e:
+        # Check if we should output JSON by inspecting the command line
+        # This is a fallback to maintain the contract for machine consumers
+        # when an exception occurs before click's internal error handling kicks in.
+        is_json = "--no-json" not in sys.argv
+
+        if is_json:
+            error_payload = {
+                "status": "error",
+                "message": str(e),
+                "type": e.__class__.__name__,
+                "code": getattr(e, 'code', 1)
+            }
+            # Print JSON to stdout to satisfy piped machine consumers (e.g. boomtick-mcp)
+            print(json.dumps(error_payload, indent=2))
+        else:
+            log_error(str(e))
+
+        sys.exit(getattr(e, 'code', 1))
 
 if __name__ == "__main__":
     main()
