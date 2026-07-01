@@ -745,7 +745,7 @@ class Orchestrator:
             res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
             logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
         if not logs_content.strip(): return {"status": "success", "message": "No errors found."}
-        original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "boomtick-cli", "repair.py"))
+        original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "boomtick-pkg/cli", "repair.py"))
         worktree_path = None; branch_name = None
         try:
             branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"

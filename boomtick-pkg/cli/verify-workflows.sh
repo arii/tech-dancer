@@ -51,9 +51,9 @@ run_check "shared" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" t
 
 run_check "ai-slop-audit.md" "python3 .agents/scripts/audit-ai-slop.py"
 
-run_check "dev-tools-cli-guide.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh pre-submit --help"
-run_check "dev-tools-cli-guide.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh audit-pr --help"
-run_check "dev-tools-cli-guide.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh validate-issue --help"
+run_check "boomtick-cli-guide.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh pre-submit --help"
+run_check "boomtick-cli-guide.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh audit-pr --help"
+run_check "boomtick-cli-guide.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh validate-issue --help"
 
 run_check "review-pr.md" "PYTHONPATH=\"boomtick-pkg/cli:boomtick-pkg/cli/dev_tools\" td-cli gh audit-pr 2821 --fetch"
 

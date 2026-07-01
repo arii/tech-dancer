@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "boomtick-cli"
 version = "0.1.0"
-description = "BoomTick CLI — agentic dev-tools for GitHub + AI workflows"
+description = "BoomTick CLI — agentic development tools for GitHub + AI workflows"
 requires-python = ">=3.8"
 dependencies = [
     "requests>=2.0.0",
