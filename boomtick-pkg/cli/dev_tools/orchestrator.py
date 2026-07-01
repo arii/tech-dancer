@@ -7,21 +7,23 @@ import shutil
 import subprocess
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
-from urllib.parse import quote, urlparse
 from collections import defaultdict
-from dev_tools.ux_report import generate_report
-import tempfile
 
 from dev_tools.services.github import GitHubClient
 from dev_tools.services.ai_service import AIClient
 from dev_tools.services.jules import JulesClient
 from dev_tools.services.repair_service import RepairService
 from dev_tools.services.vision_service import VisionService
-from dev_tools.utils import verify_ci_metrics
-from dev_tools.utils import log_error, log_warn, get_or_create_log_dir, CLIError
-from dev_tools.handlers.command_handler import CommandHandler
-from dev_tools.models import IssueSummary, PRSummary
+from dev_tools.services.pr_service import PRService
+from dev_tools.services.audit_service import AuditService
+from dev_tools.services.remediation_service import RemediationService
+
 from dev_tools.utils import (
+    verify_ci_metrics,
+    log_error,
+    log_warn,
+    get_or_create_log_dir,
+    CLIError,
     get_github_token,
     get_github_client,
     get_repo_name,
@@ -37,219 +39,57 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope
 )
+from dev_tools.handlers.command_handler import CommandHandler
+from dev_tools.models import IssueSummary, PRSummary
 from dev_tools.config import get_config
 
-
-
 PROJECT_CONFIG = get_config()
-AUDIT_CHECK_DIRS = PROJECT_CONFIG.audit_check_dirs
-SPEC_SECTIONS = PROJECT_CONFIG.spec_sections
-
-# Pre-compute UI indicators for heuristic checks
-UI_INDICATORS = PROJECT_CONFIG.ui_indicators
 
 class Orchestrator:
-    # Command detection patterns with word boundaries to avoid false positives
     _CMD_PATTERNS = {
         "conflict_resolve": r"(?<!\w)@conflict-resolve\b",
         "update_snapshots": r"(?<!\w)@update-snapshots\b",
-        "ai_fix": r"(?<!\w)/ai-fix\b",
-        "ai_review": r"(?<!\w)/ai-review\b",
+        "ai_chatops": r"(?<!\w)/(ai-fix|ai-review)\b",
         "jules_fix_ci": r"(?<!\w)@jules-fix-ci\b",
     }
 
     def __init__(self) -> None:
-        self._github: Optional[GitHubClient] = None
-        self._ai: Optional[AIClient] = None
-        self._jules: Optional[JulesClient] = None
+        self._github = None
+        self._ai = None
+        self._jules = None
+        self._pr_service = None
+        self._audit_service = None
+        self._remediation_service = None
 
     @property
     def github(self) -> GitHubClient:
-        if self._github is None:
-            self._github = GitHubClient()
+        if self._github is None: self._github = GitHubClient()
         return self._github
 
     @property
     def ai(self) -> AIClient:
-        if self._ai is None:
-            self._ai = AIClient()
+        if self._ai is None: self._ai = AIClient()
         return self._ai
 
     @property
     def jules(self) -> JulesClient:
-        if self._jules is None:
-            self._jules = JulesClient()
+        if self._jules is None: self._jules = JulesClient()
         return self._jules
 
     @property
-    def vision(self) -> VisionService:
-        return VisionService()
+    def pr_service(self) -> PRService:
+        if self._pr_service is None: self._pr_service = PRService(self.github)
+        return self._pr_service
 
-    def _hash_content(self, content: str) -> str:
-        return hashlib.md5(content.encode('utf-8')).hexdigest()
+    @property
+    def audit_service(self) -> AuditService:
+        if self._audit_service is None: self._audit_service = AuditService(self)
+        return self._audit_service
 
-    def _cleanup_worktree(self, worktree_path: str) -> None:
-        """Robustly cleans up a git worktree and its directory."""
-        # Unregister and attempt to remove the worktree via git
-        run_command(["git", "worktree", "remove", "-f", worktree_path], check=False, log_on_error=False)
-
-        # Forcefully delete the directory if it still exists
-        if os.path.exists(worktree_path):
-            shutil.rmtree(worktree_path, ignore_errors=True)
-
-        # Prune stale worktree metadata
-        run_command(["git", "worktree", "prune"], check=False, log_on_error=False)
-
-        # Final safety check
-        if os.path.exists(worktree_path):
-            raise CLIError(f"Failed to clean up worktree directory: {worktree_path}")
-
-    def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
-        """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
-        is_ui = any(indicator in diff for indicator in UI_INDICATORS)
-        is_python = ".py" in diff
-
-        fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
-
-        feedback = f"### Specific Review for PR #{pr['number']}\n\n"
-
-        # What's working
-        feedback += "**What is working well:**\n"
-        feedback += f"- The scope is clearly defined in branch `{pr.get('head', {}).get('ref', 'unknown')}`.\n"
-        if not fails:
-            feedback += "- All CI checks appear to be passing.\n"
-
-        feedback += "\n**Specific Issues & Actionable Fixes:**\n"
-
-        if fails:
-            feedback += f"- **CI Failure:** The following checks are failing: {', '.join(fails)}. Please investigate the logs for these jobs.\n"
-            if "Build & E2E" in fails:
-                feedback += "  - *Fix:* Ensure `pnpm run build` passes locally and all `playwright` tests succeed via `pnpm test:e2e`.\n"
-            elif "deploy" in fails:
-                feedback += "  - *Fix:* Verify that the `dist` directory compiles correctly without TypeScript or Vite errors.\n"
-
-        if is_ui:
-            tailwind_indicators = PROJECT_CONFIG.tailwind_indicators
-            if any(ind in diff for ind in tailwind_indicators):
-                feedback += "- **Design System Anti-patterns:** The diff contains raw Tailwind classes (e.g. padding/margin utility classes, arbitrary values).\n"
-                feedback += "  - *Fix:* Replace raw Tailwind layout classes with `Stack`, `Box`, or `Grid` primitives using design tokens (e.g., `gap={4}`, `paddingY={{ base: 4, md: 1.5 }}`). Verify by running `node scripts/detect-antipatterns.mjs`.\n"
-
-            feedback += "- **Mobile UX Verification:** For any UI additions, ensure horizontal layout does not overflow a 390px viewport.\n"
-            feedback += "  - *Fix:* If adding interactive elements, wrap them to enforce a minimum 48x48px touch target for accessibility.\n"
-
-        if is_python:
-            feedback += "- **Python Scripting:** Python changes detected.\n"
-            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td-cli` or equivalent test files if extending `dev-tools`.\n"
-
-        if pr.get('mergeable') is False:
-            base_branch_name = PROJECT_CONFIG.base_branch_name
-            feedback += f"- **Merge Conflicts:** This PR has conflicts with the `{base_branch_name}` base branch.\n"
-            feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `{PROJECT_CONFIG.cli_alias} gh conflicts`), and force push.\n"
-
-        if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
-            feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
-            feedback += f"  - *Fix:* Ensure this is rebased against recent changes in the `{PROJECT_CONFIG.base_branch_name}` branch to avoid overlapping functionality.\n"
-
-        # Default if no specific issues caught by heuristics
-        if feedback.endswith("**Specific Issues & Actionable Fixes:**\n"):
-            feedback += "- Review the diff against `audit` guidelines. Ensure no console errors exist in the target components.\n"
-
-        return feedback
-
-
-
-    def review_pr(self, pr_number: int) -> Dict[str, Any]:
-        """
-        Fetches a PR, its diff, and generates a code review using LocalAI/Gemini.
-        """
-        pr_details = self.github.fetch_pr_details(pr_number)
-        sha = pr_details.get('head', {}).get('sha')
-        check_runs = self.github.fetch_check_runs(sha)
-        pr_details['checkResults'] = check_runs
-
-        # Fetch logs for failing checks
-        failing_logs = {}
-        structured_failures = []
-        for run in check_runs:
-            if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                failing_logs[run.get('name')] = logs[-5000:]  # Keep last 5k chars
-                findings = extract_failing_info(logs)
-                for f in findings:
-                    structured_failures.append({
-                        "check": run.get('name'),
-                        "file": f['file'],
-                        "line": f['line'],
-                        "message": f['message'],
-                        "type": f['type']
-                    })
-
-        pr_details['failingLogs'] = failing_logs
-        pr_details['structuredFailures'] = structured_failures
-
-        pr_diff = self.github.fetch_pr_diff(pr_number)
-        diff_hash = self._hash_content(pr_diff)
-        # Store cache in local logs directory to avoid /tmp Security Error
-        review_dir = get_or_create_log_dir("reviews")
-        cache_file = os.path.join(review_dir, f"review_cache_{pr_number}_{diff_hash}.json")
-        if os.path.exists(cache_file):
-            with open(cache_file, 'r') as f: return json.load(f)
-        review_result = self.ai.generate_code_review(pr_details, pr_diff)
-        with open(cache_file, 'w') as f: json.dump(review_result, f)
-        return review_result
-
-    def resolve_conflict(self, file_path: str) -> bool:
-        """
-        Detects merge conflicts via GitHubClient (implicit local git), analyzes logic with AI.
-        """
-        return self.ai.resolve_file_conflicts(file_path)
-
-    def analyze_file(self, file_path: str) -> str:
-        if not os.path.exists(file_path):
-            raise CLIError(f"File not found: {file_path}")
-
-        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-            content = f.read()
-        prompt = f"Analyze this file for bugs, style issues, and potential improvements:\n\n{content[:20000]}"
-        return self.ai.generate(prompt)
-
-    def find_conflict_files(self) -> List[str]:
-        """
-        Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.
-        """
-        res = run_command([
-            "grep", "-lrE", "^<<<<<<<|^=======|^>>>>>>>", ".",
-            "--exclude-dir=boomtick-pkg",
-            "--exclude-dir=node_modules",
-            "--exclude-dir=dist",
-            "--exclude-dir=.git",
-            "--exclude-dir=build",
-            "--exclude-dir=target",
-            "--exclude-dir=.venv"
-        ], check=False, log_on_error=False)
-        if res.returncode == 0 and res.stdout:
-            return [f.strip() for f in res.stdout.splitlines() if f.strip()]
-        return []
-
-    def dispatch_jules_review(self, branch: str, prompt: str) -> Optional[Dict[str, Any]]:
-        """
-        Automates the creation of Jules sessions.
-        """
-        if not self.github.branch_exists(branch):
-            raise CLIError(f"Branch '{branch}' does not exist in the repository.")
-
-        # Prevent dispatching Jules for consolidation/aggregation tasks
-        if re.search(r"\b(consolidate|aggregate)\s+pr(s)?\b", prompt.lower()):
-            raise CLIError("PR consolidation and aggregation tasks should be performed directly using the 'gh aggregate' command instead of dispatching a Jules session.")
-
-        source_id = self.jules.discover_source_id(self.github.repo)
-        if not source_id:
-            raise CLIError(f"Could not find a Jules source mapping for repository: {self.github.repo}")
-
-        session = self.jules.create_session_from_source(source_id, branch, prompt)
-        return session
-
-    # --- Helper methods ported from td-cli ---
+    @property
+    def remediation_service(self) -> RemediationService:
+        if self._remediation_service is None: self._remediation_service = RemediationService(self)
+        return self._remediation_service
 
     def get_env_or_gha(self, env_var: str) -> Optional[str]:
         if env_var in os.environ: return os.environ[env_var]
@@ -259,8 +99,7 @@ class Orchestrator:
         if file_path and os.path.exists(file_path):
             with open(file_path, 'r') as f: return int(f.read().strip() or fallback_value)
         val = self.get_env_or_gha(env_var)
-        if val is not None and str(val).strip() != "": return int(val)
-        return fallback_value
+        return int(val) if val is not None and str(val).strip() != "" else fallback_value
 
     def get_audit_results(self, content: Optional[str] = None, targets: Optional[List[str]] = None) -> Dict[str, Any]:
         cmd = ["node", "scripts/detect-antipatterns.mjs", "--json"]
@@ -374,265 +213,32 @@ class Orchestrator:
             "issue": IssueSummary(**res).model_dump()
         }
 
+    # Delegation to PRService
+    def list_prs(self, *args, **kwargs): return self.pr_service.list_prs(*args, **kwargs)
+    def get_ci_logs(self, *args, **kwargs): return self.pr_service.get_ci_logs(*args, **kwargs)
+    def stream_ci_logs(self, *args, **kwargs): return self.pr_service.stream_ci_logs(*args, **kwargs)
+    def get_merge_conflicts(self, *args, **kwargs): return self.pr_service.get_merge_conflicts(*args, **kwargs)
+    def get_pr_diff_shapen(self, *args, **kwargs): return self.pr_service.get_pr_diff_shapen(*args, **kwargs)
+    def aggregate_prs(self, *args, **kwargs): return self.pr_service.aggregate_prs(*args, **kwargs)
+    def update_issue(self, *args, **kwargs): return self.pr_service.update_issue(*args, **kwargs)
     def post_comment(self, entity_number: int, body: Optional[str]) -> Dict[str, Any]:
-        """
-        Posts a comment to a Pull Request or Issue.
-        """
-        if body is None or not body.strip():
-            raise CLIError("Comment body cannot be empty.")
+        if body is None or not body.strip(): raise CLIError("Comment body cannot be empty.")
         return self.github.create_issue_comment(entity_number, body)
 
-    def validate_issue(self, issue_number: Optional[int] = None, all_open: bool = False, post_comments: bool = False, dry_run: bool = True) -> Dict[str, Any]:
-        repo = get_github_client().get_repo(get_repo_name())
-        issues = []
-        if all_open:
-            issues = list(repo.get_issues(state='open'))
-        elif issue_number:
-            issues = [repo.get_issue(issue_number)]
-        else:
-            raise CLIError("Provide --issue-number or --all-open")
+    # Delegation to AuditService
+    def get_audit_results(self, *args, **kwargs): return self.audit_service.get_audit_results(*args, **kwargs)
+    def validate_issue(self, *args, **kwargs): return self.audit_service.validate_issue(*args, **kwargs)
+    def handle_audit_gate(self, *args, **kwargs): return self.audit_service.handle_audit_gate(*args, **kwargs)
 
-        results = []
-        total_findings = 0
-        audit_base = self.get_audit_results(content="")
-        config = audit_base.get("config", {})
-
-        for issue in issues:
-            findings = []
-            warnings = []
-            body = issue.body or ''
-            title = issue.title or ''
-
-            if not body.strip():
-                findings.append("Issue body is empty.")
-
-            for i, block in enumerate(self.extract_code_blocks(body)):
-                res = self.get_audit_results(content=block)
-                violations = res.get("violations", {}).get("stdin", [])
-                for v in violations:
-                    val = v.get('value', 'N/A')
-                    findings.append(f"Code block {i+1}: {v['message']} (value: {val})")
-                for comp, path in config.get('existingComponents', {}).items():
-                    if re.search(rf'(create|build|make|add|new)\s+.*{comp}', block, re.IGNORECASE):
-                        warnings.append(f"Code block {i+1}: Suggests `{comp}` (exists at `{path}`)")
-            for comp, path in config.get('existingComponents', {}).items():
-                if re.search(rf'(create|build|make|add\s+a\s+new)\s+.*{comp}\b', body, re.IGNORECASE):
-                    warnings.append(f"Issue suggests `{comp}` (exists at `{path}`)")
-            if re.match(r'^Draft.*:', title) and '```markdown' in body:
-                md_match = re.search(r'```markdown\n(.*?)\n```', body, re.DOTALL)
-                if md_match:
-                    for field in config.get('requiredContentFields', []):
-                        if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE):
-                            findings.append(f"Missing frontmatter: `{field}`")
-            if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
-                warnings.append("No acceptance criteria.")
-            if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
-                warnings.append("Mentions Tailwind but not layout primitives.")
-
-            # Spec-Driven Issue Validation
-            missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
-            if missing_spec_sections:
-                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
-
-            issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
-            results.append(issue_result)
-            total_findings += len(findings)
-            if post_comments and (findings or warnings):
-                comment = "## 🤖 Issue Quality Review\n\n"
-                if findings: comment += "### ❌ Violations\n" + "\n".join(f"- {f}" for f in findings) + "\n\n"
-                if warnings: comment += "### ⚠️ Warnings\n" + "\n".join(f"- {w}" for w in warnings) + "\n"
-                if not dry_run: issue.create_comment(f"{comment}\n---\n*Generated by `{PROJECT_CONFIG.cli_alias} validate-issue`*")
-
-        return {"status": "success" if total_findings == 0 else "error", "issues": results, "total_findings": total_findings}
-
-    def handle_detect_conflicts(self, pr_num: Optional[int] = None) -> List[Dict[str, Any]]:
-        conflicts = self.detect_conflicts(pr_num)
-        formatted = []
-        for pr_pair, files in conflicts.items():
-            formatted.append({"prs": list(pr_pair), "files": files})
-        return formatted
-
-    def handle_status_board(self) -> List[Dict[str, Any]]:
-        repo = get_github_client().get_repo(get_repo_name())
-        prs_data = []
-        for pr in repo.get_pulls(state='open'):
-            m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
-            prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
-        return prs_data
-
-    def ratchet_any(self, update: bool = False, baseline_file: Optional[str] = None, dry_run: bool = True) -> Dict[str, Any]:
-        current = get_any_count()
-        baseline = self.resolve_baseline(baseline_file, 'ANY_COUNT_BASELINE', 0)
-        res = {"current": current, "baseline": baseline, "status": "success" if current <= baseline else "error"}
-        if current > baseline: res["message"] = f"'any' count increased from {baseline} to {current}."
-        if update:
-            if not dry_run:
-                if baseline_file:
-                    with open(baseline_file, 'w') as f: f.write(str(current))
-                else: set_gha_variable('ANY_COUNT_BASELINE', str(current))
-            res["updated"] = not dry_run
-        return res
-
-    def check_bundle_size(self, update: bool = False, baseline_file: Optional[str] = None, threshold: int = 50, dry_run: bool = True) -> Dict[str, Any]:
-        size = get_bundle_size()
-        baseline = self.resolve_baseline(baseline_file, 'BUNDLE_BASELINE_KB', 3080)
-        threshold_kb = baseline + threshold
-        res = {"size_kb": size, "baseline_kb": baseline, "threshold_kb": threshold_kb, "status": "success" if size <= threshold_kb else "error"}
-        if size > threshold_kb: res["message"] = f"Bundle size exceeds threshold ({size}KB > {threshold_kb}KB)."
-        if update:
-            if not dry_run:
-                if baseline_file:
-                    with open(baseline_file, 'w') as f: f.write(str(size))
-                else: set_gha_variable('BUNDLE_BASELINE_KB', str(size))
-            res["updated"] = not dry_run
-        return res
-
-    def migrate_tokens(self, find: Optional[str] = None, migrate: Optional[Tuple[str, str]] = None, dry_run: bool = True) -> List[Dict[str, Any]]:
-        root_dir = 'src'; matches = []
-        if find:
-            for filepath in walk_tsx(root_dir):
-                findings = find_patterns_in_file(filepath, [(re.escape(find), "Found")])
-                for ln, _, content in findings:
-                    matches.append({"file": filepath, "line": ln, "content": content.strip()})
-        elif migrate:
-            old, new = migrate
-            for filepath in walk_tsx(root_dir):
-                with open(filepath, 'r') as f: c = f.read()
-                if old in c:
-                    matches.append({"file": filepath})
-                    if not dry_run:
-                        with open(filepath, 'w') as f: f.write(c.replace(old, new))
-        return matches
-
-    def update_issues(self, dry_run: bool = True) -> List[Dict[str, Any]]:
-        repo = get_github_client().get_repo(get_repo_name()); updates = []
-        audit_base = self.get_audit_results(content=""); config = audit_base.get("config", {})
-        deprecated = config.get("deprecated", {})
-        for issue in repo.get_issues(state='open'):
-            body = issue.body or ''; findings = []
-            for old, new in deprecated.get('assets', {}).items():
-                if old in body: findings.append(f"References deprecated name `{old}`. Use `{new}` instead.")
-            for old, new in deprecated.get('paths', {}).items():
-                if old in body: findings.append(f"References deprecated path `{old}`. New location: `{new}`")
-            res = self.get_audit_results(content=body)
-            violations = res.get("violations", {}).get("stdin", [])
-            for v in violations: findings.append(f"Contains banned pattern: {v['message']} (value: {v.get('value', 'N/A')})")
-            if findings:
-                updates.append({"number": issue.number, "findings": findings})
-                if not dry_run: issue.create_comment(f"## 🤖 Automated Issue Update\n\n{"\n".join(f"- {f}" for f in findings)}\n\n---\n*Generated by `{PROJECT_CONFIG.cli_alias} update-issues`*")
-        return updates
-
-    def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event: Optional[str] = None) -> Dict[str, Any]:
-        review_dir = get_or_create_log_dir("reviews")
-        ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
-        res = {"pr": pr_number, "files": {}}
-        if fetch:
-            repo = get_github_client().get_repo(get_repo_name()); pr = repo.get_pull(pr_number)
-            title = pr.title; author = pr.user.login; desc = pr.body or '_No description provided._'
-            context_lines = [f"# PR Context: #{pr.number} — {title}", f"**Author:** @{author}\n", f"## Description\n{desc}\n", "## CI Status"]
-
-            check_runs = self.github.fetch_check_runs(pr.head.sha)
-            failed_check_names = []
-            detected_errors = []
-            if check_runs:
-                for run in check_runs:
-                    status_icon = '✅' if run.get('conclusion') == 'success' else '❌' if run.get('conclusion') == 'failure' else '⏳'
-                    context_lines.append(f"- {status_icon} **{run.get('name')}**: {run.get('status')} ({run.get('conclusion') or 'in_progress'})")
-                    if run.get('conclusion') == 'failure':
-                        failed_check_names.append(run.get('name'))
-                        logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-
-                        # Structured failure analysis
-                        findings = extract_failing_info(logs)
-                        if findings:
-                            context_lines.append("  **Failing Tests/Build Errors:**")
-                            for f in findings:
-                                error_msg = f"🔴 `{f['file']}:{f['line']}`: {f['message']} ({f['type']})"
-                                context_lines.append(f"  - {error_msg}")
-                                detected_errors.append(error_msg)
-
-                        # Extract a snippet of the logs (last 50 lines or search for 'error')
-                        cleaned_logs = clean_gha_logs(logs)
-                        log_lines = cleaned_logs.splitlines()
-                        error_lines = [l for l in log_lines if any(x in l.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴'])]
-                        snippet = "\n".join(error_lines[-20:] if error_lines else log_lines[-30:])
-                        context_lines.append(f"  <details><summary>Failure Logs Snippet</summary>\n\n  ```\n  {snippet}\n  ```\n  </details>")
-            else:
-                context_lines.append("_No check runs found._")
-
-            context_lines.extend(["\n## Files Changed"])
-            for f in pr.get_files(): context_lines.append(f"- {'🟢' if f.status=='added' else '🔴' if f.status=='removed' else '🟡'} `{f.filename}`")
-            context_lines.append("\n## Diffs")
-            for f in pr.get_files():
-                context_lines.append(f"\n### `{f.filename}` ({f.status})")
-                patch = f.patch or '_No textual diff available._'; annotated = []; line_num = 0
-                if patch != '_No textual diff available._':
-                    for line in patch.splitlines():
-                        if line.startswith('@@'):
-                            m = re.search(r'\+(\d+)', line); line_num = int(m.group(1)) if m else line_num
-                            annotated.append(line)
-                        elif line.startswith('+'): annotated.append(f"{line_num:4d} |{line}"); line_num += 1
-                        elif line.startswith('-'): annotated.append(f"     |{line}")
-                        else: annotated.append(f"{line_num:4d} |{line}"); line_num += 1
-                context_lines.append(f"```diff\n" + "\n".join(annotated) + "\n```")
-            with open(ctx_path, "w") as f: f.write("\n".join(context_lines))
-            template_path = os.path.join(os.path.dirname(__file__), "..", "review_template.md")
-
-            failed_checks_str = "\n".join(f"- {name}" for name in failed_check_names) if failed_check_names else "_None_"
-            errors_str = "\n".join(f"- {err}" for err in detected_errors) if detected_errors else "_None detected by parser._"
-
-            if os.path.exists(template_path):
-                with open(template_path) as f:
-                    template = f.read().format(
-                        pr_num=pr_number,
-                        head_sha=pr.head.sha,
-                        failed_checks=failed_checks_str,
-                        detected_errors=errors_str
-                    )
-            else:
-                template = f"# PR Review: #{pr_number}\n- SHA: {pr.head.sha}\n\n## CI Log Triage\n- **Failed Checks:**\n{failed_checks_str}\n- **Detected Errors:**\n{errors_str}\n"
-            with open(rev_path, "w") as f: f.write(template)
-            res["files"]["context"] = ctx_path; res["files"]["review"] = rev_path
-        if audit:
-            if not os.path.exists(ctx_path): raise CLIError(f"Context file missing: {ctx_path}")
-            with open(ctx_path) as f: context = f.read()
-            changed_files = re.findall(r'### `([^`]+)`', context); auto_findings = []
-            scope_warning = verify_pr_scope(changed_files)
-            if scope_warning: auto_findings.append({"path": "PR SCOPE", "issue": scope_warning, "severity": "major"})
-            files_to_audit = [f for f in changed_files if (f.endswith('.tsx') or f.endswith('.ts')) and os.path.exists(f)]
-            if files_to_audit:
-                audit_res = run_command(["node", "scripts/detect-antipatterns.mjs", "--json"] + files_to_audit, check=False)
-                output = audit_res.stdout
-                if output and "{" in output:
-                    json_start = output.find("{")
-                    json_end = output.rfind("}") + 1
-                    audit_data = json.loads(output[json_start:json_end])
-                    for filepath, violations in audit_data.items():
-                        for v in violations:
-                            auto_findings.append({"path": filepath, "issue": f"{v['pattern']}: {v['message']} (value: {v.get('value', 'N/A')})", "severity": v.get('severity', 'minor')})
-            res["auto_findings"] = auto_findings
-        if submit:
-            self.github.submit_pr_review(pr_number, rev_path, cleanup=cleanup, dry_run=dry_run, event_override=event)
-        return res
-
-    def handle_comment_command(self, pr_number: int, command: str, comment_id: Optional[str] = None) -> Dict[str, Any]:
-        """
-        Delegates command handling to the CommandHandler.
-        """
-        handler = CommandHandler(self)
-        return handler.handle(pr_number, command, comment_id)
+    # Delegation to RemediationService
+    def fix_ci(self, *args, **kwargs): return self.remediation_service.fix_ci(*args, **kwargs)
 
     def parse_comment(self, body: str, author_association: str) -> Dict[str, Any]:
-        """
-        Parses a comment body and returns the intended actions.
-        Consolidates detection logic using regex patterns with word boundaries.
-        """
         results = {k: bool(re.search(v, body)) for k, v in self._CMD_PATTERNS.items()}
-
         return {
             "conflict_resolve": results["conflict_resolve"],
             "update_snapshots": results["update_snapshots"],
-            "ai_chatops": results["ai_fix"] or results["ai_review"],
+            "ai_chatops": results["ai_chatops"],
             "jules_fix_ci": results["jules_fix_ci"] and author_association in ['OWNER', 'MEMBER', 'COLLABORATOR']
         }
 
