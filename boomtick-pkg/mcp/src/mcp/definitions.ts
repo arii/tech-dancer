@@ -79,43 +79,6 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
-    name: "github.search_open_prs",
-    description: "Search for open pull requests in the repository.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        state: { type: "string", enum: ["open", "closed", "all"], default: "open", description: "The state of the PRs to search for (open, closed, all)." },
-        includeDrafts: { type: "boolean", default: true, description: "Whether to include draft PRs in the results." },
-        limit: { type: "number", minimum: 1, maximum: 100, default: 100, description: "The maximum number of PRs to return (default: 100, range: 1-100)." },
-        labels: { type: "array", items: { type: "string" }, description: "Filter PRs by labels." },
-      },
-      required: [],
-    },
-  },
-  {
-    name: "github.get_pr_diff",
-    description: "Get the diff and changed files for a pull request.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        prNumber: { type: "number", description: "The number of the pull request to get the diff for." },
-      },
-      required: ["prNumber"],
-    },
-  },
-  {
-    name: "github.checkout_branch",
-    description: "Checkout a specific branch in the repository or worktree.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        branch: { type: "string", description: "The name of the branch to checkout." },
-        worktreePath: { type: "string", description: "Optional path to the worktree to perform the checkout in." },
-      },
-      required: ["branch"],
-    },
-  },
-  {
     name: "github.get_merge_conflict_files",
     description: "Detect files that conflict when a PR is merged with the base branch.",
     inputSchema: {
@@ -140,14 +103,21 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
-    name: "repo.get_package_scripts",
-    description: "Get the scripts defined in package.json.",
+    name: "repo.run_script",
+    description: "Execute a script defined in package.json. Return exit code, stdout, and stderr. DO NOT use this for one-off exploratory bash commands; use raw bash directly instead. Use this tool exclusively for known package.json scripts (e.g. 'test', 'lint').",
     inputSchema: {
       type: "object",
       properties: {
-        filter: { type: "string", description: "Optional glob pattern to filter script names." }
+        script_name: {
+          type: "string",
+          description: "The exact name of the script in package.json to run (e.g. 'test', 'lint').",
+        },
+        args: {
+          type: "string",
+          description: "Optional arguments to pass to the script (e.g. '--filter=my-test'). Do not include the script name here.",
+        },
       },
-      required: []
+      required: ["script_name"],
     },
   },
   {
@@ -184,18 +154,6 @@ export const MCP_TOOLS: Tool[] = [
       },
       required: ["prNumber"],
     },
-  },
-  {
-    name: "repo.create_branch",
-    description: "Creates a new clean git branch from a target base branch.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        branchName: { type: "string", description: "The name of the new branch" },
-        baseBranch: { type: "string", default: "main", description: "Branch to branch off from" }
-      },
-      required: ["branchName"]
-    }
   },
   {
     name: "repo.create_repair_branch",
@@ -248,20 +206,6 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
-    name: "repo.commit_patch",
-    description: "Commit verified repair changes in a worktree.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        worktreePath: { type: "string", description: "Path to the worktree where changes are made." },
-        message: { type: "string", description: "Commit message." },
-        allowedFiles: { type: "array", items: { type: "string" }, description: "List of files that are allowed to be committed." },
-        writeMode: { type: "boolean", const: true, description: "Safety gate: Must be true to perform the commit." },
-      },
-      required: ["worktreePath", "message", "allowedFiles", "writeMode"],
-    },
-  },
-  {
     name: "github.open_replacement_pr",
     description: "Open a new PR that replaces or repairs the original PR.",
     inputSchema: {
@@ -280,21 +224,6 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
-    name: "github.create_pull_request",
-    description: "Creates a pull request on GitHub using the MCP server's integrated credentials. Bypasses terminal CLI constraints.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        title: { type: "string", description: "PR Title." },
-        body: { type: "string", description: "Description of changes." },
-        head: { type: "string", description: "The branch containing changes to merge." },
-        base: { type: "string", default: "main", description: "The target branch to merge into." },
-        draft: { type: "boolean", default: false, description: "Whether to create the PR as a draft." }
-      },
-      required: ["title", "body", "head"]
-    }
-  },
-  {
     name: "github.comment_triage_summary",
     description: "Comment on the original PR with a diagnosis and replacement link.",
     inputSchema: {
@@ -308,7 +237,7 @@ export const MCP_TOOLS: Tool[] = [
   },
   {
     name: "github.issue_view",
-    description: "View details of a GitHub issue including title, body, and state.",
+    description: "View details of a GitHub issue including title, body, and state. DO NOT search the web or use `gh issue view --help`. Use this tool directly. Example: {\"issueNumber\": 42}",
     inputSchema: {
       type: "object",
       properties: {
@@ -319,20 +248,23 @@ export const MCP_TOOLS: Tool[] = [
   },
   {
     name: "github.issue_update",
-    description: "Update a GitHub issue's body, labels, and/or state.",
+    description: "Update a GitHub issue's body, labels, and/or state. DO NOT use bash `gh issue edit`. Example: {\"issueNumber\": 42, \"state\": \"closed\", \"labels\": [\"fixed\"]}",
     inputSchema: {
       type: "object",
       properties: {
         issueNumber: { type: "number", description: "The number of the issue to update." },
         body: { type: "string", description: "The new body content for the issue." },
-        state: { type: "string", description: "The state to set the issue to (open or closed)." },
+        labels: { type: "array", items: { type: "string" }, description: "Exact set of labels for the issue." },
+        add_labels: { type: "array", items: { type: "string" }, description: "Labels to add." },
+        remove_labels: { type: "array", items: { type: "string" }, description: "Labels to remove." },
+        state: { type: "string", enum: ["open", "closed"], description: "The state to set the issue to." },
       },
       required: ["issueNumber"],
     },
   },
   {
     name: "github.issue_comment",
-    description: "Add a new comment to a GitHub issue.",
+    description: "Post a comment to a GitHub issue. DO NOT use bash `gh issue comment`. Example: {\"issueNumber\": 12, \"body\": \"Fixed in #13\"}",
     inputSchema: {
       type: "object",
       properties: {
@@ -344,7 +276,7 @@ export const MCP_TOOLS: Tool[] = [
   },
   {
     name: "github.create_issue",
-    description: "Create a new GitHub issue.",
+    description: "Create a new GitHub issue. DO NOT use bash `gh issue create`. Example: {\"title\": \"Fix bug X\", \"body\": \"Description...\"}",
     inputSchema: {
       type: "object",
       properties: {

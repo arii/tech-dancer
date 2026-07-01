@@ -84,6 +84,7 @@ If you encounter a schema error or a missing argument in an MCP tool, you must *
 | **GitHub** | Manage Reviews | `github.manage_reviews` | `td-cli gh manage-reviews` | - |
 | **GitHub** | Validate Issue | `github.validate_issue` | `td-cli gh validate-issue` | - |
 | **GitHub** | Create Issue | `github.create_issue` | `td-cli gh create-issue` | `gh issue create` |
+| **Repository** | Run Script | `repo.run_script` | `td-cli repo run-script` | `pnpm run <script>` |
 | **GitHub** | Aggregate PRs / Consolidate | - | `td-cli gh aggregate <TARGET_BRANCH> <PR_NUMBERS...>` (Note: Use `main` branch as base) | - |
 | **GitHub** | Pre-submit Gate | `github.pre_submit` | `td-cli gh pre-submit` | - |
 | **Repository** | Read Repo Index | `repo.read_agent_context` | `cat .agent-context.json` | - |
@@ -138,6 +139,17 @@ blocked and further LLM calls add no value.
 ---
 
 ## 🛠️ MCP Tool Usage Guidelines
+
+### ⚠️ No-Search / No-Help Policy for Core Operations
+For all issue create/update/comment/close/view operations, ALWAYS use the
+`github.issue_*` MCP tools. Do NOT:
+- Run `gh issue --help`, `gh --help`, or any `-h`/`--help` flag
+- Search the web for `gh` CLI syntax
+- Fall back to raw `gh issue create ...` via bash
+
+If a required parameter is unclear, the tool schema is the source of truth —
+do not attempt to discover it via help text or search. If the schema is
+genuinely insufficient for the task, stop and ask rather than exploring.
 
 ### Asynchronous Operations
 Always prefer MCP tools for heavy operations (running tests, fetching large

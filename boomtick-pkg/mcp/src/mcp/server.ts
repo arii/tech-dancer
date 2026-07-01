@@ -12,24 +12,17 @@ import { config } from "../config.js";
 import { createSuccessResult, createErrorResult } from "../lib/result.js";
 import { MCP_TOOLS, MCP_PROMPTS, MCP_RESOURCES } from "./definitions.js";
 import { healthHandler, HealthCheckInputSchema } from "./tools.js";
-import { searchOpenPrsHandler, SearchOpenPrsInputSchema } from "../tools/github.search_open_prs.js";
-import { getPrDiffHandler, GetPrDiffInputSchema } from "../tools/github.get_pr_diff.js";
 import { getMergeConflictFilesHandler, GetMergeConflictFilesInputSchema } from "../tools/github.get_merge_conflict_files.js";
-import { checkoutBranchHandler, CheckoutBranchInputSchema } from "../tools/github.checkout_branch.js";
-import { getChangedFilesHandler, GetChangedFilesInputSchema } from "../tools/repo.get_changed_files.js";
-import { getPackageScriptsHandler, GetPackageScriptsInputSchema } from "../tools/repo.get_package_scripts.js";
+import { runScriptHandler, RunScriptInputSchema } from "../tools/repo.run_script.js";
 import { getRouteMapHandler, GetRouteMapInputSchema } from "../tools/repo.get_route_map.js";
 import { readCiLogsHandler, ReadCiLogsInputSchema } from "../tools/repo.read_ci_logs.js";
 import { repoLogsHandler, RepoLogsInputSchema } from "../tools/repo.logs.js";
 import { createRepairBranchHandler, CreateRepairBranchInputSchema } from "../tools/repo.create_repair_branch.js";
-import { createBranchHandler, CreateBranchInputSchema } from "../tools/repo.create_branch.js";
 import { runTestsHandler, RunTestsInputSchema } from "../tools/repo.run_tests.js";
 import { runLighthouseHandler, RunLighthouseInputSchema } from "../tools/repo.run_lighthouse.js";
 import { runPlaywrightHandler, RunPlaywrightInputSchema } from "../tools/repo.run_playwright.js";
-import { commitPatchHandler, CommitPatchInputSchema } from "../tools/repo.commit_patch.js";
 import { openReplacementPrHandler, OpenReplacementPrInputSchema } from "../tools/github.open_replacement_pr.js";
 import { commentTriageSummaryHandler, CommentTriageSummaryInputSchema } from "../tools/github.comment_triage_summary.js";
-import { createPullRequestHandler, CreatePullRequestInputSchema } from "../tools/github.create_pull_request.js";
 import { issueViewHandler, IssueViewInputSchema } from "../tools/github.issue_view.js";
 import { issueUpdateHandler, IssueUpdateInputSchema } from "../tools/github.issue_update.js";
 import { issueCommentHandler, IssueCommentInputSchema } from "../tools/github.issue_comment.js";
@@ -138,13 +131,6 @@ export class BoomtickMCPServer {
           contents: [{ uri, mimeType: "text/typescript", text: content }],
         };
       }
-      if (uri.startsWith("repo://diff/")) {
-        const prNumber = parseInt(uri.split("/").pop() || "");
-        const diff = await getPrDiffHandler({ prNumber });
-        return {
-          contents: [{ uri, mimeType: "text/plain", text: diff.diffText }],
-        };
-      }
       if (uri.startsWith("repo://ci/")) {
         const prNumber = parseInt(uri.split("/").pop() || "");
         const logs = await readCiLogsHandler({ prNumber });
@@ -182,26 +168,16 @@ export class BoomtickMCPServer {
         switch (request.params.name) {
           case "boomtick.health":
             return createSuccessResult(await healthHandler(HealthCheckInputSchema.parse(request.params.arguments || {})));
-          case "github.search_open_prs":
-            return createSuccessResult(await searchOpenPrsHandler(SearchOpenPrsInputSchema.parse(request.params.arguments || {})));
-          case "github.get_pr_diff":
-            return createSuccessResult(await getPrDiffHandler(GetPrDiffInputSchema.parse(request.params.arguments)));
           case "github.get_merge_conflict_files":
             return createSuccessResult(await getMergeConflictFilesHandler(GetMergeConflictFilesInputSchema.parse(request.params.arguments)));
-          case "github.checkout_branch":
-            return createSuccessResult(await checkoutBranchHandler(CheckoutBranchInputSchema.parse(request.params.arguments)));
-          case "repo.get_changed_files":
-            return createSuccessResult(await getChangedFilesHandler(GetChangedFilesInputSchema.parse(request.params.arguments || {})));
-          case "repo.get_package_scripts":
-            return createSuccessResult(await getPackageScriptsHandler(GetPackageScriptsInputSchema.parse(request.params.arguments || {})));
+          case "repo.run_script":
+            return await runScriptHandler(request.params.arguments);
           case "repo.get_route_map":
             return createSuccessResult(await getRouteMapHandler(GetRouteMapInputSchema.parse(request.params.arguments || {})));
           case "repo.read_ci_logs":
             return createSuccessResult(await readCiLogsHandler(ReadCiLogsInputSchema.parse(request.params.arguments)));
           case "repo.logs":
             return createSuccessResult(await repoLogsHandler(RepoLogsInputSchema.parse(request.params.arguments)));
-          case "repo.create_branch":
-            return createSuccessResult(await createBranchHandler(CreateBranchInputSchema.parse(request.params.arguments)));
           case "repo.create_repair_branch":
             return createSuccessResult(await createRepairBranchHandler(CreateRepairBranchInputSchema.parse(request.params.arguments)));
           case "repo.run_tests":
@@ -210,14 +186,10 @@ export class BoomtickMCPServer {
             return createSuccessResult(await runLighthouseHandler(RunLighthouseInputSchema.parse(request.params.arguments || {})));
           case "repo.run_playwright":
             return createSuccessResult(await runPlaywrightHandler(RunPlaywrightInputSchema.parse(request.params.arguments || {})));
-          case "repo.commit_patch":
-            return createSuccessResult(await commitPatchHandler(CommitPatchInputSchema.parse(request.params.arguments)));
           case "github.open_replacement_pr":
             return createSuccessResult(await openReplacementPrHandler(OpenReplacementPrInputSchema.parse(request.params.arguments)));
           case "github.comment_triage_summary":
             return createSuccessResult(await commentTriageSummaryHandler(CommentTriageSummaryInputSchema.parse(request.params.arguments)));
-          case "github.create_pull_request":
-            return createSuccessResult(await createPullRequestHandler(CreatePullRequestInputSchema.parse(request.params.arguments)));
           case "github.issue_view":
             return createSuccessResult(await issueViewHandler(IssueViewInputSchema.parse(request.params.arguments)));
           case "github.issue_update":
