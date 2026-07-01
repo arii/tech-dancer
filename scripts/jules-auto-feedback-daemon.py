@@ -8,8 +8,12 @@ import subprocess
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+repo_root = os.path.abspath(os.path.join(script_dir, '..'))
+cli_pkg_dir = os.path.join(repo_root, 'boomtick-pkg', 'cli')
+
 # Add CLI package to python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'boomtick-pkg', 'cli'))
+sys.path.insert(0, cli_pkg_dir)
 from dev_tools.services.jules import JulesClient
 from dev_tools.services.github import GitHubClient
 
@@ -80,13 +84,14 @@ def main():
             logger.info(f"Running full feedback pipeline for PR #{matched_pr_num} using trigger_jules_feedback...")
 
             try:
-                cmd = ["python3", "boomtick-pkg/cli/dev_tools/td_cli.py", "--no-json", "agent", "trigger-feedback", session_id]
+                td_cli_path = os.path.join(cli_pkg_dir, 'dev_tools', 'td_cli.py')
+                cmd = ["python3", td_cli_path, "--no-json", "agent", "trigger-feedback", session_id]
                 env = os.environ.copy()
-                env["PYTHONPATH"] = os.path.join(os.getcwd(), "boomtick-pkg/cli")
+                env["PYTHONPATH"] = cli_pkg_dir
                 res = subprocess.run(cmd, env=env, check=True, capture_output=True, text=True)
                 logger.info(f"Triggered feedback for {session_id}. Result: {res.stdout}")
             except subprocess.CalledProcessError as e:
-                logger.error(f"Error triggering feedback for {session_id}: {e.stderr}")
+                logger.error(f"Error triggering feedback for {session_id}:\n{e.stderr}\n{e.stdout}")
 
     except Exception as e:
         logger.error(f"Error in daemon: {e}", exc_info=True)
