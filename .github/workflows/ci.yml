@@ -11,12 +11,13 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - '.github/workflows/ci.yml'
+      - '.github/workflows/**'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
       - '*.config.ts'
       - 'tsconfig*.json'
+      - '.yamllint.yml'
   pull_request:
     branches: ['**']
     paths:
@@ -27,13 +28,16 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - '.github/workflows/ci.yml'
+      - '.github/workflows/**'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
       - '*.config.ts'
       - 'tsconfig*.json'
+      - '.yamllint.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '45 4 * * 6'
 
 permissions:
   contents: read
@@ -160,3 +164,91 @@ jobs:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           pr_number: ${{ github.event.pull_request.number }}
           jules_api_key: ${{ secrets.JULES_API_KEY }}
+
+  security-scan:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
+    name: Security Scan (${{ matrix.scanner }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        scanner: [oxlint, semgrep, gitleaks]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Initialize CodeQL
+        if: matrix.scanner == 'semgrep'
+        uses: github/codeql-action/init@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          languages: actions, javascript-typescript
+
+      - name: Oxlint Scan
+        if: matrix.scanner == 'oxlint'
+        run: pnpm run lint:ox
+
+      - name: Semgrep Static Analysis
+        if: matrix.scanner == 'semgrep'
+        run: |
+          # Install semgrep on the host for efficiency
+          pip install semgrep
+          pnpm run audit:semgrep
+
+      - name: Gitleaks Secret Detection
+        if: matrix.scanner == 'gitleaks'
+        uses: gitleaks/gitleaks-action@v2 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Perform CodeQL Analysis
+        if: matrix.scanner == 'semgrep'
+        uses: github/codeql-action/analyze@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          category: "/language:security-scan"
+
+
+  validate-workflows:
+    name: Validate all workflow files
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+
+      - name: Download actionlint
+        id: get_actionlint
+        run: |
+          # Pin to a specific version and commit for security
+          # Current commit for v1.7.12 as of 2026-06-26
+          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash > download-actionlint.sh
+          bash download-actionlint.sh 1.7.12
+          rm download-actionlint.sh
+        shell: bash
+
+      - name: Lint workflow logic with actionlint
+        run: |
+          # Ignore 'background', 'parallel', and 'wait' keywords as actionlint does
+          # not yet support these new GitHub Actions features.
+          ./actionlint \
+            -ignore 'step must run script with "run" section' \
+            -ignore 'unexpected key "background"' \
+            -ignore 'unexpected key "parallel"' \
+            -ignore 'unexpected key "wait"' \
+            -color
+        shell: bash
