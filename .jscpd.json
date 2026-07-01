@@ -1,7 +1,7 @@
 {
   "threshold": 5,
-  "minLines": 15,
-  "minTokens": 100,
+  "minLines": 10,
+  "minTokens": 75,
   "ignore": [
     "src/layouts/**",
     "src/components/ui/**",
