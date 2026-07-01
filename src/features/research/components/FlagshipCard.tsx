@@ -77,12 +77,12 @@ const FlagshipCard = ({
           )}
 
           {tool.inDevMessage && (
-            <div className="in-dev-banner">
+            <Box className="in-dev-banner">
               <Icon icon={FlaskConical} size="sm" color="dim" aria-hidden="true" />
-              <p>
+              <Box as="p">
                 <strong>{tool.inDevMessage.highlight}</strong>{tool.inDevMessage.rest}
-              </p>
-            </div>
+              </Box>
+            </Box>
           )}
 
           <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>

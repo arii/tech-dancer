@@ -5,8 +5,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
 import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { Icon } from '@/components/ui/Icon';
 
 // Sub-components
 import ViewportAnalysisCard from '@/features/ux-auditor/components/ViewportAnalysisCard';
@@ -54,6 +52,7 @@ const UXAuditor = () => {
             label="Visual UX Auditor"
             title="Multimodal AI Analysis"
             description="Automated visual regression and UX improvement suggestions across viewports."
+            icon={Camera}
           />
         </Box>
 
@@ -103,12 +102,24 @@ const UXAuditor = () => {
               </Stack>
             </>
           ) : (
-            <EmptyState
+            <Box
+              display="flex"
+              direction="col"
+              align="center"
+              justify="center"
               minHeight={500}
-              icon={<Icon icon={Camera} size="xl" color="muted" />}
-              title="Ready to Audit"
-              description="Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop."
-            />
+              surface="muted"
+              radius="xl"
+              className="text-center"
+            >
+              <Box marginBottom={4} color="dim">
+                <Camera size={48} />
+              </Box>
+              <Grid gap={2}>
+                <Box as="h3" className="text-xl font-black">Ready to Audit</Box>
+                <Box as="p" className="text-sm text-dim">Enter a URL above to start the visual analysis across Mobile, Tablet, and Desktop.</Box>
+              </Grid>
+            </Box>
           )}
         </Stack>
       </Grid>

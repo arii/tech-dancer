@@ -22,7 +22,7 @@ const ResearchHero = () => {
         {/* Scrollable Focus Tags for Mobile */}
         <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
           <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
-          <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+          <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="scroll-mask-fade">
             {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
               <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
             ))}

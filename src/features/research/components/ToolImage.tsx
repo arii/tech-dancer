@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment, MouseEvent } from 'react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ResearchTool } from '@/config/research-tools';
 
@@ -19,14 +19,14 @@ const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
           </Text>
           <Text className="preview-headline">
             {headline.map((line, idx) => (
-              <React.Fragment key={idx}>
+              <Fragment key={idx}>
                 {line.accent ? (
                   <span className="headline-accent">{line.accent}</span>
                 ) : (
                   line.text
                 )}
                 {idx < headline.length - 1 && <br />}
-              </React.Fragment>
+              </Fragment>
             ))}
           </Text>
           <Text className="preview-tagline">
@@ -42,7 +42,7 @@ const ToolImage = ({ tool, baseUrl, onImageClick }: ToolImageProps) => {
   const src = tool.image.startsWith('/') ? `${baseUrl}${tool.image}` : tool.image;
   const alt = tool.imageAlt || `Screenshot of the ${tool.title} interface preview`;
 
-  const handleImageClick = (e: React.MouseEvent) => {
+  const handleImageClick = (e: MouseEvent) => {
     if (onImageClick) {
       e.preventDefault();
       e.stopPropagation();
