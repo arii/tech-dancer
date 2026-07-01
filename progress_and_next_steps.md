@@ -1,6 +1,6 @@
 # BoomTick-Pkg Consolidation: Audits & Remaining Tasks
 
-This document tracks the completed audits, resolved technical debt, tester findings verification, and remaining open/outstanding tasks of the `boomtick-pkg/` consolidation epic.
+This document tracks the completed audits, resolved technical debt, and remaining open/outstanding tasks of the `boomtick-pkg/` consolidation epic.
 
 ---
 
@@ -21,22 +21,6 @@ This document tracks the completed audits, resolved technical debt, tester findi
     *   Replaced the check in `cli.py` with standard `sys.exit(code)` (allowing standard testing frameworks like pytest to capture `SystemExit` normally via `pytest.raises(SystemExit)`).
     *   Replaced the check in `td_cli.py` with standard script execution context detection (`if __name__ == "__main__":`).
     *   Verified that all 132 Vitest cases and 33 Pytest cases continue to pass cleanly.
-
-### 3. Tester Findings Verification & Fixes
-We systematically reviewed the findings reported by the tester:
-- **Recursive Symlink**: **Inaccurate / Resolved**. No symlinks exist at `boomtick-pkg/boomtick-pkg`.
-- **Binary Artifacts (`.pyc` / `__pycache__`)**: **Inaccurate / Resolved**. These are ignored by `.gitignore` and are not tracked in revision control.
-- **Redundant Configuration (`current_config.py`)**: **Resolved**. The duplicate configuration file has been fully purged from the repository.
-- **Import Errors**:
-  - `verify_versions.py`: **Resolved**. Dynamic path mutations were removed; the script now uses absolute package imports.
-  - `ai_service.py`: **Accurate & Fixed**. Added the missing `import requests` at the top of the file to prevent runtime errors when the Gemini fallback path executes.
-- **Path Resolution**: **Accurate & Fixed**. Fixed an off-by-one error in `boomtick-pkg/mcp/src/config.ts` where `repoPath` resolved to `../../../../` instead of `../../../` in the fallback case.
-- **Dependency Gaps**: **Accurate & Fixed**. Added the missing `duckduckgo-search>=6.0.0` dependency to the CLI's `pyproject.toml`.
-- **CI & Environment Blockers**:
-  - **Missing Root Configs (`.node-version` / `.npmrc`)**: **Inaccurate**. Both files are present in the repository root.
-  - **Git History Depth**: **Inaccurate**. Reusable workflow actions already specify `fetch-depth: 0`.
-  - **Missing Validation Scripts (`detect-antipatterns.mjs`)**: **Expected**. This is a repository-specific UI validation script, designed to reside in the host repository root where the CLI executes.
-  - **pnpm Filter Support**: **Inaccurate**. Unified `pnpm-workspace.yaml` is correctly present in the root.
 
 ---
 
