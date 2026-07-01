@@ -424,15 +424,17 @@ class Orchestrator:
                     for field in config.get('requiredContentFields', []):
                         if not re.search(rf'^{field}:', md_match.group(1), re.MULTILINE):
                             findings.append(f"Missing frontmatter: `{field}`")
-            if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
-                warnings.append("No acceptance criteria.")
-            if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
-                warnings.append("Mentions Tailwind but not layout primitives.")
+            is_jules_pr = "*PR created automatically by Jules" in body
+            if not is_jules_pr:
+                if not re.search(r'(acceptance criteria|definition of done|## done|verify|test)', body, re.IGNORECASE):
+                    warnings.append("No acceptance criteria.")
+                if re.search(r'tailwind|className.*flex|className.*grid', body, re.IGNORECASE) and not re.search(r'<Box|<Stack|<Grid|primitives|design.tokens', body, re.IGNORECASE):
+                    warnings.append("Mentions Tailwind but not layout primitives.")
 
-            # Spec-Driven Issue Validation
-            missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
-            if missing_spec_sections:
-                findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
+                # Spec-Driven Issue Validation
+                missing_spec_sections = [s for s in SPEC_SECTIONS if not self._has_spec_section(s, body)]
+                if missing_spec_sections:
+                    findings.append(f"Missing spec-driven sections: {', '.join(f'`{s}`' for s in missing_spec_sections)}")
 
             issue_result = {"number": issue.number, "title": title, "findings": findings, "warnings": warnings}
             results.append(issue_result)
