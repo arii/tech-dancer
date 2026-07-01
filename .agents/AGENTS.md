@@ -25,7 +25,7 @@ Before executing **any** command, agents MUST:
 
 Tier 1 MCP tools are the **required first call** — not a preference.
 
-Every `boomtick-mcp` tool automatically:
+Every `boomtick-pkg/mcp` tool automatically:
 1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema` into context
 2. Calls the appropriate `td-cli` subcommand internally
 3. Returns structured output with repo context already attached
@@ -55,7 +55,7 @@ Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly
 
 | Tier | Tool | When to Use |
 | :--- | :--- | :--- |
-| **Tier 1** | `boomtick-mcp` tools | Always — primary entry point for all repo and GitHub operations |
+| **Tier 1** | `boomtick-pkg/mcp` tools | Always — primary entry point for all repo and GitHub operations |
 | **Tier 2** | `td-cli` | Only when a Tier 1 tool is unavailable or the CLI provides logic not yet exposed via MCP |
 | **Tier 3** | Raw bash / `gh` CLI | Last resort — only when no Tier 1 or Tier 2 tool exists for the task |
 
@@ -161,7 +161,7 @@ print(json.dumps(schema['cli_schema']['subcommands']['gh pr-diff'], indent=2))
 "
 ```
 
-This is what `boomtick-mcp` does automatically on every call.
+This is what `boomtick-pkg/mcp` does automatically on every call.
 
 ## Appendix: CLI Entrypoint & Packaging Standards
 

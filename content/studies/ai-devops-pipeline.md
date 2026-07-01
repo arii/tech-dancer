@@ -114,12 +114,12 @@ Now the model has a narrower job: review the packet and produce findings.
 
 ```bash
 # Generic example: adjust command names to match your repo
-python dev-tools/aggregate_pr_context.py \
+td gh audit-pr --fetch \
   --target-branch main \
   --output .devai/review-context.md
 ```
 
-> **Implemented:** `dev-tools/td-cli gh audit-pr <PR_NUMBER> --fetch` fetches PR diffs, CI logs, and linked issue context into a structured review packet. `dev-tools/aggregate-prs.sh` handles batch aggregation.
+> **Implemented:** `boomtick-pkg/cli/td-cli gh audit-pr <PR_NUMBER> --fetch` fetches PR diffs, CI logs, and linked issue context into a structured review packet. `boomtick-pkg/cli/aggregate-prs.sh` handles batch aggregation.
 
 The point is not that my aggregation command is special. The point is that the model should receive a curated artifact instead of wandering through the repo.
 
@@ -183,7 +183,7 @@ This is intentionally boring. If this part feels magical, the pipeline is probab
 
 The model should not be responsible for knowing your repo's entire history. It should receive a bounded task, produce bounded output, and leave the final decision to deterministic code.
 
-> **Implemented:** The AI orchestration logic (prioritizing GitHub Models and Gemini) is centralized in `dev-tools/utils.py`.
+> **Implemented:** The AI orchestration logic (prioritizing GitHub Models and Gemini) is centralized in `boomtick-pkg/cli/utils.py`.
 
 ---
 
@@ -241,7 +241,7 @@ Use `COMMENT` for feedback that may be useful but should not stop the PR: naming
 Use `APPROVE` or a summary comment only when there are no blocking findings.
 
 ```python
-# dev-tools/submit_review.py
+# td gh audit-pr --submit
 import json
 
 with open(".devai/review-result.json") as f:
@@ -256,7 +256,7 @@ pr.create_review(
 )
 ```
 
-> **Implemented:** `dev-tools/submit_review.py` handles `APPROVE`, `REQUEST_CHANGES`, and `COMMENT` states.
+> **Implemented:** `td gh audit-pr --submit` handles `APPROVE`, `REQUEST_CHANGES`, and `COMMENT` states.
 
 The model proposes the facts. The script applies the policy.
 
@@ -292,7 +292,7 @@ sequenceDiagram
 
 That last step is not ceremony. It is the safety boundary.
 
-> **Experimental:** `dev-tools/td-cli ai repair` can be triggered when CI fails. A GitHub Actions workflow (`jules-fix-trigger.yml`) exists to initiate repair sessions. Treat the output as a suggestion; always review before merge.
+> **Experimental:** `boomtick-pkg/cli/td-cli ai repair` can be triggered when CI fails. A GitHub Actions workflow (`jules-fix-trigger.yml`) exists to initiate repair sessions. Treat the output as a suggestion; always review before merge.
 
 ---
 
@@ -337,15 +337,15 @@ Everything else, including GitHub comments, review states, CI repair, and screen
   review-context.md
   review-result.json
 
-dev-tools/
+boomtick-pkg/cli/
   aggregate_pr_context.py
 ```
 
 ```bash
 # Generic example: file names are adaptable
-python dev-tools/aggregate_pr_context.py > .devai/review-context.md
-python dev-tools/ai_review.py .devai/review-context.md > .devai/review-result.json
-python dev-tools/submit_review.py .devai/review-result.json
+td gh audit-pr --fetch > .devai/review-context.md
+td ai review .devai/review-context.md > .devai/review-result.json
+td gh audit-pr --submit .devai/review-result.json
 ```
 
 Even if you never post the result back to GitHub automatically, you still get something useful: a repeatable review artifact that can be inspected, improved, and rerun.

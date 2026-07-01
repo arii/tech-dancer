@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
 /**
- * Shared test utilities for boomtick-mcp
+ * Shared test utilities for boomtick-pkg/mcp
  */
 
 /**

@@ -105,7 +105,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['GitHub Actions', 'LLM', 'PR Automation'],
     canonicalPath: '/research/gitops-pr-reviewer',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/boomtick-cli'
   },
   {
     id: 'deployment-impact-analyzer',
@@ -117,7 +117,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Dependency Graph', 'CI/CD'],
     canonicalPath: '/research/deployment-impact-analyzer',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools',
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/boomtick-cli',
     isFlagship: true
   },
   {
@@ -130,7 +130,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     status: 'Active',
     tags: ['Playwright', 'Pixelmatch', 'Screenshot Diff', 'CI/CD'],
     canonicalPath: '/ux-auditor',
-    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/dev-tools'
+    sourceUrl: 'https://github.com/arii/tech-dancer/tree/main/boomtick-cli'
   },
   {
     id: 'wcs-scraper',

@@ -1,12 +1,12 @@
 name: 'Setup Workspace'
-description: 'Bootstraps the workspace by installing Node.js, Python, and dev-tools'
+description: 'Bootstraps the workspace by installing Node.js, Python, and boomtick-cli'
 inputs:
   setup-node:
     description: "Install Node.js and pnpm"
     required: false
     default: 'true'
   setup-python:
-    description: "Install dev-tools (Python)"
+    description: "Install boomtick-cli (Python)"
     required: false
     default: 'true'
   node-version-file:
@@ -45,10 +45,10 @@ runs:
       run: corepack prepare pnpm@"$PNPM_VERSION" --activate
       shell: bash
 
-    - name: Install dev-tools
+    - name: Install boomtick-cli
       if: inputs.setup-python == 'true'
       run: |
-        echo "::group::Install dev-tools"
+        echo "::group::Install boomtick-cli"
         pip install -e boomtick-pkg/cli/ --break-system-packages
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install

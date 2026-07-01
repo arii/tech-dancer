@@ -115,8 +115,8 @@ Do NOT assume \`ChatOpenAI\` always means talking to OpenAI's own API.
     name: 'Python Scripts',
     matcher: (files) => files.some(f => f.endsWith('.py')),
     guidance: `Python Scripts:
-- \`sys.path\` manipulation at the top of dev-tools scripts (e.g. \`sys.path.append(...)\`) is
-  intentional for this repo's CI invocation pattern (\`PYTHONPATH=dev-tools python3 -m ...\`) —
+- \`sys.path\` manipulation at the top of boomtick-cli scripts (e.g. \`sys.path.append(...)\`) is
+  intentional for this repo's CI invocation pattern (\`PYTHONPATH=boomtick-cli python3 -m ...\`) —
   do not flag it as a code smell.
 - \`logger\` usage follows this codebase's existing stdlib \`logging\` convention — don't suggest
   swapping to \`print()\` or a different logging library.

@@ -14,7 +14,7 @@ This script installs and configures:
 
 - System tools (`git`, `jq`, `gh`, `curl`)
 - Node.js (pinned via `.node-version`) + pnpm (pinned via `package.json`)
-- Python dependencies (`dev-tools/` package in editable mode)
+- Python dependencies (`boomtick-pkg/cli/` package in editable mode)
 - Playwright browsers
 - Remote `origin` git configuration
 - Git hooks (`.githooks/`) for automatic index freshness
@@ -35,7 +35,7 @@ This script installs and configures:
 ## 🗂️ Agent Context Freshness
 
 `.agent-context.json` is the indexed snapshot of the repository consumed by
-`boomtick-mcp` on every tool call. It contains:
+`boomtick-pkg/mcp` on every tool call. It contains:
 
 - `file_tree` — repository structure, used for role gating in code review
 - `cli_schema` — full `td-cli` command/flag reference, used by MCP tools
@@ -58,7 +58,7 @@ Run this before any agent operation if the index may be stale (e.g. after
 pulling changes without the hooks installed, or after modifying `src/`,
 `content/`, or `boomtick-pkg/scripts/build-repo-context.py`).
 
-If `.agent-context.json` is missing or stale, `boomtick-mcp` falls back to
+If `.agent-context.json` is missing or stale, `boomtick-pkg/mcp` falls back to
 raw filesystem calls, bypassing the index and significantly increasing token
 usage across all review and audit operations.
 
@@ -69,9 +69,9 @@ usage across all review and audit operations.
 After setup, all agent operations follow the three-tier tool hierarchy defined
 in `.agents/AGENTS.md`:
 
-1. **Tier 1: `boomtick-mcp`** — required first call; auto-injects
+1. **Tier 1: `boomtick-pkg/mcp`** — required first call; auto-injects
    `.agent-context.json` context on every operation
-2. **Tier 2: `dev-tools/td-cli`** — fallback when MCP unavailable;
+2. **Tier 2: `boomtick-pkg/cli/td-cli`** — fallback when MCP unavailable;
    read `cli_schema` from `.agent-context.json` before calling
 3. **Tier 3: raw bash / `gh`** — last resort only
 

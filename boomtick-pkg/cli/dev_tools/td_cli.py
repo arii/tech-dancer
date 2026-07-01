@@ -85,7 +85,7 @@ Details: {e}
 
 Troubleshooting:
 1. Ensure dependencies are installed: pip install -e boomtick-pkg/cli
-2. Ensure PYTHONPATH includes the dev-tools directory.
+2. Ensure PYTHONPATH includes the boomtick-cli directory.
    Example: export PYTHONPATH=$PYTHONPATH:$(pwd)/boomtick-pkg/cli""", file=sys.stderr)
     if "pytest" not in sys.modules:
         sys.exit(1)

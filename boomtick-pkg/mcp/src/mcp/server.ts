@@ -154,14 +154,14 @@ export class BoomtickMCPServer {
       }
       if (uri.startsWith("repo://lighthouse/")) {
         const branch = uri.split("/").pop() || "";
-        const report = await runLighthouseHandler({ route: "/", worktreePath: `../boomtick-mcp-rescue-${branch}` });
+        const report = await runLighthouseHandler({ route: "/", worktreePath: `../boomtick-pkg/mcp-rescue-${branch}` });
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(report, null, 2) }],
         };
       }
       if (uri.startsWith("repo://playwright/")) {
         const branch = uri.split("/").pop() || "";
-        const report = await runPlaywrightHandler({ worktreePath: `../boomtick-mcp-rescue-${branch}` });
+        const report = await runPlaywrightHandler({ worktreePath: `../boomtick-pkg/mcp-rescue-${branch}` });
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(report, null, 2) }],
         };

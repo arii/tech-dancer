@@ -18,7 +18,7 @@ export async function createWorktree(branch: string, prNumber: number): Promise<
 
   const workspaceRoot = "/tmp/boomtick-worktrees";
   // nosemgrep
-  const worktreePath = path.join(workspaceRoot, `boomtick-mcp-rescue-${safePrNumber}`);
+  const worktreePath = path.join(workspaceRoot, `mcp-rescue-${safePrNumber}`);
 
   // Clean up if exists
   try {

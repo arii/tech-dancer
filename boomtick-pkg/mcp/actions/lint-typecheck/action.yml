@@ -2,7 +2,7 @@ name: BoomTick Lint & Typecheck
 description: Runs linting and typechecking via project gate
 inputs:
   target:
-    description: 'Target to check (root or boomtick-mcp)'
+    description: 'Target to check (root or boomtick-pkg/mcp)'
     required: true
   github_token:
     description: 'GitHub token'

@@ -136,7 +136,7 @@ ensure_node() {
 
 
 normalize_nvmrc_for_snapshot() {
-  # dev-tools/snapshot.sh currently compares .nvmrc literally against `node --version`.
+  # boomtick-pkg/cli/snapshot.sh currently compares .nvmrc literally against `node --version`.
   # Agent runtimes often pin only a major version such as `v22`, while Node reports
   # a full version such as `v24.16.0`. Normalize major-only pins so validation
   # does not report a false mismatch in Agent/Jules.
@@ -186,7 +186,7 @@ install_python_deps() {
 
   if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
-    have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
+    have td-cli || err "td-cli not found on PATH after editable install of boomtick-cli."
   else
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
   fi

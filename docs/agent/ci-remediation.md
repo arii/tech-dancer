@@ -68,7 +68,7 @@ If a test fails intermittently:
 ## 4. Remediation Workflow
 
 1.  **Fetch PR context**: `td-cli gh audit-pr <PR_NUMBER> --fetch`.
-2.  **Read `dev-tools/logs/reviews/pr-context-<PR_NUMBER>.md`** to see failing logs.
+2.  **Read `boomtick-pkg/cli/logs/reviews/pr-context-<PR_NUMBER>.md`** to see failing logs.
 3.  **Reproduce locally** using a targeted test run.
 4.  **Apply fix**.
 5.  **Verify fix** with the same targeted test run.

@@ -1039,7 +1039,7 @@ def main():
             code = getattr(e, 'code', 1)
             error_payload["code"] = code
             # JSON errors remain on stdout to maintain the contract for piped machine consumers
-            # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
+            # (e.g. boomtick-pkg/mcp) which may discard stderr via 2>/dev/null.
             print(json.dumps(error_payload, indent=2))
         else:
             log_error(str(e))

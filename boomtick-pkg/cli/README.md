@@ -1,7 +1,7 @@
-# dev-tools
+# boomtick-cli
 
 Developer tooling for the BoomTick repository. The primary entry point is
-`td-cli`, but agents should always call `boomtick-mcp` Tier 1 tools first —
+`td-cli`, but agents should always call `boomtick-pkg/mcp` Tier 1 tools first —
 `td-cli` is the Tier 2 fallback. See `.agents/AGENTS.md` for the full
 tool hierarchy.
 
@@ -13,7 +13,7 @@ tool hierarchy.
 ./setup-agent.sh
 ```
 
-This script (symlinked to `dev-tools/setup-agent.sh`) handles system tools,
+This script (symlinked to `boomtick-pkg/cli/setup-agent.sh`) handles system tools,
 Node.js, pnpm, Python dependencies, Playwright, remote origin configuration,
 and git hook registration.
 
@@ -53,7 +53,7 @@ export GEMINI_API_KEY="<key>"
 
 ## 🧩 Workflow-Specific Setup
 
-After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
+After `./boomtick-pkg/cli/setup-agent.sh`, use the following workflow-specific setup:
 
 #### 1) Standard PR / Review Workflows
 
@@ -86,7 +86,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 ## 🗂️ Agent Context Index
 
 `.agent-context.json` (repository root) is the pre-built index that
-`boomtick-mcp` reads on every tool call. It contains `file_tree`, `cli_schema`,
+`boomtick-pkg/mcp` reads on every tool call. It contains `file_tree`, `cli_schema`,
 and `package_json` metadata — built by `boomtick-pkg/scripts/build-repo-context.py`.
 
 **The index is kept fresh automatically** by the git hooks registered during
@@ -109,7 +109,7 @@ dispatching Jules sessions.
 
 ## 🤖 Agent / Jules GitHub Command Pattern
 
-Always use `boomtick-mcp` Tier 1 tools first. `td-cli` is the fallback
+Always use `boomtick-pkg/mcp` Tier 1 tools first. `td-cli` is the fallback
 when MCP is unavailable — not the default. See `.agents/AGENTS.md` for the
 full tool mapping table.
 
@@ -182,9 +182,9 @@ explicitly instructed to update the runtime contract.
 
 ## 🚀 Repository CLI (`td-cli`)
 
-`dev-tools/td-cli` is the Tier 2 unified entry point for local repository
+`boomtick-pkg/cli/td-cli` is the Tier 2 unified entry point for local repository
 automation. All available subcommands and flags are defined in
-`dev-tools/cli-schema.json` (also embedded in `.agent-context.json` under
+`boomtick-pkg/cli/dev_tools/cli-schema.json` (also embedded in `.agent-context.json` under
 `cli_schema`). That file is the single source of truth — never use `--help`
 to discover flags.
 

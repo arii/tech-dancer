@@ -133,7 +133,7 @@ executing any GitHub or repository operation.
 
 ### The Execution Chain
 
-`boomtick-mcp` is a thin gateway over `td-cli`. Every MCP tool
+`boomtick-pkg/mcp` is a thin gateway over `td-cli`. Every MCP tool
 call automatically:
 1. Reads `.agent-context.json` to inject `file_tree` and `cli_schema`
 2. Calls the appropriate `td-cli` subcommand internally

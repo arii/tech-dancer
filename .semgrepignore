@@ -1,4 +1,4 @@
-dev-tools/
+boomtick-pkg/cli/
 scripts/
 setup-agent.sh
 **/setup-agent.sh

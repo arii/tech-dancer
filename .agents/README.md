@@ -40,7 +40,7 @@ MCP tools — do not invoke directly unless a workflow explicitly instructs it.
 ## Context Index
 
 `.agent-context.json` (repository root) is the pre-built index consumed by
-`boomtick-mcp` on every tool call. It contains:
+`boomtick-pkg/mcp` on every tool call. It contains:
 
 - `file_tree` — repository structure snapshot
 - `cli_schema` — full `td-cli` command/flag reference

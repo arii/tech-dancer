@@ -25,7 +25,7 @@ export const DEFAULT_CONFIG: ProjectConfig = {
 };
 
 /**
- * Loads project configuration from dev-tools/project_config.json.
+ * Loads project configuration from boomtick-pkg/cli/project_config.json.
  * Gracefully handles missing or malformed configuration files.
  */
 export function loadProjectConfig(explicitPath?: string): ProjectConfig {

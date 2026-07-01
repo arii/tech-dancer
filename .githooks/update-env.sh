@@ -41,13 +41,13 @@ fi
 
 if check_run "^boomtick-pkg/cli/"; then
     if command -v python3 >/dev/null 2>&1; then
-        echo "🐍 dev-tools changed. Re-installing in editable mode..."
+        echo "🐍 boomtick-cli changed. Re-installing in editable mode..."
         # Try normal install first, then fallback for externally managed environments
         if ! python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli; then
-            python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli --break-system-packages || echo "❌ ERROR: dev-tools re-installation failed. Please run 'pip install -e ./boomtick-pkg/cli' manually."
+            python3 -m pip install --root-user-action=ignore -e ./boomtick-pkg/cli --break-system-packages || echo "❌ ERROR: boomtick-cli re-installation failed. Please run 'pip install -e ./boomtick-pkg/cli' manually."
         fi
     else
-        echo "⚠️  WARNING: python3 not found. Skipping dev-tools update."
+        echo "⚠️  WARNING: python3 not found. Skipping boomtick-cli update."
     fi
 fi
 

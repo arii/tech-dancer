@@ -14,10 +14,10 @@ Read the matching workflow before starting these task types:
 
 - Read all referenced files before taking any action.
 - **Prioritize Index & Schema**: Always consult `.agent-context.json` for
-  repository state and `dev-tools/cli-schema.json` for CLI authority before
+  repository state and `boomtick-pkg/cli/dev_tools/cli-schema.json` for CLI authority before
   taking action. Both are available via `repo.read_agent_context` (Tier 1).
 - **Prioritize MCP Tools**: Consult the tool hierarchy in `.agents/AGENTS.md`
-  before executing any repository or GitHub operation. `boomtick-mcp` is the
+  before executing any repository or GitHub operation. `boomtick-pkg/mcp` is the
   required first call — not an optional convenience.
 - Update the workflow state machine header before proceeding past each step.
 - Produce output only to the specified output files.
@@ -31,7 +31,7 @@ Read the matching workflow before starting these task types:
 - Call raw bash (`gh`, `git`) when a Tier 1 or Tier 2 tool covers the operation.
 - Use `--help` or `-h` to discover CLI flags — read `cli_schema` from
   `.agent-context.json` instead.
-- Guess flags not listed in `dev-tools/cli-schema.json`.
+- Guess flags not listed in `boomtick-pkg/cli/dev_tools/cli-schema.json`.
 - Chain subcommands in a single shell call.
 - Use interactive menus.
 - Change the Node.js or pnpm runtime versions without explicit instruction.

@@ -11,7 +11,7 @@
     "Always verify the state of the workspace (e.g., check for uncommitted changes or read the test output file) before initiating a pull request."
   ],
   "mcp_schemas": {
-    "boomtick-mcp": {
+    "boomtick-pkg/mcp": {
       "tools": [
         {
           "name": "repo.create_branch",

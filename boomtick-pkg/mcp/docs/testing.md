@@ -5,7 +5,7 @@ This document outlines the steps to verify the Boomtick MCP server functionality
 ## 1. Automated Unit Tests
 Run the unit test suite to verify core tool handlers and utilities.
 ```bash
-cd boomtick-mcp
+cd boomtick-pkg/mcp
 pnpm test
 ```
 **Expected Result**: All tests in `src/lib/shell.test.ts`, `src/tools/github.search_open_prs.test.ts`, and `src/tools/repo.get_package_scripts.test.ts` should pass.
@@ -13,7 +13,7 @@ pnpm test
 ## 2. Build Verification
 Ensure the TypeScript source compiles correctly to ESM.
 ```bash
-cd boomtick-mcp
+cd boomtick-pkg/mcp
 pnpm run build
 ```
 **Expected Result**: The `dist/` directory is populated with `.js` files and no compilation errors occur.
@@ -21,7 +21,7 @@ pnpm run build
 ## 3. Evaluation Suite
 Run the internal evaluation runner which simulates tool calls in a real (or mocked) environment.
 ```bash
-cd boomtick-mcp
+cd boomtick-pkg/mcp
 # Note: Ensure you have a valid .env or appropriate environment variables for repo paths
 pnpm run run-evals
 ```

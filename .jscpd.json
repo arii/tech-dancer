@@ -9,7 +9,7 @@
     "src/components/navigation/**",
     "src/providers/**",
     "scripts/**",
-    "dev-tools/**",
+    "boomtick-pkg/cli/**",
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",

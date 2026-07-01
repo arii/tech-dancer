@@ -4,14 +4,14 @@ This workflow has been migrated to deterministic workflow generation.
 
 Generate:
 
-dev-tools/logs/workflows/workflow-plan-pr-{PR_NUMBER}.md
+boomtick-pkg/cli/logs/workflows/workflow-plan-pr-{PR_NUMBER}.md
 
 using:
 
-python3 dev-tools/generate_review_workflow.py \
+td ai review \
   --pr PR_NUMBER \
   --issue ISSUE_NUMBER
 
 Then execute:
 
-Execute dev-tools/logs/workflows/workflow-plan-pr-{PR_NUMBER}.md
+Execute boomtick-pkg/cli/logs/workflows/workflow-plan-pr-{PR_NUMBER}.md

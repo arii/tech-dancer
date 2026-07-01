@@ -139,7 +139,7 @@ class Orchestrator:
 
         if is_python:
             feedback += "- **Python Scripting:** Python changes detected.\n"
-            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td-cli` or equivalent test files if extending `dev-tools`.\n"
+            feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td-cli` or equivalent test files if extending `boomtick-cli`.\n"
 
         if pr.get('mergeable') is False:
             base_branch_name = PROJECT_CONFIG.base_branch_name
@@ -147,7 +147,7 @@ class Orchestrator:
             feedback += f"  - *Fix:* Pull `{base_branch_name}` into your branch, resolve the conflicts (e.g., via `{PROJECT_CONFIG.cli_alias} gh conflicts`), and force push.\n"
 
         if "overlap" in pr.get('title', '').lower() or "cli" in pr.get('title', '').lower():
-            feedback += "- **Overlap / Interdependency:** This PR touches dev-tools or overlap logic.\n"
+            feedback += "- **Overlap / Interdependency:** This PR touches boomtick-cli or overlap logic.\n"
             feedback += f"  - *Fix:* Ensure this is rebased against recent changes in the `{PROJECT_CONFIG.base_branch_name}` branch to avoid overlapping functionality.\n"
 
         # Default if no specific issues caught by heuristics
@@ -745,7 +745,7 @@ class Orchestrator:
             res_tsc = run_command(["pnpm", "run", "type-check"], check=False)
             logs_content = res_lint.stdout + res_lint.stderr + "\n" + res_tsc.stdout + res_tsc.stderr
         if not logs_content.strip(): return {"status": "success", "message": "No errors found."}
-        original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "dev-tools", "repair.py"))
+        original_cwd = os.getcwd(); repair_script = os.path.abspath(os.path.join(original_cwd, "boomtick-cli", "repair.py"))
         worktree_path = None; branch_name = None
         try:
             branch_name = f"repair/local-{datetime.now().strftime('%H%M%S')}"

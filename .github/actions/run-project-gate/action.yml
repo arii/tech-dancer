@@ -2,7 +2,7 @@ name: "Run Project Gate"
 description: "Abstracted logic for building and testing monorepo sub-projects"
 inputs:
   target:
-    description: "Target project to validate (e.g., 'root', 'boomtick-mcp')"
+    description: "Target project to validate (e.g., 'root', 'boomtick-pkg/mcp')"
     required: true
   github_token:
     description: "GitHub token for API access (e.g., ratchet-any)"
@@ -30,7 +30,7 @@ runs:
           pnpm install --frozen-lockfile --engine-strict=false
         else
           FILTER_PATH="$TARGET"
-          if [ "$TARGET" = "boomtick-mcp" ]; then
+          if [ "$TARGET" = "boomtick-pkg/mcp" ]; then
             FILTER_PATH="./boomtick-pkg/mcp"
           fi
           pnpm install --frozen-lockfile --filter "$FILTER_PATH" --engine-strict=false
@@ -57,7 +57,7 @@ runs:
       env:
         TARGET: ${{ inputs.target }}
       run: |
-        if [ "$TARGET" = "boomtick-mcp" ]; then
+        if [ "$TARGET" = "boomtick-pkg/mcp" ]; then
           PYTHONPATH=boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/schema_gen.py
           npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts
         fi
@@ -66,7 +66,7 @@ runs:
           pnpm run type-check
         else
           FILTER_PATH="$TARGET"
-          if [ "$TARGET" = "boomtick-mcp" ]; then
+          if [ "$TARGET" = "boomtick-pkg/mcp" ]; then
             FILTER_PATH="./boomtick-pkg/mcp"
           fi
           pnpm --filter "$FILTER_PATH" run build
@@ -81,7 +81,7 @@ runs:
           pnpm test
         else
           FILTER_PATH="$TARGET"
-          if [ "$TARGET" = "boomtick-mcp" ]; then
+          if [ "$TARGET" = "boomtick-pkg/mcp" ]; then
             FILTER_PATH="./boomtick-pkg/mcp"
           fi
           pnpm --filter "$FILTER_PATH" run test

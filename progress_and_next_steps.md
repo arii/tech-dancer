@@ -2,7 +2,7 @@
 
 ## 📊 Consolidation Epic: Status Overview
 
-The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the self-contained `boomtick-pkg/` directory is complete. This consolidation enables proper Python/TypeScript packaging, streamlines repository-wide automation, and provides a foundation for progressive context discovery and standardized architectural entry points.
+The monorepo restructuring to group `boomtick-pkg/mcp` and `boomtick-cli` under the self-contained `boomtick-pkg/` directory is complete. This consolidation enables proper Python/TypeScript packaging, streamlines repository-wide automation, and provides a foundation for progressive context discovery and standardized architectural entry points.
 
 ---
 
@@ -34,7 +34,7 @@ The monorepo restructuring to group `boomtick-mcp` and `dev-tools` under the sel
 - [ ] **Redundant Default Removal**: Audit `ProjectConfig` (Python) and `config.ts` (TypeScript) to remove hardcoded fallbacks that shadow configuration.
 - [ ] **Logic Flattening**: Eliminate script-calling-script chains; consolidate orchestration logic directly into `dev_tools` handlers.
 - [ ] **Redundant Schema Cleanup**: Remove legacy `cli-schema.json` fragments and ensure the unified schema in `boomtick-pkg/cli/dev_tools` is the sole authority.
-- [ ] **Legacy Reference Cleanup**: Scrub remaining documentation and code comments for legacy names (`boomtick-mcp`, `dev-tools/`) to ensure the transition to `boomtick-pkg` is absolute.
+- [ ] **Legacy Reference Cleanup**: Scrub remaining documentation and code comments for legacy names (`boomtick-pkg/mcp`, `boomtick-pkg/cli/`) to ensure the transition to `boomtick-pkg` is absolute.
 - [ ] **Failover Behavior Simplification**: Replace complex multi-layered fallbacks for tokens and paths with a "fail-fast" configuration pattern.
 - [ ] **Import Hardening**: Eliminate all instances of `sys.path` hacking in favor of absolute package imports and editable installations.
 - [ ] **Test Leakage Elimination**: Remove all production logic that branches based on the presence of `pytest` in `sys.modules`.
@@ -77,7 +77,7 @@ Manual resolution of relative service dependencies via `sys.path.append` introdu
   - Aligned `.github/workflows/ai-chatops.yml` and `self-healing.yml`.
 
 - [x] **Path Fixes & Legacy Cleanup**:
-  - Audited and updated all remaining `dev-tools` and `boomtick-mcp` path references.
+  - Audited and updated all remaining `boomtick-cli` and `boomtick-pkg/mcp` path references.
   - Eliminated legacy token fallbacks (`GH_TOKEN`, `PAT_TOKEN`) in favor of standardized `GITHUB_TOKEN`.
   - **Migration Verification**: Confirmed no active runtime dependencies remain on legacy root directories; all operations transitioned to `boomtick-pkg`.
 
