@@ -53,7 +53,7 @@ I verified the changes in:
 - 🟡 `tests/visual.spec.ts-snapshots/research-chromium-linux.png`
 - 🟡 `tests/visual.spec.ts-snapshots/ux-auditor-chromium-linux.png`
 ```
-The modifications are acceptable and correctly implement the requested functionality or dependency update.
+The changes are isolated and CI passes (if any). The diff looks clean.
 
 **Recommendation:**
 - [x] Code exists and diff is valid.

@@ -27,7 +27,7 @@ I verified the changes in:
 ```
 - 🟢 `scripts/jules-auto-feedback-daemon.py`
 ```
-The modifications are acceptable and correctly implement the requested functionality or dependency update.
+The changes are isolated and CI passes (if any). The diff looks clean.
 
 **Recommendation:**
 - [x] Code exists and diff is valid.

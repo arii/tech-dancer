@@ -67,11 +67,11 @@ I verified the changes in:
 - 🟡 `package.json`
 - 🟡 `pnpm-lock.yaml`
 ```
-The modifications are acceptable and correctly implement the requested functionality or dependency update.
+The code looks solid, however this PR has structural conflicts with other open PRs in `boomtick-pkg/cli/dev_tools/orchestrator.py` or `.github/workflows/ci.yml`. Please ensure you rebase properly before final merge.
 
 **Recommendation:**
 - [x] Code exists and diff is valid.
 - [x] Relevant checks pass or failures are understood.
-Approved for merging.
+Approved with Minor Changes.
 
 <!-- td-review-manager-comment -->
