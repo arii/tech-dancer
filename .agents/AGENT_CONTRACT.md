@@ -13,6 +13,9 @@ Read the matching workflow before starting these task types:
 ## What You Will Always Do
 
 - Read all referenced files before taking any action.
+- **Startup Discovery**: You MUST read `.agent-context.json` upon startup and
+  parse its `cli_schema` and `mcp_tools` sections. This is the only way to
+  discover available subcommands and tools without guessing or using `--help`.
 - **Prioritize Index & Schema**: Always consult `.agent-context.json` for
   repository state and `dev-tools/cli-schema.json` for CLI authority before
   taking action. Both are available via `repo.read_agent_context` (Tier 1).
@@ -27,6 +30,9 @@ Read the matching workflow before starting these task types:
 
 ## What You Will Never Do
 
+- **Self-Correction Rule**: If you catch yourself about to run a raw shell
+  command (like `gh issue list` or `git checkout`) that has an MCP or `td-cli`
+  equivalent, you MUST stop and use the pre-packaged tool instead.
 - Call `td-cli` directly when an MCP tool covers the same operation.
 - Call raw bash (`gh`, `git`) when a Tier 1 or Tier 2 tool covers the operation.
 - Use `--help` or `-h` to discover CLI flags — read `cli_schema` from
