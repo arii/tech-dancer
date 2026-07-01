@@ -47,6 +47,12 @@ export default {
         error: "var(--color-error)",
         "error-surface": "var(--color-error-surface)",
       },
+      backgroundImage: {
+        'equalizer': 'linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))'
+      },
+      boxShadow: {
+        'equalizer': '0 0 14px var(--hero-accent-shadow)'
+      },
       fontSize: {
         micro: "var(--text-micro)",
         tiny: "var(--text-tiny)",

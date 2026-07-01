@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/lint-typecheck
+      - uses: ./boomtick-pkg/.github/actions/lint-typecheck
         with:
           target: ${{ matrix.target }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/audit
+      - uses: ./boomtick-pkg/.github/actions/audit
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -130,7 +130,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/test-build
+      - uses: ./boomtick-pkg/.github/actions/test-build
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -154,7 +154,7 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-      - uses: ./boomtick-pkg/mcp/actions/impact-analysis
+      - uses: ./boomtick-pkg/.github/actions/impact-analysis
 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
