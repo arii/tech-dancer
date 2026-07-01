@@ -1,0 +1,50 @@
+name: Prune Stale Previews Reusable
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source (for scripts)
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
+          path: source
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          ref: gh-pages
+          path: gh-pages-branch
+          fetch-depth: 0
+
+      - name: Prune orphaned directories
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Prepare Open PR branches list for pruning
+          echo "Fetching open PRs for pruning..."
+          gh pr list --repo ${{ github.repository }} --state open --json headRefName --jq '.[].headRefName' > open_prs.txt
+
+          cd gh-pages-branch
+
+          # Use the centralized management script
+          cp ../source/scripts/manage-previews.sh ./manage-previews.sh
+          chmod +x ./manage-previews.sh
+          ./manage-previews.sh ../open_prs.txt
+          rm ./manage-previews.sh
+
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: prune stale previews and update metadata"
+            git push origin gh-pages
+          else
+            echo "No changes made."
+          fi

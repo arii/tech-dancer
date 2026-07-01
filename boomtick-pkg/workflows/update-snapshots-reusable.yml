@@ -1,0 +1,119 @@
+name: Update Playwright Snapshots Reusable
+
+on:
+  workflow_call:
+    inputs:
+      issue_number:
+        description: 'Issue number'
+        required: true
+        type: string
+      comment_body:
+        description: 'Comment body'
+        required: true
+        type: string
+
+env:
+  NODE_ENV: production
+  REPO_NAME: ${{ github.event.repository.name }}
+  VITE_BASE_PATH: /${{ github.event.repository.name }}/
+
+jobs:
+  update-snapshots:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Create initial comment
+        id: initial-comment
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          issue-number: ${{ inputs.issue_number }}
+          body: |
+            ⏳ Updating Playwright snapshots...
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve PR details
+        uses: actions/github-script@v9 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: process.env.ISSUE_NUMBER
+            });
+            core.exportVariable('HEAD_REF', pr.data.head.ref);
+            core.exportVariable('HEAD_REPO', pr.data.head.repo.full_name);
+
+      - name: Checkout source branch
+        uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          ref: ${{ env.HEAD_REF }}
+          repository: ${{ env.HEAD_REPO }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          setup-python: 'false'
+
+      - name: Check active runtime
+        run: |
+          pnpm run check:runtime-files
+          pnpm run doctor
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Update Playwright snapshots
+        id: update
+        env:
+          CI: true
+        run: pnpm run test:e2e --update-snapshots
+
+      - name: Commit and push changes
+        id: commit
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update playwright snapshots"
+            git push origin HEAD:${{ env.HEAD_REF }}
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update comment on success
+        if: success()
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          comment-id: ${{ steps.initial-comment.outputs.comment-id }}
+          body: |
+            ✅ Playwright snapshots updated successfully.
+          edit-mode: replace
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update comment on failure
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v5 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          comment-id: ${{ steps.initial-comment.outputs.comment-id }}
+          body: |
+            ❌ Failed to update Playwright snapshots.
+            Please check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.
+          edit-mode: replace
+          token: ${{ secrets.GITHUB_TOKEN }}
