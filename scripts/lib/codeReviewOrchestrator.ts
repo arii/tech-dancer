@@ -5,7 +5,7 @@ import { ARTIFACTS_DIR } from './visualReviewConstants';
 import { postPRComment, countExistingReviews, getJulesSessionIdFromPR, sendJulesMessage, getPreviousReviewState } from './visualReviewUtils';
 import { calculateEstimatedTokens, cleanupFeedback, batchFiles, calculateReviewHash, pruneCache, filterLowImpactFiles } from './codeReviewUtils';
 import type { CodeReviewSummary, CodeReviewResult, CodeReviewState, CodeReviewRole } from './codeReviewTypes';
-import { execFile as execFileCb } from 'child_process';
+import { execFile as execFileCb, spawn } from 'child_process';
 import { promisify } from 'util';
 import { logReviewExecution } from './aiLogger';
 import { loadProjectConfig } from './projectConfig';
