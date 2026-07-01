@@ -1044,7 +1044,7 @@ def main():
         else:
             log_error(str(e))
 
-        sys.exit(code)
+        sys.exit(getattr(e, 'code', 1))
 
 if __name__ == "__main__":
     main()

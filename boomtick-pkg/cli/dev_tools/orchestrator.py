@@ -535,13 +535,39 @@ Respond only after the PR is created or updated:
             with open(tracking_file, "w") as f: f.write("\n".join(new_lines) + "\n")
         return {"pr": pr_num, "status": status, "updated": not dry_run}
 
-    def resolve_conflicts_headless(self) -> List[str]:
-        files = self.find_conflict_files(); resolved, failed = [], []
-        for f in files:
-            if self.resolve_conflict(f): resolved.append(f)
-            else: failed.append(f)
-        if failed: raise CLIError(f"Failed to resolve: {', '.join(failed)}")
-        return resolved
+    def _cleanup_worktree(self, worktree_path: str) -> None:
+        """Robustly cleans up a git worktree and its directory."""
+        # Unregister and attempt to remove the worktree via git
+        run_command(["git", "worktree", "remove", "-f", worktree_path], check=False, log_on_error=False)
+
+        # Forcefully delete the directory if it still exists
+        if os.path.exists(worktree_path):
+            shutil.rmtree(worktree_path, ignore_errors=True)
+
+        # Prune stale worktree metadata
+        run_command(["git", "worktree", "prune"], check=False, log_on_error=False)
+
+        # Final safety check
+        if os.path.exists(worktree_path):
+            raise CLIError(f"Failed to clean up worktree directory: {worktree_path}")
+
+    def find_conflict_files(self) -> List[str]:
+        """
+        Robustly finds files with git conflict markers, ignoring build artifacts and dependencies.
+        """
+        res = run_command([
+            "grep", "-lrE", "^<<<<<<<|^=======|^>>>>>>>", ".",
+            "--exclude-dir=boomtick-pkg",
+            "--exclude-dir=node_modules",
+            "--exclude-dir=dist",
+            "--exclude-dir=.git",
+            "--exclude-dir=build",
+            "--exclude-dir=target",
+            "--exclude-dir=.venv"
+        ], check=False, log_on_error=False)
+        if res.returncode == 0 and res.stdout:
+            return [f.strip() for f in res.stdout.splitlines() if f.strip()]
+        return []
 
     def repair_context(self, log: Optional[str] = None, log_file: Optional[str] = None, pr_number: Optional[int] = None) -> List[str]:
         pipeline = RepairService(); prompts = []
