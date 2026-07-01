@@ -345,6 +345,8 @@ class Orchestrator:
         res = None
         # Handle full label replacement first as it is mutually exclusive with incremental changes
         if labels is not None:
+            if add_labels or remove_labels:
+                raise CLIError("Cannot combine full label replacement")
             res = self.github.update_issue(issue_number, body=body, labels=labels)
         else:
             # Handle incremental label changes (can happen together)

@@ -98,7 +98,7 @@ describe("createJulesSessionHandler", () => {
     });
 
     await expect(createJulesSessionHandler({ task: "do work", pr: 999 }))
-      .rejects.toThrow("Failed to create session: PR not found");
+      .rejects.toThrow("td-cli command failed");
   });
 
   it("should throw descriptive error if PR JSON is invalid", async () => {
