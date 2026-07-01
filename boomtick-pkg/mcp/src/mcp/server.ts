@@ -154,14 +154,18 @@ export class BoomtickMCPServer {
       }
       if (uri.startsWith("repo://lighthouse/")) {
         const branch = uri.split("/").pop() || "";
-        const report = await runLighthouseHandler({ route: "/", worktreePath: path.join("/tmp/boomtick-worktrees", `mcp-rescue-${branch}`) });
+        const safeBranch = path.basename(branch);
+        // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+        const report = await runLighthouseHandler({ route: "/", worktreePath: path.join("/tmp/boomtick-worktrees", `mcp-rescue-${safeBranch}`) });
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(report, null, 2) }],
         };
       }
       if (uri.startsWith("repo://playwright/")) {
         const branch = uri.split("/").pop() || "";
-        const report = await runPlaywrightHandler({ worktreePath: path.join("/tmp/boomtick-worktrees", `mcp-rescue-${branch}`) });
+        const safeBranch = path.basename(branch);
+        // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+        const report = await runPlaywrightHandler({ worktreePath: path.join("/tmp/boomtick-worktrees", `mcp-rescue-${safeBranch}`) });
         return {
           contents: [{ uri, mimeType: "application/json", text: JSON.stringify(report, null, 2) }],
         };
