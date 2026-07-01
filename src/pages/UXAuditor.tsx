@@ -70,7 +70,7 @@ const UXAuditor = () => {
         />
       </Stack>
 
-      <Grid cols={{ base: 1, lg: 4 }} gap={8}>
+      <Grid gap={8}>
         {/* Reports List */}
         <AuditHistory
           reports={reports}
@@ -79,7 +79,7 @@ const UXAuditor = () => {
         />
 
         {/* Detailed View */}
-        <Stack gap={6} span={{ base: 1, lg: 3 }} minWidth={0} width="full">
+        <Stack gap={6} span={{ base: 'full', lg: 9 }} minWidth={0} width="full">
           {activeReport ? (
             <>
               <AuditSessionHeader

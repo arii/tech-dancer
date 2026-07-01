@@ -13,7 +13,7 @@ interface AuditHistoryProps {
 
 const AuditHistory = ({ reports, activeReportId, setActiveReport }: AuditHistoryProps) => {
   return (
-    <Stack gap={4} span={{ lg: 1 }} minWidth={0}>
+    <Stack gap={4} span={{ base: 'full', lg: 3 }} minWidth={0} width="full">
       <Text variant="sans" size="xs" weight="font-bold" uppercase tracking="widest" color="dim" paddingX={1}>
         Audit History
       </Text>
