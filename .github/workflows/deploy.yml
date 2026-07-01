@@ -40,7 +40,7 @@ jobs:
       - name: Setup Workspace
         uses: ./.github/actions/setup-workspace
         with:
-          setup-python: 'false'
+          setup-python: 'true'
 
       - name: Check active runtime
         run: |
