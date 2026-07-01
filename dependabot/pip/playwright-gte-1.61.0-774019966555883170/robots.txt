@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /previews/
+Disallow: /404.html
+
+Sitemap: https://arii.github.io/tech-dancer/dependabot/pip/playwright-gte-1.61.0-774019966555883170/sitemap.xml
