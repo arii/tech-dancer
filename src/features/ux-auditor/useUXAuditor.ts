@@ -166,6 +166,21 @@ export function useUXAuditor() {
     return () => unsubscribe();
   }, [user, queryClient]);
 
+  const updateReport = useCallback(async (reportId: string, updates: Partial<UXReport>) => {
+    // Update local cache
+    queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
+      old.map(r => r.id === reportId ? { ...r, ...updates } : r)
+    );
+
+    // Update Firestore if available
+    if (user && firebaseConfig) {
+      const db = getFirestore();
+      await withRetry(() =>
+        updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), updates)
+      );
+    }
+  }, [user, queryClient]);
+
   const auditMutation = useMutation({
     mutationFn: async (targetUrl: string) => {
       const reportId = Date.now().toString();
@@ -179,12 +194,11 @@ export function useUXAuditor() {
 
       setActiveReportId(reportId);
 
-      // Optimistic update for immediate UI feedback
+      // Initial local state
       queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) => [newReport, ...old]);
 
       if (user && firebaseConfig) {
         const db = getFirestore();
-        // Use setDoc with a pre-generated ID for idempotency during retries
         await withRetry(() =>
           setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), newReport)
         );
@@ -204,40 +218,14 @@ export function useUXAuditor() {
 
         const analysis = await analyzeViewport(vp, targetUrl, base64DataUri);
 
-        newReport[`findings_${vp.name.toLowerCase()}`] = analysis;
-        newReport[`image_${vp.name.toLowerCase()}`] = mockImg;
-
-        // Update the report in cache to reflect progress
-        queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
-          old.map(r => r.id === reportId ? { ...newReport } : r)
-        );
-
-        if (user && firebaseConfig) {
-          const db = getFirestore();
-          await withRetry(() =>
-            updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-              [`findings_${vp.name.toLowerCase()}`]: analysis,
-              [`image_${vp.name.toLowerCase()}`]: mockImg
-            })
-          );
-        }
+        await updateReport(reportId, {
+          [`findings_${vp.name.toLowerCase()}`]: analysis,
+          [`image_${vp.name.toLowerCase()}`]: mockImg
+        });
       }
 
-      newReport.status = 'completed';
-      queryClient.setQueryData(['ux-reports', user?.uid], (old: UXReport[] = []) =>
-        old.map(r => r.id === reportId ? { ...newReport } : r)
-      );
-
-      if (user && firebaseConfig) {
-        const db = getFirestore();
-        await withRetry(() =>
-          updateDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'ux_reports', reportId), {
-            status: 'completed'
-          })
-        );
-      }
-
-      return newReport;
+      await updateReport(reportId, { status: 'completed' });
+      return { ...newReport, status: 'completed' } as UXReport;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ux-reports', user?.uid] });

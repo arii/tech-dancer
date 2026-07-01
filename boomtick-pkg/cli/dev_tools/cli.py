@@ -367,17 +367,22 @@ def aggregate(ctx, target_branch, pr_numbers):
     res = orch.aggregate_prs(target_branch, list(pr_numbers))
     out(ctx, res['message'], data=res)
 
+def _render_conflicts(ctx, conflicts):
+    if not ctx.obj['JSON']:
+        if not conflicts:
+            click.echo("✅ No potential merge conflicts detected.")
+        for c in conflicts:
+            click.echo(f"⚠️  {' ↔ '.join(f'#{p}' for p in c['prs'])} share {len(c['files'])} file(s):")
+            for f in sorted(c['files'])[:10]:
+                click.echo(f"    - {f}")
+    out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
+
 @gh.command()
 @click.pass_context
 def conflicts(ctx):
     orch = ctx.obj['ORCHESTRATOR']
     conflicts: List[Dict[str, Any]] = orch.handle_detect_conflicts()
-    if not ctx.obj['JSON']:
-        if not conflicts: click.echo("✅ No potential merge conflicts detected.")
-        for c in conflicts:
-            click.echo(f"⚠️  {' ↔ '.join(f'#{p}' for p in c['prs'])} share {len(c['files'])} file(s):")
-            for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
-    out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
+    _render_conflicts(ctx, conflicts)
 
 @gh.command()
 @click.option('--pr', required=True, type=int, help="The PR number to resolve conflicts for.")
@@ -441,12 +446,7 @@ def verify_versions(ctx, diff_input):
 def detect_conflicts(ctx, pr):
     orch = ctx.obj['ORCHESTRATOR']
     conflicts = orch.handle_detect_conflicts(pr_num=pr)
-    if not ctx.obj['JSON']:
-        if not conflicts: click.echo("✅ No potential merge conflicts detected.")
-        for c in conflicts:
-            click.echo(f"⚠️  {' ↔ '.join(f'#{p}' for p in c['prs'])} share {len(c['files'])} file(s):")
-            for f in sorted(c['files'])[:10]: click.echo(f"    - {f}")
-    out(ctx, f"Found {len(conflicts)} potential conflicts.", data={"conflicts": conflicts})
+    _render_conflicts(ctx, conflicts)
 
 
 @gh.command()
@@ -537,6 +537,13 @@ def track_review(ctx, pr, status, auditor, dry_run):
     res = orch.track_review(pr, status, auditor, dry_run=dry_run)
     out(ctx, f"✅ Updated tracking for PR #{pr}", data=res)
 
+def _handle_gate(ctx, res, label):
+    msg = f"{label}: Current={res.get('current', res.get('size_kb'))}, Baseline={res.get('baseline', res.get('baseline_kb'))}"
+    if res['status'] == 'error':
+        err(ctx, msg, data=res)
+    else:
+        out(ctx, msg, data=res)
+
 @gh.command()
 @click.option('--baseline-file')
 @click.option('--update', is_flag=True)
@@ -545,11 +552,7 @@ def track_review(ctx, pr, status, auditor, dry_run):
 def ratchet_any(ctx, baseline_file, update, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.ratchet_any(update=update, baseline_file=baseline_file, dry_run=dry_run)
-    msg = f"TypeScript 'any' Ratchet: Current={res['current']}, Baseline={res['baseline']}"
-    if res['status'] == 'error':
-        err(ctx, msg, data=res)
-    else:
-        out(ctx, msg, data=res)
+    _handle_gate(ctx, res, "TypeScript 'any' Ratchet")
 
 @gh.command()
 @click.option('--baseline-file')
@@ -560,11 +563,7 @@ def ratchet_any(ctx, baseline_file, update, dry_run):
 def bundle_size(ctx, baseline_file, threshold, update, dry_run):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.check_bundle_size(update=update, baseline_file=baseline_file, threshold=threshold, dry_run=dry_run)
-    msg = f"Bundle Size Check: Current={res['size_kb']}KB, Baseline={res['baseline_kb']}KB"
-    if res['status'] == 'error':
-        err(ctx, msg, data=res)
-    else:
-        out(ctx, msg, data=res)
+    _handle_gate(ctx, res, "Bundle Size Check")
 
 @cli.command()
 @click.pass_context

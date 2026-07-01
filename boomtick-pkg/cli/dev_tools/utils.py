@@ -480,134 +480,75 @@ class GHAConfigManager:
         except Exception:
             return None, None
 
-    def get_variable(self, name: str) -> Optional[str]:
-        """Retrieves a variable, checking local cache first, then the GitHub API."""
-        # 1. Check local cache
-        if name in self.cache:
-            return str(self.cache[name])
-
-        # 2. Fetch from GitHub API
-        import requests
+    def _gh_api_request(self, method: str, name: str, payload: Optional[dict] = None) -> Optional[requests.Response]:
         token = get_github_token()
         repo = get_repo_name()
-        if token and repo:
-            try:
-                import requests
-                url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-                headers = {
-                    "Authorization": f"Bearer {token}",
-                    "Accept": "application/vnd.github+json"
-                }
-                response = requests.get(url, headers=headers, timeout=10)
-                if response.status_code == 200:
-                    data = response.json()
-                    val = str(data.get("value", ""))
-                    self.cache[name] = val
-                    self._save_cache()
-                    return val
-            except Exception as e:
-                log_warn(f"Failed to fetch GHA variable '{name}' via API: {e}")
+        if not (token and repo):
+            return None
 
-        # 3. Check gh CLI availability
+        url = f"https://api.github.com/repos/{repo}/actions/variables"
+        if name:
+            url += f"/{name}"
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        try:
+            response = requests.request(method, url, headers=headers, json=payload, timeout=10)
+            return response
+        except Exception as e:
+            log_warn(f"GitHub API request failed ({method} {url}): {e}")
+            return None
+
+    def _is_gh_cli_available(self) -> bool:
         if self.gh_available is None:
             try:
                 run_command(["gh", "--version"], log_on_error=False)
                 self.gh_available = True
             except (CLIError, FileNotFoundError):
                 self.gh_available = False
+        return self.gh_available
 
-        if not self.gh_available:
+    def get_variable(self, name: str) -> Optional[str]:
+        """Retrieves a variable, checking local cache first, then the GitHub API."""
+        if name in self.cache:
+            return str(self.cache[name])
+
+        resp = self._gh_api_request("GET", name)
+        if resp and resp.status_code == 200:
+            val = str(resp.json().get("value", ""))
+            self.cache[name] = val
+            self._save_cache()
+            return val
+
+        if not self._is_gh_cli_available():
             return None
-
-        try:
-            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-            headers = {
-                "Authorization": f"Bearer {token}",
-                "Accept": "application/vnd.github+json",
-                "X-GitHub-Api-Version": "2022-11-28"
-            }
-            response = requests.get(url, headers=headers, timeout=10)
-            if response.status_code == 200:
-                val = response.json().get("value")
-                self.cache[name] = val
-                self._save_cache()
-                return val
-            elif response.status_code != 404:
-                log_error(f"fetching GHA variable '{name}' via API: {response.status_code} {response.text}")
-        except Exception as e:
-            log_error(f"Unexpected error fetching GHA variable '{name}': {e}")
 
         return None
 
     def set_variable(self, name: str, value: str) -> bool:
         """Sets a variable using the GitHub API and updates local cache."""
-        # 1. Update local cache
         self.cache[name] = value
         self._save_cache()
 
-        # 2. Set via GitHub API
-        import requests
-        token = get_github_token()
-        repo = get_repo_name()
-        if token and repo:
-            try:
-                import requests
-                url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-                payload = {"name": name, "value": str(value)}
-                headers = {
-                    "Authorization": f"Bearer {token}",
-                    "Accept": "application/vnd.github+json",
-                    "Content-Type": "application/json"
-                }
-                response = requests.patch(url, json=payload, headers=headers, timeout=10)
-                if response.status_code in [200, 204]:
-                    return True
-                elif response.status_code == 404:
-                    # Create instead of update
-                    create_url = f"https://api.github.com/repos/{repo}/actions/variables"
-                    create_response = requests.post(create_url, json=payload, headers=headers, timeout=10)
-                    if create_response.status_code in [201, 204]:
-                        return True
-            except Exception as e:
-                log_error(f"Failed to set GHA variable '{name}' via API: {e}")
+        payload = {"name": name, "value": str(value)}
+        resp = self._gh_api_request("PATCH", name, payload)
 
-        # 3. Check gh CLI availability
-        if self.gh_available is None:
-            try:
-                run_command(["gh", "--version"], log_on_error=False)
-                self.gh_available = True
-            except (CLIError, FileNotFoundError):
-                self.gh_available = False
-
-        if not self.gh_available:
-            return False
-
-        try:
-            url = f"https://api.github.com/repos/{repo}/actions/variables/{name}"
-            headers = {
-                "Authorization": f"Bearer {token}",
-                "Accept": "application/vnd.github+json",
-                "X-GitHub-Api-Version": "2022-11-28"
-            }
-
-            # Check if variable exists first to decide between POST (create) and PATCH (update)
-            response = requests.get(url, headers=headers, timeout=10)
-            exists = (response.status_code == 200)
-
-            if exists:
-                res = requests.patch(url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
-            else:
-                create_url = f"https://api.github.com/repos/{repo}/actions/variables"
-                res = requests.post(create_url, headers=headers, json={"name": name, "value": str(value)}, timeout=10)
-
-            if res.status_code in [201, 204]:
+        if resp and resp.status_code in [200, 204]:
+            return True
+        elif resp and resp.status_code == 404:
+            # Try creating instead
+            resp = self._gh_api_request("POST", "", payload)
+            if resp and resp.status_code in [201, 204]:
                 return True
-            else:
-                log_error(f"setting GHA variable '{name}' via API: {res.status_code} {res.text}")
-                return False
-        except Exception as e:
-            log_error(f"setting GHA variable '{name}' via API: {e}")
+
+        if not self._is_gh_cli_available():
             return False
+
+        return False
 
 def get_gha_variable(name: str) -> Optional[str]:
     """Helper function to retrieve a GHA variable via the global manager."""
