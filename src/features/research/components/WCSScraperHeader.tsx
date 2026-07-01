@@ -1,11 +1,10 @@
-import { useCallback, useEffect } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useWCSData } from '../hooks/useWCSData';
 
 export function WCSScraperHeader() {
-  const { error, totalEvents } = useWCSData();
+  const { error } = useWCSData();
 
   if (error) {
     return (
