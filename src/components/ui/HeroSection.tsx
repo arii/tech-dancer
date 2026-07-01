@@ -46,8 +46,7 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        paddingLeft={{ base: 6, md: 10, lg: 14 }}
-        paddingRight={{ base: 4, md: 8, lg: 12 }}
+        paddingX={{ base: 4, md: 8, lg: 12 }}
         paddingTop={{ base: 4, lg: 8 }}
         paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
@@ -65,7 +64,7 @@ export function HeroSection() {
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 16, lg: 20 }}
+          marginTop={{ base: 5, lg: 6 }}
           align="start"
           gap={0}
           width="full"
@@ -78,8 +77,7 @@ export function HeroSection() {
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
-            leading="[1.1]"
+            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
           >
             Pack smart.
           </Text>
@@ -87,7 +85,6 @@ export function HeroSection() {
             as="span"
             variant="hero"
             size={{ base: "4xl", md: "6xl", lg: "7xl" }}
-            leading="[1.1]"
           >
             <span className="hero-accent-color">Dance more.</span>
           </Text>
@@ -109,15 +106,14 @@ export function HeroSection() {
           direction="row"
           align="stretch"
           gap={5}
-          marginTop={{ base: 8, lg: 10 }}
+          marginTop={{ base: 2, lg: 4 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"
         >
           <Box
             width="0.5"
-            shrink={false}
-            className="bg-white/20"
+            className="bg-white/20 shrink-0"
             aria-hidden="true"
           />
           <Text
