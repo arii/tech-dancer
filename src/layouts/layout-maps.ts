@@ -49,7 +49,7 @@ export const SHADOW_MAP: Record<string, string> = {
   glow: 'shadow-glow',
 };
 
-export const COLS_MAP: Record<string | number, string> = {
+const _COLS_MAP: Record<string | number, string> = {
   1: 'grid-cols-1',
   2: 'grid-cols-2',
   3: 'grid-cols-3',
@@ -63,6 +63,15 @@ export const COLS_MAP: Record<string | number, string> = {
   11: 'grid-cols-11',
   12: 'grid-cols-12',
 };
+
+export const COLS_MAP = new Proxy(_COLS_MAP, {
+  get(target, prop) {
+    if (typeof prop === 'string' && prop.startsWith('[') && prop.endsWith(']')) {
+      return `grid-cols-${prop}`;
+    }
+    return target[prop as keyof typeof _COLS_MAP];
+  }
+}) as Record<string | number, string>;
 
 export const SPAN_MAP: Record<string | number, string> = {
   1: 'col-span-1',
@@ -80,7 +89,7 @@ export const SPAN_MAP: Record<string | number, string> = {
   full: 'col-span-full',
 };
 
-export const ROWS_MAP: Record<string | number, string> = {
+const _ROWS_MAP: Record<string | number, string> = {
   1: 'grid-rows-1',
   2: 'grid-rows-2',
   3: 'grid-rows-3',
@@ -88,3 +97,12 @@ export const ROWS_MAP: Record<string | number, string> = {
   5: 'grid-rows-5',
   6: 'grid-rows-6',
 };
+
+export const ROWS_MAP = new Proxy(_ROWS_MAP, {
+  get(target, prop) {
+    if (typeof prop === 'string' && prop.startsWith('[') && prop.endsWith(']')) {
+      return `grid-rows-${prop}`;
+    }
+    return target[prop as keyof typeof _ROWS_MAP];
+  }
+}) as Record<string | number, string>;
