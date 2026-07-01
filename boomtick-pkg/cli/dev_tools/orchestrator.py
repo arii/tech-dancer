@@ -563,6 +563,20 @@ Respond only after the PR is created or updated:
             with open(tracking_file, "w") as f: f.write("\n".join(new_lines) + "\n")
         return {"pr": pr_num, "status": status, "updated": not dry_run}
 
+    def resolve_conflict(self, file_path: str) -> bool:
+        """
+        Detects merge conflicts via GitHubClient (implicit local git), analyzes logic with AI.
+        """
+        return self.ai.resolve_file_conflicts(file_path)
+
+    def resolve_conflicts_headless(self) -> List[str]:
+        files = self.find_conflict_files(); resolved, failed = [], []
+        for f in files:
+            if self.resolve_conflict(f): resolved.append(f)
+            else: failed.append(f)
+        if failed: raise CLIError(f"Failed to resolve: {', '.join(failed)}")
+        return resolved
+
     def _cleanup_worktree(self, worktree_path: str) -> None:
         """Robustly cleans up a git worktree and its directory."""
         # Unregister and attempt to remove the worktree via git
