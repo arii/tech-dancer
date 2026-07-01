@@ -50,7 +50,7 @@ We systematically reviewed the findings reported by the tester:
 
 ## 🧹 Outstanding Task 2: Technical Debt & Logic Simplification
 - [ ] **Legacy Reference Cleanup** (Issue #3196): Scrub remaining documentation and code comments for legacy names (`boomtick-mcp`, `dev-tools/`) to ensure the transition to `boomtick-pkg` is absolute.
-- [ ] **Architectural Standards** (Issue #3108): Implement mandated architectural standards for CLI and packaging (remove sys.path hacks, transition manual sys.argv).
+- [x] **Architectural Standards** (Issue #3108): Implement mandated architectural standards for CLI and packaging (remove sys.path hacks, transition manual sys.argv). **[Resolved in consolidated PR #3215]**
 
 ---
 

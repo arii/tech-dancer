@@ -45,9 +45,15 @@ github.get_pr_diff(pr_number=2280)
 
 Only escalate to a lower tier if the MCP tool is **genuinely unavailable**. If an MCP tool or dev-tool command fails or requires fallback to a lower tier, you MUST document the issue in the CLI Failure Ledger (within `progress_and_next_steps.md`) rather than silently bypassing it.
 
-### 🚫 Zero-Fallback Policy
+### 🚫 Zero-Fallback & Self-Correction Policy
 
-Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists. If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
+Raw terminal execution (e.g., `git checkout && git push` via Bash) is **strictly forbidden** for standard development tasks if a Tier 1 (MCP) or Tier 2 (td-cli) tool exists.
+
+**Self-Correction Rule**: If you catch yourself about to run a raw shell
+command (like `gh issue list` or `git checkout`) that has an MCP or `td-cli`
+equivalent, you MUST stop and use the pre-packaged tool instead.
+
+If you encounter a schema error or a missing argument in an MCP tool, you must **fix the tool's code or schema** rather than falling back to raw terminal commands. Bypassing MCP tools hides structural errors and prevents clean automation audits.
 
 ---
 
