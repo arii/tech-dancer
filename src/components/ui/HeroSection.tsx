@@ -17,8 +17,8 @@ export function HeroSection() {
   return (
     <Stack
       as="section"
-      align="center"
-      justify="center"
+      align="start"
+      justify="start"
       overflow="hidden"
       position="relative"
       width="full"
@@ -46,25 +46,28 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        paddingX={{ base: 4, md: 8, lg: 12 }}
-        paddingTop={{ base: 4, lg: 8 }}
-        paddingBottom={{ base: 0, lg: 0 }}
-        maxWidth="screen-xl"
-        marginX="auto"
+        paddingX={0}
+        paddingTop={0}
+        paddingBottom={0}
+        maxWidth="full"
+        className="hero-content-stack"
       >
 
 
         <Wordmark
           variant="hero"
+          size="lg"
           opacity={0}
           pointerEvents="none"
           className="hero-logo-anim"
+          marginTop={{ base: 0, lg: -24 }}
+          marginBottom={{ base: 4, lg: 2 }}
         />
 
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 5, lg: 6 }}
+          marginTop={0}
           align="start"
           gap={0}
           width="full"
@@ -77,14 +80,14 @@ export function HeroSection() {
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
           >
             Pack smart.
           </Text>
           <Text
             as="span"
             variant="hero"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "7xl", lg: "8xl" }}
           >
             <span className="hero-accent-color">Dance more.</span>
           </Text>
@@ -121,7 +124,7 @@ export function HeroSection() {
             variant="body"
             weight="font-normal"
             align="left"
-            size={{ base: "base", md: "lg", lg: "xl" }}
+            size={{ base: "lg", md: "xl", lg: "2xl" }}
             className="hero-tagline-text"
           >
             Gear, travel, and tips for better dance weekends.

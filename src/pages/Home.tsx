@@ -21,13 +21,12 @@ export default function Home() {
       {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
       <Grid
         as="section"
-        cols={{ base: 1 }}
-        gap={{ base: 8, lg: 6 }}
+        cols={{ base: 1, lg: "[minmax(0,1fr)_420px]" }}
+        gap={{ base: 8, lg: 4 }}
         width="full"
         maxWidth="full"
         minWidth={0}
-        align="center"
-        className="lg:grid-cols-[minmax(0,1fr)_420px]"
+        align="start"
       >
         <HeroSection />
         <FeaturedGuidePanel />
