@@ -213,11 +213,15 @@ function ToolCard({ tool, navigate }: {
   navigate: (path: string) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLink = !!tool.sourceUrl;
-  const href = tool.sourceUrl || tool.canonicalPath || `/research/${tool.id}`;
+
+  // Priority: externalUrl > canonicalPath > sourceUrl > fallback research path
+  const href = tool.externalUrl || tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
+
+  // External if we're using externalUrl OR if we're falling back to sourceUrl without a canonical internal path
+  const isExternal = !!tool.externalUrl || (!tool.canonicalPath && !!tool.sourceUrl);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isLink) {
+    if (!isExternal) {
       e.preventDefault();
       navigate(href);
     }
@@ -233,8 +237,8 @@ function ToolCard({ tool, navigate }: {
     <Stack
       as="a"
       href={href}
-      target={isLink ? "_blank" : undefined}
-      rel={isLink ? "noopener noreferrer" : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
       paddingTop={3.5} paddingX={4} paddingBottom={4}
@@ -274,7 +278,9 @@ function ToolCard({ tool, navigate }: {
       </Stack>
       <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {isLink ? 'View Source' : 'View Assets'}
+          {tool.externalUrl ? (tool.externalLinkDisplayLabel || 'Open Tool') :
+            tool.canonicalPath ? 'View Tool' :
+              tool.sourceUrl ? 'View Source' : 'View Assets'}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Box>
