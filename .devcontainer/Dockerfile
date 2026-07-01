@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.60.0-noble
+FROM mcr.microsoft.com/playwright:v1.61.0-noble
 
 # Links the image to your repository
 LABEL org.opencontainers.image.source="https://github.com/arii/tech-dancer"
