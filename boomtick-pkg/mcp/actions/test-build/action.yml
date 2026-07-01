@@ -28,7 +28,7 @@ runs:
 
     - name: Run Playwright Smoke Test
       run: |
-        VITE_BASE_PATH=/ pnpm run test:e2e
+        pnpm run setup:playwright && VITE_BASE_PATH=/ pnpm run test:e2e
       shell: bash
 
     - name: Run Lighthouse CI
