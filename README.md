@@ -46,6 +46,12 @@ A TypeScript-based MCP server communicating via stdio.
 - **Build**: `pnpm --filter ./boomtick-pkg/mcp build`
 - **Run**: `node boomtick-pkg/mcp/dist/index.js`
 
+### 🤖 Agent Coordination & .agent-context.json
+This repository uses a **Schema-Driven Contract Pipeline**. All AI agents MUST:
+1. **Consult `.agent-context.json`** immediately upon startup to discover available tools and CLI subcommands.
+2. **Follow the 'MCP-First' policy**: Prioritize Tier 1 (MCP) tools and Tier 2 (`td`) subcommands over raw shell commands (Tier 3).
+3. **Practice Self-Correction**: If you catch yourself about to run a raw shell command that has a tool equivalent, stop and use the tool.
+
 ## 📖 Documentation
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and developer protocols.
