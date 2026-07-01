@@ -71,7 +71,8 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     tqdm==4.68.3 \
     langchain-openai \
     langchain-core \
-    duckduckgo-search>=6.0.0
+    duckduckgo-search>=6.0.0 \
+    "setuptools<83.0.0"
 
 # ── Dev Tools ──────────────────────────────────────────────────────────────────
 # We copy the full boomtick-pkg/cli directory so that pip install -e can create the
