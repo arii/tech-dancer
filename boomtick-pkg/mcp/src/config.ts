@@ -63,12 +63,18 @@ export function initializeConfig() {
 export const config = {
   get githubToken() { return getGithubToken(); },
   get githubOwner() {
-    const [defaultOwner] = (cachedDynamicConfig?.github_repo || "arii/tech-dancer").split("/");
-    return process.env.GITHUB_OWNER || defaultOwner;
+    const owner = process.env.GITHUB_OWNER || cachedDynamicConfig?.github_repo?.split("/")[0];
+    if (!owner) {
+      throw new Error("GITHUB_OWNER must be set via environment variable or project_config.json");
+    }
+    return owner;
   },
   get githubRepo() {
-    const [, defaultRepo] = (cachedDynamicConfig?.github_repo || "arii/tech-dancer").split("/");
-    return process.env.GITHUB_REPO || defaultRepo;
+    const repo = process.env.GITHUB_REPO || cachedDynamicConfig?.github_repo?.split("/")[1];
+    if (!repo) {
+      throw new Error("GITHUB_REPO must be set via environment variable or project_config.json");
+    }
+    return repo;
   },
   get repoPath() {
     return process.env.BOOMTICK_REPO_PATH || path.resolve(__dirname, "../../../");
