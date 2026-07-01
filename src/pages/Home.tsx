@@ -11,7 +11,16 @@ import { PromoStrip } from '@/components/ui/PromoStrip';
 
 export default function Home() {
   return (
-    <Box as="section" aria-label="Home content" className="mx-auto w-full max-w-[1240px] min-w-0 overflow-x-clip px-4 sm:px-6 lg:px-8">
+    <Box
+      as="section"
+      aria-label="Home content"
+      marginX="auto"
+      width="full"
+      maxWidth="[1240px]"
+      minWidth={0}
+      overflowX="hidden"
+      paddingX={{ base: 4, sm: 6, lg: 8 }}
+    >
       <SEO
         title="Home"
         description="BoomTick: Training tips, travel guides, and gear reviews for West Coast Swing dancers."
@@ -21,13 +30,12 @@ export default function Home() {
       {/* Hero + Featured Guide: editorial two-column on desktop, stacked on mobile */}
       <Grid
         as="section"
-        cols={{ base: 1 }}
+        cols={{ base: 1, lg: "[minmax(0,1fr)_420px]" }}
         gap={{ base: 8, lg: 6 }}
         width="full"
         maxWidth="full"
         minWidth={0}
         align="start"
-        className="lg:grid-cols-[minmax(0,1fr)_420px]"
       >
         <HeroSection />
         <Box marginTop={{ base: 0, lg: 16 }}>
@@ -53,12 +61,11 @@ export default function Home() {
         minWidth={0}
       >
         <Grid
-          cols={{ base: 1 }}
+          cols={{ base: 1, lg: "[minmax(0,1.6fr)_minmax(300px,0.8fr)]" }}
           gap={8}
           width="full"
           maxWidth="full"
           minWidth={0}
-          className="lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,0.8fr)]"
         >
           <LatestPosts />
           <DevLabCallout />

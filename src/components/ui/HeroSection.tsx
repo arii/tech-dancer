@@ -46,8 +46,8 @@ export function HeroSection() {
         zIndex={10}
         align="start"
         gap={0}
-        paddingX={{ base: 4, md: 8, lg: 12 }}
         paddingLeft={{ base: 6, md: 10, lg: 14 }}
+        paddingRight={{ base: 4, md: 8, lg: 12 }}
         paddingTop={{ base: 4, lg: 8 }}
         paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
@@ -65,7 +65,7 @@ export function HeroSection() {
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 11, lg: 12 }}
+          marginTop={{ base: 16, lg: 20 }}
           align="start"
           gap={0}
           width="full"
@@ -116,7 +116,8 @@ export function HeroSection() {
         >
           <Box
             width="0.5"
-            className="bg-white/20 shrink-0"
+            shrink={false}
+            className="bg-white/20"
             aria-hidden="true"
           />
           <Text
