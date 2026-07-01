@@ -48,13 +48,20 @@ runs:
 
     - name: Lint
       if: inputs.target == 'root'
-      run: pnpm run lint
+      run: |
+        pnpm run verify:schemas
+        pnpm run lint
       shell: bash
 
     - name: Type-check / Build
       env:
         TARGET: ${{ inputs.target }}
       run: |
+        if [ "$TARGET" = "boomtick-mcp" ]; then
+          PYTHONPATH=boomtick-pkg/cli python3 boomtick-pkg/cli/dev_tools/schema_gen.py
+          npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts
+        fi
+
         if [ "$TARGET" = "root" ]; then
           pnpm run type-check
         else
