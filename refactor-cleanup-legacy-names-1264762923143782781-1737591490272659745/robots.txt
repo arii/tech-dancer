@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/refactor-cleanup-legacy-names-1264762923143782781-1737591490272659745/sitemap.xml
