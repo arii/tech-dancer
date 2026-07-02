@@ -226,10 +226,11 @@ function ToolCard({ tool }: {
   tool: ResearchTool;
 }) {
   // Priority: externalUrl > canonicalPath > sourceUrl > fallback research path
+  // Ensuring canonicalPath (internal deep-dive) is preferred for internal tool links
   const href = tool.externalUrl || tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
 
-  // External if we're using externalUrl OR if we're falling back to sourceUrl WITHOUT a canonical internal path
-  // NOTE: If canonicalPath exists, it should be treated as an internal Link regardless of sourceUrl.
+  // We only treat it as external if there is an explicit externalUrl
+  // OR if there is NO internal canonicalPath and we are using the sourceUrl.
   const isExternal = !!tool.externalUrl || (!tool.canonicalPath && !!tool.sourceUrl);
 
   const Component = isExternal ? 'a' : Link;
