@@ -132,6 +132,7 @@ def clean_llm_output(text: str) -> str:
 
 def is_ai_available() -> bool:
     """Checks if AI API token is present."""
+    # Force verification PR
     return bool(os.getenv("GITHUB_TOKEN"))
 
 def to_standard_schema(schema):
