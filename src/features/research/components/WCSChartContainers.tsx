@@ -1,5 +1,6 @@
 // impeccable-ignore-file
-import { BarChart2, TrendingUp } from 'lucide-react';
+import { ReactNode } from 'react';
+import { BarChart2, TrendingUp, LucideIcon } from 'lucide-react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -32,45 +33,56 @@ const customTooltipStyle = {
   padding: '8px'
 };
 
-export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
+const commonXAxisProps = {
+  fontSize: 10,
+  tickLine: false,
+  axisLine: false,
+  tick: { fill: 'rgba(255,255,255,0.5)' }
+};
+
+const commonYAxisProps = {
+  fontSize: 10,
+  tickLine: false,
+  axisLine: false,
+  tick: { fill: 'rgba(255,255,255,0.5)' }
+};
+
+const commonBrushProps = {
+  height: 20,
+  stroke: "var(--raw-color-accent-brand)",
+  fill: "var(--raw-color-surface-muted)",
+  travellerWidth: 10
+};
+
+const commonGridProps = {
+  strokeDasharray: "3 3",
+  vertical: false,
+  stroke: "rgba(255,255,255,0.05)"
+};
+
+interface ChartContainerProps {
+  title: string;
+  icon: LucideIcon;
+  children: ReactNode;
+  hasData: boolean;
+  emptyLabel: string;
+}
+
+const ChartContainer = ({ title, icon: Icon, children, hasData, emptyLabel }: ChartContainerProps) => (
   <Box border surface="default" padding="card" height="[400px]">
     <Stack gap={4} height="full">
       <Box display="flex" align="center" gap={3}>
-        <BarChart2 className="w-4 h-4 text-accent" />
-        <Text variant="mono" size="micro" weight="font-bold" uppercase>Score Distribution</Text>
+        <Icon className="w-4 h-4 text-accent" />
+        <Text variant="mono" size="micro" weight="font-bold" uppercase>{title}</Text>
       </Box>
       <Box flex={1} minHeight={0}>
-        {data.length > 0 ? (
+        {hasData ? (
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-              <XAxis
-                dataKey="score"
-                fontSize={10}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fill: 'rgba(255,255,255,0.5)' }}
-              />
-              <YAxis
-                fontSize={10}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fill: 'rgba(255,255,255,0.5)' }}
-              />
-              <Tooltip contentStyle={customTooltipStyle} />
-              <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
-              <Brush
-                dataKey="score"
-                height={20}
-                stroke="var(--raw-color-accent-brand)"
-                fill="var(--raw-color-surface-muted)"
-                travellerWidth={10}
-              />
-            </BarChart>
+            {children}
           </ResponsiveContainer>
         ) : (
           <Box display="flex" align="center" justify="center" height="full">
-            <Text variant="mono" size="xs" color="dim">NO_DISTRIBUTION_DATA</Text>
+            <Text variant="mono" size="xs" color="dim">{emptyLabel}</Text>
           </Box>
         )}
       </Box>
@@ -78,55 +90,45 @@ export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
   </Box>
 );
 
+export const ScoreDistributionChart = ({ data }: { data: ScoreData[] }) => (
+  <ChartContainer
+    title="Score Distribution"
+    icon={BarChart2}
+    hasData={data.length > 0}
+    emptyLabel="NO_DISTRIBUTION_DATA"
+  >
+    <BarChart data={data} margin={{ bottom: 20 }}>
+      <CartesianGrid {...commonGridProps} />
+      <XAxis dataKey="score" {...commonXAxisProps} />
+      <YAxis {...commonYAxisProps} />
+      <Tooltip contentStyle={customTooltipStyle} />
+      <Bar dataKey="count" fill="var(--raw-color-accent-brand)" radius={[2, 2, 0, 0]} />
+      <Brush dataKey="score" {...commonBrushProps} />
+    </BarChart>
+  </ChartContainer>
+);
+
 export const AvgScoreTrendChart = ({ data }: { data: TrendData[] }) => (
-  <Box border surface="default" padding="card" height="[400px]">
-    <Stack gap={4} height="full">
-      <Box display="flex" align="center" gap={3}>
-        <TrendingUp className="w-4 h-4 text-accent" />
-        <Text variant="mono" size="micro" weight="font-bold" uppercase>Avg Score Trend</Text>
-      </Box>
-      <Box flex={1} minHeight={0}>
-        {data.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-              <XAxis
-                dataKey="date"
-                fontSize={10}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fill: 'rgba(255,255,255,0.5)' }}
-              />
-              <YAxis
-                fontSize={10}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fill: 'rgba(255,255,255,0.5)' }}
-              />
-              <Tooltip contentStyle={customTooltipStyle} />
-              <Line
-                type="monotone"
-                dataKey="avg"
-                stroke="var(--raw-color-accent-brand)"
-                strokeWidth={2}
-                dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
-                activeDot={{ r: 6 }}
-              />
-              <Brush
-                dataKey="date"
-                height={20}
-                stroke="var(--raw-color-accent-brand)"
-                fill="var(--raw-color-surface-muted)"
-                travellerWidth={10}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        ) : (
-          <Box display="flex" align="center" justify="center" height="full">
-            <Text variant="mono" size="xs" color="dim">NO_TREND_DATA</Text>
-          </Box>
-        )}
-      </Box>
-    </Stack>
-  </Box>
+  <ChartContainer
+    title="Avg Score Trend"
+    icon={TrendingUp}
+    hasData={data.length > 0}
+    emptyLabel="NO_TREND_DATA"
+  >
+    <LineChart data={data} margin={{ bottom: 20 }}>
+      <CartesianGrid {...commonGridProps} />
+      <XAxis dataKey="date" {...commonXAxisProps} />
+      <YAxis {...commonYAxisProps} />
+      <Tooltip contentStyle={customTooltipStyle} />
+      <Line
+        type="monotone"
+        dataKey="avg"
+        stroke="var(--raw-color-accent-brand)"
+        strokeWidth={2}
+        dot={{ r: 4, fill: 'var(--raw-color-accent-brand)' }}
+        activeDot={{ r: 6 }}
+      />
+      <Brush dataKey="date" {...commonBrushProps} />
+    </LineChart>
+  </ChartContainer>
 );

@@ -1,8 +1,5 @@
-import { Box } from '@/layouts/Primitives';
-import { EditorialLayout } from '@/components/editorial/EditorialLayout';
-import { EditorialHeader } from '@/components/editorial/EditorialHeader';
-import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import { Post, readingTime } from '@/lib/content';
+import { Post } from '@/lib/content';
+import { EditorialPostView } from '@/components/editorial/EditorialPostView';
 
 interface FullPreviewProps {
   post: Post;
@@ -10,27 +7,11 @@ interface FullPreviewProps {
 }
 
 export function FullPreview({ post, onBack }: FullPreviewProps) {
-  const rt = `${readingTime(post.content)} min read`;
-
   return (
-    <EditorialLayout
+    <EditorialPostView
+      post={post}
       onBack={onBack}
       backLabel="Exit Preview"
-      header={
-        <EditorialHeader
-          category={post.category}
-          date={post.date}
-          readTime={rt}
-          title={post.title}
-          dek={post.excerpt}
-          author={post.author}
-          tags={post.tags}
-        />
-      }
-    >
-      <Box className="prose-editorial">
-        <MarkdownRenderer content={post.content} />
-      </Box>
-    </EditorialLayout>
+    />
   );
 }
