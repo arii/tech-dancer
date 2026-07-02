@@ -16,14 +16,14 @@ const variantStyles = {
 };
 
 const activeStyles = {
-  default: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background",
-  compact: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background",
+  default: "border-text-main text-text-main bg-white/5 ring-2 ring-line ring-offset-2 ring-offset-background",
+  compact: "border-text-main text-text-main bg-white/5 ring-2 ring-line ring-offset-2 ring-offset-background",
   quiet: "bg-surface border-line text-text-main",
 };
 
 const inactiveStyles = {
-  default: "border-line text-text-dim hover:border-accent/50 hover:text-text-main",
-  compact: "border-line text-text-dim hover:border-accent/50 hover:text-text-main",
+  default: "border-line text-text-dim hover:border-accent/30 hover:text-text-main",
+  compact: "border-line text-text-dim hover:border-accent/30 hover:text-text-main",
   quiet: "bg-transparent border-transparent text-text-dim hover:text-text-main",
 };
 
@@ -41,7 +41,7 @@ export function FilterButton({
       onClick={onClick}
       aria-pressed={isActive}
       className={cn(
-        "inline-flex items-center rounded-full border transition-all cursor-pointer",
+        "inline-flex items-center rounded-xl border transition-all cursor-pointer",
         variantStyles[variant],
         isActive ? activeStyles[variant] : inactiveStyles[variant],
         className
