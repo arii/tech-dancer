@@ -433,12 +433,18 @@ def get_repo_name() -> Optional[str]:
         log_warn(f"Failed to detect repository name: {e}")
         return None
 
+_gha_var_cache: Dict[str, str] = {}
+
 def get_gha_variable(name: str) -> Optional[str]:
-    """Helper function to retrieve a GHA variable via the native gh cli."""
+    """Helper function to retrieve a GHA variable via the native gh cli with lightweight memory cache."""
+    if name in _gha_var_cache:
+        return _gha_var_cache[name]
     try:
         proc = run_command(["gh", "variable", "get", name], check=False, log_on_error=False)
         if proc.returncode == 0:
-            return proc.stdout.strip()
+            val = proc.stdout.strip()
+            _gha_var_cache[name] = val
+            return val
     except Exception as e:
         log_warn(f"Failed to get GHA variable {name}: {e}")
     return None
@@ -446,10 +452,9 @@ def get_gha_variable(name: str) -> Optional[str]:
 def set_gha_variable(name: str, value: str) -> bool:
     """Helper function to set a GHA variable via the native gh cli."""
     try:
-        # Check if it exists to decide whether to create or update (though set --body handles both if the variable exists)
-        # Actually, `gh variable set` creates it if it doesn't exist, and updates if it does.
         proc = run_command(["gh", "variable", "set", name, "--body", str(value)], check=False, log_on_error=False)
         if proc.returncode == 0:
+            _gha_var_cache[name] = str(value)
             return True
         else:
             log_warn(f"Failed to set GHA variable {name}. stderr: {proc.stderr}")
