@@ -22,6 +22,8 @@ export function parseFrontmatter(content: string) {
 
   try {
     const data = parse(yamlStr);
+    // Note: The `yaml` library internally mitigates prototype pollution.
+    // Downstream spreading `{ ...data }` also negates null-prototype safety.
     return { data: (data && typeof data === 'object') ? data : {}, content: body };
   } catch (e) {
     console.error('Error parsing frontmatter:', e);
