@@ -204,6 +204,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           overscroll && (overscroll === "x-contain" ? "overscroll-x-contain" : overscroll === "y-contain" ? "overscroll-y-contain" : `overscroll-${overscroll}`),
           isolation,
           noScrollbar && "no-scrollbar",
+          props.noScrollbar && "no-scrollbar",
           pointerEvents && `pointer-events-${pointerEvents}`,
           zIndex && (zIndexTokens[zIndex as keyof typeof zIndexTokens] !== undefined ? resolveJIT(zIndexTokens[zIndex as keyof typeof zIndexTokens], "z") : resolveJIT(zIndex, "z")),
           (opacityVariant || opacity !== undefined) && resolveJIT(
