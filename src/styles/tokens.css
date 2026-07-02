@@ -136,3 +136,27 @@
   align-items: center !important;
 }
 
+/* Card border utility classes */
+.card-border {
+  border: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-t {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-b {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-l {
+  border-left: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-r {
+  border-right: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-x {
+  border-left: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}
+.card-border-y {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+}

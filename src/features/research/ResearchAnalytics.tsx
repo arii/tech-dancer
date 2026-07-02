@@ -22,13 +22,6 @@ function getToolIcon(tool: ResearchTool): LucideIcon {
   return Search;
 }
 
-function getToolLabel(tool: ResearchTool): string {
-  if (tool.externalUrl) return tool.externalLinkDisplayLabel || 'Open Tool';
-  if (tool.canonicalPath) return 'View Tool';
-  if (tool.sourceUrl) return 'View Source';
-  return 'View Assets';
-}
-
 function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUrl: string; onImageClick?: (src: string) => void }) {
   if (tool.customPreview) {
     const { logo, headline, tagline } = tool.customPreview;
@@ -236,6 +229,7 @@ function ToolCard({ tool }: {
   const href = tool.externalUrl || tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
 
   // External if we're using externalUrl OR if we're falling back to sourceUrl WITHOUT a canonical internal path
+  // NOTE: If canonicalPath exists, it should be treated as an internal Link regardless of sourceUrl.
   const isExternal = !!tool.externalUrl || (!tool.canonicalPath && !!tool.sourceUrl);
 
   const Component = isExternal ? 'a' : Link;
@@ -284,7 +278,7 @@ function ToolCard({ tool }: {
       </Stack>
       <Stack direction="row" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {getToolLabel(tool)}
+          {tool.externalUrl ? (tool.externalLinkDisplayLabel || 'Open Tool') : (tool.canonicalPath ? 'View Tool' : 'View Source')}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
       </Stack>
