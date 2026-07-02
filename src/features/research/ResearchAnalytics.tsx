@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
@@ -26,7 +26,7 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
   if (tool.customPreview) {
     const { logo, headline, tagline } = tool.customPreview;
     return (
-      <Box width="full" border="b" borderColor="white/8" className="card-screenshot-wrapper boomtick-blog-preview">
+      <Box width="full" className="card-screenshot-wrapper boomtick-blog-preview border-b border-white/8">
         <Stack gap={1} className="preview-content">
           <Text className="preview-logo">
             {logo.prefix}<span className="logo-accent">{logo.accent}</span><span className="logo-dot font-light">{logo.suffix}</span>
@@ -65,7 +65,7 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
   };
 
   return (
-    <Box width="full" border="b" borderColor="white/8" cursor="zoom-in" className="card-screenshot-wrapper" onClick={handleImageClick}>
+    <Box width="full" className="card-screenshot-wrapper border-b border-white/8 cursor-zoom-in" onClick={handleImageClick}>
       <img
         src={src}
         alt={alt}
@@ -104,12 +104,12 @@ function FlagshipCard({
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
-          <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
+          <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
             <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
             <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
-          </Stack>
+          </Box>
 
           <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest" marginBottom={1}>
             {tool.category}
@@ -133,21 +133,7 @@ function FlagshipCard({
             {tool.description}
           </Text>
           {tool.description && tool.description.length > 150 && (
-            <Box
-              as="span"
-              role="button"
-              tabIndex={0}
-              onClick={toggleExpand}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  toggleExpand(e as unknown as React.MouseEvent);
-                }
-              }}
-              marginBottom={5} alignSelf="start"
-              className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30"
-              cursor="pointer"
-            >
+            <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30">
               {isExpanded ? "Read Less" : "Read More"}
             </Box>
           )}
@@ -161,13 +147,13 @@ function FlagshipCard({
             </div>
           )}
 
-          <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
+          <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
             {tool.tags.map(tag => (
               <Text key={tag} className="flagship-tag">
                 {tag}
               </Text>
             ))}
-          </Stack>
+          </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
             {tool.externalUrl ? (
@@ -222,67 +208,76 @@ function FlagshipCard({
   );
 }
 
-function ToolCard({ tool }: {
+function ToolCard({ tool, navigate }: {
   tool: ResearchTool;
+  navigate: (path: string) => void;
 }) {
-  // Priority: externalUrl > canonicalPath > sourceUrl > fallback research path
-  // Ensuring canonicalPath (internal deep-dive) is preferred for internal tool links
-  const href = tool.externalUrl || tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const href = tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
+  const isLink = href.startsWith('http');
 
-  // We only treat it as external if there is an explicit externalUrl
-  // OR if there is NO internal canonicalPath and we are using the sourceUrl.
-  const isExternal = !!tool.externalUrl || (!tool.canonicalPath && !!tool.sourceUrl);
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isLink) {
+      e.preventDefault();
+      navigate(href);
+    }
+  };
 
-  const Component = isExternal ? 'a' : Link;
-  const linkProps = isExternal
-    ? { href, target: "_blank", rel: "noopener noreferrer" }
-    : { to: href };
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <Stack
-      as={Component}
-      {...linkProps}
+      as="a"
+      href={href}
+      target={isLink ? "_blank" : undefined}
+      rel={isLink ? "noopener noreferrer" : undefined}
+      onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
       paddingTop={3.5} paddingX={4} paddingBottom={4}
-      className={cn(cardVariants({ interactive: true }), "!no-underline")}
+      className={cn(cardVariants({ interactive: true }), "no-underline")}
     >
-      <Stack gap={0} width="full" flex={1}>
-        <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
+      <Stack gap={0} width="full">
+        <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
           <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <StatusBadge label={tool.status} />
-        </Stack>
-
-        <Stack gap={0}>
-          <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
-          <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
-          {tool.subtitle && (
-            <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
-          )}
-          <Text
-            size="sm"
-            color="dim"
-            leading="relaxed"
-            marginBottom={3}
-            className="line-clamp-3"
-          >
-            {tool.description}
-          </Text>
-        </Stack>
-
-        <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
+        </Box>
+        <Text variant="mono" size="micro" color="dim" weight="font-bold" uppercase tracking="widest" opacityVariant="subtle" marginBottom={1}>{tool.category}</Text>
+        <Text variant="display" size="xl" weight="font-black" marginBottom={2}>{tool.title}</Text>
+        {tool.subtitle && (
+          <Text size="micro" color="accent" weight="font-normal" uppercase tracking="tighter" marginBottom={2}>{tool.subtitle}</Text>
+        )}
+        <Text
+          size="sm"
+          color="dim"
+          leading="relaxed"
+          marginBottom={3}
+          className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
+        >
+          {tool.description}
+        </Text>
+        {tool.description && tool.description.length > 120 && (
+          <Box as="button" onClick={toggleExpand} marginBottom={5} alignSelf="start" className="text-accent hover:underline text-xs font-semibold focus:outline-none">
+            {isExpanded ? "Read Less" : "Read More"}
+          </Box>
+        )}
+        <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
           {tool.tags.map(tag => (
             <Text key={tag} className="flagship-tag">{tag}</Text>
           ))}
-        </Stack>
+        </Box>
       </Stack>
-      <Stack direction="row" align="center" gap={2} marginTop="auto">
+      <Box display="flex" align="center" gap={2} marginTop="auto">
         <Text weight="font-bold" size="xs" uppercase tracking="widest" color="accent">
-          {tool.externalUrl ? (tool.externalLinkDisplayLabel || 'Open Tool') : (tool.canonicalPath ? 'View Tool' : 'View Source')}
+          {isLink ? 'View Source' : 'View Assets'}
         </Text>
         <Icon icon={ArrowRight} size="md" color="accent" />
-      </Stack>
+      </Box>
     </Stack>
   );
 }
@@ -296,17 +291,17 @@ const STACK_CATEGORIES = [
   { label: 'AI', tags: ['LLM Workflows', 'Agentic CI/CD'], colorClass: 'bg-brand-amber/10 text-brand-amber border border-brand-amber/20' },
 ];
 
-function ToolSection({ title, tools }: { title: string, tools: ResearchTool[] }) {
+function ToolSection({ title, tools, navigate }: { title: string, tools: ResearchTool[], navigate: (path: string) => void }) {
   if (tools.length === 0) return null;
   return (
     <Stack gap={12} width="full">
-      <Stack direction="row" paddingBottom={4} justify="between" align="center" border="b" width="full">
+      <Box paddingBottom={4} display="flex" justify="between" align="center" border="b" width="full">
         <Text variant="headline" size="2xl" weight="font-black">{title}</Text>
         <Text variant="mono" size="xs" color="dim" weight="font-semibold" uppercase tracking="widest" opacityVariant="subtle">{tools.length} TOOLS</Text>
-      </Stack>
+      </Box>
       <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
         {tools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} />
+          <ToolCard key={tool.id} tool={tool} navigate={navigate} />
         ))}
       </Grid>
     </Stack>
@@ -314,6 +309,7 @@ function ToolSection({ title, tools }: { title: string, tools: ResearchTool[] })
 }
 
 export default function ResearchAnalytics() {
+  const navigate = useNavigate();
   const { studies, tools } = useResearch();
   const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -348,24 +344,24 @@ export default function ResearchAnalytics() {
             {/* Scrollable Focus Tags for Mobile */}
             <Stack direction="col" align="start" gap={2} width="full" marginTop={2} marginBottom={2} paddingY={1} display={{ base: "flex", lg: "none" }}>
               <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold">Focus</Text>
-              <Stack direction="row" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
+              <Box display="flex" overflowX="auto" noScrollbar gap={2} width="full" className="flex-nowrap scroll-mask-fade">
                 {STACK_CATEGORIES.flatMap(cat => cat.tags.map(tag => ({ tag, col: cat.colorClass }))).map(item => (
                   <Text key={item.tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cn(item.col, "shrink-0")}>{item.tag}</Text>
                 ))}
-              </Stack>
+              </Box>
             </Stack>
 
             {/* Categorized Stack Grid for Desktop */}
             <Stack gap={2} marginTop={4} marginBottom={4} width="full" display={{ base: "none", lg: "flex" }}>
               {STACK_CATEGORIES.map(cat => (
-                <Stack direction="row" key={cat.label} align="center" gap={2} width="full">
+                <Box key={cat.label} display="flex" align="center" gap={2} width="full">
                   <Text size="micro" color="dim" uppercase tracking="widest" weight="font-bold" width={24} shrink={0}>{cat.label}</Text>
-                  <Stack direction="row" wrap="wrap" gap={2} width="full">
+                  <Box display="flex" wrap="wrap" gap={2} width="full">
                     {cat.tags.map(tag => (
                       <Text key={tag} size="micro" weight="font-bold" paddingX={2} paddingY={0.5} radius="sm" className={cat.colorClass}>{tag}</Text>
                     ))}
-                  </Stack>
-                </Stack>
+                  </Box>
+                </Box>
               ))}
             </Stack>
 
@@ -402,13 +398,13 @@ export default function ResearchAnalytics() {
         </Box>
 
         {/* Engineering Systems Section */}
-        <ToolSection title="Engineering Systems" tools={engineeringTools} />
+        <ToolSection title="Engineering Systems" tools={engineeringTools} navigate={navigate} />
 
         {/* Data & Content Systems Section */}
-        <ToolSection title="Data & Content Systems" tools={dataContentTools} />
+        <ToolSection title="Data & Content Systems" tools={dataContentTools} navigate={navigate} />
 
         {/* Ecommerce Experiments Section */}
-        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} />
+        <ToolSection title="Ecommerce Experiments" tools={e_commerceTools} navigate={navigate} />
 
         {/* Articles & Research Section */}
         {studies.length > 0 && (
@@ -419,21 +415,19 @@ export default function ResearchAnalytics() {
             </Box>
 
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
-              {studies.map((study) => {
-                const isPublished = study.status === 'published';
-                return (
+              {studies.map((study) => (
                 <Stack
                   key={study.slug}
-                  as={isPublished ? Link : 'div'}
-                  {...(isPublished ? { to: `/research/${study.slug}` } : {})}
+                  onClick={() => {
+                    if (study.status === 'published') {
+                      navigate(`/research/${study.slug}`);
+                    }
+                  }}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
-                  className={cn(
-                    cardVariants({
-                      interactive: study.status === 'published'
-                    }),
-                    study.status === 'published' && "!no-underline"
-                  )}
+                  className={cardVariants({
+                    interactive: study.status === 'published'
+                  })}
                   paddingTop={3.5}
                   paddingX={4}
                   paddingBottom={4}
@@ -441,39 +435,39 @@ export default function ResearchAnalytics() {
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
                 >
-                  <Stack direction="row" justify="between" align="center" marginBottom={3} width="full" gap={0}>
+                  <Box display="flex" justify="between" align="center" marginBottom={3} width="full">
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
                     {study.status && <StatusBadge label={study.status} />}
-                  </Stack>
+                  </Box>
 
                   <Text as="h3" variant="display" size="2xl" weight="font-black" marginBottom={2}>
                     {study.title}
                   </Text>
-                  <Stack direction="row" align="center" gap={4} marginBottom={3}>
+                  <Box display="flex" align="center" gap={4} marginBottom={3}>
                     <Text variant="mono" size="micro" color="dim" opacityVariant="muted">{study.date}</Text>
                     {study.readTime && (
-                      <Stack direction="row" align="center" gap={1} opacityVariant="muted">
+                      <Box display="flex" align="center" gap={1} opacityVariant="muted">
                         <Icon icon={Clock} size="xs" color="dim" />
                         <Text variant="mono" size="micro" color="dim">{study.readTime} MIN</Text>
-                      </Stack>
+                      </Box>
                     )}
-                  </Stack>
+                  </Box>
 
                   <Text variant="body" size="sm" color="dim" clamp={3} leading="relaxed" marginBottom={3}>
                     {study.excerpt}
                   </Text>
 
                   {study.tags && study.tags.length > 0 && (
-                    <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
+                    <Box display="flex" wrap="wrap" gap={1.5} marginBottom={3}>
                       {study.tags.map(tag => (
                         <Text key={tag} className="flagship-tag">
                           {tag}
                         </Text>
                       ))}
-                    </Stack>
+                    </Box>
                   )}
 
-                  <Stack direction="row" align="center" gap={2} marginTop="auto">
+                  <Box display="flex" align="center" gap={2} marginTop="auto">
                     <Text variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="accent">
                       {study.status === 'planned'
                         ? 'Coming Soon'
@@ -482,9 +476,9 @@ export default function ResearchAnalytics() {
                           : 'Read Article'}
                     </Text>
                     <Icon icon={FileText} size="sm" color="accent" />
-                  </Stack>
+                  </Box>
                 </Stack>
-              )})}
+              ))}
             </Grid>
           </Stack>
         )}
@@ -507,19 +501,19 @@ export default function ResearchAnalytics() {
           {/* Contact Details Column (Right) */}
           <Stack gap={4} span={{ base: 1, md: 5 }} align={{ base: "start", md: "end" }} textAlign={{ base: "left", md: "right" }}>
             <Text variant="mono" size="xs" color="dim" uppercase tracking="widest" weight="font-bold" opacityVariant="subtle">Get in touch</Text>
-            <Stack direction="row" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
-              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors cursor-pointer">
+            <Box display="flex" align="center" gap={4} wrap="wrap" justify={{ base: "start", md: "end" }} marginTop={2}>
+              <Box as="a" href="mailto:anders.ariel@gmail.com" className="hover:text-accent transition-colors">
                 <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">Email</Text>
               </Box>
               <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors cursor-pointer">
+              <Box as="a" href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
                 <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">LinkedIn</Text>
               </Box>
               <Text color="dim" opacityVariant="muted" size="xs">·</Text>
-              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors cursor-pointer">
+              <Box as="a" href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
                 <Text variant="mono" size="xs" weight="font-bold" color="accent" uppercase tracking="widest">GitHub</Text>
               </Box>
-            </Stack>
+            </Box>
           </Stack>
         </Grid>
       </Stack>
@@ -533,8 +527,7 @@ export default function ResearchAnalytics() {
           display="flex"
           align="center"
           justify="center"
-          cursor="zoom-out"
-          className="bg-black/90"
+          className="bg-black/90 cursor-zoom-out"
           onClick={() => setLightboxImage(null)}
         >
           <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
