@@ -88,11 +88,10 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
     customPreview: {
       logo: { prefix: 'boom', accent: 'tick', suffix: '.blog' },
       headline: [
-        { text: 'Built for dancers.' },
-        { text: 'Train smarter.', accent: 'Train smarter.' },
-        { text: 'Travel better.' }
+        { text: 'Pack smart.' },
+        { text: 'Dance more.', accent: 'Dance more.' }
       ],
-      tagline: 'Training notes, gear reviews, and WCS guides.'
+      tagline: 'Gear, travel, and tips for better dance weekends.'
     }
   },
   {
