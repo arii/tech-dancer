@@ -17,7 +17,6 @@ from dev_tools.utils import (
     clean_llm_output,
     get_ai_model,
     get_ai_review_model,
-    get_ai_synthesis_model,
     get_stack_versions,
     get_gemini_model
 )
@@ -281,6 +280,7 @@ class AIClient:
         print(f"🤖 Requesting AI review for {len(reviewable)} chunks ...", end="", flush=True, file=sys.stderr)
 
         raw = None
+        file_reviews = []
         try:
             raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=2)
         except Exception as e:
