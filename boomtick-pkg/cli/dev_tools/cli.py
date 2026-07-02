@@ -268,10 +268,9 @@ def issue_view(ctx, issue_number):
 @click.option('--labels', help='Comma-separated list of labels to set (replaces existing labels)')
 @click.option('--add-labels', help='Comma-separated list of labels to add')
 @click.option('--remove-labels', help='Comma-separated list of labels to remove')
-@click.option('--state', type=click.Choice(['open', 'closed']), help='The state to set the issue to (open or closed)')
 @click.pass_context
-def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_labels, state):
-    """Update a GitHub issue's body, labels, and/or state."""
+def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_labels):
+    """Update a GitHub issue's body and/or labels."""
     orch = ctx.obj['ORCHESTRATOR']
 
     label_list = [l.strip() for l in labels.split(',')] if labels else None
@@ -286,8 +285,7 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
             file=file,
             labels=label_list,
             add_labels=add_label_list,
-            remove_labels=remove_label_list,
-            state=state
+            remove_labels=remove_label_list
         )
     except Exception as e:
         err(ctx, str(e))
@@ -301,8 +299,7 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
         body=content,
         labels=label_list,
         add_labels=add_label_list,
-        remove_labels=remove_label_list,
-        state=state
+        remove_labels=remove_label_list
     )
     out(ctx, f"✅ Successfully updated issue #{issue_number}", data=res)
 
@@ -1022,28 +1019,33 @@ for group in [jules_group]:
 
 
 def main():
-    """Unified entry point for the Tech-Dancer CLI with standardized error handling."""
+    # click entry point automatically handles sys.argv
     try:
         cli(obj={})
     except Exception as e:
-        # Check if we should output JSON by inspecting the command line
-        # This is a fallback to maintain the contract for machine consumers
-        # when an exception occurs before click's internal error handling kicks in.
+        # If we are in JSON mode, we should ideally output JSON error.
+        # Detecting JSON mode from sys.argv since click context isn't available here yet if it failed early.
+        # Note: {PROJECT_CONFIG.cli_alias} subcommands are JSON by default.
         is_json = "--no-json" not in sys.argv
 
         if is_json:
             error_payload = {
                 "status": "error",
                 "message": str(e),
-                "type": e.__class__.__name__,
-                "code": getattr(e, 'code', 1)
+                "type": e.__class__.__name__
             }
-            # Print JSON to stdout to satisfy piped machine consumers (e.g. boomtick-mcp)
+            # CLIError and some others might have a custom 'code' attribute
+            code = getattr(e, 'code', 1)
+            error_payload["code"] = code
+            # JSON errors remain on stdout to maintain the contract for piped machine consumers
+            # (e.g. boomtick-mcp) which may discard stderr via 2>/dev/null.
             print(json.dumps(error_payload, indent=2))
         else:
             log_error(str(e))
+            code = getattr(e, 'code', 1)
 
-        sys.exit(getattr(e, 'code', 1))
+        if "pytest" not in sys.modules:
+            sys.exit(code)
 
 if __name__ == "__main__":
     main()
