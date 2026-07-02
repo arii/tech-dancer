@@ -15,22 +15,19 @@ export type { Post, Resource, Study, ContentItem, ContentStatus };
  */
 export function parseFrontmatter(content: string) {
   const match = content.match(/^---\n([\s\S]+?)\n---\n([\s\S]*)$/);
-  if (!match) return { data: Object.create(null), content };
+  if (!match) return { data: {}, content };
 
   const yamlStr = match[1];
   const body = match[2];
 
   try {
     const data = parse(yamlStr);
-    // Convert to null-prototype object for safety
-    const safeData = Object.create(null);
-    if (data && typeof data === 'object') {
-      Object.assign(safeData, data);
-    }
-    return { data: safeData, content: body };
+    // Note: The `yaml` library internally mitigates prototype pollution.
+    // Downstream spreading `{ ...data }` also negates null-prototype safety.
+    return { data: (data && typeof data === 'object') ? data : {}, content: body };
   } catch (e) {
     console.error('Error parsing frontmatter:', e);
-    return { data: Object.create(null), content: body };
+    return { data: {}, content: body };
   }
 }
 

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { forwardRef } from "react"
-import { composeStyles } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 
@@ -17,7 +17,7 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
       <Box
         ref={ref}
         display={display}
-        className={composeStyles(
+        className={cn(
           applyResponsive(cols, (v) => COLS_MAP[v as keyof typeof COLS_MAP] || ""),
           applyResponsive(rows, (v) => ROWS_MAP[v as keyof typeof ROWS_MAP] || ""),
           className
