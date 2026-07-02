@@ -1,0 +1,235 @@
+# Final Issue Audit (2026-07-02)
+
+## Keep open
+
+- #3156: feat: Public Assets & Format Consolidation
+  - Summary: Issue 'feat: Public Assets & Format Consolidation' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2975: ci: investigate and reduce long CI pipeline times
+  - Summary: Issue 'ci: investigate and reduce long CI pipeline times' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2900: Investigate why mobile visual snapshots prompt unexpected updates when no changes exist
+  - Summary: Issue 'Investigate why mobile visual snapshots prompt unexpected updates when no changes exist' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2784: feat(ai): Implement Structured Token Management & Strict JSON Schemas
+  - Summary: Issue 'feat(ai): Implement Structured Token Management & Strict JSON Schemas' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2678: accessibility: fix contrast ratio regressions on homepage elements
+  - Summary: Issue 'accessibility: fix contrast ratio regressions on homepage elements' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2675: bug: fix clipped overflow containers and skip link text overflow
+  - Summary: Issue 'bug: fix clipped overflow containers and skip link text overflow' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2672: Improve AI Review Context Management and Truncation Handling
+  - Summary: Issue 'Improve AI Review Context Management and Truncation Handling' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2671: Optimization Needed: Impact Analysis Review Quotas Exceeded
+  - Summary: Issue 'Optimization Needed: Impact Analysis Review Quotas Exceeded' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2649: Improvement: Remove Agents & CI/CD from home page Explore by Topic grid
+  - Summary: Issue 'Improvement: Remove Agents & CI/CD from home page Explore by Topic grid' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2639: Improvement: Optimize CI Artifact Structure and Report Generation
+  - Summary: Issue 'Improvement: Optimize CI Artifact Structure and Report Generation' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2638: Improvement: Standardize CI Script Log Formatting and Error Tracing
+  - Summary: Issue 'Improvement: Standardize CI Script Log Formatting and Error Tracing' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2630: entropy gate
+  - Summary: Issue 'entropy gate' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2622: Improvement: Expand shared component traversal for impact analysis
+  - Summary: Issue 'Improvement: Expand shared component traversal for impact analysis' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2619: Improvement: Resolve barrel exports for impact analysis
+  - Summary: Issue 'Improvement: Resolve barrel exports for impact analysis' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2618: Improvement: Trace layout dependencies for impact analysis
+  - Summary: Issue 'Improvement: Trace layout dependencies for impact analysis' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2606: Deployment Impact Analysis Effectiveness Audit
+  - Summary: Issue 'Deployment Impact Analysis Effectiveness Audit' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2602: Refactor: De-slop ResearchAnalytics by extracting common UI components
+  - Summary: Issue 'Refactor: De-slop ResearchAnalytics by extracting common UI components' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2582: ci(models): capture context window limits from GitHub models catalog and filter on them
+  - Summary: Issue 'ci(models): capture context window limits from GitHub models catalog and filter on them' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2581: ci(review): gate visual review routes on DOM/pixel severity — skip LOW routes
+  - Summary: Issue 'ci(review): gate visual review routes on DOM/pixel severity — skip LOW routes' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2579: ci(review): run GitHub Models first; only invoke Gemini on HIGH findings or failure
+  - Summary: Issue 'ci(review): run GitHub Models first; only invoke Gemini on HIGH findings or failure' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2577: ci(review): use incremental diff (HEAD~1..HEAD) for iterative commits, not full branch diff
+  - Summary: Issue 'ci(review): use incremental diff (HEAD~1..HEAD) for iterative commits, not full branch diff' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2576: ci(review): scope code review to changed hunks, not full file contents
+  - Summary: Issue 'ci(review): scope code review to changed hunks, not full file contents' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2575: ci(review): scope reviewer to PR's stated purpose; flag only new untrusted input paths
+  - Summary: Issue 'ci(review): scope reviewer to PR's stated purpose; flag only new untrusted input paths' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2574: ci(review): enforce MAX_AI_REVIEWS cap end-to-end in the Jules remediation loop
+  - Summary: Issue 'ci(review): enforce MAX_AI_REVIEWS cap end-to-end in the Jules remediation loop' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2573: ci(review): require reviewer to engage with existing test/verification evidence
+  - Summary: Issue 'ci(review): require reviewer to engage with existing test/verification evidence' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2571: ci(review): prevent reviewer from asserting framework facts it hasn't verified
+  - Summary: Issue 'ci(review): prevent reviewer from asserting framework facts it hasn't verified' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2570: ci(review): feed full type/interface context into the reviewer, not just the diff hunk
+  - Summary: Issue 'ci(review): feed full type/interface context into the reviewer, not just the diff hunk' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2569: ci(review): require evidence for HIGH/blocking severity
+  - Summary: Issue 'ci(review): require evidence for HIGH/blocking severity' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2563: Reviewer bot (GitHub Models code review) produces inconsistent, stateless feedback across PR iterations
+  - Summary: Issue 'Reviewer bot (GitHub Models code review) produces inconsistent, stateless feedback across PR iterations' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2561: Recommendations for Improving AI Code Review & Repository Standards
+  - Summary: Issue 'Recommendations for Improving AI Code Review & Repository Standards' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2555: model aware token usage
+  - Summary: Issue 'model aware token usage' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2553: CI: Move UI Anti-Pattern Audit to its own workflow
+  - Summary: Issue 'CI: Move UI Anti-Pattern Audit to its own workflow' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2552: CI: Consider merging static analysis toolchecks
+  - Summary: Issue 'CI: Consider merging static analysis toolchecks' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2550: CI: Impact Analysis API returns 404 Not Found
+  - Summary: Issue 'CI: Impact Analysis API returns 404 Not Found' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2534: Rewrite "The Story Behind the Merch" blog post to align with brand voice and fix missing images
+  - Summary: Issue 'Rewrite "The Story Behind the Merch" blog post to align with brand voice and fix missing images' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2531: Replace raw flex and items-center classes with Box primitive in UXAuditor.tsx
+  - Summary: Issue 'Replace raw flex and items-center classes with Box primitive in UXAuditor.tsx' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2530: Replace raw form styling with UI components in BlogDrafter.tsx
+  - Summary: Issue 'Replace raw form styling with UI components in BlogDrafter.tsx' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2529: Remove raw padding and flex classes in ResearchAnalytics.tsx
+  - Summary: Issue 'Remove raw padding and flex classes in ResearchAnalytics.tsx' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+- #2492: refactor(scripts): extract impact-analysis helpers into scripts/impact/ submodules with Zod schemas
+  - Summary: Issue 'refactor(scripts): extract impact-analysis helpers into scripts/impact/ submodules with Zod schemas' asks to implement or fix related functionality.
+  - Reason: The issue appears to describe a valid enhancement or fix that aligns with the codebase. The implementation is not yet complete.
+
+## Keep open, needs clarification
+
+- #3244: Merge setuptools dependency bump PR
+  - Summary: Issue 'Merge setuptools dependency bump PR' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3243: chore: fix e2e tests and update visual snapshots
+  - Summary: Issue 'chore: fix e2e tests and update visual snapshots' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3237: fix: prioritize internal deep-dive links in research tools
+  - Summary: Issue 'fix: prioritize internal deep-dive links in research tools' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3236: Add AI Slop Audit Report
+  - Summary: Issue 'Add AI Slop Audit Report' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3235: Fix validate-issue checks for Jules PRs
+  - Summary: Issue 'Fix validate-issue checks for Jules PRs' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3234: ux auditor page not accessible
+  - Summary: Issue 'ux auditor page not accessible' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3233: fix(jules): Fix failing MCP jules session tools tests
+  - Summary: Issue 'fix(jules): Fix failing MCP jules session tools tests' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3228: fix: sync dockerfile setuptools version with dependabot PR
+  - Summary: Issue 'fix: sync dockerfile setuptools version with dependabot PR' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3217: Failed to programmatically close PRs via MCP tool: Unknown error
+  - Summary: Issue 'Failed to programmatically close PRs via MCP tool: Unknown error' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3216: feat: Aggregate consolidation of PRs 3186, 3188, and 3190
+  - Summary: Issue 'feat: Aggregate consolidation of PRs 3186, 3188, and 3190' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3203: CI: Internalize workflows inside boomtick-pkg
+  - Summary: Issue 'CI: Internalize workflows inside boomtick-pkg' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3198: Configure JSCPD duplicate code detection in CI
+  - Summary: Issue 'Configure JSCPD duplicate code detection in CI' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3196: Refactor: Cleanup legacy boomtick-mcp and dev-tools references in documentation and code comments
+  - Summary: Issue 'Refactor: Cleanup legacy boomtick-mcp and dev-tools references in documentation and code comments' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3194: CI: Configure JSCPD duplicate code detection check in root CI workflow
+  - Summary: Issue 'CI: Configure JSCPD duplicate code detection check in root CI workflow' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3192: Improve Agent Awareness and Access to Boomtick MCP/CLI Tools over Raw shell Commands
+  - Summary: Issue 'Improve Agent Awareness and Access to Boomtick MCP/CLI Tools over Raw shell Commands' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3108: refactor: implement mandated architectural standards for CLI and packaging
+  - Summary: Issue 'refactor: implement mandated architectural standards for CLI and packaging' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3063: Refactor boomtick-pkg/mcp hardcoded github defaults in config.ts
+  - Summary: Issue 'Refactor boomtick-pkg/mcp hardcoded github defaults in config.ts' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3060: Refactor: Components exceed 150-line limit (AGENTS.md Rule 11)
+  - Summary: Issue 'Refactor: Components exceed 150-line limit (AGENTS.md Rule 11)' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3056: feat: Finalize install.sh and modularize CI actions
+  - Summary: Issue 'feat: Finalize install.sh and modularize CI actions' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #3014: Systemic CI Metrics Definition: Establish clear measurable targets
+  - Summary: Issue 'Systemic CI Metrics Definition: Establish clear measurable targets' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2997: Epic: Master tracking for individual blog post improvements
+  - Summary: Issue 'Epic: Master tracking for individual blog post improvements' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2996: Epic: Group and Prioritize Raw Styling UI Refactors
+  - Summary: Issue 'Epic: Group and Prioritize Raw Styling UI Refactors' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2984: update homepage cta
+  - Summary: Issue 'update homepage cta' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2968: context token improvements
+  - Summary: Issue 'context token improvements' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2847: [Workflow Audit] Consolidated Health Report
+  - Summary: Issue '[Workflow Audit] Consolidated Health Report' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2811: make Dependabot guidelines and update workflow
+  - Summary: Issue 'make Dependabot guidelines and update workflow' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2692: content: Master audit and visual improvement of WCS blog posts
+  - Summary: Issue 'content: Master audit and visual improvement of WCS blog posts' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2687: content: Audit and improve blog posts to meet Impeccable standards
+  - Summary: Issue 'content: Audit and improve blog posts to meet Impeccable standards' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2685: feat: Create autonomous AI-driven Playwright crawler for dynamic visual QA and Gemini reviews
+  - Summary: Issue 'feat: Create autonomous AI-driven Playwright crawler for dynamic visual QA and Gemini reviews' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+- #2664: feat: Add linked issue specifications to PR review context
+  - Summary: Issue 'feat: Add linked issue specifications to PR review context' requires further specification.
+  - Reason: The issue body is missing the mandatory spec-driven sections (Goal, Problem Statement, etc) required by our rules. The author needs to provide this context.
+
+## Duplicate, close
+
+- #3204: homepage cta
+  - Summary: Issue 'homepage cta' requires further specification.
+  - Reason: Duplicate of #2984 which already tracks updating the homepage CTA.
+- #3202: Refactor: Cleanup legacy boomtick-mcp and dev-tools references
+  - Summary: Issue 'Refactor: Cleanup legacy boomtick-mcp and dev-tools references' requires further specification.
+  - Reason: Duplicate of #3196 which tracks the cleanup of legacy boomtick references.
+- #2689: content: Refactor the merch story blog post to meet Impeccable standards
+  - Summary: Issue 'content: Refactor the merch story blog post to meet Impeccable standards' requires further specification.
+  - Reason: Duplicate of #2534 which already tracks rewriting the merch story.
+- #2554: Improve token usage
+  - Summary: Issue 'Improve token usage' asks to implement or fix related functionality.
+  - Reason: Duplicate of #2555 which already tracks model aware token usage.
+
+## Outdated, close
+
+- #2461: Move power-charging.md to draft due to generic AI filler content
+  - Summary: Issue 'Move power-charging.md to draft due to generic AI filler content' asks to implement or fix related functionality.
+  - Reason: The request to move a markdown to draft is outdated and better addressed via a direct PR rather than an open issue.
