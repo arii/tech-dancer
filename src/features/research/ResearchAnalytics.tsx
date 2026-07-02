@@ -33,7 +33,7 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
   if (tool.customPreview) {
     const { logo, headline, tagline } = tool.customPreview;
     return (
-      <Box width="full" className="card-screenshot-wrapper boomtick-blog-preview border-b border-white/8">
+      <Box width="full" border="b" borderColor="white/8" className="card-screenshot-wrapper boomtick-blog-preview">
         <Stack gap={1} className="preview-content">
           <Text className="preview-logo">
             {logo.prefix}<span className="logo-accent">{logo.accent}</span><span className="logo-dot font-light">{logo.suffix}</span>
@@ -72,7 +72,7 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
   };
 
   return (
-    <Box width="full" className="card-screenshot-wrapper border-b border-white/8 cursor-zoom-in" onClick={handleImageClick}>
+    <Box width="full" border="b" borderColor="white/8" cursor="zoom-in" className="card-screenshot-wrapper" onClick={handleImageClick}>
       <img
         src={src}
         alt={alt}
@@ -112,7 +112,7 @@ function FlagshipCard({
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
-            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" borderColor="white/8" border>
+            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" border borderColor="white/8">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
             <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
@@ -144,10 +144,7 @@ function FlagshipCard({
               as="span"
               role="button"
               tabIndex={0}
-              onClick={(e) => {
-                e.preventDefault();
-                toggleExpand(e);
-              }}
+              onClick={toggleExpand}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
@@ -235,19 +232,11 @@ function FlagshipCard({
 function ToolCard({ tool }: {
   tool: ResearchTool;
 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   // Priority: externalUrl > canonicalPath > sourceUrl > fallback research path
   const href = tool.externalUrl || tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
 
-  // External if we're using externalUrl OR if we're falling back to sourceUrl without a canonical internal path
+  // External if we're using externalUrl OR if we're falling back to sourceUrl WITHOUT a canonical internal path
   const isExternal = !!tool.externalUrl || (!tool.canonicalPath && !!tool.sourceUrl);
-
-  const toggleExpand = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsExpanded(!isExpanded);
-  };
 
   const Component = isExternal ? 'a' : Link;
   const linkProps = isExternal
@@ -264,7 +253,7 @@ function ToolCard({ tool }: {
     >
       <Stack gap={0} width="full" flex={1}>
         <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
-          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" borderColor="white/8" border>
+          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" border borderColor="white/8">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <StatusBadge label={tool.status} />
@@ -281,32 +270,10 @@ function ToolCard({ tool }: {
             color="dim"
             leading="relaxed"
             marginBottom={3}
-            className={cn(!isExpanded && tool.description.length > 120 && "line-clamp-3")}
+            className="line-clamp-3"
           >
             {tool.description}
           </Text>
-          {tool.description && tool.description.length > 120 && (
-            <Box
-              as="span"
-              role="button"
-              tabIndex={0}
-              onClick={(e) => {
-                e.preventDefault();
-                toggleExpand(e);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  toggleExpand(e as unknown as React.MouseEvent);
-                }
-              }}
-              marginBottom={5} alignSelf="start"
-              className="text-accent hover:underline text-xs font-semibold focus:outline-none z-30"
-              cursor="pointer"
-            >
-              {isExpanded ? "Read Less" : "Read More"}
-            </Box>
-          )}
         </Stack>
 
         <Stack direction="row" wrap="wrap" gap={1.5} marginBottom={3}>
@@ -457,11 +424,13 @@ export default function ResearchAnalytics() {
             </Box>
 
             <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6} width="full">
-              {studies.map((study) => (
+              {studies.map((study) => {
+                const isPublished = study.status === 'published';
+                return (
                 <Stack
                   key={study.slug}
-                  as={study.status === 'published' ? Link : 'div'}
-                  to={study.status === 'published' ? `/research/${study.slug}` : undefined}
+                  as={isPublished ? Link : 'div'}
+                  {...(isPublished ? { to: `/research/${study.slug}` } : {})}
                   height="full"
                   surface={study.status === 'published' ? 'surface' : 'muted'}
                   className={cn(
@@ -520,7 +489,7 @@ export default function ResearchAnalytics() {
                     <Icon icon={FileText} size="sm" color="accent" />
                   </Stack>
                 </Stack>
-              ))}
+              )})}
             </Grid>
           </Stack>
         )}
@@ -569,7 +538,8 @@ export default function ResearchAnalytics() {
           display="flex"
           align="center"
           justify="center"
-          className="bg-black/90 cursor-zoom-out"
+          cursor="zoom-out"
+          className="bg-black/90"
           onClick={() => setLightboxImage(null)}
         >
           <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
