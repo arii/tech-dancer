@@ -997,17 +997,17 @@ def plan_aggregation(ctx):
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
-@agent_group.command()
+@agent_group.command(name='run-feedback-check')
 @click.pass_context
-def daemon(ctx):
-    """Run the Automated Agent Feedback Daemon."""
+def run_feedback_check(ctx):
+    """Run a one-shot Automated Agent Feedback Check to trigger CI feedback for active sessions."""
     from dev_tools.daemon import JulesFeedbackDaemon
     try:
         daemon_instance = JulesFeedbackDaemon()
         daemon_instance.run()
-        out(ctx, "Daemon execution completed.", data={"status": "success"})
+        out(ctx, "Feedback check execution completed.", data={"status": "success"})
     except Exception as e:
-        _handle_unexpected_error(ctx, "agent daemon", e)
+        _handle_unexpected_error(ctx, "agent run-feedback-check", e)
 
 # Register aliases for backwards compatibility
 @cli.group(name='jules')
