@@ -12,6 +12,7 @@ import click
 
 from dev_tools.models import CreateIssueInput, SearchPRsInput, IssueUpdateInput
 from dev_tools.orchestrator import Orchestrator
+from dev_tools.daemon import JulesFeedbackDaemon
 from dev_tools.utils import (
     get_or_create_log_dir,
     CLIError,
@@ -1001,7 +1002,6 @@ def plan_aggregation(ctx):
 @click.pass_context
 def run_feedback_check(ctx):
     """Run a one-shot Automated Agent Feedback Check to trigger CI feedback for active sessions."""
-    from dev_tools.daemon import JulesFeedbackDaemon
     try:
         daemon_instance = JulesFeedbackDaemon()
         daemon_instance.run()
