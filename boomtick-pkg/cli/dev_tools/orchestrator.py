@@ -205,57 +205,17 @@ class Orchestrator:
         """
         return self.github.fetch_issue_details(issue_number)
 
-    def update_issue(self, issue_number: int, body: Optional[str] = None, labels: Optional[List[str]] = None, add_labels: Optional[List[str]] = None, remove_labels: Optional[List[str]] = None) -> Dict[str, Any]:
-        """
-        Updates an issue's body and/or labels.
-        """
-        res = None
-        # Handle full label replacement first as it is mutually exclusive with incremental changes
-        if labels is not None:
-            res = self.github.update_issue(issue_number, body=body, labels=labels)
-        else:
-            # Handle incremental label changes (can happen together)
-            if add_labels:
-                res = self.github.add_labels(issue_number, add_labels)
 
-            if remove_labels:
-                for label in remove_labels:
-                    self.github.remove_label(issue_number, label)
-                # If we haven't updated yet (no add_labels or body), fetch current state
-                if res is None and body is None:
-                    res = self.github.fetch_issue_details(issue_number)
-
-            # Handle body update if not already done via 'labels' PATCH
-            if body is not None:
-                res = self.github.update_issue(issue_number, body=body)
-
-        if res is None:
-            raise CLIError("Nothing to update. Provide body or labels.")
-
-        return {
-            "status": "success",
-            "issue": IssueSummary(**res).model_dump()
-        }
-
-    # Delegation to PRService
-    def list_prs(self, *args, **kwargs): return self.pr_service.list_prs(*args, **kwargs)
-    def get_ci_logs(self, *args, **kwargs): return self.pr_service.get_ci_logs(*args, **kwargs)
-    def stream_ci_logs(self, *args, **kwargs): return self.pr_service.stream_ci_logs(*args, **kwargs)
-    def get_merge_conflicts(self, *args, **kwargs): return self.pr_service.get_merge_conflicts(*args, **kwargs)
-    def get_pr_diff_shapen(self, *args, **kwargs): return self.pr_service.get_pr_diff_shapen(*args, **kwargs)
-    def aggregate_prs(self, *args, **kwargs): return self.pr_service.aggregate_prs(*args, **kwargs)
-    def update_issue(self, *args, **kwargs): return self.pr_service.update_issue(*args, **kwargs)
-    def post_comment(self, entity_number: int, body: Optional[str]) -> Dict[str, Any]:
-        if body is None or not body.strip(): raise CLIError("Comment body cannot be empty.")
+    def post_comment(self, entity_number: int, body: str) -> dict:
+        if not body or not body.strip(): raise CLIError("Comment body cannot be empty.")
         return self.github.create_issue_comment(entity_number, body)
 
-    # Delegation to AuditService
-    def get_audit_results(self, *args, **kwargs): return self.audit_service.get_audit_results(*args, **kwargs)
-    def validate_issue(self, *args, **kwargs): return self.audit_service.validate_issue(*args, **kwargs)
-    def handle_audit_gate(self, *args, **kwargs): return self.audit_service.handle_audit_gate(*args, **kwargs)
-
-    # Delegation to RemediationService
-    def fix_ci(self, *args, **kwargs): return self.remediation_service.fix_ci(*args, **kwargs)
+    def __getattr__(self, name):
+        """Dynamically delegates methods to the appropriate service."""
+        if hasattr(self.pr_service, name): return getattr(self.pr_service, name)
+        if hasattr(self.audit_service, name): return getattr(self.audit_service, name)
+        if hasattr(self.remediation_service, name): return getattr(self.remediation_service, name)
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
     def parse_comment(self, body: str, author_association: str) -> Dict[str, Any]:
         results = {k: bool(re.search(v, body)) for k, v in self._CMD_PATTERNS.items()}
@@ -435,106 +395,6 @@ class Orchestrator:
                     baseline_count += int(run_command(["node", "scripts/detect-antipatterns.mjs", "--count-only", "-"], input_str=res_show.stdout) or 0)
         return {"current": current_count, "baseline": baseline_count, "status": "success" if current_count <= baseline_count else "error"}
 
-    def fix_ci(self, pr_number: Optional[int] = None, branch: Optional[str] = None, api_key: Optional[str] = None, dry_run: bool = True) -> Dict[str, Any]:
-        repo_name = get_repo_name(); g = get_github_client(); repo = g.get_repo(repo_name)
-        if pr_number:
-            pr = repo.get_pull(int(pr_number))
-            branch = pr.head.ref
-        elif branch: pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
-        else:
-            branch = run_command(['git', 'branch', '--show-current']).strip()
-            pulls = list(repo.get_pulls(state='open', head=f"{repo.owner.login}:{branch}")); pr = pulls[0] if pulls else None
-
-        if not pr:
-            raise CLIError(f"Could not find PR for branch {branch}")
-
-        if api_key: self.jules.api_key = api_key
-
-        # Analyze failing check runs
-        check_runs = self.github.fetch_check_runs(pr.head.sha)
-        failing_logs = []
-        structured_failures = []
-        for run in check_runs:
-            if run.get('conclusion') == 'failure':
-                logs = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-
-                # Clean logs and take a smart snippet
-                cleaned_logs = clean_gha_logs(logs)
-
-                # Prioritize lines with error signatures
-                important_lines = []
-                for line in cleaned_logs.splitlines():
-                    if any(x in line.lower() for x in ['error', 'fail', 'ts', 'vitest', 'playwright', '🔴']):
-                        important_lines.append(line)
-
-                if important_lines:
-                    snippet = "\n".join(important_lines[-30:]) # Keep last 30 important lines
-                else:
-                    snippet = cleaned_logs[-2000:] # Fallback to tail of cleaned logs
-
-                failing_logs.append(f"Check Run: {run.get('name')}\nLogs:\n{snippet}")
-
-                findings = extract_failing_info(logs)
-                for f in findings:
-                    structured_failures.append(f"File: {f['file']}, Line: {f['line']}, Error: {f['message']} ({f['type']})")
-
-        base_branch = PROJECT_CONFIG.base_branch
-        base_branch_name = PROJECT_CONFIG.base_branch_name
-
-        prompt = f"""# Agent Prompt: Self-Review, Fix, and Publish PR
-
-You are a senior engineering agent reviewing your own branch before publishing.
-
-Compare the current branch against `{base_branch_name}`, identify issues, fix them directly, validate the result, and open or update a pull request. Do not stop after giving recommendations.
-
-## Rules
-
-- Do not ask for confirmation before making fixes.
-- Do not ask the user to run commands.
-- Do not stop until you have opened or updated a PR.
-- Do not make unrelated refactors.
-- Do not publish with known failing checks unless the failure is clearly unrelated and documented.
-- If local setup prevents a check from running, document the attempted command, the setup gap, and the follow-up needed.
-
-## Steps
-
-1. Check branch state with `git status`, `git branch --show-current`, `git remote -v`, and `git fetch origin {base_branch_name}`.
-2. Review the full diff with `git diff {base_branch}...HEAD`, `git diff --stat {base_branch}...HEAD`, `git log --oneline {base_branch}..HEAD`, and `git diff --cached`.
-3. Create a checklist covering correctness, edge cases, TypeScript/imports, dead code, UI/mobile behavior, accessibility, validation, repo hygiene, and PR description quality.
-4. Fix the issues directly.
-5. Validate using the repo scripts from `package.json`, such as lint, typecheck, test, and build.
-   - For CI remediation, favor targeted testing (e.g., `pnpm run test:e2e:targeted -- <args>`) and represent failures using the structured schema described in `docs/agent/ci-remediation.md`.
-6. If validation fails, fix the root cause and rerun the failing check. If the environment blocks a check, document the exact command and reason.
-7. Final review with `git status`, `git diff {base_branch}...HEAD`, `git diff --stat {base_branch}...HEAD`, and a search for TODO/FIXME/debug leftovers.
-8. Commit, push, and create or update the PR with a clear summary and validation notes.
-
-## Final response
-
-Respond only after the PR is created or updated:
-
-- PR link
-- Changes made
-- Self-review fixes
-- Validation results
-- Notes or documented limitations"""
-
-        if structured_failures:
-            prompt += "\n\n## CI Failure Analysis\n\nStructured Failure Analysis:\n- " + "\n- ".join(structured_failures)
-
-        if failing_logs:
-            prompt += "\n\nDetailed Failing Logs (Snippets):\n" + "\n---\n".join(failing_logs)
-
-        agent_name = "Jules"
-        source_id = self.get_env_or_gha("JULES_SOURCE_ID") or self.jules.discover_source_id(repo_name)
-        if not source_id: raise CLIError("JULES_SOURCE_ID missing and auto-discovery failed.")
-        session_name = "dry-run-session"
-        if not dry_run:
-            res = self.jules.create_session_from_source(source_id, branch, prompt)
-            if res: session_name = res.get("name")
-            else: raise CLIError(f"{agent_name} API session creation failed")
-        feedback = f"🤖 **{agent_name} is on it!**\n\nInitialized autonomous repair session (`{session_name}`) for branch `{branch}`."
-        if pr and not dry_run: pr.create_issue_comment(feedback)
-        return {"session": session_name, "branch": branch, "feedback": feedback, "agent_name": agent_name}
 
     def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True) -> List[Dict[str, Any]]:
         g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
@@ -732,159 +592,10 @@ Respond only after the PR is created or updated:
             "command": " ".join(["pnpm"] + playwright_args),
             "failedTests": failed_tests
         }
-    def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
-        """Fetches CI logs for failing (or all) check runs in a PR."""
-        # Get PR head SHA
-        pr_data = self.github.fetch_pr_details(pr_number)
-        head_sha = pr_data.get("head", {}).get("sha")
 
-        if not head_sha:
-            raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
 
-        # Get check runs
-        checks = self.github.fetch_check_runs(head_sha)
-        failed_checks = [c for c in checks if c.get("conclusion") == "failure"]
 
-        logs = {}
-        # Get check suites to find workflow runs
-        check_suites = self.github.fetch_check_suites(head_sha)
 
-        for suite in check_suites:
-            runs = self.github.fetch_check_runs_for_suite(suite['id'])
-            for run in runs:
-                if include_all or run.get("conclusion") == "failure":
-                    log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-                    logs[run["name"]] = log_content[:10000]
-
-        return {
-            "checks": checks,
-            "failedChecks": failed_checks,
-            "logs": logs
-        }
-
-    def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
-        """Fetches and combines all CI logs for the latest workflow run of a PR."""
-        # Get PR head SHA
-        pr_data = self.github.fetch_pr_details(pr_number)
-        head_sha = pr_data.get("head", {}).get("sha")
-
-        if not head_sha:
-            raise CLIError(f"Could not determine head SHA for PR #{pr_number}")
-
-        # Get all check runs for this SHA
-        check_runs = self.github.fetch_check_runs(head_sha)
-
-        all_logs = []
-        # Limit to latest 20 jobs to avoid extreme memory usage
-        for run in check_runs[:20]:
-            # Fetch logs via API to avoid terminal paging/buffering issues
-            log_content = self.github.fetch_check_run_logs(run.get('id'), external_id=run.get('external_id'))
-            header = f"--- LOGS FOR JOB: {run['name']} (ID: {run['id']}) ---"
-            all_logs.append(header)
-            # Truncate each log to 20k chars to balance detail vs memory
-            all_logs.append(log_content[-20000:])
-            all_logs.append("\n")
-
-        combined_logs = "\n".join(all_logs)
-
-        if grep:
-            grep_pattern = grep.lower()
-            lines = combined_logs.splitlines()
-            filtered_lines = [line for line in lines if grep_pattern in line.lower()]
-            return "\n".join(filtered_lines)
-
-        return combined_logs
-
-    def get_merge_conflicts(self, pr_number: int, base_branch: str = None) -> Dict[str, Any]:
-        """Detects merge conflicts for a PR against a base branch using a temporary worktree."""
-        if base_branch is None:
-            base_branch = PROJECT_CONFIG.base_branch_name
-        # Get PR head ref
-        pr_data = self.github.fetch_pr_details(pr_number)
-        head_ref = pr_data.get("head", {}).get("ref")
-
-        if not head_ref:
-            raise CLIError(f"Could not determine head ref for PR #{pr_number}")
-
-        # Ensure we have the latest
-        run_command(["git", "fetch", "origin", head_ref])
-        run_command(["git", "fetch", "origin", base_branch])
-
-        worktree_path = os.path.join(os.getcwd(), f"worktree-conflict-{pr_number}.tmp")
-        self._cleanup_worktree(worktree_path)
-
-        run_command(["git", "worktree", "add", worktree_path, f"origin/{head_ref}"])
-
-        conflict_files = []
-        command_log = ""
-        try:
-            res = run_command(
-                ["git", "merge", "--no-commit", "--no-ff", f"origin/{base_branch}"],
-                cwd=worktree_path,
-                check=False
-            )
-            command_log = res.stdout + res.stderr
-
-            if res.returncode != 0:
-                res_diff = run_command(
-                    ["git", "diff", "--name-only", "--diff-filter=U"],
-                    cwd=worktree_path,
-                    check=False
-                )
-                conflict_files = [f.strip() for f in res_diff.stdout.splitlines() if f.strip()]
-                run_command(["git", "merge", "--abort"], cwd=worktree_path, check=False)
-        finally:
-            run_command(["git", "worktree", "remove", "-f", worktree_path], check=False)
-            if os.path.exists(worktree_path):
-                shutil.rmtree(worktree_path, ignore_errors=True)
-
-        return {
-            "prNumber": pr_number,
-            "baseBranch": base_branch,
-            "headRef": head_ref,
-            "conflictFiles": conflict_files,
-            "commandLog": command_log
-        }
-
-    def get_pr_diff_shapen(self, pr_number: int) -> Dict[str, Any]:
-        """Fetches PR diff, applies truncation and shapes file info."""
-        # Get files list
-        files = self.github.fetch_pr_files(pr_number)
-
-        # Get diff text
-        diff_text = self.github.fetch_pr_diff(pr_number)
-
-        MAX_DIFF_SIZE = 50000
-        truncated = False
-        if len(diff_text) > MAX_DIFF_SIZE:
-            diff_text = diff_text[:MAX_DIFF_SIZE] + "\n\n... [Diff truncated due to size] ..."
-            truncated = True
-
-        return {
-            "prNumber": pr_number,
-            "files": [
-                {
-                    "path": f.get("filename"),
-                    "status": f.get("status") or "modified",
-                    "additions": f.get("additions"),
-                    "deletions": f.get("deletions")
-                } for f in files
-            ],
-            "diffText": diff_text,
-            "truncated": truncated
-        }
-
-    def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
-        """Lists PRs with optional filtering."""
-        prs = self.github.list_pull_requests(state=state, limit=limit, labels=labels)
-
-        if not include_drafts:
-            prs = [pr for pr in prs if not pr.get("isDraft")]
-
-        return {
-            "status": "success",
-            "prs": [PRSummary(**pr).model_dump() for pr in prs]
-        }
 
     def trigger_jules_feedback(self, session_id: str) -> Dict[str, Any]:
         """Ports logic from trigger-feedback.ts to provide CI feedback to Jules."""
@@ -953,69 +664,6 @@ Respond only after the PR is created or updated:
         self.jules.send_message(session_id, feedback)
         return {"status": "success", "feedback": feedback}
 
-    def aggregate_prs(self, target_branch: str, pr_numbers: List[int]) -> Dict[str, Any]:
-        """
-        Aggregates multiple PRs into a single target branch and creates a consolidated PR.
-        """
-        def run(cmd: List[str], check: bool = True) -> subprocess.CompletedProcess:
-            return run_command(cmd, check=check)
-
-        base_branch = PROJECT_CONFIG.base_branch_name
-
-        # 1. Isolation & Cleanliness
-        run(["git", "checkout", base_branch])
-        run(["git", "pull", "origin", base_branch])
-        run(["git", "checkout", "-b", target_branch])
-
-        aggregate_body = ""
-        successfully_merged = []
-
-        for pr_num in pr_numbers:
-            # 2. Sequential Extraction & Deterministic Sequence
-            pr_data = self.github.fetch_pr_details(pr_num)
-            head_ref = pr_data.get('head', {}).get('ref')
-            title = pr_data.get('title')
-            body = pr_data.get('body') or ""
-
-            if not head_ref:
-                raise CLIError(f"Could not determine head ref for PR #{pr_num}")
-
-            # 2.5 Handle forks by using git fetch
-            # This ensures the branch is available locally and handles forks correctly
-            run(["git", "fetch", "origin", f"pull/{pr_num}/head:{head_ref}"])
-
-            # Switch back to the target branch
-            run(["git", "checkout", target_branch])
-
-            # 3. Safety First: Attempt automated integration merge
-            # Use 'ort' strategy implicitly by standard merge if git version supports it,
-            # or just standard merge.
-            res = run_command(["git", "merge", head_ref, "-m", f"Merging PR #{pr_num}: {title}"], check=False)
-
-            if res.returncode != 0:
-                # Conflict encountered
-                run(["git", "merge", "--abort"])
-                raise CLIError(f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.", code=res.returncode)
-
-            # 4. Metadata Preservation
-            successfully_merged.append(pr_num)
-            aggregate_body += f"Closes #{pr_num}\n\n### Description from PR #{pr_num} ({title}):\n{body}\n\n---\n"
-
-        # Push the compiled branch
-        run(["git", "push", "-u", "origin", target_branch])
-
-        # Create consolidated PR
-        pr_title = f"Aggregated Feature: {target_branch}"
-        pr_res = self.github.create_pull_request(pr_title, aggregate_body, target_branch, base_branch)
-        pr_url = pr_res.get("html_url")
-
-        return {
-            "status": "success",
-            "branch": target_branch,
-            "merged_prs": successfully_merged,
-            "pr_url": pr_url,
-            "message": f"Successfully aggregated {len(successfully_merged)} PRs into {target_branch}"
-        }
 
     def generate_review_workflow(self, pr_number: int, issue_number: Optional[int] = None) -> Dict[str, Any]:
         """Generates a deterministic review workflow plan for an agent."""

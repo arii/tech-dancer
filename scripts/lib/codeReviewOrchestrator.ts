@@ -79,12 +79,16 @@ export async function getCodeDiffSummary(targetFiles?: string[]): Promise<CodeRe
         if (batchFiles.length > 0) {
             const results = await getAIContext(JSON.stringify({ files: batchFiles }));
             for (const ctx of results) {
-                impactSemanticContext += `\n### Context for ${ctx.path}\n`;
+                impactSemanticContext += `
+### Context for ${ctx.path}
+`;
                 if (ctx.dependencies && Array.isArray(ctx.dependencies)) {
-                    impactSemanticContext += `- Deps: ${ctx.dependencies.join(', ')}\n`;
+                    impactSemanticContext += `- Deps: ${ctx.dependencies.join(', ')}
+`;
                 }
                 if (ctx.dependents && Array.isArray(ctx.dependents)) {
-                    impactSemanticContext += `- Impacted: ${ctx.dependents.join(', ')}\n`;
+                    impactSemanticContext += `- Impacted: ${ctx.dependents.join(', ')}
+`;
                 }
             }
         }
