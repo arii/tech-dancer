@@ -112,7 +112,11 @@ function ArielProfile() {
               </Box>
 
               {/* Remaining Sections (Dance, Why, etc.) */}
-              {otherSections.map(renderSection)}
+              {otherSections.map(s => {
+                // Ensure the 'connect' section links are rendered as intended instead of duplicated
+                if (s.id === 'connect') return null;
+                return renderSection(s);
+              })}
 
               <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
                 <Stack gap={4}>

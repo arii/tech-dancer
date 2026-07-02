@@ -21,7 +21,8 @@ describe("getJulesPullRequestHandler", () => {
     vi.mocked(shell.runCommand).mockResolvedValue({
       stdout: JSON.stringify({
         status: "success",
-        session: { name: "sessions/123",
+        session: {
+          name: "sessions/123",
           outputs: [{ pullRequest: { url: "https://github.com/pr/1" } }]
         }
       }),

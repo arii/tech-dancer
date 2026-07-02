@@ -90,7 +90,7 @@ describe("createJulesSessionHandler", () => {
 
   it("should throw error if PR view fails", async () => {
     vi.mocked(shell.runCommand).mockResolvedValue({
-      stdout: "",
+      stdout: JSON.stringify({ status: "error", message: "PR not found" }),
       stderr: "PR not found",
       exitCode: 1,
       durationMs: 10,
