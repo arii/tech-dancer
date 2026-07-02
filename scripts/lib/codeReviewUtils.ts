@@ -95,14 +95,17 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
  */
 function validateFindingsSchema(state: CodeReviewState): boolean {
   if (!state.findings || !Array.isArray(state.findings)) return false;
-  return state.findings.every(f =>
-    f &&
-    typeof f === 'object' &&
-    typeof f.id === 'string' && f.id.trim() !== '' &&
-    typeof f.file === 'string' && f.file.trim() !== '' &&
-    typeof f.issue === 'string' && f.issue.trim() !== '' &&
-    (f.status === 'open' || f.status === 'resolved')
-  );
+  return state.findings.every(f => {
+    if (f && typeof f === 'object' && typeof f.status === 'string') {
+      f.status = f.status.toLowerCase() as 'open' | 'resolved';
+    }
+    return f &&
+      typeof f === 'object' &&
+      typeof f.id === 'string' && f.id.trim() !== '' &&
+      typeof f.file === 'string' && f.file.trim() !== '' &&
+      typeof f.issue === 'string' && f.issue.trim() !== '' &&
+      (f.status === 'open' || f.status === 'resolved');
+  });
 }
 
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
@@ -118,7 +121,14 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   }
 
   let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
-  jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
+
+  const startIdx = jsonText.indexOf('{');
+  const endIdx = jsonText.lastIndexOf('}');
+  if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
+    jsonText = jsonText.slice(startIdx, endIdx + 1);
+  } else {
+    jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
+  }
 
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
