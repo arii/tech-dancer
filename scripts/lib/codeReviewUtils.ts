@@ -95,17 +95,14 @@ export function parseCodeReviewState(feedback: string): CodeReviewState | undefi
  */
 function validateFindingsSchema(state: CodeReviewState): boolean {
   if (!state.findings || !Array.isArray(state.findings)) return false;
-  return state.findings.every(f => {
-    if (f && typeof f === 'object' && typeof f.status === 'string') {
-      f.status = f.status.toLowerCase() as 'open' | 'resolved';
-    }
-    return f &&
-      typeof f === 'object' &&
-      typeof f.id === 'string' && f.id.trim() !== '' &&
-      typeof f.file === 'string' && f.file.trim() !== '' &&
-      typeof f.issue === 'string' && f.issue.trim() !== '' &&
-      (f.status === 'open' || f.status === 'resolved');
-  });
+  return state.findings.every(f =>
+    f &&
+    typeof f === 'object' &&
+    typeof f.id === 'string' && f.id.trim() !== '' &&
+    typeof f.file === 'string' && f.file.trim() !== '' &&
+    typeof f.issue === 'string' && f.issue.trim() !== '' &&
+    (f.status === 'open' || f.status === 'resolved')
+  );
 }
 
 export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsResult {
@@ -132,6 +129,17 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
 
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
+
+    // Normalize properties before validation to avoid side-effects in validator
+    if (state && state.findings && Array.isArray(state.findings)) {
+      state.findings = state.findings.map(f => {
+        if (f && typeof f === 'object' && typeof f.status === 'string') {
+          return { ...f, status: f.status.toLowerCase() as 'open' | 'resolved' };
+        }
+        return f;
+      });
+    }
+
     if (!validateFindingsSchema(state)) {
       return { state, parseError: 'incomplete_findings' };
     }

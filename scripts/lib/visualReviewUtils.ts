@@ -32,10 +32,11 @@ export function parseVisualReviewFindings(feedback: string): VisualReviewFinding
   try {
     const data = JSON.parse(jsonText) as VisualReviewState;
     if (data.findings && Array.isArray(data.findings)) {
-      data.findings.forEach(f => {
+      data.findings = data.findings.map(f => {
         if (f && typeof f === 'object' && typeof f.status === 'string') {
-          f.status = f.status.toLowerCase() as 'open' | 'resolved';
+          return { ...f, status: f.status.toLowerCase() as 'open' | 'resolved' };
         }
+        return f;
       });
     }
     return data.findings || [];
