@@ -432,7 +432,7 @@ class Orchestrator:
             base = PROJECT_CONFIG.base_branch
             base_files = run_command(["git", "ls-tree", "-r", base, "--name-only"]).splitlines()
             # Ensure AUDIT_CHECK_DIRS are handled as a list of prefixes
-            relevant = [mf for mf in base_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in AUDIT_CHECK_DIRS)]
+            relevant = [mf for mf in base_files if (mf.endswith('.tsx') or mf.endswith('.ts')) and any(mf == d or mf.startswith(d + '/') for d in PROJECT_CONFIG.audit_check_dirs)]
             for mf in relevant:
                 res_show = run_command(["git", "show", f"{base}:{mf}"], check=False, log_on_error=False)
                 if res_show.returncode == 0:
