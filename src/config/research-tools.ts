@@ -91,7 +91,7 @@ export const RESEARCH_TOOLS: ResearchTool[] = [
         { text: 'Pack smart.' },
         { text: 'Dance more.', accent: 'Dance more.' }
       ],
-      tagline: 'Gear, travel, and tips for better dance weekends.'
+      tagline: "The west coast swing dancer's guide to gear, travel, and better dance weekends."
     }
   },
   {
