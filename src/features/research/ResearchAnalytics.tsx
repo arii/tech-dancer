@@ -111,7 +111,7 @@ function FlagshipCard({
       <Stack gap={0} height="full">
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
-          <Stack direction="row" justify="between" align="start" width="full" marginBottom={3}>
+          <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
             <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" borderColor="white/8" border>
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
@@ -262,8 +262,8 @@ function ToolCard({ tool }: {
       paddingTop={3.5} paddingX={4} paddingBottom={4}
       className={cn(cardVariants({ interactive: true }), "!no-underline")}
     >
-      <Stack gap={3} width="full" flex={1}>
-        <Stack direction="row" justify="between" align="start" width="full">
+      <Stack gap={0} width="full" flex={1}>
+        <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
           <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" borderColor="white/8" border>
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
@@ -477,7 +477,7 @@ export default function ResearchAnalytics() {
                   cursor={study.status === 'published' ? 'pointer' : 'default'}
                   gap={0}
                 >
-                  <Stack direction="row" justify="between" align="center" marginBottom={3} width="full">
+                  <Stack direction="row" justify="between" align="center" marginBottom={3} width="full" gap={0}>
                     <Text variant="mono" size="micro" color="accent" weight="font-bold" uppercase tracking="widest">{study.category}</Text>
                     {study.status && <StatusBadge label={study.status} />}
                   </Stack>
