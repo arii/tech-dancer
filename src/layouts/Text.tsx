@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
-import { composeStyles } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { Box, BaseProps } from "./Box"
@@ -44,7 +44,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
       <Box
         as={Component}
         ref={ref as Ref<HTMLDivElement>}
-        className={composeStyles(
+        className={cn(
           variant && typography[variant],
           intent && variants.intent[intent],
           !intent && color === "main" && "text-text-main",

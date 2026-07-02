@@ -1,6 +1,6 @@
 import * as React from "react"
 import { forwardRef } from "react"
-import { composeStyles } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { Box, BoxProps } from "./Box"
 import { applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 
@@ -39,7 +39,7 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
       <Box
         ref={ref}
         display={display}
-        className={composeStyles(
+        className={cn(
           applyResponsive(direction, directionMapper),
           applyResponsive(align, alignMapper),
           applyResponsive(justify, justifyMapper),
