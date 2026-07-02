@@ -105,7 +105,7 @@ function FlagshipCard({
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
-            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
+            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
             <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
@@ -213,8 +213,8 @@ function ToolCard({ tool, navigate }: {
   navigate: (path: string) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLink = !!tool.sourceUrl;
-  const href = tool.sourceUrl || tool.canonicalPath || `/research/${tool.id}`;
+  const href = tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
+  const isLink = href.startsWith('http');
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isLink) {
@@ -242,7 +242,7 @@ function ToolCard({ tool, navigate }: {
     >
       <Stack gap={0} width="full">
         <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>
-          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" className="border border-white/8">
+          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <StatusBadge label={tool.status} />

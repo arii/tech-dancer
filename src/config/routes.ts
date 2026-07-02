@@ -27,30 +27,12 @@ export const routes: RouteConfig[] = [
     lazy: () => import('@/pages/BlogPost').then(m => ({ Component: m.default })),
     skeleton: 'post'
   },
-  {
-    path: '/gear',
+  ...['/gear', '/gear/:slug', '/events', '/events/:slug'].map(path => ({
+    path,
     lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
+    skeleton: 'simple' as const,
     sitemap: false
-  },
-  {
-    path: '/gear/:slug',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
-  },
-  {
-    path: '/events',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
-  },
-  {
-    path: '/events/:slug',
-    lazy: () => import('@/pages/RemovedPage').then(m => ({ Component: m.default })),
-    skeleton: 'simple',
-    sitemap: false
-  },
+  })),
   {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),

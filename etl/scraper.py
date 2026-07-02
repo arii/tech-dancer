@@ -380,19 +380,17 @@ class ETLPipeline:
             # Prepend new events to the existing queue
             new_queue = []
             seen_urls = set()
-            for item in discovered:
-                url = item[0] if isinstance(item, (tuple, list)) else (item["url"] if isinstance(item, dict) else item)
-                if url not in seen_urls:
-                    loc = item[1] if isinstance(item, (tuple, list)) else (item["loc"] if isinstance(item, dict) else "Unknown")
-                    new_queue.append([url, loc])
-                    seen_urls.add(url)
-            
-            for item in self.event_queue:
-                url = item[0] if isinstance(item, (tuple, list)) else (item["url"] if isinstance(item, dict) else item)
-                if url not in seen_urls:
-                    loc = item[1] if isinstance(item, (tuple, list)) else (item["loc"] if isinstance(item, dict) else "Unknown")
-                    new_queue.append([url, loc])
-                    seen_urls.add(url)
+
+            def extend_queue(items):
+                for item in items:
+                    url = item[0] if isinstance(item, (tuple, list)) else (item["url"] if isinstance(item, dict) else item)
+                    if url not in seen_urls:
+                        loc = item[1] if isinstance(item, (tuple, list)) else (item["loc"] if isinstance(item, dict) else "Unknown")
+                        new_queue.append([url, loc])
+                        seen_urls.add(url)
+
+            extend_queue(discovered)
+            extend_queue(self.event_queue)
             
             self.event_queue = new_queue
             self._save_queue()
