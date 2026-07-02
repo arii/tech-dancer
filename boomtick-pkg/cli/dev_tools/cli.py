@@ -997,6 +997,18 @@ def plan_aggregation(ctx):
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
+@agent_group.command()
+@click.pass_context
+def daemon(ctx):
+    """Run the Automated Agent Feedback Daemon."""
+    from dev_tools.daemon import JulesFeedbackDaemon
+    try:
+        daemon_instance = JulesFeedbackDaemon()
+        daemon_instance.run()
+        out(ctx, "Daemon execution completed.", data={"status": "success"})
+    except Exception as e:
+        _handle_unexpected_error(ctx, "agent daemon", e)
+
 # Register aliases for backwards compatibility
 @cli.group(name='jules')
 def jules_group():
