@@ -15,7 +15,7 @@ test.describe('Global Search Modal - Mobile', () => {
     await expect(page.getByRole('dialog', { name: 'Navigation menu' })).toBeVisible();
 
     // Use text selector to find "Search" button
-    const searchButton = page.getByRole('button', { name: 'Search' });
+    const searchButton = page.getByRole('button', { name: 'Search', exact: true });
     await searchButton.click();
 
     // Modal should be visible
