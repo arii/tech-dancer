@@ -10,14 +10,14 @@ interface FilterButtonProps {
 }
 
 const variantStyles = {
-  default: "font-semibold uppercase tracking-emphasized px-4 py-3 text-xs min-h-11",
-  compact: "font-semibold uppercase tracking-emphasized px-3 py-1.5 text-xs min-h-11",
-  quiet: "px-3.5 py-2 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-line",
+  default: "font-semibold uppercase tracking-emphasized px-4 py-1.5 text-xs min-h-11",
+  compact: "font-semibold uppercase tracking-emphasized px-4 py-1.5 text-xs min-h-11",
+  quiet: "px-4 py-1.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-line",
 };
 
 const activeStyles = {
-  default: "border-accent text-accent bg-accent/5 ring-2 ring-accent",
-  compact: "border-accent text-accent bg-accent/5 ring-2 ring-accent",
+  default: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background",
+  compact: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background",
   quiet: "bg-surface border-line text-text-main",
 };
 
