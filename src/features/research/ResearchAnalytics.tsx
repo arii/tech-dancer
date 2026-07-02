@@ -105,7 +105,7 @@ function FlagshipCard({
         <ToolImage tool={tool} baseUrl={baseUrl} onImageClick={onImageClick} />
         <Stack flex={1} paddingTop={3.5} paddingX={4} paddingBottom={4} gap={0}>
           <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
-            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center" border borderColor="white/8">
+            <Box width={12} height={12} surface="muted" radius="md" display="flex" align="center" justify="center">
               <Icon icon={getToolIcon(tool)} size="lg" color="accent" />
             </Box>
             <StatusBadge label={tool.id === 'boomtick-blog' ? 'Active dev' : 'Flagship'} />
@@ -248,7 +248,7 @@ function ToolCard({ tool }: {
     >
       <Stack gap={0} width="full" flex={1}>
         <Stack direction="row" justify="between" align="start" width="full" marginBottom={3} gap={0}>
-          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center" border borderColor="white/8">
+          <Box width={10} height={10} surface="muted" radius="md" display="flex" align="center" justify="center">
             <Icon icon={getToolIcon(tool)} size="md" color="dim" />
           </Box>
           <StatusBadge label={tool.status} />
