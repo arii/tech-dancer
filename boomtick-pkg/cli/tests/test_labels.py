@@ -59,7 +59,7 @@ class TestLabels(unittest.TestCase):
     def test_orchestrator_update_issue_full_labels(self):
         self.orch.github.update_issue.return_value = {"number": 123, "title": "T", "html_url": "U", "state": "S"}
         self.orch.update_issue(123, labels=["l1", "l2"])
-        self.orch.github.update_issue.assert_called_once_with(123, body=None, labels=["l1", "l2"])
+        self.orch.github.update_issue.assert_called_once_with(123, labels=["l1", "l2"])
 
     def test_orchestrator_update_issue_simultaneous_add_remove(self):
         self.orch.github.fetch_issue_details.return_value = {"number": 123, "title": "T", "html_url": "U", "state": "S"}
