@@ -89,6 +89,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/.github/actions/lint-typecheck
         with:
           target: ${{ matrix.target }}
@@ -103,6 +105,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/.github/actions/audit
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -131,6 +135,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+        with:
+          fetch-depth: 0
       - uses: ./boomtick-pkg/.github/actions/test-build
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
