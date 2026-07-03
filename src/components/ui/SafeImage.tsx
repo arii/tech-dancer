@@ -9,14 +9,17 @@ import { normalizeAsset } from '@/lib/content';
  */
 const isSafeUrl = (url: string): boolean => {
   if (!url) return false;
-  // Allow relative paths, including those without ./ prefix (e.g., "image.jpg")
-  if (!url.includes('://') && !url.startsWith('data:')) return true;
+  if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) return true;
   try {
     const parsed = new URL(url);
     return ['http:', 'https:'].includes(parsed.protocol);
   } catch {
-    // If URL parsing fails but it has no protocol, assume it's a complex relative path
-    return !url.includes('://');
+    // If URL parsing fails (likely because it's a relative path like "image.jpg"),
+    // we check if it contains a protocol-like structure.
+    const colonIndex = url.indexOf(':');
+    const slashIndex = url.indexOf('/');
+    // Safe if no colon (relative path) or colon appears after a slash (part of the path)
+    return colonIndex === -1 || (slashIndex !== -1 && colonIndex > slashIndex);
   }
 };
 
