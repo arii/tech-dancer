@@ -78,7 +78,7 @@ function ArielProfile() {
   const otherSections = bio.sections.filter(s => s.id !== 'professional');
 
   return (
-    <Box as="section" height="full">
+    <Box as="section" height="full" paddingBottom={{ base: 24, lg: 32 }}>
       <SEO
         title="About"
         description="Ariel Anders, PhD: MIT Roboticist, DevAI Engineer, and West Coast Swing dancer. Expert in robotics software and agentic CI/CD pipelines."
