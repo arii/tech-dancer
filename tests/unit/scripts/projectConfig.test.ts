@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -50,11 +50,14 @@ describe('loadProjectConfig', () => {
   });
 
   it('handles malformed JSON by returning defaults', () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const configPath = path.join(tempDir, 'malformed.json');
     fs.writeFileSync(configPath, 'invalid json {');
 
     const config = loadProjectConfig(configPath);
     expect(config).toEqual(DEFAULT_CONFIG);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('⚠️  Failed to load project_config.json, using defaults.'), expect.any(Error));
+    consoleWarnSpy.mockRestore();
   });
 
   it('validates types and falls back to defaults for invalid types', () => {
