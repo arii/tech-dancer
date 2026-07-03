@@ -208,6 +208,7 @@ class AIClient:
 
         pr_num = pr.get('number', 'unknown')
         pr_title = pr.get('title', '')
+        pr_description = pr.get('body', '')
         checks = pr.get('checkResults', [])
         checks_summary = "\n".join(
             f"- {c.get('name')}: {c.get('status')} ({c.get('conclusion','Pending')})"
@@ -264,9 +265,13 @@ class AIClient:
         prompt = (
             f'You are a strict code reviewer. Review the diff below.\n'
             f'PR title: {pr_title}\n'
+            f'PR description: {pr_description}\n'
             f'CI status: {checks_summary}\n\n'
             f'Rules:\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
+            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200]}..."\n'
+            f'- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn\'t before).\n'
+            f'- Do not introduce review topics unrelated to the PR\'s stated goal unless you find a genuine, evidence-backed regression caused by this diff.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Provide an overall `reviewComment` summarizing the review.\n'
