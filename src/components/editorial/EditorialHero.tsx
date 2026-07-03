@@ -5,7 +5,7 @@ import { journalVariants } from '@/lib/variants';
 interface EditorialHeroProps {
   src: string;
   alt: string;
-  aspectRatio?: "video" | "square" | string | { base?: string, md?: string, lg?: string };
+  aspectRatio?: "video" | "square" | { base?: string, md?: string, lg?: string };
   objectFit?: 'cover' | 'contain';
 }
 
@@ -29,7 +29,8 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
         radius="none"
         maxWidth="full"
         maxHeight={{ base: "viewport-half", lg: 96 }}
-        className="w-full h-full"
+        width="full"
+        height="full"
       />
     </Box>
   );

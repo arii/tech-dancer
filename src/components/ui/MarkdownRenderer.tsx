@@ -169,7 +169,17 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
 
     if (diagramUrl) {
       return (
-        <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
+        <Box
+          marginY={12}
+          width="full"
+          display="flex"
+          justify="center"
+          surface="surface"
+          radius="lg"
+          padding={8}
+          border
+          borderColor="line/30"
+        >
           <SafeImage
             src={diagramUrl}
             alt="Workflow Diagram"
@@ -177,7 +187,6 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             maxWidth="full"
             maxHeight={{ base: "viewport-half", lg: 96 }}
             objectFit="contain"
-            className="object-contain"
             loading="lazy"
           />
         </Box>
@@ -352,14 +361,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             const isMermaid = src?.includes('mermaid.ink');
 
             return (
-              <Box marginY={12} width="full" display="flex" justify="center" className="markdown-image-wrapper">
+              <Box marginY={12} width="full" display="flex" justify="center">
                 <SafeImage
                   src={src || ''}
                   radius="lg"
                   shadow="sm"
                   border
                   loading="lazy"
-                  alt={alt || "Article illustration"}
+                  alt={alt || ""}
                   maxWidth={{ base: 'full', md: '2xl' }}
                   maxHeight={{ base: "viewport-half", lg: 96 }}
                   objectFit="contain"
