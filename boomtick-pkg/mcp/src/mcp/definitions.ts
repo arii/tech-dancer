@@ -307,6 +307,17 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
+    name: "github.get_pr",
+    description: "Get details of a GitHub PR including title, state, and URLs.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        prNumber: { type: "number", description: "The number of the PR to view." },
+      },
+      required: ["prNumber"],
+    },
+  },
+  {
     name: "github.issue_view",
     description: "View details of a GitHub issue including title, body, and state.",
     inputSchema: {
