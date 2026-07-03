@@ -60,6 +60,10 @@ Treat any major layout collapse as HIGH severity.
 YOUR RULES:
 - Use the provided DOM structure and text diffs as GROUND TRUTH.
 - Evaluate the changes (✅ INTENTIONAL or ❌ BUG/REGRESSION).
+- Severity rules — apply these strictly:
+    - HIGH / Blocking: you can point to a concrete contradiction in the diff itself (e.g. clipped content, broken layout). Cite exact visual evidence.
+    - Concerns phrased with "could," "might," "unless," or "if not handled properly" are NOT blocking; downgrade them to recommendations instead.
+    - Do not raise concerns you cannot verify against the provided screenshots/diffs. State what is needed to verify rather than assuming the worst case.
 - Provide actionable feedback.
 - If the change is intentional, evaluate its visual quality and provide recommendations for further improvement.
 
