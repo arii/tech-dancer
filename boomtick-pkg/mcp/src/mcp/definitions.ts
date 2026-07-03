@@ -437,11 +437,11 @@ export const MCP_TOOLS: Tool[] = [
   },
   {
     name: "jules.get_pr",
-    description: "Get the generated pull request for a Jules session.",
+    description: "Get the generated pull request url associated with an active Jules agent session.",
     inputSchema: {
       type: "object",
       properties: {
-        id: { type: "string", description: "The unique ID of the Jules session." },
+        id: { type: "string", description: "The unique ID of the Jules agent session (not a PR number)." },
       },
       required: ["id"],
     },
