@@ -207,8 +207,8 @@ class AIClient:
         """
 
         pr_num = pr.get('number', 'unknown')
-        pr_title = pr.get('title', '')
-        pr_description = pr.get('body', '')
+        pr_title = pr.get('title') or ''
+        pr_description = pr.get('body') or ''
         checks = pr.get('checkResults', [])
         checks_summary = "\n".join(
             f"- {c.get('name')}: {c.get('status')} ({c.get('conclusion','Pending')})"
