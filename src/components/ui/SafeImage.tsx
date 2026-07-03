@@ -9,13 +9,14 @@ import { normalizeAsset } from '@/lib/content';
  */
 const isSafeUrl = (url: string): boolean => {
   if (!url) return false;
-  if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) return true;
+  // Allow relative paths, including those without ./ prefix (e.g., "image.jpg")
+  if (!url.includes('://') && !url.startsWith('data:')) return true;
   try {
     const parsed = new URL(url);
     return ['http:', 'https:'].includes(parsed.protocol);
   } catch {
-    // If not a valid URL and not explicitly relative, treat as unsafe
-    return false;
+    // If URL parsing fails but it has no protocol, assume it's a complex relative path
+    return !url.includes('://');
   }
 };
 
@@ -44,11 +45,15 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
 
     const isExternal = finalSrc?.startsWith('http');
 
-    // Filter boxProps to separate valid HTML attributes from layout primitive props
-    const filteredProps: Record<string, unknown> = {};
+    // Separate layout props from standard HTML image attributes
+    const imgAttributes: Record<string, unknown> = {};
+    const layoutProps: Record<string, unknown> = {};
+
     Object.entries(boxProps).forEach(([key, value]) => {
       if (SAFE_IMAGE_ATTRS.has(key)) {
-        filteredProps[key] = value;
+        imgAttributes[key] = value;
+      } else {
+        layoutProps[key] = value;
       }
     });
 
@@ -62,8 +67,8 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
           crossOrigin: "anonymous",
           referrerPolicy: "no-referrer"
         } : {})}
-        {...filteredProps}
-        {...boxProps} // Box will handle its own layout props and filter them
+        {...imgAttributes}
+        {...layoutProps} // Primitives filter out non-primitive props from the DOM
       />
     );
   }

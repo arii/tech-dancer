@@ -21,7 +21,6 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       border
       className={journalVariants.card({ variant: 'hero' })}
       aspect={aspectRatio}
-      maxHeight={{ base: "viewport-half", lg: 96 }}
     >
       <SafeImage
         src={src}
