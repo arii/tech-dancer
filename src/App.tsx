@@ -4,7 +4,7 @@
  */
 
 import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
+
 import { AnimatePresence, motion } from 'motion/react';
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -96,7 +96,6 @@ export function RootLayout() {
       {import.meta.env.VITE_IS_VERCEL === 'true' && (
         <>
           <Analytics />
-          <SpeedInsights />
         </>
       )}
     </Box>
