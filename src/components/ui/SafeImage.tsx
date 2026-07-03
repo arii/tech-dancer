@@ -79,7 +79,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
 
     const finalStyle = {
       objectFit: objectFit || 'contain',
-      ...(imgAttributes.style as any || {})
+      ...(imgAttributes.style as React.CSSProperties)
     };
 
     return (
@@ -90,7 +90,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         alt={alt}
         {...(isExternal ? {
           // Allow disabling crossOrigin by passing null explicitly
-          ...(boxProps.crossOrigin === null ? {} : { crossOrigin: (boxProps.crossOrigin as any) || "anonymous" }),
+          ...(boxProps.crossOrigin !== null && { crossOrigin: (boxProps.crossOrigin as any) || "anonymous" }),
           referrerPolicy: "no-referrer"
         } : {})}
         {...layoutProps}
