@@ -76,31 +76,15 @@ export function HeroSection() {
           <Text
             as="span"
             variant="hero"
-            color="white"
-            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            size={{ base: "5xl", md: "6xl", lg: "7xl" }}
           >
-            Built for dancers.
-          </Text>
-          <Text
-            as="span"
-            variant="hero"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          >
-            <span className="hero-accent-color">Look good.</span>
+            <span className="hero-accent-color">Pack smart.</span>
           </Text>
           <Text
             as="span"
             variant="hero"
             color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          >
-            Travel smart.
-          </Text>
-          <Text
-            as="span"
-            variant="hero"
-            color="white"
-            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "5xl", md: "6xl", lg: "7xl" }}
           >
             Dance more.
           </Text>
@@ -110,7 +94,7 @@ export function HeroSection() {
         <Box
           width={24}
           height={1.5}
-          marginTop={2}
+          marginTop={4}
           radius="full"
           opacity={0}
           pointerEvents="none"
@@ -122,7 +106,7 @@ export function HeroSection() {
           direction="row"
           align="stretch"
           gap={5}
-          marginTop={{ base: 2, lg: 4 }}
+          marginTop={{ base: 4, lg: 6 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"
@@ -137,10 +121,10 @@ export function HeroSection() {
             variant="body"
             weight="font-normal"
             align="left"
-            size={{ base: "base", md: "lg", lg: "xl" }}
+            size={{ base: "lg", md: "xl", lg: "2xl" }}
             className="hero-tagline-text"
           >
-            Gear guides, travel hacks, DIY tips, and merch for West Coast Swing dancers
+            Research-driven gear guides and travel hacks for the modern West Coast Swing dancer.
           </Text>
         </Stack>
 
