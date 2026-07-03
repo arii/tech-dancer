@@ -347,6 +347,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
           img: ({node: _node, src, alt, ...props}) => {
+            // Mermaid diagrams are external SVG images that often don't support CORS.
+            // Disable crossOrigin for them specifically.
+            const isMermaid = src?.includes('mermaid.ink');
+
             return (
               <Box marginY={12} width="full" display="flex" justify="center" className="markdown-image-wrapper">
                 <SafeImage
@@ -359,6 +363,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   maxWidth={{ base: 'full', md: '2xl' }}
                   maxHeight={{ base: "viewport-half", lg: 96 }}
                   objectFit="contain"
+                  crossOrigin={isMermaid ? null : undefined}
                   {...props}
                 />
               </Box>

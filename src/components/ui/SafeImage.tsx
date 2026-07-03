@@ -5,7 +5,7 @@ import { normalizeAsset } from '@/lib/content';
 
 /**
  * Validates if a URL is safe based on a protocol whitelist.
- * Allows only http:, https:, or relative paths (starting with /).
+ * Allows only http:, https:, or relative paths.
  */
 const isSafeUrl = (url: string): boolean => {
   if (!url) return false;
@@ -22,15 +22,34 @@ const isSafeUrl = (url: string): boolean => {
 
 /**
  * Whitelist of standard HTML <img> attributes to prevent event handler injection.
+ * Includes style and className to allow Primitives to work correctly.
  */
 const SAFE_IMAGE_ATTRS = new Set([
-  'src', 'alt', 'title', 'loading', 'srcSet', 'sizes', 'useMap', 'width', 'height', 'crossOrigin', 'referrerPolicy'
+  'src', 'alt', 'title', 'loading', 'srcSet', 'sizes', 'useMap', 'width', 'height', 'crossOrigin', 'referrerPolicy', 'style', 'className'
+]);
+
+/**
+ * Whitelist of layout Primitive props.
+ */
+const PRIMITIVE_PROPS = new Set([
+  'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
+  'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'marginX', 'marginY',
+  'gap', 'gapX', 'gapY', 'border', 'borderColor', 'smBorder', 'mdBorder', 'lgBorder', 'xlBorder',
+  'surface', 'emphasis', 'radius', 'panel', 'flex', 'wrap', 'layout', 'shadow', 'position', 'inset',
+  'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight', 'overflow', 'overflowX', 'overflowY', 'overscroll', 'isolation',
+  'noScrollbar', 'pointerEvents', 'zIndex', 'opacity', 'opacityVariant', 'display', 'aspect',
+  'shrink', 'self', 'justify', 'align', 'scrollBehavior', 'scrollPaddingTop', 'scrollMarginTop',
+  'top', 'right', 'bottom', 'left', 'span', 'cursor', 'flexWrap', 'textAlign', 'bgGradient',
+  'initial', 'animate', 'exit', 'transition', 'variants', 'whileHover', 'whileTap', 'whileFocus',
+  'whileDrag', 'whileInView', 'viewport', 'layoutId', 'onAnimationStart', 'onAnimationComplete',
+  'onUpdate', 'custom'
 ]);
 
 export interface SafeImageProps extends Omit<BoxProps, 'as'> {
   src?: string;
   alt: string;
   fallbackSrc?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 /**
@@ -38,24 +57,30 @@ export interface SafeImageProps extends Omit<BoxProps, 'as'> {
  * prop filtering, and external asset policies by default.
  */
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
-  ({ src, alt, fallbackSrc, ...boxProps }, ref) => {
+  ({ src, alt, fallbackSrc, objectFit, ...boxProps }, ref) => {
     const normalizedSrc = normalizeAsset(src || '');
     const isSafe = normalizedSrc ? isSafeUrl(normalizedSrc) : false;
     const finalSrc = isSafe ? normalizedSrc : fallbackSrc;
 
     const isExternal = finalSrc?.startsWith('http');
 
-    // Separate layout props from standard HTML image attributes
+    // Separate whitelisted attributes from layout props
     const imgAttributes: Record<string, unknown> = {};
     const layoutProps: Record<string, unknown> = {};
 
     Object.entries(boxProps).forEach(([key, value]) => {
       if (SAFE_IMAGE_ATTRS.has(key)) {
         imgAttributes[key] = value;
-      } else {
+      } else if (PRIMITIVE_PROPS.has(key)) {
         layoutProps[key] = value;
       }
+      // Any other props (like 'onerror') are dropped
     });
+
+    const finalStyle = {
+      objectFit: objectFit || 'contain',
+      ...(imgAttributes.style as any || {})
+    };
 
     return (
       <Box
@@ -64,11 +89,13 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         src={finalSrc}
         alt={alt}
         {...(isExternal ? {
-          crossOrigin: "anonymous",
+          // Allow disabling crossOrigin by passing null explicitly
+          ...(boxProps.crossOrigin === null ? {} : { crossOrigin: (boxProps.crossOrigin as any) || "anonymous" }),
           referrerPolicy: "no-referrer"
         } : {})}
+        {...layoutProps}
         {...imgAttributes}
-        {...layoutProps} // Primitives filter out non-primitive props from the DOM
+        style={finalStyle}
       />
     );
   }
