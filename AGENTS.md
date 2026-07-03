@@ -91,6 +91,16 @@ Wrap page-level and async-heavy components in an error boundary.
 - Images require meaningful `alt` text (or `alt=""` for decorative).
 - Use semantic HTML (`<button>`, `<nav>`, `<main>`) over `<div onClick>`.
 
+### Editorial Image Constraints
+Standardize image constraints for all editorial content (Markdown, Mermaid diagrams, Hero sections):
+- **Mobile**: `maxHeight="viewport-half"` (50vh).
+- **Desktop**: `maxHeight={96}` (384px).
+- **Object Fit**: `object-contain` to prevent distortion.
+- **Safety**: Always use the `SafeImage` component for Markdown-rendered images to enforce protocol whitelisting and prop filtering.
+
+### Design Token Compliance
+Avoid arbitrary JIT values (e.g., `[50vh]`, `[384px]`). Always prefer semantic tokens from `SPACING_MAP` (e.g., `viewport-half`, `96`) to ensure theme consistency and maintainability.
+
 ## 16) Test Coverage
 
 New components require at least a smoke test. New utility functions require

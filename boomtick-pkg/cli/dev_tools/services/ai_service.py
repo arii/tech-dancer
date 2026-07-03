@@ -267,6 +267,8 @@ class AIClient:
             f'CI status: {checks_summary}\n\n'
             f'Rules:\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
+            f'- ENFORCE editorial image constraints for new components or markdown: Mobile: maxHeight="viewport-half" (50vh), Desktop: maxHeight={{96}} (384px), Object Fit: object-contain.\n'
+            f'- SUGGEST semantic tokens from the design system (e.g., "viewport-half") instead of arbitrary JIT values (e.g., "[50vh]").\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Provide an overall `reviewComment` summarizing the review.\n'

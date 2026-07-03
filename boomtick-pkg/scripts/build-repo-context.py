@@ -242,6 +242,25 @@ def build_repo_context():
 
     file_tree = get_dir_structure(repo_root)
 
+    # 6. Design Token System (Semantic Mappings)
+    design_tokens = {}
+    try:
+        layout_maps_path = repo_root / "src" / "layouts" / "layout-maps.ts"
+        if layout_maps_path.exists():
+            # Basic extraction of exported constants using regex to avoid heavy TS parsing
+            import re
+            content = layout_maps_path.read_text()
+            # Extract maps like: export const SPACING_MAP: Record<...> = { ... };
+            maps = re.findall(r"export const (\w+):.*?= \{(.*?)\};", content, re.DOTALL)
+            for map_name, map_content in maps:
+                # Clean up the map content and convert to a dict
+                entries = {}
+                for entry in re.findall(r"(['\w\d\.]+):\s*['\"](.*?)['\"]", map_content):
+                    entries[entry[0].strip("'\"")] = entry[1]
+                design_tokens[map_name] = entries
+    except Exception as e:
+        print(f"Error extracting design tokens: {e}", file=sys.stderr)
+
     # Assemble context
     return {
         "repo": {
@@ -252,6 +271,7 @@ def build_repo_context():
         "mcp_schema": mcp_schema,
         "cli_schema": cli_schema,
         "file_tree": file_tree,
+        "design_tokens": design_tokens,
     }
 
 if __name__ == "__main__":
