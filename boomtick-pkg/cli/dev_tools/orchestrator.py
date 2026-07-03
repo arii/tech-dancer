@@ -679,12 +679,9 @@ class Orchestrator:
         return {"node": actual_node, "pnpm": actual_pnpm}
 
 
-    def verify_ci_metrics(self, **kwargs):
-        return verify_ci_metrics(**kwargs)
-
     def generate_ci_summary_report(self):
         """Generates a markdown summary of CI metrics."""
-        metrics_res = self.verify_ci_metrics()
+        metrics_res = verify_ci_metrics()
 
         report = ["## 📊 CI Metrics Verification"]
 

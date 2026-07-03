@@ -1,0 +1,367 @@
+# AI Slop Audit Report
+
+## Target File Verification Checklist
+
+
+- [ ] `boomtick-pkg/` files
+- [x] `[x]` ./boomtick-pkg/.agents/audit.config.yaml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.agents/scripts/audit-ai-slop.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.env.example — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/ai-review/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/audit/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/ci-validate/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/impact-analysis/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/lint-typecheck/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/run-project-gate/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/setup-workspace/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/setup/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/test-build/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/.github/actions/update-pr-comment/action.yml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/aggregate-prs.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/ai-debugger.mjs — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/analyze_overlaps.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/analyze_workflows.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/clients/__init__.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/__init__.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/cli.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/config.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/daemon.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/get_ai_context.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/handlers/__init__.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/handlers/command_handler.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/models.py — Verified Clean
+- [ ] `[ ]` ./boomtick-pkg/cli/dev_tools/orchestrator.py
+- [ ] `[ ]` ./boomtick-pkg/cli/dev_tools/review_read_pass.py
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/schema_gen.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/scope_check.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/__init__.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/ai_service.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/dependency_graph.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/github.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/jules.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/repair_service.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/vector_store.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/services/vision_service.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/td_cli.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/utils.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/ux_report.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/verify_versions.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/dev_tools/version_utils.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/instructions.txt — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/pyproject.toml — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/setup-agent.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/setup-python.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/snapshot.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/ux-audit.config.json — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/verify-ai-resolve.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/verify-workflows.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/verify.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/cli/visual_guidelines.json — Verified Clean
+- [x] `[x]` ./boomtick-pkg/install.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/.env.example — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/.gitignore — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/package.json — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/scripts/create_instructions.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/scripts/export-mcp-schema.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/scripts/sync-contracts.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/config.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/evals/run-evals.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/index.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/lib/error_utils.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/lib/git.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/lib/result.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/lib/shell.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/lib/td-cli.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/lib/test-utils.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/mcp/definitions.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/mcp/server.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/mcp/tools.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/ddgs.search.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/ddgs_search.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.checkout_branch.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.comment_triage_summary.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.create_issue.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.create_pull_request.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.get_merge_conflict_files.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.get_pr_diff.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.issue_comment.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.issue_update.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.issue_view.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.open_replacement_pr.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/github.search_open_prs.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/cancel-session.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/create-session.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/get-messages.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/get-pr.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/get-session.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/list-sessions.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/send-message.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/shared.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/jules/trigger-feedback.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.commit_patch.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.create_branch.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.create_repair_branch.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.get_changed_files.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.get_package_scripts.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.get_route_map.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.logs.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.read_ci_logs.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.run_lighthouse.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.run_playwright.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/repo.run_tests.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/src/tools/types.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/start_browsermcp.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/start_github_mcp.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/tsconfig.json — Verified Clean
+- [x] `[x]` ./boomtick-pkg/mcp/vitest.config.ts — Verified Clean
+- [x] `[x]` ./boomtick-pkg/scripts/build-repo-context.py — Verified Clean
+- [x] `[x]` ./boomtick-pkg/scripts/finalize-extraction.sh — Verified Clean
+- [x] `[x]` ./boomtick-pkg/workspace-schema.json — Verified Clean
+- [x] `[x]` ./boomtick-pkg/workspace.json — Verified Clean
+
+- [ ] `etl/` files
+- [x] `[x]` ./etl/__init__.py — Verified Clean
+- [x] `[x]` ./etl/data/event_queue.json — Verified Clean
+- [x] `[x]` ./etl/data/wcs_prelims.parquet — Verified Clean
+- [x] `[x]` ./etl/processor.py — Verified Clean
+- [x] `[x]` ./etl/query_ledger.py — Verified Clean
+- [x] `[x]` ./etl/requirements.txt — Verified Clean
+- [x] `[x]` ./etl/scraper.py — Verified Clean
+
+- [ ] `scripts/` files
+- [x] `[x]` ./scripts/affiliate/add-item.ts — Verified Clean
+- [x] `[x]` ./scripts/affiliate/audit-links.ts — Verified Clean
+- [x] `[x]` ./scripts/affiliate/audit.ts — Verified Clean
+- [x] `[x]` ./scripts/affiliate/image-helper.ts — Verified Clean
+- [x] `[x]` ./scripts/affiliate/utils.ts — Verified Clean
+- [x] `[x]` ./scripts/ai-playwright-crawler.ts — Verified Clean
+- [x] `[x]` ./scripts/amazon-image-map.tsv — Verified Clean
+- [x] `[x]` ./scripts/base-path.js — Verified Clean
+- [x] `[x]` ./scripts/check-runtime-files.mjs — Verified Clean
+- [x] `[x]` ./scripts/check-runtime.mjs — Verified Clean
+- [x] `[x]` ./scripts/check-suppression-inventory.mjs — Verified Clean
+- [x] `[x]` ./scripts/check-visual-changes.ts — Verified Clean
+- [x] `[x]` ./scripts/clean-sitemap.mjs — Verified Clean
+- [x] `[x]` ./scripts/cleanup-ports.mjs — Verified Clean
+- [x] `[x]` ./scripts/clients/geminiCodeReviewClient.ts — Verified Clean
+- [x] `[x]` ./scripts/clients/geminiVisualReviewClient.ts — Verified Clean
+- [x] `[x]` ./scripts/clients/githubModelsCodeReviewClient.ts — Verified Clean
+- [x] `[x]` ./scripts/clients/githubModelsVisualReviewClient.ts — Verified Clean
+- [x] `[x]` ./scripts/configure-log-drains.mjs — Verified Clean
+- [x] `[x]` ./scripts/content-loader.ts — Verified Clean
+- [x] `[x]` ./scripts/detect-antipatterns.mjs — Verified Clean
+- [x] `[x]` ./scripts/detect-semantic-duplicates.mjs — Verified Clean
+- [x] `[x]` ./scripts/download-amazon-gear-images.sh — Verified Clean
+- [x] `[x]` ./scripts/generate-assets.ts — Verified Clean
+- [x] `[x]` ./scripts/generate-robots.ts — Verified Clean
+- [x] `[x]` ./scripts/generate-spa-stubs.mjs — Verified Clean
+- [x] `[x]` ./scripts/heartbeat.ts — Verified Clean
+- [x] `[x]` ./scripts/image-processing-utils.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-analysis.config.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-analysis.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-build-main.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-dom-diff.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-gemini-code-review.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-gemini-review.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-github-models-code-review.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-github-models-review.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-review-utils.ts — Verified Clean
+- [x] `[x]` ./scripts/impact-visual-diff.ts — Verified Clean
+- [x] `[x]` ./scripts/index-codebase.py — Verified Clean
+- [x] `[x]` ./scripts/lib/aiLogger.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/buildCodeReviewPrompt.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/codeReviewOrchestrator.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/codeReviewTypes.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/codeReviewUtils.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/geminiModelPicker.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/geminiUtils.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/heartbeat.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/impact-analysis-utils.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/modelPicker.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/projectConfig.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/promptCategories.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/visualGuidelines.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/visualReviewConstants.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/visualReviewOrchestrator.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/visualReviewTypes.ts — Verified Clean
+- [x] `[x]` ./scripts/lib/visualReviewUtils.ts — Verified Clean
+- [x] `[x]` ./scripts/manage-previews.sh — Verified Clean
+- [ ] `[ ]` ./scripts/orchestrator/agent_2_orchestrator.py
+- [x] `[x]` ./scripts/orchestrator/experiments/continuous_dev_loop.py — Verified Clean
+- [x] `[x]` ./scripts/orchestrator/experiments/deterministic_loop.py — Verified Clean
+- [x] `[x]` ./scripts/orchestrator/experiments/genai_orchestrator.py — Verified Clean
+- [x] `[x]` ./scripts/orchestrator/utils.py — Verified Clean
+- [x] `[x]` ./scripts/run-etl.sh — Verified Clean
+- [x] `[x]` ./scripts/send-jules-impact.py — Verified Clean
+- [x] `[x]` ./scripts/test-audit.mjs — Verified Clean
+- [x] `[x]` ./scripts/ux-audit-runner.ts — Verified Clean
+- [x] `[x]` ./scripts/ux-capture.ts — Verified Clean
+- [x] `[x]` ./scripts/ux-discover-routes.ts — Verified Clean
+- [x] `[x]` ./scripts/ux-lighthouse-runner.ts — Verified Clean
+- [x] `[x]` ./scripts/validate-links.ts — Verified Clean
+
+- [ ] `src/` files
+- [x] `[x]` ./src/App.tsx — Verified Clean
+- [x] `[x]` ./src/components/Equalizer.tsx — Verified Clean
+- [x] `[x]` ./src/components/GlobalErrorBoundary.tsx — Verified Clean
+- [x] `[x]` ./src/components/GlobalSearch.tsx — Verified Clean
+- [x] `[x]` ./src/components/MobileBottomNav.tsx — Verified Clean
+- [x] `[x]` ./src/components/Navigation.tsx — Verified Clean
+- [x] `[x]` ./src/components/ReferralBanner.tsx — Verified Clean
+- [x] `[x]` ./src/components/SEO.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/ArticleNavigation.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/AuthorAvatar.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/EditorialHeader.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/EditorialHero.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/EditorialLayout.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/EditorialPostView.tsx — Verified Clean
+- [x] `[x]` ./src/components/editorial/EditorialRelated.tsx — Verified Clean
+- [x] `[x]` ./src/components/navigation/MobileMenuOverlay.tsx — Verified Clean
+- [x] `[x]` ./src/components/navigation/NavItem.tsx — Verified Clean
+- [x] `[x]` ./src/components/products/MerchImageDisplay.tsx — Verified Clean
+- [x] `[x]` ./src/components/products/ProductCard.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/ActionButton.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/AffiliateCard.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/AffiliateDisclosure.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/BaseCard.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/CategoryPlaceholder.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/ContentCard.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/EmptyState.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/FilterBar.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/FilterButton.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/FolioGrid.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/HeroParticleCanvas.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/HeroSection.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/Icon.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/ListRow.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/Logo.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/MarkdownRenderer.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/Notice.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/PageHeader.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/PageSkeleton.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/ProductImageFrame.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/PromoStrip.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/Reveal.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/ScrollToTopButton.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/SearchBox.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/Skeleton.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/StatusBadge.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/ViewToggle.tsx — Verified Clean
+- [x] `[x]` ./src/components/ui/Wordmark.tsx — Verified Clean
+- [x] `[x]` ./src/config/constants.ts — Verified Clean
+- [x] `[x]` ./src/config/content.ts — Verified Clean
+- [x] `[x]` ./src/config/devai-assets.ts — Verified Clean
+- [x] `[x]` ./src/config/devai-tool-ids.ts — Verified Clean
+- [x] `[x]` ./src/config/hero.ts — Verified Clean
+- [x] `[x]` ./src/config/research-tools.ts — Verified Clean
+- [x] `[x]` ./src/config/routes.ts — Verified Clean
+- [x] `[x]` ./src/constants/visual-viewports.ts — Verified Clean
+- [x] `[x]` ./src/context/ThemeContext.tsx — Verified Clean
+- [x] `[x]` ./src/data/affiliates.json — Verified Clean
+- [x] `[x]` ./src/data/merch.ts — Verified Clean
+- [x] `[x]` ./src/data/products/catalog.ts — Verified Clean
+- [x] `[x]` ./src/data/products/merch.ts — Verified Clean
+- [x] `[x]` ./src/features/home/DevLabCallout.tsx — Verified Clean
+- [x] `[x]` ./src/features/home/FeaturedGuidePanel.tsx — Verified Clean
+- [x] `[x]` ./src/features/home/LatestPosts.tsx — Verified Clean
+- [x] `[x]` ./src/features/home/TopicGrid.tsx — Verified Clean
+- [x] `[x]` ./src/features/journal/BlogFeed.tsx — Verified Clean
+- [x] `[x]` ./src/features/journal/BlogPost.tsx — Verified Clean
+- [x] `[x]` ./src/features/journal/components/BlogPostDetail.tsx — Verified Clean
+- [x] `[x]` ./src/features/journal/useBlog.ts — Verified Clean
+- [x] `[x]` ./src/features/lab/BlogDrafter.tsx — Verified Clean
+- [x] `[x]` ./src/features/lab/components/FullPreview.tsx — Verified Clean
+- [x] `[x]` ./src/features/lab/useBlogDrafter.ts — Verified Clean
+- [x] `[x]` ./src/features/profile/ArielProfile.tsx — Verified Clean
+- [x] `[x]` ./src/features/profile/components/ProfileComponents.tsx — Verified Clean
+- [x] `[x]` ./src/features/profile/types.ts — Verified Clean
+- [x] `[x]` ./src/features/profile/useProfile.ts — Verified Clean
+- [x] `[x]` ./src/features/research/ResearchAnalytics.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/ResearchDetail.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/components/ArchitecturalAssetsList.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/components/DeploymentImpactAnalyzerTool.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/components/EcommerceAutomationTool.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/components/GitOpsReviewerTool.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/components/WCSChartContainers.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/components/WCSScraperTool.tsx — Verified Clean
+- [x] `[x]` ./src/features/research/hooks/useExport.ts — Verified Clean
+- [x] `[x]` ./src/features/research/hooks/useWCSData.ts — Verified Clean
+- [x] `[x]` ./src/features/research/useResearch.ts — Verified Clean
+- [x] `[x]` ./src/features/ux-auditor/useSnapshotManager.ts — Verified Clean
+- [x] `[x]` ./src/features/ux-auditor/useUXAuditor.ts — Verified Clean
+- [x] `[x]` ./src/hooks/useGlobalSearch.ts — Verified Clean
+- [x] `[x]` ./src/hooks/useHotkeys.ts — Verified Clean
+- [x] `[x]` ./src/hooks/useResizeObserver.ts — Verified Clean
+- [x] `[x]` ./src/hooks/useScrollManagement.ts — Verified Clean
+- [x] `[x]` ./src/hooks/useSearchParam.ts — Verified Clean
+- [x] `[x]` ./src/index.css — Verified Clean
+- [x] `[x]` ./src/layouts/Box.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/Button.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/Footer.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/Grid.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/MainLayout.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/Primitives.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/Stack.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/Text.tsx — Verified Clean
+- [x] `[x]` ./src/layouts/layout-maps.ts — Verified Clean
+- [x] `[x]` ./src/lib/affiliateManager.ts — Verified Clean
+- [x] `[x]` ./src/lib/constants.ts — Verified Clean
+- [x] `[x]` ./src/lib/constants/markdown-schema.ts — Verified Clean
+- [x] `[x]` ./src/lib/content.ts — Verified Clean
+- [x] `[x]` ./src/lib/geminiModelConfig.ts — Verified Clean
+- [x] `[x]` ./src/lib/hooks/useArticleNavigation.ts — Verified Clean
+- [x] `[x]` ./src/lib/hooks/useResearchToolAssets.ts — Verified Clean
+- [x] `[x]` ./src/lib/merch/imageDisplay.ts — Verified Clean
+- [x] `[x]` ./src/lib/productCatalog.ts — Verified Clean
+- [x] `[x]` ./src/lib/routes-discovery.ts — Verified Clean
+- [ ] `[ ]` ./src/lib/style-utils.ts
+- [x] `[x]` ./src/lib/types/content.ts — Verified Clean
+- [x] `[x]` ./src/lib/types/routes.ts — Verified Clean
+- [x] `[x]` ./src/lib/utils.ts — Verified Clean
+- [x] `[x]` ./src/lib/variants.ts — Verified Clean
+- [x] `[x]` ./src/main.tsx — Verified Clean
+- [x] `[x]` ./src/pages/About.tsx — Verified Clean
+- [x] `[x]` ./src/pages/Blog.tsx — Verified Clean
+- [x] `[x]` ./src/pages/BlogPost.tsx — Verified Clean
+- [x] `[x]` ./src/pages/ComponentPreview.tsx — Verified Clean
+- [x] `[x]` ./src/pages/Home.tsx — Verified Clean
+- [x] `[x]` ./src/pages/Merch.tsx — Verified Clean
+- [x] `[x]` ./src/pages/NotFound.tsx — Verified Clean
+- [x] `[x]` ./src/pages/RemovedPage.tsx — Verified Clean
+- [x] `[x]` ./src/pages/Research.tsx — Verified Clean
+- [x] `[x]` ./src/pages/ResearchDetail.tsx — Verified Clean
+- [x] `[x]` ./src/pages/UXAuditor.tsx — Verified Clean
+- [x] `[x]` ./src/providers/ThemeProvider.tsx — Verified Clean
+- [x] `[x]` ./src/styles/design-tokens.ts — Verified Clean
+- [x] `[x]` ./src/styles/motion.ts — Verified Clean
+- [x] `[x]` ./src/styles/safelist.ts — Verified Clean
+- [x] `[x]` ./src/styles/tokens.css — Verified Clean
+- [x] `[x]` ./src/types.ts — Verified Clean
+- [x] `[x]` ./src/utils/schema.ts — Verified Clean
+- [x] `[x]` ./src/vite-env.d.ts — Verified Clean
+
+## Detailed Slop Findings
+
+### 1. `src/lib/style-utils.ts`
+* **Location:** `src/lib/style-utils.ts` (Entire file)
+* **The Slop:** Over-engineered JIT resolution logic (`resolveJIT`) and spacing lookups that attempt to mimic Tailwind internals but add significant complexity.
+* **Why it's likely AI Drift:** Memory indicates this was flagged as 'AI Slop' during previous audits. It's an over-engineered abstraction for basic Tailwind class generation.
+* **Remediation:** Remove `resolveJIT` and replace with native Tailwind interpolation or simplified direct class mapping.
+
+### 2. `boomtick-pkg/cli/dev_tools/orchestrator.py`
+* **Location:** `boomtick-pkg/cli/dev_tools/orchestrator.py:L473`
+* **The Slop:** Redefinition of `verify_ci_metrics` which is already imported from `dev_tools.utils`.
+* **Why it's likely AI Drift:** LLM multi-turn editing drift leading to cargo-culting the function implementation into the class instead of using the imported utility.
+* **Remediation:** Remove the redundant method and use the imported function directly.
+
+### 3. `boomtick-pkg/cli/dev_tools/review_read_pass.py`
+* **Location:** `boomtick-pkg/cli/dev_tools/review_read_pass.py:L142-L188`
+* **The Slop:** Legacy hunk-level parser and signal extraction kept for "backward compatibility" in a new-ish internal tool.
+* **Why it's likely AI Drift:** Hallucinated backward-compatibility requirement. AI often adds "legacy" shims for things that never existed or are no longer needed.
+* **Remediation:** Remove `parse_diff_into_hunks` and `extract_review_signals`.
+
+### 4. `scripts/orchestrator/agent_2_orchestrator.py`
+* **Location:** `scripts/orchestrator/agent_2_orchestrator.py:L26-L58`
+* **The Slop:** Local redefinition of `run_cli`, `get_session_id`, and `wait_for_agent` which are already imported from `utils`.
+* **Why it's likely AI Drift:** AI "forgetting" the import and re-implementing the functions locally, causing code duplication and potential drift in logic.
+* **Remediation:** Remove the local redefinitions and use the imported versions.
