@@ -4,32 +4,52 @@ import { SPACING_MAP } from "@/layouts/layout-maps"
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
 
 /**
- * Resolves a spacing value, looking up tokens in SPACING_MAP.
- * If not in map, returns the value as a Tailwind arbitrary value.
+ * Resolves a value for use in a Tailwind class.
+ * Handles tokens (numbers, simple strings) vs arbitrary values (bracketed or with units).
+ */
+export function resolveJIT(val: string | number | boolean | undefined | null, prefix: string): string {
+  if (val === undefined || val === null || val === "") return ""
+
+  const strVal = String(val)
+  const isNegative = strVal.startsWith("-") && strVal !== "-"
+  const absVal = isNegative ? strVal.substring(1) : strVal
+  const negPrefix = isNegative ? "-" : ""
+
+  // Standard Tailwind tokens:
+  // 1. Pure numbers (e.g. 4, 1.5, 96)
+  // 2. Simple alphanumeric strings with hyphens/slashes (e.g. full, center, white/20)
+  //    Exclude anything that looks like it has a CSS unit (px, vh, vw, %|rem|em)
+  const isToken = /^\d+(\.\d+)?$/.test(absVal) ||
+                  (/^[a-z0-9-/]+$/.test(absVal) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absVal));
+
+  if (isToken) return `${negPrefix}${prefix}-${absVal}`
+
+  // Arbitrary values wrapped in brackets
+  const bracketVal = absVal.startsWith("[") && absVal.endsWith("]") ? absVal : `[${absVal}]`
+  return `${negPrefix}${prefix}-${bracketVal}`
+}
+
+/**
+ * Resolves a spacing value, checking SPACING_MAP first for semantic tokens.
  */
 export function resolveSpacing(prefix: string) {
   return (v: string | number | boolean | undefined | null) => {
     if (v === undefined || v === null || v === "") return ""
 
-    const isNegative = (typeof v === "number" && v < 0) || (typeof v === "string" && v.startsWith("-") && v !== "-")
-    const absV = typeof v === "number" ? Math.abs(v) : (isNegative ? v.substring(1) : v)
+    const strV = String(v)
+    const isNegative = strV.startsWith("-") && strV !== "-"
+    const absV = isNegative ? strV.substring(1) : strV
 
-    const token = SPACING_MAP[absV as keyof typeof SPACING_MAP];
-    const negPrefix = isNegative ? "-" : ""
+    const mapped = SPACING_MAP[absV as keyof typeof SPACING_MAP];
+    if (mapped) return `${isNegative ? "-" : ""}${prefix}-${mapped}`;
 
-    if (token) return `${negPrefix}${prefix}-${token}`;
+    // Check if it's a known CSS variable without brackets (e.g. section-spacing)
+    if (/^[a-z-]+$/.test(absV) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absV)) {
+       return `${isNegative ? "-" : ""}${prefix}-${absV}`;
+    }
 
-    // Fallback to arbitrary value
-    return `${negPrefix}${prefix}-[${absV}]`;
+    return resolveJIT(v, prefix);
   }
-}
-
-/**
- * Resolves a generic value for use in a Tailwind class.
- */
-export function resolveJIT(val: string | number | boolean | undefined | null, prefix: string): string {
-  if (val === undefined || val === null || val === "") return ""
-  return `${prefix}-[${val}]`
 }
 
 /**
@@ -47,8 +67,7 @@ export function applyResponsive<T>(
   return Object.entries(prop)
     .map(([bp, val]) => {
       const className = mapFn(val as T)
-      if (!className) return ""
-      return bp === "base" ? className : `${bp}:${className}`
+      return className ? (bp === "base" ? className : `${bp}:${className}`) : ""
     })
     .filter(Boolean)
     .join(" ")
