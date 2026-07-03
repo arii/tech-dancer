@@ -69,6 +69,9 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
     const layoutProps: Record<string, unknown> = {};
 
     Object.entries(boxProps).forEach(([key, value]) => {
+      // Handle crossOrigin and style specifically below to avoid lint issues and ensure correct behavior
+      if (key === 'crossOrigin' || key === 'style') return;
+
       if (SAFE_IMAGE_ATTRS.has(key)) {
         imgAttributes[key] = value;
       } else if (PRIMITIVE_PROPS.has(key)) {
@@ -77,10 +80,21 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
       // Any other props (like 'onerror') are dropped
     });
 
-    const finalStyle = {
+    const finalStyle: React.CSSProperties = {
       objectFit: objectFit || 'contain',
-      ...(imgAttributes.style as React.CSSProperties)
+      ...(boxProps.style as React.CSSProperties)
     };
+
+    // Determine external asset policies
+    const externalPolicies: Record<string, unknown> = {};
+    if (isExternal) {
+      externalPolicies.referrerPolicy = "no-referrer";
+
+      // Default to anonymous for external, but allow explicit override (including null to disable)
+      if (boxProps.crossOrigin !== null) {
+        externalPolicies.crossOrigin = (boxProps.crossOrigin as SafeImageProps['crossOrigin']) || "anonymous";
+      }
+    }
 
     return (
       <Box
@@ -88,11 +102,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         as="img"
         src={finalSrc}
         alt={alt}
-        {...(isExternal ? {
-          // Allow disabling crossOrigin by passing null explicitly
-          ...(boxProps.crossOrigin !== null && { crossOrigin: (boxProps.crossOrigin as any) || "anonymous" }),
-          referrerPolicy: "no-referrer"
-        } : {})}
+        {...externalPolicies}
         {...layoutProps}
         {...imgAttributes}
         style={finalStyle}
