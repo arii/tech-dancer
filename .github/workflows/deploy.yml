@@ -166,7 +166,9 @@ jobs:
               # Clean sync for branch subdirectories
               rm -rf "$DEST_DIR"
               mkdir -p "$DEST_DIR"
-              cp -r ../dist-assets/. "$DEST_DIR/"
+              # Ignore image and large asset copying into branch subdirectories to prevent artifact bloat on gh-pages
+              # We copy html, json, js, css, etc., but exclude images (png, jpg, etc.)
+              rsync -a --exclude="*.png" --exclude="*.jpg" --exclude="*.jpeg" --exclude="*.gif" --exclude="*.webp" --exclude="*.mp4" --exclude="*.webm" ../dist-assets/ "$DEST_DIR/"
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
