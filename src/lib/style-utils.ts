@@ -1,4 +1,3 @@
-/* impeccable-ignore-file */
 import { SPACING_MAP } from "@/layouts/layout-maps"
 
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
@@ -17,7 +16,7 @@ export function resolveJIT(val: string | number | boolean | undefined | null, pr
 
   // Standard Tailwind tokens:
   // 1. Pure numbers (e.g. 4, 1.5, 96)
-  // 2. Simple alphanumeric strings with hyphens/slashes (e.g. full, center, white/20)
+  // 2. Simple alphanumeric strings with hyphens and slashes (e.g. full, center, 1/2, white/20)
   //    Exclude anything that looks like it has a CSS unit (px, vh, vw, %|rem|em)
   const isToken = /^\d+(\.\d+)?$/.test(absVal) ||
                   (/^[a-z0-9-/]+$/.test(absVal) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absVal));
