@@ -1,6 +1,6 @@
 import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
-import { cn, composeStyles } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens, opacity as opacityTokens } from "@/styles/design-tokens"
 import { variants } from "@/lib/variants"
 import { RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
@@ -154,7 +154,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     return (
       <Component
         ref={ref}
-        className={composeStyles(
+        className={cn(
           panel && layoutTokens.panel,
           layoutProp && typeof layoutProp === "string" && layoutTokens[layoutProp as keyof typeof layoutTokens],
           shadow && SHADOW_MAP[shadow],

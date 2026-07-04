@@ -9,14 +9,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Standardized style composition helper.
- * Centralizes how we merge Tailwind classes and variants.
- */
-export function composeStyles(...styles: ClassValue[]) {
-  return cn(...styles)
-}
-
-/**
  * Safely checks if a search term is included in a value.
  * Handles non-string values by converting them to strings and normalizes to lowercase.
  */

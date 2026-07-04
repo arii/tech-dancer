@@ -19,10 +19,26 @@ export function parseVisualReviewFindings(feedback: string): VisualReviewFinding
     return [];
   }
 
-  const jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+  let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
+
+  const startIdx = jsonText.indexOf('{');
+  const endIdx = jsonText.lastIndexOf('}');
+  if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
+    jsonText = jsonText.slice(startIdx, endIdx + 1);
+  } else {
+    jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
+  }
 
   try {
     const data = JSON.parse(jsonText) as VisualReviewState;
+    if (data.findings && Array.isArray(data.findings)) {
+      data.findings = data.findings.map(f => {
+        if (f && typeof f === 'object' && typeof f.status === 'string') {
+          return { ...f, status: f.status.toLowerCase() as 'open' | 'resolved' };
+        }
+        return f;
+      });
+    }
     return data.findings || [];
   } catch (e) {
     console.warn('Failed to parse findings JSON from visual LLM response:', e);

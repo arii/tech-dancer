@@ -118,10 +118,28 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
   }
 
   let jsonText = feedback.slice(openIdx + openTag.length, closeIdx).trim();
-  jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
+
+  const startIdx = jsonText.indexOf('{');
+  const endIdx = jsonText.lastIndexOf('}');
+  if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
+    jsonText = jsonText.slice(startIdx, endIdx + 1);
+  } else {
+    jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
+  }
 
   try {
     const state = JSON.parse(jsonText) as CodeReviewState;
+
+    // Normalize properties before validation to avoid side-effects in validator
+    if (state && state.findings && Array.isArray(state.findings)) {
+      state.findings = state.findings.map(f => {
+        if (f && typeof f === 'object' && typeof f.status === 'string') {
+          return { ...f, status: f.status.toLowerCase() as 'open' | 'resolved' };
+        }
+        return f;
+      });
+    }
+
     if (!validateFindingsSchema(state)) {
       return { state, parseError: 'incomplete_findings' };
     }

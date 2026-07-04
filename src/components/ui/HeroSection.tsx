@@ -17,7 +17,7 @@ export function HeroSection() {
   return (
     <Stack
       as="section"
-      align="center"
+      align="start"
       justify="center"
       overflow="hidden"
       position="relative"
@@ -47,10 +47,10 @@ export function HeroSection() {
         align="start"
         gap={0}
         paddingX={{ base: 4, md: 8, lg: 12 }}
-        paddingTop={{ base: 4, lg: 8 }}
+        paddingTop={{ base: 2, lg: 8 }}
         paddingBottom={{ base: 0, lg: 0 }}
         maxWidth="screen-xl"
-        marginX="auto"
+        marginX={{ base: 0, xl: "auto" }}
       >
 
 
@@ -64,7 +64,7 @@ export function HeroSection() {
         {/* Visual-style Headline - Editorial Serif with Balanced Visual Weight */}
         <Stack
           as="h1"
-          marginTop={{ base: 5, lg: 6 }}
+          marginTop={{ base: 2, lg: 6 }}
           align="start"
           gap={0}
           width="full"
@@ -76,17 +76,19 @@ export function HeroSection() {
           <Text
             as="span"
             variant="hero"
-            size={{ base: "5xl", md: "6xl", lg: "7xl" }}
+            color="white"
+            size={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            display="block"
           >
-            <span className="hero-accent-color">Pack smart.</span>
+            Pack smart.
           </Text>
           <Text
             as="span"
             variant="hero"
-            color="white"
-            size={{ base: "5xl", md: "6xl", lg: "7xl" }}
+            size={{ base: "4xl", md: "6xl", lg: "7xl" }}
+            display="block"
           >
-            Dance more.
+            <span className="hero-accent-color">Dance more.</span>
           </Text>
         </Stack>
 
@@ -94,7 +96,7 @@ export function HeroSection() {
         <Box
           width={24}
           height={1.5}
-          marginTop={4}
+          marginTop={2}
           radius="full"
           opacity={0}
           pointerEvents="none"
@@ -106,7 +108,7 @@ export function HeroSection() {
           direction="row"
           align="stretch"
           gap={5}
-          marginTop={{ base: 4, lg: 6 }}
+          marginTop={{ base: 1, lg: 4 }}
           maxWidth="2xl"
           opacity={0}
           className="hero-tagline-anim"
@@ -121,10 +123,10 @@ export function HeroSection() {
             variant="body"
             weight="font-normal"
             align="left"
-            size={{ base: "lg", md: "xl", lg: "2xl" }}
+            size={{ base: "sm", md: "lg", lg: "xl" }}
             className="hero-tagline-text"
           >
-            Research-driven gear guides and travel hacks for the modern West Coast Swing dancer.
+            The west coast swing dancer's guide to gear, travel, and better dance weekends.
           </Text>
         </Stack>
 
