@@ -44,9 +44,9 @@ _REVIEW_SCHEMA = {
                         "items": {
                             "type": "object",
                             "properties": {
-                                "line":       {"type": "integer"},
-                                "severity":   {"type": "string"},
-                                "comment":    {"type": "string"},
+                                "line": {"type": "integer"},
+                                "severity": {"type": "string"},
+                                "comment": {"type": "string"},
                                 "confidence": {"type": "string"},
                             },
                             "required": ["line", "severity", "comment", "confidence"],
@@ -58,7 +58,7 @@ _REVIEW_SCHEMA = {
             }
         },
         "reviewComment": {"type": "string"},
-        "labels":        {"type": "array", "items": {"type": "string"}},
+        "labels": {"type": "array", "items": {"type": "string"}},
         "recommendation": {"type": "string"},
     },
     "required": ["file_reviews", "reviewComment", "labels", "recommendation"],
@@ -69,11 +69,20 @@ _SYNTHESIS_SCHEMA = {
     "type": "object",
     "properties": {
         "reviewComment": {"type": "string"},
-        "labels":        {"type": "array", "items": {"type": "string"}},
+        "labels": {"type": "array", "items": {"type": "string"}},
         "recommendation": {"type": "string"},
     },
     "required": ["reviewComment", "labels", "recommendation"],
 }
+
+_COMMON_REVIEW_GUIDELINES = """## 1. Review Philosophy
+Review ONLY changes in this PR. Ignore pre-existing issues. Assume original code worked (Regression Mindset).
+EVIDENCE RULE: Every issue MUST point to the exact line, explain the error, and describe the runtime consequence.
+FALSE POSITIVE FILTER: If you aren't certain or it might be a design choice, DO NOT report it.
+
+## 2. Repository Rules
+Prefer removing code. Flag unnecessary wrappers, one-line helpers, and dead abstractions.
+BANNED: Raw Tailwind (flex, grid, px-*) in .tsx files. Use <Stack>, <Grid>, <Box>."""
 
 
 class AIClient:
@@ -270,22 +279,22 @@ class AIClient:
         # Combine diffs up to a reasonable limit (e.g. 100k chars for standard models)
         MAX_COMBINED_CHARS = 100_000
         combined_diff = ""
+        is_truncated = False
         for chunk in reviewable:
             if len(combined_diff) + len(chunk['diff_text']) > MAX_COMBINED_CHARS:
                 combined_diff += "\n\n... (Diff truncated due to size limits)"
+                is_truncated = True
                 break
             combined_diff += f"\n\n{chunk['diff_text']}"
+
+        truncation_note = ""
+        if is_truncated:
+            truncation_note = "\nNOTE: This diff is TRUNCATED. If you need more context to be certain of an issue, state what you are missing instead of speculating.\n"
 
         prompt = (
             f"You are a strict code reviewer. Review the diff below for PR: {pr_title}.\n"
             f"CI status: {checks_summary}\n\n"
-            "## 1. Review Philosophy\n"
-            "Review ONLY changes in this PR. Ignore pre-existing issues. Assume original code worked (Regression Mindset).\n"
-            "EVIDENCE RULE: Every issue MUST point to the exact line, explain the error, and describe the runtime consequence.\n"
-            "FALSE POSITIVE FILTER: If you aren't certain or it might be a design choice, DO NOT report it.\n\n"
-            "## 2. Repository Rules\n"
-            "Prefer removing code. Flag unnecessary wrappers, one-line helpers, and dead abstractions.\n"
-            "BANNED: Raw Tailwind (flex, grid, px-*) in .tsx files. Use <Stack>, <Grid>, <Box>.\n\n"
+            f"{_COMMON_REVIEW_GUIDELINES}\n\n"
             "## 3. Review Checklist\n"
             "Order: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance, 6. Maintainability.\n\n"
             "## 4. Severity & Confidence\n"
@@ -306,7 +315,7 @@ class AIClient:
         try:
             raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=2)
         except Exception as e:
-            print(f" ❌ ERROR: {e}", flush=True, file=sys.stderr)
+            log_error(f"Review call failed for PR #{pr_num}: {e}")
 
         elapsed = time.time() - t0
 
@@ -395,20 +404,17 @@ class AIClient:
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
         return (
-            f"You are a strict code reviewer. Review ONLY the diff below for file \"{chunk['file']}\".\n"
+            f"You are a senior code reviewer. Review ONLY the diff below for file \"{chunk['file']}\".\n"
             f"PR title: {pr_title}\n"
             f"CI status: {checks_summary}\n\n"
             f"## Current Stack Versions\n{versions_block}\n{context_section}\n\n"
-            "## 1. Review Philosophy\n"
-            "Review ONLY changes. EVIDENCE RULE: exact line + runtime consequence required. REGRESSION MINDSET: assume existing code works.\n\n"
-            "## 2. Repository Rules\n"
-            "DO NOT suggest downgrading versions. Mandate <Stack>/<Grid>/<Box>. Flag 'AI Slop' and redundant abstractions.\n\n"
+            f"{_COMMON_REVIEW_GUIDELINES}\n\n"
             "## 3. Review Checklist\n"
             "1. Correctness, 2. Security, 3. Performance, 4. Maintainability.\n\n"
             "## 4. Severity & Confidence\n"
-            "Use 'error', 'warn', 'info'. Include 'confidence' (high/medium/low) in issue description.\n\n"
+            "Use 'error', 'warn', 'info'. Populate the 'confidence' field (high/medium/low) for every issue.\n\n"
             "## 5. Output Contract\n"
-            "Output ONLY valid JSON. Include counterexamples for blocking issues.\n\n"
+            "Output ONLY valid JSON matching the schema. Include counterexamples for all errors.\n\n"
             f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
     def _write_progress_snapshot(
@@ -621,10 +627,11 @@ class AIClient:
         all_issues = []
         for fr in file_reviews:
             for issue in fr.get('issues', []):
+                conf = issue.get('confidence', 'high').upper()
                 all_issues.append({
                     "path": fr['file'],
                     "line": issue.get('line', 1),
-                    "body": f"[{issue.get('severity','?')}] {issue.get('comment','')}",
+                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
                 })
         if not all_issues:
             all_issues = [{"path": "<see reviewComment above>", "line": 1, "body": review_comment[:500]}]

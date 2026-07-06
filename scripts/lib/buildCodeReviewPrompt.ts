@@ -165,8 +165,10 @@ You MUST end your review with exactly one of the following strings:
 [VERDICT: WARN]
 [VERDICT: FAIL]
 
-You MUST provide a structured JSON summary inside a \`<findings>\` tag at the end.
-The JSON must follow this schema:
+### Structured JSON Findings
+You MUST provide a structured JSON summary of ALL findings at the very end of your response, wrapped in \`<findings>\` tags. Do not truncate the JSON.
+
+**JSON Schema:**
 <findings>
 {
   "findings": [
@@ -175,7 +177,7 @@ The JSON must follow this schema:
       "file": "src/App.tsx",
       "line": 10,
       "snippet": "const x = 1;",
-      "issue": "Brief description of the issue. Confidence: HIGH. Counterexample: ...",
+      "issue": "Brief description. Confidence: HIGH. Counterexample: ...",
       "status": "open",
       "fixSummary": "..."
     }
@@ -183,7 +185,7 @@ The JSON must follow this schema:
 }
 </findings>
 
-Strict JSON Verification: Ensure the JSON is well-formed and includes 'id', 'file', 'issue', 'status', and 'snippet'.`;
+Strict JSON Verification: Ensure the JSON is 100% valid, contains no comments, and includes all required fields: 'id', 'file', 'issue', 'status', and 'snippet'.`;
 
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
 
