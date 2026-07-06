@@ -166,17 +166,11 @@ jobs:
               # Clean sync for branch subdirectories
               rm -rf "$DEST_DIR"
               mkdir -p "$DEST_DIR"
-<<<<<<< HEAD
-              # Ignore image and large asset copying into branch subdirectories to prevent artifact bloat on gh-pages
-              # We copy html, json, js, css, etc., but exclude images (png, jpg, etc.)
-              rsync -a --exclude="*.png" --exclude="*.jpg" --exclude="*.jpeg" --exclude="*.gif" --exclude="*.webp" --exclude="*.mp4" --exclude="*.webm" ../dist-assets/ "$DEST_DIR/"
-=======
               # Note: We previously tried to use rsync to exclude images to prevent gh-pages bloat.
               # However, this breaks visual regression agents (Gemini, GitHub Models) which run against
               # the PR preview URL and need those images to render correctly to evaluate the UI changes.
               # Instead, we rely on `prune-stale-previews.yml` and `manage-previews.sh` to clean up.
               cp -r ../dist-assets/. "$DEST_DIR/"
->>>>>>> old-branch
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
