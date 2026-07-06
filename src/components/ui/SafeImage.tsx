@@ -9,17 +9,33 @@ import { normalizeAsset } from '@/lib/content';
  */
 const isSafeUrl = (url: string): boolean => {
   if (!url) return false;
-  if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) return true;
+  if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../') || url.startsWith('blob:')) return true;
+
+  // Basic check for common dangerous protocols
+  const lowerUrl = url.toLowerCase().trim();
+  if (lowerUrl.startsWith('javascript:') || lowerUrl.startsWith('data:') || lowerUrl.startsWith('vbscript:')) {
+    return false;
+  }
+
   try {
+    // If it's a valid absolute URL, check the protocol
     const parsed = new URL(url);
-    return ['http:', 'https:'].includes(parsed.protocol);
+    return ['http:', 'https:', 'blob:'].includes(parsed.protocol);
   } catch {
-    // If URL parsing fails (likely because it's a relative path like "image.jpg"),
-    // we check if it contains a protocol-like structure.
+    // If URL parsing fails, it's likely a relative path (e.g., "image.jpg").
+    // We consider it safe if it doesn't contain a protocol-like colon before a slash.
     const colonIndex = url.indexOf(':');
     const slashIndex = url.indexOf('/');
-    // Safe if no colon (relative path) or colon appears after a slash (part of the path)
-    return colonIndex === -1 || (slashIndex !== -1 && colonIndex > slashIndex);
+
+    // Relative paths won't have a colon before the first slash (if any)
+    // e.g., "path/to/img.jpg" -> colon -1, slash 4 -> safe
+    // e.g., "img.jpg" -> colon -1, slash -1 -> safe
+    // e.g., "http://bad" -> colon 4, slash 5 -> unsafe (but handled by URL constructor)
+    // e.g., "javascript:alert" -> colon 10, slash -1 -> unsafe
+    if (colonIndex === -1) return true;
+    if (slashIndex !== -1 && colonIndex > slashIndex) return true;
+
+    return false;
   }
 };
 

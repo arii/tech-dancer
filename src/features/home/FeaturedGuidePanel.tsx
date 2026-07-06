@@ -1,6 +1,7 @@
 // impeccable-ignore-file
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { ASSET_PREFIX } from '@/config/constants';
 
 const FEATURED = {
@@ -28,13 +29,16 @@ export function FeaturedGuidePanel() {
       className="group self-stretch"
     >
       {/* Background image — fills the column height naturally */}
-      <img
+      <SafeImage
         src={`${ASSET_PREFIX}${FEATURED.image}`}
         alt={FEATURED.imageAlt}
-        width={420}
-        height={600}
+        width="full"
+        height="full"
         fetchPriority="high"
-        className="absolute inset-0 h-full w-full object-cover object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
+        position="absolute"
+        inset={0}
+        objectFit="cover"
+        className="object-center opacity-dim transition-opacity motion-reduce:transition-none duration-500 group-hover:opacity-high"
         aria-hidden="true"
       />
       {/* Gradient overlay for text legibility (bottom-up to protect bottom-aligned text) */}

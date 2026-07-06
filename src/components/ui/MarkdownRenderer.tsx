@@ -188,6 +188,7 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
             maxHeight={{ base: "viewport-half", lg: 96 }}
             objectFit="contain"
             loading="lazy"
+            crossOrigin={null}
           />
         </Box>
       );

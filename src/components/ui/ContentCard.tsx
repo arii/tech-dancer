@@ -1,5 +1,6 @@
 import { motion, HTMLMotionProps } from 'motion/react';
 import { Box, Stack, Text, BaseProps } from '@/layouts/Primitives';
+import { SafeImage } from './SafeImage';
 import { BaseCard } from './BaseCard';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
@@ -58,10 +59,13 @@ export function ContentCard(props: ContentCardProps) {
     >
       {image && (
         <Box width="full" className="aspect-video bg-surface-alt border-b border-line overflow-hidden">
-          <img
+          <SafeImage
             src={image}
             alt={imageAlt || title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            width="full"
+            height="full"
+            objectFit="cover"
+            className="transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
         </Box>
