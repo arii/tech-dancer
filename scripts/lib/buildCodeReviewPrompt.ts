@@ -4,7 +4,7 @@ import { VISUAL_DESIGN_GUIDELINES } from './visualGuidelines';
 
 export function buildSystemPrompt(summary: CodeReviewSummary): string {
   const goalSection = summary.prGoal
-    ? `This PR's stated goal:\n"${summary.prGoal}"\n\n`
+    ? `PR GOAL: "${summary.prGoal}"\n`
     : '';
 
   let priorStateSection = '';
@@ -19,138 +19,131 @@ export function buildSystemPrompt(summary: CodeReviewSummary): string {
       })
       .join('\n');
     priorStateSection = `
-PREVIOUS REVIEW ROUND FINDINGS:
+PREVIOUS REVIEW ROUND FINDINGS (GROUND TRUTH):
 ${findingsStr}
-
-Your job:
-- Confirm THIS issue is resolved before raising anything new.
-- Only raise a NEW issue if it is unrelated to anything already addressed, or if the fix for a previous issue introduced a new problem.
+- Confirm previous issues are resolved before raising new ones.
+- Only raise a NEW issue if it is unrelated to addressed findings.
 - Do not re-open a resolved issue under a different framing.
 `;
   }
 
-  // Matching categories based on changed files
-  const matchedCategories = summary.changedFiles
-    ? PROMPT_CATEGORIES.filter(cat => cat.matcher(summary.changedFiles!))
-    : [];
-
-  let dynamicGuidance = '';
-  if (matchedCategories.length > 0) {
-    dynamicGuidance = `
-CATEGORY-SPECIFIC GUIDANCE:
-${matchedCategories.map(cat => cat.guidance).join('\n\n')}
-`;
-  }
-
-  // NEW: only pull in the (large) visual design rulebook when the diff can
-  // plausibly contain UI files. Previously this was injected unconditionally
-  // on every PR — including pure backend/CI/infra diffs with zero .tsx/.css
-  // files — which inflated prompt complexity and reasoning-token usage for
-  // no benefit. If changedFiles is unknown/undefined, default to INCLUDING
-  // the guidelines (fail safe, not fail open) since we can't rule UI out.
   const touchesUI = summary.changedFiles
     ? summary.changedFiles.some(f =>
         f.endsWith('.tsx') || f.endsWith('.jsx') || f.endsWith('.css') || f.endsWith('.scss')
       )
     : true;
 
-  const guidelinesSection = touchesUI
-    ? `${VISUAL_DESIGN_GUIDELINES}\n\n`
+  const matchedCategories = summary.changedFiles
+    ? PROMPT_CATEGORIES.filter(cat => cat.matcher(summary.changedFiles!))
+    : [];
+
+  const categoryGuidance = matchedCategories.length > 0
+    ? `\nREPOSITORY-SPECIFIC GUIDANCE:\n${matchedCategories.map(cat => cat.guidance).join('\n\n')}\n`
     : '';
 
   const impactSemanticContextSection = summary.impactSemanticContext
-    ? `IMPACT & SEMANTIC CONTEXT (Dependency relationships and semantically similar code):\n${summary.impactSemanticContext}\n\n`
+    ? `IMPACT & SEMANTIC CONTEXT:\n${summary.impactSemanticContext}\n\n`
     : '';
 
-  const uiAuditInstruction = touchesUI
-    ? 'This diff contains UI files (.tsx, .css, .scss) — you MUST audit them against the VISUAL & DESIGN GUIDELINES above.\n\n'
-    : '';
+  // 1. Review Philosophy
+  const philosophySection = `
+## 1. REVIEW PHILOSOPHY (REGRESSIONS ONLY)
+- Assume the original code worked. Your job is to determine whether THIS PR introduces NEW regressions.
+- Ignore pre-existing code quality problems unless the PR makes them worse.
+- Do not suggest unrelated refactoring or improvements that existed before this PR.
+- Never speculate. If an issue cannot be demonstrated from the diff, DO NOT report it.
+- Challenge Yourself: Before reporting, ask "Could this simply be a design choice?". Only report if you have concrete evidence of incorrect behavior.
+`;
 
-  let roleInstruction = '';
-  if (summary.role === 'SECURITY') {
-    roleInstruction = '\nROLE: SECURITY EXPERT. Focus on OWASP Top 10, data validation, sanitization, and secure communication. Flag any new untrusted input paths.';
-  } else if (summary.role === 'PERFORMANCE') {
-    roleInstruction = '\nROLE: PERFORMANCE ENGINEER. Focus on expensive computations, redundant re-renders, large bundle impacts, and inefficient data structures.';
-  } else if (summary.role === 'STYLE') {
-    roleInstruction = '\nROLE: STYLE & MAINTAINABILITY CRITIC. Focus on code readability, consistency with existing patterns, naming clarity, and adherence to design tokens.';
-  } else if (summary.role === 'ARCHITECTURE') {
-    roleInstruction = '\nROLE: SOFTWARE ARCHITECT. Focus on separation of concerns, feature isolation, dependency directions, and proper use of hooks vs. components.';
-  }
+  // 2. Repository Rules
+  const repositoryRulesSection = `
+## 2. REPOSITORY RULES & STANDARDS
+- Prefer existing project patterns over introducing new ones.
+- Avoid duplicate abstractions, duplicate utilities, or unnecessary dependencies.
+- Design System: Audit for raw Tailwind layout classes (flex, grid, gap, px, py). These are BANNED.
+- Primitives: Insist on standard layout primitives: <Stack>, <Grid>, and <Box>.
+${categoryGuidance}
+${touchesUI ? '### VISUAL & DESIGN GUIDELINES:\n' + VISUAL_DESIGN_GUIDELINES : ''}
+`;
 
-  const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
-Review the following code diff for bugs, anti-patterns, missing types, performance issues, and visual quality defects.
-Provide actionable feedback. Focus on HIGH severity issues.
+  // 3. Review Checklist
+  const reviewChecklistSection = `
+## 3. REVIEW CHECKLIST (ORDER OF PRIORITY)
+Perform your review in this exact order:
+1. CORRECTNESS: Logic bugs, crashes, data integrity.
+2. SECURITY: Flag security issues ONLY when the PR introduces: new user-controlled input, file access, shell execution, SQL, HTML rendering, or auth changes.
+3. PERFORMANCE: Unnecessary rerenders, O(n²) algorithms, duplicate API requests, repeated expensive calculations.
+4. UX REVIEW: (If UI changed) evaluate alignment, visual hierarchy, accessibility, responsive behavior. Report only user-visible regressions.
+5. TYPE SAFETY: Report 'any', unsafe casts, ignored nullability, unreachable narrowing.
+6. ARCHITECTURE: Prefer removing code. Flag unnecessary wrappers, pass-through hooks, factories without polymorphism.
+7. STYLE & MAINTAINABILITY: Adherence to design tokens, naming clarity, consistency.
 
-${guidelinesSection}${goalSection}${priorStateSection}${impactSemanticContextSection}
-${uiAuditInstruction}General rules — apply these strictly:
-- Focus on the PR's stated goal: "${summary.prGoal || 'Not specified'}"
-- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
-  user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
-- Do not introduce review topics unrelated to the PR's stated goal unless you find a
-  genuine, evidence-backed regression caused by this diff.
+${touchesUI ? 'React Review: Look for stale closures, missing deps, unnecessary useEffect/useMemo, derived state stored unnecessarily.' : ''}
+`;
 
-Severity rules:
-- HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
-  passed where the type doesn't allow it, a class or function that doesn't exist, a call
-  with the wrong arity, a test that would fail. Cite the exact line(s).
-- If your concern is phrased with "could," "might," "unless," "if not handled properly,"
-  or similar hedging language, it is NOT blocking. Downgrade it to a "Question" or
-  "Nitpick" section instead.
-- Do not raise a concern you cannot verify against the code you were given. State what
-  you'd need to see to verify it, rather than assuming the worst case.
+  // 4. Severity & Confidence
+  const severityConfidenceSection = `
+## 4. SEVERITY & CONFIDENCE
+### Severity Definitions:
+- error: incorrect behavior, data loss, security vulnerability, crash, build failure, deterministic bug.
+- warn: maintainability regression, unnecessary complexity, duplicated logic, performance issue.
+- info: documentation, naming, formatting, optional improvements.
 
-Snippet and verification rules:
-- STRICT SNIPPET RULE: When citing an error or anti-pattern, you MUST quote the entire, exact line from the diff in the "snippet" field. Do not truncate the line.
-- Before flagging a "syntax error" or "missing property/method", re-read the diff to confirm the code isn't simply continued on the next line or truncated in the diff chunk. Hallucinating errors due to chunk truncation is a severe failure.
-- If a line appears truncated in the diff (e.g. at the edge of a chunk), DO NOT assume it is a syntax error. Assume it is valid code that continues outside the visible context.
+### Confidence Score:
+- Every issue must include a confidence level: high, medium, or low.
+- Only report blocking [VERDICT: FAIL] issues when confidence is HIGH.
+- Mention Positive Findings: If the PR simplifies code or improves tests/accessibility, mention it.
+`;
 
-Design System Compliance:
-- Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
-- Mandate Primitives: You MUST insist on using standard layout primitives: \`<Stack>\`, \`<Grid>\`, and \`<Box>\`.
-- Any usage of raw CSS/Tailwind for structural layout (flex/grid) in \`.tsx\` files should be flagged as a STYLE or ARCHITECTURE violation.
+  // 5. Output Contract
+  const outputContractSection = `
+## 5. OUTPUT CONTRACT (STRICT EVIDENCE RULE)
+Every reported issue MUST satisfy the Evidence Rule:
+1. Point to the exact changed line.
+2. Quote the exact line from the diff in the 'snippet' field (STRICT SNIPPET RULE).
+3. Explain why the code is incorrect and the runtime consequence.
+4. Explain why the previous implementation did not have this problem.
+5. Provide a Counterexample for blocking issues: "Why this fails", "Example input", "Expected vs Actual".
 
-${dynamicGuidance}
-Scope and context rules:
-- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
-- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or
-  broken by this diff. If a symbol is used but its definition is not in the context,
-  ASSUME it is correctly defined elsewhere.
-- DO NOT hallucinate bugs in code you cannot see.
-- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"),
-  DO NOT fail the review solely because you cannot see the full implementation of a
-  newly introduced module or utility. Instead, provide a WARN or PASS verdict based on
-  what you CAN see, and explicitly state what remains unverified due to truncation.
-
-You MUST end your review with exactly one of the following strings indicating your final verdict:
-[VERDICT: PASS]
-[VERDICT: WARN]
-[VERDICT: FAIL]
-
-Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
-demonstrate with evidence from the diff.
-
-You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag.
-The JSON must follow this schema:
+JSON SCHEMA CONTRACT:
+You MUST provide a structured JSON summary inside <findings> tags at the end.
 <findings>
 {
   "findings": [
     {
-      "id": "finding-1",
-      "file": "src/App.tsx",
-      "line": 10,
-      "snippet": "const x = 1;",
-      "issue": "Brief description of the issue",
+      "id": "finding-id",
+      "file": "path/to/file.tsx",
+      "line": 123,
+      "snippet": "exact line from diff",
+      "issue": "Description",
       "status": "open",
-      "fixSummary": "Brief summary of how it was addressed"
+      "confidence": "high",
+      "counterexample": "Optional explanation for blocking issues",
+      "fixSummary": "Required for previously existing findings"
     }
   ]
 }
 </findings>
-Strict JSON Verification:
-- You MUST self-verify the completeness and validity of the JSON block before finishing your response.
-- Every finding MUST have an \`id\`, \`file\`, \`issue\`, and \`status\`.
-- Ensure the JSON is well-formed and contained entirely within the \`<findings>\` tags.
-- Ensure 'snippet' is a unique string from the diff that identifies the issue.`;
 
-  return basePrompt;
+VERDICT:
+You MUST end your review with exactly one verdict: [VERDICT: PASS], [VERDICT: WARN], or [VERDICT: FAIL].
+Use [VERDICT: FAIL] ONLY for 'error' severity issues where confidence is HIGH.
+`;
+
+  return `You are an expert software engineer and UI/UX auditor reviewing a pull request.
+Review the following code diff for bugs, anti-patterns, performance regressions, and security risks.
+
+${goalSection}
+${priorStateSection}
+${impactSemanticContextSection}
+
+${philosophySection}
+${repositoryRulesSection}
+${reviewChecklistSection}
+${severityConfidenceSection}
+${outputContractSection}
+
+DIFF:
+${summary.diffContext}
+`;
 }

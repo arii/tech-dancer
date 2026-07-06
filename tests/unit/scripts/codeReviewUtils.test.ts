@@ -20,7 +20,7 @@ describe('codeReviewUtils', () => {
         prGoal: 'Fix a bug',
         diffContext: '',
       });
-      expect(prompt).toContain("This PR's stated goal:\n\"Fix a bug\"");
+      expect(prompt).toContain('PR GOAL: "Fix a bug"');
     });
 
     it('does not include goal section if not provided', () => {
@@ -39,8 +39,17 @@ describe('codeReviewUtils', () => {
           ]
         }
       });
-      expect(prompt).toContain('PREVIOUS REVIEW ROUND FINDINGS:');
+      expect(prompt).toContain('PREVIOUS REVIEW ROUND FINDINGS (GROUND TRUTH):');
       expect(prompt).toContain('- [f-1] a.js: Bad code (Status: open)');
+    });
+
+    it('includes all 5 mandatory sections', () => {
+      const prompt = buildSystemPrompt({ diffContext: 'some diff' });
+      expect(prompt).toContain('## 1. REVIEW PHILOSOPHY');
+      expect(prompt).toContain('## 2. REPOSITORY RULES');
+      expect(prompt).toContain('## 3. REVIEW CHECKLIST');
+      expect(prompt).toContain('## 4. SEVERITY & CONFIDENCE');
+      expect(prompt).toContain('## 5. OUTPUT CONTRACT');
     });
   });
 
@@ -110,15 +119,41 @@ describe('codeReviewUtils', () => {
   });
 
   describe('parseCodeReviewStateDetailed and parseCodeReviewState', () => {
-    it('parses valid JSON findings', () => {
-      const json = JSON.stringify({ findings: [{ id: '1', file: 'test.ts', issue: 'test', status: 'open' }] });
+    it('parses valid JSON findings including new fields', () => {
+      const json = JSON.stringify({
+        findings: [{
+          id: '1',
+          file: 'test.ts',
+          issue: 'test',
+          status: 'open',
+          confidence: 'high',
+          counterexample: 'Example'
+        }]
+      });
       const feedback = `Some text\n<findings>\n${json}\n</findings>\nMore text`;
       const result = parseCodeReviewStateDetailed(feedback);
       expect(result.state?.findings.length).toBe(1);
       expect(result.state?.findings[0].id).toBe('1');
+      expect(result.state?.findings[0].confidence).toBe('high');
+      expect(result.state?.findings[0].counterexample).toBe('Example');
       expect(result.parseError).toBeUndefined();
 
       expect(parseCodeReviewState(feedback)?.findings.length).toBe(1);
+    });
+
+    it('rejects invalid confidence levels', () => {
+        const json = JSON.stringify({
+          findings: [{
+            id: '1',
+            file: 'test.ts',
+            issue: 'test',
+            status: 'open',
+            confidence: 'INVALID'
+          }]
+        });
+        const feedback = `<findings>${json}</findings>`;
+        const result = parseCodeReviewStateDetailed(feedback);
+        expect(result.parseError).toBe('incomplete_findings');
     });
 
     it('handles missing closing tag', () => {

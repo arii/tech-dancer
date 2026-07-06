@@ -44,8 +44,10 @@ _REVIEW_SCHEMA = {
                                 "line":     {"type": "integer"},
                                 "severity": {"type": "string"},
                                 "comment":  {"type": "string"},
+                                "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+                                "counterexample": {"type": "string"},
                             },
-                            "required": ["line", "severity", "comment"],
+                            "required": ["line", "severity", "comment", "confidence"],
                         }
                     },
                     "verdict": {"type": "string"},
@@ -267,16 +269,25 @@ class AIClient:
             f'PR title: {pr_title}\n'
             f'PR description: {pr_description}\n'
             f'CI status: {checks_summary}\n\n'
-            f'Rules:\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n'
-            f'- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn\'t before).\n'
-            f'- Do not introduce review topics unrelated to the PR\'s stated goal unless you find a genuine, evidence-backed regression caused by this diff.\n'
-            f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
-            f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
-            f'- Provide an overall `reviewComment` summarizing the review.\n'
+            f'## 1. REVIEW PHILOSOPHY (REGRESSIONS ONLY)\n'
+            f'- Assume the original code worked. Determine if THIS PR introduces NEW regressions.\n'
+            f'- Ignore pre-existing issues unless the PR makes them worse.\n'
+            f'- Never speculate. If an issue cannot be demonstrated from the diff, DO NOT report it.\n'
+            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n\n'
+            f'## 2. REVIEW CHECKLIST\n'
+            f'1. CORRECTNESS: Logic bugs, crashes, data integrity.\n'
+            f'2. SECURITY: Flag issues ONLY for new user-controlled input, file access, shell exec, SQL, or auth changes.\n'
+            f'3. ARCHITECTURE: Prefer removing code. Flag unnecessary wrappers or duplicate logic.\n\n'
+            f'## 3. SEVERITY DEFINITIONS\n'
+            f'- error: incorrect behavior, data loss, security vulnerability, crash, build failure.\n'
+            f'- warn: maintainability regression, unnecessary complexity, performance issue.\n'
+            f'- info: documentation, naming, formatting.\n\n'
+            f'## 4. OUTPUT CONTRACT (EVIDENCE RULE)\n'
+            f'- Point to the exact changed line. Explain why it is incorrect and the consequence.\n'
+            f'- Set file verdicts to "ok" (no issues), "needs_changes" (warn/info), or "blocking" (error).\n'
+            f'- Provide an overall `reviewComment` summarizing findings.\n'
             f'- Suggest 1-3 `labels` (e.g. "needs-changes", "lgtm", "ci-failing").\n'
-            f'- Set overall `recommendation` to EXACTLY ONE of: "Approved", "Approved with Minor Changes", or "Not Approved".\n'
+            f'- Set overall `recommendation` to: "Approved", "Approved with Minor Changes", or "Not Approved".\n'
             f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
             f'Diff:{combined_diff}'
         )
@@ -384,13 +395,20 @@ class AIClient:
             f'CI status: {checks_summary}\n'
             f'\n## Current Stack Versions (Source of Truth)\n{versions_block}\n'
             f'{context_section}\n\n'
-            f'Rules:\n'
-            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n'
-            f'- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn\'t before).\n'
-            f'- Do not introduce review topics unrelated to the PR\'s stated goal unless you find a genuine, evidence-backed regression caused by this diff.\n'
-            f'- DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
+            f'## 1. REVIEW PHILOSOPHY (REGRESSIONS ONLY)\n'
+            f'- Assume the original code worked. Determine if THIS PR introduces NEW regressions.\n'
+            f'- Never speculate. If an issue cannot be demonstrated from the diff, DO NOT report it.\n'
+            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n\n'
+            f'## 2. REVIEW CHECKLIST\n'
+            f'1. CORRECTNESS: Logic bugs, crashes, data integrity.\n'
+            f'2. SECURITY: Flag issues ONLY for new user-controlled input, file access, shell exec, SQL, or auth changes.\n'
+            f'3. VERSIONING: DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n\n'
+            f'## 3. SEVERITY DEFINITIONS\n'
+            f'- error: incorrect behavior, data loss, security vulnerability, crash, build failure.\n'
+            f'- warn: maintainability regression, unnecessary complexity, performance issue.\n'
+            f'- info: documentation, naming, formatting.\n\n'
+            f'## 4. OUTPUT CONTRACT (EVIDENCE RULE)\n'
+            f'- Point to the exact changed line. Explain why it is incorrect and the consequence.\n'
             f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
             f'Diff:{trunc_note}\n{chunk["diff_text"]}'
@@ -605,10 +623,16 @@ class AIClient:
         all_issues = []
         for fr in file_reviews:
             for issue in fr.get('issues', []):
+                comment_body = f"[{issue.get('severity','?')}] {issue.get('comment','')}"
+                if issue.get('confidence'):
+                    comment_body += f"\n\n**Confidence:** {issue.get('confidence')}"
+                if issue.get('counterexample'):
+                    comment_body += f"\n\n**Counterexample:**\n{issue.get('counterexample')}"
+
                 all_issues.append({
                     "path": fr['file'],
                     "line": issue.get('line', 1),
-                    "body": f"[{issue.get('severity','?')}] {issue.get('comment','')}",
+                    "body": comment_body,
                 })
         if not all_issues:
             all_issues = [{"path": "<see reviewComment above>", "line": 1, "body": review_comment[:500]}]
