@@ -579,18 +579,21 @@ def doctor(ctx):
     res = orch.runtime_check()
     out(ctx, f"✅ Runtime OK: node {res['node']}, pnpm {res['pnpm']}", data=res)
 
-@gh.command()
+@gh.command(name='verify-metrics')
 @click.pass_context
 def verify_metrics(ctx):
     """Verify CI metrics against established thresholds."""
     orch = ctx.obj['ORCHESTRATOR']
-    res = orch.verify_ci_metrics()
-    if res['status'] == 'error':
-        err(ctx, res['message'], data=res)
-    else:
-        out(ctx, res['message'], data=res)
+    try:
+        res = orch.verify_ci_metrics()
+        if res['status'] == 'error':
+            err(ctx, res['message'], data=res)
+        else:
+            out(ctx, res['message'], data=res)
+    except Exception as e:
+        _handle_unexpected_error(ctx, "gh verify-metrics", e)
 
-@gh.command()
+@gh.command(name='summary-report')
 @click.pass_context
 def summary_report(ctx):
     """Generate a markdown report of CI metrics for GHA Step Summary."""

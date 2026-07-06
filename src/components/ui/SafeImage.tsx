@@ -9,12 +9,20 @@ import { normalizeAsset } from '@/lib/content';
  */
 const isSafeUrl = (url: string): boolean => {
   if (!url) return false;
-  if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../') || url.startsWith('blob:')) return true;
 
-  // Basic check for common dangerous protocols
   const lowerUrl = url.toLowerCase().trim();
-  if (lowerUrl.startsWith('javascript:') || lowerUrl.startsWith('data:') || lowerUrl.startsWith('vbscript:')) {
+
+  // Explicitly block known dangerous protocols immediately
+  if (lowerUrl.startsWith('javascript:') ||
+      lowerUrl.startsWith('data:') ||
+      lowerUrl.startsWith('vbscript:') ||
+      lowerUrl.startsWith('file:')) {
     return false;
+  }
+
+  // Allow safe relative and local protocols
+  if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../') || url.startsWith('blob:')) {
+    return true;
   }
 
   try {
@@ -22,16 +30,12 @@ const isSafeUrl = (url: string): boolean => {
     const parsed = new URL(url);
     return ['http:', 'https:', 'blob:'].includes(parsed.protocol);
   } catch {
-    // If URL parsing fails, it's likely a relative path (e.g., "image.jpg").
-    // We consider it safe if it doesn't contain a protocol-like colon before a slash.
+    // If URL parsing fails (likely because it's a relative path like "image.jpg"),
+    // we check if it contains a protocol-like colon before a slash.
     const colonIndex = url.indexOf(':');
     const slashIndex = url.indexOf('/');
 
-    // Relative paths won't have a colon before the first slash (if any)
-    // e.g., "path/to/img.jpg" -> colon -1, slash 4 -> safe
-    // e.g., "img.jpg" -> colon -1, slash -1 -> safe
-    // e.g., "http://bad" -> colon 4, slash 5 -> unsafe (but handled by URL constructor)
-    // e.g., "javascript:alert" -> colon 10, slash -1 -> unsafe
+    // Safe if no colon or colon appears after a slash
     if (colonIndex === -1) return true;
     if (slashIndex !== -1 && colonIndex > slashIndex) return true;
 
@@ -41,10 +45,10 @@ const isSafeUrl = (url: string): boolean => {
 
 /**
  * Whitelist of standard HTML <img> attributes to prevent event handler injection.
- * Includes style and className to allow Primitives to work correctly.
+ * Removed width/height to let Box handle layout via Primitives.
  */
 const SAFE_IMAGE_ATTRS = new Set([
-  'src', 'alt', 'title', 'loading', 'srcSet', 'sizes', 'useMap', 'width', 'height', 'crossOrigin', 'referrerPolicy', 'style', 'className'
+  'src', 'alt', 'title', 'loading', 'srcSet', 'sizes', 'useMap'
 ]);
 
 /**
@@ -76,7 +80,7 @@ export interface SafeImageProps extends Omit<BoxProps, 'as'> {
  * prop filtering, and external asset policies by default.
  */
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
-  ({ src, alt, fallbackSrc, objectFit, ...boxProps }, ref) => {
+  ({ src, alt, fallbackSrc, objectFit, className, style, crossOrigin, ...boxProps }, ref) => {
     const normalizedSrc = normalizeAsset(src || '');
     const isSafe = normalizedSrc ? isSafeUrl(normalizedSrc) : false;
     const finalSrc = isSafe ? normalizedSrc : fallbackSrc;
@@ -88,30 +92,28 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
     const layoutProps: Record<string, unknown> = {};
 
     Object.entries(boxProps).forEach(([key, value]) => {
-      // Handle crossOrigin and style specifically below to avoid lint issues and ensure correct behavior
-      if (key === 'crossOrigin' || key === 'style') return;
-
       if (SAFE_IMAGE_ATTRS.has(key)) {
         imgAttributes[key] = value;
       } else if (PRIMITIVE_PROPS.has(key)) {
         layoutProps[key] = value;
       }
-      // Any other props (like 'onerror') are dropped
     });
 
     const finalStyle: React.CSSProperties = {
       objectFit: objectFit || 'contain',
-      ...(boxProps.style as React.CSSProperties)
+      ...style
     };
 
     // Determine external asset policies
-    const externalPolicies: Record<string, unknown> = {};
+    const externalPolicies: Record<string, string | null> = {};
     if (isExternal) {
       externalPolicies.referrerPolicy = "no-referrer";
 
       // Default to anonymous for external, but allow explicit override (including null to disable)
-      if (boxProps.crossOrigin !== null) {
-        externalPolicies.crossOrigin = (boxProps.crossOrigin as SafeImageProps['crossOrigin']) || "anonymous";
+      if (crossOrigin !== undefined) {
+        externalPolicies.crossOrigin = crossOrigin as string | null;
+      } else {
+        externalPolicies.crossOrigin = "anonymous";
       }
     }
 
@@ -121,10 +123,11 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         as="img"
         src={finalSrc}
         alt={alt}
+        className={className}
+        style={finalStyle}
         {...externalPolicies}
         {...layoutProps}
         {...imgAttributes}
-        style={finalStyle}
       />
     );
   }
