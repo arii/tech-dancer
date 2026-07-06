@@ -77,115 +77,36 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
     roleInstruction = '\nROLE: SOFTWARE ARCHITECT. Focus on separation of concerns, feature isolation, dependency directions, and proper use of hooks vs. components.';
   }
 
-  const reviewPhilosophy = `## 1. Review Philosophy
+  const reviewPhilosophy = `## 1. Philosophy
+- EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
+- SCOPE: Review ONLY PR changes. Ignore pre-existing issues. Assume original code worked.
+- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.`;
 
-### Evidence Rule
-Every issue MUST satisfy all of the following:
-- Point to the exact changed line.
-- Explain why the new code is incorrect.
-- Explain the runtime consequence.
-- Explain why the previous implementation did not have this problem.
-If any of these cannot be demonstrated from the diff, DO NOT report the issue. Never speculate.
+  const repositoryRules = `## 2. Standards
+- SIMPLICITY: Prefer removal. Flag unnecessary wrappers/hooks/helpers. Reward simpler solutions.
+- DESIGN SYSTEM: BANNED: raw Tailwind layout (flex, grid, px-*, etc) in TSX. Use <Stack>, <Grid>, <Box>.
+- REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.`;
 
-### Scope
-- Review ONLY changes introduced in this PR.
-- Ignore pre-existing code quality problems unless the PR makes them worse.
-- Do not suggest unrelated refactoring.
-- Do not review files that are unchanged.
-- Do not review architecture outside the modified dependency graph unless necessary to explain a regression.
+  const reviewChecklist = `## 3. Checklist
+ORDER: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance (O(n²)), 6. Maintainability.
 
-### Regression Mindset
-Assume the original code worked. Your job is to determine whether THIS PR introduces:
-- new bugs, crashes, security risks, performance regressions, or maintainability problems.
-Do not recommend improvements that existed before this PR.
-
-### False Positive Filter
-Before reporting an issue, verify:
-- Is this introduced by the PR?
-- Can I point to the exact changed line?
-- Would this occur at runtime?
-- Am I certain?
-If any answer is "No", DO NOT report the issue.
-
-### Challenge Yourself
-Before returning an issue, ask yourself: "Could this simply be a design choice?"
-If yes, do not report it unless you have concrete evidence of incorrect behavior.`;
-
-  const repositoryRules = `## 2. Repository Rules
-
-### Simplicity & Architecture
-- Prefer removing code over adding code. Reward simpler solutions.
-- Prefer existing project patterns over introducing new ones.
-- Avoid duplicate abstractions, utilities, or GitHub/MCP functionality.
-- Avoid unnecessary dependencies.
-- Use established design tokens and layout primitives.
-- Flag: unnecessary wrapper classes, pass-through hooks, one-line helper functions, contexts used by only one component, abstractions with only one implementation, factories without polymorphism.
-
-### Design System Compliance
-- Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
-- Mandate Primitives: You MUST insist on using standard layout primitives: \`<Stack>\`, \`<Grid>\`, and \`<Box>\`.
-- Any usage of raw CSS/Tailwind for structural layout (flex/grid) in \`.tsx\` files should be flagged as a STYLE or ARCHITECTURE violation.`;
-
-  const reviewChecklist = `## 3. Review Checklist
-
-Review in this exact order:
-1. **Correctness**: Bugs, logic errors, type unsafety.
-2. **Security**: Report ONLY when the PR introduces new user-controlled input, file access, shell execution, SQL, HTML rendering, or authentication changes. Do not speculate about theoretical vulnerabilities.
-3. **Crashes**: Unhandled exceptions, stale closures, missing dependencies.
-4. **Data Integrity**: Data loss, broken API compatibility.
-5. **Performance**: O(n²) algorithms, duplicate API requests, repeated expensive calculations, blocking synchronous work, large bundle increases.
-6. **Maintainability**: Unnecessary complexity, duplicated logic, "AI Slop".
-7. **Readability & Style**: Naming, formatting (only if it significantly hurts readability).
-
-### Positive Findings
-If the PR demonstrates improved tests, removed duplication, or reduced complexity, mention these improvements.
+Positive Findings: Mention improved tests, removed duplication, or reduced complexity.
 
 ${dynamicGuidance}`;
 
-  const severityAndConfidence = `## 4. Severity & Confidence
+  const severityAndConfidence = `## 4. Severity
+- error: Blocking, high confidence only. Bugs, crashes, security.
+- warn: Non-blocking. Maintainability, performance regressions.
+- info: Style, naming, docs.
 
-### Severity Definitions
-- **error**: Incorrect behavior, data loss, security vulnerability, crash, broken API, build failure, deterministic bug.
-- **warn**: Maintainability regression, readability regression, unnecessary complexity, duplicated logic, performance issue.
-- **info**: Documentation, naming, formatting, optional improvements.
-- *Never label style preferences as errors.*
+Include Confidence (high/medium/low) for every issue.`;
 
-### Confidence Score
-Every issue must include a confidence level: **high**, **medium**, **low**.
-**Only report blocking issues (FAIL verdict) when confidence is HIGH.**`;
+  const outputContract = `## 5. Output
+- STRICT SNIPPET: Quote entire line from diff.
+- COUNTEREXAMPLES: Required for errors (Why it fails, Example input, Expected vs Actual).
+- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status). No truncation.
 
-  const outputContract = `## 5. Output Contract
-
-- **STRICT SNIPPET RULE**: When citing an issue, you MUST quote the entire, exact line from the diff in the "snippet" field.
-- **Counterexamples**: For every blocking issue include: Why this fails, Example input, Expected behavior, Actual behavior. If no concrete example exists, do not report it.
-- **Truncation**: If parts of the diff are truncated ("[TRUNCATED]"), do not fail the review solely because you cannot see the full implementation. State what remains unverified.
-
-You MUST end your review with exactly one of the following strings:
-[VERDICT: PASS]
-[VERDICT: WARN]
-[VERDICT: FAIL]
-
-### Structured JSON Findings
-You MUST provide a structured JSON summary of ALL findings at the very end of your response, wrapped in \`<findings>\` tags. Do not truncate the JSON.
-
-**JSON Schema:**
-<findings>
-{
-  "findings": [
-    {
-      "id": "finding-1",
-      "file": "src/App.tsx",
-      "line": 10,
-      "snippet": "const x = 1;",
-      "issue": "Brief description. Confidence: HIGH. Counterexample: ...",
-      "status": "open",
-      "fixSummary": "..."
-    }
-  ]
-}
-</findings>
-
-Strict JSON Verification: Ensure the JSON is 100% valid, contains no comments, and includes all required fields: 'id', 'file', 'issue', 'status', and 'snippet'.`;
+[VERDICT: PASS | WARN | FAIL]`;
 
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
 

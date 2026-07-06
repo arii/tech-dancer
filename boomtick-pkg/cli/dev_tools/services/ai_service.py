@@ -75,14 +75,10 @@ _SYNTHESIS_SCHEMA = {
     "required": ["reviewComment", "labels", "recommendation"],
 }
 
-_COMMON_REVIEW_GUIDELINES = """## 1. Review Philosophy
-Review ONLY changes in this PR. Ignore pre-existing issues. Assume original code worked (Regression Mindset).
-EVIDENCE RULE: Every issue MUST point to the exact line, explain the error, and describe the runtime consequence.
-FALSE POSITIVE FILTER: If you aren't certain or it might be a design choice, DO NOT report it.
-
-## 2. Repository Rules
-Prefer removing code. Flag unnecessary wrappers, one-line helpers, and dead abstractions.
-BANNED: Raw Tailwind (flex, grid, px-*) in .tsx files. Use <Stack>, <Grid>, <Box>."""
+_COMMON_REVIEW_GUIDELINES = """Review ONLY PR changes. Assume original code worked.
+EVIDENCE RULE: Issue must point to exact line + explain runtime consequence.
+FALSE POSITIVE FILTER: No speculation. Design choices are NOT bugs.
+REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box)."""
 
 
 class AIClient:
@@ -292,19 +288,12 @@ class AIClient:
             truncation_note = "\nNOTE: This diff is TRUNCATED. If you need more context to be certain of an issue, state what you are missing instead of speculating.\n"
 
         prompt = (
-            f"You are a strict code reviewer. Review the diff below for PR: {pr_title}.\n"
-            f"CI status: {checks_summary}\n\n"
+            f"Review PR: {pr_title}. CI: {checks_summary}\n\n"
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
-            "## 3. Review Checklist\n"
-            "Order: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance, 6. Maintainability.\n\n"
-            "## 4. Severity & Confidence\n"
-            "- error: bugs, crashes, security risks, broken APIs.\n"
-            "- warn: maintainability/performance regressions.\n"
-            "- info: style, naming, docs.\n"
-            "Include 'confidence' (high/medium/low). Only 'error' with confidence 'high' is blocking.\n\n"
-            "## 5. Output Contract\n"
-            "Output ONLY valid JSON matching the schema. Include counterexamples for errors.\n\n"
-            f"Diff:\n{combined_diff}"
+            "ORDER: Correctness, Security (new input/auth only), Crashes, Data Integrity, Performance, Maintainability.\n"
+            "SEVERITY: error (blocking, high confidence only), warn, info. Include 'confidence' (high/medium/low).\n"
+            "OUTPUT: Valid JSON. Counterexamples required for errors.\n\n"
+            f"{truncation_note}Diff:\n{combined_diff}"
         )
 
         t0 = time.time()
@@ -404,17 +393,12 @@ class AIClient:
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
         return (
-            f"You are a senior code reviewer. Review ONLY the diff below for file \"{chunk['file']}\".\n"
-            f"PR title: {pr_title}\n"
-            f"CI status: {checks_summary}\n\n"
-            f"## Current Stack Versions\n{versions_block}\n{context_section}\n\n"
+            f"Review {chunk['file']}. PR: {pr_title}. CI: {checks_summary}\n"
+            f"VERSIONS: {versions_block}\n{context_section}\n\n"
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
-            "## 3. Review Checklist\n"
-            "1. Correctness, 2. Security, 3. Performance, 4. Maintainability.\n\n"
-            "## 4. Severity & Confidence\n"
-            "Use 'error', 'warn', 'info'. Populate the 'confidence' field (high/medium/low) for every issue.\n\n"
-            "## 5. Output Contract\n"
-            "Output ONLY valid JSON matching the schema. Include counterexamples for all errors.\n\n"
+            "ORDER: Correctness > Security > Performance > Maintainability.\n"
+            "SEVERITY: error/warn/info. confidence: high/medium/low.\n"
+            "OUTPUT: Valid JSON. Counterexamples required for errors.\n\n"
             f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
     def _write_progress_snapshot(

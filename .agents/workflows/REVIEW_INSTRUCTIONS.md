@@ -11,27 +11,21 @@ You will record your findings in the writeable `pr-review-<PR_NUMBER>.md` file.
 - **Checklist Completion**: Every item in the Audit Checklist MUST be marked to indicate it was verified.
 - **JSON Block**: You MUST fill the JSON block at the bottom of the file with your findings.
 
-## 2. Review Philosophy & Audit Checklist
+## 2. Philosophy & Checklist
 
-You MUST adopt a **Senior Engineer** mindset.
+### Senior Engineer Mindset:
+- **Evidence Rule**: Point to exact line + explain runtime consequence. No speculation.
+- **Regression Scope**: Review ONLY PR changes. Ignore pre-existing issues unless worsened.
+- **Simplicity**: Prefer code removal. Flag unnecessary wrappers/hooks/abstractions.
+- **Filter**: Verify runtime impact + certainty. Design choices != bugs.
 
-### Review Philosophy:
-- **Evidence Rule**: Every issue MUST satisfy: Point to exact line, explain why it's incorrect, explain runtime consequence, and explain why the previous version was better. No speculation.
-- **Regression Mindset**: Review ONLY changes in this PR. Assume original code worked. Ignore pre-existing issues unless made worse.
-- **Simplicity**: Prefer removing code. Flag unnecessary abstractions (wrapper classes, pass-through hooks, one-line helpers).
-- **False Positive Filter**: Before reporting, verify: Is it introduced by the PR? Would it occur at runtime? Am I certain?
-
-### Audit Checklist Marking:
-- **`[x]`**: Verified and **passed**.
-- **`[ ]`**: Verified and **failed**. Provide feedback in `FINDINGS` and JSON comments.
-
-The **Anti-AI-Slop checklist** is mandatory:
+### Checklist (Mark `[x]` or `[ ]`):
 - **Dead abstractions**: Simplest primitive used?
-- **Unnecessary indirection**: Direct function calls preferred over wrappers?
-- **Responsibility creep**: State/logic in the correct place?
+- **Unnecessary indirection**: Direct calls preferred over wrappers?
+- **Responsibility creep**: Logic in the correct place?
 - **Import bloat**: No redundant `import React`?
-- **Token compliance**: Established design tokens used (no raw Tailwind for layout)?
-- **Audit ratio**: For > 100 lines added, identified 10 lines to refactor/remove?
+- **Token compliance**: Standard tokens used (no raw Tailwind for layout)?
+- **Audit ratio**: 10 lines refactored per 100 added?
 
 ## 3. CI Failure Handling
 
