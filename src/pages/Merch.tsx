@@ -92,6 +92,7 @@ export default function Merch() {
                   key={collection.id}
                   label={collection.label}
                   isActive={activeCollection === collection.id}
+                  variant="compact"
                   onClick={() => setActiveCollection(collection.id)}
                 />
               ))}
