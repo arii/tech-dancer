@@ -67,6 +67,16 @@ export default defineConfig(({mode}) => {
       rollupOptions: {
         output: {
           compact: !skipMinify,
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('firebase')) return 'vendor-firebase';
+              if (id.includes('motion')) return 'vendor-motion';
+              if (id.includes('recharts') || id.includes('d3')) return 'vendor-charts';
+              if (id.includes('lucide-react')) return 'vendor-icons';
+              if (id.includes('react-markdown') || id.includes('unified') || id.includes('remark') || id.includes('rehype')) return 'vendor-markdown';
+              return 'vendor';
+            }
+          },
         }
       }
     },
