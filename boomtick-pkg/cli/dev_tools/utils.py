@@ -260,9 +260,9 @@ def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: O
         except (ValueError, TypeError):
             return default
 
-    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", 150000)
-    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", 50000)
-    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", 200000)
+    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", 1500000)
+    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", 500000)
+    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", 2000000)
 
     # Threshold validation
     if input_limit < 0 or output_limit < 0 or total_limit < 0:

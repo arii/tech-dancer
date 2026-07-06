@@ -62,6 +62,7 @@
 * [x] **`[x]` boomtick-pkg/mcp/src/tools/github.create_issue.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/src/tools/github.create_pull_request.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/src/tools/github.get_merge_conflict_files.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` boomtick-pkg/mcp/src/tools/github.get_pr.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/src/tools/github.get_pr_diff.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/src/tools/github.issue_comment.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/src/tools/github.issue_update.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
