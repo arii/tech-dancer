@@ -26,6 +26,9 @@ from dev_tools.services.vector_store import VectorStore
 # Model used for per-file chunk review (code-aware, focused)
 _REVIEW_MODEL = get_ai_review_model()
 
+# Model used for final summary synthesis
+_SYNTHESIS_MODEL = get_ai_model()
+
 # Combined review schema
 _REVIEW_SCHEMA = {
     "type": "object",
@@ -59,6 +62,17 @@ _REVIEW_SCHEMA = {
         "recommendation": {"type": "string"},
     },
     "required": ["file_reviews", "reviewComment", "labels", "recommendation"],
+}
+
+# Synthesis review schema
+_SYNTHESIS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "reviewComment": {"type": "string"},
+        "labels":        {"type": "array", "items": {"type": "string"}},
+        "recommendation": {"type": "string"},
+    },
+    "required": ["reviewComment", "labels", "recommendation"],
 }
 
 
