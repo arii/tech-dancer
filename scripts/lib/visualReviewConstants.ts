@@ -34,7 +34,8 @@ Treat major layout collapse as HIGH severity.
 3. Recommendations.
 
 End with <findings> JSON block (id, route, issue, status).`;
-The JSON must follow this schema:
+
+export const JSON_SCHEMA_INFO = `The JSON must follow this schema:
 {
   "findings": [
     {
