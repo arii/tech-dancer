@@ -7,16 +7,22 @@ export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, 
  */
 export function resolveJIT(val: string | number | boolean | undefined | null, prefix: string): string {
   if (val === undefined || val === null || val === "") return "";
-  const isNegative = typeof val === "number" ? val < 0 : String(val).startsWith("-") && val !== "-";
-  const absVal = isNegative ? String(val).slice(1) : val;
-  const absStr = String(absVal);
 
-  // Tailwind tokens: numeric (4, 1.5), fractions (1/2), or names (full, auto, red-500)
-  // Names must start with a letter and not end in a CSS unit suffix preceded by a digit.
-  const isToken = /^\d+(\.\d+)?$|^\d+\/\d+$/.test(absStr) || (/^[a-z]/.test(absStr) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absStr));
+  const isNegative = typeof val === "number" ? val < 0 : String(val).startsWith("-") && val !== "-";
+  const absVal = isNegative ? (typeof val === "number" ? Math.abs(val) : String(val).slice(1)) : val;
+  const absStr = String(absVal);
 
   const pfx = prefix ? `${prefix}-` : "";
   const negPfx = isNegative ? "-" : "";
+
+  // Tailwind tokens: numeric (4, 1.5), or simple alphanumeric-hyphen names (full, 2xl, red-500).
+  // Note: Fractions (1/2) and decimals in strings (1.5) are treated as arbitrary values [1/2]
+  // to ensure compatibility with all Tailwind themes unless they are passed as numbers.
+  const isToken = typeof val === "number" || (
+    typeof val === "string" &&
+    /^[a-z0-9-]+$/.test(absStr) &&
+    !/[0-9](px|vh|vw|%|rem|em)$/.test(absStr)
+  );
 
   if (isToken) return `${negPfx}${pfx}${absStr}`;
 
