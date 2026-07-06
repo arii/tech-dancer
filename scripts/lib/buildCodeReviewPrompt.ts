@@ -82,7 +82,14 @@ Review the following code diff for bugs, anti-patterns, missing types, performan
 Provide actionable feedback. Focus on HIGH severity issues.
 
 ${guidelinesSection}${goalSection}${priorStateSection}${impactSemanticContextSection}
-${uiAuditInstruction}Severity rules — apply these strictly:
+${uiAuditInstruction}General rules — apply these strictly:
+- Focus on the PR's stated goal: "${summary.prGoal || 'Not specified'}"
+- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
+  user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
+- Do not introduce review topics unrelated to the PR's stated goal unless you find a
+  genuine, evidence-backed regression caused by this diff.
+
+Severity rules:
 - HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
   passed where the type doesn't allow it, a class or function that doesn't exist, a call
   with the wrong arity, a test that would fail. Cite the exact line(s).
@@ -103,16 +110,12 @@ Design System Compliance:
 - Any usage of raw CSS/Tailwind for structural layout (flex/grid) in \`.tsx\` files should be flagged as a STYLE or ARCHITECTURE violation.
 
 ${dynamicGuidance}
-Scope and security rules:
+Scope and context rules:
 - STRICT SCOPE: Only review the lines present in the diff or the provided external context.
 - DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or
   broken by this diff. If a symbol is used but its definition is not in the context,
   ASSUME it is correctly defined elsewhere.
 - DO NOT hallucinate bugs in code you cannot see.
-- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
-  user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
-- Do not introduce review topics unrelated to the PR's stated goal unless you find a
-  genuine, evidence-backed regression caused by this diff.
 - If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"),
   DO NOT fail the review solely because you cannot see the full implementation of a
   newly introduced module or utility. Instead, provide a WARN or PASS verdict based on

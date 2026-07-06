@@ -269,7 +269,7 @@ class AIClient:
             f'CI status: {checks_summary}\n\n'
             f'Rules:\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200]}..."\n'
+            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n'
             f'- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn\'t before).\n'
             f'- Do not introduce review topics unrelated to the PR\'s stated goal unless you find a genuine, evidence-backed regression caused by this diff.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
@@ -368,7 +368,7 @@ class AIClient:
 
         return "\n".join(context_parts)
 
-    def _build_chunk_prompt(self, chunk: Dict, pr_title: str, checks_summary: str) -> str:
+    def _build_chunk_prompt(self, chunk: Dict, pr_title: str, checks_summary: str, pr_description: str = "") -> str:
         trunc_note = "\n(Note: diff was truncated to fit context window)" if chunk.get('truncated') else ""
 
         context = self._get_context_for_chunk(chunk)
@@ -380,10 +380,14 @@ class AIClient:
         return (
             f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
             f'PR title: {pr_title}\n'
+            f'PR description: {pr_description}\n'
             f'CI status: {checks_summary}\n'
             f'\n## Current Stack Versions (Source of Truth)\n{versions_block}\n'
             f'{context_section}\n\n'
             f'Rules:\n'
+            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n'
+            f'- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn\'t before).\n'
+            f'- Do not introduce review topics unrelated to the PR\'s stated goal unless you find a genuine, evidence-backed regression caused by this diff.\n'
             f'- DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
