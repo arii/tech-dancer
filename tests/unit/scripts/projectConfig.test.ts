@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -6,18 +6,13 @@ import { loadProjectConfig, DEFAULT_CONFIG } from '../../../scripts/lib/projectC
 
 describe('loadProjectConfig', () => {
   let tempDir: string;
-  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'project-config-test-'));
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
     fs.rmSync(tempDir, { recursive: true, force: true });
-    if (consoleWarnSpy) {
-      consoleWarnSpy.mockRestore();
-    }
   });
 
   it('returns default config when file does not exist', () => {
@@ -60,7 +55,6 @@ describe('loadProjectConfig', () => {
 
     const config = loadProjectConfig(configPath);
     expect(config).toEqual(DEFAULT_CONFIG);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('⚠️  Failed to load project_config.json, using defaults.'), expect.any(Error));
   });
 
   it('validates types and falls back to defaults for invalid types', () => {

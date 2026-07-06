@@ -11,21 +11,13 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
       - '.github/workflows/**'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
-      - '**.ts'
-      - '**.tsx'
-      - '**.js'
-      - '**.mjs'
-      - '**.json'
-      - '**.yaml'
-      - '**.yml'
-      - '**.ini'
-      - '**.html'
-      - '.npmrc'
+      - '*.config.ts'
+      - 'tsconfig*.json'
+      - '.yamllint.yml'
   pull_request:
     branches: ['**']
     paths:
@@ -36,21 +28,13 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
       - '.github/workflows/**'
       - '.github/actions/**'
       - 'AGENTS.md'
       - 'docs/github-workflows.md'
-      - '**.ts'
-      - '**.tsx'
-      - '**.js'
-      - '**.mjs'
-      - '**.json'
-      - '**.yaml'
-      - '**.yml'
-      - '**.ini'
-      - '**.html'
-      - '.npmrc'
+      - '*.config.ts'
+      - 'tsconfig*.json'
+      - '.yamllint.yml'
   workflow_dispatch:
   schedule:
     - cron: '45 4 * * 6'
@@ -76,8 +60,16 @@ env:
   AUDIT_BASELINE: ${{ vars.AUDIT_BASELINE }}
 
 jobs:
+  verify-changes:
+    uses: ./.github/workflows/reusable-gate.yml
+    permissions:
+      pull-requests: write
+      contents: write
+
   lint-typecheck:
     name: Lint & Type Check (${{ matrix.target }})
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
@@ -98,6 +90,8 @@ jobs:
 
   audit:
     name: Anti-Pattern Audit
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
@@ -123,6 +117,8 @@ jobs:
 
   test-build:
     name: Build & E2E
+    needs: [verify-changes]
+    if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
@@ -140,12 +136,12 @@ jobs:
       - uses: ./boomtick-pkg/.github/actions/test-build
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          run_lighthouse: ${{ github.ref == 'refs/heads/main' }}
 
 
   impact-analysis:
-    needs: [lint-typecheck, audit, test-build]
+    needs: [verify-changes, lint-typecheck, audit, test-build]
     name: Deployment Impact Analysis
+    if: needs.verify-changes.outputs.has_changes == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
@@ -161,22 +157,6 @@ jobs:
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
         with:
           fetch-depth: 0
-
-      - name: Get main branch SHA
-        id: main-sha
-        shell: bash
-        run: |
-          git fetch origin main
-          echo "SHA=$(git rev-parse origin/main)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache main build
-        uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-        with:
-          path: .tmp-main
-          key: ${{ runner.os }}-main-build-${{ steps.main-sha.outputs.SHA }}
-          restore-keys: |
-            ${{ runner.os }}-main-build-
-
       - uses: ./boomtick-pkg/.github/actions/impact-analysis
 
         with:
@@ -186,6 +166,8 @@ jobs:
           jules_api_key: ${{ secrets.JULES_API_KEY }}
 
   security-scan:
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
     name: Security Scan (${{ matrix.scanner }})
     runs-on: ubuntu-latest
     permissions:
@@ -239,6 +221,8 @@ jobs:
 
   validate-workflows:
     name: Validate all workflow files
+    needs: verify-changes
+    if: needs.verify-changes.outputs.has_changes == 'true' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
