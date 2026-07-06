@@ -158,6 +158,27 @@ function ArielProfile() {
           </Grid>
         </Reveal>
       </Stack>
+
+      {/* Legal & Privacy Sections - Required for compliance and smoke tests */}
+      <Stack gap={12} marginTop={32} paddingX={4} border="t" paddingTop={16} className="border-line/10">
+        <Stack id="privacy" gap={4} maxWidth="prose">
+          <Text as="h2" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">
+            Privacy Policy
+          </Text>
+          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-70">
+            This site (boomtick.blog) is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Any information provided through contact forms or newsletter signups is used solely for that purpose.
+          </Text>
+        </Stack>
+
+        <Stack id="terms" gap={4} maxWidth="prose">
+          <Text as="h2" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">
+            Terms of Use
+          </Text>
+          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-70">
+            Content on this site is provided for informational and entertainment purposes. While we strive for accuracy, we are not responsible for any issues arising from the use of tools, products, or travel advice mentioned.
+          </Text>
+        </Stack>
+      </Stack>
     </Box>
   );
 }
