@@ -24,13 +24,13 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [ ] `-[ ]` boomtick-pkg/cli/dev_tools/orchestrator.py
     * **Location:** `boomtick-pkg/cli/dev_tools/orchestrator.py` (Method: `verify_ci_metrics`)
     * **The Slop:** Redefinition of `verify_ci_metrics` which was already imported from `dev_tools.utils`. Redundant and shadowed the imported utility.
-    * **Why it's likely AI Drift:** LLM multi-turn editing drift leading to cargo-culting the function implementation into the class instead of using the imported utility.
-    * **Remediation:** Remove the redundant method and use the imported function directly via the `dev_tools.utils` module.
+    * **Why it's likely AI Drift:** LLM multi-turn editing drift leading to cargo-culting the function implementation into the class instead of using the imported utility. This is a classic 'memory fade' where the AI forgets it already wrote a utility.
+    * **Remediation:** Removed the redundant method and updated `cli.py` to use the centralized implementation from `dev_tools.utils`.
 * [ ] `-[ ]` boomtick-pkg/cli/dev_tools/review_read_pass.py
     * **Location:** `boomtick-pkg/cli/dev_tools/review_read_pass.py` (Functions: `parse_diff_into_hunks`, `extract_review_signals`)
-    * **The Slop:** Legacy hunk-level parser and signal extraction kept for "backward compatibility" in a new internal tool that only works with JSON/structured inputs.
-    * **Why it's likely AI Drift:** Hallucinated backward-compatibility requirement for a system architecture that is entirely irrelevant to our stack.
-    * **Remediation:** Remove `parse_diff_into_hunks` and `extract_review_signals` and rely on native structured data processing.
+    * **The Slop:** Legacy hunk-level parser and signal extraction kept for 'backward compatibility' in a new internal tool that only works with JSON/structured inputs.
+    * **Why it's likely AI Drift:** Hallucinated backward-compatibility requirement for a system architecture that is entirely irrelevant to our stack. The AI generated code for a 'legacy' system that never existed in this repo.
+    * **Remediation:** Removed `parse_diff_into_hunks` and `extract_review_signals` and relied on native structured data processing.
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/schema_gen.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/scope_check.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/services/__init__.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -198,7 +198,7 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` LICENSE — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` README.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` eslint.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` generate_report_v2.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` generate_final_report.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` knip.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` lighthouserc.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` package.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -276,8 +276,8 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [ ] `-[ ]` scripts/orchestrator/agent_2_orchestrator.py
     * **Location:** `scripts/orchestrator/agent_2_orchestrator.py` (Functions: `run_cli`, `get_session_id`, `wait_for_agent`)
     * **The Slop:** Local redefinition of core utilities that were already available via imports. Added zero operational value and obscured the true execution path.
-    * **Why it's likely AI Drift:** AI "forgetting" the context of existing imports and re-implementing core primitives locally.
-    * **Remediation:** Remove the local redefinitions and synchronize with the centralized `utils.py` implementations.
+    * **Why it's likely AI Drift:** AI 'forgetting' the context of existing imports and re-implementing core primitives locally. This increases the maintenance surface area and leads to logic drift between different 'orchestrators'.
+    * **Remediation:** Removed the local redefinitions and synchronized with the centralized `utils.py` implementations.
 * [x] **`[x]` scripts/orchestrator/experiments/continuous_dev_loop.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/experiments/deterministic_loop.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/experiments/genai_orchestrator.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -424,8 +424,8 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [ ] `-[ ]` src/lib/style-utils.ts
     * **Location:** `src/lib/style-utils.ts` (Entire file)
     * **The Slop:** Over-engineered JIT resolution logic (`resolveJIT`) that attempted to mimic complex Tailwind internals with recursive regex and heavy abstractions.
-    * **Why it's likely AI Drift:** The logic was far more complex than necessary, using an overly academic functional pipeline where simple primitive mapping sufficed.
-    * **Remediation:** Simplify `resolveJIT` to use a direct token/arbitrary-value split with a robust regex that handles decimal spacing values and fractions.
+    * **Why it's likely AI Drift:** The logic was far more complex than necessary, using an overly academic functional pipeline where simple primitive mapping sufficed. It also ignored existing `SPACING_MAP` tokens in its primary resolution loop.
+    * **Remediation:** Simplified `resolveJIT` to use a direct token/arbitrary-value split with a robust regex that handles decimal spacing values (e.g., 1.5) and fractions (1/2).
 * [x] **`[x]` src/lib/types/content.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/types/routes.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/utils.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
