@@ -8,7 +8,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Box, Text, Stack, Grid } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
-import { normalizeAsset } from '@/lib/content';
+import { SafeImage } from './SafeImage';
 import { Notice } from './Notice';
 import { AffiliateCard } from './AffiliateCard';
 import { affiliateManager } from '@/lib/affiliateManager';
@@ -169,16 +169,26 @@ const RenderCode = ({ className, children, node: _node, ...props }: { className?
 
     if (diagramUrl) {
       return (
-        <Box marginY={12} width="full" display="flex" justify="center" surface="surface" radius="lg" padding={8} className="bg-surface-alt/50 border border-line/30">
-          <Box
-            as="img"
+        <Box
+          marginY={12}
+          width="full"
+          display="flex"
+          justify="center"
+          surface="surface"
+          radius="lg"
+          padding={8}
+          border
+          borderColor="line/30"
+        >
+          <SafeImage
             src={diagramUrl}
             alt="Workflow Diagram"
             radius="lg"
             maxWidth="full"
-            maxHeight={96}
-            className="object-contain"
+            maxHeight={{ base: "viewport-half", lg: 96 }}
+            objectFit="contain"
             loading="lazy"
+            crossOrigin={null}
           />
         </Box>
       );
@@ -347,19 +357,23 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <Box as="td" padding={4} className="border-b border-line/50" {...props} />
           ),
           img: ({node: _node, src, alt, ...props}) => {
-            const normalizedSrc = normalizeAsset(src || '');
+            // Mermaid diagrams are external SVG images that often don't support CORS.
+            // Disable crossOrigin for them specifically.
+            const isMermaid = src?.includes('mermaid.ink');
+
             return (
-              <Box marginY={12} width="full" display="flex" justify="center" className="markdown-image-wrapper">
-                <Box
-                  as="img"
-                  src={normalizedSrc}
+              <Box marginY={12} width="full" display="flex" justify="center">
+                <SafeImage
+                  src={src || ''}
                   radius="lg"
                   shadow="sm"
                   border
                   loading="lazy"
-                  alt={alt || "Article illustration"}
+                  alt={alt || ""}
                   maxWidth={{ base: 'full', md: '2xl' }}
-                  height="auto"
+                  maxHeight={{ base: "viewport-half", lg: 96 }}
+                  objectFit="contain"
+                  crossOrigin={isMermaid ? null : undefined}
                   {...props}
                 />
               </Box>

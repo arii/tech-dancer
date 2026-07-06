@@ -9,6 +9,16 @@ export default {
   safelist: tailwindSafelist,
   theme: {
     extend: {
+      spacing: {
+        '18': '4.5rem',
+        'viewport-half': '50vh',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'md': '12px',
+        'lg': '18px',
+        'xl': '24px',
+      },
       opacity: {
         ghost: '0.1',
         low: '0.2',
@@ -51,7 +61,8 @@ export default {
         'equalizer': 'linear-gradient(180deg, var(--raw-color-accent-brand), var(--raw-color-accent-purple), var(--raw-color-accent-magenta))'
       },
       boxShadow: {
-        'equalizer': '0 0 14px var(--hero-accent-shadow)'
+        'equalizer': '0 0 14px var(--hero-accent-shadow)',
+        'glow': '0 0 15px var(--raw-color-accent-shadow)',
       },
       fontSize: {
         micro: "var(--text-micro)",

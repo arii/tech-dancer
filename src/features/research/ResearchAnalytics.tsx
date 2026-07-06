@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BaseCard } from '@/components/ui/BaseCard';
@@ -65,11 +66,17 @@ function ToolImage({ tool, baseUrl, onImageClick }: { tool: ResearchTool; baseUr
   };
 
   return (
-    <Box width="full" className="card-screenshot-wrapper border-b border-white/8 cursor-zoom-in" onClick={handleImageClick}>
-      <img
+    <Box
+      width="full"
+      className="card-screenshot-wrapper border-b border-white/8 cursor-zoom-in"
+      onClick={handleImageClick}
+    >
+      <SafeImage
         src={src}
         alt={alt}
-        className="opacity-heavy hover:opacity-100 transition-opacity duration-500 w-full"
+        width="full"
+        objectFit="cover"
+        className="opacity-heavy hover:opacity-100 transition-opacity duration-500"
       />
     </Box>
   );
@@ -533,10 +540,16 @@ export default function ResearchAnalytics() {
           <Box position="absolute" top={4} right={4} className="text-white hover:text-accent p-2">
             <Icon icon={X} size="lg" />
           </Box>
-          <img
+          <SafeImage
             src={lightboxImage}
             alt="Enlarged screenshot preview"
-            className="max-w-[95vw] max-h-[95vh] md:max-w-[85vw] md:max-h-[85vh] object-contain rounded-lg border border-white/10 shadow-2xl"
+            maxWidth={{ base: "screen-sm", md: "7xl" }}
+            maxHeight={{ base: "viewport-half", md: "screen" }}
+            objectFit="contain"
+            radius="lg"
+            border
+            borderColor="white/10"
+            shadow="glow"
           />
         </Box>
       )}
