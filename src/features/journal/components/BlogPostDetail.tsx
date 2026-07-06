@@ -1,4 +1,3 @@
-// impeccable-ignore-file
 import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { AffiliateDisclosure } from '@/components/ui/AffiliateDisclosure';

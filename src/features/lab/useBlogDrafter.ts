@@ -26,14 +26,6 @@ const STORAGE_KEY = 'tech-dancer-blog-draft';
 const HISTORY_KEY = 'tech-dancer-blog-history';
 const DEBOUNCE_WAIT = 1000; // 1 second
 
-// Safe ID generator with fallback for legacy browsers
-const generateId = () => {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-};
-
 const DEFAULT_DATA: DraftData = {
   type: 'post',
   title: '',
@@ -55,8 +47,8 @@ export function useBlogDrafter() {
         const parsed = JSON.parse(saved);
         return { ...DEFAULT_DATA, ...parsed };
       }
-    } catch {
-      // Silent fail per audit recommendation
+    } catch (err) {
+      console.warn('Failed to load draft from localStorage:', err);
     }
     return DEFAULT_DATA;
   });
@@ -67,8 +59,8 @@ export function useBlogDrafter() {
       if (saved) {
         return JSON.parse(saved);
       }
-    } catch {
-      // Silent fail per audit recommendation
+    } catch (err) {
+      console.warn('Failed to load history from localStorage:', err);
     }
     return [];
   });
@@ -104,7 +96,7 @@ export function useBlogDrafter() {
 
   const saveToHistory = useCallback(() => {
     const newEntry: HistoryEntry = {
-      id: generateId(),
+      id: crypto.randomUUID(),
       timestamp: Date.now(),
       data: { ...data }
     };
@@ -182,7 +174,8 @@ ${data.affiliateLink ? `\n[Buy on Amazon](${data.affiliateLink})` : ''}
         clean = clean.replace(/^```(json)?\n?/, '').replace(/\n?```$/, '');
         clean = clean.trim();
         return JSON.parse(clean);
-      } catch {
+      } catch (err) {
+        console.error('Failed to parse AI response JSON:', err);
         return null;
       }
     };

@@ -40,35 +40,11 @@ const preprocessMarkdown = (content: string): string => {
 
 /**
  * Parses a prop value from a markdown tag.
- * Markdown attributes are always strings when parsed via rehype-raw,
- * but we want to support JSX-like syntax for numbers, booleans, and responsive objects.
- * e.g. cols="{{ base: 1, md: 3 }}" or gap="{6}"
+ * Supports plain strings and numeric strings.
  */
 function parseProp<T>(val: unknown): T {
   if (typeof val !== 'string') return val as T;
   const trimmed = val.trim();
-
-  // Handle JSX-style curly braces: {1} or {{base: 1}}
-  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-    const inner = trimmed.slice(1, -1).trim();
-
-    try {
-      // Safely parse JSON strings by converting non-quoted keys to quoted
-      // e.g. { base: 1, md: 3 } -> { "base": 1, "md": 3 }
-      let jsonStr = inner;
-      if (!inner.startsWith('{') && inner.startsWith("'") && inner.endsWith("'")) {
-        jsonStr = `"${inner.slice(1, -1)}"`;
-      } else if (inner.startsWith('{')) {
-        jsonStr = inner
-          .replace(/(?:^|[{,]\s*)([a-zA-Z0-9_]+)\s*:/g, (match, key) => match.replace(key, `"${key}"`))
-          .replace(/(?<![a-zA-Z])'|'(?![a-zA-Z])/g, '"');
-      }
-      return JSON.parse(jsonStr) as T;
-    } catch (e) {
-      console.warn('MarkdownRenderer: Failed to parse prop expression:', inner, e);
-      return inner as T;
-    }
-  }
 
   // Auto-convert plain numeric strings (e.g. margin="4")
   const num = Number(trimmed);

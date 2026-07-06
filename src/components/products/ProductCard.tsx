@@ -46,8 +46,7 @@ export function ProductCard({
       <MerchImageDisplay
         title={item.title}
         href={item.href}
-        imageUrl={item.imageUrl}
-        images={item.images}
+        images={item.images || [{ src: item.imageUrl, side: 'front', alt: item.title }]}
         imageDisplayMode={item.imageDisplayMode}
         isFeatured={isFeatured}
       />

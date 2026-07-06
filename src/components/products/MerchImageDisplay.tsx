@@ -6,8 +6,7 @@ import { resolveMerchImages } from '@/lib/merch/imageDisplay';
 interface MerchImageDisplayProps {
   title: string;
   href: string;
-  imageUrl: string;
-  images?: MerchProductImage[];
+  images: MerchProductImage[];
   imageDisplayMode?: MerchImageDisplayMode;
   isFeatured?: boolean;
 }
@@ -82,8 +81,8 @@ function ProminentImages({ primary, secondary }: { primary: MerchProductImage; s
   );
 }
 
-export function MerchImageDisplay({ title, href, imageUrl, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
-  const resolved = resolveMerchImages({ title, imageUrl, images, imageDisplayMode });
+export function MerchImageDisplay({ title, href, images, imageDisplayMode, isFeatured }: MerchImageDisplayProps) {
+  const resolved = resolveMerchImages({ title, images, imageDisplayMode });
   const primary = resolved.primary;
   if (!primary) return null;
 

@@ -130,11 +130,9 @@ def is_ai_available() -> bool:
     """Checks if AI API token is present."""
     return bool(os.getenv("GITHUB_TOKEN"))
 
-def to_standard_schema(schema, uppercase: bool = False):
+def to_standard_schema(schema):
     """Recursively prepares a standard JSON schema.
     - Ensures top-level 'type: object' if 'properties' is present.
-    - Converts type names to uppercase if uppercase=True (Gemini requirement).
-    - Otherwise ensures lowercase (Standard AI model naming).
     """
     if isinstance(schema, dict):
         # Auto-inject object type if properties are defined without a type
@@ -143,13 +141,10 @@ def to_standard_schema(schema, uppercase: bool = False):
 
         new_schema = {}
         for k, v in schema.items():
-            if k == "type" and isinstance(v, str):
-                new_schema[k] = v.upper() if uppercase else v.lower()
-            else:
-                new_schema[k] = to_standard_schema(v, uppercase=uppercase)
+            new_schema[k] = to_standard_schema(v)
         return new_schema
     elif isinstance(schema, list):
-        return [to_standard_schema(item, uppercase=uppercase) for item in schema]
+        return [to_standard_schema(item) for item in schema]
     return schema
 
 def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
@@ -210,7 +205,7 @@ def call_github_models(prompt: str, model: str = None, max_retries: int = 3, sch
     data = {"model": model or get_ai_model(), "messages": [{"role": "user", "content": prompt}], "stream": False}
     if schema:
         # OpenAI style: prompt injection + json_object mode
-        norm_schema = to_standard_schema(schema, uppercase=False)
+        norm_schema = to_standard_schema(schema)
         data["response_format"] = {"type": "json_object"}
         data["messages"].insert(0, {
             "role": "system",
@@ -340,7 +335,22 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
     if schema:
         # Note: structured output handling varies by LangChain version/provider
         # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
-        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(schema)}"
+        # Gemini requirement: types must be uppercase in schema for some versions
+        def to_gemini_schema(s):
+            if isinstance(s, dict):
+                res = {}
+                for k, v in s.items():
+                    if k == "type" and isinstance(v, str):
+                        res[k] = v.upper()
+                    else:
+                        res[k] = to_gemini_schema(v)
+                return res
+            elif isinstance(s, list):
+                return [to_gemini_schema(i) for i in s]
+            return s
+
+        gemini_schema = to_gemini_schema(schema)
+        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(gemini_schema)}"
 
     try:
         response = llm.invoke([HumanMessage(content=prompt)])

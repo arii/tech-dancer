@@ -15,10 +15,9 @@ export function resolveJIT(val: string | number | boolean | undefined | null, pr
   const pfx = prefix ? `${prefix}-` : ""
   const negPrefix = isNegative ? "-" : ""
 
-  // Standard Tailwind tokens (numbers or specific strings without CSS units)
-  // Logic: Must be a number or a simple alphanumeric string that doesn't end in a CSS unit
+  // Standard Tailwind tokens (numbers or specific strings)
   const isToken = typeof val === "number" ||
-    (typeof absVal === "string" && /^[a-z0-9-]+$/.test(absVal) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absVal))
+    (typeof absVal === "string" && /^[a-z0-9-/.]+$/.test(absVal))
 
   if (isToken) return `${negPrefix}${pfx}${absVal}`
 
