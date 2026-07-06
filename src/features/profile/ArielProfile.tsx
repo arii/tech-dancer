@@ -1,4 +1,5 @@
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
@@ -138,23 +139,19 @@ function ArielProfile() {
             <Box className="lg:col-span-4 relative order-1 lg:order-2">
               <Stack gap={8} position="sticky" top={12} align={{ base: "center", lg: "start" }}>
                 {/* Profile portrait (Always on top or as ordered) */}
-                <Box
+                <SafeImage
+                  src={roboticistPhoto}
+                  alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
                   border
                   radius="md"
-                  overflow="hidden"
                   aspect={{ base: "3/4", lg: "1/1" }}
                   surface="default"
                   width={{ base: "48", md: "56", lg: "64" }}
-                  className="shadow-2xl border-line/10 relative"
-                >
-                  <img
-                    src={roboticistPhoto}
-                    alt="Ariel Anders, PhD - Roboticist and WCS Dancer"
-                    width={960}
-                    height={949}
-                    className="w-full h-full object-cover object-center-20"
-                  />
-                </Box>
+                  shadow="2xl"
+                  borderColor="line/10"
+                  objectFit="cover"
+                  objectPosition="center 20%"
+                />
 
                 {/* Hide these in mobile since they are now injected in the main column sequence */}
                 <Box className="hidden lg:block w-full">

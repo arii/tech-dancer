@@ -73,6 +73,7 @@ export interface SafeImageProps extends Omit<BoxProps, 'as'> {
   alt: string;
   fallbackSrc?: string;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  objectPosition?: string;
 }
 
 /**
@@ -80,10 +81,13 @@ export interface SafeImageProps extends Omit<BoxProps, 'as'> {
  * prop filtering, and external asset policies by default.
  */
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
-  ({ src, alt, fallbackSrc, objectFit, className, style, crossOrigin, ...boxProps }, ref) => {
+  ({ src, alt, fallbackSrc, objectFit, objectPosition, className, style, crossOrigin, ...boxProps }, ref) => {
+    const [hasError, setHasError] = React.useState(false);
     const normalizedSrc = normalizeAsset(src || '');
     const isSafe = normalizedSrc ? isSafeUrl(normalizedSrc) : false;
-    const finalSrc = isSafe ? normalizedSrc : fallbackSrc;
+
+    // If the URL is unsafe, or if a load error occurred and a fallback exists
+    const finalSrc = (!isSafe || hasError) ? fallbackSrc : normalizedSrc;
 
     const isExternal = finalSrc?.startsWith('http');
 
@@ -101,6 +105,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
 
     const finalStyle: React.CSSProperties = {
       objectFit: objectFit || 'contain',
+      objectPosition: objectPosition,
       ...style
     };
 
@@ -117,6 +122,15 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
       }
     }
 
+    const handleError = () => {
+      if (!hasError) setHasError(true);
+    };
+
+    // If we have an error and no fallback, we return null to avoid showing a broken image icon
+    if (hasError && !fallbackSrc) {
+      return null;
+    }
+
     return (
       <Box
         ref={ref}
@@ -125,6 +139,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         alt={alt}
         className={className}
         style={finalStyle}
+        onError={handleError}
         {...externalPolicies}
         {...layoutProps}
         {...imgAttributes}

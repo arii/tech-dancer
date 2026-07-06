@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { SafeImage } from '@/components/ui/SafeImage';
 import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
@@ -102,21 +103,22 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           <Box
             key={index}
             as="button"
-            aspect="square"
-            overflow="hidden"
-            border
-            radius="md"
-            className="border-line/10 bg-surface/30 group cursor-pointer focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             onClick={() => setSelectedImage(image.src)}
             aria-label={`View ${image.alt}`}
+            width="full"
+            className="focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none group"
           >
-            <img
+            <SafeImage
               src={image.src}
               alt={image.alt}
-              width={800}
-              height={800}
+              aspect="square"
+              border
+              radius="md"
+              borderColor="line/10"
+              surface="surface"
+              objectFit="cover"
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              className="transition-transform duration-500 group-hover:scale-110"
             />
           </Box>
         ))}
@@ -132,13 +134,14 @@ export function ProfileGallery({ images }: { images: ProfileGalleryImage[] }) {
           justify="center"
           onClick={() => setSelectedImage(null)}
         >
-          <Box maxWidth="full" padding={4} height="full" display="flex" align="center" justify="center">
-            <img
-              src={selectedImage}
-              alt="Expanded view"
-              className="max-w-full max-h-full object-contain"
-            />
-          </Box>
+          <SafeImage
+            src={selectedImage}
+            alt="Expanded view"
+            maxWidth="full"
+            maxHeight="full"
+            padding={4}
+            objectFit="contain"
+          />
         </Stack>
       )}
     </>
