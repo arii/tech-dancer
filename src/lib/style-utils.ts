@@ -3,31 +3,25 @@ import { SPACING_MAP } from "@/layouts/layout-maps"
 export type ResponsiveProp<T> = T | { base?: T, sm?: T, md?: T, lg?: T, xl?: T, '2xl'?: T }
 
 /**
- * Resolves a value for use in a Tailwind class, handling negative values
- * and arbitrary strings correctly.
+ * Resolves a value for use in a Tailwind class.
  */
 export function resolveJIT(val: string | number | boolean | undefined | null, prefix: string): string {
-  if (val === undefined || val === null || val === "") return ""
+  if (val === undefined || val === null || val === "") return "";
+  const isNegative = typeof val === "number" ? val < 0 : String(val).startsWith("-") && val !== "-";
+  const absVal = isNegative ? String(val).slice(1) : val;
+  const absStr = String(absVal);
 
-  const isNegative = (typeof val === "number" && val < 0) || (typeof val === "string" && val.startsWith("-") && val !== "-")
-  const absVal = typeof val === "number" ? Math.abs(val) : (isNegative ? val.substring(1) : val)
+  // Tailwind tokens: numeric (4, 1.5), fractions (1/2), or names (full, auto, red-500)
+  // Names must start with a letter and not end in a CSS unit suffix preceded by a digit.
+  const isToken = /^\d+(\.\d+)?$|^\d+\/\d+$/.test(absStr) || (/^[a-z]/.test(absStr) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absStr));
 
-  const pfx = prefix ? `${prefix}-` : ""
-  const negPrefix = isNegative ? "-" : ""
+  const pfx = prefix ? `${prefix}-` : "";
+  const negPfx = isNegative ? "-" : "";
 
-  // Standard Tailwind tokens (numbers or specific strings without CSS units)
-  // Logic: Must be a number or a simple alphanumeric string that doesn't end in a CSS unit
-  const isToken = typeof val === "number" ||
-    (typeof absVal === "string" && /^[a-z0-9-]+$/.test(absVal) && !/[0-9](px|vh|vw|%|rem|em)$/.test(absVal))
+  if (isToken) return `${negPfx}${pfx}${absStr}`;
 
-  if (isToken) return `${negPrefix}${pfx}${absVal}`
-
-  // Arbitrary values
-  const value = typeof val === "string" && val.startsWith("[") && val.endsWith("]")
-    ? val
-    : `[${val}]`
-
-  return `${negPrefix}${pfx}${value}`
+  const value = absStr.startsWith("[") && absStr.endsWith("]") ? absStr : `[${absStr}]`;
+  return `${negPfx}${pfx}${value}`;
 }
 
 /**

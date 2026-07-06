@@ -26,12 +26,8 @@ const STORAGE_KEY = 'tech-dancer-blog-draft';
 const HISTORY_KEY = 'tech-dancer-blog-history';
 const DEBOUNCE_WAIT = 1000; // 1 second
 
-// Safe ID generator with fallback for legacy browsers
 const generateId = () => {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  return crypto.randomUUID();
 };
 
 const DEFAULT_DATA: DraftData = {

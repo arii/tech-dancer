@@ -7,10 +7,6 @@ export interface ResolvedMerchImages {
   equal: MerchProductImage[];
 }
 
-export function legacyImageToMerchImages(imageUrl: string, alt: string): MerchProductImage[] {
-  return [{ src: imageUrl, side: 'front', alt }];
-}
-
 export function resolveMerchImages(args: {
   title: string;
   imageUrl: string;
@@ -19,7 +15,7 @@ export function resolveMerchImages(args: {
 }): ResolvedMerchImages {
   const images = args.images?.length
     ? args.images
-    : legacyImageToMerchImages(args.imageUrl, `${args.title} product image`);
+    : [{ src: args.imageUrl, side: 'front', alt: `${args.title} product image` }];
 
   const mode = args.imageDisplayMode ?? 'front-only';
   const front = images.find((image) => image.side === 'front');

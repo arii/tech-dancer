@@ -6,10 +6,6 @@ import { IssueUpdateInputSchema, IssueUpdateResponseSchema } from "./contract.js
 export { IssueUpdateInputSchema };
 
 export async function issueUpdateHandler(args: any) {
-  // Handle camelCase translation fallback for client schema drift
-  if (args.issueNumber !== undefined && args.issue_number === undefined) {
-    args.issue_number = args.issueNumber;
-  }
   const params = IssueUpdateInputSchema.parse(args);
 
   const cmdArgs = ["gh", "issue-update", params.issue_number.toString()];
