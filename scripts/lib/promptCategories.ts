@@ -87,28 +87,21 @@ Do NOT assume \`ChatOpenAI\` always means talking to OpenAI's own API.
     name: 'React Components',
     matcher: (files) => files.some(f => f.endsWith('.tsx') || f.endsWith('.jsx')),
     guidance: `React Components:
+- Look for: stale closures, missing dependencies, unnecessary useEffect/useMemo/useCallback, duplicated state, derived state stored unnecessarily, prop drilling introduced, unnecessary context usage, unnecessary rerenders.
 - Flag as blocking: conditional/early-return hook calls (real rules-of-hooks violations),
   \`useEffect\`/\`useMemo\` dependency arrays that are demonstrably stale given the diff.
-- Do NOT flag the absence of \`React.memo\`, \`useCallback\`, or \`useMemo\` as a bug — these are
-  performance opinions, not correctness issues, unless the PR's stated goal is specifically a
-  performance optimization.
 - This project enforces color usage via CSS variables / design tokens (\`tokens.css\`), checked
   by a dedicated CI step that greps for raw hex literals outside that file. Flag new raw hex
-  color literals (e.g. \`#3fae2f\`) in \`.tsx\` as a real anti-pattern — but don't invent
-  subjective color-taste judgments ("too vibrant," "too neon") beyond that mechanical rule.`,
+  color literals (e.g. \`#3fae2f\`) in \`.tsx\` as a real anti-pattern.`,
   },
   {
     id: 'typescript-types',
     name: 'TypeScript Definitions',
-    matcher: (files) => files.some(f => f.endsWith('.d.ts') || f.endsWith('Types.ts')),
-    guidance: `TypeScript Definitions:
-- A type/interface change is only blocking if you can also see, in the SAME diff or in the
-  provided EXTERNAL CONTEXT, a concrete usage site that becomes invalid as a result. State what
-  file/line you'd need to see to verify it rather than assuming downstream code breaks.
-- Removing a field from an interface is not automatically a regression if the diff (or external
-  context) also shows the only call sites reading that field were updated in the same change.
-- Prefer noting a missing \`?\` on an optional property only when the diff shows a call site that
-  doesn't always provide that property — not as a blanket style preference.`,
+    matcher: (files) => files.some(f => f.endsWith('.d.ts') || f.endsWith('Types.ts') || f.endsWith('.ts')),
+    guidance: `TypeScript & Type Safety:
+- Report: use of any, unsafe casts, ignored nullability, impossible unions, incorrect generic usage, unreachable narrowing.
+- A type/interface change is only blocking if you can also see a concrete usage site that becomes invalid as a result.
+- Do not report stylistic typing preferences.`,
   },
   {
     id: 'python-scripts',

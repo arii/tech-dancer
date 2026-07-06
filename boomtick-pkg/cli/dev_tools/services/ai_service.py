@@ -41,11 +41,12 @@ _REVIEW_SCHEMA = {
                         "items": {
                             "type": "object",
                             "properties": {
-                                "line":     {"type": "integer"},
-                                "severity": {"type": "string"},
-                                "comment":  {"type": "string"},
+                                "line":       {"type": "integer"},
+                                "severity":   {"type": "string"},
+                                "comment":    {"type": "string"},
+                                "confidence": {"type": "string"},
                             },
-                            "required": ["line", "severity", "comment"],
+                            "required": ["line", "severity", "comment", "confidence"],
                         }
                     },
                     "verdict": {"type": "string"},
@@ -262,18 +263,25 @@ class AIClient:
             combined_diff += f"\n\n{chunk['diff_text']}"
 
         prompt = (
-            f'You are a strict code reviewer. Review the diff below.\n'
-            f'PR title: {pr_title}\n'
-            f'CI status: {checks_summary}\n\n'
-            f'Rules:\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
-            f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
-            f'- Provide an overall `reviewComment` summarizing the review.\n'
-            f'- Suggest 1-3 `labels` (e.g. "needs-changes", "lgtm", "ci-failing").\n'
-            f'- Set overall `recommendation` to EXACTLY ONE of: "Approved", "Approved with Minor Changes", or "Not Approved".\n'
-            f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
-            f'Diff:{combined_diff}'
+            f"You are a strict code reviewer. Review the diff below for PR: {pr_title}.\n"
+            f"CI status: {checks_summary}\n\n"
+            "## 1. Review Philosophy\n"
+            "Review ONLY changes in this PR. Ignore pre-existing issues. Assume original code worked (Regression Mindset).\n"
+            "EVIDENCE RULE: Every issue MUST point to the exact line, explain the error, and describe the runtime consequence.\n"
+            "FALSE POSITIVE FILTER: If you aren't certain or it might be a design choice, DO NOT report it.\n\n"
+            "## 2. Repository Rules\n"
+            "Prefer removing code. Flag unnecessary wrappers, one-line helpers, and dead abstractions.\n"
+            "BANNED: Raw Tailwind (flex, grid, px-*) in .tsx files. Use <Stack>, <Grid>, <Box>.\n\n"
+            "## 3. Review Checklist\n"
+            "Order: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance, 6. Maintainability.\n\n"
+            "## 4. Severity & Confidence\n"
+            "- error: bugs, crashes, security risks, broken APIs.\n"
+            "- warn: maintainability/performance regressions.\n"
+            "- info: style, naming, docs.\n"
+            "Include 'confidence' (high/medium/low). Only 'error' with confidence 'high' is blocking.\n\n"
+            "## 5. Output Contract\n"
+            "Output ONLY valid JSON matching the schema. Include counterexamples for errors.\n\n"
+            f"Diff:\n{combined_diff}"
         )
 
         t0 = time.time()
@@ -373,18 +381,21 @@ class AIClient:
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
         return (
-            f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
-            f'PR title: {pr_title}\n'
-            f'CI status: {checks_summary}\n'
-            f'\n## Current Stack Versions (Source of Truth)\n{versions_block}\n'
-            f'{context_section}\n\n'
-            f'Rules:\n'
-            f'- DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
-            f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
-            f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
-            f'Diff:{trunc_note}\n{chunk["diff_text"]}'
+            f"You are a strict code reviewer. Review ONLY the diff below for file \"{chunk['file']}\".\n"
+            f"PR title: {pr_title}\n"
+            f"CI status: {checks_summary}\n\n"
+            f"## Current Stack Versions\n{versions_block}\n{context_section}\n\n"
+            "## 1. Review Philosophy\n"
+            "Review ONLY changes. EVIDENCE RULE: exact line + runtime consequence required. REGRESSION MINDSET: assume existing code works.\n\n"
+            "## 2. Repository Rules\n"
+            "DO NOT suggest downgrading versions. Mandate <Stack>/<Grid>/<Box>. Flag 'AI Slop' and redundant abstractions.\n\n"
+            "## 3. Review Checklist\n"
+            "1. Correctness, 2. Security, 3. Performance, 4. Maintainability.\n\n"
+            "## 4. Severity & Confidence\n"
+            "Use 'error', 'warn', 'info'. Include 'confidence' (high/medium/low) in issue description.\n\n"
+            "## 5. Output Contract\n"
+            "Output ONLY valid JSON. Include counterexamples for blocking issues.\n\n"
+            f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
     def _write_progress_snapshot(
         self,
