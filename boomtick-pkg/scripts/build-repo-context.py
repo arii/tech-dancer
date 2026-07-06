@@ -3,6 +3,11 @@ import json
 import pathlib
 import sys
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s', stream=sys.stderr)
+logger = logging.getLogger(__name__)
 
 def build_repo_context():
     """Gathers static context about the repository."""
@@ -59,7 +64,7 @@ def build_repo_context():
             "devDependencies": sorted(list(package_json.get("devDependencies", {}).keys())),
         }
     except Exception as e:
-        print(f"Error reading package.json: {e}", file=sys.stderr)
+        logger.error(f"Error reading package.json: {e}")
         package_summary = {}
 
     # 2. Project Config (Repo Root)
@@ -69,7 +74,7 @@ def build_repo_context():
         if project_config_path.exists():
             project_config = json.loads(project_config_path.read_text())
     except Exception as e:
-        print(f"Error reading project_config.json: {e}", file=sys.stderr)
+        logger.error(f"Error reading project_config.json: {e}")
 
     # 3. MCP Schema (Package Internal)
     mcp_schema = {"tools": [], "prompts": [], "resources": []}
@@ -88,7 +93,7 @@ def build_repo_context():
             )
             mcp_schema = json.loads(result.stdout)
     except Exception as e:
-        print(f"Error gathering MCP schema: {e}", file=sys.stderr)
+        logger.error(f"Error gathering MCP schema: {e}")
 
     # 4. CLI Schema (Package Internal)
     cli_schema = {}
@@ -211,17 +216,17 @@ def build_repo_context():
                 generate_schema()
             # Note: sync-contracts.ts is run via pnpm run verify:schemas or manually
         except Exception as schema_err:
-            print(f"Error generating model schemas: {schema_err}", file=sys.stderr)
+            logger.error(f"Error generating model schemas: {schema_err}")
 
     except Exception as e:
-        print(f"Error generating cli-schema.json dynamically: {e}", file=sys.stderr)
+        logger.error(f"Error generating cli-schema.json dynamically: {e}")
         # Fallback to reading file if generation failed
         try:
             cli_schema_path = package_root / "cli" / "dev_tools" / "cli-schema.json"
             if cli_schema_path.exists():
                 cli_schema = json.loads(cli_schema_path.read_text())
         except Exception as read_err:
-            print(f"Fallback read of cli-schema.json failed: {read_err}", file=sys.stderr)
+            logger.error(f"Fallback read of cli-schema.json failed: {read_err}")
 
     # 5. File Tree (Repo Root)
     def get_dir_structure(path, max_depth=2, current_depth=0):
@@ -242,6 +247,25 @@ def build_repo_context():
 
     file_tree = get_dir_structure(repo_root)
 
+    # 6. Design Token System (Semantic Mappings)
+    design_tokens = {}
+    try:
+        layout_maps_path = repo_root / "src" / "layouts" / "layout-maps.ts"
+        if layout_maps_path.exists():
+            # Basic extraction of exported constants using regex to avoid heavy TS parsing
+            import re
+            content = layout_maps_path.read_text()
+            # Extract maps like: export const SPACING_MAP: Record<...> = { ... };
+            maps = re.findall(r"export const (\w+):.*?= \{(.*?)\};", content, re.DOTALL)
+            for map_name, map_content in maps:
+                # Clean up the map content and convert to a dict
+                entries = {}
+                for entry in re.findall(r"(['\w\d\.]+):\s*['\"](.*?)['\"]", map_content):
+                    entries[entry[0].strip("'\"")] = entry[1]
+                design_tokens[map_name] = entries
+    except Exception as e:
+        logger.error(f"Error extracting design tokens: {e}")
+
     # Assemble context
     return {
         "repo": {
@@ -252,6 +276,7 @@ def build_repo_context():
         "mcp_schema": mcp_schema,
         "cli_schema": cli_schema,
         "file_tree": file_tree,
+        "design_tokens": design_tokens,
     }
 
 if __name__ == "__main__":
@@ -262,5 +287,5 @@ if __name__ == "__main__":
         # sort_keys=True ensures the output is deterministic for revision control
         print(json.dumps(context, indent=2, sort_keys=True))
     except Exception as e:
-        print(f"FATAL: Context generation failed: {e}", file=sys.stderr)
+        logger.critical(f"FATAL: Context generation failed: {e}")
         sys.exit(1)

@@ -39,7 +39,7 @@ class JulesFeedbackDaemon:
         self.github = GitHubClient()
         self.orchestrator = Orchestrator()
         # Ensure the orchestrator uses our extended client
-        self.orchestrator.initialize_jules(self.jules)
+        self.orchestrator.jules = self.jules
 
     def run(self):
         logger.info("Starting Jules Feedback Daemon")
