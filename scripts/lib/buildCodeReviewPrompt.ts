@@ -82,15 +82,10 @@ Review the following code diff for bugs, anti-patterns, missing types, performan
 Provide actionable feedback. Focus on HIGH severity issues.
 
 ${guidelinesSection}${goalSection}${priorStateSection}${impactSemanticContextSection}
-${uiAuditInstruction}Severity rules — apply these strictly:
-- HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
-  passed where the type doesn't allow it, a class or function that doesn't exist, a call
-  with the wrong arity, a test that would fail. Cite the exact line(s).
-- If your concern is phrased with "could," "might," "unless," "if not handled properly,"
-  or similar hedging language, it is NOT blocking. Downgrade it to a "Question" or
-  "Nitpick" section instead.
-- Do not raise a concern you cannot verify against the code you were given. State what
-  you'd need to see to verify it, rather than assuming the worst case.
+${uiAuditInstruction}Severity rules:
+- High/Blocking: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.
+- No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to "Approved with Minor Changes".
+- Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.
 
 Snippet and verification rules:
 - STRICT SNIPPET RULE: When citing an error or anti-pattern, you MUST quote the entire, exact line from the diff in the "snippet" field. Do not truncate the line.

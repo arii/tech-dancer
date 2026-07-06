@@ -267,10 +267,10 @@ class AIClient:
             f'CI status: {checks_summary}\n\n'
             f'Rules:\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Severity rules — apply these strictly:\n'
-            f'    - "error" (Blocking): must point to a concrete contradiction in the diff itself (e.g. type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.\n'
-            f'    - Concerns phrased with "could," "might," "unless," or "if not handled properly" are NOT blocking; downgrade them to "warn" or "info".\n'
-            f'    - Do not raise concerns you cannot verify against the provided code. State what is needed to verify rather than assuming the worst case.\n'
+            f'- Severity rules:\n'
+            f'    - High/Blocking: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.\n'
+            f'    - No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to "warn" or "info".\n'
+            f'    - Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Provide an overall `reviewComment` summarizing the review.\n'
@@ -385,10 +385,10 @@ class AIClient:
             f'Rules:\n'
             f'- DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n'
             f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Severity rules — apply these strictly:\n'
-            f'    - "error" (Blocking): must point to a concrete contradiction in the diff itself (e.g. type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.\n'
-            f'    - Concerns phrased with "could," "might," "unless," or "if not handled properly" are NOT blocking; downgrade them to "warn" or "info".\n'
-            f'    - Do not raise concerns you cannot verify against the provided code. State what is needed to verify rather than assuming the worst case.\n'
+            f'- Severity rules:\n'
+            f'    - High/Blocking: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.\n'
+            f'    - No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to "warn" or "info".\n'
+            f'    - Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
@@ -630,7 +630,6 @@ For EVERY changed file, verify against these standards. Mark as `- [x]` when ver
 - [ ] Responsibility creep: Component does not take on state/logic belonging in parent/hook.
 - [ ] Import bloat: No unnecessary `import React from 'react'` (React 17+).
 - [ ] Token compliance: Uses established design tokens (no raw Tailwind values or inline styles).
-- [ ] Audit ratio: If > 100 lines added, identified at least 10 lines to refactor/remove.
 
 ## Per-File Findings
 
