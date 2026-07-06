@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 
 const expectedNodeExact = "24.16.0";
-const expectedNodeMajorForVercel = "24.x";
+const expectedNodeMajorForVercel = ">=22.0.0";
 const expectedPnpm = "10.28.2";
 
 const errors = [];

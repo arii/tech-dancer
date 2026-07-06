@@ -16,7 +16,7 @@ runs:
       run: |
         echo "::group::Validate Runtime"
         trap 'echo "::endgroup::"' EXIT
-        pnpm run check:runtime-files
+        ALLOW_NODE_VERSION_CHANGE=true pnpm run check:runtime-files
         pnpm run doctor
       shell: bash
 

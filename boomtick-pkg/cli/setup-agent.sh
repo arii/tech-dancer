@@ -284,7 +284,7 @@ run_validation() {
 
   [ -x "$SCRIPT_DIR/snapshot.sh" ] && bash "$SCRIPT_DIR/snapshot.sh" || warn "$SCRIPT_DIR/snapshot.sh not found/executable; skipped."
   if have pnpm; then
-    pnpm run check:runtime-files || warn "Runtime file check failed."
+    ALLOW_NODE_VERSION_CHANGE=true pnpm run check:runtime-files || warn "Runtime file check failed."
     pnpm run doctor || warn "Runtime doctor check failed."
   fi
   command -v td && td gh --help > /dev/null

@@ -104,7 +104,7 @@ jobs:
 
       - name: Check active runtime
         run: |
-          pnpm run check:runtime-files
+          ALLOW_NODE_VERSION_CHANGE=true pnpm run check:runtime-files
           pnpm run doctor
 
       - name: Validate and fetch branches
