@@ -29,11 +29,12 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
     if (navigator.share && navigator.canShare?.(shareData)) {
       try {
         await navigator.share(shareData);
-        return;
       } catch (err) {
-        if ((err as Error).name !== 'AbortError') console.error('Share failed:', err);
-        return;
+        if ((err as Error).name !== 'AbortError') {
+          console.error('Share failed:', err);
+        }
       }
+      return;
     }
 
     try {
@@ -41,7 +42,7 @@ export function BlogPostDetail({ post, onBack, backLabel }: BlogPostDetailProps)
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
-      console.error('Clipboard fallback failed:', err);
+      console.error('Clipboard copy failed:', err);
     }
   };
 

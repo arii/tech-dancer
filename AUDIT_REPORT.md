@@ -74,11 +74,7 @@ This report documents the audit of the codebase to identify "AI slop"—over-eng
 * [x] **`[x]` src/features/home/TopicGrid.tsx — Verified Clean**
 * [x] **`[x]` src/features/journal/BlogFeed.tsx — Verified Clean**
 * [x] **`[x]` src/features/journal/BlogPost.tsx — Verified Clean**
-* [ ] `-[ ]` src/features/journal/components/BlogPostDetail.tsx
-  * **Location:** `src/features/journal/components/BlogPostDetail.tsx` (Line 1)
-  * **The Slop:** `// impeccable-ignore-file` comment at the top.
-  * **Why it's likely AI Drift:** This indicates that an automated tool previously flagged slop or anti-patterns in this file, and instead of refactoring the code, the AI simply added a suppression comment to bypass the check.
-  * **Remediation:** Removed the suppression comment and refactored the underlying over-engineered share logic.
+* [x] **`[x]` src/features/journal/components/BlogPostDetail.tsx — Verified Clean**
 * [x] **`[x]` src/features/journal/useBlog.ts — Verified Clean**
 * [x] **`[x]` src/features/lab/BlogDrafter.tsx — Verified Clean**
 * [x] **`[x]` src/features/lab/components/FullPreview.tsx — Verified Clean**
