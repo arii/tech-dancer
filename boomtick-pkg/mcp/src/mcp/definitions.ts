@@ -307,6 +307,18 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
+    name: "github.get_pr",
+    description: "Fetch a PR's full payload (title, body, author, etc.) from GitHub.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        pr_number: { type: "number", description: "The pull-request number." }
+      },
+      required: ["pr_number"],
+      additionalProperties: false,
+    },
+  },
+  {
     name: "github.issue_view",
     description: "View details of a GitHub issue including title, body, and state.",
     inputSchema: {
@@ -426,13 +438,14 @@ export const MCP_TOOLS: Tool[] = [
   },
   {
     name: "jules.get_pr",
-    description: "Get the generated pull request for a Jules session.",
+    description: "Return the GitHub pull-request number that belongs to a Jules session.",
     inputSchema: {
       type: "object",
       properties: {
-        id: { type: "string", description: "The unique ID of the Jules session." },
+        session_id: { type: "string", description: "The UUID of a Jules session (as created by jules.create_session)." },
       },
-      required: ["id"],
+      required: ["session_id"],
+      additionalProperties: false,
     },
   },
   {

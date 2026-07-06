@@ -195,6 +195,8 @@ def view(ctx, pr_number):
         "state": pr.get("state"),
         "headRefName": pr.get("head", {}).get("ref"),
         "baseRefName": pr.get("base", {}).get("ref"),
+        "body": pr.get("body"),
+        "author": pr.get("user", {}).get("login"),
         "html_url": pr.get("html_url")
     }
     out(ctx, f"PR #{normalized_pr['number']}: {normalized_pr['title']}\nState: {normalized_pr['state']}", data={"pr": normalized_pr})
