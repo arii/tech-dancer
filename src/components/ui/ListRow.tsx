@@ -2,6 +2,7 @@
 import { NavLink } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
+import { SafeImage } from './SafeImage';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { pickRest } from '@/lib/utils';
@@ -67,11 +68,14 @@ export function ListRow(props: ListRowProps) {
         className="bg-white border-line/30"
       >
         {image ? (
-          <img
+          <SafeImage
             src={image}
             alt=""
             loading="lazy"
-            className="h-full w-full object-contain p-1"
+            width="full"
+            height="full"
+            objectFit="contain"
+            padding={1}
           />
         ) : (
           <CategoryPlaceholder category={category} size="md" />
