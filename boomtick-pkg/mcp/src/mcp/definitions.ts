@@ -307,17 +307,6 @@ export const MCP_TOOLS: Tool[] = [
     },
   },
   {
-    name: "github.get_pr",
-    description: "Get details of a GitHub PR including title, state, and URLs.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        prNumber: { type: "number", description: "The number of the PR to view." },
-      },
-      required: ["prNumber"],
-    },
-  },
-  {
     name: "github.issue_view",
     description: "View details of a GitHub issue including title, body, and state.",
     inputSchema: {
@@ -384,9 +373,9 @@ export const MCP_TOOLS: Tool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        sessionId: { type: "string", description: "The unique ID of the Jules session (a long number like 13410430235481343883), NOT a pull request number or issue ID." }
+        id: { type: "string", description: "The unique ID of the Jules session." }
       },
-      required: ["sessionId"],
+      required: ["id"],
     },
   },
   {
@@ -395,10 +384,10 @@ export const MCP_TOOLS: Tool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        sessionId: { type: "string", description: "The unique ID of the Jules session (a long number like 13410430235481343883), NOT a pull request number or issue ID." },
+        id: { type: "string", description: "The unique ID of the Jules session." },
         message: { type: "string", description: "The message content to send." }
       },
-      required: ["sessionId", "message"],
+      required: ["id", "message"],
     },
   },
   {
@@ -407,9 +396,9 @@ export const MCP_TOOLS: Tool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        sessionId: { type: "string", description: "The unique ID of the Jules session (a long number like 13410430235481343883), NOT a pull request number or issue ID." }
+        id: { type: "string", description: "The unique ID of the Jules session." }
       },
-      required: ["sessionId"],
+      required: ["id"],
     },
   },
   {
@@ -430,20 +419,20 @@ export const MCP_TOOLS: Tool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        sessionId: { type: "string", description: "The unique ID of the Jules session to cancel (a long number like 13410430235481343883), NOT a pull request number." },
+        id: { type: "string", description: "The unique ID of the Jules session to cancel." },
       },
-      required: ["sessionId"],
+      required: ["id"],
     },
   },
   {
     name: "jules.get_pr",
-    description: "Get the generated pull request url associated with an active Jules agent session.",
+    description: "Get the generated pull request for a Jules session.",
     inputSchema: {
       type: "object",
       properties: {
-        sessionId: { type: "string", description: "The unique ID of the Jules session (a long number like 13410430235481343883), NOT a pull request number or issue ID." },
+        id: { type: "string", description: "The unique ID of the Jules session." },
       },
-      required: ["sessionId"],
+      required: ["id"],
     },
   },
   {

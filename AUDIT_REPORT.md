@@ -37,13 +37,6 @@
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/ux_report.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/verify_versions.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/version_utils.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/services/test_github.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/test_config.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/test_dependency_graph.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/test_fail_fast.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/test_github_no_gh.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/test_labels.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` boomtick-pkg/cli/tests/test_parse_comment.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/scripts/export-mcp-schema.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/scripts/sync-contracts.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/mcp/src/config.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -112,8 +105,6 @@
 * [x] **`[x]` etl/processor.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/query_ledger.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/scraper.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` etl/tests/__init__.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` etl/tests/test_pipeline.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 
 ## `scripts/` files
 * [x] **`[x]` scripts/affiliate/add-item.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -172,9 +163,9 @@
 * [x] **`[x]` scripts/lib/visualReviewUtils.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [ ] `-[ ]` scripts/orchestrator/agent_2_orchestrator.py
   * **Location:** `scripts/orchestrator/agent_2_orchestrator.py`
-  * **The Slop:** Missing core imports (subprocess, time, re) and broken CLI_BASE reference.
-  * **Why it's likely AI Drift:** AI generation drift resulted in a script that depends on globals that were not imported or defined in scope.
-  * **Remediation:** Added missing imports and fixed CLI_BASE resolution.
+  * **The Slop:** Missing core imports (subprocess, time, re), re-definition of utilities, and broken CLI_BASE reference.
+  * **Why it's likely AI Drift:** AI generation drift resulted in a script that depends on globals that were not imported or defined in scope, and redundant logic was copied from utils.
+  * **Remediation:** Removed redundant definitions and added missing imports.
 * [x] **`[x]` scripts/orchestrator/experiments/continuous_dev_loop.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/experiments/deterministic_loop.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/experiments/genai_orchestrator.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -292,14 +283,6 @@
 * [x] **`[x]` src/layouts/Stack.tsx — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/layouts/Text.tsx — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/layouts/layout-maps.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/affiliateManager.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/assetNormalization.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/content.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/generate-assets.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/productCatalog.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/prototype_pollution.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/schema.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` src/lib/__tests__/utils.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/affiliateManager.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/constants.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/constants/markdown-schema.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).

@@ -81,9 +81,6 @@ class Orchestrator:
             self._jules = JulesClient()
         return self._jules
 
-    def initialize_jules(self, client: JulesClient) -> None:
-        self._jules = client
-
     @property
     def vision(self) -> VisionService:
         return VisionService()

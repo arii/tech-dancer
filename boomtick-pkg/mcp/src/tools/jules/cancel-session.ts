@@ -3,11 +3,11 @@ import { JulesSession } from "../types.js";
 import { runCommand } from "../../lib/shell.js";
 
 export const CancelJulesSessionInputSchema = z.object({
-  sessionId: z.string(),
+  id: z.string(),
 });
 
 export async function cancelJulesSessionHandler(input: z.infer<typeof CancelJulesSessionInputSchema>): Promise<JulesSession> {
-  const result = await runCommand("td-cli", ["agent", "cancel", input.sessionId]);
+  const result = await runCommand("td-cli", ["agent", "cancel", input.id]);
 
   if (result.exitCode !== 0) {
     throw new Error(`Failed to cancel session: ${result.stderr}`);
@@ -19,7 +19,7 @@ export async function cancelJulesSessionHandler(input: z.infer<typeof CancelJule
   }
 
   return {
-    id: input.sessionId.replace("sessions/", ""),
+    id: input.id.replace("sessions/", ""),
     status: "FAILED",
     createdAt: new Date(),
   };
