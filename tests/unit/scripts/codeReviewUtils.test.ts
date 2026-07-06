@@ -39,17 +39,15 @@ describe('codeReviewUtils', () => {
           ]
         }
       });
-      expect(prompt).toContain('PREVIOUS REVIEW ROUND FINDINGS (GROUND TRUTH):');
-      expect(prompt).toContain('- [f-1] a.js: Bad code (Status: open)');
+      expect(prompt).toContain('PREVIOUS FINDINGS (GROUND TRUTH):');
+      expect(prompt).toContain('- [f-1] a.js: Bad code (open)');
     });
 
-    it('includes all 5 mandatory sections', () => {
+    it('includes all 3 mandatory sections', () => {
       const prompt = buildSystemPrompt({ diffContext: 'some diff' });
-      expect(prompt).toContain('## 1. REVIEW PHILOSOPHY');
-      expect(prompt).toContain('## 2. REPOSITORY RULES');
-      expect(prompt).toContain('## 3. REVIEW CHECKLIST');
-      expect(prompt).toContain('## 4. SEVERITY & CONFIDENCE');
-      expect(prompt).toContain('## 5. OUTPUT CONTRACT');
+      expect(prompt).toContain('## 1. SCOPE & PHILOSOPHY');
+      expect(prompt).toContain('## 2. CHECKLIST');
+      expect(prompt).toContain('## 3. SEVERITY & CONTRACT');
     });
   });
 

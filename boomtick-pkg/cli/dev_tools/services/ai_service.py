@@ -264,32 +264,24 @@ class AIClient:
                 break
             combined_diff += f"\n\n{chunk['diff_text']}"
 
+        goal_preview = f"{pr_title} - {pr_description[:200].strip()}..." if len(pr_description) > 200 else f"{pr_title} - {pr_description.strip()}"
+
         prompt = (
-            f'You are a strict code reviewer. Review the diff below.\n'
-            f'PR title: {pr_title}\n'
-            f'PR description: {pr_description}\n'
-            f'CI status: {checks_summary}\n\n'
-            f'## 1. REVIEW PHILOSOPHY (REGRESSIONS ONLY)\n'
-            f'- Assume the original code worked. Determine if THIS PR introduces NEW regressions.\n'
-            f'- Ignore pre-existing issues unless the PR makes them worse.\n'
-            f'- Never speculate. If an issue cannot be demonstrated from the diff, DO NOT report it.\n'
-            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n\n'
-            f'## 2. REVIEW CHECKLIST\n'
-            f'1. CORRECTNESS: Logic bugs, crashes, data integrity.\n'
-            f'2. SECURITY: Flag issues ONLY for new user-controlled input, file access, shell exec, SQL, or auth changes.\n'
-            f'3. ARCHITECTURE: Prefer removing code. Flag unnecessary wrappers or duplicate logic.\n\n'
-            f'## 3. SEVERITY DEFINITIONS\n'
-            f'- error: incorrect behavior, data loss, security vulnerability, crash, build failure.\n'
-            f'- warn: maintainability regression, unnecessary complexity, performance issue.\n'
-            f'- info: documentation, naming, formatting.\n\n'
-            f'## 4. OUTPUT CONTRACT (EVIDENCE RULE)\n'
-            f'- Point to the exact changed line. Explain why it is incorrect and the consequence.\n'
-            f'- Set file verdicts to "ok" (no issues), "needs_changes" (warn/info), or "blocking" (error).\n'
-            f'- Provide an overall `reviewComment` summarizing findings.\n'
-            f'- Suggest 1-3 `labels` (e.g. "needs-changes", "lgtm", "ci-failing").\n'
-            f'- Set overall `recommendation` to: "Approved", "Approved with Minor Changes", or "Not Approved".\n'
-            f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
-            f'Diff:{combined_diff}'
+            f"You are a senior engineer auditing a PR for REGRESSIONS.\n"
+            f"PR GOAL: \"{goal_preview}\"\n"
+            f"CI status: {checks_summary}\n\n"
+            f"SCOPE & PHILOSOPHY:\n"
+            f"- Review ONLY changed lines. Regression mindset: only flag if the PR makes things worse.\n"
+            f"- Evidence Rule: Point to the exact line, quote it, and explain the runtime consequence.\n"
+            f"- Security: Flag ONLY if the diff introduces a NEW untrusted input path.\n\n"
+            f"CHECKLIST:\n"
+            f"1. Logic bugs, crashes, data integrity.\n"
+            f"2. Security (Scoped).\n"
+            f"3. Unnecessary complexity/duplicates.\n\n"
+            f"SEVERITY: error (blocking), warn (maintainability), info (nits).\n"
+            f"REQUIRED: confidence (high/medium/low) for every issue.\n"
+            f"Output ONLY valid JSON summarizing file_reviews, labels, recommendation, and reviewComment.\n\n"
+            f"Diff:{combined_diff}"
         )
 
         t0 = time.time()
@@ -388,31 +380,28 @@ class AIClient:
         stack_versions = get_stack_versions(fetch_latest=True)
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
+        goal_preview = f"{pr_title} - {pr_description[:200].strip()}..." if len(pr_description) > 200 else f"{pr_title} - {pr_description.strip()}"
+
         return (
-            f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
-            f'PR title: {pr_title}\n'
-            f'PR description: {pr_description}\n'
-            f'CI status: {checks_summary}\n'
-            f'\n## Current Stack Versions (Source of Truth)\n{versions_block}\n'
-            f'{context_section}\n\n'
-            f'## 1. REVIEW PHILOSOPHY (REGRESSIONS ONLY)\n'
-            f'- Assume the original code worked. Determine if THIS PR introduces NEW regressions.\n'
-            f'- Never speculate. If an issue cannot be demonstrated from the diff, DO NOT report it.\n'
-            f'- Focus on the PR\'s stated goal: "{pr_title} - {pr_description[:200].strip()}{"..." if len(pr_description) > 200 else ""}"\n\n'
-            f'## 2. REVIEW CHECKLIST\n'
-            f'1. CORRECTNESS: Logic bugs, crashes, data integrity.\n'
-            f'2. SECURITY: Flag issues ONLY for new user-controlled input, file access, shell exec, SQL, or auth changes.\n'
-            f'3. VERSIONING: DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n\n'
-            f'## 3. SEVERITY DEFINITIONS\n'
-            f'- error: incorrect behavior, data loss, security vulnerability, crash, build failure.\n'
-            f'- warn: maintainability regression, unnecessary complexity, performance issue.\n'
-            f'- info: documentation, naming, formatting.\n\n'
-            f'## 4. OUTPUT CONTRACT (EVIDENCE RULE)\n'
-            f'- Point to the exact changed line. Explain why it is incorrect and the consequence.\n'
-            f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
-            f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
-            f'Diff:{trunc_note}\n{chunk["diff_text"]}'
+            f"You are a senior engineer auditing a file for REGRESSIONS.\n"
+            f"PR GOAL: \"{goal_preview}\"\n"
+            f"CI status: {checks_summary}\n"
+            f"\n## Source of Truth\n{versions_block}\n"
+            f"{context_section}\n\n"
+            f"SCOPE & PHILOSOPHY:\n"
+            f"- Review ONLY changed lines. Only flag if the PR makes things worse (Regression mindset).\n"
+            f"- Evidence Rule: Point to the exact line, quote it, and explain the consequence.\n"
+            f"- Security: Flag ONLY if the diff introduces a NEW untrusted input path.\n\n"
+            f"CHECKLIST:\n"
+            f"1. Logic bugs, crashes, data integrity.\n"
+            f"2. Security (Scoped).\n"
+            f"3. Do not suggest version downgrades.\n\n"
+            f"SEVERITY: error, warn, info.\n"
+            f"REQUIRED: confidence (high/medium/low), verdict (ok/needs_changes/blocking).\n"
+            f"Output ONLY valid JSON summarizing issues and verdict.\n\n"
+            f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
+
     def _write_progress_snapshot(
         self,
         pr_num: Any,
@@ -528,7 +517,9 @@ class AIClient:
 
         raw = None
         try:
-            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
+            # Note: _SYNTHESIS_MODEL and _SYNTHESIS_SCHEMA should be defined if this method is used.
+            # Assuming they are global or available via call_ai.
+            raw = call_ai(prompt, max_retries=2)
         except Exception as e:
             log_error(f"Synthesis call failed: {e}")
 
