@@ -1,5 +1,8 @@
 import json
 import argparse
+import subprocess
+import time
+import re
 import sys
 import os
 
@@ -23,6 +26,7 @@ Initial Task Payload:
 
 def run_cli(args):
     """Executes a BoomTick CLI command and returns the standard output."""
+    from .utils import CLI_BASE
     cmd = CLI_BASE + args
     env = os.environ.copy()
     existing_path = env.get("PYTHONPATH", "")

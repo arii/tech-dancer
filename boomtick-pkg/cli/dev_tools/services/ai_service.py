@@ -501,7 +501,7 @@ class AIClient:
 
         raw = None
         try:
-            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
+            raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=2)
         except Exception as e:
             log_error(f"Synthesis call failed: {e}")
 
