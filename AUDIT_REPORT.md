@@ -4,12 +4,7 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 
 ## Target File Discovery & Verification Checklist
 
-* [x] **`[x]` AGENTS.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` AUDIT_REPORT.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` CONTRIBUTING.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` LICENSE — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` README.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` artifacts/visual-review/summary.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [ ] `boomtick-pkg/` files
 * [x] **`[x]` boomtick-pkg/cli/README.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/aggregate-prs.sh — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/ai-debugger.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -27,7 +22,15 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/handlers/command_handler.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/models.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [ ] `-[ ]` boomtick-pkg/cli/dev_tools/orchestrator.py
+    * **Location:** `boomtick-pkg/cli/dev_tools/orchestrator.py` (Method: `verify_ci_metrics`)
+    * **The Slop:** Redefinition of `verify_ci_metrics` which was already imported from `dev_tools.utils`. Redundant and shadowed the imported utility.
+    * **Why it's likely AI Drift:** LLM multi-turn editing drift leading to cargo-culting the function implementation into the class instead of using the imported utility.
+    * **Remediation:** Remove the redundant method and use the imported function directly via the `dev_tools.utils` module.
 * [ ] `-[ ]` boomtick-pkg/cli/dev_tools/review_read_pass.py
+    * **Location:** `boomtick-pkg/cli/dev_tools/review_read_pass.py` (Functions: `parse_diff_into_hunks`, `extract_review_signals`)
+    * **The Slop:** Legacy hunk-level parser and signal extraction kept for "backward compatibility" in a new internal tool that only works with JSON/structured inputs.
+    * **Why it's likely AI Drift:** Hallucinated backward-compatibility requirement for a system architecture that is entirely irrelevant to our stack.
+    * **Remediation:** Remove `parse_diff_into_hunks` and `extract_review_signals` and rely on native structured data processing.
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/schema_gen.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/scope_check.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/cli/dev_tools/services/__init__.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -134,6 +137,8 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` boomtick-pkg/scripts/finalize-extraction.sh — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/workspace-schema.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` boomtick-pkg/workspace.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `content/` files
 * [x] **`[x]` content/blog/2026-06-14-the-story-behind-the-merch-page.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` content/posts/2026-04-18-competition-metrics.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` content/posts/2026-04-18-financial-literacy-dancers.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -156,6 +161,8 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` content/studies/confidently-incorrect-v4.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` content/studies/deployment-impact-analyzer.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` content/studies/wcs-scraper-initial-sync.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `docs/` files
 * [x] **`[x]` docs/affiliate-tooling.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` docs/agent/ci-failure.schema.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` docs/agent/ci-remediation.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -172,22 +179,43 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` docs/release.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` docs/semantic-duplicate-detection.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` docs/semantic-duplicate-github-issues.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` eslint.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `etl/` files
 * [x] **`[x]` etl/README.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/__init__.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/data/event_queue.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/processor.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/query_ledger.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` etl/scraper.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` generate_report.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `public/` files
+* [x] **`[x]` public/previews/dashboard.js — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] Root files
+* [x] **`[x]` AGENTS.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` AUDIT_REPORT.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` CONTRIBUTING.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` LICENSE — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` README.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` eslint.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` generate_report_v2.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` knip.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` lighthouserc.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` package.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` playwright.config.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` pnpm-lock.yaml — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` pnpm-workspace.yaml — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` public/previews/dashboard.js — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` pytest.ini — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` svgo.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` tailwind.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` tsconfig.app.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` tsconfig.base.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` tsconfig.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` tsconfig.node.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` vercel.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+* [x] **`[x]` vite.config.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `scripts/` files
 * [x] **`[x]` scripts/affiliate/add-item.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/affiliate/audit-links.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/affiliate/audit.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -246,6 +274,10 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` scripts/manage-previews.sh — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/README.md — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [ ] `-[ ]` scripts/orchestrator/agent_2_orchestrator.py
+    * **Location:** `scripts/orchestrator/agent_2_orchestrator.py` (Functions: `run_cli`, `get_session_id`, `wait_for_agent`)
+    * **The Slop:** Local redefinition of core utilities that were already available via imports. Added zero operational value and obscured the true execution path.
+    * **Why it's likely AI Drift:** AI "forgetting" the context of existing imports and re-implementing core primitives locally.
+    * **Remediation:** Remove the local redefinitions and synchronize with the centralized `utils.py` implementations.
 * [x] **`[x]` scripts/orchestrator/experiments/continuous_dev_loop.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/experiments/deterministic_loop.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/orchestrator/experiments/genai_orchestrator.py — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -258,7 +290,11 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` scripts/ux-discover-routes.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/ux-lighthouse-runner.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` scripts/validate-links.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `setup-agent.sh -> boomtick-pkg/` files
 * [x] **`[x]` setup-agent.sh -> boomtick-pkg/cli/setup-agent.sh — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
+
+* [ ] `src/` files
 * [x] **`[x]` src/App.tsx — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/affiliate-tool.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/components/Equalizer.tsx — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -386,6 +422,10 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` src/lib/routes-discovery.test.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/routes-discovery.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [ ] `-[ ]` src/lib/style-utils.ts
+    * **Location:** `src/lib/style-utils.ts` (Entire file)
+    * **The Slop:** Over-engineered JIT resolution logic (`resolveJIT`) that attempted to mimic complex Tailwind internals with recursive regex and heavy abstractions.
+    * **Why it's likely AI Drift:** The logic was far more complex than necessary, using an overly academic functional pipeline where simple primitive mapping sufficed.
+    * **Remediation:** Simplify `resolveJIT` to use a direct token/arbitrary-value split with a robust regex that handles decimal spacing values and fractions.
 * [x] **`[x]` src/lib/types/content.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/types/routes.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/lib/utils.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
@@ -410,37 +450,3 @@ This report documents the results of a comprehensive audit of the BoomTick codeb
 * [x] **`[x]` src/types.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/utils/schema.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
 * [x] **`[x]` src/vite-env.d.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` svgo.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` tailwind.config.mjs — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` tsconfig.app.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` tsconfig.base.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` tsconfig.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` tsconfig.node.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` vercel.json — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-* [x] **`[x]` vite.config.ts — Verified Clean** (No hallucinated compatibility layers, cargo-culted boilerplate, or non-functional abstractions found).
-
-## Detailed Slop Findings
-
-### 1. `src/lib/style-utils.ts`
-* **Location:** `src/lib/style-utils.ts` (Entire file)
-* **The Slop:** Over-engineered JIT resolution logic (`resolveJIT`) that attempted to mimic complex Tailwind internals with recursive regex and heavy abstractions.
-* **Why it's likely AI Drift:** The logic was far more complex than necessary, using an overly academic functional pipeline where simple primitive mapping sufficed.
-* **Remediation:** Simplify `resolveJIT` to use a direct token/arbitrary-value split with a robust regex that handles decimal spacing values and fractions.
-
-### 2. `boomtick-pkg/cli/dev_tools/orchestrator.py`
-* **Location:** `boomtick-pkg/cli/dev_tools/orchestrator.py` (Method: `verify_ci_metrics`)
-* **The Slop:** Redefinition of `verify_ci_metrics` which was already imported from `dev_tools.utils`. Redundant and shadowed the imported utility.
-* **Why it's likely AI Drift:** LLM multi-turn editing drift leading to cargo-culting the function implementation into the class instead of using the imported utility.
-* **Remediation:** Remove the redundant method and use the imported function directly via the `dev_tools.utils` module.
-
-### 3. `boomtick-pkg/cli/dev_tools/review_read_pass.py`
-* **Location:** `boomtick-pkg/cli/dev_tools/review_read_pass.py` (Functions: `parse_diff_into_hunks`, `extract_review_signals`)
-* **The Slop:** Legacy hunk-level parser and signal extraction kept for "backward compatibility" in a new internal tool that only works with JSON/structured inputs.
-* **Why it's likely AI Drift:** Hallucinated backward-compatibility requirement for a system architecture that is entirely irrelevant to our stack.
-* **Remediation:** Remove `parse_diff_into_hunks` and `extract_review_signals` and rely on native structured data processing.
-
-### 4. `scripts/orchestrator/agent_2_orchestrator.py`
-* **Location:** `scripts/orchestrator/agent_2_orchestrator.py` (Functions: `run_cli`, `get_session_id`, `wait_for_agent`)
-* **The Slop:** Local redefinition of core utilities that were already available via imports. Added zero operational value and obscured the true execution path.
-* **Why it's likely AI Drift:** AI "forgetting" the context of existing imports and re-implementing core primitives locally.
-* **Remediation:** Remove the local redefinitions and synchronize with the centralized `utils.py` implementations.
