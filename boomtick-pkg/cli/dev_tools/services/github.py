@@ -320,24 +320,38 @@ class GitHubClient:
         with open(filepath, 'r') as f:
             content = f.read()
 
-        # Find the last JSON block (metadata)
+        # Find all JSON blocks and identify the metadata block (must contain 'recommendation' or 'comments')
         json_blocks = list(re.finditer(r'```json\n(.*?)\n```', content, re.DOTALL))
         if not json_blocks:
-            raise CLIError("Could not find JSON block in review document")
+            raise CLIError("Could not find any JSON block in review document")
 
-        last_match = json_blocks[-1]
-        try:
-            payload = json.loads(last_match.group(1))
-        except json.JSONDecodeError as e:
-            raise CLIError(f"Failed to parse JSON block at bottom: {str(e)}")
+        payload = None
+        metadata_match = None
+        for match in reversed(json_blocks):
+            try:
+                candidate = json.loads(match.group(1))
+                if isinstance(candidate, dict) and ("recommendation" in candidate or "comments" in candidate):
+                    payload = candidate
+                    metadata_match = match
+                    break
+            except json.JSONDecodeError:
+                continue
 
-        # Extract Markdown body (everything above the last JSON block)
-        body = content[:last_match.start()].strip()
+        if not payload:
+            raise CLIError("Could not find a valid JSON metadata block (containing 'recommendation' or 'comments')")
+
+        # Extract Markdown body (everything above the metadata JSON block)
+        body = content[:metadata_match.start()].strip()
         # Clean up the trailing "Output JSON" instructions if present
         body = re.split(r'##\s+Output JSON', body, flags=re.IGNORECASE)[0].strip()
 
-        # Merge extracted body into payload if not already present or if payload body is boilerplate
-        if "body" not in payload or not payload["body"].strip() or payload["body"] == "<findings>":
+        if not body:
+             raise CLIError("Review body (Markdown section) is empty. Provide findings before the JSON block.")
+
+        # Merge extracted body into payload if not already present or if payload body is boilerplate/placeholder
+        existing_body = payload.get("body", "").strip()
+        is_placeholder = any(p in existing_body for p in ["<findings>", "<summary>", "<feedback>"])
+        if not existing_body or is_placeholder:
             payload["body"] = body
 
         # Validate payload before proceeding
@@ -354,7 +368,8 @@ class GitHubClient:
         elif recommendation == "Approved":
             event = "APPROVE"
         elif recommendation == "Approved with Minor Changes":
-            event = "APPROVE"
+            # Per code review, minor changes shouldn't automatically approve
+            event = "COMMENT"
         elif recommendation == "Not Approved":
             event = "REQUEST_CHANGES"
         else:
