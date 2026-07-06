@@ -308,6 +308,7 @@ class GitHubClient:
     def submit_pr_review(self, pr_number: int, filepath: str, cleanup: bool = False, dry_run: bool = True, event_override: Optional[str] = None, is_json: bool = False):
         """
         Submits a PR review from a markdown file containing a JSON payload.
+        The file should have standard Markdown at the top and a JSON block at the bottom for metadata.
         """
         from dev_tools.utils import CLIError, log_info, log_warn
         import re
@@ -319,14 +320,25 @@ class GitHubClient:
         with open(filepath, 'r') as f:
             content = f.read()
 
-        json_match = re.search(r'```json\n(.*?)\n```', content, re.DOTALL)
-        if not json_match:
+        # Find the last JSON block (metadata)
+        json_blocks = list(re.finditer(r'```json\n(.*?)\n```', content, re.DOTALL))
+        if not json_blocks:
             raise CLIError("Could not find JSON block in review document")
 
+        last_match = json_blocks[-1]
         try:
-            payload = json.loads(json_match.group(1))
+            payload = json.loads(last_match.group(1))
         except json.JSONDecodeError as e:
-            raise CLIError(f"Failed to parse JSON block: {str(e)}")
+            raise CLIError(f"Failed to parse JSON block at bottom: {str(e)}")
+
+        # Extract Markdown body (everything above the last JSON block)
+        body = content[:last_match.start()].strip()
+        # Clean up the trailing "Output JSON" instructions if present
+        body = re.split(r'##\s+Output JSON', body, flags=re.IGNORECASE)[0].strip()
+
+        # Merge extracted body into payload if not already present or if payload body is boilerplate
+        if "body" not in payload or not payload["body"].strip() or payload["body"] == "<findings>":
+            payload["body"] = body
 
         # Validate payload before proceeding
         self.validate_review_payload(payload)
@@ -335,7 +347,20 @@ class GitHubClient:
         check_runs = self.fetch_check_runs(pr_details.get('head', {}).get('sha'))
         failing_checks = [run.get('name') for run in check_runs if run.get('conclusion') == 'failure']
 
-        event = event_override or ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","") else "APPROVE" if "Approved" in payload.get("body","") else "COMMENT")
+        # Determine event based on recommendation field, then fallback to body analysis
+        recommendation = payload.get("recommendation", "")
+        if event_override:
+            event = event_override
+        elif recommendation == "Approved":
+            event = "APPROVE"
+        elif recommendation == "Approved with Minor Changes":
+            event = "APPROVE"
+        elif recommendation == "Not Approved":
+            event = "REQUEST_CHANGES"
+        else:
+            event = ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","")
+                     else "APPROVE" if "Approved" in payload.get("body","")
+                     else "COMMENT")
 
         if failing_checks and event == "APPROVE":
             event = "COMMENT"
