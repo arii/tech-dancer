@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 
 import click
 
-from dev_tools.models import CreateIssueInput, SearchPRsInput, IssueUpdateInput, ReadPRCommentsInput
+from dev_tools.models import CreateIssueInput, SearchPRsInput, IssueUpdateInput, ReadPRCommentsInput, ReadPRCommentsResponse
 from dev_tools.utils import (
     get_or_create_log_dir,
     CLIError,
@@ -28,7 +28,7 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope,
     verify_ci_metrics,
-    strip_ansi
+    mask_sensitive_data
 )
 from dev_tools.config import get_config
 
@@ -81,12 +81,14 @@ def out(ctx, msg, data=None):
         click.echo(msg)
 
 def err(ctx, msg, code=1, data=None):
+    # Ensure sensitive data is masked in the error message
+    masked_msg = mask_sensitive_data(msg)
     if ctx.obj['JSON']:
-        payload = {"status": "error", "message": msg, "code": code}
+        payload = {"status": "error", "message": masked_msg, "code": code}
         if data: payload.update({"data": data})
         click.echo(json.dumps(payload, indent=2))
     else:
-        click.echo(f"❌ Error: {msg}", err=True)
+        click.echo(f"❌ Error: {masked_msg}", err=True)
     sys.exit(code)
 
 def _handle_unexpected_error(ctx, command_name, error):
@@ -511,15 +513,24 @@ def post_comment(ctx, pr, file, body):
 @click.pass_context
 def read_pr_comments(ctx, pr_number):
     """Fetch and display standard and review comments for a PR."""
+    if pr_number <= 0:
+        err(ctx, "PR number must be a positive integer.")
+
     orch = ctx.obj['ORCHESTRATOR']
 
-    # Contract validation
+    # Input contract validation
     try:
         ReadPRCommentsInput(pr_number=pr_number)
     except Exception as e:
         _handle_unexpected_error(ctx, "read-pr-comments", e)
 
     res = orch.get_pr_comments(pr_number)
+
+    # Response contract validation
+    try:
+        ReadPRCommentsResponse(**res)
+    except Exception as e:
+        log_warn(f"Response validation failed for read-pr-comments: {e}")
 
     if ctx.obj['JSON']:
         out(ctx, f"Fetched comments for PR #{pr_number}", data=res)
@@ -528,7 +539,7 @@ def read_pr_comments(ctx, pr_number):
         click.echo(f"PR #{pr['number']}: {pr['title']}")
         click.echo("--- Comments ---")
         for comment in res.get('comments', []):
-            body = strip_ansi(comment.get('body', ''))
+            body = click.unstyle(comment.get('body', ''))
             click.echo(f"[{comment['user']}]: {body}")
             click.echo("-" * 20)
 
@@ -537,7 +548,7 @@ def read_pr_comments(ctx, pr_number):
             path = comment.get('path')
             line = comment.get('line')
             location = f"{path}:{line}" if line else path
-            body = strip_ansi(comment.get('body', ''))
+            body = click.unstyle(comment.get('body', ''))
             click.echo(f"[{comment['user']}] in {location}: {body}")
             click.echo("-" * 20)
 
