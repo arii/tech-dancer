@@ -320,17 +320,20 @@ class GitHubClient:
         with open(filepath, 'r') as f:
             content = f.read()
 
-        # Find all JSON blocks and identify the metadata block (must contain 'recommendation' or 'comments')
+        # Find all JSON blocks and identify the metadata block (must contain 'recommendation', 'comments', or 'labels')
         json_blocks = list(re.finditer(r'```json\n(.*?)\n```', content, re.DOTALL))
         if not json_blocks:
             raise CLIError("Could not find any JSON block in review document")
+
+        # Known keys used to distinguish the metadata block from other JSON blocks (like code samples)
+        METADATA_IDENTIFIER_KEYS = {"recommendation", "comments", "labels"}
 
         payload = None
         metadata_match = None
         for match in reversed(json_blocks):
             try:
                 candidate = json.loads(match.group(1))
-                if isinstance(candidate, dict) and ("recommendation" in candidate or "comments" in candidate):
+                if isinstance(candidate, dict) and any(k in candidate for k in METADATA_IDENTIFIER_KEYS):
                     payload = candidate
                     metadata_match = match
                     break
@@ -338,7 +341,7 @@ class GitHubClient:
                 continue
 
         if not payload:
-            raise CLIError("Could not find a valid JSON metadata block (containing 'recommendation' or 'comments')")
+            raise CLIError(f"Could not find a valid JSON metadata block (expected keys: {', '.join(METADATA_IDENTIFIER_KEYS)})")
 
         # Extract Markdown body (everything above the metadata JSON block)
         body = content[:metadata_match.start()].strip()

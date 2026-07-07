@@ -38,7 +38,7 @@ If the PR context indicates failing CI checks:
 ## 4. Review Status Mapping
 
 - **Approved**: Zero violations AND all critical CI checks passing.
-- **Approved with Minor Changes**: Minor non-breaking violations (e.g., import bloat, trivial token leakage).
+- **Approved with Minor Changes**: Minor non-breaking violations (e.g., import bloat, trivial token leakage). Note: This maps to a "COMMENT" review to ensure feedback is reviewed.
 - **Not Approved**: Architectural regressions, breaking changes, major token violations, OR failing CI checks.
 
 ## 5. Formatting the Output (Markdown + JSON)
