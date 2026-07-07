@@ -46,7 +46,7 @@ export const variants = {
  * Helper factory to wrap cva and automatically apply base transition styles.
  */
 export const createVariants: typeof cva = (base, config) => {
-  return cva(clsx(base, "motion-safe:transition-all motion-safe:duration-200"), config as Parameters<typeof cva>[1]);
+  return cva(clsx(base, "motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none"), config as Parameters<typeof cva>[1]);
 };
 
 export const buttonVariants = createVariants(
