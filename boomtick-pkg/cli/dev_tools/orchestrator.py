@@ -58,6 +58,21 @@ class Orchestrator:
         "jules_fix_ci": r"(?<!\w)@jules-fix-ci\b",
     }
 
+    def _extract_diff_hunks(self, diff_text: str) -> Dict[str, List[Tuple[int, int]]]:
+        """Extracts modified line ranges (hunks) from a git diff string."""
+        hunks = defaultdict(list)
+        current_file = None
+        for line in diff_text.splitlines():
+            if line.startswith("+++ b/"):
+                current_file = line[6:]
+            elif line.startswith("@@") and current_file:
+                m = re.search(r"\+(\d+),?(\d*)", line)
+                if m:
+                    start = int(m.group(1))
+                    count = int(m.group(2)) if m.group(2) else 1
+                    hunks[current_file].append((start, start + count - 1))
+        return hunks
+
     def __init__(self) -> None:
         self._github: Optional[GitHubClient] = None
         self._ai: Optional[AIClient] = None
@@ -1771,7 +1786,7 @@ Overlapping functionality identified and resolved.
             if changed_dir:
                 os.chdir(original_cwd)
 
-    def plan_aggregation(self, pr_numbers: List[int], target_branch: str) -> Dict[str, Any]:
+    def generate_aggregation_workflow(self, pr_numbers: List[int], target_branch: str) -> Dict[str, Any]:
         """Generates a deterministic aggregation workflow plan for an agent."""
         # 1. Environment Validation
         env_res = self.runtime_check()
@@ -1779,35 +1794,21 @@ Overlapping functionality identified and resolved.
 
         # 2. Fetch PR Metadata and Overlaps
         pr_details = {}
-        file_to_prs = defaultdict(list)
+        file_to_prs = defaultdict(set)
         pr_hunks = {}
-
-        def _extract_hunks(diff_text):
-            hunks = defaultdict(list)
-            current_file = None
-            for line in diff_text.splitlines():
-                if line.startswith("+++ b/"):
-                    current_file = line[6:]
-                elif line.startswith("@@") and current_file:
-                    m = re.search(r"\+(\d+),?(\d*)", line)
-                    if m:
-                        start = int(m.group(1))
-                        count = int(m.group(2)) if m.group(2) else 1
-                        hunks[current_file].append((start, start + count - 1))
-            return hunks
 
         for pr_num in pr_numbers:
             details = self.github.fetch_pr_details(pr_num)
             pr_details[pr_num] = details
             files = self.github.fetch_pr_files(pr_num)
             diff = self.github.fetch_pr_diff(pr_num)
-            pr_hunks[pr_num] = _extract_hunks(diff)
+            pr_hunks[pr_num] = self._extract_diff_hunks(diff)
 
             pr_files = {f.get("filename") for f in files if f.get("filename")}
             for f in pr_files:
-                file_to_prs[f].append(pr_num)
+                file_to_prs[f].add(pr_num)
 
-        overlapping_files = {f: prs for f, prs in file_to_prs.items() if len(prs) > 1}
+        overlapping_files = {f: sorted(list(prs)) for f, prs in file_to_prs.items() if len(prs) > 1}
 
         # 3. Detect Structural Conflicts (Line-level overlaps)
         conflicts = []
@@ -1826,14 +1827,19 @@ Overlapping functionality identified and resolved.
                                 })
 
         # 4. Generate Markdown Files
-        sanitized_target = target_branch.replace("/", "-")
+        # Strict sanitization: allow only alphanumeric, underscores, and hyphens
+        sanitized_target = re.sub(r'[^a-zA-Z0-9_\-]', '-', target_branch)
         workflow_plan_path = os.path.join(get_or_create_log_dir("workflows"), f"workflow-plan-aggregation-{sanitized_target}.md")
         context_details_path = os.path.join(get_or_create_log_dir("reviews"), f"aggregation-context-{sanitized_target}.md")
         plan_skeleton_path = os.path.join(get_or_create_log_dir("reviews"), f"aggregation-plan-{sanitized_target}.md")
 
+        # --- Helper for escaping markdown special characters ---
+        def _escape_md(text):
+            return str(text).replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)")
+
         # --- Workflow Plan Template ---
         with open(workflow_plan_path, "w") as f:
-            f.write(f"""# Reviewing Aggregation Planning Guide: {target_branch}
+            f.write(f"""# Reviewing Aggregation Planning Guide: {_escape_md(target_branch)}
 
 ## Agent Instructions
 - setup complete
@@ -1879,11 +1885,13 @@ Run the validation suite to ensure the aggregated branch is stable.
 
         # --- Context Details Template ---
         with open(context_details_path, "w") as f:
-            f.write(f"# Aggregation Context Details: {target_branch}\n\n")
+            f.write(f"# Aggregation Context Details: {_escape_md(target_branch)}\n\n")
             f.write("## Targeted PRs\n")
             for pr_num in pr_numbers:
                 details = pr_details.get(pr_num, {})
-                f.write(f"- **PR #{pr_num}**: {details.get('title')} (@{details.get('user', {}).get('login')})\n")
+                title = _escape_md(details.get('title', ''))
+                login = _escape_md(details.get('user', {}).get('login', ''))
+                f.write(f"- **PR #{pr_num}**: {title} (@{login})\n")
 
             f.write("\n## Overlapping Files\n")
             if not overlapping_files:
@@ -1901,7 +1909,7 @@ Run the validation suite to ensure the aggregated branch is stable.
 
         # --- Plan Skeleton Template ---
         with open(plan_skeleton_path, "w") as f:
-            f.write(f"""# Aggregation Plan Skeleton: {target_branch}
+            f.write(f"""# Aggregation Plan Skeleton: {_escape_md(target_branch)}
 
 ## Integration Steps
 1. **Prepare Base**: Checkout the latest base branch.
