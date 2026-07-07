@@ -234,9 +234,7 @@
   }
 }
 
-@utility z-top {
-  z-index: 100;
-}
+
 
 @layer base {
   html {
