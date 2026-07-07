@@ -93,8 +93,8 @@ install_apt_tools() {
   fi
 
   log "Installing system tools..."
-  run_sudo apt-get update -y || return 0
-  run_sudo apt-get install -y \
+  timeout 60 run_sudo apt-get update -y || return 0
+  timeout 120 run_sudo apt-get install -y \
     ca-certificates curl git jq unzip xz-utils gpg \
     python3 python3-pip python3-venv python3-setuptools python3-wheel \
     build-essential || warn "Some OS packages could not be installed. Continuing with available tools."
@@ -103,13 +103,13 @@ install_apt_tools() {
     log "Installing GitHub CLI (gh)..."
     # Ensure /usr/share/keyrings exists as a standard location for system keyrings
     if run_sudo mkdir -p /usr/share/keyrings; then
-      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+      curl --connect-timeout 10 --max-time 60 -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
         | run_sudo tee /usr/share/keyrings/githubcli-archive-keyring.gpg >/dev/null || true
       run_sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg || true
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
         | run_sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null || true
-      run_sudo apt-get update -y || true
-      run_sudo apt-get install -y gh || warn "Unable to install gh; continuing."
+      timeout 60 run_sudo apt-get update -y || true
+      timeout 60 run_sudo apt-get install -y gh || warn "Unable to install gh; continuing."
     else
       warn "Unable to configure GitHub CLI apt repository; continuing."
     fi
@@ -118,9 +118,9 @@ install_apt_tools() {
   if ! have node; then
     log "Installing Node.js ${NODE_MAJOR}.x..."
     # Semgrep-ignore: bash.curl.security.curl-pipe-bash.curl-pipe-bash
-    if curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" > nodesource_setup.sh && run_sudo bash nodesource_setup.sh; then
+    if curl --connect-timeout 10 --max-time 60 -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" > nodesource_setup.sh && run_sudo bash nodesource_setup.sh; then
       rm nodesource_setup.sh
-      run_sudo apt-get install -y nodejs || warn "Unable to install nodejs via apt."
+      timeout 60 run_sudo apt-get install -y nodejs || warn "Unable to install nodejs via apt."
     else
       rm -f nodesource_setup.sh
       warn "Unable to configure NodeSource repository."
@@ -186,7 +186,13 @@ install_python_deps() {
 
   if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
-    have td-cli || err "td-cli not found on PATH after editable install of dev-tools."
+    if ! have td-cli; then
+      err "td-cli not found on PATH after editable install of dev-tools. Path is: $PATH"
+    fi
+    if ! have td; then
+      err "td (alias) not found on PATH after editable install of dev-tools. Path is: $PATH"
+    fi
+    log "Verified td-cli and td are available on PATH."
   else
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
   fi
@@ -294,14 +300,42 @@ run_validation() {
 main() {
   echo "=== BoomTick Agent Environment Setup ==="
   echo "Repository: ${REPO_ROOT}"
+
   install_apt_tools
-  ensure_corepack_pnpm
-  install_python_deps
-  configure_remote_origin
-  configure_git_hooks
-  install_node_deps
-  install_playwright
+
+  log "Starting parallel installation blocks..."
+  (
+    log "[Parallel] Installing Python dependencies..."
+    install_python_deps
+  ) &
+  pid_python=$!
+
+  (
+    log "[Parallel] Installing Node.js & dependencies..."
+    ensure_corepack_pnpm
+    install_node_deps
+    install_playwright
+  ) &
+  pid_node=$!
+
+  (
+    log "[Parallel] Configuring Git..."
+    configure_remote_origin
+    configure_git_hooks
+  ) &
+  pid_git=$!
+
+  local failed=0
+  wait $pid_python || { err "Python dependency installation failed"; failed=1; }
+  wait $pid_node || { err "Node.js/Playwright installation failed"; failed=1; }
+  wait $pid_git || { err "Git configuration failed"; failed=1; }
+
+  if [ $failed -ne 0 ]; then
+    err "One or more parallel setup tasks failed."
+  fi
+
   run_validation
 }
+
 
 main "$@"
