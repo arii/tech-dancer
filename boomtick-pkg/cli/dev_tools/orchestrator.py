@@ -456,8 +456,8 @@ class Orchestrator:
         # Use GitHubClient for batch searching if we want caching, but here we can just use pagination limit
         repo = get_github_client().get_repo(get_repo_name())
         prs_data = []
-        # Use per_page to limit the number of items fetched in initial API call
-        for i, pr in enumerate(repo.get_pulls(state='open').get_page(0)[:limit]):
+        # PyGithub get_pulls handles per_page internally. Directly slice the paginated list.
+        for pr in repo.get_pulls(state='open')[:limit]:
             m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
             prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
         return prs_data
@@ -918,8 +918,8 @@ Respond only after the PR is created or updated:
 
     def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True, limit: int = 10) -> List[Dict[str, Any]]:
         g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
-        # Use get_page(0) to fetch initial items efficiently
-        for i, pr in enumerate(repo.get_pulls(state='open', sort='updated', direction='desc').get_page(0)[:limit]):
+        # PyGithub get_pulls handles per_page internally. Directly slice the paginated list.
+        for pr in repo.get_pulls(state='open', sort='updated', direction='desc')[:limit]:
             last_review = next((r for r in pr.get_reviews().reversed if r.user.login == login), None)
             status = "ACTION: Needs Review" if not last_review else f"ACTION: Needs Re-Review" if last_review.commit_id != pr.head.sha else "STATE: Up-To-Date"
             item = {"number": pr.number, "title": pr.title, "status": status, "unaddressed": []}

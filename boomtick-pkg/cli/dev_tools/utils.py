@@ -147,11 +147,11 @@ class DiskCache:
                 log_warn(f"Failed to delete cache for {key}: {e}")
 
     def clear(self):
-        """Clears all cached items in this subdir."""
-        import shutil
+        """Clears all cached items in this subdir without removing the directory."""
         try:
-            shutil.rmtree(self.cache_dir)
-            os.makedirs(self.cache_dir, exist_ok=True)
+            for file_path in Path(self.cache_dir).iterdir():
+                if file_path.is_file():
+                    file_path.unlink()
         except Exception as e:
             log_warn(f"Failed to clear cache: {e}")
 

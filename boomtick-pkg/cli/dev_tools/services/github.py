@@ -86,10 +86,6 @@ class GitHubClient:
 
             if method == "GET":
                 self._cache.set(cache_key, result, ttl=ttl)
-            else:
-                # Basic cache invalidation: clear on mutation
-                # In a more advanced implementation, we could selectively invalidate
-                self._cache.clear()
 
             return result
         except requests.exceptions.RequestException:

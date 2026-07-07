@@ -88,7 +88,8 @@ class JulesFeedbackDaemon:
         # 3. Fallback to session ID in body (Batch search)
         # Ensure session_id is safely quoted for GitHub search
         safe_id = f'"{session_id}"'
-        prs = self.github.search_pull_requests(f'{safe_id} in:body state:open', limit=1)
+        # Also check title to be thorough, Search API is efficient here
+        prs = self.github.search_pull_requests(f'{safe_id} in:body,title state:open', limit=1)
         if prs:
             return prs[0]
 

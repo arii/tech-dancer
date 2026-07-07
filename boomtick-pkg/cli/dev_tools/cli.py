@@ -48,7 +48,7 @@ class LazyOrchestrator:
         return getattr(self._get_instance(), name)
 
     def __setattr__(self, name, value):
-        if name in ("_instance",):
+        if name in ("_instance", "_no_cache"):
             super().__setattr__(name, value)
         else:
             setattr(self._get_instance(), name, value)
