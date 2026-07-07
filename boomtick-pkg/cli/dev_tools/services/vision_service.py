@@ -2,8 +2,6 @@ import os
 import json
 import base64
 from typing import Optional, List, Dict
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
 from dev_tools.config import load_project_config
 from dev_tools.utils import log_error
 
@@ -31,6 +29,9 @@ class VisionService:
 
         if not self.token:
             return "No GITHUB_TOKEN found."
+
+        from langchain_openai import ChatOpenAI
+        from langchain_core.messages import HumanMessage
 
         llm = ChatOpenAI(
             base_url="https://models.inference.ai.azure.com",
