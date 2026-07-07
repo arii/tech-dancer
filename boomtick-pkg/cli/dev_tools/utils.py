@@ -125,7 +125,7 @@ def clean_llm_output(text: str) -> str:
     findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
     if findings_match:
         text = findings_match.group(1).strip()
-
+        
     match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
     if match:
         return match.group(1).strip()
