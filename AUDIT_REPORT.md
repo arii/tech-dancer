@@ -394,7 +394,7 @@
 * **File:** `src/features/lab/useBlogDrafter.ts`
   * **The Slop:** `generateId` function with unnecessary fallback for "legacy browsers" in a Node 24+ pinned environment.
   * **Why:** AI drifted into generic web-compat mode instead of adhering to the project's strict runtime contract.
-  * **Remediation:** Simplified to direct `crypto.randomUUID()` call.
+  * **Remediation:** Simplified to direct `crypto.randomUUID()` call. Explicitly rejected "best practice" fallbacks that contradict the project's modern environment constraints.
 
 * **File:** `src/lib/style-utils.ts`
   * **The Slop:** Over-engineered `resolveJIT` function with complex branching logic for arbitrary Tailwind values.
