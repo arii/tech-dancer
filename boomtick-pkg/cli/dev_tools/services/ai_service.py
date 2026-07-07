@@ -330,6 +330,15 @@ class AIClient:
                 parsed = json.loads(cleaned)
                 file_reviews = parsed.get("file_reviews", [])
 
+                # Schema validation for counterexample
+                for fr in file_reviews:
+                    for issue in fr.get("issues", []):
+                        if issue.get("severity") == "error" and not issue.get("counterexample"):
+                            issue["counterexample"] = "No counterexample provided by AI."
+                        if "counterexample" in issue and issue["counterexample"] is not None:
+                            if not isinstance(issue["counterexample"], str):
+                                issue["counterexample"] = str(issue["counterexample"])
+
                 final = {
                     "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
                     "labels": parsed.get("labels", []),
@@ -641,8 +650,10 @@ class AIClient:
                 comment_body = f"[{issue.get('severity','?')}] {issue.get('comment','')}"
                 if issue.get('confidence'):
                     comment_body += f"\n\n**Confidence:** {issue.get('confidence')}"
-                if issue.get('counterexample'):
-                    comment_body += f"\n\n**Counterexample:**\n{issue.get('counterexample')}"
+
+                ce = issue.get('counterexample')
+                if ce and isinstance(ce, str) and ce.strip():
+                    comment_body += f"\n\n**Counterexample:**\n{ce.strip()}"
 
                 all_issues.append({
                     "path": fr['file'],
