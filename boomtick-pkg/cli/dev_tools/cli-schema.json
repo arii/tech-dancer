@@ -1,0 +1,588 @@
+{
+  "_warning": "AUTO-GENERATED: DO NOT EDIT MANUALLY. Update models.py instead.",
+  "models": {
+    "CreateIssueInput": {
+      "properties": {
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "body": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Body"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "title": "CreateIssueInput",
+      "type": "object"
+    },
+    "SearchPRsInput": {
+      "properties": {
+        "state": {
+          "default": "open",
+          "title": "State",
+          "type": "string"
+        },
+        "limit": {
+          "default": 100,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "include_drafts": {
+          "default": true,
+          "title": "Include Drafts",
+          "type": "boolean"
+        },
+        "labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labels"
+        }
+      },
+      "title": "SearchPRsInput",
+      "type": "object"
+    },
+    "IssueUpdateInput": {
+      "properties": {
+        "issue_number": {
+          "title": "Issue Number",
+          "type": "integer"
+        },
+        "body": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Body"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labels"
+        },
+        "add_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Add Labels"
+        },
+        "remove_labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remove Labels"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "State"
+        }
+      },
+      "required": [
+        "issue_number"
+      ],
+      "title": "IssueUpdateInput",
+      "type": "object"
+    },
+    "ReadPRCommentsInput": {
+      "properties": {
+        "pr_number": {
+          "title": "Pr Number",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "pr_number"
+      ],
+      "title": "ReadPRCommentsInput",
+      "type": "object"
+    },
+    "CreateIssueResponse": {
+      "$defs": {
+        "IssueSummary": {
+          "properties": {
+            "number": {
+              "title": "Number",
+              "type": "integer"
+            },
+            "title": {
+              "title": "Title",
+              "type": "string"
+            },
+            "html_url": {
+              "title": "Html Url",
+              "type": "string"
+            },
+            "state": {
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "number",
+            "title",
+            "html_url",
+            "state"
+          ],
+          "title": "IssueSummary",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "status": {
+          "default": "success",
+          "title": "Status",
+          "type": "string"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "data": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data"
+        },
+        "issue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IssueSummary"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "CreateIssueResponse",
+      "type": "object"
+    },
+    "SearchPRsResponse": {
+      "$defs": {
+        "PRSummary": {
+          "properties": {
+            "number": {
+              "title": "Number",
+              "type": "integer"
+            },
+            "title": {
+              "title": "Title",
+              "type": "string"
+            },
+            "author": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Author",
+              "type": "object"
+            },
+            "headRefName": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Headrefname"
+            },
+            "baseRefName": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Baserefname"
+            },
+            "isDraft": {
+              "default": false,
+              "title": "Isdraft",
+              "type": "boolean"
+            },
+            "mergeStateStatus": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Mergestatestatus"
+            },
+            "updatedAt": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Updatedat"
+            },
+            "url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Url"
+            }
+          },
+          "required": [
+            "number",
+            "title"
+          ],
+          "title": "PRSummary",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "status": {
+          "default": "success",
+          "title": "Status",
+          "type": "string"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "data": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data"
+        },
+        "prs": {
+          "items": {
+            "$ref": "#/$defs/PRSummary"
+          },
+          "title": "Prs",
+          "type": "array"
+        }
+      },
+      "title": "SearchPRsResponse",
+      "type": "object"
+    },
+    "IssueUpdateResponse": {
+      "$defs": {
+        "IssueSummary": {
+          "properties": {
+            "number": {
+              "title": "Number",
+              "type": "integer"
+            },
+            "title": {
+              "title": "Title",
+              "type": "string"
+            },
+            "html_url": {
+              "title": "Html Url",
+              "type": "string"
+            },
+            "state": {
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "number",
+            "title",
+            "html_url",
+            "state"
+          ],
+          "title": "IssueSummary",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "status": {
+          "default": "success",
+          "title": "Status",
+          "type": "string"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "data": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data"
+        },
+        "issue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IssueSummary"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "IssueUpdateResponse",
+      "type": "object"
+    },
+    "ReadPRCommentsResponse": {
+      "$defs": {
+        "PRComment": {
+          "properties": {
+            "user": {
+              "title": "User",
+              "type": "string"
+            },
+            "body": {
+              "title": "Body",
+              "type": "string"
+            },
+            "created_at": {
+              "title": "Created At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "user",
+            "body",
+            "created_at"
+          ],
+          "title": "PRComment",
+          "type": "object"
+        },
+        "ReviewComment": {
+          "properties": {
+            "user": {
+              "title": "User",
+              "type": "string"
+            },
+            "path": {
+              "title": "Path",
+              "type": "string"
+            },
+            "line": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Line"
+            },
+            "body": {
+              "title": "Body",
+              "type": "string"
+            },
+            "created_at": {
+              "title": "Created At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "user",
+            "path",
+            "body",
+            "created_at"
+          ],
+          "title": "ReviewComment",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "status": {
+          "default": "success",
+          "title": "Status",
+          "type": "string"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "data": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Data"
+        },
+        "pr": {
+          "additionalProperties": true,
+          "title": "Pr",
+          "type": "object"
+        },
+        "comments": {
+          "items": {
+            "$ref": "#/$defs/PRComment"
+          },
+          "title": "Comments",
+          "type": "array"
+        },
+        "review_comments": {
+          "items": {
+            "$ref": "#/$defs/ReviewComment"
+          },
+          "title": "Review Comments",
+          "type": "array"
+        }
+      },
+      "required": [
+        "pr"
+      ],
+      "title": "ReadPRCommentsResponse",
+      "type": "object"
+    }
+  }
+}

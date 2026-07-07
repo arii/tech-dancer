@@ -1,8 +1,8 @@
 import json
 import os
 from dev_tools.models import (
-    CreateIssueInput, SearchPRsInput, IssueUpdateInput,
-    CreateIssueResponse, SearchPRsResponse, IssueUpdateResponse
+    CreateIssueInput, SearchPRsInput, IssueUpdateInput, ReadPRCommentsInput,
+    CreateIssueResponse, SearchPRsResponse, IssueUpdateResponse, ReadPRCommentsResponse
 )
 
 def get_models_schema():
@@ -10,9 +10,11 @@ def get_models_schema():
         "CreateIssueInput": CreateIssueInput.model_json_schema(),
         "SearchPRsInput": SearchPRsInput.model_json_schema(),
         "IssueUpdateInput": IssueUpdateInput.model_json_schema(),
+        "ReadPRCommentsInput": ReadPRCommentsInput.model_json_schema(),
         "CreateIssueResponse": CreateIssueResponse.model_json_schema(),
         "SearchPRsResponse": SearchPRsResponse.model_json_schema(),
         "IssueUpdateResponse": IssueUpdateResponse.model_json_schema(),
+        "ReadPRCommentsResponse": ReadPRCommentsResponse.model_json_schema(),
     }
 
 def generate_schema():

@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 
 import click
 
-from dev_tools.models import CreateIssueInput, SearchPRsInput, IssueUpdateInput
+from dev_tools.models import CreateIssueInput, SearchPRsInput, IssueUpdateInput, ReadPRCommentsInput
 from dev_tools.utils import (
     get_or_create_log_dir,
     CLIError,
@@ -512,6 +512,13 @@ def post_comment(ctx, pr, file, body):
 def read_pr_comments(ctx, pr_number):
     """Fetch and display standard and review comments for a PR."""
     orch = ctx.obj['ORCHESTRATOR']
+
+    # Contract validation
+    try:
+        ReadPRCommentsInput(pr_number=pr_number)
+    except Exception as e:
+        _handle_unexpected_error(ctx, "read-pr-comments", e)
+
     res = orch.get_pr_comments(pr_number)
 
     if ctx.obj['JSON']:
