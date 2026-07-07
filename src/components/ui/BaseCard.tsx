@@ -42,10 +42,7 @@ export function BaseCard({
     className
   );
 
-  const linkClasses = cn(
-    "absolute inset-0 z-10 outline-none focus-visible:ring-2 focus-visible:ring-accent",
-    "rounded-md"
-  );
+  const linkClasses = "absolute inset-0 z-10 outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md";
 
   return (
     <Stack
