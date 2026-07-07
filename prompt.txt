@@ -1,0 +1,243 @@
+# Self Review Before Submitting
+
+Your task is to perform a comprehensive self-review before committing or opening a pull request.
+
+Do **not** assume your implementation is correct. Your goal is to actively find mistakes.
+
+---
+
+## Step 1: Enumerate All Changes
+
+Generate the complete list of modified files.
+
+```bash
+git diff --name-status origin/main...HEAD
+```
+
+For each file, determine:
+
+- Why was this file modified?
+- Was the modification intentional?
+- Does it belong in this PR?
+- Are there accidental formatting or unrelated changes?
+
+---
+
+## Step 2: Create a Review Checklist
+
+Create a file:
+
+```
+artifacts/self-audit.md
+```
+
+The file should contain one checklist item for **every changed file**.
+
+Example:
+
+```markdown
+# Self Audit
+
+## Files
+
+- [ ] src/components/Button.tsx
+- [ ] src/hooks/useTheme.ts
+- [ ] package.json
+- [ ] README.md
+```
+
+Do **not** mark anything complete until it has been manually reviewed.
+
+---
+
+## Step 3: Review Every File
+
+For each changed file, inspect the entire diff.
+
+```bash
+git diff origin/main...HEAD -- path/to/file
+```
+
+Verify:
+
+- implementation is correct
+- logic is complete
+- no dead code
+- no debugging statements
+- no commented-out code
+- no accidental whitespace-only changes
+- naming is consistent
+- documentation updated if required
+- tests updated if required
+- types remain correct
+- imports are clean
+- no duplicated code
+- no regressions introduced
+
+Only after verifying the file should you change
+
+```markdown
+- [ ] filename
+```
+
+to
+
+```markdown
+- [x] filename
+```
+
+and record a short review summary beneath it.
+
+Example
+
+```markdown
+- [x] src/components/Button.tsx
+
+Verified:
+- removed duplicated rendering path
+- updated accessibility label
+- tests still pass
+- no unrelated changes
+```
+
+---
+
+## Step 4: Cross-Check Requirements
+
+Read the original issue, prompt, or specification again.
+
+Verify every requested behavior exists.
+
+Create a section:
+
+```markdown
+## Requirement Verification
+
+- [x] Requirement A
+- [x] Requirement B
+- [ ] Requirement C
+```
+
+Any unchecked item means the implementation is incomplete.
+
+---
+
+## Step 5: Look for Missing Work
+
+Ask yourself:
+
+- What did I forget?
+- What edge cases are missing?
+- What would a reviewer question?
+- What could fail in production?
+- Are error paths handled?
+- Are loading states handled?
+- Are empty states handled?
+- Are accessibility concerns addressed?
+- Are mobile layouts correct?
+- Is dark mode correct (if applicable)?
+
+Document findings.
+
+---
+
+## Step 6: Search for Common Mistakes
+
+Search the repository for:
+
+- TODO
+- FIXME
+- console.log
+- debugger
+- XXX
+- HACK
+
+Remove anything unintended.
+
+---
+
+## Step 7: Verify Tests
+
+Run the project's validation commands.
+
+Examples:
+
+```bash
+npm test
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Record results.
+
+```markdown
+## Validation
+
+- [x] Build
+- [x] Typecheck
+- [x] Lint
+- [x] Tests
+```
+
+Include failures if any occur.
+
+---
+
+## Step 8: Review the Final Diff
+
+Read the entire PR one final time.
+
+```bash
+git diff origin/main...HEAD
+```
+
+Look for:
+
+- unrelated edits
+- formatting noise
+- missing files
+- generated files
+- secrets
+- accidental dependency updates
+- merge artifacts
+
+---
+
+## Step 9: PR Readiness
+
+Complete:
+
+```markdown
+## Ready for Review
+
+- [ ] Every file reviewed
+- [ ] Every requirement implemented
+- [ ] Tests passing
+- [ ] Documentation updated
+- [ ] No unrelated changes
+- [ ] Ready to merge
+```
+
+Do **not** mark an item complete unless you have explicitly verified it.
+
+---
+
+## Deliverables
+
+Produce:
+
+```
+artifacts/self-audit.md
+```
+
+containing:
+
+- File-by-file review
+- Requirement verification
+- Validation results
+- Risks discovered
+- Remaining work
+- Final readiness checklist
+
+If any checklist item cannot be completed, stop and fix the issue before opening a PR or creating a commit.
