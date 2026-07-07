@@ -7,7 +7,6 @@ import urllib.parse
 import requests
 import re
 import random
-import hashlib
 from pathlib import Path
 from typing import Optional, Union, List, Dict, Any
 def mask_sensitive_data(msg: str) -> str:
@@ -88,74 +87,6 @@ def get_or_create_log_dir(subdir: str) -> str:
     return log_dir
 
 
-class DiskCache:
-    """Lightweight disk-based cache for JSON-serializable data."""
-    def __init__(self, subdir: str = "cache", no_cache: bool = False):
-        self.cache_dir = get_or_create_log_dir(subdir)
-        # Use explicit parameter or TD_NO_CACHE to bypass the cache
-        self.no_cache = no_cache or os.environ.get("TD_NO_CACHE") == "true"
-
-    def _get_path(self, key: str) -> Path:
-        hashed_key = hashlib.sha256(key.encode('utf-8')).hexdigest()
-        return Path(self.cache_dir) / f"{hashed_key}.json"
-
-    def get(self, key: str) -> Optional[Any]:
-        if self.no_cache:
-            return None
-
-        path = self._get_path(key)
-        if not path.exists():
-            return None
-
-        try:
-            with path.open('r') as f:
-                data = json.load(f)
-
-            expires_at = data.get("expires_at")
-            if expires_at and time.time() > expires_at:
-                path.unlink()
-                return None
-
-            return data.get("value")
-        except Exception as e:
-            log_warn(f"Failed to read cache for {key}: {e}")
-            return None
-
-    def set(self, key: str, value: Any, ttl: Optional[int] = None):
-        if self.no_cache:
-            return
-
-        path = self._get_path(key)
-        data = {
-            "value": value,
-            "created_at": time.time(),
-            "expires_at": (time.time() + ttl) if ttl else None
-        }
-
-        try:
-            with path.open('w') as f:
-                json.dump(data, f)
-        except Exception as e:
-            log_warn(f"Failed to write cache for {key}: {e}")
-
-    def delete(self, key: str):
-        path = self._get_path(key)
-        if path.exists():
-            try:
-                path.unlink()
-            except Exception as e:
-                log_warn(f"Failed to delete cache for {key}: {e}")
-
-    def clear(self):
-        """Clears all cached items in this subdir without removing the directory."""
-        try:
-            for file_path in Path(self.cache_dir).iterdir():
-                if file_path.is_file():
-                    file_path.unlink()
-        except Exception as e:
-            log_warn(f"Failed to clear cache: {e}")
-
-
 class APIConnectionError(Exception):
     """Custom exception for retriable API connection issues."""
     pass
@@ -189,12 +120,7 @@ def get_gemini_model() -> str:
     return _get_model_config("GEMINI_MODEL", "ai_synthesis_model", "gemini-2.5-flash-lite")
 
 def clean_llm_output(text: str) -> str:
-    """Removes markdown code blocks if present, or extracts from <findings> tags if present."""
-    # First try to extract from <findings> tags (used in code review prompts)
-    findings_match = re.search(r"<findings>\s*(.*?)\s*</findings>", text, re.DOTALL | re.IGNORECASE)
-    if findings_match:
-        text = findings_match.group(1).strip()
-        
+    """Removes markdown code blocks if present."""
     match = re.search(r"```(?:\w+)?\s*\n(.*?)\n\s*```", text, re.DOTALL)
     if match:
         return match.group(1).strip()
@@ -333,9 +259,9 @@ def verify_ci_metrics(input_threshold: Optional[int] = None, output_threshold: O
         except (ValueError, TypeError):
             return default
 
-    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", 800000)
-    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", 200000)
-    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", 1000000)
+    input_limit = get_limit(input_threshold, "MAX_INPUT_TOKENS", 150000)
+    output_limit = get_limit(output_threshold, "MAX_OUTPUT_TOKENS", 50000)
+    total_limit = get_limit(total_threshold, "MAX_TOTAL_TOKENS", 200000)
 
     # Threshold validation
     if input_limit < 0 or output_limit < 0 or total_limit < 0:

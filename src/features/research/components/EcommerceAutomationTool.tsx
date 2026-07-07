@@ -13,7 +13,6 @@ import {
   Text,
   Grid
 } from '@/layouts/Primitives';
-import { SafeImage } from '@/components/ui/SafeImage';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Icon } from '@/components/ui/Icon';
 import { SEO } from '@/components/SEO';
@@ -191,26 +190,26 @@ export function EcommerceAutomationTool() {
         <Text variant="headline" size="xl" weight="font-black" as="h2">Visual Image QA Examples</Text>
         <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={6}>
           <Box border radius="md" overflow="hidden" surface="default">
-            <SafeImage
-              src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-front.webp`}
-              alt="NorCal BestCal Front Mockup"
-              aspect="square"
-              padding={4}
-              objectFit="contain"
-            />
+            <Box padding={4} aspect="square" display="flex" align="center" justify="center">
+              <img
+                src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-front.webp`}
+                alt="NorCal BestCal Front Mockup"
+                className="max-w-full max-h-full object-contain"
+              />
+            </Box>
             <Box padding={4} border="t">
               <Text size="xs" weight="bold">FRONT QA CHECK</Text>
               <Text size="micro" color="dim">Center alignment and color profile validation.</Text>
             </Box>
           </Box>
           <Box border radius="md" overflow="hidden" surface="default">
-            <SafeImage
-              src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-back.webp`}
-              alt="NorCal BestCal Back Mockup"
-              aspect="square"
-              padding={4}
-              objectFit="contain"
-            />
+            <Box padding={4} aspect="square" display="flex" align="center" justify="center">
+              <img
+                src={`${ASSET_PREFIX}/assets/gear/norcal-bestcal-back.webp`}
+                alt="NorCal BestCal Back Mockup"
+                className="max-w-full max-h-full object-contain"
+              />
+            </Box>
             <Box padding={4} border="t">
               <Text size="xs" weight="bold">BACK QA CHECK</Text>
               <Text size="micro" color="dim">Print area boundaries and text legibility.</Text>

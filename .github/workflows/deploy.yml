@@ -166,11 +166,11 @@ jobs:
               # Clean sync for branch subdirectories
               rm -rf "$DEST_DIR"
               mkdir -p "$DEST_DIR"
-              rsync -a --exclude='*.png' --exclude='*.jpg' ../dist-assets/ "$DEST_DIR/"
+              rsync -a --exclude='images/gear/sketches/*.png' ../dist-assets/ "$DEST_DIR/"
             else
               # Root deployment for main branch
               # We use selective copy to avoid deleting other branch folders
-              rsync -a --exclude='*.png' --exclude='*.jpg' ../dist-assets/ ./
+              rsync -a --exclude='images/gear/sketches/*.png' ../dist-assets/ ./
             fi
             touch .nojekyll
 
@@ -179,7 +179,7 @@ jobs:
               # Also deploy to tech-dancer/ subdirectory for root domain support
               rm -rf tech-dancer
               mkdir -p tech-dancer
-              rsync -a --exclude='*.png' --exclude='*.jpg' ../dist-assets/ tech-dancer/
+              rsync -a --exclude='images/gear/sketches/*.png' ../dist-assets/ tech-dancer/
 
               # Ensure SEO assets are at the root
               cp ../dist-assets/sitemap.xml ./sitemap.xml 2>/dev/null || true

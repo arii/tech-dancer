@@ -2,7 +2,7 @@ import os
 import subprocess
 import json
 import sys
-from dev_tools.utils import log_info, DiskCache
+from dev_tools.utils import log_info
 import base64
 import requests
 import time
@@ -10,7 +10,7 @@ from typing import Optional, List, Dict, Any
 from urllib.parse import quote
 
 class GitHubClient:
-    def __init__(self, token: Optional[str] = None, repo: Optional[str] = None, no_cache: bool = False):
+    def __init__(self, token: Optional[str] = None, repo: Optional[str] = None):
         from dev_tools.utils import get_github_token
         self.token = token or get_github_token()
         if not self.token:
@@ -25,7 +25,6 @@ class GitHubClient:
             "Accept": "application/vnd.github.v3+json",
         })
         self._branch_cache = {}
-        self._cache = DiskCache(subdir="github", no_cache=no_cache)
 
     def branch_exists(self, branch_name: str) -> bool:
         """Checks if a branch exists in the repository, with caching."""
@@ -53,17 +52,8 @@ class GitHubClient:
             return ""
 
 
-    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, params: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True, ttl: int = 300) -> Any:
+    def _request(self, method: str, path: str, json_data: Optional[Dict] = None, params: Optional[Dict] = None, is_text: bool = False, accept: Optional[str] = None, allow_redirects: bool = True) -> Any:
         url = f"{self.base_url}{path}"
-
-        # Cache key based on request details
-        cache_key = f"{method}:{path}:{json.dumps(params, sort_keys=True) if params else ''}:{accept}:{is_text}"
-
-        if method == "GET":
-            cached_val = self._cache.get(cache_key)
-            if cached_val is not None:
-                return cached_val
-
         headers = {}
         if accept:
             headers["Accept"] = accept
@@ -81,21 +71,16 @@ class GitHubClient:
                 allow_redirects=allow_redirects
             )
             response.raise_for_status()
-
-            result = response.text if is_text else response.json()
-
-            if method == "GET":
-                self._cache.set(cache_key, result, ttl=ttl)
-
-            return result
+            if is_text:
+                return response.text
+            return response.json()
         except requests.exceptions.RequestException:
              # Preserve the original requests exception for specific status code handling in callers
              raise
 
     def fetch_pr_files(self, number: int) -> List[Dict[str, Any]]:
         """Fetches the list of files changed in a PR."""
-        # PR files usually don't change once a commit is pushed, but we'll use a shorter TTL
-        return self._request('GET', f'/repos/{self.repo}/pulls/{number}/files', ttl=600)
+        return self._request('GET', f'/repos/{self.repo}/pulls/{number}/files')
 
     def fetch_pr_details(self, number: int) -> Dict[str, Any]:
         return self._request('GET', f'/repos/{self.repo}/pulls/{number}')
@@ -125,30 +110,28 @@ class GitHubClient:
         data = self._request('GET', f'/repos/{self.repo}/check-suites/{suite_id}/check-runs')
         return data.get('check_runs', [])
 
-    def search_pull_requests(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
-        """General search for pull requests using the Search API."""
-        full_query = f"repo:{self.repo} is:pr {query}"
-        data = self._request('GET', '/search/issues', params={"q": full_query, "per_page": limit})
-        items = data.get('items', []) if isinstance(data, dict) else []
-
-        return [{
-            "number": pr.get("number"),
-            "title": pr.get("title"),
-            "body": pr.get("body"),
-            "author": {"login": pr.get("user", {}).get("login")},
-            "isDraft": pr.get("draft"),
-            "updatedAt": pr.get("updated_at"),
-            "url": pr.get("html_url")
-        } for pr in items[:limit]]
-
     def list_pull_requests(self, state: str = 'open', limit: int = 100, labels: Optional[List[str]] = None) -> List[Dict[str, Any]]:
         """Lists pull requests with optional server-side label filtering or standard Pulls API."""
         if labels:
             # Use Search API for efficient server-side label filtering
-            query = f"state:{state}"
+            query = f"repo:{self.repo} is:pr state:{state}"
             for label in labels:
                 query += f' label:"{label}"'
-            return self.search_pull_requests(query, limit=limit)
+
+            data = self._request('GET', '/search/issues', params={"q": query, "per_page": limit})
+            # Search API returns { "items": [...] }
+            items = data.get('items', []) if isinstance(data, dict) else []
+
+            # Map search items to the unified internal format
+            return [{
+                "number": pr.get("number"),
+                "title": pr.get("title"),
+                "author": {"login": pr.get("user", {}).get("login")},
+                "isDraft": pr.get("draft"),
+                "updatedAt": pr.get("updated_at"),
+                "url": pr.get("html_url")
+                # Note: Search items lack 'headRefName' and 'baseRefName' without extra API calls
+            } for pr in items[:limit]]
 
         # Fallback to standard Pulls API if no labels, using internal pagination
         prs = []
@@ -231,14 +214,6 @@ class GitHubClient:
     def fetch_issue_details(self, number: int) -> Dict[str, Any]:
         """Fetches the details of a GitHub issue."""
         return self._request('GET', f'/repos/{self.repo}/issues/{number}')
-
-    def fetch_issue_comments(self, number: int) -> List[Dict[str, Any]]:
-        """Fetches the comments on an issue or pull request."""
-        return self._request('GET', f'/repos/{self.repo}/issues/{number}/comments')
-
-    def fetch_review_comments(self, number: int) -> List[Dict[str, Any]]:
-        """Fetches the review comments on a pull request."""
-        return self._request('GET', f'/repos/{self.repo}/pulls/{number}/comments')
 
     def update_issue(self, number: int, body: Optional[str] = None, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Updates a GitHub issue's body and/or labels."""
@@ -333,7 +308,6 @@ class GitHubClient:
     def submit_pr_review(self, pr_number: int, filepath: str, cleanup: bool = False, dry_run: bool = True, event_override: Optional[str] = None, is_json: bool = False):
         """
         Submits a PR review from a markdown file containing a JSON payload.
-        The file should have standard Markdown at the top and a JSON block at the bottom for metadata.
         """
         from dev_tools.utils import CLIError, log_info, log_warn
         import re
@@ -345,42 +319,14 @@ class GitHubClient:
         with open(filepath, 'r') as f:
             content = f.read()
 
-        # Find all JSON blocks and identify the metadata block (must contain 'recommendation', 'comments', or 'labels')
-        json_blocks = list(re.finditer(r'```json\n(.*?)\n```', content, re.DOTALL))
-        if not json_blocks:
-            raise CLIError("Could not find any JSON block in review document")
+        json_match = re.search(r'```json\n(.*?)\n```', content, re.DOTALL)
+        if not json_match:
+            raise CLIError("Could not find JSON block in review document")
 
-        # Known keys used to distinguish the metadata block from other JSON blocks (like code samples)
-        METADATA_IDENTIFIER_KEYS = {"recommendation", "comments", "labels"}
-
-        payload = None
-        metadata_match = None
-        for match in reversed(json_blocks):
-            try:
-                candidate = json.loads(match.group(1))
-                if isinstance(candidate, dict) and any(k in candidate for k in METADATA_IDENTIFIER_KEYS):
-                    payload = candidate
-                    metadata_match = match
-                    break
-            except json.JSONDecodeError:
-                continue
-
-        if not payload:
-            raise CLIError(f"Could not find a valid JSON metadata block (expected keys: {', '.join(METADATA_IDENTIFIER_KEYS)})")
-
-        # Extract Markdown body (everything above the metadata JSON block)
-        body = content[:metadata_match.start()].strip()
-        # Clean up the trailing "Output JSON" instructions if present
-        body = re.split(r'##\s+Output JSON', body, flags=re.IGNORECASE)[0].strip()
-
-        if not body:
-             raise CLIError("Review body (Markdown section) is empty. Provide findings before the JSON block.")
-
-        # Merge extracted body into payload if not already present or if payload body is boilerplate/placeholder
-        existing_body = payload.get("body", "").strip()
-        is_placeholder = any(p in existing_body for p in ["<findings>", "<summary>", "<feedback>"])
-        if not existing_body or is_placeholder:
-            payload["body"] = body
+        try:
+            payload = json.loads(json_match.group(1))
+        except json.JSONDecodeError as e:
+            raise CLIError(f"Failed to parse JSON block: {str(e)}")
 
         # Validate payload before proceeding
         self.validate_review_payload(payload)
@@ -389,21 +335,7 @@ class GitHubClient:
         check_runs = self.fetch_check_runs(pr_details.get('head', {}).get('sha'))
         failing_checks = [run.get('name') for run in check_runs if run.get('conclusion') == 'failure']
 
-        # Determine event based on recommendation field, then fallback to body analysis
-        recommendation = payload.get("recommendation", "")
-        if event_override:
-            event = event_override
-        elif recommendation == "Approved":
-            event = "APPROVE"
-        elif recommendation == "Approved with Minor Changes":
-            # Per code review, minor changes shouldn't automatically approve
-            event = "COMMENT"
-        elif recommendation == "Not Approved":
-            event = "REQUEST_CHANGES"
-        else:
-            event = ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","")
-                     else "APPROVE" if "Approved" in payload.get("body","")
-                     else "COMMENT")
+        event = event_override or ("REQUEST_CHANGES" if "Not Approved" in payload.get("body","") else "APPROVE" if "Approved" in payload.get("body","") else "COMMENT")
 
         if failing_checks and event == "APPROVE":
             event = "COMMENT"

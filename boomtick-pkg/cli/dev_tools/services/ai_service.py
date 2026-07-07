@@ -292,8 +292,7 @@ class AIClient:
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
             "ORDER: Correctness, Security (new input/auth only), Crashes, Data Integrity, Performance, Maintainability.\n"
             "SEVERITY: error (blocking, high confidence only), warn, info. Include 'confidence' (high/medium/low).\n"
-            "OUTPUT: Valid JSON. Counterexamples required for errors.\n"
-            "JSON MUST be inside a <findings> tag.\n\n"
+            "OUTPUT: Valid JSON. Counterexamples required for errors.\n\n"
             f"{truncation_note}Diff:\n{combined_diff}"
         )
 
@@ -399,8 +398,7 @@ class AIClient:
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
             "ORDER: Correctness > Security > Performance > Maintainability.\n"
             "SEVERITY: error/warn/info. confidence: high/medium/low.\n"
-            "OUTPUT: Valid JSON. Counterexamples required for errors.\n"
-            "JSON MUST be inside a <findings> tag.\n\n"
+            "OUTPUT: Valid JSON. Counterexamples required for errors.\n\n"
             f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
     def _write_progress_snapshot(
@@ -510,20 +508,15 @@ class AIClient:
             f"  Errors (could not review): {error_files or 'none'}\n"
             f"Total issues found: {total_issues}\n\n"
             f"Issue details:\n{findings_str if findings_str else '  (none)'}\n\n"
-            f"Format your response as a standard Markdown report followed by a metadata JSON block.\n\n"
-            f"The Markdown report should summarize the findings concisely.\n\n"
-            f"The JSON block at the bottom MUST follow this schema:\n"
-            f"{{\n"
-            f"  \"recommendation\": \"Approved | Approved with Minor Changes | Not Approved\",\n"
-            f"  \"labels\": [\"lgtm\", \"needs-changes\", ...],\n"
-            f"  \"reviewComment\": \"Concise summary for the body\"\n"
-            f"}}\n"
+            f"Write a concise PR review body (reviewComment) summarising the above findings.\n"
+            f"Choose recommendation: 'Approved', 'Approved with Minor Changes', or 'Not Approved'.\n"
+            f"Suggest 1-3 labels (e.g. 'needs-changes', 'lgtm', 'ci-failing').\n"
+            f"Output ONLY valid JSON, no prose outside it."
         )
 
         raw = None
         try:
-            # We don't use strict schema mode here because we want mixed markdown + json
-            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, max_retries=2)
+            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
         except Exception as e:
             log_error(f"Synthesis call failed: {e}")
 
@@ -625,14 +618,8 @@ class AIClient:
                     "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
                 })
         if not all_issues:
-            # Always provide at least one comment to satisfy validator
-            all_issues = [{"path": "SUMMARY", "line": 1, "body": "Review summary provided in body."}]
-
-        metadata_json = json.dumps({
-            "recommendation": recommendation,
-            "labels": labels,
-            "comments": all_issues
-        }, indent=2)
+            all_issues = [{"path": "<see reviewComment above>", "line": 1, "body": review_comment[:500]}]
+        comments_json = json.dumps({"body": review_comment, "comments": all_issues}, indent=2)
 
         content = f"""# PR Review: #{pr_num}
 
@@ -675,11 +662,11 @@ _Skipped ({len(skipped_files)} files): {skipped_str}_
 
 ## Output JSON
 
-Provide your metadata in the JSON block below. The review body is extracted from the Markdown content above.
+Provide your findings and inline comments in the JSON block below.
 DO NOT REMOVE THE BACKTICKS.
 
 ```json
-{metadata_json}
+{comments_json}
 ```
 """
         output_dir = ensure_dir('logs', 'reviews')

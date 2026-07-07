@@ -1,8 +1,8 @@
 import json
 import os
 from dev_tools.models import (
-    CreateIssueInput, SearchPRsInput, IssueUpdateInput, ReadPRCommentsInput,
-    CreateIssueResponse, SearchPRsResponse, IssueUpdateResponse, ReadPRCommentsResponse
+    CreateIssueInput, SearchPRsInput, IssueUpdateInput,
+    CreateIssueResponse, SearchPRsResponse, IssueUpdateResponse
 )
 
 def get_models_schema():
@@ -10,11 +10,9 @@ def get_models_schema():
         "CreateIssueInput": CreateIssueInput.model_json_schema(),
         "SearchPRsInput": SearchPRsInput.model_json_schema(),
         "IssueUpdateInput": IssueUpdateInput.model_json_schema(),
-        "ReadPRCommentsInput": ReadPRCommentsInput.model_json_schema(),
         "CreateIssueResponse": CreateIssueResponse.model_json_schema(),
         "SearchPRsResponse": SearchPRsResponse.model_json_schema(),
         "IssueUpdateResponse": IssueUpdateResponse.model_json_schema(),
-        "ReadPRCommentsResponse": ReadPRCommentsResponse.model_json_schema(),
     }
 
 def generate_schema():
@@ -39,7 +37,6 @@ def generate_schema():
 
     with open(output_path, "w") as f:
         json.dump(existing, f, indent=2)
-        f.write("\n")
 
     import sys
     print(f"Updated cli-schema.json with models at {output_path}", file=sys.stderr)

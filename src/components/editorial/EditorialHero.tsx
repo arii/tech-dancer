@@ -1,18 +1,18 @@
 import { Box } from '@/layouts/Primitives';
-import { SafeImage } from '@/components/ui/SafeImage';
+import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
 import { journalVariants } from '@/lib/variants';
 
 interface EditorialHeroProps {
   src: string;
   alt: string;
-  aspectRatio?: "video" | "square" | { base?: string, md?: string, lg?: string };
+  aspectRatio?: "video" | "square" | string | { base?: string, md?: string, lg?: string };
   objectFit?: 'cover' | 'contain';
 }
 
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'contain' }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover' }: EditorialHeroProps) {
   return (
     <Box
       width="full"
@@ -21,16 +21,16 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       border
       className={journalVariants.card({ variant: 'hero' })}
       aspect={aspectRatio}
+      maxHeight={{ lg: 96 }}
     >
-      <SafeImage
+      <ProductImageFrame
         src={src}
         alt={alt}
         objectFit={objectFit}
+        border={false}
         radius="none"
-        maxWidth="full"
-        maxHeight={{ base: "viewport-half", lg: 96 }}
-        width="full"
-        height="full"
+        aspect="auto"
+        className="w-full h-full lg:max-h-96"
       />
     </Box>
   );

@@ -2,7 +2,6 @@
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { SafeImage } from '@/components/ui/SafeImage';
 import { getPosts } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 
@@ -46,22 +45,14 @@ export function LatestPosts() {
             <Box
               radius="md"
               overflow="hidden"
-              height={14}
-              width={18}
-              shrink={0}
-              surface="muted"
-              className="mt-0.5"
+              className="mt-0.5 h-14 w-[72px] shrink-0 bg-surface-alt"
             >
               {post.image ? (
-                <SafeImage
+                <img
                   src={post.image}
                   alt=""
                   aria-hidden="true"
-                  display="block"
-                  width="full"
-                  height="full"
-                  maxWidth="full"
-                  objectFit="cover"
+                  className="block h-full w-full max-w-full object-cover"
                 />
               ) : (
                 <CategoryPlaceholder category={post.category} size="sm" />

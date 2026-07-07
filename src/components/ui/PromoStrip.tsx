@@ -2,7 +2,6 @@
 import { NavLink } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { SafeImage } from '@/components/ui/SafeImage';
 import { Icon } from '@/components/ui/Icon';
 
 interface PromoStripProps {
@@ -37,15 +36,27 @@ export function PromoStrip({
       className="group transition-all hover:bg-white/5"
     >
       <Stack direction="row" align="center" gap={{ base: 3, sm: 4 }}>
-        <SafeImage
-          src={fullImageSrc}
-          alt=""
+        <Box
           width={{ base: 10, sm: 12 }}
           height={{ base: 10, sm: 12 }}
           radius="md"
-          objectFit="cover"
+          overflow="hidden"
           className="shrink-0 bg-white/10"
-        />
+        >
+          <img
+            src={fullImageSrc}
+            alt=""
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Hide image container on error to prevent broken icon
+              const img = e.currentTarget;
+              img.style.display = 'none';
+              if (img.parentElement) {
+                img.parentElement.style.display = 'none';
+              }
+            }}
+          />
+        </Box>
 
         <Stack gap={0} grow={1} className="min-w-0">
           <Text weight="font-bold" size={{ base: 'sm', sm: 'base' }} className="leading-tight">{title}</Text>

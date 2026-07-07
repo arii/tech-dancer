@@ -23,7 +23,6 @@ export const SPACING_MAP: Record<string | number, string> = {
   64: '64',
   80: '80',
   'section-spacing': 'section-spacing',
-  'viewport-half': 'viewport-half',
   auto: 'auto',
 };
 
