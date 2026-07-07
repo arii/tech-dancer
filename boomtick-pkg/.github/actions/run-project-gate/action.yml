@@ -86,6 +86,16 @@ runs:
         fi
       shell: bash
 
+    - name: Python Linting
+      if: inputs.target == 'root'
+      continue-on-error: true
+      run: |
+        echo "::group::Python Linting"
+        trap 'echo "::endgroup::"' EXIT
+        pnpm run lint:python
+        pnpm run type-check:python
+      shell: bash
+
     - name: Run Unit Tests
       env:
         TARGET: ${{ inputs.target }}

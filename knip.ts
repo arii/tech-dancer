@@ -22,7 +22,7 @@ const config: KnipConfig = {
       project: ["src/**/*.ts"]
     }
   },
-  ignoreBinaries: ['python3', 'semgrep', 'td-cli'],
+  ignoreBinaries: ['python3', 'semgrep', 'td-cli', 'pip', 'pylint', 'mypy'],
   ignoreExportsUsedInFile: true,
 };
 
