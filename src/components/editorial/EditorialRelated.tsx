@@ -1,6 +1,6 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants, type JournalCardVariants } from '@/lib/variants';
 
 interface RelatedItem {
   title: string;
@@ -8,12 +8,12 @@ interface RelatedItem {
   category?: string;
 }
 
-interface EditorialRelatedProps {
+interface EditorialRelatedProps extends JournalCardVariants {
   title?: string;
   items: RelatedItem[];
 }
 
-export function EditorialRelated({ title = "Related Guides", items }: EditorialRelatedProps) {
+export function EditorialRelated({ title = "Related Guides", items, variant = 'default', interactive = true }: EditorialRelatedProps) {
   if (items.length === 0) return null;
 
   return (
@@ -25,7 +25,7 @@ export function EditorialRelated({ title = "Related Guides", items }: EditorialR
         <Stack gap={4}>
           {items.map((item) => (
             <Link key={item.href} to={item.href} className="group">
-              <Box padding={4} border radius="md" className={journalVariants.card({ interactive: true })}>
+              <Box padding={4} border radius="md" className={journalVariants.card({ variant, interactive })}>
                 <Stack gap={1}>
                   {item.category && (
                     <Text variant="mono" size="micro" color="accent" weight="font-bold">

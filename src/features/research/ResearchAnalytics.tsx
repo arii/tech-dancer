@@ -11,7 +11,7 @@ import { BaseCard } from '@/components/ui/BaseCard';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
-import { cardVariants } from '@/lib/variants';
+import { cardVariants, type CardVariants } from '@/lib/variants';
 import { ResearchTool } from '@/config/research-tools';
 import { SOCIAL_LINKS } from '@/config/constants';
 
@@ -208,10 +208,12 @@ function FlagshipCard({
   );
 }
 
-function ToolCard({ tool, navigate }: {
+interface ToolCardProps extends CardVariants {
   tool: ResearchTool;
   navigate: (path: string) => void;
-}) {
+}
+
+function ToolCard({ tool, navigate, interactive = true, overflow, span }: ToolCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const href = tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
   const isLink = href.startsWith('http');
@@ -238,7 +240,7 @@ function ToolCard({ tool, navigate }: {
       onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
       paddingTop={3.5} paddingX={4} paddingBottom={4}
-      className={cn(cardVariants({ interactive: true }), "no-underline")}
+      className={cn(cardVariants({ interactive, overflow, span }), "no-underline")}
     >
       <Stack gap={0} width="full">
         <Box display="flex" justify="between" align="start" width="full" marginBottom={3}>

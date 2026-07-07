@@ -1,8 +1,8 @@
 import { Box } from '@/layouts/Primitives';
 import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants, type JournalCardVariants } from '@/lib/variants';
 
-interface EditorialHeroProps {
+interface EditorialHeroProps extends JournalCardVariants {
   src: string;
   alt: string;
   aspectRatio?: "video" | "square" | string | { base?: string, md?: string, lg?: string };
@@ -12,14 +12,14 @@ interface EditorialHeroProps {
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover' }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover', variant = 'hero', interactive }: EditorialHeroProps) {
   return (
     <Box
       width="full"
       radius="md"
       overflow="hidden"
       border
-      className={journalVariants.card({ variant: 'hero' })}
+      className={journalVariants.card({ variant, interactive })}
       aspect={aspectRatio}
       maxHeight={{ lg: 96 }}
     >

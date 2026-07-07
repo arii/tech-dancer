@@ -3,12 +3,15 @@ import { NavLink } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
+import { listRowVariants, type ListRowVariants } from '@/lib/variants';
+
+
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
-interface ListRowProps {
+interface ListRowProps extends ListRowVariants {
   slug: string;
   title: string;
   category: string;
@@ -50,7 +53,7 @@ export function ListRow(props: ListRowProps) {
     <Box as={NavLink} to={`${basePath}/${slug}`}
       {...rest}
       display="flex" align="center" border="b"
-      className="group hover:bg-surface/50 transition-colors"
+      className={listRowVariants({ active: props.active, className: "group hover:bg-surface/50 transition-colors" })}
     >
       <Box width={1} shrink={0} self="stretch" opacityVariant="none" className="bg-accent group-hover:opacity-full transition-opacity" />
       <Box

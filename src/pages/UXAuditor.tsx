@@ -13,7 +13,7 @@ import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
+import { actionButtonVariants, cardVariants, listRowVariants, type CardVariants } from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -223,9 +223,15 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   );
 }
 
-function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
+interface ViewportAnalysisCardProps extends CardVariants {
+  vp: typeof VIEWPORTS[0];
+  data: ViewportAnalysis;
+  activeReportUrl?: string;
+}
+
+function ViewportAnalysisCard({ vp, data, activeReportUrl, overflow = "hidden", interactive, span }: ViewportAnalysisCardProps) {
   return (
-    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
+    <Box className={cardVariants({ overflow, interactive, span })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -325,6 +331,7 @@ function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPO
     </Box>
   );
 }
+
 
 export default function UXAuditor() {
   const toolConfig = RESEARCH_TOOLS.find(t => t.id === 'ux-auditor');
