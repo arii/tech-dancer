@@ -29,6 +29,9 @@ export const variants = {
     outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 transition-colors active:scale-[0.98]",
     ghost: "bg-transparent hover:bg-line/10",
     primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-[0.98] shadow-sm",
+    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
+    fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
+    reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
     none: "rounded-none",
@@ -64,5 +67,142 @@ export const buttonVariants = cva(
       variant: "primary",
       size: "default",
     },
+  }
+);
+
+/**
+ * Shared variants for Console-style action buttons (compact, high-contrast)
+ */
+export const actionButtonVariants = cva(
+  "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "hover:text-text-main",
+        primary: "bg-accent text-bg hover:opacity-90 shadow-md",
+        ghost: "hover:bg-line/10 text-text-dim hover:text-text-main",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+/**
+ * Card variants for reports, tools, and callout blocks
+ */
+export const cardVariants = cva(
+  "bg-surface rounded-md shadow-sm card-border transition-all",
+  {
+    variants: {
+      interactive: {
+        true: "hover:border-accent cursor-pointer",
+        false: "",
+      },
+      overflow: {
+        hidden: "overflow-hidden",
+        visible: "overflow-visible",
+      },
+      span: {
+        1: "col-span-1",
+        2: "col-span-2",
+        3: "col-span-3",
+      }
+    },
+    defaultVariants: {
+      interactive: false,
+      overflow: "visible",
+    }
+  }
+);
+
+/**
+ * FilterButton variants for collection and category filtering.
+ * Separates structural styles from state-specific styles.
+ */
+export const filterButtonVariants = cva(
+  "inline-flex items-center justify-center border transition-all whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
+  {
+    variants: {
+      variant: {
+        default: "px-4 py-3 min-h-11",
+        compact: "px-4 py-1.5",
+        quiet: "px-3.5 py-2 font-medium tracking-normal",
+      },
+      isActive: {
+        true: "",
+        false: "",
+      },
+    },
+    compoundVariants: [
+      {
+        variant: ["default", "compact"],
+        isActive: true,
+        className: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background hover:bg-accent/10",
+      },
+      {
+        variant: ["default", "compact"],
+        isActive: false,
+        className: "border-line text-text-dim hover:border-accent/50 hover:text-text-main hover:bg-white/5",
+      },
+      {
+        variant: "quiet",
+        isActive: true,
+        className: "bg-surface border-line text-text-main hover:bg-surface/80",
+      },
+      {
+        variant: "quiet",
+        isActive: false,
+        className: "bg-transparent border-transparent text-text-dim hover:text-text-main hover:bg-line/10",
+      },
+    ],
+    defaultVariants: {
+      variant: "default",
+      isActive: false,
+    },
+  }
+);
+
+/**
+ * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
+ */
+export const tagVariants = cva(
+  'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
+  {
+    variants: {
+      variant: {
+        sky: "bg-accent-sky/10 text-accent-sky border-accent-sky/20",
+        purple: "bg-accent-purple/10 text-accent-purple border-accent-purple/20",
+        cyan: "bg-accent/10 text-accent border-accent/20",
+        default: "bg-surface-alt/50 text-text-dim border-line/30",
+      },
+      size: {
+        xs: "px-2 py-0.5 text-micro",
+        sm: "px-3 py-1 text-xs",
+      }
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "sm",
+    }
+  }
+);
+
+/**
+ * List row variants for interactive lists (e.g., Audit History)
+ */
+export const listRowVariants = cva(
+  "text-left transition-all border-l-4 w-full",
+  {
+    variants: {
+      active: {
+        true: "bg-bg border-accent",
+        false: "border-transparent hover:bg-surface",
+      },
+    },
+    defaultVariants: {
+      active: false,
+    }
   }
 );
