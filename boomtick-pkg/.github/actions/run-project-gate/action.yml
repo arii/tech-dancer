@@ -92,6 +92,9 @@ runs:
       run: |
         echo "::group::Python Linting"
         trap 'echo "::endgroup::"' EXIT
+        if [ -f "requirements-dev.txt" ]; then
+          pip install -r requirements-dev.txt
+        fi
         pnpm run lint:python
         pnpm run type-check:python
       shell: bash
