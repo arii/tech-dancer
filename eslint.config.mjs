@@ -25,6 +25,13 @@ export default tseslint.config(
       }],
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/purity': 'off',
+      'no-restricted-imports': ['error', {
+        'paths': [{
+          'name': '@/lib/variants',
+          'importNames': ['actionButtonVariants', 'cardVariants', 'filterButtonVariants', 'tagVariants', 'listRowVariants'],
+          'message': 'Component-specific variants have been relocated. Please import from their respective domain-specific variants.ts file.'
+        }]
+      }],
     },
   },
   {
