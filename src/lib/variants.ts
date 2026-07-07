@@ -130,7 +130,7 @@ export const cardVariants = createVariants(
     },
     defaultVariants: {
       interactive: false,
-      overflow: "hidden",
+      overflow: "visible",
     }
   }
 );
@@ -234,7 +234,7 @@ export const journalVariants = {
     }
   }),
   shareAction: createVariants("text-text-dim hover:text-accent group"),
-  tag: createVariants("border-line/30 hover:border-accent cursor-default"),
+  tag: createVariants("border-line/30 hover:border-accent cursor-default bg-surface/30"),
   navLink: createVariants("group cursor-pointer", {
     variants: {
       active: {

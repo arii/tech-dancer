@@ -1,6 +1,7 @@
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { Link } from 'react-router-dom';
 import { journalVariants, variants, type JournalCardVariants } from '@/lib/variants';
+import { isSafeUrl } from '@/lib/utils';
 
 interface RelatedItem {
   title: string;
@@ -24,7 +25,7 @@ export function EditorialRelated({ title = "Related Guides", items, variant = 'd
         </Text>
         <Stack gap={4}>
           {items.map((item) => (
-            <Link key={item.href} to={item.href} className="group">
+            <Link key={item.href} to={isSafeUrl(item.href) ? item.href : '#'} className="group">
               <Box padding={4} border radius="md" className={journalVariants.card({ variant, interactive })}>
                 <Stack gap={1}>
                   {item.category && (

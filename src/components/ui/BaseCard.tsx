@@ -33,6 +33,7 @@ export function BaseCard({
 }: BaseCardProps) {
   const isLink = !!(to || href);
   const safeHref = isSafeUrl(href) ? href : undefined;
+  const safeTo = isSafeUrl(to) ? to : undefined;
 
   // Use standardized cardVariants to ensure visual consistency
   const cardClasses = cn(
@@ -51,10 +52,10 @@ export function BaseCard({
       className={cardClasses}
       {...props}
     >
-      {to && (
+      {safeTo && (
         <Box
           as={NavLink}
-          to={to}
+          to={safeTo}
           aria-label={ariaLabel}
           className={linkClasses}
         />
