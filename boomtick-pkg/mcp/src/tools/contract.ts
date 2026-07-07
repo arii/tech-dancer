@@ -13,7 +13,7 @@ export const IssueUpdateInputSchema = z.object({ "issue_number": z.number().int(
 
 export type IssueUpdateInput = z.infer<typeof IssueUpdateInputSchema>;
 
-export const ReadPRCommentsInputSchema = z.object({ "pr_number": z.number().int() });
+export const ReadPRCommentsInputSchema = z.object({ "pr_number": z.number().int().gt(0) });
 
 export type ReadPRCommentsInput = z.infer<typeof ReadPRCommentsInputSchema>;
 
@@ -29,6 +29,6 @@ export const IssueUpdateResponseSchema = z.object({ "status": z.string().default
 
 export type IssueUpdateResponse = z.infer<typeof IssueUpdateResponseSchema>;
 
-export const ReadPRCommentsResponseSchema = z.object({ "status": z.string().default("success"), "message": z.union([z.string(), z.null()]).default(null), "data": z.union([z.any(), z.null()]).default(null), "pr": z.record(z.string(), z.any()), "comments": z.array(z.any()).optional(), "review_comments": z.array(z.any()).optional() });
+export const ReadPRCommentsResponseSchema = z.object({ "status": z.string().default("success"), "message": z.union([z.string(), z.null()]).default(null), "data": z.union([z.any(), z.null()]).default(null), "pr": z.any(), "comments": z.array(z.any()).optional(), "review_comments": z.array(z.any()).optional() });
 
 export type ReadPRCommentsResponse = z.infer<typeof ReadPRCommentsResponseSchema>;

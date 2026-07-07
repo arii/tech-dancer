@@ -69,7 +69,7 @@ class IssueUpdateResponse(CLIResponse):
     issue: Optional[IssueSummary] = None
 
 class ReadPRCommentsInput(BaseModel):
-    pr_number: int
+    pr_number: int = Field(..., gt=0)
 
 class PRComment(BaseModel):
     user: str
@@ -84,6 +84,6 @@ class ReviewComment(BaseModel):
     created_at: str
 
 class ReadPRCommentsResponse(CLIResponse):
-    pr: Dict[str, Any]
+    pr: IssueSummary
     comments: List[PRComment] = Field(default_factory=list)
     review_comments: List[ReviewComment] = Field(default_factory=list)
