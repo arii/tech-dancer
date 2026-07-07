@@ -91,13 +91,13 @@ def _get_review_prompt_constants() -> tuple[str, str]:
         ts_path = os.path.join(root_dir, 'scripts', 'lib', 'ReviewPromptConstants.ts')
         with open(ts_path, 'r') as f:
             ts_content = f.read()
-            
+
         json_match = re.search(r'export const STRICT_JSON_VERIFICATION\s*=\s*`([\s\S]*?)`;', ts_content)
         snippet_match = re.search(r'export const SNIPPET_AND_VERIFICATION_RULES\s*=\s*`([\s\S]*?)`;', ts_content)
-        
+
         json_rules = json_match.group(1).replace('\\`', '`') if json_match else ""
         snippet_rules = snippet_match.group(1).replace('\\`', '`') if snippet_match else ""
-        
+
         return json_rules, snippet_rules
     except Exception as e:
         log_warn(f"Failed to load ReviewPromptConstants.ts: {e}")
