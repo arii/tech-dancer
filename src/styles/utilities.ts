@@ -9,7 +9,8 @@
  */
 export const transitions = {
   all: "transition-all duration-200",
-  colors: "transition-colors",
+  colors: "transition-colors duration-200",
+  transform: "transition-transform duration-200",
   slow: "transition-all duration-300",
 } as const;
 

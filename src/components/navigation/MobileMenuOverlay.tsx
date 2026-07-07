@@ -94,7 +94,7 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             radius="md"
             className={cn(
               transitions.all,
-              "hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
+              "motion-safe:hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
             )}
           >
             <Box shrink={false}>

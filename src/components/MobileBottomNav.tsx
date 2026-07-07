@@ -31,7 +31,7 @@ export function MobileBottomNav() {
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >
-                <Icon className="w-6 h-6 stroke-thick" />
+                <Box as={Icon} width={6} height={6} className="stroke-thick" />
                 <Text variant="mono" size="micro" weight="font-bold" marginTop={1}>
                   {item.label.split(' ')[0]}
                 </Text>

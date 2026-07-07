@@ -56,7 +56,7 @@ export const variants = {
     fab: cn(
       "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg",
       transitions.slow,
-      "rounded-none"
+      "rounded-md"
     ),
     reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
@@ -107,7 +107,7 @@ export const buttonVariants = cva(
 export const actionButtonVariants = cva(
   cn(
     "font-bold",
-    transitions.all,
+    transitions.colors,
     "text-sm shrink-0 flex items-center gap-2",
     interaction.disabled
   ),
