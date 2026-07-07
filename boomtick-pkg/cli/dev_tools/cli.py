@@ -34,13 +34,14 @@ from dev_tools.config import get_config
 
 
 class LazyOrchestrator:
-    def __init__(self):
+    def __init__(self, no_cache: bool = False):
         self._instance = None
+        self._no_cache = no_cache
 
     def _get_instance(self):
         if self._instance is None:
             from dev_tools.orchestrator import Orchestrator
-            self._instance = Orchestrator()
+            self._instance = Orchestrator(no_cache=self._no_cache)
         return self._instance
 
     def __getattr__(self, name):
@@ -57,6 +58,7 @@ class LazyOrchestrator:
 
 
 PROJECT_CONFIG = get_config()
+DEFAULT_LIMIT = 10
 
 # CLI Group
 @click.group()
@@ -67,13 +69,11 @@ def cli(ctx, json_output, no_cache):
     """Unified Tech-Dancer DevTools CLI"""
     ctx.ensure_object(dict)
 
-    if no_cache:
-        os.environ["TD_NO_CACHE"] = "true"
-
     # If the user explicitly passed --no-json (if supported) or we want to detect if it's a TTY
     # But for now, we follow the requirement to be JSON by default for machine consumption.
     ctx.obj['JSON'] = json_output
-    ctx.obj['ORCHESTRATOR'] = LazyOrchestrator()
+    ctx.obj['NO_CACHE'] = no_cache
+    ctx.obj['ORCHESTRATOR'] = LazyOrchestrator(no_cache=no_cache)
 
 # --- Utility Helpers ---
 def out(ctx, msg, data=None):
@@ -176,7 +176,7 @@ def gh():
 
 @gh.command()
 @click.option('--state', default='open')
-@click.option('--limit', type=int, default=10)
+@click.option('--limit', type=int, default=DEFAULT_LIMIT)
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
@@ -511,7 +511,7 @@ def post_comment(ctx, pr, file, body):
     out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
 
 @gh.command()
-@click.option('--limit', type=int, default=10, help='Limit the number of open PRs to process')
+@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of open PRs to process')
 @click.pass_context
 def status_board(ctx, limit):
     orch = ctx.obj['ORCHESTRATOR']
@@ -544,7 +544,7 @@ def update_issues(ctx, dry_run):
 @click.option('--check-responses', is_flag=True)
 @click.option('--cleanup-comments', is_flag=True)
 @click.option('--dry-run/--execute', default=True)
-@click.option('--limit', type=int, default=10, help='Limit the number of PRs to process')
+@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of PRs to process')
 @click.pass_context
 def manage_reviews(ctx, check_responses, cleanup_comments, dry_run, limit):
     orch = ctx.obj['ORCHESTRATOR']
@@ -636,7 +636,7 @@ def pre_submit(ctx):
     out(ctx, "Pre-submit checks complete.", data={"results": res})
 
 @gh.command()
-@click.option('--limit', type=int, default=10, help='Limit the number of open PRs to process')
+@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of open PRs to process')
 @click.option('--no-cache', is_flag=True, default=False, help='Bust the cache and force fetching data from GitHub')
 @click.pass_context
 def overlaps(ctx, limit, no_cache):
@@ -897,7 +897,7 @@ def dispatch(ctx, branch, task):
 
 
 @agent_group.command()
-@click.option('--limit', type=int, default=10, help='Limit the number of sessions to retrieve')
+@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of sessions to retrieve')
 @click.pass_context
 def sync(ctx, limit):
     """Sync active agent sessions."""
@@ -1055,19 +1055,14 @@ def context_warm(ctx, force):
     if os.path.exists(context_file) and not force:
         # Check if context is older than package.json or git head
         mtime = os.path.getmtime(context_file)
-        if os.path.exists("package.json") and os.path.getmtime("package.json") > mtime:
-            is_stale = True
-        else:
+        if not (os.path.exists("package.json") and os.path.getmtime("package.json") > mtime):
             try:
                 # Check if any files changed since context was generated
                 # This is a heuristic: check if any tracked files are newer than context
                 res = subprocess.run(["git", "diff", "--name-only", "HEAD"], capture_output=True, text=True)
-                if res.stdout.strip():
-                    is_stale = True
-                else:
-                    is_stale = False
+                is_stale = bool(res.stdout.strip())
             except Exception:
-                is_stale = True
+                pass # is_stale remains True
 
     if is_stale or force:
         log_info("🧊 Context is stale or missing. Warming up...")

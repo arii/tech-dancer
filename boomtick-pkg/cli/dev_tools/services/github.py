@@ -10,7 +10,7 @@ from typing import Optional, List, Dict, Any
 from urllib.parse import quote
 
 class GitHubClient:
-    def __init__(self, token: Optional[str] = None, repo: Optional[str] = None):
+    def __init__(self, token: Optional[str] = None, repo: Optional[str] = None, no_cache: bool = False):
         from dev_tools.utils import get_github_token
         self.token = token or get_github_token()
         if not self.token:
@@ -25,7 +25,7 @@ class GitHubClient:
             "Accept": "application/vnd.github.v3+json",
         })
         self._branch_cache = {}
-        self._cache = DiskCache(subdir="github")
+        self._cache = DiskCache(subdir="github", no_cache=no_cache)
 
     def branch_exists(self, branch_name: str) -> bool:
         """Checks if a branch exists in the repository, with caching."""

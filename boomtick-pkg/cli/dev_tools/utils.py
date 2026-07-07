@@ -90,13 +90,13 @@ def get_or_create_log_dir(subdir: str) -> str:
 
 class DiskCache:
     """Lightweight disk-based cache for JSON-serializable data."""
-    def __init__(self, subdir: str = "cache"):
+    def __init__(self, subdir: str = "cache", no_cache: bool = False):
         self.cache_dir = get_or_create_log_dir(subdir)
-        # Use TD_NO_CACHE to bypass the cache
-        self.no_cache = os.environ.get("TD_NO_CACHE") == "true"
+        # Use explicit parameter or TD_NO_CACHE to bypass the cache
+        self.no_cache = no_cache or os.environ.get("TD_NO_CACHE") == "true"
 
     def _get_path(self, key: str) -> Path:
-        hashed_key = hashlib.md5(key.encode('utf-8')).hexdigest()
+        hashed_key = hashlib.sha256(key.encode('utf-8')).hexdigest()
         return Path(self.cache_dir) / f"{hashed_key}.json"
 
     def get(self, key: str) -> Optional[Any]:

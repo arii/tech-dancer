@@ -72,24 +72,23 @@ class JulesFeedbackDaemon:
                             self._pr_cache[pr_num] = self.github.fetch_pr_details(pr_num)
                         return self._pr_cache[pr_num]
 
-        # 2. Try branch name from sourceContext (fast)
+        # 2. Try branch name from sourceContext (fast - targeted search)
         branch = None
         if session.get("sourceContext"):
             branch = session["sourceContext"].get("githubRepoContext", {}).get("startingBranch")
 
         if branch:
-            # Targeted PR search by branch
-            prs = self.github.list_pull_requests(state='open') # Still need to list for branch match unless we use search API
-            # Optimization: If we have many PRs, use search API for targeted branch lookup
-            for pr in prs:
-                if pr.get("headRefName") == branch:
-                    if pr['number'] not in self._pr_cache:
-                        self._pr_cache[pr['number']] = pr
-                    return pr
+            # Use search API for targeted branch lookup (eliminates N+1 and full list scan)
+            prs = self.github.search_pull_requests(f'head:{branch} state:open', limit=1)
+            if prs:
+                pr = prs[0]
+                self._pr_cache[pr['number']] = pr
+                return pr
 
         # 3. Fallback to session ID in body (Batch search)
-        # Only do this if we haven't found it yet
-        prs = self.github.search_pull_requests(f'"{session_id}" state:open', limit=1)
+        # Ensure session_id is safely quoted for GitHub search
+        safe_id = f'"{session_id}"'
+        prs = self.github.search_pull_requests(f'{safe_id} in:body state:open', limit=1)
         if prs:
             return prs[0]
 
