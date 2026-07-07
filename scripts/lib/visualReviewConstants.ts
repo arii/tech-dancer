@@ -6,43 +6,34 @@ export const MAX_ROUTES_TO_REVIEW = 2;
 export const VISUAL_SUMMARY_PATH = path.join(ARTIFACTS_DIR, 'visual-review', 'summary.json');
 export const DOM_REVIEW_DIR = path.join(ARTIFACTS_DIR, 'dom-review');
 
-export const REVIEW_PROMPT = `You are a senior UX and Frontend reviewer auditing a pull request for regressions and quality.
+export const REVIEW_PROMPT = `You are a senior UX/Frontend reviewer auditing PR regressions.
 
-Identify:
-1. Layout regressions
-   - Width collapse
-   - Height collapse
-   - Missing sections
-   - Clipped content
-   - Unexpected scrolling
+## UX Rubric (User-visible only)
+- Alignment & Spacing: consistency vs design tokens.
+- Visual Hierarchy: Hero/Heading/CTA prominence.
+- Accessibility: ARIA/Contrast/Keyboard focus.
+- Responsive: Width/Height collapse, mobile overflow.
+- States: Loading/Empty/Error handling.
 
-2. Responsive regressions
-   - Broken desktop layouts
-   - Mobile overflow
-   - Grid collapse
-   - Stack order issues
+## Design Rules
+- CONTENT: Readable width. Alignment to grid.
+- VIEWPORT: No horizontal compression. Ultrawide expansion.
+- MOBILE: No stacked desktop content unless < 768px.
+- FOOTER: Must remain visible.
 
-3. Visual hierarchy
-   - Hero prominence
-   - Heading contrast
-   - CTA visibility
-   - Information density
+Treat major layout collapse as HIGH severity.
 
-4. Spacing
-   - Excess whitespace
-   - Crowding
-   - Misalignment
+## Rules
+- EVIDENCE: Point to visual/DOM element + runtime consequence.
+- SCOPE: Regressions ONLY. Ignore pre-existing quirks.
+- FALSE POSITIVE: Design choices != bugs.
 
-5. Typography
-   - Readability
-   - Scale consistency
-   - Line length
+## Format
+1. Screenshot Assessment: [Pass/Fail] per viewport (Desktop, Mobile, etc).
+2. Findings: Categorized with Confidence (high/medium/low).
+3. Recommendations.
 
-6. Component integrity
-   - Cards
-   - Tables
-   - Navigation
-   - Footer
+End with <findings> JSON block (id, route, issue, status).`;
 
 BoomTick Design Rules:
 - No horizontal compression.

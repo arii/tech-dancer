@@ -26,6 +26,9 @@ from dev_tools.services.vector_store import VectorStore
 # Model used for per-file chunk review (code-aware, focused)
 _REVIEW_MODEL = get_ai_review_model()
 
+# Model used for final summary synthesis
+_SYNTHESIS_MODEL = get_ai_model()
+
 # Combined review schema
 _REVIEW_SCHEMA = {
     "type": "object",
@@ -41,11 +44,12 @@ _REVIEW_SCHEMA = {
                         "items": {
                             "type": "object",
                             "properties": {
-                                "line":     {"type": "integer"},
+                                "line": {"type": "integer"},
                                 "severity": {"type": "string"},
-                                "comment":  {"type": "string"},
+                                "comment": {"type": "string"},
+                                "confidence": {"type": "string"},
                             },
-                            "required": ["line", "severity", "comment"],
+                            "required": ["line", "severity", "comment", "confidence"],
                         }
                     },
                     "verdict": {"type": "string"},
@@ -54,11 +58,27 @@ _REVIEW_SCHEMA = {
             }
         },
         "reviewComment": {"type": "string"},
-        "labels":        {"type": "array", "items": {"type": "string"}},
+        "labels": {"type": "array", "items": {"type": "string"}},
         "recommendation": {"type": "string"},
     },
     "required": ["file_reviews", "reviewComment", "labels", "recommendation"],
 }
+
+# Synthesis review schema
+_SYNTHESIS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "reviewComment": {"type": "string"},
+        "labels": {"type": "array", "items": {"type": "string"}},
+        "recommendation": {"type": "string"},
+    },
+    "required": ["reviewComment", "labels", "recommendation"],
+}
+
+_COMMON_REVIEW_GUIDELINES = """Review ONLY PR changes. Assume original code worked.
+EVIDENCE RULE: Issue must point to exact line + explain runtime consequence.
+FALSE POSITIVE FILTER: No speculation. Design choices are NOT bugs.
+REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box)."""
 
 
 class AIClient:
@@ -255,11 +275,17 @@ class AIClient:
         # Combine diffs up to a reasonable limit (e.g. 100k chars for standard models)
         MAX_COMBINED_CHARS = 100_000
         combined_diff = ""
+        is_truncated = False
         for chunk in reviewable:
             if len(combined_diff) + len(chunk['diff_text']) > MAX_COMBINED_CHARS:
                 combined_diff += "\n\n... (Diff truncated due to size limits)"
+                is_truncated = True
                 break
             combined_diff += f"\n\n{chunk['diff_text']}"
+
+        truncation_note = ""
+        if is_truncated:
+            truncation_note = "\nNOTE: This diff is TRUNCATED. If you need more context to be certain of an issue, state what you are missing instead of speculating.\n"
 
         prompt = (
             f'You are a strict code reviewer. Review the diff below.\n'
@@ -288,7 +314,7 @@ class AIClient:
         try:
             raw = call_ai(prompt, model=_REVIEW_MODEL, schema=_REVIEW_SCHEMA, max_retries=2)
         except Exception as e:
-            print(f" ❌ ERROR: {e}", flush=True, file=sys.stderr)
+            log_error(f"Review call failed for PR #{pr_num}: {e}")
 
         elapsed = time.time() - t0
 
@@ -604,10 +630,11 @@ class AIClient:
         all_issues = []
         for fr in file_reviews:
             for issue in fr.get('issues', []):
+                conf = issue.get('confidence', 'high').upper()
                 all_issues.append({
                     "path": fr['file'],
                     "line": issue.get('line', 1),
-                    "body": f"[{issue.get('severity','?')}] {issue.get('comment','')}",
+                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
                 })
         if not all_issues:
             all_issues = [{"path": "<see reviewComment above>", "line": 1, "body": review_comment[:500]}]
