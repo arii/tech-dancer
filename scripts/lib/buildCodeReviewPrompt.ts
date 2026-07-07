@@ -104,7 +104,7 @@ Include Confidence (high/medium/low) for every issue.`;
   const outputContract = `## 5. Output
 - STRICT SNIPPET: Quote entire line from diff.
 - COUNTEREXAMPLES: Required for errors (Why it fails, Example input, Expected vs Actual).
-- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status). No truncation.
+- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status), followed immediately by </findings>. No truncation.
 
 [VERDICT: PASS | WARN | FAIL]`;
 

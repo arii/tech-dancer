@@ -288,20 +288,13 @@ class AIClient:
             truncation_note = "\nNOTE: This diff is TRUNCATED. If you need more context to be certain of an issue, state what you are missing instead of speculating.\n"
 
         prompt = (
-            f'You are a strict code reviewer. Review the diff below.\n'
-            f'PR title: {pr_title}\n'
-            f'CI status: {checks_summary}\n\n'
-            f'Rules:\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- ENFORCE editorial image constraints for new components or markdown: Mobile: maxHeight="viewport-half" (50vh), Desktop: maxHeight={{96}} (384px), Object Fit: object-contain.\n'
-            f'- SUGGEST semantic tokens from the design system (e.g., "viewport-half") instead of arbitrary JIT values (e.g., "[50vh]").\n'
-            f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
-            f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
-            f'- Provide an overall `reviewComment` summarizing the review.\n'
-            f'- Suggest 1-3 `labels` (e.g. "needs-changes", "lgtm", "ci-failing").\n'
-            f'- Set overall `recommendation` to EXACTLY ONE of: "Approved", "Approved with Minor Changes", or "Not Approved".\n'
-            f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
-            f'Diff:{combined_diff}'
+            f"Review PR: {pr_title}. CI: {checks_summary}\n\n"
+            f"{_COMMON_REVIEW_GUIDELINES}\n\n"
+            "ORDER: Correctness, Security (new input/auth only), Crashes, Data Integrity, Performance, Maintainability.\n"
+            "SEVERITY: error (blocking, high confidence only), warn, info. Include 'confidence' (high/medium/low).\n"
+            "OUTPUT: Valid JSON. Counterexamples required for errors.\n"
+            "JSON MUST be inside a <findings> tag.\n\n"
+            f"{truncation_note}Diff:\n{combined_diff}"
         )
 
         t0 = time.time()
@@ -406,7 +399,8 @@ class AIClient:
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
             "ORDER: Correctness > Security > Performance > Maintainability.\n"
             "SEVERITY: error/warn/info. confidence: high/medium/low.\n"
-            "OUTPUT: Valid JSON. Counterexamples required for errors.\n\n"
+            "OUTPUT: Valid JSON. Counterexamples required for errors.\n"
+            "JSON MUST be inside a <findings> tag.\n\n"
             f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
     def _write_progress_snapshot(
