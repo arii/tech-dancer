@@ -300,7 +300,7 @@ class AIClient:
             f"2. Security (Scoped).\n"
             f"3. Unnecessary complexity/duplicates.\n\n"
             f"SEVERITY: error (blocking), warn (maintainability), info (nits).\n"
-            f"REQUIRED: confidence (high/medium/low) for every issue.\n"
+            f"REQUIRED: confidence (high/medium/low) for every issue. Counterexamples required for errors.\n"
             f"Output ONLY valid JSON summarizing file_reviews, labels, recommendation, and reviewComment.\n\n"
             f"Diff:{combined_diff}"
         )
@@ -418,7 +418,7 @@ class AIClient:
             f"2. Security (Scoped).\n"
             f"3. Do not suggest version downgrades.\n\n"
             f"SEVERITY: error, warn, info.\n"
-            f"REQUIRED: confidence (high/medium/low), verdict (ok/needs_changes/blocking).\n"
+            f"REQUIRED: confidence (high/medium/low), verdict (ok/needs_changes/blocking). Counterexamples required for errors.\n"
             f"Output ONLY valid JSON summarizing issues and verdict.\n\n"
             f"Diff:{trunc_note}\n{chunk['diff_text']}"
         )
@@ -540,7 +540,7 @@ class AIClient:
         try:
             # Note: _SYNTHESIS_MODEL and _SYNTHESIS_SCHEMA should be defined if this method is used.
             # Assuming they are global or available via call_ai.
-            raw = call_ai(prompt, max_retries=2)
+            raw = call_ai(prompt, model=_SYNTHESIS_MODEL, schema=_SYNTHESIS_SCHEMA, max_retries=2)
         except Exception as e:
             log_error(f"Synthesis call failed: {e}")
 
