@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, BaseProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
-import { transitions, shapes } from '@/styles/utilities';
+import { transitions } from '@/styles/utilities';
 
 interface BaseCardProps extends Omit<BaseProps, "border"> {
   border?: boolean;
@@ -44,7 +44,7 @@ export function BaseCard({
 
   const linkClasses = cn(
     "absolute inset-0 z-10 outline-none focus-visible:ring-2 focus-visible:ring-accent",
-    shapes.rounded
+    "rounded-md"
   );
 
   return (

@@ -1,7 +1,7 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
 import { cn } from "./utils";
-import { transitions, interaction, typography, shapes } from "@/styles/utilities";
+import { transitions, interaction, typography } from "@/styles/utilities";
 
 /**
  * Standardized Variant Contracts for BoomTick UI.
@@ -31,7 +31,7 @@ export const variants = {
     outline: cn(
       "border border-line bg-transparent",
       typography.label,
-      shapes.rounded,
+      "rounded-md",
       "hover:bg-line/10 hover:border-text-main/50",
       transitions.colors,
       interaction.activeScale
@@ -40,7 +40,7 @@ export const variants = {
     primary: cn(
       "bg-accent text-bg",
       typography.label,
-      shapes.rounded,
+      "rounded-md",
       "hover:bg-accent-sky",
       transitions.colors,
       interaction.activeScale,
@@ -129,7 +129,7 @@ export const actionButtonVariants = cva(
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = cva(
-  cn("bg-surface shadow-sm card-border", shapes.rounded, transitions.all),
+  cn("bg-surface shadow-sm card-border", "rounded-md", transitions.all),
   {
     variants: {
       interactive: {

@@ -6,7 +6,6 @@
 export const transitions = {
   all: "transition-all duration-200",
   colors: "transition-colors",
-  fast: "transition-all duration-150",
   slow: "transition-all duration-300",
 } as const;
 
@@ -24,8 +23,4 @@ export const typography = {
   // Shared typographic patterns
   label: "text-sm font-bold tracking-wide",
   tag: "font-semibold uppercase tracking-wider",
-} as const;
-
-export const shapes = {
-  rounded: "rounded-md",
 } as const;
