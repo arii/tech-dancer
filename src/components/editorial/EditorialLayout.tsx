@@ -2,9 +2,9 @@ import { ReactNode, useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants, type JournalNavLinkVariants } from '@/lib/variants';
 
-interface EditorialLayoutProps {
+interface EditorialLayoutProps extends JournalNavLinkVariants {
   onBack: () => void;
   backLabel: string;
   header: ReactNode;

@@ -1,14 +1,12 @@
 import { Box } from '@/layouts/Primitives';
-import { filterButtonVariants } from '@/lib/variants';
+import { filterButtonVariants, type FilterButtonVariants } from '@/lib/variants';
 import { cn } from '@/lib/utils';
 
-interface FilterButtonProps {
+interface FilterButtonProps extends FilterButtonVariants {
   label: string;
   onClick: () => void;
-  isActive: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "default" | "compact" | "quiet";
 }
 
 /**
@@ -18,21 +16,20 @@ interface FilterButtonProps {
 export const FilterButton = ({
   label,
   onClick,
-  isActive,
   className,
   type = "button",
-  variant = "default"
+  ...variants
 }: FilterButtonProps) => {
   return (
     <Box
       as="button"
       type={type}
       onClick={onClick}
-      aria-pressed={isActive}
+      aria-pressed={variants.isActive || false}
       radius="md"
       cursor="pointer"
       className={cn(
-        filterButtonVariants({ variant, isActive, className })
+        filterButtonVariants({ ...variants, className })
       )}
     >
       {label}
