@@ -27,7 +27,10 @@ const HISTORY_KEY = 'tech-dancer-blog-history';
 const DEBOUNCE_WAIT = 1000; // 1 second
 
 const generateId = () => {
-  return crypto.randomUUID();
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 };
 
 const DEFAULT_DATA: DraftData = {

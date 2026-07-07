@@ -78,7 +78,7 @@ function ArielProfile() {
   const otherSections = bio.sections.filter(s => s.id !== 'professional');
 
   return (
-    <Box as="section" height="full" paddingBottom={{ base: 32, lg: 48 }}>
+    <Box as="section" height="full">
       <SEO
         title="About"
         description="Ariel Anders, PhD: MIT Roboticist, DevAI Engineer, and West Coast Swing dancer. Expert in robotics software and agentic CI/CD pipelines."
@@ -90,7 +90,7 @@ function ArielProfile() {
         description={bio.role}
       />
 
-      <Stack gap={16} marginTop={12}>
+      <Stack gap={12} marginTop={12}>
         <Reveal direction={hasHash ? 'none' : 'up'} delay={hasHash ? 0 : undefined}>
           <Grid cols={{ base: 1, lg: 12 }} gap={12}>
             {/* Main Content Area */}
@@ -117,6 +117,21 @@ function ArielProfile() {
                 if (s.id === 'connect') return null;
                 return renderSection(s);
               })}
+
+              <Stack gap={8} marginTop={12} border="t" paddingTop={12}>
+                <Stack gap={4}>
+                  <Text id="privacy" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Privacy Policy</Text>
+                  <Text variant="body" size="base" color="dim">
+                    We value your privacy. This site does not track personal data beyond what is necessary for functional performance.
+                  </Text>
+                </Stack>
+                <Stack gap={4}>
+                  <Text id="terms" variant="mono" size="sm" color="brand" weight="font-bold" scrollMarginTop={32} className="uppercase tracking-widest">Terms of Use</Text>
+                  <Text variant="body" size="base" color="dim">
+                    By using this site, you agree to the terms and conditions. All content is for informational purposes. Portions of this site may contain affiliate links where we earn a small commission at no extra cost to you.
+                  </Text>
+                </Stack>
+              </Stack>
             </Stack>
 
             {/* Sticky Sidebar (Desktop only view for the details box) */}
@@ -157,27 +172,6 @@ function ArielProfile() {
             </Box>
           </Grid>
         </Reveal>
-      </Stack>
-
-      {/* Legal & Privacy Sections - Required for compliance and smoke tests */}
-      <Stack gap={12} marginTop={32} paddingX={4} border="t" paddingTop={16} className="border-line/10">
-        <Stack id="privacy" gap={4} maxWidth="prose">
-          <Text as="h2" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">
-            Privacy Policy
-          </Text>
-          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-70">
-            This site (boomtick.blog) is a personal project. We do not sell your data. We use basic analytics to understand site traffic. Any information provided through contact forms or newsletter signups is used solely for that purpose.
-          </Text>
-        </Stack>
-
-        <Stack id="terms" gap={4} maxWidth="prose">
-          <Text as="h2" variant="mono" size="xs" weight="font-bold" uppercase tracking="widest" color="dim">
-            Terms of Use
-          </Text>
-          <Text variant="body" size="xs" color="dim" className="leading-relaxed opacity-70">
-            Content on this site is provided for informational and entertainment purposes. While we strive for accuracy, we are not responsible for any issues arising from the use of tools, products, or travel advice mentioned.
-          </Text>
-        </Stack>
       </Stack>
     </Box>
   );

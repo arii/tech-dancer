@@ -8,7 +8,7 @@ describe('buildCodeReviewPrompt', () => {
       changedFiles: ['.github/workflows/ci.yml']
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
-    expect(prompt).toContain('CI/CD:');
+    expect(prompt).toContain('CI/CD Workflows:');
     expect(prompt).toContain('if: always()');
   });
 
@@ -18,8 +18,8 @@ describe('buildCodeReviewPrompt', () => {
       changedFiles: ['src/components/Button.tsx']
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
-    expect(prompt).toContain('React:');
-    expect(prompt).toContain('Blocking: hook rule violations');
+    expect(prompt).toContain('React Components:');
+    expect(prompt).toContain('Flag as blocking: conditional/early-return hook calls');
   });
 
   it('injects LLM integration guidance when CodeReviewClient is changed', () => {
@@ -28,8 +28,8 @@ describe('buildCodeReviewPrompt', () => {
       changedFiles: ['scripts/clients/githubModelsCodeReviewClient.ts']
     });
     expect(prompt).toContain('CATEGORY-SPECIFIC GUIDANCE:');
-    expect(prompt).toContain('LLM Clients:');
-    expect(prompt).toContain('GITHUB_TOKEN is correct');
+    expect(prompt).toContain('LLM Client Integrations — READ BEFORE FLAGGING AUTH/MODEL ISSUES:');
+    expect(prompt).toContain('Do NOT assume `ChatOpenAI` always means talking to OpenAI\'s own API');
   });
 
   it('concatenates multiple guidance blocks if multiple categories match', () => {
@@ -37,8 +37,8 @@ describe('buildCodeReviewPrompt', () => {
       diffContext: 'some diff',
       changedFiles: ['src/components/Button.tsx', '.github/workflows/ci.yml']
     });
-    expect(prompt).toContain('CI/CD:');
-    expect(prompt).toContain('React:');
+    expect(prompt).toContain('CI/CD Workflows:');
+    expect(prompt).toContain('React Components:');
   });
 
   it('does not include category guidance section if no categories match', () => {

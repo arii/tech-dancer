@@ -77,50 +77,77 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
     roleInstruction = '\nROLE: SOFTWARE ARCHITECT. Focus on separation of concerns, feature isolation, dependency directions, and proper use of hooks vs. components.';
   }
 
-  const reviewPhilosophy = `## 1. Philosophy
-- EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
-- SCOPE: Review ONLY PR changes. Ignore pre-existing issues. Assume original code worked.
-- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.`;
-
-  const repositoryRules = `## 2. Standards
-- SIMPLICITY: Prefer removal. Flag unnecessary wrappers/hooks/helpers. Reward simpler solutions.
-- DESIGN SYSTEM: BANNED: raw Tailwind layout (flex, grid, px-*, etc) in TSX. Use <Stack>, <Grid>, <Box>.
-- REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.`;
-
-  const reviewChecklist = `## 3. Checklist
-ORDER: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance (O(n²)), 6. Maintainability.
-
-Positive Findings: Mention improved tests, removed duplication, or reduced complexity.
-
-${dynamicGuidance}`;
-
-  const severityAndConfidence = `## 4. Severity
-- error: Blocking, high confidence only. Bugs, crashes, security.
-- warn: Non-blocking. Maintainability, performance regressions.
-- info: Style, naming, docs.
-
-Include Confidence (high/medium/low) for every issue.`;
-
-  const outputContract = `## 5. Output
-- STRICT SNIPPET: Quote entire line from diff.
-- COUNTEREXAMPLES: Required for errors (Why it fails, Example input, Expected vs Actual).
-- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status). No truncation.
-
-[VERDICT: PASS | WARN | FAIL]`;
-
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
+Review the following code diff for bugs, anti-patterns, missing types, performance issues, and visual quality defects.
+Provide actionable feedback. Focus on HIGH severity issues.
 
-${goalSection}${priorStateSection}${impactSemanticContextSection}${guidelinesSection}${uiAuditInstruction}
+${guidelinesSection}${goalSection}${priorStateSection}${impactSemanticContextSection}
+${uiAuditInstruction}Severity rules — apply these strictly:
+- HIGH / Blocking: you can point to a concrete contradiction in the diff itself — a value
+  passed where the type doesn't allow it, a class or function that doesn't exist, a call
+  with the wrong arity, a test that would fail. Cite the exact line(s).
+- If your concern is phrased with "could," "might," "unless," "if not handled properly,"
+  or similar hedging language, it is NOT blocking. Downgrade it to a "Question" or
+  "Nitpick" section instead.
+- Do not raise a concern you cannot verify against the code you were given. State what
+  you'd need to see to verify it, rather than assuming the worst case.
 
-${reviewPhilosophy}
+Snippet and verification rules:
+- STRICT SNIPPET RULE: When citing an error or anti-pattern, you MUST quote the entire, exact line from the diff in the "snippet" field. Do not truncate the line.
+- Before flagging a "syntax error" or "missing property/method", re-read the diff to confirm the code isn't simply continued on the next line or truncated in the diff chunk. Hallucinating errors due to chunk truncation is a severe failure.
+- If a line appears truncated in the diff (e.g. at the edge of a chunk), DO NOT assume it is a syntax error. Assume it is valid code that continues outside the visible context.
 
-${repositoryRules}
+Design System Compliance:
+- Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
+- Mandate Primitives: You MUST insist on using standard layout primitives: \`<Stack>\`, \`<Grid>\`, and \`<Box>\`.
+- Any usage of raw CSS/Tailwind for structural layout (flex/grid) in \`.tsx\` files should be flagged as a STYLE or ARCHITECTURE violation.
 
-${reviewChecklist}
+${dynamicGuidance}
+Scope and security rules:
+- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
+- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or
+  broken by this diff. If a symbol is used but its definition is not in the context,
+  ASSUME it is correctly defined elsewhere.
+- DO NOT hallucinate bugs in code you cannot see.
+- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new
+  user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
+- Do not introduce review topics unrelated to the PR's stated goal unless you find a
+  genuine, evidence-backed regression caused by this diff.
+- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"),
+  DO NOT fail the review solely because you cannot see the full implementation of a
+  newly introduced module or utility. Instead, provide a WARN or PASS verdict based on
+  what you CAN see, and explicitly state what remains unverified due to truncation.
 
-${severityAndConfidence}
+You MUST end your review with exactly one of the following strings indicating your final verdict:
+[VERDICT: PASS]
+[VERDICT: WARN]
+[VERDICT: FAIL]
 
-${outputContract}`;
+Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can
+demonstrate with evidence from the diff.
+
+You MUST also provide a structured JSON summary of the findings (both old and new) at the end of your response, inside a \` <findings>\` tag.
+The JSON must follow this schema:
+<findings>
+{
+  "findings": [
+    {
+      "id": "finding-1",
+      "file": "src/App.tsx",
+      "line": 10,
+      "snippet": "const x = 1;",
+      "issue": "Brief description of the issue",
+      "status": "open",
+      "fixSummary": "Brief summary of how it was addressed"
+    }
+  ]
+}
+</findings>
+Strict JSON Verification:
+- You MUST self-verify the completeness and validity of the JSON block before finishing your response.
+- Every finding MUST have an \`id\`, \`file\`, \`issue\`, and \`status\`.
+- Ensure the JSON is well-formed and contained entirely within the \`<findings>\` tags.
+- Ensure 'snippet' is a unique string from the diff that identifies the issue.`;
 
   return basePrompt;
 }

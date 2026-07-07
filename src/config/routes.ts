@@ -34,23 +34,6 @@ export const routes: RouteConfig[] = [
     sitemap: false
   })),
   {
-    path: '/merch',
-    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
-    label: 'Merch',
-    icon: Tag,
-    skeleton: 'grid',
-    isMobileVisible: true,
-    isTopNav: true
-  },
-  {
-    path: '/about',
-    lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
-    label: 'About',
-    icon: User,
-    skeleton: 'simple',
-    isTopNav: true
-  },
-  {
     path: '/research',
     lazy: () => import('@/pages/Research').then(m => ({ Component: m.default })),
     label: 'DevAI Portfolio',
@@ -68,6 +51,23 @@ export const routes: RouteConfig[] = [
     path: '/ux-auditor',
     lazy: () => import('@/pages/UXAuditor').then(m => ({ Component: m.default })),
     skeleton: 'grid'
+  },
+  {
+    path: '/merch',
+    lazy: () => import('@/pages/Merch').then(m => ({ Component: m.default })),
+    label: 'Merch',
+    icon: Tag,
+    skeleton: 'grid',
+    isMobileVisible: true,
+    isTopNav: true
+  },
+  {
+    path: '/about',
+    lazy: () => import('@/pages/About').then(m => ({ Component: m.default })),
+    label: 'About',
+    icon: User,
+    skeleton: 'simple',
+    isTopNav: true
   },
   {
     path: '/preview',

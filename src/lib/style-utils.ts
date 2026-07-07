@@ -20,8 +20,8 @@ export function resolveJIT(val: string | number | boolean | undefined | null, pr
   // to ensure compatibility with all Tailwind themes unless they are passed as numbers.
   const isToken = typeof val === "number" || (
     typeof val === "string" &&
-    /^[a-z0-9-]+$/.test(absStr) &&
-    !/[0-9](px|vh|vw|%|rem|em)$/.test(absStr)
+    /^[a-z0-9/.-]+$/.test(absStr) &&
+    !/[0-9](px|vh|vw|%|rem|em|ms|s|deg)$/.test(absStr)
   );
 
   if (isToken) return `${negPfx}${pfx}${absStr}`;
