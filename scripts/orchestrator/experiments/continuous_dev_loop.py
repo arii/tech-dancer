@@ -10,13 +10,13 @@ def execute_continuous_dev_loop(issue_queue):
     """
     Simulates a continuous integration pipeline where Agent 1 acts as Lead Engineer.
     """
-    base_branch = "develop"
+    base_branch = "main"
 
     print(f"Initializing primary Agent 1 session on {base_branch}...")
     initial_payload = {
         "current_timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "target_id": base_branch,
-        "task_objective": "Initialize session on develop branch. Stand by to orchestrate issue resolutions.",
+        "task_objective": f"Initialize session on {base_branch} branch. Stand by to orchestrate issue resolutions.",
         "interaction_history": []
     }
 

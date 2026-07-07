@@ -139,21 +139,21 @@ def dispatch_payload(task_type, target_id):
 
 Experiment 3: Continuous Issue Resolution Loop (End-to-End)
 
-Agent 2 manages a backlog of issues and creates a continuous development pipeline. It establishes a develop branch, spins up a primary Jules session, and feeds it issues one by one, waiting for each to be resolved, approved, and merged before sending the next.
+Agent 2 manages a backlog of issues and creates a continuous development pipeline. It establishes a main branch, spins up a primary Jules session, and feeds it issues one by one, waiting for each to be resolved, approved, and merged before sending the next.
 
 Note on Hierarchical Agents: In this model, Agent 1 acts as a "Lead Engineer." When instructed to solve an issue, Agent 1 can autonomously use its own MCP tools to spin up sub-sessions (temporary Jules workers) to parallelize tasks or test specific PRs, reporting back to Agent 2 only when the entire issue lifecycle is complete.
 
 Concept
 
-Identify or check out a base develop branch.
+Identify or check out a base main branch.
 
-Initialize the primary Agent 1 (Jules) session on the develop branch.
+Initialize the primary Agent 1 (Jules) session on the main branch.
 
 Retrieve a list of open issues from the backlog.
 
 Iterate through the issues:
 
-Dispatch a payload instructing Jules to fix the issue, open a PR, and get it merged into develop.
+Dispatch a payload instructing Jules to fix the issue, open a PR, and get it merged into main.
 
 Poll the session until Jules signals SUCCESS (meaning the PR is merged).
 
@@ -174,9 +174,9 @@ def execute_continuous_dev_loop(issue_queue):
     """
     issue_queue: List of GitHub issue numbers (e.g., [101, 102, 105])
     """
-    base_branch = "develop"
+    base_branch = "main"
 
-    # 1. Pre-flight: Ensure develop branch exists or instruct Jules to create it
+    # 1. Pre-flight: Ensure main branch exists or instruct Jules to create it
     # We will assume Agent 2 uses system git or Jules's repo.create_branch MCP to handle this locally.
 
     # 2. Create the primary Agent 1 session
@@ -184,7 +184,7 @@ def execute_continuous_dev_loop(issue_queue):
     initial_payload = {
         "current_timestamp": "2026-06-26T23:12:00Z",
         "target_id": base_branch,
-        "task_objective": "Initialize session on develop branch. Stand by to orchestrate issue resolutions.",
+        "task_objective": f"Initialize session on {base_branch} branch. Stand by to orchestrate issue resolutions.",
         "interaction_history": []
     }
 
