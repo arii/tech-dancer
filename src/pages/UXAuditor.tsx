@@ -13,11 +13,7 @@ import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import {
-  actionButtonVariants, type ActionButtonVariants,
-  cardVariants, type CardVariants,
-  listRowVariants, type ListRowVariants
-} from '@/lib/variants';
+import { actionButtonVariants, cardVariants, listRowVariants } from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -227,15 +223,9 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   );
 }
 
-interface ViewportAnalysisCardProps extends CardVariants {
-  vp: typeof VIEWPORTS[0];
-  data: ViewportAnalysis;
-  activeReportUrl?: string;
-}
-
-function ViewportAnalysisCard({ vp, data, activeReportUrl, overflow, interactive, span }: ViewportAnalysisCardProps) {
+function ViewportAnalysisCard({ vp, data, activeReportUrl }: { vp: typeof VIEWPORTS[0], data: ViewportAnalysis, activeReportUrl?: string }) {
   return (
-    <Box className={cardVariants({ overflow: overflow ?? "hidden", interactive, span })} minWidth={0}>
+    <Box className={cardVariants({ overflow: "hidden" })} minWidth={0}>
       <Stack padding={4} border="b" direction="row" align="center" justify="between" surface="muted">
         <Stack direction="row" align="center" gap={3}>
           <Box width={9} height={9} surface="default" radius="md" shadow="sm" color="accent" display="flex" align="center" justify="center" shrink={0}>
@@ -468,7 +458,7 @@ export default function UXAuditor() {
                 direction="row"
                 onClick={() => setActiveReport(report)}
                 width="full" align="center" gap={3} padding={4} 
-                className={listRowVariants({ active: activeReport?.id === report.id } as ListRowVariants)}
+                className={listRowVariants({ active: activeReport?.id === report.id })}
               >
                 <Box
                   width={9}
@@ -521,7 +511,7 @@ export default function UXAuditor() {
                     align="center"
                     justify="center"
                     gap={2}
-                    className={actionButtonVariants({ variant: "default" } as ActionButtonVariants)}
+                    className={actionButtonVariants({ variant: "default" })}
                     surface="muted" 
                     color="dim"
                     paddingX={4}
@@ -540,7 +530,7 @@ export default function UXAuditor() {
                     align="center"
                     justify="center"
                     gap={2}
-                    className={actionButtonVariants({ variant: "primary" } as ActionButtonVariants)}
+                    className={actionButtonVariants({ variant: "primary" })}
                     paddingX={6}
                     paddingY={2}
                     radius="xl"
