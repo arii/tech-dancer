@@ -126,6 +126,12 @@ def clean_llm_output(text: str) -> str:
         return match.group(1).strip()
     return text.strip()
 
+def strip_ansi(text: str) -> str:
+    """Removes ANSI escape codes from text."""
+    if not isinstance(text, str):
+        return str(text)
+    return re.sub(r'\x1b\[[0-9;]*[mGKF]', '', text)
+
 def is_ai_available() -> bool:
     """Checks if AI API token is present."""
     return bool(os.getenv("GITHUB_TOKEN"))

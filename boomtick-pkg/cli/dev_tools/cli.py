@@ -27,7 +27,8 @@ from dev_tools.utils import (
     get_bundle_size,
     get_any_count,
     verify_pr_scope,
-    verify_ci_metrics
+    verify_ci_metrics,
+    strip_ansi
 )
 from dev_tools.config import get_config
 
@@ -520,12 +521,17 @@ def read_pr_comments(ctx, pr_number):
         click.echo(f"PR #{pr['number']}: {pr['title']}")
         click.echo("--- Comments ---")
         for comment in res.get('comments', []):
-            click.echo(f"[{comment['user']}]: {comment['body']}")
+            body = strip_ansi(comment.get('body', ''))
+            click.echo(f"[{comment['user']}]: {body}")
             click.echo("-" * 20)
 
         click.echo("\n--- Review Comments ---")
         for comment in res.get('review_comments', []):
-            click.echo(f"[{comment['user']}] in {comment['path']}:{comment.get('line')}: {comment['body']}")
+            path = comment.get('path')
+            line = comment.get('line')
+            location = f"{path}:{line}" if line else path
+            body = strip_ansi(comment.get('body', ''))
+            click.echo(f"[{comment['user']}] in {location}: {body}")
             click.echo("-" * 20)
 
 @gh.command()
