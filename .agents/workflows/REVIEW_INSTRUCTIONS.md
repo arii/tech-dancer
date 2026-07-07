@@ -11,22 +11,21 @@ You will record your findings in the writeable `pr-review-<PR_NUMBER>.md` file.
 - **Checklist Completion**: Every item in the Audit Checklist MUST be marked to indicate it was verified.
 - **JSON Block**: You MUST fill the JSON block at the bottom of the file with your findings.
 
-## 2. Audit Checklist Verification
+## 2. Philosophy & Checklist
 
-You MUST systematically verify each item against the diff context.
+### Senior Engineer Mindset:
+- **Evidence Rule**: Point to exact line + explain runtime consequence. No speculation.
+- **Regression Scope**: Review ONLY PR changes. Ignore pre-existing issues unless worsened.
+- **Simplicity**: Prefer code removal. Flag unnecessary wrappers/hooks/abstractions.
+- **Filter**: Verify runtime impact + certainty. Design choices != bugs.
 
-### Marking Convention:
-- **`[x]`**: Verified and **passed** (no issues found).
-- **`[ ]`**: Verified and **failed** (issue found). You MUST provide detailed feedback for these items in the `FINDINGS` section and/or as inline comments in the JSON block.
-
-The **Anti-AI-Slop checklist** is mandatory for all reviews.
-
-- **Dead abstractions**: Did they introduce a new class, context, or hook that a simpler primitive could handle?
-- **Unnecessary indirection**: Does this add a layer of wrapping where a direct function call would suffice?
-- **Responsibility creep**: Is a component taking on state or logic that belongs in a parent container or a custom hook?
-- **Import bloat**: Is `import React from 'react'` included unnecessarily (not needed in React 17+)?
-- **Token compliance**: Are they using raw Tailwind values (e.g., `text-[13px]`, `bg-[#f4f4f4]`) or inline styles instead of the established design tokens?
-- **Audit ratio**: If the PR adds > 100 lines of code, you must find at least 10 lines of code to recommend removing or refactoring.
+### Checklist (Mark `[x]` or `[ ]`):
+- **Dead abstractions**: Simplest primitive used?
+- **Unnecessary indirection**: Direct calls preferred over wrappers?
+- **Responsibility creep**: Logic in the correct place?
+- **Import bloat**: No redundant `import React`?
+- **Token compliance**: Standard tokens used (no raw Tailwind for layout)?
+- **Audit ratio**: 10 lines refactored per 100 added?
 
 ## 3. CI Failure Handling
 
@@ -35,11 +34,22 @@ If the PR context indicates failing CI checks:
 - **Log Triage**: You must complete the "CI Log Triage" section in the review file. Use the "Detected Errors" and "Failure Logs Snippet" from the context file to perform a Root Cause Analysis and provide Remediation Steps.
 - **Prioritize Fixes**: Mention the CI failures prominently in your review body and prioritize their resolution.
 
-## 4. Review Status Mapping
+## 4. Severity & Confidence
 
+Every blocking issue MUST include a **Confidence Score**: **high**, **medium**, **low**.
+Only report blocking issues when confidence is **HIGH**.
+
+### Severity Definitions:
+- **error**: Incorrect behavior, data loss, security vulnerability, crash, broken API, build failure, deterministic bug.
+- **warn**: Maintainability regression, readability regression, unnecessary complexity, duplicated logic, performance issue.
+- **info**: Documentation, naming, formatting.
+
+Never label style preferences as errors.
+
+### Review Status Mapping:
 - **Approved**: Zero violations AND all critical CI checks passing.
-- **Approved with Minor Changes**: Minor non-breaking violations (e.g., import bloat, trivial token leakage).
-- **Not Approved**: Architectural regressions, breaking changes, major token violations, OR failing CI checks.
+- **Approved with Minor Changes**: Minor non-breaking violations (e.g., info/warn issues).
+- **Not Approved**: Architectural regressions, breaking changes (errors), major token violations, OR failing CI checks.
 
 ## 5. Formatting the JSON Output
 
