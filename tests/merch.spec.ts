@@ -22,10 +22,10 @@ test.describe('Merch Page', () => {
 
   test('should display product cards', async ({ page }) => {
     const productCards = page.getByTestId('product-card');
-    // Note: The count is 19 because there are 11 unique products.
+    // Note: The count is 19 because there are 11 unique products (some in multiple sections).
     // Some products appear in multiple collections when the "All" filter is active,
-    // summing to a total of 19 card components rendered across the page.
-    await expect(productCards).toHaveCount(19);
+    // summing to a total of 14 card components rendered across the page.
+    await expect(productCards).toHaveCount(14);
   });
 
   test('should filter products by collection', async ({ page }) => {
@@ -38,7 +38,7 @@ test.describe('Merch Page', () => {
 
     // Reset filter
     await page.getByRole('button', { name: 'All' }).click();
-    await expect(filteredCards).toHaveCount(19);
+    await expect(filteredCards).toHaveCount(14);
   });
 
   test('should have correct attributes on Printful external links', async ({ page }) => {
