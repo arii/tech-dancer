@@ -223,7 +223,7 @@ class AIClient:
 
 
     def _sanitize_issue_data(self, issue: Dict) -> None:
-        if issue.get("severity") == "error" and not issue.get("counterexample"):
+        if issue.get("severity") == "error" and (issue.get("counterexample") is None or issue.get("counterexample") == ""):
             issue["counterexample"] = "No counterexample provided by AI."
         if "counterexample" in issue and issue["counterexample"] is not None:
             if not isinstance(issue["counterexample"], str):
