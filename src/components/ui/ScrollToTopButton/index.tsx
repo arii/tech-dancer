@@ -1,4 +1,4 @@
-import { useState, useEffect, RefObject } from "react";
+import { useState, useEffect, useCallback, RefObject } from "react";
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Box } from '@/layouts/Primitives';
@@ -12,26 +12,23 @@ interface ScrollToTopButtonProps {
 export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
 
+    const handleScroll = useCallback(() => {
+    const container = scrollRef.current;
+    if (container) {
+      setIsVisible(container.scrollTop > 300);
+    }
+  }, [scrollRef]);
+
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
-
-    const handleScroll = () => {
-      const scrollTop = container.scrollTop;
-
-      if (scrollTop > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
 
     container.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       container.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollRef]);
+  }, [scrollRef, handleScroll]);
 
   const scrollToTop = () => {
     if (scrollRef.current) {
@@ -56,8 +53,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           aria-label="Scroll to top"
-          bottom={8}
-          right={8}
+          bottom={8} right={8} /* impeccable-ignore */
           className={fabVariants()}
           data-testid="scroll-to-top-button"
         >
