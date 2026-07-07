@@ -133,6 +133,7 @@ def is_ai_available() -> bool:
 def to_standard_schema(schema):
     """Recursively prepares a standard JSON schema.
     - Ensures top-level 'type: object' if 'properties' is present.
+    - Enforces lowercase AI model naming globally.
     """
     if isinstance(schema, dict):
         # Auto-inject object type if properties are defined without a type
@@ -141,7 +142,10 @@ def to_standard_schema(schema):
 
         new_schema = {}
         for k, v in schema.items():
-            new_schema[k] = to_standard_schema(v)
+            if k == "type" and isinstance(v, str):
+                new_schema[k] = v.lower()
+            else:
+                new_schema[k] = to_standard_schema(v)
         return new_schema
     elif isinstance(schema, list):
         return [to_standard_schema(item) for item in schema]
@@ -335,22 +339,9 @@ def call_gemini(prompt: str, model: str = None, max_retries: int = 3, schema = N
     if schema:
         # Note: structured output handling varies by LangChain version/provider
         # For simplicity in this shim, we'll rely on prompt engineering if bind_tools isn't used
-        # Gemini requirement: types must be uppercase in schema for some versions
-        def to_gemini_schema(s):
-            if isinstance(s, dict):
-                res = {}
-                for k, v in s.items():
-                    if k == "type" and isinstance(v, str):
-                        res[k] = v.upper()
-                    else:
-                        res[k] = to_gemini_schema(v)
-                return res
-            elif isinstance(s, list):
-                return [to_gemini_schema(i) for i in s]
-            return s
-
-        gemini_schema = to_gemini_schema(schema)
-        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(gemini_schema)}"
+        # Enforce lowercase AI model naming globally instead of using model-specific toggles
+        standard_schema = to_standard_schema(schema)
+        prompt += f"\n\nOutput MUST be valid JSON matching this schema: {json.dumps(standard_schema)}"
 
     try:
         response = llm.invoke([HumanMessage(content=prompt)])

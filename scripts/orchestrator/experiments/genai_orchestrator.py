@@ -7,10 +7,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from utils import run_cli
 
 try:
-    from dev_tools.utils import call_ai, get_ai_synthesis_model, clean_llm_output
+    from dev_tools.utils import call_ai, get_ai_model, clean_llm_output
 except ImportError:
     call_ai = None
-    get_ai_synthesis_model = lambda: "gpt-4o-mini"
+    get_ai_model = lambda: "gpt-4o-mini"
     clean_llm_output = lambda x: x
 
 
@@ -67,7 +67,7 @@ def generate_dynamic_payload():
     Output ONLY a JSON payload matching the expected Jules schema.
     """
 
-    model = get_ai_synthesis_model()
+    model = get_ai_model()
     llm_response = generate_text_ai(model=model, prompt=prompt)
     return json.loads(llm_response)
 
