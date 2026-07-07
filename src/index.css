@@ -59,7 +59,10 @@
   --spacing-comfort: var(--raw-spacing-comfort);
   --spacing-end-pad: var(--raw-spacing-end-pad);
 
-  /* Z-Index */
+  /* Interaction */
+  --scale-active: var(--raw-scale-active);
+
+  /* Static Defaults */
   --z-hide: var(--raw-z-hide);
   --z-base: var(--raw-z-base);
   --z-docked: var(--raw-z-docked);
@@ -205,6 +208,12 @@
 @utility transition-nav {
   transition-property: background-color, backdrop-filter, border-color;
   transition-duration: 300ms;
+}
+
+@utility scale-active {
+  --tw-scale-x: var(--scale-active);
+  --tw-scale-y: var(--scale-active);
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 @utility safe-bottom {

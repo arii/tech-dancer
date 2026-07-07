@@ -4,7 +4,8 @@ import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
-import { pickRest } from '@/lib/utils';
+import { pickRest, cn } from '@/lib/utils';
+import { transitions } from '@/styles/utilities';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
 
@@ -50,7 +51,7 @@ export function ListRow(props: ListRowProps) {
     <Box as={NavLink} to={`${basePath}/${slug}`}
       {...rest}
       display="flex" align="center" border="b"
-      className="group hover:bg-surface/50 transition-colors"
+      className={cn("group hover:bg-surface/50", transitions.colors)}
     >
       <Box width={1} shrink={0} self="stretch" opacityVariant="none" className="bg-accent group-hover:opacity-full transition-opacity" />
       <Box

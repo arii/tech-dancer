@@ -54,6 +54,9 @@
   --raw-spacing-comfort: 3rem;
   --raw-spacing-end-pad: 8rem;
 
+  /* Interaction */
+  --raw-scale-active: 0.98;
+
   /* Animation */
   --raw-duration-fast: 150ms;
   --raw-duration-normal: 300ms;

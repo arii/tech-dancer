@@ -1,5 +1,7 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
+import { cn } from "./utils";
+import { transitions, interaction, typography, shapes } from "@/styles/utilities";
 
 /**
  * Standardized Variant Contracts for BoomTick UI.
@@ -26,11 +28,36 @@ export const variants = {
   },
   emphasis: {
     solid: "bg-text-main text-bg border-transparent",
-    outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50 transition-colors active:scale-[0.98]",
+    outline: cn(
+      "border border-line bg-transparent",
+      typography.label,
+      shapes.rounded,
+      "hover:bg-line/10 hover:border-text-main/50",
+      transitions.colors,
+      interaction.activeScale
+    ),
     ghost: "bg-transparent hover:bg-line/10",
-    primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky transition-colors active:scale-[0.98] shadow-sm",
-    professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 transition-all shadow-sm active:scale-[0.98] normal-case tracking-normal",
-    fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none",
+    primary: cn(
+      "bg-accent text-bg",
+      typography.label,
+      shapes.rounded,
+      "hover:bg-accent-sky",
+      transitions.colors,
+      interaction.activeScale,
+      "shadow-sm"
+    ),
+    professional: cn(
+      "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90",
+      transitions.all,
+      "shadow-sm",
+      interaction.activeScale,
+      "normal-case tracking-normal"
+    ),
+    fab: cn(
+      "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg",
+      transitions.slow,
+      "rounded-none"
+    ),
     reminder: "bg-accent-purple text-bg hover:bg-accent-purple/90 shadow-lg h-14 w-full",
   },
   radius: {
@@ -42,7 +69,11 @@ export const variants = {
 };
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center font-sans tracking-normal transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+  cn(
+    "inline-flex items-center justify-center font-sans tracking-normal",
+    transitions.all,
+    interaction.disabled
+  ),
   {
     variants: {
       variant: variants.emphasis,
@@ -74,13 +105,17 @@ export const buttonVariants = cva(
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
 export const actionButtonVariants = cva(
-  "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  cn(
+    "font-bold",
+    transitions.all,
+    "text-sm shrink-0 flex items-center gap-2 disabled:opacity-50"
+  ),
   {
     variants: {
       variant: {
         default: "hover:text-text-main",
         primary: "bg-accent text-bg hover:opacity-90 shadow-md",
-        ghost: "hover:bg-line/10 text-text-dim hover:text-text-main",
+        ghost: interaction.ghost,
       },
     },
     defaultVariants: {
@@ -93,11 +128,11 @@ export const actionButtonVariants = cva(
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = cva(
-  "bg-surface rounded-md shadow-sm card-border transition-all",
+  cn("bg-surface shadow-sm card-border", shapes.rounded, transitions.all),
   {
     variants: {
       interactive: {
-        true: "hover:border-accent cursor-pointer",
+        true: interaction.accentHover,
         false: "",
       },
       overflow: {
@@ -122,7 +157,11 @@ export const cardVariants = cva(
  * Separates structural styles from state-specific styles.
  */
 export const filterButtonVariants = cva(
-  "inline-flex items-center justify-center border transition-all whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
+  cn(
+    "inline-flex items-center justify-center border",
+    transitions.all,
+    "whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs"
+  ),
   {
     variants: {
       variant: {
@@ -154,7 +193,7 @@ export const filterButtonVariants = cva(
       {
         variant: "quiet",
         isActive: false,
-        className: "bg-transparent border-transparent text-text-dim hover:text-text-main hover:bg-line/10",
+        className: cn("bg-transparent border-transparent text-text-dim", interaction.hover, "hover:text-text-main"),
       },
     ],
     defaultVariants: {
@@ -168,7 +207,11 @@ export const filterButtonVariants = cva(
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = cva(
-  'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
+  cn(
+    'inline-flex items-center rounded border',
+    typography.tag,
+    transitions.colors
+  ),
   {
     variants: {
       variant: {
@@ -193,7 +236,7 @@ export const tagVariants = cva(
  * Journal/Blog specific variants for editorial consistency.
  */
 export const journalVariants = {
-  card: cva("transition-all", {
+  card: cva(transitions.all, {
     variants: {
       variant: {
         default: "bg-surface/30 border-line/30",
@@ -209,9 +252,9 @@ export const journalVariants = {
       interactive: false
     }
   }),
-  shareAction: cva("text-text-dim hover:text-accent transition-colors group"),
-  tag: cva("border-line/50 hover:border-accent transition-colors cursor-default"),
-  navLink: cva("transition-colors group cursor-pointer", {
+  shareAction: cva(cn("text-text-dim hover:text-accent group", transitions.colors)),
+  tag: cva(cn("border-line/50 hover:border-accent cursor-default", transitions.colors)),
+  navLink: cva(cn("group cursor-pointer", transitions.colors), {
     variants: {
       active: {
         true: "text-accent",
@@ -228,7 +271,7 @@ export const journalVariants = {
  * List row variants for interactive lists (e.g., Audit History)
  */
 export const listRowVariants = cva(
-  "text-left transition-all border-l-4 w-full",
+  cn("text-left border-l-4 w-full", transitions.all),
   {
     variants: {
       active: {

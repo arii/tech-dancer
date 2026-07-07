@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, BaseProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
+import { transitions, shapes } from '@/styles/utilities';
 
 interface BaseCardProps extends Omit<BaseProps, "border"> {
   border?: boolean;
@@ -34,13 +35,17 @@ export function BaseCard({
 
   // Standardized hover and transition classes
   const cardClasses = cn(
-    "group relative bg-surface transition-all duration-200",
+    "group relative bg-surface",
+    transitions.all,
     border === true && "card-border",
     isLink && "hover:-translate-y-0.5 hover:border-accent/40",
     className
   );
 
-  const linkClasses = "absolute inset-0 z-10 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-accent";
+  const linkClasses = cn(
+    "absolute inset-0 z-10 outline-none focus-visible:ring-2 focus-visible:ring-accent",
+    shapes.rounded
+  );
 
   return (
     <Stack

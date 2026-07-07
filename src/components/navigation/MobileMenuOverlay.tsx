@@ -2,7 +2,9 @@
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Box, Text, Stack } from '@/layouts/Primitives';
+import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { transitions } from '@/styles/utilities';
 import { TOP_NAV_ROUTES } from '@/config/routes';
 import { useEffect, useRef } from 'react';
 import { NavItem } from './NavItem';
@@ -91,10 +93,13 @@ export function MobileMenuOverlay({ isOpen, onClose, onSearchClick }: MobileMenu
             width="full"
             position="relative"
             radius="md"
-            className="transition-all duration-200 hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
+            className={cn(
+              transitions.all,
+              "hover:translate-x-1 text-text-dim hover:text-accent hover:bg-surface-alt/50 border-line/50 tap-target"
+            )}
           >
             <Box shrink={false}>
-              <Search className={`w-6 h-6 ${stroke.thick}`} />
+              <Search className={cn("w-6 h-6", stroke.thick)} />
             </Box>
             <Text variant="sans" size="xl" weight="font-bold" className="leading-none">
               Search

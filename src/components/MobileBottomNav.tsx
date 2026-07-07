@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Box, Text } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
 import { stroke } from '@/styles/design-tokens';
+import { transitions } from '@/styles/utilities';
 import { MOBILE_NAV_ROUTES } from '@/config/routes';
 
 export function MobileBottomNav() {
@@ -25,7 +26,8 @@ export function MobileBottomNav() {
               <NavLink
                 to={item.path}
                 className={({ isActive }) => cn(
-                  "flex flex-col items-center justify-center h-full transition-colors tap-target",
+                  "flex flex-col items-center justify-center h-full tap-target",
+                  transitions.colors,
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >
