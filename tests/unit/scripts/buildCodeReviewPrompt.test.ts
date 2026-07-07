@@ -37,8 +37,8 @@ describe('buildCodeReviewPrompt', () => {
       diffContext: 'some diff',
       changedFiles: ['src/components/Button.tsx', '.github/workflows/ci.yml']
     });
-    expect(prompt).toContain('CI/CD Workflows:');
-    expect(prompt).toContain('React Components:');
+    expect(prompt).toContain('CI/CD:');
+    expect(prompt).toContain('React:');
   });
 
   it('does not include category guidance section if no categories match', () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { reconcileVerdict } from '../../../scripts/lib/codeReviewOrchestrator';
 
 import { IMPACT_CONFIG } from '../../../scripts/impact-analysis.config';
@@ -68,9 +68,21 @@ describe('filtering logic', () => {
 });
 
 describe('reconcileVerdict', () => {
+  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    if (consoleWarnSpy) {
+      consoleWarnSpy.mockRestore();
+    }
+  });
   it('downgrades fail to warn if no parseable findings', () => {
     const result = reconcileVerdict({ feedback: '', llmVerdict: 'fail', tokens: 0, cost: 0 }, '');
     expect(result.llmVerdict).toBe('warn');
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('Downgrading FAIL→WARN: no open findings found to justify the FAIL verdict.'));
   });
 
   it('respects open findings', () => {
@@ -101,5 +113,6 @@ describe('reconcileVerdict', () => {
       ''
     );
     expect(result.llmVerdict).toBe('warn');
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('Downgrading FAIL→WARN: no open findings found to justify the FAIL verdict.'));
   });
 });

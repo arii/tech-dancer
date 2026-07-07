@@ -21,34 +21,36 @@ export default function Merch() {
   const sections = useMemo(() => {
     if (activeCollection !== 'all') return null;
 
+    const featuredIds = [
+      'lead-follow-switch-love-neon',
+      'war-eagle-oversized',
+      'norcal-bestcal-golden-gate-pride'
+    ];
+
     return [
       {
         id: 'featured',
         title: 'Featured Picks',
         description: 'Best intro products and our strongest designs for the social floor.',
-        products: [
-          allProducts.find(p => p.id === 'lead-follow-switch-love-neon'),
-          allProducts.find(p => p.id === 'war-eagle-oversized'),
-          allProducts.find(p => p.id === 'norcal-bestcal-golden-gate-pride'),
-        ].filter((p): p is NonNullable<typeof p> => !!p),
+        products: featuredIds.map(id => allProducts.find(p => p.id === id)).filter((p): p is NonNullable<typeof p> => !!p),
       },
       {
         id: 'lead-follow-switch',
         title: 'Lead, Follow, and Switch Dance Shirts',
         description: 'Role-specific and gender-neutral designs for West Coast Swing dancers who lead, follow, switch, or just love the social floor.',
-        products: allProducts.filter(p => p.collections.includes('lead-follow-switch')),
+        products: allProducts.filter(p => p.collections.includes('lead-follow-switch') && !featuredIds.includes(p.id)),
       },
       {
         id: 'norcal-bestcal',
         title: 'NorCal BestCal Pride Apparel',
         description: 'Bay Area, California, Golden Gate, and bear designs representing our Northern California roots.',
-        products: allProducts.filter(p => p.collections.includes('norcal-bestcal')),
+        products: allProducts.filter(p => p.collections.includes('norcal-bestcal') && !featuredIds.includes(p.id)),
       },
       {
         id: 'rainbow-pride',
         title: 'Rainbow Pride Dance Apparel',
         description: 'Pride-focused designs celebrating an inclusive dance floor and social dance identity.',
-        products: allProducts.filter(p => p.collections.includes('rainbow-pride')),
+        products: allProducts.filter(p => p.collections.includes('rainbow-pride') && !featuredIds.includes(p.id)),
       }
     ];
   }, [activeCollection, allProducts]);
@@ -83,13 +85,14 @@ export default function Merch() {
           <Text variant="headline" size="sm" weight="font-bold" uppercase tracking="wider" color="dim">
             Shop by Style
           </Text>
-          <Box border="b" paddingBottom={2} overflowX="auto">
-            <Stack direction="row" gap={2} padding={1} minWidth="max">
+          <Box border="b" paddingBottom={2} overflowX="auto" noScrollbar>
+            <Stack direction="row" gap={2} paddingY={2} paddingX={1} minWidth="max">
               {COLLECTIONS.map((collection) => (
                 <FilterButton
                   key={collection.id}
                   label={collection.label}
                   isActive={activeCollection === collection.id}
+                  variant="compact"
                   onClick={() => setActiveCollection(collection.id)}
                 />
               ))}
