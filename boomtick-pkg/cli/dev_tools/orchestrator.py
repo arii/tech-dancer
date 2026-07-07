@@ -1770,3 +1770,154 @@ Overlapping functionality identified and resolved.
         finally:
             if changed_dir:
                 os.chdir(original_cwd)
+
+    def plan_aggregation(self, pr_numbers: List[int], target_branch: str) -> Dict[str, Any]:
+        """Generates a deterministic aggregation workflow plan for an agent."""
+        # 1. Environment Validation
+        env_res = self.runtime_check()
+        env_output = f"Runtime OK: node {env_res['node']}, pnpm {env_res['pnpm']}"
+
+        # 2. Fetch PR Metadata and Overlaps
+        pr_details = {}
+        file_to_prs = defaultdict(list)
+        pr_hunks = {}
+
+        def _extract_hunks(diff_text):
+            hunks = defaultdict(list)
+            current_file = None
+            for line in diff_text.splitlines():
+                if line.startswith("+++ b/"):
+                    current_file = line[6:]
+                elif line.startswith("@@") and current_file:
+                    m = re.search(r"\+(\d+),?(\d*)", line)
+                    if m:
+                        start = int(m.group(1))
+                        count = int(m.group(2)) if m.group(2) else 1
+                        hunks[current_file].append((start, start + count - 1))
+            return hunks
+
+        for pr_num in pr_numbers:
+            details = self.github.fetch_pr_details(pr_num)
+            pr_details[pr_num] = details
+            files = self.github.fetch_pr_files(pr_num)
+            diff = self.github.fetch_pr_diff(pr_num)
+            pr_hunks[pr_num] = _extract_hunks(diff)
+
+            pr_files = {f.get("filename") for f in files if f.get("filename")}
+            for f in pr_files:
+                file_to_prs[f].append(pr_num)
+
+        overlapping_files = {f: prs for f, prs in file_to_prs.items() if len(prs) > 1}
+
+        # 3. Detect Structural Conflicts (Line-level overlaps)
+        conflicts = []
+        for filename, prs in overlapping_files.items():
+            for i in range(len(prs)):
+                for j in range(i + 1, len(prs)):
+                    hunks1 = pr_hunks[prs[i]].get(filename, [])
+                    hunks2 = pr_hunks[prs[j]].get(filename, [])
+                    for s1, e1 in hunks1:
+                        for s2, e2 in hunks2:
+                            if max(s1, s2) <= min(e1, e2):
+                                conflicts.append({
+                                    "file": filename,
+                                    "prs": [prs[i], prs[j]],
+                                    "range": [max(s1, s2), min(e1, e2)]
+                                })
+
+        # 4. Generate Markdown Files
+        sanitized_target = target_branch.replace("/", "-")
+        workflow_plan_path = os.path.join(get_or_create_log_dir("workflows"), f"workflow-plan-aggregation-{sanitized_target}.md")
+        context_details_path = os.path.join(get_or_create_log_dir("reviews"), f"aggregation-context-{sanitized_target}.md")
+        plan_skeleton_path = os.path.join(get_or_create_log_dir("reviews"), f"aggregation-plan-{sanitized_target}.md")
+
+        # --- Workflow Plan Template ---
+        with open(workflow_plan_path, "w") as f:
+            f.write(f"""# Reviewing Aggregation Planning Guide: {target_branch}
+
+## Agent Instructions
+- setup complete
+- validation complete
+- context collected
+- overlaps identified
+
+Agent must not repeat these steps.
+
+---
+
+## Workflow State
+[x] Environment Validation
+[x] PR Context Collection
+[x] Overlap Identification
+[ ] Conflict Resolution
+[ ] Integration Verification
+[ ] Final Aggregation
+
+---
+
+## Collected Context
+### Validation Output
+```text
+{env_output}
+```
+
+### Overlap Summary
+Found {len(overlapping_files)} overlapping files and {len(conflicts)} structural conflicts across {len(pr_numbers)} PRs.
+
+---
+
+## Remaining Tasks
+### Step 1: Review Overlaps
+Examine the files listed in `aggregation-context-{sanitized_target}.md`.
+
+### Step 2: Resolve Conflicts
+Perform the merge and resolve any structural or semantic conflicts.
+
+### Step 3: Verify
+Run the validation suite to ensure the aggregated branch is stable.
+""")
+
+        # --- Context Details Template ---
+        with open(context_details_path, "w") as f:
+            f.write(f"# Aggregation Context Details: {target_branch}\n\n")
+            f.write("## Targeted PRs\n")
+            for pr_num in pr_numbers:
+                details = pr_details.get(pr_num, {})
+                f.write(f"- **PR #{pr_num}**: {details.get('title')} (@{details.get('user', {}).get('login')})\n")
+
+            f.write("\n## Overlapping Files\n")
+            if not overlapping_files:
+                f.write("No overlapping files detected.\n")
+            else:
+                for filename, prs in sorted(overlapping_files.items()):
+                    f.write(f"- `{filename}`: Changed in PRs {', '.join(f'#{p}' for p in prs)}\n")
+
+            f.write("\n## Structural Conflicts (Line Overlaps)\n")
+            if not conflicts:
+                f.write("No direct line-level conflicts detected.\n")
+            else:
+                for c in conflicts:
+                    f.write(f"- `{c['file']}`: PR #{c['prs'][0]} and PR #{c['prs'][1]} overlap at lines {c['range'][0]}-{c['range'][1]}\n")
+
+        # --- Plan Skeleton Template ---
+        with open(plan_skeleton_path, "w") as f:
+            f.write(f"""# Aggregation Plan Skeleton: {target_branch}
+
+## Integration Steps
+1. **Prepare Base**: Checkout the latest base branch.
+2. **Sequential Merge**: Merge each PR branch into the target branch.
+3. **Manual Resolution**: For each overlapping file, ensure logical consistency.
+4. **Validation**: Run `pnpm run ci:local` or equivalent.
+
+## Completion Criteria
+- All PRs successfully integrated.
+- No merge markers remain in the codebase.
+- All tests pass in the aggregated branch.
+""")
+
+        return {
+            "status": "success",
+            "plan_path": workflow_plan_path,
+            "context_path": context_details_path,
+            "skeleton_path": plan_skeleton_path
+        }
