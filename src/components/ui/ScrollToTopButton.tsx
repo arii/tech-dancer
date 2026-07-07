@@ -3,12 +3,9 @@ import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/layouts/Primitives';
 import { iconSizes } from '@/styles/design-tokens';
-import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-const scrollToTopButtonVariants = cva(
-  "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none"
-);
+const FAB_CLASSES = "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg transition-all duration-300 rounded-none";
 
 interface ScrollToTopButtonProps {
   scrollRef: RefObject<HTMLElement | null>;
@@ -64,7 +61,7 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           aria-label="Scroll to top"
           bottom={8}
           right={8}
-          className={cn(scrollToTopButtonVariants(), "transition-all duration-300")}
+          className={cn(FAB_CLASSES, "transition-all duration-300")}
           data-testid="scroll-to-top-button"
         >
           <ArrowUp size={iconSizes.lg} aria-hidden="true" />
