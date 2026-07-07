@@ -81,6 +81,28 @@ FALSE POSITIVE FILTER: No speculation. Design choices are NOT bugs.
 REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box)."""
 
 
+
+def _get_review_prompt_constants() -> tuple[str, str]:
+    import os
+    import re
+    # Determine repo root from the current file's relative path execution
+    try:
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+        ts_path = os.path.join(root_dir, 'scripts', 'lib', 'ReviewPromptConstants.ts')
+        with open(ts_path, 'r') as f:
+            ts_content = f.read()
+
+        json_match = re.search(r'export const STRICT_JSON_VERIFICATION\s*=\s*`([\s\S]*?)`;', ts_content)
+        snippet_match = re.search(r'export const SNIPPET_AND_VERIFICATION_RULES\s*=\s*`([\s\S]*?)`;', ts_content)
+
+        json_rules = json_match.group(1).replace('\\`', '`') if json_match else ""
+        snippet_rules = snippet_match.group(1).replace('\\`', '`') if snippet_match else ""
+
+        return json_rules, snippet_rules
+    except Exception as e:
+        log_warn(f"Failed to load ReviewPromptConstants.ts: {e}")
+        return "", ""
+
 class AIClient:
     def __init__(self, ai_model: str = None):
         self.ai_model = ai_model or get_ai_model()
@@ -284,6 +306,7 @@ class AIClient:
             combined_diff += f"\n\n{chunk['diff_text']}"
 
         truncation_note = ""
+        json_rules, snippet_rules = _get_review_prompt_constants()
         if is_truncated:
             truncation_note = "\nNOTE: This diff is TRUNCATED. If you need more context to be certain of an issue, state what you are missing instead of speculating.\n"
 
@@ -292,11 +315,8 @@ class AIClient:
             f'PR title: {pr_title}\n'
             f'CI status: {checks_summary}\n\n'
             f'Rules:\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Severity rules:\n'
-            f'    - High/Blocking: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.\n'
-            f'    - No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to "warn" or "info".\n'
-            f'    - Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.\n'
+            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'            f'{snippet_rules}\n\n'
+            f'{json_rules}\n\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- For file verdicts, set to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Provide an overall `reviewComment` summarizing the review.\n'
@@ -402,6 +422,7 @@ class AIClient:
         stack_versions = get_stack_versions(fetch_latest=True)
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
+        json_rules, snippet_rules = _get_review_prompt_constants()
         return (
             f'You are a strict code reviewer. Review ONLY the diff below for file "{chunk["file"]}".\n'
             f'PR title: {pr_title}\n'
@@ -410,11 +431,8 @@ class AIClient:
             f'{context_section}\n\n'
             f'Rules:\n'
             f'- DO NOT suggest downgrading any versions listed in the "Current Stack Versions" section.\n'
-            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'
-            f'- Severity rules:\n'
-            f'    - High/Blocking: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.\n'
-            f'    - No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to "warn" or "info".\n'
-            f'    - Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.\n'
+            f'- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n'            f'{snippet_rules}\n\n'
+            f'{json_rules}\n\n'
             f'- Use severity "error" for blocking issues, "warn" for improvements, "info" for nits.\n'
             f'- Set verdict to "ok" (no issues), "needs_changes" (warn/info only), or "blocking" (any error).\n'
             f'- Output ONLY valid JSON. No prose, no markdown outside the JSON.\n\n'
