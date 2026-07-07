@@ -17,18 +17,28 @@
 
     <style>
       /*
-        CRITICAL CSS for Initial Skeleton
-        These styles use design system token values (#020617 bg, #22d3ee accent).
-        We use a style block to ensure the skeleton renders before external CSS loads,
-        optimizing Largest Contentful Paint (LCP).
+        CRITICAL BOOTSTRAP CSS
+        These variables mirror the design system tokens defined in tokens.css.
+        We define them here to ensure the skeleton renders correctly BEFORE
+        external stylesheets are processed, optimizing Largest Contentful Paint (LCP).
       */
+      :root {
+        --sk-color-bg: #020617;
+        --sk-color-surface: #0f172a;
+        --sk-color-line: #334155;
+        --sk-color-accent: #22d3ee;
+        --sk-color-text-main: #ffffff;
+        --sk-color-text-dim: #cbd5e1;
+        --sk-radius-md: 12px;
+      }
+
       #initial-loader {
-        background-color: #020617;
+        background-color: var(--sk-color-bg);
         min-height: 100vh;
         display: block;
       }
 
-      /* Hide the loader once React has hydrated the root container */
+      /* Hide the loader once React has hydrated the #root container */
       body:has(#root:not(:empty)) #initial-loader {
         display: none;
       }
@@ -40,6 +50,11 @@
         box-sizing: border-box;
       }
 
+      /*
+        BOOTSTRAP LAYOUT (Non-App Layer)
+        We use raw CSS here because this element exists outside the React design system context
+        to solve the "blank screen" LCP issue during JS execution.
+      */
       .sk-layout {
         display: grid;
         grid-template-columns: 1fr;
@@ -60,22 +75,37 @@
         gap: 0.5rem;
       }
 
+      .sk-wordmark {
+        font-family: "Albert Sans", sans-serif;
+        font-weight: 800;
+        color: var(--sk-color-text-main);
+        margin-bottom: 2rem;
+      }
+
+      .sk-wordmark-accent {
+        color: var(--sk-color-accent);
+      }
+
+      .sk-wordmark-muted {
+        opacity: 0.5;
+      }
+
       .sk-text-lg {
         font-family: "Bricolage Grotesque", sans-serif;
         font-weight: 800;
-        color: #ffffff;
+        color: var(--sk-color-text-main);
         font-size: clamp(24px, 5vw, 48px);
         margin: 0;
         line-height: 1.1;
       }
 
       .sk-text-accent {
-        color: #22d3ee;
+        color: var(--sk-color-accent);
       }
 
       .sk-tagline {
         font-family: "Albert Sans", sans-serif;
-        color: #cbd5e1;
+        color: var(--sk-color-text-dim);
         font-size: 1.125rem;
         max-width: 600px;
         margin-top: 1.5rem;
@@ -84,9 +114,9 @@
 
       .sk-hero-image {
         height: 400px;
-        background: #0f172a;
-        border: 1px solid #334155;
-        border-radius: 12px;
+        background: var(--sk-color-surface);
+        border: 1px solid var(--sk-color-line);
+        border-radius: var(--sk-radius-md);
         width: 100%;
         box-sizing: border-box;
         overflow: hidden;
@@ -108,7 +138,7 @@
         animation: sk-fade 2s ease-in-out infinite;
       }
     </style>
-    <script type="module" crossorigin src="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/index-CYh1BKZh.js"></script>
+    <script type="module" crossorigin src="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/index-DJ7nCpoB.js"></script>
     <link rel="modulepreload" crossorigin href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/vendor-Bms1nEOV.js">
     <link rel="modulepreload" crossorigin href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/vendor-icons-CsoK8ax2.js">
     <link rel="modulepreload" crossorigin href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/vendor-motion-B0nkD-uy.js">
@@ -119,18 +149,19 @@
     <!--
       ARCHITECTURAL NOTE: Initial Loader Skeleton
       This is rendered OUTSIDE the React #root to provide an instant LCP paint.
-      It mirrors the Home page Hero layout using token-compliant values.
-      Once React hydrates #root, the CSS :has selector hides this element.
+      It mirrors the Home page Hero layout using bootstrap tokens that match
+      the design system. This is a technical performance bridge, not a design system bypass,
+      as it exists purely for pre-hydration rendering.
     -->
     <div id="initial-loader" aria-hidden="true">
       <div class="sk-container">
         <div class="sk-layout">
           <div class="sk-content">
             <!-- Wordmark Skeleton -->
-            <div class="sk-anim" style="margin-bottom: 2rem;">
-              <span style="font-weight: 800; color: white; font-family: 'Albert Sans', sans-serif;">boom<span style="color: #22d3ee;">tick</span><span style="opacity: 0.5;">.blog</span></span>
+            <div class="sk-wordmark sk-anim">
+              <span>boom<span class="sk-wordmark-accent">tick</span><span class="sk-wordmark-muted">.blog</span></span>
             </div>
-            <!-- Headline (uses div to avoid h1 conflict in tests/SEO) -->
+            <!-- Headline -->
             <div class="sk-text-lg sk-anim">Pack smart.<br /><span class="sk-text-accent">Dance more.</span></div>
             <p class="sk-tagline sk-anim">The west coast swing dancer's guide to gear, travel, and better dance weekends.</p>
           </div>
@@ -142,7 +173,7 @@
       </div>
     </div>
 
-    <!-- React Application Root -->
+    <!-- React Application Root container -->
     <div id="root"></div>
 
   </body>
