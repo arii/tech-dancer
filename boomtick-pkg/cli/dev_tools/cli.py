@@ -58,9 +58,9 @@ class LazyOrchestrator:
 
 
 PROJECT_CONFIG = get_config()
-DEFAULT_LIMIT = PROJECT_CONFIG.default_limit
+DEFAULT_GH_API_LIMIT = PROJECT_CONFIG.default_limit
 
-def limit_option(default_val=DEFAULT_LIMIT, help_text='Limit the number of items to process'):
+def limit_option(default_val=DEFAULT_GH_API_LIMIT, help_text='Limit the number of items to process'):
     def decorator(f):
         return click.option('--limit', type=int, default=default_val, help=help_text)(f)
     return decorator
