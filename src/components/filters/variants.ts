@@ -51,7 +51,7 @@ export const filterButtonVariants = cva(
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
 export const tagVariants = cva(
-  'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
+  'inline-flex items-center rounded-sm font-semibold uppercase tracking-wider border transition-colors',
   {
     variants: {
       variant: {

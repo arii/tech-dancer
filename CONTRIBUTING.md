@@ -13,6 +13,8 @@ All modifications to CLI tools or workspace configurations must be validated aga
 
 ### 3. Domain-Specific Variants
 To prevent global namespace pollution, component-specific or domain-specific variants (e.g., `journalVariants`, `cardVariants`) must reside in a `variants.ts` file within the component's directory. Only universal UI primitives should be defined in `src/lib/variants.ts`.
+For example, a component `MyComponent` should have its variants in `src/components/ui/MyComponent/variants.ts` and be imported as `import { myVariants } from "./variants";` within that component or `import { myVariants } from "@/components/ui/MyComponent/variants";` externally.
+
 
 ### 2. Local Test Runners
 Before submitting any changes, ensure all tests pass:
