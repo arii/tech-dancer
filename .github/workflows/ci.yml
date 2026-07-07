@@ -241,8 +241,6 @@ jobs:
     name: Validate all workflow files
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    container:
-      image: rhysd/actionlint:1.7.12
     steps:
       - name: Checkout
         uses: actions/checkout@v7 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
@@ -253,10 +251,11 @@ jobs:
         run: |
           # Ignore 'background', 'parallel', and 'wait' keywords as actionlint does
           # not yet support these new GitHub Actions features.
-          actionlint \
+          # Using docker run to avoid curl 429s and environment issues.
+          docker run --rm -v "$(pwd):/repo" -w /repo rhysd/actionlint:1.7.12 \
             -ignore 'step must run script with "run" section' \
             -ignore 'unexpected key "background"' \
             -ignore 'unexpected key "parallel"' \
             -ignore 'unexpected key "wait"' \
             -color
-        shell: sh
+        shell: bash
