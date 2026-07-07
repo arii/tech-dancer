@@ -221,6 +221,14 @@ class AIClient:
 
     # ── Single-pass review pipeline ───────────────────────────────────────────
 
+
+    def _sanitize_issue_data(self, issue: Dict) -> None:
+        if issue.get("severity") == "error" and not issue.get("counterexample"):
+            issue["counterexample"] = "No counterexample provided by AI."
+        if "counterexample" in issue and issue["counterexample"] is not None:
+            if not isinstance(issue["counterexample"], str):
+                issue["counterexample"] = str(issue["counterexample"])
+
     def generate_code_review(self, pr: Dict, diff: str) -> Dict:
         """
         Single-pass AI review pipeline leveraging large context windows.
@@ -331,13 +339,14 @@ class AIClient:
                 file_reviews = parsed.get("file_reviews", [])
 
                 # Schema validation for counterexample
-                for fr in file_reviews:
-                    for issue in fr.get("issues", []):
-                        if issue.get("severity") == "error" and not issue.get("counterexample"):
-                            issue["counterexample"] = "No counterexample provided by AI."
-                        if "counterexample" in issue and issue["counterexample"] is not None:
-                            if not isinstance(issue["counterexample"], str):
-                                issue["counterexample"] = str(issue["counterexample"])
+                if isinstance(file_reviews, list):
+                    for fr in file_reviews:
+                        if isinstance(fr, dict):
+                            issues = fr.get("issues", [])
+                            if isinstance(issues, list):
+                                for issue in issues:
+                                    if isinstance(issue, dict):
+                                        self._sanitize_issue_data(issue)
 
                 final = {
                     "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
