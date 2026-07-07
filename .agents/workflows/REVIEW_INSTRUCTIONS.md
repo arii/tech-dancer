@@ -48,18 +48,19 @@ Never label style preferences as errors.
 
 ### Review Status Mapping:
 - **Approved**: Zero violations AND all critical CI checks passing.
-- **Approved with Minor Changes**: Minor non-breaking violations (e.g., info/warn issues).
-- **Not Approved**: Architectural regressions, breaking changes (errors), major token violations, OR failing CI checks.
+- **Approved with Minor Changes**: Minor non-breaking violations (e.g., import bloat, trivial token leakage). Note: This maps to a "COMMENT" review to ensure feedback is reviewed.
+- **Not Approved**: Architectural regressions, breaking changes, major token violations, OR failing CI checks.
 
-## 5. Formatting the JSON Output
+## 5. Formatting the Output (Markdown + JSON)
 
-At the bottom of `pr-review-<PR_NUMBER>.md`, there is a JSON block. You must write your feedback strictly into this JSON structure.
+The review file uses a separated format to prevent JSON escaping issues. You must write standard Markdown at the top and a structured JSON block at the very bottom for metadata.
 
-### The JSON Schema:
+### The Metadata JSON Block:
 
 ```json
 {
-  "body": "## ANTI-AI-SLOP\n- [x] No dead abstractions\n- [x] No unnecessary indirection\n- [x] No responsibility creep\n- [x] No import bloat\n- [x] Token compliance verified\n- [x] Audit ratio satisfied\n\n## FINDINGS\n<summary of key findings and observations>\n\n## FINAL RECOMMENDATION\n<Approved | Approved with Minor Changes | Not Approved>",
+  "recommendation": "Approved | Approved with Minor Changes | Not Approved",
+  "labels": ["lgtm", "needs-changes"],
   "comments": [
     {
       "path": "src/example.tsx",
@@ -72,8 +73,9 @@ At the bottom of `pr-review-<PR_NUMBER>.md`, there is a JSON block. You must wri
 
 ### Output Rules:
 
-- **Replace Placeholders**: Replace all `<findings>`, `<summary>`, and `<Approved | ...>` placeholders with actual analysis.
-- **Always provide at least one comment** in the `comments` array.
+- **Standard Markdown Body**: Write your findings, checklist, and triage as standard Markdown at the top of the file.
+- **Flattened Schema**: The JSON block must ONLY contain metadata (`recommendation`, `labels`, `comments`). Do NOT nest the review body inside JSON.
+- **Always provide at least one comment** in the `comments` array. If no inline issues are found, add a summary comment with path `"SUMMARY"`.
 - **Line Numbers**: Every inline comment MUST have a `line` number that exists within the **Valid Comment Ranges** for that file in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON.
 
