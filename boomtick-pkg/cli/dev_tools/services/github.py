@@ -302,7 +302,8 @@ class GitHubClient:
         clean_body = re.sub(r'Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved', '', clean_body, flags=re.IGNORECASE)
         clean_body = clean_body.strip()
 
-        if len(clean_body) < 20 and not real_comments:
+        MIN_REVIEW_BODY_LENGTH = 20
+        if len(clean_body) < MIN_REVIEW_BODY_LENGTH and not real_comments:
             raise CLIError("Review rejected: No meaningful content found in body or comments (body too short).")
 
     def submit_pr_review(self, pr_number: int, filepath: str, cleanup: bool = False, dry_run: bool = True, event_override: Optional[str] = None, is_json: bool = False):
