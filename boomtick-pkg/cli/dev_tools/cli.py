@@ -637,13 +637,14 @@ def pre_submit(ctx):
 
 @gh.command()
 @click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of open PRs to process')
-@click.option('--no-cache', is_flag=True, default=False, help='Bust the cache and force fetching data from GitHub')
 @click.pass_context
-def overlaps(ctx, limit, no_cache):
+def overlaps(ctx, limit):
     """Identify and propose consolidation of PRs with high functional or structural overlap."""
     script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dev_tools', 'pr_overlap.py')
     cmd = [sys.executable, script_path, '--limit', str(limit)]
-    if no_cache:
+
+    # Check global NO_CACHE from context object
+    if ctx.obj.get('NO_CACHE'):
         cmd.append('--no-cache')
 
     try:
@@ -1033,13 +1034,14 @@ def plan_aggregation(ctx):
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
 @agent_group.command(name='run-feedback-check')
+@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of active sessions to check')
 @click.pass_context
-def run_feedback_check(ctx):
+def run_feedback_check(ctx, limit):
     """Run a one-shot Automated Agent Feedback Check to trigger CI feedback for active sessions."""
     try:
         from dev_tools.daemon import JulesFeedbackDaemon
         daemon_instance = JulesFeedbackDaemon()
-        daemon_instance.run()
+        daemon_instance.run(limit=limit)
         out(ctx, "Feedback check execution completed.", data={"status": "success"})
     except Exception as e:
         _handle_unexpected_error(ctx, "agent run-feedback-check", e)
@@ -1050,30 +1052,39 @@ def run_feedback_check(ctx):
 def context_warm(ctx, force):
     """Pre-warm the .agent-context.json repository index."""
     context_file = ".agent-context.json"
-    is_stale = True
 
-    if os.path.exists(context_file) and not force:
+    # Staleness check logic
+    is_stale = not os.path.exists(context_file) or force
+
+    if not is_stale:
         # Check if context is older than package.json or git head
         mtime = os.path.getmtime(context_file)
-        if not (os.path.exists("package.json") and os.path.getmtime("package.json") > mtime):
+        if os.path.exists("package.json") and os.path.getmtime("package.json") > mtime:
+            is_stale = True
+        else:
             try:
                 # Check if any files changed since context was generated
                 # This is a heuristic: check if any tracked files are newer than context
                 res = subprocess.run(["git", "diff", "--name-only", "HEAD"], capture_output=True, text=True)
                 is_stale = bool(res.stdout.strip())
-            except Exception:
-                pass # is_stale remains True
+            except Exception as e:
+                log_warn(f"Error checking context staleness: {e}")
+                is_stale = True
 
-    if is_stale or force:
+    if is_stale:
         log_info("🧊 Context is stale or missing. Warming up...")
         try:
             # The agent:prime script outputs to stdout, we redirect it to the file
-            script_path = "boomtick-pkg/scripts/build-repo-context.py"
+            # Use dynamic resolution if needed, but for now we follow the repo structure
+            script_path = os.path.join(os.getcwd(), "boomtick-pkg", "scripts", "build-repo-context.py")
             if not os.path.exists(script_path):
                 err(ctx, f"Context builder script not found at {script_path}")
 
             with open(context_file, "w") as f:
-                subprocess.run([sys.executable, script_path], stdout=f, check=True)
+                try:
+                    subprocess.run([sys.executable, script_path], stdout=f, check=True)
+                except subprocess.CalledProcessError as e:
+                    err(ctx, f"Context builder script failed: {e}")
 
             out(ctx, "✅ Context pre-warmed successfully.", data={"path": context_file})
         except Exception as e:

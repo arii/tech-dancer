@@ -41,10 +41,10 @@ class JulesFeedbackDaemon:
         # Ensure the orchestrator uses our extended client
         self.orchestrator.initialize_jules(self.jules)
 
-    def run(self):
+    def run(self, limit: int = 10):
         logger.info("Starting Jules Feedback Daemon")
         try:
-            sessions = self.jules.list_sessions(pageSize=50)
+            sessions = self.jules.list_sessions(pageSize=limit)
             logger.info(f"Found {len(sessions)} sessions")
         except Exception as e:
             logger.error(f"Error fetching sessions: {e}")
@@ -107,8 +107,6 @@ class JulesFeedbackDaemon:
             logger.info(f"No matching PR found for session {session_id}")
             return
 
-        logger.info(f"Matched PR #{matched_pr['number']} ({matched_pr.get('headRefName')}) for session {session_id}")
-
         try:
             messages = self.jules.get_messages(session_id)
         except Exception as e:
@@ -118,6 +116,8 @@ class JulesFeedbackDaemon:
         if not messages:
             logger.info(f"No messages for session {session_id}")
             return
+
+        logger.info(f"Matched PR #{matched_pr['number']} ({matched_pr.get('headRefName')}, {matched_pr.get('title')}) for session {session_id}")
 
         last_message = messages[-1]
         if last_message.get("role") == "user":
