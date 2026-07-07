@@ -1,3 +1,5 @@
+import { Box } from '@/layouts/Primitives';
+import { filterButtonVariants } from '@/lib/variants';
 import { cn } from '@/lib/utils';
 
 interface FilterButtonProps {
@@ -9,45 +11,31 @@ interface FilterButtonProps {
   variant?: "default" | "compact" | "quiet";
 }
 
-const variantStyles = {
-  default: "font-semibold uppercase tracking-emphasized px-4 py-3 text-xs min-h-11",
-  compact: "font-semibold uppercase tracking-emphasized px-3 py-1.5 text-xs min-h-11",
-  quiet: "px-3.5 py-2 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-line",
-};
-
-const activeStyles = {
-  default: "border-accent text-accent bg-accent/5 ring-2 ring-accent",
-  compact: "border-accent text-accent bg-accent/5 ring-2 ring-accent",
-  quiet: "bg-surface border-line text-text-main",
-};
-
-const inactiveStyles = {
-  default: "border-line text-text-dim hover:border-accent/50 hover:text-text-main",
-  compact: "border-line text-text-dim hover:border-accent/50 hover:text-text-main",
-  quiet: "bg-transparent border-transparent text-text-dim hover:text-text-main",
-};
-
-export function FilterButton({
+/**
+ * FilterButton component for collection and category filtering.
+ * Adheres to design system constraints and utilizes the Primitive system.
+ */
+export const FilterButton = ({
   label,
   onClick,
   isActive,
   className,
   type = "button",
   variant = "default"
-}: FilterButtonProps) {
+}: FilterButtonProps) => {
   return (
-    <button
+    <Box
+      as="button"
       type={type}
       onClick={onClick}
       aria-pressed={isActive}
+      radius="md"
+      cursor="pointer"
       className={cn(
-        "inline-flex items-center rounded-full border transition-all cursor-pointer",
-        variantStyles[variant],
-        isActive ? activeStyles[variant] : inactiveStyles[variant],
-        className
+        filterButtonVariants({ variant, isActive, className })
       )}
     >
       {label}
-    </button>
+    </Box>
   );
-}
+};
