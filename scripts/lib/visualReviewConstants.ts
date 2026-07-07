@@ -33,7 +33,7 @@ Treat major layout collapse as HIGH severity.
 2. Findings: Categorized with Confidence (high/medium/low).
 3. Recommendations.
 
-End with <findings> JSON block (id, route, issue, status).`;
+End with <findings> JSON block (id, route, issue, status).
 
 BoomTick Design Rules:
 - No horizontal compression.
