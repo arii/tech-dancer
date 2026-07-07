@@ -228,7 +228,7 @@ def to_standard_schema(schema):
 def call_ai(prompt: str, model: str = None, url: Optional[str] = None, max_retries: int = 3, schema = None) -> Optional[str]:
     """Unified helper to call AI API using LangChain ChatOpenAI with retries."""
 
-    token = os.getenv("GITHUB_TOKEN")
+    token = get_github_token()
     if not token:
         return None
 

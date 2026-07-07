@@ -3,7 +3,7 @@ import json
 import base64
 from typing import Optional, List, Dict
 from dev_tools.config import load_project_config
-from dev_tools.utils import log_error
+from dev_tools.utils import log_error, get_github_token
 
 
 
@@ -14,7 +14,7 @@ class VisionService:
 
     def __init__(self, model: Optional[str] = None):
         self.model = model or os.environ.get("VISION_MODEL", PROJECT_CONFIG.ai_vision_model)
-        self.token = os.getenv("GITHUB_TOKEN")
+        self.token = get_github_token()
 
     def call_ai(self, prompt: str, image_paths: List[str]) -> Optional[str]:
         """Calls the AI model with text prompt and images."""
