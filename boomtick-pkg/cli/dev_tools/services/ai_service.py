@@ -85,7 +85,7 @@ REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Ta
 def _get_review_prompt_constants() -> tuple[str, str]:
     import os
     import json
-    from dev_tools.utils import get_base_dir
+    from dev_tools.utils import get_base_dir, log_warn
 
     json_rules = ""
     snippet_rules = ""
