@@ -1794,7 +1794,7 @@ Overlapping functionality identified and resolved.
 
         # 2. Fetch PR Metadata and Overlaps
         pr_details = {}
-        file_to_prs = defaultdict(set)
+        file_to_prs: Dict[str, set[int]] = defaultdict(set)
         pr_hunks = {}
 
         for pr_num in pr_numbers:
@@ -1804,14 +1804,15 @@ Overlapping functionality identified and resolved.
             diff = self.github.fetch_pr_diff(pr_num)
             pr_hunks[pr_num] = self._extract_diff_hunks(diff)
 
-            pr_files = {f.get("filename") for f in files if f.get("filename")}
-            for f in pr_files:
-                file_to_prs[f].add(pr_num)
+            # Explicitly cast to str to satisfy type checkers
+            pr_files = {str(f.get("filename")) for f in files if f.get("filename")}
+            for filename_str in pr_files:
+                file_to_prs[filename_str].add(pr_num)
 
-        overlapping_files = {f: sorted(list(prs)) for f, prs in file_to_prs.items() if len(prs) > 1}
+        overlapping_files: Dict[str, List[int]] = {f: sorted(list(prs)) for f, prs in file_to_prs.items() if len(prs) > 1}
 
         # 3. Detect Structural Conflicts (Line-level overlaps)
-        conflicts = []
+        conflicts: List[Dict[str, Any]] = []
         for filename, prs in overlapping_files.items():
             for i in range(len(prs)):
                 for j in range(i + 1, len(prs)):
@@ -1905,7 +1906,11 @@ Run the validation suite to ensure the aggregated branch is stable.
                 f.write("No direct line-level conflicts detected.\n")
             else:
                 for c in conflicts:
-                    f.write(f"- `{c['file']}`: PR #{c['prs'][0]} and PR #{c['prs'][1]} overlap at lines {c['range'][0]}-{c['range'][1]}\n")
+                    c_file = str(c.get('file', 'unknown'))
+                    c_prs = c.get('prs', [])
+                    c_range = c.get('range', [0, 0])
+                    if len(c_prs) >= 2 and len(c_range) >= 2:
+                        f.write(f"- `{c_file}`: PR #{c_prs[0]} and PR #{c_prs[1]} overlap at lines {c_range[0]}-{c_range[1]}\n")
 
         # --- Plan Skeleton Template ---
         with open(plan_skeleton_path, "w") as f:
