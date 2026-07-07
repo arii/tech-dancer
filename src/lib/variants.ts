@@ -47,7 +47,7 @@ export const variants = {
       "shadow-sm"
     ),
     professional: cn(
-      "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90",
+      "bg-text-main text-white font-sans rounded-md hover:bg-text-main/90",
       transitions.all,
       "shadow-sm",
       interaction.activeScale,

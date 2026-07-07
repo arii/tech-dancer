@@ -1,8 +1,7 @@
 
 import { NavLink } from 'react-router-dom';
-import { Box, Text } from '@/layouts/Primitives';
+import { Box, Text, Stack } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
-import { stroke } from '@/styles/design-tokens';
 import { transitions } from '@/styles/utilities';
 import { MOBILE_NAV_ROUTES } from '@/config/routes';
 
@@ -18,20 +17,21 @@ export function MobileBottomNav() {
       display={{ lg: 'none' }}
       className="bg-surface/90 backdrop-blur-xl safe-bottom"
     >
-      <Box as="ul" display="flex" justify="around" align="center" width="full" height={16}>
+      <Stack as="ul" direction="row" justify="around" align="center" width="full" height={16}>
         {MOBILE_NAV_ROUTES.map((item) => {
           const Icon = item.icon;
           return (
             <Box as="li" key={item.path} flex={1}>
               <NavLink
                 to={item.path}
+                aria-label={item.label}
                 className={({ isActive }) => cn(
                   "flex flex-col items-center justify-center h-full tap-target",
                   transitions.colors,
                   isActive ? "text-accent" : "text-text-dim hover:text-accent"
                 )}
               >
-                <Icon className={cn("w-6 h-6", stroke.thick)} />
+                <Icon className="w-6 h-6 stroke-thick" />
                 <Text variant="mono" size="micro" weight="font-bold" marginTop={1}>
                   {item.label.split(' ')[0]}
                 </Text>
@@ -39,7 +39,7 @@ export function MobileBottomNav() {
             </Box>
           );
         })}
-      </Box>
+      </Stack>
     </Box>
   );
 }
