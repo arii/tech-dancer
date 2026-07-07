@@ -50,16 +50,56 @@ class JulesFeedbackDaemon:
             logger.error(f"Error fetching sessions: {e}")
             sys.exit(1)
 
-        # We defer PR fetching to _process_session for more targeted lookups
-        # but we use a cache to avoid re-fetching same data
         self._pr_cache = {}
+        self._session_to_pr_map = {}
+
+        # Batch pre-match sessions to PRs where possible to reduce API hits
+        self._pre_match_sessions_batch(sessions)
 
         for session in sessions:
             self._process_session(session)
 
+    def _pre_match_sessions_batch(self, sessions: List[Dict[str, Any]]):
+        """Batch search for multiple session IDs in one GitHub API call."""
+        if not sessions:
+            return
+
+        session_ids = []
+        for s in sessions:
+            sid = s.get("name", "").split('/')[-1]
+            if sid:
+                session_ids.append(sid)
+
+        if not session_ids:
+            return
+
+        # GitHub Search API query construction
+        # Example: (ID1 OR ID2 OR ID3) in:body,title state:open
+        id_query = " OR ".join([f'"{sid}"' for sid in session_ids])
+        full_query = f"({id_query}) in:body,title state:open"
+
+        try:
+            logger.info(f"Performing batch PR search for {len(session_ids)} session IDs")
+            found_prs = self.github.search_pull_requests(full_query, limit=50)
+
+            for pr in found_prs:
+                body = (pr.get('body') or "").lower()
+                title = (pr.get('title') or "").lower()
+                for sid in session_ids:
+                    if sid.lower() in body or sid.lower() in title:
+                        self._session_to_pr_map[sid] = pr
+                        # Cache the PR details as well
+                        self._pr_cache[pr['number']] = pr
+        except Exception as e:
+            logger.warning(f"Batch PR search failed, will fallback to individual lookups: {e}")
+
     def _get_pr_for_session(self, session: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Optimized PR lookup for a session."""
         session_id = session.get("name", "").replace("sessions/", "")
+
+        # 0. Check batch pre-match results
+        if session_id in self._session_to_pr_map:
+            return self._session_to_pr_map[session_id]
 
         # 1. Try metadata/outputs first if available (fastest)
         if session.get("outputs") and isinstance(session["outputs"], list):

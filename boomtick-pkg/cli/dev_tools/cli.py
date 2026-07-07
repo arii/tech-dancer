@@ -58,11 +58,16 @@ class LazyOrchestrator:
 
 
 PROJECT_CONFIG = get_config()
-DEFAULT_LIMIT = 10
+DEFAULT_LIMIT = PROJECT_CONFIG.default_limit
+
+def limit_option(default_val=DEFAULT_LIMIT, help_text='Limit the number of items to process'):
+    def decorator(f):
+        return click.option('--limit', type=int, default=default_val, help=help_text)(f)
+    return decorator
 
 # CLI Group
 @click.group()
-@click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
+@click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format')
 @click.option('--no-cache', is_flag=True, default=False, help='Bypass the disk cache for GitHub API calls')
 @click.pass_context
 def cli(ctx, json_output, no_cache):
@@ -176,7 +181,7 @@ def gh():
 
 @gh.command()
 @click.option('--state', default='open')
-@click.option('--limit', type=int, default=DEFAULT_LIMIT)
+@limit_option(help_text='Limit the number of PRs to process')
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
@@ -511,7 +516,7 @@ def post_comment(ctx, pr, file, body):
     out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
 
 @gh.command()
-@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of open PRs to process')
+@limit_option(help_text='Limit the number of open PRs to process')
 @click.pass_context
 def status_board(ctx, limit):
     orch = ctx.obj['ORCHESTRATOR']
@@ -544,7 +549,7 @@ def update_issues(ctx, dry_run):
 @click.option('--check-responses', is_flag=True)
 @click.option('--cleanup-comments', is_flag=True)
 @click.option('--dry-run/--execute', default=True)
-@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of PRs to process')
+@limit_option(help_text='Limit the number of PRs to process')
 @click.pass_context
 def manage_reviews(ctx, check_responses, cleanup_comments, dry_run, limit):
     orch = ctx.obj['ORCHESTRATOR']
@@ -636,7 +641,7 @@ def pre_submit(ctx):
     out(ctx, "Pre-submit checks complete.", data={"results": res})
 
 @gh.command()
-@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of open PRs to process')
+@limit_option(help_text='Limit the number of open PRs to process')
 @click.pass_context
 def overlaps(ctx, limit):
     """Identify and propose consolidation of PRs with high functional or structural overlap."""
@@ -898,7 +903,7 @@ def dispatch(ctx, branch, task):
 
 
 @agent_group.command()
-@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of sessions to retrieve')
+@limit_option(help_text='Limit the number of sessions to retrieve')
 @click.pass_context
 def sync(ctx, limit):
     """Sync active agent sessions."""
@@ -1034,7 +1039,7 @@ def plan_aggregation(ctx):
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
 @agent_group.command(name='run-feedback-check')
-@click.option('--limit', type=int, default=DEFAULT_LIMIT, help='Limit the number of active sessions to check')
+@limit_option(help_text='Limit the number of active sessions to check')
 @click.pass_context
 def run_feedback_check(ctx, limit):
     """Run a one-shot Automated Agent Feedback Check to trigger CI feedback for active sessions."""
@@ -1053,30 +1058,43 @@ def context_warm(ctx, force):
     """Pre-warm the .agent-context.json repository index."""
     context_file = ".agent-context.json"
 
-    # Staleness check logic
+    # Determine if the context file is stale or missing
     is_stale = not os.path.exists(context_file) or force
 
     if not is_stale:
-        # Check if context is older than package.json or git head
-        mtime = os.path.getmtime(context_file)
-        if os.path.exists("package.json") and os.path.getmtime("package.json") > mtime:
-            is_stale = True
-        else:
-            try:
-                # Check if any files changed since context was generated
-                # This is a heuristic: check if any tracked files are newer than context
-                res = subprocess.run(["git", "diff", "--name-only", "HEAD"], capture_output=True, text=True)
-                is_stale = bool(res.stdout.strip())
-            except Exception as e:
-                log_warn(f"Error checking context staleness: {e}")
+        try:
+            # Compare the last commit timestamp of the context file with the HEAD commit
+            # This handles branch switches where the working directory might be clean but context is old
+            res = subprocess.run(
+                ["git", "log", "-1", "--format=%ct", "--", context_file],
+                capture_output=True, text=True, check=True
+            )
+            context_ts = int(res.stdout.strip() or 0)
+
+            res_head = subprocess.run(
+                ["git", "log", "-1", "--format=%ct"],
+                capture_output=True, text=True, check=True
+            )
+            head_ts = int(res_head.stdout.strip() or 0)
+
+            if head_ts > context_ts:
+                is_stale = True
+            else:
+                # Also check for uncommitted changes in the working directory
+                res_diff = subprocess.run(["git", "diff", "--name-only", "HEAD"], capture_output=True, text=True, check=True)
+                is_stale = bool(res_diff.stdout.strip())
+        except Exception as e:
+            log_warn(f"Error checking context staleness via git: {e}")
+            # Fallback to simple mtime check if git fails
+            mtime = os.path.getmtime(context_file)
+            if os.path.exists("package.json") and os.path.getmtime("package.json") > mtime:
                 is_stale = True
 
     if is_stale:
         log_info("🧊 Context is stale or missing. Warming up...")
         try:
-            # The agent:prime script outputs to stdout, we redirect it to the file
-            # Use dynamic resolution if needed, but for now we follow the repo structure
-            script_path = os.path.join(os.getcwd(), "boomtick-pkg", "scripts", "build-repo-context.py")
+            # Use dynamic resolution from ProjectConfig for the context builder script
+            script_path = PROJECT_CONFIG.context_builder_script
             if not os.path.exists(script_path):
                 err(ctx, f"Context builder script not found at {script_path}")
 
@@ -1084,7 +1102,7 @@ def context_warm(ctx, force):
                 try:
                     subprocess.run([sys.executable, script_path], stdout=f, check=True)
                 except subprocess.CalledProcessError as e:
-                    err(ctx, f"Context builder script failed: {e}")
+                    err(ctx, f"Context builder script failed (exit {e.returncode}): {e.stderr or str(e)}")
 
             out(ctx, "✅ Context pre-warmed successfully.", data={"path": context_file})
         except Exception as e:
