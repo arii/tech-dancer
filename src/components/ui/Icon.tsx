@@ -1,10 +1,11 @@
 // impeccable-ignore-file
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { opacity as opacityTokens } from "@/styles/design-tokens"
+import { createVariants } from "@/lib/variants"
 
-const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
+const iconVariants = createVariants("shrink-0 inline-flex items-center justify-center", {
   variants: {
     size: {
       xs: "w-3 h-3",
@@ -29,7 +30,9 @@ const iconVariants = cva("shrink-0 inline-flex items-center justify-center", {
   },
 })
 
-export interface IconProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof iconVariants> {
+export type IconVariants = VariantProps<typeof iconVariants>;
+
+export interface IconProps extends React.HTMLAttributes<HTMLSpanElement>, IconVariants {
   icon: React.ElementType
   strokeWidth?: number
   opacityVariant?: keyof typeof opacityTokens

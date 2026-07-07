@@ -1,5 +1,6 @@
 // impeccable-ignore-file
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
+import { clsx } from "clsx";
 
 /**
  * Standardized Variant Contracts for BoomTick UI.
@@ -41,8 +42,15 @@ export const variants = {
   }
 };
 
-export const buttonVariants = cva(
-  "inline-flex items-center justify-center font-sans tracking-normal transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+/**
+ * Helper factory to wrap cva and automatically apply base transition styles.
+ */
+export const createVariants: typeof cva = (base, config) => {
+  return cva(clsx(base, "transition-all duration-200"), config as Parameters<typeof cva>[1]);
+};
+
+export const buttonVariants = createVariants(
+  "inline-flex items-center justify-center font-sans tracking-normal disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       variant: variants.emphasis,
@@ -70,11 +78,13 @@ export const buttonVariants = cva(
   }
 );
 
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
+
 /**
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
-export const actionButtonVariants = cva(
-  "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+export const actionButtonVariants = createVariants(
+  "font-bold text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -89,11 +99,13 @@ export const actionButtonVariants = cva(
   }
 );
 
+export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
+
 /**
  * Card variants for reports, tools, and callout blocks
  */
-export const cardVariants = cva(
-  "bg-surface rounded-md shadow-sm card-border transition-all",
+export const cardVariants = createVariants(
+  "bg-surface rounded-md shadow-sm card-border",
   {
     variants: {
       interactive: {
@@ -117,12 +129,14 @@ export const cardVariants = cva(
   }
 );
 
+export type CardVariants = VariantProps<typeof cardVariants>;
+
 /**
  * FilterButton variants for collection and category filtering.
  * Separates structural styles from state-specific styles.
  */
-export const filterButtonVariants = cva(
-  "inline-flex items-center justify-center border transition-all whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
+export const filterButtonVariants = createVariants(
+  "inline-flex items-center justify-center border whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
   {
     variants: {
       variant: {
@@ -164,11 +178,13 @@ export const filterButtonVariants = cva(
   }
 );
 
+export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
+
 /**
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
-export const tagVariants = cva(
-  'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
+export const tagVariants = createVariants(
+  'inline-flex items-center rounded font-semibold uppercase tracking-wider border',
   {
     variants: {
       variant: {
@@ -189,11 +205,13 @@ export const tagVariants = cva(
   }
 );
 
+export type TagVariants = VariantProps<typeof tagVariants>;
+
 /**
  * Journal/Blog specific variants for editorial consistency.
  */
 export const journalVariants = {
-  card: cva("transition-all", {
+  card: createVariants("", {
     variants: {
       variant: {
         default: "bg-surface/30 border-line/30",
@@ -209,9 +227,9 @@ export const journalVariants = {
       interactive: false
     }
   }),
-  shareAction: cva("text-text-dim hover:text-accent transition-colors group"),
-  tag: cva("border-line/50 hover:border-accent transition-colors cursor-default"),
-  navLink: cva("transition-colors group cursor-pointer", {
+  shareAction: createVariants("text-text-dim hover:text-accent group"),
+  tag: createVariants("border-line/50 hover:border-accent cursor-default"),
+  navLink: createVariants("group cursor-pointer", {
     variants: {
       active: {
         true: "text-accent",
@@ -224,11 +242,16 @@ export const journalVariants = {
   })
 };
 
+export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
+export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
+export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
+export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;
+
 /**
  * List row variants for interactive lists (e.g., Audit History)
  */
-export const listRowVariants = cva(
-  "text-left transition-all border-l-4 w-full",
+export const listRowVariants = createVariants(
+  "text-left border-l-4 w-full",
   {
     variants: {
       active: {
@@ -241,3 +264,5 @@ export const listRowVariants = cva(
     }
   }
 );
+
+export type ListRowVariants = VariantProps<typeof listRowVariants>;

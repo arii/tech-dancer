@@ -1,10 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { tagVariants } from '@/lib/variants';
-import type { VariantProps } from 'class-variance-authority';
+import { tagVariants, type TagVariants } from '@/lib/variants';
 
-type TagVariant = NonNullable<VariantProps<typeof tagVariants>['variant']>;
+type TagVariant = NonNullable<TagVariants['variant']>;
 
 interface Highlight {
   label: string;
