@@ -40,7 +40,7 @@ ${touchesUI ? '6. REACT: Stale closures, missing deps, unnecessary useEffect/use
 - warn: Maintainability/Perf regression, unnecessary complexity.
 - info: Naming, documentation, optional nits.
 
-Confidence: Every finding MUST include a confidence level (high/medium/low).
+Confidence: Every finding MUST include a confidence level (high/medium/low). Counterexamples required for errors.
 
 JSON CONTRACT: Wrap structured summary in <findings> tags.
 <findings>
