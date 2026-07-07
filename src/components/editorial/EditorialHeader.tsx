@@ -1,10 +1,10 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants, type JournalShareActionVariants, type JournalTagVariants } from '@/lib/variants';
+import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
-interface EditorialHeaderProps extends JournalShareActionVariants, JournalTagVariants {
+interface EditorialHeaderProps {
   category: string;
   date: string;
   readTime: string;

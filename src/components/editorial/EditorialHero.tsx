@@ -19,7 +19,7 @@ export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "v
       radius="md"
       overflow="hidden"
       border
-      className={journalVariants.card({ variant: variant || 'hero' })}
+      className={journalVariants.card({ variant })}
       aspect={aspectRatio}
       maxHeight={{ lg: 96 }}
     >

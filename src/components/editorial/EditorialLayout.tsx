@@ -25,12 +25,20 @@ export function EditorialLayout({
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 1000);
+      if (timeoutId) return;
+      timeoutId = setTimeout(() => {
+        setShowBackToTop(window.scrollY > 1000);
+        timeoutId = null;
+      }, 200);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   const scrollToTop = () => {

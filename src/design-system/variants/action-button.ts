@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
  * Optimized for rapid interaction with high-contrast feedback.
  */
 export const actionButtonVariants = cva(
-  "font-bold transition-all motion-safe:transition-all motion-reduce:transition-none text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  "font-bold transition-colors motion-safe:transition-colors motion-reduce:transition-none text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
   {
     variants: {
       variant: {

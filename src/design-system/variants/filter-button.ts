@@ -20,12 +20,22 @@ export const filterButtonVariants = cva(
     },
     compoundVariants: [
       {
-        variant: ["default", "compact"],
+        variant: "default",
         isActive: true,
         className: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background hover:bg-accent/10",
       },
       {
-        variant: ["default", "compact"],
+        variant: "compact",
+        isActive: true,
+        className: "border-accent text-accent bg-accent/5 ring-2 ring-accent ring-offset-2 ring-offset-background hover:bg-accent/10",
+      },
+      {
+        variant: "default",
+        isActive: false,
+        className: "border-line text-text-dim hover:border-accent/50 hover:text-text-main hover:bg-white/5",
+      },
+      {
+        variant: "compact",
         isActive: false,
         className: "border-line text-text-dim hover:border-accent/50 hover:text-text-main hover:bg-white/5",
       },

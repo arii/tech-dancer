@@ -17,7 +17,7 @@ export const journalVariants = {
       }
     },
     defaultVariants: {
-      variant: "default",
+      variant: "hero",
       interactive: false
     }
   }),
@@ -41,15 +41,6 @@ export const journalVariants = {
  */
 export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
 
-/**
- * TypeScript props for Journal Share Action variants.
- */
-export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
-
-/**
- * TypeScript props for Journal Tag variants.
- */
-export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
 
 /**
  * TypeScript props for Journal Navigation Link variants.
