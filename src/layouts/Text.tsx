@@ -3,7 +3,7 @@ import * as React from "react"
 import { forwardRef, Ref, ElementType, HTMLAttributes } from "react"
 import { cn } from "@/lib/utils"
 import { typography, typeSizes, tracking as trackingTokens, opacity as opacityTokens } from "@/styles/design-tokens"
-import { variants } from "@/lib/variants"
+import { variants } from "@/design-system/variants/shared"
 import { Box, BaseProps } from "./Box"
 import { resolveJIT, applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 

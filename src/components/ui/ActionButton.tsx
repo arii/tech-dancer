@@ -1,11 +1,11 @@
 import { ReactNode, ElementType, forwardRef, Ref } from 'react';
 import { Box, BoxProps } from '@/layouts/Primitives';
+import { actionButtonVariants, type ActionButtonVariants } from '@/lib/variants';
 import { cn } from '@/lib/utils';
 
-interface ActionButtonProps extends BoxProps {
+interface ActionButtonProps extends BoxProps, ActionButtonVariants {
   children: ReactNode;
   as?: ElementType;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'accent';
   loading?: boolean;
 }
 
@@ -25,10 +25,7 @@ export const ActionButton = forwardRef<HTMLElement, ActionButtonProps>(
         cursor="pointer"
         className={cn(
           "transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-muted disabled:cursor-not-allowed",
-          variant === 'primary' && "bg-accent text-bg hover:bg-accent/90",
-          variant === 'secondary' && "bg-surface-alt text-text-main border border-line hover:border-accent/50",
-          variant === 'accent' && "bg-accent-navy text-bg border border-accent/20 hover:bg-accent/10",
-          variant === 'ghost' && "bg-transparent text-text-dim hover:text-text-main hover:bg-line/10",
+          actionButtonVariants({ variant }),
           className
         )}
         {...props}

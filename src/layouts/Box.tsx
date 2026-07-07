@@ -2,7 +2,7 @@ import * as React from "react"
 import { forwardRef, HTMLAttributes, ElementType } from "react"
 import { cn } from "@/lib/utils"
 import { spacing, layout as layoutTokens, shadows, zIndex as zIndexTokens, opacity as opacityTokens } from "@/styles/design-tokens"
-import { variants } from "@/lib/variants"
+import { variants } from "@/design-system/variants/shared"
 import { RADIUS_MAP, SHADOW_MAP, SPAN_MAP } from "./layout-maps"
 import { resolveJIT, resolveSpacing, applyResponsive, type ResponsiveProp } from "@/lib/style-utils"
 

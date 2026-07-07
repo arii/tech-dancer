@@ -1,14 +1,12 @@
 import { Box } from '@/layouts/Primitives';
-import { filterButtonVariants } from '@/lib/variants';
+import { filterButtonVariants, type FilterButtonVariants } from '@/lib/variants';
 import { cn } from '@/lib/utils';
 
-interface FilterButtonProps {
+interface FilterButtonProps extends FilterButtonVariants {
   label: string;
   onClick: () => void;
-  isActive: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "default" | "compact" | "quiet";
 }
 
 /**
