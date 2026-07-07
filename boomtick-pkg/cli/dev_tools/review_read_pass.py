@@ -186,3 +186,14 @@ def parse_diff_into_file_chunks(diff_text: str) -> list[dict]:
     return chunks
 
 
+if __name__ == "__main__":
+    raw = sys.stdin.read()
+    chunks = parse_diff_into_file_chunks(raw)
+    reviewable = [c for c in chunks if not c["skip"]]
+    skipped = [c for c in chunks if c["skip"]]
+    print(json.dumps({
+        "total_chunks": len(chunks),
+        "reviewable": len(reviewable),
+        "skipped": len(skipped),
+        "chunks": chunks,
+    }, indent=2))
