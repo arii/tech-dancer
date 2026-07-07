@@ -1,7 +1,7 @@
 import type { CodeReviewSummary } from './codeReviewTypes';
 import { PROMPT_CATEGORIES } from './promptCategories';
 import { VISUAL_DESIGN_GUIDELINES } from './visualGuidelines';
-import { STRICT_JSON_VERIFICATION, SNIPPET_AND_VERIFICATION_RULES } from './ReviewPromptConstants';
+import { STRICT_JSON_VERIFICATION, SNIPPET_AND_VERIFICATION_RULES, REVIEW_PHILOSOPHY } from './ReviewPromptConstants';
 
 export function buildSystemPrompt(summary: CodeReviewSummary): string {
   const goalSection = summary.prGoal
@@ -78,20 +78,8 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
     roleInstruction = '\nROLE: SOFTWARE ARCHITECT. Focus on separation of concerns, feature isolation, dependency directions, and proper use of hooks vs. components.';
   }
 
-  const reviewPhilosophy = `## 1. Philosophy
-- EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
-- SCOPE: Review ONLY PR changes. Ignore pre-existing issues. Assume original code worked.
-- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
-- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.
-- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or broken by this diff. If a symbol is used but its definition is not in the context, ASSUME it is correctly defined elsewhere.
-- DO NOT hallucinate bugs in code you cannot see.
-- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
-- Do not introduce review topics unrelated to the PR's stated goal unless you find a genuine, evidence-backed regression caused by this diff.
-- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"), DO NOT fail the review solely because you cannot see the full implementation of a newly introduced module or utility. Instead, provide a WARN or PASS verdict based on what you CAN see, and explicitly state what remains unverified due to truncation.`;
-
   const repositoryRules = `## 2. Standards
 - SIMPLICITY: Prefer removal. Flag unnecessary wrappers/hooks/helpers. Reward simpler solutions.
-- ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments.
 - DESIGN SYSTEM: BANNED: raw Tailwind layout (flex, grid, px-*, etc) in TSX. Use <Stack>, <Grid>, <Box>.
 - REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.
 - Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
@@ -154,7 +142,7 @@ ${STRICT_JSON_VERIFICATION}`;
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
 
 ${goalSection}${priorStateSection}${impactSemanticContextSection}${guidelinesSection}${uiAuditInstruction}
-${reviewPhilosophy}
+${REVIEW_PHILOSOPHY}
 
 ${repositoryRules}
 

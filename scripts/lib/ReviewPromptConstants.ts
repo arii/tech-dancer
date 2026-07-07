@@ -8,3 +8,20 @@ export const SNIPPET_AND_VERIFICATION_RULES = `Snippet and verification rules:
 - STRICT SNIPPET RULE: When citing an error or anti-pattern, you MUST quote the entire, exact line from the diff in the "snippet" field. Do not truncate the line.
 - Before flagging a "syntax error" or "missing property/method", re-read the diff to confirm the code isn't simply continued on the next line or truncated in the diff chunk. Hallucinating errors due to chunk truncation is a severe failure.
 - If a line appears truncated in the diff (e.g. at the edge of a chunk), DO NOT assume it is a syntax error. Assume it is valid code that continues outside the visible context.`;
+
+export const COMMON_REVIEW_GUIDELINES = `Review ONLY PR changes. Assume original code worked.
+EVIDENCE RULE: Issue must point to exact line + explain runtime consequence.
+FALSE POSITIVE FILTER: No speculation. Design choices are NOT bugs.
+REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box).
+ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments.`;
+
+export const REVIEW_PHILOSOPHY = `## 1. Philosophy
+- EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
+- SCOPE: Review ONLY PR changes. Ignore pre-existing issues. Assume original code worked.
+- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
+- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.
+- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or broken by this diff. If a symbol is used but its definition is not in the context, ASSUME it is correctly defined elsewhere.
+- DO NOT hallucinate bugs in code you cannot see.
+- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
+- Do not introduce review topics unrelated to the PR's stated goal unless you find a genuine, evidence-backed regression caused by this diff.
+- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"), DO NOT fail the review solely because you cannot see the full implementation of a newly introduced module or utility. Instead, provide a WARN or PASS verdict based on what you CAN see, and explicitly state what remains unverified due to truncation.`;
