@@ -29,9 +29,25 @@ runs:
       if: inputs.setup-node == 'true'
       uses: actions/setup-node@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
-        cache: 'pnpm'
-        cache-dependency-path: pnpm-lock.yaml
         node-version-file: ${{ inputs.node-version-file }}
+
+    - name: Cache pnpm store
+      uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      if: inputs.setup-node == 'true'
+      with:
+        path: ~/.local/share/pnpm/store/v10
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+
+    - name: Cache pip
+      uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+      if: inputs.setup-python == 'true'
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('boomtick-pkg/cli/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
     - name: Enable Corepack
       if: inputs.setup-node == 'true'
