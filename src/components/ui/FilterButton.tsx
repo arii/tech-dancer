@@ -16,7 +16,7 @@ interface FilterButtonProps extends FilterButtonVariants {
 export const FilterButton = ({
   label,
   onClick,
-  isActive,
+  isActive = false,
   className,
   type = "button",
   variant = "default"

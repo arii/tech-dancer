@@ -9,6 +9,25 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Safely checks if a URL is safe to navigate to (prevents javascript: injection).
+ * Supports both absolute and relative paths.
+ */
+export function isSafeUrl(url: string | undefined | null): boolean {
+  if (!url) return false;
+  // Common safe prefixes
+  if (url.startsWith('/') || url.startsWith('#') || url.startsWith('mailto:') || url.startsWith('tel:')) {
+    return true;
+  }
+
+  try {
+    const parsed = new URL(url, 'http://localhost');
+    return ['http:', 'https:', 'blob:'].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Safely checks if a search term is included in a value.
  * Handles non-string values by converting them to strings and normalizes to lowercase.
  */

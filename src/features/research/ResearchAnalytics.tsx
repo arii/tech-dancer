@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, Activity, FileText, Cpu, LucideIcon, ExternalLink, Github, Globe, Clock, X, FlaskConical } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, isSafeUrl } from '@/lib/utils';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { SEO } from '@/components/SEO';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -156,7 +156,7 @@ function FlagshipCard({
           </Box>
 
           <Stack direction={{ base: "col", sm: "row" }} gap={3} marginTop="auto" width={{ base: "full", sm: "auto" }}>
-            {tool.externalUrl ? (
+            {tool.externalUrl && isSafeUrl(tool.externalUrl) ? (
               <ActionButton
                 as="a"
                 href={tool.externalUrl}
@@ -171,7 +171,7 @@ function FlagshipCard({
                 {tool.externalLinkDisplayLabel || 'Open Link'}
                 <Icon icon={ExternalLink} size="sm" />
               </ActionButton>
-            ) : tool.canonicalPath && (
+            ) : tool.canonicalPath && isSafeUrl(tool.canonicalPath) && (
               <ActionButton
                 as={Link}
                 to={tool.canonicalPath}
@@ -185,7 +185,7 @@ function FlagshipCard({
                 <Icon icon={ArrowRight} size="sm" />
               </ActionButton>
             )}
-            {tool.sourceUrl && (
+            {tool.sourceUrl && isSafeUrl(tool.sourceUrl) && (
               <ActionButton
                 as="a"
                 href={tool.sourceUrl}
@@ -215,11 +215,12 @@ interface ToolCardProps extends CardVariants {
 
 function ToolCard({ tool, navigate, interactive = true, overflow, span }: ToolCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const href = tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
-  const isLink = href.startsWith('http');
+  const rawHref = tool.canonicalPath || tool.sourceUrl || `/research/${tool.id}`;
+  const href = isSafeUrl(rawHref) ? rawHref : '#';
+  const isExternal = href.startsWith('http') || href.startsWith('//');
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isLink) {
+    if (!isExternal && href !== '#') {
       e.preventDefault();
       navigate(href);
     }
@@ -235,8 +236,8 @@ function ToolCard({ tool, navigate, interactive = true, overflow, span }: ToolCa
     <Stack
       as="a"
       href={href}
-      target={isLink ? "_blank" : undefined}
-      rel={isLink ? "noopener noreferrer" : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       onClick={handleClick}
       height="full" align="start" textAlign="left" gap={0}
       paddingTop={3.5} paddingX={4} paddingBottom={4}

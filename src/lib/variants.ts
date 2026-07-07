@@ -39,6 +39,12 @@ export const variants = {
     industrial: "rounded-[2px]",
     lg: "rounded-lg",
     xl: "rounded-xl",
+  },
+  border: {
+    default: "border-line",
+    muted: "border-line/30",
+    dim: "border-line/50",
+    accent: "border-accent/30",
   }
 };
 
@@ -105,11 +111,11 @@ export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
  * Card variants for reports, tools, and callout blocks
  */
 export const cardVariants = createVariants(
-  "bg-surface rounded-md shadow-sm card-border",
+  "bg-surface rounded-md card-border",
   {
     variants: {
       interactive: {
-        true: "hover:border-accent cursor-pointer",
+        true: "hover:border-accent/40 hover:-translate-y-0.5 cursor-pointer",
         false: "",
       },
       overflow: {
@@ -124,7 +130,7 @@ export const cardVariants = createVariants(
     },
     defaultVariants: {
       interactive: false,
-      overflow: "visible",
+      overflow: "hidden",
     }
   }
 );
@@ -228,7 +234,7 @@ export const journalVariants = {
     }
   }),
   shareAction: createVariants("text-text-dim hover:text-accent group"),
-  tag: createVariants("border-line/50 hover:border-accent cursor-default"),
+  tag: createVariants("border-line/30 hover:border-accent cursor-default"),
   navLink: createVariants("group cursor-pointer", {
     variants: {
       active: {
@@ -249,12 +255,12 @@ export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink
  * List row variants for interactive lists (e.g., Audit History)
  */
 export const listRowVariants = createVariants(
-  "text-left border-l-4 w-full",
+  "text-left border-l-4 w-full group transition-colors",
   {
     variants: {
       active: {
         true: "bg-bg border-accent",
-        false: "border-transparent hover:bg-surface",
+        false: "border-transparent hover:bg-surface/50",
       },
     },
     defaultVariants: {

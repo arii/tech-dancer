@@ -207,7 +207,7 @@ export default function ResearchDetail() {
         <Stack gap={8} align="center">
           <Search size={48} className="opacity-low" />
           <Text variant="display" size="2xl">Content Not Found</Text>
-          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors">
+          <Box as="button" onClick={() => navigate('/research')} className="hover:text-accent transition-colors" cursor="pointer">
             <Text variant="mono" size="xs">Back to Portfolio</Text>
           </Box>
         </Stack>

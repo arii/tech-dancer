@@ -4,6 +4,7 @@ import { ContentCard } from '@/components/ui/ContentCard';
 import { Stack, Text } from '@/layouts/Primitives';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { variants } from '@/lib/variants';
 
 export interface ArticleNavItem {
   title: string;
@@ -27,7 +28,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
   if (!previous && !next) return null;
 
   return (
-    <Box paddingY={12} border="t" borderColor="line" className="border-line/30">
+    <Box paddingY={12} border="t" className={variants.border.muted}>
       <Grid cols={{ base: 1, md: 2 }} gap={4}>
         <Box>
           {previous && (
@@ -36,7 +37,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 <Icon
                   icon={ArrowLeft}
                   size="sm"
-                  className="transition-transform group-hover:-translate-x-1"
+                  className="motion-safe:transition-transform motion-safe:group-hover:-translate-x-1"
                 />
                 <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
                   Previous Article
@@ -66,7 +67,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
                 <Icon
                   icon={ArrowRight}
                   size="sm"
-                  className="transition-transform group-hover:translate-x-1"
+                  className="motion-safe:transition-transform motion-safe:group-hover:translate-x-1"
                 />
               </Stack>
               <ContentCard

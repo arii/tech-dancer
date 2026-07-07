@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, Stack, BaseProps } from '@/layouts/Primitives';
-import { cn } from '@/lib/utils';
+import { cn, isSafeUrl } from '@/lib/utils';
+import { cardVariants } from '@/lib/variants';
 
 interface BaseCardProps extends Omit<BaseProps, "border"> {
   border?: boolean;
@@ -31,12 +32,13 @@ export function BaseCard({
   ...props
 }: BaseCardProps) {
   const isLink = !!(to || href);
+  const safeHref = isSafeUrl(href) ? href : undefined;
 
-  // Standardized hover and transition classes
+  // Use standardized cardVariants to ensure visual consistency
   const cardClasses = cn(
-    "group relative bg-surface transition-all duration-200",
-    border === true && "card-border",
-    isLink && "hover:-translate-y-0.5 hover:border-accent/40",
+    "group relative",
+    cardVariants({ interactive: isLink }),
+    !border && "border-none",
     className
   );
 
@@ -57,10 +59,10 @@ export function BaseCard({
           className={linkClasses}
         />
       )}
-      {href && (
+      {safeHref && (
         <Box
           as="a"
-          href={href}
+          href={safeHref}
           target="_blank"
           rel={rel || "noopener noreferrer"}
           aria-label={ariaLabel}

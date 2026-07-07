@@ -1,9 +1,8 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants, variants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
-import { cn } from '@/lib/utils';
 
 interface EditorialHeaderProps {
   category: string;
@@ -62,9 +61,8 @@ export function EditorialHeader({
         align={{ base: "start", sm: "center" }}
         gap={6}
         border="y"
-        borderColor="line"
         paddingY={8}
-        className="border-line/30"
+        className={variants.border.muted}
       >
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
@@ -96,7 +94,7 @@ export function EditorialHeader({
                 justify="center"
                 border
                 radius="sm"
-                className={cn(journalVariants.tag(), "border-line/30")}
+                className={journalVariants.tag()}
               >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>

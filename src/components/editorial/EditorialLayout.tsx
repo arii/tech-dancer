@@ -59,7 +59,7 @@ export function EditorialLayout({
             <Icon
               icon={ArrowLeft}
               size="sm"
-              className="transition-transform group-hover:-translate-x-1"
+              className="motion-safe:transition-transform motion-safe:group-hover:-translate-x-1"
             />
             <Text variant="mono" size="xs" weight="font-bold" uppercase>
               {backLabel}
