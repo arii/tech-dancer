@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /previews/
-Disallow: /404.html
-
-Sitemap: https://arii.github.io/tech-dancer/improve-ai-review-standards-6644635720755050568-13722536043922910141/sitemap.xml

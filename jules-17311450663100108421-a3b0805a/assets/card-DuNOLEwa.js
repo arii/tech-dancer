@@ -1,1 +1,0 @@
-import{c as r}from"./index-cQ7KVeiE.js";const e=r("bg-surface rounded-md shadow-sm card-border transition-all",{variants:{interactive:{true:"hover:border-accent cursor-pointer",false:""},overflow:{hidden:"overflow-hidden",visible:"overflow-visible"},span:{1:"col-span-1",2:"col-span-2",3:"col-span-3"}},defaultVariants:{interactive:!1,overflow:"visible"}});export{e as c};
