@@ -61,10 +61,15 @@ PROJECT_CONFIG = get_config()
 # CLI Group
 @click.group()
 @click.option('--json/--no-json', 'json_output', default=True, help='Output results in JSON format (default: True)')
+@click.option('--no-cache', is_flag=True, default=False, help='Bypass the disk cache for GitHub API calls')
 @click.pass_context
-def cli(ctx, json_output):
+def cli(ctx, json_output, no_cache):
     """Unified Tech-Dancer DevTools CLI"""
     ctx.ensure_object(dict)
+
+    if no_cache:
+        os.environ["TD_NO_CACHE"] = "true"
+
     # If the user explicitly passed --no-json (if supported) or we want to detect if it's a TTY
     # But for now, we follow the requirement to be JSON by default for machine consumption.
     ctx.obj['JSON'] = json_output
@@ -171,7 +176,7 @@ def gh():
 
 @gh.command()
 @click.option('--state', default='open')
-@click.option('--limit', type=int, default=100)
+@click.option('--limit', type=int, default=10)
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
@@ -506,10 +511,11 @@ def post_comment(ctx, pr, file, body):
     out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
 
 @gh.command()
+@click.option('--limit', type=int, default=10, help='Limit the number of open PRs to process')
 @click.pass_context
-def status_board(ctx):
+def status_board(ctx, limit):
     orch = ctx.obj['ORCHESTRATOR']
-    prs = orch.handle_status_board()
+    prs = orch.handle_status_board(limit=limit)
     if not ctx.obj['JSON']:
         click.echo("# Active Agent Work Board\n| Branch | Issue | Status |")
         for pr in prs:
@@ -538,10 +544,11 @@ def update_issues(ctx, dry_run):
 @click.option('--check-responses', is_flag=True)
 @click.option('--cleanup-comments', is_flag=True)
 @click.option('--dry-run/--execute', default=True)
+@click.option('--limit', type=int, default=10, help='Limit the number of PRs to process')
 @click.pass_context
-def manage_reviews(ctx, check_responses, cleanup_comments, dry_run):
+def manage_reviews(ctx, check_responses, cleanup_comments, dry_run, limit):
     orch = ctx.obj['ORCHESTRATOR']
-    prs = orch.manage_reviews(check_responses=check_responses, cleanup_comments=cleanup_comments, dry_run=dry_run)
+    prs = orch.manage_reviews(check_responses=check_responses, cleanup_comments=cleanup_comments, dry_run=dry_run, limit=limit)
     out(ctx, f"Checked {len(prs)} PRs.", data={"prs": prs})
 
 @gh.command()
@@ -629,7 +636,7 @@ def pre_submit(ctx):
     out(ctx, "Pre-submit checks complete.", data={"results": res})
 
 @gh.command()
-@click.option('--limit', type=int, default=50, help='Limit the number of open PRs to process')
+@click.option('--limit', type=int, default=10, help='Limit the number of open PRs to process')
 @click.option('--no-cache', is_flag=True, default=False, help='Bust the cache and force fetching data from GitHub')
 @click.pass_context
 def overlaps(ctx, limit, no_cache):
@@ -890,11 +897,12 @@ def dispatch(ctx, branch, task):
 
 
 @agent_group.command()
+@click.option('--limit', type=int, default=10, help='Limit the number of sessions to retrieve')
 @click.pass_context
-def sync(ctx):
+def sync(ctx, limit):
     """Sync active agent sessions."""
     orch = ctx.obj['ORCHESTRATOR']
-    sessions = orch.jules.list_sessions()
+    sessions = orch.jules.list_sessions(pageSize=limit)
 
     if not ctx.obj['JSON']:
         if not sessions:
@@ -1035,6 +1043,48 @@ def run_feedback_check(ctx):
         out(ctx, "Feedback check execution completed.", data={"status": "success"})
     except Exception as e:
         _handle_unexpected_error(ctx, "agent run-feedback-check", e)
+
+@cli.command(name='context-warm')
+@click.option('--force', is_flag=True, help='Force re-generation of context even if not stale')
+@click.pass_context
+def context_warm(ctx, force):
+    """Pre-warm the .agent-context.json repository index."""
+    context_file = ".agent-context.json"
+    is_stale = True
+
+    if os.path.exists(context_file) and not force:
+        # Check if context is older than package.json or git head
+        mtime = os.path.getmtime(context_file)
+        if os.path.exists("package.json") and os.path.getmtime("package.json") > mtime:
+            is_stale = True
+        else:
+            try:
+                # Check if any files changed since context was generated
+                # This is a heuristic: check if any tracked files are newer than context
+                res = subprocess.run(["git", "diff", "--name-only", "HEAD"], capture_output=True, text=True)
+                if res.stdout.strip():
+                    is_stale = True
+                else:
+                    is_stale = False
+            except Exception:
+                is_stale = True
+
+    if is_stale or force:
+        log_info("🧊 Context is stale or missing. Warming up...")
+        try:
+            # The agent:prime script outputs to stdout, we redirect it to the file
+            script_path = "boomtick-pkg/scripts/build-repo-context.py"
+            if not os.path.exists(script_path):
+                err(ctx, f"Context builder script not found at {script_path}")
+
+            with open(context_file, "w") as f:
+                subprocess.run([sys.executable, script_path], stdout=f, check=True)
+
+            out(ctx, "✅ Context pre-warmed successfully.", data={"path": context_file})
+        except Exception as e:
+            _handle_unexpected_error(ctx, "context-warm", e)
+    else:
+        out(ctx, "✅ Context is up-to-date.", data={"path": context_file})
 
 # Register aliases for backwards compatibility
 @cli.group(name='jules')

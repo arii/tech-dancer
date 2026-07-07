@@ -46,55 +46,62 @@ class JulesFeedbackDaemon:
         try:
             sessions = self.jules.list_sessions(pageSize=50)
             logger.info(f"Found {len(sessions)} sessions")
-
-            open_prs = self.github.list_pull_requests(state="open")
-            logger.info(f"Found {len(open_prs)} open PRs")
         except Exception as e:
-            logger.error(f"Error fetching initial data: {e}")
+            logger.error(f"Error fetching sessions: {e}")
             sys.exit(1)
 
-        # Pre-process PRs for faster lookup
-        pr_map = {}
-        for pr in open_prs:
-            pr_title = pr.get("title", "") or ""
-            pr_body = pr.get("body", "") or ""
-            pr_branch = pr.get("headRefName", "") or ""
-            pr_map[pr['number']] = {
-                'title': pr_title.lower(),
-                'body': pr_body,
-                'branch': pr_branch,
-                'raw': pr
-            }
+        # We defer PR fetching to _process_session for more targeted lookups
+        # but we use a cache to avoid re-fetching same data
+        self._pr_cache = {}
 
         for session in sessions:
-            self._process_session(session, pr_map)
+            self._process_session(session)
 
-    def _process_session(self, session: Dict[str, Any], pr_map: Dict[int, Dict[str, Any]]):
+    def _get_pr_for_session(self, session: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Optimized PR lookup for a session."""
+        session_id = session.get("name", "").replace("sessions/", "")
+
+        # 1. Try metadata/outputs first if available (fastest)
+        if session.get("outputs") and isinstance(session["outputs"], list):
+            for output in session["outputs"]:
+                if output.get("pullRequest") and output["pullRequest"].get("url"):
+                    match = re.search(r"/pull/(\d+)", output["pullRequest"]["url"])
+                    if match:
+                        pr_num = int(match.group(1))
+                        if pr_num not in self._pr_cache:
+                            self._pr_cache[pr_num] = self.github.fetch_pr_details(pr_num)
+                        return self._pr_cache[pr_num]
+
+        # 2. Try branch name from sourceContext (fast)
+        branch = None
+        if session.get("sourceContext"):
+            branch = session["sourceContext"].get("githubRepoContext", {}).get("startingBranch")
+
+        if branch:
+            # Targeted PR search by branch
+            prs = self.github.list_pull_requests(state='open') # Still need to list for branch match unless we use search API
+            # Optimization: If we have many PRs, use search API for targeted branch lookup
+            for pr in prs:
+                if pr.get("headRefName") == branch:
+                    if pr['number'] not in self._pr_cache:
+                        self._pr_cache[pr['number']] = pr
+                    return pr
+
+        # 3. Fallback to session ID in body (Batch search)
+        # Only do this if we haven't found it yet
+        prs = self.github.search_pull_requests(f'"{session_id}" state:open', limit=1)
+        if prs:
+            return prs[0]
+
+        return None
+
+    def _process_session(self, session: Dict[str, Any]):
         session_id = session.get("name", "").replace("sessions/", "")
         if not session_id:
             return
 
         logger.info(f"Processing session {session_id}")
-        prompt = session.get("prompt", "")
-        prompt_lower = prompt.lower()
-
-        matched_pr = None
-        for pr_number, pr_data in pr_map.items():
-            # Match by session ID in PR body using regex to ensure word boundaries
-            # or simply just finding it since it's a very long unique ID
-            if session_id in pr_data['body']:
-                matched_pr = pr_data['raw']
-                break
-
-            # Match by PR branch name in prompt
-            if pr_data['branch'] and pr_data['branch'] in prompt:
-                matched_pr = pr_data['raw']
-                break
-
-            # Try matching PR title as a substring of prompt or vice-versa
-            if pr_data['title'] and (pr_data['title'] in prompt_lower or prompt_lower in pr_data['title']):
-                matched_pr = pr_data['raw']
-                break
+        matched_pr = self._get_pr_for_session(session)
 
         if not matched_pr:
             logger.info(f"No matching PR found for session {session_id}")

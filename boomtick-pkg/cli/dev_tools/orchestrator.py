@@ -451,10 +451,12 @@ class Orchestrator:
             formatted.append({"prs": list(pr_pair), "files": files})
         return formatted
 
-    def handle_status_board(self) -> List[Dict[str, Any]]:
+    def handle_status_board(self, limit: int = 10) -> List[Dict[str, Any]]:
+        # Use GitHubClient for batch searching if we want caching, but here we can just use pagination limit
         repo = get_github_client().get_repo(get_repo_name())
         prs_data = []
-        for pr in repo.get_pulls(state='open'):
+        for i, pr in enumerate(repo.get_pulls(state='open')):
+            if i >= limit: break
             m = re.search(r'issue-(\d+)', pr.head.ref); issue = f"#{m.group(1)}" if m else "—"
             prs_data.append({"branch": pr.head.ref, "issue": issue, "status": "Draft" if pr.draft else "Open", "number": pr.number})
         return prs_data
@@ -913,9 +915,11 @@ Respond only after the PR is created or updated:
         if pr and not dry_run: pr.create_issue_comment(feedback)
         return {"session": session_name, "branch": branch, "feedback": feedback, "agent_name": agent_name}
 
-    def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True) -> List[Dict[str, Any]]:
+    def manage_reviews(self, check_responses: bool = False, cleanup_comments: bool = False, dry_run: bool = True, limit: int = 10) -> List[Dict[str, Any]]:
         g = get_github_client(); repo = g.get_repo(get_repo_name()); login = g.get_user().login; prs_data = []
-        for pr in repo.get_pulls(state='open', sort='updated', direction='desc'):
+        # PyGithub get_pulls returns a PaginatedList. We iterate directly with a limit to avoid full list hydration.
+        for i, pr in enumerate(repo.get_pulls(state='open', sort='updated', direction='desc')):
+            if i >= limit: break
             last_review = next((r for r in pr.get_reviews().reversed if r.user.login == login), None)
             status = "ACTION: Needs Review" if not last_review else f"ACTION: Needs Re-Review" if last_review.commit_id != pr.head.sha else "STATE: Up-To-Date"
             item = {"number": pr.number, "title": pr.title, "status": status, "unaddressed": []}
