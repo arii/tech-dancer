@@ -17,7 +17,7 @@ export function EditorialRelated({ title = "Related Guides", items, variant = 'd
   if (items.length === 0) return null;
 
   return (
-    <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
+    <Box paddingY={12} border="t" borderColor="line" className="border-line/30">
       <Stack gap={6}>
         <Text variant="mono" size="xs" color="dim" weight="font-bold" uppercase tracking="widest">
           {title}

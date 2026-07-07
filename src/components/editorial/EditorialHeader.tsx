@@ -1,10 +1,11 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants, type JournalShareActionVariants, type JournalTagVariants } from '@/lib/variants';
+import { journalVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
+import { cn } from '@/lib/utils';
 
-interface EditorialHeaderProps extends JournalShareActionVariants, JournalTagVariants {
+interface EditorialHeaderProps {
   category: string;
   date: string;
   readTime: string;
@@ -55,11 +56,20 @@ export function EditorialHeader({
         </Box>
       )}
 
-      <Stack direction={{ base: "column", sm: "row" }} justify="between" align={{ base: "start", sm: "center" }} gap={6} border="y" borderColor="line" paddingY={8} className="border-opacity-medium">
+      <Stack
+        direction={{ base: "column", sm: "row" }}
+        justify="between"
+        align={{ base: "start", sm: "center" }}
+        gap={6}
+        border="y"
+        borderColor="line"
+        paddingY={8}
+        className="border-line/30"
+      >
         <Stack direction="row" align="center" gap={4} flex={1}>
            <AuthorAvatar src={authorAvatarSrc} name={author} />
            <Stack gap={1}>
-             <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
+             <Text variant="mono" size="xs" weight="font-black" tracking="wide">BY {author.toUpperCase()}</Text>
              {onShare && (
                <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
                  <Share2 className="w-3.5 h-3.5" />
@@ -86,7 +96,7 @@ export function EditorialHeader({
                 justify="center"
                 border
                 radius="sm"
-                className={journalVariants.tag()}
+                className={cn(journalVariants.tag(), "border-line/30")}
               >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>

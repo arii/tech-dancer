@@ -27,7 +27,7 @@ export function ArticleNavigation({ previous, next }: ArticleNavigationProps) {
   if (!previous && !next) return null;
 
   return (
-    <Box paddingY={12} border="t" borderColor="line" className="border-opacity-medium">
+    <Box paddingY={12} border="t" borderColor="line" className="border-line/30">
       <Grid cols={{ base: 1, md: 2 }} gap={4}>
         <Box>
           {previous && (
