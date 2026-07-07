@@ -46,15 +46,8 @@ runs:
       uses: actions/setup-node@v6 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         node-version-file: ${{ inputs.node-version-file }}
+        cache: 'pnpm'
 
-    - name: Cache pnpm store
-      uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-      if: inputs.setup-node == 'true'
-      with:
-        path: ~/.local/share/pnpm/store/v10
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-
 
     - name: Cache pip
       uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
