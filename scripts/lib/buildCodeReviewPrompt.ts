@@ -1,6 +1,7 @@
 import type { CodeReviewSummary } from './codeReviewTypes';
 import { PROMPT_CATEGORIES } from './promptCategories';
 import { VISUAL_DESIGN_GUIDELINES } from './visualGuidelines';
+import { STRICT_JSON_VERIFICATION, SNIPPET_AND_VERIFICATION_RULES } from './ReviewPromptConstants';
 
 export function buildSystemPrompt(summary: CodeReviewSummary): string {
   const goalSection = summary.prGoal
@@ -80,12 +81,21 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
   const reviewPhilosophy = `## 1. Philosophy
 - EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
 - SCOPE: Review ONLY PR changes. Ignore pre-existing issues. Assume original code worked.
-- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.`;
+- STRICT SCOPE: Only review the lines present in the diff or the provided external context.
+- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.
+- DO NOT flag "missing" imports, types, or files unless you can prove they were deleted or broken by this diff. If a symbol is used but its definition is not in the context, ASSUME it is correctly defined elsewhere.
+- DO NOT hallucinate bugs in code you cannot see.
+- Flag security issues ONLY if this diff introduces a NEW untrusted input path (e.g. new user-controlled data flowing somewhere it wasn't before). Do not flag pre-existing patterns.
+- Do not introduce review topics unrelated to the PR's stated goal unless you find a genuine, evidence-backed regression caused by this diff.
+- If parts of the diff or external context are truncated (indicated by "[TRUNCATED]"), DO NOT fail the review solely because you cannot see the full implementation of a newly introduced module or utility. Instead, provide a WARN or PASS verdict based on what you CAN see, and explicitly state what remains unverified due to truncation.`;
 
   const repositoryRules = `## 2. Standards
 - SIMPLICITY: Prefer removal. Flag unnecessary wrappers/hooks/helpers. Reward simpler solutions.
 - DESIGN SYSTEM: BANNED: raw Tailwind layout (flex, grid, px-*, etc) in TSX. Use <Stack>, <Grid>, <Box>.
-- REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.`;
+- REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.
+- Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
+- Mandate Primitives: You MUST insist on using standard layout primitives: \`<Stack>\`, \`<Grid>\`, and \`<Box>\`.
+- Any usage of raw CSS/Tailwind for structural layout (flex/grid) in \`.tsx\` files should be flagged as a STYLE or ARCHITECTURE violation.`;
 
   const reviewChecklist = `## 3. Checklist
 ORDER: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance (O(n²)), 6. Maintainability.
@@ -99,19 +109,50 @@ ${dynamicGuidance}`;
 - warn: Non-blocking. Maintainability, performance regressions.
 - info: Style, naming, docs.
 
-Include Confidence (high/medium/low) for every issue.`;
+Include Confidence (high/medium/low) for every issue.
+
+Severity rules:
+- High/Blocking: Concerns must feature concrete code contradictions (e.g., type mismatch, nonexistent call, wrong arity, failing test). Cite exact lines.
+- No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to "Approved with Minor Changes".
+- Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.`;
 
   const outputContract = `## 5. Output
 - STRICT SNIPPET: Quote entire line from diff.
 - COUNTEREXAMPLES: Required for errors (Why it fails, Example input, Expected vs Actual).
-- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status), followed immediately by </findings>. No truncation.
+- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status, confidence, counterexample), followed immediately by </findings>. No truncation.
 
-[VERDICT: PASS | WARN | FAIL]`;
+${SNIPPET_AND_VERIFICATION_RULES}
+
+You MUST end your review with exactly one of the following strings indicating your final verdict:
+[VERDICT: PASS]
+[VERDICT: WARN]
+[VERDICT: FAIL]
+
+Use [VERDICT: FAIL] ONLY if there are blocking bugs or severe anti-patterns that you can demonstrate with evidence from the diff.
+
+The JSON must follow this schema:
+<findings>
+{
+  "findings": [
+    {
+      "id": "finding-1",
+      "file": "src/App.tsx",
+      "line": 10,
+      "snippet": "const x = 1;",
+      "issue": "Brief description of the issue",
+      "status": "open",
+      "confidence": "high",
+      "counterexample": "why it fails...",
+      "fixSummary": "Brief summary of how it was addressed"
+    }
+  ]
+}
+</findings>
+${STRICT_JSON_VERIFICATION}`;
 
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
 
 ${goalSection}${priorStateSection}${impactSemanticContextSection}${guidelinesSection}${uiAuditInstruction}
-
 ${reviewPhilosophy}
 
 ${repositoryRules}

@@ -6,6 +6,8 @@ export interface ReviewFinding {
   issue: string;
   status: 'open' | 'resolved';
   fixSummary?: string;
+  confidence?: 'high' | 'medium' | 'low';
+  counterexample?: string;
 }
 
 export interface CodeReviewState {

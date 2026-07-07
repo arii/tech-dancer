@@ -33,9 +33,41 @@ Treat major layout collapse as HIGH severity.
 2. Findings: Categorized with Confidence (high/medium/low).
 3. Recommendations.
 
-End with <findings> JSON block (id, route, issue, status).`;
+End with <findings> JSON block (id, route, issue, status).
 
-export const JSON_SCHEMA_INFO = `The JSON must follow this schema:
+BoomTick Design Rules:
+- No horizontal compression.
+- Content width should remain readable.
+- Cards must align to grid.
+- Footer must remain visible.
+- Desktop should utilize available width.
+- Ultrawide layouts should expand gracefully.
+- No giant empty regions.
+- No stacked desktop content unless viewport < 768px.
+- Research pages should maintain editorial hierarchy.
+
+Treat any major layout collapse as HIGH severity.
+
+YOUR RULES:
+- Use the provided DOM structure and text diffs as GROUND TRUTH.
+- Evaluate the changes (✅ INTENTIONAL or ❌ BUG/REGRESSION).
+- Severity rules:
+    - High/Blocking: Concerns must feature concrete visual contradictions (e.g., clipped content, broken layout). Cite exact evidence.
+    - No Speculation: If it uses "could" or "might", it is non-blocking. Downgrade to recommendations.
+    - Verification: Do not raise concerns you cannot verify. State what is needed to verify rather than assuming the worst case.
+- Provide actionable feedback.
+- If the change is intentional, evaluate its visual quality and provide recommendations for further improvement.
+
+RESPONSE FORMAT:
+1. Screenshot Assessment:
+   For every provided viewport (Desktop, Laptop, Tablet, Mobile, Ultrawide):
+   - [Pass/Fail] explaining visually what is broken if it fails. Include approximate coordinates if possible.
+2. Detailed Findings:
+   - Categorized by the rubric above.
+3. Recommendations for Improvement.
+
+You MUST end your response with a structured JSON summary of the findings inside a <findings> tag.
+The JSON must follow this schema:
 {
   "findings": [
     {
