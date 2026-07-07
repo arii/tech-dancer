@@ -1,5 +1,6 @@
 # PR Review Status
 
+- [x] PR #3375: Review all open PRs
 - [x] PR #3374: Introduce automated agent feedback daemon script
 - [x] PR #3373: chore: Introduce Python linting and type checks
 - [x] PR #3372: Design System: Localize FAB styling and track refactor tasks
