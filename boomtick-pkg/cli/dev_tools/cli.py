@@ -606,9 +606,8 @@ def doctor(ctx):
 @click.pass_context
 def verify_metrics(ctx):
     """Verify CI metrics against established thresholds."""
-    orch = ctx.obj['ORCHESTRATOR']
     try:
-        res = orch.verify_ci_metrics()
+        res = verify_ci_metrics()
         if res['status'] == 'error':
             err(ctx, res['message'], data=res)
         else:
