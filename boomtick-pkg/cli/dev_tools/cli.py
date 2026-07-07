@@ -34,21 +34,22 @@ from dev_tools.config import get_config
 
 
 class LazyOrchestrator:
-    def __init__(self, no_cache: bool = False):
-        self._instance = None
-        self._no_cache = no_cache
+    """Lazy proxy for the Orchestrator to defer heavy imports and initialization."""
+    def __init__(self, factory):
+        # Use super().__setattr__ to avoid recursion during initialization
+        super().__setattr__('_factory', factory)
+        super().__setattr__('_instance', None)
 
     def _get_instance(self):
         if self._instance is None:
-            from dev_tools.orchestrator import Orchestrator
-            self._instance = Orchestrator(no_cache=self._no_cache)
+            super().__setattr__('_instance', self._factory())
         return self._instance
 
     def __getattr__(self, name):
         return getattr(self._get_instance(), name)
 
     def __setattr__(self, name, value):
-        if name in ("_instance", "_no_cache"):
+        if name in ("_instance", "_factory"):
             super().__setattr__(name, value)
         else:
             setattr(self._get_instance(), name, value)
@@ -78,7 +79,12 @@ def cli(ctx, json_output, no_cache):
     # But for now, we follow the requirement to be JSON by default for machine consumption.
     ctx.obj['JSON'] = json_output
     ctx.obj['NO_CACHE'] = no_cache
-    ctx.obj['ORCHESTRATOR'] = LazyOrchestrator(no_cache=no_cache)
+
+    def orchestrator_factory():
+        from dev_tools.orchestrator import Orchestrator
+        return Orchestrator(no_cache=no_cache)
+
+    ctx.obj['ORCHESTRATOR'] = LazyOrchestrator(orchestrator_factory)
 
 # --- Utility Helpers ---
 def out(ctx, msg, data=None):
