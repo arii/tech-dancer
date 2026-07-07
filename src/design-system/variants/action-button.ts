@@ -1,10 +1,11 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 /**
- * Shared variants for Console-style action buttons (compact, high-contrast)
+ * Shared variants for Console-style action buttons (compact, high-contrast).
+ * Optimized for rapid interaction with high-contrast feedback.
  */
 export const actionButtonVariants = cva(
-  "font-bold transition-all text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  "font-bold transition-all motion-safe:transition-all motion-reduce:transition-none text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -19,4 +20,7 @@ export const actionButtonVariants = cva(
   }
 );
 
+/**
+ * TypeScript props for ActionButton variants derived from the CVA definition.
+ */
 export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;

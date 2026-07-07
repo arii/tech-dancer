@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * FilterButton variants for collection and category filtering.
- * Separates structural styles from state-specific styles.
+ * Separates structural styles from state-specific styles for consistent hit targets.
  */
 export const filterButtonVariants = cva(
   "inline-flex items-center justify-center border transition-all whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
@@ -47,4 +47,7 @@ export const filterButtonVariants = cva(
   }
 );
 
+/**
+ * TypeScript props for FilterButton variants derived from the CVA definition.
+ */
 export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;

@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 /**
- * Card variants for reports, tools, and callout blocks
+ * Card variants for reports, tools, and callout blocks.
+ * Standardizes elevation, interactivity, and layout grid spans.
  */
 export const cardVariants = cva(
   "bg-surface rounded-md shadow-sm card-border transition-all",
@@ -28,4 +29,7 @@ export const cardVariants = cva(
   }
 );
 
+/**
+ * TypeScript props for Card variants derived from the CVA definition.
+ */
 export type CardVariants = VariantProps<typeof cardVariants>;

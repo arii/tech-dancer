@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
+ * Supports multiple color scales and size constraints.
  */
 export const tagVariants = cva(
   'inline-flex items-center rounded font-semibold uppercase tracking-wider border transition-colors',
@@ -25,4 +26,7 @@ export const tagVariants = cva(
   }
 );
 
+/**
+ * TypeScript props for Tag variants derived from the CVA definition.
+ */
 export type TagVariants = VariantProps<typeof tagVariants>;

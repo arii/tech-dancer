@@ -20,6 +20,7 @@ export function EditorialLayout({
   children,
   sidebar,
   footer,
+  active,
 }: EditorialLayoutProps) {
   const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -53,7 +54,7 @@ export function EditorialLayout({
             onClick={onBack}
             align="center"
             gap={2}
-            className={journalVariants.navLink()}
+            className={journalVariants.navLink({ active })}
           >
             <Icon
               icon={ArrowLeft}

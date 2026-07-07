@@ -3,12 +3,12 @@ import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { tagVariants, type TagVariants } from '@/lib/variants';
 
-type TagVariant = NonNullable<TagVariants['variant']>;
+type TagVariantType = NonNullable<TagVariants['variant']>;
 
 interface Highlight {
   label: string;
   tags: string[];
-  variant: TagVariant;
+  variant: TagVariantType;
 }
 
 const HIGHLIGHTS: Highlight[] = [

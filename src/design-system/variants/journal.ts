@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 /**
  * Journal/Blog specific variants for editorial consistency.
+ * Covers cards, navigation links, and editorial tags.
  */
 export const journalVariants = {
   card: cva("transition-all", {
@@ -35,7 +36,22 @@ export const journalVariants = {
   })
 };
 
+/**
+ * TypeScript props for Journal Card variants.
+ */
 export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
+
+/**
+ * TypeScript props for Journal Share Action variants.
+ */
 export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
+
+/**
+ * TypeScript props for Journal Tag variants.
+ */
 export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
+
+/**
+ * TypeScript props for Journal Navigation Link variants.
+ */
 export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;

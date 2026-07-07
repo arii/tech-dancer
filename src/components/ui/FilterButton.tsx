@@ -18,18 +18,19 @@ export const FilterButton = ({
   onClick,
   className,
   type = "button",
-  ...variants
+  variant,
+  isActive
 }: FilterButtonProps) => {
   return (
     <Box
       as="button"
       type={type}
       onClick={onClick}
-      aria-pressed={variants.isActive || false}
+      aria-pressed={isActive || false}
       radius="md"
       cursor="pointer"
       className={cn(
-        filterButtonVariants({ ...variants, className })
+        filterButtonVariants({ variant, isActive, className })
       )}
     >
       {label}

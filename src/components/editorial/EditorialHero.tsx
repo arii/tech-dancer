@@ -12,14 +12,14 @@ interface EditorialHeroProps extends JournalCardVariants {
 /**
  * Featured hero image for blog posts with mandatory alt text for accessibility.
  */
-export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover', ...variants }: EditorialHeroProps) {
+export function EditorialHero({ src, alt, aspectRatio = { base: "square", md: "video" }, objectFit = 'cover', variant }: EditorialHeroProps) {
   return (
     <Box
       width="full"
       radius="md"
       overflow="hidden"
       border
-      className={journalVariants.card({ variant: 'hero', ...variants })}
+      className={journalVariants.card({ variant: variant || 'hero' })}
       aspect={aspectRatio}
       maxHeight={{ lg: 96 }}
     >

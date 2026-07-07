@@ -1,6 +1,10 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { variants } from "./shared";
 
+/**
+ * Global button variants following the design system's emphasis and intent scales.
+ * Includes layout, typography, and state-based transitions.
+ */
 export const buttonVariants = cva(
   "inline-flex items-center justify-center font-sans tracking-normal transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
   {
@@ -30,4 +34,7 @@ export const buttonVariants = cva(
   }
 );
 
+/**
+ * TypeScript props for Button variants derived from the CVA definition.
+ */
 export type ButtonVariants = VariantProps<typeof buttonVariants>;
