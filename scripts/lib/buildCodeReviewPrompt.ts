@@ -79,37 +79,6 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
     roleInstruction = '\nROLE: SOFTWARE ARCHITECT. Focus on separation of concerns, feature isolation, dependency directions, and proper use of hooks vs. components.';
   }
 
-  const reviewPhilosophy = `## 1. Philosophy
-- EVIDENCE RULE: Points to exact line + explain runtime consequence + explain why previous code was better. No speculation.
-- SCOPE: Review ONLY PR changes. Ignore pre-existing issues. Assume original code worked.
-- FALSE POSITIVE FILTER: Verify if it occurs at runtime. Design choices are NOT bugs.`;
-
-  const repositoryRules = `## 2. Standards
-- SIMPLICITY: Prefer removal. Flag unnecessary wrappers/hooks/helpers. Reward simpler solutions.
-- DESIGN SYSTEM: BANNED: raw Tailwind layout (flex, grid, px-*, etc) in TSX. Use <Stack>, <Grid>, <Box>.
-- REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.`;
-
-  const reviewChecklist = `## 3. Checklist
-ORDER: 1. Correctness, 2. Security (new inputs/auth only), 3. Crashes, 4. Data Integrity, 5. Performance (O(n²)), 6. Maintainability.
-
-Positive Findings: Mention improved tests, removed duplication, or reduced complexity.
-
-${dynamicGuidance}`;
-
-  const severityAndConfidence = `## 4. Severity
-- error: Blocking, high confidence only. Bugs, crashes, security.
-- warn: Non-blocking. Maintainability, performance regressions.
-- info: Style, naming, docs.
-
-Include Confidence (high/medium/low) for every issue.`;
-
-  const outputContract = `## 5. Output
-- STRICT SNIPPET: Quote entire line from diff.
-- COUNTEREXAMPLES: Required for errors (Why it fails, Example input, Expected vs Actual).
-- JSON: End with <findings> JSON block (id, file, line, snippet, issue, status), followed immediately by </findings>. No truncation.
-
-[VERDICT: PASS | WARN | FAIL]`;
-
   const basePrompt = `You are an expert software engineer and UI/UX auditor reviewing a pull request.${roleInstruction}
 Review the following code diff for bugs, anti-patterns, missing types, performance issues, and visual quality defects.
 Provide actionable feedback. Focus on HIGH severity issues.

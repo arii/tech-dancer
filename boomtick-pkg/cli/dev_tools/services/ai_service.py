@@ -84,24 +84,28 @@ REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Ta
 
 def _get_review_prompt_constants() -> tuple[str, str]:
     import os
-    import re
-    # Determine repo root from the current file's relative path execution
+    import json
+    from dev_tools.utils import get_base_dir
+
+    json_rules = ""
+    snippet_rules = ""
     try:
-        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-        ts_path = os.path.join(root_dir, 'scripts', 'lib', 'ReviewPromptConstants.ts')
-        with open(ts_path, 'r') as f:
-            ts_content = f.read()
+        # get_base_dir() returns the path to `boomtick-pkg/cli`
+        cli_dir = get_base_dir()
+        # Navigate from `boomtick-pkg/cli` to `<repo_root>/scripts/lib/ReviewPromptConstants.json`
+        json_path = os.path.join(cli_dir, '..', '..', 'scripts', 'lib', 'ReviewPromptConstants.json')
 
-        json_match = re.search(r'export const STRICT_JSON_VERIFICATION\s*=\s*`([\s\S]*?)`;', ts_content)
-        snippet_match = re.search(r'export const SNIPPET_AND_VERIFICATION_RULES\s*=\s*`([\s\S]*?)`;', ts_content)
+        with open(json_path, 'r') as f:
+            data = json.load(f)
 
-        json_rules = json_match.group(1).replace('\\`', '`') if json_match else ""
-        snippet_rules = snippet_match.group(1).replace('\\`', '`') if snippet_match else ""
+        json_rules = data.get("STRICT_JSON_VERIFICATION", "")
+        snippet_rules = data.get("SNIPPET_AND_VERIFICATION_RULES", "")
 
-        return json_rules, snippet_rules
-    except Exception as e:
-        log_warn(f"Failed to load ReviewPromptConstants.ts: {e}")
-        return "", ""
+    except Exception:
+        # Log a generic message to avoid exposing sensitive info like file paths
+        log_warn("Failed to load or parse ReviewPromptConstants.json. Using empty default rules.")
+
+    return json_rules, snippet_rules
 
 class AIClient:
     def __init__(self, ai_model: str = None):
@@ -296,14 +300,19 @@ class AIClient:
 
         # Combine diffs up to a reasonable limit (e.g. 100k chars for standard models)
         MAX_COMBINED_CHARS = 100_000
-        combined_diff = ""
+        diff_chunks = []
+        current_len = 0
         is_truncated = False
         for chunk in reviewable:
-            if len(combined_diff) + len(chunk['diff_text']) > MAX_COMBINED_CHARS:
-                combined_diff += "\n\n... (Diff truncated due to size limits)"
+            chunk_len = len(chunk['diff_text']) + 2  # for "\n\n"
+            if current_len + chunk_len > MAX_COMBINED_CHARS:
+                diff_chunks.append("\n\n... (Diff truncated due to size limits)")
                 is_truncated = True
                 break
-            combined_diff += f"\n\n{chunk['diff_text']}"
+            diff_chunks.append(f"\n\n{chunk['diff_text']}")
+            current_len += chunk_len
+
+        combined_diff = "".join(diff_chunks)
 
         truncation_note = ""
         json_rules, snippet_rules = _get_review_prompt_constants()
