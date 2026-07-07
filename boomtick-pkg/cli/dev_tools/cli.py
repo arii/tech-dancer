@@ -916,12 +916,12 @@ def comment(ctx, pr, command, comment_id):
 # ==========================================
 # AGENT COMMAND GROUP
 # ==========================================
-@cli.group(name='agent')
+@cli.group(name='agent', context_settings=dict(help_option_names=['-h', '--help']))
 def agent_group():
     """Agent Operations"""
     pass
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('branch')
 @click.argument('task')
 @click.pass_context
@@ -936,7 +936,7 @@ def dispatch(ctx, branch, task):
 
 
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.pass_context
 def sync(ctx):
     """Sync active agent sessions."""
@@ -957,7 +957,7 @@ def sync(ctx):
 
     out(ctx, "Agent sync complete.", data={"sessions": sessions})
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--pr-number', type=int)
 @click.option('--branch')
 @click.option('--api-key')
@@ -969,7 +969,7 @@ def fix_ci(ctx, pr_number, branch, api_key, dry_run):
     agent_name = res.get('agent_name', 'Jules')
     out(ctx, f"🚀 Initialized {agent_name} session for branch `{res['branch']}`", data=res)
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--log')
 @click.option('--file')
 @click.option('--pr', type=int)
@@ -979,7 +979,7 @@ def repair_context(ctx, log, file, pr):
     res = orch.repair_context(log=log, log_file=file, pr_number=pr)
     out(ctx, f"Generated {len(res)} prompts.", data={"prompts": res})
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--logs')
 @click.option('--stdin', is_flag=True)
 @click.option('--worktree', is_flag=True)
@@ -992,7 +992,7 @@ def repair(ctx, logs, stdin, worktree):
     else:
         err(ctx, res['message'], data=res)
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('session_id')
 @click.pass_context
 def cancel(ctx, session_id):
@@ -1001,7 +1001,7 @@ def cancel(ctx, session_id):
     res = orch.jules.cancel_session(session_id)
     out(ctx, f"✅ Session {session_id} cancelled", data=res)
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('session_id')
 @click.pass_context
 def get_session(ctx, session_id):
@@ -1010,7 +1010,7 @@ def get_session(ctx, session_id):
     session = orch.jules.get_session(session_id)
     out(ctx, f"Session {session_id} details retrieved", data={"session": session})
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('session_id')
 @click.pass_context
 def trigger_feedback(ctx, session_id):
@@ -1019,7 +1019,7 @@ def trigger_feedback(ctx, session_id):
     res = orch.trigger_jules_feedback(session_id)
     out(ctx, "Feedback triggered", data=res)
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('session_id')
 @click.pass_context
 def messages(ctx, session_id):
@@ -1037,7 +1037,7 @@ def messages(ctx, session_id):
                 click.echo("-" * 40)
     out(ctx, f"Messages retrieved for {session_id}", data={"messages": msgs})
 
-@agent_group.command()
+@agent_group.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('session_id')
 @click.argument('message')
 @click.pass_context
@@ -1047,7 +1047,7 @@ def send(ctx, session_id, message):
     res = orch.jules.send_message(session_id, message)
     out(ctx, f"✅ Message sent to session {session_id}", data=res)
 
-@agent_group.command(name='plan-review')
+@agent_group.command(name='plan-review', context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('--pr', 'pr_number', required=True, type=int, help='Pull Request number')
 @click.option('--issue', 'issue_number', type=int, help='Issue number')
 @click.pass_context
@@ -1060,7 +1060,7 @@ def plan_review(ctx, pr_number, issue_number):
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-review", e)
 
-@agent_group.command(name='plan-aggregation')
+@agent_group.command(name='plan-aggregation', context_settings=dict(help_option_names=['-h', '--help']))
 @click.pass_context
 def plan_aggregation(ctx):
     """Generate a deterministic aggregation workflow plan for an agent."""
@@ -1071,7 +1071,7 @@ def plan_aggregation(ctx):
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
-@agent_group.command(name='run-feedback-check')
+@agent_group.command(name='run-feedback-check', context_settings=dict(help_option_names=['-h', '--help']))
 @click.pass_context
 def run_feedback_check(ctx):
     """Run a one-shot Automated Agent Feedback Check to trigger CI feedback for active sessions."""
@@ -1102,6 +1102,11 @@ for group in [jules_group]:
     group.add_command(send)
     group.add_command(plan_review)
     group.add_command(plan_aggregation)
+
+for group in [agent_group, jules_group]:
+    group.add_command(get_session, name='session')
+    group.add_command(sync, name='list')
+    group.add_command(sync, name='list-sessions')
 
 
 def main():
