@@ -1,1 +1,0 @@
-import{j as e,B as u,b as i,am as m}from"./index-CukHDS_a.js";const l=({label:r,onClick:s,isActive:t,className:a,type:o="button",variant:n="default"})=>e.jsx(u,{as:"button",type:o,onClick:s,"aria-pressed":t,radius:"md",cursor:"pointer",className:i(m({variant:n,isActive:t,className:a})),children:r});export{l as F};
