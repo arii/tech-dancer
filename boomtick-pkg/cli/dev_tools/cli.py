@@ -505,6 +505,29 @@ def post_comment(ctx, pr, file, body):
     res = orch.post_comment(pr, content)
     out(ctx, f"✅ Successfully posted comment to PR #{pr}", data=res)
 
+@gh.command(name='read-pr-comments')
+@click.option('--pr-number', required=True, type=int, help="The PR number to fetch comments for.")
+@click.pass_context
+def read_pr_comments(ctx, pr_number):
+    """Fetch and display standard and review comments for a PR."""
+    orch = ctx.obj['ORCHESTRATOR']
+    res = orch.get_pr_comments(pr_number)
+
+    if ctx.obj['JSON']:
+        out(ctx, f"Fetched comments for PR #{pr_number}", data=res)
+    else:
+        pr = res['pr']
+        click.echo(f"PR #{pr['number']}: {pr['title']}")
+        click.echo("--- Comments ---")
+        for comment in res.get('comments', []):
+            click.echo(f"[{comment['user']}]: {comment['body']}")
+            click.echo("-" * 20)
+
+        click.echo("\n--- Review Comments ---")
+        for comment in res.get('review_comments', []):
+            click.echo(f"[{comment['user']}] in {comment['path']}:{comment.get('line')}: {comment['body']}")
+            click.echo("-" * 20)
+
 @gh.command()
 @click.pass_context
 def status_board(ctx):
