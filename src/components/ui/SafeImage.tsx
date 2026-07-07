@@ -26,19 +26,11 @@ const isSafeUrl = (url: string): boolean => {
   }
 
   try {
-    // If it's a valid absolute URL, check the protocol
-    const parsed = new URL(url);
+    // Construct a URL with a dummy base to reliably extract the protocol even for relative paths
+    const parsed = new URL(url, 'http://localhost');
     return ['http:', 'https:', 'blob:'].includes(parsed.protocol);
   } catch {
-    // If URL parsing fails (likely because it's a relative path like "image.jpg"),
-    // we check if it contains a protocol-like colon before a slash.
-    const colonIndex = url.indexOf(':');
-    const slashIndex = url.indexOf('/');
-
-    // Safe if no colon or colon appears after a slash
-    if (colonIndex === -1) return true;
-    if (slashIndex !== -1 && colonIndex > slashIndex) return true;
-
+    // If it still fails parsing, it's completely malformed
     return false;
   }
 };
@@ -53,6 +45,8 @@ const SAFE_IMAGE_ATTRS = new Set([
 
 /**
  * Whitelist of layout Primitive props.
+ * TODO: Keep this synchronized with BoxProps in `src/layouts/Box.tsx`.
+ * If new props are added to Box, they must be added here to avoid layout regressions.
  */
 const PRIMITIVE_PROPS = new Set([
   'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingX', 'paddingY',
