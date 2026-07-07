@@ -9,40 +9,57 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/svg+xml" href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/favicon.svg" />
+
+    <!-- PERFORMANCE: High-priority preload for LCP Hero image -->
     <link rel="preload" as="image" href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/home/wcs-travel-pack.webp" type="image/webp" fetchpriority="high" />
+
     <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
     <style>
+      /*
+        CRITICAL CSS for Initial Skeleton
+        These styles use design system token values (#020617 bg, #22d3ee accent).
+        We use a style block to ensure the skeleton renders before external CSS loads,
+        optimizing Largest Contentful Paint (LCP).
+      */
       #initial-loader {
         background-color: #020617;
         min-height: 100vh;
         display: block;
       }
+
+      /* Hide the loader once React has hydrated the root container */
       body:has(#root:not(:empty)) #initial-loader {
         display: none;
       }
+
       .sk-container {
         padding: 2rem;
         max-width: 1240px;
         margin: 0 auto;
         box-sizing: border-box;
       }
+
       .sk-layout {
         display: grid;
         grid-template-columns: 1fr;
         gap: 2rem;
         align-items: center;
       }
+
       @media (min-width: 1024px) {
         .sk-layout {
           grid-template-columns: minmax(0, 1fr) 420px;
           margin-top: 2rem;
         }
       }
+
       .sk-content {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
       }
+
       .sk-text-lg {
         font-family: "Bricolage Grotesque", sans-serif;
         font-weight: 800;
@@ -51,9 +68,11 @@
         margin: 0;
         line-height: 1.1;
       }
+
       .sk-text-accent {
         color: #22d3ee;
       }
+
       .sk-tagline {
         font-family: "Albert Sans", sans-serif;
         color: #cbd5e1;
@@ -62,6 +81,7 @@
         margin-top: 1.5rem;
         opacity: 0.8;
       }
+
       .sk-hero-image {
         height: 400px;
         background: #0f172a;
@@ -71,21 +91,24 @@
         box-sizing: border-box;
         overflow: hidden;
       }
+
       .sk-hero-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         opacity: 0.4;
       }
+
       @keyframes sk-fade {
         0%, 100% { opacity: 0.6; }
         50% { opacity: 1; }
       }
+
       .sk-anim {
         animation: sk-fade 2s ease-in-out infinite;
       }
     </style>
-    <script type="module" crossorigin src="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/index-BomRmGUZ.js"></script>
+    <script type="module" crossorigin src="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/index-CYh1BKZh.js"></script>
     <link rel="modulepreload" crossorigin href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/vendor-Bms1nEOV.js">
     <link rel="modulepreload" crossorigin href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/vendor-icons-CsoK8ax2.js">
     <link rel="modulepreload" crossorigin href="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/vendor-motion-B0nkD-uy.js">
@@ -93,22 +116,34 @@
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
   </head>
   <body>
-    <div id="initial-loader">
+    <!--
+      ARCHITECTURAL NOTE: Initial Loader Skeleton
+      This is rendered OUTSIDE the React #root to provide an instant LCP paint.
+      It mirrors the Home page Hero layout using token-compliant values.
+      Once React hydrates #root, the CSS :has selector hides this element.
+    -->
+    <div id="initial-loader" aria-hidden="true">
       <div class="sk-container">
         <div class="sk-layout">
           <div class="sk-content">
+            <!-- Wordmark Skeleton -->
             <div class="sk-anim" style="margin-bottom: 2rem;">
               <span style="font-weight: 800; color: white; font-family: 'Albert Sans', sans-serif;">boom<span style="color: #22d3ee;">tick</span><span style="opacity: 0.5;">.blog</span></span>
             </div>
+            <!-- Headline (uses div to avoid h1 conflict in tests/SEO) -->
             <div class="sk-text-lg sk-anim">Pack smart.<br /><span class="sk-text-accent">Dance more.</span></div>
             <p class="sk-tagline sk-anim">The west coast swing dancer's guide to gear, travel, and better dance weekends.</p>
           </div>
+          <!-- Hero Image Skeleton -->
           <div class="sk-hero-image sk-anim">
              <img src="/tech-dancer/perf/lcp-optimization-and-bundle-splitting-16510492462418256717/assets/home/wcs-travel-pack.webp" alt="" fetchpriority="high" />
           </div>
         </div>
       </div>
     </div>
+
+    <!-- React Application Root -->
     <div id="root"></div>
+
   </body>
 </html>
