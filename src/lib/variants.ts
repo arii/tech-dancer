@@ -108,7 +108,8 @@ export const actionButtonVariants = cva(
   cn(
     "font-bold",
     transitions.all,
-    "text-sm shrink-0 flex items-center gap-2 disabled:opacity-50"
+    "text-sm shrink-0 flex items-center gap-2",
+    interaction.disabled
   ),
   {
     variants: {

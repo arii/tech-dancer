@@ -23,7 +23,7 @@ export const interaction = {
 export const typography = {
   // Shared typographic patterns
   label: "text-sm font-bold tracking-wide",
-  tag: "text-xs font-semibold uppercase tracking-wider",
+  tag: "font-semibold uppercase tracking-wider",
 } as const;
 
 export const shapes = {
