@@ -85,7 +85,8 @@ Before suggesting an implementation, verify if it already exists:
 
 - **hallucinating PR Numbers**: Always use the PR number provided in the prompt.
 - **Out-of-range comments**: Comments on lines not in the diff cause 422 errors.
-- **Empty payloads**: Never submit a review with empty findings or placeholders.
+- **Empty payloads**: Never submit a review with empty findings or placeholders. A review body containing only "Review", "LGTM", or similar boilerplate is considered an empty payload and will be rejected.
+- **Overriding human rejections**: You MUST respect human PR rejections or blocking reviews. Never override or clear them by submitting automated approvals or empty review comments.
 
 ## 8. Tooling Guidelines
 

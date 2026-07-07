@@ -43,6 +43,8 @@ Read the matching workflow before starting these task types:
 - Change the Node.js or pnpm runtime versions without explicit instruction.
 - Delete `pnpm-lock.yaml`.
 - Add `use-node-version` to `.npmrc`.
+- Submit empty, contentless, or boilerplate code reviews (e.g., just posting "Review" or "LGTM").
+- Override or clear human PR rejections or blocking reviews with automated approvals or contentless comments.
 
 ---
 

@@ -302,8 +302,11 @@ class GitHubClient:
         clean_body = re.sub(r'Approved\s*\|\s*Approved\s*with\s*Minor\s*Changes\s*\|\s*Not\s*Approved', '', clean_body, flags=re.IGNORECASE)
         clean_body = clean_body.strip()
 
+        if clean_body.lower() in ["review", "lgtm", "looks good to me"]:
+            clean_body = ""
+
         if not clean_body and not real_comments:
-            raise CLIError("Review rejected: No meaningful content found in body or comments.")
+            raise CLIError("Review rejected: No meaningful content found in body or comments (only boilerplate like 'Review' or 'LGTM').")
 
     def submit_pr_review(self, pr_number: int, filepath: str, cleanup: bool = False, dry_run: bool = True, event_override: Optional[str] = None, is_json: bool = False):
         """
