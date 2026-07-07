@@ -1,7 +1,7 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants } from '@/components/editorial/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
 interface EditorialHeaderProps {

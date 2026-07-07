@@ -1,8 +1,24 @@
 import { useState, useEffect, RefObject } from "react";
 import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Button } from '@/layouts/Primitives';
+import { Box } from '@/layouts/Primitives';
 import { iconSizes } from '@/styles/design-tokens';
+import { cva } from "class-variance-authority";
+
+const fabVariants = cva(
+  "inline-flex items-center justify-center font-sans tracking-normal transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg rounded-none active:scale-tap",
+  {
+    variants: {
+      size: {
+        default: "h-10 px-6 text-xs",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      size: "icon",
+    },
+  }
+);
 
 interface ScrollToTopButtonProps {
   scrollRef: RefObject<HTMLElement | null>;
@@ -44,13 +60,11 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
   return (
     <AnimatePresence>
       {isVisible && (
-        <Button
+        <Box
           as={motion.button}
           onClick={scrollToTop}
           position="fixed"
-          padding={3}
           zIndex="popover"
-          variant="fab"
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
@@ -59,11 +73,11 @@ export function ScrollToTopButton({ scrollRef }: ScrollToTopButtonProps) {
           aria-label="Scroll to top"
           bottom={8}
           right={8}
-          className="transition-all duration-300"
+          className={fabVariants()}
           data-testid="scroll-to-top-button"
         >
           <ArrowUp size={iconSizes.lg} aria-hidden="true" />
-        </Button>
+        </Box>
       )}
     </AnimatePresence>
   );

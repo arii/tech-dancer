@@ -1,6 +1,6 @@
 import { Box } from '@/layouts/Primitives';
 import { ProductImageFrame } from '@/components/ui/ProductImageFrame';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants } from '@/components/editorial/variants';
 
 interface EditorialHeroProps {
   src: string;

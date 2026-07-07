@@ -4,9 +4,28 @@ import { ChevronRight } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { readingTime } from '@/lib/content';
 import { CategoryPlaceholder } from '@/components/ui/CategoryPlaceholder';
+import { cva } from "class-variance-authority";
 import { pickRest } from '@/lib/utils';
 import { CONTENT_METADATA_KEYS } from '@/lib/constants';
 import { affiliateManager } from '@/lib/affiliateManager';
+
+/**
+ * List row variants for interactive lists (e.g., Audit History)
+ */
+export const listRowVariants = cva(
+  "text-left transition-all border-l-4 w-full",
+  {
+    variants: {
+      active: {
+        true: "bg-bg border-accent",
+        false: "border-transparent hover:bg-surface",
+      },
+    },
+    defaultVariants: {
+      active: false,
+    }
+  }
+);
 
 interface ListRowProps {
   slug: string;

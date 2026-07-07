@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from 'react';
 import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
 import { Icon } from '@/components/ui/Icon';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants } from '@/components/editorial/variants';
 
 interface EditorialLayoutProps {
   onBack: () => void;
