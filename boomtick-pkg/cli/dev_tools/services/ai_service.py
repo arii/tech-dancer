@@ -47,8 +47,7 @@ _REVIEW_SCHEMA = {
                                 "line": {"type": "integer"},
                                 "severity": {"type": "string"},
                                 "comment": {"type": "string"},
-                                "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
-                                "counterexample": {"type": "string"},
+                                "confidence": {"type": "string"},
                             },
                             "required": ["line", "severity", "comment", "confidence"],
                         }
@@ -79,30 +78,9 @@ _SYNTHESIS_SCHEMA = {
 _COMMON_REVIEW_GUIDELINES = """Review ONLY PR changes. Assume original code worked.
 EVIDENCE RULE: Issue must point to exact line + explain runtime consequence.
 FALSE POSITIVE FILTER: No speculation. Design choices are NOT bugs.
-REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box)."""
+REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box).
+ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments."""
 
-
-
-def _get_review_prompt_constants() -> tuple[str, str]:
-    import os
-    import re
-    # Determine repo root from the current file's relative path execution
-    try:
-        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-        ts_path = os.path.join(root_dir, 'scripts', 'lib', 'ReviewPromptConstants.ts')
-        with open(ts_path, 'r') as f:
-            ts_content = f.read()
-
-        json_match = re.search(r'export const STRICT_JSON_VERIFICATION\s*=\s*`([\s\S]*?)`;', ts_content)
-        snippet_match = re.search(r'export const SNIPPET_AND_VERIFICATION_RULES\s*=\s*`([\s\S]*?)`;', ts_content)
-
-        json_rules = json_match.group(1).replace('\\`', '`') if json_match else ""
-        snippet_rules = snippet_match.group(1).replace('\\`', '`') if snippet_match else ""
-
-        return json_rules, snippet_rules
-    except Exception as e:
-        log_warn(f"Failed to load ReviewPromptConstants.ts: {e}")
-        return "", ""
 
 class AIClient:
     def __init__(self, ai_model: str = None):
@@ -307,7 +285,6 @@ class AIClient:
             combined_diff += f"\n\n{chunk['diff_text']}"
 
         truncation_note = ""
-        json_rules, snippet_rules = _get_review_prompt_constants()
         if is_truncated:
             truncation_note = "\nNOTE: This diff is TRUNCATED. If you need more context to be certain of an issue, state what you are missing instead of speculating.\n"
 
@@ -316,15 +293,6 @@ class AIClient:
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
             "ORDER: Correctness, Security (new input/auth only), Crashes, Data Integrity, Performance, Maintainability.\n"
             "SEVERITY: error (blocking, high confidence only), warn, info. Include 'confidence' (high/medium/low).\n"
-            f"Rules:\n"
-            f"- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n"
-            f"{snippet_rules}\n\n"
-            f"{json_rules}\n\n"
-            f"- Use severity \"error\" for blocking issues, \"warn\" for improvements, \"info\" for nits.\n"
-            f"- For file verdicts, set to \"ok\" (no issues), \"needs_changes\" (warn/info only), or \"blocking\" (any error).\n"
-            f"- Provide an overall `reviewComment` summarizing the review.\n"
-            f"- Suggest 1-3 `labels` (e.g. \"needs-changes\", \"lgtm\", \"ci-failing\").\n"
-            f"- Set overall `recommendation` to EXACTLY ONE of: \"Approved\", \"Approved with Minor Changes\", or \"Not Approved\".\n"
             "OUTPUT: Valid JSON. Counterexamples required for errors.\n"
             "JSON MUST be inside a <findings> tag.\n\n"
             f"{truncation_note}Diff:\n{combined_diff}"
@@ -426,18 +394,12 @@ class AIClient:
         stack_versions = get_stack_versions(fetch_latest=True)
         versions_block = "\n".join([f"- {k}: {v}" for k, v in stack_versions.items()])
 
-        json_rules, snippet_rules = _get_review_prompt_constants()
         return (
             f"Review {chunk['file']}. PR: {pr_title}. CI: {checks_summary}\n"
             f"VERSIONS: {versions_block}\n{context_section}\n\n"
             f"{_COMMON_REVIEW_GUIDELINES}\n\n"
-            f"Rules:\n"
-            f"- DO NOT suggest downgrading any versions listed in the \"Current Stack Versions\" section.\n"
-            f"- Flag ONLY real problems: bugs, type unsafety, broken logic, design rule violations.\n"
-            f"{snippet_rules}\n\n"
-            f"{json_rules}\n\n"
-            f"- Use severity \"error\" for blocking issues, \"warn\" for improvements, \"info\" for nits.\n"
-            f"- Set verdict to \"ok\" (no issues), \"needs_changes\" (warn/info only), or \"blocking\" (any error).\n"
+            "ORDER: Correctness > Security > Performance > Maintainability.\n"
+            "SEVERITY: error/warn/info. confidence: high/medium/low.\n"
             "OUTPUT: Valid JSON. Counterexamples required for errors.\n"
             "JSON MUST be inside a <findings> tag.\n\n"
             f"Diff:{trunc_note}\n{chunk['diff_text']}"

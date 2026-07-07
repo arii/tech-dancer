@@ -91,6 +91,7 @@ ${matchedCategories.map(cat => cat.guidance).join('\n\n')}
 
   const repositoryRules = `## 2. Standards
 - SIMPLICITY: Prefer removal. Flag unnecessary wrappers/hooks/helpers. Reward simpler solutions.
+- ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments.
 - DESIGN SYSTEM: BANNED: raw Tailwind layout (flex, grid, px-*, etc) in TSX. Use <Stack>, <Grid>, <Box>.
 - REPO PATTERNS: Use existing utilities/tokens. Avoid duplicate GitHub/MCP functionality.
 - Catch Design System Bypasses: Audit for raw Tailwind layout classes (e.g., \`flex\`, \`grid\`, \`px-4\`, \`py-2\`, \`gap-4\`). These are BANNED in app layers.
