@@ -11,7 +11,7 @@ import { BaseCard } from '@/components/ui/BaseCard';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { useResearch } from './useResearch';
-import { cardVariants } from '@/lib/variants';
+import { cardVariants } from '@/components/lists/variants';
 import { ResearchTool } from '@/config/research-tools';
 import { SOCIAL_LINKS } from '@/config/constants';
 

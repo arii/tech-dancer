@@ -11,6 +11,9 @@ All modifications to CLI tools or workspace configurations must be validated aga
 - **CLI Commands**: `boomtick-pkg/cli/dev_tools/cli-schema.json`
 - **Workspace Config**: `boomtick-pkg/workspace-schema.json`
 
+### 3. Domain-Specific Variants
+To prevent global namespace pollution, component-specific or domain-specific variants (e.g., `journalVariants`, `cardVariants`) must reside in a `variants.ts` file within the component's directory. Only universal UI primitives should be defined in `src/lib/variants.ts`.
+
 ### 2. Local Test Runners
 Before submitting any changes, ensure all tests pass:
 

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Terminal } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
-import { tagVariants } from '@/lib/variants';
+import { tagVariants } from '@/components/filters/variants';
 import type { VariantProps } from 'class-variance-authority';
 
 type TagVariant = NonNullable<VariantProps<typeof tagVariants>['variant']>;

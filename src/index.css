@@ -228,6 +228,12 @@
   z-index: 100;
 }
 
+@utility scale-tap {
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -524,6 +530,11 @@
 }
 
 @utility scroll-mask-fade {
+  mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+}
+
+}
   mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
 }

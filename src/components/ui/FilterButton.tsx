@@ -1,5 +1,5 @@
 import { Box } from '@/layouts/Primitives';
-import { filterButtonVariants } from '@/lib/variants';
+import { filterButtonVariants } from '@/components/filters/variants';
 import { cn } from '@/lib/utils';
 
 interface FilterButtonProps {
