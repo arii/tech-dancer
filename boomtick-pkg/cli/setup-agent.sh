@@ -195,7 +195,8 @@ install_python_deps() {
   have python3 || err "python3 is required."
   log "Installing Python dependencies for dev tools..."
   python3 -m pip --version || err "pip is required."
-  pip_install --root-user-action=ignore --upgrade pip setuptools wheel
+  # satisfy boomtick-cli / torch requirement of setuptools < 81/82
+  pip_install --root-user-action=ignore --upgrade pip "setuptools<81.0.0" wheel
 
   if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
     (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
