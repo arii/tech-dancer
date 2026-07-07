@@ -32,6 +32,10 @@ PNPM_VERSION="${PNPM_VERSION:-10.28.2}"
 NODE_MAJOR="${NODE_MAJOR:-24}"
 SKIP_APT="${SKIP_APT:-0}"
 SKIP_PLAYWRIGHT="${SKIP_PLAYWRIGHT:-0}"
+SKIP_NODE_DEPS="${SKIP_NODE_DEPS:-0}"
+SKIP_ETL_DEPS="${SKIP_ETL_DEPS:-0}"
+SKIP_GH_INSTALL="${SKIP_GH_INSTALL:-0}"
+SKIP_NODE_INSTALL="${SKIP_NODE_INSTALL:-0}"
 SKIP_VALIDATION="${SKIP_VALIDATION:-0}"
 SKIP_REMOTE_CONFIG="${SKIP_REMOTE_CONFIG:-0}"
 
@@ -75,10 +79,11 @@ run_sudo() {
 pip_install() {
   # Ubuntu/Debian images may enable PEP 668. Try normal install first, then the
   # distro-compatible override, without masking genuine package errors.
-  if python3 -m pip install --disable-pip-version-check "$@"; then
+  # Use a 600s timeout to prevent hangs while allowing for slow networks.
+  if timeout 600 python3 -m pip install --disable-pip-version-check "$@"; then
     return 0
   fi
-  python3 -m pip install --disable-pip-version-check --break-system-packages "$@"
+  timeout 600 python3 -m pip install --disable-pip-version-check --break-system-packages "$@"
 }
 
 # -------- install steps --------
@@ -92,14 +97,22 @@ install_apt_tools() {
     return 0
   fi
 
-  log "Installing system tools..."
-  timeout 60 run_sudo apt-get update -y || return 0
-  timeout 120 run_sudo apt-get install -y \
-    ca-certificates curl git jq unzip xz-utils gpg \
-    python3 python3-pip python3-venv python3-setuptools python3-wheel \
-    build-essential || warn "Some OS packages could not be installed. Continuing with available tools."
+  local missing=()
+  for pkg in curl git jq unzip xz-utils gpg python3 python3-pip python3-venv python3-setuptools python3-wheel build-essential; do
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+      missing+=("$pkg")
+    fi
+  done
 
-  if ! have gh; then
+  if [ ${#missing[@]} -eq 0 ]; then
+    log "All core system tools already installed."
+  else
+    log "Installing missing system tools: ${missing[*]}"
+    timeout 300 run_sudo apt-get update -y || return 0
+    timeout 600 run_sudo apt-get install -y ca-certificates "${missing[@]}" || warn "Some OS packages could not be installed. Continuing with available tools."
+  fi
+
+  if ! have gh && [ "$SKIP_GH_INSTALL" != "1" ]; then
     log "Installing GitHub CLI (gh)..."
     # Ensure /usr/share/keyrings exists as a standard location for system keyrings
     if run_sudo mkdir -p /usr/share/keyrings; then
@@ -108,19 +121,19 @@ install_apt_tools() {
       run_sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg || true
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
         | run_sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null || true
-      timeout 60 run_sudo apt-get update -y || true
-      timeout 60 run_sudo apt-get install -y gh || warn "Unable to install gh; continuing."
+      timeout 300 run_sudo apt-get update -y || true
+      timeout 600 run_sudo apt-get install -y gh || warn "Unable to install gh; continuing."
     else
       warn "Unable to configure GitHub CLI apt repository; continuing."
     fi
   fi
 
-  if ! have node; then
+  if ! have node && [ "$SKIP_NODE_INSTALL" != "1" ]; then
     log "Installing Node.js ${NODE_MAJOR}.x..."
     # Semgrep-ignore: bash.curl.security.curl-pipe-bash.curl-pipe-bash
     if curl --connect-timeout 10 --max-time 60 -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" > nodesource_setup.sh && run_sudo bash nodesource_setup.sh; then
       rm nodesource_setup.sh
-      timeout 60 run_sudo apt-get install -y nodejs || warn "Unable to install nodejs via apt."
+      timeout 600 run_sudo apt-get install -y nodejs || warn "Unable to install nodejs via apt."
     else
       rm -f nodesource_setup.sh
       warn "Unable to configure NodeSource repository."
@@ -197,12 +210,16 @@ install_python_deps() {
     pip_install --root-user-action=ignore requests google-genai python-dotenv pydantic click PyGithub
   fi
 
-  if [ -f "etl/requirements.txt" ]; then
+  if [ -f "etl/requirements.txt" ] && [ "$SKIP_ETL_DEPS" != "1" ]; then
     pip_install --root-user-action=ignore -r etl/requirements.txt
   fi
 }
 
 install_node_deps() {
+  if [ "$SKIP_NODE_DEPS" = "1" ]; then
+    warn "SKIP_NODE_DEPS=1; skipping pnpm install."
+    return 0
+  fi
   have pnpm || err "pnpm is required."
   if [ ! -f "package.json" ]; then
     warn "package.json not found in ${REPO_ROOT}; skipping pnpm install."
@@ -304,31 +321,43 @@ main() {
   install_apt_tools
 
   log "Starting parallel installation blocks..."
+  pid_python=""
+  pid_node=""
+  pid_git=""
+
   (
-    log "[Parallel] Installing Python dependencies..."
+    log "[Parallel-Python] Installing Python dependencies..."
     install_python_deps
   ) &
   pid_python=$!
 
-  (
-    log "[Parallel] Installing Node.js & dependencies..."
-    ensure_corepack_pnpm
-    install_node_deps
-    install_playwright
-  ) &
-  pid_node=$!
+  if [ "$SKIP_NODE_DEPS" != "1" ] || [ "$SKIP_PLAYWRIGHT" != "1" ]; then
+    (
+      log "[Parallel-Node] Installing Node.js & dependencies..."
+      ensure_corepack_pnpm
+      install_node_deps
+      install_playwright
+    ) &
+    pid_node=$!
+  else
+    log "[Skip] Node.js & dependencies skipped."
+  fi
 
-  (
-    log "[Parallel] Configuring Git..."
-    configure_remote_origin
-    configure_git_hooks
-  ) &
-  pid_git=$!
+  if [ "$SKIP_REMOTE_CONFIG" != "1" ]; then
+    (
+      log "[Parallel-Git] Configuring Git..."
+      configure_remote_origin
+      configure_git_hooks
+    ) &
+    pid_git=$!
+  else
+    log "[Skip] Git configuration skipped."
+  fi
 
   local failed=0
-  wait $pid_python || { err "Python dependency installation failed"; failed=1; }
-  wait $pid_node || { err "Node.js/Playwright installation failed"; failed=1; }
-  wait $pid_git || { err "Git configuration failed"; failed=1; }
+  [ -n "$pid_python" ] && { wait $pid_python || { err "Python dependency installation failed"; failed=1; }; }
+  [ -n "$pid_node" ] && { wait $pid_node || { err "Node.js/Playwright installation failed"; failed=1; }; }
+  [ -n "$pid_git" ] && { wait $pid_git || { err "Git configuration failed"; failed=1; }; }
 
   if [ $failed -ne 0 ]; then
     err "One or more parallel setup tasks failed."
