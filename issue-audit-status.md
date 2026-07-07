@@ -2,9 +2,9 @@
 
 ## Summary
 
-- Total open issues reviewed: 91
-- Issues recommended to keep open: 58
-- Issues recommended for clarification: 33
+- Total open issues reviewed: 92
+- Issues recommended to keep open: 47
+- Issues recommended for clarification: 45
 - Issues recommended to keep open (PR exists): 0
 - Issues recommended to merge: 0
 - Issues recommended to close: 0
@@ -12,7 +12,7 @@
 
 ## Issue Checklist
 
-### Issue #3387 — Design System Refactor: Remove component-specific variants from global contracts
+### Issue #3389 — Agent Workflow: Dev-Tools & Pipeline Improvements Needed
 
 - [x] Relevance checked
 - [x] Duplicate check completed
@@ -26,12 +26,34 @@
 **Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
-- **Summary:** Requests design system refactor: remove component-specific variants from global contracts. Lacks detailed description.
+- **Summary:** Requests agent workflow: dev-tools & pipeline improvements needed. Includes detailed description.
 - **Relevant:** Yes
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
 - **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
+
+
+### Issue #3387 — Design System Refactor: Remove component-specific variants from global contracts
+
+- [x] Relevance checked
+- [x] Duplicate check completed
+- [x] Related PRs checked
+- [x] Current implementation checked
+- [x] Labels / milestone reviewed
+- [x] Audit note written
+- [x] Recommendation recorded
+
+**Recommendation:** Keep open
+**Reason:** The issue is actionable and properly specified, pending implementation.
+
+**Audit Note:**
+- **Summary:** Requests design system refactor: remove component-specific variants from global contracts. Includes detailed description.
+- **Relevant:** Yes
+- **Actionable:** Yes
+- **Related PRs:** None
+- **Recommended Next Action:** Keep open
+- **Specific Edits Needed:** None
 
 
 ### Issue #3386 — Design System Refactor: Localize FAB styling
@@ -44,16 +66,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open, needs clarification
-**Reason:** The issue lacks a clear specification and problem statement.
+**Recommendation:** Keep open
+**Reason:** The issue is actionable and properly specified, pending implementation.
 
 **Audit Note:**
-- **Summary:** Requests design system refactor: localize fab styling. Lacks detailed description.
+- **Summary:** Requests design system refactor: localize fab styling. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** No, needs details
+- **Actionable:** Yes
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
+- **Recommended Next Action:** Keep open
+- **Specific Edits Needed:** None
 
 
 ### Issue #3385 — Design System Refactor: Export component-specific VariantProps
@@ -67,7 +89,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Reason:** The issue is actionable and properly specified, pending implementation.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: export component-specific variantprops. Includes detailed description.
@@ -89,7 +111,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Reason:** The issue is actionable and properly specified, pending implementation.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: introduce cva helper factories. Includes detailed description.
@@ -111,7 +133,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Reason:** The issue is actionable and properly specified, pending implementation.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: export utility constants. Includes detailed description.
@@ -132,16 +154,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** This is a tracking epic and its sub-tasks are likely still active.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests epic composable and localized design system refactor. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3381 — [Feature] Implement td agent plan-workflow-audit workflow tool
@@ -221,7 +243,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests address mypy type-checking errors across the python codebase. Includes detailed description.
@@ -229,7 +251,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3376 — Address pylint errors across the Python codebase
@@ -243,7 +265,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests address pylint errors across the python codebase. Includes detailed description.
@@ -251,7 +273,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3354 — [Jules] Support batch message sending in jules.send_message
@@ -265,7 +287,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests jules support batch message sending in jules.send_message. Includes detailed description.
@@ -273,7 +295,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3353 — [MCP] Synchronize local agent configuration schemas with repository updates
@@ -287,7 +309,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests mcp synchronize local agent configuration schemas with repository updates. Includes detailed description.
@@ -295,7 +317,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3327 — Design System Refactor: Add exported VariantProps types
@@ -308,16 +330,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: add exported variantprops types. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3326 — Design System Refactor: Split component contracts into distinct files
@@ -330,16 +352,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: split component contracts into distinct files. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3325 — Design System Refactor: Extract shared utility classes into tokens
@@ -352,16 +374,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: extract shared utility classes into tokens. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3324 — Design System Refactor: Reduce semantic overlap and component-specific variants
@@ -374,16 +396,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: reduce semantic overlap and component-specific variants. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3323 — Design System Refactor: Separate design tokens from component variants
@@ -396,16 +418,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: separate design tokens from component variants. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3320 — refactor(ui): Use composition via cx() instead of massive inline tailwind strings
@@ -419,7 +441,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests refactor(ui): use composition via cx() instead of massive inline tailwind strings. Includes detailed description.
@@ -427,7 +449,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3318 — Design System Refactor: Export Explicit Types and Helper Factories for CVA
@@ -440,16 +462,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: export explicit types and helper factories for cva. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3317 — Design System Refactor: Split Variants into Modular Files
@@ -462,16 +484,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: split variants into modular files. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3316 — Design System Refactor: Extract Repeated Utility Classes into Shared Constants
@@ -484,16 +506,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: extract repeated utility classes into shared constants. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3315 — Design System Refactor: Standardize Component Variant Contracts (Tone, Appearance, Radius)
@@ -506,16 +528,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: standardize component variant contracts (tone, appearance, radius). Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3314 — Design System Refactor: Separate UI Tokens from Component Variants
@@ -528,16 +550,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** Part of an ongoing systemic design system refactor that requires careful component-by-component updates.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests design system refactor: separate ui tokens from component variants. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3313 — chore(ui): Add strict TypeScript enforcement to design system via `as const` and `VariantProps`
@@ -551,7 +573,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests chore(ui): add strict typescript enforcement to design system via `as const` and `variantprops`. Includes detailed description.
@@ -559,7 +581,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3310 — Consolidate open Dependabot PRs into a single PR
@@ -573,7 +595,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests consolidate open dependabot prs into a single pr. Includes detailed description.
@@ -581,7 +603,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3309 — perf: Fix high Largest Contentful Paint (LCP) times and optimize bundle delivery
@@ -595,7 +617,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests perf: fix high largest contentful paint (lcp) times and optimize bundle delivery. Includes detailed description.
@@ -603,7 +625,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3307 — refactor(prompt): Optimize review instructions for better AI reasoning and lower token usage
@@ -617,7 +639,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests refactor(prompt): optimize review instructions for better ai reasoning and lower token usage. Includes detailed description.
@@ -625,7 +647,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3265 — improve devai vis layout
@@ -639,7 +661,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests improve devai vis layout. Includes detailed description.
@@ -647,7 +669,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3264 — Merch:  Text Spacing & Content Hierarchy
@@ -661,7 +683,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests merch:  text spacing & content hierarchy. Includes detailed description.
@@ -669,7 +691,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3263 — Merch page:  Call-to-Action (CTA) Primary vs. Secondary Hierarchy
@@ -683,7 +705,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests merch page:  call-to-action (cta) primary vs. secondary hierarchy. Includes detailed description.
@@ -691,7 +713,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3258 — CI: Re-run pipelines for PRs 3233 and 3235 after snapshot update
@@ -705,7 +727,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests ci: re-run pipelines for prs 3233 and 3235 after snapshot update. Includes detailed description.
@@ -713,7 +735,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3257 — CI: Fix td-cli PATH resolution in GitHub Actions
@@ -727,7 +749,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests ci: fix td-cli path resolution in github actions. Includes detailed description.
@@ -735,7 +757,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3256 — Fix: Update boomtick-mcp Vitest mock expectations for td-cli error handling
@@ -749,7 +771,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests fix: update boomtick-mcp vitest mock expectations for td-cli error handling. Includes detailed description.
@@ -757,7 +779,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3251 — Refactor Defensive AI Infrastructure and GHA Configuration Management
@@ -815,7 +837,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests failed to programmatically close prs via mcp tool: unknown error. Includes detailed description.
@@ -823,7 +845,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3203 — CI: Internalize workflows inside boomtick-pkg
@@ -837,7 +859,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests ci: internalize workflows inside boomtick-pkg. Includes detailed description.
@@ -845,7 +867,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3196 — Refactor: Cleanup legacy boomtick-mcp and dev-tools references in documentation and code comments
@@ -859,7 +881,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests refactor: cleanup legacy boomtick-mcp and dev-tools references in documentation and code comments. Includes detailed description.
@@ -867,7 +889,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3192 — Improve Agent Awareness and Access to Boomtick MCP/CLI Tools over Raw shell Commands
@@ -881,7 +903,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests improve agent awareness and access to boomtick mcp/cli tools over raw shell commands. Includes detailed description.
@@ -889,7 +911,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3156 — feat: Public Assets & Format Consolidation
@@ -925,7 +947,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests refactor: implement mandated architectural standards for cli and packaging. Includes detailed description.
@@ -933,7 +955,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3063 — Refactor boomtick-pkg/mcp hardcoded github defaults in config.ts
@@ -947,7 +969,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests refactor boomtick-pkg/mcp hardcoded github defaults in config.ts. Includes detailed description.
@@ -955,7 +977,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3060 — Refactor: Components exceed 150-line limit (AGENTS.md Rule 11)
@@ -969,7 +991,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests refactor: components exceed 150-line limit (agents.md rule 11). Includes detailed description.
@@ -977,7 +999,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3056 — feat: Finalize install.sh and modularize CI actions
@@ -991,7 +1013,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests feat: finalize install.sh and modularize ci actions. Includes detailed description.
@@ -999,7 +1021,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #3014 — Systemic CI Metrics Definition: Establish clear measurable targets
@@ -1013,7 +1035,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests systemic ci metrics definition: establish clear measurable targets. Includes detailed description.
@@ -1021,7 +1043,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2997 — Epic: Master tracking for individual blog post improvements
@@ -1034,16 +1056,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** This is a tracking epic and its sub-tasks are likely still active.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests epic: master tracking for individual blog post improvements. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2996 — Epic: Group and Prioritize Raw Styling UI Refactors
@@ -1056,16 +1078,16 @@
 - [x] Audit note written
 - [x] Recommendation recorded
 
-**Recommendation:** Keep open
-**Reason:** This is a tracking epic and its sub-tasks are likely still active.
+**Recommendation:** Keep open, needs clarification
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests epic: group and prioritize raw styling ui refactors. Includes detailed description.
 - **Relevant:** Yes
-- **Actionable:** Yes
+- **Actionable:** No, needs details
 - **Related PRs:** None
-- **Recommended Next Action:** Keep open
-- **Specific Edits Needed:** None
+- **Recommended Next Action:** Keep open, needs clarification
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2968 — context token improvements
@@ -1079,7 +1101,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests context token improvements. Includes detailed description.
@@ -1087,7 +1109,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2900 — Investigate why mobile visual snapshots prompt unexpected updates when no changes exist
@@ -1123,7 +1145,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests workflow audit consolidated health report. Includes detailed description.
@@ -1131,7 +1153,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2811 — make Dependabot guidelines and update workflow
@@ -1145,7 +1167,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests make dependabot guidelines and update workflow. Includes detailed description.
@@ -1153,7 +1175,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2784 — feat(ai): Implement Structured Token Management & Strict JSON Schemas
@@ -1189,7 +1211,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests content: master audit and visual improvement of wcs blog posts. Includes detailed description.
@@ -1197,7 +1219,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2687 — content: Audit and improve blog posts to meet Impeccable standards
@@ -1211,7 +1233,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests content: audit and improve blog posts to meet impeccable standards. Includes detailed description.
@@ -1219,7 +1241,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2685 — feat: Create autonomous AI-driven Playwright crawler for dynamic visual QA and Gemini reviews
@@ -1233,7 +1255,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests feat: create autonomous ai-driven playwright crawler for dynamic visual qa and gemini reviews. Includes detailed description.
@@ -1241,7 +1263,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2678 — accessibility: fix contrast ratio regressions on homepage elements
@@ -1343,7 +1365,7 @@
 - [x] Recommendation recorded
 
 **Recommendation:** Keep open, needs clarification
-**Reason:** The issue may be actionable but requires a more complete specification.
+**Reason:** The issue lacks a clear specification and problem statement.
 
 **Audit Note:**
 - **Summary:** Requests feat: add linked issue specifications to pr review context. Includes detailed description.
@@ -1351,7 +1373,7 @@
 - **Actionable:** No, needs details
 - **Related PRs:** None
 - **Recommended Next Action:** Keep open, needs clarification
-- **Specific Edits Needed:** Flesh out the exact scope of the changes.
+- **Specific Edits Needed:** Add `Problem Statement`, `Goal`, `Proposed Approach`, and `Scope` sections.
 
 
 ### Issue #2649 — Improvement: Remove Agents & CI/CD from home page Explore by Topic grid

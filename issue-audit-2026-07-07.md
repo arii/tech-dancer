@@ -2,34 +2,23 @@
 
 ## 1. Summary of all open issues reviewed
 
-Total open issues reviewed: 91
+Total open issues reviewed: 92
 
 ## 2. Recommended action for each issue
 (See issue-audit-status.md for detailed breakdown per issue)
 
 ## 3. Issues that should remain open
+- #3387: Design System Refactor: Remove component-specific variants from global contracts
+- #3386: Design System Refactor: Localize FAB styling
 - #3385: Design System Refactor: Export component-specific VariantProps
 - #3384: Design System Refactor: Introduce CVA helper factories
 - #3383: Design System Refactor: Export utility constants
-- #3382: [Epic] Composable and Localized Design System Refactor
 - #3381: [Feature] Implement td agent plan-workflow-audit workflow tool
 - #3379: [Feature] Implement td agent plan-issue-audit workflow tool
 - #3378: [Feature] Implement td agent plan-aggregation workflow tool
-- #3327: Design System Refactor: Add exported VariantProps types
-- #3326: Design System Refactor: Split component contracts into distinct files
-- #3325: Design System Refactor: Extract shared utility classes into tokens
-- #3324: Design System Refactor: Reduce semantic overlap and component-specific variants
-- #3323: Design System Refactor: Separate design tokens from component variants
-- #3318: Design System Refactor: Export Explicit Types and Helper Factories for CVA
-- #3317: Design System Refactor: Split Variants into Modular Files
-- #3316: Design System Refactor: Extract Repeated Utility Classes into Shared Constants
-- #3315: Design System Refactor: Standardize Component Variant Contracts (Tone, Appearance, Radius)
-- #3314: Design System Refactor: Separate UI Tokens from Component Variants
 - #3251: Refactor Defensive AI Infrastructure and GHA Configuration Management
 - #3248: Refactor Over-engineered Layout Primitives and Remove Hallucinated JIT Resolver
 - #3156: feat: Public Assets & Format Consolidation
-- #2997: Epic: Master tracking for individual blog post improvements
-- #2996: Epic: Group and Prioritize Raw Styling UI Refactors
 - #2900: Investigate why mobile visual snapshots prompt unexpected updates when no changes exist
 - #2784: feat(ai): Implement Structured Token Management & Strict JSON Schemas
 - #2678: accessibility: fix contrast ratio regressions on homepage elements
@@ -68,13 +57,23 @@ Total open issues reviewed: 91
 - #2492: refactor(scripts): extract impact-analysis helpers into scripts/impact/ submodules with Zod schemas
 
 ## 4. Issues that need clarification or scope updates
-- #3387: Design System Refactor: Remove component-specific variants from global contracts
-- #3386: Design System Refactor: Localize FAB styling
+- #3389: Agent Workflow: Dev-Tools & Pipeline Improvements Needed
+- #3382: [Epic] Composable and Localized Design System Refactor
 - #3377: Address mypy type-checking errors across the Python codebase
 - #3376: Address pylint errors across the Python codebase
 - #3354: [Jules] Support batch message sending in jules.send_message
 - #3353: [MCP] Synchronize local agent configuration schemas with repository updates
+- #3327: Design System Refactor: Add exported VariantProps types
+- #3326: Design System Refactor: Split component contracts into distinct files
+- #3325: Design System Refactor: Extract shared utility classes into tokens
+- #3324: Design System Refactor: Reduce semantic overlap and component-specific variants
+- #3323: Design System Refactor: Separate design tokens from component variants
 - #3320: refactor(ui): Use composition via cx() instead of massive inline tailwind strings
+- #3318: Design System Refactor: Export Explicit Types and Helper Factories for CVA
+- #3317: Design System Refactor: Split Variants into Modular Files
+- #3316: Design System Refactor: Extract Repeated Utility Classes into Shared Constants
+- #3315: Design System Refactor: Standardize Component Variant Contracts (Tone, Appearance, Radius)
+- #3314: Design System Refactor: Separate UI Tokens from Component Variants
 - #3313: chore(ui): Add strict TypeScript enforcement to design system via `as const` and `VariantProps`
 - #3310: Consolidate open Dependabot PRs into a single PR
 - #3309: perf: Fix high Largest Contentful Paint (LCP) times and optimize bundle delivery
@@ -94,6 +93,8 @@ Total open issues reviewed: 91
 - #3060: Refactor: Components exceed 150-line limit (AGENTS.md Rule 11)
 - #3056: feat: Finalize install.sh and modularize CI actions
 - #3014: Systemic CI Metrics Definition: Establish clear measurable targets
+- #2997: Epic: Master tracking for individual blog post improvements
+- #2996: Epic: Group and Prioritize Raw Styling UI Refactors
 - #2968: context token improvements
 - #2847: [Workflow Audit] Consolidated Health Report
 - #2811: make Dependabot guidelines and update workflow
