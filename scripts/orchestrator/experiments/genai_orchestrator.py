@@ -6,17 +6,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import time
-from dev_tools.utils import run_command
-
-def run_cli(args, suppress_errors=False):
-    try:
-        res = run_command(["td-cli"] + args)
-        return res if isinstance(res, str) else ""
-    except Exception as e:
-        if not suppress_errors:
-            print(f"CLI Error: {e}")
-        return "" if suppress_errors else None
-
+from dev_tools.utils import run_cli
 
 try:
     from dev_tools.utils import call_ai, get_ai_synthesis_model, clean_llm_output
@@ -24,7 +14,6 @@ except ImportError:
     call_ai = None
     get_ai_synthesis_model = lambda: "gpt-4o-mini"
     clean_llm_output = lambda x: x
-
 
 def generate_text_ai(model, prompt):
     """Calls the real AI integration if available, otherwise falls back to a mock routing payload."""

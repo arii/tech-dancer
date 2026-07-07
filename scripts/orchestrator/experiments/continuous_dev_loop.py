@@ -6,46 +6,9 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import time
-from dev_tools.utils import run_command
-
-def run_cli(args, suppress_errors=False):
-    try:
-        res = run_command(["td-cli"] + args)
-        return res if isinstance(res, str) else ""
-    except Exception as e:
-        if not suppress_errors:
-            print(f"CLI Error: {e}")
-        return "" if suppress_errors else None
+from dev_tools.utils import run_cli, get_session_id, wait_for_agent
 
 import re
-
-def get_session_id():
-    stdout = run_cli(["agent", "sync"])
-    if not stdout:
-        return None
-    match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
-    return match.group(1) if match else None
-
-def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
-    print(f"Polling state for session {session_id}...")
-    start_time = time.time()
-    retries = 0
-    while True:
-        if time.time() - start_time > timeout:
-            raise TimeoutError(f"Timeout of {timeout}s exceeded while waiting for session {session_id}.")
-        if retries >= max_retries:
-            raise RuntimeError(f"Max retries of {max_retries} exceeded while waiting for session {session_id}.")
-
-        messages = run_cli(["agent", "messages", session_id])
-        if messages:
-            is_completed = "SUCCESS" in messages or "ABORTED_THROTTLED" in messages
-            is_waiting = "waiting for input" in messages.lower() or "failed" in messages.lower()
-            if is_completed or is_waiting:
-                print("Agent 1 is ready.")
-                break
-        retries += 1
-        time.sleep(poll_interval)
-
 
 def execute_continuous_dev_loop(issue_queue):
     """

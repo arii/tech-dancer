@@ -641,3 +641,44 @@ def verify_pr_scope(file_list=None):
         return "PR scope warning: Mixing significant code changes with content updates. Consider splitting content corrections from feature development."
     return None
 
+
+def run_cli(args, suppress_errors=False):
+    """Executes a BoomTick CLI command using the standard run_command interface."""
+    try:
+        res = run_command(["td-cli"] + args)
+        return res if isinstance(res, str) else ""
+    except Exception as e:
+        if not suppress_errors:
+            print(f"CLI Error: {e}")
+        return "" if suppress_errors else None
+
+def get_session_id():
+    """Runs 'agent sync' and parses the output for the active session ID."""
+    stdout = run_cli(["agent", "sync"])
+    if not stdout:
+        return None
+    import re
+    match = re.search(r"(?:Session ID|id):\s*([a-zA-Z0-9_-]+)", stdout, re.IGNORECASE)
+    return match.group(1) if match else None
+
+def wait_for_agent(session_id, poll_interval=10, timeout=300, max_retries=30):
+    """Blocks execution until the agent reaches a terminal state or requests input."""
+    print(f"Polling state for session {session_id}...")
+    import time
+    start_time = time.time()
+    retries = 0
+    while True:
+        if time.time() - start_time > timeout:
+            raise TimeoutError(f"Timeout of {timeout}s exceeded while waiting for session {session_id}.")
+        if retries >= max_retries:
+            raise RuntimeError(f"Max retries of {max_retries} exceeded while waiting for session {session_id}.")
+
+        messages = run_cli(["agent", "messages", session_id])
+        if messages:
+            is_completed = "SUCCESS" in messages or "ABORTED_THROTTLED" in messages
+            is_waiting = "waiting for input" in messages.lower() or "failed" in messages.lower()
+            if is_completed or is_waiting:
+                print("Agent 1 is ready.")
+                break
+        retries += 1
+        time.sleep(poll_interval)
