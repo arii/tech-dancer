@@ -210,24 +210,10 @@ install_python_deps() {
 
   if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
     log "Installing boomtick-cli in editable mode..."
-    # Force reinstall to ensure paths are correctly mapped
-    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp --force)
+    # Use standard user prefix to ensure deterministic binary location
+    python3 -m pip install --user -e "${REPO_ROOT}/boomtick-pkg/cli" --break-system-packages
 
-    # Try to find the binaries in common locations if 'have' fails initially
     export PATH="$HOME/.local/bin:$PATH"
-
-    if ! have td-cli || ! have td; then
-      warn "td/td-cli not immediately found on PATH. Attempting to locate..."
-      # Fallback: find where pip installed them
-      local pip_loc
-      pip_loc=$(python3 -m pip show boomtick-cli 2>/dev/null | grep Location | cut -d' ' -f2 || true)
-      if [ -n "$pip_loc" ]; then
-         # Usually bin is at ../bin relative to site-packages or in ~/.local/bin
-         local bin_guess="${pip_loc%/lib/python*}/bin"
-         [ -d "$bin_guess" ] && export PATH="$bin_guess:$PATH"
-         export PATH="$HOME/.local/bin:$PATH"
-      fi
-    fi
 
     if ! have td-cli || ! have td; then
       err "td/td-cli not found on PATH after editable install. Path: $PATH"
@@ -311,45 +297,44 @@ configure_git_hooks() {
   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then return 0; fi
   log "Configuring git hooks path to .githooks..."
   if git config core.hooksPath .githooks; then
-    [ "$STATUS_GIT" = "PENDING" ] && STATUS_GIT="INSTALLED"
+    if [ "$STATUS_GIT" = "PENDING" ]; then
+      STATUS_GIT="INSTALLED"
+    fi
   else
     STATUS_GIT="FAILED (git config)"
   fi
 }
 
 persist_environment() {
-  log "Persisting environment settings to ~/.bashrc..."
+  log "Persisting environment settings to ~/.config/boomtick/env.sh..."
+  local env_file="$HOME/.config/boomtick/env.sh"
   local bashrc="$HOME/.bashrc"
 
-  # Ensure Node 24 persistence via NVM if available
-  if [ -d "$HOME/.nvm" ]; then
-    if ! grep -q "nvm use ${NODE_MAJOR}" "$bashrc"; then
-      echo 'export NVM_DIR="$HOME/.nvm"' >> "$bashrc"
-      echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "$bashrc"
-      echo "nvm use ${NODE_MAJOR} >/dev/null 2>&1 || nvm install ${NODE_MAJOR} >/dev/null 2>&1" >> "$bashrc"
-      echo "nvm alias default ${NODE_MAJOR} >/dev/null 2>&1" >> "$bashrc"
-    fi
+  mkdir -p "$(dirname "$env_file")"
 
-    # Apply to current session
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install "${NODE_MAJOR}" >/dev/null 2>&1 || true
-    nvm use "${NODE_MAJOR}" >/dev/null 2>&1 || true
-    nvm alias default "${NODE_MAJOR}" >/dev/null 2>&1 || true
+  # Create or overwrite the env file with current settings
+  cat << EOE > "$env_file"
+# BoomTick Environment Settings
+export NODE_MAJOR="${NODE_MAJOR}"
+export NVM_DIR="\$HOME/.nvm"
+[ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+nvm use ${NODE_MAJOR} >/dev/null 2>&1 || nvm install ${NODE_MAJOR} >/dev/null 2>&1
+nvm alias default ${NODE_MAJOR} >/dev/null 2>&1
+
+export PATH="\$HOME/.local/bin:\$PATH"
+export PNPM_HOME="\$HOME/.local/share/pnpm"
+export PATH="\$PNPM_HOME:\$PATH"
+EOE
+
+  # Source the env file in .bashrc if not already present
+  if ! grep -Fq "source \"$env_file\"" "$bashrc"; then
+    echo "" >> "$bashrc"
+    echo "# Load BoomTick environment settings" >> "$bashrc"
+    echo "[ -f \"$env_file\" ] && source \"$env_file\"" >> "$bashrc"
   fi
 
-  # Ensure ~/.local/bin is in PATH for td/td-cli
-  if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$bashrc"; then
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$bashrc"
-  fi
-
-  # Also ensure PNPM is on path if corepack didn't do it globally
-  if ! grep -q "PNPM_HOME" "$bashrc"; then
-    {
-      echo 'export PNPM_HOME="$HOME/.local/share/pnpm"'
-      echo 'export PATH="$PNPM_HOME:$PATH"'
-    } >> "$bashrc"
-  fi
+  # Apply to current session
+  source "$env_file"
 }
 
 run_validation() {
@@ -416,12 +401,12 @@ main() {
     pid_git=$!
   fi
 
-  persist_environment
-
   local failed=0
   [ -n "$pid_python" ] && { wait $pid_python || { warn "Python block failed"; failed=1; }; }
   [ -n "$pid_node" ] && { wait $pid_node || { warn "Node block failed"; failed=1; }; }
   [ -n "$pid_git" ] && { wait $pid_git || { warn "Git block failed"; failed=1; }; }
+
+  persist_environment
 
   [ -f .status_python ] && STATUS_PYTHON=$(cat .status_python) && rm .status_python || { [ -n "$pid_python" ] && STATUS_PYTHON="FAILED"; }
   [ -f .status_node ] && STATUS_NODE=$(cat .status_node) && rm .status_node || { [ -n "$pid_node" ] && STATUS_NODE="FAILED"; }
