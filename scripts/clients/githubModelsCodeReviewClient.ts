@@ -64,22 +64,33 @@ export const githubModelsCodeReviewClient: CodeReviewClientStrategy = {
     const url = 'https://models.inference.ai.azure.com/chat/completions';
 
     let fetchResponse;
-    try {
-      fetchResponse = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: messages,
-          max_tokens: maxTokens,
-          temperature: 0.1
-        })
-      });
-    } catch (e) {
-      throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
+    let retries = 5;
+    let delay = 2000;
+    while (retries > 0) {
+      try {
+        fetchResponse = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: modelName,
+            messages: messages,
+            max_tokens: maxTokens,
+            temperature: 0.1
+          })
+        });
+        if (fetchResponse.status === 429) {
+          throw new Error('RateLimitReached');
+        }
+        break;
+      } catch (e) {
+        retries--;
+        if (retries === 0) throw new Error(`Failed to fetch from GitHub Models API: ${e}`, { cause: e });
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 2;
+      }
     }
 
     if (!fetchResponse.ok) {
