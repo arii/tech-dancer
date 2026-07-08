@@ -1,8 +1,20 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { jsonSchemaToZod } from 'json-schema-to-zod';
 
 async function syncContracts() {
+  let jsonSchemaToZod;
+  try {
+    const module = await import('json-schema-to-zod');
+    jsonSchemaToZod = module.jsonSchemaToZod;
+  } catch (err: any) {
+    if (err.code === 'ERR_MODULE_NOT_FOUND' || err.message?.includes('Cannot find package')) {
+      console.error('❌ Error: json-schema-to-zod not found.');
+      console.error('   Please run `pnpm install` in the root directory.');
+      process.exit(1);
+    }
+    throw err;
+  }
+
   let schemaPath = path.join(process.cwd(), 'boomtick-pkg/cli/dev_tools/cli-schema.json');
   let outputPath = path.join(process.cwd(), 'boomtick-pkg/mcp/src/tools/contract.ts');
 

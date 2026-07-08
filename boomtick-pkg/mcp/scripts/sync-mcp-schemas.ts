@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { MCP_TOOLS } from '../src/mcp/definitions.js';
 
 const homeDir = process.env.HOME || process.env.USERPROFILE || '';
 const globalTargetDir = homeDir ? path.join(homeDir, '.gemini', 'antigravity-cli', 'mcp', 'boomtick-mcp') : null;
@@ -17,8 +16,21 @@ function isWritable(dir: string): boolean {
   }
 }
 
-function syncSchemas() {
+async function syncSchemas() {
   console.log('🔄 Synchronizing MCP tool schemas...');
+
+  let MCP_TOOLS;
+  try {
+    const module = await import('../src/mcp/definitions.js');
+    MCP_TOOLS = module.MCP_TOOLS;
+  } catch (err: any) {
+    if (err.code === 'ERR_MODULE_NOT_FOUND' || err.message?.includes('Cannot find package')) {
+      console.error('❌ Error: MCP dependencies not found.');
+      console.error('   Please run `pnpm install` in the root directory.');
+      process.exit(1);
+    }
+    throw err;
+  }
 
   const targets = [projectTargetDir];
   if (globalTargetDir) targets.push(globalTargetDir);
@@ -46,7 +58,7 @@ function syncSchemas() {
     return;
   }
 
-  MCP_TOOLS.forEach(tool => {
+  MCP_TOOLS.forEach((tool: any) => {
     const schemaContent = JSON.stringify(tool.inputSchema, null, 2);
     const fileName = `${tool.name}.json`;
 
@@ -64,9 +76,7 @@ function syncSchemas() {
   validTargets.forEach(target => console.log(`   - ${target}`));
 }
 
-try {
-  syncSchemas();
-} catch (error) {
+syncSchemas().catch(error => {
   console.error('❌ Unexpected error during MCP schema synchronization:', error);
   process.exit(1);
-}
+});
