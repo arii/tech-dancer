@@ -1413,6 +1413,31 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             "command": " ".join(["pnpm"] + playwright_args),
             "failedTests": failed_tests
         }
+    def sync_pr(self, prNumber: int) -> Dict[str, Any]:
+        """Reliably pull the latest remote PR state to local, overwriting messy rebases."""
+        pr_data = self.github.fetch_pr_details(prNumber)
+        head_ref = pr_data.get("head", {}).get("ref")
+
+        if not head_ref:
+            raise CLIError(f"Could not determine head ref for PR #{prNumber}")
+
+        # Ensure we are on the branch or create it if it doesn't exist
+        current_branch = run_command(["git", "branch", "--show-current"]).strip()
+        if current_branch != head_ref:
+            log_info(f"Switching from {current_branch} to {head_ref}")
+            run_command(["git", "checkout", "-B", head_ref, f"origin/{head_ref}"], check=False)
+            run_command(["git", "checkout", head_ref])
+
+        log_info(f"Syncing branch {head_ref} with remote...")
+        run_command(["git", "fetch", "origin", head_ref])
+        run_command(["git", "reset", "--hard", f"origin/{head_ref}"])
+
+        return {
+            "status": "success",
+            "message": f"Successfully synced local branch `{head_ref}` with remote state of PR #{prNumber}.",
+            "branch": head_ref
+        }
+
     def get_ci_logs(self, prNumber: int, include_all: bool = False, **kwargs) -> Dict[str, Any]:
         if "pr_number" in kwargs: prNumber = kwargs["pr_number"]
         """Fetches CI logs for failing (or all) check runs in a PR."""
