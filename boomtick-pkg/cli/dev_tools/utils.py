@@ -13,24 +13,31 @@ from typing import Optional, Union, List, Dict, Any
 def sanitize_path(path: str) -> str:
     """
     Sanitizes a path to prevent traversal bugs and ensure it remains within the intended scope.
+    Uses normpath to resolve .. and ensures the result doesn't escape the current directory.
     """
     if not path:
         return ""
-    # 1. Basic path traversal blocking
-    # Repeatedly remove '..' until no more remain to prevent nested traversal like '....//'
-    last_path = None
-    while path != last_path:
-        last_path = path
-        path = path.replace("..", ".")
+    # 0. Null byte protection
+    path = path.split('\0', 1)[0]
 
-    # 2. Character Whitelisting: Allow only alphanumeric, dots, slashes, hyphens, and underscores
-    path = re.sub(r'[^a-zA-Z0-9\./\-_]', '', path)
+    # 1. Normalize path to resolve '..'
+    normalized = os.path.normpath(path)
 
-    # 3. Collapse multiple slashes
-    path = re.sub(r'/+', '/', path)
+    # 2. Prevent escaping current directory
+    if normalized.startswith("..") or os.path.isabs(normalized):
+        # Fallback to a safe version or just strip leading dots/slashes
+        normalized = normalized.lstrip('./\\')
 
-    # 4. Remove leading/trailing slashes to ensure relative pathing if used that way
-    return path.strip('/')
+    # 3. Character Whitelisting: Allow only alphanumeric, dots, slashes, hyphens, and underscores
+    sanitized = re.sub(r'[^a-zA-Z0-9\./\-_]', '', normalized)
+
+    # 4. Collapse multiple slashes and strip
+    return re.sub(r'/+', '/', sanitized).strip('/')
+
+def escape_md(text: Any) -> str:
+    """Escapes markdown special characters using a single regex pass."""
+    # Escape [, ], (, )
+    return re.sub(r'([\[\]\(\)])', r'\\\1', str(text))
 
 def sanitize_metadata(text: str) -> str:
     """

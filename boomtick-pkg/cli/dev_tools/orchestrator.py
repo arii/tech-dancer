@@ -39,7 +39,8 @@ from dev_tools.utils import (
     get_any_count,
     verify_pr_scope,
     sanitize_path,
-    sanitize_metadata
+    sanitize_metadata,
+    escape_md
 )
 from dev_tools.config import get_config
 
@@ -76,10 +77,6 @@ class Orchestrator:
                     count = int(m.group(2)) if m.group(2) else 1
                     hunks[current_file].append((start, start + count - 1))
         return hunks
-
-    def _escape_md(self, text: Any) -> str:
-        """Escapes markdown special characters."""
-        return str(text).replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)")
 
     def __init__(self, no_cache: bool = False) -> None:
         self._github: Optional[GitHubClient] = None
@@ -749,7 +746,9 @@ class Orchestrator:
 
         return "\n".join(report)
 
-    def _run_pre_submit_step(self, results: Dict[str, Any], name: str, cmd: List[str]) -> None:
+    def _execute_pre_submit_check(self, results: Dict[str, Any], name: str, cmd: List[str]) -> None:
+        """Executes a pre-submit check command and records the result."""
+        log_info(f"Running check: {name} ({' '.join(cmd)})")
         try:
             run_command(cmd)
             results["steps"].append({"name": name, "status": "success"})
@@ -768,10 +767,10 @@ class Orchestrator:
             results["steps"].append({"name": "Runtime Check", "status": "failure", "error": str(e)})
             raise e
 
-        self._run_pre_submit_step(results, "Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
-        self._run_pre_submit_step(results, "Version Downgrade Check", [PROJECT_CONFIG.cli_alias, "gh", "verify-versions"])
-        self._run_pre_submit_step(results, "TypeScript", ["pnpm", "run", "type-check"])
-        self._run_pre_submit_step(results, "Lint", ["pnpm", "run", "lint"])
+        self._execute_pre_submit_check(results, "Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
+        self._execute_pre_submit_check(results, "Version Downgrade Check", [PROJECT_CONFIG.cli_alias, "gh", "verify-versions"])
+        self._execute_pre_submit_check(results, "TypeScript", ["pnpm", "run", "type-check"])
+        self._execute_pre_submit_check(results, "Lint", ["pnpm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
         if missing_vars: results["steps"].append({"name": "Baseline Check", "status": "warning", "message": f"Missing GHA variables: {', '.join(missing_vars)}"})
         else: results["steps"].append({"name": "Baseline Check", "status": "success"})
@@ -1952,7 +1951,7 @@ Overlapping functionality identified and resolved.
 
         # --- Workflow Plan Template ---
         with open(workflow_plan_path, "w") as f:
-            f.write(f"""# Reviewing Aggregation Planning Guide: {self._escape_md(target_branch)}
+            f.write(f"""# Reviewing Aggregation Planning Guide: {escape_md(target_branch)}
 
 ## Agent Instructions
 - **Environment Check**: Ensure Python dependencies and pnpm {PROJECT_CONFIG.pnpm_version} are available.
@@ -1999,12 +1998,12 @@ Run the validation suite to ensure the aggregated branch is stable.
 
         # --- Context Details Template ---
         with open(context_details_path, "w") as f:
-            f.write(f"# Aggregation Context Details: {self._escape_md(target_branch)}\n\n")
+            f.write(f"# Aggregation Context Details: {escape_md(target_branch)}\n\n")
             f.write("## Targeted PRs\n")
             for pr_num in pr_numbers:
                 details = pr_details.get(pr_num, {})
-                title = self._escape_md(details.get('title', ''))
-                login = self._escape_md(details.get('user', {}).get('login', ''))
+                title = escape_md(details.get('title', ''))
+                login = escape_md(details.get('user', {}).get('login', ''))
                 f.write(f"- **PR #{pr_num}**: {title} (@{login})\n")
 
             f.write("\n## Overlapping Files\n")
@@ -2027,7 +2026,7 @@ Run the validation suite to ensure the aggregated branch is stable.
 
         # --- Plan Skeleton Template ---
         with open(plan_skeleton_path, "w") as f:
-            f.write(f"""# Aggregation Plan Skeleton: {self._escape_md(target_branch)}
+            f.write(f"""# Aggregation Plan Skeleton: {escape_md(target_branch)}
 
 ## Integration Steps
 1. **Prepare Base**: Checkout the latest base branch.
