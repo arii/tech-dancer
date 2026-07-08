@@ -13,7 +13,7 @@ import { BASE_URL } from '@/config/constants';
 import { RESEARCH_TOOLS } from '@/config/research-tools';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { actionButtonVariants, cardVariants, listRowVariants, type CardVariants, type ListRowVariants, type ActionButtonVariants } from '@/lib/variants';
+import { actionButtonVariants, cardVariants, listRowVariants, type CardVariants } from '@/lib/variants';
 
 const viewportIcons = {
   Mobile: <Icon icon={Smartphone} size="md" />,
@@ -220,6 +220,38 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
          </Box>
       </Box>
     </Box>
+  );
+}
+
+function HistoryItem({ report, active, onClick }: { report: any, active: boolean, onClick: () => void }) {
+  return (
+    <Stack
+      as="button"
+      direction="row"
+      onClick={onClick}
+      width="full" align="center" gap={3} padding={4}
+      className={listRowVariants({ active })}
+    >
+      <Box
+        width={9}
+        height={9}
+        radius="full"
+        surface={report.status === 'completed' ? 'success' : 'warning'}
+        className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
+        shrink={0}
+      >
+        {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
+      </Box>
+      <Box flex={1} minWidth="0">
+        <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
+          {report.url.replace('https://', '')}
+        </Text>
+        <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
+          {new Date(report.timestamp).toLocaleTimeString()}
+        </Text>
+      </Box>
+      <Icon icon={ChevronRight} size="sm" color="muted" />
+    </Stack>
   );
 }
 
@@ -452,34 +484,12 @@ export default function UXAuditor() {
               />
             )}
             {reports.map((report) => (
-              <Stack
+              <HistoryItem
                 key={report.id}
-                as="button"
-                direction="row"
+                report={report}
+                active={activeReport?.id === report.id}
                 onClick={() => setActiveReport(report)}
-                width="full" align="center" gap={3} padding={4} 
-                className={listRowVariants({ active: activeReport?.id === report.id })}
-              >
-                <Box
-                  width={9}
-                  height={9}
-                  radius="full"
-                  surface={report.status === 'completed' ? 'success' : 'warning'}
-                  className={`${report.status !== 'completed' ? 'animate-pulse' : ''} flex items-center justify-center`}
-                  shrink={0}
-                >
-                  {report.status === 'completed' ? <Icon icon={CheckCircle} size="sm" /> : <Icon icon={RefreshCw} size="sm" />}
-                </Box>
-                <Box flex={1} minWidth="0">
-                  <Text variant="sans" size="sm" weight="font-bold" className="truncate block">
-                    {report.url.replace('https://', '')}
-                  </Text>
-                  <Text variant="mono" size="xs" weight="font-medium" color="dim" uppercase>
-                    {new Date(report.timestamp).toLocaleTimeString()}
-                  </Text>
-                </Box>
-                <Icon icon={ChevronRight} size="sm" color="muted" />
-              </Stack>
+              />
             ))}
           </Stack>
         </Stack>

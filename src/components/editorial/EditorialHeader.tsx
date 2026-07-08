@@ -30,6 +30,7 @@ export function EditorialHeader({
   onShare,
   isShared,
   hero,
+  ...props
 }: EditorialHeaderProps) {
   return (
     <Stack gap={12}>
