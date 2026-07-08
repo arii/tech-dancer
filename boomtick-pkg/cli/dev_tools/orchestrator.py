@@ -1421,16 +1421,17 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         if not head_ref:
             raise CLIError(f"Could not determine head ref for PR #{prNumber}")
 
-        # Ensure we are on the branch or create it if it doesn't exist
+        log_info(f"Fetching remote state for PR #{prNumber} ({head_ref})...")
+        # Use pull ref to be robust against forks and ensure we get the exact commit
+        run_command(["git", "fetch", "origin", f"pull/{prNumber}/head"])
+
         current_branch = run_command(["git", "branch", "--show-current"]).strip()
         if current_branch != head_ref:
             log_info(f"Switching from {current_branch} to {head_ref}")
-            run_command(["git", "checkout", "-B", head_ref, f"origin/{head_ref}"], check=False)
-            run_command(["git", "checkout", head_ref])
-
-        log_info(f"Syncing branch {head_ref} with remote...")
-        run_command(["git", "fetch", "origin", head_ref])
-        run_command(["git", "reset", "--hard", f"origin/{head_ref}"])
+            run_command(["git", "checkout", "-B", head_ref, "FETCH_HEAD"])
+        else:
+            log_info(f"Hard resetting {head_ref} to remote state...")
+            run_command(["git", "reset", "--hard", "FETCH_HEAD"])
 
         return {
             "status": "success",
