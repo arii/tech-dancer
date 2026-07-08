@@ -16,16 +16,20 @@ function isWritable(dir: string): boolean {
   }
 }
 
+interface ToolDefinition {
+  name: string;
+  inputSchema: Record<string, any>;
+}
+
 /**
  * Synchronizes MCP tool schemas to target locations.
  */
 async function syncSchemas() {
   console.log('🔄 Synchronizing MCP tool schemas...');
 
-  let MCP_TOOLS;
+  let mcpToolsModule;
   try {
-    const module = await import('../src/mcp/definitions.js');
-    MCP_TOOLS = module.MCP_TOOLS;
+    mcpToolsModule = await import('../src/mcp/definitions.js');
   } catch (err: unknown) {
     const error = err as { code?: string; message?: string };
     if (error.code === 'ERR_MODULE_NOT_FOUND' || error.message?.includes('Cannot find package')) {
@@ -35,6 +39,8 @@ async function syncSchemas() {
     }
     throw err;
   }
+
+  const mcpTools = mcpToolsModule.MCP_TOOLS as ToolDefinition[];
 
   const targets = [projectTargetDir];
   if (globalTargetDir) targets.push(globalTargetDir);
@@ -62,12 +68,7 @@ async function syncSchemas() {
     return;
   }
 
-  interface ToolDefinition {
-    name: string;
-    inputSchema: any;
-  }
-
-  (MCP_TOOLS as ToolDefinition[]).forEach((tool) => {
+  mcpTools.forEach((tool) => {
     const schemaContent = JSON.stringify(tool.inputSchema, null, 2);
     const fileName = `${tool.name}.json`;
 
@@ -81,7 +82,7 @@ async function syncSchemas() {
     });
   });
 
-  console.log(`✅ Synchronized ${MCP_TOOLS.length} tool schemas to ${validTargets.length} locations.`);
+  console.log(`✅ Synchronized ${mcpTools.length} tool schemas to ${validTargets.length} locations.`);
   validTargets.forEach(target => console.log(`   - ${target}`));
 }
 
