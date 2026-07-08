@@ -266,9 +266,16 @@ def clean_llm_output(text: str) -> str:
         end = text.rfind('}')
         if start != -1 and end != -1 and end > start:
             candidate = text[start:end+1]
-            # Heuristic: if it contains ":" it's likely a JSON object or assignment
-            if ":" in candidate:
+            # Validate candidate is actual JSON before returning
+            try:
+                json.loads(candidate)
                 return candidate.strip()
+            except json.JSONDecodeError:
+                # If direct parse fails, check if it's a JSON object with at least one key-value pair
+                if ":" in candidate:
+                     # This might still be a valid object but with surrounding text or minor formatting issues.
+                     # We return it to allow the caller's json.loads() to attempt parsing or fail gracefully.
+                     return candidate.strip()
 
     return text.strip()
 
