@@ -20,12 +20,14 @@ def sync_deps():
         venv_python = Path(sys.executable)
 
     try:
+        # Using --no-cache-dir to avoid disk space issues in some environments
+        # and --upgrade to ensure latest specified versions
         subprocess.run(
-            [str(venv_python), "-m", "pip", "install", "-r", str(req_file)],
+            [str(venv_python), "-m", "pip", "install", "--upgrade", "--no-cache-dir", "-r", str(req_file)],
             check=True,
             capture_output=True,
             text=True,
-            timeout=300 # 5 minutes timeout
+            timeout=600 # Increased to 10 minutes for slow environments
         )
         print("✅ Python dependencies synced successfully.")
     except subprocess.TimeoutExpired:

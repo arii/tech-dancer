@@ -68,8 +68,23 @@ def limit_option(default_val=DEFAULT_GH_API_LIMIT, help_text='Limit the number o
     return decorator
 
 def json_option(f):
-    """Decorator to add --json option to subcommands for flexible placement."""
-    return click.option('--json/--no-json', 'json_output', default=None, help='Output results in JSON format')(f)
+    """
+    Decorator to add --json option to subcommands.
+    Allows --json to be placed after the command (e.g., 'td command --json').
+    Automatically updates ctx.obj['JSON'] if the option is provided.
+    """
+    import functools
+    f = click.option('--json/--no-json', 'json_output', default=None, help='Output results in JSON format')(f)
+
+    @click.pass_context
+    @functools.wraps(f)
+    def wrapper(ctx, *args, **kwargs):
+        json_output = kwargs.pop('json_output', None)
+        if json_output is not None and ctx.obj is not None:
+            ctx.obj['JSON'] = json_output
+        return ctx.invoke(f, *args, **kwargs)
+
+    return wrapper
 
 CONTEXT_SETTINGS = dict(
     help_option_names=["-h", "--help"],
@@ -144,12 +159,8 @@ def config():
 @config.command(name='view')
 @json_option
 @click.pass_context
-def config_view(ctx, json_output):
+def config_view(ctx):
     """View the current project configuration as JSON."""
-    # If subcommand option is provided, it overrides the group option
-    if json_output is not None and ctx.obj is not None:
-        ctx.obj['JSON'] = json_output
-
     # ctx.obj might be None if the command is called directly or during unit tests
     is_json = ctx.obj.get('JSON', True) if ctx.obj is not None else True
 
@@ -210,9 +221,7 @@ def gh():
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
-def search_prs(ctx, json_output, state, limit, include_drafts, labels):
-    if json_output is not None and ctx.obj is not None:
-        ctx.obj['JSON'] = json_output
+def search_prs(ctx, state, limit, include_drafts, labels):
     orch = ctx.obj['ORCHESTRATOR']
     label_list = [l.strip() for l in labels.split(',')] if labels else None
 
@@ -294,9 +303,7 @@ def audit(ctx, check_dirs):
 @click.option('--base')
 @click.option('--event')
 @click.pass_context
-def audit_pr(ctx, json_output, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, event):
-    if json_output is not None and ctx.obj is not None:
-        ctx.obj['JSON'] = json_output
+def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, event):
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.audit_pr(pr_number, fetch=fetch, audit=run_audit, submit=submit, cleanup=cleanup, dry_run=dry_run, event=event)
     out(ctx, f"✅ Audit PR #{pr_number} action complete.", data=res)
@@ -1120,9 +1127,7 @@ def plan_aggregation(ctx, pr_numbers, target):
 @click.option('--all-open', is_flag=True, help='Audit all open issues')
 @limit_option(help_text='Limit the number of open issues to process')
 @click.pass_context
-def plan_issue_audit(ctx, json_output, issue_numbers, all_open, limit):
-    if json_output is not None and ctx.obj is not None:
-        ctx.obj['JSON'] = json_output
+def plan_issue_audit(ctx, issue_numbers, all_open, limit):
     """Generate deterministic roadmap and checklist for auditing open issues."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
