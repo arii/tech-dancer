@@ -145,10 +145,10 @@ def safe_write_file(filepath: str, content: str):
         log_info(f"Symlink detected: {filepath} -> {target_path}")
 
     # Security: Ensure target path is within repo root
-    repo_root = os.getcwd()
+    repo_root = os.path.abspath(os.getcwd())
     abs_target = os.path.abspath(target_path)
     try:
-        if os.path.commonpath([repo_root, abs_target]) != repo_root:
+        if not abs_target.startswith(repo_root + os.sep) and abs_target != repo_root:
              raise CLIError(f"Security Error: Target path {target_path} is outside of repository root.")
     except ValueError:
          raise CLIError(f"Security Error: Target path {target_path} is invalid or outside of repository root.")
@@ -156,8 +156,11 @@ def safe_write_file(filepath: str, content: str):
     # Ensure parent directory exists for the target
     os.makedirs(os.path.dirname(abs_target), exist_ok=True)
 
-    with open(abs_target, 'w', encoding='utf-8') as f:
-        f.write(content)
+    try:
+        with open(abs_target, 'w', encoding='utf-8') as f:
+            f.write(content)
+    except Exception as e:
+        raise CLIError(f"Failed to write to {abs_target}: {e}")
 
 def apply_patch(filepath: str, patch_content: str):
     """
@@ -166,11 +169,11 @@ def apply_patch(filepath: str, patch_content: str):
     """
     import tempfile
 
-    # Security: validate filepath
-    repo_root = os.getcwd()
-    abs_filepath = os.path.abspath(filepath)
+    # Security: validate filepath - use realpath to resolve any symlink escapes
+    repo_root = os.path.abspath(os.getcwd())
+    abs_filepath = os.path.realpath(filepath)
     try:
-        if os.path.commonpath([repo_root, abs_filepath]) != repo_root:
+        if not abs_filepath.startswith(repo_root + os.sep) and abs_filepath != repo_root:
              raise CLIError(f"Security Error: Path {filepath} is outside of repository root.")
     except ValueError:
          raise CLIError(f"Security Error: Path {filepath} is invalid or outside of repository root.")

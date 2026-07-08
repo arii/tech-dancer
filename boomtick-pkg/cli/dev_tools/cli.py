@@ -196,12 +196,14 @@ def apply_patch(ctx, filepath, patch_file, patch_body):
     filepath = sanitize_path(filepath)
     if not filepath:
         err(ctx, "Invalid filepath provided.")
+        return # Explicit return for security
 
     content = patch_body
     if patch_file:
         safe_patch_path = sanitize_path(patch_file)
         if not safe_patch_path:
              err(ctx, "Invalid patch-file path provided.")
+             return # Explicit return for security
         try:
              # Use Orchestrator helper for safe file reading
              content = orch._read_safe_file(safe_patch_path)
@@ -210,6 +212,7 @@ def apply_patch(ctx, filepath, patch_file, patch_body):
 
     if not content:
         err(ctx, "Provide either --patch-file or --patch-body")
+        return # Explicit return for security
 
     try:
         _apply(filepath, content)
