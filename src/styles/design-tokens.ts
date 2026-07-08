@@ -10,7 +10,7 @@
 export const spacing = {
   card: "p-card",
   compact: "p-compact",
-};
+} as const;
 
 export const animation = {
   fast: "duration-fast",
@@ -19,7 +19,7 @@ export const animation = {
   // Framer Motion requires numeric arrays for JS-driven easing
   ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
   revealDistance: "var(--reveal-distance)",
-};
+} as const;
 
 /**
  * Common Layout Primitives (encoded as Tailwind fragments)
@@ -29,27 +29,27 @@ export const layout = {
   navRail: "nav-rail hidden lg:flex flex-col justify-between min-h-screen sticky top-0",
   mobileHeader: "lg:hidden fixed top-0 left-0 right-0 h-16 bg-surface z-[110] flex items-center justify-between px-8 border-b border-line w-full",
   panel: "panel h-full overflow-y-auto w-full",
-};
+} as const;
 
 export const inputs = {
   base: "w-full bg-bg border border-line px-4 py-3 text-sm font-sans text-slate-100 placeholder:text-slate-400 placeholder:opacity-100 focus:outline-none focus:border-accent transition-all duration-150",
   label: "text-tiny font-mono font-bold uppercase tracking-widest text-text-dim block mb-2",
   select: "bg-bg border border-line px-3 py-1 text-tiny font-mono font-bold uppercase tracking-widest text-accent focus:outline-none focus:border-accent",
   error: "border-error focus:border-error focus:ring-error/20",
-};
+} as const;
 
 
 export const shadows = {
   topOverlay: "shadow-top-overlay",
   standard: "shadow-sm",
   glow: "shadow-[0_0_15px_var(--color-accent-shadow)]",
-};
+} as const;
 
 
 export const stroke = {
   thin: "stroke-[0.5]",
   thick: "stroke-[1.5]",
-};
+} as const;
 
 export const iconSizes = {
   xs: 12,
@@ -57,7 +57,7 @@ export const iconSizes = {
   md: 20,
   lg: 24,
   xl: 32,
-};
+} as const;
 
 export const zIndex = {
   hide: "hide",
@@ -74,7 +74,7 @@ export const zIndex = {
   nav: "nav",
   mobileMenu: "mobile-menu",
   search: "search",
-};
+} as const;
 
 export const tracking = {
   tighter: "tracking-tighter",
@@ -88,7 +88,7 @@ export const tracking = {
   utility: "tracking-[3px]",
   label: "tracking-[2px]",
   wordmark: "tracking-[0.05em]",
-};
+} as const;
 
 export const typography = {
   h1: "font-display font-black tracking-tighter leading-[0.95]",
@@ -100,7 +100,7 @@ export const typography = {
   body: "font-sans leading-relaxed text-text-body max-w-[65ch] break-words",
   mono: "font-mono tracking-widest uppercase",
   sans: "font-sans",
-};
+} as const;
 
 export const opacity = {
   none: 0,
@@ -114,7 +114,7 @@ export const opacity = {
   heavy: 0.8,
   solid: 0.9,
   full: 1,
-};
+} as const;
 
 export const typeSizes = {
   micro: "text-micro",
@@ -137,4 +137,4 @@ export const typeSizes = {
   "fluid-7": "text-5xl sm:text-6xl md:text-7xl",
   "fluid-8": "text-6xl sm:text-7xl md:text-8xl",
   "fluid-9": "text-7xl sm:text-8xl md:text-9xl",
-};
+} as const;

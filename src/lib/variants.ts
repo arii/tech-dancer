@@ -1,5 +1,5 @@
 // impeccable-ignore-file
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { transitions, interaction, typography, layouts, buttons, journal, lists } from "@/styles/utilities";
 
 /**
@@ -67,7 +67,7 @@ export const variants = {
     lg: "rounded-lg",
     xl: "rounded-xl",
   }
-};
+} as const;
 
 export const buttonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} ${buttons.base}`,
@@ -269,3 +269,20 @@ export const listRowVariants = createTransitionVariants(
     }
   }
 );
+
+/**
+ * Derived TypeScript types for all variant definitions.
+ * Automatically stays in sync with CVA definitions.
+ */
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
+export type ActionButtonVariants = VariantProps<typeof actionButtonVariants>;
+export type CardVariants = VariantProps<typeof cardVariants>;
+export type FilterButtonVariants = VariantProps<typeof filterButtonVariants>;
+export type TagVariants = VariantProps<typeof tagVariants>;
+export type ListRowVariants = VariantProps<typeof listRowVariants>;
+
+// Journal Specific Variant Props
+export type JournalCardVariants = VariantProps<typeof journalVariants.card>;
+export type JournalShareActionVariants = VariantProps<typeof journalVariants.shareAction>;
+export type JournalTagVariants = VariantProps<typeof journalVariants.tag>;
+export type JournalNavLinkVariants = VariantProps<typeof journalVariants.navLink>;
