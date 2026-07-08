@@ -76,6 +76,33 @@ def test_scan_workflows(tmp_path, monkeypatch):
     assert any("ci.yml" in f for f in workflows)
     assert any("deploy.yaml" in f for f in workflows)
 
+def test_scan_workflows_fallback(tmp_path, monkeypatch):
+    workflow_dir = tmp_path / ".github" / "workflows"
+    workflow_dir.mkdir(parents=True)
+    (workflow_dir / "ci.yml").write_text("name: CI")
+    (workflow_dir / "deploy.yaml").write_text("name: Deploy")
+    (workflow_dir / "README.md").write_text("Not a workflow")
+
+    # Mock run_command to simulate git ls-files failure
+    from dev_tools.utils import CLIError
+    def mock_run_command_fail(cmd, **kwargs):
+        if cmd[0] == "git" and cmd[1] == "ls-files":
+            raise CLIError("git failed")
+        return ""
+
+    monkeypatch.setattr("dev_tools.orchestrator.run_command", mock_run_command_fail)
+
+    # Mock os.path.exists and os.listdir for fallback
+    monkeypatch.setattr(os.path, "exists", lambda p: ".github/workflows" in str(p))
+    monkeypatch.setattr(os, "listdir", lambda p: ["ci.yml", "deploy.yaml", "README.md"] if ".github/workflows" in str(p) else [])
+
+    orch = Orchestrator()
+    workflows = orch._scan_workflows()
+    # Manual walk should still find 2 workflow files
+    assert len(workflows) == 2
+    assert any("ci.yml" in f for f in workflows)
+    assert any("deploy.yaml" in f for f in workflows)
+
 def test_plan_workflow_audit_invalid_path(tmp_path, monkeypatch):
     from dev_tools.utils import CLIError
     orch = Orchestrator()

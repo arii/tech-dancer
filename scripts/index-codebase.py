@@ -29,7 +29,7 @@ def get_files_to_index(extensions: set[str], exclude_dirs: set[str]) -> Iterator
                 yield filepath
         return
     except Exception as e:
-        print(f"⚠️ git ls-files failed: {e}. Falling back to os.walk")
+        print(f"⚠️ git ls-files failed: {e}. Falling back to os.walk. Performance may be impacted in large repositories.")
 
     for root, dirs, files in os.walk("."):
         # Prune excluded directories

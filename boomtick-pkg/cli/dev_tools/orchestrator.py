@@ -1101,8 +1101,8 @@ Respond only after the PR is created or updated:
             files = []
             for f in tracked_files:
                 if f.endswith(".yml") or f.endswith(".yaml"):
-                    if os.path.exists(f):
-                        files.append(f)
+                    # Tracked files are guaranteed to exist in the repository
+                    files.append(f)
             return sorted(files)
         except Exception:
             # Fallback to manual listing if git fails

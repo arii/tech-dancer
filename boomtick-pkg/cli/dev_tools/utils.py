@@ -683,21 +683,32 @@ def fetch_latest_node() -> Optional[str]:
 def walk_tsx(root_dir='src'):
     """
     Yields tracked .tsx files within the specified directory.
-    Uses 'git ls-files' to ensure untracked agent scratchpad files are ignored.
+
+    This function prioritizes using 'git ls-files' to discover files, which ensures that
+    untracked agent scratchpad scripts are excluded from audits and analysis.
+    It falls back to manual directory traversal if Git is unavailable.
+
+    Args:
+        root_dir (str): The starting directory for discovery. Defaults to 'src'.
+
+    Yields:
+        str: Relative path to a discovered .tsx file.
     """
+    # Defensive input validation to mitigate traversal/injection risks
+    safe_root = sanitize_path(root_dir)
+    if not safe_root:
+        safe_root = 'src'
+
     try:
-        # Get list of tracked files in root_dir
-        cmd = ["git", "ls-files", root_dir]
+        # Get list of tracked files in root_dir. Tracked files are guaranteed to exist.
+        cmd = ["git", "ls-files", safe_root]
         tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
         for f in tracked_files:
             if f.endswith('.tsx'):
-                # Ensure the path is relative to the current working directory
-                # git ls-files already returns relative paths from repo root
-                if os.path.exists(f):
-                    yield f
+                yield f
     except Exception:
         # Fallback to manual walk if git fails or is not a git repo
-        for root, dirs, files in os.walk(root_dir):
+        for root, dirs, files in os.walk(safe_root):
             for file in files:
                 if file.endswith('.tsx'):
                     yield os.path.join(root, file)

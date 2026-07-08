@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,6 +25,9 @@ const CHECK_PATHS = [
 
 const AUDIT_EXTENSIONS = ['.ts', '.tsx', '.yml', '.css', '.scss', '.npmrc'];
 
+const GIT_COMMAND = 'git';
+const GIT_LS_FILES_ARGS = ['ls-files'];
+
 function collectAuditFiles(targets) {
   const resolvedTargets = targets.length > 0 ? targets : CHECK_PATHS;
   const results = new Set();
@@ -41,9 +44,17 @@ function collectAuditFiles(targets) {
       // --cached (default): files in the index
       // --others --exclude-standard: untracked files not ignored by .gitignore
       // We ONLY want tracked files (those in the index).
-      const output = execSync(`git ls-files "${target}"`, { encoding: 'utf-8', cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] });
-      return output.split('\n').filter(Boolean).map(f => path.resolve(ROOT, f));
-    } catch {
+      // Use spawnSync with an arguments array to avoid shell injection vulnerabilities.
+      const result = spawnSync(GIT_COMMAND, [...GIT_LS_FILES_ARGS, target], { encoding: 'utf-8', cwd: ROOT });
+
+      if (result.status !== 0) {
+        console.error(`::error::git ls-files failed for target "${target}" (exit ${result.status}): ${result.stderr}`);
+        return null;
+      }
+
+      return result.stdout.split('\n').filter(Boolean).map(f => path.resolve(ROOT, f));
+    } catch (err) {
+      console.error(`::error::Unexpected error in getTrackedFiles for target "${target}": ${err.message}`);
       return null;
     }
   };
