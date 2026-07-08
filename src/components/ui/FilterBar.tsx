@@ -27,7 +27,7 @@ export function FilterBar({ categories }: FilterBarProps) {
             label={formatCategory(cat)}
             onClick={() => setActiveCategory(cat)}
             isActive={activeCategory === cat}
-            className="transition-all duration-300 text-sm whitespace-nowrap px-3"
+            className="transition-all duration-300 text-sm whitespace-nowrap"
           />
         ))}
       </Stack>
