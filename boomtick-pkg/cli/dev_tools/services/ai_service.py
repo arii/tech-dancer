@@ -397,7 +397,7 @@ class AIClient:
                         if not isinstance(issue, dict):
                             continue
                         normalized_fr["issues"].append({
-                            "line": issue.get("line") if isinstance(issue.get("line"), int) else 0,
+                            "line": issue.get("line") if isinstance(issue.get("line"), int) else None,
                             "severity": str(issue.get("severity", "warn")),
                             "comment": str(issue.get("comment", "No comment provided.")),
                             "confidence": str(issue.get("confidence", "medium")),

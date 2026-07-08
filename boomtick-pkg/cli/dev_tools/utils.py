@@ -260,18 +260,29 @@ def clean_llm_output(text: str) -> str:
         text = code_block_match.group(1).strip()
 
     # 3. Robust JSON boundary extraction for mixed text/JSON
-    # Only attempt if it looks like it contains a JSON object or array and is NOT source code
-    if "{" in text and "}" in text and "import " not in text and "export " not in text:
-        start = text.find('{')
-        end = text.rfind('}')
-        if start != -1 and end != -1 and end > start:
-            candidate = text[start:end+1]
-            # Validate candidate is actual JSON before returning
-            try:
-                json.loads(candidate)
-                return candidate.strip()
-            except json.JSONDecodeError:
-                pass
+    # Handles outermost object {...} or array [...]
+    first_brace = text.find('{')
+    first_bracket = text.find('[')
+    last_brace = text.rfind('}')
+    last_bracket = text.rfind(']')
+
+    # Determine starting point
+    start = -1
+    if first_brace != -1 and (first_bracket == -1 or first_brace < first_bracket):
+        start = first_brace
+        end = last_brace
+    elif first_bracket != -1:
+        start = first_bracket
+        end = last_bracket
+
+    if start != -1 and end != -1 and end > start:
+        candidate = text[start:end+1]
+        # Validate candidate is actual JSON before returning
+        try:
+            json.loads(candidate)
+            return candidate.strip()
+        except json.JSONDecodeError:
+            pass
 
     return text.strip()
 

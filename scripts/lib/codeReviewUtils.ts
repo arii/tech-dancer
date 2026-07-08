@@ -112,7 +112,7 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
 
   const openIdx = feedback.lastIndexOf(openTag);
   const closeIdx = feedback.lastIndexOf(closeTag);
-  const isTruncated = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
+  const openedButNeverClosed = openIdx !== -1 && (closeIdx === -1 || closeIdx < openIdx);
 
   let jsonText: string;
   if (openIdx !== -1) {
@@ -153,8 +153,12 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     endIdx = lastBracket;
   }
 
+  const isTruncated = startIdx !== -1 && endIdx === -1;
+
   if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
     jsonText = jsonText.slice(startIdx, endIdx + 1);
+  } else if (isTruncated) {
+    jsonText = jsonText.slice(startIdx);
   } else {
     // Strip markdown code blocks if boundaries weren't found
     jsonText = jsonText.replace(/^```[a-z]*\s*/gi, '').replace(/\s*```$/g, '').trim();
@@ -190,14 +194,21 @@ export function parseCodeReviewStateDetailed(feedback: string): ParsedFindingsRe
     }
 
     if (!validateFindingsSchema(state)) {
-      // If validation failed, prioritize 'missing_closing_tag' if we know the output was truncated.
+      // If validation failed, prioritize 'missing_closing_tag' if the tags were malformed.
+      // Then 'truncated_json' if the JSON boundaries were incomplete.
       // Otherwise, it's a schema violation.
-      const error = isTruncated ? 'missing_closing_tag' : 'incomplete_findings';
+      let error: 'missing_closing_tag' | 'truncated_json' | 'incomplete_findings' = 'incomplete_findings';
+      if (openedButNeverClosed) error = 'missing_closing_tag';
+      else if (isTruncated) error = 'truncated_json';
+
       return { state, parseError: error };
     }
 
     // Schema is valid, but if it was truncated, we still report it so the orchestrator knows.
-    return isTruncated ? { state, parseError: 'missing_closing_tag' } : { state };
+    if (openedButNeverClosed) return { state, parseError: 'missing_closing_tag' };
+    if (isTruncated) return { state, parseError: 'truncated_json' };
+
+    return { state };
   } catch (e) {
     if (process.env.NODE_ENV !== 'test') {
       console.warn('Failed to parse findings JSON:', e, 'JSON snippet:', jsonText.slice(0, 100));
