@@ -430,6 +430,7 @@ class Orchestrator:
         repo = get_github_client().get_repo(get_repo_name())
         issues = []
         if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
+        if "limit" in kwargs: limit = kwargs["limit"]
         if all_open:
             issues = list(repo.get_issues(state='open'))
         elif issueNumber:
@@ -1265,6 +1266,7 @@ Run the workflow (if possible via `gh workflow run` or by pushing a test branch)
         """
         issues = []
         if "issue_numbers" in kwargs and issueNumbers is None: issueNumbers = kwargs["issue_numbers"]
+        if "limit" in kwargs: limit = kwargs["limit"]
         if all_open:
             issues = self.github.list_issues(state='open', limit=limit)
         elif issueNumbers:
@@ -1528,6 +1530,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
     def list_prs(self, state: str = "open", limit: int = 100, includeDrafts: bool = True, labels: Optional[List[str]] = None, **kwargs) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
         if "include_drafts" in kwargs: includeDrafts = kwargs["include_drafts"]
+        if "labels" in kwargs and labels is None: labels = kwargs["labels"]
         prs = self.github.list_pull_requests(state=state, limit=limit, labels=labels)
 
         if not includeDrafts:
