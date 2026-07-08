@@ -25,22 +25,15 @@ export const IconMap: Record<string, React.ElementType> = {
  * Renders a list of professional experience cards.
  * Adheres to 'no-card' principles by using minimal borders and surface density.
  */
-/**
- * Sanitizes a string by removing any HTML tags to prevent XSS.
- */
-function sanitize(str: string): string {
-  if (typeof str !== 'string') return '';
-  return str.replace(/<[^>]*>?/gm, '');
-}
-
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
   if (!Array.isArray(cards)) return null;
 
-  // Security: Explicitly sanitize and validate input cards.
+  // Security: Explicitly validate input cards.
+  // We rely on React's automatic escaping for text content.
   const validatedCards = cards.map(card => ({
     ...card,
-    title: sanitize(card.title),
-    content: sanitize(card.content),
+    title: String(card.title || ''),
+    content: String(card.content || ''),
     icon: card.icon && IconMap[card.icon] ? card.icon : undefined
   }));
 
