@@ -26,16 +26,19 @@ export const IconMap: Record<string, React.ElementType> = {
  * Adheres to 'no-card' principles by using minimal borders and surface density.
  */
 export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
-  if (!Array.isArray(cards)) return null;
-
   // Security: Explicitly validate input cards.
   // Performance: Memoize validation to prevent redundant work on re-renders.
-  const validatedCards = useMemo(() => cards.map(card => ({
-    ...card,
-    title: String(card.title || ''),
-    content: String(card.content || ''),
-    icon: card.icon && IconMap[card.icon] ? card.icon : undefined
-  })), [cards]);
+  const validatedCards = useMemo(() => {
+    if (!Array.isArray(cards)) return [];
+    return cards.map(card => ({
+      ...card,
+      title: card.title ?? '',
+      content: card.content ?? '',
+      icon: card.icon && IconMap[card.icon] ? card.icon : undefined
+    }));
+  }, [cards]);
+
+  if (!Array.isArray(cards)) return null;
 
   return (
     <Stack gap="card" marginTop={4}>
@@ -43,7 +46,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
           <Box key={index} padding={8} border radius="md" surface="default" className={`bg-surface/20 border-line/5 group ${interaction.hoverAccent} ${transitions.default} ${interaction.active} cursor-pointer`}>
-            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
+            <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="center">
               {Icon && (
                 <Box 
                   width={12} 
@@ -51,7 +54,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
                   radius="md"
                   border 
                   display="flex" 
-                  align="start"
+                  align="center"
                   justify="center" 
                   className="bg-accent/5 border-accent/20 shrink-0 shadow-sm group-hover:shadow-accent/5"
                 >
@@ -174,7 +177,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           target="_blank"
           rel="noopener noreferrer"
           display="inline-flex"
-          align="start"
+          align="center"
           paddingX={4}
           paddingY={3}
           minHeight={11}
