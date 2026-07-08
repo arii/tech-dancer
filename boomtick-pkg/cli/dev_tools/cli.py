@@ -202,7 +202,7 @@ def search_prs(ctx, state, limit, include_drafts, labels):
 
     # Contract validation
     try:
-        SearchPRsInput(state=state, limit=limit, include_drafts=include_drafts, labels=label_list)
+        SearchPRsInput(state=state, limit=limit, includeDrafts=include_drafts, labels=label_list)
     except Exception as e:
         _handle_unexpected_error(ctx, "pr list", e)
 
@@ -330,12 +330,12 @@ def issue_update(ctx, issue_number, file, body, labels, add_labels, remove_label
     # Contract validation
     try:
         IssueUpdateInput(
-            issue_number=issue_number,
+            issueNumber=issue_number,
             body=body,
             file=file,
             labels=label_list,
-            add_labels=add_label_list,
-            remove_labels=remove_label_list
+            addLabels=add_label_list,
+            removeLabels=remove_label_list
         )
     except Exception as e:
         _handle_unexpected_error(ctx, "issue update", e)
@@ -538,7 +538,7 @@ def read_pr_comments(ctx, pr_number):
 
     # Input contract validation
     try:
-        ReadPRCommentsInput(pr_number=pr_number)
+        ReadPRCommentsInput(prNumber=pr_number)
     except Exception as e:
         _handle_unexpected_error(ctx, "read-pr-comments", e)
 
