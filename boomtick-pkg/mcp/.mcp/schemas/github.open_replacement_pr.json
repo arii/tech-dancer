@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "properties": {
+    "originalPrNumber": {
+      "type": "number",
+      "description": "The number of the original pull request being replaced."
+    },
+    "repairBranch": {
+      "type": "string",
+      "description": "The branch containing the fixes."
+    },
+    "baseBranch": {
+      "type": "string",
+      "description": "The branch to merge the fixes into."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the new PR."
+    },
+    "body": {
+      "type": "string",
+      "description": "The body/description of the new PR."
+    },
+    "draft": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to create the PR as a draft (default: true)."
+    },
+    "worktreePath": {
+      "type": "string",
+      "description": "Optional path to the worktree where the PR is created from."
+    },
+    "pushMode": {
+      "type": "boolean",
+      "const": true,
+      "description": "Safety gate: Must be true to push the branch and open the PR."
+    }
+  },
+  "required": [
+    "originalPrNumber",
+    "repairBranch",
+    "baseBranch",
+    "title",
+    "body",
+    "pushMode"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "sessionId": {
+      "type": "string",
+      "description": "The unique ID of the Jules session (a long number like 13410430235481343883), NOT a pull request number or issue ID."
+    }
+  },
+  "required": [
+    "sessionId"
+  ]
+}

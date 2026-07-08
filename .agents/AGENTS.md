@@ -169,6 +169,18 @@ print(json.dumps(schema['cli_schema']['subcommands']['gh pr-diff'], indent=2))
 
 This is what `boomtick-mcp` does automatically on every call.
 
+### 🔄 MCP Tool Schema Synchronization
+
+To prevent schema drift (e.g., outdated parameters or case mismatches), MCP tool schemas are automatically synchronized from `boomtick-pkg/mcp/src/mcp/definitions.ts` to:
+1. **Global Config**: `~/.gemini/antigravity-cli/mcp/boomtick-mcp/`
+2. **Project Local**: `boomtick-pkg/mcp/.mcp/schemas/`
+
+Synchronization occurs automatically during:
+- `pnpm run verify:schemas` (pre-build gate)
+- `.githooks/update-env.sh` (triggered by git pull/checkout if MCP code changes)
+
+**Best Practice**: If your agent environment supports project-level tool configuration, configure it to prefer the schemas in `boomtick-pkg/mcp/.mcp/schemas/`. This ensures you are always using the most up-to-date tool definitions for the current branch.
+
 ## Appendix: CLI Entrypoint & Packaging Standards
 
 ### 1. Deterministic Imports over sys.path Manipulation

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "issueNumber": {
+      "type": "number",
+      "description": "The number of the issue to update."
+    },
+    "body": {
+      "type": "string",
+      "description": "The new body content for the issue."
+    },
+    "state": {
+      "type": "string",
+      "description": "The state to set the issue to (open or closed)."
+    }
+  },
+  "required": [
+    "issueNumber"
+  ]
+}

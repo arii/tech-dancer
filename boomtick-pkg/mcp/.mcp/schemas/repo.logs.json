@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "prNumber": {
+      "type": "number"
+    },
+    "grep": {
+      "type": "string",
+      "description": "Optional pattern to filter log lines."
+    }
+  },
+  "required": [
+    "prNumber"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "branchName": {
+      "type": "string",
+      "description": "The name of the new branch"
+    },
+    "baseBranch": {
+      "type": "string",
+      "default": "main",
+      "description": "Branch to branch off from"
+    }
+  },
+  "required": [
+    "branchName"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "base": {
+      "type": "string",
+      "default": "main",
+      "description": "The base ref to compare from (default: 'main')."
+    },
+    "head": {
+      "type": "string",
+      "default": "HEAD",
+      "description": "The head ref to compare to (default: 'HEAD')."
+    }
+  },
+  "required": []
+}

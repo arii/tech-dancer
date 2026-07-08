@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "route": {
+      "type": "string",
+      "default": "/",
+      "description": "The route to audit (default: '/')."
+    },
+    "worktreePath": {
+      "type": "string",
+      "description": "Optional path to the worktree to run the audit in."
+    }
+  },
+  "required": []
+}

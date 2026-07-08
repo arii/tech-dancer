@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional list of commands to run (default includes install, lint, test, build)."
+    },
+    "timeoutSeconds": {
+      "type": "number",
+      "default": 300,
+      "description": "Maximum time in seconds to wait for tests (default: 300)."
+    },
+    "worktreePath": {
+      "type": "string",
+      "description": "Optional path to the worktree to run tests in."
+    }
+  },
+  "required": []
+}

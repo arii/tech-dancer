@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "PR Title."
+    },
+    "body": {
+      "type": "string",
+      "description": "Description of changes."
+    },
+    "head": {
+      "type": "string",
+      "description": "The branch containing changes to merge."
+    },
+    "base": {
+      "type": "string",
+      "default": "main",
+      "description": "The target branch to merge into."
+    },
+    "draft": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to create the PR as a draft."
+    }
+  },
+  "required": [
+    "title",
+    "body",
+    "head"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "prNumber": {
+      "type": "number",
+      "description": "The number of the original PR to comment on."
+    },
+    "body": {
+      "type": "string",
+      "description": "The content of the comment."
+    }
+  },
+  "required": [
+    "prNumber",
+    "body"
+  ]
+}

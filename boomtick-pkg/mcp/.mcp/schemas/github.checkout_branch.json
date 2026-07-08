@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "branch": {
+      "type": "string",
+      "description": "The name of the branch to checkout."
+    },
+    "worktreePath": {
+      "type": "string",
+      "description": "Optional path to the worktree to perform the checkout in."
+    }
+  },
+  "required": [
+    "branch"
+  ]
+}

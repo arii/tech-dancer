@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "checkDeep": {
+      "type": "boolean",
+      "description": "Whether to perform a deep health check including external dependencies.",
+      "default": false
+    }
+  },
+  "required": []
+}

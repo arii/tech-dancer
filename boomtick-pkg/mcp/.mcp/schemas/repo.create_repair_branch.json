@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "prNumber": {
+      "type": "number",
+      "description": "The original pull request number to repair."
+    },
+    "repairBranchName": {
+      "type": "string",
+      "description": "Optional custom name for the new repair branch. Defaults to agent/repair-pr-<num>-<title>."
+    },
+    "writeMode": {
+      "type": "boolean",
+      "const": true,
+      "description": "Safety gate: Must be true to perform branch creation and worktree setup."
+    }
+  },
+  "required": [
+    "prNumber",
+    "writeMode"
+  ]
+}

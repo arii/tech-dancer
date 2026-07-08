@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "filter": {
+      "type": "string",
+      "description": "Optional glob pattern to filter script names."
+    }
+  },
+  "required": []
+}

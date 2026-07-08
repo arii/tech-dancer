@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string"
+    },
+    "maxResults": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "query"
+  ]
+}
