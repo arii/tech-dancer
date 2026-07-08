@@ -41,6 +41,13 @@ class TestGitHubClientPagination(unittest.TestCase):
         call_url = args[1] if len(args) > 1 else kwargs.get("url", "")
 
         self.assertIn("/search/issues", call_url)
+        # mock_request is actually Session.request, so we check calls on the mock
+        found_search_call = False
+        for call in mock_request.call_args_list:
+            if any("/search/issues" in str(arg) for arg in call.args):
+                found_search_call = True
+                break
+        self.assertTrue(found_search_call, "Search API call not found in mock_request calls")
 
 
 if __name__ == '__main__':

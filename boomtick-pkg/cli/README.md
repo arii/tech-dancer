@@ -47,7 +47,7 @@ export GEMINI_API_KEY="<key>"
 
 - `SKIP_GIT_HOOKS=1` — skip git hook execution (e.g. in CI).
 - `SKIP_VALIDATION=1` — skip post-setup runtime validation.
-- `NODE_MAJOR` — override Node major used for apt installation (defaults to `22`).
+- `NODE_MAJOR` — override Node major used for apt installation (defaults to `24`).
 
 ---
 
@@ -57,10 +57,10 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 
 #### 1) Standard PR / Review Workflows
 
-- Audit a PR (dry-run by default):
-  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit`
-- Submit audit results:
-  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
+- Plan a review (fetches context and audits):
+  - `td-cli agent plan-review --pr <PR_NUMBER>`
+- Submit audit results (after authoring the review in `pr-review-<PR>.md`):
+  - `td-cli gh audit-pr <PR_NUMBER> --submit --execute`
 - Pre-submit quality gate before push/merge:
   - `td-cli gh pre-submit`
 
@@ -77,7 +77,7 @@ After `./dev-tools/setup-agent.sh`, use the following workflow-specific setup:
 #### 3) Headless / Bot Auditing
 
 - For batch auditing open PRs:
-  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --cleanup --execute`
+  - `td-cli gh audit-pr <PR_NUMBER> --fetch --audit --submit --execute`
 - Ensure `jq`, `gh`, Python deps, and pnpm deps are installed (handled by
   setup script).
 
