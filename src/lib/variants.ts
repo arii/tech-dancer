@@ -1,15 +1,13 @@
 // impeccable-ignore-file
 import { cva } from "class-variance-authority";
-import { interaction, typography, layouts } from "@/styles/utilities";
-
-const DEFAULT_TRANSITIONS = "motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none";
+import { transitions, interaction, typography, layouts } from "@/styles/utilities";
 
 /**
  * Enhanced CVA factory that injects default accessibility-compliant transitions.
  */
 export const createVariants: typeof cva = (base, config) => {
   // Use simple concatenation to avoid runtime overhead of clsx for the base string
-  const baseClasses = base ? `${base} ${DEFAULT_TRANSITIONS}` : DEFAULT_TRANSITIONS;
+  const baseClasses = base ? `${base} ${transitions.default}` : transitions.default;
   return cva(baseClasses, config);
 };
 

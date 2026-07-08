@@ -1,4 +1,5 @@
 import { expect, test, describe } from "vitest";
+import { transitions } from "@/styles/utilities";
 import {
   buttonVariants,
   actionButtonVariants,
@@ -10,7 +11,7 @@ import {
 } from "../variants";
 
 describe("Variants Factory (createVariants)", () => {
-  const defaultTransitions = "motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none";
+  const defaultTransitions = transitions.default;
 
   test("buttonVariants should include default transitions", () => {
     const classes = buttonVariants();
