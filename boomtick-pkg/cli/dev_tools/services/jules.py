@@ -128,23 +128,34 @@ class JulesClient:
         if len(session_ids) == 1:
             return self._send_single_message(session_ids[0], message)
 
+        # Implementation of hard cap for batch size
+        BATCH_CAP = 50
+        if len(session_ids) > BATCH_CAP:
+            log_warn(f"Batch size {len(session_ids)} exceeds cap of {BATCH_CAP}. Truncating.")
+            session_ids = session_ids[:BATCH_CAP]
+
         log_info(f"Batch sending message to {len(session_ids)} sessions...")
-        results = []
+
+        # Use a dict to maintain input order in the final results list
+        results_map = {}
         with ThreadPoolExecutor(max_workers=min(len(session_ids), 10)) as executor:
             future_to_sid = {executor.submit(self._send_single_message, sid, message): sid for sid in session_ids}
             for future in as_completed(future_to_sid):
                 sid = future_to_sid[future]
                 try:
                     res = future.result()
-                    results.append({"sessionId": sid, "status": "success"})
+                    results_map[sid] = {"sessionId": sid, "status": "success"}
                 except Exception as exc:
                     log_warn(f"Failed to send message to {sid}: {exc}")
-                    results.append({"sessionId": sid, "status": "error", "message": str(exc)})
+                    results_map[sid] = {"sessionId": sid, "status": "error", "message": str(exc)}
+
+        # Reconstruct results in original input order
+        ordered_results = [results_map[sid] for sid in session_ids]
 
         return {
-            "status": "success" if any(r["status"] == "success" for r in results) else "error",
-            "message": f"Batch send completed. {sum(1 for r in results if r['status'] == 'success')}/{len(session_ids)} successful.",
-            "results": results
+            "status": "success" if any(r["status"] == "success" for r in ordered_results) else "error",
+            "message": f"Batch send completed. {sum(1 for r in ordered_results if r['status'] == 'success')}/{len(session_ids)} successful.",
+            "results": ordered_results
         }
 
     def _send_single_message(self, session_id: str, message: str) -> Dict[str, Any]:

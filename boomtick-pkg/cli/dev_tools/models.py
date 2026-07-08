@@ -196,6 +196,27 @@ class JulesSendMessageInput(BaseModel):
     sessionId: Union[str, List[str]] = Field(..., description="The unique ID or IDs of the Jules session(s).")
     message: str = Field(..., description="The message content to send.")
 
+    @model_validator(mode='after')
+    def validate_send_message(self) -> 'JulesSendMessageInput':
+        ids = [self.sessionId] if isinstance(self.sessionId, str) else self.sessionId
+        if not ids:
+            raise ValueError("sessionId list cannot be empty")
+
+        import re
+        # Allow alphanumeric, hyphens, underscores, and forward slashes (for sessions/ prefix)
+        pattern = re.compile(r"^[a-zA-Z0-9/_-]+$")
+
+        for sid in ids:
+            if not sid or not sid.strip():
+                raise ValueError("Session ID cannot be empty or whitespace")
+            if not pattern.match(sid):
+                raise ValueError(f"Invalid characters in session ID: {sid}")
+
+        if not self.message or not self.message.strip():
+            raise ValueError("Message cannot be empty or whitespace")
+
+        return self
+
 class JulesListSessionsInput(BaseModel):
     pageSize: Optional[int] = Field(None, description="Maximum number of sessions to return.")
     pageToken: Optional[str] = Field(None, description="Token for pagination.")

@@ -24,18 +24,31 @@ def test_send_single_message(jules_client):
 
 def test_send_batch_message_success(jules_client):
     with patch("requests.post") as mock_post:
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {"status": "success"}
-        mock_post.return_value = mock_response
+        # Mock responses arriving out of order to test reconstruction
+        mock_res1 = MagicMock()
+        mock_res1.status_code = 200
+        mock_res1.json.return_value = {"status": "success"}
 
-        session_ids = ["session1", "session2", "session3"]
+        mock_res2 = MagicMock()
+        mock_res2.status_code = 200
+        mock_res2.json.return_value = {"status": "success"}
+
+        # side_effect returns results for session2 then session1
+        def side_effect(url, **kwargs):
+            if "session2" in url: return mock_res2
+            return mock_res1
+
+        mock_post.side_effect = side_effect
+
+        session_ids = ["session1", "session2"]
         res = jules_client.send_message(session_ids, "hello batch")
 
         assert res["status"] == "success"
-        assert "3/3 successful" in res["message"]
-        assert len(res["results"]) == 3
-        assert mock_post.call_count == 3
+        assert "2/2 successful" in res["message"]
+        assert len(res["results"]) == 2
+        # Verify order is preserved: session1, then session2
+        assert res["results"][0]["sessionId"] == "session1"
+        assert res["results"][1]["sessionId"] == "session2"
 
 def test_send_batch_message_partial_failure(jules_client):
     with patch("requests.post") as mock_post:
@@ -57,7 +70,47 @@ def test_send_batch_message_partial_failure(jules_client):
         assert res["status"] == "success" # At least one succeeded
         assert "1/2 successful" in res["message"]
 
-        # Check results
-        results_dict = {r["sessionId"]: r for r in res["results"]}
-        assert results_dict["session1"]["status"] == "success"
-        assert results_dict["session2"]["status"] == "error"
+        # Check results order
+        assert res["results"][0]["sessionId"] == "session1"
+        assert res["results"][0]["status"] == "success"
+        assert res["results"][1]["sessionId"] == "session2"
+        assert res["results"][1]["status"] == "error"
+
+def test_send_batch_hard_cap(jules_client):
+    with patch("requests.post") as mock_post:
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"status": "success"}
+        mock_post.return_value = mock_response
+
+        # Pass 60 IDs, should truncate to 50
+        session_ids = [f"s{i}" for i in range(60)]
+        res = jules_client.send_message(session_ids, "hello cap")
+
+        assert len(res["results"]) == 50
+        assert mock_post.call_count == 50
+
+def test_validation_invalid_ids():
+    from dev_tools.models import JulesSendMessageInput
+    import pytest
+    from pydantic import ValidationError
+
+    # Test invalid characters
+    with pytest.raises(ValidationError) as exc:
+        JulesSendMessageInput(sessionId="bad;id", message="msg")
+    assert "Invalid characters" in str(exc.value)
+
+    # Test empty list
+    with pytest.raises(ValidationError) as exc:
+        JulesSendMessageInput(sessionId=[], message="msg")
+    assert "cannot be empty" in str(exc.value)
+
+    # Test whitespace ID
+    with pytest.raises(ValidationError) as exc:
+        JulesSendMessageInput(sessionId=["  "], message="msg")
+    assert "cannot be empty or whitespace" in str(exc.value)
+
+    # Test empty message
+    with pytest.raises(ValidationError) as exc:
+        JulesSendMessageInput(sessionId="sid", message="  ")
+    assert "Message cannot be empty" in str(exc.value)
