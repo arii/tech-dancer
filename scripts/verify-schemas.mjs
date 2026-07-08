@@ -39,7 +39,7 @@ function verifySchemas() {
 
     // 4. Sync Contracts
     console.log('🔄 Syncing contracts...');
-    execSync('npx tsx boomtick-pkg/mcp/scripts/sync-contracts.ts', { stdio: 'inherit' });
+    execSync('pnpm exec tsx boomtick-pkg/mcp/scripts/sync-contracts.ts', { stdio: 'inherit' });
 
     // 5. Sync MCP Schemas
     console.log('🛠️  Syncing MCP schemas...');
