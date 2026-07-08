@@ -18,7 +18,7 @@ function isWritable(dir: string): boolean {
 
 interface ToolDefinition {
   name: string;
-  inputSchema: Record<string, any>;
+  inputSchema: Record<string, unknown>;
 }
 
 /**
