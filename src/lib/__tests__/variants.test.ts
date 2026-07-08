@@ -61,4 +61,18 @@ describe("Variants Factory (createVariants)", () => {
     const classes = listRowVariants();
     expect(classes).toContain(defaultTransitions);
   });
+
+  describe("createVariants edge cases", () => {
+    test("should handle empty base string", async () => {
+      const { createVariants } = await import("../variants");
+      const variants = createVariants("", {});
+      expect(variants()).toBe(defaultTransitions);
+    });
+
+    test("should handle undefined config", async () => {
+      const { createVariants } = await import("../variants");
+      const variants = createVariants("base-class", undefined as any);
+      expect(variants()).toBe(`base-class ${defaultTransitions}`);
+    });
+  });
 });
