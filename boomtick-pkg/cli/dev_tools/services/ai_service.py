@@ -659,11 +659,17 @@ class AIClient:
             f = fr.get('file')
             if not f:
                 continue
-            file_data[f]['issues'].extend(fr.get('issues', []))
+            issues = fr.get('issues', [])
+            if isinstance(issues, list):
+                file_data[f]['issues'].extend([i for i in issues if isinstance(i, dict)])
+
             # worst verdict wins: blocking > needs_changes > ok
             _rank = {"blocking": 3, "needs_changes": 2, "ok": 1, "error": 0, "parse_error": 0}
-            if _rank.get(fr.get('verdict', 'ok'), 0) > _rank.get(file_data[f]['verdict'], 0):
-                file_data[f]['verdict'] = fr.get('verdict', 'ok')
+            verdict = fr.get('verdict', 'ok')
+            if not isinstance(verdict, str):
+                verdict = str(verdict)
+            if _rank.get(verdict, 0) > _rank.get(file_data[f]['verdict'], 0):
+                file_data[f]['verdict'] = verdict
         for chunk in chunks:
             if not chunk['skip']:
                 file_data[chunk['file']]['added_lines'] += chunk['added_lines']
@@ -690,12 +696,15 @@ class AIClient:
         for fr in file_reviews:
             if not isinstance(fr, dict):
                 continue
-            for issue in fr.get('issues', []):
+            issues = fr.get('issues', [])
+            if not isinstance(issues, list):
+                continue
+            for issue in issues:
                 if not isinstance(issue, dict):
                     continue
-                conf = issue.get('confidence', 'high').upper()
+                conf = str(issue.get('confidence', 'high')).upper()
                 all_issues.append({
-                    "path": fr.get('file', 'unknown'),
+                    "path": str(fr.get('file', 'unknown')),
                     "line": issue.get('line', 1),
                     "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
                 })
