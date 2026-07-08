@@ -47,24 +47,6 @@ runs:
       with:
         node-version-file: ${{ inputs.node-version-file }}
 
-    - name: Cache pnpm store
-      uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-      if: inputs.setup-node == 'true'
-      with:
-        path: ~/.local/share/pnpm/store/v10
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-
-
-    - name: Cache pip
-      uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
-      if: inputs.setup-python == 'true'
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('boomtick-pkg/cli/pyproject.toml') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-
     - name: Enable Corepack
       if: inputs.setup-node == 'true'
       run: corepack enable
@@ -89,7 +71,7 @@ runs:
       uses: actions/cache@v4 # nosemgrep: yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
       with:
         path: ${{ steps.pip-cache.outputs.DIR }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml', '**/requirements-dev.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
@@ -97,10 +79,16 @@ runs:
       if: inputs.setup-python == 'true'
       run: |
         echo "::group::Install dev-tools"
-        pip install -e boomtick-pkg/cli/ --break-system-packages
-
-        if [ -f "boomtick-pkg/cli/requirements-dev.txt" ]; then
-          pip install -r boomtick-pkg/cli/requirements-dev.txt --break-system-packages
+        if [ -d "boomtick-pkg/cli" ]; then
+          pip install -e boomtick-pkg/cli/ --break-system-packages
+          if [ -f "boomtick-pkg/cli/requirements-dev.txt" ]; then
+            pip install -r boomtick-pkg/cli/requirements-dev.txt --break-system-packages
+          fi
+        else
+          pip install -e cli/ --break-system-packages
+          if [ -f "cli/requirements-dev.txt" ]; then
+            pip install -r cli/requirements-dev.txt --break-system-packages
+          fi
         fi
 
         # Add multiple potential local bin paths to GITHUB_PATH immediately after install
@@ -136,12 +124,18 @@ runs:
         # Use $(pwd) to get the container-internal path, avoiding host-path leakage from $GITHUB_WORKSPACE
         REPO_DIR=$(pwd)
 
+        if [ -d "$REPO_DIR/boomtick-pkg/cli" ]; then
+          CLI_DIR="$REPO_DIR/boomtick-pkg/cli"
+        else
+          CLI_DIR="$REPO_DIR/cli"
+        fi
+
         # 1. Update PYTHONPATH for subsequent steps
         # Ensure it works even if PYTHONPATH is initially empty
         if [ -z "$PYTHONPATH" ]; then
-          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$CLI_DIR" >> "$GITHUB_ENV"
         else
-          echo "PYTHONPATH=$REPO_DIR/boomtick-pkg/cli:$PYTHONPATH" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=$CLI_DIR:$PYTHONPATH" >> "$GITHUB_ENV"
         fi
 
         # 2. Update PATH for subsequent steps to include local bin directories
@@ -149,5 +143,5 @@ runs:
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         echo "/github/home/.local/bin" >> "$GITHUB_PATH"
 
-        echo "✅ Environment configured: PYTHONPATH includes $REPO_DIR/boomtick-pkg/cli"
+        echo "✅ Environment configured: PYTHONPATH includes $CLI_DIR"
       shell: bash
