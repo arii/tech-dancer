@@ -7,6 +7,7 @@ import hashlib
 import re
 from collections import defaultdict
 from typing import Optional, Dict, Any, List, Set, Type, Tuple
+from pydantic import ValidationError
 from dev_tools.utils import log_info, log_error, log_warn, ensure_dir
 from dev_tools.verify_versions import parse_diff, verify_changes
 from dev_tools.review_read_pass import parse_diff_into_file_chunks
@@ -53,15 +54,15 @@ def validate_with_model(data: Any, model_class: Type) -> Tuple[Optional[Dict], O
 
         parsed = model_class.model_validate(data)
         return parsed.model_dump(), None
-    except Exception as e:
+    except ValidationError as e:
         # Extract specific error details from Pydantic
-        if hasattr(e, 'errors') and callable(e.errors):
-            errs = []
-            for err in e.errors():
-                loc = " -> ".join(str(x) for x in err.get('loc', []))
-                msg = err.get('msg')
-                errs.append(f"[{loc}]: {msg}")
-            return None, "Validation failed:\n  " + "\n  ".join(errs)
+        errs = []
+        for err in e.errors():
+            loc = " -> ".join(str(x) for x in err.get('loc', []))
+            msg = err.get('msg')
+            errs.append(f"[{loc}]: {msg}")
+        return None, "Validation failed:\n  " + "\n  ".join(errs)
+    except Exception as e:
         return None, str(e)
 
 
