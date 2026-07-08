@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
@@ -39,7 +39,7 @@ function verifySchemas() {
     console.log('📊 Checking for schema/contract drift...');
     try {
       execSync('git diff --exit-code boomtick-pkg/cli/dev_tools/cli-schema.json boomtick-pkg/mcp/src/tools/contract.ts', { stdio: 'inherit' });
-    } catch (err) {
+    } catch (_err) {
       console.error('\n❌ Schema or Contract drift detected.');
       console.error('   The generated files do not match the committed versions.');
       console.error('   Run the following to regenerate and commit:');
@@ -48,7 +48,7 @@ function verifySchemas() {
     }
 
     console.log('\n✅ Schema verification complete.');
-  } catch (err) {
+  } catch (_err) {
     console.error('\n❌ Verification failed due to an error in the sub-tasks.');
     // execSync with stdio: inherit already prints the error output
     process.exit(1);
