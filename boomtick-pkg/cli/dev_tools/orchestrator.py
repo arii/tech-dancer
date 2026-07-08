@@ -2,6 +2,7 @@ import hashlib
 import os
 import re
 import json
+import textwrap
 import sys
 import shutil
 import subprocess
@@ -1685,14 +1686,15 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                 if res.returncode != 0:
                     # Conflict encountered
                     run_command(["git", "merge", "--abort"])
-                    error_msg = (
-                        f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.\n\n"
-                        "### Fallback Strategy:\n"
-                        "If native merging fails due to heavy conflicts or history divergence:\n"
-                        f"1. Generate a patch: `git diff {target_branch}...{head_ref} > pr_{pr_num}.patch`\n"
-                        f"2. Apply manually: `git apply pr_{pr_num}.patch` and resolve rejects.\n"
-                        f"3. Or retry merge with: `git merge {head_ref} --allow-unrelated-histories`"
-                    )
+                    error_msg = textwrap.dedent(f"""
+                        CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.
+
+                        Fallback Strategy:
+                        If native merging fails due to heavy conflicts or history divergence:
+                        1. Generate a patch: `git diff {target_branch}...{head_ref} > pr_{pr_num}.patch`
+                        2. Apply manually: `git apply pr_{pr_num}.patch` and resolve rejects.
+                        3. Or retry merge with: `git merge {head_ref} --allow-unrelated-histories`
+                    """).strip()
                     raise CLIError(error_msg, code=res.returncode)
 
             # 4. Metadata Preservation
@@ -2080,8 +2082,8 @@ Overlapping functionality identified and resolved.
 
             if res.returncode != 0 and not allow_unrelated:
                 # Detect and retry unrelated histories even if not explicitly requested
-                output = (res.stdout or "") + (res.stderr or "")
-                if "unrelated histories" in output.lower():
+                merge_output = (res.stdout or "") + (res.stderr or "")
+                if "unrelated histories" in merge_output.lower():
                     log_warn(f"Disjoint history detected for PR #{pr_number}. Retrying with --allow-unrelated-histories")
                     res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
                     if not isinstance(res, subprocess.CompletedProcess):

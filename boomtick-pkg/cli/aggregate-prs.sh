@@ -40,6 +40,7 @@ for pr in "${PRs[@]}"; do
     # If still in a merging state (failed or unrelated histories retry resulted in conflict)
     if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
         echo "Conflict detected in PR #$pr. Attempting automatic resolution..."
+        rm -f merge_error.log
         CONFLICTED_FILES=$(git diff --name-only --diff-filter=U)
         if [ -z "$CONFLICTED_FILES" ]; then
             echo "CRITICAL: Merge failed but no conflicted files found. Aborting."
@@ -61,5 +62,6 @@ for pr in "${PRs[@]}"; do
         fi
     fi
     P_BODY="${P_BODY}Closes #$pr"$'\n\n'"### Description from PR #$pr ($TITLE):"$'\n'"$BODY"$'\n\n'"---"$'\n'
+    rm -f merge_error.log
 done
 git push -u origin "$T_BR" && gh pr create --title "Aggregated Feature: $T_BR" --body "$P_BODY" --head "$T_BR" --base "$BASE_BRANCH_NAME"
