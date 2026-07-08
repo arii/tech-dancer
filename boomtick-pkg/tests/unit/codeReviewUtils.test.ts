@@ -10,8 +10,8 @@ import {
   buildReviewPayload,
   EXTERNAL_CONTEXT_TRUNCATED_MESSAGE,
   EXTERNAL_CONTEXT_MINIMUM_BUDGET
-} from '../lib/codeReviewUtils';
-import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
+} from '../../lib/codeReviewUtils';
+import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
 
 
 describe('codeReviewUtils', () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildSystemPrompt } from '../lib/buildCodeReviewPrompt';
+import { buildSystemPrompt } from '../../lib/buildCodeReviewPrompt';
 
 describe('buildCodeReviewPrompt', () => {
   it('injects CI/CD guidance when .github/workflows file is changed', () => {

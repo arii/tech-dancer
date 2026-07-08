@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { loadProjectConfig, DEFAULT_CONFIG } from '../lib/projectConfig';
+import { loadProjectConfig, DEFAULT_CONFIG } from '../../lib/projectConfig';
 
 describe('loadProjectConfig', () => {
   let tempDir: string;

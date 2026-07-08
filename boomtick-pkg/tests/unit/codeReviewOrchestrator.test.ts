@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { reconcileVerdict } from '../lib/codeReviewOrchestrator';
+import { reconcileVerdict } from '../../lib/codeReviewOrchestrator';
 
 import { IMPACT_CONFIG } from '../../../scripts/impact-analysis.config';
-import { filterLowImpactFiles } from '../lib/codeReviewUtils';
+import { filterLowImpactFiles } from '../../lib/codeReviewUtils';
 
 describe('filtering logic', () => {
   function filterFiles(files: string[]) {
