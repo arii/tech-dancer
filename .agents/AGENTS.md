@@ -80,7 +80,7 @@ If you encounter a schema error or a missing argument in an MCP tool, you must *
 | **GitHub** | Comment on PR | `github.comment_triage_summary` | `td-cli gh audit-pr <PR> --submit` | `gh pr comment` |
 | **GitHub** | Status Board | `github.get_status_board` | `td-cli gh status-board` | - |
 | **GitHub** | PR Overlaps | `github.analyze_overlaps` | `td-cli gh overlaps` | - |
-| **GitHub** | Plan Review | `github.plan_review` | `td agent plan-review --pr <PR>` | - |
+| **GitHub** | Plan Review | `github.plan_review` | `td-cli agent plan-review --pr <PR>` | - |
 | **GitHub** | Audit PR (Submit) | `github.audit_pr` | `td-cli gh audit-pr <PR> --submit` | - |
 | **GitHub** | Manage Reviews | `github.manage_reviews` | `td-cli gh manage-reviews` | - |
 | **GitHub** | Validate Issue | `github.validate_issue` | `td-cli gh validate-issue` | - |
