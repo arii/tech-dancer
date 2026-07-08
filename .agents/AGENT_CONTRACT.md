@@ -13,6 +13,9 @@ Read the matching workflow before starting these task types:
 ## What You Will Always Do
 
 - Read all referenced files before taking any action.
+- **Plan Verification (Tiered)**:
+  - For **Application** changes: Verify via live execution, unit tests, and screenshots.
+  - For **Infrastructure/Bootstrap** changes (e.g. `scripts/`, `boomtick-pkg/cli/`, `setup-agent.sh`): If full live execution is risky or resource-constrained, you MAY satisfy verification via dry-runs, log analysis of partial runs, or static analysis (`bash -n`). Document why live verification was skipped.
 - **Startup Discovery**: You MUST read `.agent-context.json` upon startup and
   parse its `cli_schema` and `mcp_tools` sections. This is the only way to
   discover available subcommands and tools without guessing or using `--help`.
