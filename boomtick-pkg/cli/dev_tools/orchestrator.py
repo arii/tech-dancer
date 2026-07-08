@@ -1566,10 +1566,10 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
 - setup complete
 - validation complete
-- context collected
+- context collected (via `td agent plan-review --pr {pr_number}`)
 - diagnostics collected
 
-Agent must not repeat these steps.
+Agent must not repeat these steps. Redundant fetching (`--fetch`) or auditing (`--audit`) is already handled.
 
 ---
 
@@ -1578,7 +1578,7 @@ Agent must not repeat these steps.
 [x] Environment Validation
 [x] Issue Validation
 [x] Conflict Detection
-[x] Context Collection
+[x] Context Collection & Audit
 [x] Impact Analysis
 [ ] Review Analysis
 [ ] Review Authoring
@@ -1688,7 +1688,7 @@ Every finding must reference supplied evidence.
 Output exactly:
 
 ```bash
-td gh audit-pr {pr_number} --submit --cleanup --execute
+td gh audit-pr {pr_number} --submit --execute
 ```
 
 Only after successful completion.
