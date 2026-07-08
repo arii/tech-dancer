@@ -1,5 +1,6 @@
+import re
 from pydantic import BaseModel, Field, model_validator, ConfigDict
-from typing import List, Optional, Any, Dict, Union
+from typing import List, Optional, Any, Dict, Union, Annotated
 
 class IssueSummary(BaseModel):
     number: int
@@ -194,7 +195,7 @@ class JulesSessionIdInput(BaseModel):
 
 class JulesSendMessageInput(BaseModel):
     sessionId: Union[str, List[str]] = Field(..., description="The unique ID or IDs of the Jules session(s).")
-    message: str = Field(..., description="The message content to send.")
+    message: str = Field(..., min_length=1, description="The message content to send.")
 
     @model_validator(mode='after')
     def validate_send_message(self) -> 'JulesSendMessageInput':
@@ -207,17 +208,16 @@ class JulesSendMessageInput(BaseModel):
         if len(ids) > BATCH_CAP:
             raise ValueError(f"Batch size exceeds maximum limit of {BATCH_CAP}")
 
-        import re
         # Allow alphanumeric, hyphens, underscores, and forward slashes (for sessions/ prefix)
         pattern = re.compile(r"^[a-zA-Z0-9/_-]+$")
 
         for sid in ids:
-            if not sid or not sid.strip():
+            if not sid.strip():
                 raise ValueError("Session ID cannot be empty or whitespace")
             if not pattern.match(sid):
                 raise ValueError(f"Invalid characters in session ID: {sid}")
 
-        if not self.message or not self.message.strip():
+        if not self.message.strip():
             raise ValueError("Message cannot be empty or whitespace")
 
         return self

@@ -1111,9 +1111,7 @@ def send(ctx, session_ids, message):
 
     # Provide clear summary for batch operations
     summary = res.get('message', f"Message sent to session(s) {session_ids}")
-    if summary.startswith("Batch send completed"):
-        summary = f"✅ {summary}"
-    else:
+    if not summary.startswith("✅"):
         summary = f"✅ {summary}"
 
     out(ctx, summary, data=res)
