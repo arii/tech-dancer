@@ -88,19 +88,19 @@ run_sudo() {
 pip_install() {
   # Ubuntu/Debian images may enable PEP 668.
   # Use a 600s timeout to prevent hangs while allowing for slow networks.
-  local pip_cmd="python3 -m pip"
-  local opts=""
+  local PIP_CMD="python3 -m pip"
+  local PIP_OPTS=""
   if [ -n "${VENV_PATH:-}" ]; then
-    pip_cmd="${VENV_PATH}/bin/pip"
+    PIP_CMD="${VENV_PATH}/bin/pip"
   else
-    opts="--break-system-packages"
+    PIP_OPTS="--break-system-packages"
   fi
 
-  if timeout 600 $pip_cmd install --disable-pip-version-check "$@"; then
+  if timeout 600 $PIP_CMD install --disable-pip-version-check "$@"; then
     return 0
   fi
   if [ -z "${VENV_PATH:-}" ]; then
-    timeout 600 $pip_cmd install --disable-pip-version-check $opts "$@"
+    timeout 600 $PIP_CMD install --disable-pip-version-check $PIP_OPTS "$@"
   else
     return 1
   fi
