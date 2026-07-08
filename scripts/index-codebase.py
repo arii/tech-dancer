@@ -16,11 +16,13 @@ def chunk_file(filepath: str, content: str, chunk_size: int = 1000):
 def get_files_to_index(extensions: Set[str], exclude_dirs: Set[str]) -> Iterator[str]:
     """
     Yields file paths to index.
-    Prioritizes 'git ls-files' to ignore untracked scratchpad files.
+    Prioritizes 'git ls-files' but includes untracked files.
     Falls back to 'os.walk' if git is unavailable.
     """
     ext_list = list(extensions)
-    tracked_files = list_tracked_files(".", extensions=ext_list)
+    # Include untracked files so new legitimate code is indexed.
+    # Scratchpads are expected to be pruned by Orchestrator before indexing in common flows.
+    tracked_files = list_tracked_files(".", extensions=ext_list, include_untracked=True)
     for filepath in tracked_files:
         # Standardize on forward slashes for checking exclusions
         parts = filepath.split('/')

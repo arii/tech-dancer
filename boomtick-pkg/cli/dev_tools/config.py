@@ -39,6 +39,21 @@ class ProjectConfig:
     ])
     cli_alias: str = "td-cli"
     default_limit: int = 10
+    temp_file_patterns: List[str] = field(default_factory=lambda: [
+        r"^[^/]+\.py$",               # Root-level Python scripts
+        r"^[^/]+\.sh$",               # Root-level Shell scripts
+        r"\.tmp$",                    # Temporary files
+        r"\.temp$",                   # Temporary files
+        r"\.temp\.md$",               # Temporary markdown
+        r"antipattern-report\.txt$",  # Audit artifacts
+        r"workflow-audit-status\.md$" # Audit artifacts
+    ])
+    temp_file_feedback: str = (
+        "- **PR Pollution Detected:** The diff contains files that appear to be temporary scratchpads, "
+        "audit reports, or scripts used during development (e.g., root-level .py/.sh files).\n"
+        "  - *Fix:* Delete these files if they are not intended to be part of the final codebase. "
+        "If they are necessary tools, move them to a dedicated directory like `scripts/` or `boomtick-pkg/scripts/`.\n"
+    )
     allowed_bots: List[str] = field(default_factory=lambda: [
         "github-actions[bot]"
     ])
@@ -164,6 +179,8 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         kwargs["jules_api_url"] = raw["jules_api_url"]
     if "monolithic_pr_threshold" in raw:
         kwargs["monolithic_pr_threshold"] = int(raw["monolithic_pr_threshold"])
+    if "temp_file_patterns" in raw:
+        kwargs["temp_file_patterns"] = get_list("temp_file_patterns")
     if "base_branch" in raw:
         kwargs["base_branch"] = raw["base_branch"]
     if "max_diff_chars" in raw:

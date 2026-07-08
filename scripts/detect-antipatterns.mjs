@@ -37,7 +37,7 @@ function collectAuditFiles(targets) {
   };
 
   /**
-   * Discovers tracked files via git to ensure untracked agent scratchpad files are ignored.
+   * Discovers files via git. Prioritizes index but includes untracked files.
    */
   const getTrackedFiles = (target) => {
     // 1. Resolve to absolute path for validation
@@ -53,11 +53,10 @@ function collectAuditFiles(targets) {
     const relativeTarget = path.relative(ROOT, absoluteTarget) || '.';
 
     try {
-      // --cached (default): files in the index
+      // --cached: files in the index
       // --others --exclude-standard: untracked files not ignored by .gitignore
-      // We ONLY want tracked files (those in the index).
       // Use spawnSync with an arguments array and '--' separator to avoid shell injection and flag interpretation.
-      const result = spawnSync(GIT_COMMAND, [...GIT_LS_FILES_ARGS, '--', relativeTarget], { encoding: 'utf-8', cwd: ROOT });
+      const result = spawnSync(GIT_COMMAND, [...GIT_LS_FILES_ARGS, '--cached', '--others', '--exclude-standard', '--', relativeTarget], { encoding: 'utf-8', cwd: ROOT });
 
       if (result.status !== 0) {
         // Log both stdout and stderr for complete context

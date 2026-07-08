@@ -35,6 +35,7 @@ from dev_tools.utils import (
     clean_gha_logs,
     walk_tsx,
     list_tracked_files,
+    prune_untracked_scratchpads,
     find_patterns_in_file,
     get_bundle_size,
     get_any_count,
@@ -144,6 +145,9 @@ class Orchestrator:
         is_python = any(f.endswith(".py") for f in files_in_diff)
         is_infra = any(any(ind in f for ind in PROJECT_CONFIG.infra_file_paths) for f in files_in_diff)
 
+        # Detect PR Pollution (temporary scratchpads/scripts)
+        pollution_detected = any(any(re.search(pat, f) for pat in PROJECT_CONFIG.temp_file_patterns) for f in files_in_diff)
+
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
 
         feedback = f"### Specific Review for PR #{pr['number']}\n\n"
@@ -179,6 +183,9 @@ class Orchestrator:
         if is_infra:
             feedback += PROJECT_CONFIG.infra_feedback
 
+        if pollution_detected:
+            feedback += PROJECT_CONFIG.temp_file_feedback
+
         if pr.get('mergeable') is False:
             base_branch_name = PROJECT_CONFIG.base_branch_name
             feedback += f"- **Merge Conflicts:** This PR has conflicts with the `{base_branch_name}` base branch.\n"
@@ -200,6 +207,9 @@ class Orchestrator:
         """
         Fetches a PR, its diff, and generates a code review using LocalAI/Gemini.
         """
+        # Ensure scratchpads are pruned before starting review
+        prune_untracked_scratchpads()
+
         pr_details = self.github.fetch_pr_details(pr_number)
         sha = pr_details.get('head', {}).get('sha')
         check_runs = self.github.fetch_check_runs(sha)
@@ -571,6 +581,10 @@ class Orchestrator:
         return updates
 
     def audit_pr(self, pr_number: int, fetch: bool = False, audit: bool = False, submit: bool = False, cleanup: bool = False, dry_run: bool = True, event: Optional[str] = None) -> Dict[str, Any]:
+        # Prune scratchpads during audit phase
+        if audit:
+            prune_untracked_scratchpads()
+
         review_dir = get_or_create_log_dir("reviews")
         ctx_path = os.path.join(review_dir, f"pr-context-{pr_number}.md"); rev_path = os.path.join(review_dir, f"pr-review-{pr_number}.md")
         res = {"pr": pr_number, "files": {}}
@@ -759,6 +773,9 @@ class Orchestrator:
         return "\n".join(report)
 
     def pre_submit_checks(self) -> Dict[str, Any]:
+        # Auto-prune scratchpads before final validation
+        prune_untracked_scratchpads()
+
         results: Dict[str, Any] = {"steps": []}
 
         # 1. Runtime Check (Fail Fast)

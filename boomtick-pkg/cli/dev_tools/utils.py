@@ -701,15 +701,16 @@ def fetch_latest_node() -> Optional[str]:
     from dev_tools.version_utils import fetch_latest_node as _fetch
     return _fetch()
 
-def list_tracked_files(target_dir: str, extensions: Optional[List[str]] = None, recursive: bool = True) -> List[str]:
+def list_tracked_files(target_dir: str, extensions: Optional[List[str]] = None, recursive: bool = True, include_untracked: bool = False) -> List[str]:
     """
-    Discovers tracked files via git to ensure untracked agent scratchpad files are ignored.
+    Discovers files via git. Prioritizes Git's index but can include untracked files.
     Falls back to manual walking if Git is unavailable or fails.
 
     Args:
         target_dir (str): The directory to search in.
         extensions (List[str], optional): List of file extensions (e.g., ['.tsx', '.ts']).
         recursive (bool): Whether to search recursively. Defaults to True.
+        include_untracked (bool): Whether to include untracked files not ignored by Git.
 
     Returns:
         List[str]: List of discovered file paths relative to current directory.
@@ -719,8 +720,14 @@ def list_tracked_files(target_dir: str, extensions: Optional[List[str]] = None, 
         safe_target = '.'
 
     try:
-        # Get list of tracked files in target_dir. Tracked files are guaranteed to exist.
-        cmd = ["git", "ls-files", safe_target]
+        # Get list of files in target_dir.
+        # --cached (tracked), --others (untracked)
+        cmd = ["git", "ls-files", "--cached"]
+        if include_untracked:
+            cmd.append("--others")
+            cmd.append("--exclude-standard")
+        cmd.append(safe_target)
+
         tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
 
         results = []
@@ -765,6 +772,42 @@ def list_tracked_files(target_dir: str, extensions: Optional[List[str]] = None, 
                 break
 
         return sorted(results)
+
+def prune_untracked_scratchpads() -> List[str]:
+    """
+    Identifies and deletes untracked files matching temporary scratchpad patterns.
+    Returns a list of deleted file paths.
+    """
+    from dev_tools.config import get_config
+    config = get_config()
+    patterns = config.temp_file_patterns
+
+    try:
+        # Get list of all untracked files
+        cmd = ["git", "ls-files", "--others", "--exclude-standard"]
+        untracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
+
+        deleted = []
+        for f in untracked_files:
+            # Match against configured patterns
+            if any(re.search(pat, f) for pat in patterns):
+                # Extra safety: never delete protected files even if untracked
+                if f in ["setup-agent.sh", "install.sh"]:
+                    continue
+
+                try:
+                    os.remove(f)
+                    deleted.append(f)
+                except OSError as e:
+                    log_warn(f"Failed to delete scratchpad {f}: {e}")
+
+        if deleted:
+            log_info(f"🗑  Pruned {len(deleted)} untracked scratchpad file(s): {', '.join(deleted)}")
+        return deleted
+
+    except Exception as e:
+        log_warn(f"Failed to prune scratchpads: {e}")
+        return []
 
 def walk_tsx(root_dir='src'):
     """
