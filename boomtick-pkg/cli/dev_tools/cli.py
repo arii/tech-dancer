@@ -1108,7 +1108,15 @@ def send(ctx, session_ids, message):
         _handle_unexpected_error(ctx, "agent send", e)
 
     res = orch.jules.send_message(target_ids, message)
-    out(ctx, f"✅ Message sent to session(s) {session_ids}", data=res)
+
+    # Provide clear summary for batch operations
+    summary = res.get('message', f"Message sent to session(s) {session_ids}")
+    if summary.startswith("Batch send completed"):
+        summary = f"✅ {summary}"
+    else:
+        summary = f"✅ {summary}"
+
+    out(ctx, summary, data=res)
 
 @agent_group.command(name='plan-review')
 @click.option('--pr', 'pr_number', required=True, type=int, help='Pull Request number')

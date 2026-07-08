@@ -77,18 +77,14 @@ def test_send_batch_message_partial_failure(jules_client):
         assert res["results"][1]["status"] == "error"
 
 def test_send_batch_hard_cap(jules_client):
-    with patch("requests.post") as mock_post:
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {"status": "success"}
-        mock_post.return_value = mock_response
+    from dev_tools.models import JulesSendMessageInput
+    from pydantic import ValidationError
 
-        # Pass 60 IDs, should truncate to 50
-        session_ids = [f"s{i}" for i in range(60)]
-        res = jules_client.send_message(session_ids, "hello cap")
-
-        assert len(res["results"]) == 50
-        assert mock_post.call_count == 50
+    # Model should now raise error for > 50 IDs
+    session_ids = [f"s{i}" for i in range(51)]
+    with pytest.raises(ValidationError) as exc:
+        JulesSendMessageInput(sessionId=session_ids, message="msg")
+    assert "Batch size exceeds" in str(exc.value)
 
 def test_validation_invalid_ids():
     from dev_tools.models import JulesSendMessageInput

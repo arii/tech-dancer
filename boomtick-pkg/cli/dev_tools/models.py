@@ -199,8 +199,13 @@ class JulesSendMessageInput(BaseModel):
     @model_validator(mode='after')
     def validate_send_message(self) -> 'JulesSendMessageInput':
         ids = [self.sessionId] if isinstance(self.sessionId, str) else self.sessionId
+
+        # Enforce batch cap of 50
+        BATCH_CAP = 50
         if not ids:
             raise ValueError("sessionId list cannot be empty")
+        if len(ids) > BATCH_CAP:
+            raise ValueError(f"Batch size exceeds maximum limit of {BATCH_CAP}")
 
         import re
         # Allow alphanumeric, hyphens, underscores, and forward slashes (for sessions/ prefix)
