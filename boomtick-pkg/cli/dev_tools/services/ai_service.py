@@ -6,10 +6,11 @@ import json
 import hashlib
 import re
 from collections import defaultdict
-from typing import Optional, Dict, Any, List, Set
+from typing import Optional, Dict, Any, List, Set, Type, Tuple
 from dev_tools.utils import log_info, log_error, log_warn, ensure_dir
 from dev_tools.verify_versions import parse_diff, verify_changes
 from dev_tools.review_read_pass import parse_diff_into_file_chunks
+from dev_tools.models import AIFullReview, AISynthesisReview
 
 from dev_tools.utils import (
     call_ai,
@@ -30,51 +31,38 @@ _REVIEW_MODEL = get_ai_review_model()
 _SYNTHESIS_MODEL = get_ai_model()
 
 # Combined review schema
-_REVIEW_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "file_reviews": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "file": {"type": "string"},
-                    "issues": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "line": {"type": "integer"},
-                                "severity": {"type": "string"},
-                                "comment": {"type": "string"},
-                                "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
-                                "counterexample": {"type": "string"},
-                            },
-                            "required": ["line", "severity", "comment", "confidence"],
-                        }
-                    },
-                    "verdict": {"type": "string"},
-                },
-                "required": ["file", "issues", "verdict"],
-            }
-        },
-        "reviewComment": {"type": "string"},
-        "labels": {"type": "array", "items": {"type": "string"}},
-        "recommendation": {"type": "string"},
-    },
-    "required": ["file_reviews", "reviewComment", "labels", "recommendation"],
-}
+_REVIEW_SCHEMA = AIFullReview.model_json_schema()
 
 # Synthesis review schema
-_SYNTHESIS_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "reviewComment": {"type": "string"},
-        "labels": {"type": "array", "items": {"type": "string"}},
-        "recommendation": {"type": "string"},
-    },
-    "required": ["reviewComment", "labels", "recommendation"],
-}
+_SYNTHESIS_SCHEMA = AISynthesisReview.model_json_schema()
+
+def validate_with_model(data: Any, model_class: Type) -> Tuple[Optional[Dict], Optional[str]]:
+    """Validates data against a Pydantic model and returns (parsed_dict, error_message)."""
+    try:
+        # Handle cases where data might be double-encoded or stringified
+        if isinstance(data, str):
+            try:
+                data = json.loads(data)
+                if isinstance(data, str):
+                    data = json.loads(data)
+            except json.JSONDecodeError:
+                pass
+
+        if not isinstance(data, dict):
+            return None, f"Expected dictionary for validation, got {type(data).__name__}"
+
+        parsed = model_class.model_validate(data)
+        return parsed.model_dump(), None
+    except Exception as e:
+        # Extract specific error details from Pydantic
+        if hasattr(e, 'errors') and callable(e.errors):
+            errs = []
+            for err in e.errors():
+                loc = " -> ".join(str(x) for x in err.get('loc', []))
+                msg = err.get('msg')
+                errs.append(f"[{loc}]: {msg}")
+            return None, "Validation failed:\n  " + "\n  ".join(errs)
+        return None, str(e)
 
 
 
@@ -363,27 +351,21 @@ class AIClient:
         else:
             try:
                 cleaned = clean_llm_output(raw)
-                parsed = json.loads(cleaned)
-                if isinstance(parsed, str):
-                    parsed = json.loads(parsed)
+                parsed_data, err = validate_with_model(cleaned, AIFullReview)
+                if err:
+                    raise ValueError(err)
 
-                if not isinstance(parsed, dict):
-                    raise ValueError(f"Expected dict, got {type(parsed).__name__}")
-
-                file_reviews = parsed.get("file_reviews", [])
-                if not isinstance(file_reviews, list):
-                    file_reviews = []
-
+                file_reviews = parsed_data.get("file_reviews", [])
                 final = {
-                    "reviewComment": parsed.get("reviewComment", f"Automated review of PR #{pr_num}."),
-                    "labels": parsed.get("labels", []),
-                    "recommendation": parsed.get("recommendation", "Unknown")
+                    "reviewComment": parsed_data.get("reviewComment", f"Automated review of PR #{pr_num}."),
+                    "labels": parsed_data.get("labels", []),
+                    "recommendation": parsed_data.get("recommendation", "Unknown")
                 }
                 print(f" ✅ done ({elapsed:.1f}s)", flush=True, file=sys.stderr)
             except Exception as e:
-                print(f" ⚠️  parse error ({elapsed:.1f}s): {e}", flush=True, file=sys.stderr)
+                print(f" ⚠️  validation error ({elapsed:.1f}s): {e}", flush=True, file=sys.stderr)
                 final = {
-                    "reviewComment": f"Review complete. (Parse error: {e})\n\nRaw: {raw[:800]}",
+                    "reviewComment": f"Review complete. (Validation error: {e})\n\nRaw: {raw[:800]}",
                     "labels": [],
                     "recommendation": "Not Approved"
                 }
@@ -610,16 +592,15 @@ class AIClient:
             }
 
         try:
-            res = json.loads(clean_llm_output(raw))
-            if isinstance(res, str):
-                res = json.loads(res)
-            if not isinstance(res, dict):
-                raise ValueError(f"Expected dict, got {type(res).__name__}")
+            cleaned = clean_llm_output(raw)
+            res, err = validate_with_model(cleaned, AISynthesisReview)
+            if err:
+                raise ValueError(err)
             return res
         except Exception as e:
-            log_warn(f"Synthesis JSON parse error: {e} | raw: {raw[:300]}")
+            log_warn(f"Synthesis validation error: {e} | raw: {raw[:300]}")
             return {
-                "reviewComment": f"Review complete. {total_issues} issue(s) found. (Synthesis parse error: {e})\n\nRaw: {raw[:800]}",
+                "reviewComment": f"Review complete. {total_issues} issue(s) found. (Synthesis validation error: {e})\n\nRaw: {raw[:800]}",
                 "labels": [],
                 "recommendation": "Not Approved" if blocking_files else "Approved with Minor Changes",
             }
@@ -703,10 +684,12 @@ class AIClient:
                 if not isinstance(issue, dict):
                     continue
                 conf = str(issue.get('confidence', 'high')).upper()
+                # Support both 'issue' and 'comment' fields from the model
+                issue_text = issue.get('issue') or issue.get('comment') or ''
                 all_issues.append({
                     "path": str(fr.get('file', 'unknown')),
                     "line": issue.get('line', 1),
-                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue.get('comment','')}",
+                    "body": f"[{issue.get('severity','?')}] (Confidence: {conf}) {issue_text}",
                 })
         if not all_issues:
             # Always provide at least one comment to satisfy validator
