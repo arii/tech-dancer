@@ -1458,12 +1458,17 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         conflict_files = []
         command_log = ""
         try:
-            res = run_command(
-                ["git", "merge", "--no-commit", "--no-ff", f"origin/{base_branch}"],
-                cwd=worktree_path,
-                check=False
-            )
-            command_log = res.stdout + res.stderr
+            merge_cmd = ["git", "merge", "--no-commit", "--no-ff", f"origin/{base_branch}"]
+            res = run_command(merge_cmd, cwd=worktree_path, check=False)
+            command_log = (res.stdout or "") + (res.stderr or "")
+
+            if res.returncode != 0:
+                # Detect and retry unrelated histories
+                if "unrelated histories" in command_log.lower():
+                    log_warn(f"Disjoint history detected for conflict check of PR #{pr_number}. Retrying with --allow-unrelated-histories")
+                    res = run_command(merge_cmd + ["--allow-unrelated-histories"], cwd=worktree_path, check=False)
+                    command_log += "\n--- RETRY WITH --allow-unrelated-histories ---\n"
+                    command_log += (res.stdout or "") + (res.stderr or "")
 
             if res.returncode != 0:
                 res_diff = run_command(
@@ -2072,6 +2077,15 @@ Overlapping functionality identified and resolved.
             res = run_command(merge_cmd, check=False)
             if not isinstance(res, subprocess.CompletedProcess):
                 raise CLIError("Failed to execute git merge command")
+
+            if res.returncode != 0 and not allow_unrelated:
+                # Detect and retry unrelated histories even if not explicitly requested
+                output = (res.stdout or "") + (res.stderr or "")
+                if "unrelated histories" in output.lower():
+                    log_warn(f"Disjoint history detected for PR #{pr_number}. Retrying with --allow-unrelated-histories")
+                    res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
+                    if not isinstance(res, subprocess.CompletedProcess):
+                        raise CLIError("Retry merge with --allow-unrelated-histories failed execution")
 
             if res.returncode == 0:
                 message = f"✅ PR #{pr_number} merged successfully with {base_branch}.\nPath: {worktree_path}"
