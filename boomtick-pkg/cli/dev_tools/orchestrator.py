@@ -199,7 +199,7 @@ class Orchestrator:
         """
         Fetches a PR, its diff, and generates a code review using LocalAI/Gemini.
         """
-        pr_details = self.github.fetch_pr_details(pr_number)
+        pr_details = self.github.fetch_pr_details(prNumber)
         sha = pr_details.get('head', {}).get('sha')
         check_runs = self.github.fetch_check_runs(sha)
         pr_details['checkResults'] = check_runs
@@ -380,14 +380,14 @@ class Orchestrator:
         """
         return self.github.fetch_issue_details(issue_number)
 
-    def update_issue(self, issue_number: int, body: Optional[str] = None, labels: Optional[List[str]] = None, add_labels: Optional[List[str]] = None, remove_labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def update_issue(self, issueNumber: int, body: Optional[str] = None, labels: Optional[List[str]] = None, addLabels: Optional[List[str]] = None, removeLabels: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         Updates an issue's body and/or labels.
         """
         res = None
         # Handle full label replacement first as it is mutually exclusive with incremental changes
         if labels is not None:
-            res = self.github.update_issue(issue_number, body=body, labels=labels)
+            res = self.github.update_issue(issueNumber, body=body, labels=labels)
         else:
             # Handle incremental label changes (can happen together)
             if add_labels:
@@ -1375,7 +1375,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
     def get_ci_logs(self, pr_number: int, include_all: bool = False) -> Dict[str, Any]:
         """Fetches CI logs for failing (or all) check runs in a PR."""
         # Get PR head SHA
-        pr_data = self.github.fetch_pr_details(pr_number)
+        pr_data = self.github.fetch_pr_details(prNumber)
         head_sha = pr_data.get("head", {}).get("sha")
 
         if not head_sha:
@@ -1405,7 +1405,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
     def stream_ci_logs(self, pr_number: int, grep: Optional[str] = None) -> str:
         """Fetches and combines all CI logs for the latest workflow run of a PR."""
         # Get PR head SHA
-        pr_data = self.github.fetch_pr_details(pr_number)
+        pr_data = self.github.fetch_pr_details(prNumber)
         head_sha = pr_data.get("head", {}).get("sha")
 
         if not head_sha:
@@ -1440,7 +1440,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         if base_branch is None:
             base_branch = PROJECT_CONFIG.base_branch_name
         # Get PR head ref
-        pr_data = self.github.fetch_pr_details(pr_number)
+        pr_data = self.github.fetch_pr_details(prNumber)
         head_ref = pr_data.get("head", {}).get("ref")
 
         if not head_ref:
@@ -1514,11 +1514,11 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             "truncated": truncated
         }
 
-    def list_prs(self, state: str = "open", limit: int = 100, include_drafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def list_prs(self, state: str = "open", limit: int = 100, includeDrafts: bool = True, labels: Optional[List[str]] = None) -> Dict[str, Any]:
         """Lists PRs with optional filtering."""
         prs = self.github.list_pull_requests(state=state, limit=limit, labels=labels)
 
-        if not include_drafts:
+        if not includeDrafts:
             prs = [pr for pr in prs if not pr.get("isDraft")]
 
         return {
@@ -1526,11 +1526,11 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             "prs": [PRSummary(**pr).model_dump() for pr in prs]
         }
 
-    def get_pr_comments(self, pr_number: int) -> Dict[str, Any]:
+    def get_pr_comments(self, prNumber: int) -> Dict[str, Any]:
         """Fetches and aggregates standard issue comments and inline review comments for a PR."""
-        pr = self.github.fetch_pr_details(pr_number)
-        issue_comments = self.github.fetch_issue_comments(pr_number)
-        review_comments = self.github.fetch_review_comments(pr_number)
+        pr = self.github.fetch_pr_details(prNumber)
+        issue_comments = self.github.fetch_issue_comments(prNumber)
+        review_comments = self.github.fetch_review_comments(prNumber)
 
         return {
             "pr": {
@@ -1590,7 +1590,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                 "message": "Could not associate session with an open PR."
             }
 
-        pr_details = self.github.fetch_pr_details(pr_number)
+        pr_details = self.github.fetch_pr_details(prNumber)
         sha = pr_details.get("head", {}).get("sha")
         check_runs = self.github.fetch_check_runs(sha)
 
@@ -2013,7 +2013,7 @@ Overlapping functionality identified and resolved.
 
         try:
             # 1. Fetch PR details early to fail fast
-            pr_data = self.github.fetch_pr_details(pr_number)
+            pr_data = self.github.fetch_pr_details(prNumber)
             default_base = PROJECT_CONFIG.base_branch_name
             base_branch = pr_data.get('base', {}).get('ref', default_base)
             head_ref = pr_data.get('head', {}).get('ref')
