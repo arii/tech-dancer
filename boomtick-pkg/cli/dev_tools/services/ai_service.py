@@ -537,11 +537,11 @@ class AIClient:
         ci_failures: List[Dict],
     ) -> Dict:
         """Call the lighter gpt-4o model to produce the final verdict from structured per-chunk data."""
-        total_issues = sum(len(fr.get('issues', [])) for fr in file_reviews)
-        blocking_files = [fr['file'] for fr in file_reviews if fr.get('verdict') == 'blocking']
-        error_files    = [fr['file'] for fr in file_reviews if fr.get('verdict') in ('error', 'parse_error')]
-        needs_files    = [fr['file'] for fr in file_reviews if fr.get('verdict') == 'needs_changes']
-        ok_files       = [fr['file'] for fr in file_reviews if fr.get('verdict') == 'ok']
+        total_issues = sum(len(fr.get('issues', [])) for fr in file_reviews if isinstance(fr, dict))
+        blocking_files = [fr.get('file', 'unknown') for fr in file_reviews if isinstance(fr, dict) and fr.get('verdict') == 'blocking']
+        error_files    = [fr.get('file', 'unknown') for fr in file_reviews if isinstance(fr, dict) and fr.get('verdict') in ('error', 'parse_error')]
+        needs_files    = [fr.get('file', 'unknown') for fr in file_reviews if isinstance(fr, dict) and fr.get('verdict') == 'needs_changes']
+        ok_files       = [fr.get('file', 'unknown') for fr in file_reviews if isinstance(fr, dict) and fr.get('verdict') == 'ok']
 
         # Build a compact findings summary (keep prompt small)
         findings_lines = []
