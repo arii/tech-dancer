@@ -43,7 +43,7 @@ function collectAuditFiles(targets) {
       // We ONLY want tracked files (those in the index).
       const output = execSync(`git ls-files "${target}"`, { encoding: 'utf-8', cwd: ROOT, stdio: ['ignore', 'pipe', 'ignore'] });
       return output.split('\n').filter(Boolean).map(f => path.resolve(ROOT, f));
-    } catch (e) {
+    } catch {
       return null;
     }
   };
