@@ -69,7 +69,25 @@ The review file uses a separated format to prevent JSON escaping issues. You mus
 - **Line Numbers**: Every inline comment MUST have a `line` number that exists within the **Valid Comment Ranges** for that file in the diff context.
 - **JSON Validity**: Ensure the final submission block remains 100% valid JSON.
 
-## 7. Infrastructure & Component Awareness
+## 7. Tiered Review Standards (Application vs. Infrastructure)
+
+Distinguish between "Application" and "Infrastructure/Tooling" code to provide relevant feedback.
+
+### Infrastructure & Tooling (`scripts/`, `boomtick-pkg/cli/`, `.github/`, `setup-agent.sh`)
+- **Portability**: Avoid shell-specific extensions (bashisms) unless necessary. Prefer standard POSIX shell or robust Bash 4+.
+- **Idempotency**: Scripts should be safe to run multiple times.
+- **Error Handling**: Use `set -e`, `set -u`, `set -o pipefail`. Provide clear error messages.
+- **Security**: Never hardcode secrets. Use environment variables or masked inputs.
+- **Verification**: Allow verification via dry-runs, log analysis, or `bash -n` static checks when live execution is risky.
+
+### Application & UI (`src/`)
+- **Layout primitives**: `src/layouts/` (Box, Stack, Grid, Text, Button)
+- **UI components**: `src/components/ui/`
+- **Custom hooks**: `src/hooks/` (useSearchParam, useGlobalSearch, useHotkeys)
+- **Utilities**: `src/lib/utils.ts` (cn, safeSearch)
+- **Design tokens**: `src/styles/design-tokens.ts` and `tokens.css`
+
+## 8. Component Awareness (Application Only)
 
 Before suggesting an implementation, verify if it already exists:
 
@@ -83,12 +101,12 @@ Before suggesting an implementation, verify if it already exists:
 - Building layout with `div` + flex when `<Stack>` or `<Box>` exists.
 - Adding `import React` in React 17+ files.
 
-## 8. Failure Modes (Avoid These)
+## 9. Failure Modes (Avoid These)
 
 - **hallucinating PR Numbers**: Always use the PR number provided in the prompt.
 - **Out-of-range comments**: Comments on lines not in the diff cause 422 errors.
 - **Empty payloads**: Never submit a review with empty findings or placeholders.
 
-## 9. Tooling Guidelines
+## 10. Tooling Guidelines
 
 Agents must not directly use git or gh commands but reuse existing tooling (`td-cli`).

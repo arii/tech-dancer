@@ -37,7 +37,11 @@ from dev_tools.utils import (
     find_patterns_in_file,
     get_bundle_size,
     get_any_count,
-    verify_pr_scope
+    verify_pr_scope,
+    sanitize_path,
+    sanitize_metadata,
+    escape_md,
+    run_git_commands
 )
 from dev_tools.config import get_config
 
@@ -129,8 +133,15 @@ class Orchestrator:
 
     def evaluate_pr_heuristics(self, pr: Dict[str, Any], diff: str, checks: Dict[str, Any]) -> str:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
-        is_ui = any(indicator in diff for indicator in UI_INDICATORS)
-        is_python = ".py" in diff
+        # Pre-process diff to get unique files for faster heuristic matching
+        files_in_diff = set()
+        for line in diff.splitlines():
+            if line.startswith("+++ b/"):
+                files_in_diff.add(line[6:])
+
+        is_ui = any(any(ind in f for ind in UI_INDICATORS) for f in files_in_diff)
+        is_python = any(f.endswith(".py") for f in files_in_diff)
+        is_infra = any(any(ind in f for ind in PROJECT_CONFIG.infra_file_paths) for f in files_in_diff)
 
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
 
@@ -163,6 +174,9 @@ class Orchestrator:
         if is_python:
             feedback += "- **Python Scripting:** Python changes detected.\n"
             feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td-cli` or equivalent test files if extending `dev-tools`.\n"
+
+        if is_infra:
+            feedback += PROJECT_CONFIG.infra_feedback
 
         if pr.get('mergeable') is False:
             base_branch_name = PROJECT_CONFIG.base_branch_name
@@ -328,7 +342,12 @@ class Orchestrator:
         """
         Validates and reads a file from within the repository root.
         """
-        abs_path = os.path.abspath(file_path)
+        # 1. Sanitize the path first
+        clean_path = sanitize_path(file_path)
+        if not clean_path:
+            raise CLIError("Security Error: Invalid or empty file path.")
+
+        abs_path = os.path.abspath(clean_path)
         repo_root = os.path.abspath(os.getcwd())
         try:
             if os.path.commonpath([repo_root, abs_path]) != repo_root:
@@ -749,17 +768,22 @@ class Orchestrator:
             results["steps"].append({"name": "Runtime Check", "status": "failure", "error": str(e)})
             raise e
 
-        def run_step(name: str, cmd: List[str]) -> None:
+        # 2. Automated Validation Steps
+        steps = [
+            ("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"]),
+            ("Version Downgrade Check", [PROJECT_CONFIG.cli_alias, "gh", "verify-versions"]),
+            ("TypeScript", ["pnpm", "run", "type-check"]),
+            ("Lint", ["pnpm", "run", "lint"])
+        ]
+
+        for name, cmd in steps:
+            log_info(f"Running check: {name} ({' '.join(cmd)})")
             try:
                 run_command(cmd)
                 results["steps"].append({"name": name, "status": "success"})
             except CLIError as e:
                 results["steps"].append({"name": name, "status": "failure", "error": str(e)})
                 raise e
-        run_step("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
-        run_step("Version Downgrade Check", [PROJECT_CONFIG.cli_alias, "gh", "verify-versions"])
-        run_step("TypeScript", ["pnpm", "run", "type-check"])
-        run_step("Lint", ["pnpm", "run", "lint"])
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
         if missing_vars: results["steps"].append({"name": "Baseline Check", "status": "warning", "message": f"Missing GHA variables: {', '.join(missing_vars)}"})
         else: results["steps"].append({"name": "Baseline Check", "status": "success"})
@@ -1064,6 +1088,168 @@ Respond only after the PR is created or updated:
         generate_report()
         return {"status": "success", "report": "artifacts/ux-audit/ux-audit-report.md"}
 
+    def _scan_workflows(self) -> List[str]:
+        """Lists all YAML files in .github/workflows/."""
+        workflow_dir = ".github/workflows"
+        if not os.path.exists(workflow_dir):
+            return []
+        files = []
+        for f in os.listdir(workflow_dir):
+            if f.endswith(".yml") or f.endswith(".yaml"):
+                files.append(os.path.join(workflow_dir, f))
+        return sorted(files)
+
+    def _check_workflow_compliance(self, file_path: str) -> List[str]:
+        """Parses a workflow file for compliance violations using a data-driven rule model."""
+        violations = []
+
+        # Rule definition model: dictionaries with regex, message, and optional validator.
+        # Regexes are designed to be robust against varying whitespace and formatting.
+        rules = [
+            {
+                "regex": r"node-version\s*:\s*['\"]?\d+",
+                "message": "Hardcoded `node-version:`. Use `node-version-file: '.node-version'` instead."
+            },
+            {
+                "regex": r"\bnpm\s+(?:install|ci|run)\b",
+                "message": "`npm` usage detected. Use `pnpm` exclusively."
+            },
+            {
+                "regex": r"actions/checkout\s*@\s*v(\d+)",
+                "message": "Outdated `actions/checkout@v{ver}`. Use `@v4`.",
+                "validator": lambda m: int(m.group(1)) < 4
+            },
+            {
+                "regex": r"actions/setup-node\s*@\s*v(\d+)",
+                "message": "Outdated `actions/setup-node@v{ver}`. Use `@v4`.",
+                "validator": lambda m: int(m.group(1)) < 4
+            }
+        ]
+
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            for rule in rules:
+                # Use re.IGNORECASE for robustness against mixed casing in YAML
+                pattern = re.compile(rule["regex"], re.IGNORECASE)
+                for match in pattern.finditer(content):
+                    validator = rule.get("validator")
+                    if validator is None or validator(match):
+                        # Support dynamic version reporting if the regex has a group
+                        ver = match.group(1) if match.lastindex and match.lastindex >= 1 else ""
+                        violations.append(rule["message"].format(ver=ver))
+
+        except Exception as e:
+            violations.append(f"Error parsing file: {e}")
+
+        return violations
+
+    def plan_workflow_audit(self, workflow: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Builds a deterministic roadmap and status checklist for auditing GitHub workflows.
+        """
+        if workflow:
+            # 1. Path Sanitization & Validation
+            # Restrict to .github/workflows directory and ensure valid extensions
+            workflow_path = os.path.normpath(workflow)
+            if not (workflow_path.endswith(".yml") or workflow_path.endswith(".yaml")):
+                raise CLIError(f"Invalid workflow file extension: {workflow}. Must be .yml or .yaml")
+
+            if not workflow_path.startswith(".github/workflows" + os.sep) and workflow_path != os.path.join(".github", "workflows", os.path.basename(workflow_path)):
+                 # Allow relative paths that point into the directory
+                 if not os.path.dirname(workflow_path) == os.path.join(".github", "workflows"):
+                    raise CLIError(f"Workflow file must reside in .github/workflows/: {workflow}")
+
+            if not os.path.exists(workflow_path):
+                raise CLIError(f"Workflow file not found: {workflow_path}")
+            files = [workflow_path]
+        else:
+            files = self._scan_workflows()
+
+        if not files:
+            return {
+                "status": "success",
+                "message": "No workflows found to audit.",
+                "files_count": 0,
+                "status_file": "workflow-audit-status.md"
+            }
+
+        # 1. Cache compliance checks to avoid redundant processing
+        file_audit_results = {}
+        for f_path in files:
+            file_audit_results[f_path] = self._check_workflow_compliance(f_path)
+
+        # 2. Summary Checklist Generation (workflow-audit-status.md)
+        status_path = "workflow-audit-status.md"
+        status_lines = [
+            "# Workflow Audit Status",
+            f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
+            "\n## Compliance Checklist\n"
+        ]
+
+        for f_path in files:
+            name = os.path.basename(f_path)
+            violations = file_audit_results[f_path]
+            status = "✅" if not violations else "❌"
+            status_lines.append(f"- [ ] {status} `{name}`: {len(violations)} violation(s)")
+
+        with open(status_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(status_lines) + "\n")
+
+        # 3. Individual Workflow Plan Generation
+        plan_dir = get_or_create_log_dir("workflows")
+        generated_plans = []
+
+        for f_path in files:
+            name = os.path.basename(f_path)
+            plan_path = os.path.join(plan_dir, f"workflow-plan-{name}.md")
+            violations = file_audit_results[f_path]
+
+            with open(plan_path, "w", encoding="utf-8") as f:
+                f.write(f"""# Workflow Audit Plan: {name}
+
+## File Path
+`{f_path}`
+
+## Compliance Status
+{"✅ All rules followed." if not violations else "❌ Non-compliant patterns found."}
+
+### Violations
+{"" if not violations else "\n".join(f"- {v}" for v in violations)}
+
+## Audit Instructions
+
+Review `.github/workflows/` files to align them with `AGENTS.md` runtime policies and version pinning rules.
+
+### Step 1: Manual Review
+Verify if the regex patterns missed any semantic violations (e.g., complex shell scripts using forbidden tools).
+
+### Step 2: Version Alignment
+Ensure all GitHub Actions are pinned to their latest major versions (e.g. `actions/checkout@v4`).
+
+### Step 3: Runtime Policy Alignment
+Confirm `actions/setup-node` uses `node-version-file: '.node-version'`.
+
+### Step 4: Verification
+Run the workflow (if possible via `gh workflow run` or by pushing a test branch) to ensure the changes don't break the CI/CD pipeline.
+
+---
+
+## Remediation Suggestions
+- Replace `node-version: 24` (or other version) with `node-version-file: '.node-version'`.
+- Replace `npm install` with `pnpm install`.
+- Update `@v2` or `@v3` tags to `@v4` (checkout) or `@v4` (setup-node).
+""")
+            generated_plans.append(plan_path)
+
+        return {
+            "status": "success",
+            "files_count": len(files),
+            "status_file": status_path,
+            "workflow_plans": generated_plans
+        }
+
     def plan_issue_audit(self, issue_numbers: Optional[List[int]] = None, all_open: bool = False, limit: int = 100) -> Dict[str, Any]:
         """
         Builds a deterministic roadmap and status checklist for auditing open issues.
@@ -1109,6 +1295,9 @@ Respond only after the PR is created or updated:
 
             with open(plan_path, "w") as f:
                 f.write(f"""# Workflow Plan: Issue #{issue['number']}
+
+## Agent Instructions
+- **Environment Check**: Ensure Python dependencies and pnpm {PROJECT_CONFIG.pnpm_version} are available.
 
 ## Issue Context
 - **Title:** {issue['title']}
@@ -1372,7 +1561,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         """Ports logic from trigger-feedback.ts to provide CI feedback to Jules."""
         session = self.jules.get_session(session_id)
         if not session:
-             raise CLIError(f"Session {session_id} not found.")
+            raise CLIError(f"Session {session_id} not found.")
 
         pr_number = None
         # Try to find PR in session outputs
@@ -1439,15 +1628,14 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         """
         Aggregates multiple PRs into a single target branch and creates a consolidated PR.
         """
-        def run(cmd: List[str], check: bool = True) -> subprocess.CompletedProcess:
-            return run_command(cmd, check=check)
-
         base_branch = PROJECT_CONFIG.base_branch_name
 
         # 1. Isolation & Cleanliness
-        run(["git", "checkout", base_branch])
-        run(["git", "pull", "origin", base_branch])
-        run(["git", "checkout", "-b", target_branch])
+        run_git_commands([
+            ["git", "checkout", base_branch],
+            ["git", "pull", "origin", base_branch],
+            ["git", "checkout", "-b", target_branch]
+        ])
 
         aggregate_body = ""
         successfully_merged = []
@@ -1464,19 +1652,23 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
             # 2.5 Handle forks by using git fetch
             # This ensures the branch is available locally and handles forks correctly
-            run(["git", "fetch", "origin", f"pull/{pr_num}/head:{head_ref}"])
-
-            # Switch back to the target branch
-            run(["git", "checkout", target_branch])
+            # and switch back to target branch.
+            run_git_commands([
+                ["git", "fetch", "origin", f"pull/{pr_num}/head:{head_ref}"],
+                ["git", "checkout", target_branch]
+            ])
 
             # 3. Safety First: Attempt automated integration merge
             # Use 'ort' strategy implicitly by standard merge if git version supports it,
             # or just standard merge.
             res = run_command(["git", "merge", head_ref, "-m", f"Merging PR #{pr_num}: {title}"], check=False)
 
+            if not isinstance(res, subprocess.CompletedProcess):
+                raise CLIError("Merge execution failed")
+
             if res.returncode != 0:
                 # Conflict encountered
-                run(["git", "merge", "--abort"])
+                run_command(["git", "merge", "--abort"])
                 raise CLIError(f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.", code=res.returncode)
 
             # 4. Metadata Preservation
@@ -1484,7 +1676,7 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             aggregate_body += f"Closes #{pr_num}\n\n### Description from PR #{pr_num} ({title}):\n{body}\n\n---\n"
 
         # Push the compiled branch
-        run(["git", "push", "-u", "origin", target_branch])
+        run_command(["git", "push", "-u", "origin", target_branch])
 
         # Create consolidated PR
         pr_title = f"Aggregated Feature: {target_branch}"
@@ -1543,8 +1735,11 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         # 5. Impact Analysis
         impact_output = "Not available."
         if os.path.exists("scripts/impact-analysis.ts"):
-            res = run_command(["npx", "tsx", "scripts/impact-analysis.ts"], check=False)
+            # Use check=False to swallow errors from impact analysis in the planning phase
+            res = run_command(["npx", "tsx", "scripts/impact-analysis.ts"], check=False, log_on_error=False)
             impact_output = res.stdout + res.stderr
+            if res.returncode != 0:
+                impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
 
         # 6. Existing Review Data
         gemini_review = "None."
@@ -1564,12 +1759,13 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
 ## Agent Instructions
 
+- **Environment Check**: Ensure Python dependencies and pnpm {PROJECT_CONFIG.pnpm_version} are available.
 - setup complete
 - validation complete
-- context collected
+- context collected (via `td agent plan-review --pr {pr_number}`)
 - diagnostics collected
 
-Agent must not repeat these steps.
+Agent must not repeat these steps. Redundant fetching (`--fetch`) or auditing (`--audit`) is already handled.
 
 ---
 
@@ -1578,7 +1774,7 @@ Agent must not repeat these steps.
 [x] Environment Validation
 [x] Issue Validation
 [x] Conflict Detection
-[x] Context Collection
+[x] Context Collection & Audit
 [x] Impact Analysis
 [ ] Review Analysis
 [ ] Review Authoring
@@ -1688,7 +1884,7 @@ Every finding must reference supplied evidence.
 Output exactly:
 
 ```bash
-td gh audit-pr {pr_number} --submit --cleanup --execute
+td gh audit-pr {pr_number} --submit --execute
 ```
 
 Only after successful completion.
@@ -1929,20 +2125,17 @@ Overlapping functionality identified and resolved.
 
         # 4. Generate Markdown Files
         # Strict sanitization: allow only alphanumeric, underscores, and hyphens
-        sanitized_target = re.sub(r'[^a-zA-Z0-9_\-]', '-', target_branch)
+        sanitized_target = sanitize_metadata(target_branch)
         workflow_plan_path = os.path.join(get_or_create_log_dir("workflows"), f"workflow-plan-aggregation-{sanitized_target}.md")
         context_details_path = os.path.join(get_or_create_log_dir("reviews"), f"aggregation-context-{sanitized_target}.md")
         plan_skeleton_path = os.path.join(get_or_create_log_dir("reviews"), f"aggregation-plan-{sanitized_target}.md")
 
-        # --- Helper for escaping markdown special characters ---
-        def _escape_md(text):
-            return str(text).replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)")
-
         # --- Workflow Plan Template ---
         with open(workflow_plan_path, "w") as f:
-            f.write(f"""# Reviewing Aggregation Planning Guide: {_escape_md(target_branch)}
+            f.write(f"""# Reviewing Aggregation Planning Guide: {escape_md(target_branch)}
 
 ## Agent Instructions
+- **Environment Check**: Ensure Python dependencies and pnpm {PROJECT_CONFIG.pnpm_version} are available.
 - setup complete
 - validation complete
 - context collected
@@ -1986,12 +2179,12 @@ Run the validation suite to ensure the aggregated branch is stable.
 
         # --- Context Details Template ---
         with open(context_details_path, "w") as f:
-            f.write(f"# Aggregation Context Details: {_escape_md(target_branch)}\n\n")
+            f.write(f"# Aggregation Context Details: {escape_md(target_branch)}\n\n")
             f.write("## Targeted PRs\n")
             for pr_num in pr_numbers:
                 details = pr_details.get(pr_num, {})
-                title = _escape_md(details.get('title', ''))
-                login = _escape_md(details.get('user', {}).get('login', ''))
+                title = escape_md(details.get('title', ''))
+                login = escape_md(details.get('user', {}).get('login', ''))
                 f.write(f"- **PR #{pr_num}**: {title} (@{login})\n")
 
             f.write("\n## Overlapping Files\n")
@@ -2014,7 +2207,7 @@ Run the validation suite to ensure the aggregated branch is stable.
 
         # --- Plan Skeleton Template ---
         with open(plan_skeleton_path, "w") as f:
-            f.write(f"""# Aggregation Plan Skeleton: {_escape_md(target_branch)}
+            f.write(f"""# Aggregation Plan Skeleton: {escape_md(target_branch)}
 
 ## Integration Steps
 1. **Prepare Base**: Checkout the latest base branch.

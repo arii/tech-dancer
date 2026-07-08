@@ -122,6 +122,9 @@ When multiple agents work simultaneously:
 - **PR Consolidation**: Merging or consolidating multiple branches/PRs must be done directly by the active agent using local CLI git/dev-tool commands.
 - All agents read `.agent-context.json` before starting work to get current
   repository state and discover available MCP tools and CLI subcommands.
+- **Plan Verification (Tiered)**:
+  - For **Application** changes: Verify via live execution, unit tests, and screenshots.
+  - For **Infrastructure/Bootstrap** (scripts, dev-tools): Verification MAY be satisfied via dry-runs, log analysis, or static analysis (`bash -n`) if full live execution is risky.
 
 
 ---

@@ -1096,7 +1096,7 @@ def plan_aggregation(ctx, pr_numbers, target):
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
 @agent_group.command(name='plan-issue-audit')
-@click.option('--issue', 'issue_numbers', multiple=True, type=int, help='Issue number(s) to audit')
+@click.option('--issue', '--issues', 'issue_numbers', multiple=True, type=int, help='Issue number(s) to audit (e.g. --issue 1 --issue 2)')
 @click.option('--all-open', is_flag=True, help='Audit all open issues')
 @limit_option(help_text='Limit the number of open issues to process')
 @click.pass_context
@@ -1108,6 +1108,18 @@ def plan_issue_audit(ctx, issue_numbers, all_open, limit):
         out(ctx, f"Issue audit plan generated. Summary: {res['status_file']}", data=res)
     except Exception as e:
         _handle_unexpected_error(ctx, "agent plan-issue-audit", e)
+
+@agent_group.command(name='plan-workflow-audit')
+@click.option('--workflow', help='Specific workflow file to audit')
+@click.pass_context
+def plan_workflow_audit(ctx, workflow):
+    """Generate deterministic roadmap and checklist for auditing GitHub workflows."""
+    orch = ctx.obj['ORCHESTRATOR']
+    try:
+        res = orch.plan_workflow_audit(workflow=workflow)
+        out(ctx, f"Workflow audit plan generated. Summary: {res['status_file']}", data=res)
+    except Exception as e:
+        _handle_unexpected_error(ctx, "agent plan-workflow-audit", e)
 
 @agent_group.command(name='run-feedback-check')
 @limit_option(help_text='Limit the number of active sessions to check')
