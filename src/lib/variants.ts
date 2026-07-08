@@ -107,12 +107,14 @@ export const actionButtonVariants = createTransitionVariants(
     variants: {
       variant: {
         default: "hover:text-text-main",
-        primary: "bg-accent text-bg hover:opacity-90 shadow-md",
-        ghost: "hover:bg-line/10 text-text-dim hover:text-text-main",
+        primary: "bg-accent text-bg hover:bg-accent/90",
+        secondary: "bg-surface-alt text-text-main border border-line hover:border-accent/50",
+        accent: "bg-accent-navy text-bg border border-accent/20 hover:bg-accent/10",
+        ghost: "bg-transparent text-text-dim hover:text-text-main hover:bg-line/10",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "primary",
     },
   }
 );
