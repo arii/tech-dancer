@@ -20,6 +20,7 @@ export const interaction = {
   hoverOpacity: "hover:opacity-90",
   card: "group relative bg-surface",
   cardHover: "hover:border-accent/40",
+  journalCard: "hover:border-accent/50 hover:bg-surface/50 group cursor-pointer",
 };
 
 export const typography = {
@@ -36,4 +37,28 @@ export const layouts = {
   flexCenter: "flex items-center justify-center",
   inlineFlexCenter: "inline-flex items-center justify-center",
   stack: "flex flex-col",
+  cardBase: "bg-surface rounded-md shadow-sm card-border",
+  filterBase: "border whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs",
+  tagBase: "rounded border",
+};
+
+export const buttons = {
+  base: "font-sans tracking-normal disabled:opacity-50 disabled:cursor-not-allowed",
+  action: "font-bold text-sm shrink-0 flex items-center gap-2 disabled:opacity-50",
+  returnBase: "group outline-none focus-visible:ring-2 focus-visible:ring-accent",
+  returnInner: "group-hover:bg-accent group-hover:text-bg shadow-lg group-hover:shadow-accent/20",
+  outline: "border border-line bg-transparent text-sm font-bold tracking-wide rounded-md hover:bg-line/10 hover:border-text-main/50",
+  primary: "bg-accent text-bg text-sm font-bold tracking-wide rounded-md hover:bg-accent-sky shadow-sm",
+  professional: "bg-text-main text-white font-sans rounded-lg hover:bg-text-main/90 shadow-sm normal-case tracking-normal",
+  fab: "bg-surface-alt text-accent border border-accent/20 shadow-lg hover:bg-accent hover:text-bg",
+};
+
+export const journal = {
+  share: "text-text-dim hover:text-accent group",
+  tag: "border-line/50 hover:border-accent cursor-default",
+  nav: "group cursor-pointer",
+};
+
+export const lists = {
+  row: "text-left border-l-4 w-full",
 };
