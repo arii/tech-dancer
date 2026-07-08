@@ -40,7 +40,8 @@ from dev_tools.utils import (
     verify_pr_scope,
     sanitize_path,
     sanitize_metadata,
-    escape_md
+    escape_md,
+    run_git_commands
 )
 from dev_tools.config import get_config
 
@@ -746,16 +747,6 @@ class Orchestrator:
 
         return "\n".join(report)
 
-    def _execute_pre_submit_check(self, results: Dict[str, Any], name: str, cmd: List[str]) -> None:
-        """Executes a pre-submit check command and records the result."""
-        log_info(f"Running check: {name} ({' '.join(cmd)})")
-        try:
-            run_command(cmd)
-            results["steps"].append({"name": name, "status": "success"})
-        except CLIError as e:
-            results["steps"].append({"name": name, "status": "failure", "error": str(e)})
-            raise e
-
     def pre_submit_checks(self) -> Dict[str, Any]:
         results: Dict[str, Any] = {"steps": []}
 
@@ -767,10 +758,22 @@ class Orchestrator:
             results["steps"].append({"name": "Runtime Check", "status": "failure", "error": str(e)})
             raise e
 
-        self._execute_pre_submit_check(results, "Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"])
-        self._execute_pre_submit_check(results, "Version Downgrade Check", [PROJECT_CONFIG.cli_alias, "gh", "verify-versions"])
-        self._execute_pre_submit_check(results, "TypeScript", ["pnpm", "run", "type-check"])
-        self._execute_pre_submit_check(results, "Lint", ["pnpm", "run", "lint"])
+        # 2. Automated Validation Steps
+        steps = [
+            ("Anti-Pattern Audit", ["node", "scripts/detect-antipatterns.mjs"]),
+            ("Version Downgrade Check", [PROJECT_CONFIG.cli_alias, "gh", "verify-versions"]),
+            ("TypeScript", ["pnpm", "run", "type-check"]),
+            ("Lint", ["pnpm", "run", "lint"])
+        ]
+
+        for name, cmd in steps:
+            log_info(f"Running check: {name} ({' '.join(cmd)})")
+            try:
+                run_command(cmd)
+                results["steps"].append({"name": name, "status": "success"})
+            except CLIError as e:
+                results["steps"].append({"name": name, "status": "failure", "error": str(e)})
+                raise e
         missing_vars = [v for v in ["BUNDLE_BASELINE_KB", "ANY_COUNT_BASELINE"] if not (os.environ.get(v) or get_gha_variable(v))]
         if missing_vars: results["steps"].append({"name": "Baseline Check", "status": "warning", "message": f"Missing GHA variables: {', '.join(missing_vars)}"})
         else: results["steps"].append({"name": "Baseline Check", "status": "success"})
@@ -1456,9 +1459,11 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         base_branch = PROJECT_CONFIG.base_branch_name
 
         # 1. Isolation & Cleanliness
-        run_command(["git", "checkout", base_branch])
-        run_command(["git", "pull", "origin", base_branch])
-        run_command(["git", "checkout", "-b", target_branch])
+        run_git_commands([
+            ["git", "checkout", base_branch],
+            ["git", "pull", "origin", base_branch],
+            ["git", "checkout", "-b", target_branch]
+        ])
 
         aggregate_body = ""
         successfully_merged = []
@@ -1475,10 +1480,11 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
 
             # 2.5 Handle forks by using git fetch
             # This ensures the branch is available locally and handles forks correctly
-            run_command(["git", "fetch", "origin", f"pull/{pr_num}/head:{head_ref}"])
-
-            # Switch back to the target branch
-            run_command(["git", "checkout", target_branch])
+            # and switch back to target branch.
+            run_git_commands([
+                ["git", "fetch", "origin", f"pull/{pr_num}/head:{head_ref}"],
+                ["git", "checkout", target_branch]
+            ])
 
             # 3. Safety First: Attempt automated integration merge
             # Use 'ort' strategy implicitly by standard merge if git version supports it,
