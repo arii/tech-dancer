@@ -1126,9 +1126,20 @@ Respond only after the PR is created or updated:
         Builds a deterministic roadmap and status checklist for auditing GitHub workflows.
         """
         if workflow:
-            if not os.path.exists(workflow):
-                raise CLIError(f"Workflow file not found: {workflow}")
-            files = [workflow]
+            # 1. Path Sanitization & Validation
+            # Restrict to .github/workflows directory and ensure valid extensions
+            workflow_path = os.path.normpath(workflow)
+            if not (workflow_path.endswith(".yml") or workflow_path.endswith(".yaml")):
+                raise CLIError(f"Invalid workflow file extension: {workflow}. Must be .yml or .yaml")
+
+            if not workflow_path.startswith(".github/workflows" + os.sep) and workflow_path != os.path.join(".github", "workflows", os.path.basename(workflow_path)):
+                 # Allow relative paths that point into the directory
+                 if not os.path.dirname(workflow_path) == os.path.join(".github", "workflows"):
+                    raise CLIError(f"Workflow file must reside in .github/workflows/: {workflow}")
+
+            if not os.path.exists(workflow_path):
+                raise CLIError(f"Workflow file not found: {workflow_path}")
+            files = [workflow_path]
         else:
             files = self._scan_workflows()
 
