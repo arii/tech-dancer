@@ -131,11 +131,7 @@ class Orchestrator:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
         is_ui = any(indicator in diff for indicator in UI_INDICATORS)
         is_python = ".py" in diff
-        infra_indicators = [
-            "scripts/", "boomtick-pkg/cli/", ".github/workflows/",
-            "setup-agent.sh", ".sh", "Dockerfile"
-        ]
-        is_infra = any(ind in diff for ind in infra_indicators)
+        is_infra = any(ind in diff for ind in PROJECT_CONFIG.infra_indicators)
 
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
 

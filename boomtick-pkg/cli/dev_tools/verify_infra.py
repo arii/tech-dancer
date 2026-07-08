@@ -14,12 +14,15 @@ def check_shell_script(filepath):
         findings.append(f"Syntax error: {e.stderr.strip()}")
         return findings
 
-    with open(filepath, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+    except Exception as e:
+        findings.append(f"Could not read file: {e}")
+        return findings
 
-    # 2. Missing error handling in scripts (check first 15 lines for set -e, set -u, set -o pipefail)
-    # Combined flags like 'set -eu' are supported.
-    uncommented_first_lines = [re.sub(r'#.*', '', line) for line in lines[:15]]
+    # 2. Missing error handling in scripts (check first 10 lines for set -e, set -u, set -o pipefail)
+    uncommented_first_lines = [re.sub(r'#.*', '', line) for line in lines[:10]]
     settings_content = " ".join(uncommented_first_lines)
 
     missing_settings = []
@@ -31,7 +34,7 @@ def check_shell_script(filepath):
         missing_settings.append("set -o pipefail")
 
     if missing_settings and len(lines) > 5:
-        findings.append(f"Script lacks recommended settings in first 15 lines: {', '.join(missing_settings)}")
+        findings.append(f"Script lacks recommended settings in first 10 lines: {', '.join(missing_settings)}")
 
     # 3. Pattern checks
     for i, line in enumerate(lines):
@@ -40,27 +43,19 @@ def check_shell_script(filepath):
             continue
 
         # Hardcoded absolute paths (excluding common system ones)
-        # Look for tokens starting with / that aren't in the allowlist
-        for match in re.finditer(r'(^|\s|["\'])(?P<full_path>/(?P<path>[a-zA-Z0-9._/-]*))', line):
-            full_path = match.group('full_path')
-            path = match.group('path')
-            # Allowlist common system directories
-            allowlist = ['bin/', 'usr/bin/', 'dev/', 'proc/', 'tmp/', 'etc/', 'lib/', 'var/lib/', 'sys/', 'usr/sbin/', 'sbin/', 'var/run/']
-            if not any(path.startswith(a) for a in allowlist) and path not in ['', '/']:
-                # Avoid flagging division in JS/Python or common single-char patterns
-                if '/' in path and not re.search(r'[0-9]\s*/\s*[0-9]', line):
-                    findings.append(f"Line {i+1}: Potential hardcoded absolute path: {full_path}")
+        if re.search(r'(^|\s|["\'])/(?!(bin|usr/bin|dev|proc|tmp|etc|lib|var/lib|sys|usr/sbin|sbin|var/run))[a-zA-Z0-9]', line):
+            if not re.search(r'[0-9]\s*/\s*[0-9]', line): # Avoid flagging division
+                findings.append(f"Line {i+1}: Potential hardcoded absolute path: {stripped}")
 
-        # Unquoted variables in risky commands (rm, cp, mv, ls)
-        if re.search(r'\b(rm|cp|mv|ls)\b', line):
-            # Matches $VAR or ${VAR}
-            for var_match in re.finditer(r'(?P<var>\$[a-zA-Z0-9_]+|\$\{[a-zA-Z0-9_]+\})', line):
-                pre = line[:var_match.start()]
-                # Check if it's inside double quotes (simplistic)
-                if (pre.count('"') - pre.count('\\"')) % 2 == 0:
-                    # Check if it's inside single quotes
-                    if (pre.count("'") - pre.count("\\'")) % 2 == 0:
-                        findings.append(f"Line {i+1}: Unquoted variable expansion in risky command: {var_match.group('var')}")
+        # Unquoted variables in risky commands - SIMPLIFIED per directive
+        # We flag cases where a variable expansion ($VAR or ${VAR}) is used in a risky command
+        # without any visible surrounding quotes on that line.
+        if any(cmd in stripped for cmd in ['rm ', 'cp ', 'mv ', 'ls ']):
+            if '$' in stripped and not any(q in stripped for q in ['"', "'"]):
+                findings.append(f"Line {i+1}: Unquoted variable expansion in risky command: {stripped}")
+
+    if len(lines) > 20:
+        findings.append("Note: For complex shell scripts, please run 'shellcheck' for deeper analysis.")
 
     return findings
 

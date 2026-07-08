@@ -43,6 +43,10 @@ class ProjectConfig:
         "github-actions[bot]"
     ])
     worktree_prefix: str = "bt-repair-"
+    infra_indicators: List[str] = field(default_factory=lambda: [
+        "scripts/", "boomtick-pkg/cli/", ".github/workflows/",
+        "setup-agent.sh", ".sh", "Dockerfile"
+    ])
     spec_sections: List[str] = field(default_factory=lambda: [
         "Problem Statement",
         "Goal",
