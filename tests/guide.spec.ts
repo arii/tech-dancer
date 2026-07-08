@@ -7,7 +7,7 @@ test('verify guide visual consistency', async ({ page }) => {
   await page.goto(GUIDE_URL);
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(new RegExp(`.*${GUIDE_URL.replace('./', '')}`));
-  await expect(page.getByRole('heading', { name: /The WCS Travel Pack/i })).toBeVisible();
+  await expect(page.locator('h1')).toContainText(/The WCS Travel Pack/i);
 
   await scrollToSettle(page);
 

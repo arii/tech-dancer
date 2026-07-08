@@ -51,7 +51,7 @@ export function ListRow(props: ListRowProps) {
     <Box as={NavLink} to={`${basePath}/${slug}`}
       {...rest}
       display="flex" align="center" border="b"
-      className={listRowVariants({ ...props })}
+      className={listRowVariants({ active: props.active })}
     >
       <Box width={1} shrink={0} self="stretch" opacityVariant="none" className="bg-accent group-hover:opacity-full transition-opacity" />
       <Box

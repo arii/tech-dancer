@@ -62,7 +62,7 @@ export function EditorialHeader({
            <Stack gap={1}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
-               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction({ ...props })}>
+               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction({})}>
                  <Share2 className="w-3.5 h-3.5" />
                  <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                    {isShared ? "COPIED!" : "SHARE"}
@@ -87,7 +87,7 @@ export function EditorialHeader({
                 justify="center"
                 border
                 radius="sm"
-                className={journalVariants.tag({ ...props })}
+                className={journalVariants.tag({})}
               >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>

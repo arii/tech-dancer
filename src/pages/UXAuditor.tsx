@@ -5,7 +5,7 @@ import {
   Smartphone, Monitor, Tablet, Copy, Image as ImageIcon,
   ChevronRight, Github, Trash2
 } from 'lucide-react';
-import { useUXAuditor, VIEWPORTS, ViewportAnalysis, type UXReport } from '@/features/ux-auditor/useUXAuditor';
+import { useUXAuditor, VIEWPORTS, ViewportAnalysis, UXReport } from '@/features/ux-auditor/useUXAuditor';
 import { Box, Stack, Grid, Text } from '@/layouts/Primitives';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SEO } from '@/components/SEO';
@@ -223,7 +223,7 @@ function ViewportFrame({ url, width, height }: { url: string; width: number; hei
   );
 }
 
-function HistoryItem({ report, active, onClick }: { report: UXReport, active: boolean, onClick: () => void }) {
+function HistoryItem({ report, active, onClick }: { report: UXReport;; active: boolean; onClick: () => void }) {
   return (
     <Stack
       as="button"
