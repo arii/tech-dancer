@@ -4,9 +4,11 @@ import { transitions, interaction, typography, layouts } from "@/styles/utilitie
 
 /**
  * Enhanced CVA factory that injects default accessibility-compliant transitions.
+ * Renamed to be more descriptive of its primary purpose.
  */
-export const createVariants: typeof cva = (base, config) => {
-  // Use simple concatenation to avoid runtime overhead of clsx for the base string
+export const createTransitionVariants: typeof cva = (base, config) => {
+  // Use simple concatenation to avoid runtime overhead for the base string.
+  // Assumes base is a string for optimization in this codebase's standard patterns.
   const baseClasses = base ? `${base} ${transitions.default}` : transitions.default;
   return cva(baseClasses, config);
 };
@@ -53,7 +55,7 @@ export const variants = {
   }
 };
 
-export const buttonVariants = createVariants(
+export const buttonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} font-sans tracking-normal disabled:opacity-50 disabled:cursor-not-allowed`,
   {
     variants: {
@@ -85,7 +87,7 @@ export const buttonVariants = createVariants(
 /**
  * Shared variants for Console-style action buttons (compact, high-contrast)
  */
-export const actionButtonVariants = createVariants(
+export const actionButtonVariants = createTransitionVariants(
   `font-bold text-sm shrink-0 flex items-center gap-2 disabled:opacity-50`,
   {
     variants: {
@@ -104,7 +106,7 @@ export const actionButtonVariants = createVariants(
 /**
  * Card variants for reports, tools, and callout blocks
  */
-export const cardVariants = createVariants(
+export const cardVariants = createTransitionVariants(
   `bg-surface rounded-md shadow-sm card-border`,
   {
     variants: {
@@ -133,7 +135,7 @@ export const cardVariants = createVariants(
  * FilterButton variants for collection and category filtering.
  * Separates structural styles from state-specific styles.
  */
-export const filterButtonVariants = createVariants(
+export const filterButtonVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} border whitespace-nowrap font-semibold uppercase tracking-emphasized text-xs`,
   {
     variants: {
@@ -179,7 +181,7 @@ export const filterButtonVariants = createVariants(
 /**
  * Tag variants for categorizing content highlights (e.g. Robotics, AI, Infra)
  */
-export const tagVariants = createVariants(
+export const tagVariants = createTransitionVariants(
   `${layouts.inlineFlexCenter} rounded ${typography.utility} border`,
   {
     variants: {
@@ -205,7 +207,7 @@ export const tagVariants = createVariants(
  * Journal/Blog specific variants for editorial consistency.
  */
 export const journalVariants = {
-  card: createVariants("", {
+  card: createTransitionVariants("", {
     variants: {
       variant: {
         default: "bg-surface/30 border-line/30",
@@ -221,9 +223,9 @@ export const journalVariants = {
       interactive: false
     }
   }),
-  shareAction: createVariants(`text-text-dim hover:text-accent group`),
-  tag: createVariants(`border-line/50 hover:border-accent cursor-default`),
-  navLink: createVariants(`group cursor-pointer`, {
+  shareAction: createTransitionVariants(`text-text-dim hover:text-accent group`),
+  tag: createTransitionVariants(`border-line/50 hover:border-accent cursor-default`),
+  navLink: createTransitionVariants(`group cursor-pointer`, {
     variants: {
       active: {
         true: "text-accent",
@@ -239,7 +241,7 @@ export const journalVariants = {
 /**
  * List row variants for interactive lists (e.g., Audit History)
  */
-export const listRowVariants = createVariants(
+export const listRowVariants = createTransitionVariants(
   `text-left border-l-4 w-full`,
   {
     variants: {

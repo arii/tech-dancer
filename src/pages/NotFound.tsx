@@ -1,15 +1,15 @@
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
-import { createVariants } from '@/lib/variants';
+import { createTransitionVariants } from '@/lib/variants';
 
-const returnButtonVariants = createVariants(
+const returnButtonVariants = createTransitionVariants(
   "group outline-none focus-visible:ring-2 focus-visible:ring-accent",
   {
     variants: {},
   }
 );
 
-const returnButtonInnerVariants = createVariants(
+const returnButtonInnerVariants = createTransitionVariants(
   "group-hover:bg-accent group-hover:text-bg shadow-lg group-hover:shadow-accent/20",
   {
     variants: {},
