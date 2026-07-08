@@ -1,11 +1,11 @@
 import { ReactNode, ElementType, forwardRef, Ref } from 'react';
 import { Box, BoxProps } from '@/layouts/Primitives';
 import { cn } from '@/lib/utils';
+import { type ActionButtonVariants } from '@/lib/variants';
 
-interface ActionButtonProps extends BoxProps {
+interface ActionButtonProps extends BoxProps, ActionButtonVariants {
   children: ReactNode;
   as?: ElementType;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'accent';
   loading?: boolean;
 }
 

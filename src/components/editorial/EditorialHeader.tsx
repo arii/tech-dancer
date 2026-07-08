@@ -1,10 +1,10 @@
 import { Share2 } from 'lucide-react';
 import { Box, Stack, Text } from '@/layouts/Primitives';
 import { ReactNode } from 'react';
-import { journalVariants } from '@/lib/variants';
+import { journalVariants, type JournalShareActionVariants, type JournalTagVariants } from '@/lib/variants';
 import { AuthorAvatar } from './AuthorAvatar';
 
-interface EditorialHeaderProps {
+interface EditorialHeaderProps extends JournalShareActionVariants, JournalTagVariants {
   category: string;
   date: string;
   readTime: string;
@@ -61,7 +61,7 @@ export function EditorialHeader({
            <Stack gap={1}>
              <Text variant="mono" size="xs" weight="font-black" tracking="wide"  >BY {author.toUpperCase()}</Text>
              {onShare && (
-               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction()}>
+               <Stack as="button" direction="row" align="center" gap={1.5} onClick={onShare} className={journalVariants.shareAction({ ...props })}>
                  <Share2 className="w-3.5 h-3.5" />
                  <Text variant="mono" size="micro" weight="font-black" color={isShared ? "accent" : "inherit"}>
                    {isShared ? "COPIED!" : "SHARE"}
@@ -86,7 +86,7 @@ export function EditorialHeader({
                 justify="center"
                 border
                 radius="sm"
-                className={journalVariants.tag()}
+                className={journalVariants.tag({ ...props })}
               >
                 <Text variant="mono" size="micro" color="dim">{tag.toUpperCase()}</Text>
               </Box>
