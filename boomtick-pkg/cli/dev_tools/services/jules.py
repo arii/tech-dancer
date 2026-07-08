@@ -105,10 +105,10 @@ class JulesClient:
             return "Session completed successfully."
         return ""
 
-    def get_messages(self, session_id: str) -> List[Dict[str, Any]]:
+    def get_messages(self, session_id: str, timeout: int = 10) -> List[Dict[str, Any]]:
         clean_id = self._get_clean_id(session_id, "sessions")
         url = f"{self.base_url}/sessions/{clean_id}/activities"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = requests.get(url, headers=self.headers, timeout=timeout)
         response.raise_for_status()
         activities = response.json().get("activities", [])
         messages = []
