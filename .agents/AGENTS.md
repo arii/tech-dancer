@@ -80,7 +80,8 @@ If you encounter a schema error or a missing argument in an MCP tool, you must *
 | **GitHub** | Comment on PR | `github.comment_triage_summary` | `td-cli gh audit-pr <PR> --submit` | `gh pr comment` |
 | **GitHub** | Status Board | `github.get_status_board` | `td-cli gh status-board` | - |
 | **GitHub** | PR Overlaps | `github.analyze_overlaps` | `td-cli gh overlaps` | - |
-| **GitHub** | Audit PR | `github.audit_pr` | `td-cli gh audit-pr <PR> --fetch --audit` | - |
+| **GitHub** | Plan Review | `github.plan_review` | `td-cli agent plan-review --pr <PR>` | - |
+| **GitHub** | Audit PR (Submit) | `github.audit_pr` | `td-cli gh audit-pr <PR> --submit` | - |
 | **GitHub** | Manage Reviews | `github.manage_reviews` | `td-cli gh manage-reviews` | - |
 | **GitHub** | Validate Issue | `github.validate_issue` | `td-cli gh validate-issue` | - |
 | **GitHub** | Create Issue | `github.create_issue` | `td-cli gh create-issue` | `gh issue create` |
@@ -168,6 +169,18 @@ print(json.dumps(schema['cli_schema']['subcommands']['gh pr-diff'], indent=2))
 ```
 
 This is what `boomtick-mcp` does automatically on every call.
+
+### 🔄 MCP Tool Schema Synchronization
+
+To prevent schema drift (e.g., outdated parameters or case mismatches), MCP tool schemas are automatically synchronized from `boomtick-pkg/mcp/src/mcp/definitions.ts` to:
+1. **Global Config**: `~/.gemini/antigravity-cli/mcp/boomtick-mcp/`
+2. **Project Local**: `boomtick-pkg/mcp/.mcp/schemas/`
+
+Synchronization occurs automatically during:
+- `pnpm run verify:schemas` (pre-build gate)
+- `.githooks/update-env.sh` (triggered by git pull/checkout if MCP code changes)
+
+**Best Practice**: If your agent environment supports project-level tool configuration, configure it to prefer the schemas in `boomtick-pkg/mcp/.mcp/schemas/`. This ensures you are always using the most up-to-date tool definitions for the current branch.
 
 ## Appendix: CLI Entrypoint & Packaging Standards
 

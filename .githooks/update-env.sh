@@ -53,10 +53,11 @@ fi
 
 if check_run "^boomtick-pkg/mcp/"; then
     if command -v pnpm >/dev/null 2>&1; then
-        echo "🤖 boomtick-pkg/mcp changed. Rebuilding..."
+        echo "🤖 boomtick-pkg/mcp changed. Rebuilding and syncing schemas..."
         pnpm --filter ./boomtick-pkg/mcp run build || echo "❌ ERROR: boomtick-pkg/mcp build failed. Please run 'pnpm --filter ./boomtick-pkg/mcp run build' manually."
+        pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas || echo "❌ ERROR: boomtick-pkg/mcp schema sync failed. Please run 'pnpm --filter ./boomtick-pkg/mcp run sync:mcp-schemas' manually."
     else
-        echo "⚠️  WARNING: pnpm not found. Skipping boomtick-pkg/mcp build."
+        echo "⚠️  WARNING: pnpm not found. Skipping boomtick-pkg/mcp build/sync."
     fi
 fi
 

@@ -6,7 +6,7 @@ This guide provides strategies for autonomous agents to diagnose and fix CI fail
 
 When a CI check fails, do not immediately run the full test suite. Instead:
 
-1.  **Extract failure details**: Use the `extract_failing_info` helper (via `td-cli gh audit-pr <PR> --fetch`) or manually search for error patterns:
+1.  **Extract failure details**: Use the `extract_failing_info` helper (via `td agent plan-review --pr <PR>`) or manually search for error patterns:
     - **TypeScript**: `error TS\d+: <message>`
     - **Playwright**: `\d+\) [<project>] › <file>:<line>:<col> › <test_name>`
     - **Vitest**: `FAIL  <file>` followed by `❯ <file>:<line>:<col>`
@@ -67,8 +67,8 @@ If a test fails intermittently:
 
 ## 4. Remediation Workflow
 
-1.  **Fetch PR context**: `td-cli gh audit-pr <PR_NUMBER> --fetch`.
-2.  **Read `dev-tools/logs/reviews/pr-context-<PR_NUMBER>.md`** to see failing logs.
+1.  **Fetch PR context**: `td agent plan-review --pr <PR_NUMBER>`.
+2.  **Read `boomtick-pkg/cli/logs/reviews/pr-context-<PR_NUMBER>.md`** to see failing logs.
 3.  **Reproduce locally** using a targeted test run.
 4.  **Apply fix**.
 5.  **Verify fix** with the same targeted test run.
