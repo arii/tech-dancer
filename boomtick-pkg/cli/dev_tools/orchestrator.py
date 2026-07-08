@@ -1670,8 +1670,8 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
             if res.returncode != 0:
                 # Detect "refusing to merge unrelated histories" and retry
                 # Safely handle potential None values if capture failed
-                output = (res.stdout or "") + (res.stderr or "")
-                if "unrelated histories" in output.lower():
+                merge_output = (res.stdout or "") + (res.stderr or "")
+                if "unrelated histories" in merge_output.lower():
                     log_warn(f"Disjoint history detected for PR #{pr_num}. Retrying with --allow-unrelated-histories")
                     res = run_command(merge_cmd + ["--allow-unrelated-histories"], check=False)
                     if not isinstance(res, subprocess.CompletedProcess):
@@ -1680,12 +1680,14 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
                 if res.returncode != 0:
                     # Conflict encountered
                     run_command(["git", "merge", "--abort"])
-                    error_msg = f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}."
-                    error_msg += "\n\n### Fallback Strategy:\n"
-                    error_msg += "If native merging fails due to heavy conflicts or history divergence:\n"
-                    error_msg += f"1. Generate a patch: `git diff {target_branch}...{head_ref} > pr_{pr_num}.patch`\n"
-                    error_msg += f"2. Apply manually: `git apply pr_{pr_num}.patch` and resolve rejects.\n"
-                    error_msg += f"3. Or retry merge with: `git merge {head_ref} --allow-unrelated-histories`"
+                    error_msg = (
+                        f"CRITICAL: Conflict in PR #{pr_num}. Restored stable state of {target_branch}.\n\n"
+                        "### Fallback Strategy:\n"
+                        "If native merging fails due to heavy conflicts or history divergence:\n"
+                        f"1. Generate a patch: `git diff {target_branch}...{head_ref} > pr_{pr_num}.patch`\n"
+                        f"2. Apply manually: `git apply pr_{pr_num}.patch` and resolve rejects.\n"
+                        f"3. Or retry merge with: `git merge {head_ref} --allow-unrelated-histories`"
+                    )
                     raise CLIError(error_msg, code=res.returncode)
 
             # 4. Metadata Preservation
