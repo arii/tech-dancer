@@ -167,6 +167,8 @@ def load_project_config(path: str | Path = "project_config.json") -> ProjectConf
         kwargs["ai_vision_model"] = raw["ai_vision_model"]
     if "worktree_prefix" in raw:
         kwargs["worktree_prefix"] = raw["worktree_prefix"]
+    if "pnpm_version" in raw:
+        kwargs["pnpm_version"] = raw["pnpm_version"]
 
     for list_key in [
         "core_dirs", "ui_indicators", "tailwind_indicators",
