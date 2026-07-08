@@ -60,7 +60,7 @@ def test_scan_workflows(tmp_path, monkeypatch):
             return ".github/workflows/ci.yml\n.github/workflows/deploy.yaml\n.github/workflows/README.md"
         return ""
 
-    monkeypatch.setattr("dev_tools.orchestrator.run_command", mock_run_command)
+    monkeypatch.setattr("dev_tools.utils.run_command", mock_run_command)
 
     # Also need to mock os.path.exists for the files returned by git ls-files
     real_exists = os.path.exists
@@ -90,11 +90,18 @@ def test_scan_workflows_fallback(tmp_path, monkeypatch):
             raise CLIError("git failed")
         return ""
 
-    monkeypatch.setattr("dev_tools.orchestrator.run_command", mock_run_command_fail)
+    monkeypatch.setattr("dev_tools.utils.run_command", mock_run_command_fail)
 
-    # Mock os.path.exists and os.listdir for fallback
+    # Mock os.path.exists and os.walk for fallback
     monkeypatch.setattr(os.path, "exists", lambda p: ".github/workflows" in str(p))
-    monkeypatch.setattr(os, "listdir", lambda p: ["ci.yml", "deploy.yaml", "README.md"] if ".github/workflows" in str(p) else [])
+
+    def mock_walk(top, **kwargs):
+        if ".github/workflows" in str(top):
+            yield (".github/workflows", [], ["ci.yml", "deploy.yaml", "README.md"])
+        else:
+            yield (str(top), [], [])
+
+    monkeypatch.setattr(os, "walk", mock_walk)
 
     orch = Orchestrator()
     workflows = orch._scan_workflows()

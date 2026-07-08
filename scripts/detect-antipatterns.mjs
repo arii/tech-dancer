@@ -40,21 +40,27 @@ function collectAuditFiles(targets) {
    * Discovers tracked files via git to ensure untracked agent scratchpad files are ignored.
    */
   const getTrackedFiles = (target) => {
-    // 1. Sanitize and validate target path
+    // 1. Resolve to absolute path for validation
     const absoluteTarget = path.isAbsolute(target) ? target : path.resolve(ROOT, target);
+
+    // 2. Security validation: Ensure path is within repo root
     if (!absoluteTarget.startsWith(ROOT)) {
       console.error(`::error::Security Error: Path "${target}" is outside of repository root.`);
       return null;
     }
+
+    // 3. Convert back to relative path for git ls-files to ensure consistent output
+    const relativeTarget = path.relative(ROOT, absoluteTarget) || '.';
 
     try {
       // --cached (default): files in the index
       // --others --exclude-standard: untracked files not ignored by .gitignore
       // We ONLY want tracked files (those in the index).
       // Use spawnSync with an arguments array and '--' separator to avoid shell injection and flag interpretation.
-      const result = spawnSync(GIT_COMMAND, [...GIT_LS_FILES_ARGS, '--', target], { encoding: 'utf-8', cwd: ROOT });
+      const result = spawnSync(GIT_COMMAND, [...GIT_LS_FILES_ARGS, '--', relativeTarget], { encoding: 'utf-8', cwd: ROOT });
 
       if (result.status !== 0) {
+        // Log both stdout and stderr for complete context
         const errorDetails = (result.stdout || '') + (result.stderr || '');
         console.error(`::error::git ls-files failed for target "${target}" (exit ${result.status}): ${errorDetails}`);
         return null;

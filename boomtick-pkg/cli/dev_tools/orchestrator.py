@@ -34,6 +34,7 @@ from dev_tools.utils import (
     extract_failing_info,
     clean_gha_logs,
     walk_tsx,
+    list_tracked_files,
     find_patterns_in_file,
     get_bundle_size,
     get_any_count,
@@ -1091,28 +1092,9 @@ Respond only after the PR is created or updated:
     def _scan_workflows(self) -> List[str]:
         """
         Lists tracked YAML files in .github/workflows/.
-        Uses 'git ls-files' to ensure untracked agent scratchpad files are ignored.
         """
         workflow_dir = ".github/workflows"
-        try:
-            # Get list of tracked files in .github/workflows/
-            cmd = ["git", "ls-files", workflow_dir]
-            tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
-            files = []
-            for f in tracked_files:
-                if f.endswith(".yml") or f.endswith(".yaml"):
-                    # Tracked files are guaranteed to exist in the repository
-                    files.append(f)
-            return sorted(files)
-        except Exception:
-            # Fallback to manual listing if git fails
-            if not os.path.exists(workflow_dir):
-                return []
-            files = []
-            for f in os.listdir(workflow_dir):
-                if f.endswith(".yml") or f.endswith(".yaml"):
-                    files.append(os.path.join(workflow_dir, f))
-            return sorted(files)
+        return list_tracked_files(workflow_dir, extensions=[".yml", ".yaml"], recursive=False)
 
     def _check_workflow_compliance(self, file_path: str) -> List[str]:
         """Parses a workflow file for compliance violations using a data-driven rule model."""

@@ -1,9 +1,10 @@
 import os
 import subprocess
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, Set
 
 from dev_tools.services.vector_store import VectorStore
+from dev_tools.utils import list_tracked_files
 
 def chunk_file(filepath: str, content: str, chunk_size: int = 1000):
     """Simple chunking by character count (approximate)."""
@@ -12,31 +13,20 @@ def chunk_file(filepath: str, content: str, chunk_size: int = 1000):
         chunks.append(content[i:i + chunk_size])
     return chunks
 
-def get_files_to_index(extensions: set[str], exclude_dirs: set[str]) -> Iterator[str]:
+def get_files_to_index(extensions: Set[str], exclude_dirs: Set[str]) -> Iterator[str]:
     """
     Yields file paths to index.
     Prioritizes 'git ls-files' to ignore untracked scratchpad files.
     Falls back to 'os.walk' if git is unavailable.
     """
-    try:
-        result = subprocess.run(["git", "ls-files"], capture_output=True, text=True, check=True)
-        for filepath in result.stdout.splitlines():
-            # Git output always uses '/', even on Windows
-            parts = filepath.split('/')
-            if any(p in exclude_dirs for p in parts):
-                continue
-            if os.path.splitext(filepath)[1] in extensions:
-                yield filepath
-        return
-    except Exception as e:
-        print(f"⚠️ git ls-files failed: {e}. Falling back to os.walk. Performance may be impacted in large repositories.")
-
-    for root, dirs, files in os.walk("."):
-        # Prune excluded directories
-        dirs[:] = [d for d in dirs if d not in exclude_dirs]
-        for file in files:
-            if os.path.splitext(file)[1] in extensions:
-                yield os.path.join(root, file)
+    ext_list = list(extensions)
+    tracked_files = list_tracked_files(".", extensions=ext_list)
+    for filepath in tracked_files:
+        # Standardize on forward slashes for checking exclusions
+        parts = filepath.split('/')
+        if any(p in exclude_dirs for p in parts):
+            continue
+        yield filepath
 
 def index_codebase():
     print("🚀 Indexing codebase...")

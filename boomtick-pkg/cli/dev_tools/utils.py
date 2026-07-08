@@ -10,34 +10,55 @@ import random
 import hashlib
 from pathlib import Path
 from typing import Optional, Union, List, Dict, Any
-def sanitize_path(path: str, max_length: int = 255) -> str:
+def sanitize_path(path_str: str, max_length: int = 255) -> str:
     """
-    Sanitizes a path to prevent traversal bugs and ensure it remains within the intended scope.
-    Uses normpath to resolve .. and ensures the result doesn't escape the current directory.
+    Sanitizes a path to prevent traversal bugs and ensure it remains within the repository root.
+    Returns a path relative to the current working directory (assumed to be repo root).
     """
-    if not path:
+    if not path_str:
         return ""
 
-    # 0. Length check
-    if len(path) > max_length:
-        path = path[:max_length]
-
     # 1. Null byte protection
-    path = path.split('\0', 1)[0]
+    path_str = path_str.split('\0', 1)[0]
 
-    # 2. Normalize path to resolve '..'
-    normalized = os.path.normpath(path)
+    # 2. Initial normalization
+    normalized = os.path.normpath(path_str)
 
-    # 3. Prevent escaping current directory
-    if normalized.startswith("..") or os.path.isabs(normalized):
-        # Fallback to a safe version or just strip leading dots/slashes
-        normalized = normalized.lstrip('./\\')
+    # 3. Handle absolute paths by trying to make them relative to repo root
+    # Also handle Windows-style absolute paths starting with a drive letter
+    if os.path.isabs(normalized) or re.match(r'^[a-zA-Z]:', normalized):
+        repo_root = os.getcwd()
+        try:
+            # Use commonpath to check if it's truly inside the repo
+            if os.path.commonpath([repo_root, normalized]) == repo_root:
+                normalized = os.path.relpath(normalized, repo_root)
+            else:
+                # Outside repo, take only the basename to be safe
+                normalized = os.path.basename(normalized)
+        except (ValueError, OSError):
+            # Fallback for cross-drive paths on Windows or other errors
+            normalized = os.path.basename(normalized)
 
-    # 4. Character Whitelisting: Allow only alphanumeric, dots, slashes, hyphens, and underscores
+    # 4. Strict traversal blocking: strip all leading '..' or '/' or '\'
+    # Also strip Windows drive letters (e.g. C:) to ensure they are treated as relative
+    # We repeat to ensure hidden traversal like '/../' is caught after first strip
+    while True:
+        prev = normalized
+        normalized = re.sub(r'^([a-zA-Z]:|\.\.[/\\]?|[/\\])', '', normalized)
+        if normalized == prev:
+            break
+
+    # 5. Normalize to forward slashes before whitelisting
+    normalized = normalized.replace('\\', '/')
+
+    # 6. Character Whitelisting: Allow only alphanumeric, dots, slashes, hyphens, and underscores
     sanitized = re.sub(r'[^a-zA-Z0-9\./\-_]', '', normalized)
 
-    # 5. Collapse multiple slashes and strip
-    return re.sub(r'/+', '/', sanitized).strip('/')
+    # 7. Length check (performed last to avoid bypassing with long prefixes)
+    if len(sanitized) > max_length:
+        sanitized = sanitized[:max_length]
+
+    return sanitized.strip('/')
 
 def escape_md(text: Any) -> str:
     """Escapes markdown special characters using a single regex pass."""
@@ -680,38 +701,78 @@ def fetch_latest_node() -> Optional[str]:
     from dev_tools.version_utils import fetch_latest_node as _fetch
     return _fetch()
 
+def list_tracked_files(target_dir: str, extensions: Optional[List[str]] = None, recursive: bool = True) -> List[str]:
+    """
+    Discovers tracked files via git to ensure untracked agent scratchpad files are ignored.
+    Falls back to manual walking if Git is unavailable or fails.
+
+    Args:
+        target_dir (str): The directory to search in.
+        extensions (List[str], optional): List of file extensions (e.g., ['.tsx', '.ts']).
+        recursive (bool): Whether to search recursively. Defaults to True.
+
+    Returns:
+        List[str]: List of discovered file paths relative to current directory.
+    """
+    safe_target = sanitize_path(target_dir)
+    if not safe_target:
+        safe_target = '.'
+
+    try:
+        # Get list of tracked files in target_dir. Tracked files are guaranteed to exist.
+        cmd = ["git", "ls-files", safe_target]
+        tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
+
+        results = []
+        for f in tracked_files:
+            if extensions:
+                if not any(f.endswith(ext) for ext in extensions):
+                    continue
+
+            # If not recursive, filter files not directly in safe_target
+            if not recursive:
+                if safe_target == '.':
+                    if '/' in f: continue
+                else:
+                    parent = os.path.dirname(f)
+                    if parent != safe_target: continue
+
+            results.append(f)
+
+        return sorted(results)
+
+    except Exception as e:
+        log_warn(f"Command 'git ls-files {safe_target}' failed (Error: {e}). Falling back to manual walk. Performance may be impacted in large repositories. Ensure Git is installed and the directory is a Git repository for optimal performance.")
+        results = []
+        for root, _, files in os.walk(safe_target):
+            # Normalize root for consistent comparison
+            norm_root = root.replace('\\', '/').strip('/')
+            if not norm_root: norm_root = '.'
+
+            # If not recursive, we only look at the first level
+            if not recursive and norm_root != safe_target:
+                continue
+
+            for file in files:
+                filepath = os.path.join(root, file).replace('\\', '/')
+                if extensions:
+                    if any(filepath.endswith(ext) for ext in extensions):
+                        results.append(filepath)
+                else:
+                    results.append(filepath)
+
+            if not recursive:
+                break
+
+        return sorted(results)
+
 def walk_tsx(root_dir='src'):
     """
     Yields tracked .tsx files within the specified directory.
-
-    This function prioritizes using 'git ls-files' to discover files, which ensures that
-    untracked agent scratchpad scripts are excluded from audits and analysis.
-    It falls back to manual directory traversal if Git is unavailable.
-
-    Args:
-        root_dir (str): The starting directory for discovery. Defaults to 'src'.
-
-    Yields:
-        str: Relative path to a discovered .tsx file.
     """
-    # Defensive input validation to mitigate traversal/injection risks
-    safe_root = sanitize_path(root_dir)
-    if not safe_root:
-        safe_root = 'src'
-
-    try:
-        # Get list of tracked files in root_dir. Tracked files are guaranteed to exist.
-        cmd = ["git", "ls-files", safe_root]
-        tracked_files = run_command(cmd, check=True, log_on_error=False).splitlines()
-        for f in tracked_files:
-            if f.endswith('.tsx'):
-                yield f
-    except Exception:
-        # Fallback to manual walk if git fails or is not a git repo
-        for root, dirs, files in os.walk(safe_root):
-            for file in files:
-                if file.endswith('.tsx'):
-                    yield os.path.join(root, file)
+    files = list_tracked_files(root_dir, extensions=['.tsx'])
+    for f in files:
+        yield f
 
 def find_patterns_in_file(filepath, patterns):
     findings = []
