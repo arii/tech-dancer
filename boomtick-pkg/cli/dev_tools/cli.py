@@ -67,7 +67,15 @@ def limit_option(default_val=DEFAULT_GH_API_LIMIT, help_text='Limit the number o
         return click.option('--limit', type=int, default=default_val, help=help_text)(f)
     return decorator
 
-CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+def json_option(f):
+    """Decorator to add --json option to subcommands for flexible placement."""
+    return click.option('--json/--no-json', 'json_output', default=None, help='Output results in JSON format')(f)
+
+CONTEXT_SETTINGS = dict(
+    help_option_names=["-h", "--help"],
+    ignore_unknown_options=True,
+    allow_extra_args=True
+)
 
 # CLI Group
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -134,9 +142,14 @@ def config():
     pass
 
 @config.command(name='view')
+@json_option
 @click.pass_context
-def config_view(ctx):
+def config_view(ctx, json_output):
     """View the current project configuration as JSON."""
+    # If subcommand option is provided, it overrides the group option
+    if json_output is not None and ctx.obj is not None:
+        ctx.obj['JSON'] = json_output
+
     # ctx.obj might be None if the command is called directly or during unit tests
     is_json = ctx.obj.get('JSON', True) if ctx.obj is not None else True
 
@@ -191,12 +204,15 @@ def gh():
     pass
 
 @gh.command()
+@json_option
 @click.option('--state', default='open')
 @limit_option(help_text='Limit the number of PRs to process')
 @click.option('--include-drafts/--no-include-drafts', default=True)
 @click.option('--labels')
 @click.pass_context
-def search_prs(ctx, state, limit, include_drafts, labels):
+def search_prs(ctx, json_output, state, limit, include_drafts, labels):
+    if json_output is not None and ctx.obj is not None:
+        ctx.obj['JSON'] = json_output
     orch = ctx.obj['ORCHESTRATOR']
     label_list = [l.strip() for l in labels.split(',')] if labels else None
 
@@ -268,6 +284,7 @@ def audit(ctx, check_dirs):
     out(ctx, "Headless audit complete.", data=res)
 
 @gh.command()
+@json_option
 @click.argument('pr_number', type=int)
 @click.option('--fetch', is_flag=True)
 @click.option('--audit', 'run_audit', is_flag=True)
@@ -277,7 +294,9 @@ def audit(ctx, check_dirs):
 @click.option('--base')
 @click.option('--event')
 @click.pass_context
-def audit_pr(ctx, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, event):
+def audit_pr(ctx, json_output, pr_number, fetch, run_audit, submit, cleanup, dry_run, base, event):
+    if json_output is not None and ctx.obj is not None:
+        ctx.obj['JSON'] = json_output
     orch = ctx.obj['ORCHESTRATOR']
     res = orch.audit_pr(pr_number, fetch=fetch, audit=run_audit, submit=submit, cleanup=cleanup, dry_run=dry_run, event=event)
     out(ctx, f"✅ Audit PR #{pr_number} action complete.", data=res)
@@ -1096,11 +1115,14 @@ def plan_aggregation(ctx, pr_numbers, target):
         _handle_unexpected_error(ctx, "agent plan-aggregation", e)
 
 @agent_group.command(name='plan-issue-audit')
+@json_option
 @click.option('--issue', '--issues', 'issue_numbers', multiple=True, type=int, help='Issue number(s) to audit (e.g. --issue 1 --issue 2)')
 @click.option('--all-open', is_flag=True, help='Audit all open issues')
 @limit_option(help_text='Limit the number of open issues to process')
 @click.pass_context
-def plan_issue_audit(ctx, issue_numbers, all_open, limit):
+def plan_issue_audit(ctx, json_output, issue_numbers, all_open, limit):
+    if json_output is not None and ctx.obj is not None:
+        ctx.obj['JSON'] = json_output
     """Generate deterministic roadmap and checklist for auditing open issues."""
     orch = ctx.obj['ORCHESTRATOR']
     try:
