@@ -1543,8 +1543,11 @@ Follow the "Audit comment template" in `docs/agent/issue-audit-rules.md` to post
         # 5. Impact Analysis
         impact_output = "Not available."
         if os.path.exists("scripts/impact-analysis.ts"):
-            res = run_command(["npx", "tsx", "scripts/impact-analysis.ts"], check=False)
+            # Use check=False to swallow errors from impact analysis in the planning phase
+            res = run_command(["npx", "tsx", "scripts/impact-analysis.ts"], check=False, log_on_error=False)
             impact_output = res.stdout + res.stderr
+            if res.returncode != 0:
+                impact_output = f"Impact analysis failed (exit {res.returncode}):\n{impact_output}"
 
         # 6. Existing Review Data
         gemini_review = "None."
