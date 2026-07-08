@@ -2,3 +2,5 @@ pylint
 mypy
 types-requests
 types-click
+pytest
+pytest-mock

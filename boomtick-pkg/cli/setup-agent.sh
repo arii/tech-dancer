@@ -203,8 +203,30 @@ install_python_deps() {
   # satisfy boomtick-cli requirement of setuptools < 81
   pip_install --root-user-action=ignore --upgrade pip "setuptools<81.0.0" wheel
 
+  if [ -f "requirements-dev.txt" ]; then
+    log "Installing from requirements-dev.txt..."
+    pip_install --root-user-action=ignore -r requirements-dev.txt
+  fi
+
   if [ -f "boomtick-pkg/cli/pyproject.toml" ]; then
-    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp)
+    log "Installing boomtick-cli in editable mode..."
+    # Force reinstall to ensure paths are correctly mapped
+    (cd "${REPO_ROOT}/boomtick-pkg" && bash install.sh --no-mcp --force)
+
+    # Try to find the binaries in common locations if 'have' fails initially
+    export PATH="$HOME/.local/bin:$PATH"
+
+    if ! have td-cli || ! have td; then
+      warn "td/td-cli not immediately found on PATH. Attempting to locate..."
+      # Fallback: find where pip installed them
+      local pip_bin
+      pip_bin=$(python3 -m pip show boomtick-cli 2>/dev/null | grep Location | cut -d' ' -f2 || true)
+      if [ -n "$pip_bin" ]; then
+         # Usually bin is at .../bin relative to site-packages or in ~/.local/bin
+         export PATH="$HOME/.local/bin:$PATH"
+      fi
+    fi
+
     if ! have td-cli || ! have td; then
       err "td/td-cli not found on PATH after editable install. Path: $PATH"
     fi
@@ -250,7 +272,7 @@ install_playwright() {
   fi
 
   log "Installing Playwright browsers..."
-  if pnpm exec playwright install || npx --yes playwright install; then
+  if pnpm exec playwright install --with-deps || npx --yes playwright install --with-deps; then
     STATUS_PLAYWRIGHT="INSTALLED"
   else
     STATUS_PLAYWRIGHT="FAILED"
@@ -290,6 +312,39 @@ configure_git_hooks() {
     [ "$STATUS_GIT" = "PENDING" ] && STATUS_GIT="INSTALLED"
   else
     STATUS_GIT="FAILED (git config)"
+  fi
+}
+
+persist_environment() {
+  log "Persisting environment settings to ~/.bashrc..."
+  local bashrc="$HOME/.bashrc"
+
+  # Ensure Node 24 persistence via NVM if available
+  if [ -d "$HOME/.nvm" ]; then
+    if ! grep -q "nvm use ${NODE_MAJOR}" "$bashrc"; then
+      echo 'export NVM_DIR="$HOME/.nvm"' >> "$bashrc"
+      echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> "$bashrc"
+      echo "nvm use ${NODE_MAJOR} --silent || nvm install ${NODE_MAJOR} --silent" >> "$bashrc"
+      echo "nvm alias default ${NODE_MAJOR} >/dev/null" >> "$bashrc"
+    fi
+
+    # Apply to current session
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install "${NODE_MAJOR}" --silent
+    nvm use "${NODE_MAJOR}" --silent
+    nvm alias default "${NODE_MAJOR}" >/dev/null
+  fi
+
+  # Ensure ~/.local/bin is in PATH for td/td-cli
+  if ! grep -q ".local/bin" "$bashrc"; then
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$bashrc"
+  fi
+
+  # Also ensure PNPM is on path if corepack didn't do it globally
+  if ! grep -q "PNPM_HOME" "$bashrc"; then
+    echo 'export PNPM_HOME="$HOME/.local/share/pnpm"' >> "$bashrc"
+    echo 'export PATH="$PNPM_HOME:$PATH"' >> "$bashrc"
   fi
 }
 
@@ -356,6 +411,8 @@ main() {
     ) &
     pid_git=$!
   fi
+
+  persist_environment
 
   local failed=0
   [ -n "$pid_python" ] && { wait $pid_python || { warn "Python block failed"; failed=1; }; }
