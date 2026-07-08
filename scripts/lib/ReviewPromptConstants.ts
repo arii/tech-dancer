@@ -12,7 +12,12 @@ export const SNIPPET_AND_VERIFICATION_RULES = `Snippet and verification rules:
 export const COMMON_REVIEW_GUIDELINES = `Review ONLY PR changes. Assume original code worked.
 EVIDENCE RULE: Issue must point to exact line + explain runtime consequence.
 FALSE POSITIVE FILTER: No speculation. Design choices are NOT bugs.
-REPO RULES: Prefer removal. Flag redundant wrappers/abstractions. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box).
+
+TIERED SCOPE:
+- For App/UI (src/): Flag redundant wrappers. BANNED: Raw Tailwind layout (flex/grid/px-*) in TSX (use Stack/Grid/Box).
+- For Infra/Tooling (scripts/, boomtick-pkg/cli/, .github/): Focus on portability, idempotency, and error handling. Avoid UI-specific feedback for low-level scripts.
+
+REPO RULES: Prefer removal.
 ANTI-SLOP: DO NOT recommend overly complex error handling, defensive guards, extra unit tests for simple internal scripts, or boilerplate documentation/comments.`;
 
 export const REVIEW_PHILOSOPHY = `## 1. Philosophy

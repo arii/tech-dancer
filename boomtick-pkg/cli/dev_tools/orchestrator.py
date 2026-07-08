@@ -131,6 +131,11 @@ class Orchestrator:
         """Applies heuristic rules to a PR diff and checks, returning specific feedback."""
         is_ui = any(indicator in diff for indicator in UI_INDICATORS)
         is_python = ".py" in diff
+        infra_indicators = [
+            "scripts/", "boomtick-pkg/cli/", ".github/workflows/",
+            "setup-agent.sh", ".sh", "Dockerfile"
+        ]
+        is_infra = any(ind in diff for ind in infra_indicators)
 
         fails = [c['name'] for c in checks.get('check_runs', []) if c.get('conclusion') == 'failure']
 
@@ -163,6 +168,11 @@ class Orchestrator:
         if is_python:
             feedback += "- **Python Scripting:** Python changes detected.\n"
             feedback += "  - *Fix:* Ensure `python3 -m pytest tests/` passes. Update `test_td-cli` or equivalent test files if extending `dev-tools`.\n"
+
+        if is_infra:
+            feedback += "- **Infrastructure/Bootstrap Change:** Low-level script changes detected.\n"
+            feedback += "  - *Review focus:* Ensure idempotency, portability (avoid bashisms), and robust error handling (`set -e`, `set -u`).\n"
+            feedback += "  - *Verification:* If full system setup is risky, verify via dry-runs, `bash -n`, or log inspection. Document verification method in the PR.\n"
 
         if pr.get('mergeable') is False:
             base_branch_name = PROJECT_CONFIG.base_branch_name
