@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Box, Stack, Text, Grid } from '@/layouts/Primitives';
+import { transitions, interaction } from '@/styles/utilities';
 import { Star, Music, MapPin, Terminal, Zap, Globe } from 'lucide-react';
 import { ProfileCard, ProfileItem, ProfileGalleryImage, ProfileLink } from '../types';
 
@@ -29,7 +30,7 @@ export function ExperienceCards({ cards }: { cards: ProfileCard[] }) {
       {cards.map((card, index) => {
         const Icon = card.icon ? IconMap[card.icon] : null;
         return (
-          <Box key={index} padding={8} border radius="md" className="bg-surface/20 border-line/5 group hover:border-accent/20 transition-all active:scale-95 cursor-pointer">
+          <Box key={index} padding={8} border radius="md" className={`bg-surface/20 border-line/5 group ${interaction.hoverAccent} ${transitions.default} ${interaction.active} cursor-pointer`}>
             <Stack direction={{ base: "col", sm: "row" }} gap={{ base: 4, sm: 8 }} align="start">
               {Icon && (
                 <Box 
@@ -165,7 +166,7 @@ export function ProfileLinks({ links }: { links: ProfileLink[] }) {
           minHeight={11}
           border
           radius="full"
-          className="hover:border-accent hover:bg-accent/5 transition-all group active:scale-95 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none"
+          className={`${interaction.hoverAccent} ${transitions.default} group ${interaction.active} focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:outline-none`}
         >
           <Text variant="mono" size="xs" weight="font-bold" className="group-hover:text-accent">
             {link.label}
