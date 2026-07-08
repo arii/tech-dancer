@@ -55,6 +55,11 @@ RUN corepack enable \
 # ── Workspace ──────────────────────────────────────────────────────────────────
 WORKDIR /workspace
 
+# ── Dev Tools ──────────────────────────────────────────────────────────────────
+# We copy the full boomtick-pkg/cli directory so that pip install -e can create the
+# necessary metadata/links during the image build.
+COPY boomtick-pkg/cli/ /workspace/boomtick-pkg/cli/
+
 # ── Python packages ────────────────────────────────────────────────────────────
 RUN pip3 install --no-cache-dir --break-system-packages \
     PyGithub \
@@ -71,13 +76,11 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     tqdm==4.68.3 \
     langchain-openai \
     langchain-core \
-    duckduckgo-search>=6.0.0
-
-# ── Dev Tools ──────────────────────────────────────────────────────────────────
-# We copy the full boomtick-pkg/cli directory so that pip install -e can create the
-# necessary metadata/links during the image build.
-COPY boomtick-pkg/cli/ /workspace/boomtick-pkg/cli/
-RUN pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-pkg/cli/
+    duckduckgo-search>=6.0.0 \
+    && if [ -f /workspace/boomtick-pkg/cli/requirements-dev.txt ]; then \
+        pip3 install --no-cache-dir --break-system-packages -r /workspace/boomtick-pkg/cli/requirements-dev.txt; \
+    fi \
+    && pip3 install --no-cache-dir --break-system-packages -e /workspace/boomtick-pkg/cli/
 
 # ── pnpm Dependencies (Pre-bake) ──────────────────────────────────────────────
 # Copy lockfile and workspace config to pre-install dependencies
